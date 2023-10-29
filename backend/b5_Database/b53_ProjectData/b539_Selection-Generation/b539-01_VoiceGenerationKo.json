@@ -1,0 +1,261 @@
+[
+    {
+        "UserId": "",
+        "ProjectsStorageID": "",
+        "ProjectId": "",
+        "ProjectName": "",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "VoiceGenerationKo",
+        "TaskCount": 0
+    },
+    {
+        "VoiceGenerationKoSplitedBodys": [
+            {
+                "BodyId": 1,
+                "VoiceGenerationKoSplitedBodyChunks":
+                [
+                    {
+                        "ChunkId": "",
+                        "KoVoiceId": "",
+                        "VoiceGenerationKo":
+                        [
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "수업은, 대화와 강의가 함께하는 방식으로, 진행하고 싶었으나 ",
+                                "TTS": "연우",
+                                "Tone": "중립",
+                                "degree": "1",
+                                "Language": "Ko",
+                                "Pause": "0.3"
+                            },
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "학생들에게 익숙한 방식은 아니었다.",
+                                "TTS": "연우",
+                                "Tone": "중립",
+                                "degree": "1",
+                                "Language": "Ko",
+                                "Pause": "0.6"
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "KoVoiceId": "",
+                        "VoiceGenerationKo":
+                        [
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            },
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "KoVoiceId": "",
+                        "VoiceGenerationKo":
+                        [
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            },
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 2,
+                "BodyVoiceTime": "",
+                "VoiceGenerationKoSplitedBodyChunks":
+                [
+                    {
+                        "ChunkId": "",
+                        "KoVoiceId": "",
+                        "VoiceGenerationKo":
+                        [
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            },
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "KoVoiceId": "",
+                        "VoiceGenerationKo":
+                        [
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            },
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "KoVoiceId": "",
+                        "VoiceGenerationKo":
+                        [
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            },
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 3,
+                "BodyVoiceTime": "",
+                "VoiceGenerationKoSplitedBodyChunks":
+                [
+                    {
+                        "ChunkId": "",
+                        "KoVoiceId": "",
+                        "VoiceGenerationKo":
+                        [
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            },
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "KoVoiceId": "",
+                        "VoiceGenerationKo":
+                        [
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            },
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "KoVoiceId": "",
+                        "VoiceGenerationKo":
+                        [
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            },
+                            {
+                                "KoTokensId": [],
+                                "KoScript": "",
+                                "TTS": "",
+                                "Tone": "",
+                                "degree": "",
+                                "Language": "",
+                                "Pause": ""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

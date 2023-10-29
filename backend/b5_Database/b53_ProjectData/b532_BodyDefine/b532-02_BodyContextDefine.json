@@ -1,0 +1,97 @@
+[
+    {
+        "UserId": "None",
+        "ProjectsStorageID": "None",
+        "ProjectId": "None",
+        "ProjectName": "None",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "BodyContextDefine",
+        "IndexCount": 0,
+        "BodyCount": 0,
+        "ChunkCount": 0,
+        "Completion": "No"
+    },
+    {
+        "BodyContexts": [
+            {
+                "IndexId": 0,
+                "BodyIdList": [0],
+                "SplitedBookContexts": [
+                    {
+                        "BookContextTag": "Genre",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Gender",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Age",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Personality",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Emotion",
+                        "BookContext": "None"
+                    }
+                ]
+            },
+            {
+                "IndexId": 0,
+                "BodyIdList": [0],
+                "SplitedBookContexts": [
+                    {
+                        "BookContextTag": "Genre",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Gender",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Age",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Personality",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Emotion",
+                        "BookContext": "None"
+                    }
+                ]
+            },
+            {
+                "IndexId": 0,
+                "BodyIdList": [0],
+                "SplitedBookContexts": [
+                    {
+                        "BookContextTag": "Genre",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Gender",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Age",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Personality",
+                        "BookContext": "None"
+                    },
+                    {
+                        "BookContextTag": "Emotion",
+                        "BookContext": "None"
+                    }
+                ]
+            }
+        ]
+    }
+]

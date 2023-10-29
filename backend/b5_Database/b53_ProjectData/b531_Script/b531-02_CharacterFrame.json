@@ -1,0 +1,22 @@
+[
+    {
+        "UserId": "None",
+        "ProjectsStorageID": "None",
+        "ProjectId": "None",
+        "ProjectName": "None",
+        "Content": "Character",
+        "Language": "Ko",
+        "TaskName": "Character",
+        "CharacterCount": 0,
+        "Completion": "No"
+    },
+    {
+        "CharacterTags": [
+            {
+                "CharacterId": 0,
+                "CharacterTag": "None",
+                "Character": "None"
+            }
+        ]
+    }
+]

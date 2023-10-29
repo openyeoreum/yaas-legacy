@@ -1,0 +1,97 @@
+[
+    {
+        "UserId": "",
+        "ProjectsStorageID": "",
+        "ProjectId": "",
+        "ProjectName": "",
+        "Content": "Body",
+        "Language": "Global",
+        "TaskName": "SoundSelection",
+        "TaskCount": 0
+    },
+    {
+        "SoundSelectionSplitedBodys": [
+            {
+                "BodyId": 1,
+                "SoundSelectionSplitedBodyChunks":
+                [
+                    {
+                        "ChunkId": "",
+                        "SoundId": "",
+                        "SoundTime": "3",
+                        "SoundVolume": "2",
+                        "Sound": "BOOM Library - Cartoon Elements - Timpani Drum Roll"
+                    },
+                    {
+                        "ChunkId": "",
+                        "SoundId": "",
+                        "SoundTime": "",
+                        "SoundVolume": "",
+                        "Sound": ""
+                    },
+                    {
+                        "ChunkId": "",
+                        "SoundId": "",
+                        "SoundTime": "",
+                        "SoundVolume": "",
+                        "Sound": ""
+                    }
+                ]
+            },
+            {
+                "BodyId": 2,
+                "SoundSelectionSplitedBodyChunks":
+                [
+                    {
+                        "ChunkId": "",
+                        "SoundId": "",
+                        "SoundTime": "",
+                        "SoundVolume": "",
+                        "Sound": ""
+                    },
+                    {
+                        "ChunkId": "",
+                        "SoundId": "",
+                        "SoundTime": "",
+                        "SoundVolume": "",
+                        "Sound": ""
+                    },
+                    {
+                        "ChunkId": "",
+                        "SoundId": "",
+                        "SoundTime": "",
+                        "SoundVolume": "",
+                        "Sound": ""
+                    }
+                ]
+            },
+            {
+                "BodyId": 3,
+                "SoundSelectionSplitedBodyChunks":
+                [
+                    {
+                        "ChunkId": "",
+                        "SoundId": "",
+                        "SoundTime": "",
+                        "SoundVolume": "",
+                        "Sound": ""
+                    },
+                    {
+                        "ChunkId": "",
+                        "SoundId": "",
+                        "SoundTime": "",
+                        "SoundVolume": "",
+                        "Sound": ""
+                    },
+                    {
+                        "ChunkId": "",
+                        "SoundId": "",
+                        "SoundTime": "",
+                        "SoundVolume": "",
+                        "Sound": ""
+                    }
+                ]
+            }
+        ]
+    }
+]

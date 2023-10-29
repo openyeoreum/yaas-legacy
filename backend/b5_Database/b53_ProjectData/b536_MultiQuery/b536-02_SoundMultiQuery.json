@@ -1,0 +1,88 @@
+[
+    {
+        "UserId": "",
+        "ProjectsStorageID": "",
+        "ProjectId": "",
+        "ProjectName": "",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "SoundMultiQuery",
+        "TaskCount": 0
+    },
+    {
+        "SoundMultiQueriedSplitedBodys": [
+            {
+                "BodyId": 1,
+                "SoundMultiQueriedSplitedBodyChunks":
+                [
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags": "None"},
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags": "None"},
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags": "None"},
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags": "None"}
+                ]
+            },
+            {
+                "BodyId": 2,
+                "SoundMultiQueriedSplitedBodyChunks":
+                [
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags":
+                        [
+                            {"Environment": ""},
+                            {"Situation": ""},
+                            {"Era": ""},
+                            {"Culture": ""}
+                        ]
+                    },
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags":
+                        [
+                            {"Environment": ""},
+                            {"Situation": ""},
+                            {"Era": ""},
+                            {"Culture": ""}
+                        ]
+                    },
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags":
+                    [
+                        {"Environment": ""},
+                        {"Situation": ""},
+                        {"Era": ""},
+                        {"Culture": ""}
+                    ]
+                    },
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags": "None"}
+                ]
+            },
+            {
+                "BodyId": 3,
+                "SoundMultiQueriedSplitedBodyChunks":
+                [
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags":
+                        [
+                            {"Environment": ""},
+                            {"Situation": ""},
+                            {"Era": ""},
+                            {"Culture": ""}
+                        ]
+                    },
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags":
+                        [
+                            {"Environment": ""},
+                            {"Situation": ""},
+                            {"Era": ""},
+                            {"Culture": ""}
+                        ]
+                    },
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags":
+                    [
+                        {"Environment": ""},
+                        {"Situation": ""},
+                        {"Era": ""},
+                        {"Culture": ""}
+                    ]
+                    },
+                    {"ChunkId": "", "SoundId": "", "MultiQueriedSoundTags": "None"}
+                ]
+            }
+        ]
+    }
+]

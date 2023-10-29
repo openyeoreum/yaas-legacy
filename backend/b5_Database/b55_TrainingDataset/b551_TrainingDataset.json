@@ -1,0 +1,50 @@
+{
+    "TaskName": "IndexDefinePreprocess",
+    "UserId": "None",
+    "ProjectsStorageID": 0,
+    "ProjectId": 0,
+    "ProjectName": "None",
+    "RawDataSetCount": 0,
+    "FeedbackDatasetCount": 0,
+    "EmbeddingDatasetCount": 0,
+    "Completion": "No",
+    "Accuracy": {},
+    "Context":
+    {
+        "Language": "Ko",
+        "Genre": "None",
+        "Gender": "None",
+        "Age": "None",
+        "Personality": "None",
+        "Emotion": "None",
+        "Environment": "None",
+        "Situation": "None",
+        "Era": "None",
+        "Culture": "None"
+    },
+    "RawDataset": [
+        {
+            "DataSetId": 0,
+            "TrainingModel": "None",
+            "Tokens": "None",
+            "Input": "None",
+            "Output": "None"
+        }
+    ],
+    "FeedbackDataset": [
+        {
+            "DataSetId": 0,
+            "Input": "None",
+            "Feedback": "None",
+            "Check": "No",
+            "Accurace": "None"
+        }
+    ],
+    "EmbeddingDataset": [
+        {
+            "DataSetId": 0,
+            "InputEmbedding": "None",
+            "OutputEmbedding": "None"
+        }
+    ]
+}

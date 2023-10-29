@@ -1,0 +1,67 @@
+{
+    "TaskName": "IndexDefinePreprocess",
+    "UserId": "None",
+    "ProjectsStorageID": 0,
+    "ProjectId": 0,
+    "ProjectName": "None",
+    "RawDataSetCount": 1,
+    "FeedbackDatasetCount": 1,
+    "EmbeddingDatasetCount": 0,
+    "Completion": "No",
+    "Accuracy": {},
+    "Context": {
+        "Language": "None",
+        "Genre": "None",
+        "Gender": "None",
+        "Age": "None",
+        "Personality": "None",
+        "Emotion": "None",
+        "Environment": "None",
+        "Situation": "None",
+        "Era": "None",
+        "Culture": "None"
+    },
+    "RawDataset": [
+        {
+            "DataSetId": 0,
+            "TrainingModel": "None",
+            "Tokens": "None",
+            "Input": "None",
+            "Output": "None"
+        },
+        {
+            "DataSetId": 1,
+            "TrainingModel": "gpt-3.5-turbo",
+            "Tokens": {
+                "prompt_tokens": 2579,
+                "completion_tokens": 65,
+                "total_tokens": 2644
+            },
+            "Input": "데미안\n\n카인\n도둑\n베아트리체\n새는 알에서 나오려고 투쟁한다\n야곱의 싸움\n에바 부인\n종말의 발단",
+            "Output": "데미안\n\n카인\n도둑\n베아트리체\n새는 알에서 나오려고 투쟁한다\n야곱의 싸움\n에바 부인\n종말의 발단"
+        }
+    ],
+    "FeedbackDataset": [
+        {
+            "DataSetId": 0,
+            "Input": "None",
+            "Feedback": "None",
+            "Check": "No",
+            "Accurace": "None"
+        },
+        {
+            "DataSetId": 1,
+            "Input": "데미안\n\n카인\n도둑\n베아트리체\n새는 알에서 나오려고 투쟁한다\n야곱의 싸움\n에바 부인\n종말의 발단",
+            "Feedback": "데미안\n\n카인\n도둑\n베아트리체\n새는 알에서 나오려고 투쟁한다\n야곱의 싸움\n에바 부인\n종말의 발단",
+            "Check": "No",
+            "Accuracy": "None"
+        }
+    ],
+    "EmbeddingDataset": [
+        {
+            "DataSetId": 0,
+            "InputEmbedding": "None",
+            "OutputEmbedding": "None"
+        }
+    ]
+}

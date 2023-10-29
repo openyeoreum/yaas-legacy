@@ -1,0 +1,177 @@
+[
+    {
+        "UserId": "",
+        "ProjectsStorageID": "",
+        "ProjectId": "",
+        "ProjectName": "",
+        "Content": "Body",
+        "Language": "En",
+        "TaskName": "TranslationEn",
+        "TaskCount": 0
+    },
+    {
+        "TranslationEnSplitedBodys": [
+            {
+                "BodyId": 1,
+                "TranslationEnSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationEnSplitedBodyChunkTokens":
+                    [
+                        {"EnTokenId": "", "Text": "I"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "the"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "class"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "to"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "be"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "conducted"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "with"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "a"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "mix"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "of"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": "행동"}, {"SFX": "대화"}]},
+                        {"EnTokenId": "", "Text": "discussions"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "and"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": "행동"}, {"SFX": "강의"}]},
+                        {"EnTokenId": "", "Text": "lectures"},
+                        {"EnTokenId": "", "Dotdot": ","},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "but"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "the"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "students"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "were"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "not"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "familiar"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "with"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "the"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": "도구"}, {"SFX": "글쓰기"}]},
+                        {"EnTokenId": "", "Text": "writing"},
+                        {"EnTokenId": "", "Space": " "},
+                        {"EnTokenId": "", "Text": "approach"},
+                        {"EnTokenId": "", "Period": "."}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEnSplitedBodyChunkTokens":
+                    [
+                        {"EnTokenId": "", "Text": ""},
+                        {"EnTokenId": "", "Space": ""},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EnTokenId": "", "Dotdot": ","},
+                        {"EnTokenId": "", "Period": ""},
+                        {"EnTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEnSplitedBodyChunkTokens":
+                    [
+                        {"EnTokenId": "", "Text": ""},
+                        {"EnTokenId": "", "Space": ""},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EnTokenId": "", "Dotdot": ","},
+                        {"EnTokenId": "", "Period": ""},
+                        {"EnTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            },
+                        {
+                "BodyId": 2,
+                "TranslationEnSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationEnSplitedBodyChunkTokens":
+                    [
+                        {"EnTokenId": "", "Text": ""},
+                        {"EnTokenId": "", "Space": ""},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EnTokenId": "", "Dotdot": ","},
+                        {"EnTokenId": "", "Period": ""},
+                        {"EnTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEnSplitedBodyChunkTokens":
+                    [
+                        {"EnTokenId": "", "Text": ""},
+                        {"EnTokenId": "", "Space": ""},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EnTokenId": "", "Dotdot": ","},
+                        {"EnTokenId": "", "Period": ""},
+                        {"EnTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEnSplitedBodyChunkTokens":
+                    [
+                        {"EnTokenId": "", "Text": ""},
+                        {"EnTokenId": "", "Space": ""},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EnTokenId": "", "Dotdot": ","},
+                        {"EnTokenId": "", "Period": ""},
+                        {"EnTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 3,
+                "TranslationEnSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationEnSplitedBodyChunkTokens":
+                    [
+                        {"EnTokenId": "", "Text": ""},
+                        {"EnTokenId": "", "Space": ""},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EnTokenId": "", "Dotdot": ","},
+                        {"EnTokenId": "", "Period": ""},
+                        {"EnTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEnSplitedBodyChunkTokens":
+                    [
+                        {"EnTokenId": "", "Text": ""},
+                        {"EnTokenId": "", "Space": ""},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EnTokenId": "", "Dotdot": ","},
+                        {"EnTokenId": "", "Period": ""},
+                        {"EnTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEnSplitedBodyChunkTokens":
+                    [
+                        {"EnTokenId": "", "Text": ""},
+                        {"EnTokenId": "", "Space": ""},
+                        {"EnTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EnTokenId": "", "Dotdot": ","},
+                        {"EnTokenId": "", "Period": ""},
+                        {"EnTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            }
+        ]
+    }
+]

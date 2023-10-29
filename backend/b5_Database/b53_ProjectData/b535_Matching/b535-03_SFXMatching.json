@@ -1,0 +1,144 @@
+[
+    {
+        "UserId": "",
+        "ProjectsStorageID": "",
+        "ProjectId": "",
+        "ProjectName": "",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "SFXMatching",
+        "TaskCount": 0
+    },
+    {
+        "SFXMatchedSplitedBodys": [
+            {
+                "BodyId": 1,
+                "SFXMatchedSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "SFXMatchedSplitedBodyChunkTokens":
+                    [
+                        {"TokenId": "", "Text": "수업은"},
+                        {"TokenId": "", "Space": " "},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": "행동"}, {"SFX": "대화"}]},
+                        {"TokenId": "", "Text": "대화와"},
+                        {"TokenId": "", "Space": " "},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": "행동"}, {"SFX": "강의"}]},
+                        {"TokenId": "", "Text": "강의가"},
+                        {"TokenId": "", "Space": " "},
+                        {"TokenId": "", "Text": "함께하는"},
+                        {"TokenId": "", "Space": " "},
+                        {"TokenId": "", "Text": "방식으로"},
+                        {"TokenId": "", "Space": " "},
+                        {"TokenId": "", "Text": "진행하고"},
+                        {"TokenId": "", "Space": " "},
+                        {"TokenId": "", "Text": "싶었으나"},
+                        {"TokenId": "", "Space": " "},
+                        {"TokenId": "", "Text": "학생들에게"},
+                        {"TokenId": "", "Space": " "},
+                        {"TokenId": "", "Text": "익숙한"},
+                        {"TokenId": "", "Space": " "},
+                        {"TokenId": "", "Text": "방식은"},
+                        {"TokenId": "", "Space": " "},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": "도구"}, {"SFX": "글쓰기"}]},
+                        {"TokenId": "", "Text": "아니었다."},
+                        {"TokenId": "", "Period": "."}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "SFXMatchedSplitedBodyChunkTokens":
+                    [
+                        {"TokenId": "", "Text": ""},
+                        {"TokenId": "", "Space": ""},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "Period": ""},
+                        {"TokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "SFXMatchedSplitedBodyChunkTokens":
+                    [
+                        {"TokenId": "", "Text": ""},
+                        {"TokenId": "", "Space": ""},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "Period": ""},
+                        {"TokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 2,
+                "SFXMatchedSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "SFXMatchedSplitedBodyChunkTokens":
+                    [
+                        {"TokenId": "", "Text": ""},
+                        {"TokenId": "", "Space": ""},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "Period": ""},
+                        {"TokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "SFXMatchedSplitedBodyChunkTokens":
+                    [
+                        {"TokenId": "", "Text": ""},
+                        {"TokenId": "", "Space": ""},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "Period": ""},
+                        {"TokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "SFXMatchedSplitedBodyChunkTokens":
+                    [
+                        {"TokenId": "", "Text": ""},
+                        {"TokenId": "", "Space": ""},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "Period": ""},
+                        {"TokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 3,
+                "SFXMatchedSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "SFXMatchedSplitedBodyChunkTokens":
+                    [
+                        {"TokenId": "", "Text": ""},
+                        {"TokenId": "", "Space": ""},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "Period": ""},
+                        {"TokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "SFXMatchedSplitedBodyChunkTokens":
+                    [
+                        {"TokenId": "", "Text": ""},
+                        {"TokenId": "", "Space": ""},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "Period": ""},
+                        {"TokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "SFXMatchedSplitedBodyChunkTokens":
+                    [
+                        {"TokenId": "", "Text": ""},
+                        {"TokenId": "", "Space": ""},
+                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "Period": ""},
+                        {"TokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            }
+        ]
+    }
+]

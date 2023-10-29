@@ -1,0 +1,70 @@
+[
+    {
+        "UserId": "None",
+        "ProjectsStorageID": "None",
+        "ProjectId": "None",
+        "ProjectName": "None",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "CharacterTagging",
+        "BodyCount": 0,
+        "ChunkCount": 0,
+        "Completion": "No",
+        "Memo": "Chunk마다의 캐릭터 태그 프로세스"
+    },
+    {
+        "CharacterTaggedSplitedBodys": [
+            {
+                "BodyId": 0,
+                "CharacterTaggedSplitedBodyChunks": [
+                    {
+                        "ChunkId": 0,
+                        "CharacterTag": "None"
+                    },
+                    {
+                        "ChunkId": 0,
+                        "CharacterTag": "None"
+                    },
+                    {
+                        "ChunkId": 0,
+                        "CharacterTag": "None"
+                    }
+                ]
+            },
+            {
+                "BodyId": 0,
+                "CharacterTaggedSplitedBodyChunks": [
+                    {
+                        "ChunkId": 0,
+                        "CharacterTag": "None"
+                    },
+                    {
+                        "ChunkId": 0,
+                        "CharacterTag": "None"
+                    },
+                    {
+                        "ChunkId": 0,
+                        "CharacterTag": "None"
+                    }
+                ]
+            },
+            {
+                "BodyId": 0,
+                "CharacterTaggedSplitedBodyChunks": [
+                    {
+                        "ChunkId": 0,
+                        "CharacterTag": "None"
+                    },
+                    {
+                        "ChunkId": 0,
+                        "CharacterTag": "None"
+                    },
+                    {
+                        "ChunkId": 0,
+                        "CharacterTag": "None"
+                    }
+                ]
+            }
+        ]
+    }
+]

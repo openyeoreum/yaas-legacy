@@ -1,0 +1,133 @@
+[
+    {
+        "UserId": "",
+        "ProjectsStorageID": "",
+        "ProjectId": "",
+        "ProjectName": "",
+        "Content": "Body",
+        "Language": "Ja",
+        "TaskName": "TranslationJa",
+        "TaskCount": 0
+    },
+    {
+        "TranslationJaSplitedBodys": [
+            {
+                "BodyId": 1,
+                "TranslationJaSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationJaSplitedBodyChunkTokens":
+                    [
+                        {"JaTokenId": "", "Text": ""},
+                        {"JaTokenId": "", "Space": ""},
+                        {"JaTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"JaTokenId": "", "Dotdot": ","},
+                        {"JaTokenId": "", "Period": ""},
+                        {"JaTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationJaSplitedBodyChunkTokens":
+                    [
+                        {"JaTokenId": "", "Text": ""},
+                        {"JaTokenId": "", "Space": ""},
+                        {"JaTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"JaTokenId": "", "Dotdot": ","},
+                        {"JaTokenId": "", "Period": ""},
+                        {"JaTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationJaSplitedBodyChunkTokens":
+                    [
+                        {"JaTokenId": "", "Text": ""},
+                        {"JaTokenId": "", "Space": ""},
+                        {"JaTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"JaTokenId": "", "Dotdot": ","},
+                        {"JaTokenId": "", "Period": ""},
+                        {"JaTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            },
+                        {
+                "BodyId": 2,
+                "TranslationJaSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationJaSplitedBodyChunkTokens":
+                    [
+                        {"JaTokenId": "", "Text": ""},
+                        {"JaTokenId": "", "Space": ""},
+                        {"JaTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"JaTokenId": "", "Dotdot": ","},
+                        {"JaTokenId": "", "Period": ""},
+                        {"JaTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationJaSplitedBodyChunkTokens":
+                    [
+                        {"JaTokenId": "", "Text": ""},
+                        {"JaTokenId": "", "Space": ""},
+                        {"JaTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"JaTokenId": "", "Dotdot": ","},
+                        {"JaTokenId": "", "Period": ""},
+                        {"JaTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationJaSplitedBodyChunkTokens":
+                    [
+                        {"JaTokenId": "", "Text": ""},
+                        {"JaTokenId": "", "Space": ""},
+                        {"JaTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"JaTokenId": "", "Dotdot": ","},
+                        {"JaTokenId": "", "Period": ""},
+                        {"JaTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 3,
+                "TranslationJaSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationJaSplitedBodyChunkTokens":
+                    [
+                        {"JaTokenId": "", "Text": ""},
+                        {"JaTokenId": "", "Space": ""},
+                        {"JaTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"JaTokenId": "", "Dotdot": ","},
+                        {"JaTokenId": "", "Period": ""},
+                        {"JaTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationJaSplitedBodyChunkTokens":
+                    [
+                        {"JaTokenId": "", "Text": ""},
+                        {"JaTokenId": "", "Space": ""},
+                        {"JaTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"JaTokenId": "", "Dotdot": ","},
+                        {"JaTokenId": "", "Period": ""},
+                        {"JaTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationJaSplitedBodyChunkTokens":
+                    [
+                        {"JaTokenId": "", "Text": ""},
+                        {"JaTokenId": "", "Space": ""},
+                        {"JaTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"JaTokenId": "", "Dotdot": ","},
+                        {"JaTokenId": "", "Period": ""},
+                        {"JaTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            }
+        ]
+    }
+]

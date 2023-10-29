@@ -1,0 +1,133 @@
+[
+    {
+        "UserId": "",
+        "ProjectsStorageID": "",
+        "ProjectId": "",
+        "ProjectName": "",
+        "Content": "Body",
+        "Language": "Es",
+        "TaskName": "TranslationEs",
+        "TaskCount": 0
+    },
+    {
+        "TranslationEsSplitedBodys": [
+            {
+                "BodyId": 1,
+                "TranslationEsSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationEsSplitedBodyChunkTokens":
+                    [
+                        {"EsTokenId": "", "Text": ""},
+                        {"EsTokenId": "", "Space": ""},
+                        {"EsTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EsTokenId": "", "Dotdot": ","},
+                        {"EsTokenId": "", "Period": ""},
+                        {"EsTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEsSplitedBodyChunkTokens":
+                    [
+                        {"EsTokenId": "", "Text": ""},
+                        {"EsTokenId": "", "Space": ""},
+                        {"EsTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EsTokenId": "", "Dotdot": ","},
+                        {"EsTokenId": "", "Period": ""},
+                        {"EsTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEsSplitedBodyChunkTokens":
+                    [
+                        {"EsTokenId": "", "Text": ""},
+                        {"EsTokenId": "", "Space": ""},
+                        {"EsTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EsTokenId": "", "Dotdot": ","},
+                        {"EsTokenId": "", "Period": ""},
+                        {"EsTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            },
+                        {
+                "BodyId": 2,
+                "TranslationEsSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationEsSplitedBodyChunkTokens":
+                    [
+                        {"EsTokenId": "", "Text": ""},
+                        {"EsTokenId": "", "Space": ""},
+                        {"EsTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EsTokenId": "", "Dotdot": ","},
+                        {"EsTokenId": "", "Period": ""},
+                        {"EsTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEsSplitedBodyChunkTokens":
+                    [
+                        {"EsTokenId": "", "Text": ""},
+                        {"EsTokenId": "", "Space": ""},
+                        {"EsTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EsTokenId": "", "Dotdot": ","},
+                        {"EsTokenId": "", "Period": ""},
+                        {"EsTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEsSplitedBodyChunkTokens":
+                    [
+                        {"EsTokenId": "", "Text": ""},
+                        {"EsTokenId": "", "Space": ""},
+                        {"EsTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EsTokenId": "", "Dotdot": ","},
+                        {"EsTokenId": "", "Period": ""},
+                        {"EsTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 3,
+                "TranslationEsSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationEsSplitedBodyChunkTokens":
+                    [
+                        {"EsTokenId": "", "Text": ""},
+                        {"EsTokenId": "", "Space": ""},
+                        {"EsTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EsTokenId": "", "Dotdot": ","},
+                        {"EsTokenId": "", "Period": ""},
+                        {"EsTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEsSplitedBodyChunkTokens":
+                    [
+                        {"EsTokenId": "", "Text": ""},
+                        {"EsTokenId": "", "Space": ""},
+                        {"EsTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EsTokenId": "", "Dotdot": ","},
+                        {"EsTokenId": "", "Period": ""},
+                        {"EsTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationEsSplitedBodyChunkTokens":
+                    [
+                        {"EsTokenId": "", "Text": ""},
+                        {"EsTokenId": "", "Space": ""},
+                        {"EsTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"EsTokenId": "", "Dotdot": ","},
+                        {"EsTokenId": "", "Period": ""},
+                        {"EsTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            }
+        ]
+    }
+]

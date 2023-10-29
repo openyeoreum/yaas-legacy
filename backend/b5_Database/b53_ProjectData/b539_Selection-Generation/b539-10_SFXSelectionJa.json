@@ -1,0 +1,250 @@
+[
+    {
+        "UserId": "",
+        "ProjectsStorageID": "",
+        "ProjectId": "",
+        "ProjectName": "",
+        "Content": "Body",
+        "Language": "Ja",
+        "TaskName": "SFXSelectionJa",
+        "TaskCount": 0
+    },
+    {
+        "SFXSelectionJaSplitedBodys": [
+            {
+                "BodyId": 1,
+                "SFXSelectionJaSplitedBodyChunks":
+                [
+                    {
+                        "ChunkId": "",
+                        "SFXSelectionJas":
+                        [
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "2",
+                                "SFXVolume": "6",
+                                "SFX": "학생들 토론하는 소리"
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "2.5",
+                                "SFXVolume": "5",
+                                "SFX": "수업 강의 하는 소리"
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "1.5",
+                                "SFXVolume": "5",
+                                "SFX": "펜으로 글쓰는 소리"
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "SFXSelectionJas":
+                        [
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "SFXSelectionJas":
+                        [
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 1,
+                "SFXSelectionJaSplitedBodyChunks":
+                [
+                    {
+                        "ChunkId": "",
+                        "SFXSelectionJas":
+                        [
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "SFXSelectionJas":
+                        [
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "SFXSelectionJas":
+                        [
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 1,
+                "SFXSelectionJaSplitedBodyChunks":
+                [
+                    {
+                        "ChunkId": "",
+                        "SFXSelectionJas":
+                        [
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "SFXSelectionJas":
+                        [
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            }
+                        ]
+                    },
+                    {
+                        "ChunkId": "",
+                        "SFXSelectionJas":
+                        [
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            },
+                            {
+                                "JaTokenId": "",
+                                "SFXTime": "",
+                                "SFXVolume": "",
+                                "SFX": ""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

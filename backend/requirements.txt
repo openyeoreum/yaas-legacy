@@ -1,0 +1,17 @@
+# YAAS
+openai
+python-dotenv
+tiktoken
+nltk
+konlpy
+git+https://github.com/allinux/PyKoSpacing.git
+# Web Framework, DB
+fastapi
+tzdata
+psycopg2-binary
+asyncpg
+sqlalchemy
+alembic
+pydantic
+uvicorn
+bcrypt

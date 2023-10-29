@@ -1,0 +1,152 @@
+[
+    {
+        "UserId": "",
+        "ProjectsStorageID": "",
+        "ProjectId": "",
+        "ProjectName": "",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "TranslationKo",
+        "TaskCount": 0
+    },
+    {
+        "TranslationKoSplitedBodys": [
+            {
+                "BodyId": 1,
+                "TranslationKoSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationKoSplitedBodyChunkTokens":
+                    [
+                        {"KoTokenId": "", "Text": "수업은"},
+                        {"KoTokenId": "", "Space": " "},
+                        {"KoTokenId": "", "MatchedSFXTag": [{"Classification": "행동"}, {"SFX": "대화"}]},
+                        {"KoTokenId": "", "Text": "대화와"},
+                        {"KoTokenId": "", "Space": " "},
+                        {"KoTokenId": "", "MatchedSFXTag": [{"Classification": "행동"}, {"SFX": "강의"}]},
+                        {"KoTokenId": "", "Text": "강의가"},
+                        {"KoTokenId": "", "Space": " "},
+                        {"KoTokenId": "", "Text": "함께하는"},
+                        {"KoTokenId": "", "Space": " "},
+                        {"KoTokenId": "", "Text": "방식으로"},
+                        {"KoTokenId": "", "Space": " "},
+                        {"KoTokenId": "", "Text": "진행하고"},
+                        {"KoTokenId": "", "Space": " "},
+                        {"KoTokenId": "", "Text": "싶었으나"},
+                        {"KoTokenId": "", "Space": " "},
+                        {"KoTokenId": "", "Text": "학생들에게"},
+                        {"KoTokenId": "", "Space": " "},
+                        {"KoTokenId": "", "Text": "익숙한"},
+                        {"KoTokenId": "", "Space": " "},
+                        {"KoTokenId": "", "Text": "방식은"},
+                        {"KoTokenId": "", "Space": " "},
+                        {"KoTokenId": "", "MatchedSFXTag": [{"Classification": "도구"}, {"SFX": "글쓰기"}]},
+                        {"KoTokenId": "", "Text": "아니었다."},
+                        {"KoTokenId": "", "Period": "."}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationKoSplitedBodyChunkTokens":
+                    [
+                        {"KoTokenId": "", "Text": ""},
+                        {"KoTokenId": "", "Space": ""},
+                        {"KoTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"KoTokenId": "", "Dotdot": ","},
+                        {"KoTokenId": "", "Period": ""},
+                        {"KoTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationKoSplitedBodyChunkTokens":
+                    [
+                        {"KoTokenId": "", "Text": ""},
+                        {"KoTokenId": "", "Space": ""},
+                        {"KoTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"KoTokenId": "", "Dotdot": ","},
+                        {"KoTokenId": "", "Period": ""},
+                        {"KoTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 2,
+                "TranslationKoSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationKoSplitedBodyChunkTokens":
+                    [
+                        {"KoTokenId": "", "Text": ""},
+                        {"KoTokenId": "", "Space": ""},
+                        {"KoTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"KoTokenId": "", "Dotdot": ","},
+                        {"KoTokenId": "", "Period": ""},
+                        {"KoTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationKoSplitedBodyChunkTokens":
+                    [
+                        {"KoTokenId": "", "Text": ""},
+                        {"KoTokenId": "", "Space": ""},
+                        {"KoTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"KoTokenId": "", "Dotdot": ","},
+                        {"KoTokenId": "", "Period": ""},
+                        {"KoTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationKoSplitedBodyChunkTokens":
+                    [
+                        {"KoTokenId": "", "Text": ""},
+                        {"KoTokenId": "", "Space": ""},
+                        {"KoTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"KoTokenId": "", "Dotdot": ","},
+                        {"KoTokenId": "", "Period": ""},
+                        {"KoTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            },
+            {
+                "BodyId": 3,
+                "TranslationKoSplitedBodyChunks":
+                [
+                    {"ChunkId": "",
+                    "TranslationKoSplitedBodyChunkTokens":
+                    [
+                        {"KoTokenId": "", "Text": ""},
+                        {"KoTokenId": "", "Space": ""},
+                        {"KoTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"KoTokenId": "", "Dotdot": ","},
+                        {"KoTokenId": "", "Period": ""},
+                        {"KoTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationKoSplitedBodyChunkTokens":
+                    [
+                        {"KoTokenId": "", "Text": ""},
+                        {"KoTokenId": "", "Space": ""},
+                        {"KoTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"KoTokenId": "", "Dotdot": ","},
+                        {"KoTokenId": "", "Period": ""},
+                        {"KoTokenId": "", "Enter": ""}
+                    ]
+                    },
+                    {"ChunkId": "",
+                    "TranslationKoSplitedBodyChunkTokens":
+                    [
+                        {"KoTokenId": "", "Text": ""},
+                        {"KoTokenId": "", "Space": ""},
+                        {"KoTokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"KoTokenId": "", "Dotdot": ","},
+                        {"KoTokenId": "", "Period": ""},
+                        {"KoTokenId": "", "Enter": ""}
+                    ]
+                    }
+                ]
+            }
+        ]
+    }
+]

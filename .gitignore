@@ -1,0 +1,25 @@
+# 로그 파일
+*.log
+
+# IDE 설정
+.idea/
+
+# OS 생성 파일
+.DS_Store
+Thumbs.db
+
+# 환경설정 파일
+backend/.env
+
+# 업데이트 필요 없는 내용 모두 제외
+frontend/
+migrations/
+backend/b5_Database/b51_DatabaseVolumesPostgres/
+
+# b62_UserStorage 폴더 내의 특정 폴더 및 파일만 유지
+backend/b6_Storage/b62_UserStorage/*
+!backend/b6_Storage/b62_UserStorage/230923_script_files/
+!backend/b6_Storage/b62_UserStorage/230923_script_files/*
+
+# alembic 파일
+alembic.ini

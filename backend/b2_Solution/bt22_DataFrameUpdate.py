@@ -43,41 +43,41 @@ if __name__ == "__main__":
     projectName = "우리는행복을진단한다"
     DataFramePath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
     DataSetPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b55_TrainingDataTest/"
-    messagesReview = "on"
+    messagesReview = "off"
     mode = "FineTuning"
     #########################################################################
 
-    # ### 00_DataFrame-[AllMetaData] ###
-    # AddFrameMetaDataToDB(projectName, email)
+    ### 00_DataFrame-[AllMetaData] ###
+    AddFrameMetaDataToDB(projectName, email)
 
-    # AddDataSetMetaDataToDB(projectName, email)
-
-
-    # ### 01_IndexFrame-[IndexDefine] ###
-    # InitIndexFrame(projectName, email)
-    # IndexFrameUpdate(projectName, email, MessagesReview = messagesReview)
-
-    # updatedIndexFrame = UpdatedIndexFrame(projectName, email)
-    # SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
-    # SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", DataSetPath)
-    # SaveDataSet(projectName, email, "01", "IndexDefine", DataSetPath)
+    AddDataSetMetaDataToDB(projectName, email)
 
 
-    # ### 02_BodyFrame-[BodySplit, IndexTagging] ###
-    # InitBodyFrame(projectName, email)
-    # BodyFrameUpdate(projectName, email)
+    ### 01_IndexFrame-[IndexDefine] ###
+    InitIndexFrame(projectName, email)
+    IndexFrameUpdate(projectName, email, MessagesReview = messagesReview)
 
-    # updatedBodyFrame = UpdatedBodyFrame(projectName, email)
-    # SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
+    updatedIndexFrame = UpdatedIndexFrame(projectName, email)
+    SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
+    SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", DataSetPath)
+    SaveDataSet(projectName, email, "01", "IndexDefine", DataSetPath)
 
 
-    # ### 03_SummaryBodyFrame-[BodySummary] ###
-    # InitSummaryBodyFrame(projectName, email)
-    # SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    ### 02_BodyFrame-[BodySplit, IndexTagging] ###
+    InitBodyFrame(projectName, email)
+    BodyFrameUpdate(projectName, email)
 
-    # updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
-    # SaveDataFrame(projectName, email, "03_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
-    # SaveDataSet(projectName, email, "03", "BodySummary", DataSetPath)
+    updatedBodyFrame = UpdatedBodyFrame(projectName, email)
+    SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
+
+
+    ### 03_SummaryBodyFrame-[BodySummary] ###
+    InitSummaryBodyFrame(projectName, email)
+    SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+
+    updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
+    SaveDataFrame(projectName, email, "03_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
+    SaveDataSet(projectName, email, "03", "BodySummary", DataSetPath)
 
 
     ### 04_BodyCharacterDefine ###

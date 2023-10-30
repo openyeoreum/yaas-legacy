@@ -6,7 +6,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, InitBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyFrameToDB, AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, InitBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
 
 # BodyText 로드
 def LoadBodyText(projectName, email):
@@ -536,70 +536,77 @@ def BodyFrameBodysUpdate(projectName, email):
 ###########
 
 ## IndexBodyUnitChunksList을 BodyFrame에 업데이트
-def BodyFrameUpdate(projectName, email):
+def BodyFrameUpdate(projectName, email, ExistedFrame = None):
     print(f"< User: {email} | Project: {projectName} | 02_BodyFrameUpdate 시작 >")
     # BodyFrame의 Count값 가져오기
     IndexCount, BodyCount, ChunkCount, Completion = BodyFrameCountLoad(projectName, email)
     if Completion == "No":
-        # IndexBodyUnitChunksList를 IndexCount로 슬라이스
-        indexBodyUnitChunksList = TaggedChunksToUnitedChunks(projectName, email)
-        IndexBodyUnitChunksList = indexBodyUnitChunksList[IndexCount:]
-        IndexBodyUnitChunksListCount = len(IndexBodyUnitChunksList)
-
-        IndexId = IndexCount
-        ChunkId = ChunkCount
-
-        # TQDM 셋팅
-        UpdateTQDM = tqdm(IndexBodyUnitChunksList,
-                        total = IndexBodyUnitChunksListCount,
-                        desc = 'BodyFrameUpdate')
-        # i값 수동 생성
-        i = 0
-        for Update in UpdateTQDM:
-            UpdateTQDM.set_description(f'BodyFrameUpdate: {Update[0]} ...')
-            time.sleep(0.0001)
-            
-            IndexId += 1
-            IndexTag = IndexBodyUnitChunksList[i][0][0]['IndexTag']
-            IndexChunk = IndexBodyUnitChunksList[i][0][0]['TagChunks']
-
-            for j in range(len(IndexBodyUnitChunksList[i])):
-                AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, IndexChunk)
-                
-                for k in range(len(IndexBodyUnitChunksList[i][j])):
-                    ChunkId += 1
-                    
-                    if "IndexTag" in IndexBodyUnitChunksList[i][j][k].keys():
-                        Tag = IndexBodyUnitChunksList[i][j][k]["IndexTag"]
-                    else:
-                        Tag = IndexBodyUnitChunksList[i][j][k]["Tag"]
-                    Chunk = IndexBodyUnitChunksList[i][j][k]["TagChunks"]
-                    
-                    AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk)
-            # i값 수동 업데이트
-            i += 1
         
-        UpdateTQDM.close()
-        ##### Bodys 업데이트
-        BodyFrameBodysUpdate(projectName, email)
-        #####
-        # Completion "Yes" 업데이트
-        BodyFrameCompletionUpdate(projectName, email)
-        
-        # BodyText와 텍스트 매칭 체크
-        BodyFrameList = []
-        BodyFrame = UpdatedBodyFrame(projectName, email)[1]["SplitedBodyScripts"]
-        for i in range(len(BodyFrame)):
-            for j in range(len(BodyFrame[i]["SplitedBodyChunks"])):
-                BodyFrameList.append(BodyFrame[i]["SplitedBodyChunks"][j]["Chunk"])
-        
-        # BodyFrameUpdate 오류체크
-        INPUT = re.sub("[^가-힣]", "", str(IndexBodyUnitChunksList))
-        OUTPUT = re.sub("[^가-힣]", "", str(BodyFrameList))
-        if INPUT != OUTPUT:
-            print(f"IndexBodyUnitChunksList와 BodyFrameList 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | BodyFrameUpdateError")
+        if ExistedFrame != None:
+            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            AddExistedBodyFrameToDB(projectName, email, ExistedFrame)
+            print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate는 ExistedBodyFrame으로 대처됨 ]\n")
         else:
-            print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate 완료 ]\n")
+            indexBodyUnitChunksList = TaggedChunksToUnitedChunks(projectName, email)
+            
+            # IndexBodyUnitChunksList를 IndexCount로 슬라이스
+            IndexBodyUnitChunksList = indexBodyUnitChunksList[IndexCount:]
+            IndexBodyUnitChunksListCount = len(IndexBodyUnitChunksList)
+
+            IndexId = IndexCount
+            ChunkId = ChunkCount
+
+            # TQDM 셋팅
+            UpdateTQDM = tqdm(IndexBodyUnitChunksList,
+                            total = IndexBodyUnitChunksListCount,
+                            desc = 'BodyFrameUpdate')
+            # i값 수동 생성
+            i = 0
+            for Update in UpdateTQDM:
+                UpdateTQDM.set_description(f'BodyFrameUpdate: {Update[0]} ...')
+                time.sleep(0.0001)
+                
+                IndexId += 1
+                IndexTag = IndexBodyUnitChunksList[i][0][0]['IndexTag']
+                IndexChunk = IndexBodyUnitChunksList[i][0][0]['TagChunks']
+
+                for j in range(len(IndexBodyUnitChunksList[i])):
+                    AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, IndexChunk)
+                    
+                    for k in range(len(IndexBodyUnitChunksList[i][j])):
+                        ChunkId += 1
+                        
+                        if "IndexTag" in IndexBodyUnitChunksList[i][j][k].keys():
+                            Tag = IndexBodyUnitChunksList[i][j][k]["IndexTag"]
+                        else:
+                            Tag = IndexBodyUnitChunksList[i][j][k]["Tag"]
+                        Chunk = IndexBodyUnitChunksList[i][j][k]["TagChunks"]
+                        
+                        AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk)
+                # i값 수동 업데이트
+                i += 1
+            
+            UpdateTQDM.close()
+            ##### Bodys 업데이트
+            BodyFrameBodysUpdate(projectName, email)
+            #####
+            # Completion "Yes" 업데이트
+            BodyFrameCompletionUpdate(projectName, email)
+            
+            # BodyText와 텍스트 매칭 체크
+            BodyFrameList = []
+            BodyFrame = UpdatedBodyFrame(projectName, email)[1]["SplitedBodyScripts"]
+            for i in range(len(BodyFrame)):
+                for j in range(len(BodyFrame[i]["SplitedBodyChunks"])):
+                    BodyFrameList.append(BodyFrame[i]["SplitedBodyChunks"][j]["Chunk"])
+            
+            # BodyFrameUpdate 오류체크
+            INPUT = re.sub("[^가-힣]", "", str(IndexBodyUnitChunksList))
+            OUTPUT = re.sub("[^가-힣]", "", str(BodyFrameList))
+            if INPUT != OUTPUT:
+                print(f"IndexBodyUnitChunksList와 BodyFrameList 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | BodyFrameUpdateError")
+            else:
+                print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate 완료 ]\n")
     else:
         print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate는 이미 완료됨 ]\n")
     

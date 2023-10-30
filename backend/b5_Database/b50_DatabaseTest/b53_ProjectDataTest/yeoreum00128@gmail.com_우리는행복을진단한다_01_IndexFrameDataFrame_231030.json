@@ -1,0 +1,387 @@
+[
+    {
+        "UserId": "ba3560d6681b787e30875d891eb6455841a61d3bb4795e67b56c9b8cbd63d584",
+        "ProjectsStorageID": 1,
+        "ProjectId": 7,
+        "ProjectName": "우리는행복을진단한다",
+        "Content": "Index",
+        "Language": "Ko",
+        "TaskName": "IndexDefine",
+        "IndexCount": 73,
+        "Completion": "Yes"
+    },
+    {
+        "IndexTags": [
+            {
+                "IndexId": 0,
+                "IndexTag": "None",
+                "Index": "None"
+            },
+            {
+                "IndexId": 1,
+                "IndexTag": "Title",
+                "Index": "우리는 행복을 진단한다"
+            },
+            {
+                "IndexId": 2,
+                "IndexTag": "Logue",
+                "Index": "머리말"
+            },
+            {
+                "IndexId": 3,
+                "IndexTag": "Chapter",
+                "Index": "1장 남들이가지않는길"
+            },
+            {
+                "IndexId": 4,
+                "IndexTag": "Index",
+                "Index": "인간에 대한 근원적 의문"
+            },
+            {
+                "IndexId": 5,
+                "IndexTag": "Index",
+                "Index": "해부학 실습실에 울려 퍼진 고함 소리"
+            },
+            {
+                "IndexId": 6,
+                "IndexTag": "Index",
+                "Index": "무의촌에서 인술(仁術)을 펼치 면서"
+            },
+            {
+                "IndexId": 7,
+                "IndexTag": "Index",
+                "Index": "사람을 살리는 의사결정의 머릿돌"
+            },
+            {
+                "IndexId": 8,
+                "IndexTag": "Index",
+                "Index": "작은 틈새 너머의 기회를 발견하다"
+            },
+            {
+                "IndexId": 9,
+                "IndexTag": "Chapter",
+                "Index": "24시간 불이 꺼지지 않는 검사실"
+            },
+            {
+                "IndexId": 10,
+                "IndexTag": "Index",
+                "Index": "오직 두 발로 뛰어다니던 나날들"
+            },
+            {
+                "IndexId": 11,
+                "IndexTag": "Index",
+                "Index": "스퍼트를 올려야 할 순간"
+            },
+            {
+                "IndexId": 12,
+                "IndexTag": "Index",
+                "Index": "우리 회사는 경쟁사와 확실하게 구별되는가"
+            },
+            {
+                "IndexId": 13,
+                "IndexTag": "Index",
+                "Index": "최초라는 이름의 가치"
+            },
+            {
+                "IndexId": 14,
+                "IndexTag": "Index",
+                "Index": "어떻게 그런 생각을 할 수 있을까"
+            },
+            {
+                "IndexId": 15,
+                "IndexTag": "Index",
+                "Index": "선즉제인(先則制人)의 전략"
+            },
+            {
+                "IndexId": 16,
+                "IndexTag": "Index",
+                "Index": "승자의 저주를 피하려면"
+            },
+            {
+                "IndexId": 17,
+                "IndexTag": "Chapter",
+                "Index": "2장 담금질로 연단되는 쇠처럼"
+            },
+            {
+                "IndexId": 18,
+                "IndexTag": "Index",
+                "Index": "일류와 삼류의 결정적 차이"
+            },
+            {
+                "IndexId": 19,
+                "IndexTag": "Index",
+                "Index": "브루투스, 너마저"
+            },
+            {
+                "IndexId": 20,
+                "IndexTag": "Index",
+                "Index": "죽은 과거를 묻어 버리고"
+            },
+            {
+                "IndexId": 21,
+                "IndexTag": "Index",
+                "Index": "존속하되 파괴할 수 있다면"
+            },
+            {
+                "IndexId": 22,
+                "IndexTag": "Index",
+                "Index": "휴먼 에러에 대한 최후의 보루"
+            },
+            {
+                "IndexId": 23,
+                "IndexTag": "Index",
+                "Index": "실수하는 인간, 어떻게 막을까"
+            },
+            {
+                "IndexId": 24,
+                "IndexTag": "Index",
+                "Index": "SOP, 인간의 한계를 보완하다"
+            },
+            {
+                "IndexId": 25,
+                "IndexTag": "Index",
+                "Index": "사 람의 인식과 싸운다는 것"
+            },
+            {
+                "IndexId": 26,
+                "IndexTag": "Index",
+                "Index": "경영자의 믿음이 필요한 순간"
+            },
+            {
+                "IndexId": 27,
+                "IndexTag": "Index",
+                "Index": "느닷없이 들이닥쳤을 때"
+            },
+            {
+                "IndexId": 28,
+                "IndexTag": "Index",
+                "Index": "누가 전화벨을 울렸을까"
+            },
+            {
+                "IndexId": 29,
+                "IndexTag": "Index",
+                "Index": "돈보다 더 중요한 무게중심"
+            },
+            {
+                "IndexId": 30,
+                "IndexTag": "Index",
+                "Index": "자부심과 번 아웃, 그 아찔한 경계"
+            },
+            {
+                "IndexId": 31,
+                "IndexTag": "Chapter",
+                "Index": "3장 탁월함에 이르는 열쇠"
+            },
+            {
+                "IndexId": 32,
+                "IndexTag": "Index",
+                "Index": "새로운 세상을 향하여"
+            },
+            {
+                "IndexId": 33,
+                "IndexTag": "Index",
+                "Index": "사람의 마음을 여는 가장 쉬운 방법"
+            },
+            {
+                "IndexId": 34,
+                "IndexTag": "Index",
+                "Index": "멀리 가고 싶으면 함께 가라"
+            },
+            {
+                "IndexId": 35,
+                "IndexTag": "Index",
+                "Index": "더 넓은 세계를 향한 도약"
+            },
+            {
+                "IndexId": 36,
+                "IndexTag": "Index",
+                "Index": "해외진출 성공을 위한 네 가지 조건"
+            },
+            {
+                "IndexId": 37,
+                "IndexTag": "Index",
+                "Index": "실패하라 그리고 도전하라"
+            },
+            {
+                "IndexId": 38,
+                "IndexTag": "Index",
+                "Index": "새로운 검사법 개발"
+            },
+            {
+                "IndexId": 39,
+                "IndexTag": "Index",
+                "Index": "실패 뒤의 성공을 발견해 내는 용기"
+            },
+            {
+                "IndexId": 40,
+                "IndexTag": "Index",
+                "Index": "과학적 데이터에 대한 사명감"
+            },
+            {
+                "IndexId": 41,
+                "IndexTag": "Index",
+                "Index": "연구원들을 긴장시킨 두 마디"
+            },
+            {
+                "IndexId": 42,
+                "IndexTag": "Index",
+                "Index": "증발된 범인"
+            },
+            {
+                "IndexId": 43,
+                "IndexTag": "Chapter",
+                "Index": "4장 진흙에서 건져 올린 다이아몬드"
+            },
+            {
+                "IndexId": 44,
+                "IndexTag": "Index",
+                "Index": "코비드-19 쓰나미를 이겨 내다"
+            },
+            {
+                "IndexId": 45,
+                "IndexTag": "Index",
+                "Index": "세상에서 가장 무서운 말"
+            },
+            {
+                "IndexId": 46,
+                "IndexTag": "Index",
+                "Index": "사신과 싸웠던 사람들"
+            },
+            {
+                "IndexId": 47,
+                "IndexTag": "Index",
+                "Index": "고통스러운 시간을 견디게 하는 힘"
+            },
+            {
+                "IndexId": 48,
+                "IndexTag": "Index",
+                "Index": "사람들을 괴롭히는 PCR 검사결과 유형"
+            },
+            {
+                "IndexId": 49,
+                "IndexTag": "Index",
+                "Index": "생명에 대한 사명감"
+            },
+            {
+                "IndexId": 50,
+                "IndexTag": "Index",
+                "Index": "절구통을 이고 가는 개미들"
+            },
+            {
+                "IndexId": 51,
+                "IndexTag": "Index",
+                "Index": "거익태산(去益泰山)"
+            },
+            {
+                "IndexId": 52,
+                "IndexTag": "Index",
+                "Index": "서로에게 버팀목이 되어"
+            },
+            {
+                "IndexId": 53,
+                "IndexTag": "Index",
+                "Index": "감염병에 대한 준비된 대처 능력"
+            },
+            {
+                "IndexId": 54,
+                "IndexTag": "Index",
+                "Index": "핀란드에서 날아온 전화 한 통"
+            },
+            {
+                "IndexId": 55,
+                "IndexTag": "Index",
+                "Index": "오랜 노력에 대한 신뢰"
+            },
+            {
+                "IndexId": 56,
+                "IndexTag": "Index",
+                "Index": "과정은 신속하게, 결과는 정확하게"
+            },
+            {
+                "IndexId": 57,
+                "IndexTag": "Chapter",
+                "Index": "5장 춤추는 별들의 세상"
+            },
+            {
+                "IndexId": 58,
+                "IndexTag": "Index",
+                "Index": "경영진과 노조가 두 손을 맞잡을 때"
+            },
+            {
+                "IndexId": 59,
+                "IndexTag": "Index",
+                "Index": "“오늘 급여가 나가지 못합니다”"
+            },
+            {
+                "IndexId": 60,
+                "IndexTag": "Index",
+                "Index": "가족 같은 회사가 가능하려면"
+            },
+            {
+                "IndexId": 61,
+                "IndexTag": "Index",
+                "Index": "모두가 일하고 싶어 하는 회사"
+            },
+            {
+                "IndexId": 62,
+                "IndexTag": "Index",
+                "Index": "장기근속자가 많은 이유"
+            },
+            {
+                "IndexId": 63,
+                "IndexTag": "Index",
+                "Index": "가족검진으로 발견한 어머니의 암"
+            },
+            {
+                "IndexId": 64,
+                "IndexTag": "Index",
+                "Index": "근 로의욕 고취해 회사 성장시키는 복지제도"
+            },
+            {
+                "IndexId": 65,
+                "IndexTag": "Index",
+                "Index": "인간적인 너무나 인간적인"
+            },
+            {
+                "IndexId": 66,
+                "IndexTag": "Index",
+                "Index": "한 사람 한 사람이 중요하다"
+            },
+            {
+                "IndexId": 67,
+                "IndexTag": "Index",
+                "Index": "생산성 향상 & 직원 만족도 두 마리 토끼 잡는 직무교육"
+            },
+            {
+                "IndexId": 68,
+                "IndexTag": "Index",
+                "Index": "동료를 이끌어 주는 아프리카 코끼리처럼"
+            },
+            {
+                "IndexId": 69,
+                "IndexTag": "Index",
+                "Index": "40년을 이어 온 기업철학"
+            },
+            {
+                "IndexId": 70,
+                "IndexTag": "Index",
+                "Index": "착한 걸음 6분 걷기"
+            },
+            {
+                "IndexId": 71,
+                "IndexTag": "Index",
+                "Index": "고통 속에 홀로 신음하는 이가 없도록"
+            },
+            {
+                "IndexId": 72,
+                "IndexTag": "Index",
+                "Index": "SCL 의 주요 사회공헌활동(2021~2023 現)"
+            },
+            {
+                "IndexId": 73,
+                "IndexTag": "Index",
+                "Index": "기업이 사회적 책임을 다한다 는 것"
+            }
+        ]
+    }
+]

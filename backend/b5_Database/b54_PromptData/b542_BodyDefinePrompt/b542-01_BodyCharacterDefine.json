@@ -1,9 +1,17 @@
 {
     "TaskName": "BodyCharacterDefine",
-    "ShortTokensModel": "gpt-3.5-turbo",
-    "LongTokensModel": "gpt-3.5-turbo-16k",
-    "ExampleFineTunedModel": [{"Date": "BodyCharacterDefine-231022073805", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS"}],
-    "MemoryFineTunedModel": [],
+    "BaseModel": {
+        "ShortTokensModel": "gpt-3.5-turbo",
+        "LongTokensModel": "gpt-3.5-turbo-16k"
+    },
+    "ExampleFineTunedModel": {
+        "ShortTokensModel": [{"Date": "BodyCharacterDefine-231022073805", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS"}],
+        "LongTokensModel": []
+    },
+    "MemoryFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
     "Temperature": 0.4,
     "OutputTokensRatio": 0.5,
     "Example": [
@@ -119,6 +127,64 @@
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",
             "OutputEnder": "OutputEnder"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "<내용> 중 [말n]의 1)'말의 종류', 2)'말하는 인물', 3)'인물의 역할', 4)'듣는 인물'의 명칭을 작성하여 <태그.json>을 완성하는 작업을 합니다. 여기서 n은 말의 순서를 표시한 숫자입니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<태그.json> 요소)\n",
+                    "Message": "1)'말의종류': '대화', '독백', '요약', '인용', '강조' 중 선택\n2)'말하는인물': 말하는 인물의 이름, 직업 등의 명칭\n3)'인물의역할': 말하는 인물의 역할로 '주인공', '조연', '단역', '엑스트라', '카메오' 중 선택\n4)'듣는인물': 말을 듣는 인물의 명칭"
+                },
+                {
+                    "Mark": "\n\n(<태그.json> 추가데이터: [말1], [말2], [말3], ... [말n] 의 예시)\n",
+                    "Message": "[{'말1': {'말의종류': '대화', '말하는인물': '어린왕자', '인물의역할': '주인공', '듣는인물': '여우'}}, {'말2': {'말의종류': '독백', '말하는인물': '나', '인물의역할': '주인공', '듣는인물': '그'}}, {'말3': {'말의종류': '요약', '말하는인물': '소방관', '인물의역할': '조연', '듣는인물': '환자'}}, ... {'말n': {'말의종류': '인용', '말하는인물': '아버지', '인물의역할': '단역', '듣는인물': '아들'}}]"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. [말n]과 연관된 정보를 중점적으로 <내용>을 충분히 파악합니다.\n2. [말n]에 해당하는 '말의종류', '말하는인물', '인물의역할', '듣는인물'의 명칭을 충분히 고민하여 (<태그.json> 예시)처럼 <태그.json>을 완성해 주세요.\n3. '말하는인물'은 '없음'이 될 수 없습니다.\n4. 결과물에 <내용>은 절대 작성하지 않으며, 결과물인 <태그.json>만을 작성합니다.\n5. <내용>에서 등장하는 [말n]의 개수와 <태그.json>의 태그 데이터 개수는 일치합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(태깅 작업)\n",
+                    "InputMark": "<내용>\n",
+                    "Input": "INPUT"
+                }
+    
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<태그.json>\n",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
         }
     ]
 }

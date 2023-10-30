@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddIndexFrameBodyToDB, IndexFrameCountLoad, InitIndexFrame, IndexFrameCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedIndexFrameToDB, AddIndexFrameBodyToDB, IndexFrameCountLoad, InitIndexFrame, IndexFrameCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 # IndexText 로드
@@ -160,39 +160,46 @@ def IndexDefineDivision(projectName, email, maxTokens = 1500, messagesReview = "
       return responseJson
 
 # 프롬프트 요청 및 결과물 Json을 IndexFrame에 업데이트
-def IndexFrameUpdate(projectName, email, MessagesReview = "off"):
+def IndexFrameUpdate(projectName, email, MessagesReview = "off", ExistedFrame = None):
     print(f"< User: {email} | Project: {projectName} | 01_IndexFrameUpdate 시작 >")
     # IndexFrame의 Count값 가져오기
     IndexCount, Completion = IndexFrameCountLoad(projectName, email)
     if Completion == "No":
-        # ResponseJson을 IndexCount로 슬라이스
-        responseJson = IndexDefineDivision(projectName, email, messagesReview = MessagesReview)
-        ResponseJson = responseJson[IndexCount:]
-        ResponseJsonCount = len(ResponseJson)
-        
-        IndexId = IndexCount
-        
-        # TQDM 셋팅
-        UpdateTQDM = tqdm(ResponseJson,
-                          total = ResponseJsonCount,
-                          desc = 'IndexFrameUpdate')
-        # i값 수동 생성
-        i = 0
-        for Update in UpdateTQDM:
-            UpdateTQDM.set_description(f'IndexFrameUpdate: {Update}')
-            time.sleep(0.0001)
-            IndexId += 1
-            IndexTag = list(ResponseJson[i].keys())[0]
-            Index = ResponseJson[i][IndexTag]
+      
+        if ExistedFrame != None:
+          # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+          AddExistedIndexFrameToDB(projectName, email, ExistedFrame)
+          print(f"[ User: {email} | Project: {projectName} | 01_IndexFrameUpdate은 ExistedIndexFrame으로 대처됨 ]\n")
+        else:
+          responseJson = IndexDefineDivision(projectName, email, messagesReview = MessagesReview)
+          
+          # ResponseJson을 IndexCount로 슬라이스
+          ResponseJson = responseJson[IndexCount:]
+          ResponseJsonCount = len(ResponseJson)
+          
+          IndexId = IndexCount
+          
+          # TQDM 셋팅
+          UpdateTQDM = tqdm(ResponseJson,
+                            total = ResponseJsonCount,
+                            desc = 'IndexFrameUpdate')
+          # i값 수동 생성
+          i = 0
+          for Update in UpdateTQDM:
+              UpdateTQDM.set_description(f'IndexFrameUpdate: {Update}')
+              time.sleep(0.0001)
+              IndexId += 1
+              IndexTag = list(ResponseJson[i].keys())[0]
+              Index = ResponseJson[i][IndexTag]
 
-            AddIndexFrameBodyToDB(projectName, email, IndexId, IndexTag, Index)
-            # i값 수동 업데이트
-            i += 1
-            
-        UpdateTQDM.close()
-        # Completion "Yes" 업데이트
-        IndexFrameCompletionUpdate(projectName, email)
-        print(f"[ User: {email} | Project: {projectName} | 01_IndexFrameUpdate 완료 ]\n")
+              AddIndexFrameBodyToDB(projectName, email, IndexId, IndexTag, Index)
+              # i값 수동 업데이트
+              i += 1
+              
+          UpdateTQDM.close()
+          # Completion "Yes" 업데이트
+          IndexFrameCompletionUpdate(projectName, email)
+          print(f"[ User: {email} | Project: {projectName} | 01_IndexFrameUpdate 완료 ]\n")
     
     else:
         print(f"[ User: {email} | Project: {projectName} | 01_IndexFrameUpdate은 이미 완료됨 ]\n")

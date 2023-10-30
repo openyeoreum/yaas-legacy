@@ -1,9 +1,17 @@
 {
     "TaskName": "IndexDefine",
-    "ShortTokensModel": "gpt-3.5-turbo",
-    "LongTokensModel": "gpt-3.5-turbo-16k",
-    "ExampleFineTunedModel": [],
-    "MemoryFineTunedModel": [],
+    "BaseModel": {
+        "ShortTokensModel": "gpt-3.5-turbo",
+        "LongTokensModel": "gpt-3.5-turbo-16k"
+    },
+    "ExampleFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
+    "MemoryFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
     "Temperature": 0.5,
     "OutputTokensRatio": 2,
     "Example": [
@@ -100,7 +108,6 @@
                     "InputMark": "<목차.text>\n",
                     "Input": "INPUT"
                 }
-    
             ]
         },
         {
@@ -154,7 +161,6 @@
                     "Input": "INPUT",
                     "InputEnder": ""
                 }
-    
             ]
         },
         {
@@ -165,6 +171,109 @@
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",
             "OutputEnder": "OutputEnder"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서의 목차에서 목차별 목차태그를 선정하여 json 형식으로 정리하는 전문가 입니다.\n그래서 지금 도서목차인 <목차.text>를 목차태그 key값과 목차명 value값으로 <태그된 목차.json>를 제작하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "(목차태그 종류)\n",
+                    "Message": "Title: 도서의 제목\nLogue: 도서의 서문, 서평, 머릿말, 부록, 맺음말, 기타 등\nPart: 파트, 부 등의 제목\nChapter: 챕터, 장 등의 제목\nIndex: 소제목 등"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. 도서의 <목차.text>를 한줄씩 목차 부분을 분리합니다.\n2. 목차를 가장 큰 단위인 제목부터 가장 작은 단위인 소제목까지 파악합니다.\n3. 각 목차 앞에 목차태그의 key값 'Title, Rouge, Part, Chapter, Index'를 결정하여 <태그된 목차.json>으로 정리합니다.\n4. 아래 <목차.text>를 '한줄도 빠짐 없이' <태그된 목차.json>로 완성합니다.\n"
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(목차태그 작업 예시1)\n",
+                    "InputExampleMark": "<목차 예시1.text>\n",
+                    "InputExample": "NFT와 ARG가 바꾸는 비즈니스 법칙 웹3.0 메타버스\n\n머리말\n\n제1부 오래된 미래 - 메타버스, 30년의 역사\n\n1장. 1990년대, 메타버스가 잉태되다\n\n응답하라 1994\n초월적 시공간을 발견하다\n인터넷의 뿌리를 찾아서\n팀 버너스 리, 하이퍼텍스트를 계승하다\n인터넷과 웹은 다르다\n사이버 대륙으로 항해한 사람들\n지구에 새로운 기운이 맴돌다\n역전과 이동\n확률론적 방정식과 애자일 경영학\n\n2장. 웹2.0 시대, 집단지성이 태동하다\n\n지미 웨일스의 위키 실험\n블로그, 소비자를 생산자로 세우다\n두 공대생의 이상한 창업\n구글의 두 가지 광고상품\n웹을 놀이터에서 일터로 바꾼 애드센스\n오픈 플랫폼에서의 마케팅 문법\nSNS 창업 열풍\n웹 2.0 시대가 되다\n집단지성의 원리\n메타버스 경제학, 위키노믹스와 동료생산경제",
+                    "OutputExampleMark": "\n\n<태그된 목차 예시1.json>\n",
+                    "OutputExample":
+                    [
+                        {"Title": "NFT와 ARG가 바꾸는 비즈니스 법칙 웹3.0 메타버스"},
+                        {"Logue": "머리말"},
+                        {"Part": "제1부 오래된 미래 - 메타버스, 30년의 역사"},
+                        {"Chapter": "1장. 1990년대, 메타버스가 잉태되다"},
+                        {"Index": "응답하라 1994"},
+                        {"Index": "초월적 시공간을 발견하다"},
+                        {"Index": "인터넷의 뿌리를 찾아서"},
+                        {"Index": "팀 버너스 리, 하이퍼텍스트를 계승하다"},
+                        {"Index": "인터넷과 웹은 다르다"},
+                        {"Index": "사이버 대륙으로 항해한 사람들"},
+                        {"Index": "지구에 새로운 기운이 맴돌다"},
+                        {"Index": "역전과 이동"},
+                        {"Index": "확률론적 방정식과 애자일 경영학"},
+                        {"Chapter": "2장. 웹2.0 시대, 집단지성이 태동하다"},
+                        {"Index": "지미 웨일스의 위키 실험"},
+                        {"Index": "블로그, 소비자를 생산자로 세우다"},
+                        {"Index": "두 공대생의 이상한 창업"},
+                        {"Index": "구글의 두 가지 광고상품"},
+                        {"Index": "웹을 놀이터에서 일터로 바꾼 애드센스"},
+                        {"Index": "오픈 플랫폼에서의 마케팅 문법"},
+                        {"Index": "SNS 창업 열풍"},
+                        {"Index": "웹 2.0 시대가 되다"},
+                        {"Index": "집단지성의 원리"},
+                        {"Index": "메타버스 경제학, 위키노믹스와 동료생산경제"}
+                    ]
+                },
+                {
+                    "Mark": "\n\n(목차태그 작업 예시2)\n",
+                    "InputExampleMark": "<목차 예시2.text>\n",
+                    "InputExample": "카이스트 명상 수업\n\n들어가며\n\n1부 내 삶의 터닝 포인트가 된 카이스트 명상 수업\n카이스트 사태와 성찰 013\n수업을 준비하며 021\n첫 번째 수업: 마음을 정의해본다면 029\n두 번째 수업: 자기 돌아보기 043\n세 번째 수업: 마음은 내가 살아온 사진이다 052\n네 번째 수업: 내 삶을 바꿔놓은 마음빼기 명상 061\n다섯 번째 수업: 마음빼기 명상이 가져온 변화들 066\n여섯 번째 수업: 철학과 명상의 만남 075\n일곱 번째 수업: 뇌과학과 명상 085\n명상을 본격적으로 시작하기 전에 알아야 할 것들 100\n2부 나의 명상 이야기\n나의 인생, 그리고 명상을 하게 되었다 107\n내게 일어난 명상 효과 112\n나의 첫 명상 이야기 122\n명상을 하며 내가 비워낸 마음들 131",
+                    "OutputExampleMark": "\n\n<태그된 목차 예시2.json>\n",
+                    "OutputExample":
+                    [
+                        {"Title": "카이스트 명상 수업"},
+                        {"Logue": "들어가며"},
+                        {"Part": "1부 내 삶의 터닝 포인트가 된 카이스트 명상 수업"},
+                        {"Index": "카이스트 사태와 성찰"},
+                        {"Index": "수업을 준비하며"},
+                        {"Index": "첫 번째 수업: 마음을 정의해본다면"},
+                        {"Index": "두 번째 수업: 자기 돌아보기"},
+                        {"Index": "세 번째 수업: 마음은 내가 살아온 사진이다"},
+                        {"Index": "네 번째 수업: 내 삶을 바꿔놓은 마음빼기 명상"},
+                        {"Index": "다섯 번째 수업: 마음빼기 명상이 가져온 변화들"},
+                        {"Index": "여섯 번째 수업: 철학과 명상의 만남"},
+                        {"Index": "일곱 번째 수업: 뇌과학과 명상"},
+                        {"Index": "명상을 본격적으로 시작하기 전에 알아야 할 것들"},
+                        {"Part": "2부 나의 명상 이야기"},
+                        {"Index": "나의 인생, 그리고 명상을 하게 되었다"},
+                        {"Index": "내게 일어난 명상 효과"},
+                        {"Index": "나의 첫 명상 이야기"},
+                        {"Index": "명상을 하며 내가 비워낸 마음들"}
+                    ]
+                },
+                {
+                    "Mark": "\n\n(목차태그 작업)\n",
+                    "InputMark": "<목차.text>\n",
+                    "Input": "INPUT"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<태그된 목차.json>\n",
+            "OutputStarter": "[{'Title': '",
+            "Output": "OUTPUT"
         }
     ]
 }

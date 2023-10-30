@@ -8,15 +8,15 @@ services:
       - POSTGRES_USER=yeoreum
       - POSTGRES_PASSWORD=0128
     volumes:
-      - ./backend/b5_Database/b51_DatabaseVolumesPostgres:/var/lib/postgresql/data
+      - ./backend/b5_Database/b52_DatabaseVolumesPostgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: "yeoreum@gmail.com"
-      PGADMIN_DEFAULT_PASSWORD: "0128"
+      PGADMIN_DEFAULT_EMAIL: "yeoreum00128@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "Dhvmsdufma1!"
     ports:
       - "8080:80"
     depends_on:

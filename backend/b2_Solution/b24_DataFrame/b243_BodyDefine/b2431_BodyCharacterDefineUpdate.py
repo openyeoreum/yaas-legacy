@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddBodyCharacterDefineChunksToDB, AddBodyCharacterDefineCharacterTagsToDB, BodyCharacterDefineCountLoad, BodyCharacterDefineCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyCharacterDefineToDB, AddBodyCharacterDefineChunksToDB, AddBodyCharacterDefineCharacterTagsToDB, BodyCharacterDefineCountLoad, BodyCharacterDefineCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 ## BodyFrameBodys 로드
@@ -130,14 +130,22 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
                 mode = "Example"
             else:
                 mode = "Memory"
-        elif Mode == "FineTuning":
-            mode = "Example"
+        elif Mode == "MemoryFineTuning":
+            if "Continue" in InputDic:
+                ContinueCount += 1
+            if ContinueCount == 1:
+                mode = "ExampleFineTuning"
+                FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
+            else:
+                mode = "MemoryFineTuning"
+        elif Mode == "ExampleFineTuning":
+            mode = "ExampleFineTuning"
             FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
         else:
             mode = "Example"
 
         if "Continue" in InputDic:
-            if Mode == "FineTuning":
+            if Mode == "ExampleFineTuning":
                 Keys = list(FineTuningMemory.keys())
                 Input = FineTuningMemory[Keys[1]] + InputDic['Continue']
             else:
@@ -154,12 +162,12 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
-            if mode == "Example":
+            if mode in ["Example", "ExampleFineTuning"]:
                 Example = promptFrame[0]["Example"]
                 if Response.startswith(Example[2]["OutputStarter"]):
                     Response = Response.replace(Example[2]["OutputStarter"], "", 1)
                 responseData = Example[2]["OutputStarter"] + Response
-            elif mode == "Memory":
+            elif mode in ["Memory", "MemoryFineTuning"]:
                 if Response.startswith("[" + outputEnder):
                     responseData = Response
                 else:
@@ -170,8 +178,10 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
             Filter = BodyCharacterDefineFilter(TalkTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
-                if mode == "Example" and ContinueCount == 1:
+                if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
+                if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
+                    ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
                 continue
             else:
@@ -239,45 +249,53 @@ def BodyCharacterDefineResponseJson(projectName, email, messagesReview = 'off', 
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 BodyCharacterDefine에 업데이트
-def BodyCharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory"):
+def BodyCharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedFrame = None):
     print(f"< User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, CharacterCount, Completion = BodyCharacterDefineCountLoad(projectName, email)
     if Completion == "No":
-        responseJson = BodyCharacterDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
-        ResponseJson = responseJson[ContinueCount:]
-        ResponseJsonCount = len(ResponseJson)
         
-        CharacterChunkId = ContinueCount
-        
-        # TQDM 셋팅
-        UpdateTQDM = tqdm(ResponseJson,
-                          total = ResponseJsonCount,
-                          desc = 'BodyCharacterDefineUpdate')
-        # i값 수동 생성
-        i = 0
-        for Update in UpdateTQDM:
-            UpdateTQDM.set_description(f'BodyCharacterDefineUpdate: {Update}')
-            time.sleep(0.0001)
-            CharacterChunkId += 1
-            ChunkId = ResponseJson[i]["ChunkId"]
-            Chunk = ResponseJson[i]["Chunk"]
-            Character = ResponseJson[i]["Character"]
-            Type = ResponseJson[i]["Type"]
-            Role = ResponseJson[i]["Role"]
-            Listener = ResponseJson[i]["Listener"]
+        if ExistedFrame != None:
+            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            AddExistedBodyCharacterDefineToDB(projectName, email, ExistedFrame)
+            print(f"[ User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate는 ExistedBodyCharacterDefine으로 대처됨 ]\n")
+        else:
+            responseJson = BodyCharacterDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
-            AddBodyCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Role, Listener)
-            # i값 수동 업데이트
-            i += 1
-        
-        UpdateTQDM.close()
-        # Completion "Yes" 업데이트
-        BodyCharacterDefineCompletionUpdate(projectName, email)
-        print(f"[ User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate 완료 ]\n")
+            # ResponseJson을 ContinueCount로 슬라이스
+            ResponseJson = responseJson[ContinueCount:]
+            ResponseJsonCount = len(ResponseJson)
+            
+            CharacterChunkId = ContinueCount
+            
+            # TQDM 셋팅
+            UpdateTQDM = tqdm(ResponseJson,
+                            total = ResponseJsonCount,
+                            desc = 'BodyCharacterDefineUpdate')
+            # i값 수동 생성
+            i = 0
+            for Update in UpdateTQDM:
+                UpdateTQDM.set_description(f'BodyCharacterDefineUpdate: {Update}')
+                time.sleep(0.0001)
+                CharacterChunkId += 1
+                ChunkId = ResponseJson[i]["ChunkId"]
+                Chunk = ResponseJson[i]["Chunk"]
+                Character = ResponseJson[i]["Character"]
+                Type = ResponseJson[i]["Type"]
+                Role = ResponseJson[i]["Role"]
+                Listener = ResponseJson[i]["Listener"]
+                
+                AddBodyCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Role, Listener)
+                # i값 수동 업데이트
+                i += 1
+            
+            UpdateTQDM.close()
+            # Completion "Yes" 업데이트
+            BodyCharacterDefineCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate은 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 

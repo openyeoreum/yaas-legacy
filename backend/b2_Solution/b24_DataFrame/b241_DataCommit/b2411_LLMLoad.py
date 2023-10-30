@@ -13,6 +13,8 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetPromptFrame, GetTrainingDataset
 
+##########
+##### LLM 공통사항 #####
 ## 오늘 날짜
 def Date(Option = "Day"):
     if Option == "Day":
@@ -31,13 +33,20 @@ def LoadLLMapiKey(email):
         lLMapiKey = user.TTSapiKey
     
     return lLMapiKey
+##########
+##########
 
+##########
+##### LLM Response #####
 ## 프롬프트 요청할 LLMmessages 메세지 구조 생성
 def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
     promptFrame = GetPromptFrame(Process)
     messageTime = "current time: " + str(Date("Second")) + '\n\n'
-    if mode == "Example":
-      Example = promptFrame[0]["Example"]
+    if mode in ["Example", "ExampleFineTuning"]:
+      if mode == "Example":
+        Example = promptFrame[0]["Example"]
+      elif mode == "ExampleFineTuning":
+        Example = promptFrame[0]["ExampleFineTuning"]
       messages = [
         {
           "role": Example[0]["Role"],
@@ -62,7 +71,7 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
         }
       ]
       
-    elif mode == "Memory":
+    elif mode in ["Memory", "MemoryFineTuning"]:
       Memory = promptFrame[0]["Memory"]
       messages = [
         {
@@ -155,22 +164,37 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
     promptFrame = GetPromptFrame(Process)
     
     Messages, TotalTokens, temperature = LLMmessages(Process, Input, mode = Mode, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
-    
+
     if TotalTokens < 4500:
-      if promptFrame[0]["ExampleFineTunedModel"] != []:
-        if Mode == "Example":
-          Model = promptFrame[0]["ExampleFineTunedModel"][-1]["Model"]
-        elif Mode == "Memory":
-          if promptFrame[0]["MemoryFineTunedModel"] != []:
-            Model = promptFrame[0]["MemoryFineTunedModel"][-1]["Model"]
-          else:
-            Model = promptFrame[0]["ShortTokensModel"]
-      else:
-        Model = promptFrame[0]["ShortTokensModel"]
+      if Mode in ["Example", "Memory"]:
+        Model = promptFrame[0]["BaseModel"]["ShortTokensModel"]
+      if Mode == "ExampleFineTuning":
+        if promptFrame[0]["ExampleFineTunedModel"]["ShortTokensModel"] != []:
+          Model = promptFrame[0]["ExampleFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+        else:
+          Model = promptFrame[0]["BaseModel"]["ShortTokensModel"]
+      if Mode == "MemoryFineTuning":
+        if promptFrame[0]["MemoryFineTunedModel"]["ShortTokensModel"] != []:
+          Model = promptFrame[0]["MemoryFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+        else:
+          Model = promptFrame[0]["BaseModel"]["ShortTokensModel"]
+
     else:
-      Model = promptFrame[0]["LongTokensModel"]
+      if Mode in ["Example", "Memory"]:
+        Model = promptFrame[0]["BaseModel"]["LongTokensModel"]
+      if Mode == "ExampleFineTuning":
+        if promptFrame[0]["ExampleFineTunedModel"]["LongTokensModel"] != []:
+          Model = promptFrame[0]["ExampleFineTunedModel"]["LongTokensModel"][-1]["Model"]
+        else:
+          Model = promptFrame[0]["BaseModel"]["LongTokensModel"]
+      if Mode == "MemoryFineTuning":
+        if promptFrame[0]["MemoryFineTunedModel"]["LongTokensModel"] != []:
+          Model = promptFrame[0]["MemoryFineTunedModel"]["LongTokensModel"][-1]["Model"]
+        else:
+          Model = promptFrame[0]["BaseModel"]["LongTokensModel"]
+
     Temperature = temperature
-    
+
     for _ in range(MaxAttempts):
       try:
           response = openai.ChatCompletion.create(
@@ -189,7 +213,11 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
       except openai.error.OpenAIError as e:
           print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생: {e}")
           continue
-        
+##########
+##########
+
+##########
+##### LLM FineTuning #####
 ## 파인튜닝 데이터셋 생성
 def LLMTrainingDatasetGenerator(projectName, email, Process, DataSetPath, processDataset):
     ###                                                                   ^^^^^^^^^^^^^^ 테스트 후 삭제 ###   
@@ -252,17 +280,24 @@ def LLMTrainingDatasetUpload(projectName, email, Process, DataSetPath, processDa
     return FileId
 
 ## 파인튜닝
-def LLMFineTuning(projectName, email, Process, DataSetPath, processDataset, Model = "gpt-3.5-turbo", Epochs = 3, MaxAttempts = 100):
-    ###                                                                              ^^^^^^^^^^^^^^ 테스트 후 삭제 ###
+def LLMFineTuning(projectName, email, Process, DataSetPath, processDataset, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
+    ###                                                     ^^^^^^^^^^^^^^ 테스트 후 삭제 ###
     with get_db() as db:
         openai.api_key = LoadLLMapiKey(email)
         openai.api_key = os.getenv("OPENAI_API_KEY")
         
         FileId = LLMTrainingDatasetUpload(projectName, email, Process, DataSetPath, processDataset)
-      
+
+        # 토큰수별 모델 선정
+        if ModelTokens == "Short":
+          BaseModel = "gpt-3.5-turbo"
+        elif ModelTokens == "Long":
+          BaseModel = "gpt-3.5-turbo-16k"
+        
+        # FineTuning 요청
         FineTuningJob = openai.FineTuningJob.create(
           training_file = FileId,
-          model = Model,
+          model = BaseModel,
           hyperparameters={"n_epochs":Epochs}
         )
         time.sleep(random.randint(60, 90))
@@ -273,13 +308,27 @@ def LLMFineTuning(projectName, email, Process, DataSetPath, processDataset, Mode
             time.sleep(random.randint(60, 90))
             continue
           else:
-            FineTuninedModel = FineTuningJob["fine_tuned_model"]
+            FineTunedModel = FineTuningJob["fine_tuned_model"]
             TrainedTokens = FineTuningJob["trained_tokens"]
             TrainingFile = FineTuningJob["training_file"]
             print(f"Project: {projectName} | Process: {Process} | LLMFineTuning 완료")
             
         promptFrame = GetPromptFrame(Process)
-        promptFrame[0]['ExampleFineTunedModel'].append({"Id" : Process + '-' + str(Date("Second")), "Model" :FineTuninedModel})
+        
+        # Prompt 모델 업데이트
+        fineTunedModelDic = {"Id" : Process + '-' + str(Date("Second")), "Model" :FineTunedModel}
+        
+        if Mode == "Example":
+          if ModelTokens == "Short":
+            promptFrame[0]['ExampleFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
+          elif ModelTokens == "Long":
+            promptFrame[0]['ExampleFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
+            
+        elif Mode == "Memory":
+          if ModelTokens == "Short":
+            promptFrame[0]['MemoryFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
+          elif ModelTokens == "Long":
+            promptFrame[0]['MemoryFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
         
         flag_modified(promptFrame, Process)
         
@@ -288,7 +337,9 @@ def LLMFineTuning(projectName, email, Process, DataSetPath, processDataset, Mode
         
     # openai.File.delete(TrainingFile)
     
-    return FineTuninedModel, TrainedTokens
+    return FineTunedModel, TrainedTokens
+##########
+##########
     
 if __name__ == "__main__":
 
@@ -300,25 +351,17 @@ if __name__ == "__main__":
     DataSetPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b55_TrainingDataTest/"
     #########################################################################
 
-    # with open(DataSetPath + "yeoreum00128@gmail.com_우리는행복을진단한다_04_BodyCharacterDefineDataSet_231022.json", 'r', encoding='utf-8') as file:
-    #     processDataset = json.load(file)
+    with open(DataSetPath + "yeoreum00128@gmail.com_우리는행복을진단한다_04_BodyCharacterDefineDataSet_231022.json", 'r', encoding='utf-8') as file:
+        processDataset = json.load(file)
     
-    # FineTuninedModel, TrainedTokens = LLMFineTuning(projectName, email, process, DataSetPath, processDataset)
+    modelTokens = "Short"
+    mode = "Example"
+    epochs = 4
+    FineTunedModel, TrainedTokens = LLMFineTuning(projectName, email, process, DataSetPath, processDataset, ModelTokens = modelTokens, Mode = mode, Epochs = epochs)
     
-    # print(FineTuninedModel, TrainedTokens)
-        
-    # LLMFineTuning(projectName, email, process, DataSetPath, processDataset)
-    # FileId = "file-7IcoiyDE9P4pf6CZx5nHemX1"
-    # Model = "gpt-3.5-turbo"
-    # Epochs = 4
-    # LLMFineTuning(FileId, Model, Epochs)  
-    
-    # completion = openai.ChatCompletion.create(
-    #   model="ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
-    #   messages=[
-    #     {"role": "user", "content": "안녕 GPT!"}
-    #   ]
-    # )
-    
-    promptFrame = GetPromptFrame(process)
-    print(promptFrame[0]['ExampleFineTunedModel'])
+    completion = openai.ChatCompletion.create(
+      model = FineTunedModel,
+      messages = [
+        {"role": "user", "content": "안녕 GPT!"}
+      ]
+    )

@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddSummaryBodyFrameBodyToDB, SummaryBodyFrameCountLoad, SummaryBodyFrameCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSummaryBodyFrameToDB, AddSummaryBodyFrameBodyToDB, SummaryBodyFrameCountLoad, SummaryBodyFrameCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 ## BodyFrameBodys 로드
@@ -133,11 +133,29 @@ def BodySummaryProcess(projectName, email, Process = "BodySummary", memoryLength
                 mode = "Example"
             else:
                 mode = "Memory"
+        elif Mode == "MemoryFineTuning":
+            if "Continue" in InputDic:
+                ContinueCount += 1
+            if ContinueCount == 1:
+                mode = "ExampleFineTuning"
+                FineTuningMemoryDic = InputList[TotalCount - 1]
+                keys = list(FineTuningMemoryDic.keys())
+                FineTuningMemory = FineTuningMemoryDic[keys[1]]
+            else:
+                mode = "MemoryFineTuning"
+        elif Mode == "ExampleFineTuning" and TotalCount > 0:
+            mode = "ExampleFineTuning"
+            FineTuningMemoryDic = InputList[TotalCount - 1]
+            keys = list(FineTuningMemoryDic.keys())
+            FineTuningMemory = FineTuningMemoryDic[keys[1]]
         else:
             mode = "Example"
 
         if "Continue" in InputDic:
-            Input = str(InputDic)
+            if Mode == "ExampleFineTuning":
+                Input = FineTuningMemory + str(InputDic)
+            else:
+                Input = str(InputDic)
 
             # Filter, MemoryCounter, OutputEnder 처리
             inputDicId = str(InputDic["Id"])
@@ -150,12 +168,12 @@ def BodySummaryProcess(projectName, email, Process = "BodySummary", memoryLength
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
-            if mode == "Example":
+            if mode in ["Example", "ExampleFineTuning"]:
                 Example = promptFrame[0]["Example"]
                 if Response.startswith(Example[2]["OutputStarter"]):
                     Response = Response.replace(Example[2]["OutputStarter"], "", 1)
                 responseData = Example[2]["OutputStarter"] + Response
-            elif mode == "Memory":
+            elif mode in ["Memory", "MemoryFineTuning"]:
                 if Response.startswith("[" + outputEnder):
                     responseData = Response
                 else:
@@ -166,8 +184,10 @@ def BodySummaryProcess(projectName, email, Process = "BodySummary", memoryLength
             Filter = BodySummaryFilter(InputDic, responseData, memoryCounter)
             
             if isinstance(Filter, str):
-                if mode == "Example" and ContinueCount == 1:
+                if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
+                if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
+                    ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
                 continue
             else:
@@ -218,41 +238,49 @@ def BodySummaryResponseJson(projectName, email, messagesReview = "off", mode = "
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 IndexFrame에 업데이트
-def SummaryBodyFrameUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory"):
+def SummaryBodyFrameUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedFrame = None):
     print(f"< User: {email} | Project: {projectName} | 03_SummaryBodyFrameUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, Completion = SummaryBodyFrameCountLoad(projectName, email)
     if Completion == "No":
-        responseJson = BodySummaryResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
-        ResponseJson = responseJson[ContinueCount:]
-        ResponseJsonCount = len(ResponseJson)
         
-        BodyId = ContinueCount
-        
-        # TQDM 셋팅
-        UpdateTQDM = tqdm(ResponseJson,
-                          total = ResponseJsonCount,
-                          desc = 'SummaryBodyFrameUpdate')
-        # i값 수동 생성
-        i = 0
-        for Update in UpdateTQDM:
-            UpdateTQDM.set_description(f'SummaryBodyFrameUpdate: {Update}')
-            time.sleep(0.0001)
-            BodyId += 1
-            Summary = ResponseJson[i]["Summary"]
-            BodySummaryScript = ResponseJson[i]["BodySummaryScript"]
+        if ExistedFrame != None:
+            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            AddExistedSummaryBodyFrameToDB(projectName, email, ExistedFrame)
+            print(f"[ User: {email} | Project: {projectName} | 03_SummaryBodyFrameUpdate는 ExistedSummaryBodyFrame으로 대처됨 ]\n")
+        else:
+            responseJson = BodySummaryResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+                
+            # ResponseJson을 ContinueCount로 슬라이스
+            ResponseJson = responseJson[ContinueCount:]
+            ResponseJsonCount = len(ResponseJson)
             
-            AddSummaryBodyFrameBodyToDB(projectName, email, BodyId, Summary, BodySummaryScript)
-            # i값 수동 업데이트
-            i += 1
-        
-        UpdateTQDM.close()
-        # Completion "Yes" 업데이트
-        SummaryBodyFrameCompletionUpdate(projectName, email)
-        print(f"[ User: {email} | Project: {projectName} | 03_SummaryBodyFrameUpdate 완료 ]\n")
+            BodyId = ContinueCount
+            
+            # TQDM 셋팅
+            UpdateTQDM = tqdm(ResponseJson,
+                            total = ResponseJsonCount,
+                            desc = 'SummaryBodyFrameUpdate')
+            # i값 수동 생성
+            i = 0
+            for Update in UpdateTQDM:
+                UpdateTQDM.set_description(f'SummaryBodyFrameUpdate: {Update}')
+                time.sleep(0.0001)
+                BodyId += 1
+                Summary = ResponseJson[i]["Summary"]
+                BodySummaryScript = ResponseJson[i]["BodySummaryScript"]
+                
+                AddSummaryBodyFrameBodyToDB(projectName, email, BodyId, Summary, BodySummaryScript)
+                # i값 수동 업데이트
+                i += 1
+            
+            UpdateTQDM.close()
+            # Completion "Yes" 업데이트
+            SummaryBodyFrameCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 03_SummaryBodyFrameUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 03_SummaryBodyFrameUpdate은 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 03_SummaryBodyFrameUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 
@@ -265,4 +293,5 @@ if __name__ == "__main__":
     mode = "Memory"
     #########################################################################
     
-    SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    # SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    print(BodyFrameBodysToInputList(projectName, email)[:4])

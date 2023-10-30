@@ -1,4 +1,6 @@
 import os
+import re
+import unicodedata
 import json
 import sys
 sys.path.append("/yaas")
@@ -39,7 +41,19 @@ def AddFrameMetaDataToDB(projectName, email):
 
 ##########
 ##### IndexDefine Process #####
-# 1. 1-1 IndexFrame의 Body(본문)부분 업데이트 형식
+# 1. 1-1 IndexFrame이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedIndexFrameToDB(projectName, email, ExistedFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.IndexFrame[1] = ExistedFrame[1]
+        
+        flag_modified(project, "IndexFrame")
+        
+        db.add(project)
+        db.commit()
+
+# 1. 1-2 IndexFrame의 Body(본문)부분 업데이트 형식
 def UpdateIndexTags(project, IndexId, IndexTag, Index):
     
     updateIndexTags = {
@@ -52,7 +66,7 @@ def UpdateIndexTags(project, IndexId, IndexTag, Index):
     # Count 업데이트
     project.IndexFrame[0]["IndexCount"] = IndexId
 
-# 1. 1-2 IndexFrame의 Body(본문)부분 업데이트
+# 1. 1-3 IndexFrame의 Body(본문)부분 업데이트
 def AddIndexFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
     with get_db() as db:
     
@@ -111,7 +125,20 @@ def IndexFrameCompletionUpdate(projectName, email):
 
 ##########
 ##### BodySplit, IndexTagging Process #####
-# 2. 1-1 BodyFrame의 Body(본문) Body부분 업데이트 형식
+# 2. 1-1 BodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedBodyFrameToDB(projectName, email, ExistedFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.BodyFrame[1] = ExistedFrame[1]
+        project.BodyFrame[2] = ExistedFrame[2]
+        
+        flag_modified(project, "BodyFrame")
+        
+        db.add(project)
+        db.commit()
+        
+# 2. 1-2 BodyFrame의 Body(본문) Body부분 업데이트 형식
 def UpdateSplitedBodyScripts(project, IndexId, IndexTag, Index):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.BodyFrame[1]["SplitedBodyScripts"])
@@ -129,7 +156,7 @@ def UpdateSplitedBodyScripts(project, IndexId, IndexTag, Index):
     project.BodyFrame[0]["IndexCount"] = IndexId
     project.BodyFrame[0]["BodyCount"] = BodyId
 
-# 2. 1-2 BodyFrame의 Body(본문) Body부분 업데이트
+# 2. 1-3 BodyFrame의 Body(본문) Body부분 업데이트
 def AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
     with get_db() as db:
         
@@ -247,7 +274,19 @@ def BodyFrameCompletionUpdate(projectName, email):
 
 ##########
 ##### BodySummary Process #####
-# 3. 1-1 SummaryBodyFrame의 BodySummaryScripts(본문)부분 업데이트 형식
+# 3. 1-1 SummaryBodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedSummaryBodyFrameToDB(projectName, email, ExistedFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.SummaryBodyFrame[1] = ExistedFrame[1]
+        
+        flag_modified(project, "SummaryBodyFrame")
+        
+        db.add(project)
+        db.commit()
+        
+# 3. 1-2 SummaryBodyFrame의 BodySummaryScripts(본문)부분 업데이트 형식
 def UpdateSummaryBodyTags(project, BodyId, Summary, BodySummaryScript):
     
     updateBodySummaryScripts = {
@@ -260,7 +299,7 @@ def UpdateSummaryBodyTags(project, BodyId, Summary, BodySummaryScript):
     # Count 업데이트
     project.SummaryBodyFrame[0]["BodyCount"] = BodyId
     
-# 3. 1-2 SummaryBodyFrame의 SummaryBodyFrame(본문)부분 업데이트
+# 3. 1-3 SummaryBodyFrame의 SummaryBodyFrame(본문)부분 업데이트
 def AddSummaryBodyFrameBodyToDB(projectName, email, BodyId, Summary, BodySummaryScript):
     with get_db() as db:
     
@@ -319,6 +358,19 @@ def SummaryBodyFrameCompletionUpdate(projectName, email):
 
 ##########
 ##### BodyCharacterDefine Process #####
+# 4. 1-1 BodyCharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedBodyCharacterDefineToDB(projectName, email, ExistedFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.BodyCharacterDefine[1] = ExistedFrame[1]
+        project.BodyCharacterDefine[2] = ExistedFrame[2]
+        
+        flag_modified(project, "BodyCharacterDefine")
+        
+        db.add(project)
+        db.commit()
+        
 # 4. 1-1 BodyCharacterDefine의 Body(본문) BodyCharacters부분 업데이트 형식
 def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, Type, Role, Listener):    
     updateCharacterChunks = {

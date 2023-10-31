@@ -86,7 +86,7 @@ def BodyCharacterDefineInputMemory(inputMemoryDics, MemoryLength):
         else:
             inputMemoryList.append(inputmeMory['Pass'])
     inputMemory = "".join(inputMemoryList)
-    print(f"@@@@@@@@@@\ninputMemory :{inputMemory}\n@@@@@@@@@@")
+    # print(f"@@@@@@@@@@\ninputMemory :{inputMemory}\n@@@@@@@@@@")
     
     return inputMemory
 
@@ -136,13 +136,13 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
                 ContinueCount += 1
             if ContinueCount == 1:
                 mode = "ExampleFineTuning"
-                # FineTuningMemory 형성
+                # "ExampleFineTuning"의 ineTuningMemory 형성
                 FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
             else:
                 mode = "MemoryFineTuning"
         elif Mode == "ExampleFineTuning":
             mode = "ExampleFineTuning"
-            # FineTuningMemory 형성
+            # "ExampleFineTuning"의 ineTuningMemory 형성
             FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
         else:
             mode = "Example"

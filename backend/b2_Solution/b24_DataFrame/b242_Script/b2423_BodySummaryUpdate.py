@@ -138,7 +138,7 @@ def BodySummaryProcess(projectName, email, Process = "BodySummary", memoryLength
                 ContinueCount += 1
             if ContinueCount == 1:
                 mode = "ExampleFineTuning"
-                # FineTuningMemory 형성
+                # "ExampleFineTuning"의 ineTuningMemory 형성
                 FineTuningMemoryDic = InputList[TotalCount - 1]
                 keys = list(FineTuningMemoryDic.keys())
                 FineTuningMemory = FineTuningMemoryDic[keys[1]]
@@ -146,7 +146,7 @@ def BodySummaryProcess(projectName, email, Process = "BodySummary", memoryLength
                 mode = "MemoryFineTuning"
         elif Mode == "ExampleFineTuning" and TotalCount > 0:
             mode = "ExampleFineTuning"
-            # FineTuningMemory 형성
+            # "ExampleFineTuning"의 ineTuningMemory 형성
             FineTuningMemoryDic = InputList[TotalCount - 1]
             keys = list(FineTuningMemoryDic.keys())
             FineTuningMemory = FineTuningMemoryDic[keys[1]]
@@ -301,5 +301,4 @@ if __name__ == "__main__":
     mode = "Memory"
     #########################################################################
     
-    # SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
-    print(BodyFrameBodysToInputList(projectName, email)[:4])
+    SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)

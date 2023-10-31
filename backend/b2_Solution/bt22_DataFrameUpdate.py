@@ -34,7 +34,7 @@ def SaveDataFrame(projectName, email, Process, UpdatedFrame, DataSetPath):
     newFilename = filename
     while os.path.exists(newFilename):
         counter += 1
-        newFilename = f"{base}({counter}) {ext}"
+        newFilename = f"{base} ({counter}){ext}"
     with open(newFilename, 'w', encoding='utf-8') as f:
         json.dump(UpdatedFrame, f, ensure_ascii=False, indent=4)
         
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "살아서천국극락낙원에가는방법"
+    projectName = "우리는행복을진단한다"
     DataFramePath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
     DataSetPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b55_TrainingDataTest/"
     ProjectDataTestPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
@@ -88,6 +88,7 @@ if __name__ == "__main__":
     AddDataSetMetaDataToDB(projectName, email)
 
 
+    ###################################
     ### 01_IndexFrame-[IndexDefine] ###
     InitIndexFrame(projectName, email)
     if existedFrameMode == "on":
@@ -100,8 +101,10 @@ if __name__ == "__main__":
         SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
         SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", DataSetPath)
         SaveDataSet(projectName, email, "01", "IndexDefine", DataSetPath)
+    existedFrame = None
 
 
+    ##############################################
     ### 02_BodyFrame-[BodySplit, IndexTagging] ###
     InitBodyFrame(projectName, email)
     if existedFrameMode == "on":
@@ -111,21 +114,25 @@ if __name__ == "__main__":
     if existedFrame == None:
         updatedBodyFrame = UpdatedBodyFrame(projectName, email)
         SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
+    existedFrame = None
 
 
-    # ### 03_SummaryBodyFrame-[BodySummary] ###
-    # InitSummaryBodyFrame(projectName, email)
-    # if existedFrameMode == "on":
-    #     existedFrame = LoadExistedFrame(projectName, email, "03", ProjectDataTestPath)
-    # mode = "ExampleFineTuning" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning"
-    # SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedFrame = existedFrame)
+    #########################################
+    ### 03_SummaryBodyFrame-[BodySummary] ###
+    InitSummaryBodyFrame(projectName, email)
+    if existedFrameMode == "on":
+        existedFrame = LoadExistedFrame(projectName, email, "03", ProjectDataTestPath)
+    mode = "ExampleFineTuning" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning"
+    SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedFrame = existedFrame)
     
-    # if existedFrame == None:
-    #     updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
-    #     SaveDataFrame(projectName, email, "03_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
-    #     SaveDataSet(projectName, email, "03", "BodySummary", DataSetPath)
+    if existedFrame == None:
+        updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
+        SaveDataFrame(projectName, email, "03_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
+        SaveDataSet(projectName, email, "03", "BodySummary", DataSetPath)
+    existedFrame = None
 
 
+    ##############################
     ### 04_BodyCharacterDefine ###
     InitBodyCharacterDefine(projectName, email)
     if existedFrameMode == "on":
@@ -137,3 +144,4 @@ if __name__ == "__main__":
         updatedBodyCharacterDefine = UpdatedBodyCharacterDefine(projectName, email)
         SaveDataFrame(projectName, email, "04_BodyCharacterDefine", updatedBodyCharacterDefine, DataFramePath)       
         SaveDataSet(projectName, email, "04", "BodyCharacterDefine", DataSetPath)
+    existedFrame = None

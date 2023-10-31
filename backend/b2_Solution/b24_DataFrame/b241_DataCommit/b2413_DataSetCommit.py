@@ -57,6 +57,7 @@ def UpdateProjectContext(ProcessDataset, Process, Language = "None", Genre = "No
     
     ProcessDataset["TaskName"] = Process
     ProcessDataset["Context"].update(updateContext)
+    ProcessDataset["FeedbackCompletion"] = "No"
     
 # 1. 1-2 ProjectContext 부분 업데이트
 def AddProjectContextToDB(projectName, email, Process, language = "None", genre = "None", gender = "None", age = "None", personality = "None", emotion = "None", environment = "None", situation = "None", era = "None", culture = "None"):
@@ -207,7 +208,7 @@ def InitRawDataSet(projectName, email, Process):
                 "Input": "None",
                 "Feedback": "None",
                 "Check": "No",
-                "Accurace": "None"
+                "Accuracy": "None"
             }
         ]
         ProcessDataset["FeedbackCompletion"] = "No"
@@ -260,7 +261,7 @@ def SaveDataSet(projectName, email, ProcessNumber, Process, DataSetPath):
     Newfilename = filename
     while os.path.exists(Newfilename):
         counter += 1
-        Newfilename = f"{base}({counter}) {ext}"
+        Newfilename = f"{base} ({counter}){ext}"
     with open(Newfilename, 'w', encoding='utf-8') as f:
         json.dump(ProcessDataset, f, ensure_ascii=False, indent=4)
         

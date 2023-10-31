@@ -188,7 +188,7 @@ def CommentTagging(projectName, email):
     if INPUT == OUTPUT:
         print(f"Project: {projectName} | Process: BodyFrameUpdate | CommentTagging 완료")
     else:
-        print(f"BodyText와 CommentTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CommentTaggingMatchingError")
+        print(f"BodyText와 CommentTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CommentTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
 
     return CommentTaggedChunks
 
@@ -236,7 +236,7 @@ def CaptionTagging(projectName, email):
     if INPUT == OUTPUT:
         print(f"Project: {projectName} | Process: BodyFrameUpdate | CaptionTagging 완료")
     else:
-        print(f"BodyText와 CaptionTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CaptionTaggingMatchingError")
+        print(f"BodyText와 CaptionTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CaptionTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
 
     return CaptionTaggedChunks
     
@@ -295,7 +295,7 @@ def CharacterTagging(projectName, email):
     if len(INPUT) == len(OUTPUT):
         print(f"Project: {projectName} | Process: BodyFrameUpdate | CharacterTagging 완료, 삭제된 데이터: {nonMergedTaggedChunks}")
     else:
-        print(f"BodyText와 CharacterTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CharacterTaggingMatchingError")
+        print(f"BodyText와 CharacterTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CharacterTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
 
     
     return CharacterTaggedChunks
@@ -362,7 +362,7 @@ def IndexMatching(projectName, email):
     INPUT = re.sub("[^가-힣]", "", str(CharacterTaggedChunks))
     OUTPUT = re.sub("[^가-힣]", "", str(IndexMatchedChunks))
     if INPUT != OUTPUT:
-        print(f"CharacterTaggedChunks와 IndexMatchedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | IndexMatchedChunksError")
+        print(f"CharacterTaggedChunks와 IndexMatchedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | IndexMatchedChunksError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
     else:
         print(f"Project: {projectName} | Process: BodyFrameUpdate | IndexMatching 완료")
         
@@ -422,7 +422,7 @@ def TaggedChunksToUnitedChunks(projectName, email):
     INPUT = re.sub("[^가-힣]", "", str(IndexMatchedChunks))
     OUTPUT = re.sub("[^가-힣]", "", str(IndexBodyUnitChunksList))
     if INPUT != OUTPUT:
-        print(f"IndexMatchedChunks와 IndexMatchedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | TaggedChunksToUnitedChunksError")
+        print(f"IndexMatchedChunks와 IndexMatchedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | TaggedChunksToUnitedChunksError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
     else:
         print(f"Project: {projectName} | Process: BodyFrameUpdate | TaggedChunksToUnitedChunks 완료")
 
@@ -440,6 +440,7 @@ def SplitedBodyScriptsToBodys(projectName, email):
     BodyTags = ["Narrator", "Character", "Caption", "Comment"]
     Tags = []
     Bodys = []
+    bodys = [] # 에러 테스트용도
     BodyChunks = []
     CharacterChunks = []
     TalkCount = 0
@@ -488,6 +489,7 @@ def SplitedBodyScriptsToBodys(projectName, email):
                 task.append("Character")
                 
         Bodys.append({'BodyId': idx + 1, 'Task': task, 'Body': "".join(BodyChunks), 'Character': "".join(CharacterChunks)})
+        bodys.append({'BodyId': idx + 1, 'Task': task, 'Body': "".join(BodyChunks)}) # 에러 테스트용도
         Tags = []
         BodyChunks = []
         CharacterChunks = []
@@ -498,13 +500,13 @@ def SplitedBodyScriptsToBodys(projectName, email):
     for i in range(len(BodyFrame)):
         for j in range(len(BodyFrame[i]["SplitedBodyChunks"])):
             BodyFrameList.append(BodyFrame[i]["SplitedBodyChunks"][j]["Chunk"])
-    CleanBodys = re.sub(r'\[말\d{1,5}\]', '', str(Bodys))
+    CleanBodys = re.sub(r'\[말\d{1,5}\]', '', str(bodys))
     
     # BodyFrameBodysUpdate 오류체크
     INPUT = re.sub("[^가-힣]", "", str(BodyFrameList))
     OUTPUT = re.sub("[^가-힣]", "", CleanBodys)
     if INPUT != OUTPUT:
-        print(f"SplitedBodyScripts와 Bodys 불일치 오류 발생: Project: {projectName} | Process: BodyFrameBodysUpdate | BodyFrameBodysUpdateError")
+        print(f"SplitedBodyScripts와 Bodys 불일치 오류 발생: Project: {projectName} | Process: BodyFrameBodysUpdate | BodyFrameBodysUpdateError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
     else:
         print(f"[ Project: {projectName} | BodyFrameBodysUpdate 완료 ]\n")     
     
@@ -604,7 +606,7 @@ def BodyFrameUpdate(projectName, email, ExistedFrame = None):
             INPUT = re.sub("[^가-힣]", "", str(IndexBodyUnitChunksList))
             OUTPUT = re.sub("[^가-힣]", "", str(BodyFrameList))
             if INPUT != OUTPUT:
-                print(f"IndexBodyUnitChunksList와 BodyFrameList 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | BodyFrameUpdateError")
+                print(f"IndexBodyUnitChunksList와 BodyFrameList 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | BodyFrameUpdateError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
             else:
                 print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate 완료 ]\n")
     else:

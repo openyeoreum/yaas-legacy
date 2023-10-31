@@ -259,7 +259,7 @@ def LLMTrainingDatasetGenerator(projectName, email, Process, DataSetPath, proces
     Newfilename = filename
     while os.path.exists(Newfilename):
         counter += 1
-        Newfilename = f"{base}({counter}) {ext}"
+        Newfilename = f"{base} ({counter}){ext}"
     
     ProcessDataset = processDataset ### < --- 테스트 후 삭제 ###
     

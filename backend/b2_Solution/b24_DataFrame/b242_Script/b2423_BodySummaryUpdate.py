@@ -50,7 +50,7 @@ def BodySummaryFilter(InputDic, responseData, memoryCounter):
     # for index in quote_indices[5:-1]:
     #     responseData = responseData[:index] + '\"' + responseData[index+1:]
         
-    print(f'\n\n@@@@@@@@@@@@@@@\n\n{responseData}\n\n@@@@@@@@@@@@@@@\n\n')
+    # print(f'\n\n@@@@@@@@@@@@@@@\n\n{responseData}\n\n@@@@@@@@@@@@@@@\n\n')
     
     # Error1: json 형식이 아닐 때의 예외 처리
     try:

@@ -19,7 +19,7 @@ def LoadIndexText(projectName, email):
     return indexText
 
 # IndexPreprocess 프롬프트 요청 및 결과물 Text화
-def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess", MaxRetries = 100, MESSAGESREVIEW = "off"):
+def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess", MaxRetries = 100, Mode = "Example", MESSAGESREVIEW = "off"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -38,7 +38,7 @@ def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess",
         print(f"Project: {projectName} | Process: {Process} | CleanTextMatching 완료")
 
         # DataSets 업데이트
-        AddProjectRawDatasetToDB(projectName, email, Process, Model, Usage, Input, Response)
+        AddProjectRawDatasetToDB(projectName, email, Process, Mode, Model, Usage, Input, Response)
         AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, Response)
 
         return Response
@@ -49,7 +49,7 @@ def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess",
     print(f"Project: {projectName} | Process: {Process}에서 오류 발생: 최대 재시도 횟수를 초과하였습니다.")
 
 # IndexDefine 프롬프트 요청 및 결과물 Json화
-def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None, MaxRetries = 100, MessagesReview = "off"):
+def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None, MaxRetries = 100, Mode = "Example", MessagesReview = "off"):
     if Input == None:
       Input = IndexDefinePreprocess(projectName, email, MESSAGESREVIEW = MessagesReview)
     Input = Input.replace("'", "")
@@ -100,7 +100,7 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
         print(f"Project: {projectName} | Process: {Process} | JSONDecode 완료")
 
         # DataSets 업데이트
-        AddProjectRawDatasetToDB(projectName, email, Process, Model, Usage, Input, responseJson)
+        AddProjectRawDatasetToDB(projectName, email, Process, Mode, Model, Usage, Input, responseJson)
         AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, responseJson)
 
         return responseJson
@@ -110,7 +110,7 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
         TotalCount += 1
 
 # IndexDefine 프롬프트 요청 및 결과물이 긴 경우 나누어 처리
-def IndexDefineDivision(projectName, email, maxTokens = 1500, messagesReview = "off"):
+def IndexDefineDivision(projectName, email, maxTokens = 1500, mode = "Example", messagesReview = "off"):
     indexText = LoadIndexText(projectName, email)
     encoding = tiktoken.get_encoding("cl100k_base")
     indexTokens = len(encoding.encode(indexText))
@@ -119,7 +119,7 @@ def IndexDefineDivision(projectName, email, maxTokens = 1500, messagesReview = "
     if indexTokens >= maxTokens:
       print(f"--- IndexDefineDivision 모드, 토큰수: {indexTokens} ---")
       # preprocessedIndexText를 둘다 앞부분에 Title을 붙혀서 2개로 분할
-      preprocessedIndexText = IndexDefinePreprocess(projectName, email, MESSAGESREVIEW = messagesReview)
+      preprocessedIndexText = IndexDefinePreprocess(projectName, email, Mode = mode, MESSAGESREVIEW = messagesReview)
       # print(f"{type(preprocessedIndexText)}\npreprocessedIndexText: {preprocessedIndexText}")
       sections = preprocessedIndexText.split('\n\n')
       totalTokens = sum(len(section.split()) for section in sections)
@@ -141,10 +141,10 @@ def IndexDefineDivision(projectName, email, maxTokens = 1500, messagesReview = "
       
       # 분할된 InputText를 바탕으로 IndexDefineProcess프로세스를 분할하여 2번 실행
       print("--- FirstIndexDefineProcess 시작 ---")
-      FirstIndexDefineProcess = IndexDefineProcess(projectName, email, Input = firstIndexText, MessagesReview = messagesReview)
+      FirstIndexDefineProcess = IndexDefineProcess(projectName, email, Input = firstIndexText, Mode = mode, MessagesReview = messagesReview)
       print("--- FirstIndexDefineProcess 완료 ---")
       print("--- SecondIndexDefineProcess 시작 ---")
-      SecondIndexDefineProcess = IndexDefineProcess(projectName, email, Input = secondIndexText, MessagesReview = messagesReview)
+      SecondIndexDefineProcess = IndexDefineProcess(projectName, email, Input = secondIndexText, Mode = mode, MessagesReview = messagesReview)
       print("--- SecondIndexDefineProcess 완료 ---")
       
       # 분할된 출력의 결합 (SecondIndexDefineProcess의 경우 타이틀 제거)
@@ -160,7 +160,7 @@ def IndexDefineDivision(projectName, email, maxTokens = 1500, messagesReview = "
       return responseJson
 
 # 프롬프트 요청 및 결과물 Json을 IndexFrame에 업데이트
-def IndexFrameUpdate(projectName, email, MessagesReview = "off", ExistedFrame = None):
+def IndexFrameUpdate(projectName, email, MessagesReview = "off", Mode = "Example", ExistedFrame = None):
     print(f"< User: {email} | Project: {projectName} | 01_IndexFrameUpdate 시작 >")
     # IndexFrame의 Count값 가져오기
     IndexCount, Completion = IndexFrameCountLoad(projectName, email)
@@ -171,7 +171,7 @@ def IndexFrameUpdate(projectName, email, MessagesReview = "off", ExistedFrame = 
           AddExistedIndexFrameToDB(projectName, email, ExistedFrame)
           print(f"[ User: {email} | Project: {projectName} | 01_IndexFrameUpdate은 ExistedIndexFrame으로 대처됨 ]\n")
         else:
-          responseJson = IndexDefineDivision(projectName, email, messagesReview = MessagesReview)
+          responseJson = IndexDefineDivision(projectName, email, mode = Mode, messagesReview = MessagesReview)
           
           # ResponseJson을 IndexCount로 슬라이스
           ResponseJson = responseJson[IndexCount:]

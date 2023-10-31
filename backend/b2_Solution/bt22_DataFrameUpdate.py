@@ -70,46 +70,47 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "살아서천국극락낙원에가는방법"
     DataFramePath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
     DataSetPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b55_TrainingDataTest/"
     ProjectDataTestPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
     messagesReview = "on"
     
     ### existedFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
-    existedFrameMode = "off" # <- 개발 후 off #
+    existedFrameMode = "on" # <- 개발 후 off #
     existedFrame = None
     #########################################################################
     
 
-    # ### 00_DataFrame-[AllMetaData] ###
-    # AddFrameMetaDataToDB(projectName, email)
+    ### 00_DataFrame-[AllMetaData] ###
+    AddFrameMetaDataToDB(projectName, email)
 
-    # AddDataSetMetaDataToDB(projectName, email)
+    AddDataSetMetaDataToDB(projectName, email)
 
 
-    # ### 01_IndexFrame-[IndexDefine] ###
-    # InitIndexFrame(projectName, email)
-    # if existedFrameMode == "on":
-    #     existedFrame = LoadExistedFrame(projectName, email, "01", ProjectDataTestPath)
-    # IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, ExistedFrame = existedFrame)
+    ### 01_IndexFrame-[IndexDefine] ###
+    InitIndexFrame(projectName, email)
+    if existedFrameMode == "on":
+        existedFrame = LoadExistedFrame(projectName, email, "01", ProjectDataTestPath)
+    mode = "Example"
+    IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedFrame = existedFrame)
     
-    # if existedFrame == None:
-    #     updatedIndexFrame = UpdatedIndexFrame(projectName, email)
-    #     SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
-    #     SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", DataSetPath)
-    #     SaveDataSet(projectName, email, "01", "IndexDefine", DataSetPath)
+    if existedFrame == None:
+        updatedIndexFrame = UpdatedIndexFrame(projectName, email)
+        SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
+        SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", DataSetPath)
+        SaveDataSet(projectName, email, "01", "IndexDefine", DataSetPath)
 
 
-    # ### 02_BodyFrame-[BodySplit, IndexTagging] ###
-    # InitBodyFrame(projectName, email)
-    # if existedFrameMode == "on":
-    #     existedFrame = LoadExistedFrame(projectName, email, "02", ProjectDataTestPath)
-    # BodyFrameUpdate(projectName, email, ExistedFrame = existedFrame)
+    ### 02_BodyFrame-[BodySplit, IndexTagging] ###
+    InitBodyFrame(projectName, email)
+    if existedFrameMode == "on":
+        existedFrame = LoadExistedFrame(projectName, email, "02", ProjectDataTestPath)
+    BodyFrameUpdate(projectName, email, ExistedFrame = existedFrame)
 
-    # if existedFrame == None:
-    #     updatedBodyFrame = UpdatedBodyFrame(projectName, email)
-    #     SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
+    if existedFrame == None:
+        updatedBodyFrame = UpdatedBodyFrame(projectName, email)
+        SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
 
 
     # ### 03_SummaryBodyFrame-[BodySummary] ###

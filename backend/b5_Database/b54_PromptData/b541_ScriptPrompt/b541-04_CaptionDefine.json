@@ -82,63 +82,6 @@
             "Output": "OUTPUT"
         }
     ],
-    "Memory": [
-        {
-            "Role": "system",
-            "Mark": "(역할)\n",
-            "Message": "당신은 도서의 내용에서 본문과 캡션을 분리하는 전문가 입니다.\n그래서 지금 <예상 캡션 부분>에서 <캡션.json>을 선정하는 작업을 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": 
-            [
-                {
-                    "Mark": "(캡션의 정의)\n",
-                    "Message": "도서의 내용에 이해를 돕기 위한 용어, 사진, 별첨, 참고, 해설, 표, 기타 등에 포함된 부가적 설명 또는 정보"
-                },
-                {
-                    "Mark": "\n\n(캡션의 종류)\n",
-                    "Message": "용어, 자료, 별첨, 참고, 해설, 기타"
-                },
-                {
-                    "Mark": "\n\n(요청)\n",
-                    "Message": "1. 아래 예시들을 보고 <예상 캡션 부분>에서 <캡션.json>을 선정하는 규칙을 파악합니다.\n2. <예상 캡션 부분>은 도서 내용중 캡션이 있다고 예상되는 곳을 발췌한 것 입니다.\n3. <예상 캡션 부분>에 'part_of_the_caption : <Term>...' 부분은 캡션에 포함되어 있는 내용 중 일부분 입니다.\n4. 따라서 캡션은 'part_of_the_caption <Term>...'가 포함된 ['part_of_the_caption'], [4, 'part_of_the_caption'], [1, 2, 3, 4, 'part_of_the_caption'], [4, 'part_of_the_caption', 5, 6] 등의 리스트로 구성합니다.\n5. 작업의 최종 결과물인 <캡션1.json>은 캡션이 조합된 CaptionList과 캡션 내용인 CaptionText과 캡션의 종류 태그인 CaptionTag로 완성합니다."
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample":""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample":""
-                },
-                {
-                    "Mark": "\n\n(캡션선정 작업)\n",
-                    "InputMark": "<예상 캡션 부분>\n",
-                    "InputStarter": "",
-                    "InputMemory": "InputMemory",
-                    "Input": "INPUT",
-                    "InputEnder": ""
-                }
-    
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "<캡션.json>\n",
-            "MemoryCounter": "MemoryCounter",
-            "OutputStarter": "",
-            "OutputMemory": "OutputMemory",
-            "Output": "OUTPUT",
-            "OutputEnder": "OutputEnder"
-        }
-    ],
     "ExampleFineTuning": [
         {
             "Role": "system",
@@ -205,6 +148,120 @@
             "OutputMark": "<캡션.json>\n",
             "OutputStarter": "[{'CaptionList': ['",
             "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서의 내용에서 본문과 캡션을 분리하는 전문가 입니다.\n그래서 지금 <예상 캡션 부분>에서 <캡션.json>을 선정하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(캡션의 정의)\n",
+                    "Message": "도서의 내용에 이해를 돕기 위한 용어, 사진, 별첨, 참고, 해설, 표, 기타 등에 포함된 부가적 설명 또는 정보"
+                },
+                {
+                    "Mark": "\n\n(캡션의 종류)\n",
+                    "Message": "용어, 자료, 별첨, 참고, 해설, 기타"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. 아래 예시들을 보고 <예상 캡션 부분>에서 <캡션.json>을 선정하는 규칙을 파악합니다.\n2. <예상 캡션 부분>은 도서 내용중 캡션이 있다고 예상되는 곳을 발췌한 것 입니다.\n3. <예상 캡션 부분>에 'part_of_the_caption : <Term>...' 부분은 캡션에 포함되어 있는 내용 중 일부분 입니다.\n4. 따라서 캡션은 'part_of_the_caption <Term>...'가 포함된 ['part_of_the_caption'], [4, 'part_of_the_caption'], [1, 2, 3, 4, 'part_of_the_caption'], [4, 'part_of_the_caption', 5, 6] 등의 리스트로 구성합니다.\n5. 작업의 최종 결과물인 <캡션1.json>은 캡션이 조합된 CaptionList과 캡션 내용인 CaptionText과 캡션의 종류 태그인 CaptionTag로 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "\n\n(캡션선정 작업)\n",
+                    "InputMark": "<예상 캡션 부분>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": ""
+                }
+    
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<캡션.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서의 내용에서 본문과 캡션을 분리하는 전문가 입니다.\n그래서 지금 <예상 캡션 부분>에서 <캡션.json>을 선정하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(캡션의 정의)\n",
+                    "Message": "도서의 내용에 이해를 돕기 위한 용어, 사진, 별첨, 참고, 해설, 표, 기타 등에 포함된 부가적 설명 또는 정보"
+                },
+                {
+                    "Mark": "\n\n(캡션의 종류)\n",
+                    "Message": "용어, 자료, 별첨, 참고, 해설, 기타"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. 아래 예시들을 보고 <예상 캡션 부분>에서 <캡션.json>을 선정하는 규칙을 파악합니다.\n2. <예상 캡션 부분>은 도서 내용중 캡션이 있다고 예상되는 곳을 발췌한 것 입니다.\n3. <예상 캡션 부분>에 'part_of_the_caption : <Term>...' 부분은 캡션에 포함되어 있는 내용 중 일부분 입니다.\n4. 따라서 캡션은 'part_of_the_caption <Term>...'가 포함된 ['part_of_the_caption'], [4, 'part_of_the_caption'], [1, 2, 3, 4, 'part_of_the_caption'], [4, 'part_of_the_caption', 5, 6] 등의 리스트로 구성합니다.\n5. 작업의 최종 결과물인 <캡션1.json>은 캡션이 조합된 CaptionList과 캡션 내용인 CaptionText과 캡션의 종류 태그인 CaptionTag로 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "\n\n(캡션선정 작업)\n",
+                    "InputMark": "<예상 캡션 부분>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": ""
+                }
+    
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<캡션.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
         }
     ]
 }

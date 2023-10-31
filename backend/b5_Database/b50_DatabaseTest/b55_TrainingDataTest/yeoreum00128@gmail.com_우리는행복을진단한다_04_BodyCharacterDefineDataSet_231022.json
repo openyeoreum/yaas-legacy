@@ -1858,7 +1858,7 @@
             "Input": "None",
             "Feedback": "None",
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 1,
@@ -1874,7 +1874,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 2,
@@ -1898,7 +1898,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 3,
@@ -1922,7 +1922,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 4,
@@ -1938,7 +1938,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 5,
@@ -1970,7 +1970,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 6,
@@ -1994,7 +1994,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 7,
@@ -2018,7 +2018,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 8,
@@ -2034,7 +2034,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 9,
@@ -2050,7 +2050,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 10,
@@ -2066,7 +2066,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 11,
@@ -2090,7 +2090,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 12,
@@ -2106,7 +2106,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 13,
@@ -2122,7 +2122,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 14,
@@ -2138,7 +2138,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 15,
@@ -2162,7 +2162,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 16,
@@ -2186,7 +2186,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 17,
@@ -2202,7 +2202,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 18,
@@ -2218,7 +2218,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 19,
@@ -2234,7 +2234,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 20,
@@ -2250,7 +2250,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 21,
@@ -2266,7 +2266,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 22,
@@ -2282,7 +2282,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 23,
@@ -2306,7 +2306,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 24,
@@ -2322,7 +2322,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 25,
@@ -2338,7 +2338,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 26,
@@ -2354,7 +2354,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 27,
@@ -2402,7 +2402,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 28,
@@ -2426,7 +2426,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 29,
@@ -2442,7 +2442,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 30,
@@ -2466,7 +2466,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 31,
@@ -2482,7 +2482,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 32,
@@ -2498,7 +2498,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 33,
@@ -2530,7 +2530,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 34,
@@ -2546,7 +2546,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 35,
@@ -2570,7 +2570,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 36,
@@ -2602,7 +2602,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 37,
@@ -2618,7 +2618,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 38,
@@ -2634,7 +2634,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 39,
@@ -2650,7 +2650,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 40,
@@ -2690,7 +2690,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 41,
@@ -2722,7 +2722,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 42,
@@ -2738,7 +2738,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 43,
@@ -2762,7 +2762,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 44,
@@ -2794,7 +2794,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 45,
@@ -2810,7 +2810,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 46,
@@ -2826,7 +2826,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 47,
@@ -2842,7 +2842,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 48,
@@ -2866,7 +2866,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 49,
@@ -2890,7 +2890,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 50,
@@ -2914,7 +2914,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 51,
@@ -2930,7 +2930,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 52,
@@ -2946,7 +2946,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 53,
@@ -2962,7 +2962,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 54,
@@ -2978,7 +2978,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 55,
@@ -3002,7 +3002,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 56,
@@ -3026,7 +3026,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 57,
@@ -3042,7 +3042,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 58,
@@ -3066,7 +3066,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 59,
@@ -3082,7 +3082,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 60,
@@ -3098,7 +3098,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 61,
@@ -3114,7 +3114,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 62,
@@ -3154,7 +3154,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 63,
@@ -3170,7 +3170,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 64,
@@ -3186,7 +3186,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 65,
@@ -3202,7 +3202,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 66,
@@ -3218,7 +3218,7 @@
                 }
             ],
             "Check": "Yes",
-            "accuracy": "None"
+            "Accuracy": "None"
         }
     ],
     "EmbeddingDataset": [

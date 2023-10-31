@@ -117,62 +117,6 @@
             "Output": "OUTPUT"
         }
     ],
-    "Memory": [
-        {
-            "Role": "system",
-            "Mark": "(역할)\n",
-            "Message": "당신은 도서의 목차에서 목차별 목차태그를 선정하여 json 형식으로 정리하는 전문가 입니다.\n그래서 지금 도서목차인 <목차.text>를 목차태그 key값과 목차명 value값으로 <태그된 목차.json>를 제작하는 작업을 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": 
-            [
-                {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
-                    "Mark": "(목차태그 종류)\n",
-                    "Message": "Title: 도서의 제목\nLogue: 도서의 서문, 서평, 머릿말, 부록, 맺음말, 기타 등\nPart: 파트, 부 등의 제목\nChapter: 챕터, 장 등의 제목\nIndex: 소제목 등"
-                },
-                {
-                    "Mark": "\n\n(요청)\n",
-                    "Message": "1. 도서의 <목차.text>를 한줄씩 목차 부분을 분리합니다.\n2. 목차를 가장 큰 단위인 제목부터 가장 작은 단위인 소제목까지 파악합니다.\n3. 각 목차 앞에 목차태그의 key값 'Title, Rouge, Part, Chapter, Index'를 결정하여 <태그된 목차.json>으로 정리합니다.\n4. 아래 <목차.text>를 '한줄도 빠짐 없이' <태그된 목차.json>로 완성합니다.\n"
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample":""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample":""
-                },
-                {
-                    "Mark": "\n\n(목차태그 작업)\n",
-                    "InputMark": "<목차.text>\n",
-                    "InputStarter": "",
-                    "InputMemory": "InputMemory",
-                    "Input": "INPUT",
-                    "InputEnder": ""
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "<태그된 목차.json>\n",
-            "MemoryCounter": "MemoryCounter",
-            "OutputStarter": "",
-            "OutputMemory": "OutputMemory",
-            "Output": "OUTPUT",
-            "OutputEnder": "OutputEnder"
-        }
-    ],
     "ExampleFineTuning": [
         {
             "Role": "system",
@@ -274,6 +218,118 @@
             "OutputMark": "<태그된 목차.json>\n",
             "OutputStarter": "[{'Title': '",
             "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서의 목차에서 목차별 목차태그를 선정하여 json 형식으로 정리하는 전문가 입니다.\n그래서 지금 도서목차인 <목차.text>를 목차태그 key값과 목차명 value값으로 <태그된 목차.json>를 제작하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "(목차태그 종류)\n",
+                    "Message": "Title: 도서의 제목\nLogue: 도서의 서문, 서평, 머릿말, 부록, 맺음말, 기타 등\nPart: 파트, 부 등의 제목\nChapter: 챕터, 장 등의 제목\nIndex: 소제목 등"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. 도서의 <목차.text>를 한줄씩 목차 부분을 분리합니다.\n2. 목차를 가장 큰 단위인 제목부터 가장 작은 단위인 소제목까지 파악합니다.\n3. 각 목차 앞에 목차태그의 key값 'Title, Rouge, Part, Chapter, Index'를 결정하여 <태그된 목차.json>으로 정리합니다.\n4. 아래 <목차.text>를 '한줄도 빠짐 없이' <태그된 목차.json>로 완성합니다.\n"
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "\n\n(목차태그 작업)\n",
+                    "InputMark": "<목차.text>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": ""
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<태그된 목차.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서의 목차에서 목차별 목차태그를 선정하여 json 형식으로 정리하는 전문가 입니다.\n그래서 지금 도서목차인 <목차.text>를 목차태그 key값과 목차명 value값으로 <태그된 목차.json>를 제작하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "(목차태그 종류)\n",
+                    "Message": "Title: 도서의 제목\nLogue: 도서의 서문, 서평, 머릿말, 부록, 맺음말, 기타 등\nPart: 파트, 부 등의 제목\nChapter: 챕터, 장 등의 제목\nIndex: 소제목 등"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. 도서의 <목차.text>를 한줄씩 목차 부분을 분리합니다.\n2. 목차를 가장 큰 단위인 제목부터 가장 작은 단위인 소제목까지 파악합니다.\n3. 각 목차 앞에 목차태그의 key값 'Title, Rouge, Part, Chapter, Index'를 결정하여 <태그된 목차.json>으로 정리합니다.\n4. 아래 <목차.text>를 '한줄도 빠짐 없이' <태그된 목차.json>로 완성합니다.\n"
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "\n\n(목차태그 작업)\n",
+                    "InputMark": "<목차.text>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": ""
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<태그된 목차.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
         }
     ]
 }

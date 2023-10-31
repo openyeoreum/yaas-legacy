@@ -72,12 +72,14 @@ def AddProjectContextToDB(projectName, email, Process, language = "None", genre 
         db.commit()
         
 # 1. 1-3 UpdateProjectRawDataset 업데이트 형식
-def UpdateProjectRawDataset(ProcessDataset, Model, Usage, Input, Output):
+def UpdateProjectRawDataset(ProcessDataset, Mode, Model, Usage, Input, Output, InputMemory = "None"):
     DataSetId = len(ProcessDataset["RawDataset"])
     updateRawDataset = {
         "DataSetId": DataSetId,
+        "Mode": Mode,
         "TrainingModel": Model,
         "Tokens": Usage,
+        "InputMemory": InputMemory,
         "Input": Input,
         "Output": Output
     }
@@ -86,12 +88,12 @@ def UpdateProjectRawDataset(ProcessDataset, Model, Usage, Input, Output):
     ProcessDataset["RawDataSetCount"] = DataSetId
     
 # 1. 1-4 ProjectRawDataset 부분 업데이트
-def AddProjectRawDatasetToDB(projectName, email, Process, Model, Usage, Input, Output):
+def AddProjectRawDatasetToDB(projectName, email, Process, Mode, Model, Usage, Input, Output, INPUTMEMORY = "None"):
     with get_db() as db:
     
         trainingDataset = GetTrainingDataset(projectName, email)
         ProcessDataset = getattr(trainingDataset, Process)
-        UpdateProjectRawDataset(ProcessDataset, Model, Usage, Input, Output)
+        UpdateProjectRawDataset(ProcessDataset, Mode, Model, Usage, Input, Output, InputMemory = INPUTMEMORY)
         
         flag_modified(trainingDataset, Process)
         
@@ -99,10 +101,11 @@ def AddProjectRawDatasetToDB(projectName, email, Process, Model, Usage, Input, O
         db.commit()
         
 # 1. 1-5 UpdateProjectFeedbackDataSets 업데이트 형식
-def UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output):
+def UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output, InputMemory = "None"):
     DataSetId = len(ProcessDataset["FeedbackDataset"])
     updateFeedbackDataset = {
         "DataSetId": DataSetId,
+        "InputMemory": InputMemory,
         "Input": Input,
         "Feedback": Output,
         "Check": "No",
@@ -113,12 +116,12 @@ def UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output):
     ProcessDataset["FeedbackDatasetCount"] = DataSetId
     
 # 1. 1-6 ProjectFeedbackDataSets 부분 업데이트
-def AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, Output):
+def AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, Output, INPUTMEMORY = "None"):
     with get_db() as db:
     
         trainingDataset = GetTrainingDataset(projectName, email)
         ProcessDataset = getattr(trainingDataset, Process)
-        UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output)
+        UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output, InputMemory = INPUTMEMORY)
         
         flag_modified(trainingDataset, Process)
         
@@ -126,10 +129,11 @@ def AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, Output):
         db.commit()
         
 # 1. 1-7 UpdateProjectEmbeddingDataSets 업데이트 형식
-def UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbedding):
+def UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbedding, InputMemoryEmbedding = "None"):
     DataSetId = len(ProcessDataset["EmbeddingDataset"])
     updateFeedbackDataset = {
         "DataSetId": DataSetId,
+        "InputMemoryEmbedding": InputMemoryEmbedding,
         "InputEmbedding": InputEmbedding,
         "OutputEmbedding": OutputEmbedding,
     }
@@ -138,12 +142,12 @@ def UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbeddi
     ProcessDataset["EmbeddingDatasetCount"] = DataSetId
     
 # 1. 1-8 UpdateProjectEmbeddingDataSets 부분 업데이트
-def AddProjectEmbeddingDataSetsToDB(projectName, email, Process, InputEmbedding, OutputEmbedding):
+def AddProjectEmbeddingDataSetsToDB(projectName, email, Process, InputEmbedding, OutputEmbedding, inputMemoryEmbedding = "None"):
     with get_db() as db:
     
         trainingDataset = GetTrainingDataset(projectName, email)
         ProcessDataset = getattr(trainingDataset, Process)
-        UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbedding)
+        UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbedding, InputMemoryEmbedding = inputMemoryEmbedding)
         
         flag_modified(trainingDataset, Process)
         
@@ -188,15 +192,29 @@ def InitRawDataSet(projectName, email, Process):
         ProcessDataset["RawDataset"] = [
             {
                 "DataSetId": 0,
+                "Mode": "None",
                 "TrainingModel": "None",
                 "Tokens": "None",
+                "InputMemory": "None",
                 "Input": "None",
                 "Output": "None"
             }
         ]
+        ProcessDataset["FeedbackDataset"] = [
+            {
+                "DataSetId": 0,
+                "InputMemory": "None",
+                "Input": "None",
+                "Feedback": "None",
+                "Check": "No",
+                "Accurace": "None"
+            }
+        ]
+        ProcessDataset["FeedbackCompletion"] = "No"
         ProcessDataset["EmbeddingDataset"] = [
             {
                 "DataSetId": 0,
+                "InputMemoryEmbedding": "None",
                 "InputEmbedding": "None",
                 "OutputEmbedding": "None"
             }
@@ -288,7 +306,7 @@ def OutputAccuracy(projectName, email, Process, processDataset):
             TotalSimpleAccuracy += simpleAccuracy
             TotalElementsAccuracy += elementsAccuracy
             
-            FeedbackDataset[i+1]["accuracy"] = {"Simple": simpleAccuracy, "Elements": elementsAccuracy}
+            FeedbackDataset[i+1]["Accuracy"] = {"Simple": simpleAccuracy, "Elements": elementsAccuracy}
         
         AverageSimpleAccuracy = TotalSimpleAccuracy / len(RawDataset)
         AverageElementsAccuracy = TotalElementsAccuracy / len(RawDataset)

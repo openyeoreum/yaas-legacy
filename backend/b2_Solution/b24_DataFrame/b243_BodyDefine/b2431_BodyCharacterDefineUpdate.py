@@ -86,6 +86,7 @@ def BodyCharacterDefineInputMemory(inputMemoryDics, MemoryLength):
         else:
             inputMemoryList.append(inputmeMory['Pass'])
     inputMemory = "".join(inputMemoryList)
+    print(f"@@@@@@@@@@\ninputMemory :{inputMemory}\n@@@@@@@@@@")
     
     return inputMemory
 
@@ -135,11 +136,13 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
                 ContinueCount += 1
             if ContinueCount == 1:
                 mode = "ExampleFineTuning"
+                # FineTuningMemory 형성
                 FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
             else:
                 mode = "MemoryFineTuning"
         elif Mode == "ExampleFineTuning":
             mode = "ExampleFineTuning"
+            # FineTuningMemory 형성
             FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
         else:
             mode = "Example"
@@ -189,8 +192,14 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트
-                AddProjectRawDatasetToDB(projectName, email, Process, Model, Usage, InputDic, OutputDic)
-                AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, OutputDic)
+                if mode in ["Example", "ExampleFineTuning"]:
+                    # mode가 ["Example", "ExampleFineTuning"]중 하나인 경우 Memory 초기화
+                    INPUTMemory = "None"
+                elif mode in ["Memory", "MemoryFineTuning"]:
+                    INPUTMemory = inputMemory
+                    
+                AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, InputDic, OutputDic, INPUTMEMORY = INPUTMemory)
+                AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, OutputDic, INPUTMEMORY = INPUTMemory)
 
         else:
             OutputDic = "Pass"
@@ -305,7 +314,7 @@ if __name__ == "__main__":
     DataFramePath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
     DataSetPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b55_TrainingDataTest/"
     messagesReview = "on"
-    mode = "Memory"
+    mode = "Example"
     #########################################################################
     
     BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)

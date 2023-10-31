@@ -42,11 +42,14 @@ def LoadLLMapiKey(email):
 def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
     promptFrame = GetPromptFrame(Process)
     messageTime = "current time: " + str(Date("Second")) + '\n\n'
+    
+    # messages
     if mode in ["Example", "ExampleFineTuning"]:
       if mode == "Example":
         Example = promptFrame[0]["Example"]
       elif mode == "ExampleFineTuning":
         Example = promptFrame[0]["ExampleFineTuning"]
+        
       messages = [
         {
           "role": Example[0]["Role"],
@@ -72,7 +75,11 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
       ]
       
     elif mode in ["Memory", "MemoryFineTuning"]:
-      Memory = promptFrame[0]["Memory"]
+      if mode == "Memory":
+        Memory = promptFrame[0]["Memory"]
+      elif mode == "MemoryFineTuning":
+        Memory = promptFrame[0]["MemoryFineTuning"]
+        
       messages = [
         {
           "role": Memory[0]["Role"],
@@ -100,24 +107,45 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
                     str(outputEnder)
         }
       ]
-      
-    elif mode == "Training":
-      Example = promptFrame[0]["Example"]
+    
+    # Training
+    elif mode == "ExampleTraining":
+      ExampleFineTuning = promptFrame[0]["ExampleFineTuning"]
       messages = [
         {
-          "role": Example[0]["Role"],
-          "content": Example[0]["Mark"] + Example[0]["Message"]
+          "role": ExampleFineTuning[0]["Role"],
+          "content": ExampleFineTuning[0]["Mark"] + ExampleFineTuning[0]["Message"]
         },
         {
-          "role": Example[1]["Role"],
-          "content": Example[1]["Request"][0]["Mark"] + Example[1]["Request"][0]["Message"] +
-                    Example[1]["Request"][1]["Mark"] + Example[1]["Request"][1]["Message"] +
-                    Example[1]["Request"][2]["Mark"] + Example[1]["Request"][2]["Message"] +
-                    Example[1]["Request"][6]["Mark"] + Example[1]["Request"][6]["InputMark"] + str(Input)
+          "role": ExampleFineTuning[1]["Role"],
+          "content": ExampleFineTuning[1]["Request"][0]["Mark"] + ExampleFineTuning[1]["Request"][0]["Message"] +
+                    ExampleFineTuning[1]["Request"][1]["Mark"] + ExampleFineTuning[1]["Request"][1]["Message"] +
+                    ExampleFineTuning[1]["Request"][2]["Mark"] + ExampleFineTuning[1]["Request"][2]["Message"] +
+                    ExampleFineTuning[1]["Request"][6]["Mark"] + ExampleFineTuning[1]["Request"][6]["InputMark"] + str(Input)
         },
         {
-          "role": Example[2]["Role"],
-          "content": Example[2]["OutputMark"] + Example[2]["OutputStarter"] + str(Output)
+          "role": ExampleFineTuning[2]["Role"],
+          "content": ExampleFineTuning[2]["OutputMark"] + ExampleFineTuning[2]["OutputStarter"] + str(Output)
+        }
+      ]
+      
+    elif mode == "MemoryTraining":
+      MemoryFineTuning = promptFrame[0]["MemoryFineTuning"]
+      messages = [
+        {
+          "role": MemoryFineTuning[0]["Role"],
+          "content": MemoryFineTuning[0]["Mark"] + MemoryFineTuning[0]["Message"]
+        },
+        {
+          "role": MemoryFineTuning[1]["Role"],
+          "content": MemoryFineTuning[1]["Request"][0]["Mark"] + MemoryFineTuning[1]["Request"][0]["Message"] +
+                    MemoryFineTuning[1]["Request"][1]["Mark"] + MemoryFineTuning[1]["Request"][1]["Message"] +
+                    MemoryFineTuning[1]["Request"][2]["Mark"] + MemoryFineTuning[1]["Request"][2]["Message"] +
+                    MemoryFineTuning[1]["Request"][5]["Mark"] + MemoryFineTuning[1]["Request"][5]["InputMark"] + str(inputMemory) + str(Input)
+        },
+        {
+          "role": MemoryFineTuning[2]["Role"],
+          "content": MemoryFineTuning[2]["OutputMark"] + MemoryFineTuning[2]["OutputStarter"] + str(Output)
         }
       ]
     
@@ -219,7 +247,7 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
 ##########
 ##### LLM FineTuning #####
 ## 파인튜닝 데이터셋 생성
-def LLMTrainingDatasetGenerator(projectName, email, Process, DataSetPath, processDataset):
+def LLMTrainingDatasetGenerator(projectName, email, Process, DataSetPath, processDataset, Mode = "Example"):
     ###                                                                   ^^^^^^^^^^^^^^ 테스트 후 삭제 ###   
     trainingDataset = GetTrainingDataset(projectName, email)
     ProcessDataset = getattr(trainingDataset, Process)
@@ -235,32 +263,45 @@ def LLMTrainingDatasetGenerator(projectName, email, Process, DataSetPath, proces
     
     ProcessDataset = processDataset ### < --- 테스트 후 삭제 ###
     
-    IOList = ProcessDataset["FeedbackDataset"][1:]
-    TotalTokens = 0
-    
-    with open(Newfilename, 'w', encoding='utf-8') as file:
-      for i in range(len(IOList)):
-        Input = IOList[i]["Input"]
-        output = IOList[i]["Feedback"]
-        
-        messages, totalTokens = LLMmessages(Process, Input, Output = output, mode = "Training")
-        
-        TrainingData = {"messages": [messages[0], messages[1], messages[2]]}
+    if ProcessDataset["FeedbackCompletion"] == "Yes":
+      if Mode == "Example":
+        MOde = "ExampleTraining"
+      elif Mode == "Memory":
+        MOde = "MemoryTraining"
+      IOList = ProcessDataset["FeedbackDataset"][1:]
+      TotalTokens = 0
+      
+      with open(Newfilename, 'w', encoding='utf-8') as file:
+        for i in range(len(IOList)):
+          # "InputMemory"가 "None"일 경우 빈 텍스트("") 처리
+          if IOList[i]["InputMemory"] == "None":
+            InputMemory = ""
+          else:
+            InputMemory = IOList[i]["InputMemory"]
+          Input = IOList[i]["Input"]
+          output = IOList[i]["Feedback"]
+          
+          messages, totalTokens = LLMmessages(Process, Input, Output = output, mode = MOde, inputMemory = InputMemory)
+          
+          TrainingData = {"messages": [messages[0], messages[1], messages[2]]}
 
-        file.write(json.dumps(TrainingData, ensure_ascii=False) + '\n')
-        
-        TotalTokens += totalTokens
-    
-    return open(Newfilename, 'rb')
+          file.write(json.dumps(TrainingData, ensure_ascii = False) + '\n')
+          
+          TotalTokens += totalTokens
+      
+      return open(Newfilename, 'rb')
+    else:
+      print(f"Project: {projectName} | Process: {Process} | 피드백이 완료되지 않은 데이터셋 입니다.")
+      return None
     
 ## 파인튜닝 파일 업로드 생성
-def LLMTrainingDatasetUpload(projectName, email, Process, DataSetPath, processDataset, MaxAttempts = 100):
+def LLMTrainingDatasetUpload(projectName, email, Process, DataSetPath, processDataset, mode = "Example", MaxAttempts = 100):
     ###                                                                ^^^^^^^^^^^^^^ 테스트 후 삭제 ###  
     openai.api_key = LoadLLMapiKey(email)
     openai.api_key = os.getenv("OPENAI_API_KEY")
     
     # LLMTrainingDataset 업로드
-    LLMTrainingDataset = LLMTrainingDatasetGenerator(projectName, email, Process, DataSetPath, processDataset)
+    LLMTrainingDataset = LLMTrainingDatasetGenerator(projectName, email, Process, DataSetPath, processDataset, Mode = mode)
     ###                                                                                        ^^^^^^^^^^^^^^ 테스트 후 삭제 ###  
     UploadedFile = openai.File.create(
       file = LLMTrainingDataset,
@@ -286,7 +327,7 @@ def LLMFineTuning(projectName, email, Process, DataSetPath, processDataset, Mode
         openai.api_key = LoadLLMapiKey(email)
         openai.api_key = os.getenv("OPENAI_API_KEY")
         
-        FileId = LLMTrainingDatasetUpload(projectName, email, Process, DataSetPath, processDataset)
+        FileId = LLMTrainingDatasetUpload(projectName, email, Process, DataSetPath, processDataset, mode = Mode)
 
         # 토큰수별 모델 선정
         if ModelTokens == "Short":
@@ -351,7 +392,7 @@ if __name__ == "__main__":
     DataSetPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b55_TrainingDataTest/"
     #########################################################################
 
-    with open(DataSetPath + "yeoreum00128@gmail.com_우리는행복을진단한다_04_BodyCharacterDefineDataSet_231022.json", 'r', encoding='utf-8') as file:
+    with open(DataSetPath + "yeoreum00128@gmail.com_우리는행복을진단한다_04_BodyCharacterDefineDataSet_231022_Accuracy.json", 'r', encoding='utf-8') as file:
         processDataset = json.load(file)
     
     modelTokens = "Short"

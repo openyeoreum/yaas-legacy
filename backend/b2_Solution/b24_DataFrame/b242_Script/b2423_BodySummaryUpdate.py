@@ -138,6 +138,7 @@ def BodySummaryProcess(projectName, email, Process = "BodySummary", memoryLength
                 ContinueCount += 1
             if ContinueCount == 1:
                 mode = "ExampleFineTuning"
+                # FineTuningMemory 형성
                 FineTuningMemoryDic = InputList[TotalCount - 1]
                 keys = list(FineTuningMemoryDic.keys())
                 FineTuningMemory = FineTuningMemoryDic[keys[1]]
@@ -145,6 +146,7 @@ def BodySummaryProcess(projectName, email, Process = "BodySummary", memoryLength
                 mode = "MemoryFineTuning"
         elif Mode == "ExampleFineTuning" and TotalCount > 0:
             mode = "ExampleFineTuning"
+            # FineTuningMemory 형성
             FineTuningMemoryDic = InputList[TotalCount - 1]
             keys = list(FineTuningMemoryDic.keys())
             FineTuningMemory = FineTuningMemoryDic[keys[1]]
@@ -195,8 +197,14 @@ def BodySummaryProcess(projectName, email, Process = "BodySummary", memoryLength
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
 
             # DataSets 업데이트
-            AddProjectRawDatasetToDB(projectName, email, Process, Model, Usage, InputDic, OutputDic)
-            AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, OutputDic)
+            if mode in ["Example", "ExampleFineTuning"]:
+                # mode가 ["Example", "ExampleFineTuning"]중 하나인 경우 Memory 초기화
+                INPUTMemory = "None"
+            elif mode in ["Memory", "MemoryFineTuning"]:
+                INPUTMemory = inputMemory
+                
+            AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, InputDic, OutputDic, INPUTMEMORY = INPUTMemory)
+            AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, OutputDic, INPUTMEMORY = INPUTMemory)
             
         else:
             OutputDic = InputDic

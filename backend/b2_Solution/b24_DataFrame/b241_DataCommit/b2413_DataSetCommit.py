@@ -1,4 +1,6 @@
 import os
+import re
+import unicodedata
 import json
 import sys
 sys.path.append("/yaas")
@@ -247,14 +249,14 @@ def DataSetCompletionUpdate(projectName, email, Process):
         db.commit()
         
 ## 1. 업데이트된 DataSet 파일저장
-def SaveDataSet(projectName, email, ProcessNumber, Process, DataSetPath):
+def SaveDataSet(projectName, email, ProcessNumber, Process, RawDataSetPath):
     with get_db() as db:
         trainingDataset = GetTrainingDataset(projectName, email)
         ProcessDataset = getattr(trainingDataset, Process)
     # 현재 날짜 및 시간을 가져옵니다.
     now = datetime.now()
     date = now.strftime('%y%m%d')
-    filename = DataSetPath + email + '_' + projectName + '_' + str(ProcessNumber) + '_' + str(Process) + 'DataSet_' + date + '.json'
+    filename = RawDataSetPath + email + '_' + projectName + '_' + str(ProcessNumber) + '_' + str(Process) + 'DataSet_' + date + '.json'
     
     base, ext = os.path.splitext(filename)
     counter = 0
@@ -263,9 +265,42 @@ def SaveDataSet(projectName, email, ProcessNumber, Process, DataSetPath):
         counter += 1
         Newfilename = f"{base} ({counter}){ext}"
     with open(Newfilename, 'w', encoding='utf-8') as f:
-        json.dump(ProcessDataset, f, ensure_ascii=False, indent=4)
-        
-## 1. 데이터셋 Accuracy 측정
+        json.dump(ProcessDataset, f, ensure_ascii=False, indent = 4)
+
+#########################################
+### 2. 피드백 데이터셋 Accuracy 측정 및 저장 ###
+
+## 2. 2-1 피드백 데이터셋 불러오기
+def LoadExistedDataSets(projectName, email, Process, RawDataSetPath):
+    # 문자열 정규화
+    EmailNormalized = unicodedata.normalize('NFC', email)
+    ProjectNameNormalized = unicodedata.normalize('NFC', projectName)
+    ProcessNormalized = unicodedata.normalize('NFC', Process)
+    
+    # 정규 표현식으로 파일명에서 생성날짜와 프로세스 이름 추출
+    patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+_{re.escape(ProcessNormalized)}DataSet_(\d+).json"
+    pattern = re.compile(patternSTR)
+    
+    MaxDate = 0
+    RecentFile = None
+
+    for FileName in os.listdir(RawDataSetPath):
+        FileNameNormalized = unicodedata.normalize('NFC', FileName)
+        match = pattern.match(FileNameNormalized)       
+        if match:
+            date = int(match.group(1))
+            if date > MaxDate:
+                MaxDate = date
+                RecentFile = FileName
+
+    if RecentFile:
+        with open(os.path.join(RawDataSetPath, RecentFile), 'r', encoding='utf-8') as file:
+            ExistedDataSet = json.load(file)
+            return RecentFile, ExistedDataSet
+
+    return None
+
+## 2. 2-2 피드백 데이터셋 Accuracy 측정
 def SimpleAccuracy(Output, Feedback):
     matched = 0
     total = len(Output)
@@ -283,51 +318,81 @@ def ElementsAccuracy(Output, Feedback):
             matched += sum(1 for k, v in Output[i][key].items() if Feedback[i][key].get(k) == v)
     return matched / total
 
-def OutputAccuracy(projectName, email, Process, processDataset):
-    ###                                         ^^^^^^^^^^^^^^ 테스트 후 삭제 ###
-    with get_db() as db:
-        trainingDataset = GetTrainingDataset(projectName, email)
-        ProcessDataset = getattr(trainingDataset, Process)
-        
-        ProcessDataset = processDataset ### < --- 테스트 후 삭제 ###
+def OutputAccuracy(ExistedDataSet):
 
-        RawDataset = ProcessDataset["RawDataset"][1:]
-        FeedbackDataset = ProcessDataset["FeedbackDataset"]
-        
-        TotalSimpleAccuracy = 0
-        TotalElementsAccuracy = 0
-        
-        for i in range(len(RawDataset)):
-            Output = RawDataset[i]["Output"]
-            Feedback = FeedbackDataset[i+1]["Feedback"]
-            
-            simpleAccuracy = SimpleAccuracy(Output, Feedback)
-            elementsAccuracy = ElementsAccuracy(Output, Feedback)
-            
-            TotalSimpleAccuracy += simpleAccuracy
-            TotalElementsAccuracy += elementsAccuracy
-            
-            FeedbackDataset[i+1]["Accuracy"] = {"Simple": simpleAccuracy, "Elements": elementsAccuracy}
-        
-        AverageSimpleAccuracy = TotalSimpleAccuracy / len(RawDataset)
-        AverageElementsAccuracy = TotalElementsAccuracy / len(RawDataset)
-        ProcessDataset["Accuracy"] = {"Simple": AverageSimpleAccuracy, "Elements": AverageElementsAccuracy}
-        
-        # flag_modified(trainingDataset, Process)
-
-        # db.add(trainingDataset)
-        # db.commit()
-        
-    return ProcessDataset
+    RawDataset = ExistedDataSet["RawDataset"][1:]
+    FeedbackDataset = ExistedDataSet["FeedbackDataset"]
     
+    TotalSimpleAccuracy = 0
+    TotalElementsAccuracy = 0
+    
+    for i in range(len(RawDataset)):
+        Output = RawDataset[i]["Output"]
+        Feedback = FeedbackDataset[i+1]["Feedback"]
+        
+        simpleAccuracy = SimpleAccuracy(Output, Feedback)
+        elementsAccuracy = ElementsAccuracy(Output, Feedback)
+        
+        TotalSimpleAccuracy += simpleAccuracy
+        TotalElementsAccuracy += elementsAccuracy
+        
+        FeedbackDataset[i+1]["Accuracy"] = {"Simple": simpleAccuracy, "Elements": elementsAccuracy}
+    
+    AverageSimpleAccuracy = TotalSimpleAccuracy / len(RawDataset)
+    AverageElementsAccuracy = TotalElementsAccuracy / len(RawDataset)
+    ExistedDataSet["Accuracy"] = {"Simple": AverageSimpleAccuracy, "Elements": AverageElementsAccuracy}
+                
+    return ExistedDataSet
+
+## 2. 2-3 피드백 데이터셋 저장하기
+def SaveFeedbackDataSet(projectName, Process, RecentFile, AccuracyDataSet, RawDataSetPath, CompleteDataSet):
+    # 기존 파일 경로
+    OldFilePath = os.path.join(RawDataSetPath, RecentFile)
+    # 새로운 경로 및 파일명 생성
+    NewFileName = RecentFile.replace('.json', '_Feedback.json')
+    NewFilePath = os.path.join(CompleteDataSet, NewFileName)
+    
+    # 기존 파일 삭제
+    if os.path.exists(OldFilePath):
+        os.remove(OldFilePath)
+    
+    # 새로운 파일에 AccuracyDataSet 저장
+    with open(NewFilePath, 'w', encoding = 'utf-8') as NewFile:
+        json.dump(AccuracyDataSet, NewFile, ensure_ascii = False, indent = 4)
+        
+    print(f"Project: {projectName} | Process: {Process} | AddProjectFeedbackDataSets 완료, SaveFeedbackDataSet: {NewFilePath}")
+
+## 2. 2-4 피드백 데이터셋 업데이트
+def AddProjectFeedbackDataSets(projectName, email, Process, RawDataSetPath, CompleteDataSet):
+    RecentFile, ExistedDataSet = LoadExistedDataSets(projectName, email, Process, RawDataSetPath)
+    if ExistedDataSet:
+        if ExistedDataSet["FeedbackCompletion"] == "Yes":
+            AccuracyDataSet = OutputAccuracy(ExistedDataSet)
+            with get_db() as db:
+                trainingDataset = GetTrainingDataset(projectName, email)
+                ProcessDataset = getattr(trainingDataset, Process)
+                ProcessDataset["FeedbackDataset"] = AccuracyDataSet["FeedbackDataset"]
+                
+                flag_modified(trainingDataset, Process)
+
+                db.add(trainingDataset)
+                db.commit()
+                
+            SaveFeedbackDataSet(projectName, Process, RecentFile, AccuracyDataSet, RawDataSetPath, CompleteDataSet)
+        else:
+            print(f"Project: {projectName} | Process: {Process} | LoadExistedDataSets에서 오류 발생: ExistedDataSets이 존재 하지 않습니다.")
+    else:
+        print(f"Project: {projectName} | Process: {Process} | FeedbackCompletion에서 오류 발생: Feedback이 완료 되지 않았습니다.")
+        
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
     process = 'IndexDefinePreprocess'
-    DataFramePath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
-    DataSetPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b55_TrainingDataTest/"
+    DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
+    RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
+    CompleteDataSet = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5122_CompleteDataSet/"
     #########################################################################
     
     # AddDataSetMetaDataToDB(projectName, email)
@@ -336,9 +401,11 @@ if __name__ == "__main__":
     # AddProjectFeedbackDataSetsToDB(projectName, email, process, "Input", "Output")
     # AddProjectEmbeddingDataSetsToDB(projectName, email, process, "InputEmbedding", "OutputEmbedding")
     
-    with open(DataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_04_BodyCharacterDefineDataSet.json", 'r', encoding='utf-8') as file:
-        processDataset = json.load(file)
-    processDataset = OutputAccuracy(projectName, email, process, processDataset)
+    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_04_BodyCharacterDefineDataSet.json", 'r', encoding='utf-8') as file:
+    #     processDataset = json.load(file)
+    # processDataset = OutputAccuracy(projectName, email, process, processDataset)
     
-    with open(DataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_04_BodyCharacterDefineDataSet_Accuracy.json", 'w', encoding='utf-8') as file:
-        json.dump(processDataset, file, ensure_ascii=False, indent=4)
+    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_04_BodyCharacterDefineDataSet_Accuracy.json", 'w', encoding='utf-8') as file:
+    #     json.dump(processDataset, file, ensure_ascii=False, indent = 4)
+        
+    AddProjectFeedbackDataSets(projectName, email, "BodyCharacterDefine", RawDataSetPath, CompleteDataSet)

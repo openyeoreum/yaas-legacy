@@ -8,7 +8,7 @@ from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject
 from backend.b2_Solution.b23_Project.b232_ProjectCommit import GetProjectDataPath, LoadJsonFrame
 
-##########
+###################################################
 ##### 전체 DataFrame의 MetaData(식별)부분을 업데이트 #####
 def AddFrameMetaDataToDB(projectName, email):
     with get_db() as db:
@@ -32,12 +32,10 @@ def AddFrameMetaDataToDB(projectName, email):
 
         db.add(project)
         db.commit()
-##########
-##########
 
-##########
+###############################
 ##### IndexDefine Process #####
-# 1. 1-1 IndexFrame이 이미 ExistedFrame으로 존재할때 업데이트
+## 1. 1-1 IndexFrame이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedIndexFrameToDB(projectName, email, ExistedFrame):
     with get_db() as db:
     
@@ -49,7 +47,7 @@ def AddExistedIndexFrameToDB(projectName, email, ExistedFrame):
         db.add(project)
         db.commit()
 
-# 1. 1-2 IndexFrame의 Body(본문)부분 업데이트 형식
+## 1. 1-2 IndexFrame의 Body(본문)부분 업데이트 형식
 def UpdateIndexTags(project, IndexId, IndexTag, Index):
     
     updateIndexTags = {
@@ -62,7 +60,7 @@ def UpdateIndexTags(project, IndexId, IndexTag, Index):
     # Count 업데이트
     project.IndexFrame[0]["IndexCount"] = IndexId
 
-# 1. 1-3 IndexFrame의 Body(본문)부분 업데이트
+## 1. 1-3 IndexFrame의 Body(본문)부분 업데이트
 def AddIndexFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
     with get_db() as db:
     
@@ -116,12 +114,10 @@ def IndexFrameCompletionUpdate(projectName, email):
 
         db.add(project)
         db.commit()
-##########
-##########
 
-##########
+###########################################
 ##### BodySplit, IndexTagging Process #####
-# 2. 1-1 BodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
+## 2. 1-1 BodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedBodyFrameToDB(projectName, email, ExistedFrame):
     with get_db() as db:
     
@@ -134,7 +130,7 @@ def AddExistedBodyFrameToDB(projectName, email, ExistedFrame):
         db.add(project)
         db.commit()
         
-# 2. 1-2 BodyFrame의 Body(본문) Body부분 업데이트 형식
+## 2. 1-2 BodyFrame의 Body(본문) Body부분 업데이트 형식
 def UpdateSplitedBodyScripts(project, IndexId, IndexTag, Index):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.BodyFrame[1]["SplitedBodyScripts"])
@@ -152,7 +148,7 @@ def UpdateSplitedBodyScripts(project, IndexId, IndexTag, Index):
     project.BodyFrame[0]["IndexCount"] = IndexId
     project.BodyFrame[0]["BodyCount"] = BodyId
 
-# 2. 1-3 BodyFrame의 Body(본문) Body부분 업데이트
+## 2. 1-3 BodyFrame의 Body(본문) Body부분 업데이트
 def AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
     with get_db() as db:
         
@@ -164,7 +160,7 @@ def AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
         db.add(project)
         db.commit()
 
-# 2. 2-1 BodyFrame의 Body(본문) TagChunks부분 업데이트 형식
+## 2. 2-1 BodyFrame의 Body(본문) TagChunks부분 업데이트 형식
 def UpdateSplitedBodyTagChunks(project, ChunkId, Tag, Chunk):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.BodyFrame[1]["SplitedBodyScripts"]) -1
@@ -179,7 +175,7 @@ def UpdateSplitedBodyTagChunks(project, ChunkId, Tag, Chunk):
     # Count 업데이트
     project.BodyFrame[0]["ChunkCount"] = ChunkId
 
-# 2. 2-2 BodyFrame의 Body(본문) TagChunks부분 업데이트
+## 2. 2-2 BodyFrame의 Body(본문) TagChunks부분 업데이트
 def AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
     with get_db() as db:
         
@@ -191,7 +187,7 @@ def AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
         db.add(project)
         db.commit()
         
-# 2. 3-1 BodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
+## 2. 3-1 BodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
 def UpdateBodys(project, Task, Body, Character):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.BodyFrame[2]["Bodys"])
@@ -205,7 +201,7 @@ def UpdateBodys(project, Task, Body, Character):
     
     project.BodyFrame[2]["Bodys"].append(updateBodys)
     
-# 2. 3-2 BodyFrame의 Bodys(부문) Bodys부분 업데이트
+## 2. 3-2 BodyFrame의 Bodys(부문) Bodys부분 업데이트
 def AddBodyFrameBodysToDB(projectName, email, Task, Body, Character):
     with get_db() as db:
         
@@ -265,12 +261,10 @@ def BodyFrameCompletionUpdate(projectName, email):
 
         db.add(project)
         db.commit()
-##########
-##########
 
-##########
+###############################
 ##### BodySummary Process #####
-# 3. 1-1 SummaryBodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
+## 3. 1-1 SummaryBodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedSummaryBodyFrameToDB(projectName, email, ExistedFrame):
     with get_db() as db:
     
@@ -282,7 +276,7 @@ def AddExistedSummaryBodyFrameToDB(projectName, email, ExistedFrame):
         db.add(project)
         db.commit()
         
-# 3. 1-2 SummaryBodyFrame의 BodySummaryScripts(본문)부분 업데이트 형식
+## 3. 1-2 SummaryBodyFrame의 BodySummaryScripts(본문)부분 업데이트 형식
 def UpdateSummaryBodyTags(project, BodyId, Summary, BodySummaryScript):
     
     updateBodySummaryScripts = {
@@ -295,7 +289,7 @@ def UpdateSummaryBodyTags(project, BodyId, Summary, BodySummaryScript):
     # Count 업데이트
     project.SummaryBodyFrame[0]["BodyCount"] = BodyId
     
-# 3. 1-3 SummaryBodyFrame의 SummaryBodyFrame(본문)부분 업데이트
+## 3. 1-3 SummaryBodyFrame의 SummaryBodyFrame(본문)부분 업데이트
 def AddSummaryBodyFrameBodyToDB(projectName, email, BodyId, Summary, BodySummaryScript):
     with get_db() as db:
     
@@ -349,12 +343,10 @@ def SummaryBodyFrameCompletionUpdate(projectName, email):
 
         db.add(project)
         db.commit()
-##########
-##########
 
-##########
+#######################################
 ##### BodyCharacterDefine Process #####
-# 4. 1-1 BodyCharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
+## 4. 1-1 BodyCharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedBodyCharacterDefineToDB(projectName, email, ExistedFrame):
     with get_db() as db:
     
@@ -367,7 +359,7 @@ def AddExistedBodyCharacterDefineToDB(projectName, email, ExistedFrame):
         db.add(project)
         db.commit()
         
-# 4. 1-1 BodyCharacterDefine의 Body(본문) BodyCharacters부분 업데이트 형식
+## 4. 1-1 BodyCharacterDefine의 Body(본문) BodyCharacters부분 업데이트 형식
 def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, Type, Role, Listener):    
     updateCharacterChunks = {
         "CharacterChunkId": CharacterChunkId,
@@ -382,7 +374,7 @@ def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, 
     project.BodyCharacterDefine[1]["CharacterChunks"].append(updateCharacterChunks)
     project.BodyCharacterDefine[0]["CharacterChunkCount"] = CharacterChunkId
     
-# 4. 1-2 BodyCharacterDefine의 Body(본문) BodyCharacters부분 업데이트
+## 4. 1-2 BodyCharacterDefine의 Body(본문) BodyCharacters부분 업데이트
 def AddBodyCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Role, Listener):
     with get_db() as db:
         
@@ -394,7 +386,7 @@ def AddBodyCharacterDefineChunksToDB(projectName, email, CharacterChunkId, Chunk
         db.add(project)
         db.commit()
 
-# 4. 2-1 BodyCharacterDefine의 Character(부문) CharacterTags부분 업데이트 형식
+## 4. 2-1 BodyCharacterDefine의 Character(부문) CharacterTags부분 업데이트 형식
 def UpdateCharacterTags(project, CharacterTag, CharacterList, Character):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     CharacterId = len(project.BodyCharacterDefine[2]["CharacterTags"]) -1
@@ -409,7 +401,7 @@ def UpdateCharacterTags(project, CharacterTag, CharacterList, Character):
     project.BodyCharacterDefine[2]["CharacterTags"].append(updateCharacterTags)
     project.BodyCharacterDefine[0]["CharacterCount"] = CharacterId
     
-# 4. 2-2 BodyCharacterDefine의 Character(부문) CharacterTags부분 업데이트
+## 4. 2-2 BodyCharacterDefine의 Character(부문) CharacterTags부분 업데이트
 def AddBodyCharacterDefineCharacterTagsToDB(projectName, email, CharacterTag, CharacterList, Character):
     with get_db() as db:
         
@@ -467,8 +459,6 @@ def BodyCharacterDefineCompletionUpdate(projectName, email):
 
         db.add(project)
         db.commit()
-##########
-##########
 
 if __name__ == "__main__":
 
@@ -476,6 +466,6 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
     process = 'IndexDefinePreprocess'
-    DataFramePath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
-    DataSetPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b55_TrainingDataTest/"
+    DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
+    RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     #########################################################################

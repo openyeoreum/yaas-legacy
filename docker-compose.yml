@@ -8,7 +8,7 @@ services:
       - POSTGRES_USER=yeoreum
       - POSTGRES_PASSWORD=0128
     volumes:
-      - ./backend/b5_Database/b52_DatabaseVolumesPostgres:/var/lib/postgresql/data
+      - ./backend/databaseVolumesPostgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 

@@ -5,7 +5,7 @@
     "ProjectId": 7,
     "ProjectName": "우리는행복을진단한다",
     "RawDataSetCount": 66,
-    "FeedbackDatasetCount": 0,
+    "FeedbackDatasetCount": 66,
     "EmbeddingDatasetCount": 0,
     "Completion": "No",
     "Accuracy": {

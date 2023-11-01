@@ -13,8 +13,9 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetPromptFrame, GetTrainingDataset
 
-##########
+######################
 ##### LLM 공통사항 #####
+
 ## 오늘 날짜
 def Date(Option = "Day"):
     if Option == "Day":
@@ -33,11 +34,10 @@ def LoadLLMapiKey(email):
         lLMapiKey = user.TTSapiKey
     
     return lLMapiKey
-##########
-##########
 
-##########
+########################
 ##### LLM Response #####
+
 ## 프롬프트 요청할 LLMmessages 메세지 구조 생성
 def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
     promptFrame = GetPromptFrame(Process)
@@ -241,18 +241,16 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
       except openai.error.OpenAIError as e:
           print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생: {e}")
           continue
-##########
-##########
 
-##########
+##########################
 ##### LLM FineTuning #####
 ## 파인튜닝 데이터셋 생성
-def LLMTrainingDatasetGenerator(projectName, email, Process, DataSetPath, processDataset, Mode = "Example"):
+def LLMTrainingDatasetGenerator(projectName, email, Process, RawDataSetPath, processDataset, Mode = "Example"):
     ###                                                                   ^^^^^^^^^^^^^^ 테스트 후 삭제 ###   
     trainingDataset = GetTrainingDataset(projectName, email)
     ProcessDataset = getattr(trainingDataset, Process)
 
-    filename = DataSetPath + Process + 'DataSet_Training_' + Date() + '.jsonl'
+    filename = RawDataSetPath + Process + 'DataSet_Training_' + Date() + '.jsonl'
     
     base, ext = os.path.splitext(filename)
     counter = 0
@@ -295,13 +293,13 @@ def LLMTrainingDatasetGenerator(projectName, email, Process, DataSetPath, proces
       return None
     
 ## 파인튜닝 파일 업로드 생성
-def LLMTrainingDatasetUpload(projectName, email, Process, DataSetPath, processDataset, mode = "Example", MaxAttempts = 100):
+def LLMTrainingDatasetUpload(projectName, email, Process, RawDataSetPath, processDataset, mode = "Example", MaxAttempts = 100):
     ###                                                                ^^^^^^^^^^^^^^ 테스트 후 삭제 ###  
     openai.api_key = LoadLLMapiKey(email)
     openai.api_key = os.getenv("OPENAI_API_KEY")
     
     # LLMTrainingDataset 업로드
-    LLMTrainingDataset = LLMTrainingDatasetGenerator(projectName, email, Process, DataSetPath, processDataset, Mode = mode)
+    LLMTrainingDataset = LLMTrainingDatasetGenerator(projectName, email, Process, RawDataSetPath, processDataset, Mode = mode)
     ###                                                                                        ^^^^^^^^^^^^^^ 테스트 후 삭제 ###  
     UploadedFile = openai.File.create(
       file = LLMTrainingDataset,
@@ -321,13 +319,13 @@ def LLMTrainingDatasetUpload(projectName, email, Process, DataSetPath, processDa
     return FileId
 
 ## 파인튜닝
-def LLMFineTuning(projectName, email, Process, DataSetPath, processDataset, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
+def LLMFineTuning(projectName, email, Process, RawDataSetPath, processDataset, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
     ###                                                     ^^^^^^^^^^^^^^ 테스트 후 삭제 ###
     with get_db() as db:
         openai.api_key = LoadLLMapiKey(email)
         openai.api_key = os.getenv("OPENAI_API_KEY")
         
-        FileId = LLMTrainingDatasetUpload(projectName, email, Process, DataSetPath, processDataset, mode = Mode)
+        FileId = LLMTrainingDatasetUpload(projectName, email, Process, RawDataSetPath, processDataset, mode = Mode)
 
         # 토큰수별 모델 선정
         if ModelTokens == "Short":
@@ -379,8 +377,6 @@ def LLMFineTuning(projectName, email, Process, DataSetPath, processDataset, Mode
     # openai.File.delete(TrainingFile)
     
     return FineTunedModel, TrainedTokens
-##########
-##########
     
 if __name__ == "__main__":
 
@@ -388,17 +384,17 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
     process = 'IndexDefinePreprocess'
-    DataFramePath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
-    DataSetPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b55_TrainingDataTest/"
+    DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
+    RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     #########################################################################
 
-    with open(DataSetPath + "yeoreum00128@gmail.com_우리는행복을진단한다_04_BodyCharacterDefineDataSet_231022_Accuracy.json", 'r', encoding='utf-8') as file:
+    with open(RawDataSetPath + "yeoreum00128@gmail.com_우리는행복을진단한다_04_BodyCharacterDefineDataSet_231022_Accuracy.json", 'r', encoding='utf-8') as file:
         processDataset = json.load(file)
     
     modelTokens = "Short"
     mode = "Example"
     epochs = 4
-    FineTunedModel, TrainedTokens = LLMFineTuning(projectName, email, process, DataSetPath, processDataset, ModelTokens = modelTokens, Mode = mode, Epochs = epochs)
+    FineTunedModel, TrainedTokens = LLMFineTuning(projectName, email, process, RawDataSetPath, processDataset, ModelTokens = modelTokens, Mode = mode, Epochs = epochs)
     
     completion = openai.ChatCompletion.create(
       model = FineTunedModel,

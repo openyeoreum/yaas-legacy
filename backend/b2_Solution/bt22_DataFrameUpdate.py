@@ -25,9 +25,9 @@ def Date(Option = "Day"):
     return date
 
 ## 업데이트된 DataFrame 파일저장
-def SaveDataFrame(projectName, email, Process, UpdatedFrame, DataSetPath):
+def SaveDataFrame(projectName, email, Process, UpdatedFrame, RawDataSetPath):
     # 현재 날짜 및 시간을 가져옵니다.
-    filename = DataSetPath + email + '_' + projectName + '_' + Process + 'DataFrame_' + str(Date()) + '.json'
+    filename = RawDataSetPath + email + '_' + projectName + '_' + Process + 'DataFrame_' + str(Date()) + '.json'
     
     base, ext = os.path.splitext(filename)
     counter = 0
@@ -36,33 +36,34 @@ def SaveDataFrame(projectName, email, Process, UpdatedFrame, DataSetPath):
         counter += 1
         newFilename = f"{base} ({counter}){ext}"
     with open(newFilename, 'w', encoding='utf-8') as f:
-        json.dump(UpdatedFrame, f, ensure_ascii=False, indent=4)
+        json.dump(UpdatedFrame, f, ensure_ascii=False, indent = 4)
         
-def LoadExistedFrame(projectName, email, ProcessNumber, ProjectDataTestPath):
+def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
     # 문자열 정규화
-    EmailNormalized = unicodedata.normalize('NFD', email)
-    ProjectNameNormalized = unicodedata.normalize('NFD', projectName)
+    EmailNormalized = unicodedata.normalize('NFC', email)
+    ProjectNameNormalized = unicodedata.normalize('NFC', projectName)
+    ProcessNormalized = unicodedata.normalize('NFC', Process)
     
-    # 정규 표현식으로 파일명에서 생성날짜 추출
-    patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_{ProcessNumber}_\w+_(\d+).json"
+    # 정규 표현식으로 파일명에서 생성날짜와 프로세스 이름 추출
+    patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+_{re.escape(ProcessNormalized)}DataFrame_(\d+).json"
     pattern = re.compile(patternSTR)
     
     MaxDate = 0
     RecentFile = None
 
-    for FileName in os.listdir(ProjectDataTestPath):
-        FileNameNormalized = unicodedata.normalize('NFD', FileName)
+    for FileName in os.listdir(DataFramePath):
+        FileNameNormalized = unicodedata.normalize('NFC', FileName)
         match = pattern.match(FileNameNormalized)       
         if match:
             date = int(match.group(1))
             if date > MaxDate:
                 MaxDate = date
-                RecentFile = FileName  # 원본 파일명을 반환합니다.
+                RecentFile = FileName
 
     if RecentFile:
-        with open(os.path.join(ProjectDataTestPath, RecentFile), 'r', encoding='utf-8') as file:
-            ExistedFrame = json.load(file)
-            return ExistedFrame
+        with open(os.path.join(DataFramePath, RecentFile), 'r', encoding='utf-8') as file:
+            ExistedDataFrame = json.load(file)
+            return ExistedDataFrame
 
     return None
 
@@ -71,14 +72,14 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    DataFramePath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
-    DataSetPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b55_TrainingDataTest/"
-    ProjectDataTestPath = "/yaas/backend/b5_Database/b50_DatabaseTest/b53_ProjectDataTest/"
+    DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
+    RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
+    ProjectDataTestPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     messagesReview = "on"
     
-    ### existedFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
-    existedFrameMode = "on" # <- 개발 후 off #
-    existedFrame = None
+    ### existedDataFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
+    existedDataFrameMode = "on" # <- 개발 후 off #
+    existedDataFrame = None
     #########################################################################
     
 
@@ -91,57 +92,57 @@ if __name__ == "__main__":
     ###################################
     ### 01_IndexFrame-[IndexDefine] ###
     InitIndexFrame(projectName, email)
-    if existedFrameMode == "on":
-        existedFrame = LoadExistedFrame(projectName, email, "01", ProjectDataTestPath)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "IndexFrame", ProjectDataTestPath)
     mode = "Example"
-    IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedFrame = existedFrame)
+    IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, existedDataFrame = existedDataFrame)
     
-    if existedFrame == None:
+    if existedDataFrame == None:
         updatedIndexFrame = UpdatedIndexFrame(projectName, email)
         SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
-        SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", DataSetPath)
-        SaveDataSet(projectName, email, "01", "IndexDefine", DataSetPath)
-    existedFrame = None
+        SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", RawDataSetPath)
+        SaveDataSet(projectName, email, "01", "IndexDefine", RawDataSetPath)
+    existedDataFrame = None
 
 
     ##############################################
     ### 02_BodyFrame-[BodySplit, IndexTagging] ###
     InitBodyFrame(projectName, email)
-    if existedFrameMode == "on":
-        existedFrame = LoadExistedFrame(projectName, email, "02", ProjectDataTestPath)
-    BodyFrameUpdate(projectName, email, ExistedFrame = existedFrame)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", ProjectDataTestPath)
+    BodyFrameUpdate(projectName, email, existedDataFrame = existedDataFrame)
 
-    if existedFrame == None:
+    if existedDataFrame == None:
         updatedBodyFrame = UpdatedBodyFrame(projectName, email)
         SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
-    existedFrame = None
+    existedDataFrame = None
 
 
     #########################################
     ### 03_SummaryBodyFrame-[BodySummary] ###
     InitSummaryBodyFrame(projectName, email)
-    if existedFrameMode == "on":
-        existedFrame = LoadExistedFrame(projectName, email, "03", ProjectDataTestPath)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "SummaryBodyFrame", ProjectDataTestPath)
     mode = "ExampleFineTuning" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning"
-    SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedFrame = existedFrame)
+    SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, existedDataFrame = existedDataFrame)
     
-    if existedFrame == None:
+    if existedDataFrame == None:
         updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
         SaveDataFrame(projectName, email, "03_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
-        SaveDataSet(projectName, email, "03", "BodySummary", DataSetPath)
-    existedFrame = None
+        SaveDataSet(projectName, email, "03", "BodySummary", RawDataSetPath)
+    existedDataFrame = None
 
 
     ##############################
     ### 04_BodyCharacterDefine ###
     InitBodyCharacterDefine(projectName, email)
-    if existedFrameMode == "on":
-        existedFrame = LoadExistedFrame(projectName, email, "04", ProjectDataTestPath)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyCharacterDefine", ProjectDataTestPath)
     mode = "ExampleFineTuning"
-    BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedFrame = existedFrame)
+    BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, existedDataFrame = existedDataFrame)
     
-    if existedFrame == None:
+    if existedDataFrame == None:
         updatedBodyCharacterDefine = UpdatedBodyCharacterDefine(projectName, email)
         SaveDataFrame(projectName, email, "04_BodyCharacterDefine", updatedBodyCharacterDefine, DataFramePath)       
-        SaveDataSet(projectName, email, "04", "BodyCharacterDefine", DataSetPath)
-    existedFrame = None
+        SaveDataSet(projectName, email, "04", "BodyCharacterDefine", RawDataSetPath)
+    existedDataFrame = None

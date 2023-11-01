@@ -24,8 +24,10 @@
     "RawDataset": [
         {
             "DataSetId": 0,
+            "Mode": "None",
             "TrainingModel": "None",
             "Tokens": "None",
+            "InputMemory": "None",
             "Input": "None",
             "Output": "None"
         },
@@ -993,10 +995,11 @@
     "FeedbackDataset": [
         {
             "DataSetId": 0,
+            "InputMemory": "None",
             "Input": "None",
             "Feedback": "None",
             "Check": "No",
-            "Accurace": "None"
+            "Accuracy": "None"
         },
         {
             "DataSetId": 1,
@@ -1939,12 +1942,13 @@
             "Accuracy": "None"
         }
     ],
+    "FeedbackCompletion": "No",
     "EmbeddingDataset": [
         {
             "DataSetId": 0,
+            "InputMemoryEmbedding": "None",
             "InputEmbedding": "None",
             "OutputEmbedding": "None"
         }
-    ],
-    "FeedbackCompletion": "No"
+    ]
 }

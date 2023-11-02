@@ -1,6 +1,6 @@
 [
     {
-        "UserId": "0d24ce981a863baffca2e84ba4c43b36e0581b6ebdeee84ac77b92ebe49d6260",
+        "UserId": "8023676d3b241aa5ff10a9a7e01fde693bffa3029a16ddccddc9d3b14cb94216",
         "ProjectsStorageID": 1,
         "ProjectId": 7,
         "ProjectName": "우리는행복을진단한다",
@@ -29,8 +29,8 @@
                 "ChunkId": 12,
                 "Chunk": "\"사람이 건강하고 행복하게 살아가는 데 도움이 되는 의료기관\"",
                 "Character": "SCL",
-                "Type": "요약",
-                "Role": "주인공",
+                "Type": "대화",
+                "Role": "의료기관",
                 "Listener": "없음"
             },
             {
@@ -47,9 +47,9 @@
                 "ChunkId": 39,
                 "Chunk": "\"자네들이 쥔 칼은 사람을 살리는 칼이 되어야 해\"",
                 "Character": "스승",
-                "Type": "대화",
+                "Type": "인용",
                 "Role": "단역",
-                "Listener": "SCL"
+                "Listener": "SCL 구성원들"
             },
             {
                 "CharacterChunkId": 4,
@@ -57,7 +57,7 @@
                 "Chunk": "\"그만하고 나가. 어서!\"",
                 "Character": "A교수",
                 "Type": "대화",
-                "Role": "주인공",
+                "Role": "단역",
                 "Listener": "의대생들"
             },
             {
@@ -66,7 +66,7 @@
                 "Chunk": "\"자넨 지금 환자를 죽였어 그러고도 메스를 잡을 자격이 있어? 어 서 나가!\"",
                 "Character": "A교수",
                 "Type": "대화",
-                "Role": "주인공",
+                "Role": "단역",
                 "Listener": "B"
             },
             {
@@ -74,9 +74,9 @@
                 "ChunkId": 87,
                 "Chunk": "\"저런 식으로 혈관을 건드리면 환자는 목숨을 잃는다. 의사의 사소한 실수 하나가 환자의 생명을 앗아 갈 수 있다는 걸 명심하도록!\"",
                 "Character": "A교수",
-                "Type": "인용",
+                "Type": "강조",
                 "Role": "주인공",
-                "Listener": "없음"
+                "Listener": "의대생들"
             },
             {
                 "CharacterChunkId": 7,
@@ -92,7 +92,7 @@
                 "ChunkId": 106,
                 "Chunk": "\"그때가 처음이었을 거예요, 의사의 실수를 줄일 방법을 알고 싶었던 때가. \"",
                 "Character": "이경률",
-                "Type": "대화",
+                "Type": "독백",
                 "Role": "주인공",
                 "Listener": "없음"
             },
@@ -101,7 +101,7 @@
                 "ChunkId": 114,
                 "Chunk": "\"자네들이 쥔 칼은 사람을 살리는 칼이 되어야 해\"",
                 "Character": "이경률",
-                "Type": "대화",
+                "Type": "독백",
                 "Role": "주인공",
                 "Listener": "없음"
             },
@@ -110,7 +110,7 @@
                 "ChunkId": 147,
                 "Chunk": "\"정식 의사가 왔다는 소식을 듣고 군민들이 굉장히 몰려들어 왔어요. 매일 쉴 틈이 없었죠. \"",
                 "Character": "의사",
-                "Type": "대화",
+                "Type": "인용",
                 "Role": "단역",
                 "Listener": "없음"
             },
@@ -119,7 +119,7 @@
                 "ChunkId": 165,
                 "Chunk": "\"횡성군에서 일하던 3년 동안을 잊을 수 없다\"",
                 "Character": "의사",
-                "Type": "독백",
+                "Type": "인용",
                 "Role": "단역",
                 "Listener": "없음"
             },
@@ -137,7 +137,7 @@
                 "ChunkId": 172,
                 "Chunk": "\"의사로서 환자를 실수없이 진료하고 치료하는 것이 중요하다는 걸 체험한 순간이기도 했다\"",
                 "Character": "의사",
-                "Type": "대화",
+                "Type": "인용",
                 "Role": "단역",
                 "Listener": "없음"
             },
@@ -147,7 +147,7 @@
                 "Chunk": "\"의사의 실수를 줄이고 정확한 진단 및 치료를 하도록 돕는 방법\"",
                 "Character": "의사",
                 "Type": "인용",
-                "Role": "단역",
+                "Role": "주인공",
                 "Listener": "없음"
             },
             {
@@ -163,7 +163,7 @@
                 "CharacterChunkId": 16,
                 "ChunkId": 254,
                 "Chunk": "\"이런 검사법이 있으면 좋겠다\"",
-                "Character": "이경률",
+                "Character": "이경률 회장",
                 "Type": "인용",
                 "Role": "단역",
                 "Listener": "없음"
@@ -175,7 +175,7 @@
                 "Character": "제프 베조스",
                 "Type": "인용",
                 "Role": "단역",
-                "Listener": "기업인들"
+                "Listener": "없음"
             },
             {
                 "CharacterChunkId": 18,
@@ -184,7 +184,7 @@
                 "Character": "나",
                 "Type": "질문",
                 "Role": "주인공",
-                "Listener": "당신"
+                "Listener": "상대방"
             },
             {
                 "CharacterChunkId": 19,
@@ -236,8 +236,8 @@
                 "ChunkId": 595,
                 "Chunk": "\"강서 지역의 모든 이가 진나라에 반기를 들었으니 하늘이 진나라를 버린 것 같습니다. 내가 알기론 먼저 선수를 치면 상대를 누를 수 있고 先則制人, 뒤늦게 하면 상대에게 제압당한다고 後則人制 합니다. \"",
                 "Character": "은통",
-                "Type": "대화",
-                "Role": "주인공",
+                "Type": "인용",
+                "Role": "단역",
                 "Listener": "항량"
             },
             {
@@ -245,7 +245,7 @@
                 "ChunkId": 606,
                 "Chunk": "\"저 회사가 최초야\"",
                 "Character": "알 수 없음",
-                "Type": "강조",
+                "Type": "인용",
                 "Role": "알 수 없음",
                 "Listener": "소비자들"
             },
@@ -262,9 +262,9 @@
                 "CharacterChunkId": 27,
                 "ChunkId": 688,
                 "Chunk": "\"브루투스 너마저\"",
-                "Character": "율리우스 카이사르",
+                "Character": "나",
                 "Type": "대화",
-                "Role": "단역",
+                "Role": "주인공",
                 "Listener": "브루투스"
             },
             {
@@ -308,7 +308,7 @@
                 "ChunkId": 927,
                 "Chunk": "\"회사 안팎으로 그런 변화가 있을 때 일본 LSIM으로 출장을 가게 되었어요. SCL에 꼭 필요한 걸 발견할 수 있었던 출장이었죠. \"",
                 "Character": "당시 임상시험지원사업부 부서장",
-                "Type": "대화",
+                "Type": "인용",
                 "Role": "단역",
                 "Listener": "없음"
             },
@@ -317,7 +317,7 @@
                 "ChunkId": 939,
                 "Chunk": "\"자연재해에 예민한 나라이기 때문에 유사시 대피 및 탈출 경로를 잘 만들어 두었어요. 노란색 화살표로 이동경로를 꼼꼼하게 표시해 두었더라고요. \"",
                 "Character": "당시 임상시험지원사업부 부서장",
-                "Type": "대화",
+                "Type": "인용",
                 "Role": "단역",
                 "Listener": "없음"
             },
@@ -335,24 +335,24 @@
                 "ChunkId": 986,
                 "Chunk": "\"어떻게 보면 사람의 인식을 바꾸는 일이고, 인식을 바꾸기 위해서 사람의 인식하고 싸우는 일인 것 같아요. \"",
                 "Character": "나",
-                "Type": "대화",
+                "Type": "인용",
                 "Role": "주인공",
-                "Listener": "직원들"
+                "Listener": "없음"
             },
             {
                 "CharacterChunkId": 36,
                 "ChunkId": 1010,
                 "Chunk": "\"다른 의료기관들도 모두 품질관 리에 힘을 기울이겠지만 SCL만큼 전담 부서를 두고 전문적으로 관리 하기는 힘들 것\"",
-                "Character": "그",
+                "Character": "나",
                 "Type": "인용",
-                "Role": "단역",
+                "Role": "주인공",
                 "Listener": "없음"
             },
             {
                 "CharacterChunkId": 37,
                 "ChunkId": 1013,
                 "Chunk": "\"은퇴가 얼마 안 남았지만, 제가 있는 동안 모든 부서가 올바르게 구현된 SOP를 통해서 업무를 할 수 있도록 훈련하는 게 꿈이에요. \"",
-                "Character": "그",
+                "Character": "경영자",
                 "Type": "대화",
                 "Role": "주인공",
                 "Listener": "없음"
@@ -361,7 +361,7 @@
                 "CharacterChunkId": 38,
                 "ChunkId": 1020,
                 "Chunk": "\"생각하는 대로 해보라\"",
-                "Character": "그",
+                "Character": "경영자",
                 "Type": "대화",
                 "Role": "주인공",
                 "Listener": "없음"
@@ -370,7 +370,7 @@
                 "CharacterChunkId": 39,
                 "ChunkId": 1022,
                 "Chunk": "\"객관적이고 과학적인 데이터의 중요성을 모두 인지하고 있었어요. 그렇다곤 해도 직원의 제안에 선뜻 새로운 부서를 신설해 주고 지원해 주는 게 쉬운 일은 아니라고 생각해요. \"",
-                "Character": "그",
+                "Character": "경영자",
                 "Type": "대화",
                 "Role": "주인공",
                 "Listener": "없음"
@@ -379,7 +379,7 @@
                 "CharacterChunkId": 40,
                 "ChunkId": 1029,
                 "Chunk": "\"SCL에서 임상시험이 차지하는 비중이 낮기 때문에, 임상시험과 관련돼 SOP를 만드는 건 정말 귀찮은 일이에요. 하지만 SOP가 SCL 모든 사업영역의 신뢰성을 담보할 수 있다는 것 또한 사실이에요. \"",
-                "Character": "그",
+                "Character": "경영자",
                 "Type": "대화",
                 "Role": "주인공",
                 "Listener": "없음"
@@ -390,14 +390,14 @@
                 "Chunk": "\"SCL은 SOP를 갖추면서 검체검사기관으로서 신뢰성을 더욱 높여 가게 되었고, 이러한 성과 는 직원을 신뢰하고 전폭적인 지지를 아끼지 않았기 때문\"",
                 "Character": "이경률 회장",
                 "Type": "대화",
-                "Role": "단역",
+                "Role": "주인공",
                 "Listener": "없음"
             },
             {
                 "CharacterChunkId": 42,
                 "ChunkId": 1036,
                 "Chunk": "\"내 임무는 최고의 성공을 거둘 수 있는 사업에 최상의 능력을 발휘할 수 있는 인재를 배치하고, 가장 올바른 사업을 선택하여 자본을 투자하는 것이다. 아이디어를 제공하고, 자원을 분배한 후 간섭하지 않고 내버려 둔다. 훌륭한 비즈 니스 리더란 관리하기를 포기하는 사람이다. \"",
-                "Character": "CEO",
+                "Character": "잭 웰치",
                 "Type": "인용",
                 "Role": "단역",
                 "Listener": "없음"
@@ -442,7 +442,7 @@
                 "CharacterChunkId": 47,
                 "ChunkId": 1111,
                 "Chunk": "\"얼굴이 붉어질 때도 있지만, 나중엔 다 풀죠. 다들 일을 잘하기 위 해 그런 거라서 그 순간이 지나면 서로를 이해해 주는 편이에요. \"",
-                "Character": "검사부원",
+                "Character": "직원들",
                 "Type": "인용",
                 "Role": "단역",
                 "Listener": "없음"
@@ -451,9 +451,9 @@
                 "CharacterChunkId": 48,
                 "ChunkId": 1114,
                 "Chunk": "\"검사를 통해 환자의 발병 사실을 찾아내면 생명을 살리는 거지만, 반대로 놓치면 환자가 위험해지니까 정신을 바싹 차려야죠. 검사자는 검체 너머에 있는 환자를 봐야 해요. \"",
-                "Character": "직원들",
+                "Character": "직원",
                 "Type": "인용",
-                "Role": "단역",
+                "Role": "엑스트라",
                 "Listener": "없음"
             },
             {
@@ -498,7 +498,7 @@
                 "Chunk": "\"이란, 사우디 등 중동지역에 많이 다녔죠. 이란에 가면 머리에 스카프를 두르고 사우디에 가면 아바야를 입어요. 직원들이 현지 여성 들과 같은 모습을 하는 거죠. 히잡에 대한 찬반 논란과 별도로 비즈니스하러 간 사람으로서 그 나라에 대한 호의를 표현하는 거예요. \"",
                 "Character": "부서장",
                 "Type": "인용",
-                "Role": "주인공",
+                "Role": "단역",
                 "Listener": "없음"
             },
             {
@@ -570,7 +570,7 @@
                 "Chunk": "\"팀장님, 혹시 잠시 시간 있으세요?\"",
                 "Character": "직원",
                 "Type": "대화",
-                "Role": "단역",
+                "Role": "조연",
                 "Listener": "팀장"
             },
             {
@@ -579,7 +579,7 @@
                 "Chunk": "\"아, 내가 지금 시간이 안 되는데\"",
                 "Character": "팀장",
                 "Type": "대화",
-                "Role": "단역",
+                "Role": "주인공",
                 "Listener": "직원"
             },
             {
@@ -588,7 +588,7 @@
                 "Chunk": "\"잠깐만 시간 내 주세요. 꼭 드릴 말씀이 있습니다. \"",
                 "Character": "직원",
                 "Type": "대화",
-                "Role": "단역",
+                "Role": "조연",
                 "Listener": "팀장"
             },
             {
@@ -597,7 +597,7 @@
                 "Chunk": "\"팀장님, 제가 이번 달 말까지만 일하고 그만두려고 합니다. 그동안 잘해 주셔서 감사했고 죄송합니다. \"",
                 "Character": "직원",
                 "Type": "대화",
-                "Role": "단역",
+                "Role": "조연",
                 "Listener": "팀장"
             },
             {
@@ -605,8 +605,8 @@
                 "ChunkId": 1705,
                 "Chunk": "\"견디다 못해 그만둔 직원들 이 50% 가까이 되는 것 같다\"",
                 "Character": "분자진단팀장",
-                "Type": "대화",
-                "Role": "주인공",
+                "Type": "인용",
+                "Role": "단역",
                 "Listener": "없음"
             },
             {
@@ -614,15 +614,15 @@
                 "ChunkId": 1714,
                 "Chunk": "\"한 달에 단 하루 쉬었던 적도 있었다\"",
                 "Character": "분자진단팀장",
-                "Type": "대화",
-                "Role": "주인공",
+                "Type": "인용",
+                "Role": "단역",
                 "Listener": "없음"
             },
             {
                 "CharacterChunkId": 67,
                 "ChunkId": 1722,
                 "Chunk": "\"잠시 시간 있으세요?\"",
-                "Character": "직원들",
+                "Character": "직원",
                 "Type": "대화",
                 "Role": "조연",
                 "Listener": "분자진단팀장"
@@ -631,7 +631,7 @@
                 "CharacterChunkId": 68,
                 "ChunkId": 1816,
                 "Chunk": "\"화장실 몇 시간 동안 안 가 봤어?\"",
-                "Character": "분자진단팀 구성원",
+                "Character": "분자진단팀 직원",
                 "Type": "대화",
                 "Role": "단역",
                 "Listener": "알 수 없음"
@@ -650,7 +650,7 @@
                 "ChunkId": 1830,
                 "Chunk": "\"딱 아내에게만 내가 코로나 검체검사를 진행하고 있다는 걸 말해줬죠. 절대 아무에게도 내가 하는 일을 말하지 말라고 했어요. 그랬다 가는 사람들이 폭탄이라도 본 듯 피할 게 분명하니까요. \"",
                 "Character": "팀장",
-                "Type": "대화",
+                "Type": "독백",
                 "Role": "단역",
                 "Listener": "알 수 없음"
             },
@@ -661,7 +661,7 @@
                 "Character": "환자",
                 "Type": "대화",
                 "Role": "단역",
-                "Listener": "의료진"
+                "Listener": "의사"
             },
             {
                 "CharacterChunkId": 72,
@@ -670,13 +670,13 @@
                 "Character": "환자",
                 "Type": "대화",
                 "Role": "단역",
-                "Listener": "의료진"
+                "Listener": "의사"
             },
             {
                 "CharacterChunkId": 73,
                 "ChunkId": 1852,
                 "Chunk": "\"병원으로부터 결과를 받으셔야 한다\"",
-                "Character": "의료진",
+                "Character": "의사",
                 "Type": "대화",
                 "Role": "단역",
                 "Listener": "환자"
@@ -687,7 +687,7 @@
                 "Chunk": "\"하고 싶어서 했다고 말할 순 없어요. 저 또한 사람이니 두렵고 하 기 싫을 때가 있죠. 그렇지만 내가 선택한 일이잖아요. 누군가는 해야 할 일이고\"",
                 "Character": "직원",
                 "Type": "대화",
-                "Role": "조연",
+                "Role": "단역",
                 "Listener": "알 수 없음"
             },
             {
@@ -697,7 +697,7 @@
                 "Character": "구매부 직원",
                 "Type": "인용",
                 "Role": "단역",
-                "Listener": "없음"
+                "Listener": "나"
             },
             {
                 "CharacterChunkId": 76,
@@ -706,7 +706,7 @@
                 "Character": "구매부 직원",
                 "Type": "인용",
                 "Role": "단역",
-                "Listener": "나"
+                "Listener": "없음"
             },
             {
                 "CharacterChunkId": 77,
@@ -785,7 +785,7 @@
                 "ChunkId": 2225,
                 "Chunk": "\"어쩔 수 없이 고통 분담이 필요하다면 경영진이 먼저 솔선수범해야죠. 그리고 회사 사정을 최대한 직원들에게 정확히 알리는 게 필요 하다고 생각해요. 그냥 통보가 아니라 정보 공개를 바탕으로 양해를 요청하는 거죠. 그래야 직원들도 어떻게 하는 게 좋을지 올바른 판단을 내릴 수 있지 않을까요. \"",
                 "Character": "인사부 부서장",
-                "Type": "인용",
+                "Type": "대화",
                 "Role": "단역",
                 "Listener": "경영진"
             },
@@ -848,7 +848,7 @@
                 "ChunkId": 2395,
                 "Chunk": "\"학교를 졸업하신 선배님 추천으로 지원하게 되었다\"",
                 "Character": "지원자",
-                "Type": "대화",
+                "Type": "인용",
                 "Role": "단역",
                 "Listener": "나"
             },
@@ -877,7 +877,7 @@
                 "Character": "직원 B",
                 "Type": "인용",
                 "Role": "단역",
-                "Listener": "나"
+                "Listener": "직원 A"
             },
             {
                 "CharacterChunkId": 96,
@@ -910,18 +910,18 @@
                 "CharacterChunkId": 99,
                 "ChunkId": 2512,
                 "Chunk": "\"한번 인연을 맺으면 그대로 이어 가고자 하는 성향이 강해요. 사람에 대한 시선이 따뜻하달까, 남들이 들으면 믿어지지 않겠지만 저희 는 그렇게 느껴요. \"",
-                "Character": "직원",
+                "Character": "SCL 직원",
                 "Type": "인용",
-                "Role": "조연",
+                "Role": "단역",
                 "Listener": "없음"
             },
             {
                 "CharacterChunkId": 100,
                 "ChunkId": 2523,
                 "Chunk": "\"검사부와 영업부를 포함한 모든 부서들이 부서별·개인별 성과 지표와 목표값이 있지만, 목표에 대한 압박감보다는 본인이 맡은 일을 잘 수행해 나가면 자연스레 좋은 성과가 따라온다는 걸 회사는 알고 있는 것 같아요. 그렇기에 회사는 각 부서원들이 좋은 성과를 낼 수 있도록 지원하고 그러한 환경을 마련해 주는 데 힘써 주고 있습니다. \"",
-                "Character": "직원",
+                "Character": "SCL 직원",
                 "Type": "인용",
-                "Role": "조연",
+                "Role": "단역",
                 "Listener": "없음"
             },
             {
@@ -949,7 +949,7 @@
                 "Character": "직원",
                 "Type": "인용",
                 "Role": "단역",
-                "Listener": "없음"
+                "Listener": "상대방"
             },
             {
                 "CharacterChunkId": 104,

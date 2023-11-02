@@ -8,7 +8,7 @@ from tqdm import tqdm
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyCharacterDefineToDB, AddBodyCharacterDefineChunksToDB, AddBodyCharacterDefineCharacterTagsToDB, BodyCharacterDefineCountLoad, BodyCharacterDefineCompletionUpdate
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
@@ -124,6 +124,7 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
         
     # BodyCharacterDefineProcess
     while TotalCount < len(InputList):
+        # Momory 계열 모드의 순서
         if Mode == "Memory":
             if "Continue" in InputDic:
                 ContinueCount += 1
@@ -136,15 +137,16 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
                 ContinueCount += 1
             if ContinueCount == 1:
                 mode = "ExampleFineTuning"
-                # "ExampleFineTuning"의 ineTuningMemory 형성
+                # "ExampleFineTuning"의 fineTuningMemory 형성
                 FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
             else:
                 mode = "MemoryFineTuning"
+        # Example 계열 모드의 순서
         elif Mode == "ExampleFineTuning":
             mode = "ExampleFineTuning"
-            # "ExampleFineTuning"의 ineTuningMemory 형성
+            # "ExampleFineTuning"의 fineTuningMemory 형성
             FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
-        else:
+        elif Mode == "Example":
             mode = "Example"
 
         if "Continue" in InputDic:
@@ -159,7 +161,7 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
             TalkTag = ["말" + match for match in talkTag]
             memoryCounter = " - 이어서 작업할 추가데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
             outputEnder = f"{{'{TalkTag[0]}': {{'말의종류': '"
-            
+
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
@@ -258,15 +260,16 @@ def BodyCharacterDefineResponseJson(projectName, email, messagesReview = 'off', 
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 BodyCharacterDefine에 업데이트
-def BodyCharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedFrame = None):
+def BodyCharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, CharacterCount, Completion = BodyCharacterDefineCountLoad(projectName, email)
     if Completion == "No":
         
-        if ExistedFrame != None:
+        if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedBodyCharacterDefineToDB(projectName, email, ExistedFrame)
+            AddExistedBodyCharacterDefineToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "BodyCharacterDefine", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate는 ExistedBodyCharacterDefine으로 대처됨 ]\n")
         else:
             responseJson = BodyCharacterDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)

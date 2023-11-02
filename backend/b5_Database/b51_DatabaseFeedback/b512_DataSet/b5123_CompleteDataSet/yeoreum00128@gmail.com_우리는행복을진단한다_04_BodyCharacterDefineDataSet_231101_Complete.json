@@ -4,11 +4,14 @@
     "ProjectsStorageID": 1,
     "ProjectId": 7,
     "ProjectName": "우리는행복을진단한다",
-    "RawDataSetCount": 72,
-    "FeedbackDatasetCount": 72,
+    "RawDataSetCount": 66,
+    "FeedbackDatasetCount": 66,
     "EmbeddingDatasetCount": 0,
     "Completion": "No",
-    "Accuracy": {},
+    "Accuracy": {
+        "Simple": 0.806060606060606,
+        "Elements": 0.9119949494949495
+    },
     "Context": {
         "Language": "None",
         "Genre": "None",
@@ -36,9 +39,9 @@
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1796,
-                "completion_tokens": 63,
-                "total_tokens": 1859
+                "prompt_tokens": 1812,
+                "completion_tokens": 64,
+                "total_tokens": 1876
             },
             "InputMemory": "None",
             "Input": {
@@ -48,9 +51,9 @@
             "Output": [
                 {
                     "말1": {
-                        "말의종류": "요약",
+                        "말의종류": "대화",
                         "말하는인물": "SCL",
-                        "인물의역할": "주인공",
+                        "인물의역할": "의료기관",
                         "듣는인물": "없음"
                     }
                 }
@@ -61,199 +64,9 @@
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 2413,
-                "completion_tokens": 115,
-                "total_tokens": 2528
-            },
-            "InputMemory": "None",
-            "Input": {
-                "Id": 5,
-                "Continue": "이제는 대한민국을 넘어 전 세계에 우리나라 진단검사의학의 우수성을 알리고 싶다. 미국 할리우드의 여배우 오드리 헵번은 \n\n[말2]\"성공이란, 중요한 생일에 도달했는데 당신은 정확히 똑같다는 걸 발견하는 것이다\"\n\nSuccess is like reaching an important birthday and finding you’re exactly the same 라는 말을 남겼다. 그의 말을 빌려 표현한다면 SCL은 앞으로도 성공할 것이다. 왜냐하 면 오래전 초심, 즉 ‘사람들의 행복하고 건강한 삶을 돕겠다’는 마음이 여전히 생생하게 살아 숨 쉬고 있기 때문이다. 이 마음은 한 번 도 꺾인 적이 없다. \n\n[말3]\"자네들이 쥔 칼은 사람을 살리는 칼이 되어야 해\"\n\n지금도 가끔 의과대학 시절 스승에게 들은 말이 떠오른다. SCL은 검체검사기관으로 시작해 지금은 종합 헬스케어 그룹이 되었다. 의사 와 기업가는 그 입장이 같을 수 없다. 그러나 생명의 소중함, 그 엄중 한 무게를 언제나 묵직하게 느끼고 있다. 인간은 누구나 자기 건강을 지키면서 행복하게 살 권리가 있다. SCL은 이 땅의 모든 이들이 그렇게 살 수 있도록 도울 것이다. \n2023년 5월\nSCL헬스케어 회장 이경률\n"
-            },
-            "Output": [
-                {
-                    "말2": {
-                        "말의종류": "인용",
-                        "말하는인물": "오드리 헵번",
-                        "인물의역할": "단역",
-                        "듣는인물": "없음"
-                    }
-                },
-                {
-                    "말3": {
-                        "말의종류": "인용",
-                        "말하는인물": "스승",
-                        "인물의역할": "단역",
-                        "듣는인물": "없음"
-                    }
-                }
-            ]
-        },
-        {
-            "DataSetId": 3,
-            "Mode": "ExampleFineTuning",
-            "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
-            "Tokens": {
-                "prompt_tokens": 1836,
-                "completion_tokens": 110,
-                "total_tokens": 1946
-            },
-            "InputMemory": "None",
-            "Input": {
-                "Id": 10,
-                "Continue": "\n\n[말4]\"그만하고 나가. 어서!\"\n\nA교수의 호통이 실습실 전체에 울려 퍼졌다. 얇게 얼어붙은 얼음 이 날카로운 송곳에 깨어지듯 집중이 흐트러졌다. 실습대에 모여 있 던 의대생들은 고개를 들고 교수의 손가락이 가리킨 쪽으로 시선을 돌렸다. B가 메스를 쥔 채 손을 떨고 있었다. 주춤거리는 B를 향해 다 시 고함이 날아들었다. \n\n[말5]\"자넨 지금 환자를 죽였어 그러고도 메스를 잡을 자격이 있어? 어 서 나가!\"\n\nB는 메스를 내려놓고 뒷걸음치다가 등을 돌려 실습실 밖으로 나갔다. B가 문밖으로 사라지자 A교수의 얼굴은 다시 무표정하게 바뀌었다. 해부학을 가르치는 A교수는 의대생들 사이에서 철저한 성격으로 이름이 나 있었다. 수술용 메스의 칼날에 비견될 만큼 날카로웠다. 실습 용 메스는 무딘 편이지만 수술용 메스는 상당히 날카롭다 특히 카데바를 직접 다루는 실습시간 때 그의 완벽주의는 찬란하게 빛을 발했다. 단 한 번의 실수, 티끌만큼의 소홀함이라도 결코 용납하는 법이 없었다. 의대생들이 가장 인상 깊은 경험으로 꼽는 해부학 실습은 어떤 수업보다 엄격한 분위기 속에서 진행된다. 1980년대 의과대학 해부학 실습에서는 의대생 10명당 1구의 카데바가 배정되었다. 그때도 카데바가 부족했지만 지금은 카데바 1구에 더 많은 학생들이 실습을 진행하고 있다 의대생들은 의학 발전을 위해 기꺼이 자기 몸을 기증해 준 분들의 숭고한 뜻을 느끼면서 실습에 임했다. 실습 첫날 의대생들은 가장 단정한 옷차림으로 학교에 온다. 그리고 본격적인 작업에 앞서서 카데바를 향해 묵념을 드린다. 시신을 기증한 고인의 뜻을 기리기 위해 별도로 추모제를 지내는 의과대학들도 있다 의대생들이 다루는 카데바는 과거에 존엄한 사람으로 숨 쉬며 존재했었다. 처음부터 의사를 꿈꿨던 사람도, 공부를 잘해서 부모의 권유로 의대에 진학한 사람도, 카데바 앞에서 겸허한 마음을 갖게 된다. "
-            },
-            "Output": [
-                {
-                    "말4": {
-                        "말의종류": "대화",
-                        "말하는인물": "A교수",
-                        "인물의역할": "주인공",
-                        "듣는인물": "의대생들"
-                    }
-                },
-                {
-                    "말5": {
-                        "말의종류": "대화",
-                        "말하는인물": "A교수",
-                        "인물의역할": "주인공",
-                        "듣는인물": "B"
-                    }
-                }
-            ]
-        },
-        {
-            "DataSetId": 4,
-            "Mode": "ExampleFineTuning",
-            "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
-            "Tokens": {
-                "prompt_tokens": 2920,
-                "completion_tokens": 49,
-                "total_tokens": 2969
-            },
-            "InputMemory": "None",
-            "Input": {
-                "Id": 11,
-                "Continue": "처음에 카데바를 보면 두렵고 곤혹스러워하는 경우가 많고 심지어 기절하는 학생들도 있다. 그러나 시간이 지나면서 차츰 익숙해지면 신비로운 인체의 구조와 기능을 파악하는 데 몰입한다. 학생들은 교수의 지도에 따라 역할을 나눠 진행하는데 메스를 잡고 직접 박리하는 사람, 해부학 책을 보면서 구조와 부위별 명칭을 확인하는 사람, 전 체적으로 진두지휘하는 사람 등으로 구분된다. 책에서 배웠던 신체 구조를 직접 확인하고 부위별 기능을 이해하는 데 해부학 실습은 큰 도움이 된다. 해부학은 현대의학의 기초로서 그 중요성은 두말할 필 요가 없기에 의대생들은 허용된 실습 기간 중에 신체 구석구석을 이 해하기 위해 많은 노력을 기울인다. 문제는 이 과정에서 필연적으로(?) 실수가 발생할 수밖에 없다는 점이다. 조직별로 정교하게 분리하는 작업이 말처럼 쉬운 게 아니라서 아차 싶으면 신경이나 근육, 혈관을 자를 수 있다. 해부학 교수들은 이런 실수를 인정하지 않았다. A교수는 학생들이 실수할 때마다 손을 들고 자진 신고하도록 했는데, 신고를 받는 족족 학생들을 내쫓았다. B에게 불호령을 내린 이유도 그가 혈관을 잘못 건드렸기 때문. \n\n[말6]\"저런 식으로 혈관을 건드리면 환자는 목숨을 잃는다. 의사의 사소한 실수 하나가 환자의 생명을 앗아 갈 수 있다는 걸 명심하도록!\"\n\n그 자리에 있었던 이들 중 어느 누구도 말하지 않았지만 속으로는 생각했다. 이제 B는 리포트를 제출하느라 죽을 똥을 싸게 될 거라고 A교수는 실습 때 실수를 저지른 학생들에게 본인이 실수한 신체 부위 에 대한 리포트를 작성하라는 ‘벌’을 내린다. 학생 입장에서는 억울할 지 몰라도 의사라는 직업 특성상 엄격한 교육은 불가피하다. 자신이 잘못 다룬 신체 부위의 이름과 기능을 공부하면서 한층 성장할 수 있다는 점에서 리포트 작성은 훌륭한 벌이다. 실습 때 용케 실수하지 않은 학생이라도 안심할 수 없다. 해부학 실습 시험이 있기 때문이다. 실습대에 놓여 있는 카데바의 부위마다 번호 표식을 해두고 제한시간 내에 학생들에게 해당 용어와 기능을 쓰게 하는 시험이다. "
-            },
-            "Output": [
-                {
-                    "말6": {
-                        "말의종류": "대화",
-                        "말하는인물": "A교수",
-                        "인물의역할": "주인공",
-                        "듣는인물": "의대생들"
-                    }
-                }
-            ]
-        },
-        {
-            "DataSetId": 5,
-            "Mode": "Example",
-            "TrainingModel": "gpt-3.5-turbo-16k",
-            "Tokens": {
-                "prompt_tokens": 3816,
-                "completion_tokens": 174,
-                "total_tokens": 3990
-            },
-            "InputMemory": "None",
-            "Input": {
-                "Id": 12,
-                "Continue": "학생들은 해부학 책과 의학사전을 뒤적이면서 수 천 개에 달하는 용어를 달달 외우고 시험에 임한다. 밤새워 공부해도 시험장에서 시간에 쫓겨 가며 답을 기록하다 보면 그야말로 넋이 나 간다. 의대생들은 이렇게 혹독한 트레이닝을 거쳐 인체를 배우고 정식 의사가 된다. 어쩌면 의과대학의 모든 과정은 생명의 엄중함을 가르치는 걸 목적으로 하는지도 모른다. 의대생 이경률은 실습실에서 쫓겨나는 친구들을 보면 \n\n[말7]\"내가 실수한 것도 아닌데 머리털이 곤두서는 느낌이었다\"\n\n고 회상한다. 스승인 A교수가 왜 그렇게 철저했는지 이해한다고 했다. 해부학 실습 때 정말 내가 사람의 생명을 다루는 일을 한다는 사실을 뼈저리게 느끼게 되었다는것. 카데바를 신중하게 다루지 못하면 앞으로 살아 있는 신체를 어떻게 다룰 것이며, 어떻게 생명을 지켜 줄 수 있겠는가. A교수의 엄격한 가르침에는 이런 깊은 뜻이 숨어 있었다. \n\n[말8]\"그때가 처음이었을 거예요, 의사의 실수를 줄일 방법을 알고 싶었던 때가. \"\n\n사람은 완벽할 수 없다. 근원적으로 실수하는 존재이다. 그러나 의사는 생명을 취급하는 직업이기에 완벽을 추구해야 한다. 의사의 실수는 환자가 최종 피해자가 되는 ‘리스크’이기 때문이다. 여기서 모순이 발생한다. 인간이란 존재가 완벽할 수 없는데, 어떻게 이 빈틈을 보완해야 할까. 그는 \n\n[말9]\"자네들이 쥔 칼은 사람을 살리는 칼이 되어야 해\"\n\n라는 스승의 일갈을 가슴속에 깊이 새겼다. 그리고 언젠가 의사가 되면, 의사들이 실수를 줄이고 정확한 진단을 하여 환자를 치료할 방법을 찾으면 좋겠다고 생각했다. 이 막연했던 다짐은 훗날 서울의과학연구소를 통해 구체화되고 이뤄지기 시작한다. "
-            },
-            "Output": [
-                {
-                    "말7": {
-                        "말의종류": "대화",
-                        "말하는인물": "이경률",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                },
-                {
-                    "말8": {
-                        "말의종류": "대화",
-                        "말하는인물": "이경률",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                },
-                {
-                    "말9": {
-                        "말의종류": "대화",
-                        "말하는인물": "이경률",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                }
-            ]
-        },
-        {
-            "DataSetId": 6,
-            "Mode": "ExampleFineTuning",
-            "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
-            "Tokens": {
-                "prompt_tokens": 2848,
-                "completion_tokens": 111,
-                "total_tokens": 2959
-            },
-            "InputMemory": "None",
-            "Input": {
-                "Id": 15,
-                "Continue": "정식 의사 면허를 가진 의사는 단 한 명도 없는 무의촌이어서, 한지의사 일정 지역 안에서만 개업하도록 허가받은 의사 가 의료 공백을 메우고 있었다. 그가 등장하자 한지의사는 일을 접고 다른 지역으로 떠났고, 그는 간 호사 역할을 하는 조산사와 보건소에서 함께 일하게 되었다. \n\n[말10]\"정식 의사가 왔다는 소식을 듣고 군민들이 굉장히 몰려들어 왔어요. 매일 쉴 틈이 없었죠. \"\n\n당시 횡성군의 인구수는 2만 명 정도였다. 5일장이 열리는 날이면 하루에 250여 명의 군민들이 그를 찾아왔다. 간호사가 한 명뿐이라 일손이 모자랐다. 어르신들은 몇 시간씩 약이 나오길 기다려야 했다. 그는 횡성군수에게 사정을 설명하여 횡성군 역사상 처음으로 자동 약 포장기를 도입했다. 그 덕에 환자들의 대기시간이 줄어들 수 있었다. 공보의 2년 차 때 해낸 일은 더 있었다. 그때 정부에서 모자보건 센터 사업을 활발하게 진행하고 있었는데, 군수와 상의하여 횡성군 에 모자보건센터가 설립될 수 있도록 사업을 신청해 승인을 따낸 것이다. 그는 원주세브란스기독병원 산부인과에 가서 두 달간 분만 트레이닝을 받았다. 그 덕분에 산부인과 전문의가 아님에도 새롭게 설립된 모자보건센터에서 사고나 실수 한번 없이 아기를 잘 받을 수 있었다. 그가 있는 동안 보건소, 모자보건센터에 인근 지역 사람들까지 찾아와 북적거렸다. 일손이 모자라 인원을 충원하였고, 보건지소까지 열었다. 공보의 3년 차 때에는 횡성군 둔내면 보건지소를 개척하였다. 보건지소에서는 치과 전문의 한 명과 함께 근무했다. 매일 땀 흘려 일하는 그들을 위해 횡성군수는 곧잘 고기를 사주었다. 열심히 일하고, 신나게 먹으며 그 시절을 보냈다. 그는 \n\n[말11]\"횡성군에서 일하던 3년 동안을 잊을 수 없다\"\n\n고 추억한다. 그 에게 공보의 시절이 인상 깊었던 이유는 많은 환자들을 진료하면서 의사로서 처음으로 보람을 느꼈기 때문이다. 치료받은 환자들은 그의 손을 부여잡고 고맙다고 말해주고, 집에서 신문지에 고구마나 감자 등을 싸와서 나눠 주기도 했다. 그는 "
-            },
-            "Output": [
-                {
-                    "말10": {
-                        "말의종류": "대화",
-                        "말하는인물": "의대생",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                },
-                {
-                    "말11": {
-                        "말의종류": "독백",
-                        "말하는인물": "의대생",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                }
-            ]
-        },
-        {
-            "DataSetId": 7,
-            "Mode": "ExampleFineTuning",
-            "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
-            "Tokens": {
-                "prompt_tokens": 1796,
-                "completion_tokens": 63,
-                "total_tokens": 1859
-            },
-            "InputMemory": "None",
-            "Input": {
-                "Id": 4,
-                "Continue": "\n인류의 건강하고 행복한 미래를 위해 앞장서는 의료기관\n어떤 기관인가?. 누군가 이렇게 질문한다면 어떻게 답해야 할까. 서울의과학연구소 SCL를 설명하는 팩트 중심적 표현은 많다. 국내 최초 검체검사기관, 아시아 최대 규모 검사실 보유, 국내 최초 PCR 검사 도입, 국내 최초 CAP College of American Pathologists 인증, 한국 최초 해외 의료기관 코로나19 검사 수주 등등 하나같이 가슴 뿌듯한 사실들이다. 그러나 단 한 줄로 표현해야 한다면 이렇게 답하고 싶다. \n\n[말1]\"사람이 건강하고 행복하게 살아가는 데 도움이 되는 의료기관\"\n\n이라고. 기관 특성상 다소 생소하게 느끼는 이들이 있을 수 있지만 적어도 SCL에서 일하는 구성원들은 모두 동의한다. 40년 동안 오로지 그 한 길을 달려왔으니까. SCL은 환자의 진단 및 치료를 위해 검사를 수행하는 기관이다. 환자를 치료할 때는 반드시 객관적·과학적 근거와 의사의 경험이 통합 되어야 한다는 근거중심의학 EBM 을 추구한다. 대중에게는 낯선 개념 이지만, 사실 지구상 모든 사람들의 생활에 깊이 파고들어 있는 학문 이다. 우리가 아파서 혹은 검진을 받기 위해 병의원에 가면, 의사들은 우리의 건강 상태와 질환에 걸렸는지 여부를 알아보기 위해 검사 전 문기관에 검사를 의뢰한다. 우리는 그 검사결과를 기반으로 한 치료 를 받는다. SCL은 1983년 창립 이후 정확히 40주년이 된 현재까지 인간의 건 강과 행복을 위해 오롯이 한길을 걸어왔다. 진단검사의학과 전문의로 서 근거중심의학의 전망에 대한 확고한 믿음이 있었다. 하지만 당시 에 모두가 거기에 동의하는 건 아니었다. 잘 알려지지 않은 길, 길이라고 부를 수도 없는 길을 가는 건 쉽지 않았다. 오로지 열정 하나로 뛰었다. 이 책에 들어 있는 이야기는 40년 동안 한길만 바라봤던 사람들의 피와 땀의 열매들이다. 어느 한 개인의 이야기가 아니라, 구성원 모두 가 같은 목표를 바라보며 웃고 울고 성장해 온 분투기이다. 창립 40주년을 맞아 SCL의 빛나는 성취를 정리하면서, 앞으로 다 가올 40년에 대한 기대감으로 가슴이 벅차오른다. "
-            },
-            "Output": [
-                {
-                    "말1": {
-                        "말의종류": "요약",
-                        "말하는인물": "SCL",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                }
-            ]
-        },
-        {
-            "DataSetId": 8,
-            "Mode": "ExampleFineTuning",
-            "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
-            "Tokens": {
-                "prompt_tokens": 1345,
-                "completion_tokens": 130,
-                "total_tokens": 1475
+                "prompt_tokens": 2336,
+                "completion_tokens": 134,
+                "total_tokens": 2470
             },
             "InputMemory": "None",
             "Input": {
@@ -271,22 +84,22 @@
                 },
                 {
                     "말3": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "스승",
                         "인물의역할": "단역",
-                        "듣는인물": "SCL"
+                        "듣는인물": "SCL 구성원들"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 9,
+            "DataSetId": 3,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1785,
-                "completion_tokens": 126,
-                "total_tokens": 1911
+                "prompt_tokens": 1819,
+                "completion_tokens": 128,
+                "total_tokens": 1947
             },
             "InputMemory": "None",
             "Input": {
@@ -298,7 +111,7 @@
                     "말4": {
                         "말의종류": "대화",
                         "말하는인물": "A교수",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "의대생들"
                     }
                 },
@@ -306,20 +119,20 @@
                     "말5": {
                         "말의종류": "대화",
                         "말하는인물": "A교수",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "B"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 10,
+            "DataSetId": 4,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1788,
-                "completion_tokens": 64,
-                "total_tokens": 1852
+                "prompt_tokens": 2763,
+                "completion_tokens": 66,
+                "total_tokens": 2829
             },
             "InputMemory": "None",
             "Input": {
@@ -329,22 +142,22 @@
             "Output": [
                 {
                     "말6": {
-                        "말의종류": "인용",
+                        "말의종류": "강조",
                         "말하는인물": "A교수",
                         "인물의역할": "주인공",
-                        "듣는인물": "없음"
+                        "듣는인물": "의대생들"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 11,
+            "DataSetId": 5,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1656,
-                "completion_tokens": 190,
-                "total_tokens": 1846
+                "prompt_tokens": 2639,
+                "completion_tokens": 194,
+                "total_tokens": 2833
             },
             "InputMemory": "None",
             "Input": {
@@ -362,7 +175,7 @@
                 },
                 {
                     "말8": {
-                        "말의종류": "대화",
+                        "말의종류": "독백",
                         "말하는인물": "이경률",
                         "인물의역할": "주인공",
                         "듣는인물": "없음"
@@ -370,7 +183,7 @@
                 },
                 {
                     "말9": {
-                        "말의종류": "대화",
+                        "말의종류": "독백",
                         "말하는인물": "이경률",
                         "인물의역할": "주인공",
                         "듣는인물": "없음"
@@ -379,13 +192,13 @@
             ]
         },
         {
-            "DataSetId": 12,
+            "DataSetId": 6,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1811,
-                "completion_tokens": 127,
-                "total_tokens": 1938
+                "prompt_tokens": 2820,
+                "completion_tokens": 125,
+                "total_tokens": 2945
             },
             "InputMemory": "None",
             "Input": {
@@ -395,7 +208,7 @@
             "Output": [
                 {
                     "말10": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "의사",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
@@ -403,7 +216,7 @@
                 },
                 {
                     "말11": {
-                        "말의종류": "독백",
+                        "말의종류": "인용",
                         "말하는인물": "의사",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
@@ -412,13 +225,13 @@
             ]
         },
         {
-            "DataSetId": 13,
+            "DataSetId": 7,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1060,
+                "prompt_tokens": 2064,
                 "completion_tokens": 124,
-                "total_tokens": 1184
+                "total_tokens": 2188
             },
             "InputMemory": "None",
             "Input": {
@@ -436,7 +249,7 @@
                 },
                 {
                     "말13": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "의사",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
@@ -445,13 +258,13 @@
             ]
         },
         {
-            "DataSetId": 14,
+            "DataSetId": 8,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1814,
-                "completion_tokens": 63,
-                "total_tokens": 1877
+                "prompt_tokens": 1846,
+                "completion_tokens": 62,
+                "total_tokens": 1908
             },
             "InputMemory": "None",
             "Input": {
@@ -463,20 +276,20 @@
                     "말14": {
                         "말의종류": "인용",
                         "말하는인물": "의사",
-                        "인물의역할": "단역",
+                        "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 15,
+            "DataSetId": 9,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1797,
-                "completion_tokens": 81,
-                "total_tokens": 1878
+                "prompt_tokens": 2807,
+                "completion_tokens": 76,
+                "total_tokens": 2883
             },
             "InputMemory": "None",
             "Input": {
@@ -495,13 +308,13 @@
             ]
         },
         {
-            "DataSetId": 16,
+            "DataSetId": 10,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1804,
-                "completion_tokens": 65,
-                "total_tokens": 1869
+                "prompt_tokens": 2806,
+                "completion_tokens": 67,
+                "total_tokens": 2873
             },
             "InputMemory": "None",
             "Input": {
@@ -512,7 +325,7 @@
                 {
                     "말16": {
                         "말의종류": "인용",
-                        "말하는인물": "이경률",
+                        "말하는인물": "이경률 회장",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
@@ -520,13 +333,13 @@
             ]
         },
         {
-            "DataSetId": 17,
+            "DataSetId": 11,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1752,
+                "prompt_tokens": 2718,
                 "completion_tokens": 130,
-                "total_tokens": 1882
+                "total_tokens": 2848
             },
             "InputMemory": "None",
             "Input": {
@@ -539,7 +352,7 @@
                         "말의종류": "인용",
                         "말하는인물": "제프 베조스",
                         "인물의역할": "단역",
-                        "듣는인물": "기업인들"
+                        "듣는인물": "없음"
                     }
                 },
                 {
@@ -547,19 +360,19 @@
                         "말의종류": "질문",
                         "말하는인물": "나",
                         "인물의역할": "주인공",
-                        "듣는인물": "당신"
+                        "듣는인물": "상대방"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 18,
+            "DataSetId": 12,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1630,
+                "prompt_tokens": 2630,
                 "completion_tokens": 70,
-                "total_tokens": 1700
+                "total_tokens": 2700
             },
             "InputMemory": "None",
             "Input": {
@@ -578,13 +391,13 @@
             ]
         },
         {
-            "DataSetId": 19,
+            "DataSetId": 13,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1818,
+                "prompt_tokens": 1851,
                 "completion_tokens": 70,
-                "total_tokens": 1888
+                "total_tokens": 1921
             },
             "InputMemory": "None",
             "Input": {
@@ -603,13 +416,13 @@
             ]
         },
         {
-            "DataSetId": 20,
+            "DataSetId": 14,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1811,
+                "prompt_tokens": 2818,
                 "completion_tokens": 70,
-                "total_tokens": 1881
+                "total_tokens": 2888
             },
             "InputMemory": "None",
             "Input": {
@@ -628,13 +441,13 @@
             ]
         },
         {
-            "DataSetId": 21,
+            "DataSetId": 15,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1787,
+                "prompt_tokens": 1815,
                 "completion_tokens": 123,
-                "total_tokens": 1910
+                "total_tokens": 1938
             },
             "InputMemory": "None",
             "Input": {
@@ -661,13 +474,13 @@
             ]
         },
         {
-            "DataSetId": 22,
+            "DataSetId": 16,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1815,
+                "prompt_tokens": 2773,
                 "completion_tokens": 132,
-                "total_tokens": 1947
+                "total_tokens": 2905
             },
             "InputMemory": "None",
             "Input": {
@@ -677,15 +490,15 @@
             "Output": [
                 {
                     "말24": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "은통",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "항량"
                     }
                 },
                 {
                     "말25": {
-                        "말의종류": "강조",
+                        "말의종류": "인용",
                         "말하는인물": "알 수 없음",
                         "인물의역할": "알 수 없음",
                         "듣는인물": "소비자들"
@@ -694,13 +507,13 @@
             ]
         },
         {
-            "DataSetId": 23,
+            "DataSetId": 17,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1770,
+                "prompt_tokens": 1795,
                 "completion_tokens": 66,
-                "total_tokens": 1836
+                "total_tokens": 1861
             },
             "InputMemory": "None",
             "Input": {
@@ -719,13 +532,13 @@
             ]
         },
         {
-            "DataSetId": 24,
+            "DataSetId": 18,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1773,
-                "completion_tokens": 77,
-                "total_tokens": 1850
+                "prompt_tokens": 2738,
+                "completion_tokens": 66,
+                "total_tokens": 2804
             },
             "InputMemory": "None",
             "Input": {
@@ -736,21 +549,21 @@
                 {
                     "말27": {
                         "말의종류": "대화",
-                        "말하는인물": "율리우스 카이사르",
-                        "인물의역할": "단역",
+                        "말하는인물": "나",
+                        "인물의역할": "주인공",
                         "듣는인물": "브루투스"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 25,
+            "DataSetId": 19,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1589,
+                "prompt_tokens": 2558,
                 "completion_tokens": 66,
-                "total_tokens": 1655
+                "total_tokens": 2624
             },
             "InputMemory": "None",
             "Input": {
@@ -769,13 +582,13 @@
             ]
         },
         {
-            "DataSetId": 26,
+            "DataSetId": 20,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1795,
+                "prompt_tokens": 1820,
                 "completion_tokens": 67,
-                "total_tokens": 1862
+                "total_tokens": 1887
             },
             "InputMemory": "None",
             "Input": {
@@ -794,13 +607,13 @@
             ]
         },
         {
-            "DataSetId": 27,
+            "DataSetId": 21,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1775,
+                "prompt_tokens": 2767,
                 "completion_tokens": 66,
-                "total_tokens": 1841
+                "total_tokens": 2833
             },
             "InputMemory": "None",
             "Input": {
@@ -819,13 +632,13 @@
             ]
         },
         {
-            "DataSetId": 28,
+            "DataSetId": 22,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1049,
+                "prompt_tokens": 2027,
                 "completion_tokens": 68,
-                "total_tokens": 1117
+                "total_tokens": 2095
             },
             "InputMemory": "None",
             "Input": {
@@ -844,13 +657,13 @@
             ]
         },
         {
-            "DataSetId": 29,
+            "DataSetId": 23,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1798,
+                "prompt_tokens": 1823,
                 "completion_tokens": 157,
-                "total_tokens": 1955
+                "total_tokens": 1980
             },
             "InputMemory": "None",
             "Input": {
@@ -860,7 +673,7 @@
             "Output": [
                 {
                     "말32": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "당시 임상시험지원사업부 부서장",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
@@ -868,7 +681,7 @@
                 },
                 {
                     "말33": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "당시 임상시험지원사업부 부서장",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
@@ -877,13 +690,13 @@
             ]
         },
         {
-            "DataSetId": 30,
+            "DataSetId": 24,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1768,
+                "prompt_tokens": 1791,
                 "completion_tokens": 65,
-                "total_tokens": 1833
+                "total_tokens": 1856
             },
             "InputMemory": "None",
             "Input": {
@@ -902,13 +715,13 @@
             ]
         },
         {
-            "DataSetId": 31,
+            "DataSetId": 25,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1795,
-                "completion_tokens": 62,
-                "total_tokens": 1857
+                "prompt_tokens": 2758,
+                "completion_tokens": 61,
+                "total_tokens": 2819
             },
             "InputMemory": "None",
             "Input": {
@@ -918,22 +731,22 @@
             "Output": [
                 {
                     "말35": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "나",
                         "인물의역할": "주인공",
-                        "듣는인물": "직원들"
+                        "듣는인물": "없음"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 32,
+            "DataSetId": 26,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1040,
-                "completion_tokens": 67,
-                "total_tokens": 1107
+                "prompt_tokens": 2030,
+                "completion_tokens": 61,
+                "total_tokens": 2091
             },
             "InputMemory": "None",
             "Input": {
@@ -944,21 +757,21 @@
                 {
                     "말36": {
                         "말의종류": "인용",
-                        "말하는인물": "그",
-                        "인물의역할": "단역",
+                        "말하는인물": "나",
+                        "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 33,
+            "DataSetId": 27,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1826,
-                "completion_tokens": 307,
-                "total_tokens": 2133
+                "prompt_tokens": 1852,
+                "completion_tokens": 318,
+                "total_tokens": 2170
             },
             "InputMemory": "None",
             "Input": {
@@ -969,7 +782,7 @@
                 {
                     "말37": {
                         "말의종류": "대화",
-                        "말하는인물": "그",
+                        "말하는인물": "경영자",
                         "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
@@ -977,7 +790,7 @@
                 {
                     "말38": {
                         "말의종류": "대화",
-                        "말하는인물": "그",
+                        "말하는인물": "경영자",
                         "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
@@ -985,7 +798,7 @@
                 {
                     "말39": {
                         "말의종류": "대화",
-                        "말하는인물": "그",
+                        "말하는인물": "경영자",
                         "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
@@ -993,7 +806,7 @@
                 {
                     "말40": {
                         "말의종류": "대화",
-                        "말하는인물": "그",
+                        "말하는인물": "경영자",
                         "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
@@ -1002,20 +815,20 @@
                     "말41": {
                         "말의종류": "대화",
                         "말하는인물": "이경률 회장",
-                        "인물의역할": "단역",
+                        "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 34,
+            "DataSetId": 28,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1637,
-                "completion_tokens": 124,
-                "total_tokens": 1761
+                "prompt_tokens": 2641,
+                "completion_tokens": 128,
+                "total_tokens": 2769
             },
             "InputMemory": "None",
             "Input": {
@@ -1026,7 +839,7 @@
                 {
                     "말42": {
                         "말의종류": "인용",
-                        "말하는인물": "CEO",
+                        "말하는인물": "잭 웰치",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
@@ -1042,13 +855,13 @@
             ]
         },
         {
-            "DataSetId": 35,
+            "DataSetId": 29,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1790,
+                "prompt_tokens": 1816,
                 "completion_tokens": 65,
-                "total_tokens": 1855
+                "total_tokens": 1881
             },
             "InputMemory": "None",
             "Input": {
@@ -1067,13 +880,13 @@
             ]
         },
         {
-            "DataSetId": 36,
+            "DataSetId": 30,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1808,
+                "prompt_tokens": 2794,
                 "completion_tokens": 129,
-                "total_tokens": 1937
+                "total_tokens": 2923
             },
             "InputMemory": "None",
             "Input": {
@@ -1100,13 +913,13 @@
             ]
         },
         {
-            "DataSetId": 37,
+            "DataSetId": 31,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1736,
-                "completion_tokens": 66,
-                "total_tokens": 1802
+                "prompt_tokens": 2736,
+                "completion_tokens": 65,
+                "total_tokens": 2801
             },
             "InputMemory": "None",
             "Input": {
@@ -1117,7 +930,7 @@
                 {
                     "말47": {
                         "말의종류": "인용",
-                        "말하는인물": "검사부원",
+                        "말하는인물": "직원들",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
@@ -1125,13 +938,13 @@
             ]
         },
         {
-            "DataSetId": 38,
+            "DataSetId": 32,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1106,
-                "completion_tokens": 65,
-                "total_tokens": 1171
+                "prompt_tokens": 2038,
+                "completion_tokens": 64,
+                "total_tokens": 2102
             },
             "InputMemory": "None",
             "Input": {
@@ -1142,21 +955,21 @@
                 {
                     "말48": {
                         "말의종류": "인용",
-                        "말하는인물": "직원들",
-                        "인물의역할": "단역",
+                        "말하는인물": "직원",
+                        "인물의역할": "엑스트라",
                         "듣는인물": "없음"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 39,
+            "DataSetId": 33,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1803,
+                "prompt_tokens": 1831,
                 "completion_tokens": 189,
-                "total_tokens": 1992
+                "total_tokens": 2020
             },
             "InputMemory": "None",
             "Input": {
@@ -1191,13 +1004,13 @@
             ]
         },
         {
-            "DataSetId": 40,
+            "DataSetId": 34,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1765,
+                "prompt_tokens": 1793,
                 "completion_tokens": 71,
-                "total_tokens": 1836
+                "total_tokens": 1864
             },
             "InputMemory": "None",
             "Input": {
@@ -1216,13 +1029,13 @@
             ]
         },
         {
-            "DataSetId": 41,
+            "DataSetId": 35,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1767,
-                "completion_tokens": 126,
-                "total_tokens": 1893
+                "prompt_tokens": 2728,
+                "completion_tokens": 127,
+                "total_tokens": 2855
             },
             "InputMemory": "None",
             "Input": {
@@ -1234,7 +1047,7 @@
                     "말53": {
                         "말의종류": "인용",
                         "말하는인물": "부서장",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
@@ -1249,13 +1062,13 @@
             ]
         },
         {
-            "DataSetId": 42,
+            "DataSetId": 36,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1825,
+                "prompt_tokens": 1849,
                 "completion_tokens": 207,
-                "total_tokens": 2032
+                "total_tokens": 2056
             },
             "InputMemory": "None",
             "Input": {
@@ -1290,13 +1103,13 @@
             ]
         },
         {
-            "DataSetId": 43,
+            "DataSetId": 37,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1789,
+                "prompt_tokens": 2719,
                 "completion_tokens": 74,
-                "total_tokens": 1863
+                "total_tokens": 2793
             },
             "InputMemory": "None",
             "Input": {
@@ -1315,13 +1128,13 @@
             ]
         },
         {
-            "DataSetId": 44,
+            "DataSetId": 38,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1662,
+                "prompt_tokens": 2624,
                 "completion_tokens": 70,
-                "total_tokens": 1732
+                "total_tokens": 2694
             },
             "InputMemory": "None",
             "Input": {
@@ -1340,13 +1153,13 @@
             ]
         },
         {
-            "DataSetId": 45,
+            "DataSetId": 39,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1402,
+                "prompt_tokens": 2412,
                 "completion_tokens": 68,
-                "total_tokens": 1470
+                "total_tokens": 2480
             },
             "InputMemory": "None",
             "Input": {
@@ -1365,13 +1178,13 @@
             ]
         },
         {
-            "DataSetId": 46,
+            "DataSetId": 40,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1799,
-                "completion_tokens": 253,
-                "total_tokens": 2052
+                "prompt_tokens": 1820,
+                "completion_tokens": 249,
+                "total_tokens": 2069
             },
             "InputMemory": "None",
             "Input": {
@@ -1383,7 +1196,7 @@
                     "말61": {
                         "말의종류": "대화",
                         "말하는인물": "직원",
-                        "인물의역할": "단역",
+                        "인물의역할": "조연",
                         "듣는인물": "팀장"
                     }
                 },
@@ -1391,7 +1204,7 @@
                     "말62": {
                         "말의종류": "대화",
                         "말하는인물": "팀장",
-                        "인물의역할": "단역",
+                        "인물의역할": "주인공",
                         "듣는인물": "직원"
                     }
                 },
@@ -1399,7 +1212,7 @@
                     "말63": {
                         "말의종류": "대화",
                         "말하는인물": "직원",
-                        "인물의역할": "단역",
+                        "인물의역할": "조연",
                         "듣는인물": "팀장"
                     }
                 },
@@ -1407,20 +1220,20 @@
                     "말64": {
                         "말의종류": "대화",
                         "말하는인물": "직원",
-                        "인물의역할": "단역",
+                        "인물의역할": "조연",
                         "듣는인물": "팀장"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 47,
+            "DataSetId": 41,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1539,
-                "completion_tokens": 203,
-                "total_tokens": 1742
+                "prompt_tokens": 2519,
+                "completion_tokens": 204,
+                "total_tokens": 2723
             },
             "InputMemory": "None",
             "Input": {
@@ -1430,24 +1243,24 @@
             "Output": [
                 {
                     "말65": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "분자진단팀장",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
                 {
                     "말66": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "분자진단팀장",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
                 {
                     "말67": {
                         "말의종류": "대화",
-                        "말하는인물": "직원들",
+                        "말하는인물": "직원",
                         "인물의역할": "조연",
                         "듣는인물": "분자진단팀장"
                     }
@@ -1455,13 +1268,13 @@
             ]
         },
         {
-            "DataSetId": 48,
+            "DataSetId": 42,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1653,
-                "completion_tokens": 73,
-                "total_tokens": 1726
+                "prompt_tokens": 2643,
+                "completion_tokens": 78,
+                "total_tokens": 2721
             },
             "InputMemory": "None",
             "Input": {
@@ -1472,7 +1285,7 @@
                 {
                     "말68": {
                         "말의종류": "대화",
-                        "말하는인물": "분자진단팀 구성원",
+                        "말하는인물": "분자진단팀 직원",
                         "인물의역할": "단역",
                         "듣는인물": "알 수 없음"
                     }
@@ -1480,13 +1293,13 @@
             ]
         },
         {
-            "DataSetId": 49,
+            "DataSetId": 43,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1802,
-                "completion_tokens": 136,
-                "total_tokens": 1938
+                "prompt_tokens": 1830,
+                "completion_tokens": 138,
+                "total_tokens": 1968
             },
             "InputMemory": "None",
             "Input": {
@@ -1504,7 +1317,7 @@
                 },
                 {
                     "말70": {
-                        "말의종류": "대화",
+                        "말의종류": "독백",
                         "말하는인물": "팀장",
                         "인물의역할": "단역",
                         "듣는인물": "알 수 없음"
@@ -1513,13 +1326,13 @@
             ]
         },
         {
-            "DataSetId": 50,
+            "DataSetId": 44,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1698,
-                "completion_tokens": 187,
-                "total_tokens": 1885
+                "prompt_tokens": 2693,
+                "completion_tokens": 184,
+                "total_tokens": 2877
             },
             "InputMemory": "None",
             "Input": {
@@ -1532,7 +1345,7 @@
                         "말의종류": "대화",
                         "말하는인물": "환자",
                         "인물의역할": "단역",
-                        "듣는인물": "의료진"
+                        "듣는인물": "의사"
                     }
                 },
                 {
@@ -1540,13 +1353,13 @@
                         "말의종류": "대화",
                         "말하는인물": "환자",
                         "인물의역할": "단역",
-                        "듣는인물": "의료진"
+                        "듣는인물": "의사"
                     }
                 },
                 {
                     "말73": {
                         "말의종류": "대화",
-                        "말하는인물": "의료진",
+                        "말하는인물": "의사",
                         "인물의역할": "단역",
                         "듣는인물": "환자"
                     }
@@ -1554,13 +1367,13 @@
             ]
         },
         {
-            "DataSetId": 51,
+            "DataSetId": 45,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1770,
-                "completion_tokens": 65,
-                "total_tokens": 1835
+                "prompt_tokens": 1789,
+                "completion_tokens": 66,
+                "total_tokens": 1855
             },
             "InputMemory": "None",
             "Input": {
@@ -1572,20 +1385,20 @@
                     "말74": {
                         "말의종류": "대화",
                         "말하는인물": "직원",
-                        "인물의역할": "조연",
+                        "인물의역할": "단역",
                         "듣는인물": "알 수 없음"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 52,
+            "DataSetId": 46,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1772,
-                "completion_tokens": 73,
-                "total_tokens": 1845
+                "prompt_tokens": 1787,
+                "completion_tokens": 66,
+                "total_tokens": 1853
             },
             "InputMemory": "None",
             "Input": {
@@ -1598,19 +1411,19 @@
                         "말의종류": "인용",
                         "말하는인물": "구매부 직원",
                         "인물의역할": "단역",
-                        "듣는인물": "없음"
+                        "듣는인물": "나"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 53,
+            "DataSetId": 47,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1741,
-                "completion_tokens": 66,
-                "total_tokens": 1807
+                "prompt_tokens": 2681,
+                "completion_tokens": 68,
+                "total_tokens": 2749
             },
             "InputMemory": "None",
             "Input": {
@@ -1623,19 +1436,19 @@
                         "말의종류": "인용",
                         "말하는인물": "구매부 직원",
                         "인물의역할": "단역",
-                        "듣는인물": "나"
+                        "듣는인물": "없음"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 54,
+            "DataSetId": 48,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1800,
+                "prompt_tokens": 1821,
                 "completion_tokens": 147,
-                "total_tokens": 1947
+                "total_tokens": 1968
             },
             "InputMemory": "None",
             "Input": {
@@ -1662,13 +1475,13 @@
             ]
         },
         {
-            "DataSetId": 55,
+            "DataSetId": 49,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1787,
+                "prompt_tokens": 2778,
                 "completion_tokens": 129,
-                "total_tokens": 1916
+                "total_tokens": 2907
             },
             "InputMemory": "None",
             "Input": {
@@ -1695,13 +1508,13 @@
             ]
         },
         {
-            "DataSetId": 56,
+            "DataSetId": 50,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1814,
+                "prompt_tokens": 1844,
                 "completion_tokens": 129,
-                "total_tokens": 1943
+                "total_tokens": 1973
             },
             "InputMemory": "None",
             "Input": {
@@ -1728,13 +1541,13 @@
             ]
         },
         {
-            "DataSetId": 57,
+            "DataSetId": 51,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1366,
+                "prompt_tokens": 2340,
                 "completion_tokens": 69,
-                "total_tokens": 1435
+                "total_tokens": 2409
             },
             "InputMemory": "None",
             "Input": {
@@ -1753,13 +1566,13 @@
             ]
         },
         {
-            "DataSetId": 58,
+            "DataSetId": 52,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1807,
+                "prompt_tokens": 1831,
                 "completion_tokens": 68,
-                "total_tokens": 1875
+                "total_tokens": 1899
             },
             "InputMemory": "None",
             "Input": {
@@ -1778,13 +1591,13 @@
             ]
         },
         {
-            "DataSetId": 59,
+            "DataSetId": 53,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1752,
+                "prompt_tokens": 2755,
                 "completion_tokens": 68,
-                "total_tokens": 1820
+                "total_tokens": 2823
             },
             "InputMemory": "None",
             "Input": {
@@ -1794,7 +1607,7 @@
             "Output": [
                 {
                     "말85": {
-                        "말의종류": "인용",
+                        "말의종류": "대화",
                         "말하는인물": "인사부 부서장",
                         "인물의역할": "단역",
                         "듣는인물": "경영진"
@@ -1803,13 +1616,13 @@
             ]
         },
         {
-            "DataSetId": 60,
+            "DataSetId": 54,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1663,
+                "prompt_tokens": 1687,
                 "completion_tokens": 67,
-                "total_tokens": 1730
+                "total_tokens": 1754
             },
             "InputMemory": "None",
             "Input": {
@@ -1828,13 +1641,13 @@
             ]
         },
         {
-            "DataSetId": 61,
+            "DataSetId": 55,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1805,
+                "prompt_tokens": 2665,
                 "completion_tokens": 133,
-                "total_tokens": 1938
+                "total_tokens": 2798
             },
             "InputMemory": "None",
             "Input": {
@@ -1861,13 +1674,13 @@
             ]
         },
         {
-            "DataSetId": 62,
+            "DataSetId": 56,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1808,
+                "prompt_tokens": 2792,
                 "completion_tokens": 155,
-                "total_tokens": 1963
+                "total_tokens": 2947
             },
             "InputMemory": "None",
             "Input": {
@@ -1894,13 +1707,13 @@
             ]
         },
         {
-            "DataSetId": 63,
+            "DataSetId": 57,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1744,
+                "prompt_tokens": 2743,
                 "completion_tokens": 67,
-                "total_tokens": 1811
+                "total_tokens": 2810
             },
             "InputMemory": "None",
             "Input": {
@@ -1919,13 +1732,13 @@
             ]
         },
         {
-            "DataSetId": 64,
+            "DataSetId": 58,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1250,
+                "prompt_tokens": 2226,
                 "completion_tokens": 129,
-                "total_tokens": 1379
+                "total_tokens": 2355
             },
             "InputMemory": "None",
             "Input": {
@@ -1935,7 +1748,7 @@
             "Output": [
                 {
                     "말92": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "지원자",
                         "인물의역할": "단역",
                         "듣는인물": "나"
@@ -1952,13 +1765,13 @@
             ]
         },
         {
-            "DataSetId": 65,
+            "DataSetId": 59,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1760,
+                "prompt_tokens": 1791,
                 "completion_tokens": 66,
-                "total_tokens": 1826
+                "total_tokens": 1857
             },
             "InputMemory": "None",
             "Input": {
@@ -1977,13 +1790,13 @@
             ]
         },
         {
-            "DataSetId": 66,
+            "DataSetId": 60,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1696,
-                "completion_tokens": 63,
-                "total_tokens": 1759
+                "prompt_tokens": 2651,
+                "completion_tokens": 66,
+                "total_tokens": 2717
             },
             "InputMemory": "None",
             "Input": {
@@ -1996,19 +1809,19 @@
                         "말의종류": "인용",
                         "말하는인물": "직원 B",
                         "인물의역할": "단역",
-                        "듣는인물": "나"
+                        "듣는인물": "직원 A"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 67,
+            "DataSetId": 61,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1800,
+                "prompt_tokens": 2777,
                 "completion_tokens": 77,
-                "total_tokens": 1877
+                "total_tokens": 2854
             },
             "InputMemory": "None",
             "Input": {
@@ -2027,13 +1840,13 @@
             ]
         },
         {
-            "DataSetId": 68,
+            "DataSetId": 62,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1792,
-                "completion_tokens": 249,
-                "total_tokens": 2041
+                "prompt_tokens": 1815,
+                "completion_tokens": 255,
+                "total_tokens": 2070
             },
             "InputMemory": "None",
             "Input": {
@@ -2060,29 +1873,29 @@
                 {
                     "말99": {
                         "말의종류": "인용",
-                        "말하는인물": "직원",
-                        "인물의역할": "조연",
+                        "말하는인물": "SCL 직원",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
                 {
                     "말100": {
                         "말의종류": "인용",
-                        "말하는인물": "직원",
-                        "인물의역할": "조연",
+                        "말하는인물": "SCL 직원",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 69,
+            "DataSetId": 63,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1690,
+                "prompt_tokens": 2665,
                 "completion_tokens": 67,
-                "total_tokens": 1757
+                "total_tokens": 2732
             },
             "InputMemory": "None",
             "Input": {
@@ -2101,13 +1914,13 @@
             ]
         },
         {
-            "DataSetId": 70,
+            "DataSetId": 64,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1793,
+                "prompt_tokens": 1829,
                 "completion_tokens": 67,
-                "total_tokens": 1860
+                "total_tokens": 1896
             },
             "InputMemory": "None",
             "Input": {
@@ -2126,13 +1939,13 @@
             ]
         },
         {
-            "DataSetId": 71,
+            "DataSetId": 65,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1307,
-                "completion_tokens": 64,
-                "total_tokens": 1371
+                "prompt_tokens": 2247,
+                "completion_tokens": 65,
+                "total_tokens": 2312
             },
             "InputMemory": "None",
             "Input": {
@@ -2145,19 +1958,19 @@
                         "말의종류": "인용",
                         "말하는인물": "직원",
                         "인물의역할": "단역",
-                        "듣는인물": "없음"
+                        "듣는인물": "상대방"
                     }
                 }
             ]
         },
         {
-            "DataSetId": 72,
+            "DataSetId": 66,
             "Mode": "ExampleFineTuning",
             "TrainingModel": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS",
             "Tokens": {
-                "prompt_tokens": 1770,
+                "prompt_tokens": 2741,
                 "completion_tokens": 70,
-                "total_tokens": 1840
+                "total_tokens": 2811
             },
             "InputMemory": "None",
             "Input": {
@@ -2195,178 +2008,21 @@
             "Feedback": [
                 {
                     "말1": {
-                        "말의종류": "요약",
-                        "말하는인물": "SCL",
+                        "말의종류": "독백",
+                        "말하는인물": "나",
                         "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.0,
+                "Elements": 0.25
+            }
         },
         {
             "DataSetId": 2,
-            "InputMemory": "None",
-            "Input": {
-                "Id": 5,
-                "Continue": "이제는 대한민국을 넘어 전 세계에 우리나라 진단검사의학의 우수성을 알리고 싶다. 미국 할리우드의 여배우 오드리 헵번은 \n\n[말2]\"성공이란, 중요한 생일에 도달했는데 당신은 정확히 똑같다는 걸 발견하는 것이다\"\n\nSuccess is like reaching an important birthday and finding you’re exactly the same 라는 말을 남겼다. 그의 말을 빌려 표현한다면 SCL은 앞으로도 성공할 것이다. 왜냐하 면 오래전 초심, 즉 ‘사람들의 행복하고 건강한 삶을 돕겠다’는 마음이 여전히 생생하게 살아 숨 쉬고 있기 때문이다. 이 마음은 한 번 도 꺾인 적이 없다. \n\n[말3]\"자네들이 쥔 칼은 사람을 살리는 칼이 되어야 해\"\n\n지금도 가끔 의과대학 시절 스승에게 들은 말이 떠오른다. SCL은 검체검사기관으로 시작해 지금은 종합 헬스케어 그룹이 되었다. 의사 와 기업가는 그 입장이 같을 수 없다. 그러나 생명의 소중함, 그 엄중 한 무게를 언제나 묵직하게 느끼고 있다. 인간은 누구나 자기 건강을 지키면서 행복하게 살 권리가 있다. SCL은 이 땅의 모든 이들이 그렇게 살 수 있도록 도울 것이다. \n2023년 5월\nSCL헬스케어 회장 이경률\n"
-            },
-            "Feedback": [
-                {
-                    "말2": {
-                        "말의종류": "인용",
-                        "말하는인물": "오드리 헵번",
-                        "인물의역할": "단역",
-                        "듣는인물": "없음"
-                    }
-                },
-                {
-                    "말3": {
-                        "말의종류": "인용",
-                        "말하는인물": "스승",
-                        "인물의역할": "단역",
-                        "듣는인물": "없음"
-                    }
-                }
-            ],
-            "Check": "No",
-            "Accuracy": "None"
-        },
-        {
-            "DataSetId": 3,
-            "InputMemory": "None",
-            "Input": {
-                "Id": 10,
-                "Continue": "\n\n[말4]\"그만하고 나가. 어서!\"\n\nA교수의 호통이 실습실 전체에 울려 퍼졌다. 얇게 얼어붙은 얼음 이 날카로운 송곳에 깨어지듯 집중이 흐트러졌다. 실습대에 모여 있 던 의대생들은 고개를 들고 교수의 손가락이 가리킨 쪽으로 시선을 돌렸다. B가 메스를 쥔 채 손을 떨고 있었다. 주춤거리는 B를 향해 다 시 고함이 날아들었다. \n\n[말5]\"자넨 지금 환자를 죽였어 그러고도 메스를 잡을 자격이 있어? 어 서 나가!\"\n\nB는 메스를 내려놓고 뒷걸음치다가 등을 돌려 실습실 밖으로 나갔다. B가 문밖으로 사라지자 A교수의 얼굴은 다시 무표정하게 바뀌었다. 해부학을 가르치는 A교수는 의대생들 사이에서 철저한 성격으로 이름이 나 있었다. 수술용 메스의 칼날에 비견될 만큼 날카로웠다. 실습 용 메스는 무딘 편이지만 수술용 메스는 상당히 날카롭다 특히 카데바를 직접 다루는 실습시간 때 그의 완벽주의는 찬란하게 빛을 발했다. 단 한 번의 실수, 티끌만큼의 소홀함이라도 결코 용납하는 법이 없었다. 의대생들이 가장 인상 깊은 경험으로 꼽는 해부학 실습은 어떤 수업보다 엄격한 분위기 속에서 진행된다. 1980년대 의과대학 해부학 실습에서는 의대생 10명당 1구의 카데바가 배정되었다. 그때도 카데바가 부족했지만 지금은 카데바 1구에 더 많은 학생들이 실습을 진행하고 있다 의대생들은 의학 발전을 위해 기꺼이 자기 몸을 기증해 준 분들의 숭고한 뜻을 느끼면서 실습에 임했다. 실습 첫날 의대생들은 가장 단정한 옷차림으로 학교에 온다. 그리고 본격적인 작업에 앞서서 카데바를 향해 묵념을 드린다. 시신을 기증한 고인의 뜻을 기리기 위해 별도로 추모제를 지내는 의과대학들도 있다 의대생들이 다루는 카데바는 과거에 존엄한 사람으로 숨 쉬며 존재했었다. 처음부터 의사를 꿈꿨던 사람도, 공부를 잘해서 부모의 권유로 의대에 진학한 사람도, 카데바 앞에서 겸허한 마음을 갖게 된다. "
-            },
-            "Feedback": [
-                {
-                    "말4": {
-                        "말의종류": "대화",
-                        "말하는인물": "A교수",
-                        "인물의역할": "주인공",
-                        "듣는인물": "의대생들"
-                    }
-                },
-                {
-                    "말5": {
-                        "말의종류": "대화",
-                        "말하는인물": "A교수",
-                        "인물의역할": "주인공",
-                        "듣는인물": "B"
-                    }
-                }
-            ],
-            "Check": "No",
-            "Accuracy": "None"
-        },
-        {
-            "DataSetId": 4,
-            "InputMemory": "None",
-            "Input": {
-                "Id": 11,
-                "Continue": "처음에 카데바를 보면 두렵고 곤혹스러워하는 경우가 많고 심지어 기절하는 학생들도 있다. 그러나 시간이 지나면서 차츰 익숙해지면 신비로운 인체의 구조와 기능을 파악하는 데 몰입한다. 학생들은 교수의 지도에 따라 역할을 나눠 진행하는데 메스를 잡고 직접 박리하는 사람, 해부학 책을 보면서 구조와 부위별 명칭을 확인하는 사람, 전 체적으로 진두지휘하는 사람 등으로 구분된다. 책에서 배웠던 신체 구조를 직접 확인하고 부위별 기능을 이해하는 데 해부학 실습은 큰 도움이 된다. 해부학은 현대의학의 기초로서 그 중요성은 두말할 필 요가 없기에 의대생들은 허용된 실습 기간 중에 신체 구석구석을 이 해하기 위해 많은 노력을 기울인다. 문제는 이 과정에서 필연적으로(?) 실수가 발생할 수밖에 없다는 점이다. 조직별로 정교하게 분리하는 작업이 말처럼 쉬운 게 아니라서 아차 싶으면 신경이나 근육, 혈관을 자를 수 있다. 해부학 교수들은 이런 실수를 인정하지 않았다. A교수는 학생들이 실수할 때마다 손을 들고 자진 신고하도록 했는데, 신고를 받는 족족 학생들을 내쫓았다. B에게 불호령을 내린 이유도 그가 혈관을 잘못 건드렸기 때문. \n\n[말6]\"저런 식으로 혈관을 건드리면 환자는 목숨을 잃는다. 의사의 사소한 실수 하나가 환자의 생명을 앗아 갈 수 있다는 걸 명심하도록!\"\n\n그 자리에 있었던 이들 중 어느 누구도 말하지 않았지만 속으로는 생각했다. 이제 B는 리포트를 제출하느라 죽을 똥을 싸게 될 거라고 A교수는 실습 때 실수를 저지른 학생들에게 본인이 실수한 신체 부위 에 대한 리포트를 작성하라는 ‘벌’을 내린다. 학생 입장에서는 억울할 지 몰라도 의사라는 직업 특성상 엄격한 교육은 불가피하다. 자신이 잘못 다룬 신체 부위의 이름과 기능을 공부하면서 한층 성장할 수 있다는 점에서 리포트 작성은 훌륭한 벌이다. 실습 때 용케 실수하지 않은 학생이라도 안심할 수 없다. 해부학 실습 시험이 있기 때문이다. 실습대에 놓여 있는 카데바의 부위마다 번호 표식을 해두고 제한시간 내에 학생들에게 해당 용어와 기능을 쓰게 하는 시험이다. "
-            },
-            "Feedback": [
-                {
-                    "말6": {
-                        "말의종류": "대화",
-                        "말하는인물": "A교수",
-                        "인물의역할": "주인공",
-                        "듣는인물": "의대생들"
-                    }
-                }
-            ],
-            "Check": "No",
-            "Accuracy": "None"
-        },
-        {
-            "DataSetId": 5,
-            "InputMemory": "None",
-            "Input": {
-                "Id": 12,
-                "Continue": "학생들은 해부학 책과 의학사전을 뒤적이면서 수 천 개에 달하는 용어를 달달 외우고 시험에 임한다. 밤새워 공부해도 시험장에서 시간에 쫓겨 가며 답을 기록하다 보면 그야말로 넋이 나 간다. 의대생들은 이렇게 혹독한 트레이닝을 거쳐 인체를 배우고 정식 의사가 된다. 어쩌면 의과대학의 모든 과정은 생명의 엄중함을 가르치는 걸 목적으로 하는지도 모른다. 의대생 이경률은 실습실에서 쫓겨나는 친구들을 보면 \n\n[말7]\"내가 실수한 것도 아닌데 머리털이 곤두서는 느낌이었다\"\n\n고 회상한다. 스승인 A교수가 왜 그렇게 철저했는지 이해한다고 했다. 해부학 실습 때 정말 내가 사람의 생명을 다루는 일을 한다는 사실을 뼈저리게 느끼게 되었다는것. 카데바를 신중하게 다루지 못하면 앞으로 살아 있는 신체를 어떻게 다룰 것이며, 어떻게 생명을 지켜 줄 수 있겠는가. A교수의 엄격한 가르침에는 이런 깊은 뜻이 숨어 있었다. \n\n[말8]\"그때가 처음이었을 거예요, 의사의 실수를 줄일 방법을 알고 싶었던 때가. \"\n\n사람은 완벽할 수 없다. 근원적으로 실수하는 존재이다. 그러나 의사는 생명을 취급하는 직업이기에 완벽을 추구해야 한다. 의사의 실수는 환자가 최종 피해자가 되는 ‘리스크’이기 때문이다. 여기서 모순이 발생한다. 인간이란 존재가 완벽할 수 없는데, 어떻게 이 빈틈을 보완해야 할까. 그는 \n\n[말9]\"자네들이 쥔 칼은 사람을 살리는 칼이 되어야 해\"\n\n라는 스승의 일갈을 가슴속에 깊이 새겼다. 그리고 언젠가 의사가 되면, 의사들이 실수를 줄이고 정확한 진단을 하여 환자를 치료할 방법을 찾으면 좋겠다고 생각했다. 이 막연했던 다짐은 훗날 서울의과학연구소를 통해 구체화되고 이뤄지기 시작한다. "
-            },
-            "Feedback": [
-                {
-                    "말7": {
-                        "말의종류": "대화",
-                        "말하는인물": "이경률",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                },
-                {
-                    "말8": {
-                        "말의종류": "대화",
-                        "말하는인물": "이경률",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                },
-                {
-                    "말9": {
-                        "말의종류": "대화",
-                        "말하는인물": "이경률",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                }
-            ],
-            "Check": "No",
-            "Accuracy": "None"
-        },
-        {
-            "DataSetId": 6,
-            "InputMemory": "None",
-            "Input": {
-                "Id": 15,
-                "Continue": "정식 의사 면허를 가진 의사는 단 한 명도 없는 무의촌이어서, 한지의사 일정 지역 안에서만 개업하도록 허가받은 의사 가 의료 공백을 메우고 있었다. 그가 등장하자 한지의사는 일을 접고 다른 지역으로 떠났고, 그는 간 호사 역할을 하는 조산사와 보건소에서 함께 일하게 되었다. \n\n[말10]\"정식 의사가 왔다는 소식을 듣고 군민들이 굉장히 몰려들어 왔어요. 매일 쉴 틈이 없었죠. \"\n\n당시 횡성군의 인구수는 2만 명 정도였다. 5일장이 열리는 날이면 하루에 250여 명의 군민들이 그를 찾아왔다. 간호사가 한 명뿐이라 일손이 모자랐다. 어르신들은 몇 시간씩 약이 나오길 기다려야 했다. 그는 횡성군수에게 사정을 설명하여 횡성군 역사상 처음으로 자동 약 포장기를 도입했다. 그 덕에 환자들의 대기시간이 줄어들 수 있었다. 공보의 2년 차 때 해낸 일은 더 있었다. 그때 정부에서 모자보건 센터 사업을 활발하게 진행하고 있었는데, 군수와 상의하여 횡성군 에 모자보건센터가 설립될 수 있도록 사업을 신청해 승인을 따낸 것이다. 그는 원주세브란스기독병원 산부인과에 가서 두 달간 분만 트레이닝을 받았다. 그 덕분에 산부인과 전문의가 아님에도 새롭게 설립된 모자보건센터에서 사고나 실수 한번 없이 아기를 잘 받을 수 있었다. 그가 있는 동안 보건소, 모자보건센터에 인근 지역 사람들까지 찾아와 북적거렸다. 일손이 모자라 인원을 충원하였고, 보건지소까지 열었다. 공보의 3년 차 때에는 횡성군 둔내면 보건지소를 개척하였다. 보건지소에서는 치과 전문의 한 명과 함께 근무했다. 매일 땀 흘려 일하는 그들을 위해 횡성군수는 곧잘 고기를 사주었다. 열심히 일하고, 신나게 먹으며 그 시절을 보냈다. 그는 \n\n[말11]\"횡성군에서 일하던 3년 동안을 잊을 수 없다\"\n\n고 추억한다. 그 에게 공보의 시절이 인상 깊었던 이유는 많은 환자들을 진료하면서 의사로서 처음으로 보람을 느꼈기 때문이다. 치료받은 환자들은 그의 손을 부여잡고 고맙다고 말해주고, 집에서 신문지에 고구마나 감자 등을 싸와서 나눠 주기도 했다. 그는 "
-            },
-            "Feedback": [
-                {
-                    "말10": {
-                        "말의종류": "대화",
-                        "말하는인물": "의대생",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                },
-                {
-                    "말11": {
-                        "말의종류": "독백",
-                        "말하는인물": "의대생",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                }
-            ],
-            "Check": "No",
-            "Accuracy": "None"
-        },
-        {
-            "DataSetId": 7,
-            "InputMemory": "None",
-            "Input": {
-                "Id": 4,
-                "Continue": "\n인류의 건강하고 행복한 미래를 위해 앞장서는 의료기관\n어떤 기관인가?. 누군가 이렇게 질문한다면 어떻게 답해야 할까. 서울의과학연구소 SCL를 설명하는 팩트 중심적 표현은 많다. 국내 최초 검체검사기관, 아시아 최대 규모 검사실 보유, 국내 최초 PCR 검사 도입, 국내 최초 CAP College of American Pathologists 인증, 한국 최초 해외 의료기관 코로나19 검사 수주 등등 하나같이 가슴 뿌듯한 사실들이다. 그러나 단 한 줄로 표현해야 한다면 이렇게 답하고 싶다. \n\n[말1]\"사람이 건강하고 행복하게 살아가는 데 도움이 되는 의료기관\"\n\n이라고. 기관 특성상 다소 생소하게 느끼는 이들이 있을 수 있지만 적어도 SCL에서 일하는 구성원들은 모두 동의한다. 40년 동안 오로지 그 한 길을 달려왔으니까. SCL은 환자의 진단 및 치료를 위해 검사를 수행하는 기관이다. 환자를 치료할 때는 반드시 객관적·과학적 근거와 의사의 경험이 통합 되어야 한다는 근거중심의학 EBM 을 추구한다. 대중에게는 낯선 개념 이지만, 사실 지구상 모든 사람들의 생활에 깊이 파고들어 있는 학문 이다. 우리가 아파서 혹은 검진을 받기 위해 병의원에 가면, 의사들은 우리의 건강 상태와 질환에 걸렸는지 여부를 알아보기 위해 검사 전 문기관에 검사를 의뢰한다. 우리는 그 검사결과를 기반으로 한 치료 를 받는다. SCL은 1983년 창립 이후 정확히 40주년이 된 현재까지 인간의 건 강과 행복을 위해 오롯이 한길을 걸어왔다. 진단검사의학과 전문의로 서 근거중심의학의 전망에 대한 확고한 믿음이 있었다. 하지만 당시 에 모두가 거기에 동의하는 건 아니었다. 잘 알려지지 않은 길, 길이라고 부를 수도 없는 길을 가는 건 쉽지 않았다. 오로지 열정 하나로 뛰었다. 이 책에 들어 있는 이야기는 40년 동안 한길만 바라봤던 사람들의 피와 땀의 열매들이다. 어느 한 개인의 이야기가 아니라, 구성원 모두 가 같은 목표를 바라보며 웃고 울고 성장해 온 분투기이다. 창립 40주년을 맞아 SCL의 빛나는 성취를 정리하면서, 앞으로 다 가올 40년에 대한 기대감으로 가슴이 벅차오른다. "
-            },
-            "Feedback": [
-                {
-                    "말1": {
-                        "말의종류": "요약",
-                        "말하는인물": "SCL",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
-                    }
-                }
-            ],
-            "Check": "No",
-            "Accuracy": "None"
-        },
-        {
-            "DataSetId": 8,
             "InputMemory": "None",
             "Input": {
                 "Id": 5,
@@ -2383,18 +2039,21 @@
                 },
                 {
                     "말3": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "스승",
                         "인물의역할": "단역",
-                        "듣는인물": "SCL"
+                        "듣는인물": "나"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.5,
+                "Elements": 0.875
+            }
         },
         {
-            "DataSetId": 9,
+            "DataSetId": 3,
             "InputMemory": "None",
             "Input": {
                 "Id": 10,
@@ -2405,7 +2064,7 @@
                     "말4": {
                         "말의종류": "대화",
                         "말하는인물": "A교수",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "의대생들"
                     }
                 },
@@ -2413,16 +2072,19 @@
                     "말5": {
                         "말의종류": "대화",
                         "말하는인물": "A교수",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "B"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 10,
+            "DataSetId": 4,
             "InputMemory": "None",
             "Input": {
                 "Id": 11,
@@ -2431,18 +2093,21 @@
             "Feedback": [
                 {
                     "말6": {
-                        "말의종류": "인용",
+                        "말의종류": "강조",
                         "말하는인물": "A교수",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
+                        "인물의역할": "단역",
+                        "듣는인물": "의대생들"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.0,
+                "Elements": 0.75
+            }
         },
         {
-            "DataSetId": 11,
+            "DataSetId": 5,
             "InputMemory": "None",
             "Input": {
                 "Id": 12,
@@ -2451,7 +2116,7 @@
             "Feedback": [
                 {
                     "말7": {
-                        "말의종류": "대화",
+                        "말의종류": "독백",
                         "말하는인물": "이경률",
                         "인물의역할": "주인공",
                         "듣는인물": "없음"
@@ -2459,7 +2124,7 @@
                 },
                 {
                     "말8": {
-                        "말의종류": "대화",
+                        "말의종류": "독백",
                         "말하는인물": "이경률",
                         "인물의역할": "주인공",
                         "듣는인물": "없음"
@@ -2468,17 +2133,20 @@
                 {
                     "말9": {
                         "말의종류": "대화",
-                        "말하는인물": "이경률",
-                        "인물의역할": "주인공",
-                        "듣는인물": "없음"
+                        "말하는인물": "스승",
+                        "인물의역할": "단역",
+                        "듣는인물": "이경률"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.3333333333333333,
+                "Elements": 0.5833333333333334
+            }
         },
         {
-            "DataSetId": 12,
+            "DataSetId": 6,
             "InputMemory": "None",
             "Input": {
                 "Id": 15,
@@ -2487,7 +2155,7 @@
             "Feedback": [
                 {
                     "말10": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "의사",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
@@ -2495,18 +2163,21 @@
                 },
                 {
                     "말11": {
-                        "말의종류": "독백",
+                        "말의종류": "인용",
                         "말하는인물": "의사",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 13,
+            "DataSetId": 7,
             "InputMemory": "None",
             "Input": {
                 "Id": 16,
@@ -2523,18 +2194,21 @@
                 },
                 {
                     "말13": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "의사",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 14,
+            "DataSetId": 8,
             "InputMemory": "None",
             "Input": {
                 "Id": 18,
@@ -2545,16 +2219,19 @@
                     "말14": {
                         "말의종류": "인용",
                         "말하는인물": "의사",
-                        "인물의역할": "단역",
+                        "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 15,
+            "DataSetId": 9,
             "InputMemory": "None",
             "Input": {
                 "Id": 19,
@@ -2570,11 +2247,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 16,
+            "DataSetId": 10,
             "InputMemory": "None",
             "Input": {
                 "Id": 21,
@@ -2583,18 +2263,21 @@
             "Feedback": [
                 {
                     "말16": {
-                        "말의종류": "인용",
-                        "말하는인물": "이경률",
-                        "인물의역할": "단역",
+                        "말의종류": "독백",
+                        "말하는인물": "이경률 회장",
+                        "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.0,
+                "Elements": 0.5
+            }
         },
         {
-            "DataSetId": 17,
+            "DataSetId": 11,
             "InputMemory": "None",
             "Input": {
                 "Id": 25,
@@ -2606,7 +2289,7 @@
                         "말의종류": "인용",
                         "말하는인물": "제프 베조스",
                         "인물의역할": "단역",
-                        "듣는인물": "기업인들"
+                        "듣는인물": "없음"
                     }
                 },
                 {
@@ -2614,15 +2297,18 @@
                         "말의종류": "질문",
                         "말하는인물": "나",
                         "인물의역할": "주인공",
-                        "듣는인물": "당신"
+                        "듣는인물": "상대방"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 18,
+            "DataSetId": 12,
             "InputMemory": "None",
             "Input": {
                 "Id": 32,
@@ -2638,11 +2324,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 19,
+            "DataSetId": 13,
             "InputMemory": "None",
             "Input": {
                 "Id": 34,
@@ -2658,11 +2347,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 20,
+            "DataSetId": 14,
             "InputMemory": "None",
             "Input": {
                 "Id": 36,
@@ -2678,11 +2370,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 21,
+            "DataSetId": 15,
             "InputMemory": "None",
             "Input": {
                 "Id": 42,
@@ -2700,17 +2395,20 @@
                 {
                     "말23": {
                         "말의종류": "독백",
-                        "말하는인물": "나",
-                        "인물의역할": "주인공",
+                        "말하는인물": "개그맨",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.5,
+                "Elements": 0.75
+            }
         },
         {
-            "DataSetId": 22,
+            "DataSetId": 16,
             "InputMemory": "None",
             "Input": {
                 "Id": 49,
@@ -2719,26 +2417,29 @@
             "Feedback": [
                 {
                     "말24": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "은통",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "항량"
                     }
                 },
                 {
                     "말25": {
-                        "말의종류": "강조",
-                        "말하는인물": "알 수 없음",
-                        "인물의역할": "알 수 없음",
+                        "말의종류": "인용",
+                        "말하는인물": "나",
+                        "인물의역할": "주인공",
                         "듣는인물": "소비자들"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.5,
+                "Elements": 0.75
+            }
         },
         {
-            "DataSetId": 23,
+            "DataSetId": 17,
             "InputMemory": "None",
             "Input": {
                 "Id": 59,
@@ -2754,11 +2455,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 24,
+            "DataSetId": 18,
             "InputMemory": "None",
             "Input": {
                 "Id": 60,
@@ -2774,11 +2478,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.0,
+                "Elements": 0.5
+            }
         },
         {
-            "DataSetId": 25,
+            "DataSetId": 19,
             "InputMemory": "None",
             "Input": {
                 "Id": 61,
@@ -2787,18 +2494,21 @@
             "Feedback": [
                 {
                     "말28": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "경영자",
                         "인물의역할": "단역",
-                        "듣는인물": "직원들"
+                        "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.0,
+                "Elements": 0.5
+            }
         },
         {
-            "DataSetId": 26,
+            "DataSetId": 20,
             "InputMemory": "None",
             "Input": {
                 "Id": 63,
@@ -2814,11 +2524,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 27,
+            "DataSetId": 21,
             "InputMemory": "None",
             "Input": {
                 "Id": 64,
@@ -2827,18 +2540,21 @@
             "Feedback": [
                 {
                     "말30": {
-                        "말의종류": "인용",
+                        "말의종류": "강조",
                         "말하는인물": "이경률 회장",
                         "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.0,
+                "Elements": 0.75
+            }
         },
         {
-            "DataSetId": 28,
+            "DataSetId": 22,
             "InputMemory": "None",
             "Input": {
                 "Id": 72,
@@ -2854,11 +2570,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 29,
+            "DataSetId": 23,
             "InputMemory": "None",
             "Input": {
                 "Id": 79,
@@ -2867,7 +2586,7 @@
             "Feedback": [
                 {
                     "말32": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "당시 임상시험지원사업부 부서장",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
@@ -2875,18 +2594,21 @@
                 },
                 {
                     "말33": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "당시 임상시험지원사업부 부서장",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 30,
+            "DataSetId": 24,
             "InputMemory": "None",
             "Input": {
                 "Id": 82,
@@ -2902,11 +2624,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 31,
+            "DataSetId": 25,
             "InputMemory": "None",
             "Input": {
                 "Id": 83,
@@ -2915,18 +2640,21 @@
             "Feedback": [
                 {
                     "말35": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "나",
                         "인물의역할": "주인공",
-                        "듣는인물": "직원들"
+                        "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 32,
+            "DataSetId": 26,
             "InputMemory": "None",
             "Input": {
                 "Id": 84,
@@ -2942,11 +2670,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.0,
+                "Elements": 0.5
+            }
         },
         {
-            "DataSetId": 33,
+            "DataSetId": 27,
             "InputMemory": "None",
             "Input": {
                 "Id": 86,
@@ -2957,15 +2688,15 @@
                     "말37": {
                         "말의종류": "대화",
                         "말하는인물": "그",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
                 {
                     "말38": {
                         "말의종류": "대화",
-                        "말하는인물": "그",
-                        "인물의역할": "주인공",
+                        "말하는인물": "경영자",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
@@ -2973,15 +2704,15 @@
                     "말39": {
                         "말의종류": "대화",
                         "말하는인물": "그",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
                 {
                     "말40": {
                         "말의종류": "대화",
-                        "말하는인물": "그",
-                        "인물의역할": "주인공",
+                        "말하는인물": "경영진",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
@@ -2989,16 +2720,19 @@
                     "말41": {
                         "말의종류": "대화",
                         "말하는인물": "이경률 회장",
-                        "인물의역할": "단역",
+                        "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.2,
+                "Elements": 0.65
+            }
         },
         {
-            "DataSetId": 34,
+            "DataSetId": 28,
             "InputMemory": "None",
             "Input": {
                 "Id": 87,
@@ -3008,7 +2742,7 @@
                 {
                     "말42": {
                         "말의종류": "인용",
-                        "말하는인물": "CEO",
+                        "말하는인물": "잭 웰치",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
@@ -3022,11 +2756,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 35,
+            "DataSetId": 29,
             "InputMemory": "None",
             "Input": {
                 "Id": 90,
@@ -3042,11 +2779,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 36,
+            "DataSetId": 30,
             "InputMemory": "None",
             "Input": {
                 "Id": 91,
@@ -3056,8 +2796,8 @@
                 {
                     "말45": {
                         "말의종류": "인용",
-                        "말하는인물": "직원들",
-                        "인물의역할": "단역",
+                        "말하는인물": "나",
+                        "인물의역할": "주인공",
                         "듣는인물": "없음"
                     }
                 },
@@ -3070,11 +2810,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.5,
+                "Elements": 0.75
+            }
         },
         {
-            "DataSetId": 37,
+            "DataSetId": 31,
             "InputMemory": "None",
             "Input": {
                 "Id": 92,
@@ -3084,17 +2827,20 @@
                 {
                     "말47": {
                         "말의종류": "인용",
-                        "말하는인물": "검사부원",
+                        "말하는인물": "직원들",
                         "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 38,
+            "DataSetId": 32,
             "InputMemory": "None",
             "Input": {
                 "Id": 93,
@@ -3104,17 +2850,20 @@
                 {
                     "말48": {
                         "말의종류": "인용",
-                        "말하는인물": "직원들",
-                        "인물의역할": "단역",
+                        "말하는인물": "직원",
+                        "인물의역할": "엑스트라",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 39,
+            "DataSetId": 33,
             "InputMemory": "None",
             "Input": {
                 "Id": 98,
@@ -3126,31 +2875,34 @@
                         "말의종류": "대화",
                         "말하는인물": "손님",
                         "인물의역할": "단역",
-                        "듣는인물": "없음"
+                        "듣는인물": "나"
                     }
                 },
                 {
                     "말50": {
                         "말의종류": "대화",
-                        "말하는인물": "직장인",
-                        "인물의역할": "주인공",
-                        "듣는인물": "아이"
+                        "말하는인물": "SCL 검사부 직원들",
+                        "인물의역할": "조연",
+                        "듣는인물": "나"
                     }
                 },
                 {
                     "말51": {
                         "말의종류": "대화",
-                        "말하는인물": "직원",
+                        "말하는인물": "SCL 검사부 직원들",
                         "인물의역할": "조연",
-                        "듣는인물": "없음"
+                        "듣는인물": "나"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.0,
+                "Elements": 0.5
+            }
         },
         {
-            "DataSetId": 40,
+            "DataSetId": 34,
             "InputMemory": "None",
             "Input": {
                 "Id": 105,
@@ -3166,11 +2918,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 41,
+            "DataSetId": 35,
             "InputMemory": "None",
             "Input": {
                 "Id": 106,
@@ -3181,7 +2936,7 @@
                     "말53": {
                         "말의종류": "인용",
                         "말하는인물": "부서장",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
@@ -3194,11 +2949,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 42,
+            "DataSetId": 36,
             "InputMemory": "None",
             "Input": {
                 "Id": 109,
@@ -3230,11 +2988,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 43,
+            "DataSetId": 37,
             "InputMemory": "None",
             "Input": {
                 "Id": 117,
@@ -3250,11 +3011,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 44,
+            "DataSetId": 38,
             "InputMemory": "None",
             "Input": {
                 "Id": 129,
@@ -3270,11 +3034,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 45,
+            "DataSetId": 39,
             "InputMemory": "None",
             "Input": {
                 "Id": 138,
@@ -3290,11 +3057,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 46,
+            "DataSetId": 40,
             "InputMemory": "None",
             "Input": {
                 "Id": 143,
@@ -3305,7 +3075,7 @@
                     "말61": {
                         "말의종류": "대화",
                         "말하는인물": "직원",
-                        "인물의역할": "단역",
+                        "인물의역할": "조연",
                         "듣는인물": "팀장"
                     }
                 },
@@ -3313,7 +3083,7 @@
                     "말62": {
                         "말의종류": "대화",
                         "말하는인물": "팀장",
-                        "인물의역할": "단역",
+                        "인물의역할": "주인공",
                         "듣는인물": "직원"
                     }
                 },
@@ -3321,7 +3091,7 @@
                     "말63": {
                         "말의종류": "대화",
                         "말하는인물": "직원",
-                        "인물의역할": "단역",
+                        "인물의역할": "조연",
                         "듣는인물": "팀장"
                     }
                 },
@@ -3329,16 +3099,19 @@
                     "말64": {
                         "말의종류": "대화",
                         "말하는인물": "직원",
-                        "인물의역할": "단역",
+                        "인물의역할": "조연",
                         "듣는인물": "팀장"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 47,
+            "DataSetId": 41,
             "InputMemory": "None",
             "Input": {
                 "Id": 144,
@@ -3347,34 +3120,37 @@
             "Feedback": [
                 {
                     "말65": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "분자진단팀장",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
                 {
                     "말66": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "분자진단팀장",
-                        "인물의역할": "주인공",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
                 {
                     "말67": {
                         "말의종류": "대화",
-                        "말하는인물": "직원들",
+                        "말하는인물": "직원",
                         "인물의역할": "조연",
                         "듣는인물": "분자진단팀장"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 48,
+            "DataSetId": 42,
             "InputMemory": "None",
             "Input": {
                 "Id": 149,
@@ -3384,17 +3160,20 @@
                 {
                     "말68": {
                         "말의종류": "대화",
-                        "말하는인물": "분자진단팀 구성원",
+                        "말하는인물": "분자진단팀 직원",
                         "인물의역할": "단역",
                         "듣는인물": "알 수 없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 49,
+            "DataSetId": 43,
             "InputMemory": "None",
             "Input": {
                 "Id": 151,
@@ -3411,18 +3190,21 @@
                 },
                 {
                     "말70": {
-                        "말의종류": "대화",
+                        "말의종류": "독백",
                         "말하는인물": "팀장",
                         "인물의역할": "단역",
                         "듣는인물": "알 수 없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 50,
+            "DataSetId": 44,
             "InputMemory": "None",
             "Input": {
                 "Id": 152,
@@ -3434,7 +3216,7 @@
                         "말의종류": "대화",
                         "말하는인물": "환자",
                         "인물의역할": "단역",
-                        "듣는인물": "의료진"
+                        "듣는인물": "의사"
                     }
                 },
                 {
@@ -3442,23 +3224,26 @@
                         "말의종류": "대화",
                         "말하는인물": "환자",
                         "인물의역할": "단역",
-                        "듣는인물": "의료진"
+                        "듣는인물": "의사"
                     }
                 },
                 {
                     "말73": {
                         "말의종류": "대화",
-                        "말하는인물": "의료진",
-                        "인물의역할": "단역",
+                        "말하는인물": "나",
+                        "인물의역할": "주인공",
                         "듣는인물": "환자"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.6666666666666666,
+                "Elements": 0.8333333333333334
+            }
         },
         {
-            "DataSetId": 51,
+            "DataSetId": 45,
             "InputMemory": "None",
             "Input": {
                 "Id": 158,
@@ -3469,16 +3254,19 @@
                     "말74": {
                         "말의종류": "대화",
                         "말하는인물": "직원",
-                        "인물의역할": "조연",
+                        "인물의역할": "단역",
                         "듣는인물": "알 수 없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 52,
+            "DataSetId": 46,
             "InputMemory": "None",
             "Input": {
                 "Id": 162,
@@ -3490,15 +3278,18 @@
                         "말의종류": "인용",
                         "말하는인물": "구매부 직원",
                         "인물의역할": "단역",
-                        "듣는인물": "없음"
+                        "듣는인물": "나"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 53,
+            "DataSetId": 47,
             "InputMemory": "None",
             "Input": {
                 "Id": 164,
@@ -3510,15 +3301,18 @@
                         "말의종류": "인용",
                         "말하는인물": "구매부 직원",
                         "인물의역할": "단역",
-                        "듣는인물": "나"
+                        "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 54,
+            "DataSetId": 48,
             "InputMemory": "None",
             "Input": {
                 "Id": 166,
@@ -3542,11 +3336,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 55,
+            "DataSetId": 49,
             "InputMemory": "None",
             "Input": {
                 "Id": 167,
@@ -3570,11 +3367,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 56,
+            "DataSetId": 50,
             "InputMemory": "None",
             "Input": {
                 "Id": 170,
@@ -3598,11 +3398,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 57,
+            "DataSetId": 51,
             "InputMemory": "None",
             "Input": {
                 "Id": 173,
@@ -3618,11 +3421,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 58,
+            "DataSetId": 52,
             "InputMemory": "None",
             "Input": {
                 "Id": 187,
@@ -3638,11 +3444,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 59,
+            "DataSetId": 53,
             "InputMemory": "None",
             "Input": {
                 "Id": 188,
@@ -3651,18 +3460,21 @@
             "Feedback": [
                 {
                     "말85": {
-                        "말의종류": "인용",
+                        "말의종류": "대화",
                         "말하는인물": "인사부 부서장",
                         "인물의역할": "단역",
                         "듣는인물": "경영진"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 60,
+            "DataSetId": 54,
             "InputMemory": "None",
             "Input": {
                 "Id": 191,
@@ -3678,11 +3490,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 61,
+            "DataSetId": 55,
             "InputMemory": "None",
             "Input": {
                 "Id": 192,
@@ -3706,11 +3521,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 62,
+            "DataSetId": 56,
             "InputMemory": "None",
             "Input": {
                 "Id": 195,
@@ -3734,11 +3552,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 63,
+            "DataSetId": 57,
             "InputMemory": "None",
             "Input": {
                 "Id": 196,
@@ -3754,11 +3575,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 64,
+            "DataSetId": 58,
             "InputMemory": "None",
             "Input": {
                 "Id": 201,
@@ -3767,7 +3591,7 @@
             "Feedback": [
                 {
                     "말92": {
-                        "말의종류": "대화",
+                        "말의종류": "인용",
                         "말하는인물": "지원자",
                         "인물의역할": "단역",
                         "듣는인물": "나"
@@ -3782,11 +3606,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 65,
+            "DataSetId": 59,
             "InputMemory": "None",
             "Input": {
                 "Id": 203,
@@ -3796,17 +3623,20 @@
                 {
                     "말94": {
                         "말의종류": "인용",
-                        "말하는인물": "직원",
+                        "말하는인물": "여직원",
                         "인물의역할": "단역",
                         "듣는인물": "알 수 없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 0.0,
+                "Elements": 0.75
+            }
         },
         {
-            "DataSetId": 66,
+            "DataSetId": 60,
             "InputMemory": "None",
             "Input": {
                 "Id": 204,
@@ -3818,15 +3648,18 @@
                         "말의종류": "인용",
                         "말하는인물": "직원 B",
                         "인물의역할": "단역",
-                        "듣는인물": "나"
+                        "듣는인물": "직원 A"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 67,
+            "DataSetId": 61,
             "InputMemory": "None",
             "Input": {
                 "Id": 207,
@@ -3842,11 +3675,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 68,
+            "DataSetId": 62,
             "InputMemory": "None",
             "Input": {
                 "Id": 211,
@@ -3872,25 +3708,28 @@
                 {
                     "말99": {
                         "말의종류": "인용",
-                        "말하는인물": "직원",
-                        "인물의역할": "조연",
+                        "말하는인물": "SCL 직원",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 },
                 {
                     "말100": {
                         "말의종류": "인용",
-                        "말하는인물": "직원",
-                        "인물의역할": "조연",
+                        "말하는인물": "SCL 직원",
+                        "인물의역할": "단역",
                         "듣는인물": "없음"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 69,
+            "DataSetId": 63,
             "InputMemory": "None",
             "Input": {
                 "Id": 212,
@@ -3906,11 +3745,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 70,
+            "DataSetId": 64,
             "InputMemory": "None",
             "Input": {
                 "Id": 217,
@@ -3926,11 +3768,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 71,
+            "DataSetId": 65,
             "InputMemory": "None",
             "Input": {
                 "Id": 223,
@@ -3942,15 +3787,18 @@
                         "말의종류": "인용",
                         "말하는인물": "직원",
                         "인물의역할": "단역",
-                        "듣는인물": "없음"
+                        "듣는인물": "상대방"
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         },
         {
-            "DataSetId": 72,
+            "DataSetId": 66,
             "InputMemory": "None",
             "Input": {
                 "Id": 234,
@@ -3966,11 +3814,14 @@
                     }
                 }
             ],
-            "Check": "No",
-            "Accuracy": "None"
+            "Check": "Yes",
+            "Accuracy": {
+                "Simple": 1.0,
+                "Elements": 1.0
+            }
         }
     ],
-    "FeedbackCompletion": "No",
+    "FeedbackCompletion": "Yes",
     "EmbeddingDataset": [
         {
             "DataSetId": 0,

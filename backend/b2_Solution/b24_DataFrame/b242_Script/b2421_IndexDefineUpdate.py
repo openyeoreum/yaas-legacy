@@ -9,7 +9,7 @@ from tqdm import tqdm
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedIndexFrameToDB, AddIndexFrameBodyToDB, IndexFrameCountLoad, InitIndexFrame, IndexFrameCompletionUpdate
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 # IndexText 로드
 def LoadIndexText(projectName, email):
@@ -160,15 +160,17 @@ def IndexDefineDivision(projectName, email, maxTokens = 1500, mode = "Example", 
       return responseJson
 
 # 프롬프트 요청 및 결과물 Json을 IndexFrame에 업데이트
-def IndexFrameUpdate(projectName, email, MessagesReview = "off", Mode = "Example", ExistedFrame = None):
+def IndexFrameUpdate(projectName, email, MessagesReview = "off", Mode = "Example", ExistedDataFrame = None, ExistedDataSet1 = None, ExistedDataSet2 = None):
     print(f"< User: {email} | Project: {projectName} | 01_IndexFrameUpdate 시작 >")
     # IndexFrame의 Count값 가져오기
     IndexCount, Completion = IndexFrameCountLoad(projectName, email)
     if Completion == "No":
       
-        if ExistedFrame != None:
+        if ExistedDataFrame != None:
           # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-          AddExistedIndexFrameToDB(projectName, email, ExistedFrame)
+          AddExistedIndexFrameToDB(projectName, email, ExistedDataFrame)
+          AddExistedDataSetToDB(projectName, email, "IndexDefinePreprocess", ExistedDataSet1)
+          AddExistedDataSetToDB(projectName, email, "IndexDefine", ExistedDataSet2)
           print(f"[ User: {email} | Project: {projectName} | 01_IndexFrameUpdate은 ExistedIndexFrame으로 대처됨 ]\n")
         else:
           responseJson = IndexDefineDivision(projectName, email, mode = Mode, messagesReview = MessagesReview)

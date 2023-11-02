@@ -15,6 +15,7 @@ from backend.b2_Solution.b23_Project.b231_GetDBtable import GetPromptFrame, GetT
 
 ######################
 ##### LLM 공통사항 #####
+######################
 
 ## 오늘 날짜
 def Date(Option = "Day"):
@@ -37,6 +38,7 @@ def LoadLLMapiKey(email):
 
 ########################
 ##### LLM Response #####
+########################
 
 ## 프롬프트 요청할 LLMmessages 메세지 구조 생성
 def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
@@ -151,7 +153,7 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
     
     encoding = tiktoken.get_encoding("cl100k_base")
     # print(f'messages: {messages}')
-    InputTokens = len(encoding.encode(Input))
+    InputTokens = len(encoding.encode(str(Input)))
     messageTokens = len(encoding.encode(str(messages)))
     OutputTokensRatio = promptFrame[0]["OutputTokensRatio"]
     OutputTokens = InputTokens * OutputTokensRatio
@@ -244,22 +246,21 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
 
 ##########################
 ##### LLM FineTuning #####
+##########################
+
 ## 파인튜닝 데이터셋 생성
-def LLMTrainingDatasetGenerator(projectName, email, Process, RawDataSetPath, processDataset, Mode = "Example"):
-    ###                                                                   ^^^^^^^^^^^^^^ 테스트 후 삭제 ###   
+def LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = "Example"):  
     trainingDataset = GetTrainingDataset(projectName, email)
     ProcessDataset = getattr(trainingDataset, Process)
 
-    filename = RawDataSetPath + Process + 'DataSet_Training_' + Date() + '.jsonl'
+    filename = TrainingDataSetPath + email + '_' + projectName + '_' + ProcessNumber + '_' + Process + 'DataSet_' + str(Date()) + '.jsonl'
     
     base, ext = os.path.splitext(filename)
     counter = 0
-    Newfilename = filename
-    while os.path.exists(Newfilename):
+    newFilename = filename
+    while os.path.exists(newFilename):
         counter += 1
-        Newfilename = f"{base} ({counter}){ext}"
-    
-    ProcessDataset = processDataset ### < --- 테스트 후 삭제 ###
+        newFilename = f"{base} ({counter}){ext}"
     
     if ProcessDataset["FeedbackCompletion"] == "Yes":
       if Mode == "Example":
@@ -269,7 +270,7 @@ def LLMTrainingDatasetGenerator(projectName, email, Process, RawDataSetPath, pro
       IOList = ProcessDataset["FeedbackDataset"][1:]
       TotalTokens = 0
       
-      with open(Newfilename, 'w', encoding='utf-8') as file:
+      with open(newFilename, 'w', encoding='utf-8') as file:
         for i in range(len(IOList)):
           # "InputMemory"가 "None"일 경우 빈 텍스트("") 처리
           if IOList[i]["InputMemory"] == "None":
@@ -279,7 +280,7 @@ def LLMTrainingDatasetGenerator(projectName, email, Process, RawDataSetPath, pro
           Input = IOList[i]["Input"]
           output = IOList[i]["Feedback"]
           
-          messages, totalTokens = LLMmessages(Process, Input, Output = output, mode = MOde, inputMemory = InputMemory)
+          messages, totalTokens, Temperature = LLMmessages(Process, Input, Output = output, mode = MOde, inputMemory = InputMemory)
           
           TrainingData = {"messages": [messages[0], messages[1], messages[2]]}
 
@@ -287,45 +288,51 @@ def LLMTrainingDatasetGenerator(projectName, email, Process, RawDataSetPath, pro
           
           TotalTokens += totalTokens
       
-      return open(Newfilename, 'rb')
+      return filename, open(newFilename, 'rb')
     else:
-      print(f"Project: {projectName} | Process: {Process} | 피드백이 완료되지 않은 데이터셋 입니다.")
+      print(f"Project: {projectName} | Process: {Process} | FeedbackCompletion에서 오류 발생: Feedback이 완료 되지 않았습니다.")
       return None
     
 ## 파인튜닝 파일 업로드 생성
-def LLMTrainingDatasetUpload(projectName, email, Process, RawDataSetPath, processDataset, mode = "Example", MaxAttempts = 100):
-    ###                                                                ^^^^^^^^^^^^^^ 테스트 후 삭제 ###  
+def LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = "Example", MaxAttempts = 100):
     openai.api_key = LoadLLMapiKey(email)
     openai.api_key = os.getenv("OPENAI_API_KEY")
     
     # LLMTrainingDataset 업로드
-    LLMTrainingDataset = LLMTrainingDatasetGenerator(projectName, email, Process, RawDataSetPath, processDataset, Mode = mode)
-    ###                                                                                        ^^^^^^^^^^^^^^ 테스트 후 삭제 ###  
+    filename, LLMTrainingDataset = LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = mode)
     UploadedFile = openai.File.create(
       file = LLMTrainingDataset,
       purpose = 'fine-tune'
     )
-    time.sleep(random.randint(10, 15))
+    time.sleep(random.randint(15, 20))
     
     for _ in range(MaxAttempts):
-      if UploadedFile["status"] != "uploaded":
+      UploadedFile = openai.File.retrieve(UploadedFile["id"])
+      if UploadedFile["status"] == "processed":
+        FileId = UploadedFile["id"]
+        # 파일이름에 FileId 붙이기
+        FilePath, oldFilename = os.path.split(filename)
+        base, ext = os.path.splitext(oldFilename)
+        newFilename = f"{base}_{FileId}{ext}"
+        newFilePath = os.path.join(FilePath, newFilename)
+        os.rename(filename, newFilePath)
+        
+        print(f"Project: {projectName} | Process: {Process} | LLMTrainingDatasetUpload 완료")
+        break
+      else:
         print(f"Project: {projectName} | Process: {Process} | LLMTrainingDatasetUploading ... 기다려주세요.")
         time.sleep(random.randint(10, 15))
         continue
-      else:
-        FileId = UploadedFile["id"]
-        print(f"Project: {projectName} | Process: {Process} | LLMTrainingDatasetUpload 완료")
-        
+
     return FileId
 
 ## 파인튜닝
-def LLMFineTuning(projectName, email, Process, RawDataSetPath, processDataset, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
-    ###                                                     ^^^^^^^^^^^^^^ 테스트 후 삭제 ###
+def LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
     with get_db() as db:
         openai.api_key = LoadLLMapiKey(email)
         openai.api_key = os.getenv("OPENAI_API_KEY")
         
-        FileId = LLMTrainingDatasetUpload(projectName, email, Process, RawDataSetPath, processDataset, mode = Mode)
+        FileId = LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = Mode)
 
         # 토큰수별 모델 선정
         if ModelTokens == "Short":
@@ -342,16 +349,18 @@ def LLMFineTuning(projectName, email, Process, RawDataSetPath, processDataset, M
         time.sleep(random.randint(60, 90))
         
         for _ in range(MaxAttempts):
-          if FineTuningJob["status"] != "succeeded":
-            print(f"Project: {projectName} | Process: {Process} | LLMFineTuning ... 기다려주세요.")
-            time.sleep(random.randint(60, 90))
-            continue
-          else:
+          FineTuningJob = openai.FineTuningJob.retrieve(FineTuningJob["id"])
+          if FineTuningJob["status"] == "succeeded":
             FineTunedModel = FineTuningJob["fine_tuned_model"]
             TrainedTokens = FineTuningJob["trained_tokens"]
             TrainingFile = FineTuningJob["training_file"]
+            break
+          else:
             print(f"Project: {projectName} | Process: {Process} | LLMFineTuning 완료")
-            
+            print(f"Project: {projectName} | Process: {Process} | LLMFineTuning ... 기다려주세요.")
+            time.sleep(random.randint(60, 90))
+            continue
+
         promptFrame = GetPromptFrame(Process)
         
         # Prompt 모델 업데이트
@@ -383,22 +392,27 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    process = 'IndexDefinePreprocess'
+    processNumber = "04"
+    process = "BodyCharacterDefine"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
-    RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
-    #########################################################################
-
-    with open(RawDataSetPath + "yeoreum00128@gmail.com_우리는행복을진단한다_04_BodyCharacterDefineDataSet_231022_Accuracy.json", 'r', encoding='utf-8') as file:
-        processDataset = json.load(file)
+    FeedbackDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5122_FeedbackDataSet/"
+    CompleteDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5123_CompleteDataSet/"
+    TrainingDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5124_TrainingDataSet/"
     
     modelTokens = "Short"
     mode = "Example"
-    epochs = 4
-    FineTunedModel, TrainedTokens = LLMFineTuning(projectName, email, process, RawDataSetPath, processDataset, ModelTokens = modelTokens, Mode = mode, Epochs = epochs)
+    epochs = 3
+    #########################################################################
     
-    completion = openai.ChatCompletion.create(
-      model = FineTunedModel,
-      messages = [
-        {"role": "user", "content": "안녕 GPT!"}
-      ]
-    )
+    # FineTunedModel, TrainedTokens = LLMFineTuning(projectName, email, processNumber, process, TrainingDataSetPath, ModelTokens = modelTokens, Mode = mode, Epochs = epochs)
+
+    # completion = openai.ChatCompletion.create(
+    #   model = FineTunedModel,
+    #   messages = [
+    #     {"role": "user", "content": "안녕 GPT!"}
+    #   ]
+    # )
+    
+    FineTuningJob = openai.FineTuningJob.retrieve("ftjob-BjducVT4v1wSouFgStggE2ke")
+    print(FineTuningJob)
+    print(Date("Second"))

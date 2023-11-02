@@ -538,15 +538,15 @@ def BodyFrameBodysUpdate(projectName, email):
 ###########
 
 ## IndexBodyUnitChunksList을 BodyFrame에 업데이트
-def BodyFrameUpdate(projectName, email, ExistedFrame = None):
+def BodyFrameUpdate(projectName, email, ExistedDataFrame = None):
     print(f"< User: {email} | Project: {projectName} | 02_BodyFrameUpdate 시작 >")
     # BodyFrame의 Count값 가져오기
     IndexCount, BodyCount, ChunkCount, Completion = BodyFrameCountLoad(projectName, email)
     if Completion == "No":
         
-        if ExistedFrame != None:
+        if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedBodyFrameToDB(projectName, email, ExistedFrame)
+            AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame)
             print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate는 ExistedBodyFrame으로 대처됨 ]\n")
         else:
             indexBodyUnitChunksList = TaggedChunksToUnitedChunks(projectName, email)

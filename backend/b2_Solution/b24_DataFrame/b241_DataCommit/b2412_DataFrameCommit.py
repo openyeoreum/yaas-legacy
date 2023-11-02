@@ -36,11 +36,11 @@ def AddFrameMetaDataToDB(projectName, email):
 ###############################
 ##### IndexDefine Process #####
 ## 1. 1-1 IndexFrame이 이미 ExistedFrame으로 존재할때 업데이트
-def AddExistedIndexFrameToDB(projectName, email, ExistedFrame):
+def AddExistedIndexFrameToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
         project = GetProject(projectName, email)
-        project.IndexFrame[1] = ExistedFrame[1]
+        project.IndexFrame[1] = ExistedDataFrame[1]
         
         flag_modified(project, "IndexFrame")
         
@@ -118,12 +118,12 @@ def IndexFrameCompletionUpdate(projectName, email):
 ###########################################
 ##### BodySplit, IndexTagging Process #####
 ## 2. 1-1 BodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
-def AddExistedBodyFrameToDB(projectName, email, ExistedFrame):
+def AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
         project = GetProject(projectName, email)
-        project.BodyFrame[1] = ExistedFrame[1]
-        project.BodyFrame[2] = ExistedFrame[2]
+        project.BodyFrame[1] = ExistedDataFrame[1]
+        project.BodyFrame[2] = ExistedDataFrame[2]
         
         flag_modified(project, "BodyFrame")
         
@@ -265,11 +265,11 @@ def BodyFrameCompletionUpdate(projectName, email):
 ###############################
 ##### BodySummary Process #####
 ## 3. 1-1 SummaryBodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
-def AddExistedSummaryBodyFrameToDB(projectName, email, ExistedFrame):
+def AddExistedSummaryBodyFrameToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
         project = GetProject(projectName, email)
-        project.SummaryBodyFrame[1] = ExistedFrame[1]
+        project.SummaryBodyFrame[1] = ExistedDataFrame[1]
         
         flag_modified(project, "SummaryBodyFrame")
         
@@ -347,12 +347,12 @@ def SummaryBodyFrameCompletionUpdate(projectName, email):
 #######################################
 ##### BodyCharacterDefine Process #####
 ## 4. 1-1 BodyCharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
-def AddExistedBodyCharacterDefineToDB(projectName, email, ExistedFrame):
+def AddExistedBodyCharacterDefineToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
         project = GetProject(projectName, email)
-        project.BodyCharacterDefine[1] = ExistedFrame[1]
-        project.BodyCharacterDefine[2] = ExistedFrame[2]
+        project.BodyCharacterDefine[1] = ExistedDataFrame[1]
+        project.BodyCharacterDefine[2] = ExistedDataFrame[2]
         
         flag_modified(project, "BodyCharacterDefine")
         

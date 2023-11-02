@@ -12,7 +12,7 @@ from backend.b1_Api.b14_Models import TrainingDataset
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetTrainingDataset
 
-##########
+#########################################################
 ##### 전체 TrainingDataSet의 MetaData(식별)부분을 업데이트 #####
 def AddDataSetMetaDataToDB(projectName, email):
     with get_db() as db:
@@ -36,12 +36,34 @@ def AddDataSetMetaDataToDB(projectName, email):
 
         db.add(trainingDataset)
         db.commit()
-##########
-##########
 
-##########
+###########################
 ##### General Process #####
-# 1. 1-1 UpdateProjectContext 업데이트 형식
+## 1. 1-1 IndexFrame이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedDataSetToDB(projectName, email, Process, ExistedDataSet):
+    with get_db() as db:
+    
+        trainingDataset = GetTrainingDataset(projectName, email)
+        ProcessDataset = getattr(trainingDataset, Process)
+        ProcessDataset["TaskName"] = ExistedDataSet["TaskName"]
+        ProcessDataset["UserId"] = ExistedDataSet["UserId"]
+        ProcessDataset["ProjectsStorageID"] = ExistedDataSet["ProjectsStorageID"]
+        ProcessDataset["ProjectId"] = ExistedDataSet["ProjectId"]
+        ProcessDataset["ProjectName"] = ExistedDataSet["ProjectName"]
+        ProcessDataset["RawDataSetCount"] = ExistedDataSet["RawDataSetCount"]
+        ProcessDataset["FeedbackDatasetCount"] = ExistedDataSet["FeedbackDatasetCount"]
+        ProcessDataset["EmbeddingDatasetCount"] = ExistedDataSet["EmbeddingDatasetCount"]
+        ProcessDataset["Completion"] = ExistedDataSet["Completion"]
+        ProcessDataset["Accuracy"] = ExistedDataSet["Accuracy"]
+        ProcessDataset["Context"] = ExistedDataSet["Context"]
+        ProcessDataset["RawDataset"] = ExistedDataSet["RawDataset"]
+        
+        flag_modified(trainingDataset, Process)
+        
+        db.add(trainingDataset)
+        db.commit()
+        
+## 1. 1-1 UpdateProjectContext 업데이트 형식
 def UpdateProjectContext(ProcessDataset, Process, Language = "None", Genre = "None", Gender = "None", Age = "None", Personality = "None", Emotion = "None", Environment = "None", Situation = "None", Era = "None", Culture = "None"):
     
     updateContext = {
@@ -61,7 +83,7 @@ def UpdateProjectContext(ProcessDataset, Process, Language = "None", Genre = "No
     ProcessDataset["Context"].update(updateContext)
     ProcessDataset["FeedbackCompletion"] = "No"
     
-# 1. 1-2 ProjectContext 부분 업데이트
+## 1. 1-2 ProjectContext 부분 업데이트
 def AddProjectContextToDB(projectName, email, Process, language = "None", genre = "None", gender = "None", age = "None", personality = "None", emotion = "None", environment = "None", situation = "None", era = "None", culture = "None"):
     with get_db() as db:
     
@@ -74,7 +96,7 @@ def AddProjectContextToDB(projectName, email, Process, language = "None", genre 
         db.add(trainingDataset)
         db.commit()
         
-# 1. 1-3 UpdateProjectRawDataset 업데이트 형식
+## 1. 1-3 UpdateProjectRawDataset 업데이트 형식
 def UpdateProjectRawDataset(ProcessDataset, Mode, Model, Usage, Input, Output, InputMemory = "None"):
     DataSetId = len(ProcessDataset["RawDataset"])
     updateRawDataset = {
@@ -90,7 +112,7 @@ def UpdateProjectRawDataset(ProcessDataset, Mode, Model, Usage, Input, Output, I
     ProcessDataset["RawDataset"].append(updateRawDataset)
     ProcessDataset["RawDataSetCount"] = DataSetId
     
-# 1. 1-4 ProjectRawDataset 부분 업데이트
+## 1. 1-4 ProjectRawDataset 부분 업데이트
 def AddProjectRawDatasetToDB(projectName, email, Process, Mode, Model, Usage, Input, Output, INPUTMEMORY = "None"):
     with get_db() as db:
     
@@ -103,7 +125,7 @@ def AddProjectRawDatasetToDB(projectName, email, Process, Mode, Model, Usage, In
         db.add(trainingDataset)
         db.commit()
         
-# 1. 1-5 UpdateProjectFeedbackDataSets 업데이트 형식
+## 1. 1-5 UpdateProjectFeedbackDataSets 업데이트 형식
 def UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output, InputMemory = "None"):
     DataSetId = len(ProcessDataset["FeedbackDataset"])
     updateFeedbackDataset = {
@@ -118,7 +140,7 @@ def UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output, InputMemory = "
     ProcessDataset["FeedbackDataset"].append(updateFeedbackDataset)
     ProcessDataset["FeedbackDatasetCount"] = DataSetId
     
-# 1. 1-6 ProjectFeedbackDataSets 부분 업데이트
+## 1. 1-6 ProjectFeedbackDataSets 부분 업데이트
 def AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, Output, INPUTMEMORY = "None"):
     with get_db() as db:
     
@@ -131,7 +153,7 @@ def AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, Output, I
         db.add(trainingDataset)
         db.commit()
         
-# 1. 1-7 UpdateProjectEmbeddingDataSets 업데이트 형식
+## 1. 1-7 UpdateProjectEmbeddingDataSets 업데이트 형식
 def UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbedding, InputMemoryEmbedding = "None"):
     DataSetId = len(ProcessDataset["EmbeddingDataset"])
     updateFeedbackDataset = {
@@ -144,7 +166,7 @@ def UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbeddi
     ProcessDataset["EmbeddingDataset"].append(updateFeedbackDataset)
     ProcessDataset["EmbeddingDatasetCount"] = DataSetId
     
-# 1. 1-8 UpdateProjectEmbeddingDataSets 부분 업데이트
+## 1. 1-8 UpdateProjectEmbeddingDataSets 부분 업데이트
 def AddProjectEmbeddingDataSetsToDB(projectName, email, Process, InputEmbedding, OutputEmbedding, inputMemoryEmbedding = "None"):
     with get_db() as db:
     
@@ -269,9 +291,8 @@ def SaveDataSet(projectName, email, ProcessNumber, Process, RawDataSetPath):
 
 #########################################
 ### 2. 피드백 데이터셋 Accuracy 측정 및 저장 ###
-
 ## 2. 2-1 피드백 데이터셋 불러오기
-def LoadExistedDataSets(projectName, email, Process, RawDataSetPath):
+def LoadExistedDataSets(projectName, email, Process, FeedbackDataSetPath):
     # 문자열 정규화
     EmailNormalized = unicodedata.normalize('NFC', email)
     ProjectNameNormalized = unicodedata.normalize('NFC', projectName)
@@ -284,7 +305,7 @@ def LoadExistedDataSets(projectName, email, Process, RawDataSetPath):
     MaxDate = 0
     RecentFile = None
 
-    for FileName in os.listdir(RawDataSetPath):
+    for FileName in os.listdir(FeedbackDataSetPath):
         FileNameNormalized = unicodedata.normalize('NFC', FileName)
         match = pattern.match(FileNameNormalized)       
         if match:
@@ -294,11 +315,11 @@ def LoadExistedDataSets(projectName, email, Process, RawDataSetPath):
                 RecentFile = FileName
 
     if RecentFile:
-        with open(os.path.join(RawDataSetPath, RecentFile), 'r', encoding='utf-8') as file:
+        with open(os.path.join(FeedbackDataSetPath, RecentFile), 'r', encoding='utf-8') as file:
             ExistedDataSet = json.load(file)
             return RecentFile, ExistedDataSet
 
-    return None
+    return None, None
 
 ## 2. 2-2 피드백 데이터셋 Accuracy 측정
 def SimpleAccuracy(Output, Feedback):
@@ -345,12 +366,12 @@ def OutputAccuracy(ExistedDataSet):
     return ExistedDataSet
 
 ## 2. 2-3 피드백 데이터셋 저장하기
-def SaveFeedbackDataSet(projectName, Process, RecentFile, AccuracyDataSet, RawDataSetPath, CompleteDataSet):
+def SaveFeedbackDataSet(projectName, Process, RecentFile, AccuracyDataSet, FeedbackDataSetPath, CompleteDataSetPath):
     # 기존 파일 경로
-    OldFilePath = os.path.join(RawDataSetPath, RecentFile)
+    OldFilePath = os.path.join(FeedbackDataSetPath, RecentFile)
     # 새로운 경로 및 파일명 생성
-    NewFileName = RecentFile.replace('.json', '_Feedback.json')
-    NewFilePath = os.path.join(CompleteDataSet, NewFileName)
+    NewFileName = RecentFile.replace('.json', '_Complete.json')
+    NewFilePath = os.path.join(CompleteDataSetPath, NewFileName)
     
     # 기존 파일 삭제
     if os.path.exists(OldFilePath):
@@ -363,36 +384,39 @@ def SaveFeedbackDataSet(projectName, Process, RecentFile, AccuracyDataSet, RawDa
     print(f"Project: {projectName} | Process: {Process} | AddProjectFeedbackDataSets 완료, SaveFeedbackDataSet: {NewFilePath}")
 
 ## 2. 2-4 피드백 데이터셋 업데이트
-def AddProjectFeedbackDataSets(projectName, email, Process, RawDataSetPath, CompleteDataSet):
-    RecentFile, ExistedDataSet = LoadExistedDataSets(projectName, email, Process, RawDataSetPath)
+def AddProjectFeedbackDataSets(projectName, email, Process, FeedbackDataSetPath, CompleteDataSetPath):
+    RecentFile, ExistedDataSet = LoadExistedDataSets(projectName, email, Process, FeedbackDataSetPath)
     if ExistedDataSet:
         if ExistedDataSet["FeedbackCompletion"] == "Yes":
             AccuracyDataSet = OutputAccuracy(ExistedDataSet)
             with get_db() as db:
                 trainingDataset = GetTrainingDataset(projectName, email)
                 ProcessDataset = getattr(trainingDataset, Process)
+                ProcessDataset["Accuracy"] = AccuracyDataSet["Accuracy"]
                 ProcessDataset["FeedbackDataset"] = AccuracyDataSet["FeedbackDataset"]
+                ProcessDataset["FeedbackCompletion"] = "Yes"
                 
                 flag_modified(trainingDataset, Process)
 
                 db.add(trainingDataset)
                 db.commit()
                 
-            SaveFeedbackDataSet(projectName, Process, RecentFile, AccuracyDataSet, RawDataSetPath, CompleteDataSet)
+            SaveFeedbackDataSet(projectName, Process, RecentFile, AccuracyDataSet, FeedbackDataSetPath, CompleteDataSetPath)
         else:
-            print(f"Project: {projectName} | Process: {Process} | LoadExistedDataSets에서 오류 발생: ExistedDataSets이 존재 하지 않습니다.")
+            print(f"Project: {projectName} | Process: {Process} | FeedbackCompletion에서 오류 발생: Feedback이 완료 되지 않았습니다.")
     else:
-        print(f"Project: {projectName} | Process: {Process} | FeedbackCompletion에서 오류 발생: Feedback이 완료 되지 않았습니다.")
+        print(f"Project: {projectName} | Process: {Process} | LoadExistedDataSets에서 오류 발생: ExistedDataSets이 존재 하지 않습니다.")
         
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    process = 'IndexDefinePreprocess'
-    DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
+    process = 'BodyCharacterDefine'
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
-    CompleteDataSet = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5122_CompleteDataSet/"
+    FeedbackDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5122_FeedbackDataSet/"
+    CompleteDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5123_CompleteDataSet/"
+    TrainingDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5124_TrainingDataSet/"
     #########################################################################
     
     # AddDataSetMetaDataToDB(projectName, email)
@@ -408,4 +432,4 @@ if __name__ == "__main__":
     # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_04_BodyCharacterDefineDataSet_Accuracy.json", 'w', encoding='utf-8') as file:
     #     json.dump(processDataset, file, ensure_ascii=False, indent = 4)
         
-    AddProjectFeedbackDataSets(projectName, email, "BodyCharacterDefine", RawDataSetPath, CompleteDataSet)
+    AddProjectFeedbackDataSets(projectName, email, "BodyCharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)

@@ -320,4 +320,15 @@ if __name__ == "__main__":
     mode = "Example"
     #########################################################################
     
-    BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    # BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    
+    project = GetProject(projectName, email)
+    BodyCharacterDefine = project.BodyCharacterDefine
+    CharacterChunks = BodyCharacterDefine[1]["CharacterChunks"][1:]
+    
+    Characters = []
+    for i in range(len(CharacterChunks)):
+        Characters.append(f'{CharacterChunks[i]["Character"]}: {CharacterChunks[i]["Chunk"]}')
+    
+    for i in range(len(Characters)):
+        print(Characters[i])

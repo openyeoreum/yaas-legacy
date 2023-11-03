@@ -193,6 +193,7 @@ class Project(Base):
     
     # BodyDefine
     BodyCharacterDefine = Column(JSON)
+    BodyCharacterAnnotation = Column(JSON)
     BodyContextDefine = Column(JSON)
     
     # SplitedBodyDefine
@@ -315,6 +316,7 @@ class ProjectHistory(Base):
     
     # BodyDefine
     BodyCharacterDefineStatus = Column(String(64))
+    BodyCharacterAnnotation = Column(JSON)
     BodyContextDefineStatus = Column(String(64))
     
     # SplitedBodyDefine
@@ -388,6 +390,7 @@ class Prompt(Base):
 
     # BodyDefinePrompt
     BodyCharacterDefine = Column(JSON)
+    BodyCharacterAnnotation = Column(JSON)
     BodyContextDefine = Column(JSON)
     
     # SplitedBodyDefinePrompt
@@ -468,6 +471,7 @@ class TrainingDataset(Base):
 
     # BodyDefineDataset
     BodyCharacterDefine = Column(JSON)
+    BodyCharacterAnnotation = Column(JSON)
     BodyContextDefine = Column(JSON)
     
     # SplitedBodyDefineDataset

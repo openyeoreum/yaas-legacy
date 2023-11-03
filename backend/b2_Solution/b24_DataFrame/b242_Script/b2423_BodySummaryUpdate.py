@@ -237,9 +237,9 @@ def BodySummaryResponseJson(projectName, email, messagesReview = "off", mode = "
     responseJson = []
     for response in outputMemoryDics:
         BodyId = response["Id"]
-        if "Index" in response:
+        if "Pass" in response:
             Summary = "No"
-            BodySummaryScript = response["Index"]
+            BodySummaryScript = response["Pass"]
         elif "Summary" in response:
             Summary = "Yes"
             BodySummaryScript = response["Summary"]

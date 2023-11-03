@@ -90,7 +90,8 @@ def AddProjectToDB(projectName, email):
             characterContextFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-07_CharacterContextFrame.json")
             soundContextFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-08_SoundContextFrame.json")
             bodyCharacterDefine = LoadJsonFrame(ProjectDataPath + "/b532_BodyDefine/b532-01_BodyCharacterDefine.json")
-            bodyContextDefine = LoadJsonFrame(ProjectDataPath + "/b532_BodyDefine/b532-02_BodyContextDefine.json")
+            bodyCharacterAnnotation = LoadJsonFrame(ProjectDataPath + "/b532_BodyDefine/b532-02_BodyCharacterAnnotation.json")
+            bodyContextDefine = LoadJsonFrame(ProjectDataPath + "/b532_BodyDefine/b532-03_BodyContextDefine.json")
             splitedBodyCharacterDefine = LoadJsonFrame(ProjectDataPath + "/b533_SplitedBodyDefine/b533-01_SplitedBodyCharacterDefine.json")
             splitedBodyContextDefine = LoadJsonFrame(ProjectDataPath + "/b533_SplitedBodyDefine/b533-02_SplitedBodyContextDefine.json")
             phargraphTransitionDefine = LoadJsonFrame(ProjectDataPath + "/b533_SplitedBodyDefine/b533-03_PhargraphTransitionDefine.json")
@@ -167,6 +168,7 @@ def AddProjectToDB(projectName, email):
                 CharacterContextFrame = characterContextFrame,
                 SoundContextFrame = soundContextFrame,
                 BodyCharacterDefine = bodyCharacterDefine,
+                BodyCharacterAnnotation = bodyCharacterAnnotation,
                 BodyContextDefine = bodyContextDefine,
                 SplitedBodyCharacterDefine = splitedBodyCharacterDefine,
                 SplitedBodyContextDefine = splitedBodyContextDefine,

@@ -33,9 +33,9 @@
         "Bodys": [
             {
                 "BodyId": 0,
-                "BodyTag": "None",
-                "Task": "No",
-                "Body": "None"
+                "Task": [],
+                "Body": "None",
+                "Character": "None"
             }
         ]
     }

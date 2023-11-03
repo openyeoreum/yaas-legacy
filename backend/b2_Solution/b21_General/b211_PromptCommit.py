@@ -27,7 +27,8 @@ def AddPromptToDB():
         captionDefine = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-04_CaptionDefine.json")
         bodySummary = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-05_BodySummary.json")
         bodyCharacterDefine = LoadJsonFrame(PromptDataPath + "/b542_BodyDefinePrompt/b542-01_BodyCharacterDefine.json")
-        # bodyContextDefine = LoadJsonFrame(PromptDataPath + "/b542_BodyDefinePrompt/b542-02_BodyContextDefine.json")
+        bodyCharacterAnnotation = LoadJsonFrame(PromptDataPath + "/b542_BodyDefinePrompt/b542-02_BodyCharacterAnnotation.json")
+        # bodyContextDefine = LoadJsonFrame(PromptDataPath + "/b542_BodyDefinePrompt/b542-03_BodyContextDefine.json")
         # splitedBodyCharacterDefine = LoadJsonFrame(PromptDataPath + "/b543_SplitedBodyDefinePrompt/b543-01_SplitedBodyCharacterDefine.json")
         # splitedBodyContextDefine = LoadJsonFrame(PromptDataPath + "/b543_SplitedBodyDefinePrompt/b543-02_SplitedBodyContextDefine.json")
         # phargraphTransitionDefine = LoadJsonFrame(PromptDataPath + "/b543_SplitedBodyDefinePrompt/b543-03_PhargraphTransitionDefine.json")
@@ -76,6 +77,7 @@ def AddPromptToDB():
             CaptionDefine = captionDefine,
             BodySummary = bodySummary,
             BodyCharacterDefine = bodyCharacterDefine,
+            BodyCharacterAnnotation = bodyCharacterAnnotation,
             # BodyContextDefine = bodyContextDefine,
             # SplitedBodyCharacterDefine = splitedBodyCharacterDefine,
             # SplitedBodyContextDefine = splitedBodyContextDefine,

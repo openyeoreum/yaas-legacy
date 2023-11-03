@@ -39,6 +39,7 @@ def AddTrainingDatasetToDB(projectName, email):
             CaptionDefine = trainingDataset,
             BodySummary = trainingDataset,
             BodyCharacterDefine = trainingDataset,
+            BodyCharacterAnnotation = trainingDataset,
             BodyContextDefine = trainingDataset,
             SplitedBodyCharacterDefine = trainingDataset,
             SplitedBodyContextDefine = trainingDataset,

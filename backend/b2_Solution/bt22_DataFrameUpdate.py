@@ -77,7 +77,7 @@ if __name__ == "__main__":
     messagesReview = "on"
     
     ### existedDataFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
-    existedDataFrameMode = "off" # <- 개발 후 off #
+    existedDataFrameMode = "on" # <- 개발 후 off #
     existedDataFrame = None
     existedDataSet = None
     #########################################################################

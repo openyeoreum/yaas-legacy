@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyCharacterDefineToDB, AddBodyCharacterDefineChunksToDB, AddBodyCharacterDefineCharacterTagsToDB, BodyCharacterDefineCountLoad, BodyCharacterDefineCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyCharacterAnnotationToDB, AddBodyCharacterAnnotationChunksToDB, AddBodyCharacterAnnotationCheckedCharacterTagsToDB, BodyCharacterAnnotationCountLoad, BodyCharacterAnnotationCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 ## BodyFrameBodys 로드
@@ -17,9 +17,33 @@ def LoadBodyFrameBodys(projectName, email):
     
     return BodyFrameBodys
 
+## BodyCharacterDefine 로드
+def LoadBodyCharacterDefine(projectName, email):
+    project = GetProject(projectName, email)
+    CharacterChunks = project.BodyCharacterDefine[1]['CharacterChunks'][1:]
+    CharacterTags = project.BodyCharacterDefine[2]['CharacterTags'][1:]
+    
+    return CharacterChunks, CharacterTags
+
+## TaskBody를 [말n] 이름 : 내용 형식으로 변환
+def ReplaceName(TaskBody, CharacterChunks):
+    pattern = re.compile(r'\[말(\d+)\]')
+    matches = pattern.finditer(TaskBody)
+    for match in reversed(list(matches)):
+        n = int(match.group(1))
+        for chunk in CharacterChunks:
+            if chunk['CharacterChunkId'] == n:
+                CharName = chunk['Character']
+                replacement = f"[말{n}] {CharName} : "
+                TaskBody = TaskBody[:match.start()] + replacement + TaskBody[match.end():]
+                break
+
+    return TaskBody
+
 ## BodyFrameBodys의 InputList 치환
 def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
     BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
+    CharacterChunks, CharacterTags = LoadBodyCharacterDefine(projectName, email)
     
     InputList = []
     for BodyDic in BodyFrameBodys:
@@ -28,14 +52,14 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
             Tag = "Continue"
         else:
             Tag = "Pass"
-        TaskBody = BodyDic[Task]
+        TaskBody = ReplaceName(BodyDic[Task], CharacterChunks)
         InputDic = {'Id': Id, Tag: TaskBody}
         InputList.append(InputDic)
     
     return InputList
 
-## BodyCharacterDefine의 Filter(Error 예외처리)
-def BodyCharacterDefineFilter(TalkTag, responseData, memoryCounter):
+## BodyCharacterAnnotation의 Filter(Error 예외처리)
+def CharNameBodyCharacterAnnotationFilter(TalkTag, responseData, memoryCounter):
     # responseData의 전처리
     responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
     responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
@@ -52,11 +76,11 @@ def BodyCharacterDefineFilter(TalkTag, responseData, memoryCounter):
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"
-    # # Error3: 결과가 '말하는인물'이 '없음'일 때의 예외 처리 (없음일 경우에는 Narrator 낭독)
-    # for dic in OutputDic:
-    #     for key, value in dic.items():
-    #         if value['말하는인물'] == '없음' or value['말하는인물'] == '' or value['말하는인물'] == 'none':
-    #             return "'말하는인물': '없음' 오류 발생: NonValueError"
+    # Error3: 결과가 '말하는인물'이 '없음'일 때의 예외 처리 (없음일 경우에는 Narrator 낭독)
+    for dic in OutputDic:
+        for key, value in dic.items():
+            if value['말하는인물'] == '없음' or value['말하는인물'] == '' or value['말하는인물'] == 'none':
+                return "'말하는인물': '없음' 오류 발생: NonValueError"
     # Error4: 자료의 구조가 다를 때의 예외 처리
     for dic in OutputDic:
         try:
@@ -64,7 +88,7 @@ def BodyCharacterDefineFilter(TalkTag, responseData, memoryCounter):
             if not key in TalkTag:
                 return "JSON에서 오류 발생: JSONKeyError"
             else:
-                if not ('말의종류' in dic[key] and '말하는인물' in dic[key] and '인물의역할' in dic[key] and '듣는인물' in dic[key]):
+                if not ('말하는인물' in dic[key] and '정답' in dic[key] and '수정된인물' in dic[key] and '증거문장' in dic[key]):
                     return "JSON에서 오류 발생: JSONKeyError"
         # Error5: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -75,7 +99,7 @@ def BodyCharacterDefineFilter(TalkTag, responseData, memoryCounter):
     return OutputDic
 
 ## inputMemory 형성
-def BodyCharacterDefineInputMemory(inputMemoryDics, MemoryLength):
+def BodyCharacterAnnotationInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -91,7 +115,7 @@ def BodyCharacterDefineInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def BodyCharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
+def BodyCharacterAnnotationOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -108,8 +132,8 @@ def BodyCharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
     
     return outputMemory
 
-## BodyCharacterDefine 프롬프트 요청 및 결과물 Json화
-def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## BodyCharacterAnnotation 프롬프트 요청 및 결과물 Json화
+def BodyCharacterAnnotationProcess(projectName, email, Process = "BodyCharacterAnnotation", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -122,7 +146,7 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
     inputMemoryDics.append(InputDic)
     outputMemoryDics = []
         
-    # BodyCharacterDefineProcess
+    # BodyCharacterAnnotationProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -180,7 +204,7 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
 
-            Filter = BodyCharacterDefineFilter(TalkTag, responseData, memoryCounter)
+            Filter = CharNameBodyCharacterAnnotationFilter(TalkTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -215,18 +239,18 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = BodyCharacterDefineInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = BodyCharacterAnnotationInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = BodyCharacterDefineOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = BodyCharacterAnnotationOutputMemory(outputMemoryDics, MemoryLength)
 
     return outputMemoryDics
 
 ## 데이터 치환
-def BodyCharacterDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def BodyCharacterAnnotationResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
@@ -239,7 +263,7 @@ def BodyCharacterDefineResponseJson(projectName, email, messagesReview = 'off', 
                 CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
     
     # 데이터 치환
-    outputMemoryDics = BodyCharacterDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = BodyCharacterAnnotationProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     responseCount = 0
@@ -250,29 +274,28 @@ def BodyCharacterDefineResponseJson(projectName, email, messagesReview = 'off', 
                 ChunkId = CharacterTagChunkId[responseCount]
                 Chunk = CharacterTagChunk[responseCount]
                 for key, value in dic.items():
-                    Character = value['말하는인물']
-                    Type = value['말의종류']
-                    Role = value['인물의역할']
-                    Listener = value['듣는인물']
+                    Annotation = value['증거문장']
+                    Character = value['수정된인물']
+                    Answer = value['정답']
                 responseCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "Type": Type, "Role": Role, "Listener": Listener})
+                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Annotation": Annotation, "Character": Character, "Answer": Answer})
     
     return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 BodyCharacterDefine에 업데이트
-def BodyCharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate 시작 >")
+## 프롬프트 요청 및 결과물 Json을 BodyCharacterAnnotation에 업데이트
+def BodyCharacterAnnotationUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 05_BodyCharacterAnnotationUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
-    ContinueCount, CharacterCount, Completion = BodyCharacterDefineCountLoad(projectName, email)
+    ContinueCount, CharacterCount, Completion = BodyCharacterAnnotationCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedBodyCharacterDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "BodyCharacterDefine", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate는 ExistedBodyCharacterDefine으로 대처됨 ]\n")
+            AddExistedBodyCharacterAnnotationToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "BodyCharacterAnnotation", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 05_BodyCharacterAnnotationUpdate는 ExistedBodyCharacterAnnotation으로 대처됨 ]\n")
         else:
-            responseJson = BodyCharacterDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = BodyCharacterAnnotationResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -283,31 +306,30 @@ def BodyCharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode =
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'BodyCharacterDefineUpdate')
+                            desc = 'BodyCharacterAnnotationUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'BodyCharacterDefineUpdate: {Update}')
+                UpdateTQDM.set_description(f'BodyCharacterAnnotationUpdate: {Update}')
                 time.sleep(0.0001)
                 CharacterChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
                 Chunk = ResponseJson[i]["Chunk"]
+                Annotation = ResponseJson[i]["Annotation"]
                 Character = ResponseJson[i]["Character"]
-                Type = ResponseJson[i]["Type"]
-                Role = ResponseJson[i]["Role"]
-                Listener = ResponseJson[i]["Listener"]
+                Answer = ResponseJson[i]["Answer"]
                 
-                AddBodyCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Role, Listener)
+                AddBodyCharacterAnnotationChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Annotation, Character, Answer)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            BodyCharacterDefineCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate 완료 ]\n")
+            BodyCharacterAnnotationCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 05_BodyCharacterAnnotationUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 04_BodyCharacterDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 05_BodyCharacterAnnotationUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 
@@ -320,4 +342,4 @@ if __name__ == "__main__":
     mode = "Example"
     #########################################################################
     
-    # BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    BodyCharacterAnnotationUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)

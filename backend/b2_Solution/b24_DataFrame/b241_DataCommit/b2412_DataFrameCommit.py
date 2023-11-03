@@ -10,6 +10,7 @@ from backend.b2_Solution.b23_Project.b232_ProjectCommit import GetProjectDataPat
 
 ###################################################
 ##### 전체 DataFrame의 MetaData(식별)부분을 업데이트 #####
+###################################################
 def AddFrameMetaDataToDB(projectName, email):
     with get_db() as db:
         project = GetProject(projectName, email)
@@ -33,9 +34,10 @@ def AddFrameMetaDataToDB(projectName, email):
         db.add(project)
         db.commit()
 
-###############################
-##### IndexDefine Process #####
-## 1. 1-1 IndexFrame이 이미 ExistedFrame으로 존재할때 업데이트
+##################################
+##### 01_IndexDefine Process #####
+##################################
+## 1. 1-0 IndexFrame이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedIndexFrameToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -115,9 +117,10 @@ def IndexFrameCompletionUpdate(projectName, email):
         db.add(project)
         db.commit()
 
-###########################################
-##### BodySplit, IndexTagging Process #####
-## 2. 1-1 BodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
+##############################################
+##### 02_BodySplit, IndexTagging Process #####
+##############################################
+## 2. 1-0 BodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -262,9 +265,10 @@ def BodyFrameCompletionUpdate(projectName, email):
         db.add(project)
         db.commit()
 
-###############################
-##### BodySummary Process #####
-## 3. 1-1 SummaryBodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
+##################################
+##### 03_BodySummary Process #####
+##################################
+## 3. 1-0 SummaryBodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedSummaryBodyFrameToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -344,9 +348,10 @@ def SummaryBodyFrameCompletionUpdate(projectName, email):
         db.add(project)
         db.commit()
 
-#######################################
-##### BodyCharacterDefine Process #####
-## 4. 1-1 BodyCharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
+##########################################
+##### 04_BodyCharacterDefine Process #####
+##########################################
+## 4. 1-0 BodyCharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedBodyCharacterDefineToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -359,7 +364,7 @@ def AddExistedBodyCharacterDefineToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 4. 1-1 BodyCharacterDefine의 Body(본문) BodyCharacters부분 업데이트 형식
+## 4. 1-1 BodyCharacterDefine의 Body(본문) updateCharacterChunks 업데이트 형식
 def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, Type, Role, Listener):    
     updateCharacterChunks = {
         "CharacterChunkId": CharacterChunkId,
@@ -374,7 +379,7 @@ def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, 
     project.BodyCharacterDefine[1]["CharacterChunks"].append(updateCharacterChunks)
     project.BodyCharacterDefine[0]["CharacterChunkCount"] = CharacterChunkId
     
-## 4. 1-2 BodyCharacterDefine의 Body(본문) BodyCharacters부분 업데이트
+## 4. 1-2 BodyCharacterDefine의 Body(본문) updateCharacterChunks 업데이트
 def AddBodyCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Role, Listener):
     with get_db() as db:
         
@@ -459,7 +464,123 @@ def BodyCharacterDefineCompletionUpdate(projectName, email):
 
         db.add(project)
         db.commit()
+        
+##############################################
+##### 05_BodyCharacterAnnotation Process #####
+##############################################
+## 5. 1-0 BodyCharacterAnnotation이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedBodyCharacterAnnotationToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.BodyCharacterAnnotation[1] = ExistedDataFrame[1]
+        project.BodyCharacterAnnotation[2] = ExistedDataFrame[2]
+        
+        flag_modified(project, "BodyCharacterAnnotation")
+        
+        db.add(project)
+        db.commit()
+        
+## 5. 1-1 BodyCharacterAnnotation의 Body(본문) CharacterAnnotations 업데이트 형식
+def UpdateAnnotationCharacters(project, CharacterChunkId, ChunkId, Chunk, Annotation, Character, Answer):    
+    CharacterAnnotations = {
+        "CharacterChunkId": CharacterChunkId,
+        "ChunkId": ChunkId,
+        "Chunk": Chunk,
+        "Annotation": Annotation,
+        "Character": Character,
+        "Answer": Answer
+    }
+    
+    project.BodyCharacterAnnotation[1]["CharacterAnnotations"].append(CharacterAnnotations)
+    project.BodyCharacterAnnotation[0]["CharacterChunkCount"] = CharacterChunkId
+    
+## 5. 1-2 BodyCharacterAnnotation의 Body(본문) CharacterAnnotations 업데이트
+def AddBodyCharacterAnnotationChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Annotation, Character, Answer):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateAnnotationCharacters(project, CharacterChunkId, ChunkId, Chunk, Annotation, Character, Answer)
+        
+        flag_modified(project, "BodyCharacterAnnotation")
+        
+        db.add(project)
+        db.commit()
+        
+## 5. 2-1 BodyCharacterAnnotation의 Character(부문) CharacterTags부분 업데이트 형식
+def updateCheckedCharacterTags(project, CharacterTag, CharacterList, Character):
+    # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
+    CharacterId = len(project.BodyCharacterAnnotation[2]["CharacterTags"]) -1
+    
+    updateCheckedCharacterTags = {
+        "CharacterId": CharacterId,
+        "CharacterTag": CharacterTag,
+        "CharacterList": CharacterList,
+        "Character": Character
+    }
+    
+    project.BodyCharacterAnnotation[2]["CharacterTags"].append(updateCheckedCharacterTags)
+    project.BodyCharacterAnnotation[0]["CharacterCount"] = CharacterId
+    
+## 5. 2-2 BodyCharacterAnnotation의 Character(부문) CharacterTags부분 업데이트
+def AddBodyCharacterAnnotationCheckedCharacterTagsToDB(projectName, email, CharacterTag, CharacterList, Character):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        updateCheckedCharacterTags(project, CharacterTag, CharacterList, Character)
+        
+        flag_modified(project, "BodyCharacterAnnotation")
+        
+        db.add(project)
+        db.commit()
+        
+## 5. BodyCharacterAnnotation의Count의 가져오기
+def BodyCharacterAnnotationCountLoad(projectName, email):
 
+    project = GetProject(projectName, email)
+    CharacterChunkCount = project.BodyCharacterAnnotation[0]["CharacterChunkCount"]
+    CharacterCount = project.BodyCharacterAnnotation[0]["CharacterCount"]
+    Completion = project.BodyCharacterAnnotation[0]["Completion"]
+    
+    return CharacterChunkCount, CharacterCount, Completion
+
+## 5. BodyCharacterAnnotation의 초기화
+def InitBodyCharacterAnnotation(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.BodyCharacterAnnotation[0]["CharacterChunkCount"] = 0
+        project.BodyCharacterAnnotation[0]["CharacterCount"] = 0
+        project.BodyCharacterAnnotation[0]["Completion"] = "No"
+        project.BodyCharacterAnnotation[1] = LoadJsonFrame(ProjectDataPath + "/b532_BodyDefine/b532-02_BodyCharacterAnnotation.json")[1]
+        project.BodyCharacterAnnotation[2] = LoadJsonFrame(ProjectDataPath + "/b532_BodyDefine/b532-02_BodyCharacterAnnotation.json")[2]
+
+        flag_modified(project, "BodyCharacterAnnotation")
+        
+        db.add(project)
+        db.commit()
+        
+## 5. 업데이트된 BodyCharacterAnnotation 출력
+def UpdatedBodyCharacterAnnotation(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        
+    return project.BodyCharacterAnnotation
+        
+## 5. BodyCharacterAnnotationCompletion 업데이트
+def BodyCharacterAnnotationCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.BodyCharacterAnnotation[0]["Completion"] = "Yes"
+
+        flag_modified(project, "BodyCharacterAnnotation")
+
+        db.add(project)
+        db.commit()
+        
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
@@ -469,3 +590,6 @@ if __name__ == "__main__":
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     #########################################################################
+    
+    project = GetProject(projectName, email)
+    print(project.BodyCharacterAnnotation)

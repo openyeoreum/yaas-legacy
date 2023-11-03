@@ -6,12 +6,13 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitSummaryBodyFrame, UpdatedSummaryBodyFrame, InitBodyCharacterDefine, UpdatedBodyCharacterDefine
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitSummaryBodyFrame, UpdatedSummaryBodyFrame, InitBodyCharacterDefine, UpdatedBodyCharacterDefine, InitBodyCharacterAnnotation, UpdatedBodyCharacterAnnotation
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_BodySummaryUpdate import SummaryBodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b243_BodyDefine.b2431_BodyCharacterDefineUpdate import BodyCharacterDefineUpdate
+from backend.b2_Solution.b24_DataFrame.b243_BodyDefine.b2432_BodyCharacterAnnotationUpdate import BodyCharacterAnnotationUpdate
 
 ## 오늘 날짜
 def Date(Option = "Day"):
@@ -161,5 +162,24 @@ if __name__ == "__main__":
         updatedBodyCharacterDefine = UpdatedBodyCharacterDefine(projectName, email)
         SaveDataFrame(projectName, email, "04_BodyCharacterDefine", updatedBodyCharacterDefine, DataFramePath)       
         SaveDataSet(projectName, email, "04", "BodyCharacterDefine", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet = None
+
+
+    ##################################
+    ### 05_BodyCharacterAnnotation ###
+    ##################################
+    InitBodyCharacterAnnotation(projectName, email)
+    InitRawDataSet(projectName, email, "BodyCharacterAnnotation")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyCharacterAnnotation", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodyCharacterAnnotation", RawDataSetPath)
+    mode = "ExampleFineTuning"
+    BodyCharacterAnnotationUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    
+    if existedDataFrame == None:
+        updatedBodyCharacterAnnotation = UpdatedBodyCharacterAnnotation(projectName, email)
+        SaveDataFrame(projectName, email, "05_BodyCharacterAnnotation", updatedBodyCharacterAnnotation, DataFramePath)       
+        SaveDataSet(projectName, email, "05", "BodyCharacterAnnotation", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None

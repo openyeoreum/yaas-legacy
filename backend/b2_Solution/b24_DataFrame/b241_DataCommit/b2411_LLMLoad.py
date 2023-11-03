@@ -16,7 +16,6 @@ from backend.b2_Solution.b23_Project.b231_GetDBtable import GetPromptFrame, GetT
 ######################
 ##### LLM 공통사항 #####
 ######################
-
 ## 오늘 날짜
 def Date(Option = "Day"):
     if Option == "Day":
@@ -39,7 +38,6 @@ def LoadLLMapiKey(email):
 ########################
 ##### LLM Response #####
 ########################
-
 ## 프롬프트 요청할 LLMmessages 메세지 구조 생성
 def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
     promptFrame = GetPromptFrame(Process)
@@ -247,7 +245,6 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
 ##########################
 ##### LLM FineTuning #####
 ##########################
-
 ## 파인튜닝 데이터셋 생성
 def LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = "Example"):  
     trainingDataset = GetTrainingDataset(projectName, email)

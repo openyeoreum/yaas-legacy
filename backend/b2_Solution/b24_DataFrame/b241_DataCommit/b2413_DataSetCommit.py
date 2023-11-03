@@ -14,6 +14,7 @@ from backend.b2_Solution.b23_Project.b231_GetDBtable import GetTrainingDataset
 
 #########################################################
 ##### 전체 TrainingDataSet의 MetaData(식별)부분을 업데이트 #####
+#########################################################
 def AddDataSetMetaDataToDB(projectName, email):
     with get_db() as db:
         trainingDataset = GetTrainingDataset(projectName, email)
@@ -39,6 +40,7 @@ def AddDataSetMetaDataToDB(projectName, email):
 
 ###########################
 ##### General Process #####
+###########################
 ## 1. 1-1 IndexFrame이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedDataSetToDB(projectName, email, Process, ExistedDataSet):
     with get_db() as db:
@@ -291,6 +293,7 @@ def SaveDataSet(projectName, email, ProcessNumber, Process, RawDataSetPath):
 
 #########################################
 ### 2. 피드백 데이터셋 Accuracy 측정 및 저장 ###
+#########################################
 ## 2. 2-1 피드백 데이터셋 불러오기
 def LoadExistedDataSets(projectName, email, Process, FeedbackDataSetPath):
     # 문자열 정규화

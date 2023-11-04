@@ -35,8 +35,8 @@ def GetPromptFrame(Process):
             raise ValueError(f"No such column: {Process}")
         
         # order_by를 사용해 PromptId 기준으로 내림차순 정렬 후 첫 번째 행을 가져옵니다.
-        prompt = db.query(column).order_by(Prompt.PromptId.desc()).first()
-    return prompt
+        promptFrame = db.query(column).first()
+    return promptFrame
 
 def GetTrainingDataset(projectName, email):
     with get_db() as db:  

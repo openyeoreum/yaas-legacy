@@ -4,7 +4,7 @@ import sys
 sys.path.append("/yaas")
 
 from backend.b1_Api.b13_Database import get_db
-from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject
+from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 
 def LoadTextFile(filepath):
     with open(filepath, 'r', encoding='utf-8') as file:

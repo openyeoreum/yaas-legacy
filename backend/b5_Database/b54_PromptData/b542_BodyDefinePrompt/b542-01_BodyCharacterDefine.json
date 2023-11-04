@@ -13,7 +13,7 @@
         "LongTokensModel": []
     },
     "Temperature": 0.4,
-    "OutputTokensRatio": 0.5,
+    "OutputTokensRatio": 0.4,
     "Example": [
         {
             "Role": "system",

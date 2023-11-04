@@ -5,7 +5,7 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
-from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject
+from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyFrameToDB, AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, InitBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
 
 # BodyText 로드

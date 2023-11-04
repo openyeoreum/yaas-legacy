@@ -72,7 +72,7 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "데미안"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
@@ -128,23 +128,23 @@ if __name__ == "__main__":
     existedDataFrame = None
 
 
-    #########################################
-    ### 03_SummaryBodyFrame-[BodySummary] ###
-    #########################################
-    InitSummaryBodyFrame(projectName, email)
-    InitRawDataSet(projectName, email, "BodySummary")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "SummaryBodyFrame", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodySummary", RawDataSetPath)
-    mode = "ExampleFineTuning" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning"
-    SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # #########################################
+    # ### 03_SummaryBodyFrame-[BodySummary] ###
+    # #########################################
+    # InitSummaryBodyFrame(projectName, email)
+    # InitRawDataSet(projectName, email, "BodySummary")
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "SummaryBodyFrame", DataFramePath)
+    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodySummary", RawDataSetPath)
+    # mode = "ExampleFineTuning" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning"
+    # SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    if existedDataFrame == None:
-        updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
-        SaveDataFrame(projectName, email, "03_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
-        SaveDataSet(projectName, email, "03", "BodySummary", RawDataSetPath)
-    existedDataFrame = None
-    existedDataSet = None
+    # if existedDataFrame == None:
+    #     updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
+    #     SaveDataFrame(projectName, email, "03_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
+    #     SaveDataSet(projectName, email, "03", "BodySummary", RawDataSetPath)
+    # existedDataFrame = None
+    # existedDataSet = None
 
 
     ##############################

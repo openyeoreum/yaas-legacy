@@ -5,7 +5,7 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
-from backend.b2_Solution.b23_Project.b231_GetDBtable import GetProject, GetPromptFrame
+from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyCharacterAnnotationToDB, AddBodyCharacterAnnotationChunksToDB, AddBodyCharacterAnnotationCheckedCharacterTagsToDB, BodyCharacterAnnotationCountLoad, BodyCharacterAnnotationCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
@@ -53,6 +53,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
         else:
             Tag = "Pass"
         TaskBody = ReplaceName(BodyDic[Task], CharacterChunks)
+        TaskBody = TaskBody.replace('"', '').replace("'", "")
         InputDic = {'Id': Id, Tag: TaskBody}
         InputList.append(InputDic)
     
@@ -64,6 +65,7 @@ def CharNameBodyCharacterAnnotationFilter(TalkTag, responseData, memoryCounter):
     responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
     responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
     responseData = responseData.replace("\n", "").replace("'", "\"")
+    responseData = responseData.replace("}}}", "}}").replace("{{{", "{{")
     responseData = re.sub(r'^\[', '', responseData) # 시작에 있는 대괄호[를 제거
     responseData = re.sub(r'\]$', '', responseData) # 끝에 있는 대괄호]를 제거
     responseData = f"[{responseData}]"
@@ -184,11 +186,11 @@ def BodyCharacterAnnotationProcess(projectName, email, Process = "BodyCharacterA
             talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
             TalkTag = ["말" + match for match in talkTag]
             memoryCounter = " - 이어서 작업할 추가데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
-            outputEnder = f"{{'{TalkTag[0]}': {{'말의종류': '"
+            outputEnder = f"{{'{TalkTag[0]}': {{'말하는인물': '"
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
-            
+            print(f"@@@@@@@@@@\n\nResponse: {Response}\n\n@@@@@@@@@@")
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
             if mode in ["Example", "ExampleFineTuning"]:

@@ -10,8 +10,9 @@ sys.path.append("/yaas")
 from datetime import datetime
 from backend.b1_Api.b13_Database import get_db
 from sqlalchemy.orm.attributes import flag_modified
-from backend.b1_Api.b14_Models import User
-from backend.b2_Solution.b23_Project.b231_GetDBtable import GetPromptFrame, GetTrainingDataset
+from backend.b1_Api.b14_Models import User, Prompt
+from backend.b2_Solution.b21_General.b211_GetDBtable import GetPromptFrame, GetTrainingDataset
+from backend.b2_Solution.b21_General.b212_PromptCommit import GetPromptDataPath, LoadJsonFrame
 
 ######################
 ##### LLM 공통사항 #####
@@ -321,64 +322,71 @@ def LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, Trainin
         time.sleep(random.randint(10, 15))
         continue
 
-    return FileId
+    return newFilename, FileId
 
 ## 파인튜닝
 def LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
     with get_db() as db:
-        openai.api_key = LoadLLMapiKey(email)
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-        
-        FileId = LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = Mode)
+      openai.api_key = LoadLLMapiKey(email)
+      openai.api_key = os.getenv("OPENAI_API_KEY")
+      
+      newFilename, FileId = LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = Mode)
 
-        # 토큰수별 모델 선정
+      # 토큰수별 모델 선정
+      if ModelTokens == "Short":
+        BaseModel = "gpt-3.5-turbo"
+      elif ModelTokens == "Long":
+        BaseModel = "gpt-3.5-turbo-16k"
+      
+      # FineTuning 요청
+      FineTuningJob = openai.FineTuningJob.create(
+        training_file = FileId,
+        model = BaseModel,
+        hyperparameters={"n_epochs":Epochs}
+      )
+      time.sleep(random.randint(60, 90))
+      
+      for _ in range(MaxAttempts):
+        # FineTuningJob = openai.FineTuningJob.retrieve(FineTuningJob["id"])
+        FineTuningJob = openai.FineTuningJob.retrieve("ftjob-frmhvooGEi0fK0EpaL8EyImc")
+        if FineTuningJob["status"] == "succeeded":
+          FineTunedModel = FineTuningJob["fine_tuned_model"]
+          TrainedTokens = FineTuningJob["trained_tokens"]
+          TrainingFile = FineTuningJob["training_file"]
+          print(f"Project: {projectName} | Process: {Process} | LLMFineTuning 완료")
+          break
+        else:
+          print(f"Project: {projectName} | Process: {Process} | LLMFineTuning ... 기다려주세요.")
+          time.sleep(random.randint(60, 90))
+          continue
+      
+      prompt = db.query(Prompt).first()
+      column = getattr(Prompt, Process, None)
+      promptFrame = db.query(column).first()
+      
+      # Prompt 모델 업데이트
+      fineTunedModelDic = {"Id" : Process + '-' + str(Date("Second")), "Model" :FineTunedModel}
+      print(fineTunedModelDic)
+      if Mode == "Example":
         if ModelTokens == "Short":
-          BaseModel = "gpt-3.5-turbo"
+          promptFrame[0]['ExampleFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
         elif ModelTokens == "Long":
-          BaseModel = "gpt-3.5-turbo-16k"
-        
-        # FineTuning 요청
-        FineTuningJob = openai.FineTuningJob.create(
-          training_file = FileId,
-          model = BaseModel,
-          hyperparameters={"n_epochs":Epochs}
-        )
-        time.sleep(random.randint(60, 90))
-        
-        for _ in range(MaxAttempts):
-          FineTuningJob = openai.FineTuningJob.retrieve(FineTuningJob["id"])
-          if FineTuningJob["status"] == "succeeded":
-            FineTunedModel = FineTuningJob["fine_tuned_model"]
-            TrainedTokens = FineTuningJob["trained_tokens"]
-            TrainingFile = FineTuningJob["training_file"]
-            break
-          else:
-            print(f"Project: {projectName} | Process: {Process} | LLMFineTuning 완료")
-            print(f"Project: {projectName} | Process: {Process} | LLMFineTuning ... 기다려주세요.")
-            time.sleep(random.randint(60, 90))
-            continue
+          promptFrame[0]['ExampleFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
+          
+      elif Mode == "Memory":
+        if ModelTokens == "Short":
+          promptFrame[0]['MemoryFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
+        elif ModelTokens == "Long":
+          promptFrame[0]['MemoryFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
 
-        promptFrame = GetPromptFrame(Process)
-        
-        # Prompt 모델 업데이트
-        fineTunedModelDic = {"Id" : Process + '-' + str(Date("Second")), "Model" :FineTunedModel}
-        
-        if Mode == "Example":
-          if ModelTokens == "Short":
-            promptFrame[0]['ExampleFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
-          elif ModelTokens == "Long":
-            promptFrame[0]['ExampleFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
-            
-        elif Mode == "Memory":
-          if ModelTokens == "Short":
-            promptFrame[0]['MemoryFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
-          elif ModelTokens == "Long":
-            promptFrame[0]['MemoryFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
-        
-        flag_modified(promptFrame, Process)
-        
-        db.add(promptFrame)
-        db.commit()
+      flag_modified(prompt, Process)
+      
+      db.merge(prompt)
+      db.commit()
+      
+    with open(newFilename, "a", encoding="utf-8") as file:
+      jsonLine = json.dumps(fineTunedModelDic)
+      file.write(jsonLine)
         
     # openai.File.delete(TrainingFile)
     
@@ -389,27 +397,10 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    processNumber = "04"
-    process = "BodyCharacterDefine"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     FeedbackDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5122_FeedbackDataSet/"
     CompleteDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5123_CompleteDataSet/"
     TrainingDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5124_TrainingDataSet/"
-    
-    modelTokens = "Short"
-    mode = "Example"
-    epochs = 3
     #########################################################################
     
-    # FineTunedModel, TrainedTokens = LLMFineTuning(projectName, email, processNumber, process, TrainingDataSetPath, ModelTokens = modelTokens, Mode = mode, Epochs = epochs)
-
-    # completion = openai.ChatCompletion.create(
-    #   model = FineTunedModel,
-    #   messages = [
-    #     {"role": "user", "content": "안녕 GPT!"}
-    #   ]
-    # )
-    
-    FineTuningJob = openai.FineTuningJob.retrieve("ftjob-BjducVT4v1wSouFgStggE2ke")
-    print(FineTuningJob)
-    print(Date("Second"))
+    LLMFineTuning(projectName, email, "05", "BodyCharacterAnnotation", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)

@@ -10,7 +10,7 @@ from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import TrainingDataset
 from backend.b1_Api.b13_Database import get_db
-from backend.b2_Solution.b23_Project.b231_GetDBtable import GetTrainingDataset
+from backend.b2_Solution.b21_General.b211_GetDBtable import GetTrainingDataset
 
 #########################################################
 ##### 전체 TrainingDataSet의 MetaData(식별)부분을 업데이트 #####

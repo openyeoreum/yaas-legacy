@@ -32,15 +32,6 @@ AddProjectToDB('우리는행복을진단한다', 'yeoreum00128@gmail.com')
 AddProjectToDB('살아서천국극락낙원에가는방법', 'yeoreum00128@gmail.com')
 
 ### b233_ProjectFileCommit ###
-# MoveTextFile
-MoveTextFile('데미안', 'yeoreum00128@gmail.com')
-MoveTextFile('빨간머리앤', 'yeoreum00128@gmail.com')
-MoveTextFile('웹3.0메타버스', 'yeoreum00128@gmail.com')
-MoveTextFile('나는선비로소이다', 'yeoreum00128@gmail.com')
-MoveTextFile('나는노비로소이다', 'yeoreum00128@gmail.com')
-MoveTextFile('카이스트명상수업', 'yeoreum00128@gmail.com')
-MoveTextFile('우리는행복을진단한다', 'yeoreum00128@gmail.com')
-MoveTextFile('살아서천국극락낙원에가는방법', 'yeoreum00128@gmail.com')
 # AddTextToDB
 AddTextToDB('데미안', 'yeoreum00128@gmail.com')
 AddTextToDB('빨간머리앤', 'yeoreum00128@gmail.com')

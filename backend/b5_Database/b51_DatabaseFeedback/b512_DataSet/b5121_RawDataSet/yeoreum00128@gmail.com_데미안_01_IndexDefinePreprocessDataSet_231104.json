@@ -1,0 +1,75 @@
+{
+    "TaskName": "IndexDefinePreprocess",
+    "UserId": "5ab97a6c806c2548c5574549bc2196d4fbc0ce41762b35028f64f6e693aa7f4a",
+    "ProjectsStorageID": 1,
+    "ProjectId": 1,
+    "ProjectName": "데미안",
+    "RawDataSetCount": 1,
+    "FeedbackDatasetCount": 1,
+    "EmbeddingDatasetCount": 0,
+    "Completion": "No",
+    "Accuracy": {},
+    "Context": {
+        "Language": "None",
+        "Genre": "None",
+        "Gender": "None",
+        "Age": "None",
+        "Personality": "None",
+        "Emotion": "None",
+        "Environment": "None",
+        "Situation": "None",
+        "Era": "None",
+        "Culture": "None"
+    },
+    "RawDataset": [
+        {
+            "DataSetId": 0,
+            "Mode": "None",
+            "TrainingModel": "None",
+            "Tokens": "None",
+            "InputMemory": "None",
+            "Input": "None",
+            "Output": "None"
+        },
+        {
+            "DataSetId": 1,
+            "Mode": "Example",
+            "TrainingModel": "gpt-3.5-turbo",
+            "Tokens": {
+                "prompt_tokens": 2588,
+                "completion_tokens": 65,
+                "total_tokens": 2653
+            },
+            "InputMemory": "None",
+            "Input": "데미안\n\n카인\n도둑\n베아트리체\n새는 알에서 나오려고 투쟁한다\n야곱의 싸움\n에바 부인\n종말의 발단",
+            "Output": "데미안\n\n카인\n도둑\n베아트리체\n새는 알에서 나오려고 투쟁한다\n야곱의 싸움\n에바 부인\n종말의 발단"
+        }
+    ],
+    "FeedbackDataset": [
+        {
+            "DataSetId": 0,
+            "InputMemory": "None",
+            "Input": "None",
+            "Feedback": "None",
+            "Check": "No",
+            "Accuracy": "None"
+        },
+        {
+            "DataSetId": 1,
+            "InputMemory": "None",
+            "Input": "데미안\n\n카인\n도둑\n베아트리체\n새는 알에서 나오려고 투쟁한다\n야곱의 싸움\n에바 부인\n종말의 발단",
+            "Feedback": "데미안\n\n카인\n도둑\n베아트리체\n새는 알에서 나오려고 투쟁한다\n야곱의 싸움\n에바 부인\n종말의 발단",
+            "Check": "No",
+            "Accuracy": "None"
+        }
+    ],
+    "FeedbackCompletion": "No",
+    "EmbeddingDataset": [
+        {
+            "DataSetId": 0,
+            "InputMemoryEmbedding": "None",
+            "InputEmbedding": "None",
+            "OutputEmbedding": "None"
+        }
+    ]
+}

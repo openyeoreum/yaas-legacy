@@ -40,8 +40,11 @@ def AddProjectsStorageToDB(projectsStorageName, email):
             db.add(projectsStorage)
             # 사용자 스토리지 폴더 생성
             os.makedirs(projectsStoragePath, exist_ok = True)
-                
-        db.commit()
+        
+            db.commit()
+            print(f"[ Email: {email} | ProjectsStorageName: {projectsStorageName} | AddProjectsStorageToDB 완료 ]")
+        else:
+            print(f"[ Email: {email} | ProjectsStorageName: {projectsStorageName} | AddProjectsStorageToDB가 이미 완료됨 ]")
 
 if __name__ == "__main__":
     

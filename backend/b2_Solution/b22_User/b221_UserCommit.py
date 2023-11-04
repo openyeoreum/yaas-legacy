@@ -52,7 +52,10 @@ def AddUserToDB(email, username, password):
             # 사용자 폴더 생성
             os.makedirs(userPath, exist_ok = True)
             
-        db.commit()
+            db.commit()
+            print(f"[ Email: {email} | Username: {username} | AddUserToDB 완료 ]")
+        else:
+            print(f"[ Email: {email} | Username: {username} | AddUserToDB가 이미 완료됨 ]")
 
 if __name__ == "__main__":
     

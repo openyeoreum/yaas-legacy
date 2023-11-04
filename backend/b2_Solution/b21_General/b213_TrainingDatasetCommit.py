@@ -82,7 +82,7 @@ def AddTrainingDatasetToDB(projectName, email):
             ExistingDataset.MixingMasteringJa = trainingDataset
             ExistingDataset.MixingMasteringZh = trainingDataset
             ExistingDataset.MixingMasteringEs = trainingDataset
-            
+            print(f"[ Email: {email} | ProjectName: {projectName} | AddTrainingDatasetToDB 변경사항 업데이트 ]")
         else:
             trainingDataset = TrainingDataset(
                 UserId = user.UserId,
@@ -138,7 +138,7 @@ def AddTrainingDatasetToDB(projectName, email):
                 MixingMasteringEs = trainingDataset
                 )
             db.add(trainingDataset)
-            
+            print(f"[ Email: {email} | ProjectName: {projectName} | AddTrainingDatasetToDB 완료 ]")
         db.commit()
          
 if __name__ == "__main__":

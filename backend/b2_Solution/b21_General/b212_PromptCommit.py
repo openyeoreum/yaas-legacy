@@ -120,6 +120,7 @@ def AddPromptToDB():
                 # ExistingPrompt.MixingMasteringJa = mixingMasteringJa
                 # ExistingPrompt.MixingMasteringZh = mixingMasteringZh
                 # ExistingPrompt.MixingMasteringEs = mixingMasteringEs
+                print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
         else:
             prompt = Prompt(
                 IndexDefinePreprocess = indexDefinePreprocess,
@@ -171,7 +172,7 @@ def AddPromptToDB():
                 # MixingMasteringEs = mixingMasteringEs
                 )
             db.add(prompt)
-        
+            print(f"[ General | AddPromptToDB 완료 ]")
         db.commit()
          
 if __name__ == "__main__":   

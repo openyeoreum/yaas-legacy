@@ -36,20 +36,36 @@ def AddTextToDB(projectName, email):
             print(f"No Project found for email: {email}")
             return
         
-        IndexFilePath = os.path.join(project.ScriptPath, projectName + "_Index.txt")
-        BodyFilePath = os.path.join(project.ScriptPath, projectName + "_Body.txt")
+        indexFilePath = os.path.join(project.ScriptPath, projectName + "_Index.txt")
+        bodyFilePath = os.path.join(project.ScriptPath, projectName + "_Body.txt")
 
-        IndexFileText = LoadTextFile(IndexFilePath)
-        BodyFileText = LoadTextFile(BodyFilePath)
+        # 파일이 존재하지 않을 경우에만 이동
+        if not os.path.exists(indexFilePath) or not os.path.exists(bodyFilePath):
+            MoveTextFile(projectName, email)  # 개발시에만 활용
+
+        IndexFileText = LoadTextFile(indexFilePath)
+        BodyFileText = LoadTextFile(bodyFilePath)
         
-        if IndexFileText is not None and BodyFileText is not None:
-            project.IndexFile = IndexFilePath
-            project.BodyFile = BodyFilePath
+        ExistingIndexFile = db.query(Project).filter(Project.UserId == user.UserId, Project.IndexFile == indexFilePath).first()
+        ExistingBodyFile = db.query(Project).filter(Project.UserId == user.UserId, Project.BodyFile == bodyFilePath).first()
+        
+        if not ExistingIndexFile:
+            project.IndexFile = indexFilePath
             project.IndexText = IndexFileText
-            project.BodyText = BodyFileText
-            
-            MoveTextFile(projectName, email) # 개발시에만 활용
+            db.add(project)
             db.commit()
+            print(f"[ Email: {email} | ProjectName: {projectName} | AddTextToDB, Index 완료 ]")
+        else:
+            print(f"[ Email: {email} | ProjectName: {projectName} | AddTextToDB, Index 이미 완료됨 ]")
+            
+        if not ExistingBodyFile:
+            project.BodyFile = bodyFilePath
+            project.BodyText = BodyFileText
+            db.add(project)
+            db.commit()
+            print(f"[ Email: {email} | ProjectName: {projectName} | AddTextToDB, Body 완료 ]")
+        else:
+            print(f"[ Email: {email} | ProjectName: {projectName} | AddTextToDB, Body 이미 완료됨 ]")
         
 if __name__ == "__main__":
     

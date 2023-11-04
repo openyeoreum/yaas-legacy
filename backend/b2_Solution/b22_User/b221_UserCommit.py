@@ -19,8 +19,6 @@ def GenerateUserId(email: str) -> str:
 
 ### User 테이블과 폴더를 생성하는 함수
 def AddUserToDB(email, username, password):
-    # .env 파일 로드
-    load_dotenv("/yaas/backend/.env")
     
     with get_db() as db:
         # UserId 생성
@@ -36,25 +34,26 @@ def AddUserToDB(email, username, password):
         tTSapiKey = os.getenv("TTSapiKey")
         lLMapiKey = os.getenv("LLMapiKey")
         
-        # User 객체 생성 및 초기 정보 입력
-        user = User(
-            UserId = GeneratedUserId,
-            Email = email,
-            UserName = username,
-            UserPath = userPath,
-            ProfileImagePath = profileImageFilePath,
-            TTSapiKey = tTSapiKey,
-            LLMapiKey = lLMapiKey
-            )
+        ExistingUser = db.query(User).filter(User.Email == email).first()
         
-        user.SetPassword(password)
-
-        db.add(user)
+        # User 객체 생성 및 초기 정보 입력
+        if not ExistingUser:
+            user = User(
+                UserId = GeneratedUserId,
+                Email = email,
+                UserName = username,
+                UserPath = userPath,
+                ProfileImagePath = profileImageFilePath,
+                TTSapiKey = tTSapiKey,
+                LLMapiKey = lLMapiKey
+                )
+            user.SetPassword(password)
+            db.add(user)
+            # 폴더 생성
+            if not os.path.exists(userPath):
+                os.makedirs(userPath)
+            
         db.commit()
-
-    # 폴더 생성
-    if not os.path.exists(userPath):
-        os.makedirs(userPath)
 
 if __name__ == "__main__":
     

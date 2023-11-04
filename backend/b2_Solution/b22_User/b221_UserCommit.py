@@ -1,6 +1,6 @@
 import os
 import hashlib
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import sys
 
 sys.path.append("/yaas")
@@ -49,9 +49,8 @@ def AddUserToDB(email, username, password):
                 )
             user.SetPassword(password)
             db.add(user)
-            # 폴더 생성
-            if not os.path.exists(userPath):
-                os.makedirs(userPath)
+            # 사용자 폴더 생성
+            os.makedirs(userPath, exist_ok = True)
             
         db.commit()
 

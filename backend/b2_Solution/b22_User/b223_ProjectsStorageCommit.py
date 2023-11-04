@@ -28,7 +28,7 @@ def AddProjectsStorageToDB(projectsStorageName, email):
         UserPath = user.UserPath
         projectsStoragePath = os.path.join(UserPath, f"{SeoulNow()}_{projectsStorageName}_storage")
 
-        ExistingProjectsStorage = db.query(ProjectsStorage).filter(User.Email == email).first()
+        ExistingProjectsStorage = db.query(ProjectsStorage).filter(ProjectsStorage.UserId == user.Id, ProjectsStorage.ProjectsStorageName == projectsStorageName).first()
 
         # ProjectsStorage 객체 생성 및 초기 정보 입력
         if not ExistingProjectsStorage:
@@ -38,9 +38,8 @@ def AddProjectsStorageToDB(projectsStorageName, email):
                 ProjectsStoragePath = projectsStoragePath
                 )
             db.add(projectsStorage)
-            # 폴더 생성
-            if not os.path.exists(projectsStoragePath):
-                os.makedirs(projectsStoragePath)
+            # 사용자 스토리지 폴더 생성
+            os.makedirs(projectsStoragePath, exist_ok = True)
                 
         db.commit()
 

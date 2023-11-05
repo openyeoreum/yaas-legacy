@@ -27,7 +27,7 @@ def AddProjectsStorageToDB(projectsStorageName, email):
 
         UserPath = user.UserPath
         projectsStoragePath = os.path.join(UserPath, f"{SeoulNow()}_{projectsStorageName}_storage")
-
+        print(projectsStoragePath)
         ExistingProjectsStorage = db.query(ProjectsStorage).filter(ProjectsStorage.UserId == user.UserId, ProjectsStorage.ProjectsStorageName == projectsStorageName).first()
 
         # ProjectsStorage 객체 생성 및 초기 정보 입력

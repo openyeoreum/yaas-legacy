@@ -26,7 +26,7 @@ def AddUserToDB(email, username, password):
         # BasePath 생성
         BasePath = GetBasePath()
         # UserPath 생성
-        userPath = os.path.join(BasePath, f"{SeoulNow()}_{GeneratedUserId}")
+        userPath = os.path.join(BasePath, f"{SeoulNow()}_{username}_user")
         # ProfileImageFilePath 생성
         profileImageFilePath = os.path.join(userPath, f"{SeoulNow()}_{username}_profile_image")
         

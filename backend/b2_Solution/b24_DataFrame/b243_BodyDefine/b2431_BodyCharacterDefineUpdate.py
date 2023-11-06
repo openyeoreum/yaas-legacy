@@ -156,6 +156,8 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
                 Input = FineTuningMemory[Keys[1]] + InputDic['Continue']
             else:
                 Input = InputDic['Continue']
+            # Input 전처리
+            Input = Input.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')
             
             # Filter, MemoryCounter, OutputEnder 처리
             talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))

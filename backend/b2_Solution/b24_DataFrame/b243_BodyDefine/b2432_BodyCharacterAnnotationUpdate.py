@@ -65,6 +65,7 @@ def CharNameBodyCharacterAnnotationFilter(TalkTag, responseData, memoryCounter):
     responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
     responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
     responseData = responseData.replace("\n", "").replace("'", "\"")
+    responseData = responseData.replace("```json", "").replace("```", "")
     responseData = responseData.replace("}}}", "}}").replace("{{{", "{{")
     responseData = re.sub(r'^\[', '', responseData) # 시작에 있는 대괄호[를 제거
     responseData = re.sub(r'\]$', '', responseData) # 끝에 있는 대괄호]를 제거

@@ -8,7 +8,7 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "데미안"
     FeedbackDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5122_FeedbackDataSet/"
     CompleteDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5123_CompleteDataSet/"
     TrainingDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5124_TrainingDataSet/"
@@ -20,8 +20,8 @@ if __name__ == "__main__":
     AddProjectFeedbackDataSets(projectName, email, "BodyCharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)
     LLMFineTuning(projectName, email, "04", "BodyCharacterDefine", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
     
-    ########################################################
-    ### 05_BodyCharacterAnnotation Feedback 데이터셋 파인튜닝 ###
-    ########################################################
-    AddProjectFeedbackDataSets(projectName, email, "BodyCharacterAnnotation", FeedbackDataSetPath, CompleteDataSetPath)
-    LLMFineTuning(projectName, email, "05", "BodyCharacterAnnotation", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
+    # ########################################################
+    # ### 05_BodyCharacterAnnotation Feedback 데이터셋 파인튜닝 ###
+    # ########################################################
+    # AddProjectFeedbackDataSets(projectName, email, "BodyCharacterAnnotation", FeedbackDataSetPath, CompleteDataSetPath)
+    # LLMFineTuning(projectName, email, "05", "BodyCharacterAnnotation", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)

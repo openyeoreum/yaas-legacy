@@ -5,7 +5,7 @@
         "LongTokensModel": "gpt-3.5-turbo-16k"
     },
     "ExampleFineTunedModel": {
-        "ShortTokensModel": [{"Date": "BodyCharacterDefine-231022073805", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS"}, {"Date": "BodyCharacterDefine-231102055753", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8GJjYaiZ"}],
+        "ShortTokensModel": [{"Date": "BodyCharacterDefine-231022073805", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS"}, {"Date": "BodyCharacterDefine-231102055753", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8GJjYaiZ"}, {"Date": "BodyCharacterDefine-231102055753", "Model": "ft:gpt-3.5-turbo-1106:yeoreum::8ILpWsR7"}],
         "LongTokensModel": []
     },
     "MemoryFineTunedModel": {

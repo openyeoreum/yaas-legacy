@@ -168,20 +168,20 @@ if __name__ == "__main__":
     existedDataSet = None
 
 
-    ##################################
-    ### 05_BodyCharacterAnnotation ###
-    ##################################
-    InitBodyCharacterAnnotation(projectName, email)
-    InitRawDataSet(projectName, email, "BodyCharacterAnnotation")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyCharacterAnnotation", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodyCharacterAnnotation", RawDataSetPath)
-    mode = "ExampleFineTuning"
-    BodyCharacterAnnotationUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # ##################################
+    # ### 05_BodyCharacterAnnotation ###
+    # ##################################
+    # InitBodyCharacterAnnotation(projectName, email)
+    # InitRawDataSet(projectName, email, "BodyCharacterAnnotation")
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyCharacterAnnotation", DataFramePath)
+    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodyCharacterAnnotation", RawDataSetPath)
+    # mode = "ExampleFineTuning"
+    # BodyCharacterAnnotationUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    if existedDataFrame == None:
-        updatedBodyCharacterAnnotation = UpdatedBodyCharacterAnnotation(projectName, email)
-        SaveDataFrame(projectName, email, "05_BodyCharacterAnnotation", updatedBodyCharacterAnnotation, DataFramePath)       
-        SaveDataSet(projectName, email, "05", "BodyCharacterAnnotation", RawDataSetPath)
-    existedDataFrame = None
-    existedDataSet = None
+    # if existedDataFrame == None:
+    #     updatedBodyCharacterAnnotation = UpdatedBodyCharacterAnnotation(projectName, email)
+    #     SaveDataFrame(projectName, email, "05_BodyCharacterAnnotation", updatedBodyCharacterAnnotation, DataFramePath)       
+    #     SaveDataSet(projectName, email, "05", "BodyCharacterAnnotation", RawDataSetPath)
+    # existedDataFrame = None
+    # existedDataSet = None

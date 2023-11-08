@@ -93,8 +93,8 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
 
         responseUsage = [{"Response":{
             "Model": Model,
-            "InputTokens": Usage["prompt_tokens"],
-            "OutputTokens": Usage["completion_tokens"]}}
+            "InputTokens": Usage["Input"],
+            "OutputTokens": Usage["Output"]}}
         ]
         responseJson = responseUsage + responseContent
         print(f"Project: {projectName} | Process: {Process} | JSONDecode 완료")

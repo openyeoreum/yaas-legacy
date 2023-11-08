@@ -2,12 +2,12 @@ import os
 import json
 import time
 import random
-import openai
 import tiktoken
 import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
+from openai import OpenAI
 from backend.b1_Api.b13_Database import get_db
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User, Prompt
@@ -188,8 +188,8 @@ def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, MODE = "Exa
   
 ## 프롬프트 실행
 def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
-    openai.api_key = LoadLLMapiKey(email)
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+    client = OpenAI(api_key = LoadLLMapiKey(email))
+    client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     promptFrame = GetPromptFrame(Process)
     
     Messages, TotalTokens, temperature = LLMmessages(Process, Input, mode = Mode, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
@@ -226,12 +226,15 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
 
     for _ in range(MaxAttempts):
       try:
-          response = openai.ChatCompletion.create(
+          response = client.chat.completions.create(
               model = Model,
               messages = Messages,
               temperature = Temperature)
-          Response = response["choices"][0]["message"]["content"]
-          Usage = response["usage"]
+          Response = response.choices[0].message.content
+          Usage = {'Input': response.usage.prompt_tokens,
+                   'Output': response.usage.completion_tokens,
+                   'Total': response.usage.total_tokens}
+                   
           print(f"Project: {projectName} | Process: {Process} | LLMresponse 완료")
           
           if messagesReview == "on":
@@ -239,7 +242,7 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
 
           return Response, Usage, Model
       
-      except openai.error.OpenAIError as e:
+      except client.error.OpenAIError as e:
           print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생: {e}")
           continue
 
@@ -293,21 +296,21 @@ def LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, Trai
     
 ## 파인튜닝 파일 업로드 생성
 def LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = "Example", MaxAttempts = 100):
-    openai.api_key = LoadLLMapiKey(email)
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+    client = OpenAI(api_key = LoadLLMapiKey(email))
+    client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     
     # LLMTrainingDataset 업로드
     filename, LLMTrainingDataset = LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = mode)
-    UploadedFile = openai.File.create(
+    UploadedFile = client.files.create(
       file = LLMTrainingDataset,
       purpose = 'fine-tune'
     )
     time.sleep(random.randint(15, 20))
     
     for _ in range(MaxAttempts):
-      UploadedFile = openai.File.retrieve(UploadedFile["id"])
-      if UploadedFile["status"] == "processed":
-        FileId = UploadedFile["id"]
+      uploadedFile = client.files.retrieve(UploadedFile.id)
+      if uploadedFile.status == "processed":
+        FileId = uploadedFile.id
         # 파일이름에 FileId 붙이기
         FilePath, oldFilename = os.path.split(filename)
         base, ext = os.path.splitext(oldFilename)
@@ -327,8 +330,8 @@ def LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, Trainin
 ## 파인튜닝
 def LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
     with get_db() as db:
-      openai.api_key = LoadLLMapiKey(email)
-      openai.api_key = os.getenv("OPENAI_API_KEY")
+      client = OpenAI(api_key = LoadLLMapiKey(email))
+      client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
       
       newFilename, FileId = LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = Mode)
 
@@ -339,7 +342,7 @@ def LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPat
         BaseModel = "gpt-3.5-turbo-16k"
       
       # FineTuning 요청
-      FineTuningJob = openai.FineTuningJob.create(
+      FineTuningJob = client.fine_tuning.jobs.create(
         training_file = FileId,
         model = BaseModel,
         hyperparameters={"n_epochs":Epochs}
@@ -347,12 +350,12 @@ def LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPat
       time.sleep(random.randint(60, 90))
       
       for _ in range(MaxAttempts):
-        # FineTuningJob = openai.FineTuningJob.retrieve(FineTuningJob["id"])
-        FineTuningJob = openai.FineTuningJob.retrieve("ftjob-frmhvooGEi0fK0EpaL8EyImc")
-        if FineTuningJob["status"] == "succeeded":
-          FineTunedModel = FineTuningJob["fine_tuned_model"]
-          TrainedTokens = FineTuningJob["trained_tokens"]
-          TrainingFile = FineTuningJob["training_file"]
+
+        fineTuningJob = client.fine_tuning.jobs.retrieve(FineTuningJob.id)
+        if fineTuningJob.status == "succeeded":
+          FineTunedModel = fineTuningJob.fine_tuned_model
+          TrainedTokens = fineTuningJob.trained_tokens
+          TrainingFile = fineTuningJob.training_file
           print(f"Project: {projectName} | Process: {Process} | LLMFineTuning 완료")
           break
         else:
@@ -388,7 +391,7 @@ def LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPat
       jsonLine = json.dumps(fineTunedModelDic)
       file.write(jsonLine)
         
-    # openai.File.delete(TrainingFile)
+    # client.File.delete(TrainingFile)
     
     return FineTunedModel, TrainedTokens
     
@@ -402,5 +405,5 @@ if __name__ == "__main__":
     CompleteDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5123_CompleteDataSet/"
     TrainingDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5124_TrainingDataSet/"
     #########################################################################
-    
+
     LLMFineTuning(projectName, email, "05", "BodyCharacterAnnotation", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)

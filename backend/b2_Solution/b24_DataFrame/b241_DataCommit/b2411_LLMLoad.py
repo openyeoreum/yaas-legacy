@@ -45,7 +45,7 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
     messageTime = "current time: " + str(Date("Second")) + '\n\n'
     
     # messages
-    if mode in ["Example", "ExampleFineTuning"]:
+    if mode in ["Example", "ExampleFineTuning", "Master"]:
       if mode == "Example":
         Example = promptFrame[0]["Example"]
       elif mode == "ExampleFineTuning":
@@ -194,33 +194,36 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
     
     Messages, TotalTokens, temperature = LLMmessages(Process, Input, mode = Mode, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
-    if TotalTokens < 4500:
-      if Mode in ["Example", "Memory"]:
-        Model = promptFrame[0]["BaseModel"]["ShortTokensModel"]
-      if Mode == "ExampleFineTuning":
-        if promptFrame[0]["ExampleFineTunedModel"]["ShortTokensModel"] != []:
-          Model = promptFrame[0]["ExampleFineTunedModel"]["ShortTokensModel"][-1]["Model"]
-        else:
-          Model = promptFrame[0]["BaseModel"]["ShortTokensModel"]
-      if Mode == "MemoryFineTuning":
-        if promptFrame[0]["MemoryFineTunedModel"]["ShortTokensModel"] != []:
-          Model = promptFrame[0]["MemoryFineTunedModel"]["ShortTokensModel"][-1]["Model"]
-        else:
-          Model = promptFrame[0]["BaseModel"]["ShortTokensModel"]
-
+    if Mode == "Master":
+      Model = promptFrame[0]["MasterModel"]
     else:
-      if Mode in ["Example", "Memory"]:
-        Model = promptFrame[0]["BaseModel"]["LongTokensModel"]
-      if Mode == "ExampleFineTuning":
-        if promptFrame[0]["ExampleFineTunedModel"]["LongTokensModel"] != []:
-          Model = promptFrame[0]["ExampleFineTunedModel"]["LongTokensModel"][-1]["Model"]
-        else:
+      if TotalTokens < 4500:
+        if Mode in ["Example", "Memory"]:
+          Model = promptFrame[0]["BaseModel"]["ShortTokensModel"]
+        if Mode == "ExampleFineTuning":
+          if promptFrame[0]["ExampleFineTunedModel"]["ShortTokensModel"] != []:
+            Model = promptFrame[0]["ExampleFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+          else:
+            Model = promptFrame[0]["BaseModel"]["ShortTokensModel"]
+        if Mode == "MemoryFineTuning":
+          if promptFrame[0]["MemoryFineTunedModel"]["ShortTokensModel"] != []:
+            Model = promptFrame[0]["MemoryFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+          else:
+            Model = promptFrame[0]["BaseModel"]["ShortTokensModel"]
+
+      else:
+        if Mode in ["Example", "Memory"]:
           Model = promptFrame[0]["BaseModel"]["LongTokensModel"]
-      if Mode == "MemoryFineTuning":
-        if promptFrame[0]["MemoryFineTunedModel"]["LongTokensModel"] != []:
-          Model = promptFrame[0]["MemoryFineTunedModel"]["LongTokensModel"][-1]["Model"]
-        else:
-          Model = promptFrame[0]["BaseModel"]["LongTokensModel"]
+        if Mode == "ExampleFineTuning":
+          if promptFrame[0]["ExampleFineTunedModel"]["LongTokensModel"] != []:
+            Model = promptFrame[0]["ExampleFineTunedModel"]["LongTokensModel"][-1]["Model"]
+          else:
+            Model = promptFrame[0]["BaseModel"]["LongTokensModel"]
+        if Mode == "MemoryFineTuning":
+          if promptFrame[0]["MemoryFineTunedModel"]["LongTokensModel"] != []:
+            Model = promptFrame[0]["MemoryFineTunedModel"]["LongTokensModel"][-1]["Model"]
+          else:
+            Model = promptFrame[0]["BaseModel"]["LongTokensModel"]
 
     Temperature = temperature
 
@@ -292,7 +295,7 @@ def LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, Trai
       return filename, open(newFilename, 'rb')
     else:
       print(f"Project: {projectName} | Process: {Process} | FeedbackCompletion에서 오류 발생: Feedback이 완료 되지 않았습니다.")
-      return None
+      return None, None
     
 ## 파인튜닝 파일 업로드 생성
 def LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = "Example", MaxAttempts = 100):
@@ -406,4 +409,4 @@ if __name__ == "__main__":
     TrainingDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5124_TrainingDataSet/"
     #########################################################################
 
-    LLMFineTuning(projectName, email, "05", "BodyCharacterAnnotation", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
+    LLMFineTuning(projectName, email, "05", "BodyCharacterCompletion", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)

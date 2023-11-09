@@ -27,7 +27,7 @@ def AddPromptToDB():
         captionDefine = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-04_CaptionDefine.json")
         bodySummary = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-05_BodySummary.json")
         bodyCharacterDefine = LoadJsonFrame(PromptDataPath + "/b542_BodyDefinePrompt/b542-01_BodyCharacterDefine.json")
-        bodyCharacterAnnotation = LoadJsonFrame(PromptDataPath + "/b542_BodyDefinePrompt/b542-02_BodyCharacterAnnotation.json")
+        bodyCharacterCompletion = LoadJsonFrame(PromptDataPath + "/b542_BodyDefinePrompt/b542-02_BodyCharacterCompletion.json")
         # bodyContextDefine = LoadJsonFrame(PromptDataPath + "/b542_BodyDefinePrompt/b542-03_BodyContextDefine.json")
         # splitedBodyCharacterDefine = LoadJsonFrame(PromptDataPath + "/b543_SplitedBodyDefinePrompt/b543-01_SplitedBodyCharacterDefine.json")
         # splitedBodyContextDefine = LoadJsonFrame(PromptDataPath + "/b543_SplitedBodyDefinePrompt/b543-02_SplitedBodyContextDefine.json")
@@ -79,7 +79,7 @@ def AddPromptToDB():
                 ExistingPrompt.CaptionDefine = captionDefine
                 ExistingPrompt.BodySummary = bodySummary
                 ExistingPrompt.BodyCharacterDefine = bodyCharacterDefine
-                ExistingPrompt.BodyCharacterAnnotation = bodyCharacterAnnotation
+                ExistingPrompt.BodyCharacterCompletion = bodyCharacterCompletion
                 # ExistingPrompt.BodyContextDefine = bodyContextDefine
                 # ExistingPrompt.SplitedBodyCharacterDefine = splitedBodyCharacterDefine
                 # ExistingPrompt.SplitedBodyContextDefine = splitedBodyContextDefine
@@ -129,7 +129,7 @@ def AddPromptToDB():
                 CaptionDefine = captionDefine,
                 BodySummary = bodySummary,
                 BodyCharacterDefine = bodyCharacterDefine,
-                BodyCharacterAnnotation = bodyCharacterAnnotation,
+                BodyCharacterCompletion = bodyCharacterCompletion,
                 # BodyContextDefine = bodyContextDefine,
                 # SplitedBodyCharacterDefine = splitedBodyCharacterDefine,
                 # SplitedBodyContextDefine = splitedBodyContextDefine,

@@ -6,7 +6,7 @@
         "ProjectName": "우리는행복을진단한다",
         "Content": "Body",
         "Language": "Ko",
-        "TaskName": "BodyCharacterAnnotation",
+        "TaskName": "BodyCharacterCompletion",
         "CharacterFrame": "No",
         "CharacterChunkCount": 104,
         "CharacterCount": 0,

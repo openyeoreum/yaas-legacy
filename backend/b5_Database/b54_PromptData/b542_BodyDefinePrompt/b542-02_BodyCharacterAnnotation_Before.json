@@ -1,17 +1,18 @@
 {
-    "TaskName": "BodyCharacterAnnotation",
+    "TaskName": "BodyCharacterCompletion",
     "BaseModel": {
         "ShortTokensModel": "gpt-3.5-turbo",
         "LongTokensModel": "gpt-3.5-turbo-16k"
     },
     "ExampleFineTunedModel": {
-        "ShortTokensModel": [{"Date": "BodyCharacterAnnotation-231104034753", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8H4qi78e"}],
+        "ShortTokensModel": [{"Date": "BodyCharacterCompletion-231104034753", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8H4qi78e"}],
         "LongTokensModel": []
     },
     "MemoryFineTunedModel": {
         "ShortTokensModel": [],
         "LongTokensModel": []
     },
+    "MasterModel": "gpt-4-1106-preview",
     "Temperature": 0.4,
     "OutputTokensRatio": 0.5,
     "Example": [

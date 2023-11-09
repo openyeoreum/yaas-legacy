@@ -6,7 +6,7 @@
         "ProjectName": "None",
         "Content": "Body",
         "Language": "Ko",
-        "TaskName": "BodyCharacterAnnotation",
+        "TaskName": "BodyCharacterCompletion",
         "CharacterFrame": "No",
         "CharacterChunkCount": 0,
         "CharacterCount": 0,
@@ -14,14 +14,14 @@
         "Memo": "캐릭터의 증거를 알아내는 프로세스"
     },
     {
-        "CharacterAnnotations": [
+        "CharacterCompeletions": [
             {
                 "CharacterChunkId": 0,
                 "ChunkId": 0,
                 "Chunk": "None",
-                "Annotation": "None",
                 "Character": "None",
-                "Answer": "None"
+                "MainCharacter": "None",
+                "AuthorRelationship": "None"
             }
         ]
     },

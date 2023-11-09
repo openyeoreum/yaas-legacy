@@ -66,7 +66,7 @@ def BodyCharacterDefineFilter(TalkTag, responseData, memoryCounter):
             if not key in TalkTag:
                 return "JSON에서 오류 발생: JSONKeyError"
             else:
-                if not ('말의종류' in dic[key] and '말하는인물' in dic[key] and '인물의역할' in dic[key] and '듣는인물' in dic[key]):
+                if not ('말의종류' in dic[key] and '말하는인물' in dic[key] and '말하는인물의성별' in dic[key] and '말하는인물의나이' in dic[key] and '말하는인물의감정' in dic[key] and '인물의역할' in dic[key] and '듣는인물' in dic[key]):
                     return "JSON에서 오류 발생: JSONKeyError"
         # Error5: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -157,8 +157,6 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
                 Input = FineTuningMemory[Keys[1]] + InputDic['Continue']
             else:
                 Input = InputDic['Continue']
-            # Input 전처리
-            Input = Input.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')
             
             # Filter, MemoryCounter, OutputEnder 처리
             talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
@@ -256,10 +254,13 @@ def BodyCharacterDefineResponseJson(projectName, email, messagesReview = 'off', 
                 for key, value in dic.items():
                     Character = value['말하는인물']
                     Type = value['말의종류']
+                    Gender = value['말하는인물의성별'],
+                    Age = value['말하는인물의나이'],
+                    Emotion = value['말하는인물의감정'],
                     Role = value['인물의역할']
                     Listener = value['듣는인물']
                 responseCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "Type": Type, "Role": Role, "Listener": Listener})
+                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "Type": Type, "Gender": Gender, "Age": Age, "Emotion": Emotion, "Role": Role, "Listener": Listener})
     
     return responseJson
 
@@ -298,10 +299,13 @@ def BodyCharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode =
                 Chunk = ResponseJson[i]["Chunk"]
                 Character = ResponseJson[i]["Character"]
                 Type = ResponseJson[i]["Type"]
+                Gender = ResponseJson[i]["Gender"],
+                Age = ResponseJson[i]["Age"],
+                Emotion = ResponseJson[i]["Emotion"],
                 Role = ResponseJson[i]["Role"]
                 Listener = ResponseJson[i]["Listener"]
                 
-                AddBodyCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Role, Listener)
+                AddBodyCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
                 # i값 수동 업데이트
                 i += 1
             

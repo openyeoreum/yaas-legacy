@@ -21,6 +21,9 @@
                 "Chunk": "None",
                 "Character": "None",
                 "Type": "None",
+                "Gender": "None",
+                "Age": "None",
+                "Emotion": "None",
                 "Role": "None",
                 "Listener": "None"
             }

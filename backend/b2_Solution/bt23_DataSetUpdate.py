@@ -21,7 +21,7 @@ if __name__ == "__main__":
     LLMFineTuning(projectName, email, "04", "BodyCharacterDefine", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
     
     # ########################################################
-    # ### 05_BodyCharacterAnnotation Feedback 데이터셋 파인튜닝 ###
+    # ### 05_BodyCharacterCompletion Feedback 데이터셋 파인튜닝 ###
     # ########################################################
-    # AddProjectFeedbackDataSets(projectName, email, "BodyCharacterAnnotation", FeedbackDataSetPath, CompleteDataSetPath)
-    # LLMFineTuning(projectName, email, "05", "BodyCharacterAnnotation", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
+    # AddProjectFeedbackDataSets(projectName, email, "BodyCharacterCompletion", FeedbackDataSetPath, CompleteDataSetPath)
+    # LLMFineTuning(projectName, email, "05", "BodyCharacterCompletion", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)

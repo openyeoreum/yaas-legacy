@@ -41,7 +41,7 @@ def AddTrainingDatasetToDB(projectName, email):
             ExistingDataset.CaptionDefine = trainingDataset
             ExistingDataset.BodySummary = trainingDataset
             ExistingDataset.BodyCharacterDefine = trainingDataset
-            ExistingDataset.BodyCharacterAnnotation = trainingDataset
+            ExistingDataset.BodyCharacterCompletion = trainingDataset
             ExistingDataset.BodyContextDefine = trainingDataset
             ExistingDataset.SplitedBodyCharacterDefine = trainingDataset
             ExistingDataset.SplitedBodyContextDefine = trainingDataset
@@ -95,7 +95,7 @@ def AddTrainingDatasetToDB(projectName, email):
                 CaptionDefine = trainingDataset,
                 BodySummary = trainingDataset,
                 BodyCharacterDefine = trainingDataset,
-                BodyCharacterAnnotation = trainingDataset,
+                BodyCharacterCompletion = trainingDataset,
                 BodyContextDefine = trainingDataset,
                 SplitedBodyCharacterDefine = trainingDataset,
                 SplitedBodyContextDefine = trainingDataset,

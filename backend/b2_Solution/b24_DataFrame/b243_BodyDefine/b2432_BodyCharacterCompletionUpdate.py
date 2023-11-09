@@ -7,15 +7,16 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyCharacterAnnotationToDB, AddBodyCharacterAnnotationChunksToDB, AddBodyCharacterAnnotationCheckedCharacterTagsToDB, BodyCharacterAnnotationCountLoad, BodyCharacterAnnotationCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyCharacterCompletionToDB, AddBodyCharacterCompletionChunksToDB, AddBodyCharacterCompletionCheckedCharacterTagsToDB, BodyCharacterCompletionCountLoad, BodyCharacterCompletionCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
+    BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
     BodyFrameBodys = project.BodyFrame[2]['Bodys'][1:]
     
-    return BodyFrameBodys
+    return BodyFrameSplitedBodyScripts, BodyFrameBodys
 
 ## BodyCharacterDefine 로드
 def LoadBodyCharacterDefine(projectName, email):
@@ -34,7 +35,7 @@ def ReplaceName(TaskBody, CharacterChunks):
         for chunk in CharacterChunks:
             if chunk['CharacterChunkId'] == n:
                 CharName = chunk['Character']
-                replacement = f"[말{n}] {CharName} : "
+                replacement = f"[말{n}] {CharName}: "
                 TaskBody = TaskBody[:match.start()] + replacement + TaskBody[match.end():]
                 break
 
@@ -42,25 +43,46 @@ def ReplaceName(TaskBody, CharacterChunks):
 
 ## BodyFrameBodys의 InputList 치환
 def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
-    BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
+    BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     CharacterChunks, CharacterTags = LoadBodyCharacterDefine(projectName, email)
     
+    IndexId = BodyFrameSplitedBodyScripts[0]['IndexId']
+    TaskBodys = []
     InputList = []
-    for BodyDic in BodyFrameBodys:
-        Id = BodyDic["BodyId"]
-        if Task in BodyDic["Task"]:
-            Tag = "Continue"
+    for i in range(len(BodyFrameBodys)):
+            
+        if BodyFrameSplitedBodyScripts[i]['IndexId'] == IndexId:
+            
+            if 'Body' in BodyFrameBodys[i]['Task']:
+                Tag = 'Continue'
+            else:
+                Tag = 'Pass'
+                
+            TaskBody = ReplaceName(BodyFrameBodys[i][Task], CharacterChunks)
+            TaskBody = TaskBody.replace('"', '').replace("'", "")
+            TaskBodys.append(TaskBody)
         else:
-            Tag = "Pass"
-        TaskBody = ReplaceName(BodyDic[Task], CharacterChunks)
-        TaskBody = TaskBody.replace('"', '').replace("'", "")
-        InputDic = {'Id': Id, Tag: TaskBody}
-        InputList.append(InputDic)
+            InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
+            InputList.append(InputDic)
+            IndexId = BodyFrameSplitedBodyScripts[i]['IndexId']
+            TaskBodys = []
+            
+            if 'Body' in BodyFrameBodys[i]['Task']:
+                Tag = 'Continue'
+            else:
+                Tag = 'Pass'
+                
+            TaskBody = ReplaceName(BodyFrameBodys[i][Task], CharacterChunks)
+            TaskBody = TaskBody.replace('"', '').replace("'", "")
+            TaskBodys.append(TaskBody)
+
+    if TaskBodys:
+        InputList.append({'Id': IndexId, Tag: "".join(TaskBodys)})
     
     return InputList
 
-## BodyCharacterAnnotation의 Filter(Error 예외처리)
-def CharNameBodyCharacterAnnotationFilter(TalkTag, responseData, memoryCounter):
+## BodyCharacterCompletion의 Filter(Error 예외처리)
+def CharNameBodyCharacterCompletionFilter(TalkTag, responseData, memoryCounter):
     # responseData의 전처리
     responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
     responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
@@ -102,7 +124,7 @@ def CharNameBodyCharacterAnnotationFilter(TalkTag, responseData, memoryCounter):
     return OutputDic
 
 ## inputMemory 형성
-def BodyCharacterAnnotationInputMemory(inputMemoryDics, MemoryLength):
+def BodyCharacterCompletionInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -118,7 +140,7 @@ def BodyCharacterAnnotationInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def BodyCharacterAnnotationOutputMemory(outputMemoryDics, MemoryLength):
+def BodyCharacterCompletionOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -135,8 +157,8 @@ def BodyCharacterAnnotationOutputMemory(outputMemoryDics, MemoryLength):
     
     return outputMemory
 
-## BodyCharacterAnnotation 프롬프트 요청 및 결과물 Json화
-def BodyCharacterAnnotationProcess(projectName, email, Process = "BodyCharacterAnnotation", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## BodyCharacterCompletion 프롬프트 요청 및 결과물 Json화
+def BodyCharacterCompletionProcess(projectName, email, Process = "BodyCharacterCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -149,7 +171,7 @@ def BodyCharacterAnnotationProcess(projectName, email, Process = "BodyCharacterA
     inputMemoryDics.append(InputDic)
     outputMemoryDics = []
         
-    # BodyCharacterAnnotationProcess
+    # BodyCharacterCompletionProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -169,6 +191,10 @@ def BodyCharacterAnnotationProcess(projectName, email, Process = "BodyCharacterA
             else:
                 mode = "MemoryFineTuning"
         # Example 계열 모드의 순서
+        elif Mode == "Master":
+            mode = "Master"
+            # "Master"의 MasterMemory 형성
+            MasterMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
         elif Mode == "ExampleFineTuning":
             mode = "ExampleFineTuning"
             # "ExampleFineTuning"의 fineTuningMemory 형성
@@ -177,26 +203,27 @@ def BodyCharacterAnnotationProcess(projectName, email, Process = "BodyCharacterA
             mode = "Example"
 
         if "Continue" in InputDic:
-            if Mode == "ExampleFineTuning":
+            if Mode == "Master":
+                Keys = list(MasterMemory.keys())
+                Input = MasterMemory[Keys[1]] + InputDic['Continue']
+            elif Mode == "ExampleFineTuning":
                 Keys = list(FineTuningMemory.keys())
                 Input = FineTuningMemory[Keys[1]] + InputDic['Continue']
             else:
                 Input = InputDic['Continue']
-            # Input 전처리
-            Input = Input.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')
             
             # Filter, MemoryCounter, OutputEnder 처리
             talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
             TalkTag = ["말" + match for match in talkTag]
-            memoryCounter = " - 이어서 작업할 추가데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
-            outputEnder = f"{{'{TalkTag[0]}': {{'말하는인물': '"
+            memoryCounter = ""
+            outputEnder = ""
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
             # print(f"@@@@@@@@@@\n\nResponse: {Response}\n\n@@@@@@@@@@")
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
-            if mode in ["Example", "ExampleFineTuning"]:
+            if mode in ["Example", "ExampleFineTuning", "Master"]:
                 Example = promptFrame[0]["Example"]
                 if Response.startswith(Example[2]["OutputStarter"]):
                     Response = Response.replace(Example[2]["OutputStarter"], "", 1)
@@ -209,7 +236,7 @@ def BodyCharacterAnnotationProcess(projectName, email, Process = "BodyCharacterA
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
 
-            Filter = CharNameBodyCharacterAnnotationFilter(TalkTag, responseData, memoryCounter)
+            Filter = CharNameBodyCharacterCompletionFilter(TalkTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -244,18 +271,18 @@ def BodyCharacterAnnotationProcess(projectName, email, Process = "BodyCharacterA
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = BodyCharacterAnnotationInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = BodyCharacterCompletionInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = BodyCharacterAnnotationOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = BodyCharacterCompletionOutputMemory(outputMemoryDics, MemoryLength)
 
     return outputMemoryDics
 
 ## 데이터 치환
-def BodyCharacterAnnotationResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def BodyCharacterCompletionResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
@@ -268,7 +295,7 @@ def BodyCharacterAnnotationResponseJson(projectName, email, messagesReview = 'of
                 CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
     
     # 데이터 치환
-    outputMemoryDics = BodyCharacterAnnotationProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = BodyCharacterCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     responseCount = 0
@@ -287,20 +314,20 @@ def BodyCharacterAnnotationResponseJson(projectName, email, messagesReview = 'of
     
     return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 BodyCharacterAnnotation에 업데이트
-def BodyCharacterAnnotationUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 05_BodyCharacterAnnotationUpdate 시작 >")
+## 프롬프트 요청 및 결과물 Json을 BodyCharacterCompletion에 업데이트
+def BodyCharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 05_BodyCharacterCompletionUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
-    ContinueCount, CharacterCount, Completion = BodyCharacterAnnotationCountLoad(projectName, email)
+    ContinueCount, CharacterCount, Completion = BodyCharacterCompletionCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedBodyCharacterAnnotationToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "BodyCharacterAnnotation", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 05_BodyCharacterAnnotationUpdate는 ExistedBodyCharacterAnnotation으로 대처됨 ]\n")
+            AddExistedBodyCharacterCompletionToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "BodyCharacterCompletion", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 05_BodyCharacterCompletionUpdate는 ExistedBodyCharacterCompletion으로 대처됨 ]\n")
         else:
-            responseJson = BodyCharacterAnnotationResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = BodyCharacterCompletionResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -311,11 +338,11 @@ def BodyCharacterAnnotationUpdate(projectName, email, MessagesReview = 'off', Mo
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'BodyCharacterAnnotationUpdate')
+                            desc = 'BodyCharacterCompletionUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'BodyCharacterAnnotationUpdate: {Update}')
+                UpdateTQDM.set_description(f'BodyCharacterCompletionUpdate: {Update}')
                 time.sleep(0.0001)
                 CharacterChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
@@ -324,17 +351,17 @@ def BodyCharacterAnnotationUpdate(projectName, email, MessagesReview = 'off', Mo
                 Character = ResponseJson[i]["Character"]
                 Answer = ResponseJson[i]["Answer"]
                 
-                AddBodyCharacterAnnotationChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Annotation, Character, Answer)
+                AddBodyCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Annotation, Character, Answer)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            BodyCharacterAnnotationCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 05_BodyCharacterAnnotationUpdate 완료 ]\n")
+            BodyCharacterCompletionCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 05_BodyCharacterCompletionUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 05_BodyCharacterAnnotationUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 05_BodyCharacterCompletionUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 
@@ -347,4 +374,8 @@ if __name__ == "__main__":
     mode = "Example"
     #########################################################################
     
-    BodyCharacterAnnotationUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    # BodyCharacterCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    InputList = BodyFrameBodysToInputList(projectName, email, Task = "Character")
+    
+    for i in range(45):
+        print(f"{InputList[i]}\n")

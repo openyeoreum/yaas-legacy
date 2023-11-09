@@ -88,7 +88,7 @@ def AddProjectToDB(projectName, email):
         characterContextFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-07_CharacterContextFrame.json")
         soundContextFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-08_SoundContextFrame.json")
         bodyCharacterDefine = LoadJsonFrame(ProjectDataPath + "/b532_BodyDefine/b532-01_BodyCharacterDefine.json")
-        bodyCharacterAnnotation = LoadJsonFrame(ProjectDataPath + "/b532_BodyDefine/b532-02_BodyCharacterAnnotation.json")
+        bodyCharacterCompletion = LoadJsonFrame(ProjectDataPath + "/b532_BodyDefine/b532-02_BodyCharacterCompletion.json")
         bodyContextDefine = LoadJsonFrame(ProjectDataPath + "/b532_BodyDefine/b532-03_BodyContextDefine.json")
         splitedBodyCharacterDefine = LoadJsonFrame(ProjectDataPath + "/b533_SplitedBodyDefine/b533-01_SplitedBodyCharacterDefine.json")
         splitedBodyContextDefine = LoadJsonFrame(ProjectDataPath + "/b533_SplitedBodyDefine/b533-02_SplitedBodyContextDefine.json")
@@ -168,7 +168,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.CharacterContextFrame = characterContextFrame
             ExistingProject.SoundContextFrame = soundContextFrame
             ExistingProject.BodyCharacterDefine = bodyCharacterDefine
-            ExistingProject.BodyCharacterAnnotation = bodyCharacterAnnotation
+            ExistingProject.BodyCharacterCompletion = bodyCharacterCompletion
             ExistingProject.BodyContextDefine = bodyContextDefine
             ExistingProject.SplitedBodyCharacterDefine = splitedBodyCharacterDefine
             ExistingProject.SplitedBodyContextDefine = splitedBodyContextDefine
@@ -246,7 +246,7 @@ def AddProjectToDB(projectName, email):
                 CharacterContextFrame = characterContextFrame,
                 SoundContextFrame = soundContextFrame,
                 BodyCharacterDefine = bodyCharacterDefine,
-                BodyCharacterAnnotation = bodyCharacterAnnotation,
+                BodyCharacterCompletion = bodyCharacterCompletion,
                 BodyContextDefine = bodyContextDefine,
                 SplitedBodyCharacterDefine = splitedBodyCharacterDefine,
                 SplitedBodyContextDefine = splitedBodyContextDefine,

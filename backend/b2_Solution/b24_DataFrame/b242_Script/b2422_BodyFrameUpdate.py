@@ -488,7 +488,8 @@ def SplitedBodyScriptsToBodys(projectName, email):
             if "Character" in Tags:
                 task.append("Character")
                 
-        Bodys.append({'BodyId': idx + 1, 'Task': task, 'Body': "".join(BodyChunks), 'Character': "".join(CharacterChunks)})
+        Bodys.append({'BodyId': idx + 1, 'Task': task, 'Body': "".join(BodyChunks),
+                      'Character': "".join(CharacterChunks).replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')})
         bodys.append({'BodyId': idx + 1, 'Task': task, 'Body': "".join(BodyChunks)}) # 에러 테스트용도
         Tags = []
         BodyChunks = []

@@ -68,6 +68,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<가독성 목차4.text>\n",
+            "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
         }
@@ -125,6 +126,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<가독성 목차4.text>\n",
+            "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
         }

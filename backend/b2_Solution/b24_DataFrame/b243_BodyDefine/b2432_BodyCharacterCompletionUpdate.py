@@ -10,6 +10,9 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Load
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyCharacterCompletionToDB, AddBodyCharacterCompletionChunksToDB, AddBodyCharacterCompletionCheckedCharacterTagsToDB, BodyCharacterCompletionCountLoad, BodyCharacterCompletionCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
+#########################
+##### InputList 생성 #####
+#########################
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
@@ -41,46 +44,95 @@ def ReplaceName(TaskBody, CharacterChunks):
 
     return TaskBody
 
-## BodyFrameBodys의 InputList 치환
+## inputList의 InputList 치환 (인덱스, 캡션 부분 합치기)
+def MergeInputList(inputList):
+    InputList = []
+    MergeBuffer = ''
+    MergeIds = []
+    NonMergeFound = False
+
+    for item in inputList:
+        if list(item.keys())[1] == 'Merge':
+            # 'Merge' 태그가 붙은 항목의 내용을 버퍼에 추가하고 ID를 MergeIds에 추가합니다.
+            MergeBuffer += list(item.values())[1]
+            MergeIds.append(item['Id'])
+        else:
+            # 'Merge'가 아닌 태그가 발견된 경우
+            NonMergeFound = True
+            if MergeBuffer:
+                # 버퍼에 내용이 있으면 현재 항목과 합칩니다.
+                content = MergeBuffer + list(item.values())[1]
+                # 'Id'는 MergeIds에 현재 항목의 'Id'를 추가하여 리스트로 만듭니다.
+                currentId = MergeIds + [item['Id']]
+                # 합쳐진 내용과 'Id' 리스트를 가진 새 딕셔너리를 만듭니다.
+                mergedItem = { 'Id': currentId, list(item.keys())[1]: content }
+                InputList.append(mergedItem)
+                # 버퍼와 ID 리스트를 초기화합니다.
+                MergeBuffer = ''
+                MergeIds = []
+            else:
+                # 버퍼가 비어 있으면 현재 항목을 결과 리스트에 그대로 추가합니다.
+                InputList.append(item)
+    
+    # 리스트의 끝에 도달했을 때 버퍼에 남아 있는 'Merge' 내용을 처리합니다.
+    if MergeBuffer and not NonMergeFound:
+        # 모든 항목이 'Merge'인 경우 마지막 항목만 처리합니다.
+        mergedItem = { 'Id': MergeIds, 'content': MergeBuffer }
+        InputList.append(mergedItem)
+
+    return InputList
+
+## BodyFrameBodys의 inputList 치환
 def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     CharacterChunks, CharacterTags = LoadBodyCharacterDefine(projectName, email)
     
-    IndexId = BodyFrameSplitedBodyScripts[0]['IndexId']
+    IndexId = 1
+    Tasks = []
     TaskBodys = []
-    InputList = []
-    for i in range(len(BodyFrameBodys)):
-            
+    inputList = []
+    for i in range(len(BodyFrameSplitedBodyScripts)):
         if BodyFrameSplitedBodyScripts[i]['IndexId'] == IndexId:
-            
-            if 'Body' in BodyFrameBodys[i]['Task']:
+            TaskBody = ReplaceName(BodyFrameBodys[i][Task], CharacterChunks)
+            TaskBodys.append(TaskBody)
+            Tasks += (BodyFrameBodys[i]['Task'])
+        else:
+            if 'Character' in Tasks:
                 Tag = 'Continue'
+            elif 'Body' not in Tasks:
+                Tag = 'Merge'
             else:
                 Tag = 'Pass'
                 
-            TaskBody = ReplaceName(BodyFrameBodys[i][Task], CharacterChunks)
-            TaskBody = TaskBody.replace('"', '').replace("'", "")
-            TaskBodys.append(TaskBody)
-        else:
             InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
-            InputList.append(InputDic)
-            IndexId = BodyFrameSplitedBodyScripts[i]['IndexId']
+            inputList.append(InputDic)
+            
+            IndexId += 1
+            Tasks = []
             TaskBodys = []
             
-            if 'Body' in BodyFrameBodys[i]['Task']:
-                Tag = 'Continue'
-            else:
-                Tag = 'Pass'
-                
             TaskBody = ReplaceName(BodyFrameBodys[i][Task], CharacterChunks)
-            TaskBody = TaskBody.replace('"', '').replace("'", "")
             TaskBodys.append(TaskBody)
-
-    if TaskBodys:
-        InputList.append({'Id': IndexId, Tag: "".join(TaskBodys)})
+            Tasks += BodyFrameBodys[i]['Task']
     
+    if TaskBodys:
+        if 'Character' in Tasks:
+            Tag = 'Continue'
+        elif 'Body' not in Tasks:
+            Tag = 'Merge'
+        else:
+            Tag = 'Pass'
+
+        InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
+        inputList.append(InputDic)
+        
+    InputList = MergeInputList(inputList)
+        
     return InputList
 
+######################
+##### Filter 조건 #####
+######################
 ## BodyCharacterCompletion의 Filter(Error 예외처리)
 def CharNameBodyCharacterCompletionFilter(TalkTag, responseData, memoryCounter):
     # responseData의 전처리
@@ -101,11 +153,11 @@ def CharNameBodyCharacterCompletionFilter(TalkTag, responseData, memoryCounter):
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"
-    # Error3: 결과가 '말하는인물'이 '없음'일 때의 예외 처리 (없음일 경우에는 Narrator 낭독)
-    for dic in OutputDic:
-        for key, value in dic.items():
-            if value['말하는인물'] == '없음' or value['말하는인물'] == '' or value['말하는인물'] == 'none':
-                return "'말하는인물': '없음' 오류 발생: NonValueError"
+    # # Error3: 결과가 '말하는인물'이 '없음'일 때의 예외 처리 (없음일 경우에는 Narrator 낭독)
+    # for dic in OutputDic:
+    #     for key, value in dic.items():
+    #         if value['말하는인물'] == '없음' or value['말하는인물'] == '' or value['말하는인물'] == 'none':
+    #             return "'말하는인물': '없음' 오류 발생: NonValueError"
     # Error4: 자료의 구조가 다를 때의 예외 처리
     for dic in OutputDic:
         try:
@@ -113,7 +165,7 @@ def CharNameBodyCharacterCompletionFilter(TalkTag, responseData, memoryCounter):
             if not key in TalkTag:
                 return "JSON에서 오류 발생: JSONKeyError"
             else:
-                if not ('말하는인물' in dic[key] and '정답' in dic[key] and '수정된인물' in dic[key] and '증거문장' in dic[key]):
+                if not ('말하는인물' in dic[key] and '대표명칭' in dic[key] and '저자와동일인물여부' in dic[key]):
                     return "JSON에서 오류 발생: JSONKeyError"
         # Error5: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -123,6 +175,9 @@ def CharNameBodyCharacterCompletionFilter(TalkTag, responseData, memoryCounter):
         return "JSONCount에서 오류 발생: JSONCountError"
     return OutputDic
 
+######################
+##### Memory 생성 #####
+######################
 ## inputMemory 형성
 def BodyCharacterCompletionInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
@@ -157,6 +212,9 @@ def BodyCharacterCompletionOutputMemory(outputMemoryDics, MemoryLength):
     
     return outputMemory
 
+#######################
+##### Process 진행 #####
+#######################
 ## BodyCharacterCompletion 프롬프트 요청 및 결과물 Json화
 def BodyCharacterCompletionProcess(projectName, email, Process = "BodyCharacterCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
@@ -165,11 +223,14 @@ def BodyCharacterCompletionProcess(projectName, email, Process = "BodyCharacterC
     InputList = BodyFrameBodysToInputList(projectName, email)
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
+    ProcessCount = 0
     ContinueCount = 0
     inputMemoryDics = []
+    inputMemory = []
     InputDic = InputList[0]
     inputMemoryDics.append(InputDic)
     outputMemoryDics = []
+    outputMemory = []
         
     # BodyCharacterCompletionProcess
     while TotalCount < len(InputList):
@@ -187,18 +248,18 @@ def BodyCharacterCompletionProcess(projectName, email, Process = "BodyCharacterC
             if ContinueCount == 1:
                 mode = "ExampleFineTuning"
                 # "ExampleFineTuning"의 fineTuningMemory 형성
-                FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
+                FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
             else:
                 mode = "MemoryFineTuning"
         # Example 계열 모드의 순서
         elif Mode == "Master":
             mode = "Master"
             # "Master"의 MasterMemory 형성
-            MasterMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
+            MasterMemory = InputList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
         elif Mode == "ExampleFineTuning":
             mode = "ExampleFineTuning"
             # "ExampleFineTuning"의 fineTuningMemory 형성
-            FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else ""
+            FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
         elif Mode == "Example":
             mode = "Example"
 
@@ -213,9 +274,13 @@ def BodyCharacterCompletionProcess(projectName, email, Process = "BodyCharacterC
                 Input = InputDic['Continue']
             
             # Filter, MemoryCounter, OutputEnder 처리
-            talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
+            if Mode == "Master":
+                talkTag = re.findall(r'\[말(\d{1,5})\]', str(Input))
+            else:
+                talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
+            
             TalkTag = ["말" + match for match in talkTag]
-            memoryCounter = ""
+            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
             outputEnder = ""
 
             # Response 생성
@@ -250,8 +315,8 @@ def BodyCharacterCompletionProcess(projectName, email, Process = "BodyCharacterC
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트
-                if mode in ["Example", "ExampleFineTuning"]:
-                    # mode가 ["Example", "ExampleFineTuning"]중 하나인 경우 Memory 초기화
+                if mode in ["Example", "ExampleFineTuning", "Master"]:
+                    # mode가 ["Example", "ExampleFineTuning", "Master"]중 하나인 경우 Memory 초기화
                     INPUTMemory = "None"
                 elif mode in ["Memory", "MemoryFineTuning"]:
                     INPUTMemory = inputMemory
@@ -281,6 +346,39 @@ def BodyCharacterCompletionProcess(projectName, email, Process = "BodyCharacterC
 
     return outputMemoryDics
 
+################################
+##### 데이터 치환 및 DB 업데이트 #####
+################################
+## outputMemoryDics 후처리
+def MergeOutputMemoryDics(outputMemoryDics):
+    MergedOutput = []
+    SeenSpeeches = {}
+
+    for sublist in outputMemoryDics:
+        if sublist == 'Pass':
+            MergedOutput.append('Pass')
+            continue
+
+        NewSublist = []
+        for item in sublist:
+            for SpeechId, speechInfo in item.items():
+                if SpeechId in SeenSpeeches:
+                    ExistingInfo = SeenSpeeches[SpeechId]
+                    for key in speechInfo:
+                        if speechInfo[key] != ExistingInfo[key]:
+                            if not isinstance(ExistingInfo[key], list):
+                                ExistingInfo[key] = [ExistingInfo[key]]
+                            if speechInfo[key] not in ExistingInfo[key]:
+                                ExistingInfo[key].append(speechInfo[key])
+                else:
+                    SeenSpeeches[SpeechId] = speechInfo
+                    NewSublist.append({SpeechId: speechInfo})
+        
+        if NewSublist:
+            MergedOutput.append(NewSublist)
+
+    return MergedOutput
+
 ## 데이터 치환
 def BodyCharacterCompletionResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
@@ -294,23 +392,31 @@ def BodyCharacterCompletionResponseJson(projectName, email, messagesReview = 'of
                 CharacterTagChunk.append(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk'])
                 CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
     
-    # 데이터 치환
-    outputMemoryDics = BodyCharacterCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    # # 데이터 치환
+    # OutputMemoryDics = BodyCharacterCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    file_name = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/outputMemoryDics.json" #
+    with open(file_name, "r", encoding="utf-8") as file: #
+        OutputMemoryDics = json.load(file) #
+        
+    outputMemoryDics = MergeOutputMemoryDics(OutputMemoryDics)
     
     responseJson = []
     responseCount = 0
     
     for response in outputMemoryDics:
         if response != "Pass":
+            # if responseCount >= len(CharacterTagChunkId):
+            #     print(f"Invalid index: {responseCount}. The list size is {len(CharacterTagChunkId)}.")
+            #     break  # 또는 다른 적절한 처리
             for dic in response:
                 ChunkId = CharacterTagChunkId[responseCount]
                 Chunk = CharacterTagChunk[responseCount]
                 for key, value in dic.items():
-                    Annotation = value['증거문장']
-                    Character = value['수정된인물']
-                    Answer = value['정답']
+                    Character = value['말하는인물']
+                    MainCharacter = value['대표명칭']
+                    AuthorRelationship = value['저자와동일인물여부']
                 responseCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Annotation": Annotation, "Character": Character, "Answer": Answer})
+                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "MainCharacter": MainCharacter, "AuthorRelationship": AuthorRelationship})
     
     return responseJson
 
@@ -347,11 +453,11 @@ def BodyCharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mo
                 CharacterChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
                 Chunk = ResponseJson[i]["Chunk"]
-                Annotation = ResponseJson[i]["Annotation"]
                 Character = ResponseJson[i]["Character"]
-                Answer = ResponseJson[i]["Answer"]
+                MainCharacter = ResponseJson[i]["MainCharacter"]
+                AuthorRelationship = ResponseJson[i]["AuthorRelationship"]
                 
-                AddBodyCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Annotation, Character, Answer)
+                AddBodyCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship)
                 # i값 수동 업데이트
                 i += 1
             
@@ -375,7 +481,3 @@ if __name__ == "__main__":
     #########################################################################
     
     # BodyCharacterCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
-    InputList = BodyFrameBodysToInputList(projectName, email, Task = "Character")
-    
-    for i in range(45):
-        print(f"{InputList[i]}\n")

@@ -48,9 +48,9 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
     if mode in ["Example", "ExampleFineTuning", "Master"]:
       if mode == "Example":
         Example = promptFrame[0]["Example"]
-      elif mode == "ExampleFineTuning":
+      elif mode in ["ExampleFineTuning", "Master"]:
         Example = promptFrame[0]["ExampleFineTuning"]
-        
+
       messages = [
         {
           "role": Example[0]["Role"],
@@ -71,7 +71,9 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
         },
         {
           "role": Example[2]["Role"],
-          "content": Example[2]["OutputMark"] + Example[2]["OutputStarter"]
+          "content": Example[2]["OutputMark"] + 
+                    memoryCounter + 
+                    Example[2]["OutputStarter"]
         }
       ]
       

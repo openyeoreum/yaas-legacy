@@ -405,7 +405,7 @@ def TaggedChunksToUnitedChunks(projectName, email):
             
             # 만약 현재 항목을 추가했을 때 토큰 수가 1,000을 초과한다면
             # 현재까지의 항목들을 결과 리스트에 추가하고 마지막 항목은 다음 리스트의 시작으로 합니다.
-            if currentTokensCount > 1000:
+            if currentTokensCount > 1000: #####
                 last_unit = currentList.pop()  # 마지막 항목을 제거
                 if currentList:
                     IndexBodyUnitChunksUnit.append(currentList)

@@ -2,6 +2,7 @@ import os
 import re
 import json
 import time
+import tiktoken
 import sys
 sys.path.append("/yaas")
 
@@ -43,7 +44,7 @@ def MergeInputList(inputList):
                 # 'Id'는 MergeIds에 현재 항목의 'Id'를 추가하여 리스트로 만듭니다.
                 currentId = MergeIds + [item['Id']]
                 # 합쳐진 내용과 'Id' 리스트를 가진 새 딕셔너리를 만듭니다.
-                mergedItem = { 'Id': currentId, list(item.keys())[1]: content }
+                mergedItem = { 'Id': currentId, list(item.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
                 InputList.append(mergedItem)
                 # 버퍼와 ID 리스트를 초기화합니다.
                 MergeBuffer = ''
@@ -55,7 +56,7 @@ def MergeInputList(inputList):
     # 리스트의 끝에 도달했을 때 버퍼에 남아 있는 'Merge' 내용을 처리합니다.
     if MergeBuffer and not NonMergeFound:
         # 모든 항목이 'Merge'인 경우 마지막 항목만 처리합니다.
-        mergedItem = { 'Id': MergeIds, 'content': MergeBuffer }
+        mergedItem = { 'Id': MergeIds, list(item.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
         InputList.append(mergedItem)
 
     return InputList
@@ -72,7 +73,54 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
         if BodyFrameSplitedBodyScripts[i]['IndexId'] == IndexId:
             TaskBody = BodyFrameBodys[i][Task]
             TaskBodys.append(TaskBody)
-            Tasks += (BodyFrameBodys[i]['Task'])
+            Tasks += BodyFrameBodys[i]['Task']
+        else:
+            if 'Character' in Tasks:
+                Tag = 'Continue'
+            elif 'Body' not in Tasks:
+                Tag = 'Merge'
+            else:
+                Tag = 'Pass'
+                
+            InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
+            inputList.append(InputDic)
+            
+            IndexId += 1
+            Tasks = []
+            TaskBodys = []
+            
+            TaskBody = BodyFrameBodys[i][Task]
+            TaskBodys.append(TaskBody)
+            Tasks += BodyFrameBodys[i]['Task']
+    
+    if TaskBodys:
+        if 'Character' in Tasks:
+            Tag = 'Continue'
+        elif 'Body' not in Tasks:
+            Tag = 'Merge'
+        else:
+            Tag = 'Pass'
+
+        InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
+        inputList.append(InputDic)
+        
+    InputList = MergeInputList(inputList)
+        
+    return InputList
+
+## BodyFrameBodys의 inputList 치환
+def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
+    BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
+    
+    IndexId = 1
+    Tasks = []
+    TaskBodys = []
+    inputList = []
+    for i in range(len(BodyFrameSplitedBodyScripts)):
+        if BodyFrameSplitedBodyScripts[i]['IndexId'] == IndexId:
+            TaskBody = BodyFrameBodys[i][Task]
+            TaskBodys.append(TaskBody)
+            Tasks += BodyFrameBodys[i]['Task']
         else:
             if 'Character' in Tasks:
                 Tag = 'Continue'
@@ -419,7 +467,10 @@ if __name__ == "__main__":
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
-    mode = "Example"
+    mode = "Master"
     #########################################################################
     
-    # BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    InputList = BodyFrameBodysToInputList(projectName, email, Task = "Character")
+    print(InputList)
+    # for input in InputList:
+    #     print(f'{input}\n')

@@ -72,13 +72,13 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "데미안"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     
     ### existedDataFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
-    existedDataFrameMode = "on" # <- 개발 후 off #
+    existedDataFrameMode = "off" # <- 개발 후 off #
     
     # existedDataFrame 초기화
     existedDataFrame = None
@@ -151,23 +151,23 @@ if __name__ == "__main__":
     # existedDataSet = None
 
 
-    # ##############################
-    # ### 04_BodyCharacterDefine ###
-    # ##############################
-    # InitBodyCharacterDefine(projectName, email)
-    # InitRawDataSet(projectName, email, "BodyCharacterDefine")
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyCharacterDefine", DataFramePath)
-    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodyCharacterDefine", RawDataSetPath)
-    # mode = "Master"
-    # BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    ##############################
+    ### 04_BodyCharacterDefine ###
+    ##############################
+    InitBodyCharacterDefine(projectName, email)
+    InitRawDataSet(projectName, email, "BodyCharacterDefine")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyCharacterDefine", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodyCharacterDefine", RawDataSetPath)
+    mode = "Master"
+    BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    # if existedDataFrame == None:
-    #     updatedBodyCharacterDefine = UpdatedBodyCharacterDefine(projectName, email)
-    #     SaveDataFrame(projectName, email, "04_BodyCharacterDefine", updatedBodyCharacterDefine, DataFramePath)       
-    #     SaveDataSet(projectName, email, "04", "BodyCharacterDefine", RawDataSetPath)
-    # existedDataFrame = None
-    # existedDataSet = None
+    if existedDataFrame == None:
+        updatedBodyCharacterDefine = UpdatedBodyCharacterDefine(projectName, email)
+        SaveDataFrame(projectName, email, "04_BodyCharacterDefine", updatedBodyCharacterDefine, DataFramePath)       
+        SaveDataSet(projectName, email, "04", "BodyCharacterDefine", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet = None
 
 
     ##################################

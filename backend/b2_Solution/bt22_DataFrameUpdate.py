@@ -124,7 +124,7 @@ if __name__ == "__main__":
     # InitBodyFrame(projectName, email)
     # if existedDataFrameMode == "on":
     #     existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", DataFramePath)
-    # BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = existedDataFrame)
+    # BodyFrameUpdate(projectName, email, tokensCount = 2500, ExistedDataFrame = existedDataFrame)
 
     # if existedDataFrame == None:
     #     updatedBodyFrame = UpdatedBodyFrame(projectName, email)

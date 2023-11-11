@@ -65,90 +65,20 @@ def MergeInputList(inputList):
 def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     
-    IndexId = 1
-    Tasks = []
-    TaskBodys = []
     inputList = []
-    for i in range(len(BodyFrameSplitedBodyScripts)):
-        if BodyFrameSplitedBodyScripts[i]['IndexId'] == IndexId:
-            TaskBody = BodyFrameBodys[i][Task]
-            TaskBodys.append(TaskBody)
-            Tasks += BodyFrameBodys[i]['Task']
-        else:
-            if 'Character' in Tasks:
-                Tag = 'Continue'
-            elif 'Body' not in Tasks:
-                Tag = 'Merge'
-            else:
-                Tag = 'Pass'
-                
-            InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
-            inputList.append(InputDic)
-            
-            IndexId += 1
-            Tasks = []
-            TaskBodys = []
-            
-            TaskBody = BodyFrameBodys[i][Task]
-            TaskBodys.append(TaskBody)
-            Tasks += BodyFrameBodys[i]['Task']
-    
-    if TaskBodys:
-        if 'Character' in Tasks:
+    for i in range(len(BodyFrameBodys)):
+        Id = BodyFrameBodys[i]['BodyId']
+        task = BodyFrameBodys[i]['Task']
+        TaskBody = BodyFrameBodys[i][Task]
+
+        if 'Character' in task:
             Tag = 'Continue'
-        elif 'Body' not in Tasks:
+        elif 'Body' not in task:
             Tag = 'Merge'
         else:
             Tag = 'Pass'
-
-        InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
-        inputList.append(InputDic)
-        
-    InputList = MergeInputList(inputList)
-        
-    return InputList
-
-## BodyFrameBodys의 inputList 치환
-def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
-    BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
-    
-    IndexId = 1
-    Tasks = []
-    TaskBodys = []
-    inputList = []
-    for i in range(len(BodyFrameSplitedBodyScripts)):
-        if BodyFrameSplitedBodyScripts[i]['IndexId'] == IndexId:
-            TaskBody = BodyFrameBodys[i][Task]
-            TaskBodys.append(TaskBody)
-            Tasks += BodyFrameBodys[i]['Task']
-        else:
-            if 'Character' in Tasks:
-                Tag = 'Continue'
-            elif 'Body' not in Tasks:
-                Tag = 'Merge'
-            else:
-                Tag = 'Pass'
-                
-            InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
-            inputList.append(InputDic)
             
-            IndexId += 1
-            Tasks = []
-            TaskBodys = []
-            
-            TaskBody = BodyFrameBodys[i][Task]
-            TaskBodys.append(TaskBody)
-            Tasks += BodyFrameBodys[i]['Task']
-    
-    if TaskBodys:
-        if 'Character' in Tasks:
-            Tag = 'Continue'
-        elif 'Body' not in Tasks:
-            Tag = 'Merge'
-        else:
-            Tag = 'Pass'
-
-        InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
+        InputDic = {'Id': Id, Tag: TaskBody}
         inputList.append(InputDic)
         
     InputList = MergeInputList(inputList)
@@ -247,7 +177,7 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
     InputList = BodyFrameBodysToInputList(projectName, email)
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
-    ProcessCount = 0
+    ProcessCount = 1
     ContinueCount = 0
     inputMemoryDics = []
     inputMemory = []
@@ -328,11 +258,11 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | {Filter}")
                 continue
             else:
                 OutputDic = Filter
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -363,12 +293,13 @@ def BodyCharacterDefineProcess(projectName, email, Process = "BodyCharacterDefin
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
         outputMemory = BodyCharacterDefineOutputMemory(outputMemoryDics, MemoryLength)
-
+    
     return outputMemoryDics
 
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
+    
 ## 데이터 치환
 def BodyCharacterDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
@@ -396,9 +327,9 @@ def BodyCharacterDefineResponseJson(projectName, email, messagesReview = 'off', 
                 for key, value in dic.items():
                     Character = value['말하는인물']
                     Type = value['말의종류']
-                    Gender = value['말하는인물의성별'],
-                    Age = value['말하는인물의나이'],
-                    Emotion = value['말하는인물의감정'],
+                    Gender = value['말하는인물의성별']
+                    Age = value['말하는인물의나이']
+                    Emotion = value['말하는인물의감정']
                     Role = value['인물의역할']
                     Listener = value['듣는인물']
                 responseCount += 1
@@ -463,14 +394,9 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "데미안"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    
-    InputList = BodyFrameBodysToInputList(projectName, email, Task = "Character")
-    print(InputList)
-    # for input in InputList:
-    #     print(f'{input}\n')

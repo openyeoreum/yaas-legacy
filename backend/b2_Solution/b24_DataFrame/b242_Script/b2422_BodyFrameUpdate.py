@@ -369,7 +369,7 @@ def IndexMatching(projectName, email):
     return IndexMatchedChunks
 
 ## 데이터 리스트 유닛화
-def TaggedChunksToUnitedChunks(projectName, email):
+def TaggedChunksToUnitedChunks(projectName, email, tokensCount):
     IndexMatchedChunks = IndexMatching(projectName, email)
     
     IndexUnitList = []
@@ -399,18 +399,18 @@ def TaggedChunksToUnitedChunks(projectName, email):
         IndexBodyUnitChunksUnit.append([IndexUnitChunksUnit[0]])
 
         for Unit in IndexUnitChunksUnit[1:]:
-            Unit_tokens_count = len(encoding.encode(Unit["TagChunks"]))
+            UnitTokensCount = len(encoding.encode(Unit["TagChunks"]))
             currentList.append(Unit)
-            currentTokensCount += Unit_tokens_count
+            currentTokensCount += UnitTokensCount
             
             # 만약 현재 항목을 추가했을 때 토큰 수가 1,000을 초과한다면
             # 현재까지의 항목들을 결과 리스트에 추가하고 마지막 항목은 다음 리스트의 시작으로 합니다.
-            if currentTokensCount > 1000: #####
-                last_unit = currentList.pop()  # 마지막 항목을 제거
+            if currentTokensCount > tokensCount: #####
+                lastUnit = currentList.pop()  # 마지막 항목을 제거
                 if currentList:
                     IndexBodyUnitChunksUnit.append(currentList)
-                currentList = [last_unit]
-                currentTokensCount = len(encoding.encode(last_unit["TagChunks"]))
+                currentList = [lastUnit]
+                currentTokensCount = len(encoding.encode(lastUnit["TagChunks"]))
 
         # 남은 항목들을 결과 리스트에 추가합니다.
         if currentList:
@@ -539,7 +539,7 @@ def BodyFrameBodysUpdate(projectName, email):
 ###########
 
 ## IndexBodyUnitChunksList을 BodyFrame에 업데이트
-def BodyFrameUpdate(projectName, email, ExistedDataFrame = None):
+def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = None):
     print(f"< User: {email} | Project: {projectName} | 02_BodyFrameUpdate 시작 >")
     # BodyFrame의 Count값 가져오기
     IndexCount, BodyCount, ChunkCount, Completion = BodyFrameCountLoad(projectName, email)
@@ -550,7 +550,7 @@ def BodyFrameUpdate(projectName, email, ExistedDataFrame = None):
             AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame)
             print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate는 ExistedBodyFrame으로 대처됨 ]\n")
         else:
-            indexBodyUnitChunksList = TaggedChunksToUnitedChunks(projectName, email)
+            indexBodyUnitChunksList = TaggedChunksToUnitedChunks(projectName, email, tokensCount)
             
             # IndexBodyUnitChunksList를 IndexCount로 슬라이스
             IndexBodyUnitChunksList = indexBodyUnitChunksList[IndexCount:]
@@ -623,4 +623,4 @@ if __name__ == "__main__":
     #########################################################################
 
     InitBodyFrame(projectName, email)
-    BodyFrameUpdate(projectName, email)
+    BodyFrameUpdate(projectName, email, tokensCount = 3000)

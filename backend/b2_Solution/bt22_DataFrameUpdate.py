@@ -124,7 +124,7 @@ if __name__ == "__main__":
     # InitBodyFrame(projectName, email)
     # if existedDataFrameMode == "on":
     #     existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", DataFramePath)
-    # BodyFrameUpdate(projectName, email, ExistedDataFrame = existedDataFrame)
+    # BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = existedDataFrame)
 
     # if existedDataFrame == None:
     #     updatedBodyFrame = UpdatedBodyFrame(projectName, email)
@@ -151,23 +151,23 @@ if __name__ == "__main__":
     # existedDataSet = None
 
 
-    ##############################
-    ### 04_BodyCharacterDefine ###
-    ##############################
-    InitBodyCharacterDefine(projectName, email)
-    InitRawDataSet(projectName, email, "BodyCharacterDefine")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyCharacterDefine", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodyCharacterDefine", RawDataSetPath)
-    mode = "Master"
-    BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # ##############################
+    # ### 04_BodyCharacterDefine ###
+    # ##############################
+    # InitBodyCharacterDefine(projectName, email)
+    # InitRawDataSet(projectName, email, "BodyCharacterDefine")
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyCharacterDefine", DataFramePath)
+    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodyCharacterDefine", RawDataSetPath)
+    # mode = "Master"
+    # BodyCharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    if existedDataFrame == None:
-        updatedBodyCharacterDefine = UpdatedBodyCharacterDefine(projectName, email)
-        SaveDataFrame(projectName, email, "04_BodyCharacterDefine", updatedBodyCharacterDefine, DataFramePath)       
-        SaveDataSet(projectName, email, "04", "BodyCharacterDefine", RawDataSetPath)
-    existedDataFrame = None
-    existedDataSet = None
+    # if existedDataFrame == None:
+    #     updatedBodyCharacterDefine = UpdatedBodyCharacterDefine(projectName, email)
+    #     SaveDataFrame(projectName, email, "04_BodyCharacterDefine", updatedBodyCharacterDefine, DataFramePath)       
+    #     SaveDataSet(projectName, email, "04", "BodyCharacterDefine", RawDataSetPath)
+    # existedDataFrame = None
+    # existedDataSet = None
 
 
     ##################################

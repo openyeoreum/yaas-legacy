@@ -5,6 +5,7 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
+from collections import Counter
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyCharacterCompletionToDB, AddBodyCharacterCompletionChunksToDB, AddBodyCharacterCompletionCheckedCharacterTagsToDB, BodyCharacterCompletionCountLoad, BodyCharacterCompletionCompletionUpdate
@@ -87,43 +88,20 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     CharacterChunks, CharacterTags = LoadBodyCharacterDefine(projectName, email)
     
-    IndexId = 1
-    Tasks = []
-    TaskBodys = []
     inputList = []
-    for i in range(len(BodyFrameSplitedBodyScripts)):
-        if BodyFrameSplitedBodyScripts[i]['IndexId'] == IndexId:
-            TaskBody = ReplaceName(BodyFrameBodys[i][Task], CharacterChunks)
-            TaskBodys.append(TaskBody)
-            Tasks += (BodyFrameBodys[i]['Task'])
-        else:
-            if 'Character' in Tasks:
-                Tag = 'Continue'
-            elif 'Body' not in Tasks:
-                Tag = 'Merge'
-            else:
-                Tag = 'Pass'
-                
-            InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
-            inputList.append(InputDic)
-            
-            IndexId += 1
-            Tasks = []
-            TaskBodys = []
-            
-            TaskBody = ReplaceName(BodyFrameBodys[i][Task], CharacterChunks)
-            TaskBodys.append(TaskBody)
-            Tasks += BodyFrameBodys[i]['Task']
-    
-    if TaskBodys:
-        if 'Character' in Tasks:
+    for i in range(len(BodyFrameBodys)):
+        Id = BodyFrameBodys[i]['BodyId']
+        task = BodyFrameBodys[i]['Task']
+        TaskBody = ReplaceName(BodyFrameBodys[i][Task], CharacterChunks)
+
+        if 'Character' in task:
             Tag = 'Continue'
-        elif 'Body' not in Tasks:
+        elif 'Body' not in task:
             Tag = 'Merge'
         else:
             Tag = 'Pass'
-
-        InputDic = {'Id': IndexId, Tag: "".join(TaskBodys)}
+            
+        InputDic = {'Id': Id, Tag: TaskBody}
         inputList.append(InputDic)
         
     InputList = MergeInputList(inputList)
@@ -223,7 +201,7 @@ def BodyCharacterCompletionProcess(projectName, email, Process = "BodyCharacterC
     InputList = BodyFrameBodysToInputList(projectName, email)
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
-    ProcessCount = 0
+    ProcessCount = 1
     ContinueCount = 0
     inputMemoryDics = []
     inputMemory = []
@@ -308,11 +286,11 @@ def BodyCharacterCompletionProcess(projectName, email, Process = "BodyCharacterC
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | {Filter}")
                 continue
             else:
                 OutputDic = Filter
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -343,7 +321,7 @@ def BodyCharacterCompletionProcess(projectName, email, Process = "BodyCharacterC
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
         outputMemory = BodyCharacterCompletionOutputMemory(outputMemoryDics, MemoryLength)
-
+    
     return outputMemoryDics
 
 ################################
@@ -379,6 +357,67 @@ def MergeOutputMemoryDics(outputMemoryDics):
 
     return MergedOutput
 
+## 캐릭터 선별하기(필터)
+def MainCharacterFilter(responseJson):
+    # 캐릭터 선별1 [이름1, 이름2] 서로의 이름이 포함된 경우 긴 이름만 남김
+    for i in range(len(responseJson)):
+        MainCharacter = responseJson[i]['MainCharacter']
+        if isinstance(MainCharacter, list):
+            if MainCharacter[0] in MainCharacter[1]:
+                responseJson[i]['MainCharacter'] = MainCharacter[1]
+            elif MainCharacter[1] in MainCharacter[0]:
+                responseJson[i]['MainCharacter'] = MainCharacter[0]
+            else:
+                responseJson[i]['MainCharacter'] = MainCharacter
+        else:
+            responseJson[i]['MainCharacter'] = MainCharacter
+    
+    # 캐릭터 선별2 [이름1, 이름2]이 존재할 경우 외부에 존재하는 이름으로 남기고, 둘다 존재할 경우 가까운 이름으로 남김
+    for i in range(len(responseJson)):
+        MainCharacter = responseJson[i]['MainCharacter']
+        if isinstance(MainCharacter, list):
+            Name1, Name2 = MainCharacter
+            distance1, distance2 = float('inf'), float('inf')
+
+            for j in range(len(responseJson)):
+                if Name1 == responseJson[j]['MainCharacter']:
+                    distance1 = min(distance1, abs(j - i))
+                if Name2 == responseJson[j]['MainCharacter']:
+                    distance2 = min(distance2, abs(j - i))
+
+            if distance1 < distance2:
+                responseJson[i]['MainCharacter'] = Name1
+            else:
+                responseJson[i]['MainCharacter'] = Name2
+                
+    # 캐릭터 선별3 여전히 리스트가 남아 있는 경우 뒷 이름(더 많은 데이터로 선별된)을 최종 대표명칭으로 설정
+    for i in range(len(responseJson)):
+        MainCharacter = responseJson[i]['MainCharacter']
+        if isinstance(MainCharacter, list):
+            responseJson[i]['MainCharacter'] = MainCharacter[1]
+            
+    # 캐릭터 선별4 자료내에 동일한 이름이 있을 경우 긴이름으로 대처
+    for i in range(len(responseJson)):
+        currentName = responseJson[i]['MainCharacter']
+        for j in range(len(responseJson)):
+            comparedName = responseJson[j]['MainCharacter']
+
+            # 현재 이름이 비교되는 이름을 포함하고 있으며, 더 길면 현재 이름을 유지
+            if currentName in comparedName and len(currentName) < len(comparedName):
+                responseJson[i]['MainCharacter'] = comparedName
+
+            # 비교되는 이름이 현재 이름을 포함하고 있으며, 더 길면 비교되는 이름으로 변경
+            elif comparedName in currentName and len(comparedName) < len(currentName):
+                responseJson[j]['MainCharacter'] = currentName
+
+
+
+    # 캐릭터 선별5 실제 등장인물의 리스트
+    characterCounts = Counter(dic['MainCharacter'] for dic in responseJson)
+    sortedCharacters = sorted(characterCounts, key=characterCounts.get, reverse=True)
+    
+    return responseJson, sortedCharacters
+
 ## 데이터 치환
 def BodyCharacterCompletionResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
@@ -392,11 +431,8 @@ def BodyCharacterCompletionResponseJson(projectName, email, messagesReview = 'of
                 CharacterTagChunk.append(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk'])
                 CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
     
-    # # 데이터 치환
-    # OutputMemoryDics = BodyCharacterCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
-    file_name = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/outputMemoryDics.json" #
-    with open(file_name, "r", encoding="utf-8") as file: #
-        OutputMemoryDics = json.load(file) #
+    # 데이터 치환
+    OutputMemoryDics = BodyCharacterCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
         
     outputMemoryDics = MergeOutputMemoryDics(OutputMemoryDics)
     
@@ -418,7 +454,9 @@ def BodyCharacterCompletionResponseJson(projectName, email, messagesReview = 'of
                 responseCount += 1
                 responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "MainCharacter": MainCharacter, "AuthorRelationship": AuthorRelationship})
     
-    return responseJson
+    ResponseJson, sortedCharacters = MainCharacterFilter(responseJson)
+    
+    return ResponseJson, sortedCharacters
 
 ## 프롬프트 요청 및 결과물 Json을 BodyCharacterCompletion에 업데이트
 def BodyCharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
@@ -433,7 +471,8 @@ def BodyCharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mo
             AddExistedDataSetToDB(projectName, email, "BodyCharacterCompletion", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 05_BodyCharacterCompletionUpdate는 ExistedBodyCharacterCompletion으로 대처됨 ]\n")
         else:
-            responseJson = BodyCharacterCompletionResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson, sortedCharacters = BodyCharacterCompletionResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            print(f"Project: {projectName} | Process: BodyCharacterCompletion | CharacterFilter 완료\n{projectName}의 등장인물 {len(sortedCharacters)}명 : {sortedCharacters}")
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]

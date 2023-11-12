@@ -165,7 +165,7 @@ if __name__ == "__main__":
     if existedDataFrame == None:
         updatedCharacterDefine = UpdatedCharacterDefine(projectName, email)
         SaveDataFrame(projectName, email, "06_CharacterDefine", updatedCharacterDefine, DataFramePath)       
-        SaveDataSet(projectName, email, "04", "CharacterDefine", RawDataSetPath)
+        SaveDataSet(projectName, email, "06", "CharacterDefine", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
 
@@ -184,6 +184,6 @@ if __name__ == "__main__":
     if existedDataFrame == None:
         updatedCharacterCompletion = UpdatedCharacterCompletion(projectName, email)
         SaveDataFrame(projectName, email, "07_CharacterCompletion", updatedCharacterCompletion, DataFramePath)       
-        SaveDataSet(projectName, email, "05", "CharacterCompletion", RawDataSetPath)
+        SaveDataSet(projectName, email, "07", "CharacterCompletion", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None

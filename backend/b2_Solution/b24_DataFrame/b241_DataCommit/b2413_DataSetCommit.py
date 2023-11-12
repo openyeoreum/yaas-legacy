@@ -415,7 +415,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    process = 'BodyCharacterDefine'
+    process = 'CharacterDefine'
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     FeedbackDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5122_FeedbackDataSet/"
     CompleteDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5123_CompleteDataSet/"
@@ -428,11 +428,11 @@ if __name__ == "__main__":
     # AddProjectFeedbackDataSetsToDB(projectName, email, process, "Input", "Output")
     # AddProjectEmbeddingDataSetsToDB(projectName, email, process, "InputEmbedding", "OutputEmbedding")
     
-    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_04_BodyCharacterDefineDataSet.json", 'r', encoding='utf-8') as file:
+    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_06_CharacterDefineDataSet.json", 'r', encoding='utf-8') as file:
     #     processDataset = json.load(file)
     # processDataset = OutputAccuracy(projectName, email, process, processDataset)
     
-    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_04_BodyCharacterDefineDataSet_Accuracy.json", 'w', encoding='utf-8') as file:
+    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_06_CharacterDefineDataSet_Accuracy.json", 'w', encoding='utf-8') as file:
     #     json.dump(processDataset, file, ensure_ascii=False, indent = 4)
         
-    AddProjectFeedbackDataSets(projectName, email, "BodyCharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)
+    AddProjectFeedbackDataSets(projectName, email, "CharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)

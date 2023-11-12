@@ -1,0 +1,54 @@
+[
+    {
+        "UserId": "None",
+        "ProjectsStorageID": "None",
+        "ProjectId": "None",
+        "ProjectName": "None",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "ContextCompletion",
+        "IndexCount": 0,
+        "BodyCount": 0,
+        "ChunkCount": 0,
+        "Completion": "No"
+    },
+    {
+        "ContextCompeletions": [
+            {
+                "ContextId": 0,
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Genre": "None",
+                "Gender": "None",
+                "Age": "None",
+                "Personality": "None",
+                "Emotion": "None",
+                "Era": "None",
+                "Culture": "None",
+                "importance": "None"
+            }
+        ]
+    },
+    {
+        "CheckedCompletionTags": [
+            {
+                "CharacterId": 0,
+                "CharacterTag": "Narrator",
+                "CharacterList": ["None"],
+                "Character": "None"
+            },
+            {
+                "CharacterId": 0,
+                "CharacterTag": "MainChracter",
+                "CharacterList": ["None"],
+                "Character": "None"
+            },
+            {
+                "CharacterId": 0,
+                "CharacterTag": "Chracter",
+                "CharacterList": ["None"],
+                "Character": "None"
+            }
+        ]
+    }
+]

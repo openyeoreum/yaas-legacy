@@ -249,7 +249,7 @@ def BodySummaryResponseJson(projectName, email, messagesReview = "off", mode = "
 
 ## 프롬프트 요청 및 결과물 Json을 IndexFrame에 업데이트
 def SummaryBodyFrameUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 03_SummaryBodyFrameUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 05_SummaryBodyFrameUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, Completion = SummaryBodyFrameCountLoad(projectName, email)
     if Completion == "No":
@@ -258,7 +258,7 @@ def SummaryBodyFrameUpdate(projectName, email, MessagesReview = 'off', Mode = "M
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedSummaryBodyFrameToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "BodySummary", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 03_SummaryBodyFrameUpdate는 ExistedSummaryBodyFrame으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 05_SummaryBodyFrameUpdate는 ExistedSummaryBodyFrame으로 대처됨 ]\n")
         else:
             responseJson = BodySummaryResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
                 
@@ -288,10 +288,10 @@ def SummaryBodyFrameUpdate(projectName, email, MessagesReview = 'off', Mode = "M
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             SummaryBodyFrameCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 03_SummaryBodyFrameUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 05_SummaryBodyFrameUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 03_SummaryBodyFrameUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 05_SummaryBodyFrameUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 

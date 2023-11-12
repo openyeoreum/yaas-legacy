@@ -1,6 +1,5 @@
 import bcrypt
 import pytz
-import hashlib
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, Float, String, Text, DateTime, ForeignKey
@@ -185,31 +184,34 @@ class Project(Base):
     IndexFrame = Column(JSON)
     CharacterFrame = Column(JSON)
     BodyFrame = Column(JSON)
-    CaptionPhargraphFrame = Column(JSON)
+    PhargraphCaptionFrame = Column(JSON)
+    PhargraphTransitionFrame = Column(JSON)
     SummaryBodyFrame = Column(JSON)
-    BodyContextFrame = Column(JSON)
-    CharacterContextFrame = Column(JSON)
-    SoundContextFrame = Column(JSON)
+    BodyContextTags = Column(JSON)
+    CharacterContextTags = Column(JSON)
+    SoundContextTags = Column(JSON)
     
-    # BodyDefine
-    BodyCharacterDefine = Column(JSON)
-    BodyCharacterCompletion = Column(JSON)
-    BodyContextDefine = Column(JSON)
+    # Context
+    ContextDefine = Column(JSON)
+    ContextCompletion = Column(JSON)
     
-    # SplitedBodyDefine
-    SplitedBodyCharacterDefine = Column(JSON)
-    SplitedBodyContextDefine = Column(JSON)
-    PhargraphTransitionDefine = Column(JSON)
+    # Character
+    CharacterDefine = Column(JSON)
+    CharacterCompletion = Column(JSON)
+    CharacterMultiQuery = Column(JSON)
     
-    # Tagging
-    CharacterTagging = Column(JSON)
+    # Music
     MusicTagging = Column(JSON)
-    SoundTagging = Column(JSON)
+    MusicMultiQuery = Column(JSON)
     
-    # Matching
-    CharacterMatching = Column(JSON)
+    # Sound
+    SoundTagging = Column(JSON)
     SoundMatching = Column(JSON)
+    SoundMultiQuery = Column(JSON)
+    
+    # SFX
     SFXMatching = Column(JSON)
+    SFXMultiQuery = Column(JSON)
     
     # MultiQuery
     CharacterMultiQuery = Column(JSON)
@@ -308,31 +310,34 @@ class ProjectHistory(Base):
     IndexFrameStatus = Column(String(64))
     CharacterFrameStatus = Column(String(64))
     BodyFrameStatus = Column(String(64))
-    CaptionPhargraphFrameStatus = Column(String(64))
+    PhargraphCaptionFrameStatus = Column(String(64))
+    PhargraphTransitionFrameStatus = Column(String(64))
     SummaryBodyFrameStatus = Column(String(64))
-    BodyContextFrameStatus = Column(String(64))
-    CharacterContextFrameStatus = Column(String(64))
-    SoundContextFrameStatus = Column(String(64))
+    BodyContextTagsStatus = Column(String(64))
+    CharacterContextTagsStatus = Column(String(64))
+    SoundContextTagsStatus = Column(String(64))
     
-    # BodyDefine
-    BodyCharacterDefineStatus = Column(String(64))
-    BodyCharacterCompletion = Column(JSON)
-    BodyContextDefineStatus = Column(String(64))
+    # Context
+    ContextDefineStatus = Column(JSON(64))
+    ContextCompletionStatus = Column(JSON(64))
     
-    # SplitedBodyDefine
-    SplitedBodyCharacterDefineStatus = Column(String(64))
-    SplitedBodyContextDefineStatus = Column(String(64))
-    PhargraphTransitionDefineStatus = Column(String(64))
+    # Character
+    CharacterDefineStatus = Column(JSON(64))
+    CharacterCompletionStatus = Column(JSON(64))
+    CharacterMultiQueryStatus = Column(JSON(64))
     
-    # Tagging
-    CharacterTaggingStatus = Column(String(64))
-    MusicTaggingStatus = Column(String(64))
-    SoundTaggingStatus = Column(String(64))
+    # Music
+    MusicTaggingStatus = Column(JSON(64))
+    MusicMultiQueryStatus = Column(JSON(64))
     
-    # Matching
-    CharacterMatchingStatus = Column(String(64))
-    SoundMatchingStatus = Column(String(64))
-    SFXMatchingStatus = Column(String(64))
+    # Sound
+    SoundTaggingStatus = Column(JSON(64))
+    SoundMatchingStatus = Column(JSON(64))
+    SoundMultiQueryStatus = Column(JSON(64))
+    
+    # SFX
+    SFXMatchingStatus = Column(JSON(64))
+    SFXMultiQueryStatus = Column(JSON(64))
     
     # MultiQuery
     CharacterMultiQueryStatus = Column(String(64))
@@ -385,28 +390,32 @@ class Prompt(Base):
     IndexDefinePreprocess = Column(JSON)
     IndexDefineDivisionPreprocess = Column(JSON)
     IndexDefine = Column(JSON)
-    CaptionDefine = Column(JSON)
+    CaptionPhargraph = Column(JSON)
+    TransitionPhargraph = Column(JSON)
     BodySummary = Column(JSON)
+    TransitionPhargraph = Column(JSON)
+    
+    # ContextPrompt
+    ContextDefine = Column(JSON)
+    ContextCompletion = Column(JSON)
 
-    # BodyDefinePrompt
-    BodyCharacterDefine = Column(JSON)
-    BodyCharacterCompletion = Column(JSON)
-    BodyContextDefine = Column(JSON)
+    # CharacterPrompt
+    CharacterDefine = Column(JSON)
+    CharacterCompletion = Column(JSON)
+    # CharacterMultiQuery = Column(JSON)
     
-    # SplitedBodyDefinePrompt
-    SplitedBodyCharacterDefine = Column(JSON)
-    SplitedBodyContextDefine = Column(JSON)
-    PhargraphTransitionDefine = Column(JSON)
+    # # MusicPrompt
+    # MusicTagging = Column(JSON)
+    # MusicMultiQuery = Column(JSON)
     
-    # TaggingPrompt
-    CharacterTagging = Column(JSON)
-    MusicTagging = Column(JSON)
-    SoundTagging = Column(JSON)
+    # # SoundPrompt
+    # SoundTagging = Column(JSON)
+    # SoundMatching = Column(JSON)
+    # SoundMultiQuery = Column(JSON)
     
-    # MatchingPrompt
-    CharacterMatching = Column(JSON)
-    SoundMatching = Column(JSON)
+    # SFXPrompt
     SFXMatching = Column(JSON)
+    SFXMultiQuery = Column(JSON)
 
     # MultiQueryPrompt
     CharacterMultiQuery = Column(JSON)
@@ -427,28 +436,28 @@ class Prompt(Base):
     CorrectionZh = Column(JSON)
     CorrectionEs = Column(JSON)
     
-    # Selection-GenerationPrompt
-    VoiceGenerationKo = Column(JSON)
-    VoiceGenerationEn = Column(JSON)
-    VoiceGenerationJa = Column(JSON)
-    VoiceGenerationZh = Column(JSON)
-    VoiceGenerationEs = Column(JSON)
+    # # Selection-GenerationPrompt
+    # VoiceGenerationKo = Column(JSON)
+    # VoiceGenerationEn = Column(JSON)
+    # VoiceGenerationJa = Column(JSON)
+    # VoiceGenerationZh = Column(JSON)
+    # VoiceGenerationEs = Column(JSON)
     
-    MusicSelection = Column(JSON)
-    SoundSelection = Column(JSON)
+    # MusicSelection = Column(JSON)
+    # SoundSelection = Column(JSON)
     
-    SFXSelectionKo = Column(JSON)
-    SFXSelectionEn = Column(JSON)
-    SFXSelectionJa = Column(JSON)
-    SFXSelectionZh = Column(JSON)
-    SFXSelectionEs = Column(JSON)
+    # SFXSelectionKo = Column(JSON)
+    # SFXSelectionEn = Column(JSON)
+    # SFXSelectionJa = Column(JSON)
+    # SFXSelectionZh = Column(JSON)
+    # SFXSelectionEs = Column(JSON)
     
-    # Mixing-MasteringPrompt
-    MixingMasteringKo = Column(JSON)
-    MixingMasteringEn = Column(JSON)
-    MixingMasteringJa = Column(JSON)
-    MixingMasteringZh = Column(JSON)
-    MixingMasteringEs = Column(JSON)
+    # # Mixing-MasteringPrompt
+    # MixingMasteringKo = Column(JSON)
+    # MixingMasteringEn = Column(JSON)
+    # MixingMasteringJa = Column(JSON)
+    # MixingMasteringZh = Column(JSON)
+    # MixingMasteringEs = Column(JSON)
     
 ### TrainingDataset
 class TrainingDataset(Base):
@@ -466,28 +475,32 @@ class TrainingDataset(Base):
     IndexDefinePreprocess = Column(JSON)
     IndexDefineDivisionPreprocess = Column(JSON)
     IndexDefine = Column(JSON)
-    CaptionDefine = Column(JSON)
+    CaptionPhargraph = Column(JSON)
+    TransitionPhargraph = Column(JSON)
     BodySummary = Column(JSON)
+    TransitionPhargraph = Column(JSON)
+    
+    # ContextDataset
+    ContextDefine = Column(JSON)
+    ContextCompletion = Column(JSON)
 
-    # BodyDefineDataset
-    BodyCharacterDefine = Column(JSON)
-    BodyCharacterCompletion = Column(JSON)
-    BodyContextDefine = Column(JSON)
+    # CharacterDataset
+    CharacterDefine = Column(JSON)
+    CharacterCompletion = Column(JSON)
+    # CharacterMultiQuery = Column(JSON)
     
-    # SplitedBodyDefineDataset
-    SplitedBodyCharacterDefine = Column(JSON)
-    SplitedBodyContextDefine = Column(JSON)
-    PhargraphTransitionDefine = Column(JSON)
+    # # MusicDataset
+    # MusicTagging = Column(JSON)
+    # MusicMultiQuery = Column(JSON)
     
-    # TaggingDataset
-    CharacterTagging = Column(JSON)
-    MusicTagging = Column(JSON)
-    SoundTagging = Column(JSON)
+    # # SoundDataset
+    # SoundTagging = Column(JSON)
+    # SoundMatching = Column(JSON)
+    # SoundMultiQuery = Column(JSON)
     
-    # MatchingDataset
-    CharacterMatching = Column(JSON)
-    SoundMatching = Column(JSON)
+    # SFXDataset
     SFXMatching = Column(JSON)
+    SFXMultiQuery = Column(JSON)
 
     # MultiQueryDataset
     CharacterMultiQuery = Column(JSON)
@@ -508,28 +521,28 @@ class TrainingDataset(Base):
     CorrectionZh = Column(JSON)
     CorrectionEs = Column(JSON)
     
-    # Selection-GenerationDataset
-    VoiceGenerationKo = Column(JSON)
-    VoiceGenerationEn = Column(JSON)
-    VoiceGenerationJa = Column(JSON)
-    VoiceGenerationZh = Column(JSON)
-    VoiceGenerationEs = Column(JSON)
+    # # Selection-GenerationDataset
+    # VoiceGenerationKo = Column(JSON)
+    # VoiceGenerationEn = Column(JSON)
+    # VoiceGenerationJa = Column(JSON)
+    # VoiceGenerationZh = Column(JSON)
+    # VoiceGenerationEs = Column(JSON)
     
-    MusicSelection = Column(JSON)
-    SoundSelection = Column(JSON)
+    # MusicSelection = Column(JSON)
+    # SoundSelection = Column(JSON)
     
-    SFXSelectionKo = Column(JSON)
-    SFXSelectionEn = Column(JSON)
-    SFXSelectionJa = Column(JSON)
-    SFXSelectionZh = Column(JSON)
-    SFXSelectionEs = Column(JSON)
+    # SFXSelectionKo = Column(JSON)
+    # SFXSelectionEn = Column(JSON)
+    # SFXSelectionJa = Column(JSON)
+    # SFXSelectionZh = Column(JSON)
+    # SFXSelectionEs = Column(JSON)
     
-    # Mixing-MasteringDataset
-    MixingMasteringKo = Column(JSON)
-    MixingMasteringEn = Column(JSON)
-    MixingMasteringJa = Column(JSON)
-    MixingMasteringZh = Column(JSON)
-    MixingMasteringEs = Column(JSON)
+    # # Mixing-MasteringDataset
+    # MixingMasteringKo = Column(JSON)
+    # MixingMasteringEn = Column(JSON)
+    # MixingMasteringJa = Column(JSON)
+    # MixingMasteringZh = Column(JSON)
+    # MixingMasteringEs = Column(JSON)
 
 ### VoiceDatabase
 class Voice(Base):

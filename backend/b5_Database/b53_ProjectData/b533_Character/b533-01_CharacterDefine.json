@@ -1,0 +1,32 @@
+[
+    {
+        "UserId": "None",
+        "ProjectsStorageID": "None",
+        "ProjectId": "None",
+        "ProjectName": "None",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "CharacterDefine",
+        "CharacterFrame": "No",
+        "CharacterChunkCount": 0,
+        "CharacterCount": 0,
+        "Completion": "No",
+        "Memo": "전체 캐릭터를 알아내는 프로세스"
+    },
+    {
+        "CharacterChunks": [
+            {
+                "CharacterChunkId": 0,
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Character": "None",
+                "Type": "None",
+                "Gender": "None",
+                "Age": "None",
+                "Emotion": "None",
+                "Role": "None",
+                "Listener": "None"
+            }
+        ]
+    }
+]

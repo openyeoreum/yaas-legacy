@@ -411,4 +411,4 @@ if __name__ == "__main__":
     TrainingDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5124_TrainingDataSet/"
     #########################################################################
 
-    LLMFineTuning(projectName, email, "05", "BodyCharacterCompletion", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
+    LLMFineTuning(projectName, email, "05", "CharacterCompletion", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)

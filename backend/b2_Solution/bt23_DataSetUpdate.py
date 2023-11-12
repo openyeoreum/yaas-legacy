@@ -15,13 +15,13 @@ if __name__ == "__main__":
     #########################################################################
 
     ####################################################
-    ### 04_BodyCharacterDefine Feedback 데이터셋 파인튜닝 ###
+    ### 06_CharacterDefine Feedback 데이터셋 파인튜닝 ###
     ####################################################
-    AddProjectFeedbackDataSets(projectName, email, "BodyCharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)
-    LLMFineTuning(projectName, email, "04", "BodyCharacterDefine", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
+    AddProjectFeedbackDataSets(projectName, email, "CharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)
+    LLMFineTuning(projectName, email, "04", "CharacterDefine", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
     
     # ########################################################
-    # ### 05_BodyCharacterCompletion Feedback 데이터셋 파인튜닝 ###
+    # ### 07_CharacterCompletion Feedback 데이터셋 파인튜닝 ###
     # ########################################################
-    # AddProjectFeedbackDataSets(projectName, email, "BodyCharacterCompletion", FeedbackDataSetPath, CompleteDataSetPath)
-    # LLMFineTuning(projectName, email, "05", "BodyCharacterCompletion", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
+    # AddProjectFeedbackDataSets(projectName, email, "CharacterCompletion", FeedbackDataSetPath, CompleteDataSetPath)
+    # LLMFineTuning(projectName, email, "05", "CharacterCompletion", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)

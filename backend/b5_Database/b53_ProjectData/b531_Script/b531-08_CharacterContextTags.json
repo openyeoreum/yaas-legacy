@@ -1,0 +1,68 @@
+[
+    {
+        "UserId": "None",
+        "ProjectsStorageID": "None",
+        "ProjectId": "None",
+        "ProjectName": "None",
+        "Content": "CharacterContext",
+        "Language": "Ko",
+        "TaskName": "CharacterContext"
+    },
+    {
+        "CharacterContextTags": [
+            {
+                "CharacterContextId": 0,
+                "CharacterContextTag": "None",
+                "CharacterContexts": ["None"]
+            },
+            {
+                "CharacterContextId": 1,
+                "CharacterContextTag": "Language",
+                "CharacterContexts": ["한국어", "영어", "일본어", "중국어", "스페인어"]
+            },
+            {
+                "CharacterContextId": 2,
+                "CharacterContextTag": "Type",
+                "CharacterContexts": ["대화", "독백", "요약", "인용", "강조"],
+                "Memo": "나레이터가 톤을 변경하여 읽는지, 다른 인물의 설정이 필요한지 결정하는 요소"
+            },
+            {
+                "CharacterContextId": 3,
+                "CharacterContextTag": "Relation",
+                "CharacterContexts": ["나"],
+                "Memo": "나레이터(또는 주인공)와의 관계를 통해 인물 선정의 선택요소를 구체화"
+            },
+            {
+                "CharacterContextId": 4,
+                "CharacterContextTag": "Gender",
+                "CharacterContexts": ["남성", "여성"]
+            },
+            {
+                "CharacterContextId": 5,
+                "CharacterContextTag": "Age",
+                "CharacterContexts": ["0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-"]
+            },
+            {
+                "CharacterContextId": 6,
+                "CharacterContextTag": "Emotion",
+                "CharacterContexts": ["중립", "즐거움", "화남", "슬픔", "침착함"]
+            },
+            {
+                "CharacterContextId": 7,
+                "CharacterContextTag": "Tone",
+                "CharacterContexts": ["중립", "즐거움", "화남", "슬픔", "침착함"],
+                "CharacterContextDgree": ["1", "2", "3", "4", "5"]
+            },
+            {
+                "CharacterContextId": 8,
+                "CharacterContextTag": "Dotdot",
+                "CharacterContextDgree": [" ", "~", ".", ","]
+            },
+            {
+                "CharacterContextId": 9,
+                "CharacterContextTag": "Pause",
+                "CharacterContextDgree": ["0.0", "0.3", "0.6"]
+            }
+        ]
+    }
+]

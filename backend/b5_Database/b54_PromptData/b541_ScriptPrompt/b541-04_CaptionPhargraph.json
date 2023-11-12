@@ -1,0 +1,264 @@
+{
+    "TaskName": "CaptionPhargraph",
+    "BaseModel": {
+        "ShortTokensModel": "gpt-3.5-turbo",
+        "LongTokensModel": "gpt-3.5-turbo-16k"
+    },
+    "ExampleFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
+    "MemoryFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
+    "MasterModel": "gpt-4-1106-preview",
+    "Temperature": 0.5,
+    "OutputTokensRatio": 0.5,
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서의 내용에서 본문과 캡션을 분리하는 전문가 입니다.\n그래서 지금 <예상 캡션 부분>에서 <캡션.json>을 선정하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(캡션의 정의)\n",
+                    "Message": "도서의 내용에 이해를 돕기 위한 용어, 사진, 별첨, 참고, 해설, 표, 기타 등에 포함된 부가적 설명 또는 정보"
+                },
+                {
+                    "Mark": "\n\n(캡션의 종류)\n",
+                    "Message": "용어, 자료, 별첨, 참고, 해설, 기타"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. 아래 예시들을 보고 <예상 캡션 부분>에서 <캡션.json>을 선정하는 규칙을 파악합니다.\n2. <예상 캡션 부분>은 도서 내용중 캡션이 있다고 예상되는 곳을 발췌한 것 입니다.\n3. <예상 캡션 부분>에 'part_of_the_caption : <Term>...' 부분은 캡션에 포함되어 있는 내용 중 일부분 입니다.\n4. 따라서 캡션은 'part_of_the_caption <Term>...'가 포함된 ['part_of_the_caption'], [4, 'part_of_the_caption'], [1, 2, 3, 4, 'part_of_the_caption'], [4, 'part_of_the_caption', 5, 6] 등의 리스트로 구성합니다.\n5. 작업의 최종 결과물인 <캡션1.json>은 캡션이 조합된 CaptionList과 캡션 내용인 CaptionText과 캡션의 종류 태그인 CaptionTag로 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(캡션선정 작업 예시1)\n",
+                    "InputExampleMark": "<예상 캡션 부분 예시1>\n",
+                    "InputExample": "0 : 또 수천 명의 CERN 연구원들이 만들어 내는 연구 자료들을 통합 관리하는 것도 중요한 일이었다. 그런데, 과거에는 연구보고서를 쓰면 도서관이나 자료실에 보관하고 디렉터리별로 분류해서 관리했는 데, 수천 명이 쏟아 내는, 그래서 점점 쌓여 가는 방대한 데이터를 감 당할 방법이 없었다. 비유하자면, 정보가 홍수처럼 밀려오는 상황을 돛단배로는 막을 수 없는 노릇이었다.\n\n1 : <8.Index>팀 버너스 리, 하이퍼 텍스트를 계승하다\n\n2 : <Narrator>팀 버너스 리가 이 문제를 고민한다. 대학 때부터 컴퓨터를 좋 아했고, 잠시 통신회사와 이미지 컴퓨터 시스템 회사에서 일하면서 데이터 네트워크에 관한 경력을 쌓은 경험이 있었던 그는 1984년 CERN에 복직해서 연구소 정보검색시스템 구축 작업을 맡게 된다.\n\n3 : 1980년대는 한창 컴퓨터가 개인화되던 때였는데, 연구원 개인들 의 PC를 연결해서 서로 정보를 공유하고, 또 쏟아져 나오는 연구 페 이퍼들을 도서관이나 자료실이 아닌 컴퓨터상에 모으고 분류하고 검 색할 수 있는 효율적인 정보시스템을 고민하고 있던 차였다.\n\n4 : 이때 사회학자 테드 넬슨이 제나두 프로젝트 Project Xanadu에 사용한 ‘하이퍼텍스트’라는 개념을 발견한다. 하이퍼텍스트란 ‘초월 Hyper’과 ‘문서 Text’의 합성어로서 문서들을 중첩시켜, 다른 말로 하면 하이퍼링 크를 통해 여러 문서를 넘나들 수 있도록 하는 것이다. 즉, 선형적이고 체계적으로 정보를 분류하고 보관하던 이전 인덱싱 방식과 달리, 하이퍼텍스트는 문서들을 비선형적으로, 체계를 초월해서 링크시키는 방식이다.\n\npart_of_the_caption : <Term><자료 1-2 : 인터넷의 아버지라 불리는 팀 버너스 리>\n\n5 : <Narrator>HTTP를 주창하면서 HTML과 관련 소프트웨어를 만들었고, 월드와이드웹(www)이라는 개념을 창시했다.\n\n6 : 테드 넬슨의 제나두 프로젝트는 비록 완성되지 못했지만 팀 버너스 리에 의해 계승되어 웹으로 구현되었다. 팀 버너스 리는 1989년\n\n7 : <Character>'링크로 연결된 문서 조각들의 거미줄이 고정된 계층구조보다 한층 더 유용하다'\n\n8 : <Narrator>면서 하이퍼텍스트를 통신 프로토콜로 채택할 것을 주 창했고, 지금 우리가 사용하는 인터넷 언어인 HTML, 그리고 관련 소 프트웨어를 만든다. 그는 월드와이드웹 www이라는 개념을 만들었고, 1994년부터 월드와이드웹 컨소시엄 W3C을 설립해서 이끌면서 웹 표 준과 가이드라인을 제시하는 일을 하고 있다.\n\n9 : 인터넷에 일반인들이 접속하게 된 것은 국제정치적 변화와도 관 련되어 있다. 1989년에 베를린 장벽이 무너지고, 1991년 소련이 해 체되면서 제2차 세계대전 이후 지속되어 오던 냉전체제가 종식된 것이다. 중국이 개방개혁을 표방하면서 대한민국과 수교를 맺은 것도 1992년이다. 이러한 정치 역학의 변동이 없었더라면 팀 버너스 리의 HTTP는 받아들여지기 어려웠을 것이고, 통신 네트워크는 여전히 일 반인이 접근할 수 없는 폐쇄적인 시공간으로 남아 있었을지 모를 일이다.",
+                    "OutputExampleMark": "\n\n<캡션.json 예시1>\n",
+                    "OutputExample":
+                    [
+                        {"CaptionList": ["part_of_the_caption", 5]},
+                        {"CaptionText": "<자료 1-2 : 인터넷의 아버지라 불리는 팀 버너스 리>\nHTTP를 주창하면서 HTML과 관련 소프트웨어를 만들었고, 월드와이드웹(www)이라는 개념을 창시했다."},
+                        {"CaptionTag": "자료"}
+                    ]
+                },
+                {
+                    "Mark": "\n\n(캡션선정 작업 예시2)\n",
+                    "InputExampleMark": "<예상 캡션 부분 예시2>\n",
+                    "InputExample": "0 : <Narrator>2010년대 들어 과학과 ICT가 급물살을 타면서 기술 혁신에도 가 속도가 붙었다. 트리거는 스마트폰이었다. 스마트폰과 IoT 센서들이 쏟아 내는 빅데이터는 클라우드 기술과 접합되어 딥 러닝 방식 의 인공지능을 가능하게 만들었고, 로봇, 가상현실, 3D 프린터, 자율주행차, 블록체인 등 신문물이 산업문명의 유물들을 대체해가기 시작했다.\n\n1 : 2016년 1월 다보스 포럼은 ‘4차 산업혁명’이라는 단어를 화두로 던졌다. 증기기관이 일으킨 1차 산업혁명, 20세기 들어 전기, 미디어 등이 일으킨 2차 산업혁명, 그리고 디지털과 인터넷이 세상을 뒤집어 놓은 것을 3차 산업혁명이라 한다면, 작금에 일어나고 있는 대전환을 4차 산업혁명이라 표현한 것이다.\n\n2 : 4차 산업혁명은 한 마디로, 지능 intelligence의 혁명이다. 사물인터넷 IoT은 아날로그 사물에 디지털 속성을 부여함으로써 인공지능을 붙이는 작업이고, 로봇, 3D 프린터, 자율주행차 등은 지능이 붙은 스마트사물이다. 또 사이퍼펑크에서 뿌리 뻗어 나온 블록체인은 집단지성을 발현하게 하는 알고리즘이다. 이 두 가지 지능, 즉 인공지능 AI과 집단지성 CI의 콜라보가 4차 산업혁명의 본질이다.\n\n3 : 나는 개인적으로 4차 산업혁명이라는 용어가 탐탁지는 않지만, 3차 산업혁명에 비해 한 차원 업그레이드되었다는 데는 동의한다. 1990년대 인터넷이 일으킨 3차 산업혁명은 ‘정보혁명’이라 할 수 있다. 정보가 네트워크를 타고 빛의 속도로 이동하기 시작했고, 연결과 융합을 통해 웹이라는 초월적 세상을 창조한 것이다. 정보의 이동과 융합은 지능을 만들었고, 그 결과물이 4차 산업혁명이라 불리는 ‘지능혁명’이다.\n\n4 : 정보와 지능은 다르다. 데이터를 정제한 것이 정보 information이고, 정보가 만들어 내는 에너지가 지능 intelligence이다. 제1부 3장에서 비유했던 석유로 치면, 원유는 데이터이고, 정제된 휘발유는 정보이 고, 휘발유가 만들어 내는 에너지는 지능이라 할 수 있다. 이 관계를 <자료 2-3>과 같이 정리할 수 있다.\n\npart_of_the_caption : <Term>데이터 (data)\n\n5 : <Term>정리되지 않은 진흙탕\n\n6 : <Term>정보 (information)\n\n7 : <Term>데이터에서 추출한 의미있는 패턴\n\n8 : <Term>지능 (intelligence)\n\n9 : <Term>정보가 만들어 내는 에너지",
+                    "OutputExampleMark": "\n\n<캡션.json 예시2>\n",
+                    "OutputExample":
+                    [
+                        {"CaptionList": ["part_of_the_caption", 5, 6, 7, 8, 9]},
+                        {"CaptionText": "데이터 (data)\n정리되지 않은 진흙탕\n정보 (information)\n데이터에서 추출한 의미있는 패턴\n지능 (intelligence)\n정보가 만들어 내는 에너지"},
+                        {"CaptionTag": "표"}
+                    ]
+                },
+                {
+                    "Mark": "\n\n(캡션선정 작업)\n",
+                    "InputMark": "<예상 캡션 부분>\n",
+                    "Input": "INPUT"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<캡션.json>\n",
+            "OutputStarter": "[{'CaptionList': ['",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서의 내용에서 본문과 캡션을 분리하는 전문가 입니다.\n그래서 지금 <예상 캡션 부분>에서 <캡션.json>을 선정하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(캡션의 정의)\n",
+                    "Message": "도서의 내용에 이해를 돕기 위한 용어, 사진, 별첨, 참고, 해설, 표, 기타 등에 포함된 부가적 설명 또는 정보"
+                },
+                {
+                    "Mark": "\n\n(캡션의 종류)\n",
+                    "Message": "용어, 자료, 별첨, 참고, 해설, 기타"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. 아래 예시들을 보고 <예상 캡션 부분>에서 <캡션.json>을 선정하는 규칙을 파악합니다.\n2. <예상 캡션 부분>은 도서 내용중 캡션이 있다고 예상되는 곳을 발췌한 것 입니다.\n3. <예상 캡션 부분>에 'part_of_the_caption : <Term>...' 부분은 캡션에 포함되어 있는 내용 중 일부분 입니다.\n4. 따라서 캡션은 'part_of_the_caption <Term>...'가 포함된 ['part_of_the_caption'], [4, 'part_of_the_caption'], [1, 2, 3, 4, 'part_of_the_caption'], [4, 'part_of_the_caption', 5, 6] 등의 리스트로 구성합니다.\n5. 작업의 최종 결과물인 <캡션1.json>은 캡션이 조합된 CaptionList과 캡션 내용인 CaptionText과 캡션의 종류 태그인 CaptionTag로 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(캡션선정 작업 예시1)\n",
+                    "InputExampleMark": "<예상 캡션 부분 예시1>\n",
+                    "InputExample": "0 : 또 수천 명의 CERN 연구원들이 만들어 내는 연구 자료들을 통합 관리하는 것도 중요한 일이었다. 그런데, 과거에는 연구보고서를 쓰면 도서관이나 자료실에 보관하고 디렉터리별로 분류해서 관리했는 데, 수천 명이 쏟아 내는, 그래서 점점 쌓여 가는 방대한 데이터를 감 당할 방법이 없었다. 비유하자면, 정보가 홍수처럼 밀려오는 상황을 돛단배로는 막을 수 없는 노릇이었다.\n\n1 : <8.Index>팀 버너스 리, 하이퍼 텍스트를 계승하다\n\n2 : <Narrator>팀 버너스 리가 이 문제를 고민한다. 대학 때부터 컴퓨터를 좋 아했고, 잠시 통신회사와 이미지 컴퓨터 시스템 회사에서 일하면서 데이터 네트워크에 관한 경력을 쌓은 경험이 있었던 그는 1984년 CERN에 복직해서 연구소 정보검색시스템 구축 작업을 맡게 된다.\n\n3 : 1980년대는 한창 컴퓨터가 개인화되던 때였는데, 연구원 개인들 의 PC를 연결해서 서로 정보를 공유하고, 또 쏟아져 나오는 연구 페 이퍼들을 도서관이나 자료실이 아닌 컴퓨터상에 모으고 분류하고 검 색할 수 있는 효율적인 정보시스템을 고민하고 있던 차였다.\n\n4 : 이때 사회학자 테드 넬슨이 제나두 프로젝트 Project Xanadu에 사용한 ‘하이퍼텍스트’라는 개념을 발견한다. 하이퍼텍스트란 ‘초월 Hyper’과 ‘문서 Text’의 합성어로서 문서들을 중첩시켜, 다른 말로 하면 하이퍼링 크를 통해 여러 문서를 넘나들 수 있도록 하는 것이다. 즉, 선형적이고 체계적으로 정보를 분류하고 보관하던 이전 인덱싱 방식과 달리, 하이퍼텍스트는 문서들을 비선형적으로, 체계를 초월해서 링크시키는 방식이다.\n\npart_of_the_caption : <Term><자료 1-2 : 인터넷의 아버지라 불리는 팀 버너스 리>\n\n5 : <Narrator>HTTP를 주창하면서 HTML과 관련 소프트웨어를 만들었고, 월드와이드웹(www)이라는 개념을 창시했다.\n\n6 : 테드 넬슨의 제나두 프로젝트는 비록 완성되지 못했지만 팀 버너스 리에 의해 계승되어 웹으로 구현되었다. 팀 버너스 리는 1989년\n\n7 : <Character>'링크로 연결된 문서 조각들의 거미줄이 고정된 계층구조보다 한층 더 유용하다'\n\n8 : <Narrator>면서 하이퍼텍스트를 통신 프로토콜로 채택할 것을 주 창했고, 지금 우리가 사용하는 인터넷 언어인 HTML, 그리고 관련 소 프트웨어를 만든다. 그는 월드와이드웹 www이라는 개념을 만들었고, 1994년부터 월드와이드웹 컨소시엄 W3C을 설립해서 이끌면서 웹 표 준과 가이드라인을 제시하는 일을 하고 있다.\n\n9 : 인터넷에 일반인들이 접속하게 된 것은 국제정치적 변화와도 관 련되어 있다. 1989년에 베를린 장벽이 무너지고, 1991년 소련이 해 체되면서 제2차 세계대전 이후 지속되어 오던 냉전체제가 종식된 것이다. 중국이 개방개혁을 표방하면서 대한민국과 수교를 맺은 것도 1992년이다. 이러한 정치 역학의 변동이 없었더라면 팀 버너스 리의 HTTP는 받아들여지기 어려웠을 것이고, 통신 네트워크는 여전히 일 반인이 접근할 수 없는 폐쇄적인 시공간으로 남아 있었을지 모를 일이다.",
+                    "OutputExampleMark": "\n\n<캡션.json 예시1>\n",
+                    "OutputExample":
+                    [
+                        {"CaptionList": ["part_of_the_caption", 5]},
+                        {"CaptionText": "<자료 1-2 : 인터넷의 아버지라 불리는 팀 버너스 리>\nHTTP를 주창하면서 HTML과 관련 소프트웨어를 만들었고, 월드와이드웹(www)이라는 개념을 창시했다."},
+                        {"CaptionTag": "자료"}
+                    ]
+                },
+                {
+                    "Mark": "\n\n(캡션선정 작업 예시2)\n",
+                    "InputExampleMark": "<예상 캡션 부분 예시2>\n",
+                    "InputExample": "0 : <Narrator>2010년대 들어 과학과 ICT가 급물살을 타면서 기술 혁신에도 가 속도가 붙었다. 트리거는 스마트폰이었다. 스마트폰과 IoT 센서들이 쏟아 내는 빅데이터는 클라우드 기술과 접합되어 딥 러닝 방식 의 인공지능을 가능하게 만들었고, 로봇, 가상현실, 3D 프린터, 자율주행차, 블록체인 등 신문물이 산업문명의 유물들을 대체해가기 시작했다.\n\n1 : 2016년 1월 다보스 포럼은 ‘4차 산업혁명’이라는 단어를 화두로 던졌다. 증기기관이 일으킨 1차 산업혁명, 20세기 들어 전기, 미디어 등이 일으킨 2차 산업혁명, 그리고 디지털과 인터넷이 세상을 뒤집어 놓은 것을 3차 산업혁명이라 한다면, 작금에 일어나고 있는 대전환을 4차 산업혁명이라 표현한 것이다.\n\n2 : 4차 산업혁명은 한 마디로, 지능 intelligence의 혁명이다. 사물인터넷 IoT은 아날로그 사물에 디지털 속성을 부여함으로써 인공지능을 붙이는 작업이고, 로봇, 3D 프린터, 자율주행차 등은 지능이 붙은 스마트사물이다. 또 사이퍼펑크에서 뿌리 뻗어 나온 블록체인은 집단지성을 발현하게 하는 알고리즘이다. 이 두 가지 지능, 즉 인공지능 AI과 집단지성 CI의 콜라보가 4차 산업혁명의 본질이다.\n\n3 : 나는 개인적으로 4차 산업혁명이라는 용어가 탐탁지는 않지만, 3차 산업혁명에 비해 한 차원 업그레이드되었다는 데는 동의한다. 1990년대 인터넷이 일으킨 3차 산업혁명은 ‘정보혁명’이라 할 수 있다. 정보가 네트워크를 타고 빛의 속도로 이동하기 시작했고, 연결과 융합을 통해 웹이라는 초월적 세상을 창조한 것이다. 정보의 이동과 융합은 지능을 만들었고, 그 결과물이 4차 산업혁명이라 불리는 ‘지능혁명’이다.\n\n4 : 정보와 지능은 다르다. 데이터를 정제한 것이 정보 information이고, 정보가 만들어 내는 에너지가 지능 intelligence이다. 제1부 3장에서 비유했던 석유로 치면, 원유는 데이터이고, 정제된 휘발유는 정보이 고, 휘발유가 만들어 내는 에너지는 지능이라 할 수 있다. 이 관계를 <자료 2-3>과 같이 정리할 수 있다.\n\npart_of_the_caption : <Term>데이터 (data)\n\n5 : <Term>정리되지 않은 진흙탕\n\n6 : <Term>정보 (information)\n\n7 : <Term>데이터에서 추출한 의미있는 패턴\n\n8 : <Term>지능 (intelligence)\n\n9 : <Term>정보가 만들어 내는 에너지",
+                    "OutputExampleMark": "\n\n<캡션.json 예시2>\n",
+                    "OutputExample":
+                    [
+                        {"CaptionList": ["part_of_the_caption", 5, 6, 7, 8, 9]},
+                        {"CaptionText": "데이터 (data)\n정리되지 않은 진흙탕\n정보 (information)\n데이터에서 추출한 의미있는 패턴\n지능 (intelligence)\n정보가 만들어 내는 에너지"},
+                        {"CaptionTag": "표"}
+                    ]
+                },
+                {
+                    "Mark": "\n\n(캡션선정 작업)\n",
+                    "InputMark": "<예상 캡션 부분>\n",
+                    "Input": "INPUT"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<캡션.json>\n",
+            "OutputStarter": "[{'CaptionList': ['",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서의 내용에서 본문과 캡션을 분리하는 전문가 입니다.\n그래서 지금 <예상 캡션 부분>에서 <캡션.json>을 선정하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(캡션의 정의)\n",
+                    "Message": "도서의 내용에 이해를 돕기 위한 용어, 사진, 별첨, 참고, 해설, 표, 기타 등에 포함된 부가적 설명 또는 정보"
+                },
+                {
+                    "Mark": "\n\n(캡션의 종류)\n",
+                    "Message": "용어, 자료, 별첨, 참고, 해설, 기타"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. 아래 예시들을 보고 <예상 캡션 부분>에서 <캡션.json>을 선정하는 규칙을 파악합니다.\n2. <예상 캡션 부분>은 도서 내용중 캡션이 있다고 예상되는 곳을 발췌한 것 입니다.\n3. <예상 캡션 부분>에 'part_of_the_caption : <Term>...' 부분은 캡션에 포함되어 있는 내용 중 일부분 입니다.\n4. 따라서 캡션은 'part_of_the_caption <Term>...'가 포함된 ['part_of_the_caption'], [4, 'part_of_the_caption'], [1, 2, 3, 4, 'part_of_the_caption'], [4, 'part_of_the_caption', 5, 6] 등의 리스트로 구성합니다.\n5. 작업의 최종 결과물인 <캡션1.json>은 캡션이 조합된 CaptionList과 캡션 내용인 CaptionText과 캡션의 종류 태그인 CaptionTag로 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "\n\n(캡션선정 작업)\n",
+                    "InputMark": "<예상 캡션 부분>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": ""
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<캡션.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서의 내용에서 본문과 캡션을 분리하는 전문가 입니다.\n그래서 지금 <예상 캡션 부분>에서 <캡션.json>을 선정하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(캡션의 정의)\n",
+                    "Message": "도서의 내용에 이해를 돕기 위한 용어, 사진, 별첨, 참고, 해설, 표, 기타 등에 포함된 부가적 설명 또는 정보"
+                },
+                {
+                    "Mark": "\n\n(캡션의 종류)\n",
+                    "Message": "용어, 자료, 별첨, 참고, 해설, 기타"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. 아래 예시들을 보고 <예상 캡션 부분>에서 <캡션.json>을 선정하는 규칙을 파악합니다.\n2. <예상 캡션 부분>은 도서 내용중 캡션이 있다고 예상되는 곳을 발췌한 것 입니다.\n3. <예상 캡션 부분>에 'part_of_the_caption : <Term>...' 부분은 캡션에 포함되어 있는 내용 중 일부분 입니다.\n4. 따라서 캡션은 'part_of_the_caption <Term>...'가 포함된 ['part_of_the_caption'], [4, 'part_of_the_caption'], [1, 2, 3, 4, 'part_of_the_caption'], [4, 'part_of_the_caption', 5, 6] 등의 리스트로 구성합니다.\n5. 작업의 최종 결과물인 <캡션1.json>은 캡션이 조합된 CaptionList과 캡션 내용인 CaptionText과 캡션의 종류 태그인 CaptionTag로 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "\n\n(캡션선정 작업)\n",
+                    "InputMark": "<예상 캡션 부분>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": ""
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<캡션.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

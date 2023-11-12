@@ -1,0 +1,50 @@
+[
+    {
+        "UserId": "None",
+        "ProjectsStorageID": "None",
+        "ProjectId": "None",
+        "ProjectName": "None",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "CharacterCompletion",
+        "CharacterFrame": "No",
+        "CharacterChunkCount": 0,
+        "CharacterCount": 0,
+        "Completion": "No",
+        "Memo": "캐릭터의 증거를 알아내는 프로세스"
+    },
+    {
+        "CharacterCompeletions": [
+            {
+                "CharacterChunkId": 0,
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Character": "None",
+                "MainCharacter": "None",
+                "AuthorRelationship": "None"
+            }
+        ]
+    },
+    {
+        "CheckedCharacterTags": [
+            {
+                "CharacterId": 0,
+                "CharacterTag": "Narrator",
+                "CharacterList": ["None"],
+                "Character": "None"
+            },
+            {
+                "CharacterId": 0,
+                "CharacterTag": "MainChracter",
+                "CharacterList": ["None"],
+                "Character": "None"
+            },
+            {
+                "CharacterId": 0,
+                "CharacterTag": "Chracter",
+                "CharacterList": ["None"],
+                "Character": "None"
+            }
+        ]
+    }
+]

@@ -11,8 +11,8 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_BodySummaryUpdate import SummaryBodyFrameUpdate
-from backend.b2_Solution.b24_DataFrame.b243_BodyDefine.b2431_CharacterDefineUpdate import CharacterDefineUpdate
-from backend.b2_Solution.b24_DataFrame.b243_BodyDefine.b2432_CharacterCompletionUpdate import CharacterCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b244_Character.b2431_CharacterDefineUpdate import CharacterDefineUpdate
+from backend.b2_Solution.b24_DataFrame.b244_Character.b2432_CharacterCompletionUpdate import CharacterCompletionUpdate
 
 ## 오늘 날짜
 def Date(Option = "Day"):
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     messagesReview = "on"
     
     ### existedDataFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
-    existedDataFrameMode = "off" # <- 개발 후 off #
+    existedDataFrameMode = "on" # <- 개발 후 off #
     
     # existedDataFrame 초기화
     existedDataFrame = None
@@ -132,23 +132,23 @@ if __name__ == "__main__":
     existedDataFrame = None
 
 
-    #########################################
-    ### 05_SummaryBodyFrame-[BodySummary] ###
-    #########################################
-    InitSummaryBodyFrame(projectName, email)
-    InitRawDataSet(projectName, email, "BodySummary")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "SummaryBodyFrame", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodySummary", RawDataSetPath)
-    mode = "ExampleFineTuning"
-    SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # #########################################
+    # ### 05_SummaryBodyFrame-[BodySummary] ###
+    # #########################################
+    # InitSummaryBodyFrame(projectName, email)
+    # InitRawDataSet(projectName, email, "BodySummary")
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "SummaryBodyFrame", DataFramePath)
+    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodySummary", RawDataSetPath)
+    # mode = "ExampleFineTuning"
+    # SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    if existedDataFrame == None:
-        updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
-        SaveDataFrame(projectName, email, "05_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
-        SaveDataSet(projectName, email, "05", "BodySummary", RawDataSetPath)
-    existedDataFrame = None
-    existedDataSet = None
+    # if existedDataFrame == None:
+    #     updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
+    #     SaveDataFrame(projectName, email, "05_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
+    #     SaveDataSet(projectName, email, "05", "BodySummary", RawDataSetPath)
+    # existedDataFrame = None
+    # existedDataSet = None
 
 
     ##############################

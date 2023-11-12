@@ -85,9 +85,9 @@ def AddProjectToDB(projectName, email):
         phargraphCaptionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_PhargraphCaptionFrame.json")
         phargraphTransitionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-05_PhargraphTransitionFrame.json")
         summaryBodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-06_SummaryBodyFrame.json")
-        bodyContextFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-07_BodyContextTags.json")
-        characterContextFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-08_CharacterContextTags.json")
-        soundContextFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-09_SoundContextTags.json")
+        bodyContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-07_BodyContextTags.json")
+        characterContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-08_CharacterContextTags.json")
+        soundContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-09_SoundContextTags.json")
         contextDefine = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-01_ContextDefine.json")
         contextCompletion = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-02_ContextCompletion.json")
         characterDefine = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-01_CharacterDefine.json")
@@ -129,9 +129,9 @@ def AddProjectToDB(projectName, email):
             ExistingProject.PhargraphCaptionFrame = phargraphCaptionFrame
             ExistingProject.PhargraphTransitionFrame = phargraphTransitionFrame
             ExistingProject.SummaryBodyFrame = summaryBodyFrame
-            ExistingProject.BodyContextTags = bodyContextFrame
-            ExistingProject.CharacterContextTags = characterContextFrame
-            ExistingProject.SoundContextTags = soundContextFrame
+            ExistingProject.BodyContextTags = bodyContextTags
+            ExistingProject.CharacterContextTags = characterContextTags
+            ExistingProject.SoundContextTags = soundContextTags
             ExistingProject.ContextDefine = contextDefine
             ExistingProject.ContextCompletion = contextCompletion
             ExistingProject.CharacterDefine = characterDefine
@@ -172,11 +172,11 @@ def AddProjectToDB(projectName, email):
                 PhargraphCaptionFrame = phargraphCaptionFrame,
                 PhargraphTransitionFrame = phargraphTransitionFrame,
                 SummaryBodyFrame = summaryBodyFrame,
-                BodyContextFrame = bodyContextFrame,
-                CharacterContextFrame = characterContextFrame,
-                SoundContextFrame = soundContextFrame,
-                CharacterDefine = contextDefine,
-                CharacterCompletion = contextCompletion,
+                BodyContextTags = bodyContextTags,
+                CharacterContextTags = characterContextTags,
+                SoundContextTags = soundContextTags,
+                ContextDefine = contextDefine,
+                ContextCompletion = contextCompletion,
                 CharacterDefine = characterDefine,
                 CharacterCompletion = characterCompletion
                 ### 아래로 추가되는 데이터프레임 작성 ###

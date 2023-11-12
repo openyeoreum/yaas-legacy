@@ -81,7 +81,7 @@ def AddProjectToDB(projectName, email):
         
         indexFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-01_IndexFrame.json")
         characterFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_CharacterFrame.json")
-        bodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-05_BodyFrame.json")
+        bodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")
         phargraphCaptionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_PhargraphCaptionFrame.json")
         phargraphTransitionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-05_PhargraphTransitionFrame.json")
         summaryBodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-06_SummaryBodyFrame.json")

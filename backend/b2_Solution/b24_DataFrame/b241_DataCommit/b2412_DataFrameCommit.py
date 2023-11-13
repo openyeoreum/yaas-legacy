@@ -349,7 +349,7 @@ def SummaryBodyFrameCompletionUpdate(projectName, email):
         db.commit()
 
 ##########################################
-##### 06_CharacterDefine Process #####
+##### 08_CharacterDefine Process #####
 ##########################################
 ## 6. 1-0 CharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame):
@@ -440,7 +440,7 @@ def CharacterDefineCompletionUpdate(projectName, email):
         db.commit()
         
 ##############################################
-##### 07_CharacterCompletion Process #####
+##### 09_CharacterCompletion Process #####
 ##############################################
 ## 7. 1-0 CharacterCompletion이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame):

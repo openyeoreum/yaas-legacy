@@ -130,7 +130,7 @@ if __name__ == "__main__":
         updatedBodyFrame = UpdatedBodyFrame(projectName, email)
         SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
     existedDataFrame = None
-
+    
 
     # #########################################
     # ### 05_SummaryBodyFrame-[BodySummary] ###
@@ -151,9 +151,14 @@ if __name__ == "__main__":
     # existedDataSet = None
 
 
-    ##############################
-    ### 06_CharacterDefine ###
-    ##############################
+    ########################
+    ### 06_ContextDefine ###
+    ########################
+
+
+    ##########################
+    ### 08_CharacterDefine ###
+    ##########################
     InitCharacterDefine(projectName, email)
     InitRawDataSet(projectName, email, "CharacterDefine")
     if existedDataFrameMode == "on":
@@ -164,14 +169,14 @@ if __name__ == "__main__":
     
     if existedDataFrame == None:
         updatedCharacterDefine = UpdatedCharacterDefine(projectName, email)
-        SaveDataFrame(projectName, email, "06_CharacterDefine", updatedCharacterDefine, DataFramePath)       
-        SaveDataSet(projectName, email, "06", "CharacterDefine", RawDataSetPath)
+        SaveDataFrame(projectName, email, "08_CharacterDefine", updatedCharacterDefine, DataFramePath)       
+        SaveDataSet(projectName, email, "08", "CharacterDefine", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
 
 
     ##################################
-    ### 07_CharacterCompletion ###
+    ### 09_CharacterCompletion ###
     ##################################
     InitCharacterCompletion(projectName, email)
     InitRawDataSet(projectName, email, "CharacterCompletion")
@@ -183,7 +188,7 @@ if __name__ == "__main__":
     
     if existedDataFrame == None:
         updatedCharacterCompletion = UpdatedCharacterCompletion(projectName, email)
-        SaveDataFrame(projectName, email, "07_CharacterCompletion", updatedCharacterCompletion, DataFramePath)       
-        SaveDataSet(projectName, email, "07", "CharacterCompletion", RawDataSetPath)
+        SaveDataFrame(projectName, email, "09_CharacterCompletion", updatedCharacterCompletion, DataFramePath)       
+        SaveDataSet(projectName, email, "09", "CharacterCompletion", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None

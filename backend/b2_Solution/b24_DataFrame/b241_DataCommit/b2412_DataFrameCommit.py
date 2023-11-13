@@ -8,6 +8,7 @@ from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 from backend.b2_Solution.b23_Project.b231_ProjectCommit import GetProjectDataPath, LoadJsonFrame
 
+
 ###################################################
 ##### 전체 DataFrame의 MetaData(식별)부분을 업데이트 #####
 ###################################################
@@ -33,6 +34,7 @@ def AddFrameMetaDataToDB(projectName, email):
 
         db.add(project)
         db.commit()
+
 
 ##################################
 ##### 01_IndexDefine Process #####
@@ -116,6 +118,7 @@ def IndexFrameCompletionUpdate(projectName, email):
 
         db.add(project)
         db.commit()
+
 
 ##############################################
 ##### 02_BodySplit, IndexTagging Process #####
@@ -265,6 +268,7 @@ def BodyFrameCompletionUpdate(projectName, email):
         db.add(project)
         db.commit()
 
+
 ##################################
 ##### 05_BodySummary Process #####
 ##################################
@@ -347,6 +351,7 @@ def SummaryBodyFrameCompletionUpdate(projectName, email):
 
         db.add(project)
         db.commit()
+
 
 ##########################################
 ##### 08_CharacterDefine Process #####
@@ -438,7 +443,8 @@ def CharacterDefineCompletionUpdate(projectName, email):
 
         db.add(project)
         db.commit()
-        
+
+
 ##############################################
 ##### 09_CharacterCompletion Process #####
 ##############################################

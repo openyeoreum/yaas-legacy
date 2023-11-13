@@ -14,6 +14,7 @@ from backend.b1_Api.b14_Models import User, Prompt
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetPromptFrame, GetTrainingDataset
 from backend.b2_Solution.b21_General.b212_PromptCommit import GetPromptDataPath, LoadJsonFrame
 
+
 ######################
 ##### LLM 공통사항 #####
 ######################
@@ -35,6 +36,7 @@ def LoadLLMapiKey(email):
         lLMapiKey = user.TTSapiKey
     
     return lLMapiKey
+
 
 ########################
 ##### LLM Response #####
@@ -250,6 +252,7 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
       except client.error.OpenAIError as e:
           print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생: {e}")
           continue
+
 
 ##########################
 ##### LLM FineTuning #####

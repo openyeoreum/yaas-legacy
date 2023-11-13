@@ -25,7 +25,10 @@ def CheckPassword(HashedPassword: bytes, UserPassword: str) -> bool:
 
     return bcrypt.checkpw(UserPassword.encode('utf-8'), HashedPassword)
 
-### UserFrame
+
+#################
+### UserFrame ###
+#################
 class User(Base):
     __tablename__ = "Users"
 
@@ -74,7 +77,10 @@ class UserHistory(Base):
     TTSapiKey = Column(Text)
     LLMapiKey = Column(Text)
 
-### SubscriptionFrame
+
+#########################
+### SubscriptionFrame ###
+#########################
 class Subscription(Base):
     __tablename__ = "Subscriptions"
     
@@ -124,7 +130,10 @@ class ProjectsStorageHistory(Base):
     ProjectsStorageName = Column(String(64))
     ProjectsStoragePath = Column(Text)
 
-### ProjectFrame
+
+####################
+### ProjectFrame ###
+####################
 class Project(Base):
     __tablename__ = "Projects"
     
@@ -379,7 +388,10 @@ class ProjectHistory(Base):
     MixingMasteringZhStatus = Column(String(64))
     MixingMasteringEsStatus = Column(String(64))
 
-### PromptFrame
+
+###################
+### PromptFrame ###
+###################
 class Prompt(Base):
     __tablename__ = "Prompts"
 
@@ -458,8 +470,11 @@ class Prompt(Base):
     # MixingMasteringJa = Column(JSON)
     # MixingMasteringZh = Column(JSON)
     # MixingMasteringEs = Column(JSON)
-    
-### TrainingDataset
+
+
+#######################
+### TrainingDataset ###
+#######################
 class TrainingDataset(Base):
     __tablename__ = "TrainingDatasets"
     
@@ -544,7 +559,10 @@ class TrainingDataset(Base):
     # MixingMasteringZh = Column(JSON)
     # MixingMasteringEs = Column(JSON)
 
-### VoiceDatabase
+
+#####################
+### VoiceDatabase ###
+#####################
 class Voice(Base):
     __tablename__ = "Voices"
 
@@ -568,7 +586,9 @@ class Voice(Base):
     TTSPitch = Column(Integer)
     
 
-### MusicDatabase
+#####################
+### MusicDatabase ###
+#####################
 class Music(Base):
     __tablename__ = "Musics"
 
@@ -597,8 +617,11 @@ class Music(Base):
     TitleMusic = Column(String(16))
     PartMusic = Column(String(16))
     ChapterMusic = Column(String(16))
-    
-### SoundDatabase
+
+
+#####################
+### SoundDatabase ###
+#####################
 class Sound(Base):
     __tablename__ = "Sounds"
 
@@ -625,7 +648,10 @@ class Sound(Base):
     IndexSound = Column(String(16))
     CaptionSound = Column(String(16))
 
-### LoopDatabase
+
+####################
+### LoopDatabase ###
+####################
 class Loop(Base):
     __tablename__ = "Loops"
 
@@ -652,7 +678,10 @@ class Loop(Base):
     EnvSound = Column(String(16))
     BGM = Column(String(16))
 
-### SFXDatabase
+
+###################
+### SFXDatabase ###
+###################
 class SFX(Base):
     __tablename__ = "SFXs"
 

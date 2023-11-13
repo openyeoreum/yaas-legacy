@@ -12,6 +12,7 @@ from backend.b1_Api.b14_Models import TrainingDataset
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetTrainingDataset
 
+
 #########################################################
 ##### 전체 TrainingDataSet의 MetaData(식별)부분을 업데이트 #####
 #########################################################
@@ -37,6 +38,7 @@ def AddDataSetMetaDataToDB(projectName, email):
 
         db.add(trainingDataset)
         db.commit()
+
 
 ###########################
 ##### General Process #####
@@ -290,6 +292,7 @@ def SaveDataSet(projectName, email, ProcessNumber, Process, RawDataSetPath):
         Newfilename = f"{base} ({counter}){ext}"
     with open(Newfilename, 'w', encoding='utf-8') as f:
         json.dump(ProcessDataset, f, ensure_ascii=False, indent = 4)
+
 
 #########################################
 ### 2. 피드백 데이터셋 Accuracy 측정 및 저장 ###

@@ -94,7 +94,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
         task = BodyFrameBodys[i]['Task']
         TaskBody = ReplaceName(BodyFrameBodys[i][Task], CharacterChunks)
 
-        if 'Character' in task:
+        if Task in task:
             Tag = 'Continue'
         elif 'Body' not in task:
             Tag = 'Merge'

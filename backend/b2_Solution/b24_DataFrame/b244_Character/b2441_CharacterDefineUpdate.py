@@ -2,7 +2,6 @@ import os
 import re
 import json
 import time
-import tiktoken
 import sys
 sys.path.append("/yaas")
 
@@ -71,7 +70,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
         task = BodyFrameBodys[i]['Task']
         TaskBody = BodyFrameBodys[i][Task]
 
-        if 'Character' in task:
+        if Task in task:
             Tag = 'Continue'
         elif 'Body' not in task:
             Tag = 'Merge'

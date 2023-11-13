@@ -7,22 +7,21 @@
         "Content": "Body",
         "Language": "Ko",
         "TaskName": "ContextDefine",
-        "IndexCount": 0,
-        "BodyCount": 0,
-        "ChunkCount": 0,
+        "ContextChunkCount": 0,
+        "ContextCount": 0,
         "Completion": "No"
     },
     {
         "ContextChunks": [
             {
-                "ContextId": 0,
+                "ContextChunkId": 0,
                 "ChunkId": 0,
                 "Chunk": "None",
                 "Reader": "None",
                 "Purpose": "None",
                 "Subject": "None",
                 "Phrases": "None",
-                "importance": "None"
+                "Importance": "None"
             }
         ]
     }

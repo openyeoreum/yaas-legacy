@@ -7,15 +7,14 @@
         "Content": "Body",
         "Language": "Ko",
         "TaskName": "ContextCompletion",
-        "IndexCount": 0,
-        "BodyCount": 0,
-        "ChunkCount": 0,
+        "ContextChunkCount": 0,
+        "ContextCount": 0,
         "Completion": "No"
     },
     {
         "ContextCompeletions": [
             {
-                "ContextId": 0,
+                "ContextChunkId": 0,
                 "ChunkId": 0,
                 "Chunk": "None",
                 "Genre": "None",
@@ -25,29 +24,29 @@
                 "Emotion": "None",
                 "Era": "None",
                 "Culture": "None",
-                "importance": "None"
+                "Importance": "None"
             }
         ]
     },
     {
-        "CheckedCompletionTags": [
+        "CheckedContextTags": [
             {
-                "CharacterId": 0,
-                "CharacterTag": "Narrator",
-                "CharacterList": ["None"],
-                "Character": "None"
+                "ContextId": 0,
+                "ContextTag": "Narrator",
+                "ContextList": ["None"],
+                "Context": "None"
             },
             {
-                "CharacterId": 0,
-                "CharacterTag": "MainChracter",
-                "CharacterList": ["None"],
-                "Character": "None"
+                "ContextId": 0,
+                "ContextTag": "MainChracter",
+                "ContextList": ["None"],
+                "Context": "None"
             },
             {
-                "CharacterId": 0,
-                "CharacterTag": "Chracter",
-                "CharacterList": ["None"],
-                "Character": "None"
+                "ContextId": 0,
+                "ContextTag": "Chracter",
+                "ContextList": ["None"],
+                "Context": "None"
             }
         ]
     }

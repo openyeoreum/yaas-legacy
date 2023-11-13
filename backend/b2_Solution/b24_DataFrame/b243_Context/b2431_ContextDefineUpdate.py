@@ -2,14 +2,13 @@ import os
 import re
 import json
 import time
-import tiktoken
 import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedCharacterDefineToDB, AddCharacterDefineChunksToDB, CharacterDefineCountLoad, CharacterDefineCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedContextDefineToDB, AddContextDefineChunksToDB, ContextDefineCountLoad, ContextDefineCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -62,7 +61,7 @@ def MergeInputList(inputList):
     return InputList
 
 ## BodyFrameBodys의 inputList 치환
-def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
+def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     
     inputList = []
@@ -71,12 +70,14 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
         task = BodyFrameBodys[i]['Task']
         TaskBody = BodyFrameBodys[i][Task]
 
-        if 'Character' in task:
+        if Task in task:
             Tag = 'Continue'
         elif 'Body' not in task:
             Tag = 'Merge'
         else:
             Tag = 'Pass'
+            print(f'Pass Task: {task}')
+            print(f'Pass TaskBody: {TaskBody}')
             
         InputDic = {'Id': Id, Tag: TaskBody}
         inputList.append(InputDic)
@@ -88,8 +89,8 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
 ######################
 ##### Filter 조건 #####
 ######################
-## CharacterDefine의 Filter(Error 예외처리)
-def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
+## ContextDefine의 Filter(Error 예외처리)
+def ContextDefineFilter(Input, responseData, memoryCounter):
     # responseData의 전처리
     responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
     responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
@@ -106,34 +107,30 @@ def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
-        return "JSONType에서 오류 발생: JSONTypeError"
-    # # Error3: 결과가 '말하는인물'이 '없음'일 때의 예외 처리 (없음일 경우에는 Narrator 낭독)
-    # for dic in OutputDic:
-    #     for key, value in dic.items():
-    #         if value['말하는인물'] == '없음' or value['말하는인물'] == '' or value['말하는인물'] == 'none':
-    #             return "'말하는인물': '없음' 오류 발생: NonValueError"
-    # Error4: 자료의 구조가 다를 때의 예외 처리
+        return "JSONType에서 오류 발생: JSONTypeError"  
+    # Error3: 자료의 구조가 다를 때의 예외 처리
+    INPUT = re.sub("[^가-힣]", "", str(Input))
     for dic in OutputDic:
         try:
             key = list(dic.keys())[0]
-            if not key in TalkTag:
+            OUTPUT = re.sub("[^가-힣]", "", str(dic[key]['문구']))
+            if not '요소' in key:
                 return "JSON에서 오류 발생: JSONKeyError"
-            else:
-                if not ('말의종류' in dic[key] and '말하는인물' in dic[key] and '말하는인물의성별' in dic[key] and '말하는인물의나이' in dic[key] and '말하는인물의감정' in dic[key] and '인물의역할' in dic[key] and '듣는인물' in dic[key]):
-                    return "JSON에서 오류 발생: JSONKeyError"
-        # Error5: 자료의 형태가 Str일 때의 예외처리
+            elif not OUTPUT in INPUT:
+                return f"JSON에서 오류 발생: JSON '문구'가 Input에 포함되지 않음 Error\n문구: {dic[key]['문구']}"
+            elif not ('독자' in dic[key] and '목적' in dic[key] and '주제' in dic[key] and '문구' in dic[key] and '중요도' in dic[key]):
+                return "JSON에서 오류 발생: JSONKeyError"
+        # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
-    # Error6: Input과 Output의 개수가 다를 때의 예외처리
-    if len(OutputDic) != len(TalkTag):
-        return "JSONCount에서 오류 발생: JSONCountError"
+        
     return OutputDic
 
 ######################
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def CharacterDefineInputMemory(inputMemoryDics, MemoryLength):
+def ContextDefineInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -149,7 +146,7 @@ def CharacterDefineInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def CharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
+def ContextDefineOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -169,8 +166,8 @@ def CharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## CharacterDefine 프롬프트 요청 및 결과물 Json화
-def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## ContextDefine 프롬프트 요청 및 결과물 Json화
+def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -186,7 +183,7 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
     outputMemoryDics = []
     outputMemory = []
         
-    # CharacterDefineProcess
+    # ContextDefineProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -228,10 +225,8 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
                 Input = InputDic['Continue']
             
             # Filter, MemoryCounter, OutputEnder 처리
-            talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
-            TalkTag = ["말" + match for match in talkTag]
-            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
-            outputEnder = f"{{'{TalkTag[0]}': {{'말의종류': '"
+            memoryCounter = "\n"
+            outputEnder = f"{{'요소"
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -251,7 +246,7 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
 
-            Filter = CharacterDefineFilter(TalkTag, responseData, memoryCounter)
+            Filter = ContextDefineFilter(Input, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -286,13 +281,13 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = CharacterDefineInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = ContextDefineInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = CharacterDefineOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = ContextDefineOutputMemory(outputMemoryDics, MemoryLength)
     
     return outputMemoryDics
 
@@ -301,102 +296,103 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
 ################################
     
 ## 데이터 치환
-def CharacterDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    CharacterTagChunk = []
-    CharacterTagChunkId = []
-    for i in range(len(BodyFrame)):
-        for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
-            if BodyFrame[i]['SplitedBodyChunks'][j]['Tag'] == "Character":
-                CharacterTagChunk.append(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk'])
-                CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
     
     # 데이터 치환
-    outputMemoryDics = CharacterDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = ContextDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
-    responseCount = 0
-    
     for response in outputMemoryDics:
         if response != "Pass":
             for dic in response:
-                ChunkId = CharacterTagChunkId[responseCount]
-                Chunk = CharacterTagChunk[responseCount]
                 for key, value in dic.items():
-                    Character = value['말하는인물']
-                    Type = value['말의종류']
-                    Gender = value['말하는인물의성별']
-                    Age = value['말하는인물의나이']
-                    Emotion = value['말하는인물의감정']
-                    Role = value['인물의역할']
-                    Listener = value['듣는인물']
-                responseCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "Type": Type, "Gender": Gender, "Age": Age, "Emotion": Emotion, "Role": Role, "Listener": Listener})
+                    CleanPhrases = value['문구']
+                    found = False # 플래그 설정
+                    for i in range(len(BodyFrame)):
+                        if found:
+                            break
+                        for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
+                            CleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']))
+                            if CleanChunk in CleanPhrases:
+                                ChunkId = BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId']
+                                Chunk = BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']
+                                found = True  
+                                break
+                    Reader = value['말하는인물']
+                    Purpose = value['말의종류']
+                    Subject = value['말하는인물의성별']
+                    Phrases = value['말하는인물의나이']
+                    Importance = value['말하는인물의감정']
+                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Reader": Reader, "Purpose": Purpose, "Subject": Subject, "Phrases": Phrases, "Importance": Importance})
     
     return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 CharacterDefine에 업데이트
-def CharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 08_CharacterDefineUpdate 시작 >")
+## 프롬프트 요청 및 결과물 Json을 ContextDefine에 업데이트
+def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 06_ContextDefineUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
-    ContinueCount, CharacterCount, Completion = CharacterDefineCountLoad(projectName, email)
+    ContinueCount, ContextCount, Completion = ContextDefineCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CharacterDefine", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 08_CharacterDefineUpdate는 ExistedCharacterDefine으로 대처됨 ]\n")
+            AddExistedContextDefineToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "ContextDefine", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 06_ContextDefineUpdate는 ExistedContextDefine으로 대처됨 ]\n")
         else:
-            responseJson = CharacterDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = ContextDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
             
-            CharacterChunkId = ContinueCount
+            ContextChunkId = ContinueCount
             
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'CharacterDefineUpdate')
+                            desc = 'ContextDefineUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'CharacterDefineUpdate: {Update}')
+                UpdateTQDM.set_description(f'ContextDefineUpdate: {Update}')
                 time.sleep(0.0001)
-                CharacterChunkId += 1
+                ContextChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
                 Chunk = ResponseJson[i]["Chunk"]
-                Character = ResponseJson[i]["Character"]
-                Type = ResponseJson[i]["Type"]
-                Gender = ResponseJson[i]["Gender"]
-                Age = ResponseJson[i]["Age"]
-                Emotion = ResponseJson[i]["Emotion"]
-                Role = ResponseJson[i]["Role"]
-                Listener = ResponseJson[i]["Listener"]
+                Reader = ResponseJson[i]["Reader"]
+                Purpose = ResponseJson[i]["Purpose"]
+                Subject = ResponseJson[i]["Subject"]
+                Phrases = ResponseJson[i]["Phrases"]
+                Importance = ResponseJson[i]["Importance"]
                 
-                AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
+                AddContextDefineChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            CharacterDefineCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 08_CharacterDefineUpdate 완료 ]\n")
+            ContextDefineCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 06_ContextDefineUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 08_CharacterDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 06_ContextDefineUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "데미안"
+    projectName = "우리는행복을진단한다"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    
+    outputMemoryDics = ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLength = 2, MessagesReview = "on", Mode = mode)
+    
+    with open("/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_데미안_06_OutputMemoryDics_231028.json", 'w', encoding='utf-8') as f:
+        json.dump(outputMemoryDics, f, ensure_ascii = False, indent = 4)

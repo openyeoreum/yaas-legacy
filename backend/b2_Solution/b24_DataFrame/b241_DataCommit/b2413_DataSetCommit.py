@@ -291,7 +291,7 @@ def SaveDataSet(projectName, email, ProcessNumber, Process, RawDataSetPath):
         counter += 1
         Newfilename = f"{base} ({counter}){ext}"
     with open(Newfilename, 'w', encoding='utf-8') as f:
-        json.dump(ProcessDataset, f, ensure_ascii=False, indent = 4)
+        json.dump(ProcessDataset, f, ensure_ascii = False, indent = 4)
 
 
 #########################################
@@ -436,6 +436,6 @@ if __name__ == "__main__":
     # processDataset = OutputAccuracy(projectName, email, process, processDataset)
     
     # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_08_CharacterDefineDataSet_Accuracy.json", 'w', encoding='utf-8') as file:
-    #     json.dump(processDataset, file, ensure_ascii=False, indent = 4)
+    #     json.dump(processDataset, file, ensure_ascii = False, indent = 4)
         
     AddProjectFeedbackDataSets(projectName, email, "CharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)

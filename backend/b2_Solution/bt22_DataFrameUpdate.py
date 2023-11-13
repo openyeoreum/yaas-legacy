@@ -11,8 +11,8 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_BodySummaryUpdate import SummaryBodyFrameUpdate
-from backend.b2_Solution.b24_DataFrame.b244_Character.b2431_CharacterDefineUpdate import CharacterDefineUpdate
-from backend.b2_Solution.b24_DataFrame.b244_Character.b2432_CharacterCompletionUpdate import CharacterCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b244_Character.b2441_CharacterDefineUpdate import CharacterDefineUpdate
+from backend.b2_Solution.b24_DataFrame.b244_Character.b2442_CharacterCompletionUpdate import CharacterCompletionUpdate
 
 ## 오늘 날짜
 def Date(Option = "Day"):
@@ -37,7 +37,7 @@ def SaveDataFrame(projectName, email, Process, UpdatedFrame, RawDataSetPath):
         counter += 1
         newFilename = f"{base} ({counter}){ext}"
     with open(newFilename, 'w', encoding='utf-8') as f:
-        json.dump(UpdatedFrame, f, ensure_ascii=False, indent = 4)
+        json.dump(UpdatedFrame, f, ensure_ascii = False, indent = 4)
         
 def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
     # 문자열 정규화
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "데미안"
+    projectName = "우리는행복을진단한다"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"

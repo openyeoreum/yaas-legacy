@@ -353,10 +353,223 @@ def SummaryBodyFrameCompletionUpdate(projectName, email):
         db.commit()
 
 
-##########################################
+####################################
+##### 06_ContextDefine Process #####
+####################################
+## 6. 1-0 ContextDefine이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedContextDefineToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.ContextDefine[1] = ExistedDataFrame[1]
+        
+        flag_modified(project, "ContextDefine")
+        
+        db.add(project)
+        db.commit()
+
+## 6. 1-1 ContextDefine의 Body(본문) updateContextChunks 업데이트 형식
+def UpdateChunkContexts(project, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance):    
+    updateContextChunks = {
+        "ContextChunkId": ContextChunkId,
+        "ChunkId": ChunkId,
+        "Chunk": Chunk,
+        "Reader": Reader,
+        "Purpose": Purpose,
+        "Subject": Subject,
+        "Phrases": Phrases,
+        "Importance": Importance
+    }
+    
+    project.ContextDefine[1]["ContextChunks"].append(updateContextChunks)
+    project.ContextDefine[0]["ContextChunkCount"] = ContextChunkId
+    
+## 6. 1-2 ContextDefine의 Body(본문) updateContextChunks 업데이트
+def AddContextDefineChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateChunkContexts(project, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance)
+        
+        flag_modified(project, "ContextDefine")
+        
+        db.add(project)
+        db.commit()
+        
+## 6. ContextDefine의Count의 가져오기
+def ContextDefineCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    ContextChunkCount = project.ContextDefine[0]["ContextChunkCount"]
+    ContextCount = project.ContextDefine[0]["ContextCount"]
+    Completion = project.ContextDefine[0]["Completion"]
+    
+    return ContextChunkCount, ContextCount, Completion
+
+## 8. ContextDefine의 초기화
+def InitContextDefine(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.ContextDefine[0]["ContextChunkCount"] = 0
+        project.ContextDefine[0]["ContextCount"] = 0
+        project.ContextDefine[0]["Completion"] = "No"
+        project.ContextDefine[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-01_ContextDefine.json")[1]
+        
+        flag_modified(project, "ContextDefine")
+        
+        db.add(project)
+        db.commit()
+        
+## 8. 업데이트된 ContextDefine 출력
+def UpdatedContextDefine(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+
+    return project.ContextDefine
+
+## 8. ContextDefineCompletion 업데이트
+def ContextDefineCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.ContextDefine[0]["Completion"] = "Yes"
+
+        flag_modified(project, "ContextDefine")
+
+        db.add(project)
+        db.commit()
+
+
+########################################
+##### 07_ContextCompletion Process #####
+########################################
+## 7. 1-0 ContextCompletion이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedContextCompletionToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.ContextCompletion[1] = ExistedDataFrame[1]
+        project.ContextCompletion[2] = ExistedDataFrame[2]
+        
+        flag_modified(project, "ContextCompletion")
+        
+        db.add(project)
+        db.commit()
+
+## 7. 1-1 ContextCompletion의 Body(본문) ContextCompeletions 업데이트 형식
+def UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Era, Culture, Importance):    
+    updateContextCompeletions = {
+        "ContextChunkId": ContextChunkId,
+        "ChunkId": ChunkId,
+        "Chunk": Chunk,
+        "Genre": Genre,
+        "Gender": Gender,
+        "Age": Age,
+        "Personality": Personality,
+        "Emotion": Emotion,
+        "Era": Era,
+        "Culture": Culture,
+        "Importance": Importance
+    }
+    
+    project.ContextCompletion[1]["ContextCompeletions"].append(updateContextCompeletions)
+    project.ContextCompletion[0]["ContextChunkCount"] = ContextChunkId
+    
+## 7. 1-2 ContextCompletion의 Body(본문) ContextCompeletions 업데이트
+def AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Era, Culture, Importance):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Era, Culture, Importance)
+        
+        flag_modified(project, "ContextCompletion")
+        
+        db.add(project)
+        db.commit()
+        
+## 7. 2-1 ContextCompletion의 Context(부문) ContextTags부분 업데이트 형식
+def updateCheckedContextTags(project, ContextTag, ContextList, Context):
+    # 새롭게 생성되는 ContextId는 CheckedContextTags의 Len값과 동일
+    ContextId = len(project.ContextCompletion[2]["CheckedContextTags"]) -1
+    
+    ### 실제 테스크시 수정 요망 ###
+    updateCheckedContextTags = {
+        "ContextId": ContextId,
+        "ContextTag": ContextTag,
+        "ContextList": ContextList,
+        "Context": Context
+    }
+    
+    project.ContextCompletion[2]["CheckedContextTags"].append(updateCheckedContextTags)
+    project.ContextCompletion[0]["ContextCount"] = ContextId
+    
+## 7. 2-2 ContextCompletion의 Context(부문) ContextTags부분 업데이트
+def AddContextCompletionCheckedContextTagsToDB(projectName, email, ContextTag, ContextList, Context):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        updateCheckedContextTags(project, ContextTag, ContextList, Context)
+        
+        flag_modified(project, "ContextCompletion")
+        
+        db.add(project)
+        db.commit()
+        
+## 7. ContextCompletion의Count의 가져오기
+def ContextCompletionCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    ContextChunkCount = project.ContextCompletion[0]["ContextChunkCount"]
+    ContextCount = project.ContextCompletion[0]["ContextCount"]
+    Completion = project.ContextCompletion[0]["Completion"]
+    
+    return ContextChunkCount, ContextCount, Completion
+
+## 7. ContextCompletion의 초기화
+def InitContextCompletion(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.ContextCompletion[0]["ContextChunkCount"] = 0
+        project.ContextCompletion[0]["ContextCount"] = 0
+        project.ContextCompletion[0]["Completion"] = "No"
+        project.ContextCompletion[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-02_ContextCompletion.json")[1]
+        project.ContextCompletion[2] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-02_ContextCompletion.json")[2]
+
+        flag_modified(project, "ContextCompletion")
+        
+        db.add(project)
+        db.commit()
+        
+## 7. 업데이트된 ContextCompletion 출력
+def UpdatedContextCompletion(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        
+    return project.ContextCompletion
+        
+## 7. ContextCompletionCompletion 업데이트
+def ContextCompletionCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.ContextCompletion[0]["Completion"] = "Yes"
+
+        flag_modified(project, "ContextCompletion")
+
+        db.add(project)
+        db.commit()
+
+
+######################################
 ##### 08_CharacterDefine Process #####
-##########################################
-## 6. 1-0 CharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
+######################################
+## 8. 1-0 CharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -368,7 +581,7 @@ def AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 6. 1-1 CharacterDefine의 Body(본문) updateCharacterChunks 업데이트 형식
+## 8. 1-1 CharacterDefine의 Body(본문) updateCharacterChunks 업데이트 형식
 def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener):    
     updateCharacterChunks = {
         "CharacterChunkId": CharacterChunkId,
@@ -386,7 +599,7 @@ def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, 
     project.CharacterDefine[1]["CharacterChunks"].append(updateCharacterChunks)
     project.CharacterDefine[0]["CharacterChunkCount"] = CharacterChunkId
     
-## 6. 1-2 CharacterDefine의 Body(본문) updateCharacterChunks 업데이트
+## 8. 1-2 CharacterDefine의 Body(본문) updateCharacterChunks 업데이트
 def AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener):
     with get_db() as db:
         
@@ -398,7 +611,7 @@ def AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, 
         db.add(project)
         db.commit()
 
-## 6. CharacterDefine의Count의 가져오기
+## 8. CharacterDefine의Count의 가져오기
 def CharacterDefineCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
@@ -408,7 +621,7 @@ def CharacterDefineCountLoad(projectName, email):
     
     return CharacterChunkCount, CharacterCount, Completion
 
-## 6. CharacterDefine의 초기화
+## 8. CharacterDefine의 초기화
 def InitCharacterDefine(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
@@ -424,7 +637,7 @@ def InitCharacterDefine(projectName, email):
         db.add(project)
         db.commit()
         
-## 6. 업데이트된 CharacterDefine 출력
+## 8. 업데이트된 CharacterDefine 출력
 def UpdatedCharacterDefine(projectName, email):
     with get_db() as db:
 
@@ -432,7 +645,7 @@ def UpdatedCharacterDefine(projectName, email):
 
     return project.CharacterDefine
 
-## 6. CharacterDefineCompletion 업데이트
+## 8. CharacterDefineCompletion 업데이트
 def CharacterDefineCompletionUpdate(projectName, email):
     with get_db() as db:
 
@@ -445,10 +658,10 @@ def CharacterDefineCompletionUpdate(projectName, email):
         db.commit()
 
 
-##############################################
+##########################################
 ##### 09_CharacterCompletion Process #####
-##############################################
-## 7. 1-0 CharacterCompletion이 이미 ExistedFrame으로 존재할때 업데이트
+##########################################
+## 9. 1-0 CharacterCompletion이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -461,7 +674,7 @@ def AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 7. 1-1 CharacterCompletion의 Body(본문) CharacterCompeletions 업데이트 형식
+## 9. 1-1 CharacterCompletion의 Body(본문) CharacterCompeletions 업데이트 형식
 def UpdateCompeletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship):    
     updateCharacterCompeletions = {
         "CharacterChunkId": CharacterChunkId,
@@ -475,7 +688,7 @@ def UpdateCompeletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Chara
     project.CharacterCompletion[1]["CharacterCompeletions"].append(updateCharacterCompeletions)
     project.CharacterCompletion[0]["CharacterChunkCount"] = CharacterChunkId
     
-## 7. 1-2 CharacterCompletion의 Body(본문) CharacterCompeletions 업데이트
+## 9. 1-2 CharacterCompletion의 Body(본문) CharacterCompeletions 업데이트
 def AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship):
     with get_db() as db:
         
@@ -487,11 +700,12 @@ def AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, Chunk
         db.add(project)
         db.commit()
         
-## 7. 2-1 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트 형식
+## 9. 2-1 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트 형식
 def updateCheckedCharacterTags(project, CharacterTag, CharacterList, Character):
-    # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
+    # 새롭게 생성되는 CharacterId는 CharacterTags의 Len값과 동일
     CharacterId = len(project.CharacterCompletion[2]["CharacterTags"]) -1
     
+    ### 실제 테스크시 수정 요망 ###
     updateCheckedCharacterTags = {
         "CharacterId": CharacterId,
         "CharacterTag": CharacterTag,
@@ -499,10 +713,10 @@ def updateCheckedCharacterTags(project, CharacterTag, CharacterList, Character):
         "Character": Character
     }
     
-    project.CharacterCompletion[2]["CharacterTags"].append(updateCheckedCharacterTags)
+    project.CharacterCompletion[2]["CheckedCharacterTags"].append(updateCheckedCharacterTags)
     project.CharacterCompletion[0]["CharacterCount"] = CharacterId
     
-## 7. 2-2 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트
+## 9. 2-2 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트
 def AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, CharacterList, Character):
     with get_db() as db:
         
@@ -514,7 +728,7 @@ def AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, Character
         db.add(project)
         db.commit()
         
-## 7. CharacterCompletion의Count의 가져오기
+## 9. CharacterCompletion의Count의 가져오기
 def CharacterCompletionCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
@@ -524,7 +738,7 @@ def CharacterCompletionCountLoad(projectName, email):
     
     return CharacterChunkCount, CharacterCount, Completion
 
-## 7. CharacterCompletion의 초기화
+## 9. CharacterCompletion의 초기화
 def InitCharacterCompletion(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
@@ -541,7 +755,7 @@ def InitCharacterCompletion(projectName, email):
         db.add(project)
         db.commit()
         
-## 7. 업데이트된 CharacterCompletion 출력
+## 9. 업데이트된 CharacterCompletion 출력
 def UpdatedCharacterCompletion(projectName, email):
     with get_db() as db:
 
@@ -549,7 +763,7 @@ def UpdatedCharacterCompletion(projectName, email):
         
     return project.CharacterCompletion
         
-## 7. CharacterCompletionCompletion 업데이트
+## 9. CharacterCompletionCompletion 업데이트
 def CharacterCompletionCompletionUpdate(projectName, email):
     with get_db() as db:
 

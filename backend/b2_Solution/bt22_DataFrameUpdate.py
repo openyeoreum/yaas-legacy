@@ -72,7 +72,7 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "살아서천국극락낙원에가는방법"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
@@ -156,39 +156,39 @@ if __name__ == "__main__":
     ########################
 
 
-    ##########################
-    ### 08_CharacterDefine ###
-    ##########################
-    InitCharacterDefine(projectName, email)
-    InitRawDataSet(projectName, email, "CharacterDefine")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterDefine", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterDefine", RawDataSetPath)
-    mode = "Master"
-    CharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # ##########################
+    # ### 08_CharacterDefine ###
+    # ##########################
+    # InitCharacterDefine(projectName, email)
+    # InitRawDataSet(projectName, email, "CharacterDefine")
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterDefine", DataFramePath)
+    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterDefine", RawDataSetPath)
+    # mode = "Master"
+    # CharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    if existedDataFrame == None:
-        updatedCharacterDefine = UpdatedCharacterDefine(projectName, email)
-        SaveDataFrame(projectName, email, "08_CharacterDefine", updatedCharacterDefine, DataFramePath)       
-        SaveDataSet(projectName, email, "08", "CharacterDefine", RawDataSetPath)
-    existedDataFrame = None
-    existedDataSet = None
+    # if existedDataFrame == None:
+    #     updatedCharacterDefine = UpdatedCharacterDefine(projectName, email)
+    #     SaveDataFrame(projectName, email, "08_CharacterDefine", updatedCharacterDefine, DataFramePath)       
+    #     SaveDataSet(projectName, email, "08", "CharacterDefine", RawDataSetPath)
+    # existedDataFrame = None
+    # existedDataSet = None
 
 
-    ##################################
-    ### 09_CharacterCompletion ###
-    ##################################
-    InitCharacterCompletion(projectName, email)
-    InitRawDataSet(projectName, email, "CharacterCompletion")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterCompletion", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterCompletion", RawDataSetPath)
-    mode = "Master"
-    CharacterCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # ##################################
+    # ### 09_CharacterCompletion ###
+    # ##################################
+    # InitCharacterCompletion(projectName, email)
+    # InitRawDataSet(projectName, email, "CharacterCompletion")
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterCompletion", DataFramePath)
+    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterCompletion", RawDataSetPath)
+    # mode = "Master"
+    # CharacterCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    if existedDataFrame == None:
-        updatedCharacterCompletion = UpdatedCharacterCompletion(projectName, email)
-        SaveDataFrame(projectName, email, "09_CharacterCompletion", updatedCharacterCompletion, DataFramePath)       
-        SaveDataSet(projectName, email, "09", "CharacterCompletion", RawDataSetPath)
-    existedDataFrame = None
-    existedDataSet = None
+    # if existedDataFrame == None:
+    #     updatedCharacterCompletion = UpdatedCharacterCompletion(projectName, email)
+    #     SaveDataFrame(projectName, email, "09_CharacterCompletion", updatedCharacterCompletion, DataFramePath)       
+    #     SaveDataSet(projectName, email, "09", "CharacterCompletion", RawDataSetPath)
+    # existedDataFrame = None
+    # existedDataSet = None

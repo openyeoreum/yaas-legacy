@@ -296,38 +296,86 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
 ################################
     
 ## 데이터 치환
-def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def ContextDefineResponseJson(projectName, email, OutputMemoryDics, messagesReview = 'off', mode = "Memory"):
+###                                               ^^^^^^^^^^^^^^^^ #### 테스트 후 삭제 ####
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
     
-    # 데이터 치환
-    outputMemoryDics = ContextDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    # # 데이터 치환
+    # outputMemoryDics = ContextDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = OutputMemoryDics #### 테스트 후 삭제 ####
     
     responseJson = []
+    StartCount = 0  # 시작 인덱스 초기화
     for response in outputMemoryDics:
         if response != "Pass":
             for dic in response:
                 for key, value in dic.items():
-                    CleanPhrases = value['문구']
-                    found = False # 플래그 설정
+                    CleanPhrases = re.sub("[^가-힣]", "", str(value['문구']))
+                    found = False  # 플래그 설정
+                    ChunkId = None  # 기본값 설정
+                    Chunk = None  # 기본값 설정
                     for i in range(len(BodyFrame)):
                         if found:
                             break
-                        for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
+                        for j in range(StartCount, len(BodyFrame[i]['SplitedBodyChunks'])):  # StartCount부터 시작
                             CleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']))
-                            if CleanChunk in CleanPhrases:
+                            if CleanPhrases in CleanChunk:
                                 ChunkId = BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId']
                                 Chunk = BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']
-                                found = True  
+                                # StartCount = j + 1  # 다음 검색 시작 위치 업데이트
+                                found = True
                                 break
-                    Reader = value['말하는인물']
-                    Purpose = value['말의종류']
-                    Subject = value['말하는인물의성별']
-                    Phrases = value['말하는인물의나이']
-                    Importance = value['말하는인물의감정']
+                    Reader = value['독자']
+                    Purpose = value['목적']
+                    Subject = value['주제']
+                    Phrases = value['문구']
+                    Importance = value['중요도']
                 responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Reader": Reader, "Purpose": Purpose, "Subject": Subject, "Phrases": Phrases, "Importance": Importance})
-    
+
+    # Chunk가 None인 경우 재분석
+    PrevSwitch = 0
+    PrevCleanChunk = ""
+    for response in responseJson:
+        if response['Chunk'] is None:  # 'None' 비교 시 'is None' 사용
+            CleanPhrases = re.sub("[^가-힣]", "", str(response['Phrases']))
+            found = False  # 플래그 변수 추가
+            for i in range(len(BodyFrame)):
+                if found:
+                    break  # 외부 루프 종료 조건 추가
+                ChunkIds = []
+                Chunks = []
+                CleanChunks = ""
+                for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
+                    CleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']))
+                    TestPrevCleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j-1]['Chunk']))
+                    if len(TestPrevCleanChunk) <= 2:
+                        TestPrevCleanChunk = "None"
+                    if (CleanChunk in CleanPhrases) and (CleanChunk != ''):
+                        if PrevSwitch == 0 and ((TestPrevCleanChunk[-2:] + CleanChunk) in CleanPhrases) and j > 0:
+                            PrevCleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j-1]['Chunk']))
+                            PrevChunkId = BodyFrame[i]['SplitedBodyChunks'][j-1]['ChunkId']
+                            PrevChunk = BodyFrame[i]['SplitedBodyChunks'][j-1]['Chunk']
+                            PrevSwitch = 1
+                        ChunkIds.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
+                        Chunks.append(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk'])
+                        CleanChunks += CleanChunk
+                        if CleanChunks == CleanPhrases:
+                            response['ChunkId'] = ChunkIds
+                            response['Chunk'] = Chunks
+                            PrevCleanChunk = ""
+                            PrevSwitch = 0
+                            found = True  # 플래그 변수 설정
+                            break  # 현재 루프 종료
+                        elif (CleanPhrases in (PrevCleanChunk + CleanChunks)) and (PrevCleanChunk not in CleanPhrases):
+                            response['ChunkId'] = [PrevChunkId] + ChunkIds
+                            response['Chunk'] = [PrevChunk] + Chunks
+                            PrevCleanChunk = ""
+                            PrevSwitch = 0
+                            found = True  # 플래그 변수 설정
+                            break  # 현재 루프 종료
+
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 ContextDefine에 업데이트
@@ -343,7 +391,13 @@ def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memo
             AddExistedDataSetToDB(projectName, email, "ContextDefine", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 06_ContextDefineUpdate는 ExistedContextDefine으로 대처됨 ]\n")
         else:
-            responseJson = ContextDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            #### 테스트 후 삭제 ####
+            OutputMemoryDicsPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_" + projectName + "_06_OutputMemoryDics_231028.json"
+            with open(OutputMemoryDicsPath, 'r', encoding='utf-8') as file:
+                OutputMemoryDics = json.load(file)
+            responseJson = ContextDefineResponseJson(projectName, email, OutputMemoryDics, messagesReview = 'off', mode = mode)
+            #### 테스트 후 삭제 ####
+            # responseJson = ContextDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -391,8 +445,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    
-    outputMemoryDics = ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLength = 2, MessagesReview = "on", Mode = mode)
-    
-    with open("/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_데미안_06_OutputMemoryDics_231028.json", 'w', encoding='utf-8') as f:
-        json.dump(outputMemoryDics, f, ensure_ascii = False, indent = 4)

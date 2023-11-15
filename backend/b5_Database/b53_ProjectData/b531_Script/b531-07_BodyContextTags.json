@@ -38,7 +38,7 @@
             {
                 "BodyContextId": 5,
                 "BodyContextTag": "Emotion",
-                "BodyContexts": ["행복", "평온", "무감정", "피곤", "슬픔", "두려움", "놀람", "즐거움"]
+                "BodyContexts": ["행복", "즐거움", "평온", "무감정", "피곤", "슬픔", "두려움", "놀람"]
             },
             {
                 "BodyContextId": 6,

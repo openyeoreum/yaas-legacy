@@ -6,11 +6,12 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitSummaryBodyFrame, UpdatedSummaryBodyFrame, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitSummaryBodyFrame, UpdatedSummaryBodyFrame, InitContextDefine, UpdatedContextDefine, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_BodySummaryUpdate import SummaryBodyFrameUpdate
+from backend.b2_Solution.b24_DataFrame.b243_Context.b2431_ContextDefineUpdate import ContextDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b244_Character.b2441_CharacterDefineUpdate import CharacterDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b244_Character.b2442_CharacterCompletionUpdate import CharacterCompletionUpdate
 
@@ -151,13 +152,26 @@ if __name__ == "__main__":
     # existedDataSet = None
 
 
-    ########################
-    ### 06_ContextDefine ###
-    ########################
-
+    #######################
+    ## 06_ContextDefine ###
+    #######################
+    InitContextDefine(projectName, email)
+    InitRawDataSet(projectName, email, "ContextDefine")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextDefine", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextDefine", RawDataSetPath)
+    mode = "Master"
+    ContextDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    
+    if existedDataFrame == None:
+        updatedContextDefine = UpdatedContextDefine(projectName, email)
+        SaveDataFrame(projectName, email, "06_ContextDefine", updatedContextDefine, DataFramePath)
+        SaveDataSet(projectName, email, "06", "ContextDefine", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet = None
 
     # ##########################
-    # ### 08_CharacterDefine ###
+    # ### 09_CharacterDefine ###
     # ##########################
     # InitCharacterDefine(projectName, email)
     # InitRawDataSet(projectName, email, "CharacterDefine")
@@ -169,14 +183,14 @@ if __name__ == "__main__":
     
     # if existedDataFrame == None:
     #     updatedCharacterDefine = UpdatedCharacterDefine(projectName, email)
-    #     SaveDataFrame(projectName, email, "08_CharacterDefine", updatedCharacterDefine, DataFramePath)       
-    #     SaveDataSet(projectName, email, "08", "CharacterDefine", RawDataSetPath)
+    #     SaveDataFrame(projectName, email, "09_CharacterDefine", updatedCharacterDefine, DataFramePath)       
+    #     SaveDataSet(projectName, email, "09", "CharacterDefine", RawDataSetPath)
     # existedDataFrame = None
     # existedDataSet = None
 
 
     # ##################################
-    # ### 09_CharacterCompletion ###
+    # ### 10_CharacterCompletion ###
     # ##################################
     # InitCharacterCompletion(projectName, email)
     # InitRawDataSet(projectName, email, "CharacterCompletion")
@@ -188,7 +202,7 @@ if __name__ == "__main__":
     
     # if existedDataFrame == None:
     #     updatedCharacterCompletion = UpdatedCharacterCompletion(projectName, email)
-    #     SaveDataFrame(projectName, email, "09_CharacterCompletion", updatedCharacterCompletion, DataFramePath)       
-    #     SaveDataSet(projectName, email, "09", "CharacterCompletion", RawDataSetPath)
+    #     SaveDataFrame(projectName, email, "10_CharacterCompletion", updatedCharacterCompletion, DataFramePath)       
+    #     SaveDataSet(projectName, email, "10", "CharacterCompletion", RawDataSetPath)
     # existedDataFrame = None
     # existedDataSet = None

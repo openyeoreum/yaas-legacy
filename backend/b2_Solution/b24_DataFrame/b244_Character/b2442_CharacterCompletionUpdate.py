@@ -460,7 +460,7 @@ def CharacterCompletionResponseJson(projectName, email, messagesReview = 'off', 
 
 ## 프롬프트 요청 및 결과물 Json을 CharacterCompletion에 업데이트
 def CharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 09_CharacterCompletionUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 10_CharacterCompletionUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, CharacterCount, Completion = CharacterCompletionCountLoad(projectName, email)
     if Completion == "No":
@@ -469,7 +469,7 @@ def CharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mode =
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "CharacterCompletion", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 09_CharacterCompletionUpdate는 ExistedCharacterCompletion으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 10_CharacterCompletionUpdate는 ExistedCharacterCompletion으로 대처됨 ]\n")
         else:
             responseJson, sortedCharacters = CharacterCompletionResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             print(f"Project: {projectName} | Process: CharacterCompletion | CharacterFilter 완료\n{projectName}의 등장인물 {len(sortedCharacters)}명 : {sortedCharacters}")
@@ -503,10 +503,10 @@ def CharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mode =
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             CharacterCompletionCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 09_CharacterCompletionUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 10_CharacterCompletionUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 09_CharacterCompletionUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 10_CharacterCompletionUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 

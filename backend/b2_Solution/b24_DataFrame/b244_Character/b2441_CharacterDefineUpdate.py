@@ -338,7 +338,7 @@ def CharacterDefineResponseJson(projectName, email, messagesReview = 'off', mode
 
 ## 프롬프트 요청 및 결과물 Json을 CharacterDefine에 업데이트
 def CharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 08_CharacterDefineUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 09_CharacterDefineUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, CharacterCount, Completion = CharacterDefineCountLoad(projectName, email)
     if Completion == "No":
@@ -347,7 +347,7 @@ def CharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Me
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "CharacterDefine", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 08_CharacterDefineUpdate는 ExistedCharacterDefine으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 09_CharacterDefineUpdate는 ExistedCharacterDefine으로 대처됨 ]\n")
         else:
             responseJson = CharacterDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
@@ -384,10 +384,10 @@ def CharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Me
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             CharacterDefineCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 08_CharacterDefineUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 09_CharacterDefineUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 08_CharacterDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 09_CharacterDefineUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 

@@ -113,8 +113,14 @@ def ContextDefineFilter(Input, responseData, memoryCounter):
     for dic in OutputDic:
         try:
             key = list(dic.keys())[0]
-            OUTPUT = re.sub("[^가-힣]", "", str(dic[key]['문구']))
-            if not '요소' in key:
+            # '문구' 키에 접근하는 부분에 예외 처리 추가
+            try:
+                OUTPUT = re.sub("[^가-힣]", "", str(dic[key]['문구']))
+            except TypeError:
+                return "JSON에서 오류 발생: TypeError"
+            except KeyError:
+                return "JSON에서 오류 발생: KeyError"
+            if not '메모' in key:
                 return "JSON에서 오류 발생: JSONKeyError"
             elif not OUTPUT in INPUT:
                 return f"JSON에서 오류 발생: JSON '문구'가 Input에 포함되지 않음 Error\n문구: {dic[key]['문구']}"
@@ -226,7 +232,7 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
             
             # Filter, MemoryCounter, OutputEnder 처리
             memoryCounter = "\n"
-            outputEnder = f"{{'요소"
+            outputEnder = f"{{'메모"
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -296,15 +302,13 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
 ################################
     
 ## 데이터 치환
-def ContextDefineResponseJson(projectName, email, OutputMemoryDics, messagesReview = 'off', mode = "Memory"):
-###                                               ^^^^^^^^^^^^^^^^ #### 테스트 후 삭제 ####
+def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
     
-    # # 데이터 치환
-    # outputMemoryDics = ContextDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
-    outputMemoryDics = OutputMemoryDics #### 테스트 후 삭제 ####
+    # 데이터 치환
+    outputMemoryDics = ContextDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     StartCount = 0  # 시작 인덱스 초기화
@@ -391,13 +395,7 @@ def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memo
             AddExistedDataSetToDB(projectName, email, "ContextDefine", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 06_ContextDefineUpdate는 ExistedContextDefine으로 대처됨 ]\n")
         else:
-            #### 테스트 후 삭제 ####
-            OutputMemoryDicsPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_" + projectName + "_06_OutputMemoryDics_231028.json"
-            with open(OutputMemoryDicsPath, 'r', encoding='utf-8') as file:
-                OutputMemoryDics = json.load(file)
-            responseJson = ContextDefineResponseJson(projectName, email, OutputMemoryDics, messagesReview = 'off', mode = mode)
-            #### 테스트 후 삭제 ####
-            # responseJson = ContextDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = ContextDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]

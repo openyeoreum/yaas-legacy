@@ -567,7 +567,7 @@ def ContextCompletionCompletionUpdate(projectName, email):
 
 
 ######################################
-##### 08_CharacterDefine Process #####
+##### 09_CharacterDefine Process #####
 ######################################
 ## 8. 1-0 CharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame):
@@ -659,7 +659,7 @@ def CharacterDefineCompletionUpdate(projectName, email):
 
 
 ##########################################
-##### 09_CharacterCompletion Process #####
+##### 10_CharacterCompletion Process #####
 ##########################################
 ## 9. 1-0 CharacterCompletion이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame):

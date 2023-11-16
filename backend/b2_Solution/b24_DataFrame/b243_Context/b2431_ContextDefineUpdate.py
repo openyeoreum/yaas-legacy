@@ -379,8 +379,11 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
                             PrevSwitch = 0
                             found = True  # 플래그 변수 설정
                             break  # 현재 루프 종료
+    
+    # ChunkId의 순번대로 재배열
+    ResponseJson = sorted(responseJson, key=lambda x: x['ChunkId'][0] if isinstance(x['ChunkId'], list) else x['ChunkId'])
 
-    return responseJson
+    return ResponseJson
 
 ## 프롬프트 요청 및 결과물 Json을 ContextDefine에 업데이트
 def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):

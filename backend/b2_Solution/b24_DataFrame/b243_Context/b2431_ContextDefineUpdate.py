@@ -354,10 +354,10 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
                 for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
                     CleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']))
                     TestPrevCleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j-1]['Chunk']))
-                    if len(TestPrevCleanChunk) <= 2:
+                    if len(TestPrevCleanChunk) <= 3:
                         TestPrevCleanChunk = "None"
                     if (CleanChunk in CleanPhrases) and (CleanChunk != ''):
-                        if PrevSwitch == 0 and ((TestPrevCleanChunk[-2:] + CleanChunk) in CleanPhrases) and j > 0:
+                        if PrevSwitch == 0 and ((TestPrevCleanChunk[-3:] + CleanChunk) in CleanPhrases) and j > 0:
                             PrevCleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j-1]['Chunk']))
                             PrevChunkId = BodyFrame[i]['SplitedBodyChunks'][j-1]['ChunkId']
                             PrevChunk = BodyFrame[i]['SplitedBodyChunks'][j-1]['Chunk']

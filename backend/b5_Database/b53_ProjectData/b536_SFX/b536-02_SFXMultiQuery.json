@@ -7,16 +7,19 @@
         "Content": "Body",
         "Language": "Ko",
         "TaskName": "SFXMultiQuery",
-        "TaskCount": 0
+        "TaskCount": 0,
+        "BodyCount": 0,
+        "ChunkCount": 0,
+        "Completion": "No"
     },
     {
-        "SFXMultiQueriedSplitedBodys": [
+        "SFXMultiQueriedBodys": [
             {
                 "BodyId": 1,
-                "SFXMultiQueriedSplitedBodyChunks":
+                "SFXMultiQueriedChunks":
                 [
                     {"ChunkId": "",
-                    "SFXMultiQueriedSplitedBodyChunkTokens":
+                    "SFXMultiQueriedChunkTokens":
                     [
                         {"TokenId": "", "Text": "수업은"},
                         {"TokenId": "", "Space": " "},
@@ -67,7 +70,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMultiQueriedSplitedBodyChunkTokens":
+                    "SFXMultiQueriedChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -85,7 +88,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMultiQueriedSplitedBodyChunkTokens":
+                    "SFXMultiQueriedChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -106,10 +109,10 @@
             },
             {
                 "BodyId": 2,
-                "SFXMultiQueriedSplitedBodyChunks":
+                "SFXMultiQueriedChunks":
                 [
                     {"ChunkId": "",
-                    "SFXMultiQueriedSplitedBodyChunkTokens":
+                    "SFXMultiQueriedChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -127,7 +130,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMultiQueriedSplitedBodyChunkTokens":
+                    "SFXMultiQueriedChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -145,7 +148,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMultiQueriedSplitedBodyChunkTokens":
+                    "SFXMultiQueriedChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -166,10 +169,10 @@
             },
             {
                 "BodyId": 3,
-                "SFXMultiQueriedSplitedBodyChunks":
+                "SFXMultiQueriedChunks":
                 [
                     {"ChunkId": "",
-                    "SFXMultiQueriedSplitedBodyChunkTokens":
+                    "SFXMultiQueriedChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -187,7 +190,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMultiQueriedSplitedBodyChunkTokens":
+                    "SFXMultiQueriedChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -205,7 +208,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMultiQueriedSplitedBodyChunkTokens":
+                    "SFXMultiQueriedChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},

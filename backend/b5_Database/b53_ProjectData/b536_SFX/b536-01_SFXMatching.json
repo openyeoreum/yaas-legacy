@@ -7,20 +7,23 @@
         "Content": "Body",
         "Language": "Ko",
         "TaskName": "SFXMatching",
-        "TaskCount": 0
+        "TaskCount": 0,
+        "BodyCount": 0,
+        "ChunkCount": 0,
+        "Completion": "No"
     },
     {
-        "SFXMatchedSplitedBodys": [
+        "SFXBodys": [
             {
                 "BodyId": 1,
-                "SFXMatchedSplitedBodyChunks":
+                "SFXChunks":
                 [
                     {"ChunkId": "",
-                    "SFXMatchedSplitedBodyChunkTokens":
+                    "SFXChunkTokens":
                     [
                         {"TokenId": "", "Text": "수업은"},
                         {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": "행동"}, {"SFX": "대화"}]},
+                        {"TokenId": "", "MatchedSFXTag":{"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Text": "대화와"},
                         {"TokenId": "", "Space": " "},
                         {"TokenId": "", "MatchedSFXTag":[{"Classification": "행동"}, {"SFX": "강의"}]},
@@ -46,7 +49,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMatchedSplitedBodyChunkTokens":
+                    "SFXChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -56,7 +59,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMatchedSplitedBodyChunkTokens":
+                    "SFXChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -69,10 +72,10 @@
             },
             {
                 "BodyId": 2,
-                "SFXMatchedSplitedBodyChunks":
+                "SFXChunks":
                 [
                     {"ChunkId": "",
-                    "SFXMatchedSplitedBodyChunkTokens":
+                    "SFXChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -82,7 +85,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMatchedSplitedBodyChunkTokens":
+                    "SFXChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -92,7 +95,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMatchedSplitedBodyChunkTokens":
+                    "SFXChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -105,10 +108,10 @@
             },
             {
                 "BodyId": 3,
-                "SFXMatchedSplitedBodyChunks":
+                "SFXChunks":
                 [
                     {"ChunkId": "",
-                    "SFXMatchedSplitedBodyChunkTokens":
+                    "SFXChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -118,7 +121,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMatchedSplitedBodyChunkTokens":
+                    "SFXChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
@@ -128,7 +131,7 @@
                     ]
                     },
                     {"ChunkId": "",
-                    "SFXMatchedSplitedBodyChunkTokens":
+                    "SFXChunkTokens":
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},

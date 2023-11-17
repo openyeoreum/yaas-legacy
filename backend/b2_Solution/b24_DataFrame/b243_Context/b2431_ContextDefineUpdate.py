@@ -308,7 +308,13 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
     
     # 데이터 치환
-    outputMemoryDics = ContextDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    # outputMemoryDics = ContextDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    
+    ### 테스트 후 삭제 ###
+    filepath = '/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_06_OutputMemoryDics_231028.json'
+    with open(filepath, 'r', encoding='utf-8') as file:
+        outputMemoryDics = json.load(file)
+    ### 테스트 후 삭제 ###
     
     responseJson = []
     StartCount = 0  # 시작 인덱스 초기화
@@ -379,9 +385,34 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
                             PrevSwitch = 0
                             found = True  # 플래그 변수 설정
                             break  # 현재 루프 종료
+
+        # ChunkId가 연속적이지 않은 경우를 처리하는 로직
+        if isinstance(response['ChunkId'], list) and all(isinstance(x, int) for x in response['ChunkId']):
+            NonConsecutive = True
+            for i in range(1, len(response['ChunkId'])):
+                if response['ChunkId'][i] - response['ChunkId'][i - 1] == 1:
+                    NonConsecutive = False
+                    break
+
+            if NonConsecutive:
+                # print(response['ChunkId'])
+                fullChunkIdList = range(min(response['ChunkId']), max(response['ChunkId']) + 1)
+                missingChunkIds = [id for id in fullChunkIdList if id not in response['ChunkId']]
+
+                for missingId in missingChunkIds:
+                    for body in BodyFrame:
+                        for splitedChunk in body['SplitedBodyChunks']:
+                            if splitedChunk['ChunkId'] == missingId:
+                                response['ChunkId'].append(missingId)
+                                response['Chunk'].append(splitedChunk['Chunk'])
+                                break
+                            
+                # ChunkId에 따라 Chunk를 정렬
+                chunkIdChunkPairs = sorted(zip(response['ChunkId'], response['Chunk']))
+                response['ChunkId'], response['Chunk'] = map(list, zip(*chunkIdChunkPairs))
     
     # ChunkId의 순번대로 재배열
-    ResponseJson = sorted(responseJson, key=lambda x: x['ChunkId'][0] if isinstance(x['ChunkId'], list) else x['ChunkId'])
+    ResponseJson = sorted(responseJson, key = lambda x: x['ChunkId'][0] if isinstance(x['ChunkId'], list) else x['ChunkId'])
 
     return ResponseJson
 

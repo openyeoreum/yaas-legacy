@@ -73,13 +73,13 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "살아서천국극락낙원에가는방법"
+    projectName = "우리는행복을진단한다"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     
     ### existedDataFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
-    existedDataFrameMode = "on" # <- 개발 후 off #
+    existedDataFrameMode = "off" # <- 개발 후 off #
     
     # existedDataFrame 초기화
     existedDataFrame = None
@@ -89,48 +89,48 @@ if __name__ == "__main__":
     #########################################################################
     
     
-    ##################################
-    ### 00_DataFrame-[AllMetaData] ###
-    ##################################
-    AddFrameMetaDataToDB(projectName, email)
+    # ##################################
+    # ### 00_DataFrame-[AllMetaData] ###
+    # ##################################
+    # AddFrameMetaDataToDB(projectName, email)
 
-    AddDataSetMetaDataToDB(projectName, email)
+    # AddDataSetMetaDataToDB(projectName, email)
 
 
-    ###################################
-    ### 01_IndexFrame-[IndexDefine] ###
-    ###################################
-    InitIndexFrame(projectName, email)
-    InitRawDataSet(projectName, email, "IndexDefinePreprocess")
-    InitRawDataSet(projectName, email, "IndexDefine")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "IndexFrame", DataFramePath)
-        recentFile, existedDataSet1 = LoadExistedDataSets(projectName, email, "IndexDefinePreprocess", RawDataSetPath)
-        recentFile, existedDataSet2 = LoadExistedDataSets(projectName, email, "IndexDefine", RawDataSetPath)
-    mode = "Example" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning", "Master"
-    IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
+    # ###################################
+    # ### 01_IndexFrame-[IndexDefine] ###
+    # ###################################
+    # InitIndexFrame(projectName, email)
+    # InitRawDataSet(projectName, email, "IndexDefinePreprocess")
+    # InitRawDataSet(projectName, email, "IndexDefine")
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "IndexFrame", DataFramePath)
+    #     recentFile, existedDataSet1 = LoadExistedDataSets(projectName, email, "IndexDefinePreprocess", RawDataSetPath)
+    #     recentFile, existedDataSet2 = LoadExistedDataSets(projectName, email, "IndexDefine", RawDataSetPath)
+    # mode = "Example" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning", "Master"
+    # IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
     
-    if existedDataFrame == None:
-        updatedIndexFrame = UpdatedIndexFrame(projectName, email)
-        SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
-        SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", RawDataSetPath)
-        SaveDataSet(projectName, email, "01", "IndexDefine", RawDataSetPath)
-    existedDataFrame = None
-    existedDataSet1 = None
-    existedDataSet2 = None
+    # if existedDataFrame == None:
+    #     updatedIndexFrame = UpdatedIndexFrame(projectName, email)
+    #     SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
+    #     SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", RawDataSetPath)
+    #     SaveDataSet(projectName, email, "01", "IndexDefine", RawDataSetPath)
+    # existedDataFrame = None
+    # existedDataSet1 = None
+    # existedDataSet2 = None
 
-    ##############################################
-    ### 02_BodyFrame-[BodySplit, IndexTagging] ###
-    ##############################################
-    InitBodyFrame(projectName, email)
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", DataFramePath)
-    BodyFrameUpdate(projectName, email, tokensCount = 2500, ExistedDataFrame = existedDataFrame)
+    # ##############################################
+    # ### 02_BodyFrame-[BodySplit, IndexTagging] ###
+    # ##############################################
+    # InitBodyFrame(projectName, email)
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", DataFramePath)
+    # BodyFrameUpdate(projectName, email, tokensCount = 2500, ExistedDataFrame = existedDataFrame)
 
-    if existedDataFrame == None:
-        updatedBodyFrame = UpdatedBodyFrame(projectName, email)
-        SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
-    existedDataFrame = None
+    # if existedDataFrame == None:
+    #     updatedBodyFrame = UpdatedBodyFrame(projectName, email)
+    #     SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
+    # existedDataFrame = None
     
 
     # #########################################

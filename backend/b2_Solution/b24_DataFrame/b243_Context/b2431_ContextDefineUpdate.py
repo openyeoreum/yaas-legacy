@@ -418,7 +418,7 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
 
 ## 프롬프트 요청 및 결과물 Json을 ContextDefine에 업데이트
 def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 06_ContextDefineUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 07_ContextDefineUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, ContextCount, Completion = ContextDefineCountLoad(projectName, email)
     if Completion == "No":
@@ -427,7 +427,7 @@ def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memo
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedContextDefineToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "ContextDefine", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 06_ContextDefineUpdate는 ExistedContextDefine으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 07_ContextDefineUpdate는 ExistedContextDefine으로 대처됨 ]\n")
         else:
             responseJson = ContextDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
@@ -462,10 +462,10 @@ def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memo
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             ContextDefineCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 06_ContextDefineUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 07_ContextDefineUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 06_ContextDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 07_ContextDefineUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 

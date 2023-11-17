@@ -24,9 +24,10 @@ def AddPromptToDB():
         indexDefinePreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-01_IndexDefinePreprocess.json")
         indexDefineDivisionPreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-02_IndexDefineDivisionPreprocess.json")
         indexDefine = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-03_IndexDefine.json")
-        captionPhargraph = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-04_CaptionPhargraph.json")
-        # transitionPhargraph = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-05_TransitionPhargraph.json")
-        bodySummary = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-06_BodySummary.json")
+        # preprocessBody = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-04_PreprocessBody.json")
+        captionPhargraph = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-05_CaptionPhargraph.json")
+        # transitionPhargraph = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-06_TransitionPhargraph.json")
+        bodySummary = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-07_BodySummary.json")
         contextDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-01_ContextDefine.json")
         contextCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-02_ContextCompletion.json")
         nCEMCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-03_NCEMCompletion.json")
@@ -47,6 +48,7 @@ def AddPromptToDB():
                 ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
                 ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
                 ExistingPrompt.IndexDefine = indexDefine
+                ExistingPrompt.PreprocessBody = preprocessBody
                 ExistingPrompt.CaptionPhargraph = captionPhargraph
                 # ExistingPrompt.TransitionPhargraph = transitionPhargraph
                 ExistingPrompt.BodySummary = bodySummary
@@ -69,6 +71,7 @@ def AddPromptToDB():
                 IndexDefinePreprocess = indexDefinePreprocess,
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,
                 IndexDefine = indexDefine,
+                PreprocessBody = preprocessBody,
                 CaptionPhargraph = captionPhargraph,
                 # TransitionPhargraph = transitionPhargraph,
                 BodySummary = bodySummary,

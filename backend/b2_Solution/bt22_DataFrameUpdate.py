@@ -89,71 +89,71 @@ if __name__ == "__main__":
     #########################################################################
     
     
-    # ##################################
-    # ### 00_DataFrame-[AllMetaData] ###
-    # ##################################
-    # AddFrameMetaDataToDB(projectName, email)
+    ##################################
+    ### 00_DataFrame-[AllMetaData] ###
+    ##################################
+    AddFrameMetaDataToDB(projectName, email)
 
-    # AddDataSetMetaDataToDB(projectName, email)
+    AddDataSetMetaDataToDB(projectName, email)
 
 
-    # ###################################
-    # ### 01_IndexFrame-[IndexDefine] ###
-    # ###################################
-    # InitIndexFrame(projectName, email)
-    # InitRawDataSet(projectName, email, "IndexDefinePreprocess")
-    # InitRawDataSet(projectName, email, "IndexDefine")
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "IndexFrame", DataFramePath)
-    #     recentFile, existedDataSet1 = LoadExistedDataSets(projectName, email, "IndexDefinePreprocess", RawDataSetPath)
-    #     recentFile, existedDataSet2 = LoadExistedDataSets(projectName, email, "IndexDefine", RawDataSetPath)
-    # mode = "Example" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning", "Master"
-    # IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
+    ###################################
+    ### 01_IndexFrame-[IndexDefine] ###
+    ###################################
+    InitIndexFrame(projectName, email)
+    InitRawDataSet(projectName, email, "IndexDefinePreprocess")
+    InitRawDataSet(projectName, email, "IndexDefine")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "IndexFrame", DataFramePath)
+        recentFile, existedDataSet1 = LoadExistedDataSets(projectName, email, "IndexDefinePreprocess", RawDataSetPath)
+        recentFile, existedDataSet2 = LoadExistedDataSets(projectName, email, "IndexDefine", RawDataSetPath)
+    mode = "Example" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning", "Master"
+    IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
     
-    # if existedDataFrame == None:
-    #     updatedIndexFrame = UpdatedIndexFrame(projectName, email)
-    #     SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
-    #     SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", RawDataSetPath)
-    #     SaveDataSet(projectName, email, "01", "IndexDefine", RawDataSetPath)
-    # existedDataFrame = None
-    # existedDataSet1 = None
-    # existedDataSet2 = None
+    if existedDataFrame == None:
+        updatedIndexFrame = UpdatedIndexFrame(projectName, email)
+        SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
+        SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", RawDataSetPath)
+        SaveDataSet(projectName, email, "01", "IndexDefine", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet1 = None
+    existedDataSet2 = None
 
-    # ##############################################
-    # ### 02_BodyFrame-[BodySplit, IndexTagging] ###
-    # ##############################################
-    # InitBodyFrame(projectName, email)
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", DataFramePath)
-    # BodyFrameUpdate(projectName, email, tokensCount = 2500, ExistedDataFrame = existedDataFrame)
+    ##############################################
+    ### 02_BodyFrame-[BodySplit, IndexTagging] ###
+    ##############################################
+    InitBodyFrame(projectName, email)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", DataFramePath)
+    BodyFrameUpdate(projectName, email, tokensCount = 2500, ExistedDataFrame = existedDataFrame)
 
-    # if existedDataFrame == None:
-    #     updatedBodyFrame = UpdatedBodyFrame(projectName, email)
-    #     SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
-    # existedDataFrame = None
+    if existedDataFrame == None:
+        updatedBodyFrame = UpdatedBodyFrame(projectName, email)
+        SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
+    existedDataFrame = None
     
 
-    # #########################################
-    # ### 05_SummaryBodyFrame-[BodySummary] ###
-    # #########################################
-    # InitSummaryBodyFrame(projectName, email)
-    # InitRawDataSet(projectName, email, "BodySummary")
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "SummaryBodyFrame", DataFramePath)
-    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodySummary", RawDataSetPath)
-    # mode = "ExampleFineTuning"
-    # SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    #########################################
+    ### 06_SummaryBodyFrame-[BodySummary] ###
+    #########################################
+    InitSummaryBodyFrame(projectName, email)
+    InitRawDataSet(projectName, email, "BodySummary")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "SummaryBodyFrame", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodySummary", RawDataSetPath)
+    mode = "ExampleFineTuning"
+    SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    # if existedDataFrame == None:
-    #     updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
-    #     SaveDataFrame(projectName, email, "05_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
-    #     SaveDataSet(projectName, email, "05", "BodySummary", RawDataSetPath)
-    # existedDataFrame = None
-    # existedDataSet = None
+    if existedDataFrame == None:
+        updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
+        SaveDataFrame(projectName, email, "06_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
+        SaveDataSet(projectName, email, "06", "BodySummary", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet = None
 
 
     #######################
-    ## 06_ContextDefine ###
+    ## 07_ContextDefine ###
     #######################
     InitContextDefine(projectName, email)
     InitRawDataSet(projectName, email, "ContextDefine")
@@ -165,44 +165,44 @@ if __name__ == "__main__":
     
     if existedDataFrame == None:
         updatedContextDefine = UpdatedContextDefine(projectName, email)
-        SaveDataFrame(projectName, email, "06_ContextDefine", updatedContextDefine, DataFramePath)
-        SaveDataSet(projectName, email, "06", "ContextDefine", RawDataSetPath)
+        SaveDataFrame(projectName, email, "07_ContextDefine", updatedContextDefine, DataFramePath)
+        SaveDataSet(projectName, email, "07", "ContextDefine", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
 
-    # ##########################
-    # ### 09_CharacterDefine ###
-    # ##########################
-    # InitCharacterDefine(projectName, email)
-    # InitRawDataSet(projectName, email, "CharacterDefine")
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterDefine", DataFramePath)
-    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterDefine", RawDataSetPath)
-    # mode = "Master"
-    # CharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    ##########################
+    ### 10_CharacterDefine ###
+    ##########################
+    InitCharacterDefine(projectName, email)
+    InitRawDataSet(projectName, email, "CharacterDefine")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterDefine", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterDefine", RawDataSetPath)
+    mode = "Master"
+    CharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    # if existedDataFrame == None:
-    #     updatedCharacterDefine = UpdatedCharacterDefine(projectName, email)
-    #     SaveDataFrame(projectName, email, "09_CharacterDefine", updatedCharacterDefine, DataFramePath)       
-    #     SaveDataSet(projectName, email, "09", "CharacterDefine", RawDataSetPath)
-    # existedDataFrame = None
-    # existedDataSet = None
+    if existedDataFrame == None:
+        updatedCharacterDefine = UpdatedCharacterDefine(projectName, email)
+        SaveDataFrame(projectName, email, "10_CharacterDefine", updatedCharacterDefine, DataFramePath)       
+        SaveDataSet(projectName, email, "10", "CharacterDefine", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet = None
 
 
-    # ##################################
-    # ### 10_CharacterCompletion ###
-    # ##################################
-    # InitCharacterCompletion(projectName, email)
-    # InitRawDataSet(projectName, email, "CharacterCompletion")
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterCompletion", DataFramePath)
-    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterCompletion", RawDataSetPath)
-    # mode = "Master"
-    # CharacterCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    ##################################
+    ### 11_CharacterCompletion ###
+    ##################################
+    InitCharacterCompletion(projectName, email)
+    InitRawDataSet(projectName, email, "CharacterCompletion")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterCompletion", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterCompletion", RawDataSetPath)
+    mode = "Master"
+    CharacterCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    # if existedDataFrame == None:
-    #     updatedCharacterCompletion = UpdatedCharacterCompletion(projectName, email)
-    #     SaveDataFrame(projectName, email, "10_CharacterCompletion", updatedCharacterCompletion, DataFramePath)       
-    #     SaveDataSet(projectName, email, "10", "CharacterCompletion", RawDataSetPath)
-    # existedDataFrame = None
-    # existedDataSet = None
+    if existedDataFrame == None:
+        updatedCharacterCompletion = UpdatedCharacterCompletion(projectName, email)
+        SaveDataFrame(projectName, email, "11_CharacterCompletion", updatedCharacterCompletion, DataFramePath)       
+        SaveDataSet(projectName, email, "11", "CharacterCompletion", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet = None

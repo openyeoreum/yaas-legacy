@@ -194,7 +194,7 @@ class Project(Base):
     
     # Script
     IndexFrame = Column(JSON)
-    CharacterFrame = Column(JSON)
+    PreprocessFrame = Column(JSON)
     BodyFrame = Column(JSON)
     PhargraphCaptionFrame = Column(JSON)
     PhargraphTransitionFrame = Column(JSON)
@@ -321,7 +321,7 @@ class ProjectHistory(Base):
     ## Process
     # Script
     IndexFrameStatus = Column(String(64))
-    CharacterFrameStatus = Column(String(64))
+    PreprocessFrameStatus = Column(String(64))
     BodyFrameStatus = Column(String(64))
     PhargraphCaptionFrameStatus = Column(String(64))
     PhargraphTransitionFrameStatus = Column(String(64))

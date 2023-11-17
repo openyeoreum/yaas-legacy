@@ -87,7 +87,7 @@ def AddProjectToDB(projectName, email):
         ProjectDataPath = GetProjectDataPath()
         
         indexFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-01_IndexFrame.json")
-        characterFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_CharacterFrame.json")
+        characterFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_PreprocessFrame.json")
         bodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")
         phargraphCaptionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_PhargraphCaptionFrame.json")
         phargraphTransitionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-05_PhargraphTransitionFrame.json")
@@ -139,7 +139,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.Music2FolderPath = music2FolderPath
             ExistingProject.MasterAudioBookPath = masterAudioBookPath
             ExistingProject.IndexFrame = indexFrame
-            ExistingProject.CharacterFrame = characterFrame
+            ExistingProject.PreprocessFrame = characterFrame
             ExistingProject.BodyFrame = bodyFrame
             ExistingProject.PhargraphCaptionFrame = phargraphCaptionFrame
             ExistingProject.PhargraphTransitionFrame = phargraphTransitionFrame
@@ -190,7 +190,7 @@ def AddProjectToDB(projectName, email):
                 Music2FolderPath = music2FolderPath,
                 MasterAudioBookPath = masterAudioBookPath,
                 IndexFrame = indexFrame,
-                CharacterFrame = characterFrame,
+                PreprocessFrame = characterFrame,
                 BodyFrame = bodyFrame,
                 PhargraphCaptionFrame = phargraphCaptionFrame,
                 PhargraphTransitionFrame = phargraphTransitionFrame,

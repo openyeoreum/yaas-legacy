@@ -153,6 +153,9 @@ class Project(Base):
     CharacterFile = Column(Text)
     BodyFile = Column(Text)
     
+    # DataFrameFile
+    DataFramePath = Column(Text)
+    
     # MixedAudioBookFile
     MixedAudioBookPath = Column(Text)
 
@@ -203,6 +206,7 @@ class Project(Base):
     # Context
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
+    NCEMCompletion = Column(JSON)
     
     # Character
     CharacterDefine = Column(JSON)
@@ -329,6 +333,7 @@ class ProjectHistory(Base):
     # Context
     ContextDefineStatus = Column(JSON(64))
     ContextCompletionStatus = Column(JSON(64))
+    NCEMCompletionStatus = Column(JSON(64))
     
     # Character
     CharacterDefineStatus = Column(JSON(64))
@@ -410,6 +415,7 @@ class Prompt(Base):
     # ContextPrompt
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
+    NCEMCompletion = Column(JSON)
 
     # CharacterPrompt
     CharacterDefine = Column(JSON)
@@ -498,6 +504,7 @@ class TrainingDataset(Base):
     # ContextDataset
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
+    NCEMCompletion = Column(JSON)
 
     # CharacterDataset
     CharacterDefine = Column(JSON)

@@ -1,0 +1,246 @@
+{
+    "TaskName": "SFXMatching",
+    "BaseModel": {
+        "ShortTokensModel": "gpt-3.5-turbo",
+        "LongTokensModel": "gpt-3.5-turbo-16k"
+    },
+    "ExampleFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
+    "MemoryFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
+    "MasterModel": "gpt-4-1106-preview",
+    "Temperature": 0.5,
+    "OutputTokensRatio": 0.5,
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서 마케팅 담당자 입니다. '독자'들이 <내용>을 읽는 '목적'과 그 '주제'에 대한 키워드를 추출한 뒤, 목적을 해소할 수 있는 '문구'를 <내용> 안에서 분석하여 <태그.json>을 완성하는 업무를 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<태그.json> 요소)\n",
+                    "Message": "1) '독자': '<내용>이 필요한 독자의 지칭 또는 명칭 키워드'\n2) '목적': '<내용>을 읽는 목적 또는 궁금증 등'\n3) '주제': '목적에 적합한 키워드'\n4) '문구': '<내용>안에 있는 목적과 주제에 맞는 문장 또는 문구'\n5) '중요도': '해당 문구가 독자에게 주는 정보의 중요도를 0-100의 점수로 평가'"
+                },
+                {
+                    "Mark": "\n\n(<태그.json>의 구조)\n",
+                    "Message": "[{'메모1': {'독자': ['<내용>이 필요한 독자의', '지칭 또는 명칭 리스트'], '목적': '<내용>을 읽는 목적 또는 궁금증 등', '주제': ['목적에', '적합한', '키워드', '리스트'], '문구': '<내용> 안에 있는 주제에 맞는 문장 또는 문구를 완전 그대로 작성', '중요도': '0-100'}} ... {'메모n': {'독자': ['<내용>이 필요한 독자의', '지칭 또는 명칭 리스트'], '목적': '<내용>을 읽는 목적 또는 궁금증 등', '주제': ['목적에', '적합한', '키워드', '리스트'], '문구': '<내용> 안에 있는 주제에 맞는 문장 또는 문구를 완전 그대로 작성', '중요도': '0-100'}}]"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. <내용>이 꼭 필요한 독자의 입장에서 <내용>을 상세하게 분석합니다.\n2. <내용>안에서 주제별로 한 문장 단위의 꼭 필요한 문구를 필요한 만큼 선택합니다.\n3. 문구별 그 내용이 꼭 필요한 '독자', '목적', '주제' 그리고 그 '문구'를 통하여 <태그.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(태깅 작업)\n",
+                    "InputMark": "<내용>\n",
+                    "Input": "INPUT"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<태그.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서 마케팅 담당자 입니다. '독자'들이 <내용>을 읽는 '목적'과 그 '주제'에 대한 키워드를 추출한 뒤, 목적을 해소할 수 있는 '문구'를 <내용> 안에서 분석하여 <태그.json>을 완성하는 업무를 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<태그.json> 요소)\n",
+                    "Message": "1) '독자': '<내용>이 필요한 독자의 지칭 또는 명칭 키워드'\n2) '목적': '<내용>을 읽는 목적 또는 궁금증 등'\n3) '주제': '목적에 적합한 키워드'\n4) '문구': '<내용>안에 있는 목적과 주제에 맞는 문장 또는 문구'\n5) '중요도': '해당 문구가 독자에게 주는 정보의 중요도를 0-100의 점수로 평가'"
+                },
+                {
+                    "Mark": "\n\n(<태그.json>의 구조)\n",
+                    "Message": "[{'메모1': {'독자': ['<내용>이 필요한 독자의', '지칭 또는 명칭 리스트'], '목적': '<내용>을 읽는 목적 또는 궁금증 등', '주제': ['목적에', '적합한', '키워드', '리스트'], '문구': '<내용> 안에 있는 주제에 맞는 문장 또는 문구를 완전 그대로 작성', '중요도': '0-100'}} ... {'메모n': {'독자': ['<내용>이 필요한 독자의', '지칭 또는 명칭 리스트'], '목적': '<내용>을 읽는 목적 또는 궁금증 등', '주제': ['목적에', '적합한', '키워드', '리스트'], '문구': '<내용> 안에 있는 주제에 맞는 문장 또는 문구를 완전 그대로 작성', '중요도': '0-100'}}]"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. <내용>이 꼭 필요한 독자의 입장에서 <내용>을 상세하게 분석합니다.\n2. <내용>안에서 주제별로 한 문장 단위의 꼭 필요한 문구를 필요한 만큼 선택합니다.\n3. 문구별 그 내용이 꼭 필요한 '독자', '목적', '주제' 그리고 그 '문구'를 통하여 <태그.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(태깅 작업)\n",
+                    "InputMark": "<내용>\n",
+                    "Input": "INPUT"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<태그.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서 마케팅 담당자 입니다. '독자'들이 <내용>을 읽는 '목적'과 그 '주제'에 대한 키워드를 추출한 뒤, 목적을 해소할 수 있는 '문구'를 <내용> 안에서 분석하여 <태그.json>을 완성하는 업무를 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<태그.json> 요소)\n",
+                    "Message": "1) '독자': '<내용>이 필요한 독자의 지칭 또는 명칭 키워드'\n2) '목적': '<내용>을 읽는 목적 또는 궁금증 등'\n3) '주제': '목적에 적합한 키워드'\n4) '문구': '<내용>안에 있는 목적과 주제에 맞는 문장 또는 문구'\n5) '중요도': '해당 문구가 독자에게 주는 정보의 중요도를 0-100의 점수로 평가'"
+                },
+                {
+                    "Mark": "\n\n(<태그.json>의 구조)\n",
+                    "Message": "[{'메모1': {'독자': ['<내용>이 필요한 독자의', '지칭 또는 명칭 리스트'], '목적': '<내용>을 읽는 목적 또는 궁금증 등', '주제': ['목적에', '적합한', '키워드', '리스트'], '문구': '<내용> 안에 있는 주제에 맞는 문장 또는 문구를 완전 그대로 작성', '중요도': '0-100'}} ... {'메모n': {'독자': ['<내용>이 필요한 독자의', '지칭 또는 명칭 리스트'], '목적': '<내용>을 읽는 목적 또는 궁금증 등', '주제': ['목적에', '적합한', '키워드', '리스트'], '문구': '<내용> 안에 있는 주제에 맞는 문장 또는 문구를 완전 그대로 작성', '중요도': '0-100'}}]"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. <내용>이 꼭 필요한 독자의 입장에서 <내용>을 상세하게 분석합니다.\n2. <내용>안에서 주제별로 한 문장 단위의 꼭 필요한 문구를 필요한 만큼 선택합니다.\n3. 문구별 그 내용이 꼭 필요한 '독자', '목적', '주제' 그리고 그 '문구'를 통하여 <태그.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(태깅 작업)\n",
+                    "InputMark": "<내용>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": ""
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<태그.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서 마케팅 담당자 입니다. '독자'들이 <내용>을 읽는 '목적'과 그 '주제'에 대한 키워드를 추출한 뒤, 목적을 해소할 수 있는 '문구'를 <내용> 안에서 분석하여 <태그.json>을 완성하는 업무를 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<태그.json> 요소)\n",
+                    "Message": "1) '독자': '<내용>이 필요한 독자의 지칭 또는 명칭 키워드'\n2) '목적': '<내용>을 읽는 목적 또는 궁금증 등'\n3) '주제': '목적에 적합한 키워드'\n4) '문구': '<내용>안에 있는 목적과 주제에 맞는 문장 또는 문구'\n5) '중요도': '해당 문구가 독자에게 주는 정보의 중요도를 0-100의 점수로 평가'"
+                },
+                {
+                    "Mark": "\n\n(<태그.json>의 구조)\n",
+                    "Message": "[{'메모1': {'독자': ['<내용>이 필요한 독자의', '지칭 또는 명칭 리스트'], '목적': '<내용>을 읽는 목적 또는 궁금증 등', '주제': ['목적에', '적합한', '키워드', '리스트'], '문구': '<내용> 안에 있는 주제에 맞는 문장 또는 문구를 완전 그대로 작성', '중요도': '0-100'}} ... {'메모n': {'독자': ['<내용>이 필요한 독자의', '지칭 또는 명칭 리스트'], '목적': '<내용>을 읽는 목적 또는 궁금증 등', '주제': ['목적에', '적합한', '키워드', '리스트'], '문구': '<내용> 안에 있는 주제에 맞는 문장 또는 문구를 완전 그대로 작성', '중요도': '0-100'}}]"
+                },
+                {
+                    "Mark": "\n\n(요청)\n",
+                    "Message": "1. <내용>이 꼭 필요한 독자의 입장에서 <내용>을 상세하게 분석합니다.\n2. <내용>안에서 주제별로 한 문장 단위의 꼭 필요한 문구를 필요한 만큼 선택합니다.\n3. 문구별 그 내용이 꼭 필요한 '독자', '목적', '주제' 그리고 그 '문구'를 통하여 <태그.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(태깅 작업)\n",
+                    "InputMark": "<내용>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": ""
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<태그.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

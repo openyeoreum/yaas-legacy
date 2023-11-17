@@ -42,9 +42,17 @@ def AddTrainingDatasetToDB(projectName, email):
             # ExistingDataset.TransitionPhargraph = trainingDataset
             ExistingDataset.BodySummary = trainingDataset
             ExistingDataset.ContextDefine = trainingDataset
-            # ExistingDataset.ContextCompletion = trainingDataset
+            ExistingDataset.ContextCompletion = trainingDataset
+            ExistingDataset.NCEMCompletion = trainingDataset
             ExistingDataset.CharacterDefine = trainingDataset
             ExistingDataset.CharacterCompletion = trainingDataset
+            ExistingDataset.SFXMatching = trainingDataset
+            ExistingDataset.SFXMultiQuery = trainingDataset
+            ExistingDataset.TranslationKo = trainingDataset
+            ExistingDataset.TranslationEn = trainingDataset
+            ExistingDataset.CorrectionKo = trainingDataset
+            ExistingDataset.CorrectionEn = trainingDataset
+            
             ### 아래로 추가되는 데이터셋 작성 ###
             
             print(f"[ Email: {email} | ProjectName: {projectName} | AddTrainingDatasetToDB 변경사항 업데이트 ]")
@@ -61,9 +69,16 @@ def AddTrainingDatasetToDB(projectName, email):
                 # TransitionPhargraph = trainingDataset,
                 BodySummary = trainingDataset,
                 ContextDefine = trainingDataset,
-                # ContextCompletion = trainingDataset,
+                ContextCompletion = trainingDataset,
+                NCEMCompletion = trainingDataset,
                 CharacterDefine = trainingDataset,
-                CharacterCompletion = trainingDataset
+                CharacterCompletion = trainingDataset,
+                SFXMatching = trainingDataset,
+                SFXMultiQuery = trainingDataset,
+                TranslationKo = trainingDataset,
+                TranslationEn = trainingDataset,
+                CorrectionKo = trainingDataset,
+                CorrectionEn = trainingDataset
                 ### 아래로 추가되는 데이터셋 작성 ###
                 )
             db.add(trainingDataset)

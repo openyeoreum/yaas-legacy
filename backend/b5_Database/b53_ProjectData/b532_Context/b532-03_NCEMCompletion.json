@@ -16,6 +16,8 @@
             {
                 "NCEMChunkId": 0,
                 "ChunkId": 0,
+                "Chunk": "None",
+                "Domain": "None",
                 "Needs": "None",
                 "CVC": "None",
                 "Energy": "None",

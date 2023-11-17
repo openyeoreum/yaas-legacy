@@ -28,9 +28,16 @@ def AddPromptToDB():
         # transitionPhargraph = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-05_TransitionPhargraph.json")
         bodySummary = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-06_BodySummary.json")
         contextDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-01_ContextDefine.json")
-        # contextCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-02_ContextCompletion.json")
+        contextCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-02_ContextCompletion.json")
+        nCEMCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-03_NCEMCompletion.json")
         characterDefine = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-01_CharacterDefine.json")
         characterCompletion = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-02_CharacterCompletion.json")
+        sFXMatching = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-01_SFXMatching.json")
+        sFXMultiQuery = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-02_SFXMultiQuery.json")
+        translationKo = LoadJsonFrame(PromptDataPath + "/b547_TranslationPrompt/b547-01_TranslationKo.json")
+        translationEn = LoadJsonFrame(PromptDataPath + "/b547_TranslationPrompt/b547-02_TranslationEn.json")
+        correctionKo = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-01_CorrectionKo.json")
+        correctionEn = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-02_CorrectionEn.json")
         ### 아래로 추가되는 프롬프트 작성 ###
 
         ExistingPrompt = db.query(Prompt).first()
@@ -44,9 +51,16 @@ def AddPromptToDB():
                 # ExistingPrompt.TransitionPhargraph = transitionPhargraph
                 ExistingPrompt.BodySummary = bodySummary
                 ExistingPrompt.ContextDefine = contextDefine
-                # ExistingPrompt.ContextCompletion = contextCompletion
+                ExistingPrompt.ContextCompletion = contextCompletion
+                ExistingPrompt.NCEMCompletion = nCEMCompletion
                 ExistingPrompt.CharacterDefine = characterDefine
                 ExistingPrompt.CharacterCompletion = characterCompletion
+                ExistingPrompt.SFXMatching = sFXMatching
+                ExistingPrompt.SFXMultiQuery = sFXMultiQuery
+                ExistingPrompt.TranslationKo = translationKo
+                ExistingPrompt.TranslationEn = translationEn
+                ExistingPrompt.CorrectionKo = correctionKo
+                ExistingPrompt.CorrectionEn = correctionEn
                 ### 아래로 추가되는 프롬프트 작성 ###
                 
                 print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
@@ -59,9 +73,16 @@ def AddPromptToDB():
                 # TransitionPhargraph = transitionPhargraph,
                 BodySummary = bodySummary,
                 ContextDefine = contextDefine,
-                # ContextCompletion = contextCompletion,
+                ContextCompletion = contextCompletion,
+                NCEMCompletion = nCEMCompletion,
                 CharacterDefine = characterDefine,
-                CharacterCompletion = characterCompletion
+                CharacterCompletion = characterCompletion,
+                SFXMatching = sFXMatching,
+                SFXMultiQuery = sFXMultiQuery,
+                TranslationKo = translationKo,
+                TranslationEn = translationEn,
+                CorrectionKo = correctionKo,
+                CorrectionEn = correctionEn
                 ### 아래로 추가되는 프롬프트 작성 ###
                 )
             db.add(prompt)

@@ -30,31 +30,38 @@ def AddProjectToDB(projectName, email):
         # 디렉토리 경로 생성
         projectPath = os.path.join(pojectsStoragePath, f"{projectName}")
         scriptPath = os.path.join(projectPath, f"{projectName}_script_file")
+        dataFramePath = os.path.join(projectPath, f"{projectName}_dataframe_file")
         mixedAudioBookPath = os.path.join(projectPath, f"{projectName}_mixed_audiobook_file")
+        
         voiceLayersPath = os.path.join(mixedAudioBookPath, 'VoiceLayers')
         narratorPath = os.path.join(voiceLayersPath, 'Narrator')
         character1Path = os.path.join(voiceLayersPath, 'Character1')
         character2Path = os.path.join(voiceLayersPath, 'Character2')
         character3Path = os.path.join(voiceLayersPath, 'Character3')
         character4Path = os.path.join(voiceLayersPath, 'Character4')
+        
         sFXLayersPath = os.path.join(mixedAudioBookPath, 'SFXLayers')
         sFX1Path = os.path.join(sFXLayersPath, 'SFX1')
         sFX2Path = os.path.join(sFXLayersPath, 'SFX2')
         sFX3Path = os.path.join(sFXLayersPath, 'SFX3')
         sFX4Path = os.path.join(sFXLayersPath, 'SFX4')
         sFX5Path = os.path.join(sFXLayersPath, 'SFX5')
+        
         soundLayersPath = os.path.join(mixedAudioBookPath, 'SoundLayers')
         backgoundSoundPath = os.path.join(soundLayersPath, 'BackgoundSound')
         captionSoundPath = os.path.join(soundLayersPath, 'CaptionSound')
+        
         musicLayersPath = os.path.join(mixedAudioBookPath, 'MusicLayers')
         music1FolderPath = os.path.join(musicLayersPath, 'Music1Folder')
         music2FolderPath = os.path.join(musicLayersPath, 'Music2Folder')
+        
         masterAudioBookPath = os.path.join(projectPath, f"{projectName}_master_audiobook_file")
 
         # 디렉토리 생성
         if not os.path.exists(scriptPath):
             os.makedirs(projectPath)
             os.makedirs(scriptPath)
+            os.makedirs(dataFramePath)
             os.makedirs(mixedAudioBookPath)
             os.makedirs(voiceLayersPath)
             os.makedirs(narratorPath)
@@ -90,8 +97,15 @@ def AddProjectToDB(projectName, email):
         soundContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-09_SoundContextTags.json")
         contextDefine = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-01_ContextDefine.json")
         contextCompletion = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-02_ContextCompletion.json")
+        nCEMCompletion = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_NCEMCompletion.json")
         characterDefine = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-01_CharacterDefine.json")
         characterCompletion = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-02_CharacterCompletion.json")
+        sFXMatching = LoadJsonFrame(ProjectDataPath + "/b536_SFX/b536-01_SFXMatching.json")
+        sFXMultiQuery = LoadJsonFrame(ProjectDataPath + "/b536_SFX/b536-02_SFXMultiQuery.json")
+        translationKo = LoadJsonFrame(ProjectDataPath + "/b537_Translation/b537-01_TranslationKo.json")
+        translationEn = LoadJsonFrame(ProjectDataPath + "/b537_Translation/b537-02_TranslationEn.json")
+        correctionKo = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-01_CorrectionKo.json")
+        correctionEn = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-02_CorrectionEn.json")
         ### 아래로 추가되는 데이터프레임 작성 ###
 
         ExistingProject = db.query(Project).filter(Project.UserId == user.UserId, Project.ProjectName == projectName).first()
@@ -103,6 +117,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.ProjectName = projectName
             ExistingProject.ProjectPath = projectPath
             ExistingProject.ScriptPath = scriptPath
+            ExistingProject.DataFramePath = dataFramePath
             ExistingProject.MixedAudioBookPath = mixedAudioBookPath
             ExistingProject.VoiceLayersPath = voiceLayersPath
             ExistingProject.NarratorPath = narratorPath
@@ -134,8 +149,15 @@ def AddProjectToDB(projectName, email):
             ExistingProject.SoundContextTags = soundContextTags
             ExistingProject.ContextDefine = contextDefine
             ExistingProject.ContextCompletion = contextCompletion
+            ExistingProject.NCEMCompletion = nCEMCompletion
             ExistingProject.CharacterDefine = characterDefine
             ExistingProject.CharacterCompletion = characterCompletion
+            ExistingProject.SFXMatching = sFXMatching
+            ExistingProject.SFXMultiQuery = sFXMultiQuery
+            ExistingProject.TranslationKo = translationKo
+            ExistingProject.TranslationEn = translationEn
+            ExistingProject.CorrectionKo = correctionKo
+            ExistingProject.CorrectionEn = correctionEn
             ### 아래로 추가되는 데이터프레임 작성 ###
             
             print(f"[ Email: {email} | ProjectName: {projectName} | AddProjectToDB 변경사항 업데이트 ]")
@@ -146,6 +168,7 @@ def AddProjectToDB(projectName, email):
                 ProjectName = projectName,
                 ProjectPath = projectPath,
                 ScriptPath = scriptPath,
+                DataFramePath = dataFramePath,
                 MixedAudioBookPath = mixedAudioBookPath,
                 VoiceLayersPath = voiceLayersPath,
                 NarratorPath = narratorPath,
@@ -177,8 +200,15 @@ def AddProjectToDB(projectName, email):
                 SoundContextTags = soundContextTags,
                 ContextDefine = contextDefine,
                 ContextCompletion = contextCompletion,
+                NCEMCompletion = nCEMCompletion,
                 CharacterDefine = characterDefine,
-                CharacterCompletion = characterCompletion
+                CharacterCompletion = characterCompletion,
+                SFXMatching = sFXMatching,
+                SFXMultiQuery = sFXMultiQuery,
+                TranslationKo = translationKo,
+                TranslationEn = translationEn,
+                CorrectionKo = correctionKo,
+                CorrectionEn = correctionEn
                 ### 아래로 추가되는 데이터프레임 작성 ###
                 )
             db.add(project)

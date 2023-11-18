@@ -1,0 +1,53 @@
+[
+    {
+        "UserId": "None",
+        "ProjectsStorageID": "None",
+        "ProjectId": "None",
+        "ProjectName": "None",
+        "Content": "NCEMContext",
+        "Language": "Ko",
+        "TaskName": "NCEMContext",
+        "Memo": "동일한 Domain의 다수의 도서 A...Z 간의 Q/A에서 Q와 A의 상대적 Needs, CVC, PotentialEnergy를 비교한 뒤 Q와 A가 될 수 있는 연계 관계를 형성, 이후 연계관계를 통해 다음 연계 도서를 추천"
+    },
+    {
+        "NCEMContextTags": [
+            {
+                "NCEMContextId": 0,
+                "NCEMContextTag": "None",
+                "NCEMContexts": ["None"]
+            },
+            {
+                "NCEMContextId": 1,
+                "NCEMContextTag": "Domain",
+                "NCEMContexts": ["철학 및 인성", "의료 및 보건", "교육 및 학술", "공학 및 기술", "예술 및 디자인", "경영 및 금융", "법률 및 정치", "과학 및 연구", "농업 및 환경", "서비스 및 소매", "공공 안전 및 보안"],
+                "Memo": {
+                    "철학 및 인성": "철학가, 종교인, 명상지도사 등이 포함",
+                    "의료 및 보건": "의사, 간호사, 치과의사, 약사, 보건 전문가 등이 포함",
+                    "교육 및 학술": "교사, 교수, 연구원, 교육 전문가 등이 포함",
+                    "공학 및 기술": "기계공학자, 전기공학자, 소프트웨어 개발자, IT 전문가 등이 포함",
+                    "예술 및 디자인": "화가, 조각가, 디자이너, 사진가 등이 포함",
+                    "경영 및 금융": "경영자, 회계사, 금융 분석가, 마케팅 전문가 등이 포함",
+                    "법률 및 정치": "변호사, 판사, 정치가, 정책 분석가 등이 포함",
+                    "과학 및 연구": "생물학자, 화학자, 물리학자, 지질학자 등이 포함",
+                    "농업 및 환경": "농부, 환경 과학자, 산림 관리자 등이 포함",
+                    "서비스 및 소매": "요식업 종사자, 소매업 종사자, 고객 서비스 전문가 등이 포함",
+                    "공공 안전 및 보안": "경찰관, 소방관, 보안 전문가 등이 포함"}
+            },
+            {
+                "NCEMContextId": 2,
+                "NCEMContextTag": "Needs",
+                "NCEMContexts": ["생존", "안전", "편의", "애정", "존경", "실현", "해탈"]
+            },
+            {
+                "NCEMContextId": 3,
+                "NCEMContextTag": "CVC",
+                "NCEMContexts": ["무지", "인지", "이해", "확신", "욕망", "행동", "성공"]
+            },
+            {
+                "NCEMContextId": 4,
+                "NCEMContextTag": "PotentialEnergy",
+                "NCEMContexts": ["거절", "부정", "중립", "긍정", "수용"]
+            }
+        ]
+    }
+]

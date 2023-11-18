@@ -93,6 +93,7 @@ def AddProjectToDB(projectName, email):
         phargraphTransitionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-05_PhargraphTransitionFrame.json")
         summaryBodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-06_SummaryBodyFrame.json")
         bodyContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-07_BodyContextTags.json")
+        nCEMContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-08_NCEMContextTags.json")
         characterContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-09_CharacterContextTags.json")
         soundContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-10_SoundContextTags.json")
         sFXContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-11_SFXContextTags.json")
@@ -146,6 +147,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.PhargraphTransitionFrame = phargraphTransitionFrame
             ExistingProject.SummaryBodyFrame = summaryBodyFrame
             ExistingProject.BodyContextTags = bodyContextTags
+            ExistingProject.NCEMContextTags = nCEMContextTags
             ExistingProject.CharacterContextTags = characterContextTags
             ExistingProject.SoundContextTags = soundContextTags
             ExistingProject.SFXContextTags = sFXContextTags
@@ -198,6 +200,7 @@ def AddProjectToDB(projectName, email):
                 PhargraphTransitionFrame = phargraphTransitionFrame,
                 SummaryBodyFrame = summaryBodyFrame,
                 BodyContextTags = bodyContextTags,
+                NCEMContextTags = nCEMContextTags,
                 CharacterContextTags = characterContextTags,
                 SoundContextTags = soundContextTags,
                 SFXContextTags = sFXContextTags,

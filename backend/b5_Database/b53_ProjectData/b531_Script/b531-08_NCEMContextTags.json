@@ -7,7 +7,7 @@
         "Content": "NCEMContext",
         "Language": "Ko",
         "TaskName": "NCEMContext",
-        "Memo": "동일한 Domain의 다수의 도서 A...Z 간의 Q/A에서 Q와 A의 상대적 Needs, CVC, PotentialEnergy를 비교한 뒤 Q와 A가 될 수 있는 연계 관계를 형성, 이후 연계관계를 통해 다음 연계 도서를 추천"
+        "Memo": "동일한 Domain의 다수의 도서 A...Z 간의 Q/A에서 Q와 A의 상대적 Needs, CVC, PotentialEnergy를 비교한 뒤 Q와 A가 될 수 있는 연계 관계를 형성, 이후 연계관계(연관관계를 벡터DB 또는 자연어 모델을 통한 NCEM구조의 나열)를 통해 다음 연계 도서를 추천"
     },
     {
         "NCEMContextTags": [

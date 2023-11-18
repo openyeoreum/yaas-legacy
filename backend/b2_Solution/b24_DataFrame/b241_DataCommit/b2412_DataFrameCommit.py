@@ -460,7 +460,7 @@ def AddExistedContextCompletionToDB(projectName, email, ExistedDataFrame):
         db.commit()
 
 ## 8. 1-1 ContextCompletion의 Body(본문) ContextCompeletions 업데이트 형식
-def UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Era, Culture, Importance):    
+def UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Importance):    
     updateContextCompeletions = {
         "ContextChunkId": ContextChunkId,
         "ChunkId": ChunkId,
@@ -470,8 +470,6 @@ def UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Ge
         "Age": Age,
         "Personality": Personality,
         "Emotion": Emotion,
-        "Era": Era,
-        "Culture": Culture,
         "Importance": Importance
     }
     
@@ -479,11 +477,11 @@ def UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Ge
     project.ContextCompletion[0]["ContextChunkCount"] = ContextChunkId
     
 ## 8. 1-2 ContextCompletion의 Body(본문) ContextCompeletions 업데이트
-def AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Era, Culture, Importance):
+def AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Importance):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Era, Culture, Importance)
+        UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Importance)
         
         flag_modified(project, "ContextCompletion")
         
@@ -583,7 +581,7 @@ def AddExistedNCEMCompletionToDB(projectName, email, ExistedDataFrame):
         db.commit()
 
 ## 9. 1-1 NCEMCompletion의 Body(본문) NCEMCompeletions 업데이트 형식
-def UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, Potential, Accuracy):    
+def UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy):    
     updateNCEMCompeletions = {
         "NCEMChunkId": NCEMChunkId,
         "ChunkId": ChunkId,
@@ -591,7 +589,7 @@ def UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, 
         "Domain": Domain,
         "Needs": Needs,
         "CVC": CVC,
-        "Potential": Potential,
+        "PotentialEnergy": PotentialEnergy,
         "Accuracy": Accuracy
     }
     
@@ -599,11 +597,11 @@ def UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, 
     project.NCEMCompletion[0]["NCEMChunkCount"] = NCEMChunkId
     
 ## 9. 1-2 NCEMCompletion의 Body(본문) NCEMCompeletions 업데이트
-def AddNCEMCompletionChunksToDB(projectName, email, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, Potential, Accuracy):
+def AddNCEMCompletionChunksToDB(projectName, email, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, Potential, Accuracy)
+        UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy)
         
         flag_modified(project, "NCEMCompletion")
         

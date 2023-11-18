@@ -202,6 +202,7 @@ class Project(Base):
     BodyContextTags = Column(JSON)
     CharacterContextTags = Column(JSON)
     SoundContextTags = Column(JSON)
+    SFXContextTags = Column(JSON)
     
     # Context
     ContextDefine = Column(JSON)
@@ -329,6 +330,7 @@ class ProjectHistory(Base):
     BodyContextTagsStatus = Column(String(64))
     CharacterContextTagsStatus = Column(String(64))
     SoundContextTagsStatus = Column(String(64))
+    SFXContextTagsStatus = Column(String(64))
     
     # Context
     ContextDefineStatus = Column(JSON(64))

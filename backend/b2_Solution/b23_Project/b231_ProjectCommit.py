@@ -95,6 +95,7 @@ def AddProjectToDB(projectName, email):
         bodyContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-07_BodyContextTags.json")
         characterContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-08_CharacterContextTags.json")
         soundContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-09_SoundContextTags.json")
+        sFXContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-10_SFXContextTags.json")
         contextDefine = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-01_ContextDefine.json")
         contextCompletion = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-02_ContextCompletion.json")
         nCEMCompletion = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_NCEMCompletion.json")
@@ -147,6 +148,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.BodyContextTags = bodyContextTags
             ExistingProject.CharacterContextTags = characterContextTags
             ExistingProject.SoundContextTags = soundContextTags
+            ExistingProject.SFXContextTags = sFXContextTags
             ExistingProject.ContextDefine = contextDefine
             ExistingProject.ContextCompletion = contextCompletion
             ExistingProject.NCEMCompletion = nCEMCompletion
@@ -198,6 +200,7 @@ def AddProjectToDB(projectName, email):
                 BodyContextTags = bodyContextTags,
                 CharacterContextTags = characterContextTags,
                 SoundContextTags = soundContextTags,
+                SFXContextTags = sFXContextTags,
                 ContextDefine = contextDefine,
                 ContextCompletion = contextCompletion,
                 NCEMCompletion = nCEMCompletion,

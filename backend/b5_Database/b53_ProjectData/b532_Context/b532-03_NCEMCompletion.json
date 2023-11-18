@@ -20,7 +20,7 @@
                 "Domain": "None",
                 "Needs": "None",
                 "CVC": "None",
-                "Energy": "None",
+                "PotentialEnergy": "None",
                 "Accuracy": "None"
             }
         ]

@@ -24,23 +24,11 @@
                         {"TokenId": "", "Text": "수업은"},
                         {"TokenId": "", "Space": " "},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Text": "대화와"},
                         {"TokenId": "", "Space": " "},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Text": "강의가"},
                         {"TokenId": "", "Space": " "},
                         {"TokenId": "", "Text": "함께하는"},
@@ -58,13 +46,7 @@
                         {"TokenId": "", "Text": "방식은"},
                         {"TokenId": "", "Space": " "},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Text": "아니었다."},
                         {"TokenId": "", "Period": "."}
                     ]
@@ -75,13 +57,7 @@
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Comma": ","},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
@@ -93,13 +69,7 @@
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Comma": ","},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
@@ -117,13 +87,7 @@
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Comma": ","},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
@@ -135,13 +99,7 @@
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Comma": ","},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
@@ -153,13 +111,7 @@
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Comma": ","},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
@@ -177,13 +129,7 @@
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Comma": ","},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
@@ -195,13 +141,7 @@
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Comma": ","},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
@@ -213,13 +153,7 @@
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
                         {"KoTokenId": "", "MultiQueriedSFXTags":
-                            [
-                                {"Environment": ""},
-                                {"Situation": ""},
-                                {"Era": ""},
-                                {"Culture": ""}
-                            ]
-                        },
+                        {"Environment": "", "Situation": "", "Era": "", "Culture": ""}},
                         {"TokenId": "", "Comma": ","},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}

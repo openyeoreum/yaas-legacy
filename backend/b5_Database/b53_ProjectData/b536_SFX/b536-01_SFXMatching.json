@@ -23,10 +23,12 @@
                     [
                         {"TokenId": "", "Text": "수업은"},
                         {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "MatchedSFXTag":{"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Text": "대화와"},
                         {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": "행동"}, {"SFX": "강의"}]},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Text": "강의가"},
                         {"TokenId": "", "Space": " "},
                         {"TokenId": "", "Text": "함께하는"},
@@ -43,7 +45,8 @@
                         {"TokenId": "", "Space": " "},
                         {"TokenId": "", "Text": "방식은"},
                         {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": "도구"}, {"SFX": "글쓰기"}]},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Text": "아니었다."},
                         {"TokenId": "", "Period": "."}
                     ]
@@ -53,7 +56,8 @@
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
                     ]
@@ -63,7 +67,8 @@
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
                     ]
@@ -79,7 +84,8 @@
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
                     ]
@@ -89,7 +95,8 @@
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
                     ]
@@ -99,7 +106,8 @@
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
                     ]
@@ -115,7 +123,8 @@
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
                     ]
@@ -125,7 +134,8 @@
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
                     ]
@@ -135,7 +145,8 @@
                     [
                         {"TokenId": "", "Text": ""},
                         {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":[{"Classification": ""}, {"SFX": ""}]},
+                        {"TokenId": "", "MatchedSFXTag":
+                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
                         {"TokenId": "", "Period": ""},
                         {"TokenId": "", "Enter": ""}
                     ]

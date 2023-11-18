@@ -1,0 +1,60 @@
+[
+    {
+        "UserId": "None",
+        "ProjectsStorageID": "None",
+        "ProjectId": "None",
+        "ProjectName": "None",
+        "Content": "SFXContext",
+        "Language": "Ko",
+        "TaskName": "SFXContext"
+    },
+    {
+        "SFXContextTags": [
+            {
+                "SFXContextId": 0,
+                "SFXContextTag": "None",
+                "SFXContexts": ["None"]
+            },
+            {
+                "SFXContextId": 1,
+                "SFXContextTag": "Type",
+                "SFXContexts": ["행동", "도구", "인공물", "자연물", "공간요소", "환경", "상황"]
+            },
+            {
+                "SFXContextId": 2,
+                "SFXContextTag": "Role",
+                "SFXContexts": ["대상음", "배경음"]
+            },
+            {
+                "SFXContextId": 3,
+                "SFXContextTag": "Direction",
+                "SFXContexts": ["중앙", "전체", "좌", "우", "앞", "뒤"]
+            },
+            {
+                "SFXContextId": 4,
+                "SFXContextTag": "Range",
+                "SFXContexts": "... <시작> 내용범위 <끝> ..."
+            },
+            {
+                "SFXContextId": 5,
+                "SFXContextTag": "Environment",
+                "SFXContexts": ["산", "숲", "바다", "하늘", "강/계곡", "사막", "시골", "도시", "산업지역","도로"]
+            },
+            {
+                "SFXContextId": 6,
+                "SFXContextTag": "Situation",
+                "SFXContexts": ["대화", "수업", "파티/공연", "사무", "노동", "운동", "이동", "놀이", "식사"]
+            },
+            {
+                "SFXContextId": 7,
+                "SFXContextTag": "Era",
+                "SFXContexts": ["먼과거", "1800", "1900", "1950", "현대", "미래"]
+            },
+            {
+                "SFXContextId": 8,
+                "SFXContextTag": "Culture",
+                "SFXContexts": ["서양", "동양", "중동", "아프리카", "자연", "농경", "도시", "미래"]
+            }
+        ]
+    }
+]

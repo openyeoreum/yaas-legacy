@@ -39,26 +39,6 @@
                 "BodyContextId": 5,
                 "BodyContextTag": "Emotion",
                 "BodyContexts": ["행복", "즐거움", "평온", "무감정", "피곤", "슬픔", "두려움", "놀람"]
-            },
-            {
-                "BodyContextId": 6,
-                "BodyContextTag": "Domain",
-                "BodyContexts": ["0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-"]
-            },
-            {
-                "BodyContextId": 7,
-                "BodyContextTag": "Needs",
-                "BodyContexts": ["0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-"]
-            },
-            {
-                "BodyContextId": 8,
-                "BodyContextTag": "CVC",
-                "BodyContexts": ["외향적", "내향적", "중립적"]
-            },
-            {
-                "BodyContextId": 9,
-                "BodyContextTag": "PotentialEnergy",
-                "BodyContexts": ["행복", "즐거움", "평온", "무감정", "피곤", "슬픔", "두려움", "놀람"]
             }
         ]
     }

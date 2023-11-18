@@ -10,7 +10,8 @@
         "IndexCount": 0,
         "BodyCount": 0,
         "ChunkCount": 0,
-        "Completion": "No"
+        "Completion": "No",
+        "Memo": "Bodys가 테스크별로 다양한 토큰이 필요한 경우 다양한 토큰으로 구성하기, 예시: Bodys(2000), Bodys(3000)"
     },
     {
         "SplitedBodyScripts": [

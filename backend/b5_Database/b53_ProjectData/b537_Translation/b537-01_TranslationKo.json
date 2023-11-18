@@ -7,7 +7,8 @@
         "Content": "Body",
         "Language": "Ko",
         "TaskName": "TranslationKo",
-        "TaskCount": 0
+        "TaskCount": 0,
+        "Memo": "1. 끊어읽기 보정과 효과음 중 효과음만 번역의 대상으로 두고 번역 후 효과음의 위치를 저장한 다음 번역 후 끊어읽기 부분과 합치는 작업으로 분리진행\n2. 필요시 번역시 전문용어, 대명사, 고유명사, 약어를 미리 체크하여 인물의 이름처럼 통일하는 작업을 진행"
     },
     {
         "TranslationKoSplitedBodys": [

@@ -36,9 +36,9 @@ def AddPromptToDB():
         sFXMatching = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-01_SFXMatching.json")
         sFXMultiQuery = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-02_SFXMultiQuery.json")
         translationKo = LoadJsonFrame(PromptDataPath + "/b547_TranslationPrompt/b547-01_TranslationKo.json")
-        translationEn = LoadJsonFrame(PromptDataPath + "/b547_TranslationPrompt/b547-02_TranslationEn.json")
+        # translationEn = LoadJsonFrame(PromptDataPath + "/b547_TranslationPrompt/b547-02_TranslationEn.json")
         correctionKo = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-01_CorrectionKo.json")
-        correctionEn = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-02_CorrectionEn.json")
+        # correctionEn = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-02_CorrectionEn.json")
         ### 아래로 추가되는 프롬프트 작성 ###
 
         ExistingPrompt = db.query(Prompt).first()
@@ -48,7 +48,7 @@ def AddPromptToDB():
                 ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
                 ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
                 ExistingPrompt.IndexDefine = indexDefine
-                ExistingPrompt.PreprocessBody = preprocessBody
+                # ExistingPrompt.PreprocessBody = preprocessBody
                 ExistingPrompt.CaptionPhargraph = captionPhargraph
                 # ExistingPrompt.TransitionPhargraph = transitionPhargraph
                 ExistingPrompt.BodySummary = bodySummary
@@ -60,9 +60,9 @@ def AddPromptToDB():
                 ExistingPrompt.SFXMatching = sFXMatching
                 ExistingPrompt.SFXMultiQuery = sFXMultiQuery
                 ExistingPrompt.TranslationKo = translationKo
-                ExistingPrompt.TranslationEn = translationEn
+                # ExistingPrompt.TranslationEn = translationEn
                 ExistingPrompt.CorrectionKo = correctionKo
-                ExistingPrompt.CorrectionEn = correctionEn
+                # ExistingPrompt.CorrectionEn = correctionEn
                 ### 아래로 추가되는 프롬프트 작성 ###
                 
                 print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
@@ -71,7 +71,7 @@ def AddPromptToDB():
                 IndexDefinePreprocess = indexDefinePreprocess,
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,
                 IndexDefine = indexDefine,
-                PreprocessBody = preprocessBody,
+                # PreprocessBody = preprocessBody,
                 CaptionPhargraph = captionPhargraph,
                 # TransitionPhargraph = transitionPhargraph,
                 BodySummary = bodySummary,
@@ -83,9 +83,9 @@ def AddPromptToDB():
                 SFXMatching = sFXMatching,
                 SFXMultiQuery = sFXMultiQuery,
                 TranslationKo = translationKo,
-                TranslationEn = translationEn,
-                CorrectionKo = correctionKo,
-                CorrectionEn = correctionEn
+                # TranslationEn = translationEn,
+                CorrectionKo = correctionKo
+                # CorrectionEn = correctionEn
                 ### 아래로 추가되는 프롬프트 작성 ###
                 )
             db.add(prompt)

@@ -50,9 +50,9 @@ def AddTrainingDatasetToDB(projectName, email):
             ExistingDataset.SFXMatching = trainingDataset
             ExistingDataset.SFXMultiQuery = trainingDataset
             ExistingDataset.TranslationKo = trainingDataset
-            ExistingDataset.TranslationEn = trainingDataset
+            # ExistingDataset.TranslationEn = trainingDataset
             ExistingDataset.CorrectionKo = trainingDataset
-            ExistingDataset.CorrectionEn = trainingDataset
+            # ExistingDataset.CorrectionEn = trainingDataset
             
             ### 아래로 추가되는 데이터셋 작성 ###
             
@@ -78,9 +78,9 @@ def AddTrainingDatasetToDB(projectName, email):
                 SFXMatching = trainingDataset,
                 SFXMultiQuery = trainingDataset,
                 TranslationKo = trainingDataset,
-                TranslationEn = trainingDataset,
-                CorrectionKo = trainingDataset,
-                CorrectionEn = trainingDataset
+                # TranslationEn = trainingDataset,
+                CorrectionKo = trainingDataset
+                # CorrectionEn = trainingDataset
                 ### 아래로 추가되는 데이터셋 작성 ###
                 )
             db.add(trainingDataset)

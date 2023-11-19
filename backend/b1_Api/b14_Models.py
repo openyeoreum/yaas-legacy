@@ -411,7 +411,7 @@ class Prompt(Base):
     IndexDefinePreprocess = Column(JSON)
     IndexDefineDivisionPreprocess = Column(JSON)
     IndexDefine = Column(JSON)
-    PreprocessBody = Column(JSON)
+    # PreprocessBody = Column(JSON)
     CaptionPhargraph = Column(JSON)
     TransitionPhargraph = Column(JSON)
     BodySummary = Column(JSON)
@@ -439,25 +439,20 @@ class Prompt(Base):
     # SFXPrompt
     SFXMatching = Column(JSON)
     SFXMultiQuery = Column(JSON)
-
-    # MultiQueryPrompt
-    CharacterMultiQuery = Column(JSON)
-    SoundMultiQuery = Column(JSON)
-    SFXMultiQuery = Column(JSON)
     
     # TranslationPrompt
     TranslationKo = Column(JSON)
-    TranslationEn = Column(JSON)
-    TranslationJa = Column(JSON)
-    TranslationZh = Column(JSON)
-    TranslationEs = Column(JSON)
+    # TranslationEn = Column(JSON)
+    # TranslationJa = Column(JSON)
+    # TranslationZh = Column(JSON)
+    # TranslationEs = Column(JSON)
     
     # CorrectionPrompt
     CorrectionKo = Column(JSON)
-    CorrectionEn = Column(JSON)
-    CorrectionJa = Column(JSON)
-    CorrectionZh = Column(JSON)
-    CorrectionEs = Column(JSON)
+    # CorrectionEn = Column(JSON)
+    # CorrectionJa = Column(JSON)
+    # CorrectionZh = Column(JSON)
+    # CorrectionEs = Column(JSON)
     
     # # Selection-GenerationPrompt
     # VoiceGenerationKo = Column(JSON)

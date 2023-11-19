@@ -431,11 +431,11 @@ if __name__ == "__main__":
     # AddProjectFeedbackDataSetsToDB(projectName, email, process, "Input", "Output")
     # AddProjectEmbeddingDataSetsToDB(projectName, email, process, "InputEmbedding", "OutputEmbedding")
     
-    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_10_CharacterDefineDataSet.json", 'r', encoding='utf-8') as file:
+    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_11_CharacterDefineDataSet.json", 'r', encoding='utf-8') as file:
     #     processDataset = json.load(file)
     # processDataset = OutputAccuracy(projectName, email, process, processDataset)
     
-    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_10_CharacterDefineDataSet_Accuracy.json", 'w', encoding='utf-8') as file:
+    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_11_CharacterDefineDataSet_Accuracy.json", 'w', encoding='utf-8') as file:
     #     json.dump(processDataset, file, ensure_ascii = False, indent = 4)
         
     AddProjectFeedbackDataSets(projectName, email, "CharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)

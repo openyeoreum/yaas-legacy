@@ -208,6 +208,7 @@ class Project(Base):
     # Context
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
+    NCEMDefine = Column(JSON)
     NCEMCompletion = Column(JSON)
     
     # Character
@@ -337,6 +338,7 @@ class ProjectHistory(Base):
     # Context
     ContextDefineStatus = Column(JSON(64))
     ContextCompletionStatus = Column(JSON(64))
+    NCEMDefineStatus = Column(JSON(64))
     NCEMCompletionStatus = Column(JSON(64))
     
     # Character
@@ -420,6 +422,7 @@ class Prompt(Base):
     # ContextPrompt
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
+    NCEMDefine = Column(JSON)
     NCEMCompletion = Column(JSON)
 
     # CharacterPrompt
@@ -505,6 +508,7 @@ class TrainingDataset(Base):
     # ContextDataset
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
+    NCEMDefine = Column(JSON)
     NCEMCompletion = Column(JSON)
 
     # CharacterDataset

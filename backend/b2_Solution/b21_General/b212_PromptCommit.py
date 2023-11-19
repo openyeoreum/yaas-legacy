@@ -30,7 +30,8 @@ def AddPromptToDB():
         bodySummary = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-07_BodySummary.json")
         contextDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-01_ContextDefine.json")
         contextCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-02_ContextCompletion.json")
-        nCEMCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-03_NCEMCompletion.json")
+        nCEMDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-03_NCEMDefine.json")
+        nCEMCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-04_NCEMCompletion.json")
         characterDefine = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-01_CharacterDefine.json")
         characterCompletion = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-02_CharacterCompletion.json")
         sFXMatching = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-01_SFXMatching.json")
@@ -54,6 +55,7 @@ def AddPromptToDB():
                 ExistingPrompt.BodySummary = bodySummary
                 ExistingPrompt.ContextDefine = contextDefine
                 ExistingPrompt.ContextCompletion = contextCompletion
+                ExistingPrompt.NCEMDefine = nCEMDefine
                 ExistingPrompt.NCEMCompletion = nCEMCompletion
                 ExistingPrompt.CharacterDefine = characterDefine
                 ExistingPrompt.CharacterCompletion = characterCompletion
@@ -77,6 +79,7 @@ def AddPromptToDB():
                 BodySummary = bodySummary,
                 ContextDefine = contextDefine,
                 ContextCompletion = contextCompletion,
+                NCEMDefine = nCEMDefine,
                 NCEMCompletion = nCEMCompletion,
                 CharacterDefine = characterDefine,
                 CharacterCompletion = characterCompletion,

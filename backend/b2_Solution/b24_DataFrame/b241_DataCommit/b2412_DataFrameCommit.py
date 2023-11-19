@@ -565,22 +565,22 @@ def ContextCompletionCompletionUpdate(projectName, email):
 
 
 #####################################
-##### 09_NCEMCompletion Process #####
+##### 09_NCEMDefine Process #####
 #####################################
-## 9. 1-0 NCEMCompletion이 이미 ExistedFrame으로 존재할때 업데이트
-def AddExistedNCEMCompletionToDB(projectName, email, ExistedDataFrame):
+## 9. 1-0 NCEMDefine이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedNCEMDefineToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
         project = GetProject(projectName, email)
-        project.NCEMCompletion[1] = ExistedDataFrame[1]
-        project.NCEMCompletion[2] = ExistedDataFrame[2]
+        project.NCEMDefine[1] = ExistedDataFrame[1]
+        project.NCEMDefine[2] = ExistedDataFrame[2]
         
-        flag_modified(project, "NCEMCompletion")
+        flag_modified(project, "NCEMDefine")
         
         db.add(project)
         db.commit()
 
-## 9. 1-1 NCEMCompletion의 Body(본문) NCEMCompeletions 업데이트 형식
+## 9. 1-1 NCEMDefine의 Body(본문) NCEMCompeletions 업데이트 형식
 def UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy):    
     updateNCEMCompeletions = {
         "NCEMChunkId": NCEMChunkId,
@@ -593,25 +593,25 @@ def UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, 
         "Accuracy": Accuracy
     }
     
-    project.NCEMCompletion[1]["NCEMCompeletions"].append(updateNCEMCompeletions)
-    project.NCEMCompletion[0]["NCEMChunkCount"] = NCEMChunkId
+    project.NCEMDefine[1]["NCEMCompeletions"].append(updateNCEMCompeletions)
+    project.NCEMDefine[0]["NCEMChunkCount"] = NCEMChunkId
     
-## 9. 1-2 NCEMCompletion의 Body(본문) NCEMCompeletions 업데이트
-def AddNCEMCompletionChunksToDB(projectName, email, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy):
+## 9. 1-2 NCEMDefine의 Body(본문) NCEMCompeletions 업데이트
+def AddNCEMDefineChunksToDB(projectName, email, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy):
     with get_db() as db:
         
         project = GetProject(projectName, email)
         UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy)
         
-        flag_modified(project, "NCEMCompletion")
+        flag_modified(project, "NCEMDefine")
         
         db.add(project)
         db.commit()
         
-## 9. 2-1 NCEMCompletion의 NCEM(부문) NCEMTags부분 업데이트 형식
+## 9. 2-1 NCEMDefine의 NCEM(부문) NCEMTags부분 업데이트 형식
 def updateCheckedNCEMTags(project, NCEMTag, NCEMList, NCEM):
     # 새롭게 생성되는 NCEMId는 CheckedNCEMTags의 Len값과 동일
-    NCEMId = len(project.NCEMCompletion[2]["CheckedNCEMTags"]) -1
+    NCEMId = len(project.NCEMDefine[2]["CheckedNCEMTags"]) -1
     
     ### 실제 테스크시 수정 요망 ###
     updateCheckedNCEMTags = {
@@ -621,73 +621,73 @@ def updateCheckedNCEMTags(project, NCEMTag, NCEMList, NCEM):
         "NCEM": NCEM
     }
     
-    project.NCEMCompletion[2]["CheckedNCEMTags"].append(updateCheckedNCEMTags)
-    project.NCEMCompletion[0]["NCEMCount"] = NCEMId
+    project.NCEMDefine[2]["CheckedNCEMTags"].append(updateCheckedNCEMTags)
+    project.NCEMDefine[0]["NCEMCount"] = NCEMId
     
-## 9. 2-2 NCEMCompletion의 NCEM(부문) NCEMTags부분 업데이트
-def AddNCEMCompletionCheckedNCEMTagsToDB(projectName, email, NCEMTag, NCEMList, NCEM):
+## 9. 2-2 NCEMDefine의 NCEM(부문) NCEMTags부분 업데이트
+def AddNCEMDefineCheckedNCEMTagsToDB(projectName, email, NCEMTag, NCEMList, NCEM):
     with get_db() as db:
         
         project = GetProject(projectName, email)
         updateCheckedNCEMTags(project, NCEMTag, NCEMList, NCEM)
         
-        flag_modified(project, "NCEMCompletion")
+        flag_modified(project, "NCEMDefine")
         
         db.add(project)
         db.commit()
         
-## 9. NCEMCompletion의Count의 가져오기
-def NCEMCompletionCountLoad(projectName, email):
+## 9. NCEMDefine의Count의 가져오기
+def NCEMDefineCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
-    NCEMChunkCount = project.NCEMCompletion[0]["NCEMChunkCount"]
-    NCEMCount = project.NCEMCompletion[0]["NCEMCount"]
-    Completion = project.NCEMCompletion[0]["Completion"]
+    NCEMChunkCount = project.NCEMDefine[0]["NCEMChunkCount"]
+    NCEMCount = project.NCEMDefine[0]["NCEMCount"]
+    Completion = project.NCEMDefine[0]["Completion"]
     
     return NCEMChunkCount, NCEMCount, Completion
 
-## 9. NCEMCompletion의 초기화
-def InitNCEMCompletion(projectName, email):
+## 9. NCEMDefine의 초기화
+def InitNCEMDefine(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
     
         project = GetProject(projectName, email)
-        project.NCEMCompletion[0]["NCEMChunkCount"] = 0
-        project.NCEMCompletion[0]["NCEMCount"] = 0
-        project.NCEMCompletion[0]["Completion"] = "No"
-        project.NCEMCompletion[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_NCEMCompletion.json")[1]
-        project.NCEMCompletion[2] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_NCEMCompletion.json")[2]
+        project.NCEMDefine[0]["NCEMChunkCount"] = 0
+        project.NCEMDefine[0]["NCEMCount"] = 0
+        project.NCEMDefine[0]["Completion"] = "No"
+        project.NCEMDefine[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_NCEMDefine.json")[1]
+        project.NCEMDefine[2] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_NCEMDefine.json")[2]
 
-        flag_modified(project, "NCEMCompletion")
+        flag_modified(project, "NCEMDefine")
         
         db.add(project)
         db.commit()
         
-## 9. 업데이트된 NCEMCompletion 출력
-def UpdatedNCEMCompletion(projectName, email):
+## 9. 업데이트된 NCEMDefine 출력
+def UpdatedNCEMDefine(projectName, email):
     with get_db() as db:
 
         project = GetProject(projectName, email)
         
-    return project.NCEMCompletion
+    return project.NCEMDefine
         
-## 9. NCEMCompletionCompletion 업데이트
-def NCEMCompletionCompletionUpdate(projectName, email):
+## 9. NCEMDefineCompletion 업데이트
+def NCEMDefineCompletionUpdate(projectName, email):
     with get_db() as db:
 
         project = GetProject(projectName, email)
-        project.NCEMCompletion[0]["Completion"] = "Yes"
+        project.NCEMDefine[0]["Completion"] = "Yes"
 
-        flag_modified(project, "NCEMCompletion")
+        flag_modified(project, "NCEMDefine")
 
         db.add(project)
         db.commit()
 
 
 ######################################
-##### 10_CharacterDefine Process #####
+##### 11_CharacterDefine Process #####
 ######################################
-## 10. 1-0 CharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
+## 11. 1-0 CharacterDefine이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -699,7 +699,7 @@ def AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 10. 1-1 CharacterDefine의 Body(본문) updateCharacterChunks 업데이트 형식
+## 11. 1-1 CharacterDefine의 Body(본문) updateCharacterChunks 업데이트 형식
 def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener):    
     updateCharacterChunks = {
         "CharacterChunkId": CharacterChunkId,
@@ -717,7 +717,7 @@ def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, 
     project.CharacterDefine[1]["CharacterChunks"].append(updateCharacterChunks)
     project.CharacterDefine[0]["CharacterChunkCount"] = CharacterChunkId
     
-## 10. 1-2 CharacterDefine의 Body(본문) updateCharacterChunks 업데이트
+## 11. 1-2 CharacterDefine의 Body(본문) updateCharacterChunks 업데이트
 def AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener):
     with get_db() as db:
         
@@ -729,7 +729,7 @@ def AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, 
         db.add(project)
         db.commit()
 
-## 10. CharacterDefine의Count의 가져오기
+## 11. CharacterDefine의Count의 가져오기
 def CharacterDefineCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
@@ -739,7 +739,7 @@ def CharacterDefineCountLoad(projectName, email):
     
     return CharacterChunkCount, CharacterCount, Completion
 
-## 10. CharacterDefine의 초기화
+## 11. CharacterDefine의 초기화
 def InitCharacterDefine(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
@@ -755,7 +755,7 @@ def InitCharacterDefine(projectName, email):
         db.add(project)
         db.commit()
         
-## 10. 업데이트된 CharacterDefine 출력
+## 11. 업데이트된 CharacterDefine 출력
 def UpdatedCharacterDefine(projectName, email):
     with get_db() as db:
 
@@ -763,7 +763,7 @@ def UpdatedCharacterDefine(projectName, email):
 
     return project.CharacterDefine
 
-## 10. CharacterDefineCompletion 업데이트
+## 11. CharacterDefineCompletion 업데이트
 def CharacterDefineCompletionUpdate(projectName, email):
     with get_db() as db:
 
@@ -777,9 +777,9 @@ def CharacterDefineCompletionUpdate(projectName, email):
 
 
 ##########################################
-##### 11_CharacterCompletion Process #####
+##### 12_CharacterCompletion Process #####
 ##########################################
-## 11. 1-0 CharacterCompletion이 이미 ExistedFrame으로 존재할때 업데이트
+## 12. 1-0 CharacterCompletion이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -792,7 +792,7 @@ def AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 11. 1-1 CharacterCompletion의 Body(본문) CharacterCompeletions 업데이트 형식
+## 12. 1-1 CharacterCompletion의 Body(본문) CharacterCompeletions 업데이트 형식
 def UpdateCompeletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship):    
     updateCharacterCompeletions = {
         "CharacterChunkId": CharacterChunkId,
@@ -806,7 +806,7 @@ def UpdateCompeletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Chara
     project.CharacterCompletion[1]["CharacterCompeletions"].append(updateCharacterCompeletions)
     project.CharacterCompletion[0]["CharacterChunkCount"] = CharacterChunkId
     
-## 11. 1-2 CharacterCompletion의 Body(본문) CharacterCompeletions 업데이트
+## 12. 1-2 CharacterCompletion의 Body(본문) CharacterCompeletions 업데이트
 def AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship):
     with get_db() as db:
         
@@ -818,7 +818,7 @@ def AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, Chunk
         db.add(project)
         db.commit()
         
-## 11. 2-1 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트 형식
+## 12. 2-1 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트 형식
 def updateCheckedCharacterTags(project, CharacterTag, CharacterList, Character):
     # 새롭게 생성되는 CharacterId는 CharacterTags의 Len값과 동일
     CharacterId = len(project.CharacterCompletion[2]["CharacterTags"]) -1
@@ -834,7 +834,7 @@ def updateCheckedCharacterTags(project, CharacterTag, CharacterList, Character):
     project.CharacterCompletion[2]["CheckedCharacterTags"].append(updateCheckedCharacterTags)
     project.CharacterCompletion[0]["CharacterCount"] = CharacterId
     
-## 11. 2-2 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트
+## 12. 2-2 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트
 def AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, CharacterList, Character):
     with get_db() as db:
         
@@ -846,7 +846,7 @@ def AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, Character
         db.add(project)
         db.commit()
         
-## 11. CharacterCompletion의Count의 가져오기
+## 12. CharacterCompletion의Count의 가져오기
 def CharacterCompletionCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
@@ -856,7 +856,7 @@ def CharacterCompletionCountLoad(projectName, email):
     
     return CharacterChunkCount, CharacterCount, Completion
 
-## 11. CharacterCompletion의 초기화
+## 12. CharacterCompletion의 초기화
 def InitCharacterCompletion(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
@@ -873,7 +873,7 @@ def InitCharacterCompletion(projectName, email):
         db.add(project)
         db.commit()
         
-## 11. 업데이트된 CharacterCompletion 출력
+## 12. 업데이트된 CharacterCompletion 출력
 def UpdatedCharacterCompletion(projectName, email):
     with get_db() as db:
 
@@ -881,7 +881,7 @@ def UpdatedCharacterCompletion(projectName, email):
         
     return project.CharacterCompletion
         
-## 11. CharacterCompletionCompletion 업데이트
+## 12. CharacterCompletionCompletion 업데이트
 def CharacterCompletionCompletionUpdate(projectName, email):
     with get_db() as db:
 

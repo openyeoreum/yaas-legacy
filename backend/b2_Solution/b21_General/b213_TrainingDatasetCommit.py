@@ -44,6 +44,7 @@ def AddTrainingDatasetToDB(projectName, email):
             ExistingDataset.BodySummary = trainingDataset
             ExistingDataset.ContextDefine = trainingDataset
             ExistingDataset.ContextCompletion = trainingDataset
+            ExistingDataset.NCEMDefine = trainingDataset
             ExistingDataset.NCEMCompletion = trainingDataset
             ExistingDataset.CharacterDefine = trainingDataset
             ExistingDataset.CharacterCompletion = trainingDataset
@@ -72,6 +73,7 @@ def AddTrainingDatasetToDB(projectName, email):
                 BodySummary = trainingDataset,
                 ContextDefine = trainingDataset,
                 ContextCompletion = trainingDataset,
+                NCEMDefine = trainingDataset,
                 NCEMCompletion = trainingDataset,
                 CharacterDefine = trainingDataset,
                 CharacterCompletion = trainingDataset,

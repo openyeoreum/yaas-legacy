@@ -15,13 +15,13 @@ if __name__ == "__main__":
     #########################################################################
 
     ####################################################
-    ### 10_CharacterDefine Feedback 데이터셋 파인튜닝 ###
+    ### 11_CharacterDefine Feedback 데이터셋 파인튜닝 ###
     ####################################################
     AddProjectFeedbackDataSets(projectName, email, "CharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)
-    LLMFineTuning(projectName, email, "10", "CharacterDefine", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
+    LLMFineTuning(projectName, email, "11", "CharacterDefine", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
     
     # ########################################################
-    # ### 11_CharacterCompletion Feedback 데이터셋 파인튜닝 ###
+    # ### 12_CharacterCompletion Feedback 데이터셋 파인튜닝 ###
     # ########################################################
     # AddProjectFeedbackDataSets(projectName, email, "CharacterCompletion", FeedbackDataSetPath, CompleteDataSetPath)
     # LLMFineTuning(projectName, email, "05", "CharacterCompletion", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)

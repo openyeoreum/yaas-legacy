@@ -18,7 +18,7 @@
             },
             {
                 "NCEMContextId": 1,
-                "NCEMContextTag": "Domain",
+                "NCEMContextTag": ["Domain", "목적"],
                 "NCEMContexts": ["철학 및 인성", "의료 및 보건", "교육 및 학술", "공학 및 기술", "예술 및 디자인", "경영 및 금융", "법률 및 정치", "과학 및 연구", "농업 및 환경", "서비스 및 소매", "공공 안전 및 보안"],
                 "Memo": {
                     "철학 및 인성": "철학가, 종교인, 명상지도사 등이 포함",
@@ -35,17 +35,17 @@
             },
             {
                 "NCEMContextId": 2,
-                "NCEMContextTag": "Needs",
+                "NCEMContextTag": ["Needs", "야성"],
                 "NCEMContexts": ["생존", "안전", "편의", "애정", "존경", "실현", "해탈"]
             },
             {
                 "NCEMContextId": 3,
-                "NCEMContextTag": "CVC",
+                "NCEMContextTag": ["CVC", "지성"],
                 "NCEMContexts": ["무지", "인지", "이해", "확신", "욕망", "행동", "성공"]
             },
             {
                 "NCEMContextId": 4,
-                "NCEMContextTag": "PotentialEnergy",
+                "NCEMContextTag": ["PotentialEnergy", "덕성"],
                 "NCEMContexts": ["거절", "부정", "중립", "긍정", "수용"]
             }
         ]

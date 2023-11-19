@@ -326,7 +326,7 @@ def InitSummaryBodyFrame(projectName, email):
         project = GetProject(projectName, email)
         project.SummaryBodyFrame[0]["BodyCount"] = 0
         project.SummaryBodyFrame[0]["Completion"] = "No"
-        project.SummaryBodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-07_SummaryBodyFrame.json")[1]
+        project.SummaryBodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-06_SummaryBodyFrame.json")[1]
         
         flag_modified(project, "SummaryBodyFrame")
         

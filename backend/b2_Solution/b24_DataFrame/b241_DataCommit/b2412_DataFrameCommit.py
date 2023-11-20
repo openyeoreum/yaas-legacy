@@ -194,31 +194,33 @@ def AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
         db.commit()
         
 ## 2. 3-1 BodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
-def UpdateBodys(project, Task, Body, Character):
+def UpdateBodys(project, ChunkIds, Task, Body, Character, Context = "None"):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.BodyFrame[2]["Bodys"])
     
     updateBodys = {
         "BodyId": BodyId,
+        "ChunkId": ChunkIds,
         "Task": Task,
         "Body": Body,
-        "Character": Character
+        "Character": Character,
+        "Context": Context
     }
     
     project.BodyFrame[2]["Bodys"].append(updateBodys)
     
 ## 2. 3-2 BodyFrame의 Bodys(부문) Bodys부분 업데이트
-def AddBodyFrameBodysToDB(projectName, email, Task, Body, Character):
+def AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Character, context = "None"):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateBodys(project, Task, Body, Character)
+        UpdateBodys(project, ChunkIds, Task, Body, Character, Context = context)
         
         flag_modified(project, "BodyFrame")
         
         db.add(project)
         db.commit()
-        
+                
 ## 2. BodyFrame의Count의 가져오기
 def BodyFrameCountLoad(projectName, email):
 

@@ -34,18 +34,10 @@
         "Bodys": [
             {
                 "BodyId": 0,
+                "ChunkId": [],
                 "Task": [],
                 "Body": "None",
-                "Character": "None"
-            }
-        ]
-    },
-    {
-        "ContextBodys": [
-            {
-                "BodyId": 0,
-                "Task": [],
-                "Body": "None",
+                "Character": "None",
                 "Context": "None"
             }
         ]

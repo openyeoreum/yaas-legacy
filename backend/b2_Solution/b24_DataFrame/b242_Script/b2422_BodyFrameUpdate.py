@@ -428,8 +428,10 @@ def TaggedChunksToUnitedChunks(projectName, email, tokensCount):
 
     return IndexBodyUnitChunksList
 
-###########
-## SplitedBodyScripts의 Bodys전환
+####################################
+### SplitedBodyScripts의 Bodys전환 ###
+####################################
+
 def SplitedBodyScriptsToBodys(projectName, email):
     project = GetProject(projectName, email)
     bodyFrame = project.BodyFrame
@@ -439,6 +441,7 @@ def SplitedBodyScriptsToBodys(projectName, email):
     CaptionTags = [{"Caption"}, {'CaptionComment', 'Caption'}]
     BodyTags = ["Narrator", "Character", "Caption", "Comment"]
     Tags = []
+    ChunkIds = []
     Bodys = []
     bodys = [] # 에러 테스트용도
     BodyChunks = []
@@ -449,6 +452,7 @@ def SplitedBodyScriptsToBodys(projectName, email):
         SplitedBodyChunks = SplitedBody["SplitedBodyChunks"]
         for i, SplitedBodyChunk in enumerate(SplitedBodyChunks):
             Tags.append(SplitedBodyChunk['Tag'])
+            ChunkIds.append(SplitedBodyChunk['ChunkId'])
             if SplitedBodyChunk['Tag'] == "Title":
                 BodyChunks.append(SplitedBodyChunk['Chunk'])
                 CharacterChunks.append(SplitedBodyChunk['Chunk'])
@@ -488,10 +492,11 @@ def SplitedBodyScriptsToBodys(projectName, email):
             if "Character" in Tags:
                 task.append("Character")
                 
-        Bodys.append({'BodyId': idx + 1, 'Task': task, 'Body': "".join(BodyChunks),
+        Bodys.append({'BodyId': idx + 1, 'ChunkId': ChunkIds, 'Task': task, 'Body': "".join(BodyChunks),
                       'Character': "".join(CharacterChunks).replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')})
-        bodys.append({'BodyId': idx + 1, 'Task': task, 'Body': "".join(BodyChunks)}) # 에러 테스트용도
+        bodys.append({'BodyId': idx + 1, 'ChunkId': ChunkIds, 'Task': task, 'Body': "".join(BodyChunks)}) # 에러 테스트용도
         Tags = []
+        ChunkIds = []
         BodyChunks = []
         CharacterChunks = []
 
@@ -527,18 +532,21 @@ def BodyFrameBodysUpdate(projectName, email):
     for Update in UpdateTQDM:
         UpdateTQDM.set_description(f'BodyFrameBodysUpdate: {Update} ...')
         time.sleep(0.0001)
+        ChunkIds = Bodys[i]['ChunkId']
         Task = Bodys[i]['Task']
         Body = Bodys[i]['Body']
         Character = Bodys[i]['Character']
         
-        AddBodyFrameBodysToDB(projectName, email, Task, Body, Character)
+        AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Character)
         # i값 수동 업데이트
         i += 1
 
     UpdateTQDM.close()
-###########
 
-## IndexBodyUnitChunksList을 BodyFrame에 업데이트
+###################################################
+### IndexBodyUnitChunksList을 BodyFrame에 업데이트 ###
+###################################################
+
 def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = None):
     print(f"< User: {email} | Project: {projectName} | 02_BodyFrameUpdate 시작 >")
     # BodyFrame의 Count값 가져오기

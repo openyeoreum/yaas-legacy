@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedContextDefineToDB, AddContextDefineChunksToDB, ContextDefineCountLoad, ContextDefineCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedContextCompletionToDB, AddContextCompletionChunksToDB, ContextCompletionCountLoad, ContextCompletionCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -89,8 +89,8 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
 ######################
 ##### Filter 조건 #####
 ######################
-## ContextDefine의 Filter(Error 예외처리)
-def ContextDefineFilter(Input, responseData, memoryCounter):
+## ContextCompletion의 Filter(Error 예외처리)
+def ContextCompletionFilter(Input, responseData, memoryCounter):
     # responseData의 전처리
     responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
     responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
@@ -136,7 +136,7 @@ def ContextDefineFilter(Input, responseData, memoryCounter):
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def ContextDefineInputMemory(inputMemoryDics, MemoryLength):
+def ContextCompletionInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -152,7 +152,7 @@ def ContextDefineInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def ContextDefineOutputMemory(outputMemoryDics, MemoryLength):
+def ContextCompletionOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -172,8 +172,8 @@ def ContextDefineOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## ContextDefine 프롬프트 요청 및 결과물 Json화
-def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## ContextCompletion 프롬프트 요청 및 결과물 Json화
+def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -189,7 +189,7 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
     outputMemoryDics = []
     outputMemory = []
         
-    # ContextDefineProcess
+    # ContextCompletionProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -252,7 +252,7 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
 
-            Filter = ContextDefineFilter(Input, responseData, memoryCounter)
+            Filter = ContextCompletionFilter(Input, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -287,13 +287,13 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = ContextDefineInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = ContextCompletionInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = ContextDefineOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = ContextCompletionOutputMemory(outputMemoryDics, MemoryLength)
     
     return outputMemoryDics
 
@@ -302,13 +302,13 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
 ################################
     
 ## 데이터 치환
-def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def ContextCompletionResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
     
     # 데이터 치환
-    outputMemoryDics = ContextDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = ContextCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     StartCount = 0  # 시작 인덱스 초기화
@@ -410,20 +410,20 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
 
     return ResponseJson
 
-## 프롬프트 요청 및 결과물 Json을 ContextDefine에 업데이트
-def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 07_ContextDefineUpdate 시작 >")
+## 프롬프트 요청 및 결과물 Json을 ContextCompletion에 업데이트
+def ContextCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 07_ContextCompletionUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
-    ContinueCount, ContextCount, Completion = ContextDefineCountLoad(projectName, email)
+    ContinueCount, ContextCount, Completion = ContextCompletionCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedContextDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "ContextDefine", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 07_ContextDefineUpdate는 ExistedContextDefine으로 대처됨 ]\n")
+            AddExistedContextCompletionToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "ContextCompletion", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 07_ContextCompletionUpdate는 ExistedContextCompletion으로 대처됨 ]\n")
         else:
-            responseJson = ContextDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = ContextCompletionResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -434,11 +434,11 @@ def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memo
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'ContextDefineUpdate')
+                            desc = 'ContextCompletionUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'ContextDefineUpdate: {Update}')
+                UpdateTQDM.set_description(f'ContextCompletionUpdate: {Update}')
                 time.sleep(0.0001)
                 ContextChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
@@ -449,17 +449,17 @@ def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memo
                 Phrases = ResponseJson[i]["Phrases"]
                 Importance = ResponseJson[i]["Importance"]
                 
-                AddContextDefineChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance)
+                AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            ContextDefineCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 07_ContextDefineUpdate 완료 ]\n")
+            ContextCompletionCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 07_ContextCompletionUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 07_ContextDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 07_ContextCompletionUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 

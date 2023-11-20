@@ -300,7 +300,41 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
-    
+
+## ContextDefine의 Bodys전환
+def ContextDefineToBodys(projectName, email, ResponseJson):
+    project = GetProject(projectName, email)
+    bodyFrame = project.BodyFrame
+    Bodys = bodyFrame[2]["Bodys"][1:]
+
+    responseCount = 0  # 마지막으로 처리된 ResponseJson의 인덱스를 추적
+    for body in Bodys:
+        ContextBody = body['Body']
+        for i in range(responseCount, len(ResponseJson)):
+            response = ResponseJson[i]
+            Chunk = response['Chunk']
+            if isinstance(response['ChunkId'], list):
+                if all(elem in body['ChunkId'] for elem in response['ChunkId']):
+                    PhrasesTag = f"\n\n[중요문구{i+1}] "
+                    MemoTag = f"\n{{메모{i+1}}}\n\n"
+                    newStartChunk = PhrasesTag + Chunk[0]
+                    newEndChunk = Chunk[-1] + MemoTag
+                    ContextBody = ContextBody.replace(Chunk[0], newStartChunk, 1)
+                    ContextBody = ContextBody.replace(Chunk[-1], newEndChunk, 1)
+                    responseCount = i + 1
+            else:
+                if response['ChunkId'] in body['ChunkId']:
+                    PhrasesTag = f"\n\n[중요문구{i+1}] "
+                    MemoTag = f"\n{{메모{i+1}}}\n\n"
+                    newChunk = PhrasesTag + Chunk + MemoTag
+                                      
+                    ContextBody = ContextBody.replace(Chunk, newChunk, 1)
+                    responseCount = i + 1
+                    
+        body['Context'] = ContextBody
+        
+    return Bodys
+        
 ## 데이터 치환
 def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
@@ -407,8 +441,37 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
     
     # ChunkId의 순번대로 재배열
     ResponseJson = sorted(responseJson, key = lambda x: x['ChunkId'][0] if isinstance(x['ChunkId'], list) else x['ChunkId'])
+    
+    # 동일한 Chunk를 지닌 자료를 합침
+    newResponseJson = []
 
-    return ResponseJson
+    i = 0
+    while i < len(ResponseJson):
+        current = ResponseJson[i]
+        sameChunk = [current]
+
+        j = i + 1
+        while j < len(ResponseJson) and ResponseJson[j]['ChunkId'] == current['ChunkId']:
+            sameChunk.append(ResponseJson[j])
+            j += 1
+            
+        maxImportance = max(int(item['Importance']) for item in sameChunk)
+        filteredChunk = [item for item in sameChunk if int(item['Importance']) == maxImportance]
+
+        if len(filteredChunk) == 1:
+            newResponseJson.append(filteredChunk[0])
+        else:
+            merged = filteredChunk[0]
+            for field in ['Reader', 'Purpose', 'Subject', 'Phrases']:
+                merged[field] = [item[field] for item in filteredChunk]
+            newResponseJson.append(merged)
+
+        i = j
+    
+    # ContextDefine을 BodyFrameBodys의 Context 업데이트
+    ContextDefineToBodys(projectName, email, newResponseJson)
+
+    return newResponseJson
 
 ## 프롬프트 요청 및 결과물 Json을 ContextDefine에 업데이트
 def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
@@ -460,7 +523,8 @@ def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memo
         
     else:
         print(f"[ User: {email} | Project: {projectName} | 07_ContextDefineUpdate는 이미 완료됨 ]\n")
-        
+    
+    
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################

@@ -274,17 +274,17 @@ def CharacterTagging(projectName, email):
             for i, part in enumerate(parts):
                 # 홀수 인덱스는 Character 태그, 짝수 인덱스는 Narrator 태그
                 if i % 2 == 0:  # 짝수 인덱스
-                    new_tag = "Narrator"
+                    newTag = "Narrator"
                     # 문장별로 나누기
                     sentences = re.split('(?<=[.!?])\s+', part.strip())
                     for sentence in sentences:
                         if sentence:  # 텍스트가 비어있지 않은 경우만 추가
-                            CharacterTaggedChunks.append({"Tag": new_tag, "TagChunks": sentence})
+                            CharacterTaggedChunks.append({"Tag": newTag, "TagChunks": sentence})
                 else:  # 홀수 인덱스
-                    new_tag = "Character"
+                    newTag = "Character"
                     part = "∥" + part + "∥"  # 텍스트에 ∥ 추가
                     if part.strip():  # 텍스트가 비어있지 않은 경우만 추가
-                        CharacterTaggedChunks.append({"Tag": new_tag, "TagChunks": part})
+                        CharacterTaggedChunks.append({"Tag": newTag, "TagChunks": part})
         else:
             # 다른 태그는 그대로 유지
             CharacterTaggedChunks.append(chunk)
@@ -297,7 +297,6 @@ def CharacterTagging(projectName, email):
     else:
         print(f"BodyText와 CharacterTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CharacterTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
 
-    
     return CharacterTaggedChunks
 
 ## Index 매칭
@@ -625,10 +624,10 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "웹3.0메타버스"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     #########################################################################
-
+    
     InitBodyFrame(projectName, email)
     BodyFrameUpdate(projectName, email, tokensCount = 3000)

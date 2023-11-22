@@ -29,39 +29,39 @@ def MergeInputList(inputList):
     MergeIds = []
     NonMergeFound = False
 
-    for item in inputList:
-        if list(item.keys())[1] == 'Merge':
+    for INput in inputList:
+        if list(INput.keys())[1] == 'Merge':
             # 'Merge' 태그가 붙은 항목의 내용을 버퍼에 추가하고 ID를 MergeIds에 추가합니다.
-            MergeBuffer += list(item.values())[1]
-            MergeIds.append(item['Id'])
+            MergeBuffer += list(INput.values())[1]
+            MergeIds.append(INput['Id'])
         else:
             # 'Merge'가 아닌 태그가 발견된 경우
             NonMergeFound = True
             if MergeBuffer:
                 # 버퍼에 내용이 있으면 현재 항목과 합칩니다.
-                content = MergeBuffer + list(item.values())[1]
+                content = MergeBuffer + list(INput.values())[1]
                 # 'Id'는 MergeIds에 현재 항목의 'Id'를 추가하여 리스트로 만듭니다.
-                currentId = MergeIds + [item['Id']]
+                currentId = MergeIds + [INput['Id']]
                 # 합쳐진 내용과 'Id' 리스트를 가진 새 딕셔너리를 만듭니다.
-                mergedItem = { 'Id': currentId, list(item.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
-                InputList.append(mergedItem)
+                mergedINput = { 'Id': currentId, list(INput.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
+                InputList.append(mergedINput)
                 # 버퍼와 ID 리스트를 초기화합니다.
                 MergeBuffer = ''
                 MergeIds = []
             else:
                 # 버퍼가 비어 있으면 현재 항목을 결과 리스트에 그대로 추가합니다.
-                InputList.append(item)
+                InputList.append(INput)
     
     # 리스트의 끝에 도달했을 때 버퍼에 남아 있는 'Merge' 내용을 처리합니다.
     if MergeBuffer and not NonMergeFound:
         # 모든 항목이 'Merge'인 경우 마지막 항목만 처리합니다.
-        mergedItem = { 'Id': MergeIds, list(item.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
-        InputList.append(mergedItem)
+        mergedINput = { 'Id': MergeIds, list(INput.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
+        InputList.append(mergedINput)
 
     return InputList
 
 ## BodyFrameBodys의 inputList 치환
-def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
+def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     
     inputList = []
@@ -94,7 +94,7 @@ def ContextCompletionFilter(Input, responseData, memoryCounter):
     # responseData의 전처리
     responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
     responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
-    responseData = responseData.replace("\n", "").replace("'", "\"")
+    responseData = responseData.replace("\n", "").replace("|", "\"")
     responseData = responseData.replace("```json", "").replace("```", "")
     responseData = re.sub(r'^\[', '', responseData) # 시작에 있는 대괄호[를 제거
     responseData = re.sub(r'\]$', '', responseData) # 끝에 있는 대괄호]를 제거
@@ -156,11 +156,11 @@ def ContextCompletionOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
-    for item in outputMemoryDic:
-        if isinstance(item, list):
-            OUTPUTmemoryDic.extend(item)
+    for INput in outputMemoryDic:
+        if isinstance(INput, list):
+            OUTPUTmemoryDic.extend(INput)
         else:
-            OUTPUTmemoryDic.append(item)
+            OUTPUTmemoryDic.append(INput)
     OUTPUTmemoryDic = [entry for entry in OUTPUTmemoryDic if entry != "Pass"]
     outputMemory = str(OUTPUTmemoryDic)
     outputMemory = outputMemory[:-1] + ", "
@@ -233,6 +233,12 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
             # Filter, MemoryCounter, OutputEnder 처리
             memoryCounter = "\n"
             outputEnder = f"{{'메모"
+            
+            # json 오류 발생 문제 전처리
+            Input = Input.replace('"', "|")
+            Input = Input.replace("'", "|")
+            inputMemory = [INput.replace("'", "|") if isinstance(INput, str) else INput for INput in inputMemory]
+            inputMemory = [INput.replace('"', "|") if isinstance(INput, str) else INput for INput in inputMemory]
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -315,7 +321,7 @@ def ContextCompletionResponseJson(projectName, email, messagesReview = 'off', mo
     for response in outputMemoryDics:
         if response != "Pass":
             for dic in response:
-                for key, value in dic.items():
+                for key, value in dic.INputs():
                     CleanPhrases = re.sub("[^가-힣]", "", str(value['문구']))
                     found = False  # 플래그 설정
                     ChunkId = None  # 기본값 설정

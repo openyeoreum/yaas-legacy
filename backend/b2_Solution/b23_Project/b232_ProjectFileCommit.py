@@ -38,35 +38,43 @@ def AddTextToDB(projectName, email):
         
         indexFilePath = os.path.join(project.ScriptPath, projectName + "_Index.txt")
         bodyFilePath = os.path.join(project.ScriptPath, projectName + "_Body.txt")
+        
+        # 파일이 이미 존재하면 삭제
+        if os.path.exists(indexFilePath):
+            os.remove(indexFilePath)
+        if os.path.exists(bodyFilePath):
+            os.remove(bodyFilePath)
 
-        # 파일이 존재하지 않을 경우에만 이동
-        if not os.path.exists(indexFilePath) or not os.path.exists(bodyFilePath):
-            MoveTextFile(projectName, email)  # 개발시에만 활용
+        # 파일 이동 (개발시에만 활용)
+        MoveTextFile(projectName, email)
 
         IndexFileText = LoadTextFile(indexFilePath)
         BodyFileText = LoadTextFile(bodyFilePath)
-        
+
         ExistingIndexFile = db.query(Project).filter(Project.UserId == user.UserId, Project.IndexFile == indexFilePath).first()
         ExistingBodyFile = db.query(Project).filter(Project.UserId == user.UserId, Project.BodyFile == bodyFilePath).first()
+
+        project.IndexFile = indexFilePath
+        project.IndexText = IndexFileText
+        project.BodyFile = bodyFilePath
+        project.BodyText = BodyFileText
         
         if not ExistingIndexFile:
-            project.IndexFile = indexFilePath
-            project.IndexText = IndexFileText
             db.add(project)
-            db.commit()
             print(f"[ Email: {email} | ProjectName: {projectName} | AddTextToDB, Index 완료 ]")
         else:
-            print(f"[ Email: {email} | ProjectName: {projectName} | AddTextToDB, Index 이미 완료됨 ]")
+            db.merge(project)
+            print(f"[ Email: {email} | ProjectName: {projectName} | AddTextToDB, Index 변경사항 업데이트 ]")
             
         if not ExistingBodyFile:
-            project.BodyFile = bodyFilePath
-            project.BodyText = BodyFileText
             db.add(project)
-            db.commit()
             print(f"[ Email: {email} | ProjectName: {projectName} | AddTextToDB, Body 완료 ]")
         else:
-            print(f"[ Email: {email} | ProjectName: {projectName} | AddTextToDB, Body 이미 완료됨 ]")
-        
+            db.merge(project)
+            print(f"[ Email: {email} | ProjectName: {projectName} | AddTextToDB, Body 변경사항 업데이트 ]")
+            
+        db.commit()
+
 if __name__ == "__main__":
     
     AddTextToDB('데미안', 'yeoreum00128@gmail.com')

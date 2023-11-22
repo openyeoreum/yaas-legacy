@@ -233,14 +233,22 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
 
     for _ in range(MaxAttempts):
       try:
-          response = client.chat.completions.create(
-              model = Model,
-              messages = Messages,
-              temperature = Temperature)
+          if promptFrame[0]["OutputFormat"] == 'json':
+            response = client.chat.completions.create(
+                model = Model,
+                # response_format={ "type": "json_object" },
+                messages = Messages,
+                temperature = Temperature)
+          else:
+            response = client.chat.completions.create(
+                model = Model,
+                messages = Messages,
+                temperature = Temperature)
           Response = response.choices[0].message.content
           Usage = {'Input': response.usage.prompt_tokens,
                    'Output': response.usage.completion_tokens,
                    'Total': response.usage.total_tokens}
+          
                    
           print(f"Project: {projectName} | Process: {Process} | LLMresponse 완료")
           

@@ -15,6 +15,7 @@
     "MasterModel": "gpt-4-1106-preview",
     "Temperature": 0.5,
     "OutputTokensRatio": 2,
+    "OutputFormat": "json",
     "Example": [
         {
             "Role": "system",

@@ -110,7 +110,7 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
         TotalCount += 1
 
 # IndexDefine 프롬프트 요청 및 결과물이 긴 경우 나누어 처리
-def IndexDefineDivision(projectName, email, maxTokens = 1500, mode = "Example", messagesReview = "off"):
+def IndexDefineDivision(projectName, email, maxTokens = 3000, mode = "Example", messagesReview = "off"):
     indexText = LoadIndexText(projectName, email)
     encoding = tiktoken.get_encoding("cl100k_base")
     indexTokens = len(encoding.encode(indexText))

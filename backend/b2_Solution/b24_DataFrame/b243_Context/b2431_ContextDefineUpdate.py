@@ -92,10 +92,10 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
 ## ContextDefine의 Filter(Error 예외처리)
 def ContextDefineFilter(Input, responseData, memoryCounter):
     # responseData의 전처리
-    responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
-    responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
-    responseData = responseData.replace("\n", "").replace("|", "\"")
-    responseData = responseData.replace("```json", "").replace("```", "")
+    # responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
+    # responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
+    # responseData = responseData.replace("\n", "").replace("|", "'")
+    # responseData = responseData.replace("```json", "").replace("```", "")
     responseData = re.sub(r'^\[', '', responseData) # 시작에 있는 대괄호[를 제거
     responseData = re.sub(r'\]$', '', responseData) # 끝에 있는 대괄호]를 제거
     responseData = f"[{responseData}]"
@@ -235,15 +235,15 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
             memoryCounter = "\n"
             outputEnder = f"{{'메모"
             
-            # json 오류 발생 문제 전처리
-            Input = Input.replace('"', "|")
-            Input = Input.replace("'", "|")
-            inputMemory = [INput.replace("'", "|") if isinstance(INput, str) else INput for INput in inputMemory]
-            inputMemory = [INput.replace('"', "|") if isinstance(INput, str) else INput for INput in inputMemory]
+            # # json 오류 발생 문제 전처리
+            # Input = Input.replace('"', "|")
+            # Input = Input.replace("'", "|")
+            # inputMemory = [INput.replace("'", "|") if isinstance(INput, str) else INput for INput in inputMemory]
+            # inputMemory = [INput.replace('"', "|") if isinstance(INput, str) else INput for INput in inputMemory]
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
-            
+
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
             if mode in ["Example", "ExampleFineTuning", "Master"]:

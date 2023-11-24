@@ -7,12 +7,13 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitSummaryBodyFrame, UpdatedSummaryBodyFrame, InitContextDefine, UpdatedContextDefine, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitSummaryBodyFrame, UpdatedSummaryBodyFrame, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_BodySummaryUpdate import SummaryBodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2431_ContextDefineUpdate import ContextDefineUpdate
+from backend.b2_Solution.b24_DataFrame.b243_Context.b2432_ContextCompletionUpdate import ContextCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b244_Character.b2441_CharacterDefineUpdate import CharacterDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b244_Character.b2442_CharacterCompletionUpdate import CharacterCompletionUpdate
 
@@ -119,7 +120,7 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "웹3.0메타버스"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
@@ -216,6 +217,26 @@ if __name__ == "__main__":
     #     LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)
     # existedDataFrame = None
     # existedDataSet = None
+    
+    
+    ############################
+    ### 08_ContextCompletion ###
+    ############################
+    InitContextCompletion(projectName, email)
+    InitRawDataSet(projectName, email, "ContextCompletion")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextCompletion", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextCompletion", RawDataSetPath)
+    mode = "Master"
+    ContextCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    
+    if existedDataFrame == None:
+        updatedContextCompletion = UpdatedContextCompletion(projectName, email)
+        SaveDataFrame(projectName, email, "08_ContextCompletion", updatedContextCompletion, DataFramePath)
+        SaveDataSet(projectName, email, "08", "ContextCompletion", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet = None
+    
 
     # ##########################
     # ### 11_CharacterDefine ###
@@ -253,5 +274,3 @@ if __name__ == "__main__":
     #     SaveDataSet(projectName, email, "12", "CharacterCompletion", RawDataSetPath)
     # existedDataFrame = None
     # existedDataSet = None
-    
-    LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)

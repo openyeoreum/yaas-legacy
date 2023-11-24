@@ -306,11 +306,13 @@ def ContextDefineToBodys(projectName, email, ResponseJson):
         responseCount = 0  # 마지막으로 처리된 ResponseJson의 인덱스를 추적
         for body in Bodys:
             ContextBody = body['Body']
+            memoAdded = False  # {메모} 태그가 추가되었는지 추적하는 플래그
             for i in range(responseCount, len(ResponseJson)):
                 response = ResponseJson[i]
                 Chunk = response['Chunk']
                 if isinstance(response['ChunkId'], list):
                     if all(elem in body['ChunkId'] for elem in response['ChunkId']):
+                        memoAdded = True
                         PhrasesTag = f"\n\n[중요문구{i+1}] "
                         MemoTag = f"\n{{메모{i+1}}}\n\n"
                         newStartChunk = PhrasesTag + Chunk[0]
@@ -320,13 +322,16 @@ def ContextDefineToBodys(projectName, email, ResponseJson):
                         responseCount = i + 1
                 else:
                     if response['ChunkId'] in body['ChunkId']:
+                        memoAdded = True
                         PhrasesTag = f"\n\n[중요문구{i+1}] "
                         MemoTag = f"\n{{메모{i+1}}}\n\n"
                         newChunk = PhrasesTag + Chunk + MemoTag
                                         
                         ContextBody = ContextBody.replace(Chunk, newChunk, 1)
                         responseCount = i + 1
-                        
+            
+            if memoAdded:
+                body['Task'].append('Context')
             body['Context'] = ContextBody
         
     flag_modified(project, "BodyFrame")

@@ -76,8 +76,6 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
             Tag = 'Merge'
         else:
             Tag = 'Pass'
-            print(f'Pass Task: {task}')
-            print(f'Pass TaskBody: {TaskBody}')
             
         InputDic = {'Id': Id, Tag: TaskBody}
         inputList.append(InputDic)
@@ -402,7 +400,7 @@ def ContextCompletionResponseJson(projectName, email, messagesReview = 'off', mo
 
 ## 프롬프트 요청 및 결과물 Json을 ContextCompletion에 업데이트
 def ContextCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 07_ContextCompletionUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 08_ContextCompletionUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, ContextCount, Completion = ContextCompletionCountLoad(projectName, email)
     if Completion == "No":
@@ -411,7 +409,7 @@ def ContextCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedContextCompletionToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "ContextCompletion", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 07_ContextCompletionUpdate는 ExistedContextCompletion으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 08_ContextCompletionUpdate는 ExistedContextCompletion으로 대처됨 ]\n")
         else:
             responseJson = ContextCompletionResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
@@ -446,18 +444,21 @@ def ContextCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             ContextCompletionCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 07_ContextCompletionUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 08_ContextCompletionUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 07_ContextCompletionUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 08_ContextCompletionUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "웹3.0메타버스"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    InputList = BodyFrameBodysToInputList(projectName, email)
+    for input in InputList:
+        print(input)

@@ -236,7 +236,7 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
           if promptFrame[0]["OutputFormat"] == 'json':
             response = client.chat.completions.create(
                 model = Model,
-                response_format={ "type": "json_object" },
+                response_format = {"type": "json_object"},
                 messages = Messages,
                 temperature = Temperature)
           else:

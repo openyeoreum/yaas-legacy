@@ -1,8 +1,8 @@
 {
     "TaskName": "CorrectionKo",
     "BaseModel": {
-        "ShortTokensModel": "gpt-3.5-turbo",
-        "LongTokensModel": "gpt-3.5-turbo-16k"
+        "ShortTokensModel": "gpt-3.5-turbo-1106",
+        "LongTokensModel": "gpt-3.5-turbo-1106"
     },
     "ExampleFineTunedModel": {
         "ShortTokensModel": [],

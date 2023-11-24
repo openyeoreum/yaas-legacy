@@ -89,18 +89,10 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
 ######################
 ## CharacterDefine의 Filter(Error 예외처리)
 def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
-    # responseData의 전처리
-    responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
-    responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
-    responseData = responseData.replace("\n", "").replace("'", "\"")
-    responseData = responseData.replace("```json", "").replace("```", "")
-    responseData = re.sub(r'^\[', '', responseData) # 시작에 있는 대괄호[를 제거
-    responseData = re.sub(r'\]$', '', responseData) # 끝에 있는 대괄호]를 제거
-    responseData = f"[{responseData}]"
-
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
-        OutputDic = json.loads(responseData)
+        outputJson = json.loads(responseData)
+        OutputDic = [{key: value} for key, value in outputJson.items()]
     except json.JSONDecodeError:
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
@@ -126,7 +118,8 @@ def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
     # Error6: Input과 Output의 개수가 다를 때의 예외처리
     if len(OutputDic) != len(TalkTag):
         return "JSONCount에서 오류 발생: JSONCountError"
-    return OutputDic
+
+    return OutputDic, outputJson
 
 ######################
 ##### Memory 생성 #####
@@ -250,7 +243,7 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
 
-            Filter = CharacterDefineFilter(TalkTag, responseData, memoryCounter)
+            Filter, outputJson = CharacterDefineFilter(TalkTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -270,8 +263,8 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
                 elif mode in ["Memory", "MemoryFineTuning"]:
                     INPUTMemory = inputMemory
                     
-                AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, InputDic, OutputDic, INPUTMEMORY = INPUTMemory)
-                AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, OutputDic, INPUTMEMORY = INPUTMemory)
+                AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, InputDic, outputJson, INPUTMEMORY = INPUTMemory)
+                AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, outputJson, INPUTMEMORY = INPUTMemory)
 
         else:
             OutputDic = "Pass"

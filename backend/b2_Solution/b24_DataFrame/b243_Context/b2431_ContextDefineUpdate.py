@@ -1,11 +1,14 @@
 import os
 import re
+import unicodedata
 import json
 import time
 import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
+from sqlalchemy.orm.attributes import flag_modified
+from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedContextDefineToDB, AddContextDefineChunksToDB, ContextDefineCountLoad, ContextDefineCompletionUpdate
@@ -91,20 +94,11 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
 ######################
 ## ContextDefine의 Filter(Error 예외처리)
 def ContextDefineFilter(Input, responseData, memoryCounter):
-    # responseData의 전처리
-    # responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
-    # responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
-    # responseData = responseData.replace("\n", "").replace("|", "'")
-    # responseData = responseData.replace("```json", "").replace("```", "")
-    responseData = re.sub(r'^\[', '', responseData) # 시작에 있는 대괄호[를 제거
-    responseData = re.sub(r'\]$', '', responseData) # 끝에 있는 대괄호]를 제거
-    responseData = f"[{responseData}]"
-
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
-        OutputDic = json.loads(responseData)
+        outputJson = json.loads(responseData)
+        OutputDic = [{key: value} for key, value in outputJson.items()]
     except json.JSONDecodeError:
-        print(responseData)
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
@@ -131,7 +125,7 @@ def ContextDefineFilter(Input, responseData, memoryCounter):
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
         
-    return OutputDic
+    return OutputDic, outputJson
 
 ######################
 ##### Memory 생성 #####
@@ -235,12 +229,6 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
             memoryCounter = "\n"
             outputEnder = f"{{'메모"
             
-            # # json 오류 발생 문제 전처리
-            # Input = Input.replace('"', "|")
-            # Input = Input.replace("'", "|")
-            # inputMemory = [INput.replace("'", "|") if isinstance(INput, str) else INput for INput in inputMemory]
-            # inputMemory = [INput.replace('"', "|") if isinstance(INput, str) else INput for INput in inputMemory]
-
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
@@ -259,7 +247,7 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
 
-            Filter = ContextDefineFilter(Input, responseData, memoryCounter)
+            Filter, outputJson = ContextDefineFilter(Input, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -279,8 +267,8 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
                 elif mode in ["Memory", "MemoryFineTuning"]:
                     INPUTMemory = inputMemory
                     
-                AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, InputDic, OutputDic, INPUTMEMORY = INPUTMemory)
-                AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, OutputDic, INPUTMEMORY = INPUTMemory)
+                AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, InputDic, outputJson, INPUTMEMORY = INPUTMemory)
+                AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, outputJson, INPUTMEMORY = INPUTMemory)
 
         else:
             OutputDic = "Pass"
@@ -310,38 +298,42 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
 
 ## ContextDefine의 Bodys전환
 def ContextDefineToBodys(projectName, email, ResponseJson):
-    project = GetProject(projectName, email)
-    bodyFrame = project.BodyFrame
-    Bodys = bodyFrame[2]["Bodys"][1:]
+    with get_db() as db:
+        project = GetProject(projectName, email)
+        bodyFrame = project.BodyFrame
+        Bodys = bodyFrame[2]["Bodys"][1:]
 
-    responseCount = 0  # 마지막으로 처리된 ResponseJson의 인덱스를 추적
-    for body in Bodys:
-        ContextBody = body['Body']
-        for i in range(responseCount, len(ResponseJson)):
-            response = ResponseJson[i]
-            Chunk = response['Chunk']
-            if isinstance(response['ChunkId'], list):
-                if all(elem in body['ChunkId'] for elem in response['ChunkId']):
-                    PhrasesTag = f"\n\n[중요문구{i+1}] "
-                    MemoTag = f"\n{{메모{i+1}}}\n\n"
-                    newStartChunk = PhrasesTag + Chunk[0]
-                    newEndChunk = Chunk[-1] + MemoTag
-                    ContextBody = ContextBody.replace(Chunk[0], newStartChunk, 1)
-                    ContextBody = ContextBody.replace(Chunk[-1], newEndChunk, 1)
-                    responseCount = i + 1
-            else:
-                if response['ChunkId'] in body['ChunkId']:
-                    PhrasesTag = f"\n\n[중요문구{i+1}] "
-                    MemoTag = f"\n{{메모{i+1}}}\n\n"
-                    newChunk = PhrasesTag + Chunk + MemoTag
-                                      
-                    ContextBody = ContextBody.replace(Chunk, newChunk, 1)
-                    responseCount = i + 1
-                    
-        body['Context'] = ContextBody
+        responseCount = 0  # 마지막으로 처리된 ResponseJson의 인덱스를 추적
+        for body in Bodys:
+            ContextBody = body['Body']
+            for i in range(responseCount, len(ResponseJson)):
+                response = ResponseJson[i]
+                Chunk = response['Chunk']
+                if isinstance(response['ChunkId'], list):
+                    if all(elem in body['ChunkId'] for elem in response['ChunkId']):
+                        PhrasesTag = f"\n\n[중요문구{i+1}] "
+                        MemoTag = f"\n{{메모{i+1}}}\n\n"
+                        newStartChunk = PhrasesTag + Chunk[0]
+                        newEndChunk = Chunk[-1] + MemoTag
+                        ContextBody = ContextBody.replace(Chunk[0], newStartChunk, 1)
+                        ContextBody = ContextBody.replace(Chunk[-1], newEndChunk, 1)
+                        responseCount = i + 1
+                else:
+                    if response['ChunkId'] in body['ChunkId']:
+                        PhrasesTag = f"\n\n[중요문구{i+1}] "
+                        MemoTag = f"\n{{메모{i+1}}}\n\n"
+                        newChunk = PhrasesTag + Chunk + MemoTag
+                                        
+                        ContextBody = ContextBody.replace(Chunk, newChunk, 1)
+                        responseCount = i + 1
+                        
+            body['Context'] = ContextBody
         
-    return Bodys
-        
+    flag_modified(project, "BodyFrame")
+    
+    db.add(project)
+    db.commit()
+
 ## 데이터 치환
 def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
@@ -352,24 +344,25 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
     outputMemoryDics = ContextDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
-    StartCount = 0  # 시작 인덱스 초기화
     for response in outputMemoryDics:
         if response != "Pass":
             for dic in response:
                 for key, value in dic.items():
                     CleanPhrases = re.sub("[^가-힣]", "", str(value['문구']))
+                    # CleanPhrases가 비어 있으면 다음 항목으로 이동
+                    if not CleanPhrases:
+                        continue
                     found = False  # 플래그 설정
                     ChunkId = None  # 기본값 설정
                     Chunk = None  # 기본값 설정
                     for i in range(len(BodyFrame)):
                         if found:
                             break
-                        for j in range(StartCount, len(BodyFrame[i]['SplitedBodyChunks'])):  # StartCount부터 시작
+                        for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
                             CleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']))
                             if CleanPhrases in CleanChunk:
                                 ChunkId = BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId']
                                 Chunk = BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']
-                                # StartCount = j + 1  # 다음 검색 시작 위치 업데이트
                                 found = True
                                 break
                     Reader = value['독자']
@@ -446,7 +439,8 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
                 chunkIdChunkPairs = sorted(zip(response['ChunkId'], response['Chunk']))
                 response['ChunkId'], response['Chunk'] = map(list, zip(*chunkIdChunkPairs))
     
-    # ChunkId의 순번대로 재배열
+    # ChunkId의 None 부분 제거 및 순번대로 재배열
+    responseJson = [item for item in responseJson if item['ChunkId'] is not None]
     ResponseJson = sorted(responseJson, key = lambda x: x['ChunkId'][0] if isinstance(x['ChunkId'], list) else x['ChunkId'])
     
     # 동일한 Chunk를 지닌 자료를 합침
@@ -542,3 +536,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    ContextDefineUpdate(projectName, email)

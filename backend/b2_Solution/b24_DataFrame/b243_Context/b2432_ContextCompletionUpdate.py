@@ -91,18 +91,10 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
 ######################
 ## ContextCompletion의 Filter(Error 예외처리)
 def ContextCompletionFilter(Input, responseData, memoryCounter):
-    # responseData의 전처리
-    # responseData = responseData.replace("<태그.json>" + memoryCounter, "").replace("<태그.json>" + memoryCounter + " ", "")
-    # responseData = responseData.replace("<태그.json>", "").replace("<태그.json> ", "")
-    # responseData = responseData.replace("\n", "").replace("|", "'")
-    # responseData = responseData.replace("```json", "").replace("```", "")
-    responseData = re.sub(r'^\[', '', responseData) # 시작에 있는 대괄호[를 제거
-    responseData = re.sub(r'\]$', '', responseData) # 끝에 있는 대괄호]를 제거
-    responseData = f"[{responseData}]"
-
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
-        OutputDic = json.loads(responseData)
+        outputJson = json.loads(responseData)
+        OutputDic = [{key: value} for key, value in outputJson.items()]
     except json.JSONDecodeError:
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
@@ -120,17 +112,15 @@ def ContextCompletionFilter(Input, responseData, memoryCounter):
                 return "JSON에서 오류 발생: TypeError"
             except KeyError:
                 return "JSON에서 오류 발생: KeyError"
-            if not '메모' in key:
+            if not '중요문구' in key:
                 return "JSON에서 오류 발생: JSONKeyError"
-            elif not OUTPUT in INPUT:
-                return f"JSON에서 오류 발생: JSON '문구'가 Input에 포함되지 않음 Error\n문구: {dic[key]['문구']}"
-            elif not ('독자' in dic[key] and '목적' in dic[key] and '주제' in dic[key] and '문구' in dic[key] and '중요도' in dic[key]):
+            elif not ('성별' in dic[key] and '연령' in dic[key] and '장르' in dic[key] and '성격' in dic[key] and '감성' in dic[key] and '정확도' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
         
-    return OutputDic
+    return OutputDic, outputJson
 
 ######################
 ##### Memory 생성 #####
@@ -232,13 +222,7 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
             
             # Filter, MemoryCounter, OutputEnder 처리
             memoryCounter = "\n"
-            outputEnder = f"{{'메모"
-            
-            # # json 오류 발생 문제 전처리
-            # Input = Input.replace('"', "|")
-            # Input = Input.replace("'", "|")
-            # inputMemory = [INput.replace("'", "|") if isinstance(INput, str) else INput for INput in inputMemory]
-            # inputMemory = [INput.replace('"', "|") if isinstance(INput, str) else INput for INput in inputMemory]
+            outputEnder = f"{{'중요문구"
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -258,7 +242,7 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
 
-            Filter = ContextCompletionFilter(Input, responseData, memoryCounter)
+            Filter, outputJson = ContextCompletionFilter(Input, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -278,8 +262,8 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
                 elif mode in ["Memory", "MemoryFineTuning"]:
                     INPUTMemory = inputMemory
                     
-                AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, InputDic, OutputDic, INPUTMEMORY = INPUTMemory)
-                AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, OutputDic, INPUTMEMORY = INPUTMemory)
+                AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, InputDic, outputJson, INPUTMEMORY = INPUTMemory)
+                AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, outputJson, INPUTMEMORY = INPUTMemory)
 
         else:
             OutputDic = "Pass"

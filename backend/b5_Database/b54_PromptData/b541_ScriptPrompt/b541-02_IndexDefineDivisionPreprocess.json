@@ -1,8 +1,8 @@
 {
     "TaskName": "IndexDefineDivisionPreprocess",
     "BaseModel": {
-        "ShortTokensModel": "gpt-3.5-turbo",
-        "LongTokensModel": "gpt-3.5-turbo-16k"
+        "ShortTokensModel": "gpt-3.5-turbo-1106",
+        "LongTokensModel": "gpt-3.5-turbo-1106"
     },
     "ExampleFineTunedModel": {
         "ShortTokensModel": [],
@@ -15,7 +15,7 @@
     "MasterModel": "gpt-4-1106-preview",
     "Temperature": 0.5,
     "OutputTokensRatio": 1,
-    "OutputFormat": "json",
+    "OutputFormat": "text",
     "Example": [
         {
             "Role": "system",

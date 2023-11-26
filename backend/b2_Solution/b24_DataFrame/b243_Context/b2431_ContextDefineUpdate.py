@@ -448,32 +448,40 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
     # ChunkId의 None 부분 제거 및 순번대로 재배열
     responseJson = [item for item in responseJson if item['ChunkId'] is not None]
     ResponseJson = sorted(responseJson, key = lambda x: x['ChunkId'][0] if isinstance(x['ChunkId'], list) else x['ChunkId'])
-    
-    # 동일한 Chunk를 지닌 자료를 합침
+        
+    # 동일한 Chunk 또는 겹치는 Chunk를 지닌 자료를 합침
     newResponseJson = []
 
-    i = 0
-    while i < len(ResponseJson):
+    # 첫 번째 요소를 newResponseJson에 추가
+    if len(ResponseJson) > 0:
+        newResponseJson.append(ResponseJson[0])
+
+    for i in range(1, len(ResponseJson)):
         current = ResponseJson[i]
-        sameChunk = [current]
+        previous = newResponseJson[-1]
 
-        j = i + 1
-        while j < len(ResponseJson) and ResponseJson[j]['ChunkId'] == current['ChunkId']:
-            sameChunk.append(ResponseJson[j])
-            j += 1
-            
-        maxImportance = max(int(item['Importance']) for item in sameChunk)
-        filteredChunk = [item for item in sameChunk if int(item['Importance']) == maxImportance]
-
-        if len(filteredChunk) == 1:
-            newResponseJson.append(filteredChunk[0])
+        # ChunkId가 겹치는지 확인
+        overlap = False
+        if isinstance(previous['ChunkId'], list):
+            if isinstance(current['ChunkId'], list):
+                overlap = any(cid in previous['ChunkId'] for cid in current['ChunkId'])
+            else:
+                overlap = current['ChunkId'] in previous['ChunkId']
         else:
-            merged = filteredChunk[0]
-            for field in ['Reader', 'Purpose', 'Subject', 'Phrases']:
-                merged[field] = [item[field] for item in filteredChunk]
-            newResponseJson.append(merged)
+            if isinstance(current['ChunkId'], list):
+                overlap = previous['ChunkId'] in current['ChunkId']
+            else:
+                overlap = current['ChunkId'] == previous['ChunkId']
 
-        i = j
+        # 겹치는 경우, Importance와 ChunkId 길이를 기준으로 선택
+        if overlap:
+            if int(current['Importance']) > int(previous['Importance']):
+                newResponseJson[-1] = current
+            elif int(current['Importance']) == int(previous['Importance']):
+                if len(str(current['ChunkId'])) > len(str(previous['ChunkId'])):
+                    newResponseJson[-1] = current
+        else:
+            newResponseJson.append(current)
     
     # ContextDefine을 BodyFrameBodys의 Context 업데이트
     ContextDefineToBodys(projectName, email, newResponseJson)
@@ -542,4 +550,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    ContextDefineUpdate(projectName, email)

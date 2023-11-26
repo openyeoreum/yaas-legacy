@@ -19,8 +19,9 @@ def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
     BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
     BodyFrameBodys = project.BodyFrame[2]['Bodys'][1:]
+    ContextChunks =  project.ContextDefine[1]['ContextChunks'][1:]
     
-    return BodyFrameSplitedBodyScripts, BodyFrameBodys
+    return BodyFrameSplitedBodyScripts, BodyFrameBodys, ContextChunks
 
 ## inputList의 InputList 치환 (인덱스, 캡션 부분 합치기)
 def MergeInputList(inputList):
@@ -62,7 +63,7 @@ def MergeInputList(inputList):
 
 ## BodyFrameBodys의 inputList 치환
 def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
-    BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
+    BodyFrameSplitedBodyScripts, BodyFrameBodys, ContextChunks = LoadBodyFrameBodys(projectName, email)
     
     inputList = []
     for i in range(len(BodyFrameBodys)):
@@ -72,6 +73,13 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
 
         if Task in task:
             Tag = 'Continue'
+            # 메모 기입
+            for j in range(len(ContextChunks)):
+                ContextMemoIndex = f"{{메모{ContextChunks[j]['ContextChunkId']}}}"
+                if ContextMemoIndex in TaskBody:
+                    ContextMemoBody = f"[메모{ContextChunks[j]['ContextChunkId']}] {{'예상독자': {ContextChunks[j]['Reader']}, '읽는목적': {ContextChunks[j]['Purpose']}, '키워드': {ContextChunks[j]['Subject']}}}"
+                    TaskBody = TaskBody.replace(ContextMemoIndex, ContextMemoBody)
+                    
         elif 'Body' not in task:
             Tag = 'Merge'
         else:
@@ -460,6 +468,6 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    InputList = BodyFrameBodysToInputList(projectName, email)
+    InputList = BodyFrameBodysToInputList(projectName, email, Task = "Context")
     for input in InputList:
         print(input)

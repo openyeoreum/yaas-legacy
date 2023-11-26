@@ -34,7 +34,7 @@
         {
             "DataSetId": 1,
             "Mode": "Example",
-            "TrainingModel": "gpt-3.5-turbo-16k",
+            "TrainingModel": "gpt-3.5-turbo-1106",
             "Tokens": {
                 "Input": 5148,
                 "Output": 2625,

@@ -125,7 +125,7 @@ def ContextDefineFilter(Input, responseData, memoryCounter):
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
         
-    return OutputDic, outputJson
+    return {'json': outputJson, 'filter': OutputDic}
 
 ######################
 ##### Memory 생성 #####
@@ -246,8 +246,8 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
                     if Response.startswith(outputEnder):
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
-
-            Filter, outputJson = ContextDefineFilter(Input, responseData, memoryCounter)
+         
+            Filter = ContextDefineFilter(Input, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -257,7 +257,8 @@ def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLe
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
                 continue
             else:
-                OutputDic = Filter
+                OutputDic = Filter['filter']
+                outputJson = Filter['json']
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트

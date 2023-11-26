@@ -119,7 +119,7 @@ def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
     if len(OutputDic) != len(TalkTag):
         return "JSONCount에서 오류 발생: JSONCountError"
 
-    return OutputDic, outputJson
+    return {'json': outputJson, 'filter': OutputDic}
 
 ######################
 ##### Memory 생성 #####
@@ -242,8 +242,8 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
                     if Response.startswith(outputEnder):
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
-
-            Filter, outputJson = CharacterDefineFilter(TalkTag, responseData, memoryCounter)
+                    
+            Filter = CharacterDefineFilter(TalkTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -253,7 +253,8 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | {Filter}")
                 continue
             else:
-                OutputDic = Filter
+                OutputDic = Filter['filter']
+                outputJson = Filter['json']
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
                 
                 # DataSets 업데이트

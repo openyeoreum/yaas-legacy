@@ -35,7 +35,7 @@
             {
                 "IndexId": 4,
                 "IndexTag": "Chapter",
-                "Index": "1장 1990년대, 메타버스가 잉태되다"
+                "Index": "1장. 1990년대, 메타버스가 잉태되다"
             },
             {
                 "IndexId": 5,
@@ -139,7 +139,7 @@
             },
             {
                 "IndexId": 25,
-                "IndexTag": "Chapter",
+                "IndexTag": "Part",
                 "Index": "3장 스마트폰, 메타버스로 가는 길을 열다"
             },
             {

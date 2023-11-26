@@ -118,7 +118,7 @@ def ContextCompletionFilter(Input, responseData, memoryCounter):
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
         
-    return OutputDic, outputJson
+    return {'json': outputJson, 'filter': OutputDic}
 
 ######################
 ##### Memory 생성 #####
@@ -239,8 +239,8 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
                     if Response.startswith(outputEnder):
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
-
-            Filter, outputJson = ContextCompletionFilter(Input, responseData, memoryCounter)
+                                
+            Filter = ContextCompletionFilter(Input, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -250,7 +250,8 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
                 continue
             else:
-                OutputDic = Filter
+                OutputDic = Filter['filter']
+                outputJson = Filter['json']
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트

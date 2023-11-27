@@ -462,7 +462,7 @@ def AddExistedContextCompletionToDB(projectName, email, ExistedDataFrame):
         db.commit()
 
 ## 8. 1-1 ContextCompletion의 Body(본문) ContextCompeletions 업데이트 형식
-def UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Importance):    
+def UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy):    
     updateContextCompeletions = {
         "ContextChunkId": ContextChunkId,
         "ChunkId": ChunkId,
@@ -472,18 +472,18 @@ def UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Ge
         "Age": Age,
         "Personality": Personality,
         "Emotion": Emotion,
-        "Importance": Importance
+        "Accuracy": Accuracy
     }
     
     project.ContextCompletion[1]["ContextCompeletions"].append(updateContextCompeletions)
     project.ContextCompletion[0]["ContextChunkCount"] = ContextChunkId
     
 ## 8. 1-2 ContextCompletion의 Body(본문) ContextCompeletions 업데이트
-def AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Importance):
+def AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Importance)
+        UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy)
         
         flag_modified(project, "ContextCompletion")
         
@@ -904,6 +904,3 @@ if __name__ == "__main__":
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     #########################################################################
-    
-    project = GetProject(projectName, email)
-    print(project.CharacterCompletion)

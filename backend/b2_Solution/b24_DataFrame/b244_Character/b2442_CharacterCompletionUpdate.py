@@ -243,7 +243,7 @@ def CharacterCompletionProcess(projectName, email, Process = "CharacterCompletio
                 Input = InputDic['Continue']
             
             # Filter, MemoryCounter, OutputEnder 처리
-            if Mode == "Master":
+            if Mode == "Master" or Mode == "ExampleFineTuning":
                 talkTag = re.findall(r'\[말(\d{1,5})\]', str(Input))
             else:
                 talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))

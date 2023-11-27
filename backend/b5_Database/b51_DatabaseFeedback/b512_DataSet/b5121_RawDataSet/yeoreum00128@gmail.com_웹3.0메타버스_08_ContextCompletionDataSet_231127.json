@@ -1,0 +1,54 @@
+{
+    "TaskName": "ContextCompletion",
+    "UserId": "7b1f0e8acf71f6470e8ef931541ae994848aa0b7fe5440591a7fcf81120ff536",
+    "ProjectsStorageID": 1,
+    "ProjectId": 3,
+    "ProjectName": "웹3.0메타버스",
+    "RawDataSetCount": 0,
+    "FeedbackDatasetCount": 0,
+    "EmbeddingDatasetCount": 0,
+    "Completion": "No",
+    "Accuracy": {},
+    "Context": {
+        "Language": "Ko",
+        "Genre": "None",
+        "Gender": "None",
+        "Age": "None",
+        "Personality": "None",
+        "Emotion": "None",
+        "Environment": "None",
+        "Situation": "None",
+        "Era": "None",
+        "Culture": "None"
+    },
+    "RawDataset": [
+        {
+            "DataSetId": 0,
+            "Mode": "None",
+            "TrainingModel": "None",
+            "Tokens": "None",
+            "InputMemory": "None",
+            "Input": "None",
+            "Output": "None"
+        }
+    ],
+    "FeedbackDataset": [
+        {
+            "DataSetId": 0,
+            "InputMemory": "None",
+            "Input": "None",
+            "Feedback": "None",
+            "Check": "No",
+            "Accuracy": "None"
+        }
+    ],
+    "FeedbackCompletion": "No",
+    "EmbeddingDataset": [
+        {
+            "DataSetId": 0,
+            "InputMemoryEmbedding": "None",
+            "InputEmbedding": "None",
+            "OutputEmbedding": "None"
+        }
+    ]
+}

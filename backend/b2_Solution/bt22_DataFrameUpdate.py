@@ -134,7 +134,8 @@ if __name__ == "__main__":
     existedDataSet1 = None
     existedDataSet2 = None
     #########################################################################
-    
+
+
     # ##################################
     # ### 00_DataFrame-[AllMetaData] ###
     # ##################################
@@ -165,6 +166,7 @@ if __name__ == "__main__":
     # existedDataSet1 = None
     # existedDataSet2 = None
 
+
     # ##############################################
     # ### 02_BodyFrame-[BodySplit, IndexTagging] ###
     # ##############################################
@@ -177,7 +179,7 @@ if __name__ == "__main__":
     #     updatedBodyFrame = UpdatedBodyFrame(projectName, email)
     #     SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
     # existedDataFrame = None
-    
+
 
     # #########################################
     # ### 06_SummaryBodyFrame-[BodySummary] ###
@@ -217,8 +219,8 @@ if __name__ == "__main__":
     #     LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)
     # existedDataFrame = None
     # existedDataSet = None
-    
-    
+
+
     ############################
     ### 08_ContextCompletion ###
     ############################
@@ -236,7 +238,7 @@ if __name__ == "__main__":
         SaveDataSet(projectName, email, "08", "ContextCompletion", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
-    
+
 
     # ##########################
     # ### 11_CharacterDefine ###
@@ -257,9 +259,9 @@ if __name__ == "__main__":
     # existedDataSet = None
 
 
-    # ##################################
+    # ##############################
     # ### 12_CharacterCompletion ###
-    # ##################################
+    # ##############################
     # InitCharacterCompletion(projectName, email)
     # InitRawDataSet(projectName, email, "CharacterCompletion")
     # if existedDataFrameMode == "on":

@@ -71,7 +71,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
         task = BodyFrameBodys[i]['Task']
         TaskBody = BodyFrameBodys[i][Task]
 
-        if Task in task:
+        if "Context" in task:
             Tag = 'Continue'
             # 메모 기입
             for j in range(len(ContextChunks)):
@@ -96,7 +96,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
 ##### Filter 조건 #####
 ######################
 ## ContextCompletion의 Filter(Error 예외처리)
-def ContextCompletionFilter(Input, responseData, memoryCounter):
+def ContextCompletionFilter(MemoTag, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -107,24 +107,20 @@ def ContextCompletionFilter(Input, responseData, memoryCounter):
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"  
     # Error3: 자료의 구조가 다를 때의 예외 처리
-    INPUT = re.sub("[^가-힣]", "", str(Input))
     for dic in OutputDic:
         try:
             key = list(dic.keys())[0]
-            # '문구' 키에 접근하는 부분에 예외 처리 추가
-            try:
-                OUTPUT = re.sub("[^가-힣]", "", str(dic[key]['문구']))
-            except TypeError:
-                return "JSON에서 오류 발생: TypeError"
-            except KeyError:
-                return "JSON에서 오류 발생: KeyError"
-            if not '중요문구' in key:
+            if not key in MemoTag:
                 return "JSON에서 오류 발생: JSONKeyError"
-            elif not ('성별' in dic[key] and '연령' in dic[key] and '장르' in dic[key] and '성격' in dic[key] and '감성' in dic[key] and '정확도' in dic[key]):
-                return "JSON에서 오류 발생: JSONKeyError"
+            else:
+                if not ('성별' in dic[key] and '연령' in dic[key] and '장르' in dic[key] and '성격' in dic[key] and '감성' in dic[key] and '정확도' in dic[key]):
+                    return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
+        # Error4: Input과 Output의 개수가 다를 때의 예외처리
+        if len(OutputDic) != len(MemoTag):
+            return f"JSONCount에서 오류 발생: JSONCountError, OutputDic: {len(OutputDic)}, MemoTag: {len(MemoTag)}"
         
     return {'json': outputJson, 'filter': OutputDic}
 
@@ -227,7 +223,13 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
                 Input = InputDic['Continue']
             
             # Filter, MemoryCounter, OutputEnder 처리
-            memoryCounter = "\n"
+            if Mode == "Master" or Mode == "ExampleFineTuning":
+                memoTag = re.findall(r'\[중요문구(\d{1,5})\]', str(Input))
+            else:
+                memoTag = re.findall(r'\[중요문구(\d{1,5})\]', str(InputDic))
+            
+            MemoTag = ["중요문구" + match for match in memoTag]
+            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + ' -\n'
             outputEnder = f"{{'중요문구"
 
             # Response 생성
@@ -248,7 +250,7 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                                 
-            Filter = ContextCompletionFilter(Input, responseData, memoryCounter)
+            Filter = ContextCompletionFilter(MemoTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -302,110 +304,38 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
 def ContextCompletionResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
-    BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
+    ContextDefine = project.ContextDefine[1]['ContextChunks'][1:]
     
-    # 데이터 치환
-    outputMemoryDics = ContextCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    # # 데이터 치환
+    # outputMemoryDics = ContextCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    
+    ##### 테스트 후 삭제 #####
+    filePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_웹3.0메타버스_08_outputMemoryDics_231127.json"
+    # with open(filePath, "w", encoding = 'utf-8') as file:
+    #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+        
+    with open(filePath, "r", encoding='utf-8') as file:
+        outputMemoryDics = json.load(file)
+    ##### 테스트 후 삭제 #####
     
     responseJson = []
-    StartCount = 0  # 시작 인덱스 초기화
+    ContextDefineCount = 0
     for response in outputMemoryDics:
         if response != "Pass":
             for dic in response:
-                for key, value in dic.INputs():
-                    CleanPhrases = re.sub("[^가-힣]", "", str(value['문구']))
-                    found = False  # 플래그 설정
-                    ChunkId = None  # 기본값 설정
-                    Chunk = None  # 기본값 설정
-                    for i in range(len(BodyFrame)):
-                        if found:
-                            break
-                        for j in range(StartCount, len(BodyFrame[i]['SplitedBodyChunks'])):  # StartCount부터 시작
-                            CleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']))
-                            if CleanPhrases in CleanChunk:
-                                ChunkId = BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId']
-                                Chunk = BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']
-                                # StartCount = j + 1  # 다음 검색 시작 위치 업데이트
-                                found = True
-                                break
-                    Reader = value['독자']
-                    Purpose = value['목적']
-                    Subject = value['주제']
-                    Phrases = value['문구']
-                    Importance = value['중요도']
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Reader": Reader, "Purpose": Purpose, "Subject": Subject, "Phrases": Phrases, "Importance": Importance})
+                for key, value in dic.items():
+                    ChunkId = ContextDefine[ContextDefineCount]['ChunkId']
+                    Chunk = ContextDefine[ContextDefineCount]['Chunk']
+                    Genre = value['장르']
+                    Gender = value['성별']
+                    Age = value['연령']
+                    Personality = value['성격']
+                    Emotion = value['감성']
+                    Accuracy = value['정확도']
+                    ContextDefineCount += 1
+                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Genre": Genre, "Gender": Gender, "Age": Age, "Personality": Personality, "Emotion": Emotion, "Accuracy": Accuracy})
 
-    # Chunk가 None인 경우 재분석
-    PrevSwitch = 0
-    PrevCleanChunk = ""
-    for response in responseJson:
-        if response['Chunk'] is None:  # 'None' 비교 시 'is None' 사용
-            CleanPhrases = re.sub("[^가-힣]", "", str(response['Phrases']))
-            found = False  # 플래그 변수 추가
-            for i in range(len(BodyFrame)):
-                if found:
-                    break  # 외부 루프 종료 조건 추가
-                ChunkIds = []
-                Chunks = []
-                CleanChunks = ""
-                for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
-                    CleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk']))
-                    TestPrevCleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j-1]['Chunk']))
-                    if len(TestPrevCleanChunk) <= 3:
-                        TestPrevCleanChunk = "None"
-                    if (CleanChunk in CleanPhrases) and (CleanChunk != ''):
-                        if PrevSwitch == 0 and ((TestPrevCleanChunk[-3:] + CleanChunk) in CleanPhrases) and j > 0:
-                            PrevCleanChunk = re.sub("[^가-힣]", "", str(BodyFrame[i]['SplitedBodyChunks'][j-1]['Chunk']))
-                            PrevChunkId = BodyFrame[i]['SplitedBodyChunks'][j-1]['ChunkId']
-                            PrevChunk = BodyFrame[i]['SplitedBodyChunks'][j-1]['Chunk']
-                            PrevSwitch = 1
-                        ChunkIds.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
-                        Chunks.append(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk'])
-                        CleanChunks += CleanChunk
-                        if CleanChunks == CleanPhrases:
-                            response['ChunkId'] = ChunkIds
-                            response['Chunk'] = Chunks
-                            PrevCleanChunk = ""
-                            PrevSwitch = 0
-                            found = True  # 플래그 변수 설정
-                            break  # 현재 루프 종료
-                        elif (CleanPhrases in (PrevCleanChunk + CleanChunks)) and (PrevCleanChunk not in CleanPhrases):
-                            response['ChunkId'] = [PrevChunkId] + ChunkIds
-                            response['Chunk'] = [PrevChunk] + Chunks
-                            PrevCleanChunk = ""
-                            PrevSwitch = 0
-                            found = True  # 플래그 변수 설정
-                            break  # 현재 루프 종료
-
-        # ChunkId가 연속적이지 않은 경우를 처리하는 로직
-        if isinstance(response['ChunkId'], list) and all(isinstance(x, int) for x in response['ChunkId']):
-            NonConsecutive = True
-            for i in range(1, len(response['ChunkId'])):
-                if response['ChunkId'][i] - response['ChunkId'][i - 1] == 1:
-                    NonConsecutive = False
-                    break
-
-            if NonConsecutive:
-                # print(response['ChunkId'])
-                fullChunkIdList = range(min(response['ChunkId']), max(response['ChunkId']) + 1)
-                missingChunkIds = [id for id in fullChunkIdList if id not in response['ChunkId']]
-
-                for missingId in missingChunkIds:
-                    for body in BodyFrame:
-                        for splitedChunk in body['SplitedBodyChunks']:
-                            if splitedChunk['ChunkId'] == missingId:
-                                response['ChunkId'].append(missingId)
-                                response['Chunk'].append(splitedChunk['Chunk'])
-                                break
-                            
-                # ChunkId에 따라 Chunk를 정렬
-                chunkIdChunkPairs = sorted(zip(response['ChunkId'], response['Chunk']))
-                response['ChunkId'], response['Chunk'] = map(list, zip(*chunkIdChunkPairs))
-    
-    # ChunkId의 순번대로 재배열
-    ResponseJson = sorted(responseJson, key = lambda x: x['ChunkId'][0] if isinstance(x['ChunkId'], list) else x['ChunkId'])
-
-    return ResponseJson
+    return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 ContextCompletion에 업데이트
 def ContextCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
@@ -440,13 +370,14 @@ def ContextCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "
                 ContextChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
                 Chunk = ResponseJson[i]["Chunk"]
-                Reader = ResponseJson[i]["Reader"]
-                Purpose = ResponseJson[i]["Purpose"]
-                Subject = ResponseJson[i]["Subject"]
-                Phrases = ResponseJson[i]["Phrases"]
-                Importance = ResponseJson[i]["Importance"]
+                Genre = ResponseJson[i]["Genre"]
+                Gender = ResponseJson[i]["Gender"]
+                Age = ResponseJson[i]["Age"]
+                Personality = ResponseJson[i]["Personality"]
+                Emotion = ResponseJson[i]["Emotion"]
+                Accuracy = ResponseJson[i]["Accuracy"]
                 
-                AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance)
+                AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy)
                 # i값 수동 업데이트
                 i += 1
             
@@ -468,6 +399,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    InputList = BodyFrameBodysToInputList(projectName, email, Task = "Context")
-    for input in InputList:
-        print(input)

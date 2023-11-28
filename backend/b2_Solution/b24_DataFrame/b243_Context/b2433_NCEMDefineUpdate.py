@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedCharacterDefineToDB, AddCharacterDefineChunksToDB, CharacterDefineCountLoad, CharacterDefineCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedNCEMDefineToDB, AddNCEMDefineChunksToDB, NCEMDefineCountLoad, NCEMDefineCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -19,8 +19,9 @@ def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
     BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
     BodyFrameBodys = project.BodyFrame[2]['Bodys'][1:]
+    ContextChunks =  project.ContextDefine[1]['ContextChunks'][1:]
     
-    return BodyFrameSplitedBodyScripts, BodyFrameBodys
+    return BodyFrameSplitedBodyScripts, BodyFrameBodys, ContextChunks
 
 ## inputList의 InputList 치환 (인덱스, 캡션 부분 합치기)
 def MergeInputList(inputList):
@@ -29,40 +30,40 @@ def MergeInputList(inputList):
     MergeIds = []
     NonMergeFound = False
 
-    for item in inputList:
-        if list(item.keys())[1] == 'Merge':
+    for INput in inputList:
+        if list(INput.keys())[1] == 'Merge':
             # 'Merge' 태그가 붙은 항목의 내용을 버퍼에 추가하고 ID를 MergeIds에 추가합니다.
-            MergeBuffer += list(item.values())[1]
-            MergeIds.append(item['Id'])
+            MergeBuffer += list(INput.values())[1]
+            MergeIds.append(INput['Id'])
         else:
             # 'Merge'가 아닌 태그가 발견된 경우
             NonMergeFound = True
             if MergeBuffer:
                 # 버퍼에 내용이 있으면 현재 항목과 합칩니다.
-                content = MergeBuffer + list(item.values())[1]
+                content = MergeBuffer + list(INput.values())[1]
                 # 'Id'는 MergeIds에 현재 항목의 'Id'를 추가하여 리스트로 만듭니다.
-                currentId = MergeIds + [item['Id']]
+                currentId = MergeIds + [INput['Id']]
                 # 합쳐진 내용과 'Id' 리스트를 가진 새 딕셔너리를 만듭니다.
-                mergedItem = {'Id': currentId, list(item.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
-                InputList.append(mergedItem)
+                mergedINput = {'Id': currentId, list(INput.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
+                InputList.append(mergedINput)
                 # 버퍼와 ID 리스트를 초기화합니다.
                 MergeBuffer = ''
                 MergeIds = []
             else:
                 # 버퍼가 비어 있으면 현재 항목을 결과 리스트에 그대로 추가합니다.
-                InputList.append(item)
+                InputList.append(INput)
     
     # 리스트의 끝에 도달했을 때 버퍼에 남아 있는 'Merge' 내용을 처리합니다.
     if MergeBuffer and not NonMergeFound:
         # 모든 항목이 'Merge'인 경우 마지막 항목만 처리합니다.
-        mergedItem = {'Id': MergeIds, list(item.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
-        InputList.append(mergedItem)
+        mergedINput = {'Id': MergeIds, list(INput.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
+        InputList.append(mergedINput)
 
     return InputList
 
 ## BodyFrameBodys의 inputList 치환
-def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
-    BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
+def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
+    BodyFrameSplitedBodyScripts, BodyFrameBodys, ContextChunks = LoadBodyFrameBodys(projectName, email)
     
     inputList = []
     for i in range(len(BodyFrameBodys)):
@@ -70,8 +71,15 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
         task = BodyFrameBodys[i]['Task']
         TaskBody = BodyFrameBodys[i][Task]
 
-        if Task in task:
+        if "Context" in task:
             Tag = 'Continue'
+            # 메모 기입
+            for j in range(len(ContextChunks)):
+                ContextMemoIndex = f"{{메모{ContextChunks[j]['ContextChunkId']}}}"
+                if ContextMemoIndex in TaskBody:
+                    ContextMemoBody = f"[메모{ContextChunks[j]['ContextChunkId']}] {{'예상독자': {ContextChunks[j]['Reader']}, '읽는목적': {ContextChunks[j]['Purpose']}, '키워드': {ContextChunks[j]['Subject']}}}"
+                    TaskBody = TaskBody.replace(ContextMemoIndex, ContextMemoBody)
+                    
         elif 'Body' not in task:
             Tag = 'Merge'
         else:
@@ -87,8 +95,8 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
 ######################
 ##### Filter 조건 #####
 ######################
-## CharacterDefine의 Filter(Error 예외처리)
-def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
+## NCEMDefine의 Filter(Error 예외처리)
+def NCEMDefineFilter(MemoTag, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -97,35 +105,30 @@ def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
-        return "JSONType에서 오류 발생: JSONTypeError"
-    # # Error3: 결과가 '말하는인물'이 '없음'일 때의 예외 처리 (없음일 경우에는 Narrator 낭독)
-    # for dic in OutputDic:
-    #     for key, value in dic.items():
-    #         if value['말하는인물'] == '없음' or value['말하는인물'] == '' or value['말하는인물'] == 'none':
-    #             return "'말하는인물': '없음' 오류 발생: NonValueError"
-    # Error4: 자료의 구조가 다를 때의 예외 처리
+        return "JSONType에서 오류 발생: JSONTypeError"  
+    # Error3: 자료의 구조가 다를 때의 예외 처리
     for dic in OutputDic:
         try:
             key = list(dic.keys())[0]
-            if not key in TalkTag:
+            if not key in MemoTag:
                 return "JSON에서 오류 발생: JSONKeyError"
             else:
-                if not ('말의종류' in dic[key] and '말하는인물' in dic[key] and '말하는인물의성별' in dic[key] and '말하는인물의나이' in dic[key] and '말하는인물의감정' in dic[key] and '인물의역할' in dic[key] and '듣는인물' in dic[key]):
+                if not ('분야' in dic[key] and '니즈' in dic[key] and '정보의질' in dic[key] and '마음상태' in dic[key] and '정확도' in dic[key]):
                     return "JSON에서 오류 발생: JSONKeyError"
-        # Error5: 자료의 형태가 Str일 때의 예외처리
+        # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
-    # Error6: Input과 Output의 개수가 다를 때의 예외처리
-    if len(OutputDic) != len(TalkTag):
-        return "JSONCount에서 오류 발생: JSONCountError"
-
+        # Error4: Input과 Output의 개수가 다를 때의 예외처리
+        if len(OutputDic) != len(MemoTag):
+            return f"JSONCount에서 오류 발생: JSONCountError, OutputDic: {len(OutputDic)}, MemoTag: {len(MemoTag)}"
+        
     return {'json': outputJson, 'filter': OutputDic}
 
 ######################
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def CharacterDefineInputMemory(inputMemoryDics, MemoryLength):
+def NCEMDefineInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -141,15 +144,15 @@ def CharacterDefineInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def CharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
+def NCEMDefineOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
-    for item in outputMemoryDic:
-        if isinstance(item, list):
-            OUTPUTmemoryDic.extend(item)
+    for INput in outputMemoryDic:
+        if isinstance(INput, list):
+            OUTPUTmemoryDic.extend(INput)
         else:
-            OUTPUTmemoryDic.append(item)
+            OUTPUTmemoryDic.append(INput)
     OUTPUTmemoryDic = [entry for entry in OUTPUTmemoryDic if entry != "Pass"]
     outputMemory = str(OUTPUTmemoryDic)
     outputMemory = outputMemory[:-1] + ", "
@@ -161,8 +164,8 @@ def CharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## CharacterDefine 프롬프트 요청 및 결과물 Json화
-def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## NCEMDefine 프롬프트 요청 및 결과물 Json화
+def NCEMDefineProcess(projectName, email, Process = "NCEMDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -178,7 +181,7 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
     outputMemoryDics = []
     outputMemory = []
         
-    # CharacterDefineProcess
+    # NCEMDefineProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -220,10 +223,14 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
                 Input = InputDic['Continue']
             
             # Filter, MemoryCounter, OutputEnder 처리
-            talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
-            TalkTag = ["말" + match for match in talkTag]
-            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
-            outputEnder = f"{{'{TalkTag[0]}': {{'말의종류': '"
+            if Mode == "Master" or Mode == "ExampleFineTuning":
+                memoTag = re.findall(r'\[중요문구(\d{1,5})\]', str(Input))
+            else:
+                memoTag = re.findall(r'\[중요문구(\d{1,5})\]', str(InputDic))
+            
+            MemoTag = ["예상독자" + match for match in memoTag]
+            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + ' -\n'
+            outputEnder = f"{{'예상독자"
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -242,20 +249,20 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
                     if Response.startswith(outputEnder):
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
-                    
-            Filter = CharacterDefineFilter(TalkTag, responseData, memoryCounter)
+                                
+            Filter = NCEMDefineFilter(MemoTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
                 continue
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -279,13 +286,13 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = CharacterDefineInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = NCEMDefineInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = CharacterDefineOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = NCEMDefineOutputMemory(outputMemoryDics, MemoryLength)
     
     return outputMemoryDics
 
@@ -294,100 +301,97 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
 ################################
     
 ## 데이터 치환
-def CharacterDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def NCEMDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
-    BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    CharacterTagChunk = []
-    CharacterTagChunkId = []
-    for i in range(len(BodyFrame)):
-        for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
-            if BodyFrame[i]['SplitedBodyChunks'][j]['Tag'] == "Character":
-                CharacterTagChunk.append(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk'])
-                CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
+    ContextDefine = project.ContextDefine[1]['ContextChunks'][1:]
     
     # 데이터 치환
-    outputMemoryDics = CharacterDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = NCEMDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    
+    ##### 테스트 후 삭제 #####
+    filePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_웹3.0메타버스_09_outputMemoryDics_231127.json"
+    with open(filePath, "w", encoding = 'utf-8') as file:
+        json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+        
+    with open(filePath, "r", encoding='utf-8') as file:
+        outputMemoryDics = json.load(file)
+    ##### 테스트 후 삭제 #####
     
     responseJson = []
-    responseCount = 0
-    
+    ContextDefineCount = 0
     for response in outputMemoryDics:
         if response != "Pass":
             for dic in response:
-                ChunkId = CharacterTagChunkId[responseCount]
-                Chunk = CharacterTagChunk[responseCount]
                 for key, value in dic.items():
-                    Character = value['말하는인물']
-                    Type = value['말의종류']
-                    Gender = value['말하는인물의성별']
-                    Age = value['말하는인물의나이']
-                    Emotion = value['말하는인물의감정']
-                    Role = value['인물의역할']
-                    Listener = value['듣는인물']
-                responseCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "Type": Type, "Gender": Gender, "Age": Age, "Emotion": Emotion, "Role": Role, "Listener": Listener})
-    
+                    ChunkId = ContextDefine[ContextDefineCount]['ChunkId']
+                    Chunk = ContextDefine[ContextDefineCount]['Chunk']
+                    Domain = value['분야']
+                    Needs = value['니즈']
+                    CVC = value['정보의질']
+                    PotentialEnergy = value['마음상태']
+                    Accuracy = value['정확도']
+                    ContextDefineCount += 1
+                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Domain": Domain, "Needs": Needs, "CVC": CVC, "PotentialEnergy": PotentialEnergy, "Accuracy": Accuracy})
+
     return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 CharacterDefine에 업데이트
-def CharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 11_CharacterDefineUpdate 시작 >")
+## 프롬프트 요청 및 결과물 Json을 NCEMDefine에 업데이트
+def NCEMDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 09_NCEMDefineUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
-    ContinueCount, CharacterCount, Completion = CharacterDefineCountLoad(projectName, email)
+    ContinueCount, NCEMCount, Completion = NCEMDefineCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CharacterDefine", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate는 ExistedCharacterDefine으로 대처됨 ]\n")
+            AddExistedNCEMDefineToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "NCEMDefine", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 09_NCEMDefineUpdate는 ExistedNCEMDefine으로 대처됨 ]\n")
         else:
-            responseJson = CharacterDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = NCEMDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
             
-            CharacterChunkId = ContinueCount
+            NCEMChunkId = ContinueCount
             
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'CharacterDefineUpdate')
+                            desc = 'NCEMDefineUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'CharacterDefineUpdate: {Update}')
+                UpdateTQDM.set_description(f'NCEMDefineUpdate: {Update}')
                 time.sleep(0.0001)
-                CharacterChunkId += 1
+                NCEMChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
                 Chunk = ResponseJson[i]["Chunk"]
-                Character = ResponseJson[i]["Character"]
-                Type = ResponseJson[i]["Type"]
-                Gender = ResponseJson[i]["Gender"]
-                Age = ResponseJson[i]["Age"]
-                Emotion = ResponseJson[i]["Emotion"]
-                Role = ResponseJson[i]["Role"]
-                Listener = ResponseJson[i]["Listener"]
+                Domain = ResponseJson[i]["Domain"]
+                Needs = ResponseJson[i]["Needs"]
+                CVC = ResponseJson[i]["CVC"]
+                PotentialEnergy = ResponseJson[i]["PotentialEnergy"]
+                Accuracy = ResponseJson[i]["Accuracy"]
                 
-                AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
+                AddNCEMDefineChunksToDB(projectName, email, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            CharacterDefineCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate 완료 ]\n")
+            NCEMDefineCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 09_NCEMDefineUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 09_NCEMDefineUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "데미안"
+    projectName = "웹3.0메타버스"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"

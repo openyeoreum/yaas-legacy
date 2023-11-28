@@ -194,7 +194,7 @@ def AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
         db.commit()
         
 ## 2. 3-1 BodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
-def UpdateBodys(project, ChunkIds, Task, Body, Character, Context = "None"):
+def UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = "None"):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.BodyFrame[2]["Bodys"])
     
@@ -203,6 +203,7 @@ def UpdateBodys(project, ChunkIds, Task, Body, Character, Context = "None"):
         "ChunkId": ChunkIds,
         "Task": Task,
         "Body": Body,
+        "Correction": Correction,
         "Character": Character,
         "Context": Context
     }
@@ -210,11 +211,11 @@ def UpdateBodys(project, ChunkIds, Task, Body, Character, Context = "None"):
     project.BodyFrame[2]["Bodys"].append(updateBodys)
     
 ## 2. 3-2 BodyFrame의 Bodys(부문) Bodys부분 업데이트
-def AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Character, context = "None"):
+def AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character, context = "None"):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateBodys(project, ChunkIds, Task, Body, Character, Context = context)
+        UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = context)
         
         flag_modified(project, "BodyFrame")
         
@@ -891,6 +892,119 @@ def CharacterCompletionCompletionUpdate(projectName, email):
         project.CharacterCompletion[0]["Completion"] = "Yes"
 
         flag_modified(project, "CharacterCompletion")
+
+        db.add(project)
+        db.commit()
+
+
+###################################
+##### 26_CorrectionKo Process #####
+###################################
+## 26. 1-0 CorrectionKo이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.CorrectionKo[1] = ExistedDataFrame[1]
+        
+        flag_modified(project, "CorrectionKo")
+        
+        db.add(project)
+        db.commit()
+        
+## 26. 1-1 CorrectionKo의 Body(본문) CharacterCompeletions 업데이트 형식
+def UpdateCorrectionKoSplitedBodys(project):
+    BodyId = len(project.CorrectionKo[1]["CorrectionKoSplitedBodys"])
+    
+    updateCorrectionKoSplitedBodys = {
+        "BodyId": BodyId,
+        "CorrectionKoSplitedBodyChunks": []
+    }
+    
+    project.CorrectionKo[1]["CorrectionKoSplitedBodys"].append(updateCorrectionKoSplitedBodys)
+    project.CorrectionKo[0]["BodyCount"] = BodyId
+    
+## 26. 1-2 CorrectionKo의 Body(본문) CharacterCompeletions 업데이트
+def AddCorrectionKoChunksToDB(projectName, email):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateCompeletionCharacters(project)
+        
+        flag_modified(project, "CorrectionKo")
+        
+        db.add(project)
+        db.commit()
+        
+## 26. 2-1 CorrectionKo의 Body(본문) BodyChunks 업데이트 형식
+def UpdateCorrectionKoSplitedBodyChunks(project, ChunkId, ChunkTokens):
+    # 새롭게 생성되는 BodyId는 CorrectionKoSplitedBodys의 Len값과 동일
+    BodyId = len(project.CorrectionKo[1]["CorrectionKoSplitedBodys"]) -1
+    
+    updateCorrectionKoSplitedBodyChunks = {
+        "ChunkId": ChunkId,
+        "CorrectionKoSplitedBodyChunkTokens": ChunkTokens
+    }
+    
+    project.CorrectionKo[1]["CorrectionKoSplitedBodys"][BodyId]["CorrectionKoSplitedBodyChunks"].append(updateCorrectionKoSplitedBodyChunks)
+    project.CorrectionKo[0]["BodyCount"] = BodyId
+    # Count 업데이트
+    project.CorrectionKo[0]["ChunkCount"] = ChunkId
+    
+## 26. 2-2 CorrectionKo의 Body(본문) CharacterCompeletions 업데이트
+def AddCorrectionKoChunksToDB(projectName, email, ChunkId, ChunkTokens):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateCorrectionKoSplitedBodyChunks(project, ChunkId, ChunkTokens)
+        
+        flag_modified(project, "CorrectionKo")
+        
+        db.add(project)
+        db.commit()
+        
+## 26. CorrectionKo의Count의 가져오기
+def CorrectionKoCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    BodyCount = project.CorrectionKo[0]["BodyCount"]
+    ChunkCount = project.CorrectionKo[0]["ChunkCount"]
+    Completion = project.CorrectionKo[0]["Completion"]
+    
+    return BodyCount, ChunkCount, Completion
+
+## 26. CorrectionKo의 초기화
+def InitCorrectionKo(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.CorrectionKo[0]["BodyCount"] = 0
+        project.CorrectionKo[0]["ChunkCount"] = 0
+        project.CorrectionKo[0]["Completion"] = "No"
+        project.CorrectionKo[1] = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-01_CorrectionKo.json")[1]
+
+        flag_modified(project, "CorrectionKo")
+        
+        db.add(project)
+        db.commit()
+        
+## 26. 업데이트된 CorrectionKo 출력
+def UpdatedCorrectionKo(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        
+    return project.CorrectionKo
+        
+## 26. CorrectionKoCompletion 업데이트
+def CorrectionKoCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.CorrectionKo[0]["Completion"] = "Yes"
+
+        flag_modified(project, "CorrectionKo")
 
         db.add(project)
         db.commit()

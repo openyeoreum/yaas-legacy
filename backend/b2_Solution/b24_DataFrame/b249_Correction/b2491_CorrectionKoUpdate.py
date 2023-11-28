@@ -1,14 +1,17 @@
 import os
 import re
+import ast
 import json
 import time
 import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
+from sqlalchemy.orm.attributes import flag_modified
+from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedCharacterDefineToDB, AddCharacterDefineChunksToDB, CharacterDefineCountLoad, CharacterDefineCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedCorrectionKoToDB, AddCorrectionKoChunksToDB, CorrectionKoCountLoad, CorrectionKoCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -27,6 +30,7 @@ def MergeInputList(inputList):
     InputList = []
     MergeBuffer = ''
     MergeIds = []
+    MergeChunkIds = []
     NonMergeFound = False
 
     for item in inputList:
@@ -61,14 +65,14 @@ def MergeInputList(inputList):
     return InputList
 
 ## BodyFrameBodys의 inputList 치환
-def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
+def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     
     inputList = []
     for i in range(len(BodyFrameBodys)):
         Id = BodyFrameBodys[i]['BodyId']
         task = BodyFrameBodys[i]['Task']
-        TaskBody = BodyFrameBodys[i][Task]
+        TaskBody = BodyFrameBodys[i]['Correction']
 
         if Task in task:
             Tag = 'Continue'
@@ -81,51 +85,55 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
         inputList.append(InputDic)
         
     InputList = MergeInputList(inputList)
+    
+    # ChunkIdList 형성
+    InputChunkIdList = []
+    for Input in InputList:
+        InputChunkIds = []
+
+        # 'Id'가 리스트인지 확인
+        if isinstance(Input['Id'], list):
+            for Id in Input['Id']:
+                InputChunkIds += BodyFrameBodys[Id - 1]['ChunkId']
+        else:
+            # 'Id'가 단일 정수인 경우
+            Id = Input['Id']
+            InputChunkIds += BodyFrameBodys[Id - 1]['ChunkId']
+
+        InputChunkIdList.append(InputChunkIds)
         
-    return InputList
+    return InputList, InputChunkIdList
 
 ######################
 ##### Filter 조건 #####
 ######################
-## CharacterDefine의 Filter(Error 예외처리)
-def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
+## CorrectionKo의 Filter(Error 예외처리)
+def CorrectionKoFilter(Input, responseData, InputChunkId):
+    responseData = responseData.replace('<끊어읽기보정_list.json>', '')
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
-        outputJson = json.loads(responseData)
-        OutputDic = [{key: value} for key, value in outputJson.items()]
-    except json.JSONDecodeError:
-        return "JSONDecode에서 오류 발생: JSONDecodeError"
+        OutputDic = ast.literal_eval(responseData)
+    except SyntaxError:
+        return "ast.literal_eval에서 오류 발생: SyntaxError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
-        return "JSONType에서 오류 발생: JSONTypeError"
-    # # Error3: 결과가 '말하는인물'이 '없음'일 때의 예외 처리 (없음일 경우에는 Narrator 낭독)
-    # for dic in OutputDic:
-    #     for key, value in dic.items():
-    #         if value['말하는인물'] == '없음' or value['말하는인물'] == '' or value['말하는인물'] == 'none':
-    #             return "'말하는인물': '없음' 오류 발생: NonValueError"
-    # Error4: 자료의 구조가 다를 때의 예외 처리
-    for dic in OutputDic:
-        try:
-            key = list(dic.keys())[0]
-            if not key in TalkTag:
-                return "JSON에서 오류 발생: JSONKeyError"
-            else:
-                if not ('말의종류' in dic[key] and '말하는인물' in dic[key] and '말하는인물의성별' in dic[key] and '말하는인물의나이' in dic[key] and '말하는인물의감정' in dic[key] and '인물의역할' in dic[key] and '듣는인물' in dic[key]):
-                    return "JSON에서 오류 발생: JSONKeyError"
-        # Error5: 자료의 형태가 Str일 때의 예외처리
-        except AttributeError:
-            return "JSON에서 오류 발생: strJSONError"
-    # Error6: Input과 Output의 개수가 다를 때의 예외처리
-    if len(OutputDic) != len(TalkTag):
-        return "JSONCount에서 오류 발생: JSONCountError"
-
-    return {'json': outputJson, 'filter': OutputDic}
+        return "JSONType에서 오류 발생: JSONTypeError"  
+    # Error3: INPUT, OUTPUT 불일치시 예외 처리
+    INPUT = re.sub("[^가-힣]", "", str(Input))
+    OUTPUT = re.sub("[^가-힣]", "", str(responseData))
+    if INPUT != OUTPUT:
+        return f"INPUT, OUTPUT 불일치 오류 발생: INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})"  
+    # # Error4: INPUT과 OUTPUT의 수가 다를 때의 예외 처리
+    # if len(OutputDic) != len(InputChunkId):
+    #     return f"INPUT, OUTPUT의 자료수 불일치 오류 발생: INPUT({len(OutputDic)}), OUTPUT({len(InputChunkId)})"  
+        
+    return {'json': OutputDic, 'filter': OutputDic}
 
 ######################
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def CharacterDefineInputMemory(inputMemoryDics, MemoryLength):
+def CorrectionKoInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -141,7 +149,7 @@ def CharacterDefineInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def CharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
+def CorrectionKoOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -161,12 +169,12 @@ def CharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## CharacterDefine 프롬프트 요청 및 결과물 Json화
-def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## CorrectionKo 프롬프트 요청 및 결과물 Json화
+def CorrectionKoProcess(projectName, email, Process = "CorrectionKo", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    InputList = BodyFrameBodysToInputList(projectName, email)
+    InputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
@@ -174,11 +182,12 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
     inputMemoryDics = []
     inputMemory = []
     InputDic = InputList[0]
+    InputChunkId = inputChunkIdList[0]
     inputMemoryDics.append(InputDic)
     outputMemoryDics = []
     outputMemory = []
         
-    # CharacterDefineProcess
+    # CorrectionKoProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -193,41 +202,26 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
                 ContinueCount += 1
             if ContinueCount == 1:
                 mode = "ExampleFineTuning"
-                # "ExampleFineTuning"의 fineTuningMemory 형성
-                FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
             else:
                 mode = "MemoryFineTuning"
         # Example 계열 모드의 순서
         elif Mode == "Master":
             mode = "Master"
-            # "Master"의 MasterMemory 형성
-            MasterMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
         elif Mode == "ExampleFineTuning":
             mode = "ExampleFineTuning"
-            # "ExampleFineTuning"의 fineTuningMemory 형성
-            FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
         elif Mode == "Example":
             mode = "Example"
             
         if "Continue" in InputDic:
-            if Mode == "Master":
-                Keys = list(MasterMemory.keys())
-                Input = MasterMemory[Keys[1]] + InputDic['Continue']
-            elif Mode == "ExampleFineTuning":
-                Keys = list(FineTuningMemory.keys())
-                Input = FineTuningMemory[Keys[1]] + InputDic['Continue']
-            else:
-                Input = InputDic['Continue']
+            Input = InputDic['Continue']
             
             # Filter, MemoryCounter, OutputEnder 처리
-            talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
-            TalkTag = ["말" + match for match in talkTag]
-            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
-            outputEnder = f"{{'{TalkTag[0]}': {{'말의종류': '"
-
+            memoryCounter = "\n"
+            outputEnder = ""
+            
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
-            
+
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
             if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -242,20 +236,20 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
                     if Response.startswith(outputEnder):
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
-                    
-            Filter = CharacterDefineFilter(TalkTag, responseData, memoryCounter)
+         
+            Filter = CorrectionKoFilter(Input, responseData, InputChunkId)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
                 continue
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -278,116 +272,91 @@ def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memo
         # inputMemory 형성
         try:
             InputDic = InputList[TotalCount]
+            InputChunkId = inputChunkIdList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = CharacterDefineInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = CorrectionKoInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = CharacterDefineOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = CorrectionKoOutputMemory(outputMemoryDics, MemoryLength)
     
     return outputMemoryDics
 
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
-    
 ## 데이터 치환
-def CharacterDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    CharacterTagChunk = []
-    CharacterTagChunkId = []
-    for i in range(len(BodyFrame)):
-        for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
-            if BodyFrame[i]['SplitedBodyChunks'][j]['Tag'] == "Character":
-                CharacterTagChunk.append(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk'])
-                CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
     
     # 데이터 치환
-    outputMemoryDics = CharacterDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = CorrectionKoProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
-    responseCount = 0
-    
-    for response in outputMemoryDics:
-        if response != "Pass":
-            for dic in response:
-                ChunkId = CharacterTagChunkId[responseCount]
-                Chunk = CharacterTagChunk[responseCount]
-                for key, value in dic.items():
-                    Character = value['말하는인물']
-                    Type = value['말의종류']
-                    Gender = value['말하는인물의성별']
-                    Age = value['말하는인물의나이']
-                    Emotion = value['말하는인물의감정']
-                    Role = value['인물의역할']
-                    Listener = value['듣는인물']
-                responseCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "Type": Type, "Gender": Gender, "Age": Age, "Emotion": Emotion, "Role": Role, "Listener": Listener})
-    
+
     return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 CharacterDefine에 업데이트
-def CharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 11_CharacterDefineUpdate 시작 >")
+## 프롬프트 요청 및 결과물 Json을 CorrectionKo에 업데이트
+def CorrectionKoUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 26_CorrectionKoUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
-    ContinueCount, CharacterCount, Completion = CharacterDefineCountLoad(projectName, email)
+    ContinueCount, ContextCount, Completion = CorrectionKoCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CharacterDefine", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate는 ExistedCharacterDefine으로 대처됨 ]\n")
+            AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "CorrectionKo", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate는 ExistedCorrectionKo으로 대처됨 ]\n")
         else:
-            responseJson = CharacterDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = CorrectionKoResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
             
-            CharacterChunkId = ContinueCount
+            ContextChunkId = ContinueCount
             
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'CharacterDefineUpdate')
+                            desc = 'CorrectionKoUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'CharacterDefineUpdate: {Update}')
+                UpdateTQDM.set_description(f'CorrectionKoUpdate: {Update}')
                 time.sleep(0.0001)
-                CharacterChunkId += 1
+                ContextChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
                 Chunk = ResponseJson[i]["Chunk"]
-                Character = ResponseJson[i]["Character"]
-                Type = ResponseJson[i]["Type"]
-                Gender = ResponseJson[i]["Gender"]
-                Age = ResponseJson[i]["Age"]
-                Emotion = ResponseJson[i]["Emotion"]
-                Role = ResponseJson[i]["Role"]
-                Listener = ResponseJson[i]["Listener"]
+                Reader = ResponseJson[i]["Reader"]
+                Purpose = ResponseJson[i]["Purpose"]
+                Subject = ResponseJson[i]["Subject"]
+                Phrases = ResponseJson[i]["Phrases"]
+                Importance = ResponseJson[i]["Importance"]
                 
-                AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
+                AddCorrectionKoChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            CharacterDefineCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate 완료 ]\n")
+            CorrectionKoCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate는 이미 완료됨 ]\n")
-        
+        print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate는 이미 완료됨 ]\n")
+    
+    
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "데미안"
+    projectName = "우리는행복을진단한다"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"

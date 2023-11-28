@@ -337,17 +337,17 @@ def IndexMatching(projectName, email):
                 # print(IndexFrame[indexid]["Index"])
                 if indexid < len(IndexFrame)-1:
                     indexid += 1
-    
+
     # 아주 가끔 빈 인덱스가 생성되는 경우 제거
     if '' in nonMatchingIndexList:
         nonMatchingIndexList.remove('')
-                
+
     # 치환된 표현들 복구
     RestoreElements = [
         ('|', '"'), ('_', '.'),
         ('∥', '"'), ('○', '*'), ('●', '.')
         ]
-    
+
     for i, chunk in enumerate(IndexMatchedChunks):
         tagChunks = chunk["TagChunks"]
         for old, new in RestoreElements:
@@ -490,8 +490,12 @@ def SplitedBodyScriptsToBodys(projectName, email):
             task.append("Body")
             if "Character" in Tags:
                 task.append("Character")
-                
-        Bodys.append({'BodyId': idx + 1, 'ChunkId': ChunkIds, 'Task': task, 'Body': "".join(BodyChunks),
+        
+        # Body, Correction 추출
+        BODY = "".join(BodyChunks)
+        CORRECTION = "".join(BodyChunks)
+        
+        Bodys.append({'BodyId': idx + 1, 'ChunkId': ChunkIds, 'Task': task, 'Body': BODY, 'Correction': CORRECTION,
                       'Character': "".join(CharacterChunks).replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')})
         bodys.append({'BodyId': idx + 1, 'ChunkId': ChunkIds, 'Task': task, 'Body': "".join(BodyChunks)}) # 에러 테스트용도
         Tags = []
@@ -534,9 +538,10 @@ def BodyFrameBodysUpdate(projectName, email):
         ChunkIds = Bodys[i]['ChunkId']
         Task = Bodys[i]['Task']
         Body = Bodys[i]['Body']
+        Correction = Bodys[i]['Correction']
         Character = Bodys[i]['Character']
         
-        AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Character)
+        AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character)
         # i값 수동 업데이트
         i += 1
 

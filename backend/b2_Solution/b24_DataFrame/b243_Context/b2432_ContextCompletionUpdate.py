@@ -44,7 +44,7 @@ def MergeInputList(inputList):
                 # 'Id'는 MergeIds에 현재 항목의 'Id'를 추가하여 리스트로 만듭니다.
                 currentId = MergeIds + [INput['Id']]
                 # 합쳐진 내용과 'Id' 리스트를 가진 새 딕셔너리를 만듭니다.
-                mergedINput = { 'Id': currentId, list(INput.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
+                mergedINput = {'Id': currentId, list(INput.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
                 InputList.append(mergedINput)
                 # 버퍼와 ID 리스트를 초기화합니다.
                 MergeBuffer = ''
@@ -56,7 +56,7 @@ def MergeInputList(inputList):
     # 리스트의 끝에 도달했을 때 버퍼에 남아 있는 'Merge' 내용을 처리합니다.
     if MergeBuffer and not NonMergeFound:
         # 모든 항목이 'Merge'인 경우 마지막 항목만 처리합니다.
-        mergedINput = { 'Id': MergeIds, list(INput.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
+        mergedINput = {'Id': MergeIds, list(INput.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
         InputList.append(mergedINput)
 
     return InputList
@@ -306,18 +306,9 @@ def ContextCompletionResponseJson(projectName, email, messagesReview = 'off', mo
     project = GetProject(projectName, email)
     ContextDefine = project.ContextDefine[1]['ContextChunks'][1:]
     
-    # # 데이터 치환
-    # outputMemoryDics = ContextCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
-    
-    ##### 테스트 후 삭제 #####
-    filePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_웹3.0메타버스_08_outputMemoryDics_231127.json"
-    # with open(filePath, "w", encoding = 'utf-8') as file:
-    #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+    # 데이터 치환
+    outputMemoryDics = ContextCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
         
-    with open(filePath, "r", encoding='utf-8') as file:
-        outputMemoryDics = json.load(file)
-    ##### 테스트 후 삭제 #####
-    
     responseJson = []
     ContextDefineCount = 0
     for response in outputMemoryDics:

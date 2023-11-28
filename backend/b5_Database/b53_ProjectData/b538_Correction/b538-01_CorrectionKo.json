@@ -7,7 +7,9 @@
         "Content": "Body",
         "Language": "Ko",
         "TaskName": "CorrectionKo",
-        "TaskCount": 0
+        "BodyCount": 0,
+        "ChunkCount": 0,
+        "Completion": "No"
     },
     {
         "CorrectionKoSplitedBodys": [

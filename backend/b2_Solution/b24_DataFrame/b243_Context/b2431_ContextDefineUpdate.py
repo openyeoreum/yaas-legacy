@@ -46,7 +46,7 @@ def MergeInputList(inputList):
                 # 'Id'는 MergeIds에 현재 항목의 'Id'를 추가하여 리스트로 만듭니다.
                 currentId = MergeIds + [item['Id']]
                 # 합쳐진 내용과 'Id' 리스트를 가진 새 딕셔너리를 만듭니다.
-                mergedItem = { 'Id': currentId, list(item.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
+                mergedItem = {'Id': currentId, list(item.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
                 InputList.append(mergedItem)
                 # 버퍼와 ID 리스트를 초기화합니다.
                 MergeBuffer = ''
@@ -58,7 +58,7 @@ def MergeInputList(inputList):
     # 리스트의 끝에 도달했을 때 버퍼에 남아 있는 'Merge' 내용을 처리합니다.
     if MergeBuffer and not NonMergeFound:
         # 모든 항목이 'Merge'인 경우 마지막 항목만 처리합니다.
-        mergedItem = { 'Id': MergeIds, list(item.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
+        mergedItem = {'Id': MergeIds, list(item.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
         InputList.append(mergedItem)
 
     return InputList
@@ -79,8 +79,6 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
             Tag = 'Merge'
         else:
             Tag = 'Pass'
-            print(f'Pass Task: {task}')
-            print(f'Pass TaskBody: {TaskBody}')
             
         InputDic = {'Id': Id, Tag: TaskBody}
         inputList.append(InputDic)

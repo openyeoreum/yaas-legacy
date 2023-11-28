@@ -324,7 +324,9 @@ def IndexMatching(projectName, email):
                 if indexTag in BigIndexList:
                     if re.search(r'(\d)부', chunk["TagChunks"]) or re.search(r'(\d) 부', chunk["TagChunks"]):
                         tagChunk = re.sub(r'(\d)부', r'\1부,', tagChunk)
+                        tagChunk = re.sub(r'(\d)부,.', r'\1부,', tagChunk)
                         tagChunk = re.sub(r'(\d) 부', r'\1 부,', tagChunk)
+                        tagChunk = re.sub(r'(\d) 부,.', r'\1 부,', tagChunk)
                         indexTag = "Part"
                     if re.search(r'(\d)장', chunk["TagChunks"]) or re.search(r'(\d) 장', chunk["TagChunks"]):
                         tagChunk = re.sub(r'(\d)장', r'\1장,', chunk["TagChunks"])
@@ -335,7 +337,7 @@ def IndexMatching(projectName, email):
                 nonMatchingIndexList.remove(IndexFrame[indexid]["Index"])
                 # print(indexid)
                 # print(IndexFrame[indexid]["Index"])
-                if indexid < len(IndexFrame)-1:
+                if indexid < len(IndexFrame) - 1:
                     indexid += 1
 
     # 아주 가끔 빈 인덱스가 생성되는 경우 제거

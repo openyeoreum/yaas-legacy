@@ -270,6 +270,158 @@ def BodyFrameCompletionUpdate(projectName, email):
 
         db.add(project)
         db.commit()
+        
+
+##################################################
+##### 02_HalfBodySplit, IndexTagging Process #####
+##################################################
+## 2. 1-0 HalfBodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedHalfBodyFrameToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.HalfBodyFrame[1] = ExistedDataFrame[1]
+        project.HalfBodyFrame[2] = ExistedDataFrame[2]
+        
+        flag_modified(project, "HalfBodyFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 2. 1-2 HalfBodyFrame의 Body(본문) Body부분 업데이트 형식
+def UpdateSplitedHalfBodyScripts(project, IndexId, IndexTag, Index):
+    # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
+    BodyId = len(project.HalfBodyFrame[1]["SplitedBodyScripts"])
+    
+    updateSplitedBodyScripts = {
+        "IndexId": IndexId,
+        "IndexTag": IndexTag,
+        "Index": Index,
+        "BodyId": BodyId,
+        "SplitedBodyChunks": []
+    }
+    
+    project.HalfBodyFrame[1]["SplitedBodyScripts"].append(updateSplitedBodyScripts)
+    # Count 업데이트
+    project.HalfBodyFrame[0]["IndexCount"] = IndexId
+    project.HalfBodyFrame[0]["BodyCount"] = BodyId
+
+## 2. 1-3 HalfBodyFrame의 Body(본문) Body부분 업데이트
+def AddHalfBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateSplitedHalfBodyScripts(project, IndexId, IndexTag, Index)
+        
+        flag_modified(project, "HalfBodyFrame")
+        
+        db.add(project)
+        db.commit()
+
+## 2. 2-1 HalfBodyFrame의 Body(본문) TagChunks부분 업데이트 형식
+def UpdateSplitedHalfBodyTagChunks(project, ChunkId, Tag, Chunk):
+    # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
+    BodyId = len(project.HalfBodyFrame[1]["SplitedBodyScripts"]) -1
+    
+    updateSplitedBodyChunks = {
+        "ChunkId": ChunkId,
+        "Tag": Tag,
+        "Chunk":Chunk
+    }
+    
+    project.HalfBodyFrame[1]["SplitedBodyScripts"][BodyId]["SplitedBodyChunks"].append(updateSplitedBodyChunks)
+    # Count 업데이트
+    project.HalfBodyFrame[0]["ChunkCount"] = ChunkId
+
+## 2. 2-2 HalfBodyFrame의 Body(본문) TagChunks부분 업데이트
+def AddHalfBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateSplitedHalfBodyTagChunks(project, ChunkId, Tag, Chunk)
+        
+        flag_modified(project, "HalfBodyFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 2. 3-1 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
+def UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Context = "None"):
+    # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
+    BodyId = len(project.HalfBodyFrame[2]["Bodys"])
+    
+    updateBodys = {
+        "BodyId": BodyId,
+        "ChunkId": ChunkIds,
+        "Task": Task,
+        "Body": Body,
+        "Correction": Correction,
+        "Character": Character,
+        "Context": Context
+    }
+    
+    project.HalfBodyFrame[2]["Bodys"].append(updateBodys)
+    
+## 2. 3-2 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트
+def AddHalfBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character, context = "None"):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Context = context)
+        
+        flag_modified(project, "HalfBodyFrame")
+        
+        db.add(project)
+        db.commit()
+                
+## 2. HalfBodyFrame의Count의 가져오기
+def HalfBodyFrameCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    IndexCount = project.HalfBodyFrame[0]["IndexCount"]
+    BodyCount = project.HalfBodyFrame[0]["BodyCount"]
+    ChunkCount = project.HalfBodyFrame[0]["ChunkCount"]
+    Completion = project.HalfBodyFrame[0]["Completion"]
+    
+    return IndexCount, BodyCount, ChunkCount, Completion
+
+## 2. HalfBodyFrame의 초기화
+def InitHalfBodyFrame(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.HalfBodyFrame[0]["IndexCount"] = 0
+        project.HalfBodyFrame[0]["BodyCount"] = 0
+        project.HalfBodyFrame[0]["ChunkCount"] = 0
+        project.HalfBodyFrame[0]["Completion"] = "No"
+        project.HalfBodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")[1]
+        project.HalfBodyFrame[2] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")[2]
+        
+        flag_modified(project, "HalfBodyFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 2. 업데이트된 HalfBodyFrame 출력
+def UpdatedHalfBodyFrame(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+
+    return project.HalfBodyFrame
+
+## 2. HalfBodyFrameCompletion 업데이트
+def HalfBodyFrameCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.HalfBodyFrame[0]["Completion"] = "Yes"
+
+        flag_modified(project, "HalfBodyFrame")
+
+        db.add(project)
+        db.commit()
 
 
 ##################################

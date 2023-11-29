@@ -20,8 +20,8 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    BodyFrameBodys = project.BodyFrame[2]['Bodys'][1:]
+    BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
+    BodyFrameBodys = project.HalfBodyFrame[2]['Bodys'][1:]
     
     return BodyFrameSplitedBodyScripts, BodyFrameBodys
 
@@ -30,7 +30,6 @@ def MergeInputList(inputList):
     InputList = []
     MergeBuffer = ''
     MergeIds = []
-    MergeChunkIds = []
     NonMergeFound = False
 
     for item in inputList:
@@ -107,9 +106,79 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
 ######################
 ##### Filter 조건 #####
 ######################
+## DiffINPUT과 DiffOUTPUT의 공통부분을 찾고 아닌 앞부분 출력
+def CommonSubstring(INPUT, OUTPUT):
+  m = [[0] * (1 + len(OUTPUT)) for i in range(1 + len(INPUT))]
+  longest, x_longest = 0, 0
+  for x in range(1, 1 + len(INPUT)):
+      for y in range(1, 1 + len(OUTPUT)):
+          if INPUT[x - 1] == OUTPUT[y - 1]:
+              m[x][y] = m[x - 1][y - 1] + 1
+              if m[x][y] > longest:
+                  longest = m[x][y]
+                  x_longest = x
+          else:
+              m[x][y] = 0
+
+  return INPUT[x_longest - longest: x_longest]
+
+## DiffINPUT과 DiffOUTPUT의 공통부분을 찾고 아닌 앞부분 출력
+def CommonPart(DiffINPUT, DiffOUTPUT, commonSubstring):
+  nonCommonPartInput = DiffINPUT.split(commonSubstring)[0] if commonSubstring in DiffINPUT else ''
+  nonCommonPartOutput = DiffOUTPUT.split(commonSubstring)[0] if commonSubstring in DiffOUTPUT else ''
+
+  return nonCommonPartInput, nonCommonPartOutput
+
+## DiffINPUT과 DiffOUTPUT의 공통부분을 찾고 아닌 앞부분 출력
+def DiffOutputDic(Input, OutputDic):
+  INPUT = re.sub(r'[^가-힣]', '', str(Input))
+  INPUT = INPUT + "이문구는인풋과아웃풋을비교하는반복문에서인덱스오류방지용입니다"
+  OUTPUT = re.sub(r'[^가-힣]', '', str(OutputDic))
+  OUTPUT = OUTPUT + "이문구는인풋과아웃풋을비교하는반복문에서인덱스오류방지용입니다"
+
+  nonCommonPartList = []
+  try:
+    for i in range(len(INPUT)):
+      if INPUT[i] != OUTPUT[i]:
+        DiffINPUT = INPUT[i:i+10]
+        DiffOUTPUT = OUTPUT[i:i+10]
+
+        commonSubstring = CommonSubstring(DiffINPUT, DiffOUTPUT)
+        nonCommonPartInput, nonCommonPartOutput = CommonPart(DiffINPUT, DiffOUTPUT, commonSubstring)
+        nonCommonPartList.append({'INPUT': nonCommonPartInput, 'OUTPUT': nonCommonPartOutput})
+
+        if len(nonCommonPartInput) == len(nonCommonPartOutput):
+          nonCommonPartInputNum = 0
+          nonCommonPartOutput = 0
+        else:
+          nonCommonPartInputNum = len(nonCommonPartInput)
+          nonCommonPartOutput = len(nonCommonPartOutput)
+        commonSubstringINPUT = DiffINPUT.replace(DiffINPUT, commonSubstring)
+        INPUT = INPUT[:i] + commonSubstringINPUT + INPUT[i + 10 - nonCommonPartOutput:]
+        commonSubstringOUTPUT = DiffOUTPUT.replace(DiffOUTPUT, commonSubstring)
+        OUTPUT = OUTPUT[:i] + commonSubstringOUTPUT + OUTPUT[i + 10 - nonCommonPartInputNum:]
+  except IndexError:
+      pass
+
+  # Input과 OutputDic의 차이를 %로 환산
+  INPUTnonCommonPartCount = 0
+  OUTPUTnonCommonPartCount = 0
+  for nonCommonPart in nonCommonPartList:
+    INPUTnonCommonPartCount += len(nonCommonPart['INPUT'])
+    OUTPUTnonCommonPartCount += len(nonCommonPart['OUTPUT'])
+
+  INPUTnonCommonPartCount += len(INPUT)
+  OUTPUTnonCommonPartCount += len(OUTPUT)
+  nonCommonPartRatio = round(abs((INPUTnonCommonPartCount - OUTPUTnonCommonPartCount)/INPUTnonCommonPartCount), 3)
+  nonCommonPartRatio = (1 - nonCommonPartRatio) * 100
+
+  return nonCommonPartList, nonCommonPartRatio
+
 ## CorrectionKo의 Filter(Error 예외처리)
 def CorrectionKoFilter(Input, responseData, InputChunkId):
     responseData = responseData.replace('<끊어읽기보정_list.json>', '')
+    responseData = responseData.replace('```json', '')
+    responseData = responseData.replace('```', '')
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         OutputDic = ast.literal_eval(responseData)
@@ -119,13 +188,9 @@ def CorrectionKoFilter(Input, responseData, InputChunkId):
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"  
     # Error3: INPUT, OUTPUT 불일치시 예외 처리
-    INPUT = re.sub("[^가-힣]", "", str(Input))
-    OUTPUT = re.sub("[^가-힣]", "", str(responseData))
-    if INPUT != OUTPUT:
-        return f"INPUT, OUTPUT 불일치 오류 발생: INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})"  
-    # # Error4: INPUT과 OUTPUT의 수가 다를 때의 예외 처리
-    # if len(OutputDic) != len(InputChunkId):
-    #     return f"INPUT, OUTPUT의 자료수 불일치 오류 발생: INPUT({len(OutputDic)}), OUTPUT({len(InputChunkId)})"  
+    nonCommonPartList, nonCommonPartRatio = DiffOutputDic(Input, OutputDic)
+    if nonCommonPartRatio < 98.8:
+        return f"INPUT, OUTPUT 불일치율 1.2% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonPartList)})"
         
     return {'json': OutputDic, 'filter': OutputDic}
 
@@ -291,12 +356,25 @@ def CorrectionKoProcess(projectName, email, Process = "CorrectionKo", memoryLeng
 def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
-    BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
+    BodyFrameBodys = project.HalfBodyFrame[2]['Bodys'][1:]
     
     # 데이터 치환
     outputMemoryDics = CorrectionKoProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
+    ##### 테스트 후 삭제 #####
+    filePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_outputMemoryDics_231128.json"
+    with open(filePath, "w", encoding = 'utf-8') as file:
+        json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+        
+    with open(filePath, "r", encoding='utf-8') as file:
+        outputMemoryDics = json.load(file)
+    ##### 테스트 후 삭제 #####
+    
+    response = []
     responseJson = []
+    for i in range(len(BodyFrameBodys)):
+        BodyFrameBodys['ChunkId']
+        
 
     return responseJson
 

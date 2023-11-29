@@ -3,6 +3,7 @@ import json
 import time
 import random
 import tiktoken
+import openai
 import sys
 sys.path.append("/yaas")
 
@@ -257,8 +258,21 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
 
           return Response, Usage, Model
       
-      except client.error.OpenAIError as e:
-          print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생: {e}")
+      except openai.APIError as e:
+          print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생: OpenAI API returned an API Error: {e}")
+          time.sleep(random.uniform(5, 10))
+          continue
+      except openai.APIConnectionError as e:
+          print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생: Failed to connect to OpenAI API: {e}")
+          time.sleep(random.uniform(5, 10))
+          continue
+      except openai.RateLimitError as e:
+          print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생: OpenAI API request exceeded rate limit: {e}")
+          time.sleep(random.uniform(5, 10))
+          continue
+      except openai.APIStatusError as e:
+          print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생: API status error in LLMresponse: {e.status_code}, {e.response}")
+          time.sleep(random.uniform(5, 10))
           continue
 
 

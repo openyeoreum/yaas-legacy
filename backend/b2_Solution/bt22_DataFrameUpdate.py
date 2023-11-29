@@ -7,11 +7,12 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitSummaryBodyFrame, UpdatedSummaryBodyFrame, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitNCEMDefine, UpdatedNCEMDefine, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitCorrectionKo, UpdatedCorrectionKo
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitSummaryBodyFrame, UpdatedSummaryBodyFrame, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitNCEMDefine, UpdatedNCEMDefine, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitCorrectionKo, UpdatedCorrectionKo
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
-from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_BodySummaryUpdate import SummaryBodyFrameUpdate
+from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_HalfBodyFrameUpdate import HalfBodyFrameUpdate
+from backend.b2_Solution.b24_DataFrame.b242_Script.b2424_BodySummaryUpdate import SummaryBodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2431_ContextDefineUpdate import ContextDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2432_ContextCompletionUpdate import ContextCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2433_NCEMDefineUpdate import NCEMDefineUpdate
@@ -180,6 +181,20 @@ if __name__ == "__main__":
     if existedDataFrame == None:
         updatedBodyFrame = UpdatedBodyFrame(projectName, email)
         SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
+    existedDataFrame = None
+    
+    
+    ##################################################
+    ### 02_HalfBodyFrame-[BodySplit, IndexTagging] ###
+    ##################################################
+    InitHalfBodyFrame(projectName, email)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "HalfBodyFrame", DataFramePath)
+    HalfBodyFrameUpdate(projectName, email, tokensCount = 1000, ExistedDataFrame = existedDataFrame)
+
+    if existedDataFrame == None:
+        updatedHalfBodyFrame = UpdatedHalfBodyFrame(projectName, email)
+        SaveDataFrame(projectName, email, "02_HalfBodyFrame", updatedHalfBodyFrame, DataFramePath)
     existedDataFrame = None
 
 

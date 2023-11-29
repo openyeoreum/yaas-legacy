@@ -89,6 +89,7 @@ def AddProjectToDB(projectName, email):
         indexFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-01_IndexFrame.json")
         preprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_PreprocessFrame.json")
         bodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")
+        halfBodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")
         phargraphCaptionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_PhargraphCaptionFrame.json")
         phargraphTransitionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-05_PhargraphTransitionFrame.json")
         summaryBodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-06_SummaryBodyFrame.json")
@@ -143,6 +144,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.IndexFrame = indexFrame
             ExistingProject.PreprocessFrame = preprocessFrame
             ExistingProject.BodyFrame = bodyFrame
+            ExistingProject.HalfBodyFrame = halfBodyFrame
             ExistingProject.PhargraphCaptionFrame = phargraphCaptionFrame
             ExistingProject.PhargraphTransitionFrame = phargraphTransitionFrame
             ExistingProject.SummaryBodyFrame = summaryBodyFrame
@@ -196,6 +198,7 @@ def AddProjectToDB(projectName, email):
                 IndexFrame = indexFrame,
                 PreprocessFrame = preprocessFrame,
                 BodyFrame = bodyFrame,
+                HalfBodyFrame = halfBodyFrame,
                 PhargraphCaptionFrame = phargraphCaptionFrame,
                 PhargraphTransitionFrame = phargraphTransitionFrame,
                 SummaryBodyFrame = summaryBodyFrame,

@@ -6,7 +6,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyFrameToDB, AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, InitBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedHalfBodyFrameToDB, AddHalfBodyFrameBodyToDB, AddHalfBodyFrameChunkToDB, AddHalfBodyFrameBodysToDB, HalfBodyFrameCountLoad, InitHalfBodyFrame, UpdatedHalfBodyFrame, HalfBodyFrameCompletionUpdate
 
 # BodyText 로드
 def LoadBodyText(projectName, email):
@@ -111,8 +111,8 @@ def BodySplitPreprocess(projectName, email):
     # BodySplitPreprocess 오류체크
     for chunk in BodyChunks:
         if chunk.count('∥')%2 != 0:
-            print(f"Body의 따옴표 숫자 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | BodySplitPreprocessError, 문제 따옴표수: {chunk.count('∥')}")
-    print(f"Project: {projectName} | Process: BodyFrameUpdate | BodySplitPreprocess 완료")
+            print(f"Body의 따옴표 숫자 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | BodySplitPreprocessError, 문제 따옴표수: {chunk.count('∥')}")
+    print(f"Project: {projectName} | Process: HalfBodyFrameUpdate | BodySplitPreprocess 완료")
       
     return BodyChunks
 
@@ -186,9 +186,9 @@ def CommentTagging(projectName, email):
     INPUT = re.sub("[^가-힣]", "", LoadBodyText(projectName, email))
     OUTPUT = re.sub("[^가-힣]", "", str(CommentTaggedChunks))
     if INPUT == OUTPUT:
-        print(f"Project: {projectName} | Process: BodyFrameUpdate | CommentTagging 완료")
+        print(f"Project: {projectName} | Process: HalfBodyFrameUpdate | CommentTagging 완료")
     else:
-        print(f"BodyText와 CommentTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CommentTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
+        print(f"BodyText와 CommentTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | CommentTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
 
     return CommentTaggedChunks
 
@@ -234,9 +234,9 @@ def CaptionTagging(projectName, email):
     INPUT = re.sub("[^가-힣]", "", LoadBodyText(projectName, email))
     OUTPUT = re.sub("[^가-힣]", "", str(CaptionTaggedChunks))
     if INPUT == OUTPUT:
-        print(f"Project: {projectName} | Process: BodyFrameUpdate | CaptionTagging 완료")
+        print(f"Project: {projectName} | Process: HalfBodyFrameUpdate | CaptionTagging 완료")
     else:
-        print(f"BodyText와 CaptionTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CaptionTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
+        print(f"BodyText와 CaptionTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | CaptionTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
 
     return CaptionTaggedChunks
     
@@ -293,9 +293,9 @@ def CharacterTagging(projectName, email):
     INPUT = re.sub("[^가-힣]", "", LoadBodyText(projectName, email))
     OUTPUT = re.sub("[^가-힣]", "", str(CharacterTaggedChunks)) + re.sub("[^가-힣]", "", str(nonMergedTaggedChunks))
     if len(INPUT) == len(OUTPUT):
-        print(f"Project: {projectName} | Process: BodyFrameUpdate | CharacterTagging 완료, 삭제된 데이터: {nonMergedTaggedChunks}")
+        print(f"Project: {projectName} | Process: HalfBodyFrameUpdate | CharacterTagging 완료, 삭제된 데이터: {nonMergedTaggedChunks}")
     else:
-        print(f"BodyText와 CharacterTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CharacterTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
+        print(f"BodyText와 CharacterTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | CharacterTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
 
     return CharacterTaggedChunks
 
@@ -358,14 +358,14 @@ def IndexMatching(projectName, email):
     
     # IndexMatching 오류체크
     if nonMatchingIndexList != []:
-        print(f"Index 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | IndexMatchingError\n{nonMatchingIndexList}")
+        print(f"Index 불일치 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | IndexMatchingError\n{nonMatchingIndexList}")
         
     INPUT = re.sub("[^가-힣]", "", str(CharacterTaggedChunks))
     OUTPUT = re.sub("[^가-힣]", "", str(IndexMatchedChunks))
     if INPUT != OUTPUT:
-        print(f"CharacterTaggedChunks와 IndexMatchedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | IndexMatchedChunksError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
+        print(f"CharacterTaggedChunks와 IndexMatchedChunks 불일치 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | IndexMatchedChunksError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
     else:
-        print(f"Project: {projectName} | Process: BodyFrameUpdate | IndexMatching 완료")
+        print(f"Project: {projectName} | Process: HalfBodyFrameUpdate | IndexMatching 완료")
         
     return IndexMatchedChunks
 
@@ -423,9 +423,9 @@ def TaggedChunksToUnitedChunks(projectName, email, tokensCount):
     INPUT = re.sub("[^가-힣]", "", str(IndexMatchedChunks))
     OUTPUT = re.sub("[^가-힣]", "", str(IndexBodyUnitChunksList))
     if INPUT != OUTPUT:
-        print(f"IndexMatchedChunks와 IndexMatchedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | TaggedChunksToUnitedChunksError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
+        print(f"IndexMatchedChunks와 IndexMatchedChunks 불일치 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | TaggedChunksToUnitedChunksError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
     else:
-        print(f"Project: {projectName} | Process: BodyFrameUpdate | TaggedChunksToUnitedChunks 완료")
+        print(f"Project: {projectName} | Process: HalfBodyFrameUpdate | TaggedChunksToUnitedChunks 완료")
 
     return IndexBodyUnitChunksList
 
@@ -435,8 +435,8 @@ def TaggedChunksToUnitedChunks(projectName, email, tokensCount):
 
 def SplitedBodyScriptsToBodys(projectName, email):
     project = GetProject(projectName, email)
-    bodyFrame = project.BodyFrame
-    SplitedBodyScripts = bodyFrame[1]["SplitedBodyScripts"][1:]
+    HalfBodyFrame = project.HalfBodyFrame
+    SplitedBodyScripts = HalfBodyFrame[1]["SplitedBodyScripts"][1:]
 
     IndexTags = [{"Title"}, {"Logue"}, {"Chapter"}, {"Part"}, {"Index"}]
     CaptionTags = [{"Caption"}, {'CaptionComment', 'Caption'}]
@@ -505,36 +505,36 @@ def SplitedBodyScriptsToBodys(projectName, email):
         CharacterChunks = []
 
     # BodyText와 텍스트 매칭 체크
-    BodyFrameList = []
-    BodyFrame = UpdatedBodyFrame(projectName, email)[1]["SplitedBodyScripts"]
-    for i in range(len(BodyFrame)):
-        for j in range(len(BodyFrame[i]["SplitedBodyChunks"])):
-            BodyFrameList.append(BodyFrame[i]["SplitedBodyChunks"][j]["Chunk"])
+    HalfBodyFrameList = []
+    HalfBodyFrame = UpdatedHalfBodyFrame(projectName, email)[1]["SplitedBodyScripts"]
+    for i in range(len(HalfBodyFrame)):
+        for j in range(len(HalfBodyFrame[i]["SplitedBodyChunks"])):
+            HalfBodyFrameList.append(HalfBodyFrame[i]["SplitedBodyChunks"][j]["Chunk"])
     CleanBodys = re.sub(r'\[말\d{1,5}\]', '', str(bodys))
     
-    # BodyFrameBodysUpdate 오류체크
-    INPUT = re.sub("[^가-힣]", "", str(BodyFrameList))
+    # HalfBodyFrameBodysUpdate 오류체크
+    INPUT = re.sub("[^가-힣]", "", str(HalfBodyFrameList))
     OUTPUT = re.sub("[^가-힣]", "", CleanBodys)
     if INPUT != OUTPUT:
-        print(f"SplitedBodyScripts와 Bodys 불일치 오류 발생: Project: {projectName} | Process: BodyFrameBodysUpdate | BodyFrameBodysUpdateError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
+        print(f"SplitedBodyScripts와 Bodys 불일치 오류 발생: Project: {projectName} | Process: HalfBodyFrameBodysUpdate | HalfBodyFrameBodysUpdateError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
     else:
-        print(f"[ Project: {projectName} | BodyFrameBodysUpdate 완료 ]\n")     
+        print(f"[ Project: {projectName} | HalfBodyFrameBodysUpdate 완료 ]\n")     
     
     return Bodys
 
-## Bodys를 BodyFrame에 업데이트
-def BodyFrameBodysUpdate(projectName, email):
+## Bodys를 HalfBodyFrame에 업데이트
+def HalfBodyFrameBodysUpdate(projectName, email):
     Bodys = SplitedBodyScriptsToBodys(projectName, email)
     BodysCount = len(Bodys)
     
     # TQDM 셋팅
     UpdateTQDM = tqdm(Bodys,
                     total = BodysCount,
-                    desc = 'BodyFrameBodysUpdate')
+                    desc = 'HalfBodyFrameBodysUpdate')
     # i값 수동 생성
     i = 0
     for Update in UpdateTQDM:
-        UpdateTQDM.set_description(f'BodyFrameBodysUpdate: {Update} ...')
+        UpdateTQDM.set_description(f'HalfBodyFrameBodysUpdate: {Update} ...')
         time.sleep(0.0001)
         ChunkIds = Bodys[i]['ChunkId']
         Task = Bodys[i]['Task']
@@ -542,26 +542,26 @@ def BodyFrameBodysUpdate(projectName, email):
         Correction = Bodys[i]['Correction']
         Character = Bodys[i]['Character']
         
-        AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character)
+        AddHalfBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character)
         # i값 수동 업데이트
         i += 1
 
     UpdateTQDM.close()
 
 ###################################################
-### IndexBodyUnitChunksList을 BodyFrame에 업데이트 ###
+### IndexBodyUnitChunksList을 HalfBodyFrame에 업데이트 ###
 ###################################################
 
-def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = None):
-    print(f"< User: {email} | Project: {projectName} | 02_BodyFrameUpdate 시작 >")
-    # BodyFrame의 Count값 가져오기
-    IndexCount, BodyCount, ChunkCount, Completion = BodyFrameCountLoad(projectName, email)
+def HalfBodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = None):
+    print(f"< User: {email} | Project: {projectName} | 02_HalfBodyFrameUpdate 시작 >")
+    # HalfBodyFrame의 Count값 가져오기
+    IndexCount, BodyCount, ChunkCount, Completion = HalfBodyFrameCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame)
-            print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate는 ExistedBodyFrame으로 대처됨 ]\n")
+            AddExistedHalfBodyFrameToDB(projectName, email, ExistedDataFrame)
+            print(f"[ User: {email} | Project: {projectName} | 02_HalfBodyFrameUpdate는 ExistedHalfBodyFrame으로 대처됨 ]\n")
         else:
             indexBodyUnitChunksList = TaggedChunksToUnitedChunks(projectName, email, tokensCount)
             
@@ -575,11 +575,11 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
             # TQDM 셋팅
             UpdateTQDM = tqdm(IndexBodyUnitChunksList,
                             total = IndexBodyUnitChunksListCount,
-                            desc = 'BodyFrameUpdate')
+                            desc = 'HalfBodyFrameUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'BodyFrameUpdate: {Update[0]} ...')
+                UpdateTQDM.set_description(f'HalfBodyFrameUpdate: {Update[0]} ...')
                 time.sleep(0.0001)
                 
                 IndexId += 1
@@ -587,7 +587,7 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
                 IndexChunk = IndexBodyUnitChunksList[i][0][0]['TagChunks']
 
                 for j in range(len(IndexBodyUnitChunksList[i])):
-                    AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, IndexChunk)
+                    AddHalfBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, IndexChunk)
                     
                     for k in range(len(IndexBodyUnitChunksList[i][j])):
                         ChunkId += 1
@@ -598,33 +598,33 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
                             Tag = IndexBodyUnitChunksList[i][j][k]["Tag"]
                         Chunk = IndexBodyUnitChunksList[i][j][k]["TagChunks"]
                         
-                        AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk)
+                        AddHalfBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             ##### Bodys 업데이트
-            BodyFrameBodysUpdate(projectName, email)
+            HalfBodyFrameBodysUpdate(projectName, email)
             #####
             # Completion "Yes" 업데이트
-            BodyFrameCompletionUpdate(projectName, email)
+            HalfBodyFrameCompletionUpdate(projectName, email)
             
             # BodyText와 텍스트 매칭 체크
-            BodyFrameList = []
-            BodyFrame = UpdatedBodyFrame(projectName, email)[1]["SplitedBodyScripts"]
-            for i in range(len(BodyFrame)):
-                for j in range(len(BodyFrame[i]["SplitedBodyChunks"])):
-                    BodyFrameList.append(BodyFrame[i]["SplitedBodyChunks"][j]["Chunk"])
+            HalfBodyFrameList = []
+            HalfBodyFrame = UpdatedHalfBodyFrame(projectName, email)[1]["SplitedBodyScripts"]
+            for i in range(len(HalfBodyFrame)):
+                for j in range(len(HalfBodyFrame[i]["SplitedBodyChunks"])):
+                    HalfBodyFrameList.append(HalfBodyFrame[i]["SplitedBodyChunks"][j]["Chunk"])
             
-            # BodyFrameUpdate 오류체크
+            # HalfBodyFrameUpdate 오류체크
             INPUT = re.sub("[^가-힣]", "", str(IndexBodyUnitChunksList))
-            OUTPUT = re.sub("[^가-힣]", "", str(BodyFrameList))
+            OUTPUT = re.sub("[^가-힣]", "", str(HalfBodyFrameList))
             if INPUT != OUTPUT:
-                print(f"IndexBodyUnitChunksList와 BodyFrameList 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | BodyFrameUpdateError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
+                print(f"IndexBodyUnitChunksList와 HalfBodyFrameList 불일치 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | HalfBodyFrameUpdateError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
             else:
-                print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate 완료 ]\n")
+                print(f"[ User: {email} | Project: {projectName} | 02_HalfBodyFrameUpdate 완료 ]\n")
     else:
-        print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 02_HalfBodyFrameUpdate는 이미 완료됨 ]\n")
     
 if __name__ == "__main__":
 
@@ -635,5 +635,5 @@ if __name__ == "__main__":
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     #########################################################################
     
-    InitBodyFrame(projectName, email)
-    BodyFrameUpdate(projectName, email, tokensCount = 3000)
+    InitHalfBodyFrame(projectName, email)
+    HalfBodyFrameUpdate(projectName, email, tokensCount = 1000)

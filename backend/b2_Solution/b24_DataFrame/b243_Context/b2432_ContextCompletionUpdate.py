@@ -299,7 +299,6 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
-    
 ## 데이터 치환
 def ContextCompletionResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출

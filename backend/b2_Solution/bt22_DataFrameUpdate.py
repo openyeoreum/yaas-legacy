@@ -190,7 +190,7 @@ if __name__ == "__main__":
     InitHalfBodyFrame(projectName, email)
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "HalfBodyFrame", DataFramePath)
-    HalfBodyFrameUpdate(projectName, email, tokensCount = 1000, ExistedDataFrame = existedDataFrame)
+    HalfBodyFrameUpdate(projectName, email, tokensCount = 750, ExistedDataFrame = existedDataFrame)
 
     if existedDataFrame == None:
         updatedHalfBodyFrame = UpdatedHalfBodyFrame(projectName, email)

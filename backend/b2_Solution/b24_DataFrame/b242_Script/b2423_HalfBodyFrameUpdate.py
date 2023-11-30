@@ -495,8 +495,9 @@ def SplitedBodyScriptsToBodys(projectName, email):
         
         # Body, Correction 추출
         BODY = "".join(BodyChunks)
+        CORRECTION = "●".join(BodyChunks) + "●"
         
-        Bodys.append({'BodyId': idx + 1, 'ChunkId': ChunkIds, 'Task': task, 'Body': BODY, 'Correction': BODY,
+        Bodys.append({'BodyId': idx + 1, 'ChunkId': ChunkIds, 'Task': task, 'Body': BODY, 'Correction': CORRECTION,
                       'Character': "".join(CharacterChunks).replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')})
         bodys.append({'BodyId': idx + 1, 'ChunkId': ChunkIds, 'Task': task, 'Body': "".join(BodyChunks)}) # 에러 테스트용도
         Tags = []

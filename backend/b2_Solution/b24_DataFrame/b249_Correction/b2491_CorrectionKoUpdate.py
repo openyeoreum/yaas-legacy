@@ -613,7 +613,7 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
         file.write(responseJsonText)
     ########## 테스트 후 삭제 ##########
     
-    # return responseJson
+    return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 CorrectionKo에 업데이트
 def CorrectionKoUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):

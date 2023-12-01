@@ -444,15 +444,15 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
     project = GetProject(projectName, email)
     BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
     
-    # # 데이터 치환
-    # outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    # 데이터 치환
+    outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
     ########## 테스트 후 삭제 ##########
-    filePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_outputMemoryDics_231128.json"
-    # with open(filePath, "w", encoding = 'utf-8') as file:
-    #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
-    with open(filePath, "r", encoding = 'utf-8') as file:
-        outputMemoryDics = json.load(file)
+    filePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_outputMemoryDics_231128.json"
+    with open(filePath, "w", encoding = 'utf-8') as file:
+        json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+    # with open(filePath, "r", encoding = 'utf-8') as file:
+    #     outputMemoryDics = json.load(file)
     ########## 테스트 후 삭제 ##########
 
     # 기존 데이터 구조 responseJson 형성
@@ -495,6 +495,8 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
                 for k in range(len(tokens) - 6):
                     if 'Comma' in tokens[k] and 'Pause' in tokens[k+1]:
                         del tokens[k]
+                    elif 'Pause' in tokens[k] and 'Comma' in tokens[k+1]:
+                        del tokens[k+1]
                 for l in range(len(tokens) - 6):
                     if 'Ko' in tokens[l] and 'Period' in tokens[l+1] and 'Pause' in tokens[l+2]:
                         del tokens[l+2]
@@ -542,7 +544,8 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
                     for k in range(len(tokens) - 5):
                         if 'Ko' in tokens[k] and 'Period' in tokens[k+1]:
                             tokens.insert(k + 2, {"Pause": "(0.6)"})
-                            
+            
+            # 앞, 뒤Chunk를 통한 처리
             if tag == "Character" and Aftertag == "Character":
                 tokens.append({"Pause": "(0.7)"})
                 tokens.append({"Enter": "\n"})
@@ -552,17 +555,46 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
             elif tag == "Character" and Aftertag == "Comment":
                 tokens.append({"Pause": "(0.2)"})
                 tokens.append({"Enter": "\n"})
-            elif (tag == "Narrator" and Aftertag == "Character") and (AfterAftertag != "Pause"):
-                tokens.append({"Pause": "(0.4)"})
-                tokens.append({"Enter": "\n"})
+            elif tag == "Narrator" and Aftertag == "Character":
+                if len(tokens) >= 2:
+                    BeforeEndtoken = tokens[-2]
+                    Endtoken = tokens[-1]
+                    if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
+                        tokens.append({"Pause": "(0.4)"})
+                        tokens.append({"Enter": "\n"})
+            elif (tag == "Narrator" and Aftertag == "Comment") or (tag == "Caption" and Aftertag == "CaptionComment"):
+                if len(tokens) >= 2:
+                    BeforeEndtoken = tokens[-2]
+                    Endtoken = tokens[-1]
+                    if ('Pause' not in BeforeEndtoken and 'Pause' not in Endtoken) or ('Comma' not in BeforeEndtoken and 'Comma' not in Endtoken):
+                        tokens.append({"Pause": "(0.2)"})
 
-                        
+            # Chunk가 중간에 끊길 경우 처리
             if tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Character":
                 tokens.append({"Pause": "(0.7)"})
                 tokens.append({"Enter": "\n"})
+            elif tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Narrator":
+                tokens.append({"Pause": "(0.2)"})
+                tokens.append({"Enter": "\n"})
+            elif tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Comment":
+                tokens.append({"Pause": "(0.2)"})
+                tokens.append({"Enter": "\n"})
+            elif tag == "Narrator" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Character":
+                if len(tokens) >= 2:
+                    BeforeEndtoken = tokens[-2]
+                    Endtoken = tokens[-1]
+                    if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
+                        tokens.append({"Pause": "(0.4)"})
+                        tokens.append({"Enter": "\n"})
+            elif (tag == "Narrator" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Comment") or (tag == "Caption" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "CaptionComment"):
+                if len(tokens) >= 2:
+                    BeforeEndtoken = tokens[-2]
+                    Endtoken = tokens[-1]
+                    if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
+                        tokens.append({"Pause": "(0.2)"})
 
     ########## 테스트 후 삭제 ##########
-    filePath2 = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_responseJson_231128.json"
+    filePath2 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_responseJson_231128.json"
     
     with open(filePath2, "w", encoding = 'utf-8') as file:
         json.dump(responseJson, file, ensure_ascii = False, indent = 4)
@@ -575,7 +607,7 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
                 token = next(iter(token_dict.values()))
                 responseJsonText += token
 
-    filePath3 = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_responseJson_231128.txt"
+    filePath3 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_responseJson_231128.txt"
     # 텍스트 파일에 저장
     with open(filePath3, "w", encoding="utf-8") as file:
         file.write(responseJsonText)

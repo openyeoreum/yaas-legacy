@@ -191,11 +191,20 @@ def CorrectionKoFilter(Input, responseData, InputDots, InputChunkId):
     responseData = responseData.replace('<끊어읽기보정>\n\n', '')
     responseData = responseData.replace('<끊어읽기보정>\n', '')
     responseData = responseData.replace('<끊어읽기보정>', '')
-    responseData = responseData.replace('\n\n\n●', '●\n\n\n')
-    responseData = responseData.replace('\n\n●', '●\n\n')
-    responseData = responseData.replace('\n●', '●\n')
+    responseData = responseData.replace('●\n\n\n\n', '●')
+    responseData = responseData.replace('●\n\n\n', '●')
+    responseData = responseData.replace('●\n\n', '●')
+    responseData = responseData.replace('●\n', '●')
+    responseData = responseData.replace('●  ', '●')
+    responseData = responseData.replace('  ●', '●')
+    responseData = responseData.replace('● ', '●')
+    responseData = responseData.replace(' ●', '●')
     responseData = responseData.replace('{', '[')
     responseData = responseData.replace('}', ']')
+    responseData = responseData.rstrip('●')
+    
+    OutputDic = responseData.split('●')
+    OutputDic = [Output for Output in OutputDic if Output]
 
     OutputDic = [responseData]
     # Error1: 결과가 list가 아닐 때의 예외 처리
@@ -206,10 +215,8 @@ def CorrectionKoFilter(Input, responseData, InputDots, InputChunkId):
     if nonCommonPartRatio < 98.5:
         return f"INPUT, OUTPUT 불일치율 1.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
     # Error3: InputDots, responseDataDots 불일치시 예외 처리
-    # InputDots = str(Input).count('●')
-    responseDataDots = str(responseData).count('●')
-    if InputDots != responseDataDots:
-        return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDots}), OUTPUT({responseDataDots})"
+    if (InputDots - 1) != (len(OutputDic)):
+        return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDots - 1}), OUTPUT({len(OutputDic)})"
 
     return {'json': OutputDic, 'filter': OutputDic, 'nonCommonParts': nonCommonParts}
 
@@ -300,6 +307,7 @@ def CorrectionKoProcess(projectName, email, Process = "CorrectionKo", memoryLeng
         if "Continue" in InputDic:
             Input = InputDic['Continue']
             # Input의 [n] 전처리
+            Input = Input.replace('\n\n\n\n●', '●\n\n\n\n')
             Input = Input.replace('\n\n\n●', '●\n\n\n')
             Input = Input.replace('\n\n●', '●\n\n')
             Input = Input.replace('\n●', '●\n')
@@ -392,17 +400,17 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
     BodyFrameBodys = project.HalfBodyFrame[2]['Bodys'][1:]
     InputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
     
-    # 데이터 치환
-    outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    # # 데이터 치환
+    # outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
     ##### 테스트 후 삭제 #####
     filePath1 = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_outputMemoryDics_231128.json"
     filePath2 = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_nonCommonPartList_231128.json"
     
-    with open(filePath1, "w", encoding = 'utf-8') as file:
-        json.dump(nonCommonPartList, file, ensure_ascii = False, indent = 4)
-    with open(filePath2, "w", encoding = 'utf-8') as file:
-        json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+    # with open(filePath1, "w", encoding = 'utf-8') as file:
+    #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+    # with open(filePath2, "w", encoding = 'utf-8') as file:
+    #     json.dump(nonCommonPartList, file, ensure_ascii = False, indent = 4)
     
     with open(filePath1, "r", encoding = 'utf-8') as file:
         outputMemoryDics = json.load(file)
@@ -410,34 +418,7 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
         nonCommonPartList = json.load(file)
     ##### 테스트 후 삭제 #####
 
-    # responseJson 기본형태 구성
-    responseJson = []
-    for i in range(len(outputMemoryDics)):
-        response = {'BodyId': InputList[i]['Id'], 'ChunkId': inputChunkIdList[i], 'Response': outputMemoryDics[i]}
-        # , 'NonIO': nonCommonPartList[i]}
-        print(response)
-        responseJson.append(response)
-
-    # # responseJson BodyId 분리
-    # ResponseJson = []
-    # for i in range(len(responseJson)):
-    #     if isinstance(responseJson[i]['BodyId'], list):
-    #         for BodyId in responseJson[i]['BodyId']:
-    #             for SplitedBodyScripts in BodyFrameSplitedBodyScripts:
-    #                 if BodyId == SplitedBodyScripts['BodyId']:
-    #                     for response in responseJson[i]['Response']:
-    #                         cleanresponse = re.sub(r'[^가-힣]', '', response)
-    #                         for 
-    #                         if 
-            
-
-    # responseJson BodyId 분리
-    # response = []
-    # responseJson = []
-    # for i in range(len(BodyFrameBodys)):
-    #     BodyFrameBodys['ChunkId']
-
-    return responseJson
+    # return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 CorrectionKo에 업데이트
 def CorrectionKoUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):

@@ -1,8 +1,8 @@
 import os
 import re
-import ast
 import json
 import time
+import difflib
 import sys
 sys.path.append("/yaas")
 
@@ -186,7 +186,7 @@ def NumbersToDots(NumText):
     return text
 
 ## CorrectionKo의 Filter(Error 예외처리)
-def CorrectionKoFilter(Input, responseData, InputDots, InputChunkId):
+def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
     responseData = NumbersToDots(responseData)
     responseData = responseData.replace('<끊어읽기보정>\n\n', '')
     responseData = responseData.replace('<끊어읽기보정>\n', '')
@@ -205,18 +205,37 @@ def CorrectionKoFilter(Input, responseData, InputDots, InputChunkId):
     
     OutputDic = responseData.split('●')
     OutputDic = [Output for Output in OutputDic if Output]
+    InputDic = DotsInput.split('●')
+    InputDic = [Input for Input in InputDic if Input]
 
-    OutputDic = [responseData]
     # Error1: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"  
     # Error2: INPUT, OUTPUT 불일치시 예외 처리
-    nonCommonParts, nonCommonPartRatio = DiffOutputDic(Input, OutputDic)
+    nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
     if nonCommonPartRatio < 98.5:
         return f"INPUT, OUTPUT 불일치율 1.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
     # Error3: InputDots, responseDataDots 불일치시 예외 처리
-    if (InputDots - 1) != (len(OutputDic)):
-        return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDots - 1}), OUTPUT({len(OutputDic)})"
+    if InputDots != len(OutputDic):
+        return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDots}), OUTPUT({len(OutputDic)})"
+    # Error4: Input, responseData 불일치시 예외 처리
+    for i in range(len(InputDic)):
+        CleanInput = re.sub("[^가-힣]", "", InputDic[i])
+        CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
+        if CleanInput != CleanOutput:
+            diff = list(difflib.ndiff(CleanInput, CleanOutput))
+            # 차이점을 저장할 리스트
+            NonINPUT = ""
+            NonOUTPUT = ""
+            # 차이점 추출
+            for d in diff:
+                if d.startswith('- '):
+                    NonINPUT += d[2:]
+                elif d.startswith('+ '):
+                    NonOUTPUT += d[2:]
+            for j in range(len(nonCommonParts)):
+                if nonCommonParts[j]['NonINPUT'] != NonINPUT or nonCommonParts[j]['NonOUTPUT'] != NonOUTPUT:
+                    return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic}), OUTPUT({OutputDic})"
 
     return {'json': OutputDic, 'filter': OutputDic, 'nonCommonParts': nonCommonParts}
 
@@ -305,16 +324,16 @@ def CorrectionKoProcess(projectName, email, Process = "CorrectionKo", memoryLeng
             mode = "Example"
             
         if "Continue" in InputDic:
-            Input = InputDic['Continue']
+            DotsInput = InputDic['Continue']
             # Input의 [n] 전처리
-            Input = Input.replace('\n\n\n\n●', '●\n\n\n\n')
-            Input = Input.replace('\n\n\n●', '●\n\n\n')
-            Input = Input.replace('\n\n●', '●\n\n')
-            Input = Input.replace('\n●', '●\n')
-            Input = Input.replace('[', '{')
-            Input = Input.replace(']', '}')
-            InputDots = str(Input).count('●')
-            Input = DotsToNumbers(Input)
+            DotsInput = DotsInput.replace('\n\n\n\n●', '●\n\n\n\n')
+            DotsInput = DotsInput.replace('\n\n\n●', '●\n\n\n')
+            DotsInput = DotsInput.replace('\n\n●', '●\n\n')
+            DotsInput = DotsInput.replace('\n●', '●\n')
+            DotsInput = DotsInput.replace('[', '{')
+            DotsInput = DotsInput.replace(']', '}')
+            InputDots = str(DotsInput).count('●')
+            Input = DotsToNumbers(DotsInput)
             
             # Filter, MemoryCounter, OutputEnder 처리
             memoryCounter = f" - 중요: 꼼꼼한 끊어읽기!, [1] ~ [{InputDots}]까지 그대로 유지! -\n"
@@ -338,7 +357,7 @@ def CorrectionKoProcess(projectName, email, Process = "CorrectionKo", memoryLeng
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = CorrectionKoFilter(Input, responseData, InputDots, InputChunkId)
+            Filter = CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -392,32 +411,176 @@ def CorrectionKoProcess(projectName, email, Process = "CorrectionKo", memoryLeng
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
+## Chunk를 Tokens로 치환
+def SplitChunkIntoTokens(Chunk):
+
+    pattern = r"""
+        (?P<Pause>\(\d\.\d\)) | # 끊어읽기 '(0.n)'
+        (?P<SFX>\{효과음\d+\}) | # 효과음 '{효과음n}'
+        (?P<Space>\s) | # 띄어쓰기 ' '
+        (?P<Enter>\\n) | # 줄바꿈 '\n'
+        (?P<Comma>,) | # 콤마 ','
+        (?P<Quotes>['“”"‘’]) | # 따옴표 '" ... ’'
+        (?P<Period>[!?.]) | # 종결점 '!, ?, .'
+        (?P<ETC>[^a-zA-Z0-9가-힣\s,‘’“”'!?.一-龠ぁ-んァ-ンㄱ-ㅎㅏ-ㅣア-ンáéíóúÁÉÍÓÚñÑ]) | # 특수문자 (한국어, 영어, 일본어, 중국어, 스페인어 제외)
+        (?P<Number>\d+(\.\d+)?) | # 숫자 (정수 및 소수)
+        (?P<Ko>[가-힣]+) | # 한국어
+        (?P<En>[a-zA-Z]+) | # 영어
+        (?P<Ja>[ぁ-んァ-ンㄱ-ㅎㅏ-ㅣ]+) | # 일본어 (히라가나, 카타카나, 한글 자모)
+        (?P<Zh>[一-龠]+) | # 중국어 (한자)
+        (?P<Es>[áéíóúÁÉÍÓÚñÑa-zA-Z]+) # 스페인어 (스페인어 특수 문자 포함)
+    """
+
+    Tokens = []
+    for match in re.finditer(pattern, Chunk, re.VERBOSE):
+        kind = [k for k, v in match.groupdict().items() if v][0]
+        Tokens.append({kind: match.group()})
+
+    return Tokens
+
 ## 데이터 치환
 def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
-    BodyFrameBodys = project.HalfBodyFrame[2]['Bodys'][1:]
-    InputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
     
     # # 데이터 치환
     # outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
-    ##### 테스트 후 삭제 #####
-    filePath1 = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_outputMemoryDics_231128.json"
-    filePath2 = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_nonCommonPartList_231128.json"
-    
-    # with open(filePath1, "w", encoding = 'utf-8') as file:
+    ########## 테스트 후 삭제 ##########
+    filePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_outputMemoryDics_231128.json"
+    # with open(filePath, "w", encoding = 'utf-8') as file:
     #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
-    # with open(filePath2, "w", encoding = 'utf-8') as file:
-    #     json.dump(nonCommonPartList, file, ensure_ascii = False, indent = 4)
-    
-    with open(filePath1, "r", encoding = 'utf-8') as file:
+    with open(filePath, "r", encoding = 'utf-8') as file:
         outputMemoryDics = json.load(file)
-    with open(filePath2, "r", encoding = 'utf-8') as file:
-        nonCommonPartList = json.load(file)
-    ##### 테스트 후 삭제 #####
+    ########## 테스트 후 삭제 ##########
 
+    # 기존 데이터 구조 responseJson 형성
+    outputMemoryDicsList = []
+    for i in range(len(outputMemoryDics)):
+        for j in range(len(outputMemoryDics[i])):
+            outputMemoryDicsList.append({"outputId": i, "Output": outputMemoryDics[i][j]})
+    
+    responseJson = []
+    ChunkIds = []
+    CorrectionChunks = []
+    k = 0
+    for i in range(len(BodyFrameSplitedBodyScripts)):
+        CorrectionKoSplitedBody = {"OutputId": None, "BodyId": i + 1, "ChunkId": [], "CorrectionChunks": []}
+        for j in range(len(BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'])):
+            Tag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][j]['Tag']
+            CorrectionChunk = outputMemoryDicsList[k]['Output']
+            CorrectionChunkTokens = SplitChunkIntoTokens(CorrectionChunk)
+            CorrectionChunks.append({'Tag': Tag, 'CorrectionChunkTokens': CorrectionChunkTokens})
+            OutputId = outputMemoryDicsList[k]['outputId']
+            ChunkIds.append(k + 1) 
+            k += 1
+
+        CorrectionKoSplitedBody['OutputId'] = OutputId + 1
+        CorrectionKoSplitedBody['ChunkId'] = ChunkIds
+        CorrectionKoSplitedBody['CorrectionChunks'] = CorrectionChunks
+        ChunkIds = []
+        CorrectionChunks = []
+        responseJson.append(CorrectionKoSplitedBody)
+    
+    # responseJson의 끊어읽기 보정(말의 끝맺음 뒤에 끊어읽기가 존재할 경우 삭제)
+    for i in range(len(responseJson)):
+        for j in range(len(responseJson[i]['CorrectionChunks'])):
+            tokens = responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']
+            if len(tokens) >= 2:
+                BeforeEndtoken = tokens[-2]
+                Endtoken = tokens[-1]
+                if 'Period' in BeforeEndtoken and 'Pause' in Endtoken:
+                    del tokens[-1]
+                for k in range(len(tokens) - 6):
+                    if 'Comma' in tokens[k] and 'Pause' in tokens[k+1]:
+                        del tokens[k]
+                for l in range(len(tokens) - 6):
+                    if 'Ko' in tokens[l] and 'Period' in tokens[l+1] and 'Pause' in tokens[l+2]:
+                        del tokens[l+2]
+
+                    
+    # responseJson의 끊어읽기 보정(끝맺음 부분 끊어읽기 추가)
+    for i in range(len(responseJson)):
+        for j in range(len(responseJson[i]['CorrectionChunks'])):
+            tag = responseJson[i]['CorrectionChunks'][j]['Tag']
+            
+            Aftertag = None
+            if j < (len(responseJson[i]['CorrectionChunks']) - 1):
+                Aftertag = responseJson[i]['CorrectionChunks'][j + 1]['Tag']
+                
+            AfterAftertag = None
+            if j < (len(responseJson[i]['CorrectionChunks']) - 2):
+                AfterAftertag = responseJson[i]['CorrectionChunks'][j + 2]['Tag']
+            
+            # 새로운 조건을 위한 변수
+            NextChunkFirstTag = None
+            if i < (len(responseJson) - 1):
+                NextChunkFirstTag = responseJson[i+1]['CorrectionChunks'][0]['Tag']
+            
+            tokens = responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']
+            
+            if tag == "Title":
+                tokens.append({"Pause": "(2.0)"})
+                tokens.append({"Enter": "\n"})
+            elif tag in ["Logue", "Part", "Chapter"]:
+                tokens.append({"Pause": "(1.5)"})
+                tokens.append({"Enter": "\n"})
+            elif tag == "Index":
+                tokens.append({"Pause": "(1.3)"})
+                tokens.append({"Enter": "\n"})
+            elif tag == "Caption":
+                tokens.append({"Pause": "(1.2)"})
+                tokens.append({"Enter": "\n"})
+            else:
+                if len(tokens) >= 2:
+                    BeforeEndtoken = tokens[-2]
+                    Endtoken = tokens[-1]
+                    if 'Ko' in BeforeEndtoken and 'Period' in Endtoken:
+                        tokens.append({"Pause": "(0.7)"})
+                        tokens.append({"Enter": "\n"})
+                    for k in range(len(tokens) - 5):
+                        if 'Ko' in tokens[k] and 'Period' in tokens[k+1]:
+                            tokens.insert(k + 2, {"Pause": "(0.6)"})
+                            
+            if tag == "Character" and Aftertag == "Character":
+                tokens.append({"Pause": "(0.7)"})
+                tokens.append({"Enter": "\n"})
+            elif tag == "Character" and Aftertag == "Narrator":
+                tokens.append({"Pause": "(0.2)"})
+                tokens.append({"Enter": "\n"})
+            elif tag == "Character" and Aftertag == "Comment":
+                tokens.append({"Pause": "(0.2)"})
+                tokens.append({"Enter": "\n"})
+            elif (tag == "Narrator" and Aftertag == "Character") and (AfterAftertag != "Pause"):
+                tokens.append({"Pause": "(0.4)"})
+                tokens.append({"Enter": "\n"})
+
+                        
+            if tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Character":
+                tokens.append({"Pause": "(0.7)"})
+                tokens.append({"Enter": "\n"})
+
+    ########## 테스트 후 삭제 ##########
+    filePath2 = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_responseJson_231128.json"
+    
+    with open(filePath2, "w", encoding = 'utf-8') as file:
+        json.dump(responseJson, file, ensure_ascii = False, indent = 4)
+    
+    responseJsonText = ""
+    for i in range(len(responseJson)):
+        for j in range(len(responseJson[i]['CorrectionChunks'])):
+            for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
+                # 딕셔너리에서 value 추출 (딕셔너리의 첫 번째 값)
+                token = next(iter(token_dict.values()))
+                responseJsonText += token
+
+    filePath3 = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_우리는행복을진단한다_26_responseJson_231128.txt"
+    # 텍스트 파일에 저장
+    with open(filePath3, "w", encoding="utf-8") as file:
+        file.write(responseJsonText)
+    ########## 테스트 후 삭제 ##########
+    
     # return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 CorrectionKo에 업데이트

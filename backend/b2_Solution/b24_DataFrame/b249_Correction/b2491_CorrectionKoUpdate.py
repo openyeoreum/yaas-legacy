@@ -522,6 +522,7 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
             
             tokens = responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']
             
+            # Title, 일반 문장 처리
             if tag == "Title":
                 tokens.append({"Pause": "(2.0)"})
                 tokens.append({"Enter": "\n"})

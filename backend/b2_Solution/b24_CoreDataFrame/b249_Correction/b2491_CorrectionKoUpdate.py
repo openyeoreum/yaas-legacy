@@ -185,6 +185,26 @@ def NumbersToDots(NumText):
     text = re.sub(r'\[\d+\]', '●', NumText)
     return text
 
+## DiffINPUT과 DiffOUTPUT중 가장 긴 공통문자열 찾기(CleanInput의 replace를 통한 데이터 무결성 확인)
+def LongCommonSubstring(DiffINPUT, DiffOUTPUT):
+    # Create a matrix to keep track of matches
+    dp = [[0 for _ in range(len(DiffOUTPUT)+1)] for _ in range(len(DiffINPUT)+1)]
+    longest, end_pos = 0, 0
+
+    # Iterate through each character in both strings
+    for i in range(1, len(DiffINPUT)+1):
+        for j in range(1, len(DiffOUTPUT)+1):
+            if DiffINPUT[i-1] == DiffOUTPUT[j-1]:
+                dp[i][j] = dp[i-1][j-1] + 1
+                if dp[i][j] > longest:
+                    longest = dp[i][j]
+                    end_pos = i  # Mark the end position of the common substring
+            else:
+                dp[i][j] = 0  # Reset if characters don't match
+
+    # Extract the common substring
+    return DiffINPUT[end_pos-longest:end_pos]
+
 ## CorrectionKo의 Filter(Error 예외처리)
 def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
     responseData = NumbersToDots(responseData)
@@ -214,9 +234,12 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"  
     # Error2: INPUT, OUTPUT 불일치시 예외 처리
-    nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
-    if nonCommonPartRatio < 98.5:
-        return f"INPUT, OUTPUT 불일치율 1.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
+    try:
+        nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
+        if nonCommonPartRatio < 98.5:
+            return f"INPUT, OUTPUT 불일치율 1.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
+    except ValueError as e:
+        return f"INPUT, OUTPUT 매우 높은 불일치율 발생: {e}"
     # Error3: InputDots, responseDataDots 불일치시 예외 처리
     if len(InputDic) != len(OutputDic) != InputDots:
         print(f'@@@@@@@@@@\nInputDic: {InputDic}\nOutputDic: {OutputDic}\n@@@@@@@@@@')
@@ -226,25 +249,17 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
         CleanInput = re.sub("[^가-힣]", "", InputDic[i])
         CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
         if CleanInput != CleanOutput:
-            diff = list(difflib.ndiff(CleanInput, CleanOutput))
-            # 차이점을 저장할 리스트
-            NonINPUT = ""
-            NonOUTPUT = ""
-            # 차이점 추출
-            for d in diff:
-                if d.startswith('- '):
-                    NonINPUT += d[2:]
-                elif d.startswith('+ '):
-                    NonOUTPUT += d[2:]
-            
-            foundMatch = False
             for j in range(len(nonCommonParts)):
-                # 일치하는 경우
-                if (NonINPUT == nonCommonParts[j]['NonINPUT'] and NonOUTPUT == nonCommonParts[j]['NonOUTPUT']) or (NonINPUT in nonCommonParts[j]['NonINPUT'] and NonOUTPUT in nonCommonParts[j]['NonOUTPUT']):
-                    foundMatch = True
-                    break  # 일치하는 요소를 찾았으므로 반복 중단
-            # 일치하는 요소가 없으면 오류 메시지 출력
-            if not foundMatch:
+                DiffINPUT = nonCommonParts[j]['DiffINPUT']
+                DiffOUTPUT = nonCommonParts[j]['DiffOUTPUT']
+                longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
+                
+                NonINPUT = nonCommonParts[j]['NonINPUT']
+                NonOUTPUT = nonCommonParts[j]['NonOUTPUT']
+                
+                CleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
+                
+            if CleanInput != CleanOutput:
                 return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})"
 
     return {'json': OutputDic, 'filter': OutputDic, 'nonCommonParts': nonCommonParts}

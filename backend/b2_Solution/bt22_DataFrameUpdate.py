@@ -129,7 +129,7 @@ if __name__ == "__main__":
     messagesReview = "on"
     
     ### existedDataFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
-    existedDataFrameMode = "off" # <- 개발 후 off #
+    existedDataFrameMode = "on" # <- 개발 후 off #
     
     # existedDataFrame 초기화
     existedDataFrame = None
@@ -139,63 +139,63 @@ if __name__ == "__main__":
     #########################################################################
 
 
-    # ##################################
-    # ### 00_DataFrame-[AllMetaData] ###
-    # ##################################
-    # AddFrameMetaDataToDB(projectName, email)
+    ##################################
+    ### 00_DataFrame-[AllMetaData] ###
+    ##################################
+    AddFrameMetaDataToDB(projectName, email)
 
-    # AddDataSetMetaDataToDB(projectName, email)
+    AddDataSetMetaDataToDB(projectName, email)
 
 
-    # ###################################
-    # ### 01_IndexFrame-[IndexDefine] ###
-    # ###################################
-    # InitIndexFrame(projectName, email)
-    # InitRawDataSet(projectName, email, "IndexDefinePreprocess")
-    # InitRawDataSet(projectName, email, "IndexDefine")
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "IndexFrame", DataFramePath)
-    #     recentFile, existedDataSet1 = LoadExistedDataSets(projectName, email, "IndexDefinePreprocess", RawDataSetPath)
-    #     recentFile, existedDataSet2 = LoadExistedDataSets(projectName, email, "IndexDefine", RawDataSetPath)
-    # mode = "Master" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning", "Master"
-    # IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
+    ###################################
+    ### 01_IndexFrame-[IndexDefine] ###
+    ###################################
+    InitIndexFrame(projectName, email)
+    InitRawDataSet(projectName, email, "IndexDefinePreprocess")
+    InitRawDataSet(projectName, email, "IndexDefine")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "IndexFrame", DataFramePath)
+        recentFile, existedDataSet1 = LoadExistedDataSets(projectName, email, "IndexDefinePreprocess", RawDataSetPath)
+        recentFile, existedDataSet2 = LoadExistedDataSets(projectName, email, "IndexDefine", RawDataSetPath)
+    mode = "Master" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning", "Master"
+    IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
     
-    # if existedDataFrame == None:
-    #     updatedIndexFrame = UpdatedIndexFrame(projectName, email)
-    #     SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
-    #     SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", RawDataSetPath)
-    #     SaveDataSet(projectName, email, "01", "IndexDefine", RawDataSetPath)
-    # existedDataFrame = None
-    # existedDataSet1 = None
-    # existedDataSet2 = None
+    if existedDataFrame == None:
+        updatedIndexFrame = UpdatedIndexFrame(projectName, email)
+        SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
+        SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", RawDataSetPath)
+        SaveDataSet(projectName, email, "01", "IndexDefine", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet1 = None
+    existedDataSet2 = None
 
 
-    # ##############################################
-    # ### 02_BodyFrame-[BodySplit, IndexTagging] ###
-    # ##############################################
-    # InitBodyFrame(projectName, email)
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", DataFramePath)
-    # BodyFrameUpdate(projectName, email, tokensCount = 2500, ExistedDataFrame = existedDataFrame)
+    ##############################################
+    ### 02_BodyFrame-[BodySplit, IndexTagging] ###
+    ##############################################
+    InitBodyFrame(projectName, email)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", DataFramePath)
+    BodyFrameUpdate(projectName, email, tokensCount = 2500, ExistedDataFrame = existedDataFrame)
 
-    # if existedDataFrame == None:
-    #     updatedBodyFrame = UpdatedBodyFrame(projectName, email)
-    #     SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
-    # existedDataFrame = None
+    if existedDataFrame == None:
+        updatedBodyFrame = UpdatedBodyFrame(projectName, email)
+        SaveDataFrame(projectName, email, "02_BodyFrame", updatedBodyFrame, DataFramePath)
+    existedDataFrame = None
     
     
-    # ##################################################
-    # ### 02_HalfBodyFrame-[BodySplit, IndexTagging] ###
-    # ##################################################
-    # InitHalfBodyFrame(projectName, email)
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "HalfBodyFrame", DataFramePath)
-    # HalfBodyFrameUpdate(projectName, email, tokensCount = 750, ExistedDataFrame = existedDataFrame)
+    ##################################################
+    ### 02_HalfBodyFrame-[BodySplit, IndexTagging] ###
+    ##################################################
+    InitHalfBodyFrame(projectName, email)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "HalfBodyFrame", DataFramePath)
+    HalfBodyFrameUpdate(projectName, email, tokensCount = 750, ExistedDataFrame = existedDataFrame)
 
-    # if existedDataFrame == None:
-    #     updatedHalfBodyFrame = UpdatedHalfBodyFrame(projectName, email)
-    #     SaveDataFrame(projectName, email, "02_HalfBodyFrame", updatedHalfBodyFrame, DataFramePath)
-    # existedDataFrame = None
+    if existedDataFrame == None:
+        updatedHalfBodyFrame = UpdatedHalfBodyFrame(projectName, email)
+        SaveDataFrame(projectName, email, "02_HalfBodyFrame", updatedHalfBodyFrame, DataFramePath)
+    existedDataFrame = None
 
 
     # #########################################
@@ -217,25 +217,25 @@ if __name__ == "__main__":
     # existedDataSet = None
 
 
-    ########################
-    ### 07_ContextDefine ###
-    ########################
-    InitContextDefine(projectName, email)
-    InitRawDataSet(projectName, email, "ContextDefine")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextDefine", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextDefine", RawDataSetPath)
-    mode = "Master"
-    ContextDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # ########################
+    # ### 07_ContextDefine ###
+    # ########################
+    # InitContextDefine(projectName, email)
+    # InitRawDataSet(projectName, email, "ContextDefine")
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextDefine", DataFramePath)
+    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextDefine", RawDataSetPath)
+    # mode = "Master"
+    # ContextDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    if existedDataFrame == None:
-        updatedContextDefine = UpdatedContextDefine(projectName, email)
-        SaveDataFrame(projectName, email, "07_ContextDefine", updatedContextDefine, DataFramePath)
-        SaveDataSet(projectName, email, "07", "ContextDefine", RawDataSetPath)
-        # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
-        LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)
-    existedDataFrame = None
-    existedDataSet = None
+    # if existedDataFrame == None:
+    #     updatedContextDefine = UpdatedContextDefine(projectName, email)
+    #     SaveDataFrame(projectName, email, "07_ContextDefine", updatedContextDefine, DataFramePath)
+    #     SaveDataSet(projectName, email, "07", "ContextDefine", RawDataSetPath)
+    #     # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
+    #     LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)
+    # existedDataFrame = None
+    # existedDataSet = None
 
 
     # ############################
@@ -314,20 +314,20 @@ if __name__ == "__main__":
     # existedDataSet = None
     
     
-    # #######################
-    # ### 26_CorrectionKo ###
-    # #######################
-    # InitCorrectionKo(projectName, email)
-    # InitRawDataSet(projectName, email, "CorrectionKo")
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "CorrectionKo", DataFramePath)
-    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CorrectionKo", RawDataSetPath)
-    # mode = "Master"
-    # CorrectionKoUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    #######################
+    ### 26_CorrectionKo ###
+    #######################
+    InitCorrectionKo(projectName, email)
+    InitRawDataSet(projectName, email, "CorrectionKo")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "CorrectionKo", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CorrectionKo", RawDataSetPath)
+    mode = "Master"
+    CorrectionKoUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    # if existedDataFrame == None:
-    #     updatedCorrectionKo = UpdatedCorrectionKo(projectName, email)
-    #     SaveDataFrame(projectName, email, "26_CorrectionKo", updatedCorrectionKo, DataFramePath)       
-    #     SaveDataSet(projectName, email, "26", "CorrectionKo", RawDataSetPath)
-    # existedDataFrame = None
-    # existedDataSet = None
+    if existedDataFrame == None:
+        updatedCorrectionKo = UpdatedCorrectionKo(projectName, email)
+        SaveDataFrame(projectName, email, "26_CorrectionKo", updatedCorrectionKo, DataFramePath)       
+        SaveDataSet(projectName, email, "26", "CorrectionKo", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet = None

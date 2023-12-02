@@ -10,9 +10,9 @@ from tqdm import tqdm
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedContextDefineToDB, AddContextDefineChunksToDB, ContextDefineCountLoad, ContextDefineCompletionUpdate
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedContextDefineToDB, AddContextDefineChunksToDB, ContextDefineCountLoad, ContextDefineCompletionUpdate
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
 ##### InputList 생성 #####
@@ -106,9 +106,9 @@ def ContextDefineFilter(Input, responseData, memoryCounter):
     for dic in OutputDic:
         try:
             key = list(dic.keys())[0]
-            # '문구' 키에 접근하는 부분에 예외 처리 추가
+            # '핵심문구' 키에 접근하는 부분에 예외 처리 추가
             try:
-                OUTPUT = re.sub("[^가-힣]", "", str(dic[key]['문구']))
+                OUTPUT = re.sub("[^가-힣]", "", str(dic[key]['핵심문구']))
             except TypeError:
                 return "JSON에서 오류 발생: TypeError"
             except KeyError:
@@ -116,8 +116,8 @@ def ContextDefineFilter(Input, responseData, memoryCounter):
             if not '메모' in key:
                 return "JSON에서 오류 발생: JSONKeyError"
             elif not OUTPUT in INPUT:
-                return f"JSON에서 오류 발생: JSON '문구'가 Input에 포함되지 않음 Error\n문구: {dic[key]['문구']}"
-            elif not ('독자' in dic[key] and '목적' in dic[key] and '주제' in dic[key] and '문구' in dic[key] and '중요도' in dic[key]):
+                return f"JSON에서 오류 발생: JSON '핵심문구'가 Input에 포함되지 않음 Error\n문구: {dic[key]['핵심문구']}"
+            elif not ('독자' in dic[key] and '목적' in dic[key] and '주제' in dic[key] and '핵심문구' in dic[key] and '중요도' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -352,7 +352,7 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
         if response != "Pass":
             for dic in response:
                 for key, value in dic.items():
-                    CleanPhrases = re.sub("[^가-힣]", "", str(value['문구']))
+                    CleanPhrases = re.sub("[^가-힣]", "", str(value['핵심문구']))
                     # CleanPhrases가 비어 있으면 다음 항목으로 이동
                     if not CleanPhrases:
                         continue
@@ -372,7 +372,7 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
                     Reader = value['독자']
                     Purpose = value['목적']
                     Subject = value['주제']
-                    Phrases = value['문구']
+                    Phrases = value['핵심문구']
                     Importance = value['중요도']
                 responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Reader": Reader, "Purpose": Purpose, "Subject": Subject, "Phrases": Phrases, "Importance": Importance})
 

@@ -7,9 +7,9 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedNCEMDefineToDB, AddNCEMDefineChunksToDB, NCEMDefineCountLoad, NCEMDefineCompletionUpdate
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedContextCompletionToDB, AddContextCompletionChunksToDB, ContextCompletionCountLoad, ContextCompletionCompletionUpdate
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
 ##### InputList 생성 #####
@@ -95,8 +95,8 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
 ######################
 ##### Filter 조건 #####
 ######################
-## NCEMDefine의 Filter(Error 예외처리)
-def NCEMDefineFilter(MemoTag, responseData, memoryCounter):
+## ContextCompletion의 Filter(Error 예외처리)
+def ContextCompletionFilter(MemoTag, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -113,7 +113,7 @@ def NCEMDefineFilter(MemoTag, responseData, memoryCounter):
             if not key in MemoTag:
                 return "JSON에서 오류 발생: JSONKeyError"
             else:
-                if not ('분야' in dic[key] and '니즈' in dic[key] and '정보의질' in dic[key] and '마음상태' in dic[key] and '정확도' in dic[key]):
+                if not ('성별' in dic[key] and '연령' in dic[key] and '장르' in dic[key] and '성격' in dic[key] and '감성' in dic[key] and '정확도' in dic[key]):
                     return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -128,7 +128,7 @@ def NCEMDefineFilter(MemoTag, responseData, memoryCounter):
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def NCEMDefineInputMemory(inputMemoryDics, MemoryLength):
+def ContextCompletionInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -144,7 +144,7 @@ def NCEMDefineInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def NCEMDefineOutputMemory(outputMemoryDics, MemoryLength):
+def ContextCompletionOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -164,8 +164,8 @@ def NCEMDefineOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## NCEMDefine 프롬프트 요청 및 결과물 Json화
-def NCEMDefineProcess(projectName, email, Process = "NCEMDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## ContextCompletion 프롬프트 요청 및 결과물 Json화
+def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -181,7 +181,7 @@ def NCEMDefineProcess(projectName, email, Process = "NCEMDefine", memoryLength =
     outputMemoryDics = []
     outputMemory = []
         
-    # NCEMDefineProcess
+    # ContextCompletionProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -228,9 +228,9 @@ def NCEMDefineProcess(projectName, email, Process = "NCEMDefine", memoryLength =
             else:
                 memoTag = re.findall(r'\[중요문구(\d{1,5})\]', str(InputDic))
             
-            MemoTag = ["예상독자" + match for match in memoTag]
+            MemoTag = ["중요문구" + match for match in memoTag]
             memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + ' -\n'
-            outputEnder = f"{{'예상독자"
+            outputEnder = f"{{'중요문구"
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -250,7 +250,7 @@ def NCEMDefineProcess(projectName, email, Process = "NCEMDefine", memoryLength =
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                                 
-            Filter = NCEMDefineFilter(MemoTag, responseData, memoryCounter)
+            Filter = ContextCompletionFilter(MemoTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -286,38 +286,28 @@ def NCEMDefineProcess(projectName, email, Process = "NCEMDefine", memoryLength =
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = NCEMDefineInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = ContextCompletionInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = NCEMDefineOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = ContextCompletionOutputMemory(outputMemoryDics, MemoryLength)
     
     return outputMemoryDics
 
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
-    
 ## 데이터 치환
-def NCEMDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def ContextCompletionResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     ContextDefine = project.ContextDefine[1]['ContextChunks'][1:]
     
     # 데이터 치환
-    outputMemoryDics = NCEMDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
-    
-    ##### 테스트 후 삭제 #####
-    filePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_웹3.0메타버스_09_outputMemoryDics_231127.json"
-    with open(filePath, "w", encoding = 'utf-8') as file:
-        json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+    outputMemoryDics = ContextCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
         
-    with open(filePath, "r", encoding='utf-8') as file:
-        outputMemoryDics = json.load(file)
-    ##### 테스트 후 삭제 #####
-    
     responseJson = []
     ContextDefineCount = 0
     for response in outputMemoryDics:
@@ -326,66 +316,68 @@ def NCEMDefineResponseJson(projectName, email, messagesReview = 'off', mode = "M
                 for key, value in dic.items():
                     ChunkId = ContextDefine[ContextDefineCount]['ChunkId']
                     Chunk = ContextDefine[ContextDefineCount]['Chunk']
-                    Domain = value['분야']
-                    Needs = value['니즈']
-                    CVC = value['정보의질']
-                    PotentialEnergy = value['마음상태']
+                    Genre = value['장르']
+                    Gender = value['성별']
+                    Age = value['연령']
+                    Personality = value['성격']
+                    Emotion = value['감성']
                     Accuracy = value['정확도']
                     ContextDefineCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Domain": Domain, "Needs": Needs, "CVC": CVC, "PotentialEnergy": PotentialEnergy, "Accuracy": Accuracy})
+                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Genre": Genre, "Gender": Gender, "Age": Age, "Personality": Personality, "Emotion": Emotion, "Accuracy": Accuracy})
 
     return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 NCEMDefine에 업데이트
-def NCEMDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 09_NCEMDefineUpdate 시작 >")
+## 프롬프트 요청 및 결과물 Json을 ContextCompletion에 업데이트
+def ContextCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 08_ContextCompletionUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
-    ContinueCount, NCEMCount, Completion = NCEMDefineCountLoad(projectName, email)
+    ContinueCount, ContextCount, Completion = ContextCompletionCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedNCEMDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "NCEMDefine", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 09_NCEMDefineUpdate는 ExistedNCEMDefine으로 대처됨 ]\n")
+            AddExistedContextCompletionToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "ContextCompletion", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 08_ContextCompletionUpdate는 ExistedContextCompletion으로 대처됨 ]\n")
         else:
-            responseJson = NCEMDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = ContextCompletionResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
             
-            NCEMChunkId = ContinueCount
+            ContextChunkId = ContinueCount
             
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'NCEMDefineUpdate')
+                            desc = 'ContextCompletionUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'NCEMDefineUpdate: {Update}')
+                UpdateTQDM.set_description(f'ContextCompletionUpdate: {Update}')
                 time.sleep(0.0001)
-                NCEMChunkId += 1
+                ContextChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
                 Chunk = ResponseJson[i]["Chunk"]
-                Domain = ResponseJson[i]["Domain"]
-                Needs = ResponseJson[i]["Needs"]
-                CVC = ResponseJson[i]["CVC"]
-                PotentialEnergy = ResponseJson[i]["PotentialEnergy"]
+                Genre = ResponseJson[i]["Genre"]
+                Gender = ResponseJson[i]["Gender"]
+                Age = ResponseJson[i]["Age"]
+                Personality = ResponseJson[i]["Personality"]
+                Emotion = ResponseJson[i]["Emotion"]
                 Accuracy = ResponseJson[i]["Accuracy"]
                 
-                AddNCEMDefineChunksToDB(projectName, email, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy)
+                AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            NCEMDefineCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 09_NCEMDefineUpdate 완료 ]\n")
+            ContextCompletionCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 08_ContextCompletionUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 09_NCEMDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 08_ContextCompletionUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 

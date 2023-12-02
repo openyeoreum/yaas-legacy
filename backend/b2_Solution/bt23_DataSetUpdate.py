@@ -1,8 +1,8 @@
 import sys
 sys.path.append("/yaas")
 
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddProjectFeedbackDataSets
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LLMFineTuning
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2413_DataSetCommit import AddProjectFeedbackDataSets
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2411_LLMLoad import LLMFineTuning
 
 if __name__ == "__main__":
     

@@ -1,3 +1,4 @@
+import os
 import re
 import json
 import time
@@ -5,11 +6,10 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
-from collections import Counter
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedCharacterCompletionToDB, AddCharacterCompletionChunksToDB, AddCharacterCompletionCheckedCharacterTagsToDB, CharacterCompletionCountLoad, CharacterCompletionCompletionUpdate
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedCharacterDefineToDB, AddCharacterDefineChunksToDB, CharacterDefineCountLoad, CharacterDefineCompletionUpdate
+from backend.b2_Solution.b24_CoreDataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
 ##### InputList 생성 #####
@@ -21,28 +21,6 @@ def LoadBodyFrameBodys(projectName, email):
     BodyFrameBodys = project.BodyFrame[2]['Bodys'][1:]
     
     return BodyFrameSplitedBodyScripts, BodyFrameBodys
-
-## CharacterDefine 로드
-def LoadCharacterDefine(projectName, email):
-    project = GetProject(projectName, email)
-    CharacterChunks = project.CharacterDefine[1]['CharacterChunks'][1:]
-    
-    return CharacterChunks
-
-## TaskBody를 [말n] 이름 : 내용 형식으로 변환
-def ReplaceName(TaskBody, CharacterChunks):
-    pattern = re.compile(r'\[말(\d+)\]')
-    matches = pattern.finditer(TaskBody)
-    for match in reversed(list(matches)):
-        n = int(match.group(1))
-        for chunk in CharacterChunks:
-            if chunk['CharacterChunkId'] == n:
-                CharName = chunk['Character']
-                replacement = f"[말{n}] {CharName}: "
-                TaskBody = TaskBody[:match.start()] + replacement + TaskBody[match.end():]
-                break
-
-    return TaskBody
 
 ## inputList의 InputList 치환 (인덱스, 캡션 부분 합치기)
 def MergeInputList(inputList):
@@ -85,13 +63,12 @@ def MergeInputList(inputList):
 ## BodyFrameBodys의 inputList 치환
 def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
-    CharacterChunks = LoadCharacterDefine(projectName, email)
     
     inputList = []
     for i in range(len(BodyFrameBodys)):
         Id = BodyFrameBodys[i]['BodyId']
         task = BodyFrameBodys[i]['Task']
-        TaskBody = ReplaceName(BodyFrameBodys[i][Task], CharacterChunks)
+        TaskBody = BodyFrameBodys[i][Task]
 
         if Task in task:
             Tag = 'Continue'
@@ -110,8 +87,8 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
 ######################
 ##### Filter 조건 #####
 ######################
-## CharacterCompletion의 Filter(Error 예외처리)
-def CharNameCharacterCompletionFilter(TalkTag, responseData, memoryCounter):
+## CharacterDefine의 Filter(Error 예외처리)
+def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -133,7 +110,7 @@ def CharNameCharacterCompletionFilter(TalkTag, responseData, memoryCounter):
             if not key in TalkTag:
                 return "JSON에서 오류 발생: JSONKeyError"
             else:
-                if not ('말하는인물' in dic[key] and '대표명칭' in dic[key] and '저자와동일인물여부' in dic[key]):
+                if not ('말의종류' in dic[key] and '말하는인물' in dic[key] and '말하는인물의성별' in dic[key] and '말하는인물의나이' in dic[key] and '말하는인물의감정' in dic[key] and '인물의역할' in dic[key] and '듣는인물' in dic[key]):
                     return "JSON에서 오류 발생: JSONKeyError"
         # Error5: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -148,7 +125,7 @@ def CharNameCharacterCompletionFilter(TalkTag, responseData, memoryCounter):
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def CharacterCompletionInputMemory(inputMemoryDics, MemoryLength):
+def CharacterDefineInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -164,7 +141,7 @@ def CharacterCompletionInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def CharacterCompletionOutputMemory(outputMemoryDics, MemoryLength):
+def CharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -184,8 +161,8 @@ def CharacterCompletionOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## CharacterCompletion 프롬프트 요청 및 결과물 Json화
-def CharacterCompletionProcess(projectName, email, Process = "CharacterCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## CharacterDefine 프롬프트 요청 및 결과물 Json화
+def CharacterDefineProcess(projectName, email, Process = "CharacterDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -201,7 +178,7 @@ def CharacterCompletionProcess(projectName, email, Process = "CharacterCompletio
     outputMemoryDics = []
     outputMemory = []
         
-    # CharacterCompletionProcess
+    # CharacterDefineProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -224,14 +201,14 @@ def CharacterCompletionProcess(projectName, email, Process = "CharacterCompletio
         elif Mode == "Master":
             mode = "Master"
             # "Master"의 MasterMemory 형성
-            MasterMemory = InputList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
+            MasterMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
         elif Mode == "ExampleFineTuning":
             mode = "ExampleFineTuning"
             # "ExampleFineTuning"의 fineTuningMemory 형성
             FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
         elif Mode == "Example":
             mode = "Example"
-
+            
         if "Continue" in InputDic:
             if Mode == "Master":
                 Keys = list(MasterMemory.keys())
@@ -243,18 +220,14 @@ def CharacterCompletionProcess(projectName, email, Process = "CharacterCompletio
                 Input = InputDic['Continue']
             
             # Filter, MemoryCounter, OutputEnder 처리
-            if Mode == "Master" or Mode == "ExampleFineTuning":
-                talkTag = re.findall(r'\[말(\d{1,5})\]', str(Input))
-            else:
-                talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
-            
+            talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
             TalkTag = ["말" + match for match in talkTag]
             memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
-            outputEnder = ""
+            outputEnder = f"{{'{TalkTag[0]}': {{'말의종류': '"
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
-            # print(f"@@@@@@@@@@\n\nResponse: {Response}\n\n@@@@@@@@@@")
+            
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
             if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -269,8 +242,8 @@ def CharacterCompletionProcess(projectName, email, Process = "CharacterCompletio
                     if Response.startswith(outputEnder):
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
-            
-            Filter = CharNameCharacterCompletionFilter(TalkTag, responseData, memoryCounter)
+                    
+            Filter = CharacterDefineFilter(TalkTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -306,112 +279,22 @@ def CharacterCompletionProcess(projectName, email, Process = "CharacterCompletio
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = CharacterCompletionInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = CharacterDefineInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = CharacterCompletionOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = CharacterDefineOutputMemory(outputMemoryDics, MemoryLength)
     
     return outputMemoryDics
 
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
-## outputMemoryDics 후처리
-def MergeOutputMemoryDics(outputMemoryDics):
-    MergedOutput = []
-    SeenSpeeches = {}
-
-    for sublist in outputMemoryDics:
-        if sublist == 'Pass':
-            MergedOutput.append('Pass')
-            continue
-
-        NewSublist = []
-        for item in sublist:
-            for SpeechId, speechInfo in item.items():
-                if SpeechId in SeenSpeeches:
-                    ExistingInfo = SeenSpeeches[SpeechId]
-                    for key in speechInfo:
-                        if speechInfo[key] != ExistingInfo[key]:
-                            if not isinstance(ExistingInfo[key], list):
-                                ExistingInfo[key] = [ExistingInfo[key]]
-                            if speechInfo[key] not in ExistingInfo[key]:
-                                ExistingInfo[key].append(speechInfo[key])
-                else:
-                    SeenSpeeches[SpeechId] = speechInfo
-                    NewSublist.append({SpeechId: speechInfo})
-        
-        if NewSublist:
-            MergedOutput.append(NewSublist)
-
-    return MergedOutput
-
-## 캐릭터 선별하기(필터)
-def MainCharacterFilter(responseJson):
-    # 캐릭터 선별1 [이름1, 이름2] 서로의 이름이 포함된 경우 긴 이름만 남김
-    for i in range(len(responseJson)):
-        MainCharacter = responseJson[i]['MainCharacter']
-        if isinstance(MainCharacter, list):
-            if MainCharacter[0] in MainCharacter[1]:
-                responseJson[i]['MainCharacter'] = MainCharacter[1]
-            elif MainCharacter[1] in MainCharacter[0]:
-                responseJson[i]['MainCharacter'] = MainCharacter[0]
-            else:
-                responseJson[i]['MainCharacter'] = MainCharacter
-        else:
-            responseJson[i]['MainCharacter'] = MainCharacter
     
-    # 캐릭터 선별2 [이름1, 이름2]이 존재할 경우 외부에 존재하는 이름으로 남기고, 둘다 존재할 경우 가까운 이름으로 남김
-    for i in range(len(responseJson)):
-        MainCharacter = responseJson[i]['MainCharacter']
-        if isinstance(MainCharacter, list):
-            Name1, Name2 = MainCharacter
-            distance1, distance2 = float('inf'), float('inf')
-
-            for j in range(len(responseJson)):
-                if Name1 == responseJson[j]['MainCharacter']:
-                    distance1 = min(distance1, abs(j - i))
-                if Name2 == responseJson[j]['MainCharacter']:
-                    distance2 = min(distance2, abs(j - i))
-
-            if distance1 < distance2:
-                responseJson[i]['MainCharacter'] = Name1
-            else:
-                responseJson[i]['MainCharacter'] = Name2
-                
-    # 캐릭터 선별3 여전히 리스트가 남아 있는 경우 뒷 이름(더 많은 데이터로 선별된)을 최종 대표명칭으로 설정
-    for i in range(len(responseJson)):
-        MainCharacter = responseJson[i]['MainCharacter']
-        if isinstance(MainCharacter, list):
-            responseJson[i]['MainCharacter'] = MainCharacter[1]
-            
-    # 캐릭터 선별4 자료내에 동일한 이름이 있을 경우 긴이름으로 대처
-    for i in range(len(responseJson)):
-        currentName = responseJson[i]['MainCharacter']
-        for j in range(len(responseJson)):
-            comparedName = responseJson[j]['MainCharacter']
-
-            # 현재 이름이 비교되는 이름을 포함하고 있으며, 더 길면 현재 이름을 유지
-            if currentName in comparedName and len(currentName) < len(comparedName):
-                responseJson[i]['MainCharacter'] = comparedName
-
-            # 비교되는 이름이 현재 이름을 포함하고 있으며, 더 길면 비교되는 이름으로 변경
-            elif comparedName in currentName and len(comparedName) < len(currentName):
-                responseJson[j]['MainCharacter'] = currentName
-
-
-
-    # 캐릭터 선별5 실제 등장인물의 리스트
-    characterCounts = Counter(dic['MainCharacter'] for dic in responseJson)
-    sortedCharacters = sorted(characterCounts, key=characterCounts.get, reverse=True)
-    
-    return responseJson, sortedCharacters
-
 ## 데이터 치환
-def CharacterCompletionResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def CharacterDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
@@ -424,47 +307,43 @@ def CharacterCompletionResponseJson(projectName, email, messagesReview = 'off', 
                 CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
     
     # 데이터 치환
-    OutputMemoryDics = CharacterCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
-        
-    outputMemoryDics = MergeOutputMemoryDics(OutputMemoryDics)
+    outputMemoryDics = CharacterDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     responseCount = 0
     
     for response in outputMemoryDics:
         if response != "Pass":
-            # if responseCount >= len(CharacterTagChunkId):
-            #     print(f"Invalid index: {responseCount}. The list size is {len(CharacterTagChunkId)}.")
-            #     break  # 또는 다른 적절한 처리
             for dic in response:
                 ChunkId = CharacterTagChunkId[responseCount]
                 Chunk = CharacterTagChunk[responseCount]
                 for key, value in dic.items():
                     Character = value['말하는인물']
-                    MainCharacter = value['대표명칭']
-                    AuthorRelationship = value['저자와동일인물여부']
+                    Type = value['말의종류']
+                    Gender = value['말하는인물의성별']
+                    Age = value['말하는인물의나이']
+                    Emotion = value['말하는인물의감정']
+                    Role = value['인물의역할']
+                    Listener = value['듣는인물']
                 responseCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "MainCharacter": MainCharacter, "AuthorRelationship": AuthorRelationship})
+                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "Type": Type, "Gender": Gender, "Age": Age, "Emotion": Emotion, "Role": Role, "Listener": Listener})
     
-    ResponseJson, sortedCharacters = MainCharacterFilter(responseJson)
-    
-    return ResponseJson, sortedCharacters
+    return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 CharacterCompletion에 업데이트
-def CharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate 시작 >")
+## 프롬프트 요청 및 결과물 Json을 CharacterDefine에 업데이트
+def CharacterDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 11_CharacterDefineUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
-    ContinueCount, CharacterCount, Completion = CharacterCompletionCountLoad(projectName, email)
+    ContinueCount, CharacterCount, Completion = CharacterDefineCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CharacterCompletion", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate는 ExistedCharacterCompletion으로 대처됨 ]\n")
+            AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "CharacterDefine", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate는 ExistedCharacterDefine으로 대처됨 ]\n")
         else:
-            responseJson, sortedCharacters = CharacterCompletionResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
-            print(f"Project: {projectName} | Process: CharacterCompletion | CharacterFilter 완료\n{projectName}의 등장인물 {len(sortedCharacters)}명 : {sortedCharacters}")
+            responseJson = CharacterDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -475,40 +354,42 @@ def CharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mode =
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'CharacterCompletionUpdate')
+                            desc = 'CharacterDefineUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'CharacterCompletionUpdate: {Update}')
+                UpdateTQDM.set_description(f'CharacterDefineUpdate: {Update}')
                 time.sleep(0.0001)
                 CharacterChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
                 Chunk = ResponseJson[i]["Chunk"]
                 Character = ResponseJson[i]["Character"]
-                MainCharacter = ResponseJson[i]["MainCharacter"]
-                AuthorRelationship = ResponseJson[i]["AuthorRelationship"]
+                Type = ResponseJson[i]["Type"]
+                Gender = ResponseJson[i]["Gender"]
+                Age = ResponseJson[i]["Age"]
+                Emotion = ResponseJson[i]["Emotion"]
+                Role = ResponseJson[i]["Role"]
+                Listener = ResponseJson[i]["Listener"]
                 
-                AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship)
+                AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            CharacterCompletionCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate 완료 ]\n")
+            CharacterDefineCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "데미안"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
-    mode = "Example"
+    mode = "Master"
     #########################################################################
-    
-    # CharacterCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)

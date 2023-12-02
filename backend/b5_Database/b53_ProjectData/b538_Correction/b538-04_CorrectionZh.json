@@ -7,142 +7,35 @@
         "Content": "Body",
         "Language": "Zh",
         "TaskName": "CorrectionZh",
-        "TaskCount": 0
+        "BodyCount": 0,
+        "ChunkCount": 0,
+        "Completion": "No"
     },
     {
         "CorrectionZhSplitedBodys": [
             {
-                "BodyId": 1,
+                "BodyId": 0,
                 "CorrectionZhSplitedBodyChunks":
                 [
-                    {"ChunkId": "",
-                    "CorrectionZhSplitedBodyChunkTokens":
-                    [
-                        {"ZhTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"ZhTokenId": "", "Text": ""},
-                        {"ZhTokenId": "", "Space": ""},
-                        {"ZhTokenId": "", "Dotdot": ","},
-                        {"ZhTokenId": "", "Pause": "0.3"},
-                        {"ZhTokenId": "", "Period": ""},
-                        {"ZhTokenId": "", "Enter": ""},
-                        {"ZhTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionZhSplitedBodyChunkTokens":
-                    [
-                        {"ZhTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"ZhTokenId": "", "Text": ""},
-                        {"ZhTokenId": "", "Space": ""},
-                        {"ZhTokenId": "", "Dotdot": ","},
-                        {"ZhTokenId": "", "Pause": "0.3"},
-                        {"ZhTokenId": "", "Period": ""},
-                        {"ZhTokenId": "", "Enter": ""},
-                        {"ZhTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionZhSplitedBodyChunkTokens":
-                    [
-                        {"ZhTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"ZhTokenId": "", "Text": ""},
-                        {"ZhTokenId": "", "Space": ""},
-                        {"ZhTokenId": "", "Dotdot": ","},
-                        {"ZhTokenId": "", "Pause": "0.3"},
-                        {"ZhTokenId": "", "Period": ""},
-                        {"ZhTokenId": "", "Enter": ""},
-                        {"ZhTokenId": "", "Pause": "0.6"}
-                    ]
-                    }
-                ]
-            },
-            {
-                "BodyId": 2,
-                "CorrectionZhSplitedBodyChunks":
-                [
-                    {"ChunkId": "",
-                    "CorrectionZhSplitedBodyChunkTokens":
-                    [
-                        {"ZhTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"ZhTokenId": "", "Text": ""},
-                        {"ZhTokenId": "", "Space": ""},
-                        {"ZhTokenId": "", "Dotdot": ","},
-                        {"ZhTokenId": "", "Pause": "0.3"},
-                        {"ZhTokenId": "", "Period": ""},
-                        {"ZhTokenId": "", "Enter": ""},
-                        {"ZhTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionZhSplitedBodyChunkTokens":
-                    [
-                        {"ZhTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"ZhTokenId": "", "Text": ""},
-                        {"ZhTokenId": "", "Space": ""},
-                        {"ZhTokenId": "", "Dotdot": ","},
-                        {"ZhTokenId": "", "Pause": "0.3"},
-                        {"ZhTokenId": "", "Period": ""},
-                        {"ZhTokenId": "", "Enter": ""},
-                        {"ZhTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionZhSplitedBodyChunkTokens":
-                    [
-                        {"ZhTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"ZhTokenId": "", "Text": ""},
-                        {"ZhTokenId": "", "Space": ""},
-                        {"ZhTokenId": "", "Dotdot": ","},
-                        {"ZhTokenId": "", "Pause": "0.3"},
-                        {"ZhTokenId": "", "Period": ""},
-                        {"ZhTokenId": "", "Enter": ""},
-                        {"ZhTokenId": "", "Pause": "0.6"}
-                    ]
-                    }
-                ]
-            },
-            {
-                "BodyId": 3,
-                "CorrectionZhSplitedBodyChunks":
-                [
-                    {"ChunkId": "",
-                    "CorrectionZhSplitedBodyChunkTokens":
-                    [
-                        {"ZhTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"ZhTokenId": "", "Text": ""},
-                        {"ZhTokenId": "", "Space": ""},
-                        {"ZhTokenId": "", "Dotdot": ","},
-                        {"ZhTokenId": "", "Pause": "0.3"},
-                        {"ZhTokenId": "", "Period": ""},
-                        {"ZhTokenId": "", "Enter": ""},
-                        {"ZhTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionZhSplitedBodyChunkTokens":
-                    [
-                        {"ZhTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"ZhTokenId": "", "Text": ""},
-                        {"ZhTokenId": "", "Space": ""},
-                        {"ZhTokenId": "", "Dotdot": ","},
-                        {"ZhTokenId": "", "Pause": "0.3"},
-                        {"ZhTokenId": "", "Period": ""},
-                        {"ZhTokenId": "", "Enter": ""},
-                        {"ZhTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionZhSplitedBodyChunkTokens":
-                    [
-                        {"ZhTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"ZhTokenId": "", "Text": ""},
-                        {"ZhTokenId": "", "Space": ""},
-                        {"ZhTokenId": "", "Dotdot": ","},
-                        {"ZhTokenId": "", "Pause": "0.3"},
-                        {"ZhTokenId": "", "Period": ""},
-                        {"ZhTokenId": "", "Enter": ""},
-                        {"ZhTokenId": "", "Pause": "0.6"}
-                    ]
+                    {
+                        "ChunkId": 0,
+                        "Tag": "None",
+                        "CorrectionZhChunkTokens":[
+                            {"Pause": "None"},
+                            {"SFX": "None"},
+                            {"Space": "None"},
+                            {"Enter": "None"},
+                            {"Comma": "None"},
+                            {"Quotes": "None"},
+                            {"Period": "None"},
+                            {"ETC": "None"},
+                            {"Number": "None"},
+                            {"Ko": "None"},
+                            {"En": "None"},
+                            {"Ja": "None"},
+                            {"Zh": "None"},
+                            {"Es": "None"}
+                        ]
                     }
                 ]
             }

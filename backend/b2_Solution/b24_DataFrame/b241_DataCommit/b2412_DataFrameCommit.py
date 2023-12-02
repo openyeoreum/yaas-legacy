@@ -1064,7 +1064,7 @@ def AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 26. 1-1 CorrectionKo의 Body(본문) CharacterCompeletions 업데이트 형식
+## 26. 1-1 CorrectionKo의 Body(본문) CorrectionKoSplitedBodys 업데이트 형식
 def UpdateCorrectionKoSplitedBodys(project):
     BodyId = len(project.CorrectionKo[1]["CorrectionKoSplitedBodys"])
     
@@ -1076,39 +1076,40 @@ def UpdateCorrectionKoSplitedBodys(project):
     project.CorrectionKo[1]["CorrectionKoSplitedBodys"].append(updateCorrectionKoSplitedBodys)
     project.CorrectionKo[0]["BodyCount"] = BodyId
     
-## 26. 1-2 CorrectionKo의 Body(본문) CharacterCompeletions 업데이트
-def AddCorrectionKoChunksToDB(projectName, email):
+## 26. 1-2 CorrectionKo의 Body(본문) CorrectionKoSplitedBodys 업데이트
+def AddCorrectionKoSplitedBodysToDB(projectName, email):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionCharacters(project)
+        UpdateCorrectionKoSplitedBodys(project)
         
         flag_modified(project, "CorrectionKo")
         
         db.add(project)
         db.commit()
         
-## 26. 2-1 CorrectionKo의 Body(본문) BodyChunks 업데이트 형식
-def UpdateCorrectionKoSplitedBodyChunks(project, ChunkId, ChunkTokens):
+## 26. 2-1 CorrectionKo의 Body(본문) CorrectionKoChunk 업데이트 형식
+def UpdateCorrectionKoSplitedChunks(project, ChunkId, Tag, ChunkTokens):
     # 새롭게 생성되는 BodyId는 CorrectionKoSplitedBodys의 Len값과 동일
     BodyId = len(project.CorrectionKo[1]["CorrectionKoSplitedBodys"]) -1
     
-    updateCorrectionKoSplitedBodyChunks = {
+    updateCorrectionKoChunkTokens = {
         "ChunkId": ChunkId,
-        "CorrectionKoSplitedBodyChunkTokens": ChunkTokens
+        "Tag": Tag,
+        "CorrectionKoChunkTokens": ChunkTokens
     }
     
-    project.CorrectionKo[1]["CorrectionKoSplitedBodys"][BodyId]["CorrectionKoSplitedBodyChunks"].append(updateCorrectionKoSplitedBodyChunks)
+    project.CorrectionKo[1]["CorrectionKoSplitedBodys"][BodyId]["CorrectionKoSplitedBodyChunks"].append(updateCorrectionKoChunkTokens)
     project.CorrectionKo[0]["BodyCount"] = BodyId
     # Count 업데이트
     project.CorrectionKo[0]["ChunkCount"] = ChunkId
     
-## 26. 2-2 CorrectionKo의 Body(본문) CharacterCompeletions 업데이트
-def AddCorrectionKoChunksToDB(projectName, email, ChunkId, ChunkTokens):
+## 26. 2-2 CorrectionKo의 Body(본문) CorrectionKoChunk 업데이트
+def AddCorrectionKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCorrectionKoSplitedBodyChunks(project, ChunkId, ChunkTokens)
+        UpdateCorrectionKoSplitedChunks(project, ChunkId, Tag, ChunkTokens)
         
         flag_modified(project, "CorrectionKo")
         

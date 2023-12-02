@@ -14,156 +14,28 @@
     {
         "CorrectionKoSplitedBodys": [
             {
-                "BodyId": 1,
+                "BodyId": 0,
                 "CorrectionKoSplitedBodyChunks":
                 [
-                    {"ChunkId": "",
-                    "CorrectionKoSplitedBodyChunkTokens":
-                    [
-                        {"KoTokenId": "", "Tone": [{"Tone": "중립"}, {"degree": "1"}]},
-                        {"KoTokenId": "", "Text": "수업은"},
-                        {"KoTokenId": "", "Dotdot": ","},
-                        {"KoTokenId": "", "Space": " "},
-                        {"KoTokenId": "", "Text": "대화와"},
-                        {"KoTokenId": "", "Space": " "},
-                        {"KoTokenId": "", "Text": "강의가"},
-                        {"KoTokenId": "", "Space": " "},
-                        {"KoTokenId": "", "Text": "함께하는"},
-                        {"KoTokenId": "", "Space": " "},
-                        {"KoTokenId": "", "Text": "방식으로"},
-                        {"KoTokenId": "", "Dotdot": ","},
-                        {"KoTokenId": "", "Space": " "},
-                        {"KoTokenId": "", "Text": "진행하고"},
-                        {"KoTokenId": "", "Space": " "},
-                        {"KoTokenId": "", "Text": "싶었으나"},
-                        {"KoTokenId": "", "Space": " "},
-                        {"KoTokenId": "", "Pause": "0.3"},
-                        {"KoTokenId": "", "Text": "학생들에게"},
-                        {"KoTokenId": "", "Space": " "},
-                        {"KoTokenId": "", "Text": "익숙한"},
-                        {"KoTokenId": "", "Space": " "},
-                        {"KoTokenId": "", "Text": "방식은"},
-                        {"KoTokenId": "", "Space": " "},
-                        {"KoTokenId": "", "Text": "아니었다"},
-                        {"KoTokenId": "", "Period": "."},
-                        {"KoTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionKoSplitedBodyChunkTokens":
-                    [
-                        {"KoTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"KoTokenId": "", "Text": ""},
-                        {"KoTokenId": "", "Space": ""},
-                        {"KoTokenId": "", "Dotdot": ","},
-                        {"KoTokenId": "", "Pause": "0.3"},
-                        {"KoTokenId": "", "Period": ""},
-                        {"KoTokenId": "", "Enter": ""},
-                        {"KoTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionKoSplitedBodyChunkTokens":
-                    [
-                        {"KoTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"KoTokenId": "", "Text": ""},
-                        {"KoTokenId": "", "Space": ""},
-                        {"KoTokenId": "", "Dotdot": ","},
-                        {"KoTokenId": "", "Pause": "0.3"},
-                        {"KoTokenId": "", "Period": ""},
-                        {"KoTokenId": "", "Enter": ""},
-                        {"KoTokenId": "", "Pause": "0.6"}
-                    ]
-                    }
-                ]
-            },
-            {
-                "BodyId": 2,
-                "CorrectionKoSplitedBodyChunks":
-                [
-                    {"ChunkId": "",
-                    "CorrectionKoSplitedBodyChunkTokens":
-                    [
-                        {"KoTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"KoTokenId": "", "Text": ""},
-                        {"KoTokenId": "", "Space": ""},
-                        {"KoTokenId": "", "Dotdot": ","},
-                        {"KoTokenId": "", "Pause": "0.3"},
-                        {"KoTokenId": "", "Period": ""},
-                        {"KoTokenId": "", "Enter": ""},
-                        {"KoTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionKoSplitedBodyChunkTokens":
-                    [
-                        {"KoTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"KoTokenId": "", "Text": ""},
-                        {"KoTokenId": "", "Space": ""},
-                        {"KoTokenId": "", "Dotdot": ","},
-                        {"KoTokenId": "", "Pause": "0.3"},
-                        {"KoTokenId": "", "Period": ""},
-                        {"KoTokenId": "", "Enter": ""},
-                        {"KoTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionKoSplitedBodyChunkTokens":
-                    [
-                        {"KoTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"KoTokenId": "", "Text": ""},
-                        {"KoTokenId": "", "Space": ""},
-                        {"KoTokenId": "", "Dotdot": ","},
-                        {"KoTokenId": "", "Pause": "0.3"},
-                        {"KoTokenId": "", "Period": ""},
-                        {"KoTokenId": "", "Enter": ""},
-                        {"KoTokenId": "", "Pause": "0.6"}
-                    ]
-                    }
-                ]
-            },
-            {
-                "BodyId": 3,
-                "CorrectionKoSplitedBodyChunks":
-                [
-                    {"ChunkId": "",
-                    "CorrectionKoSplitedBodyChunkTokens":
-                    [
-                        {"KoTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"KoTokenId": "", "Text": ""},
-                        {"KoTokenId": "", "Space": ""},
-                        {"KoTokenId": "", "Dotdot": ","},
-                        {"KoTokenId": "", "Pause": "0.3"},
-                        {"KoTokenId": "", "Period": ""},
-                        {"KoTokenId": "", "Enter": ""},
-                        {"KoTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionKoSplitedBodyChunkTokens":
-                    [
-                        {"KoTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"KoTokenId": "", "Text": ""},
-                        {"KoTokenId": "", "Space": ""},
-                        {"KoTokenId": "", "Dotdot": ","},
-                        {"KoTokenId": "", "Pause": "0.3"},
-                        {"KoTokenId": "", "Period": ""},
-                        {"KoTokenId": "", "Enter": ""},
-                        {"KoTokenId": "", "Pause": "0.6"}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "CorrectionKoSplitedBodyChunkTokens":
-                    [
-                        {"KoTokenId": "", "Tone": [{"Tone": ""}, {"degree": ""}]},
-                        {"KoTokenId": "", "Text": ""},
-                        {"KoTokenId": "", "Space": ""},
-                        {"KoTokenId": "", "Dotdot": ","},
-                        {"KoTokenId": "", "Pause": "0.3"},
-                        {"KoTokenId": "", "Period": ""},
-                        {"KoTokenId": "", "Enter": ""},
-                        {"KoTokenId": "", "Pause": "0.6"}
-                    ]
+                    {
+                        "ChunkId": 0,
+                        "Tag": "None",
+                        "CorrectionKoChunkTokens":[
+                            {"Pause": "None"},
+                            {"SFX": "None"},
+                            {"Space": "None"},
+                            {"Enter": "None"},
+                            {"Comma": "None"},
+                            {"Quotes": "None"},
+                            {"Period": "None"},
+                            {"ETC": "None"},
+                            {"Number": "None"},
+                            {"Ko": "None"},
+                            {"En": "None"},
+                            {"Ja": "None"},
+                            {"Zh": "None"},
+                            {"Es": "None"}
+                        ]
                     }
                 ]
             }

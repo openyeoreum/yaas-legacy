@@ -216,7 +216,7 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
     if nonCommonPartRatio < 98.5:
         return f"INPUT, OUTPUT 불일치율 1.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
     # Error3: InputDots, responseDataDots 불일치시 예외 처리
-    if InputDots != len(OutputDic):
+    if len(InputDic) != len(OutputDic):
         return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDots}), OUTPUT({len(OutputDic)})"
     # Error4: Input, responseData 불일치시 예외 처리
     for i in range(len(InputDic)):

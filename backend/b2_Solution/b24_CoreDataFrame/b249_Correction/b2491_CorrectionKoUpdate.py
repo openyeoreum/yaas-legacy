@@ -251,35 +251,38 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
         CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
         
         if CleanInput != CleanOutput:
-            nonCommonPart = nonCommonParts[nonCommonPartsNum]
-            DiffINPUT = nonCommonPart['DiffINPUT']
-            print(f'\n\n\n({i}, {nonCommonPartsNum})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
-            DiffOUTPUT = nonCommonPart['DiffOUTPUT']
-            print(f'DiffOUTPUT: {DiffOUTPUT}')
-            longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
-            longCommonSubstring = longCommonSubstring.replace('콼', '')
-            print(f'longCommonSubstring: {longCommonSubstring}')
-            NonINPUT = nonCommonPart['NonINPUT']
-            print(f'NonINPUT: {NonINPUT}')
-            NonOUTPUT = nonCommonPart['NonOUTPUT']
-            print(f'NonOUTPUT: {NonOUTPUT}')
-            if longCommonSubstring in CleanInput:
-                ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
-                ReplaceCleanOutput = CleanOutput
-            else:
-                ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
-                ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
-            print(f'replace1: {NonINPUT + longCommonSubstring}')
-            print(f'replace2: {NonOUTPUT + longCommonSubstring}\n----------------------------------------\n')
-            print(f'CleanInput: {CleanInput}')
-            print(f'CleanOutput: {CleanOutput}')
-            print(f'ReplaceCleanInput: {ReplaceCleanInput}')
-            print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-                
-            if ReplaceCleanInput == ReplaceCleanOutput:
-                nonCommonPartsNum += 1
-            else:
-                return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})"
+            try:
+                nonCommonPart = nonCommonParts[nonCommonPartsNum]
+                DiffINPUT = nonCommonPart['DiffINPUT']
+                print(f'\n\n\n({i}, {nonCommonPartsNum})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
+                DiffOUTPUT = nonCommonPart['DiffOUTPUT']
+                print(f'DiffOUTPUT: {DiffOUTPUT}')
+                longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
+                longCommonSubstring = longCommonSubstring.replace('콼', '')
+                print(f'longCommonSubstring: {longCommonSubstring}')
+                NonINPUT = nonCommonPart['NonINPUT']
+                print(f'NonINPUT: {NonINPUT}')
+                NonOUTPUT = nonCommonPart['NonOUTPUT']
+                print(f'NonOUTPUT: {NonOUTPUT}')
+                if longCommonSubstring in CleanInput:
+                    ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
+                    ReplaceCleanOutput = CleanOutput
+                else:
+                    ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
+                    ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
+                print(f'replace1: {NonINPUT + longCommonSubstring}')
+                print(f'replace2: {NonOUTPUT + longCommonSubstring}\n----------------------------------------\n')
+                print(f'CleanInput: {CleanInput}')
+                print(f'CleanOutput: {CleanOutput}')
+                print(f'ReplaceCleanInput: {ReplaceCleanInput}')
+                print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+                    
+                if ReplaceCleanInput == ReplaceCleanOutput:
+                    nonCommonPartsNum += 1
+                else:
+                    print(f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})")
+            except IndexError as e:
+                print(f"INPUT, OUTPUT [n] 불일치 오류 발생: IndexError {e}")
 
     return {'json': OutputDic, 'filter': OutputDic, 'nonCommonParts': nonCommonParts}
 
@@ -745,7 +748,7 @@ if __name__ == "__main__":
     
     # nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
     # # Error4: Input, responseData 불일치시 예외 처리
-    # # <코드1>
+    # ### <코드1>
     # nonCommonPartsNum = 0
     # for i in range(len(InputDic)):
     #     CleanInput = re.sub("[^가-힣]", "", InputDic[i])
@@ -782,7 +785,7 @@ if __name__ == "__main__":
     #         else:
     #             print(f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})")
     
-    # # <코드2>
+    # ## <코드2>
     # for i in range(len(InputDic)):
     #     CleanInput = re.sub("[^가-힣]", "", InputDic[i])
     #     CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])

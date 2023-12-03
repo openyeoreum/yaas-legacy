@@ -232,7 +232,7 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
 
     # Error1: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
-        return "JSONType에서 오류 발생: JSONTypeError"  
+        return "JSONType에서 오류 발생: JSONTypeError"
     # Error2: INPUT, OUTPUT 불일치시 예외 처리
     try:
         nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
@@ -251,13 +251,25 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
         if CleanInput != CleanOutput:
             for j in range(len(nonCommonParts)):
                 DiffINPUT = nonCommonParts[j]['DiffINPUT']
+                print(f'DiffINPUT: {DiffINPUT}')
                 DiffOUTPUT = nonCommonParts[j]['DiffOUTPUT']
+                print(f'DiffOUTPUT: {DiffOUTPUT}')
                 longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
-                
+                longCommonSubstring = longCommonSubstring.replace('콼', '')
+                print(f'longCommonSubstring: {longCommonSubstring}')
                 NonINPUT = nonCommonParts[j]['NonINPUT']
+                print(f'NonINPUT: {NonINPUT}')
                 NonOUTPUT = nonCommonParts[j]['NonOUTPUT']
-                
-                CleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
+                print(f'NonOUTPUT: {NonOUTPUT}')
+                if longCommonSubstring in CleanInput:
+                    CleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
+                else:
+                    CleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
+                    CleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
+                print(f'replace1: {NonINPUT + longCommonSubstring}')
+                print(f'replace2: {NonOUTPUT + longCommonSubstring}')
+                print(f'ReplaceCleanInput: {CleanInput}')
+                print(f'(Replace)CleanOutput: {CleanOutput}')
                 
             if CleanInput != CleanOutput:
                 return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})"
@@ -718,4 +730,34 @@ if __name__ == "__main__":
     # # 텍스트 파일에 저장
     # with open(filePath3, "w", encoding="utf-8") as file:
     #     file.write(responseJsonText)
+    # ########## 테스트 후 삭제 ##########
+    
+    # ########## 테스트 후 삭제 ##########
+    # InputDic = "대체불호가토큰와와 "
+    # OutputDic = "대체불가토큰과"
+    
+    # nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
+    # CleanInput = re.sub("[^가-힣]", "", InputDic)
+    # CleanOutput = re.sub("[^가-힣]", "", OutputDic)
+    # if CleanInput != CleanOutput:
+    #     for j in range(len(nonCommonParts)):
+    #         DiffINPUT = nonCommonParts[j]['DiffINPUT']
+    #         print(f'DiffINPUT: {DiffINPUT}')
+    #         DiffOUTPUT = nonCommonParts[j]['DiffOUTPUT']
+    #         print(f'DiffOUTPUT: {DiffOUTPUT}')
+    #         longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
+    #         longCommonSubstring = longCommonSubstring.replace('콼', '')
+    #         print(f'longCommonSubstring: {longCommonSubstring}')
+    #         NonINPUT = nonCommonParts[j]['NonINPUT']
+    #         print(f'NonINPUT: {NonINPUT}')
+    #         NonOUTPUT = nonCommonParts[j]['NonOUTPUT']
+    #         print(f'NonOUTPUT: {NonOUTPUT}')
+    #         CleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
+    #         print(f'replace1: {NonINPUT + longCommonSubstring}')
+    #         print(f'replace2: {NonOUTPUT + longCommonSubstring}')
+            # print(f'ReplaceCleanInput: {CleanInput}')
+            # print(f'(Replace)CleanOutput: {CleanOutput}')
+            
+    #     if CleanInput != CleanOutput:
+    #         print(f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic}), OUTPUT({OutputDic})")
     # ########## 테스트 후 삭제 ##########

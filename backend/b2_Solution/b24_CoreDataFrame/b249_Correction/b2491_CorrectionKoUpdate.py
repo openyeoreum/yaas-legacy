@@ -245,33 +245,40 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
         print(f'@@@@@@@@@@\nInputDic: {InputDic}\nOutputDic: {OutputDic}\n@@@@@@@@@@')
         return f"INPUT, OUTPUT [n] 갯수 불일치 오류 발생: INPUT({len(InputDic)}), OUTPUT({len(OutputDic)}), InputDots({InputDots})"
     # Error4: Input, responseData 불일치시 예외 처리
+    nonCommonPartsNum = 0
     for i in range(len(InputDic)):
         CleanInput = re.sub("[^가-힣]", "", InputDic[i])
         CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
+        
         if CleanInput != CleanOutput:
-            for j in range(len(nonCommonParts)):
-                DiffINPUT = nonCommonParts[j]['DiffINPUT']
-                print(f'DiffINPUT: {DiffINPUT}')
-                DiffOUTPUT = nonCommonParts[j]['DiffOUTPUT']
-                print(f'DiffOUTPUT: {DiffOUTPUT}')
-                longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
-                longCommonSubstring = longCommonSubstring.replace('콼', '')
-                print(f'longCommonSubstring: {longCommonSubstring}')
-                NonINPUT = nonCommonParts[j]['NonINPUT']
-                print(f'NonINPUT: {NonINPUT}')
-                NonOUTPUT = nonCommonParts[j]['NonOUTPUT']
-                print(f'NonOUTPUT: {NonOUTPUT}')
-                if longCommonSubstring in CleanInput:
-                    CleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
-                else:
-                    CleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
-                    CleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
-                print(f'replace1: {NonINPUT + longCommonSubstring}')
-                print(f'replace2: {NonOUTPUT + longCommonSubstring}')
-                print(f'ReplaceCleanInput: {CleanInput}')
-                print(f'(Replace)CleanOutput: {CleanOutput}')
+            nonCommonPart = nonCommonParts[nonCommonPartsNum]
+            DiffINPUT = nonCommonPart['DiffINPUT']
+            print(f'\n\n\n({i}, {nonCommonPartsNum})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
+            DiffOUTPUT = nonCommonPart['DiffOUTPUT']
+            print(f'DiffOUTPUT: {DiffOUTPUT}')
+            longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
+            longCommonSubstring = longCommonSubstring.replace('콼', '')
+            print(f'longCommonSubstring: {longCommonSubstring}')
+            NonINPUT = nonCommonPart['NonINPUT']
+            print(f'NonINPUT: {NonINPUT}')
+            NonOUTPUT = nonCommonPart['NonOUTPUT']
+            print(f'NonOUTPUT: {NonOUTPUT}')
+            if longCommonSubstring in CleanInput:
+                ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
+                ReplaceCleanOutput = CleanOutput
+            else:
+                ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
+                ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
+            print(f'replace1: {NonINPUT + longCommonSubstring}')
+            print(f'replace2: {NonOUTPUT + longCommonSubstring}\n----------------------------------------\n')
+            print(f'CleanInput: {CleanInput}')
+            print(f'CleanOutput: {CleanOutput}')
+            print(f'ReplaceCleanInput: {ReplaceCleanInput}')
+            print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
                 
-            if CleanInput != CleanOutput:
+            if ReplaceCleanInput == ReplaceCleanOutput:
+                nonCommonPartsNum += 1
+            else:
                 return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})"
 
     return {'json': OutputDic, 'filter': OutputDic, 'nonCommonParts': nonCommonParts}
@@ -733,31 +740,83 @@ if __name__ == "__main__":
     # ########## 테스트 후 삭제 ##########
     
     # ########## 테스트 후 삭제 ##########
-    # InputDic = "대체불호가토큰와와 "
-    # OutputDic = "대체불가토큰과"
+    # InputDic = ['두 공대생의 이상한 창업', '여기서 잠깐, 구글 이야기를 하고 가자 구글의 성공은 참으로 아 이러니한 일이다. ', '1998년 검색서비스를 시작한 구글은 21세기 들면서 순식간에 세계 최고의 기업가치를 인정받는 거인으로 급부상했지 만, 시작은 단순하고 무모했다. ', '비즈니스 모델이 독특한 것도 아닌 데 다 차별화 포인트도 없었고, 어떤 식으로 돈을 벌겠다는 계획도 없이 두 공대생이 자신들의 박사학위 논문을 사업모델화한 것이었다. ', '또 구글이 검색엔진을 발명한 최초의 회사도 아니고, 더구나 기존의 경 영학 이론으로 보면 사업의 사자도 모르는 회사다. ', '창업 당시 래리 페이지와 세르게이 브린은 박사학위 논문을 쓰고 있던 스탠퍼드 대학원생들이었다. ', '그들의 논문 주제는 검색엔진의 알고리즘이었는데, 페이지랭크라는 아이디어를 생각한다. ' ,'페이지랭크란 간단히 말하면, 웹페이지에 랭킹을 매기는 방식이다. ', '예를 들어, 대학이라는 검색어를 치면 당시 알타비스타나 인포 시크 등 기존 검색엔진은 중요도에 상관없이 그냥 대학사이트들을 죽 열거하는 반면, 페이지랭크는 각 페이지마다 중요도와 연관성의 가중치 점수를 매겨서 높은 점수의 웹페이지를 상위에 노출한다. ', '이 것이 오늘날의 구글을 만들어 준 검색 알고리즘이다. ', '세르게이 브린과 래리 페이지는 페이지랭크 알고리즘을 적용한 검색엔진을 만들고 검색사이트를 열었다. ', '이게 구글의 시작이었다. ', '두 명의 순진한 공돌이들은 검색을 판매해야 할 상품으로 생각하지 않았다. ', '어떻게 판매해서 수익을 창출할 것인지 아이디어도 없었고, 검색엔진을 다른 포털 사이트나 기업에 판매하려는 시도도 별로 하지 않았다. ']
+    # OutputDic = ['두 공대생의 이상한 창업', '여기서 잠깐,(0.3) 구글 이야기를 하고 가자(0.1) 구글의 성공은 참으로(0.1) 아이러니한 일이다.', '1998년 검색서비스를 시작한 구글은(0.2) 21세기 들면서 순식간에(0.1) 세계 최고의 기업가치를 인정받는 거인으로 급부상했지만,(0.3) 시작은 단순하고(0.1) 무모했다.', '비즈니스 모델이 독특한 것도 아닌데(0.2) 다른 차별화 포인트도 없었고,(0.2) 어떤 식으로 돈을 벌겠다는 계획도 없이(0.1) 두 공대생이 자신들의 박사학위 논문을 사업모델화한 것이었다.', '또 구글이 검색엔진을 발명한 최초의 회사도 아니고,(0.3) 더구나 기존의 경영학 이론으로 보면(0.2) 사업의 사자도 모르는 회사다.', '창업 당시 래리 페이지와 세르게이 브린은(0.2) 박사학위 논문을 쓰고 있던 스탠퍼드 대학원생들이었다0.', '그들의 논문 주제는 검색엔진의 알고리즘이었는데,(0.3) 페이지랭크라는 아이디어를 생각해냈다.', '페이지랭크란(0.1) 간단히 말하면,(0.2) 웹페이지에 랭킹을 매기는 방식이다.', "예를 들어,(0.1) '대학'이라는 검색어를 치면(0.2) 당시 알타비스타나 인포시크 등 기존 검색엔진은(0.3) 중요도에 상관없이 그냥 대학사이트들을 죽 나열하는 반면,(0.3) 페이지랭크는 각 페이지마다 중요도와 연관성의 가중치 점수를 매겨서(0.2) 높은 점수의 웹페이지를 상위에 노출한다.", '이것이(0.1) 오늘날의 구글을 만들어 준 검색 알고리즘이다.', '세르게이 브린과 래리 페이지는(0.2) 페이지랭크 알고리즘을 적용한 검색엔진을 만들고(0.2) 검색사이트를 열었다.', '이게 구글의 시작이었다.', '두 명의 순진한 공돌이들은(0.2) 검색을 판매해야 할 상품으로 생각하지 않았다.', '어떻게 판매해서 수익을 창출할 것인지(0.2) 아이디어도 없었고,(0.2) 검색엔진을 다른 포털 사이트나 기업에 판매하려는 시도도(0.3) 별로 하지 않았다.']
     
     # nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
-    # CleanInput = re.sub("[^가-힣]", "", InputDic)
-    # CleanOutput = re.sub("[^가-힣]", "", OutputDic)
-    # if CleanInput != CleanOutput:
-    #     for j in range(len(nonCommonParts)):
-    #         DiffINPUT = nonCommonParts[j]['DiffINPUT']
-    #         print(f'DiffINPUT: {DiffINPUT}')
-    #         DiffOUTPUT = nonCommonParts[j]['DiffOUTPUT']
+    # # Error4: Input, responseData 불일치시 예외 처리
+    # # <코드1>
+    # nonCommonPartsNum = 0
+    # for i in range(len(InputDic)):
+    #     CleanInput = re.sub("[^가-힣]", "", InputDic[i])
+    #     CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
+        
+    #     if CleanInput != CleanOutput:
+    #         nonCommonPart = nonCommonParts[nonCommonPartsNum]
+    #         DiffINPUT = nonCommonPart['DiffINPUT']
+    #         print(f'\n\n\n({i}, {nonCommonPartsNum})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
+    #         DiffOUTPUT = nonCommonPart['DiffOUTPUT']
     #         print(f'DiffOUTPUT: {DiffOUTPUT}')
     #         longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
     #         longCommonSubstring = longCommonSubstring.replace('콼', '')
     #         print(f'longCommonSubstring: {longCommonSubstring}')
-    #         NonINPUT = nonCommonParts[j]['NonINPUT']
+    #         NonINPUT = nonCommonPart['NonINPUT']
     #         print(f'NonINPUT: {NonINPUT}')
-    #         NonOUTPUT = nonCommonParts[j]['NonOUTPUT']
+    #         NonOUTPUT = nonCommonPart['NonOUTPUT']
     #         print(f'NonOUTPUT: {NonOUTPUT}')
-    #         CleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
+    #         if longCommonSubstring in CleanInput:
+    #             ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
+    #             ReplaceCleanOutput = CleanOutput
+    #         else:
+    #             ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
+    #             ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
     #         print(f'replace1: {NonINPUT + longCommonSubstring}')
-    #         print(f'replace2: {NonOUTPUT + longCommonSubstring}')
-            # print(f'ReplaceCleanInput: {CleanInput}')
-            # print(f'(Replace)CleanOutput: {CleanOutput}')
-            
+    #         print(f'replace2: {NonOUTPUT + longCommonSubstring}\n----------------------------------------\n')
+    #         print(f'CleanInput: {CleanInput}')
+    #         print(f'CleanOutput: {CleanOutput}')
+    #         print(f'ReplaceCleanInput: {ReplaceCleanInput}')
+    #         print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+                
+    #         if ReplaceCleanInput == ReplaceCleanOutput:
+    #             nonCommonPartsNum += 1
+    #         else:
+    #             print(f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})")
+    
+    # # <코드2>
+    # for i in range(len(InputDic)):
+    #     CleanInput = re.sub("[^가-힣]", "", InputDic[i])
+    #     CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
+    #     matchFound = False
+        
     #     if CleanInput != CleanOutput:
-    #         print(f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic}), OUTPUT({OutputDic})")
+    #         for j in range(len(nonCommonParts)):
+    #             DiffINPUT = nonCommonParts[j]['DiffINPUT']
+    #             print(f'\n\n\n({i}, {j})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
+    #             DiffOUTPUT = nonCommonParts[j]['DiffOUTPUT']
+    #             print(f'DiffOUTPUT: {DiffOUTPUT}')
+    #             longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
+    #             longCommonSubstring = longCommonSubstring.replace('콼', '')
+    #             print(f'longCommonSubstring: {longCommonSubstring}')
+    #             NonINPUT = nonCommonParts[j]['NonINPUT']
+    #             print(f'NonINPUT: {NonINPUT}')
+    #             NonOUTPUT = nonCommonParts[j]['NonOUTPUT']
+    #             print(f'NonOUTPUT: {NonOUTPUT}')
+    #             if longCommonSubstring in CleanInput:
+    #                 ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
+    #                 ReplaceCleanOutput = CleanOutput
+    #             else:
+    #                 ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
+    #                 ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
+    #             print(f'replace1: {NonINPUT + longCommonSubstring}')
+    #             print(f'replace2: {NonOUTPUT + longCommonSubstring}\n----------------------------------------\n')
+    #             print(f'CleanInput: {CleanInput}')
+    #             print(f'CleanOutput: {CleanOutput}')
+    #             print(f'ReplaceCleanInput: {ReplaceCleanInput}')
+    #             print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+    #             if ReplaceCleanInput == ReplaceCleanOutput:
+    #                 matchFound = True  # 일치하는 경우 발견
+    #                 break
+                
+    #         if not matchFound:
+    #             print(f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})")
     # ########## 테스트 후 삭제 ##########

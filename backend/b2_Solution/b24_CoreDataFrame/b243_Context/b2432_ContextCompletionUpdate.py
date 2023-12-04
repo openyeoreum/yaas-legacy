@@ -77,7 +77,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
             for j in range(len(ContextChunks)):
                 ContextMemoIndex = f"{{메모{ContextChunks[j]['ContextChunkId']}}}"
                 if ContextMemoIndex in TaskBody:
-                    ContextMemoBody = f"[메모{ContextChunks[j]['ContextChunkId']}] {{'예상독자': {ContextChunks[j]['Reader']}, '읽는목적': {ContextChunks[j]['Purpose']}, '키워드': {ContextChunks[j]['Subject']}}}"
+                    ContextMemoBody = f"[메모{ContextChunks[j]['ContextChunkId']}] {{'매칭독자': {ContextChunks[j]['Reader']}, '주제': {ContextChunks[j]['Subject']}, '읽는목적': {ContextChunks[j]['Purpose']}, '읽는원인': {ContextChunks[j]['Reason']}, '읽은후질문': {ContextChunks[j]['Question']}}}"
                     TaskBody = TaskBody.replace(ContextMemoIndex, ContextMemoBody)
                     
         elif 'Body' not in task:

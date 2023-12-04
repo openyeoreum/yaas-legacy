@@ -754,23 +754,15 @@ class LifeGraph(Base):
     LifeGraphPhoneNumber = Column(String(64))
     LifeGraphEmail = Column(String(64))
     LifeGraphPath = Column(Text)
-
-    ## Files
-    # ScriptFile
-    LifeGraphPath = Column(Text)
-    
-    LifeGraphFile = Column(Text)
-    
-    # DataFrameFile
-    DataFramePath = Column(Text)
     
     ## Process
-    # Script
-    LifeGraphScript = Column(Text)
+    # RawData
+    RawLifeGarph = Column(JSON)
     
-    # Script
-    LifeGraphPreprocessFrame = Column(JSON)
-    LifeGraphFrame = Column(JSON)
+    # Preprocess
+    Preprocess = Column(JSON)
+    TranslationKo = Column(JSON)
+    TranslationEn = Column(JSON)
     
     # Context
     ContextDefine = Column(JSON)
@@ -778,6 +770,7 @@ class LifeGraph(Base):
     NCEMDefine = Column(JSON)
     NCEMLink = Column(JSON)
 
+    # Report
 
 #######################################
 ########## VideoFrameProcess ##########
@@ -798,25 +791,16 @@ class Video(Base):
     VideoLanguage = Column(String(64))
     VideoUrl = Column(Text)
     
-    ## Files
-    # ScriptFile
-    ScriptPath = Column(Text)
-    
-    IndexFile = Column(Text)
-    CharacterFile = Column(Text)
-    BodyFile = Column(Text)
-    
-    # DataFrameFile
-    DataFramePath = Column(Text)
-    
     ## Process
-    # Script
-    VideoScript = Column(Text)
+    # RawData
+    RawVideo = Column(JSON)
     
-    # Script
-    ScriptPreprocessFrame = Column(JSON)
+    # Preprocess
+    Preprocess = Column(JSON)
     IndexFrame = Column(JSON)
     BodyFrame = Column(JSON)
+    TranslationKo = Column(JSON)
+    TranslationEn = Column(JSON)
     
     # Context
     ContextDefine = Column(JSON)

@@ -77,7 +77,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
             for j in range(len(ContextChunks)):
                 ContextMemoIndex = f"{{메모{ContextChunks[j]['ContextChunkId']}}}"
                 if ContextMemoIndex in TaskBody:
-                    ContextMemoBody = f"[메모{ContextChunks[j]['ContextChunkId']}] {{'예상독자': {ContextChunks[j]['Reader']}, '읽는목적': {ContextChunks[j]['Purpose']}, '키워드': {ContextChunks[j]['Subject']}}}"
+                    ContextMemoBody = f"[메모{ContextChunks[j]['ContextChunkId']}] {{'매칭독자': {ContextChunks[j]['Reader']}, '주제': {ContextChunks[j]['Subject']}, '읽는목적': {ContextChunks[j]['Purpose']}, '읽는원인': {ContextChunks[j]['Reason']}, '읽은후질문': {ContextChunks[j]['Question']}}}"
                     TaskBody = TaskBody.replace(ContextMemoIndex, ContextMemoBody)
                     
         elif 'Body' not in task:
@@ -111,10 +111,10 @@ def NCEMDefineFilter(MemoTag, responseData, memoryCounter):
         try:
             key = list(dic.keys())[0]
             if not key in MemoTag:
-                return "JSON에서 오류 발생: JSONKeyError"
+                return "JSON에서 오류 발생: JSONKeyError1"
             else:
-                if not ('분야' in dic[key] and '니즈' in dic[key] and '정보의질' in dic[key] and '마음상태' in dic[key] and '정확도' in dic[key]):
-                    return "JSON에서 오류 발생: JSONKeyError"
+                if not ('분류' in dic[key] and '욕구상태' in dic[key] and '이해상태' in dic[key] and '마음상태' in dic[key] and '정확도' in dic[key]):
+                    return "JSON에서 오류 발생: JSONKeyError2"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
@@ -228,9 +228,9 @@ def NCEMDefineProcess(projectName, email, Process = "NCEMDefine", memoryLength =
             else:
                 memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(InputDic))
             
-            MemoTag = ["예상독자" + match for match in memoTag]
+            MemoTag = ["매칭독자" + match for match in memoTag]
             memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + ' -\n'
-            outputEnder = f"{{'예상독자"
+            outputEnder = f"{{'매칭독자"
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -326,9 +326,9 @@ def NCEMDefineResponseJson(projectName, email, messagesReview = 'off', mode = "M
                 for key, value in dic.items():
                     ChunkId = ContextDefine[ContextDefineCount]['ChunkId']
                     Chunk = ContextDefine[ContextDefineCount]['Chunk']
-                    Domain = value['분야']
-                    Needs = value['니즈']
-                    CVC = value['정보의질']
+                    Domain = value['분류']
+                    Needs = value['욕구상태']
+                    CVC = value['이해상태']
                     PotentialEnergy = value['마음상태']
                     Accuracy = value['정확도']
                     ContextDefineCount += 1

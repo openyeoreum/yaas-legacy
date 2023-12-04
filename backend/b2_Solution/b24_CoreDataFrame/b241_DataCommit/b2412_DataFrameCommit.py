@@ -524,15 +524,17 @@ def AddExistedContextDefineToDB(projectName, email, ExistedDataFrame):
         db.commit()
 
 ## 7. 1-1 ContextDefine의 Body(본문) updateContextChunks 업데이트 형식
-def UpdateChunkContexts(project, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance):    
+def UpdateChunkContexts(project, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance):    
     updateContextChunks = {
         "ContextChunkId": ContextChunkId,
         "ChunkId": ChunkId,
         "Chunk": Chunk,
-        "Reader": Reader,
-        "Purpose": Purpose,
-        "Subject": Subject,
         "Phrases": Phrases,
+        "Reader": Reader,
+        "Subject": Subject,
+        "Purpose": Purpose,
+        "Reason": Reason,
+        "Question": Question,
         "Importance": Importance
     }
     
@@ -540,11 +542,11 @@ def UpdateChunkContexts(project, ContextChunkId, ChunkId, Chunk, Reader, Purpose
     project.ContextDefine[0]["ContextChunkCount"] = ContextChunkId
     
 ## 7. 1-2 ContextDefine의 Body(본문) updateContextChunks 업데이트
-def AddContextDefineChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance):
+def AddContextDefineChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateChunkContexts(project, ContextChunkId, ChunkId, Chunk, Reader, Purpose, Subject, Phrases, Importance)
+        UpdateChunkContexts(project, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance)
         
         flag_modified(project, "ContextDefine")
         

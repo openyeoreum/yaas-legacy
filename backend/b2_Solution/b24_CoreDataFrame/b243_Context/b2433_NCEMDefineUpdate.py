@@ -224,9 +224,9 @@ def NCEMDefineProcess(projectName, email, Process = "NCEMDefine", memoryLength =
             
             # Filter, MemoryCounter, OutputEnder 처리
             if Mode == "Master" or Mode == "ExampleFineTuning":
-                memoTag = re.findall(r'\[중요문구(\d{1,5})\]', str(Input))
+                memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(Input))
             else:
-                memoTag = re.findall(r'\[중요문구(\d{1,5})\]', str(InputDic))
+                memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(InputDic))
             
             MemoTag = ["예상독자" + match for match in memoTag]
             memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + ' -\n'

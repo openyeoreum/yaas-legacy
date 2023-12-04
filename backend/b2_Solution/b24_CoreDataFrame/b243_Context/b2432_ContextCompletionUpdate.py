@@ -224,13 +224,13 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
             
             # Filter, MemoryCounter, OutputEnder 처리
             if Mode == "Master" or Mode == "ExampleFineTuning":
-                memoTag = re.findall(r'\[중요문구(\d{1,5})\]', str(Input))
+                memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(Input))
             else:
-                memoTag = re.findall(r'\[중요문구(\d{1,5})\]', str(InputDic))
+                memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(InputDic))
             
-            MemoTag = ["중요문구" + match for match in memoTag]
+            MemoTag = ["핵심문구" + match for match in memoTag]
             memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + ' -\n'
-            outputEnder = f"{{'중요문구"
+            outputEnder = f"{{'핵심문구"
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)

@@ -131,9 +131,9 @@ class ProjectsStorageHistory(Base):
     ProjectsStoragePath = Column(Text)
 
 
-############################
-##### CoreFrameProcess #####
-############################
+######################################
+########## CoreFrameProcess ##########
+######################################
 
 ####################
 ### ProjectFrame ###
@@ -648,20 +648,20 @@ class Sound(Base):
     SoundName = Column(String(64))
     SoundFile = Column(Text)
     Seconds = Column(Float)
-    
+
     # SoundGeneralPointTag
     Genre = Column(String(64))
     Gender = Column(String(64))
     Age = Column(Integer)
     Personality = Column(String(64))
     Emotion = Column(String(64))
-    
+
     # SoundSituationPointTag
     Environment = Column(String(64))
     Situation = Column(String(64))
     Era = Column(String(64))
     Culture = Column(String(64))
-    
+
     # SoundClassificationTag
     IndexSound = Column(String(16))
     CaptionSound = Column(String(16))
@@ -734,9 +734,9 @@ class SFX(Base):
     ETC = Column(String(16))
 
 
-#################################
-##### LifeGraphFrameProcess #####
-#################################
+###########################################
+########## LifeGraphFrameProcess ##########
+###########################################
 
 ######################
 ### LifeGraphFrame ###
@@ -779,9 +779,9 @@ class LifeGraph(Base):
     NCEMLink = Column(JSON)
 
 
-#################################
-##### VideoFrameProcess #####
-#################################
+#######################################
+########## VideoFrameProcess ##########
+#######################################
 
 ##################
 ### VideoFrame ###

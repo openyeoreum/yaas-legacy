@@ -17,10 +17,12 @@
                 "ContextChunkId": 0,
                 "ChunkId": 0,
                 "Chunk": "None",
-                "Reader": "None",
-                "Purpose": "None",
-                "Subject": "None",
                 "Phrases": "None",
+                "Reader": "None",
+                "Subject": "None",
+                "Purpose": "None",
+                "Reason": "None",
+                "Question": "None",
                 "Importance": "None"
             }
         ]

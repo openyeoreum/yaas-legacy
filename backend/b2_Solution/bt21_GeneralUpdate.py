@@ -5,7 +5,7 @@ from backend.b2_Solution.b21_General.b212_PromptCommit import AddPromptToDB
 from backend.b2_Solution.b21_General.b213_TrainingDatasetCommit import AddTrainingDatasetToDB
 from backend.b2_Solution.b22_User.b221_UserCommit import AddUserToDB
 from backend.b2_Solution.b22_User.b223_ProjectsStorageCommit import AddProjectsStorageToDB
-from backend.b2_Solution.b23_Project.b231_Core.b2312_CoreCommit import AddProjectToDB
+from backend.b2_Solution.b23_Project.b231_Core.b2311_CoreCommit import AddProjectToDB
 from backend.b2_Solution.b23_Project.b231_Core.b2312_CoreFileCommit import MoveTextFile, AddTextToDB
 
 ### b211_PromptCommit ###

@@ -111,10 +111,10 @@ def NCEMDefineFilter(MemoTag, responseData, memoryCounter):
         try:
             key = list(dic.keys())[0]
             if not key in MemoTag:
-                return "JSON에서 오류 발생: JSONKeyError1"
+                return "JSON에서 오류 발생: JSONMemoTagError"
             else:
                 if not ('분류' in dic[key] and '욕구상태' in dic[key] and '이해상태' in dic[key] and '마음상태' in dic[key] and '정확도' in dic[key]):
-                    return "JSON에서 오류 발생: JSONKeyError2"
+                    return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
@@ -229,7 +229,7 @@ def NCEMDefineProcess(projectName, email, Process = "NCEMDefine", memoryLength =
                 memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(InputDic))
             
             MemoTag = ["매칭독자" + match for match in memoTag]
-            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + ' -\n'
+            memoryCounter = " - 이어서 작업할 데이터 (갯수만큼만 딱 맞게 작성): " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + ' -\n'
             outputEnder = f"{{'매칭독자"
 
             # Response 생성

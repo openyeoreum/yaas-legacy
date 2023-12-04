@@ -498,15 +498,15 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
     project = GetProject(projectName, email)
     BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
 
-    # # 데이터 치환
-    # outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    # 데이터 치환
+    outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
 
     ########## 테스트 후 삭제 ##########
-    filePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_outputMemoryDics_231128.json"
+    # filePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_outputMemoryDics_231128.json"
     # with open(filePath, "w", encoding = 'utf-8') as file:
     #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
-    with open(filePath, "r", encoding = 'utf-8') as file:
-        outputMemoryDics = json.load(file)
+    # with open(filePath, "r", encoding = 'utf-8') as file:
+    #     outputMemoryDics = json.load(file)
     ########## 테스트 후 삭제 ##########
 
     # 기존 데이터 구조 responseJson 형성

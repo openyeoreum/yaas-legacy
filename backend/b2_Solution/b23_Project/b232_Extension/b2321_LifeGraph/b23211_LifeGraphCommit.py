@@ -19,7 +19,7 @@ def AddPromptToDB():
     with get_db() as db:
         
         # JSON 데이터 불러오기
-        PromptDataPath = GetPromptDataPath()
+        PromptDataPath = GetLifeGraphDataPath()
         
         indexDefinePreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-01_IndexDefinePreprocess.json")
         indexDefineDivisionPreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-02_IndexDefineDivisionPreprocess.json")

@@ -131,6 +131,10 @@ class ProjectsStorageHistory(Base):
     ProjectsStoragePath = Column(Text)
 
 
+############################
+##### CoreFrameProcess #####
+############################
+
 ####################
 ### ProjectFrame ###
 ####################
@@ -210,7 +214,7 @@ class Project(Base):
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
     NCEMDefine = Column(JSON)
-    NCEMCompletion = Column(JSON)
+    NCEMLink = Column(JSON)
     
     # Character
     CharacterDefine = Column(JSON)
@@ -341,7 +345,7 @@ class ProjectHistory(Base):
     ContextDefineStatus = Column(JSON(64))
     ContextCompletionStatus = Column(JSON(64))
     NCEMDefineStatus = Column(JSON(64))
-    NCEMCompletionStatus = Column(JSON(64))
+    NCEMLinkStatus = Column(JSON(64))
     
     # Character
     CharacterDefineStatus = Column(JSON(64))
@@ -425,7 +429,7 @@ class Prompt(Base):
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
     NCEMDefine = Column(JSON)
-    NCEMCompletion = Column(JSON)
+    NCEMLink = Column(JSON)
 
     # CharacterPrompt
     CharacterDefine = Column(JSON)
@@ -511,7 +515,7 @@ class TrainingDataset(Base):
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
     NCEMDefine = Column(JSON)
-    NCEMCompletion = Column(JSON)
+    NCEMLink = Column(JSON)
 
     # CharacterDataset
     CharacterDefine = Column(JSON)
@@ -728,3 +732,94 @@ class SFX(Base):
     situation = Column(String(16))
     SoundEffects = Column(String(16))
     ETC = Column(String(16))
+
+
+#################################
+##### LifeGraphFrameProcess #####
+#################################
+
+######################
+### LifeGraphFrame ###
+######################
+class LifeGraph(Base):
+    __tablename__ = "LifeGraphs"
+
+    LifeGraphId = Column(Integer, primary_key=True, autoincrement=True)
+    LifeGraphDate = Column(DateTime)
+    LifeGraphName = Column(String(64))
+    LifeGraphWriter = Column(String(64))
+    LifeGraphSource = Column(String(64))
+    LifeGraphLanguage = Column(String(64))
+    LifeGraphResidence = Column(String(64))
+    LifeGraphPhoneNumber = Column(String(64))
+    LifeGraphEmail = Column(String(64))
+    LifeGraphPath = Column(Text)
+
+    ## Files
+    # ScriptFile
+    LifeGraphPath = Column(Text)
+    
+    LifeGraphFile = Column(Text)
+    
+    # DataFrameFile
+    DataFramePath = Column(Text)
+    
+    ## Process
+    # Script
+    LifeGraphScript = Column(Text)
+    
+    # Script
+    LifeGraphPreprocessFrame = Column(JSON)
+    LifeGraphFrame = Column(JSON)
+    
+    # Context
+    ContextDefine = Column(JSON)
+    ContextCompletion = Column(JSON)
+    NCEMDefine = Column(JSON)
+    NCEMLink = Column(JSON)
+
+
+#################################
+##### VideoFrameProcess #####
+#################################
+
+##################
+### VideoFrame ###
+##################
+class Video(Base):
+    __tablename__ = "Videos"
+    
+    VideoId = Column(Integer, primary_key=True, autoincrement=True)
+    VideoDate = Column(DateTime)
+    VideoName = Column(String(64))
+    VideoWriter = Column(String(64))
+    VideoPlatform = Column(String(64))
+    VideoChannel = Column(String(64))
+    VideoLanguage = Column(String(64))
+    VideoUrl = Column(Text)
+    
+    ## Files
+    # ScriptFile
+    ScriptPath = Column(Text)
+    
+    IndexFile = Column(Text)
+    CharacterFile = Column(Text)
+    BodyFile = Column(Text)
+    
+    # DataFrameFile
+    DataFramePath = Column(Text)
+    
+    ## Process
+    # Script
+    VideoScript = Column(Text)
+    
+    # Script
+    ScriptPreprocessFrame = Column(JSON)
+    IndexFrame = Column(JSON)
+    BodyFrame = Column(JSON)
+    
+    # Context
+    ContextDefine = Column(JSON)
+    ContextCompletion = Column(JSON)
+    NCEMDefine = Column(JSON)
+    NCEMLink = Column(JSON)

@@ -45,7 +45,7 @@ def AddTrainingDatasetToDB(projectName, email):
             ExistingDataset.ContextDefine = trainingDataset
             ExistingDataset.ContextCompletion = trainingDataset
             ExistingDataset.NCEMDefine = trainingDataset
-            ExistingDataset.NCEMCompletion = trainingDataset
+            ExistingDataset.NCEMLink = trainingDataset
             ExistingDataset.CharacterDefine = trainingDataset
             ExistingDataset.CharacterCompletion = trainingDataset
             ExistingDataset.SFXMatching = trainingDataset
@@ -74,7 +74,7 @@ def AddTrainingDatasetToDB(projectName, email):
                 ContextDefine = trainingDataset,
                 ContextCompletion = trainingDataset,
                 NCEMDefine = trainingDataset,
-                NCEMCompletion = trainingDataset,
+                NCEMLink = trainingDataset,
                 CharacterDefine = trainingDataset,
                 CharacterCompletion = trainingDataset,
                 SFXMatching = trainingDataset,

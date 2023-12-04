@@ -254,7 +254,7 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
             try:
                 nonCommonPart = nonCommonParts[nonCommonPartsNum]
                 DiffINPUT = nonCommonPart['DiffINPUT']
-                print(f'\n\n\n({i}, {nonCommonPartsNum})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
+                print(f'\n\n\n({i}, {nonCommonPartsNum})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
                 DiffOUTPUT = nonCommonPart['DiffOUTPUT']
                 print(f'DiffOUTPUT: {DiffOUTPUT}')
                 longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
@@ -271,18 +271,25 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
                     ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
                     ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
                 print(f'replace1: {NonINPUT + longCommonSubstring}')
-                print(f'replace2: {NonOUTPUT + longCommonSubstring}\n----------------------------------------\n')
+                print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')
                 print(f'CleanInput: {CleanInput}')
                 print(f'CleanOutput: {CleanOutput}')
                 print(f'ReplaceCleanInput: {ReplaceCleanInput}')
-                print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+                print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
                     
                 if ReplaceCleanInput == ReplaceCleanOutput:
                     nonCommonPartsNum += 1
                 else:
-                    print(f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})")
+                    for i in range(len(CleanInput) + 1):
+                        ReplaceCleanInput = CleanInput[:i] + NonOUTPUT + CleanInput[i:]
+                        ReplaceCleanOutput = CleanOutput[:i] + NonINPUT + CleanOutput[i:]
+                        if ReplaceCleanInput == CleanOutput or CleanInput == ReplaceCleanOutput:
+                            nonCommonPartsNum += 1
+                            continue
+                        else:
+                            return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})"
             except IndexError as e:
-                print(f"INPUT, OUTPUT [n] 불일치 오류 발생: IndexError {e}")
+                return f"INPUT, OUTPUT [n] 불일치 오류 발생: IndexError({e})"
 
     return {'json': OutputDic, 'filter': OutputDic, 'nonCommonParts': nonCommonParts}
 
@@ -490,26 +497,25 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
-    
+
     # 데이터 치환
     outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
-    
-    ########## 테스트 후 삭제 ##########
-    filePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_outputMemoryDics_231128.json"
-    with open(filePath, "w", encoding = 'utf-8') as file:
-        json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+
+    # ########## 테스트 후 삭제 ##########
+    # filePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_outputMemoryDics_231128.json"
+    # with open(filePath, "w", encoding = 'utf-8') as file:
+    #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
     # with open(filePath, "r", encoding = 'utf-8') as file:
     #     outputMemoryDics = json.load(file)
-    # ########## 테스트 후 삭제 ##########
+    # # ########## 테스트 후 삭제 ##########
 
     # 기존 데이터 구조 responseJson 형성
     outputMemoryDicsList = []
     for i in range(len(outputMemoryDics)):
         for j in range(len(outputMemoryDics[i])):
             outputMemoryDicsList.append({"outputId": i, "Output": outputMemoryDics[i][j]})
-    
+
     responseJson = []
-    ChunkIds = []
     CorrectionChunks = []
     k = 0
     for i in range(len(BodyFrameSplitedBodyScripts)):
@@ -524,10 +530,9 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
 
         CorrectionKoSplitedBody['OutputId'] = OutputId + 1
         CorrectionKoSplitedBody['CorrectionChunks'] = CorrectionChunks
-        ChunkIds = []
         CorrectionChunks = []
         responseJson.append(CorrectionKoSplitedBody)
-    
+
     # responseJson의 끊어읽기 보정(말의 끝맺음 뒤에 끊어읽기가 존재할 경우 삭제)
     for i in range(len(responseJson)):
         for j in range(len(responseJson[i]['CorrectionChunks'])):
@@ -537,16 +542,23 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
                 Endtoken = tokens[-1]
                 if 'Period' in BeforeEndtoken and 'Pause' in Endtoken:
                     del tokens[-1]
-                for k in range(len(tokens) - 6):
-                    if 'Comma' in tokens[k] and 'Pause' in tokens[k+1]:
-                        del tokens[k]
-                    elif 'Pause' in tokens[k] and 'Comma' in tokens[k+1]:
-                        del tokens[k+1]
-                for l in range(len(tokens) - 6):
-                    if 'Ko' in tokens[l] and 'Period' in tokens[l+1] and 'Pause' in tokens[l+2]:
-                        del tokens[l+2]
-
-                    
+                if len(tokens) >= 6:
+                    for k in range(len(tokens) - 6):
+                        try:
+                            if 'Comma' in tokens[k] and 'Pause' in tokens[k+1]:
+                                del tokens[k]
+                            elif 'Pause' in tokens[k] and 'Comma' in tokens[k+1]:
+                                del tokens[k+1]
+                        except IndexError:
+                            pass
+                if len(tokens) >= 6:
+                    for l in range(len(tokens) - 6):
+                        try:
+                            if ('Ko' in tokens[l] and 'Period' in tokens[l+1] and 'Pause' in tokens[l+2]) or ('En' in tokens[l] and 'Period' in tokens[l+1] and 'Pause' in tokens[l+2]):
+                                del tokens[l+2]
+                        except IndexError:
+                            pass
+                        
     # responseJson의 끊어읽기 보정(끝맺음 부분 끊어읽기 추가)
     for i in range(len(responseJson)):
         for j in range(len(responseJson[i]['CorrectionChunks'])):
@@ -580,23 +592,27 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
             elif tag == "Caption":
                 tokens.append({"Pause": "(1.20)"})
                 tokens.append({"Enter": "\n"})
+            # elif tag == "Comment":
+            #     tokens.append({"Pause": "(0.40)"})
+            #     tokens.append({"Enter": "\n"})
             else:
                 if len(tokens) >= 2:
                     BeforeEndtoken = tokens[-2]
                     Endtoken = tokens[-1]
-                    if 'Ko' in BeforeEndtoken and 'Period' in Endtoken:
+                    if ('Ko' in BeforeEndtoken and 'Period' in Endtoken) or ('En' in BeforeEndtoken and 'Period' in Endtoken):
                         tokens.append({"Pause": "(0.70)"})
                         tokens.append({"Enter": "\n"})
-                    for k in range(len(tokens) - 5):
-                        if 'Ko' in tokens[k] and 'Period' in tokens[k+1]:
-                            tokens.insert(k + 2, {"Pause": "(0.60)"})
+                    if len(tokens) >= 5:
+                        for k in range(len(tokens) - 5):
+                            if ('Ko' in tokens[k] and 'Period' in tokens[k+1]) or ('En' in tokens[k] and 'Period' in tokens[k+1]):
+                                tokens.insert(k + 2, {"Pause": "(0.60)"})
             
             # 앞, 뒤Chunk를 통한 처리
             if tag == "Character" and Aftertag == "Character":
                 tokens.append({"Pause": "(0.70)"})
                 tokens.append({"Enter": "\n"})
             elif tag == "Character" and Aftertag == "Narrator":
-                tokens.append({"Pause": "(0.20)"})
+                tokens.append({"Pause": "(0.30)"})
                 tokens.append({"Enter": "\n"})
             elif tag == "Character" and Aftertag == "Comment":
                 tokens.append({"Pause": "(0.20)"})
@@ -620,7 +636,7 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
                 tokens.append({"Pause": "(0.70)"})
                 tokens.append({"Enter": "\n"})
             elif tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Narrator":
-                tokens.append({"Pause": "(0.20)"})
+                tokens.append({"Pause": "(0.30)"})
                 tokens.append({"Enter": "\n"})
             elif tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Comment":
                 tokens.append({"Pause": "(0.20)"})
@@ -640,10 +656,10 @@ def CorrectionKoResponseJson(projectName, email, messagesReview = 'off', mode = 
                         tokens.append({"Pause": "(0.20)"})
                         
     ########## 테스트 후 삭제 ##########
-    filePath2 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_responseJson_231128.json"
+    # filePath2 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_responseJson_231128.json"
     
-    with open(filePath2, "w", encoding = 'utf-8') as file:
-        json.dump(responseJson, file, ensure_ascii = False, indent = 4)
+    # with open(filePath2, "w", encoding = 'utf-8') as file:
+    #     json.dump(responseJson, file, ensure_ascii = False, indent = 4)
     
     responseJsonText = ""
     for i in range(len(responseJson)):
@@ -714,112 +730,10 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "웹3.0메타버스"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    # responseJson = CorrectionKoResponseJson(projectName, email)
-    
-    # ########## 테스트 후 삭제 ##########
-    # filePath2 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_responseJson_231128.json"
-    
-    # with open(filePath2, "w", encoding = 'utf-8') as file:
-    #     json.dump(responseJson, file, ensure_ascii = False, indent = 4)
-    
-    # responseJsonText = ""
-    # for i in range(len(responseJson)):
-    #     for j in range(len(responseJson[i]['CorrectionChunks'])):
-    #         for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
-    #             # 딕셔너리에서 value 추출 (딕셔너리의 첫 번째 값)
-    #             token = next(iter(token_dict.values()))
-    #             responseJsonText += token
-
-    # filePath3 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_responseJson_231128.txt"
-    # # 텍스트 파일에 저장
-    # with open(filePath3, "w", encoding="utf-8") as file:
-    #     file.write(responseJsonText)
-    # ########## 테스트 후 삭제 ##########
-    
-    # ########## 테스트 후 삭제 ##########
-    # InputDic = ['두 공대생의 이상한 창업', '여기서 잠깐, 구글 이야기를 하고 가자 구글의 성공은 참으로 아 이러니한 일이다. ', '1998년 검색서비스를 시작한 구글은 21세기 들면서 순식간에 세계 최고의 기업가치를 인정받는 거인으로 급부상했지 만, 시작은 단순하고 무모했다. ', '비즈니스 모델이 독특한 것도 아닌 데 다 차별화 포인트도 없었고, 어떤 식으로 돈을 벌겠다는 계획도 없이 두 공대생이 자신들의 박사학위 논문을 사업모델화한 것이었다. ', '또 구글이 검색엔진을 발명한 최초의 회사도 아니고, 더구나 기존의 경 영학 이론으로 보면 사업의 사자도 모르는 회사다. ', '창업 당시 래리 페이지와 세르게이 브린은 박사학위 논문을 쓰고 있던 스탠퍼드 대학원생들이었다. ', '그들의 논문 주제는 검색엔진의 알고리즘이었는데, 페이지랭크라는 아이디어를 생각한다. ' ,'페이지랭크란 간단히 말하면, 웹페이지에 랭킹을 매기는 방식이다. ', '예를 들어, 대학이라는 검색어를 치면 당시 알타비스타나 인포 시크 등 기존 검색엔진은 중요도에 상관없이 그냥 대학사이트들을 죽 열거하는 반면, 페이지랭크는 각 페이지마다 중요도와 연관성의 가중치 점수를 매겨서 높은 점수의 웹페이지를 상위에 노출한다. ', '이 것이 오늘날의 구글을 만들어 준 검색 알고리즘이다. ', '세르게이 브린과 래리 페이지는 페이지랭크 알고리즘을 적용한 검색엔진을 만들고 검색사이트를 열었다. ', '이게 구글의 시작이었다. ', '두 명의 순진한 공돌이들은 검색을 판매해야 할 상품으로 생각하지 않았다. ', '어떻게 판매해서 수익을 창출할 것인지 아이디어도 없었고, 검색엔진을 다른 포털 사이트나 기업에 판매하려는 시도도 별로 하지 않았다. ']
-    # OutputDic = ['두 공대생의 이상한 창업', '여기서 잠깐,(0.3) 구글 이야기를 하고 가자(0.1) 구글의 성공은 참으로(0.1) 아이러니한 일이다.', '1998년 검색서비스를 시작한 구글은(0.2) 21세기 들면서 순식간에(0.1) 세계 최고의 기업가치를 인정받는 거인으로 급부상했지만,(0.3) 시작은 단순하고(0.1) 무모했다.', '비즈니스 모델이 독특한 것도 아닌데(0.2) 다른 차별화 포인트도 없었고,(0.2) 어떤 식으로 돈을 벌겠다는 계획도 없이(0.1) 두 공대생이 자신들의 박사학위 논문을 사업모델화한 것이었다.', '또 구글이 검색엔진을 발명한 최초의 회사도 아니고,(0.3) 더구나 기존의 경영학 이론으로 보면(0.2) 사업의 사자도 모르는 회사다.', '창업 당시 래리 페이지와 세르게이 브린은(0.2) 박사학위 논문을 쓰고 있던 스탠퍼드 대학원생들이었다0.', '그들의 논문 주제는 검색엔진의 알고리즘이었는데,(0.3) 페이지랭크라는 아이디어를 생각해냈다.', '페이지랭크란(0.1) 간단히 말하면,(0.2) 웹페이지에 랭킹을 매기는 방식이다.', "예를 들어,(0.1) '대학'이라는 검색어를 치면(0.2) 당시 알타비스타나 인포시크 등 기존 검색엔진은(0.3) 중요도에 상관없이 그냥 대학사이트들을 죽 나열하는 반면,(0.3) 페이지랭크는 각 페이지마다 중요도와 연관성의 가중치 점수를 매겨서(0.2) 높은 점수의 웹페이지를 상위에 노출한다.", '이것이(0.1) 오늘날의 구글을 만들어 준 검색 알고리즘이다.', '세르게이 브린과 래리 페이지는(0.2) 페이지랭크 알고리즘을 적용한 검색엔진을 만들고(0.2) 검색사이트를 열었다.', '이게 구글의 시작이었다.', '두 명의 순진한 공돌이들은(0.2) 검색을 판매해야 할 상품으로 생각하지 않았다.', '어떻게 판매해서 수익을 창출할 것인지(0.2) 아이디어도 없었고,(0.2) 검색엔진을 다른 포털 사이트나 기업에 판매하려는 시도도(0.3) 별로 하지 않았다.']
-    
-    # nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
-    # # Error4: Input, responseData 불일치시 예외 처리
-    # ### <코드1>
-    # nonCommonPartsNum = 0
-    # for i in range(len(InputDic)):
-    #     CleanInput = re.sub("[^가-힣]", "", InputDic[i])
-    #     CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
-        
-    #     if CleanInput != CleanOutput:
-    #         nonCommonPart = nonCommonParts[nonCommonPartsNum]
-    #         DiffINPUT = nonCommonPart['DiffINPUT']
-    #         print(f'\n\n\n({i}, {nonCommonPartsNum})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
-    #         DiffOUTPUT = nonCommonPart['DiffOUTPUT']
-    #         print(f'DiffOUTPUT: {DiffOUTPUT}')
-    #         longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
-    #         longCommonSubstring = longCommonSubstring.replace('콼', '')
-    #         print(f'longCommonSubstring: {longCommonSubstring}')
-    #         NonINPUT = nonCommonPart['NonINPUT']
-    #         print(f'NonINPUT: {NonINPUT}')
-    #         NonOUTPUT = nonCommonPart['NonOUTPUT']
-    #         print(f'NonOUTPUT: {NonOUTPUT}')
-    #         if longCommonSubstring in CleanInput:
-    #             ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
-    #             ReplaceCleanOutput = CleanOutput
-    #         else:
-    #             ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
-    #             ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
-    #         print(f'replace1: {NonINPUT + longCommonSubstring}')
-    #         print(f'replace2: {NonOUTPUT + longCommonSubstring}\n----------------------------------------\n')
-    #         print(f'CleanInput: {CleanInput}')
-    #         print(f'CleanOutput: {CleanOutput}')
-    #         print(f'ReplaceCleanInput: {ReplaceCleanInput}')
-    #         print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-                
-    #         if ReplaceCleanInput == ReplaceCleanOutput:
-    #             nonCommonPartsNum += 1
-    #         else:
-    #             print(f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})")
-    
-    # ## <코드2>
-    # for i in range(len(InputDic)):
-    #     CleanInput = re.sub("[^가-힣]", "", InputDic[i])
-    #     CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
-    #     matchFound = False
-        
-    #     if CleanInput != CleanOutput:
-    #         for j in range(len(nonCommonParts)):
-    #             DiffINPUT = nonCommonParts[j]['DiffINPUT']
-    #             print(f'\n\n\n({i}, {j})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
-    #             DiffOUTPUT = nonCommonParts[j]['DiffOUTPUT']
-    #             print(f'DiffOUTPUT: {DiffOUTPUT}')
-    #             longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
-    #             longCommonSubstring = longCommonSubstring.replace('콼', '')
-    #             print(f'longCommonSubstring: {longCommonSubstring}')
-    #             NonINPUT = nonCommonParts[j]['NonINPUT']
-    #             print(f'NonINPUT: {NonINPUT}')
-    #             NonOUTPUT = nonCommonParts[j]['NonOUTPUT']
-    #             print(f'NonOUTPUT: {NonOUTPUT}')
-    #             if longCommonSubstring in CleanInput:
-    #                 ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
-    #                 ReplaceCleanOutput = CleanOutput
-    #             else:
-    #                 ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
-    #                 ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
-    #             print(f'replace1: {NonINPUT + longCommonSubstring}')
-    #             print(f'replace2: {NonOUTPUT + longCommonSubstring}\n----------------------------------------\n')
-    #             print(f'CleanInput: {CleanInput}')
-    #             print(f'CleanOutput: {CleanOutput}')
-    #             print(f'ReplaceCleanInput: {ReplaceCleanInput}')
-    #             print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-    #             if ReplaceCleanInput == ReplaceCleanOutput:
-    #                 matchFound = True  # 일치하는 경우 발견
-    #                 break
-                
-    #         if not matchFound:
-    #             print(f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})")
-    # ########## 테스트 후 삭제 ##########
+    CorrectionKoResponseJson(projectName, email)

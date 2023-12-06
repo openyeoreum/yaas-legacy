@@ -735,7 +735,7 @@ class SFX(Base):
 
 
 ###########################################
-########## LifeGraphFrameProcess ##########
+########## ExtensionFrameProcess ##########
 ###########################################
 
 ######################
@@ -750,6 +750,7 @@ class LifeGraph(Base):
     LifeGraphSetManager = Column(String(64))
     LifeGraphSetSource = Column(String(64))
     LifeGraphSetLanguage = Column(String(64))
+    LatestUpdateDate = Column(String(64))
     
     ## Process
     # RawData
@@ -766,9 +767,6 @@ class LifeGraph(Base):
 
     # Report
 
-#######################################
-########## VideoFrameProcess ##########
-#######################################
 
 ##################
 ### VideoFrame ###
@@ -798,3 +796,35 @@ class Video(Base):
     VideoContextCompletion = Column(JSON)
     VideoNCEMDefine = Column(JSON)
     VideoNCEMMatching = Column(JSON)
+
+
+#######################
+### ExtensionPrompt ###
+#######################
+class ExtensionPrompt(Base):
+    __tablename__ = "ExtensionPrompts"
+
+    PromptId = Column(Integer, primary_key=True, autoincrement=True)
+    PromptDate = Column(DateTime, default=SeoulNow)
+
+    # LifeGraphPrompt
+    LifeGraphTranslationKo = Column(JSON)
+    LifeGraphTranslationEn = Column(JSON)
+    LifeGraphContextDefine = Column(JSON)
+    LifeGraphNCEMDefine = Column(JSON)
+    LifeGraphNCEMMatching = Column(JSON)
+    
+    # BlogPrompt
+
+    # SNSPrompt
+
+    # VideoPrompt
+    VideoPreprocess = Column(JSON)
+    VideoTranslationKo = Column(JSON)
+    VideoTranslationEn = Column(JSON)
+    VideoContextDefine = Column(JSON)
+    VideoContextCompletion = Column(JSON)
+    VideoNCEMDefine = Column(JSON)
+    VideoNCEMMatching = Column(JSON)
+
+    # ETCPrompt

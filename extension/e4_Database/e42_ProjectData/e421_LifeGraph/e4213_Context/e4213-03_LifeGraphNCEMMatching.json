@@ -1,0 +1,29 @@
+[
+    {
+        "LifeGraphSetId": "None",
+        "LifeGraphSetName": "CourseraMeditation",
+        "Content": "LifeGraph",
+        "Language": "Ko",
+        "TaskName": "LifeGraphNCEMDefine",
+        "ResponseCount": 0,
+        "Completion": "No"
+    },
+    {
+        "MatchingData": "None",
+        "QueryContent": "None",
+        "Query": "None",
+        "ResponseContent": "None",
+        "ResponseContentSets": "None",
+        "Responses": [
+            {
+                "ResponseId": 0,
+                "Response": "None",
+                "DomainAccuracy": "None",
+                "NeedsAccuracy": "None",
+                "CVCAccuracy": "None",
+                "PotentialEnergyAccuracy": "None",
+                "MatchingAccuracy": "None"
+            }
+        ]
+    }
+]

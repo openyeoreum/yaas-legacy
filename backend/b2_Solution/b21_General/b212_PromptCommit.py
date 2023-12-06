@@ -31,7 +31,7 @@ def AddPromptToDB():
         contextDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-01_ContextDefine.json")
         contextCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-02_ContextCompletion.json")
         nCEMDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-03_NCEMDefine.json")
-        nCEMCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-04_NCEMLink.json")
+        nCEMMatching = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-04_NCEMMatching.json")
         characterDefine = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-01_CharacterDefine.json")
         characterCompletion = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-02_CharacterCompletion.json")
         sFXMatching = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-01_SFXMatching.json")
@@ -56,7 +56,7 @@ def AddPromptToDB():
                 ExistingPrompt.ContextDefine = contextDefine
                 ExistingPrompt.ContextCompletion = contextCompletion
                 ExistingPrompt.NCEMDefine = nCEMDefine
-                ExistingPrompt.NCEMLink = nCEMCompletion
+                ExistingPrompt.NCEMMatching = nCEMMatching
                 ExistingPrompt.CharacterDefine = characterDefine
                 ExistingPrompt.CharacterCompletion = characterCompletion
                 ExistingPrompt.SFXMatching = sFXMatching
@@ -80,7 +80,7 @@ def AddPromptToDB():
                 ContextDefine = contextDefine,
                 ContextCompletion = contextCompletion,
                 NCEMDefine = nCEMDefine,
-                NCEMLink = nCEMCompletion,
+                NCEMMatching = nCEMMatching,
                 CharacterDefine = characterDefine,
                 CharacterCompletion = characterCompletion,
                 SFXMatching = sFXMatching,

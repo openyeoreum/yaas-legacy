@@ -30,6 +30,7 @@ services:
       - "5173:3000"
     volumes:
       - ./backend:/yaas/backend
+      - ./extension:/yaas/extension
       - ./.git:/yaas/.git
       - ./.gitignore:/yaas/.gitignore
       - ./docker-compose.yml:/yaas/docker-compose.yml

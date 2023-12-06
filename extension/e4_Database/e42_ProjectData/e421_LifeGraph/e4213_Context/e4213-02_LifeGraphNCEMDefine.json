@@ -1,0 +1,25 @@
+[
+    {
+        "LifeGraphSetId": "None",
+        "LifeGraphSetName": "CourseraMeditation",
+        "Content": "LifeGraph",
+        "Language": "Ko",
+        "TaskName": "LifeGraphNCEMDefine",
+        "LifeGraphCount": 0,
+        "Completion": "No"
+    },
+    {
+        "ContextChunks": [
+            {
+                "LifeGraphId": 0,
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Domain": "None",
+                "Needs": "None",
+                "CVC": "None",
+                "PotentialEnergy": "None",
+                "Accuracy": "None"
+            }
+        ]
+    }
+]

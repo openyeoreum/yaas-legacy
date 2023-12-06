@@ -214,7 +214,7 @@ class Project(Base):
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
     NCEMDefine = Column(JSON)
-    NCEMLink = Column(JSON)
+    NCEMMatching = Column(JSON)
     
     # Character
     CharacterDefine = Column(JSON)
@@ -345,7 +345,7 @@ class ProjectHistory(Base):
     ContextDefineStatus = Column(JSON(64))
     ContextCompletionStatus = Column(JSON(64))
     NCEMDefineStatus = Column(JSON(64))
-    NCEMLinkStatus = Column(JSON(64))
+    NCEMMatchingStatus = Column(JSON(64))
     
     # Character
     CharacterDefineStatus = Column(JSON(64))
@@ -429,7 +429,7 @@ class Prompt(Base):
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
     NCEMDefine = Column(JSON)
-    NCEMLink = Column(JSON)
+    NCEMMatching = Column(JSON)
 
     # CharacterPrompt
     CharacterDefine = Column(JSON)
@@ -515,7 +515,7 @@ class TrainingDataset(Base):
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
     NCEMDefine = Column(JSON)
-    NCEMLink = Column(JSON)
+    NCEMMatching = Column(JSON)
 
     # CharacterDataset
     CharacterDefine = Column(JSON)
@@ -744,31 +744,25 @@ class SFX(Base):
 class LifeGraph(Base):
     __tablename__ = "LifeGraphs"
 
-    LifeGraphId = Column(Integer, primary_key=True, autoincrement=True)
-    LifeGraphDate = Column(DateTime)
-    LifeGraphName = Column(String(64))
-    LifeGraphWriter = Column(String(64))
-    LifeGraphSource = Column(String(64))
-    LifeGraphLanguage = Column(String(64))
-    LifeGraphResidence = Column(String(64))
-    LifeGraphPhoneNumber = Column(String(64))
-    LifeGraphEmail = Column(String(64))
-    LifeGraphPath = Column(Text)
+    LifeGraphSetId = Column(Integer, primary_key=True, autoincrement=True)
+    LifeGraphSetDate = Column(DateTime)
+    LifeGraphSetName = Column(String(64))
+    LifeGraphSetManager = Column(String(64))
+    LifeGraphSetSource = Column(String(64))
+    LifeGraphSetLanguage = Column(String(64))
     
     ## Process
     # RawData
-    RawLifeGarph = Column(JSON)
+    LifeGraphFrame = Column(JSON)
     
     # Preprocess
-    Preprocess = Column(JSON)
-    TranslationKo = Column(JSON)
-    TranslationEn = Column(JSON)
+    LifeGraphTranslationKo = Column(JSON)
+    LifeGraphTranslationEn = Column(JSON)
     
     # Context
-    ContextDefine = Column(JSON)
-    ContextCompletion = Column(JSON)
-    NCEMDefine = Column(JSON)
-    NCEMLink = Column(JSON)
+    LifeGraphContextDefine = Column(JSON)
+    LifeGraphNCEMDefine = Column(JSON)
+    LifeGraphNCEMMatching = Column(JSON)
 
     # Report
 
@@ -782,28 +776,25 @@ class LifeGraph(Base):
 class Video(Base):
     __tablename__ = "Videos"
     
-    VideoId = Column(Integer, primary_key=True, autoincrement=True)
-    VideoDate = Column(DateTime)
-    VideoName = Column(String(64))
-    VideoWriter = Column(String(64))
-    VideoPlatform = Column(String(64))
-    VideoChannel = Column(String(64))
-    VideoLanguage = Column(String(64))
-    VideoUrl = Column(Text)
+    VideoSetId = Column(Integer, primary_key=True, autoincrement=True)
+    VideoSetDate = Column(DateTime)
+    VideoSetName = Column(String(64))
+    VideoSetWriter = Column(String(64))
+    VideoSetPlatform = Column(String(64))
+    VideoSetChannel = Column(String(64))
+    VideoSetLanguage = Column(String(64))
     
     ## Process
     # RawData
-    RawVideo = Column(JSON)
+    VideoFrame = Column(JSON)
     
     # Preprocess
-    Preprocess = Column(JSON)
-    IndexFrame = Column(JSON)
-    BodyFrame = Column(JSON)
-    TranslationKo = Column(JSON)
-    TranslationEn = Column(JSON)
+    VideoPreprocess = Column(JSON)
+    VideoTranslationKo = Column(JSON)
+    VideoTranslationEn = Column(JSON)
     
     # Context
-    ContextDefine = Column(JSON)
-    ContextCompletion = Column(JSON)
-    NCEMDefine = Column(JSON)
-    NCEMLink = Column(JSON)
+    VideoContextDefine = Column(JSON)
+    VideoContextCompletion = Column(JSON)
+    VideoNCEMDefine = Column(JSON)
+    VideoNCEMMatching = Column(JSON)

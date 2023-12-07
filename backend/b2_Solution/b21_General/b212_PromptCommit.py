@@ -6,9 +6,10 @@ sys.path.append("/yaas")
 from backend.b1_Api.b14_Models import Prompt
 from backend.b1_Api.b13_Database import get_db
 
-def GetPromptDataPath(relativePath='../../b5_Database/b54_PromptData/'):
-    CurrentDir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(CurrentDir, relativePath)
+def GetPromptDataPath():
+    RootPath = "/yaas"
+    DataPath = "backend/b5_Database/b54_PromptData"
+    return os.path.join(RootPath, DataPath)
 
 def LoadJsonFrame(filepath):
     with open(filepath, 'r') as file:

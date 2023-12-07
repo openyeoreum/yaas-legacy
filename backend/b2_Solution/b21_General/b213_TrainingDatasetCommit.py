@@ -6,9 +6,10 @@ sys.path.append("/yaas")
 from backend.b1_Api.b14_Models import TrainingDataset, Project, User
 from backend.b1_Api.b13_Database import get_db
 
-def GetTrainingDatasetPath(relativePath='../../b5_Database/b55_TrainingDataset/b551_TrainingDataset.json'):
-    CurrentDir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(CurrentDir, relativePath)
+def GetTrainingDatasetPath():
+    RootPath = "/yaas"
+    DataPath = "backend/b5_Database/b55_TrainingDataset/b551_TrainingDataset.json"
+    return os.path.join(RootPath, DataPath)
 
 def LoadJsonDataset(filepath):
     with open(filepath, 'r') as file:

@@ -7,9 +7,10 @@ from sqlalchemy import desc
 from backend.b1_Api.b14_Models import LifeGraph
 from backend.b1_Api.b13_Database import get_db
 
-def GetLifeGraphDataPath(relativePath='../../e4_Database/e42_ProjectData/e421_LifeGraph/'):
-    CurrentDir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(CurrentDir, relativePath)
+def GetLifeGraphDataPath():
+    RootPath = "/yaas"
+    DataPath = "extension/e4_Database/e42_ProjectData/e421_LifeGraph"
+    return os.path.join(RootPath, DataPath)
 
 def LoadJsonFrame(filepath):
     with open(filepath, 'r') as file:
@@ -20,14 +21,13 @@ def AddLifeGraphToDB(lifeGraphSetName, lifeGraphSetManager, lifeGraphSetSource, 
     with get_db() as db:
         
         # JSON 데이터 불러오기
-        GetLifeGraphDataPath = GetLifeGraphDataPath()
-        
-        lifeGraphFrame = LoadJsonFrame(GetLifeGraphDataPath + "/e4211_RawData/e4211-02_LifeGraphFrame.json")
-        lifeGraphTranslationKo = LoadJsonFrame(GetLifeGraphDataPath + "/e4212_Preprocess/e4212-01_LifeGraphTranslationKo.json")
-        lifeGraphTranslationEn = LoadJsonFrame(GetLifeGraphDataPath + "/e4212_Preprocess/e4212-02_LifeGraphTranslationEn.json")
-        lifeGraphContextDefine = LoadJsonFrame(GetLifeGraphDataPath + "/e4213_Context/e4213-01_LifeGraphContextDefine.json")
-        lifeGraphNCEMDefine = LoadJsonFrame(GetLifeGraphDataPath + "/e4213_Context/e4213-02_LifeGraphNCEMDefine.json")
-        lifeGraphNCEMMatching = LoadJsonFrame(GetLifeGraphDataPath + "/e4213_Context/e4213-03_LifeGraphNCEMMatching.json")
+        LifeGraphDataPath = GetLifeGraphDataPath()
+        lifeGraphFrame = LoadJsonFrame(LifeGraphDataPath + "/e4211_RawData/e4211-02_LifeGraphFrame.json")
+        lifeGraphTranslationKo = LoadJsonFrame(LifeGraphDataPath + "/e4212_Preprocess/e4212-01_LifeGraphTranslationKo.json")
+        lifeGraphTranslationEn = LoadJsonFrame(LifeGraphDataPath + "/e4212_Preprocess/e4212-02_LifeGraphTranslationEn.json")
+        lifeGraphContextDefine = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-01_LifeGraphContextDefine.json")
+        lifeGraphNCEMDefine = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-02_LifeGraphNCEMDefine.json")
+        lifeGraphNCEMMatching = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-03_LifeGraphNCEMMatching.json")
         ### 아래로 추가되는 프롬프트 작성 ###
 
         ExistingLifeGraph = db.query(LifeGraph).filter(LifeGraph.LifeGraphSetName == lifeGraphSetName, LifeGraph.LifeGraphSetManager == lifeGraphSetManager, LifeGraph.LatestUpdateDate == latestUpdateDate).order_by(desc(LifeGraph.LatestUpdateDate)).first()

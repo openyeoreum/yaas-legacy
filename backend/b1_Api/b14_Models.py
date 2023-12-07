@@ -750,7 +750,7 @@ class LifeGraph(Base):
     LifeGraphSetManager = Column(String(64))
     LifeGraphSetSource = Column(String(64))
     LifeGraphSetLanguage = Column(String(64))
-    LatestUpdateDate = Column(String(64))
+    LatestUpdateDate = Column(Integer)
     
     ## Process
     # RawData
@@ -781,6 +781,7 @@ class Video(Base):
     VideoSetPlatform = Column(String(64))
     VideoSetChannel = Column(String(64))
     VideoSetLanguage = Column(String(64))
+    LatestUpdateDate = Column(Integer)
     
     ## Process
     # RawData

@@ -7,9 +7,10 @@ from backend.b1_Api.b14_Models import Project
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProjectsStorage
 
-def GetProjectDataPath(relativePath='../../b5_Database/b53_ProjectData/'):
-    CurrentDir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(CurrentDir, relativePath)
+def GetProjectDataPath():
+    RootPath = "/yaas"
+    DataPath = "backend/b5_Database/b53_ProjectData"
+    return os.path.join(RootPath, DataPath)
 
 def LoadJsonFrame(filepath):
     with open(filepath, 'r') as file:

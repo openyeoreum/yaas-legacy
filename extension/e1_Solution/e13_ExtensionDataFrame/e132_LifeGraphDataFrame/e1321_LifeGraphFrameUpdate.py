@@ -16,3 +16,11 @@ def LoadLifeGraphSet(Process):
     return lifeGraphSets
 
 ## Body최초 전처리
+
+if __name__ == "__main__":
+    ############################ 하이퍼 파라미터 설정 ############################
+    process = 'LifeGraphFrame'
+    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData"
+    #########################################################################
+    lifeGraph = LoadLifeGraphSet(process)
+    print(len(lifeGraph))

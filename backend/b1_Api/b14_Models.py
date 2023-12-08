@@ -786,6 +786,7 @@ class Video(Base):
     
     ## Process
     # RawData
+    VideoSets = Column(JSON)
     VideoFrame = Column(JSON)
     
     # Preprocess

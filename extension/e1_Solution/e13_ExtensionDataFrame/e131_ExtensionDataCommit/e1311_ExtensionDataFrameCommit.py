@@ -54,6 +54,7 @@ def AddExistedLifeGraphFrameToDB(lifeGraphSetName, latestUpdateDate, ExistedData
         lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
         
         lifeGraph.LifeGraphFrame[1] = ExistedDataFrame[1]
+        lifeGraph.LifeGraphFrame[2] = ExistedDataFrame[2]
         
         flag_modified(lifeGraph, "LifeGraphFrame")
         

@@ -20,12 +20,14 @@
                 "Residence": "None",
                 "PhoneNumber": "None",
                 "Email": "None",
+                "Quality": "None",
                 "LifeData": [
                     {
+                        "LifeDataId": 0,
                         "StartAge": "None",
                         "EndAge": "None",
                         "Score": "None",
-                        "ReasonKo": "None"
+                        "ReasonEn": "None"
                     }
                 ]
             }

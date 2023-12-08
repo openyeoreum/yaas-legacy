@@ -12,16 +12,22 @@ def GetLifeGraphDataPath():
     DataPath = "extension/e4_Database/e42_ProjectData/e421_LifeGraph"
     return os.path.join(RootPath, DataPath)
 
+def GetLifeGraphSetsPath(Process):
+    # 정규식을 활용해서 프로젝트 네임으로 경로를 알아내는 방법 GPT한테 요청
+    lifeGraphSetsPath = "/e4211_RawData/e4211-01_LifeGraphSets/e4211-01_231206_CourseraMeditation_LifeGraph.json"
+    return lifeGraphSetsPath
+
 def LoadJsonFrame(filepath):
     with open(filepath, 'r') as file:
         DataFrame = json.load(file)
     return DataFrame
 
-def AddLifeGraphToDB(lifeGraphSetName, lifeGraphSetManager, lifeGraphSetSource, lifeGraphSetLanguage, latestUpdateDate):
+def AddLifeGraphToDB(Process, lifeGraphSetManager, lifeGraphSetSource, lifeGraphSetLanguage, latestUpdateDate):
     with get_db() as db:
         
         # JSON 데이터 불러오기
         LifeGraphDataPath = GetLifeGraphDataPath()
+        lifeGraphSets = LoadJsonFrame(LifeGraphDataPath + GetLifeGraphSetsPath(Process))
         lifeGraphFrame = LoadJsonFrame(LifeGraphDataPath + "/e4211_RawData/e4211-02_LifeGraphFrame.json")
         lifeGraphTranslationKo = LoadJsonFrame(LifeGraphDataPath + "/e4212_Preprocess/e4212-01_LifeGraphTranslationKo.json")
         lifeGraphTranslationEn = LoadJsonFrame(LifeGraphDataPath + "/e4212_Preprocess/e4212-02_LifeGraphTranslationEn.json")
@@ -30,15 +36,16 @@ def AddLifeGraphToDB(lifeGraphSetName, lifeGraphSetManager, lifeGraphSetSource, 
         lifeGraphNCEMMatching = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-03_LifeGraphNCEMMatching.json")
         ### 아래로 추가되는 프롬프트 작성 ###
 
-        ExistingLifeGraph = db.query(LifeGraph).filter(LifeGraph.LifeGraphSetName == lifeGraphSetName, LifeGraph.LifeGraphSetManager == lifeGraphSetManager, LifeGraph.LatestUpdateDate == latestUpdateDate).order_by(desc(LifeGraph.LatestUpdateDate)).first()
+        ExistingLifeGraph = db.query(LifeGraph).filter(LifeGraph.LifeGraphSetName == Process, LifeGraph.LifeGraphSetManager == lifeGraphSetManager, LifeGraph.LatestUpdateDate == latestUpdateDate).order_by(desc(LifeGraph.LatestUpdateDate)).first()
 
         # DB Commit
         if ExistingLifeGraph:
-                ExistingLifeGraph.LifeGraphSetName = lifeGraphSetName
+                ExistingLifeGraph.LifeGraphSetName = Process
                 ExistingLifeGraph.LifeGraphSetManager = lifeGraphSetManager
                 ExistingLifeGraph.LifeGraphSetSource = lifeGraphSetSource
                 ExistingLifeGraph.LifeGraphSetLanguage = lifeGraphSetLanguage
                 ExistingLifeGraph.LatestUpdateDate = latestUpdateDate
+                ExistingLifeGraph.LifeGraphSets = lifeGraphSets
                 ExistingLifeGraph.LifeGraphFrame = lifeGraphFrame
                 ExistingLifeGraph.LifeGraphTranslationKo = lifeGraphTranslationKo
                 ExistingLifeGraph.LifeGraphTranslationEn = lifeGraphTranslationEn
@@ -50,11 +57,12 @@ def AddLifeGraphToDB(lifeGraphSetName, lifeGraphSetManager, lifeGraphSetSource, 
                 print(f"[ ExtensionProject | AddLifeGraphToDB 변경사항 업데이트 ]")
         else:
             lifeGraph = LifeGraph(
-                LifeGraphSetName = lifeGraphSetName,
+                LifeGraphSetName = Process,
                 LifeGraphSetManager = lifeGraphSetManager,
                 LifeGraphSetSource = lifeGraphSetSource,
                 LifeGraphSetLanguage = lifeGraphSetLanguage,
                 LatestUpdateDate = latestUpdateDate,
+                LifeGraphSets = lifeGraphSets,
                 LifeGraphFrame = lifeGraphFrame,
                 LifeGraphTranslationKo = lifeGraphTranslationKo,
                 LifeGraphTranslationEn = lifeGraphTranslationEn,

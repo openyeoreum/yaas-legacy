@@ -1,6 +1,7 @@
 [
     {
         "LifeGraphSetId": "None",
+        "LifeGraphSetDate": 0,
         "LifeGraphSetName": "CourseraMeditation",
         "Content": "LifeGraph",
         "Language": "Ko",
@@ -14,10 +15,12 @@
                 "LifeGraphId": 0,
                 "ChunkId": 0,
                 "Chunk": "None",
-                "Domain": "None",
                 "Needs": "None",
+                "ReasonOfNeeds": "None",
                 "CVC": "None",
+                "ReasonOfCVC": "None",
                 "PotentialEnergy": "None",
+                "ReasonOfPotentialEnergy": "None",
                 "Accuracy": "None"
             }
         ]

@@ -754,6 +754,7 @@ class LifeGraph(Base):
     
     ## Process
     # RawData
+    LifeGraphSets = Column(JSON)
     LifeGraphFrame = Column(JSON)
     
     # Preprocess

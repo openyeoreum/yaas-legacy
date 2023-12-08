@@ -181,7 +181,7 @@
                     "Input": "INPUT",
                     "InputEnder": "",
                     "InputMark2": "\n\n<영상메타데이터.db>\n",
-                    "Input2": "INPUT2"
+                    "InputMemory2": "InputMemory2"
                 }
             ]
         },
@@ -239,7 +239,7 @@
                     "Input": "INPUT",
                     "InputEnder": "",
                     "InputMark2": "\n\n<영상메타데이터.db>\n",
-                    "Input2": "INPUT2"
+                    "InputMemory2": "InputMemory2"
                 }
             ]
         },

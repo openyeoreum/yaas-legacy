@@ -1,6 +1,7 @@
 [
     {
         "LifeGraphSetId": "None",
+        "LifeGraphSetDate": 0,
         "LifeGraphSetName": "CourseraMeditation",
         "Content": "LifeGraph",
         "Language": "Ko",

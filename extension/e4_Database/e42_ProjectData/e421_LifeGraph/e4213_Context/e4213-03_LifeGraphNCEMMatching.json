@@ -1,7 +1,11 @@
 [
     {
         "LifeGraphSetId": "None",
-        "LifeGraphSetName": "CourseraMeditation",
+        "LifeGraphSetDate": 0,
+        "LifeGraphSetName": "None",
+        "LifeGraphSetManager": "None",
+        "LifeGraphSetSource": "None",
+        "LatestUpdateDate": "None",
         "Content": "LifeGraph",
         "Language": "Ko",
         "TaskName": "LifeGraphNCEMDefine",

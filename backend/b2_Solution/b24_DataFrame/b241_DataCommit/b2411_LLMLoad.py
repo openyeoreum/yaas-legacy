@@ -43,7 +43,7 @@ def LoadLLMapiKey(email):
 ##### LLM Response #####
 ########################
 ## 프롬프트 요청할 LLMmessages 메세지 구조 생성
-def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
+def LLMmessages(Process, Input, Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
     promptFrame = GetPromptFrame(Process)
     messageTime = "current time: " + str(Date("Second")) + '\n\n'
     
@@ -70,7 +70,7 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
                     Example[1]["Request"][4]["OutputExampleMark"] + str(Example[1]["Request"][4]["OutputExample"]) +
                     Example[1]["Request"][5]["Mark"] + Example[1]["Request"][5]["InputExampleMark"] + str(Example[1]["Request"][5]["InputExample"]) +
                     Example[1]["Request"][5]["OutputExampleMark"] + str(Example[1]["Request"][5]["OutputExample"]) +
-                    Example[1]["Request"][6]["Mark"] + Example[1]["Request"][6]["InputMark"] + str(Input)
+                    Example[1]["Request"][6]["Mark"] + Example[1]["Request"][6]["InputMark"] + str(Input) + Example[1]["Request"][6]["InputMark2"] + str(input2)
         },
         {
           "role": Example[2]["Role"],
@@ -103,7 +103,7 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
                     Memory[1]["Request"][5]["Mark"] + Memory[1]["Request"][5]["InputMark"] +
                     Memory[1]["Request"][5]["InputStarter"] +
                     str(inputMemory) +
-                    Memory[1]["Request"][5]["InputEnder"]
+                    Memory[1]["Request"][5]["InputEnder"] + Memory[1]["Request"][5]["InputMark2"] + str(inputMemory2)
         },
         {
           "role": Memory[2]["Role"],
@@ -127,7 +127,8 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
           "content": ExampleFineTuning[1]["Request"][0]["Mark"] + ExampleFineTuning[1]["Request"][0]["Message"] +
                     ExampleFineTuning[1]["Request"][1]["Mark"] + ExampleFineTuning[1]["Request"][1]["Message"] +
                     ExampleFineTuning[1]["Request"][2]["Mark"] + ExampleFineTuning[1]["Request"][2]["Message"] +
-                    ExampleFineTuning[1]["Request"][6]["Mark"] + ExampleFineTuning[1]["Request"][6]["InputMark"] + str(Input)
+                    ExampleFineTuning[1]["Request"][6]["Mark"] + ExampleFineTuning[1]["Request"][6]["InputMark"] + str(Input) +
+                    ExampleFineTuning[1]["Request"][6]["InputMark2"] + str(input2)
         },
         {
           "role": ExampleFineTuning[2]["Role"],
@@ -147,7 +148,8 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
           "content": MemoryFineTuning[1]["Request"][0]["Mark"] + MemoryFineTuning[1]["Request"][0]["Message"] +
                     MemoryFineTuning[1]["Request"][1]["Mark"] + MemoryFineTuning[1]["Request"][1]["Message"] +
                     MemoryFineTuning[1]["Request"][2]["Mark"] + MemoryFineTuning[1]["Request"][2]["Message"] +
-                    MemoryFineTuning[1]["Request"][5]["Mark"] + MemoryFineTuning[1]["Request"][5]["InputMark"] + str(inputMemory) + str(Input)
+                    MemoryFineTuning[1]["Request"][5]["Mark"] + MemoryFineTuning[1]["Request"][5]["InputMark"] + str(inputMemory) + str(Input) +
+                    [1]["Request"][5]["InputMark2"] + str(inputMemory2) + str(Input)
         },
         {
           "role": MemoryFineTuning[2]["Role"],
@@ -167,9 +169,9 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", inputMemory = "",
     return messages, totalTokens, Temperature
   
 ## 프롬프트에 메세지 확인
-def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, MODE = "Example", INPUTMEMORY = "", OUTPUTMEMORY = "", MEMORYCOUNTER = "", OUTPUTENDER = ""):
+def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, MODE = "Example", INPUT2 = "", INPUTMEMORY = "", OUTPUTMEMORY = "", MEMORYCOUNTER = "", OUTPUTENDER = ""):
 
-    Messages, TotalTokens, Temperature = LLMmessages(Process, Input, mode = MODE, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryCounter = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
+    Messages, TotalTokens, Temperature = LLMmessages(Process, Input, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryCounter = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
     
     TextMessagesList = [f"\n############# Messages #############\n",
                         f"Messages: ({Count}), ({Model}), ({MODE}), (Tep:{Temperature})\n",
@@ -192,12 +194,12 @@ def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, MODE = "Exa
     return print(TextMessages + TextReponse)
   
 ## 프롬프트 실행
-def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
     client = OpenAI(api_key = LoadLLMapiKey(email))
     client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     promptFrame = GetPromptFrame(Process)
     
-    Messages, TotalTokens, temperature = LLMmessages(Process, Input, mode = Mode, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+    Messages, TotalTokens, temperature = LLMmessages(Process, Input, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
     if Mode == "Master":
       Model = promptFrame[0]["MasterModel"]

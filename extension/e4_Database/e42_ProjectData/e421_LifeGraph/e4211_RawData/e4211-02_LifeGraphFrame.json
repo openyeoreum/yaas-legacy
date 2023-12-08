@@ -7,6 +7,7 @@
         "Language": "Global",
         "TaskName": "LifeGraph",
         "LifeGraphCount": 0,
+        "LifeDataTextsCount": 0,
         "Completion": "No"
     },
     {
@@ -21,6 +22,7 @@
                 "Residence": "None",
                 "PhoneNumber": "None",
                 "Email": "None",
+                "Quality": "None",
                 "LifeData": [
                     {
                         "LifeDataId": 0,
@@ -30,6 +32,17 @@
                         "ReasonGlobal": "None"
                     }
                 ]
+            }
+        ]
+    },
+    {
+        "LifeDataTexts": [
+            {
+                "LifeGraphId": 0,
+                "Language": "None",
+                "TextGlobal": "None",
+                "TextKo": "None",
+                "TextEn": "None"
             }
         ]
     }

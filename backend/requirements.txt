@@ -2,6 +2,7 @@
 client
 python-dotenv
 tiktoken
+langdetect
 nltk
 konlpy
 git+https://github.com/allinux/PyKoSpacing.git

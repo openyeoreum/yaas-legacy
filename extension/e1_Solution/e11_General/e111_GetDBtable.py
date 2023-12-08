@@ -4,22 +4,14 @@ sys.path.append("/yaas")
 from backend.b1_Api.b14_Models import LifeGraph, Video, ExtensionPrompt
 from backend.b1_Api.b13_Database import get_db
 
-def GetLifeGraphFrame(lifeGraphSetName, latestUpdateDate, Process):
-    with get_db() as db:
-        column = getattr(LifeGraph, Process, None)
-        if column is None:
-            raise ValueError(f"No such column: {lifeGraphSetName}, {Process}")
-        
-        LifeGraphFrame = db.query(column).filter(LifeGraph.LifeGraphSetName == lifeGraphSetName, LifeGraph.LatestUpdateDate == latestUpdateDate).first()
+def GetLifeGraph(lifeGraphSetName, latestUpdateDate):
+    with get_db() as db:       
+        LifeGraphFrame = db.query(LifeGraph).filter(LifeGraph.LifeGraphSetName == lifeGraphSetName, LifeGraph.LatestUpdateDate == latestUpdateDate).first()
     return LifeGraphFrame
 
-def GetVideoFrame(videoSetName, latestUpdateDate, Process):
+def GetVideo(videoSetName, latestUpdateDate):
     with get_db() as db:
-        column = getattr(Video, Process, None)
-        if column is None:
-            raise ValueError(f"No such column: {videoSetName}, {Process}")
-
-        VideoFrame = db.query(column).filter(LifeGraph.VideoSetName == videoSetName, LifeGraph.LatestUpdateDate == latestUpdateDate).first()
+        VideoFrame = db.query(Video).filter(LifeGraph.VideoSetName == videoSetName, LifeGraph.LatestUpdateDate == latestUpdateDate).first()
     return VideoFrame
 
 def GetExtensionPromptFrame(Process):
@@ -36,8 +28,9 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     lifeGraphSetName = 'CourseraMeditation'
     latestUpdateDate = 23120601
-    process = 'LifeGraphFrame'
     LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData"
     #########################################################################
     
-    print(GetLifeGraphFrame(lifeGraphSetName, latestUpdateDate, process))
+    lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+    lifeGraph.LifeGraphSets
+    print(len(lifeGraph.LifeGraphSets))

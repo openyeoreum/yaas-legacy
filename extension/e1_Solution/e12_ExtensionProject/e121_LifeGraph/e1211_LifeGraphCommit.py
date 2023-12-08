@@ -47,7 +47,7 @@ def AddLifeGraphToDB(lifeGraphSetName, lifeGraphSetManager, lifeGraphSetSource, 
 
         # DB Commit
         if ExistingLifeGraph:
-                ExistingLifeGraph.LifeGraphSetName = lifeGraphSets
+                ExistingLifeGraph.LifeGraphSetName = lifeGraphSetName
                 ExistingLifeGraph.LifeGraphSetManager = lifeGraphSetManager
                 ExistingLifeGraph.LifeGraphSetSource = lifeGraphSetSource
                 ExistingLifeGraph.LifeGraphSetLanguage = lifeGraphSetLanguage
@@ -64,7 +64,7 @@ def AddLifeGraphToDB(lifeGraphSetName, lifeGraphSetManager, lifeGraphSetSource, 
                 print(f"[ ExtensionProject | AddLifeGraphToDB 변경사항 업데이트 ]")
         else:
             lifeGraph = LifeGraph(
-                LifeGraphSetName = lifeGraphSets,
+                LifeGraphSetName = lifeGraphSetName,
                 LifeGraphSetManager = lifeGraphSetManager,
                 LifeGraphSetSource = lifeGraphSetSource,
                 LifeGraphSetLanguage = lifeGraphSetLanguage,

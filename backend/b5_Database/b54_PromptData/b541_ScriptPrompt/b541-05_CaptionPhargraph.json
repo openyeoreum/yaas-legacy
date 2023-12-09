@@ -72,7 +72,11 @@
                 {
                     "Mark": "\n\n(캡션선정 작업)\n",
                     "InputMark": "<예상 캡션 부분>\n",
-                    "Input": "INPUT"
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },
@@ -139,7 +143,11 @@
                 {
                     "Mark": "\n\n(캡션선정 작업)\n",
                     "InputMark": "<예상 캡션 부분>\n",
-                    "Input": "INPUT"
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },
@@ -192,7 +200,11 @@
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
-                    "InputEnder": ""
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },
@@ -248,7 +260,11 @@
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
-                    "InputEnder": ""
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },

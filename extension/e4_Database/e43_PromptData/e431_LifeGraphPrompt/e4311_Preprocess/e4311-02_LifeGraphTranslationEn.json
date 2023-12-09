@@ -62,7 +62,11 @@
                 {
                     "Mark": "\n\n(English translation work)\n",
                     "InputMark": "<LifeData.json>\n",
-                    "Input": "INPUT"
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },
@@ -120,7 +124,11 @@
                 {
                     "Mark": "\n\n(English translation work)\n",
                     "InputMark": "<LifeData.json>\n",
-                    "Input": "INPUT"
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },
@@ -174,7 +182,11 @@
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
-                    "InputEnder": ""
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },
@@ -230,7 +242,11 @@
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
-                    "InputEnder": ""
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },

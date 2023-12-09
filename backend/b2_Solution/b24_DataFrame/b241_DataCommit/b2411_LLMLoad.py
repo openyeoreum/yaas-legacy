@@ -14,6 +14,7 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User, Prompt
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetPromptFrame, GetTrainingDataset
 from backend.b2_Solution.b21_General.b212_PromptCommit import GetPromptDataPath, LoadJsonFrame
+from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
 
 
 ######################
@@ -43,8 +44,11 @@ def LoadLLMapiKey(email):
 ##### LLM Response #####
 ########################
 ## 프롬프트 요청할 LLMmessages 메세지 구조 생성
-def LLMmessages(Process, Input, Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
-    promptFrame = GetPromptFrame(Process)
+def LLMmessages(Process, Input, Root = "backend", Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
+    if Root == "backend":
+      promptFrame = GetPromptFrame(Process)
+    elif Root == "extension":
+      promptFrame = GetExtensionPromptFrame(Process)
     messageTime = "current time: " + str(Date("Second")) + '\n\n'
     
     # messages
@@ -169,9 +173,9 @@ def LLMmessages(Process, Input, Output = "", mode = "Example", input2 = "", inpu
     return messages, totalTokens, Temperature
   
 ## 프롬프트에 메세지 확인
-def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, MODE = "Example", INPUT2 = "", INPUTMEMORY = "", OUTPUTMEMORY = "", MEMORYCOUNTER = "", OUTPUTENDER = ""):
+def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = "backend", MODE = "Example", INPUT2 = "", INPUTMEMORY = "", OUTPUTMEMORY = "", MEMORYCOUNTER = "", OUTPUTENDER = ""):
 
-    Messages, TotalTokens, Temperature = LLMmessages(Process, Input, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryCounter = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
+    Messages, TotalTokens, Temperature = LLMmessages(Process, Input, Root = ROOT, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryCounter = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
     
     TextMessagesList = [f"\n############# Messages #############\n",
                         f"Messages: ({Count}), ({Model}), ({MODE}), (Tep:{Temperature})\n",
@@ -194,12 +198,15 @@ def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, MODE = "Exa
     return print(TextMessages + TextReponse)
   
 ## 프롬프트 실행
-def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
-    client = OpenAI(api_key = LoadLLMapiKey(email))
+def LLMresponse(projectName, email, Process, Input, Count, root = "backend", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+    # client = OpenAI(api_key = LoadLLMapiKey(email))
     client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
-    promptFrame = GetPromptFrame(Process)
+    if root == "backend":
+      promptFrame = GetPromptFrame(Process)
+    elif root == "extension":
+      promptFrame = GetExtensionPromptFrame(Process)
     
-    Messages, TotalTokens, temperature = LLMmessages(Process, Input, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+    Messages, TotalTokens, temperature = LLMmessages(Process, Input, Root = root, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
     if Mode == "Master":
       Model = promptFrame[0]["MasterModel"]
@@ -252,16 +259,21 @@ def LLMresponse(projectName, email, Process, Input, Count, Mode = "Example", Inp
                    'Output': response.usage.completion_tokens,
                    'Total': response.usage.total_tokens}
           
-                   
-          print(f"Project: {projectName} | Process: {Process} | LLMresponse 완료")
+          if isinstance(email, str):
+            print(f"Project: {projectName} | Process: {Process} | LLMresponse 완료")
+          else:
+            print(f"LifeGraphSetName: {projectName} | Process: {Process} | LLMresponse 완료")
           
           if messagesReview == "on":
-            LLMmessagesReview(Process, Input, Count, Response, Usage, Model, MODE = Mode, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+            LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = root, MODE = Mode, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
 
           return Response, Usage, Model
       
       except:
-          print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생")
+          if isinstance(email, str):
+            print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생")
+          else:
+            print(f"LifeGraphSetName: {projectName} | Process: {Process} | LLMresponse에서 오류 발생")
           time.sleep(random.uniform(5, 10))
           continue
       # except openai.APIError as e:

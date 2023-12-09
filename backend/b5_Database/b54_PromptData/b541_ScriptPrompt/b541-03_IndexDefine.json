@@ -108,7 +108,11 @@
                 {
                     "Mark": "\n\n(목차태그 작업)\n",
                     "InputMark": "<목차.text>\n",
-                    "Input": "INPUT"
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },
@@ -211,7 +215,11 @@
                 {
                     "Mark": "\n\n(목차태그 작업)\n",
                     "InputMark": "<목차.text>\n",
-                    "Input": "INPUT"
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },
@@ -264,7 +272,11 @@
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
-                    "InputEnder": ""
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },
@@ -320,7 +332,11 @@
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
-                    "InputEnder": ""
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "Input2": "INPUT2",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
                 }
             ]
         },

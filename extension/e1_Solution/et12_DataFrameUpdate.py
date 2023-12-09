@@ -7,8 +7,9 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph, GetVideo
-from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddLifeGraphMetaDataToDB, InitLifeGraphFrame, UpdatedLifeGraphFrame
+from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddLifeGraphMetaDataToDB, InitLifeGraphFrame, UpdatedLifeGraphFrame, InitLifeGraphTranslationKo, UpdatedLifeGraphTranslationKo
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1321_LifeGraphFrameUpdate import LifeGraphFrameUpdate
+from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1322_LifeGraphTranslationKoUpdate import LifeGraphTranslationKoUpdate
 
 ## 오늘 날짜
 def Date(Option = "Day"):
@@ -98,3 +99,17 @@ if __name__ == "__main__":
         updatedLifeGraphFrame = UpdatedLifeGraphFrame(lifeGraphSetName, latestUpdateDate)
         SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "01_LifeGraphFrame", updatedLifeGraphFrame, LifeGraphDataFramePath)
     existedDataFrame = None
+    
+    
+    #################################
+    ### 02_LifeGraphTranslationKo ###
+    #################################
+    InitLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphTranslationKo", LifeGraphDataFramePath)
+    LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, ExistedDataFrame = existedDataFrame)
+
+    if existedDataFrame == None:
+        updatedLifeGraphTranslationKo = UpdatedLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate)
+        SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "02_LifeGraphTranslationKo", updatedLifeGraphTranslationKo, LifeGraphDataFramePath)
+    existedDataTranslationKo = None

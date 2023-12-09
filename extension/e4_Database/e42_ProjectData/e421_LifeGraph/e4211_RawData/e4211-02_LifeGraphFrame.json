@@ -40,9 +40,7 @@
             {
                 "LifeGraphId": 0,
                 "Language": "None",
-                "TextGlobal": "None",
-                "TextKo": "None",
-                "TextEn": "None"
+                "TextGlobal": "None"
             }
         ]
     }

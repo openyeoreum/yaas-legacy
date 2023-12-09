@@ -9,7 +9,7 @@ from tqdm import tqdm
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph
-from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddExistedLifeGraphFrameToDB, AddLifeGraphFrameLifeGraphsToDB, LifeGraphFrameCountLoad, InitLifeGraphFrame, LifeGraphFrameCompletionUpdate, UpdatedLifeGraphFrame
+from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddExistedLifeGraphTranslationKoToDB, AddLifeGraphTranslationKoLifeGraphsToDB, AddLifeGraphTranslationKoLifeDataTextsToDB, LifeGraphTranslationKoCountLoad, InitLifeGraphTranslationKo, LifeGraphTranslationKoCompletionUpdate, UpdatedLifeGraphTranslationKo
 
 #########################
 ##### InputList 생성 #####
@@ -228,17 +228,28 @@ def LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, Process = 
 def LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = 'off', mode = "Memory"):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     LifeGraphs = lifeGraph.LifeGraphFrame[1]['LifeGraphs'][1:]
-    # outputMemoryDics = LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
-    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_02_outputMemoryDics_231209.json"
-    # 파일을 열고 JSON 데이터를 Python 객체로 로드
-    with open(LifeGraphFramePath, 'r', encoding='utf-8') as file:
-        outputMemoryDics = json.load(file)
+    outputMemoryDics = LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
+    
+    TranslatedKeys = {
+        '지역': 'Area',
+        '이유': 'Reason',
+        '정확도': 'Accuracy'
+    }
     
     responseJson = []
     for i, response in enumerate(outputMemoryDics):
         if response != "Pass":
             LifeGraphId = i + 1
-            Residence = response[1]["예상거주지"]
+            LifeGraphDate = LifeGraphs[i]['LifeGraphDate']
+            Name = LifeGraphs[i]['Name']
+            Age = LifeGraphs[i]['Age']
+            Source = LifeGraphs[i]['Source']
+            Language = LifeGraphs[i]['Language']
+            residence = {TranslatedKeys[key]: value for key, value in response[1]["예상거주지"].items()}
+            Residence = residence
+            PhoneNumber = LifeGraphs[i]['PhoneNumber']
+            Email = LifeGraphs[i]['Email']
+            Quality = LifeGraphs[i]['Quality']
             LifeData = []
             for j in range(len(response[0]["인생데이터"])):
                 LifeDataId = j + 1
@@ -248,64 +259,116 @@ def LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, messa
                 Score = int(response[0]["인생데이터"][j]["행복지수"])
                 ReasonKo = response[0]["인생데이터"][j]["이유"]
                 LifeData.append({'LifeDataId': LifeDataId, 'StartAge': StartAge, 'EndAge': EndAge, 'Score': Score, 'ReasonKo': ReasonKo})
-            responseJson.append({'LifeGraphId': LifeGraphId, 'Residence': Residence, 'LifeData': LifeData})
+            responseJson.append({'LifeGraphId': LifeGraphId, 'LifeGraphDate': LifeGraphDate, 'Name': Name, 'Age': Age, 'Source': Source, 'Language': Language, 'Residence': Residence, 'PhoneNumber': PhoneNumber, 'Email': Email, 'Quality': Quality, 'LifeData': LifeData})
         else:
             LifeGraphId = i + 1
-            responseJson.append({'LifeGraphId': LifeGraphId, 'Residence': "None", 'LifeData': "None"})
-            
+            responseJson.append({'LifeGraphId': LifeGraphId, 'LifeGraphDate': LifeGraphDate, 'Name': Name, 'Age': Age, 'Source': Source, 'Language': Language, 'Residence': LifeGraphs[i]['Residence'], 'PhoneNumber': PhoneNumber, 'Email': Email, 'Quality': Quality, 'LifeData': LifeGraphs[i]['LifeData']})
+
     return responseJson
 
-# ## 결과물 Json을 LifeGraphFrame에 업데이트
-# def LifeGraphFrameUpdate(lifeGraphSetName, latestUpdateDate, QUALITY = 6, ExistedDataFrame = None):
-#     print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 01_LifeGraphFrameUpdate 시작 >")
-#     # LifeGraphFrame의 Count값 가져오기
-#     LifeGraphCount, Completion = LifeGraphFrameCountLoad(lifeGraphSetName, latestUpdateDate)
-#     if Completion == "No":
+def LifeDataToText(lifeGraphSetName, latestUpdateDate):
+    ResponseJson = LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate)
+    
+    LifeDataTexts = []
+    for i in range(len(ResponseJson)):
+        LifeGraphDate = ResponseJson[i]["LifeGraphDate"]
+        Name = ResponseJson[i]["Name"]
+        Age = ResponseJson[i]["Age"]
+        Email = ResponseJson[i]["Email"]
+        Language = ResponseJson[i]["Language"]
+        LifeData = []
+        for j in range(len(ResponseJson[i]["LifeData"])):
+            StartAge = ResponseJson[i]["LifeData"][j]["StartAge"]
+            EndAge = ResponseJson[i]["LifeData"][j]["EndAge"]
+            Score = ResponseJson[i]["LifeData"][j]["Score"]
+            if ResponseJson[i]["LifeData"][j]["ReasonKo"] == '':
+                ReasonKo = '내용없음'
+            else:
+                ReasonKo = ResponseJson[i]["LifeData"][j]["ReasonKo"]
+            LifeData.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {ReasonKo}\n')
         
-#         if ExistedDataFrame != None:
-#             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-#             AddExistedLifeGraphFrameToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
-#             print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 01_LifeGraphFrameUpdate으로 대처됨 ]\n")
-#         else:
-#             LifeGraphs = LifeGraphSetJson(lifeGraphSetName, latestUpdateDate, quality = QUALITY)
-#             # LifeGraphs를 LifeGraphCount로 슬라이스
-#             LifeGraphsList = LifeGraphs[LifeGraphCount:]
-#             LifeGraphsListCount = len(LifeGraphsList)
-            
-#             # TQDM 셋팅
-#             UpdateTQDM = tqdm(LifeGraphsList,
-#                             total = LifeGraphsListCount,
-#                             desc = 'LifeGraphFrameUpdate')
-#             # i값 수동 생성
-#             i = 0
-#             for Update in UpdateTQDM:
-#                 UpdateTQDM.set_description(f'LifeGraphFrameUpdate: {Update["Name"]}, {Update["Email"]} ...')
-#                 time.sleep(0.0001)
-                
-#                 LifeGraphId = i + 1
-#                 LifeGraphDate = LifeGraphsList[i]["LifeGraphDate"]
-#                 Name = LifeGraphsList[i]["Name"]
-#                 Age = LifeGraphsList[i]["Age"]
-#                 Source = LifeGraphsList[i]["Source"]
-#                 Language = LifeGraphsList[i]["Language"]
-#                 Residence = LifeGraphsList[i]["Residence"]
-#                 PhoneNumber = LifeGraphsList[i]["PhoneNumber"]
-#                 Email = LifeGraphsList[i]["Email"]
-#                 Quality = LifeGraphsList[i]["Quality"]
-#                 LifeData = LifeGraphsList[i]["LifeData"]
+        LifeDataText = f"작성일: {LifeGraphDate}\nEmail: {Email}\n'{Name}'의 {Age}세 까지의 인생\n\n" + "".join(LifeData)
+        LifeDataTexts.append({"Name": Name, "Email": Email, "TextKo": LifeDataText, "Language": Language})
+        
+    return LifeDataTexts
 
-#                 AddLifeGraphFrameLifeGraphsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, LifeGraphDate, Name, Age, Source, Language, Residence, PhoneNumber, Email, Quality, LifeData)
-#                 # i값 수동 업데이트
-#                 i += 1
+## LifeDataTexts를 LifeGraphTranslationKo에 업데이트
+def LifeGraphTranslationKoLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate):
+    LifeDataTexts = LifeDataToText(lifeGraphSetName, latestUpdateDate)
+    LifeDataTextsCount = len(LifeDataTexts)
+    
+    # TQDM 셋팅
+    UpdateTQDM = tqdm(LifeDataTexts,
+                    total = LifeDataTextsCount,
+                    desc = 'LifeGraphTranslationKoLifeDataTextsUpdate')
+    # i값 수동 생성
+    i = 0
+    for Update in UpdateTQDM:
+        UpdateTQDM.set_description(f'LifeGraphTranslationKoLifeDataTextsUpdate: {Update["Name"]}, {Update["Email"]} ...')
+        time.sleep(0.0001)
+        LifeGraphId = i + 1
+        Language = LifeDataTexts[i]["Language"]
+        TextKo = LifeDataTexts[i]["TextKo"]
+        
+        AddLifeGraphTranslationKoLifeDataTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Language, TextKo)
+        # i값 수동 업데이트
+        i += 1
+
+    UpdateTQDM.close()
+
+## 결과물 Json을 LifeGraphTranslationKo에 업데이트
+def LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, ExistedDataFrame = None):
+    print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 02_LifeGraphTranslationKoUpdate 시작 >")
+    # LifeGraphTranslationKo의 Count값 가져오기
+    LifeGraphCount, LifeDataTextsCount, Completion = LifeGraphTranslationKoCountLoad(lifeGraphSetName, latestUpdateDate)
+    if Completion == "No":
+        
+        if ExistedDataFrame != None:
+            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            AddExistedLifeGraphTranslationKoToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 02_LifeGraphTranslationKo로 대처됨 ]\n")
+        else:
+            responseJson = LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate)
+            # LifeGraphs를 LifeGraphCount로 슬라이스
+            ResponseJson = responseJson[LifeGraphCount:]
+            ResponseJsonCount = len(ResponseJson)
             
-#             UpdateTQDM.close()
-#             #####
-#             # Completion "Yes" 업데이트
-#             LifeGraphFrameCompletionUpdate(lifeGraphSetName, latestUpdateDate)
+            # TQDM 셋팅
+            UpdateTQDM = tqdm(ResponseJson,
+                            total = ResponseJsonCount,
+                            desc = 'LifeGraphTranslationKoUpdate')
+            # i값 수동 생성
+            i = 0
+            for Update in UpdateTQDM:
+                UpdateTQDM.set_description(f'LifeGraphTranslationKoUpdate: {Update["Residence"]} ...')
+                time.sleep(0.0001)
+                
+                LifeGraphId = i + 1
+                LifeGraphDate = ResponseJson[i]["LifeGraphDate"]
+                Name = ResponseJson[i]["Name"]
+                Age = ResponseJson[i]["Age"]
+                Source = ResponseJson[i]["Source"]
+                Language = ResponseJson[i]["Language"]
+                Residence = ResponseJson[i]["Residence"]
+                PhoneNumber = ResponseJson[i]["PhoneNumber"]
+                Email = ResponseJson[i]["Email"]
+                Quality = ResponseJson[i]["Quality"]
+                LifeData = ResponseJson[i]["LifeData"]
+
+                AddLifeGraphTranslationKoLifeGraphsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, LifeGraphDate, Name, Age, Source, Language, Residence, PhoneNumber, Email, Quality, LifeData)
+                # i값 수동 업데이트
+                i += 1
             
-#             print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 01_LifeGraphFrameUpdate 완료 ]\n")
-#     else:
-#         print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 01_LifeGraphFrameUpdate는 이미 완료됨 ]\n")
+            UpdateTQDM.close()
+            ##### LifeDataTexts 업데이트
+            LifeGraphTranslationKoLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate)
+            #####
+            # Completion "Yes" 업데이트
+            LifeGraphTranslationKoCompletionUpdate(lifeGraphSetName, latestUpdateDate)
+            
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 02_LifeGraphTranslationKoUpdate 완료 ]\n")
+    else:
+        print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 02_LifeGraphTranslationKoUpdate는 이미 완료됨 ]\n")
     
 if __name__ == "__main__":
     
@@ -317,5 +380,5 @@ if __name__ == "__main__":
     
     # outputMemoryDics = LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, Mode = "Master")
     
-    LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate)
+    LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate)
     

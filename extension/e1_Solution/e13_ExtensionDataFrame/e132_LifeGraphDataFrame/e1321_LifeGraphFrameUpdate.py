@@ -65,7 +65,7 @@ def LifeGraphSetJson(lifeGraphSetName, latestUpdateDate, quality = 0):
     
     return LifeGraphs
 
-def LifeDataToText(lifeGraphSetName, latestUpdateDate, QUALITY):
+def LifeDataToText(lifeGraphSetName, latestUpdateDate, QUALITY = 0):
     LifeGraphs = LifeGraphSetJson(lifeGraphSetName, latestUpdateDate, quality = QUALITY)
     
     LifeDataTexts = []
@@ -92,7 +92,7 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate, QUALITY):
     return LifeDataTexts
 
 ## LifeDataTexts를 LifeGraphFrame에 업데이트
-def LifeGraphFrameLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, quality):
+def LifeGraphFrameLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, quality = 0):
     LifeDataTexts = LifeDataToText(lifeGraphSetName, latestUpdateDate, QUALITY = quality)
     LifeDataTextsCount = len(LifeDataTexts)
     
@@ -116,7 +116,7 @@ def LifeGraphFrameLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, qualit
     UpdateTQDM.close()
 
 ## 결과물 Json을 LifeGraphFrame에 업데이트
-def LifeGraphFrameUpdate(lifeGraphSetName, latestUpdateDate, QUALITY = 6, ExistedDataFrame = None):
+def LifeGraphFrameUpdate(lifeGraphSetName, latestUpdateDate, QUALITY = 0, ExistedDataFrame = None):
     print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 01_LifeGraphFrameUpdate 시작 >")
     # LifeGraphFrame의 Count값 가져오기
     LifeGraphCount, LifeDataTextsCount, Completion = LifeGraphFrameCountLoad(lifeGraphSetName, latestUpdateDate)
@@ -125,7 +125,7 @@ def LifeGraphFrameUpdate(lifeGraphSetName, latestUpdateDate, QUALITY = 6, Existe
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedLifeGraphFrameToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
-            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 01_LifeGraphFrameUpdate으로 대처됨 ]\n")
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 01_LifeGraphFrame으로 대처됨 ]\n")
         else:
             LifeGraphs = LifeGraphSetJson(lifeGraphSetName, latestUpdateDate, quality = QUALITY)
             # LifeGraphs를 LifeGraphCount로 슬라이스

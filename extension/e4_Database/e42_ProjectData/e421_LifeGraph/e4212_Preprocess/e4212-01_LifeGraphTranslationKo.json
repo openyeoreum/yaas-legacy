@@ -1,11 +1,13 @@
 [
     {
         "LifeGraphSetId": "None",
+        "LifeGraphSetDate": 0,
         "LifeGraphSetName": "CourseraMeditation",
         "Content": "LifeGraph",
         "Language": "Ko",
         "TaskName": "LifeGraphTranslationKo",
         "LifeGraphCount": 0,
+        "LifeDataTextsCount": 0,
         "Completion": "No"
     },
     {
@@ -30,6 +32,15 @@
                         "ReasonKo": "None"
                     }
                 ]
+            }
+        ]
+    },
+    {
+        "LifeDataTextsKo": [
+            {
+                "LifeGraphId": 0,
+                "Language": "None",
+                "TextKo": "None"
             }
         ]
     }

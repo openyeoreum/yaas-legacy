@@ -96,14 +96,12 @@ def AddLifeGraphFrameLifeGraphsToDB(lifeGraphSetName, latestUpdateDate, LifeGrap
         db.commit()
 
 ## 1. 1-3 LifeGraphFrame의 LifeDataTexts부분 업데이트 형식
-def UpdateLifeDataTexts(lifeGraph, LifeGraphId, Language, TextGlobal, TextKo = "None", TextEn = "None"):
+def UpdateLifeDataTexts(lifeGraph, LifeGraphId, Language, TextGlobal):
     
     updateLifeDataTexts = {
         "LifeGraphId": LifeGraphId,
         "Language": Language,
-        "TextGlobal": TextGlobal,
-        "TextKo": TextKo,
-        "TextEn": TextEn
+        "TextGlobal": TextGlobal
     }
     
     lifeGraph.LifeGraphFrame[2]["LifeDataTexts"].append(updateLifeDataTexts)
@@ -111,11 +109,11 @@ def UpdateLifeDataTexts(lifeGraph, LifeGraphId, Language, TextGlobal, TextKo = "
     lifeGraph.LifeGraphFrame[0]["LifeDataTextsCount"] = LifeGraphId
 
 ## 1. 1-4 LifeGraphFrame의 LifeDataTexts부분 업데이트
-def AddLifeGraphFrameLifeDataTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Language, TextGlobal, textKo = "None", textEn = "None"):
+def AddLifeGraphFrameLifeDataTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Language, TextGlobal):
     with get_db() as db:
     
         lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-        UpdateLifeDataTexts(lifeGraph, LifeGraphId, Language, TextGlobal, TextKo = textKo, TextEn = textEn)
+        UpdateLifeDataTexts(lifeGraph, LifeGraphId, Language, TextGlobal)
         
         flag_modified(lifeGraph, "LifeGraphFrame")
         
@@ -163,6 +161,127 @@ def LifeGraphFrameCompletionUpdate(lifeGraphSetName, latestUpdateDate):
         lifeGraph.LifeGraphFrame[0]["Completion"] = "Yes"
 
         flag_modified(lifeGraph, "LifeGraphFrame")
+
+        db.add(lifeGraph)
+        db.commit()
+        
+#############################################
+##### 01_LifeGraphTranslationKo Process #####
+#############################################
+## 1. 1-0 LifeGraphTranslationKo이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedLifeGraphTranslationKoToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame):
+    with get_db() as db:
+    
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+        
+        lifeGraph.LifeGraphTranslationKo[1] = ExistedDataFrame[1]
+        lifeGraph.LifeGraphTranslationKo[2] = ExistedDataFrame[2]
+        
+        flag_modified(lifeGraph, "LifeGraphTranslationKo")
+        
+        db.add(lifeGraph)
+        db.commit()
+
+
+## 1. 1-1 LifeGraphTranslationKo의 LifeGraphs부분 업데이트 형식
+def UpdateLifeGraphs(lifeGraph, LifeGraphId, LifeGraphDate, Name, Age, Source, Language, Residence, PhoneNumber, Email, Quality, LifeData):
+    
+    updateLifeGraphs = {
+        "LifeGraphId": LifeGraphId,
+        "LifeGraphDate": LifeGraphDate,
+        "Name": Name,
+        "Age": Age,
+        "Source": Source,
+        "Language": Language,
+        "Residence": Residence,
+        "PhoneNumber": PhoneNumber,
+        "Email": Email,
+        "Quality": Quality,
+        "LifeData": LifeData
+    }
+    
+    lifeGraph.LifeGraphTranslationKo[1]["LifeGraphs"].append(updateLifeGraphs)
+    # Count 업데이트
+    lifeGraph.LifeGraphTranslationKo[0]["LifeGraphCount"] = LifeGraphId
+
+## 1. 1-2 LifeGraphTranslationKo의 LifeGraphs부분 업데이트
+def AddLifeGraphTranslationKoLifeGraphsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, LifeGraphDate, Name, Age, Source, Language, Residence, PhoneNumber, Email, Quality, LifeData):
+    with get_db() as db:
+    
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+        UpdateLifeGraphs(lifeGraph, LifeGraphId, LifeGraphDate, Name, Age, Source, Language, Residence, PhoneNumber, Email, Quality, LifeData)
+        
+        flag_modified(lifeGraph, "LifeGraphTranslationKo")
+        
+        db.add(lifeGraph)
+        db.commit()
+
+## 1. 1-3 LifeGraphTranslationKo의 LifeDataTexts부분 업데이트 형식
+def UpdateLifeDataTextsKo(lifeGraph, LifeGraphId, Language, TextKo):
+    
+    updateLifeDataTextsKo = {
+        "LifeGraphId": LifeGraphId,
+        "Language": Language,
+        "TextKo": TextKo
+    }
+    
+    lifeGraph.LifeGraphTranslationKo[2]["LifeDataTextsKo"].append(updateLifeDataTextsKo)
+    # Count 업데이트
+    lifeGraph.LifeGraphTranslationKo[0]["LifeDataTextsCount"] = LifeGraphId
+
+## 1. 1-4 LifeGraphTranslationKo의 LifeDataTexts부분 업데이트
+def AddLifeGraphTranslationKoLifeDataTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Language, TextKo):
+    with get_db() as db:
+    
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+        UpdateLifeDataTextsKo(lifeGraph, LifeGraphId, Language, TextKo)
+        
+        flag_modified(lifeGraph, "LifeGraphTranslationKo")
+        
+        db.add(lifeGraph)
+        db.commit()
+
+## 1. LifeGraphTranslationKoCount 가져오기
+def LifeGraphTranslationKoCountLoad(lifeGraphSetName, latestUpdateDate):
+
+    lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+    LifeGraphCount = lifeGraph.LifeGraphTranslationKo[0]["LifeGraphCount"]
+    LifeDataTextsCount = lifeGraph.LifeGraphTranslationKo[0]["LifeDataTextsCount"]
+    Completion = lifeGraph.LifeGraphTranslationKo[0]["Completion"]
+    
+    return LifeGraphCount, LifeDataTextsCount, Completion
+        
+## 1. LifeGraphTranslationKo의 초기화
+def InitLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate):
+    LifeGraphDataPath = GetLifeGraphDataPath()
+    with get_db() as db:
+    
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+        lifeGraph.LifeGraphTranslationKo[0]["LifeGraphCount"] = 0
+        lifeGraph.LifeGraphTranslationKo[0]["LifeDataTextsCount"] = 0
+        lifeGraph.LifeGraphTranslationKo[0]["Completion"] = "No"
+        lifeGraph.LifeGraphTranslationKo[1] = LoadJsonFrame(LifeGraphDataPath + "/e4212_Preprocess/e4212-01_LifeGraphTranslationKo.json")[1]
+        
+        flag_modified(lifeGraph, "LifeGraphTranslationKo")
+        
+        db.add(lifeGraph)
+        db.commit()
+        
+## 1. 업데이트된 LifeGraphTranslationKo 출력
+def UpdatedLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate):
+    with get_db() as db:
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+
+    return lifeGraph.LifeGraphTranslationKo
+
+## 1. LifeGraphTranslationKoCompletion 업데이트
+def LifeGraphTranslationKoCompletionUpdate(lifeGraphSetName, latestUpdateDate):
+    with get_db() as db:
+
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+        lifeGraph.LifeGraphTranslationKo[0]["Completion"] = "Yes"
+
+        flag_modified(lifeGraph, "LifeGraphTranslationKo")
 
         db.add(lifeGraph)
         db.commit()

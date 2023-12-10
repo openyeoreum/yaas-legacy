@@ -107,7 +107,8 @@ if __name__ == "__main__":
     InitLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate)
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphTranslationKo", LifeGraphDataFramePath)
-    LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, ExistedDataFrame = existedDataFrame)
+    mode = "Master"
+    LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
 
     if existedDataFrame == None:
         updatedLifeGraphTranslationKo = UpdatedLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate)

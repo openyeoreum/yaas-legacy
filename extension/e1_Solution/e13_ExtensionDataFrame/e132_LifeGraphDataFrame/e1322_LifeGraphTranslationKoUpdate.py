@@ -17,7 +17,7 @@ from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311
 # LifeGraphSet 로드
 def LoadLifeGraphFrameTexts(lifeGraphSetName, latestUpdateDate):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-    LifeGraphFrameTexts = lifeGraph.LifeGraphFrame[2]['LifeDataTexts'][1:]
+    LifeGraphFrameTexts = lifeGraph.LifeGraphFrame[2]['LifeDataTexts'][1:50] ### 테스트 후 50 삭제 ###
     
     return LifeGraphFrameTexts
 
@@ -67,7 +67,7 @@ def LifeGraphTranslationKoFilter(responseData, memoryCounter):
             # '예상거주지' 키 확인 및 처리
             if '예상거주지' in dic:
                 for item in dic['예상거주지']:
-                    if not all(key in item for key in ['지역', '이유']):
+                    if not all(key in item for key in ['지역', '이유', '정확도']):
                         return "JSON에서 오류 발생: JSONKeyError, 인생데이터 내의 항목, {key}"
 
         except AttributeError as e:
@@ -266,8 +266,7 @@ def LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, messa
 
     return responseJson
 
-def LifeDataToText(lifeGraphSetName, latestUpdateDate):
-    ResponseJson = LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate)
+def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
     
     LifeDataTexts = []
     for i in range(len(ResponseJson)):
@@ -293,8 +292,8 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate):
     return LifeDataTexts
 
 ## LifeDataTexts를 LifeGraphTranslationKo에 업데이트
-def LifeGraphTranslationKoLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate):
-    LifeDataTexts = LifeDataToText(lifeGraphSetName, latestUpdateDate)
+def LifeGraphTranslationKoLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson):
+    LifeDataTexts = LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson)
     LifeDataTextsCount = len(LifeDataTexts)
     
     # TQDM 셋팅
@@ -317,7 +316,7 @@ def LifeGraphTranslationKoLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate
     UpdateTQDM.close()
 
 ## 결과물 Json을 LifeGraphTranslationKo에 업데이트
-def LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, ExistedDataFrame = None):
+def LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
     print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 02_LifeGraphTranslationKoUpdate 시작 >")
     # LifeGraphTranslationKo의 Count값 가져오기
     LifeGraphCount, LifeDataTextsCount, Completion = LifeGraphTranslationKoCountLoad(lifeGraphSetName, latestUpdateDate)
@@ -328,7 +327,7 @@ def LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, ExistedData
             AddExistedLifeGraphTranslationKoToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
             print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 02_LifeGraphTranslationKo로 대처됨 ]\n")
         else:
-            responseJson = LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate)
+            responseJson = LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = MessagesReview, mode = Mode)
             # LifeGraphs를 LifeGraphCount로 슬라이스
             ResponseJson = responseJson[LifeGraphCount:]
             ResponseJsonCount = len(ResponseJson)
@@ -361,7 +360,7 @@ def LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, ExistedData
             
             UpdateTQDM.close()
             ##### LifeDataTexts 업데이트
-            LifeGraphTranslationKoLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate)
+            LifeGraphTranslationKoLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson)
             #####
             # Completion "Yes" 업데이트
             LifeGraphTranslationKoCompletionUpdate(lifeGraphSetName, latestUpdateDate)

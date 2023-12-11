@@ -392,7 +392,9 @@ def LifeGraphTranslationEnUpdate(lifeGraphSetName, latestUpdateDate, MessagesRev
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
-    lifeGraphSetName = 'CourseraMeditation'
+    lifeGraphSetName = "CourseraMeditation"
     latestUpdateDate = 23120601
-    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData"
+    LifeGraphDataFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/"
+    messagesReview = "on"
+    mode = "Master"
     #########################################################################

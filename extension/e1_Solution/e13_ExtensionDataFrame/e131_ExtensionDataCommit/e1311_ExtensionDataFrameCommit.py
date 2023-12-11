@@ -460,7 +460,7 @@ def UpdateLifeDataContextTexts(lifeGraph, LifeGraphId, Text):
         "Text": Text
     }
     
-    lifeGraph.LifeGraphContextDefine[1]["LifeDataContextTexts"].append(updateContextChunks)
+    lifeGraph.LifeGraphContextDefine[2]["LifeDataContextTexts"].append(updateContextChunks)
     # Count 업데이트
     lifeGraph.LifeGraphContextDefine[0]["LifeDataContextTexts"] = LifeGraphId
 
@@ -481,9 +481,10 @@ def LifeGraphContextDefineCountLoad(lifeGraphSetName, latestUpdateDate):
 
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     LifeGraphCount = lifeGraph.LifeGraphContextDefine[0]["LifeGraphCount"]
+    LifeGraphTextsCount = lifeGraph.LifeGraphContextDefine[0]["LifeGraphTextsCount"]
     Completion = lifeGraph.LifeGraphContextDefine[0]["Completion"]
     
-    return LifeGraphCount, Completion
+    return LifeGraphCount, LifeGraphTextsCount, Completion
         
 ## 4. LifeGraphContextDefine의 초기화
 def InitLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate):
@@ -492,6 +493,7 @@ def InitLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate):
     
         lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
         lifeGraph.LifeGraphContextDefine[0]["LifeGraphCount"] = 0
+        lifeGraph.LifeGraphContextDefine[0]["LifeGraphTextsCount"] = 0
         lifeGraph.LifeGraphContextDefine[0]["Completion"] = "No"
         lifeGraph.LifeGraphContextDefine[1] = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-01_LifeGraphContextDefine.json")[1]
         
@@ -522,7 +524,9 @@ def LifeGraphContextDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate):
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
-    lifeGraphSetName = 'CourseraMeditation'
+    lifeGraphSetName = "CourseraMeditation"
     latestUpdateDate = 23120601
-    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData"
+    LifeGraphDataFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/"
+    messagesReview = "on"
+    mode = "Master"
     #########################################################################

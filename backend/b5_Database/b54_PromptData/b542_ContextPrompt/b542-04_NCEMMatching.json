@@ -64,8 +64,6 @@
                     "Mark": "\n\n(추천'영상'선정 작업)\n",
                     "InputMark": "<도서메타데이터.json>\n",
                     "Input": "INPUT",
-                    "InputMark2": "",
-                    "Input2": "INPUT2",
                     "InputMark2": "\n\n<영상메타데이터.db>\n",
                     "Input2": "INPUT2"
                 }
@@ -126,8 +124,6 @@
                     "Mark": "\n\n(추천'영상'선정 작업)\n",
                     "InputMark": "<도서메타데이터.json>\n",
                     "Input": "INPUT",
-                    "InputMark2": "",
-                    "Input2": "INPUT2",
                     "InputMark2": "\n\n<영상메타데이터.db>\n",
                     "Input2": "INPUT2"
                 }
@@ -184,8 +180,6 @@
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
                     "InputEnder": "",
-                    "InputMark2": "",
-                    "Input2": "INPUT2",
                     "InputMark2": "\n\n<영상메타데이터.db>\n",
                     "Input2": "INPUT2"
                 }
@@ -244,8 +238,6 @@
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
                     "InputEnder": "",
-                    "InputMark2": "",
-                    "Input2": "INPUT2",
                     "InputMark2": "\n\n<영상메타데이터.db>\n",
                     "Input2": "INPUT2"
                 }

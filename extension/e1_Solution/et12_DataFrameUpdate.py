@@ -7,10 +7,11 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph, GetVideo
-from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddLifeGraphMetaDataToDB, InitLifeGraphFrame, UpdatedLifeGraphFrame, InitLifeGraphTranslationKo, UpdatedLifeGraphTranslationKo, InitLifeGraphTranslationEn, UpdatedLifeGraphTranslationEn
+from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddLifeGraphMetaDataToDB, InitLifeGraphFrame, UpdatedLifeGraphFrame, InitLifeGraphTranslationKo, UpdatedLifeGraphTranslationKo, InitLifeGraphTranslationEn, UpdatedLifeGraphTranslationEn, InitLifeGraphContextDefine, UpdatedLifeGraphContextDefine
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1321_LifeGraphFrameUpdate import LifeGraphFrameUpdate
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1322_LifeGraphTranslationKoUpdate import LifeGraphTranslationKoUpdate
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1323_LifeGraphTranslationEnUpdate import LifeGraphTranslationEnUpdate
+from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1324_LifeGraphContextDefineUpdate import LifeGraphContextDefineUpdate
 
 ## 오늘 날짜
 def Date(Option = "Day"):
@@ -130,3 +131,18 @@ if __name__ == "__main__":
         updatedLifeGraphTranslationEn = UpdatedLifeGraphTranslationEn(lifeGraphSetName, latestUpdateDate)
         SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "03_LifeGraphTranslationEn", updatedLifeGraphTranslationEn, LifeGraphDataFramePath)
     existedDataTranslationEn = None
+    
+    
+    #################################
+    ### 04_LifeGraphContextDefine ###
+    #################################
+    InitLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphContextDefine", LifeGraphDataFramePath)
+    mode = "Master"
+    LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
+
+    if existedDataFrame == None:
+        updatedLifeGraphContextDefine = UpdatedLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate)
+        SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "04_LifeGraphContextDefine", updatedLifeGraphContextDefine, LifeGraphDataFramePath)
+    existedDataContextDefine = None

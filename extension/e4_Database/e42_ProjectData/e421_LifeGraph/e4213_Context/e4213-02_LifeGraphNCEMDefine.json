@@ -7,21 +7,40 @@
         "Language": "Ko",
         "TaskName": "LifeGraphNCEMDefine",
         "LifeGraphCount": 0,
+        "LifeDataContextTexts": 0,
         "Completion": "No"
     },
     {
-        "ContextChunks": [
+        "NCEMCompeletions": [
             {
                 "LifeGraphId": 0,
-                "ChunkId": 0,
-                "Chunk": "None",
-                "Needs": "None",
-                "ReasonOfNeeds": "None",
-                "CVC": "None",
-                "ReasonOfCVC": "None",
-                "PotentialEnergy": "None",
-                "ReasonOfPotentialEnergy": "None",
-                "Accuracy": "None"
+                "NCEMChunks": [
+                    {
+                        "ChunkId": 0,
+                        "Chunk": "None",
+                        "Needs": "None",
+                        "ReasonOfNeeds": "None",
+                        "CVC": "None",
+                        "ReasonOfCVC": "None",
+                        "PotentialEnergy": "None",
+                        "ReasonOfPotentialEnergy": "None",
+                        "Accuracy": "None"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "NCEMQuerys": [
+            {
+                "LifeGraphId": 0,
+                "QuerySet": "None",
+                "Querys": [
+                    {
+                        "ChunkId": 0,
+                        "Query": "None"
+                    }
+                ]
             }
         ]
     }

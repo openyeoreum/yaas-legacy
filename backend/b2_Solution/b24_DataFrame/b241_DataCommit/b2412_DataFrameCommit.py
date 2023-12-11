@@ -766,27 +766,27 @@ def AddNCEMDefineChunksToDB(projectName, email, NCEMChunkId, ChunkId, Chunk, Dom
         db.commit()
         
 ## 9. 2-1 NCEMDefine의 NCEM(부문) NCEMTags부분 업데이트 형식
-def updateCheckedNCEMTags(project, NCEMTag, NCEMList, NCEM):
-    # 새롭게 생성되는 NCEMId는 CheckedNCEMTags의 Len값과 동일
-    NCEMId = len(project.NCEMDefine[2]["CheckedNCEMTags"]) -1
+def updateNCEMQuerys(project, NCEMTag, NCEMList, NCEM):
+    # 새롭게 생성되는 NCEMId는 NCEMQuerys의 Len값과 동일
+    NCEMId = len(project.NCEMDefine[2]["NCEMQuerys"]) -1
     
     ### 실제 테스크시 수정 요망 ###
-    updateCheckedNCEMTags = {
+    updateNCEMQuerys = {
         "NCEMId": NCEMId,
         "NCEMTag": NCEMTag,
         "NCEMList": NCEMList,
         "NCEM": NCEM
     }
     
-    project.NCEMDefine[2]["CheckedNCEMTags"].append(updateCheckedNCEMTags)
+    project.NCEMDefine[2]["NCEMQuerys"].append(updateNCEMQuerys)
     project.NCEMDefine[0]["NCEMCount"] = NCEMId
     
 ## 9. 2-2 NCEMDefine의 NCEM(부문) NCEMTags부분 업데이트
-def AddNCEMDefineCheckedNCEMTagsToDB(projectName, email, NCEMTag, NCEMList, NCEM):
+def AddNCEMDefineNCEMQuerysToDB(projectName, email, NCEMTag, NCEMList, NCEM):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        updateCheckedNCEMTags(project, NCEMTag, NCEMList, NCEM)
+        updateNCEMQuerys(project, NCEMTag, NCEMList, NCEM)
         
         flag_modified(project, "NCEMDefine")
         

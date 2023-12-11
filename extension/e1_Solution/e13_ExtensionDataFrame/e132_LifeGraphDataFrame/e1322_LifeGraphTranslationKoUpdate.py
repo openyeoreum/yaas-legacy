@@ -17,7 +17,7 @@ from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311
 # LifeGraphSet 로드
 def LoadLifeGraphFrameTexts(lifeGraphSetName, latestUpdateDate):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-    LifeGraphFrameTexts = lifeGraph.LifeGraphFrame[2]['LifeDataTexts'][1:50] ### 테스트 후 50 삭제 ###
+    LifeGraphFrameTexts = lifeGraph.LifeGraphFrame[2]['LifeDataTexts'][1:20]  ### 테스트 후 20 삭제 ###
     
     return LifeGraphFrameTexts
 
@@ -29,14 +29,14 @@ def LifeGraphFrameTextsToInputList(lifeGraphSetName, latestUpdateDate):
     for i in range(len(LifeGraphFrameTexts)):
         Id = LifeGraphFrameTexts[i]['LifeGraphId']
         Language = LifeGraphFrameTexts[i]['Language']
-        TextGlobal = LifeGraphFrameTexts[i]['TextGlobal']
+        TextGlobalKo = LifeGraphFrameTexts[i]['TextGlobal']['Ko']
 
         if Language in ['ko', 'None']:
             Tag = 'Pass'
         else:
             Tag = 'Continue'
             
-        InputDic = {'Id': Id, Tag: TextGlobal}
+        InputDic = {'Id': Id, Tag: TextGlobalKo}
         InputList.append(InputDic)
         
     return InputList
@@ -213,11 +213,11 @@ def LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, Process = 
         outputMemoryDics.append(OutputDic)
         outputMemory = LifeGraphTranslationKoOutputMemory(outputMemoryDics, MemoryLength)
         
-        ########## 테스트 후 삭제 ##########
-        LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_02_outputMemoryDics_231209.json"
-        with open(LifeGraphFramePath, 'w', encoding='utf-8') as file:
-            json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
-        ########## 테스트 후 삭제 ##########
+        # ########## 테스트 후 삭제 ##########
+        # LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_02_outputMemoryDics_231209.json"
+        # with open(LifeGraphFramePath, 'w', encoding='utf-8') as file:
+        #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+        # ########## 테스트 후 삭제 ##########
     
     return outputMemoryDics
 
@@ -229,6 +229,12 @@ def LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, messa
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     LifeGraphs = lifeGraph.LifeGraphFrame[1]['LifeGraphs'][1:]
     outputMemoryDics = LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
+
+    # ########## 테스트 후 삭제 ##########
+    # LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_02_outputMemoryDics_231209.json"
+    # with open(LifeGraphFramePath, 'r', encoding = 'utf-8') as file:
+    #     outputMemoryDics = json.load(file)
+    # ########## 테스트 후 삭제 ##########
     
     TranslatedKeys = {
         '지역': 'Area',
@@ -245,6 +251,7 @@ def LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, messa
             Age = LifeGraphs[i]['Age']
             Source = LifeGraphs[i]['Source']
             Language = LifeGraphs[i]['Language']
+            Translation = 'ko'
             residence = {TranslatedKeys[key]: value for key, value in response[1]["예상거주지"].items()}
             Residence = residence
             PhoneNumber = LifeGraphs[i]['PhoneNumber']
@@ -259,15 +266,27 @@ def LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, messa
                 Score = int(response[0]["인생데이터"][j]["행복지수"])
                 ReasonKo = response[0]["인생데이터"][j]["이유"]
                 LifeData.append({'LifeDataId': LifeDataId, 'StartAge': StartAge, 'EndAge': EndAge, 'Score': Score, 'ReasonKo': ReasonKo})
-            responseJson.append({'LifeGraphId': LifeGraphId, 'LifeGraphDate': LifeGraphDate, 'Name': Name, 'Age': Age, 'Source': Source, 'Language': Language, 'Residence': Residence, 'PhoneNumber': PhoneNumber, 'Email': Email, 'Quality': Quality, 'LifeData': LifeData})
+            responseJson.append({'LifeGraphId': LifeGraphId, 'LifeGraphDate': LifeGraphDate, 'Name': Name, 'Age': Age, 'Source': Source, 'Language': Language, 'Translation': Translation, 'Residence': Residence, 'PhoneNumber': PhoneNumber, 'Email': Email, 'Quality': Quality, 'LifeData': LifeData})
         else:
             LifeGraphId = i + 1
-            responseJson.append({'LifeGraphId': LifeGraphId, 'LifeGraphDate': LifeGraphDate, 'Name': Name, 'Age': Age, 'Source': Source, 'Language': Language, 'Residence': LifeGraphs[i]['Residence'], 'PhoneNumber': PhoneNumber, 'Email': Email, 'Quality': Quality, 'LifeData': LifeGraphs[i]['LifeData']})
+            LifeGraphDate = LifeGraphs[i]['LifeGraphDate']
+            Name = LifeGraphs[i]['Name']
+            Age = LifeGraphs[i]['Age']
+            Source = LifeGraphs[i]['Source']
+            Language = LifeGraphs[i]['Language']
+            Residence = LifeGraphs[i]["Residence"]
+            PhoneNumber = LifeGraphs[i]['PhoneNumber']
+            Email = LifeGraphs[i]['Email']
+            Quality = LifeGraphs[i]['Quality']
+            for k in range(len(LifeGraphs[i]['LifeData'])):
+                LifeGraphs[i]['LifeData'][k]['ReasonKo'] = LifeGraphs[i]['LifeData'][k].pop('ReasonGlobal')
+            LifeData = LifeGraphs[i]['LifeData']
+            responseJson.append({'LifeGraphId': LifeGraphId, 'LifeGraphDate': LifeGraphDate, 'Name': Name, 'Age': Age, 'Source': Source, 'Language': Language, 'Translation': Language, 'Residence': Residence, 'PhoneNumber': PhoneNumber, 'Email': Email, 'Quality': Quality, 'LifeData': LifeData})
 
     return responseJson
 
-def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
-    
+def LifeDataToText(ResponseJson):
+
     LifeDataTexts = []
     for i in range(len(ResponseJson)):
         LifeGraphDate = ResponseJson[i]["LifeGraphDate"]
@@ -275,25 +294,31 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
         Age = ResponseJson[i]["Age"]
         Email = ResponseJson[i]["Email"]
         Language = ResponseJson[i]["Language"]
+        Translation = ResponseJson[i]["Translation"]
         LifeData = []
         for j in range(len(ResponseJson[i]["LifeData"])):
             StartAge = ResponseJson[i]["LifeData"][j]["StartAge"]
             EndAge = ResponseJson[i]["LifeData"][j]["EndAge"]
             Score = ResponseJson[i]["LifeData"][j]["Score"]
+
             if ResponseJson[i]["LifeData"][j]["ReasonKo"] == '':
                 ReasonKo = '내용없음'
             else:
                 ReasonKo = ResponseJson[i]["LifeData"][j]["ReasonKo"]
-            LifeData.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {ReasonKo}\n')
-        
-        LifeDataText = f"작성일: {LifeGraphDate}\nEmail: {Email}\n'{Name}'의 {Age}세 까지의 인생\n\n" + "".join(LifeData)
-        LifeDataTexts.append({"Name": Name, "Email": Email, "TextKo": LifeDataText, "Language": Language})
-        
+
+            if j == (len(ResponseJson[i]["LifeData"]) - 1):
+                LifeData.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {ReasonKo}')
+            else:
+                LifeData.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {ReasonKo}\n')
+
+        LifeDataText = f"작성일: {LifeGraphDate}\nEmail: {Email}\n\n● '{Name}'의 {Age}세 까지의 인생\n\n" + "".join(LifeData)
+        LifeDataTexts.append({"Name": Name, "Email": Email, "Language": Language, "Translation": Translation, "TextKo": LifeDataText})
+
     return LifeDataTexts
 
 ## LifeDataTexts를 LifeGraphTranslationKo에 업데이트
 def LifeGraphTranslationKoLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson):
-    LifeDataTexts = LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson)
+    LifeDataTexts = LifeDataToText(ResponseJson)
     LifeDataTextsCount = len(LifeDataTexts)
     
     # TQDM 셋팅
@@ -307,9 +332,10 @@ def LifeGraphTranslationKoLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate
         time.sleep(0.0001)
         LifeGraphId = i + 1
         Language = LifeDataTexts[i]["Language"]
+        Translation = LifeDataTexts[i]["Translation"]
         TextKo = LifeDataTexts[i]["TextKo"]
         
-        AddLifeGraphTranslationKoLifeDataTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Language, TextKo)
+        AddLifeGraphTranslationKoLifeDataTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Language, Translation, TextKo)
         # i값 수동 업데이트
         i += 1
 
@@ -348,13 +374,14 @@ def LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, MessagesRev
                 Age = ResponseJson[i]["Age"]
                 Source = ResponseJson[i]["Source"]
                 Language = ResponseJson[i]["Language"]
+                Translation = ResponseJson[i]["Translation"]
                 Residence = ResponseJson[i]["Residence"]
                 PhoneNumber = ResponseJson[i]["PhoneNumber"]
                 Email = ResponseJson[i]["Email"]
                 Quality = ResponseJson[i]["Quality"]
                 LifeData = ResponseJson[i]["LifeData"]
 
-                AddLifeGraphTranslationKoLifeGraphsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, LifeGraphDate, Name, Age, Source, Language, Residence, PhoneNumber, Email, Quality, LifeData)
+                AddLifeGraphTranslationKoLifeGraphsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, LifeGraphDate, Name, Age, Source, Language, Translation, Residence, PhoneNumber, Email, Quality, LifeData)
                 # i값 수동 업데이트
                 i += 1
             

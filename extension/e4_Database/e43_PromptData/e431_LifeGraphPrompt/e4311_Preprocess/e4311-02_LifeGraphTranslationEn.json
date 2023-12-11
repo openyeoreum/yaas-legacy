@@ -20,23 +20,23 @@
         {
             "Role": "system",
             "Mark": "(Role)\n",
-            "Message": "As a professional translator specializing in translating various languages into English, your task involves translating the <LifeData.json>, which contains the happiness scores and reasons provided by people from around the world, into <LifeDataEn.json>. This English version will enable an American psychologist to analyze the data seamlessly."
+            "Message": "You are a professional translator specializing in translating various languages into English. You are working on a project to translate the <LifeData>, written by people from around the world documenting their happiness index at different stages of their lives and the reasons for it, into English as <LifeDataEnglish.json>. This will enable an American psychologist to naturally analyze it. In addition to translating, you also guess the 'ExpectedResidence' of the 'author' of <LifeData> and write the 'Area' and 'Reason'."
         },
         {
             "Role": "user",
             "Request": 
             [
                 {
-                    "Mark": "(Request)\n",
-                    "Message": "1. The <LifeData.json> file comprises data structured with age ranges (StartAge-EndAge), happiness scores (Score), and the reasons for these scores (ReasonGlobal) as provided by individuals globally.\n2. Your goal in translating this file into <LifeDataEn.json> is to maintain the original content's integrity, ensuring that no additional information is added or deleted during translation.\n3. The final English version should read as if it were originally written by a native English speaker, ensuring natural language flow and cultural appropriateness."
+                    "Mark": "(Translation Method)\n",
+                    "Message": "1. <LifeData> contains data on the happiness index of people from around the world at different ages and their 'Reason'.\n2. You will meticulously translate the 'Reason' in <LifeData> into English to complete <LifeDataEnglish.json>.\n3. <LifeDataEnglish.json> should not have any additions or deletions of content or data during translation.\n4. <LifeDataEnglish.json> must be translated very naturally, as if done, edited, and proofread by an English translation expert."
                 },
                 {
-                    "Mark": "\n\n(Example of <LifeDataEn.json> format)\n",
-                    "Message": "{'LifeData': [{'StartAge': 'Begin Age', 'EndAge': 'End Age', 'Score': 'Happiness Score', 'ReasonEn': 'English translation of ReasonGlobal'}, ... {'StartAge': 'Begin Age', 'EndAge': 'End Age', 'Score': 'Happiness Score', 'ReasonEn': 'English translation of ReasonGlobal'}]"
+                    "Mark": "\n\n(Method for Guessing Expected Residence)\n",
+                    "Message": "1. If you can infer the region where the 'author' of <LifeData> has lived or is currently living, write the 'Area' and its 'Reason' and 'Accuracy' in 'ExpectedResidence'.\n2. 'Area' should be written in the language of the country mentioned without translation, and 'Reason' should be written in English.\n3. If there is no content to infer, leave 'Area' as an empty list [] and 'Reason' as an empty content ''."
                 },
                 {
-                    "Mark": "",
-                    "Message": ""
+                    "Mark": "\n\n(Structure of the <LifeDataEnglish.json> English Translation Output)\n",
+                    "Message": "{'LifeData': [{'Period': 'Start Age-End Age', 'Score': 'Happiness Score', 'Reason': 'Translated content of the reason in English'}, ... ,{'Period': 'Start Age-End Age', 'Score': 'Happiness Score', 'Reason': 'Translated content of the reason in English'}], 'ExpectedResidence': {'Area': ['The region where the author has lived or', 'is currently living, inferred and written', 'in chronological order in the language of that country', 'Leave empty if there is no content to infer'], 'Reason': 'Explanation in English of why the most recent and closest last region was selected', 'Accuracy': 'Indicate the accuracy as a score from 0-100'}}"
                 },
                 {
                     "Mark": "",
@@ -64,15 +64,13 @@
                     "InputMark": "<LifeData.json>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
-                    "Input2": "INPUT2",
-                    "InputMark2": "",
                     "Input2": "INPUT2"
                 }
             ]
         },
         {
             "Role": "assistant",
-            "OutputMark": "<LifeDataEn.json>\n",
+            "OutputMark": "<LifeDataEnglish.json>\n",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -82,23 +80,23 @@
         {
             "Role": "system",
             "Mark": "(Role)\n",
-            "Message": "As a professional translator specializing in translating various languages into English, your task involves translating the <LifeData.json>, which contains the happiness scores and reasons provided by people from around the world, into <LifeDataEn.json>. This English version will enable an American psychologist to analyze the data seamlessly."
+            "Message": "You are a professional translator specializing in translating various languages into English. You are working on a project to translate the <LifeData>, written by people from around the world documenting their happiness index at different stages of their lives and the reasons for it, into English as <LifeDataEnglish.json>. This will enable an American psychologist to naturally analyze it. In addition to translating, you also guess the 'ExpectedResidence' of the 'author' of <LifeData> and write the 'Area' and 'Reason'."
         },
         {
             "Role": "user",
             "Request": 
             [
                 {
-                    "Mark": "(Request)\n",
-                    "Message": "1. The <LifeData.json> file comprises data structured with age ranges (StartAge-EndAge), happiness scores (Score), and the reasons for these scores (ReasonGlobal) as provided by individuals globally.\n2. Your goal in translating this file into <LifeDataEn.json> is to maintain the original content's integrity, ensuring that no additional information is added or deleted during translation.\n3. The final English version should read as if it were originally written by a native English speaker, ensuring natural language flow and cultural appropriateness."
+                    "Mark": "(Translation Method)\n",
+                    "Message": "1. <LifeData> contains data on the happiness index of people from around the world at different ages and their 'Reason'.\n2. You will meticulously translate the 'Reason' in <LifeData> into English to complete <LifeDataEnglish.json>.\n3. <LifeDataEnglish.json> should not have any additions or deletions of content or data during translation.\n4. <LifeDataEnglish.json> must be translated very naturally, as if done, edited, and proofread by an English translation expert."
                 },
                 {
-                    "Mark": "\n\n(Example of <LifeDataEn.json> format)\n",
-                    "Message": "{'LifeData': [{'StartAge': 'Begin Age', 'EndAge': 'End Age', 'Score': 'Happiness Score', 'ReasonEn': 'English translation of ReasonGlobal'}, ... {'StartAge': 'Begin Age', 'EndAge': 'End Age', 'Score': 'Happiness Score', 'ReasonEn': 'English translation of ReasonGlobal'}]"
+                    "Mark": "\n\n(Method for Guessing Expected Residence)\n",
+                    "Message": "1. If you can infer the region where the 'author' of <LifeData> has lived or is currently living, write the 'Area' and its 'Reason' and 'Accuracy' in 'ExpectedResidence'.\n2. 'Area' should be written in the language of the country mentioned without translation, and 'Reason' should be written in English.\n3. If there is no content to infer, leave 'Area' as an empty list [] and 'Reason' as an empty content ''."
                 },
                 {
-                    "Mark": "",
-                    "Message": ""
+                    "Mark": "\n\n(Structure of the <LifeDataEnglish.json> English Translation Output)\n",
+                    "Message": "{'LifeData': [{'Period': 'Start Age-End Age', 'Score': 'Happiness Score', 'Reason': 'Translated content of the reason in English'}, ... ,{'Period': 'Start Age-End Age', 'Score': 'Happiness Score', 'Reason': 'Translated content of the reason in English'}], 'ExpectedResidence': {'Area': ['The region where the author has lived or', 'is currently living, inferred and written', 'in chronological order in the language of that country', 'Leave empty if there is no content to infer'], 'Reason': 'Explanation in English of why the most recent and closest last region was selected', 'Accuracy': 'Indicate the accuracy as a score from 0-100'}}"
                 },
                 {
                     "Mark": "",
@@ -126,15 +124,13 @@
                     "InputMark": "<LifeData.json>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
-                    "Input2": "INPUT2",
-                    "InputMark2": "",
                     "Input2": "INPUT2"
                 }
             ]
         },
         {
             "Role": "assistant",
-            "OutputMark": "<LifeDataEn.json>\n",
+            "OutputMark": "<LifeDataEnglish.json>\n",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -144,23 +140,23 @@
         {
             "Role": "system",
             "Mark": "(Role)\n",
-            "Message": "As a professional translator specializing in translating various languages into English, your task involves translating the <LifeData.json>, which contains the happiness scores and reasons provided by people from around the world, into <LifeDataEn.json>. This English version will enable an American psychologist to analyze the data seamlessly."
+            "Message": "You are a professional translator specializing in translating various languages into English. You are working on a project to translate the <LifeData>, written by people from around the world documenting their happiness index at different stages of their lives and the reasons for it, into English as <LifeDataEnglish.json>. This will enable an American psychologist to naturally analyze it. In addition to translating, you also guess the 'ExpectedResidence' of the 'author' of <LifeData> and write the 'Area' and 'Reason'."
         },
         {
             "Role": "user",
             "Request": 
             [
                 {
-                    "Mark": "(Request)\n",
-                    "Message": "1. The <LifeData.json> file comprises data structured with age ranges (StartAge-EndAge), happiness scores (Score), and the reasons for these scores (ReasonGlobal) as provided by individuals globally.\n2. Your goal in translating this file into <LifeDataEn.json> is to maintain the original content's integrity, ensuring that no additional information is added or deleted during translation.\n3. The final English version should read as if it were originally written by a native English speaker, ensuring natural language flow and cultural appropriateness."
+                    "Mark": "(Translation Method)\n",
+                    "Message": "1. <LifeData> contains data on the happiness index of people from around the world at different ages and their 'Reason'.\n2. You will meticulously translate the 'Reason' in <LifeData> into English to complete <LifeDataEnglish.json>.\n3. <LifeDataEnglish.json> should not have any additions or deletions of content or data during translation.\n4. <LifeDataEnglish.json> must be translated very naturally, as if done, edited, and proofread by an English translation expert."
                 },
                 {
-                    "Mark": "\n\n(Example of <LifeDataEn.json> format)\n",
-                    "Message": "{'LifeData': [{'StartAge': 'Begin Age', 'EndAge': 'End Age', 'Score': 'Happiness Score', 'ReasonEn': 'English translation of ReasonGlobal'}, ... {'StartAge': 'Begin Age', 'EndAge': 'End Age', 'Score': 'Happiness Score', 'ReasonEn': 'English translation of ReasonGlobal'}]"
+                    "Mark": "\n\n(Method for Guessing Expected Residence)\n",
+                    "Message": "1. If you can infer the region where the 'author' of <LifeData> has lived or is currently living, write the 'Area' and its 'Reason' and 'Accuracy' in 'ExpectedResidence'.\n2. 'Area' should be written in the language of the country mentioned without translation, and 'Reason' should be written in English.\n3. If there is no content to infer, leave 'Area' as an empty list [] and 'Reason' as an empty content ''."
                 },
                 {
-                    "Mark": "",
-                    "Message": ""
+                    "Mark": "\n\n(Structure of the <LifeDataEnglish.json> English Translation Output)\n",
+                    "Message": "{'LifeData': [{'Period': 'Start Age-End Age', 'Score': 'Happiness Score', 'Reason': 'Translated content of the reason in English'}, ... ,{'Period': 'Start Age-End Age', 'Score': 'Happiness Score', 'Reason': 'Translated content of the reason in English'}], 'ExpectedResidence': {'Area': ['The region where the author has lived or', 'is currently living, inferred and written', 'in chronological order in the language of that country', 'Leave empty if there is no content to infer'], 'Reason': 'Explanation in English of why the most recent and closest last region was selected', 'Accuracy': 'Indicate the accuracy as a score from 0-100'}}"
                 },
                 {
                     "Mark": "",
@@ -184,15 +180,13 @@
                     "Input": "INPUT",
                     "InputEnder": "",
                     "InputMark2": "",
-                    "Input2": "INPUT2",
-                    "InputMark2": "",
                     "Input2": "INPUT2"
                 }
             ]
         },
         {
             "Role": "assistant",
-            "OutputMark": "<LifeDataEn.json>\n",
+            "OutputMark": "<LifeDataEnglish.json>\n",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
@@ -204,23 +198,23 @@
         {
             "Role": "system",
             "Mark": "(Role)\n",
-            "Message": "As a professional translator specializing in translating various languages into English, your task involves translating the <LifeData.json>, which contains the happiness scores and reasons provided by people from around the world, into <LifeDataEn.json>. This English version will enable an American psychologist to analyze the data seamlessly."
+            "Message": "You are a professional translator specializing in translating various languages into English. You are working on a project to translate the <LifeData>, written by people from around the world documenting their happiness index at different stages of their lives and the reasons for it, into English as <LifeDataEnglish.json>. This will enable an American psychologist to naturally analyze it. In addition to translating, you also guess the 'ExpectedResidence' of the 'author' of <LifeData> and write the 'Area' and 'Reason'."
         },
         {
             "Role": "user",
             "Request": 
             [
                 {
-                    "Mark": "(Request)\n",
-                    "Message": "1. The <LifeData.json> file comprises data structured with age ranges (StartAge-EndAge), happiness scores (Score), and the reasons for these scores (ReasonGlobal) as provided by individuals globally.\n2. Your goal in translating this file into <LifeDataEn.json> is to maintain the original content's integrity, ensuring that no additional information is added or deleted during translation.\n3. The final English version should read as if it were originally written by a native English speaker, ensuring natural language flow and cultural appropriateness."
+                    "Mark": "(Translation Method)\n",
+                    "Message": "1. <LifeData> contains data on the happiness index of people from around the world at different ages and their 'Reason'.\n2. You will meticulously translate the 'Reason' in <LifeData> into English to complete <LifeDataEnglish.json>.\n3. <LifeDataEnglish.json> should not have any additions or deletions of content or data during translation.\n4. <LifeDataEnglish.json> must be translated very naturally, as if done, edited, and proofread by an English translation expert."
                 },
                 {
-                    "Mark": "\n\n(Example of <LifeDataEn.json> format)\n",
-                    "Message": "{'LifeData': [{'StartAge': 'Begin Age', 'EndAge': 'End Age', 'Score': 'Happiness Score', 'ReasonEn': 'English translation of ReasonGlobal'}, ... {'StartAge': 'Begin Age', 'EndAge': 'End Age', 'Score': 'Happiness Score', 'ReasonEn': 'English translation of ReasonGlobal'}]"
+                    "Mark": "\n\n(Method for Guessing Expected Residence)\n",
+                    "Message": "1. If you can infer the region where the 'author' of <LifeData> has lived or is currently living, write the 'Area' and its 'Reason' and 'Accuracy' in 'ExpectedResidence'.\n2. 'Area' should be written in the language of the country mentioned without translation, and 'Reason' should be written in English.\n3. If there is no content to infer, leave 'Area' as an empty list [] and 'Reason' as an empty content ''."
                 },
                 {
-                    "Mark": "",
-                    "Message": ""
+                    "Mark": "\n\n(Structure of the <LifeDataEnglish.json> English Translation Output)\n",
+                    "Message": "{'LifeData': [{'Period': 'Start Age-End Age', 'Score': 'Happiness Score', 'Reason': 'Translated content of the reason in English'}, ... ,{'Period': 'Start Age-End Age', 'Score': 'Happiness Score', 'Reason': 'Translated content of the reason in English'}], 'ExpectedResidence': {'Area': ['The region where the author has lived or', 'is currently living, inferred and written', 'in chronological order in the language of that country', 'Leave empty if there is no content to infer'], 'Reason': 'Explanation in English of why the most recent and closest last region was selected', 'Accuracy': 'Indicate the accuracy as a score from 0-100'}}"
                 },
                 {
                     "Mark": "",
@@ -244,15 +238,13 @@
                     "Input": "INPUT",
                     "InputEnder": "",
                     "InputMark2": "",
-                    "Input2": "INPUT2",
-                    "InputMark2": "",
                     "Input2": "INPUT2"
                 }
             ]
         },
         {
             "Role": "assistant",
-            "OutputMark": "<LifeDataEn.json>\n",
+            "OutputMark": "<LifeDataEnglish.json>\n",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",

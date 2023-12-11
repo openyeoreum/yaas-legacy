@@ -74,8 +74,6 @@
                     "InputMark": "<예상 캡션 부분>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
-                    "Input2": "INPUT2",
-                    "InputMark2": "",
                     "Input2": "INPUT2"
                 }
             ]
@@ -145,8 +143,6 @@
                     "InputMark": "<예상 캡션 부분>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
-                    "Input2": "INPUT2",
-                    "InputMark2": "",
                     "Input2": "INPUT2"
                 }
             ]
@@ -201,8 +197,6 @@
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
                     "InputEnder": "",
-                    "InputMark2": "",
-                    "Input2": "INPUT2",
                     "InputMark2": "",
                     "Input2": "INPUT2"
                 }
@@ -261,8 +255,6 @@
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
                     "InputEnder": "",
-                    "InputMark2": "",
-                    "Input2": "INPUT2",
                     "InputMark2": "",
                     "Input2": "INPUT2"
                 }

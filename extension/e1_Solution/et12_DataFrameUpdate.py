@@ -7,9 +7,10 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph, GetVideo
-from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddLifeGraphMetaDataToDB, InitLifeGraphFrame, UpdatedLifeGraphFrame, InitLifeGraphTranslationKo, UpdatedLifeGraphTranslationKo
+from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddLifeGraphMetaDataToDB, InitLifeGraphFrame, UpdatedLifeGraphFrame, InitLifeGraphTranslationKo, UpdatedLifeGraphTranslationKo, InitLifeGraphTranslationEn, UpdatedLifeGraphTranslationEn
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1321_LifeGraphFrameUpdate import LifeGraphFrameUpdate
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1322_LifeGraphTranslationKoUpdate import LifeGraphTranslationKoUpdate
+from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1323_LifeGraphTranslationEnUpdate import LifeGraphTranslationEnUpdate
 
 ## 오늘 날짜
 def Date(Option = "Day"):
@@ -66,16 +67,16 @@ def LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, Process, D
     return None
 
 if __name__ == "__main__":
-    
+
     ############################ 하이퍼 파라미터 설정 ############################
     lifeGraphSetName = "CourseraMeditation"
     latestUpdateDate = 23120601
     LifeGraphDataFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/"
     messagesReview = "on"
-    
+
     ### existedDataFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
     existedDataFrameMode = "on" # <- 개발 후 off #
-    
+
     # existedDataFrame 초기화
     existedDataFrame = None
     #########################################################################
@@ -99,8 +100,8 @@ if __name__ == "__main__":
         updatedLifeGraphFrame = UpdatedLifeGraphFrame(lifeGraphSetName, latestUpdateDate)
         SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "01_LifeGraphFrame", updatedLifeGraphFrame, LifeGraphDataFramePath)
     existedDataFrame = None
-    
-    
+
+
     #################################
     ### 02_LifeGraphTranslationKo ###
     #################################
@@ -114,3 +115,18 @@ if __name__ == "__main__":
         updatedLifeGraphTranslationKo = UpdatedLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate)
         SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "02_LifeGraphTranslationKo", updatedLifeGraphTranslationKo, LifeGraphDataFramePath)
     existedDataTranslationKo = None
+
+
+    #################################
+    ### 03_LifeGraphTranslationEn ###
+    #################################
+    InitLifeGraphTranslationEn(lifeGraphSetName, latestUpdateDate)
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphTranslationEn", LifeGraphDataFramePath)
+    mode = "Master"
+    LifeGraphTranslationEnUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
+
+    if existedDataFrame == None:
+        updatedLifeGraphTranslationEn = UpdatedLifeGraphTranslationEn(lifeGraphSetName, latestUpdateDate)
+        SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "03_LifeGraphTranslationEn", updatedLifeGraphTranslationEn, LifeGraphDataFramePath)
+    existedDataTranslationEn = None

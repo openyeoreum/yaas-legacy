@@ -75,19 +75,29 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate, QUALITY = 0):
         Age = LifeGraphs[i]["Age"]
         Email = LifeGraphs[i]["Email"]
         Language = LifeGraphs[i]["Language"]
-        LifeData = []
+        LifeDataKo = []
+        LifeDataEn = []
         for j in range(len(LifeGraphs[i]["LifeData"])):
             StartAge = LifeGraphs[i]["LifeData"][j]["StartAge"]
             EndAge = LifeGraphs[i]["LifeData"][j]["EndAge"]
             Score = LifeGraphs[i]["LifeData"][j]["Score"]
             if LifeGraphs[i]["LifeData"][j]["ReasonGlobal"] == '':
-                ReasonGlobal = '내용없음'
+                ReasonKo = '내용없음'
+                ReasonEn = 'No Content'
             else:
-                ReasonGlobal = LifeGraphs[i]["LifeData"][j]["ReasonGlobal"]
-            LifeData.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {ReasonGlobal}\n')
+                ReasonKo = LifeGraphs[i]["LifeData"][j]["ReasonGlobal"]
+                ReasonEn = LifeGraphs[i]["LifeData"][j]["ReasonGlobal"]
+                
+            if j == (len(LifeGraphs[i]["LifeData"]) - 1):
+                LifeDataKo.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {ReasonKo}')
+                LifeDataEn.append(f'{StartAge}-{EndAge} Happiness Score: {Score}, Reason: {ReasonEn}')
+            else:
+                LifeDataKo.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {ReasonKo}\n')
+                LifeDataEn.append(f'{StartAge}-{EndAge} Happiness Score: {Score}, Reason: {ReasonEn}\n')
         
-        LifeDataText = f"작성일: {LifeGraphDate}\nEmail: {Email}\n'{Name}'의 {Age}세 까지의 인생\n\n" + "".join(LifeData)
-        LifeDataTexts.append({"Name": Name, "Email": Email, "TextGlobal": LifeDataText, "Language": Language})
+        LifeDataTextKo = f"작성일: {LifeGraphDate}\nEmail: {Email}\n\n● '{Name}'의 {Age}세 까지의 인생\n\n" + "".join(LifeDataKo)
+        LifeDataTextEn = f"Date: {LifeGraphDate}\nEmail: {Email}\n\n● Life up to the age of {Age} for '{Name}'\n\n" + "".join(LifeDataEn)
+        LifeDataTexts.append({"Name": Name, "Email": Email, "TextGlobal": {'Ko': LifeDataTextKo, 'En': LifeDataTextEn}, "Language": Language})
         
     return LifeDataTexts
 

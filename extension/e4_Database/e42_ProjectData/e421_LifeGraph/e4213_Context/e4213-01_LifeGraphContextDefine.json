@@ -7,21 +7,36 @@
         "Language": "Ko",
         "TaskName": "LifeGraphContextDefine",
         "LifeGraphCount": 0,
+        "LifeDataContextTexts": 0,
         "Completion": "No"
     },
     {
         "ContextChunks": [
             {
                 "LifeGraphId": 0,
-                "ChunkId": 0,
-                "Chunk": "None",
-                "Phrases": "None",
-                "Writer": "None",
-                "Subject": "None",
-                "Purpose": "None",
-                "Reason": "None",
-                "Question": "None",
-                "Importance": "None"
+                "ContextChunks": [
+                    {
+                        "ChunkId": 0,
+                        "StartAge": 0,
+                        "EndAge": 0,
+                        "Score": 0,
+                        "Chunk": "None",
+                        "Purpose": "None",
+                        "Reason": "None",
+                        "Question": "None",
+                        "Writer": "None",
+                        "Subject": "None",
+                        "Accuracy": "None"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "LifeDataContextTexts": [
+            {
+                "LifeGraphId": 0,
+                "Text": "None"
             }
         ]
     }

@@ -9,34 +9,34 @@ from tqdm import tqdm
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph
-from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddExistedLifeGraphContextDefineToDB, AddLifeGraphContextDefineContextChunksToDB, AddLifeGraphContextDefineLifeDataContextTextsToDB, LifeGraphContextDefineCountLoad, InitLifeGraphContextDefine, LifeGraphContextDefineCompletionUpdate, UpdatedLifeGraphContextDefine
+# from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddExistedLifeGraphNCEMDefineToDB, AddLifeGraphNCEMDefineNCEMChunksToDB, AddLifeGraphNCEMDefineLifeDataNCEMTextsToDB, LifeGraphNCEMDefineCountLoad, InitLifeGraphNCEMDefine, LifeGraphNCEMDefineCompletionUpdate, UpdatedLifeGraphNCEMDefine
 
 #########################
 ##### InputList 생성 #####
 #########################
-# LifeGraphTranslationKo 로드
-def LoadLifeDataTextsKo(lifeGraphSetName, latestUpdateDate):
+# LifeDataContextTexts 로드
+def LoadLifeDataContextTexts(lifeGraphSetName, latestUpdateDate):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-    LifeDataTextsKo = lifeGraph.LifeGraphTranslationKo[2]['LifeDataTextsKo'][1:]
+    LifeDataContextTexts = lifeGraph.LifeGraphContextDefine[2]['LifeDataContextTexts'][1:]
     
-    return LifeDataTextsKo
+    return LifeDataContextTexts
 
 ## LifeGraphFrameTexts의 inputList 치환
-def LifeDataTextsKoToInputList(lifeGraphSetName, latestUpdateDate):
-    LoadLifeDataTextsko = LoadLifeDataTextsKo(lifeGraphSetName, latestUpdateDate)
+def LifeDataContextTextsToInputList(lifeGraphSetName, latestUpdateDate):
+    LifeDataContextTexts = LoadLifeDataContextTexts(lifeGraphSetName, latestUpdateDate)
     
     InputList = []
-    for i in range(len(LoadLifeDataTextsko)):
-        Id = LoadLifeDataTextsko[i]['LifeGraphId']
-        Translation = LoadLifeDataTextsko[i]['Translation']
-        TextKo = LoadLifeDataTextsko[i]['TextKo']
-
+    for i in range(len(LifeDataContextTexts)):
+        Id = LifeDataContextTexts[i]['LifeGraphId']
+        Translation = LifeDataContextTexts[i]['Translation']
+        Text = LifeDataContextTexts[i]['Text']
+        
         if Translation != 'ko':
             Tag = 'Pass'
         else:
             Tag = 'Continue'
             
-        InputDic = {'Id': Id, Tag: TextKo}
+        InputDic = {'Id': Id, Tag: Text}
         InputList.append(InputDic)
         
     return InputList
@@ -44,8 +44,8 @@ def LifeDataTextsKoToInputList(lifeGraphSetName, latestUpdateDate):
 ######################
 ##### Filter 조건 #####
 ######################
-## LifeGraphContextDefine의 Filter(Error 예외처리)
-def LifeGraphContextDefineFilter(Input, responseData, memoryCounter):
+## LifeGraphNCEMDefine의 Filter(Error 예외처리)
+def LifeGraphNCEMDefineFilter(Input, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -71,7 +71,7 @@ def LifeGraphContextDefineFilter(Input, responseData, memoryCounter):
                 return "JSON에서 오류 발생: JSONKeyError"
             elif not OUTPUT in INPUT:
                 return f"JSON에서 오류 발생: JSON '이유'가 Input에 포함되지 않음 Error\n문구: {dic[key]['이유']}"
-            elif not ('시기' in dic[key] and '행복지수' in dic[key] and '이유' in dic[key] and '목적또는문제' in dic[key] and '원인' in dic[key] and '예상질문' in dic[key] and '인물유형' in dic[key] and '주제' in dic[key] and '정확도' in dic[key]):
+            elif not ('욕구상태' in dic[key] and '욕구상태선택이유' in dic[key] and '이해상태' in dic[key] and '이해상태선택이유' in dic[key] and '마음상태' in dic[key] and '마음상태선택이유' in dic[key] and '정확도' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -83,7 +83,7 @@ def LifeGraphContextDefineFilter(Input, responseData, memoryCounter):
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def LifeGraphContextDefineInputMemory(inputMemoryDics, MemoryLength):
+def LifeGraphNCEMDefineInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -99,7 +99,7 @@ def LifeGraphContextDefineInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def LifeGraphContextDefineOutputMemory(outputMemoryDics, MemoryLength):
+def LifeGraphNCEMDefineOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -119,8 +119,8 @@ def LifeGraphContextDefineOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## LifeGraphContextDefine 프롬프트 요청 및 결과물 Json화
-def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = "LifeGraphContextDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## LifeGraphNCEMDefine 프롬프트 요청 및 결과물 Json화
+def LifeGraphNCEMDefineProcess(lifeGraphSetName, latestUpdateDate, Process = "LifeGraphNCEMDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
 
     InputList = LifeDataTextsKoToInputList(lifeGraphSetName, latestUpdateDate)
     TotalCount = 0
@@ -133,7 +133,7 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = 
     outputMemoryDics = []
     outputMemory = []
         
-    # ContextDefineProcess
+    # NCEMDefineProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -183,7 +183,7 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = 
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = LifeGraphContextDefineFilter(Input, responseData, memoryCounter)
+            Filter = LifeGraphNCEMDefineFilter(Input, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -209,19 +209,19 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = 
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = LifeGraphContextDefineInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = LifeGraphNCEMDefineInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = LifeGraphContextDefineOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = LifeGraphNCEMDefineOutputMemory(outputMemoryDics, MemoryLength)
         
-        ########## 테스트 후 삭제 ##########
-        LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_outputMemoryDics_231211.json"
-        with open(LifeGraphFramePath, 'w', encoding='utf-8') as file:
-            json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
-        ########## 테스트 후 삭제 ##########
+        # ########## 테스트 후 삭제 ##########
+        # LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_outputMemoryDics_231211.json"
+        # with open(LifeGraphFramePath, 'w', encoding='utf-8') as file:
+        #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+        # ########## 테스트 후 삭제 ##########
     
     return outputMemoryDics
 
@@ -229,10 +229,8 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = 
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
 
-def LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = 'off', mode = "Memory"):
-    lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-    LifeDataTextsKo = lifeGraph.LifeGraphTranslationKo[1]['LifeGraphsKo'][1:]
-    # outputMemoryDics = LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
+def LifeGraphNCEMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = 'off', mode = "Memory"):
+    # outputMemoryDics = LifeGraphNCEMDefineProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
 
     ########## 테스트 후 삭제 ##########
     LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_outputMemoryDics_231211.json"
@@ -244,8 +242,7 @@ def LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, messa
     for i, response in enumerate(outputMemoryDics):
         if response != "Pass":
             LifeGraphId = i + 1
-            Translation = LifeDataTextsKo[i]['Translation']
-            ContextChunks = []
+            NCEMChunks = []
             for j, Dic in enumerate(response):
                 key = list(Dic.keys())[0]
                 ChunkId = j + 1
@@ -260,9 +257,9 @@ def LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, messa
                 Writer = Dic[key]['인물유형']
                 Subject = Dic[key]['주제']
                 Accuracy = Dic[key]['정확도']
-                ContextChunk = {'ChunkId': ChunkId, 'StartAge': StartAge, 'EndAge': EndAge, 'Score': Score, 'Chunk': Chunk, 'Purpose': Purpose, 'Reason': Reason, 'Question': Question, 'Writer': Writer, 'Subject': Subject, 'Accuracy': Accuracy}
-                ContextChunks.append(ContextChunk)
-            responseJson.append({'LifeGraphId': LifeGraphId, 'Translation': Translation, 'ContextChunks': ContextChunks})
+                NCEMChunk = {'ChunkId': ChunkId, 'StartAge': StartAge, 'EndAge': EndAge, 'Score': Score, 'Chunk': Chunk, 'Purpose': Purpose, 'Reason': Reason, 'Question': Question, 'Writer': Writer, 'Subject': Subject, 'Accuracy': Accuracy}
+                NCEMChunks.append(NCEMChunk)
+            responseJson.append({'LifeGraphId': LifeGraphId, 'NCEMChunks': NCEMChunks})
 
     return responseJson
 
@@ -270,7 +267,7 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     LifeDataTextsKo = lifeGraph.LifeGraphTranslationKo[1]['LifeGraphsKo'][1:]
 
-    LifeDataContextTexts = []
+    LifeDataNCEMTexts = []
     for i in range(len(LifeDataTextsKo)):
         LifeGraphDate = LifeDataTextsKo[i]["LifeGraphDate"]
         Name = LifeDataTextsKo[i]["Name"]
@@ -279,7 +276,7 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
         Language = LifeDataTextsKo[i]["Language"]
         Translation = LifeDataTextsKo[i]["Translation"]
         LifeData = []
-        ContextChunkCount = 0
+        NCEMChunkCount = 0
         for j in range(len(LifeDataTextsKo[i]["LifeData"])):
             
             StartAge = LifeDataTextsKo[i]["LifeData"][j]["StartAge"]
@@ -291,22 +288,22 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
             else:
                 Reason = LifeDataTextsKo[i]["LifeData"][j]["ReasonKo"]
 
-            ContextChunk = ResponseJson[i]['ContextChunks'][ContextChunkCount]
-            if str(StartAge) == str(ContextChunk['StartAge']) and str(EndAge) == str(ContextChunk['EndAge']) and str(Score) == str(ContextChunk['Score']):
-                Purpose = ContextChunk['Purpose']
-                Reason = ContextChunk['Reason']
-                Question = ContextChunk['Question']
-                Writer = ContextChunk['Writer']
-                Subject = ContextChunk['Subject']
-                if ContextChunkCount < (len(ResponseJson[i]['ContextChunks']) - 1):
-                    ContextChunkCount += 1
+            NCEMChunk = ResponseJson[i]['NCEMChunks'][NCEMChunkCount]
+            if str(StartAge) == str(NCEMChunk['StartAge']) and str(EndAge) == str(NCEMChunk['EndAge']) and str(Score) == str(NCEMChunk['Score']):
+                Purpose = NCEMChunk['Purpose']
+                Reason = NCEMChunk['Reason']
+                Question = NCEMChunk['Question']
+                Writer = NCEMChunk['Writer']
+                Subject = NCEMChunk['Subject']
+                if NCEMChunkCount < (len(ResponseJson[i]['NCEMChunks']) - 1):
+                    NCEMChunkCount += 1
 
                 if j == (len(LifeDataTextsKo[i]["LifeData"]) - 1):
-                    Memo = f"[메모{ContextChunkCount}] {{'목적또는문제': '{Purpose}', '원인': '{Reason}', '예상질문': '{Question}', '인물유형': '{Writer}', '주제': '{Subject}'}}"
-                    LifeData.append(f'\n\n[중요문구{ContextChunkCount}] {StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n{Memo}')
+                    Memo = f"[메모{NCEMChunkCount}] {{'목적또는문제': '{Purpose}', '원인': '{Reason}', '예상질문': '{Question}', '인물유형': '{Writer}', '주제': '{Subject}'}}"
+                    LifeData.append(f'\n\n[중요문구{NCEMChunkCount}] {StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n{Memo}')
                 else:
-                    Memo = f"[메모{ContextChunkCount}] {{'목적또는문제': '{Purpose}', '원인': '{Reason}', '예상질문': '{Question}', '인물유형': '{Writer}', '주제': '{Subject}'}}\n"
-                    LifeData.append(f'\n[중요문구{ContextChunkCount}] {StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n{Memo}\n')
+                    Memo = f"[메모{NCEMChunkCount}] {{'목적또는문제': '{Purpose}', '원인': '{Reason}', '예상질문': '{Question}', '인물유형': '{Writer}', '주제': '{Subject}'}}\n"
+                    LifeData.append(f'\n[중요문구{NCEMChunkCount}] {StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n{Memo}\n')
             else:
                 if j == (len(LifeDataTextsKo[i]["LifeData"]) - 1):
                     LifeData.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}')
@@ -314,47 +311,46 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
                     LifeData.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n\n')
 
         LifeDataText = f"작성일: {LifeGraphDate}\nEmail: {Email}\n\n● '{Name}'의 {Age}세 까지의 인생\n\n" + "".join(LifeData).replace('\n\n\n', '\n\n')
-        LifeDataContextTexts.append({"Name": Name, "Email": Email, "Language": Language, "Translation": Translation, "Text": LifeDataText})
+        LifeDataNCEMTexts.append({"Name": Name, "Email": Email, "Language": Language, "Translation": Translation, "Text": LifeDataText})
 
-    return LifeDataContextTexts
+    return LifeDataNCEMTexts
 
-## LifeDataTexts를 LifeGraphContextDefine에 업데이트
-def LifeGraphContextDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson):
+## LifeDataTexts를 LifeGraphNCEMDefine에 업데이트
+def LifeGraphNCEMDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson):
     LifeDataTexts = LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson)
     LifeDataTextsCount = len(LifeDataTexts)
     
     # TQDM 셋팅
     UpdateTQDM = tqdm(LifeDataTexts,
                     total = LifeDataTextsCount,
-                    desc = 'LifeGraphContextDefineLifeDataTextsUpdate')
+                    desc = 'LifeGraphNCEMDefineLifeDataTextsUpdate')
     # i값 수동 생성
     i = 0
     for Update in UpdateTQDM:
-        UpdateTQDM.set_description(f'LifeGraphContextDefineLifeDataTextsUpdate: {Update["Name"]}, {Update["Email"]} ...')
+        UpdateTQDM.set_description(f'LifeGraphNCEMDefineLifeDataTextsUpdate: {Update["Name"]}, {Update["Email"]} ...')
         time.sleep(0.0001)
         LifeGraphId = i + 1
-        Translation = LifeDataTexts[i]["Translation"]
         Text = LifeDataTexts[i]["Text"]
         
-        AddLifeGraphContextDefineLifeDataContextTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, Text)
+        AddLifeGraphNCEMDefineLifeDataNCEMTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Text)
         # i값 수동 업데이트
         i += 1
 
     UpdateTQDM.close()
 
-## 결과물 Json을 LifeGraphContextDefine에 업데이트
-def LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
-    print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphContextDefineUpdate 시작 >")
-    # LifeGraphContextDefine의 Count값 가져오기
-    LifeGraphCount, LifeDataTextsCount, Completion = LifeGraphContextDefineCountLoad(lifeGraphSetName, latestUpdateDate)
+## 결과물 Json을 LifeGraphNCEMDefine에 업데이트
+def LifeGraphNCEMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
+    print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphNCEMDefineUpdate 시작 >")
+    # LifeGraphNCEMDefine의 Count값 가져오기
+    LifeGraphCount, LifeDataTextsCount, Completion = LifeGraphNCEMDefineCountLoad(lifeGraphSetName, latestUpdateDate)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedLifeGraphContextDefineToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
-            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphContextDefine로 대처됨 ]\n")
+            AddExistedLifeGraphNCEMDefineToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphNCEMDefine로 대처됨 ]\n")
         else:
-            responseJson = LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = MessagesReview, mode = Mode)
+            responseJson = LifeGraphNCEMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = MessagesReview, mode = Mode)
             # LifeGraphs를 LifeGraphCount로 슬라이스
             ResponseJson = responseJson[LifeGraphCount:]
             ResponseJsonCount = len(ResponseJson)
@@ -362,31 +358,30 @@ def LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesRev
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'LifeGraphContextDefineUpdate')
+                            desc = 'LifeGraphNCEMDefineUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'LifeGraphContextDefineUpdate: {ResponseJson[i]["ContextChunks"][0]["Chunk"]} ...')
+                UpdateTQDM.set_description(f'LifeGraphNCEMDefineUpdate: {ResponseJson[i]["NCEMChunks"][0]["Chunk"]} ...')
                 time.sleep(0.0001)
                 
                 LifeGraphId = i + 1
-                Translation = ResponseJson[i]["Translation"]
-                ContextChunks = ResponseJson[i]["ContextChunks"]
+                NCEMChunks = ResponseJson[i]["NCEMChunks"]
 
-                AddLifeGraphContextDefineContextChunksToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, ContextChunks)
+                AddLifeGraphNCEMDefineNCEMChunksToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, NCEMChunks)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             ##### LifeDataTexts 업데이트
-            LifeGraphContextDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson)
+            LifeGraphNCEMDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson)
             #####
             # Completion "Yes" 업데이트
-            LifeGraphContextDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate)
+            LifeGraphNCEMDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate)
             
-            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphContextDefineUpdate 완료 ]\n")
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphNCEMDefineUpdate 완료 ]\n")
     else:
-        print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphContextDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphNCEMDefineUpdate는 이미 완료됨 ]\n")
     
 if __name__ == "__main__":
     
@@ -397,3 +392,8 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    
+    LifeDataContextTexts = LifeDataContextTextsToInputList(lifeGraphSetName, latestUpdateDate)
+    
+
+    print(f'{LifeDataContextTexts[0]}')

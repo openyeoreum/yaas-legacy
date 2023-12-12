@@ -17,7 +17,7 @@ from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311
 # LifeGraphSet 로드
 def LoadLifeGraphFrameTexts(lifeGraphSetName, latestUpdateDate):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-    LifeGraphFrameTexts = lifeGraph.LifeGraphFrame[2]['LifeDataTexts'][1:20]  ### 테스트 후 20 삭제 ###
+    LifeGraphFrameTexts = lifeGraph.LifeGraphFrame[2]['LifeDataTexts'][1:]
     
     return LifeGraphFrameTexts
 

@@ -153,7 +153,7 @@ def LLMmessages(Process, Input, Root = "backend", Output = "", mode = "Example",
                     MemoryFineTuning[1]["Request"][1]["Mark"] + MemoryFineTuning[1]["Request"][1]["Message"] +
                     MemoryFineTuning[1]["Request"][2]["Mark"] + MemoryFineTuning[1]["Request"][2]["Message"] +
                     MemoryFineTuning[1]["Request"][5]["Mark"] + MemoryFineTuning[1]["Request"][5]["InputMark"] + str(inputMemory) + str(Input) +
-                    [1]["Request"][5]["InputMark2"] + str(inputMemory2) + str(Input)
+                    MemoryFineTuning[1]["Request"][5]["InputMark2"] + str(inputMemory2) + str(input2)
         },
         {
           "role": MemoryFineTuning[2]["Role"],

@@ -180,6 +180,7 @@
                     "Input": "INPUT",
                     "InputEnder": "",
                     "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
                     "Input2": "INPUT2"
                 }
             ]
@@ -238,6 +239,7 @@
                     "Input": "INPUT",
                     "InputEnder": "",
                     "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
                     "Input2": "INPUT2"
                 }
             ]

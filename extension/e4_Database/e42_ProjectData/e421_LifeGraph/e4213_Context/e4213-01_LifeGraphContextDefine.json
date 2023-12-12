@@ -14,6 +14,7 @@
         "ContextChunks": [
             {
                 "LifeGraphId": 0,
+                "Translation": "None",
                 "ContextChunks": [
                     {
                         "ChunkId": 0,
@@ -36,6 +37,7 @@
         "LifeDataContextTexts": [
             {
                 "LifeGraphId": 0,
+                "Translation": "None",
                 "Text": "None"
             }
         ]

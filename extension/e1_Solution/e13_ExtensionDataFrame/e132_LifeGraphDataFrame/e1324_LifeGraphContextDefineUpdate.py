@@ -280,6 +280,7 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
         Translation = LifeDataTextsKo[i]["Translation"]
         LifeData = []
         ContextChunkCount = 0
+        MemoCount = 0
         for j in range(len(LifeDataTextsKo[i]["LifeData"])):
             
             StartAge = LifeDataTextsKo[i]["LifeData"][j]["StartAge"]
@@ -295,18 +296,21 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
             if str(StartAge) == str(ContextChunk['StartAge']) and str(EndAge) == str(ContextChunk['EndAge']) and str(Score) == str(ContextChunk['Score']):
                 Purpose = ContextChunk['Purpose']
                 Reason = ContextChunk['Reason']
-                Question = ContextChunk['Question']
+                # Question = ContextChunk['Question']
                 Writer = ContextChunk['Writer']
                 Subject = ContextChunk['Subject']
+                
                 if ContextChunkCount < (len(ResponseJson[i]['ContextChunks']) - 1):
                     ContextChunkCount += 1
+                
+                MemoCount += 1
 
                 if j == (len(LifeDataTextsKo[i]["LifeData"]) - 1):
-                    Memo = f"[메모{ContextChunkCount}] {{'목적또는문제': '{Purpose}', '원인': '{Reason}', '예상질문': '{Question}', '인물유형': '{Writer}', '주제': '{Subject}'}}"
-                    LifeData.append(f'\n\n[중요문구{ContextChunkCount}] {StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n{Memo}')
+                    Memo = f"[메모{MemoCount}] {{'목적또는문제': '{Purpose}', '원인': '{Reason}', '인물유형': '{Writer}', '주제': '{Subject}'}}"
+                    LifeData.append(f'\n\n[중요부분{MemoCount}] {StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n{Memo}')
                 else:
-                    Memo = f"[메모{ContextChunkCount}] {{'목적또는문제': '{Purpose}', '원인': '{Reason}', '예상질문': '{Question}', '인물유형': '{Writer}', '주제': '{Subject}'}}\n"
-                    LifeData.append(f'\n[중요문구{ContextChunkCount}] {StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n{Memo}\n')
+                    Memo = f"[메모{MemoCount}] {{'목적또는문제': '{Purpose}', '원인': '{Reason}', '인물유형': '{Writer}', '주제': '{Subject}'}}\n"
+                    LifeData.append(f'\n[중요부분{MemoCount}] {StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n{Memo}\n')
             else:
                 if j == (len(LifeDataTextsKo[i]["LifeData"]) - 1):
                     LifeData.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}')

@@ -1,0 +1,61 @@
+[
+    {
+        "LifeGraphSetId": "None",
+        "LifeGraphSetDate": 0,
+        "LifeGraphSetName": "CourseraMeditation",
+        "Content": "LifeGraph",
+        "Language": "Ko",
+        "TaskName": "LifeGraphWMWMDefine",
+        "LifeGraphCount": 0,
+        "LifeDataContextTexts": 0,
+        "Completion": "No"
+    },
+    {
+        "WMWMCompeletions": [
+            {
+                "LifeGraphId": 0,
+                "Translation": "None",
+                "WMWMChunks": [
+                    {
+                        "ChunkId": 0,
+                        "Chunk": "None",
+                        "Wisdom": "None",
+                        "ReasonOfWisdom": "None",
+                        "Mind": "None",
+                        "ReasonOfPotentialMind": "None",
+                        "Wildness": "None",
+                        "ReasonOfWildness": "None",
+                        "Accuracy": "None"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "WMWMQuerys": [
+            {
+                "LifeGraphId": 0,
+                "Translation": "None",
+                "QuerySet": "None",
+                "Querys": [
+                    {
+                        "ChunkId": 0,
+                        "Vector": {
+                            "Purpose": "None",
+                            "Reason": "None",
+                            "Question": "None",
+                            "Chunk": "None",
+                            "Subject": "None",
+                            "Writer": "None"
+                        },
+                        "WMWM": {
+                            "Wisdom": "None",
+                            "Mind": "None",
+                            "Wildness": "None"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,51 @@
+[
+    {
+        "UserId": "None",
+        "ProjectsStorageID": "None",
+        "ProjectId": "None",
+        "ProjectName": "None",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "WMWMDefine",
+        "WMWMChunkCount": 0,
+        "WMWMCount": 0,
+        "Completion": "No"
+    },
+    {
+        "WMWMCompeletions": [
+            {
+                "WMWMChunkId": 0,
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Wisdom": "None",
+                "ReasonOfWisdom": "None",
+                "Mind": "None",
+                "ReasonOfPotentialMind": "None",
+                "Wildness": "None",
+                "ReasonOfWildness": "None",
+                "Accuracy": "None"
+            }
+        ]
+    },
+    {
+        "WMWMQuerys": [
+            {
+                "WMWMChunkId": 0,
+                "ChunkId": 0,
+                "Vector": {
+                    "Purpose": "None",
+                    "Reason": "None",
+                    "Question": "None",
+                    "Chunk": "None",
+                    "Subject": "None",
+                    "Writer": "None"
+                },
+                "WMWM": {
+                    "Wisdom": "None",
+                    "Mind": "None",
+                    "Wildness": "None"
+                }
+            }
+        ]
+    }
+]

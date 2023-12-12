@@ -45,8 +45,8 @@ def AddTrainingDatasetToDB(projectName, email):
             ExistingDataset.BodySummary = trainingDataset
             ExistingDataset.ContextDefine = trainingDataset
             ExistingDataset.ContextCompletion = trainingDataset
-            ExistingDataset.NCEMDefine = trainingDataset
-            ExistingDataset.NCEMMatching = trainingDataset
+            ExistingDataset.WMWMDefine = trainingDataset
+            ExistingDataset.WMWMMatching = trainingDataset
             ExistingDataset.CharacterDefine = trainingDataset
             ExistingDataset.CharacterCompletion = trainingDataset
             ExistingDataset.SFXMatching = trainingDataset
@@ -74,8 +74,8 @@ def AddTrainingDatasetToDB(projectName, email):
                 BodySummary = trainingDataset,
                 ContextDefine = trainingDataset,
                 ContextCompletion = trainingDataset,
-                NCEMDefine = trainingDataset,
-                NCEMMatching = trainingDataset,
+                WMWMDefine = trainingDataset,
+                WMWMMatching = trainingDataset,
                 CharacterDefine = trainingDataset,
                 CharacterCompletion = trainingDataset,
                 SFXMatching = trainingDataset,

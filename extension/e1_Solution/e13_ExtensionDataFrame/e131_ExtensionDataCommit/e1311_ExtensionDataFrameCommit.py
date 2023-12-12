@@ -454,11 +454,11 @@ def AddLifeGraphContextDefineContextChunksToDB(lifeGraphSetName, latestUpdateDat
         db.commit()
 
 ## 4. 1-3 LifeGraphContextDefine의 LifeDataContextTexts부분 업데이트 형식
-def UpdateLifeDataContextTexts(lifeGraph, LifeGraphId, Traslation, Text):
+def UpdateLifeDataContextTexts(lifeGraph, LifeGraphId, Translation, Text):
     
     updateContextChunks = {
         "LifeGraphId": LifeGraphId,
-        "Traslation": Traslation,
+        "Translation": Translation,
         "Text": Text
     }
     
@@ -467,11 +467,11 @@ def UpdateLifeDataContextTexts(lifeGraph, LifeGraphId, Traslation, Text):
     lifeGraph.LifeGraphContextDefine[0]["LifeDataContextTexts"] = LifeGraphId
 
 ## 4. 1-4 LifeGraphContextDefine의 LifeDataContextTexts부분 업데이트
-def AddLifeGraphContextDefineLifeDataContextTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Traslation, Text):
+def AddLifeGraphContextDefineLifeDataContextTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, Text):
     with get_db() as db:
     
         lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-        UpdateLifeDataContextTexts(lifeGraph, LifeGraphId, Traslation, Text)
+        UpdateLifeDataContextTexts(lifeGraph, LifeGraphId, Translation, Text)
         
         flag_modified(lifeGraph, "LifeGraphContextDefine")
         

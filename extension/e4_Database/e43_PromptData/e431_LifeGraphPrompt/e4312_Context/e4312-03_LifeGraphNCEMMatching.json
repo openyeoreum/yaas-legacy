@@ -1,5 +1,5 @@
 {
-    "TaskName": "NCEMMatching",
+    "TaskName": "WMWMMatching",
     "BaseModel": {
         "ShortTokensModel": "gpt-3.5-turbo-1106",
         "LongTokensModel": "gpt-3.5-turbo-1106"

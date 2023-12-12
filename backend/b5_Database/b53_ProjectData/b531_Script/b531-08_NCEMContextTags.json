@@ -4,22 +4,22 @@
         "ProjectsStorageID": "None",
         "ProjectId": "None",
         "ProjectName": "None",
-        "Content": "NCEMContext",
+        "Content": "WMWMContext",
         "Language": "Ko",
-        "TaskName": "NCEMContext",
-        "Memo": "동일한 Domain의 다수의 도서 A...Z 간의 Q/A에서 Q와 A의 상대적 Needs, CVC, PotentialEnergy를 비교한 뒤 Q와 A가 될 수 있는 연계 관계를 형성, 이후 연계관계(연관관계를 벡터DB 또는 자연어 모델을 통한 NCEM구조의 나열)를 통해 다음 연계 도서를 추천"
+        "TaskName": "WMWMContext",
+        "Memo": "동일한 Domain의 다수의 도서 A...Z 간의 Q/A에서 Q와 A의 상대적 Wildness, Wisdom, Mind를 비교한 뒤 Q와 A가 될 수 있는 연계 관계를 형성, 이후 연계관계(연관관계를 벡터DB 또는 자연어 모델을 통한 WMWM구조의 나열)를 통해 다음 연계 도서를 추천"
     },
     {
-        "NCEMContextTags": [
+        "WMWMContextTags": [
             {
-                "NCEMContextId": 0,
-                "NCEMContextTag": "None",
-                "NCEMContexts": ["None"]
+                "WMWMContextId": 0,
+                "WMWMContextTag": "None",
+                "WMWMContexts": ["None"]
             },
             {
-                "NCEMContextId": 1,
-                "NCEMContextTag": ["Domain", "목적"],
-                "NCEMContexts": ["철학 및 인성", "의료 및 보건", "교육 및 학술", "공학 및 기술", "예술 및 디자인", "경영 및 금융", "법률 및 정치", "과학 및 연구", "농업 및 환경", "서비스 및 소매", "공공 안전 및 보안"],
+                "WMWMContextId": 1,
+                "WMWMContextTag": ["Domain", "목적"],
+                "WMWMContexts": ["철학 및 인성", "의료 및 보건", "교육 및 학술", "공학 및 기술", "예술 및 디자인", "경영 및 금융", "법률 및 정치", "과학 및 연구", "농업 및 환경", "서비스 및 소매", "공공 안전 및 보안"],
                 "Memo": {
                     "철학 및 인성": "철학가, 종교인, 명상지도사 등이 포함",
                     "의료 및 보건": "의사, 간호사, 치과의사, 약사, 보건 전문가 등이 포함",
@@ -35,19 +35,19 @@
                     "Domain 선별방법": "1) 사람들의 도메인을 파악하며 리스트를 구축한다. 2) 마음수련 10대 항목 또는 가시빼기 항목 등"
             },
             {
-                "NCEMContextId": 2,
-                "NCEMContextTag": ["Needs", "야성"],
-                "NCEMContexts": ["생존", "안전", "편의", "애정", "존경", "실현", "해탈"]
+                "WMWMContextId": 2,
+                "WMWMContextTag": ["Wildness", "야성"],
+                "WMWMContexts": ["생존", "안전", "편의", "애정", "존경", "실현", "해탈"]
             },
             {
-                "NCEMContextId": 3,
-                "NCEMContextTag": ["CVC", "지성"],
-                "NCEMContexts": ["무지", "인지", "이해", "확신", "욕망", "행동", "성공"]
+                "WMWMContextId": 3,
+                "WMWMContextTag": ["Wisdom", "지성"],
+                "WMWMContexts": ["무지", "인지", "이해", "확신", "욕망", "행동", "성공"]
             },
             {
-                "NCEMContextId": 4,
-                "NCEMContextTag": ["PotentialEnergy", "덕성"],
-                "NCEMContexts": ["거절", "부정", "중립", "긍정", "수용"]
+                "WMWMContextId": 4,
+                "WMWMContextTag": ["Mind", "덕성"],
+                "WMWMContexts": ["거절", "부정", "중립", "긍정", "수용"]
             }
         ]
     }

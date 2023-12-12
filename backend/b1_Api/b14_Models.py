@@ -205,7 +205,7 @@ class Project(Base):
     PhargraphTransitionFrame = Column(JSON)
     SummaryBodyFrame = Column(JSON)
     BodyContextTags = Column(JSON)
-    NCEMContextTags = Column(JSON)
+    WMWMContextTags = Column(JSON)
     CharacterContextTags = Column(JSON)
     SoundContextTags = Column(JSON)
     SFXContextTags = Column(JSON)
@@ -213,8 +213,8 @@ class Project(Base):
     # Context
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
-    NCEMDefine = Column(JSON)
-    NCEMMatching = Column(JSON)
+    WMWMDefine = Column(JSON)
+    WMWMMatching = Column(JSON)
     
     # Character
     CharacterDefine = Column(JSON)
@@ -336,7 +336,7 @@ class ProjectHistory(Base):
     PhargraphTransitionFrameStatus = Column(String(64))
     SummaryBodyFrameStatus = Column(String(64))
     BodyContextTagsStatus = Column(String(64))
-    NCEMContextTagsStatus = Column(String(64))
+    WMWMContextTagsStatus = Column(String(64))
     CharacterContextTagsStatus = Column(String(64))
     SoundContextTagsStatus = Column(String(64))
     SFXContextTagsStatus = Column(String(64))
@@ -344,8 +344,8 @@ class ProjectHistory(Base):
     # Context
     ContextDefineStatus = Column(JSON(64))
     ContextCompletionStatus = Column(JSON(64))
-    NCEMDefineStatus = Column(JSON(64))
-    NCEMMatchingStatus = Column(JSON(64))
+    WMWMDefineStatus = Column(JSON(64))
+    WMWMMatchingStatus = Column(JSON(64))
     
     # Character
     CharacterDefineStatus = Column(JSON(64))
@@ -428,8 +428,8 @@ class Prompt(Base):
     # ContextPrompt
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
-    NCEMDefine = Column(JSON)
-    NCEMMatching = Column(JSON)
+    WMWMDefine = Column(JSON)
+    WMWMMatching = Column(JSON)
 
     # CharacterPrompt
     CharacterDefine = Column(JSON)
@@ -514,8 +514,8 @@ class TrainingDataset(Base):
     # ContextDataset
     ContextDefine = Column(JSON)
     ContextCompletion = Column(JSON)
-    NCEMDefine = Column(JSON)
-    NCEMMatching = Column(JSON)
+    WMWMDefine = Column(JSON)
+    WMWMMatching = Column(JSON)
 
     # CharacterDataset
     CharacterDefine = Column(JSON)
@@ -763,8 +763,8 @@ class LifeGraph(Base):
     
     # Context
     LifeGraphContextDefine = Column(JSON)
-    LifeGraphNCEMDefine = Column(JSON)
-    LifeGraphNCEMMatching = Column(JSON)
+    LifeGraphWMWMDefine = Column(JSON)
+    LifeGraphWMWMMatching = Column(JSON)
 
     # Report
 
@@ -797,8 +797,8 @@ class Video(Base):
     # Context
     VideoContextDefine = Column(JSON)
     VideoContextCompletion = Column(JSON)
-    VideoNCEMDefine = Column(JSON)
-    VideoNCEMMatching = Column(JSON)
+    VideoWMWMDefine = Column(JSON)
+    VideoWMWMMatching = Column(JSON)
 
 
 #######################
@@ -814,8 +814,8 @@ class ExtensionPrompt(Base):
     LifeGraphTranslationKo = Column(JSON)
     LifeGraphTranslationEn = Column(JSON)
     LifeGraphContextDefine = Column(JSON)
-    LifeGraphNCEMDefine = Column(JSON)
-    LifeGraphNCEMMatching = Column(JSON)
+    LifeGraphWMWMDefine = Column(JSON)
+    LifeGraphWMWMMatching = Column(JSON)
     
     # BlogPrompt
 
@@ -827,7 +827,7 @@ class ExtensionPrompt(Base):
     VideoTranslationEn = Column(JSON)
     VideoContextDefine = Column(JSON)
     VideoContextCompletion = Column(JSON)
-    VideoNCEMDefine = Column(JSON)
-    VideoNCEMMatching = Column(JSON)
+    VideoWMWMDefine = Column(JSON)
+    VideoWMWMMatching = Column(JSON)
 
     # ETCPrompt

@@ -4,7 +4,7 @@
         "LifeGraphSetName": "CourseraMeditation",
         "Content": "LifeGraph",
         "Language": "Ko",
-        "TaskName": "LifeGraphNCEMDefine",
+        "TaskName": "LifeGraphWMWMDefine",
         "LifeGraphCount": 0,
         "Completion": "No"
     },
@@ -15,9 +15,9 @@
                 "ChunkId": 0,
                 "Chunk": "None",
                 "Domain": "None",
-                "Needs": "None",
-                "CVC": "None",
-                "PotentialEnergy": "None",
+                "Wildness": "None",
+                "Wisdom": "None",
+                "Mind": "None",
                 "Accuracy": "None"
             }
         ]

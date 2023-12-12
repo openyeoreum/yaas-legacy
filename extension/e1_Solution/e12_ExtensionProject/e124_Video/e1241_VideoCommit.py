@@ -29,8 +29,8 @@ def AddVideoToDB(videoSetName, videoSetWriter, videoSetPlatform, videoSetChannel
         videoTranslationEn = LoadJsonFrame(VideoDataPath + "/e4242_Preprocess/e4242-03_VideoTranslationEn.json")
         videoContextDefine = LoadJsonFrame(VideoDataPath + "/e4243_Context/e4243-01_VideoContextDefine.json")
         videoContextCompletion = LoadJsonFrame(VideoDataPath + "/e4242_Preprocess/e4243-02_VideoContextCompletion.json")
-        videoNCEMDefine = LoadJsonFrame(VideoDataPath + "/e4243_Context/e4243-03_VideoNCEMDefine.json")
-        videoNCEMMatching = LoadJsonFrame(VideoDataPath + "/e4243_Context/e4243-04_VideoNCEMMatching.json")
+        videoWMWMDefine = LoadJsonFrame(VideoDataPath + "/e4243_Context/e4243-03_VideoWMWMDefine.json")
+        videoWMWMMatching = LoadJsonFrame(VideoDataPath + "/e4243_Context/e4243-04_VideoWMWMMatching.json")
         ### 아래로 추가되는 프롬프트 작성 ###
 
         ExistingVideo = db.query(Video).filter(Video.VideoSetName == videoSetName, Video.VideoSetWriter == videoSetWriter, Video.LatestUpdateDate == latestUpdateDate).order_by(desc(Video.LatestUpdateDate)).first()
@@ -49,8 +49,8 @@ def AddVideoToDB(videoSetName, videoSetWriter, videoSetPlatform, videoSetChannel
                 ExistingVideo.VideoTranslationEn = videoTranslationEn
                 ExistingVideo.VideoContextDefine = videoContextDefine
                 ExistingVideo.VideoContextCompletion = videoContextCompletion
-                ExistingVideo.VideoNCEMDefine = videoNCEMDefine
-                ExistingVideo.VideoNCEMMatching = videoNCEMMatching
+                ExistingVideo.VideoWMWMDefine = videoWMWMDefine
+                ExistingVideo.VideoWMWMMatching = videoWMWMMatching
                 ### 아래로 추가되는 프롬프트 작성 ###
                 
                 print(f"[ ExtensionProject | AddVideoToDB 변경사항 업데이트 ]")
@@ -68,8 +68,8 @@ def AddVideoToDB(videoSetName, videoSetWriter, videoSetPlatform, videoSetChannel
                 VideoTranslationEn = videoTranslationEn,
                 VideoContextDefine = videoContextDefine,
                 VideoContextCompletion = videoContextCompletion,
-                VideoNCEMDefine = videoNCEMDefine,
-                VideoNCEMMatching = videoNCEMMatching
+                VideoWMWMDefine = videoWMWMDefine,
+                VideoWMWMMatching = videoWMWMMatching
                 ### 아래로 추가되는 프롬프트 작성 ###
                 )
             db.add(Video)

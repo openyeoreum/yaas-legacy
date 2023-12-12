@@ -31,8 +31,8 @@ def AddPromptToDB():
         bodySummary = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-07_BodySummary.json")
         contextDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-01_ContextDefine.json")
         contextCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-02_ContextCompletion.json")
-        nCEMDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-03_NCEMDefine.json")
-        nCEMMatching = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-04_NCEMMatching.json")
+        wMWMDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-03_WMWMDefine.json")
+        wMWMMatching = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-04_WMWMMatching.json")
         characterDefine = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-01_CharacterDefine.json")
         characterCompletion = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-02_CharacterCompletion.json")
         sFXMatching = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-01_SFXMatching.json")
@@ -56,8 +56,8 @@ def AddPromptToDB():
                 ExistingPrompt.BodySummary = bodySummary
                 ExistingPrompt.ContextDefine = contextDefine
                 ExistingPrompt.ContextCompletion = contextCompletion
-                ExistingPrompt.NCEMDefine = nCEMDefine
-                ExistingPrompt.NCEMMatching = nCEMMatching
+                ExistingPrompt.WMWMDefine = wMWMDefine
+                ExistingPrompt.WMWMMatching = wMWMMatching
                 ExistingPrompt.CharacterDefine = characterDefine
                 ExistingPrompt.CharacterCompletion = characterCompletion
                 ExistingPrompt.SFXMatching = sFXMatching
@@ -80,8 +80,8 @@ def AddPromptToDB():
                 BodySummary = bodySummary,
                 ContextDefine = contextDefine,
                 ContextCompletion = contextCompletion,
-                NCEMDefine = nCEMDefine,
-                NCEMMatching = nCEMMatching,
+                WMWMDefine = wMWMDefine,
+                WMWMMatching = wMWMMatching,
                 CharacterDefine = characterDefine,
                 CharacterCompletion = characterCompletion,
                 SFXMatching = sFXMatching,

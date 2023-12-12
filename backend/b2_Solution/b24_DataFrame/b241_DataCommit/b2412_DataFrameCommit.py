@@ -722,120 +722,122 @@ def ContextCompletionCompletionUpdate(projectName, email):
 
 
 #####################################
-##### 09_NCEMDefine Process #####
+##### 09_WMWMDefine Process #####
 #####################################
-## 9. 1-0 NCEMDefine이 이미 ExistedFrame으로 존재할때 업데이트
-def AddExistedNCEMDefineToDB(projectName, email, ExistedDataFrame):
+## 9. 1-0 WMWMDefine이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedWMWMDefineToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
         project = GetProject(projectName, email)
-        project.NCEMDefine[1] = ExistedDataFrame[1]
-        project.NCEMDefine[2] = ExistedDataFrame[2]
+        project.WMWMDefine[1] = ExistedDataFrame[1]
+        project.WMWMDefine[2] = ExistedDataFrame[2]
         
-        flag_modified(project, "NCEMDefine")
+        flag_modified(project, "WMWMDefine")
         
         db.add(project)
         db.commit()
 
-## 9. 1-1 NCEMDefine의 Body(본문) NCEMCompeletions 업데이트 형식
-def UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy):    
-    updateNCEMCompeletions = {
-        "NCEMChunkId": NCEMChunkId,
+## 9. 1-1 WMWMDefine의 Body(본문) WMWMCompeletions 업데이트 형식
+def UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):    
+    updateWMWMCompeletions = {
+        "WMWMChunkId": WMWMChunkId,
         "ChunkId": ChunkId,
         "Chunk": Chunk,
-        "Domain": Domain,
-        "Needs": Needs,
-        "CVC": CVC,
-        "PotentialEnergy": PotentialEnergy,
+        "Wisdom": Wisdom,
+        "ReasonOfWisdom": ReasonOfWisdom,
+        "Mind": Mind,
+        "ReasonOfPotentialMind": ReasonOfPotentialMind,
+        "Wildness": Wildness,
+        "ReasonOfWildness": ReasonOfWildness,
         "Accuracy": Accuracy
     }
     
-    project.NCEMDefine[1]["NCEMCompeletions"].append(updateNCEMCompeletions)
-    project.NCEMDefine[0]["NCEMChunkCount"] = NCEMChunkId
+    project.WMWMDefine[1]["WMWMCompeletions"].append(updateWMWMCompeletions)
+    project.WMWMDefine[0]["WMWMChunkCount"] = WMWMChunkId
     
-## 9. 1-2 NCEMDefine의 Body(본문) NCEMCompeletions 업데이트
-def AddNCEMDefineChunksToDB(projectName, email, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy):
+## 9. 1-2 WMWMDefine의 Body(본문) WMWMCompeletions 업데이트
+def AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionNCEMs(project, NCEMChunkId, ChunkId, Chunk, Domain, Needs, CVC, PotentialEnergy, Accuracy)
+        UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
         
-        flag_modified(project, "NCEMDefine")
+        flag_modified(project, "WMWMDefine")
         
         db.add(project)
         db.commit()
         
-## 9. 2-1 NCEMDefine의 NCEM(부문) NCEMTags부분 업데이트 형식
-def updateNCEMQuerys(project, NCEMTag, NCEMList, NCEM):
-    # 새롭게 생성되는 NCEMId는 NCEMQuerys의 Len값과 동일
-    NCEMId = len(project.NCEMDefine[2]["NCEMQuerys"]) -1
+## 9. 2-1 WMWMDefine의 WMWM(부문) WMWMTags부분 업데이트 형식
+def updateWMWMQuerys(project, WMWMChunkId, ChunkId, Vector, WMWM):
+    # 새롭게 생성되는 WMWMId는 WMWMQuerys의 Len값과 동일
+    WMWMId = len(project.WMWMDefine[2]["WMWMQuerys"]) -1
     
     ### 실제 테스크시 수정 요망 ###
-    updateNCEMQuerys = {
-        "NCEMId": NCEMId,
-        "NCEMTag": NCEMTag,
-        "NCEMList": NCEMList,
-        "NCEM": NCEM
+    updateWMWMQuerys = {
+        "WMWMChunkId": WMWMChunkId,
+        "ChunkId": ChunkId,
+        "Vector": Vector,
+        "WMWM": WMWM
     }
     
-    project.NCEMDefine[2]["NCEMQuerys"].append(updateNCEMQuerys)
-    project.NCEMDefine[0]["NCEMCount"] = NCEMId
+    project.WMWMDefine[2]["WMWMQuerys"].append(updateWMWMQuerys)
+    project.WMWMDefine[0]["WMWMCount"] = WMWMId
     
-## 9. 2-2 NCEMDefine의 NCEM(부문) NCEMTags부분 업데이트
-def AddNCEMDefineNCEMQuerysToDB(projectName, email, NCEMTag, NCEMList, NCEM):
+## 9. 2-2 WMWMDefine의 WMWM(부문) WMWMTags부분 업데이트
+def AddWMWMDefineWMWMQuerysToDB(projectName, email, WMWMChunkId, ChunkId, Vector, WMWM):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        updateNCEMQuerys(project, NCEMTag, NCEMList, NCEM)
+        updateWMWMQuerys(project, WMWMChunkId, ChunkId, Vector, WMWM)
         
-        flag_modified(project, "NCEMDefine")
+        flag_modified(project, "WMWMDefine")
         
         db.add(project)
         db.commit()
         
-## 9. NCEMDefine의Count의 가져오기
-def NCEMDefineCountLoad(projectName, email):
+## 9. WMWMDefine의Count의 가져오기
+def WMWMDefineCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
-    NCEMChunkCount = project.NCEMDefine[0]["NCEMChunkCount"]
-    NCEMCount = project.NCEMDefine[0]["NCEMCount"]
-    Completion = project.NCEMDefine[0]["Completion"]
+    WMWMChunkCount = project.WMWMDefine[0]["WMWMChunkCount"]
+    WMWMCount = project.WMWMDefine[0]["WMWMCount"]
+    Completion = project.WMWMDefine[0]["Completion"]
     
-    return NCEMChunkCount, NCEMCount, Completion
+    return WMWMChunkCount, WMWMCount, Completion
 
-## 9. NCEMDefine의 초기화
-def InitNCEMDefine(projectName, email):
+## 9. WMWMDefine의 초기화
+def InitWMWMDefine(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
     
         project = GetProject(projectName, email)
-        project.NCEMDefine[0]["NCEMChunkCount"] = 0
-        project.NCEMDefine[0]["NCEMCount"] = 0
-        project.NCEMDefine[0]["Completion"] = "No"
-        project.NCEMDefine[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_NCEMDefine.json")[1]
-        project.NCEMDefine[2] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_NCEMDefine.json")[2]
+        project.WMWMDefine[0]["WMWMChunkCount"] = 0
+        project.WMWMDefine[0]["WMWMCount"] = 0
+        project.WMWMDefine[0]["Completion"] = "No"
+        project.WMWMDefine[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_WMWMDefine.json")[1]
+        project.WMWMDefine[2] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_WMWMDefine.json")[2]
 
-        flag_modified(project, "NCEMDefine")
+        flag_modified(project, "WMWMDefine")
         
         db.add(project)
         db.commit()
         
-## 9. 업데이트된 NCEMDefine 출력
-def UpdatedNCEMDefine(projectName, email):
+## 9. 업데이트된 WMWMDefine 출력
+def UpdatedWMWMDefine(projectName, email):
     with get_db() as db:
 
         project = GetProject(projectName, email)
         
-    return project.NCEMDefine
+    return project.WMWMDefine
         
-## 9. NCEMDefineCompletion 업데이트
-def NCEMDefineCompletionUpdate(projectName, email):
+## 9. WMWMDefineCompletion 업데이트
+def WMWMDefineCompletionUpdate(projectName, email):
     with get_db() as db:
 
         project = GetProject(projectName, email)
-        project.NCEMDefine[0]["Completion"] = "Yes"
+        project.WMWMDefine[0]["Completion"] = "Yes"
 
-        flag_modified(project, "NCEMDefine")
+        flag_modified(project, "WMWMDefine")
 
         db.add(project)
         db.commit()

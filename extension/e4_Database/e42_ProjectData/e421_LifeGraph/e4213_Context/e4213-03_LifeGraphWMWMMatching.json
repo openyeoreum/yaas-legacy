@@ -1,0 +1,33 @@
+[
+    {
+        "LifeGraphSetId": "None",
+        "LifeGraphSetDate": 0,
+        "LifeGraphSetName": "None",
+        "LifeGraphSetManager": "None",
+        "LifeGraphSetSource": "None",
+        "LatestUpdateDate": "None",
+        "Content": "LifeGraph",
+        "Language": "Ko",
+        "TaskName": "LifeGraphWMWMDefine",
+        "ResponseCount": 0,
+        "Completion": "No"
+    },
+    {
+        "MatchingData": "None",
+        "QueryContent": "None",
+        "Query": "None",
+        "ResponseContent": "None",
+        "ResponseContentSets": "None",
+        "Responses": [
+            {
+                "ResponseId": 0,
+                "Response": "None",
+                "DomainAccuracy": "None",
+                "WildnessAccuracy": "None",
+                "WisdomAccuracy": "None",
+                "MindAccuracy": "None",
+                "MatchingAccuracy": "None"
+            }
+        ]
+    }
+]

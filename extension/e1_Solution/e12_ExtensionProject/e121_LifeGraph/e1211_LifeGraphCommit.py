@@ -39,8 +39,8 @@ def AddLifeGraphToDB(lifeGraphSetName, lifeGraphSetManager, lifeGraphSetSource, 
         lifeGraphTranslationKo = LoadJsonFrame(LifeGraphDataPath + "/e4212_Preprocess/e4212-01_LifeGraphTranslationKo.json")
         lifeGraphTranslationEn = LoadJsonFrame(LifeGraphDataPath + "/e4212_Preprocess/e4212-02_LifeGraphTranslationEn.json")
         lifeGraphContextDefine = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-01_LifeGraphContextDefine.json")
-        lifeGraphNCEMDefine = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-02_LifeGraphNCEMDefine.json")
-        lifeGraphNCEMMatching = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-03_LifeGraphNCEMMatching.json")
+        lifeGraphWMWMDefine = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-02_LifeGraphWMWMDefine.json")
+        lifeGraphWMWMMatching = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-03_LifeGraphWMWMMatching.json")
         ### 아래로 추가되는 프롬프트 작성 ###
 
         ExistingLifeGraph = db.query(LifeGraph).filter(LifeGraph.LifeGraphSetName == lifeGraphSetName, LifeGraph.LifeGraphSetManager == lifeGraphSetManager, LifeGraph.LatestUpdateDate == latestUpdateDate).first()
@@ -57,8 +57,8 @@ def AddLifeGraphToDB(lifeGraphSetName, lifeGraphSetManager, lifeGraphSetSource, 
                 ExistingLifeGraph.LifeGraphTranslationKo = lifeGraphTranslationKo
                 ExistingLifeGraph.LifeGraphTranslationEn = lifeGraphTranslationEn
                 ExistingLifeGraph.LifeGraphContextDefine = lifeGraphContextDefine
-                ExistingLifeGraph.LifeGraphNCEMDefine = lifeGraphNCEMDefine
-                ExistingLifeGraph.LifeGraphNCEMMatching = lifeGraphNCEMMatching
+                ExistingLifeGraph.LifeGraphWMWMDefine = lifeGraphWMWMDefine
+                ExistingLifeGraph.LifeGraphWMWMMatching = lifeGraphWMWMMatching
                 ### 아래로 추가되는 프롬프트 작성 ###
                 
                 print(f"[ ExtensionProject | AddLifeGraphToDB 변경사항 업데이트 ]")
@@ -74,8 +74,8 @@ def AddLifeGraphToDB(lifeGraphSetName, lifeGraphSetManager, lifeGraphSetSource, 
                 LifeGraphTranslationKo = lifeGraphTranslationKo,
                 LifeGraphTranslationEn = lifeGraphTranslationEn,
                 LifeGraphContextDefine = lifeGraphContextDefine,
-                LifeGraphNCEMDefine = lifeGraphNCEMDefine,
-                LifeGraphNCEMMatching = lifeGraphNCEMMatching
+                LifeGraphWMWMDefine = lifeGraphWMWMDefine,
+                LifeGraphWMWMMatching = lifeGraphWMWMMatching
                 ### 아래로 추가되는 프롬프트 작성 ###
                 )
             db.add(lifeGraph)

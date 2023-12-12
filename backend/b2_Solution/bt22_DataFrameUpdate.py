@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitSummaryBodyFrame, UpdatedSummaryBodyFrame, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitNCEMDefine, UpdatedNCEMDefine, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitCorrectionKo, UpdatedCorrectionKo
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitSummaryBodyFrame, UpdatedSummaryBodyFrame, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitCorrectionKo, UpdatedCorrectionKo
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
@@ -15,7 +15,7 @@ from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_HalfBodyFrameUpdate imp
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2424_BodySummaryUpdate import SummaryBodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2431_ContextDefineUpdate import ContextDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2432_ContextCompletionUpdate import ContextCompletionUpdate
-from backend.b2_Solution.b24_DataFrame.b243_Context.b2433_NCEMDefineUpdate import NCEMDefineUpdate
+from backend.b2_Solution.b24_DataFrame.b243_Context.b2433_WMWMDefineUpdate import WMWMDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b244_Character.b2441_CharacterDefineUpdate import CharacterDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b244_Character.b2442_CharacterCompletionUpdate import CharacterCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b249_Correction.b2491_CorrectionKoUpdate import CorrectionKoUpdate
@@ -258,20 +258,20 @@ if __name__ == "__main__":
 
 
     #####################
-    ### 09_NCEMDefine ###
+    ### 09_WMWMDefine ###
     #####################
-    InitNCEMDefine(projectName, email)
-    InitRawDataSet(projectName, email, "NCEMDefine")
+    InitWMWMDefine(projectName, email)
+    InitRawDataSet(projectName, email, "WMWMDefine")
     if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "NCEMDefine", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "NCEMDefine", RawDataSetPath)
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "WMWMDefine", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "WMWMDefine", RawDataSetPath)
     mode = "Master"
-    NCEMDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    WMWMDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
     if existedDataFrame == None:
-        updatedNCEMDefine = UpdatedNCEMDefine(projectName, email)
-        SaveDataFrame(projectName, email, "09_NCEMDefine", updatedNCEMDefine, DataFramePath)
-        SaveDataSet(projectName, email, "09", "NCEMDefine", RawDataSetPath)
+        updatedWMWMDefine = UpdatedWMWMDefine(projectName, email)
+        SaveDataFrame(projectName, email, "09_WMWMDefine", updatedWMWMDefine, DataFramePath)
+        SaveDataSet(projectName, email, "09", "WMWMDefine", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
 

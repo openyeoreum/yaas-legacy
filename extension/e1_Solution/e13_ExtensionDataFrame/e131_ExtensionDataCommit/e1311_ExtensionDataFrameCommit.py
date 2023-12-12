@@ -522,7 +522,119 @@ def LifeGraphContextDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate):
 
         db.add(lifeGraph)
         db.commit()
+
+#############################################
+##### 05_LifeGraphWMWMDefine Process #####
+#############################################
+## 5. 1-0 LifeGraphWMWMDefine이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedLifeGraphWMWMDefineToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame):
+    with get_db() as db:
+    
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
         
+        lifeGraph.LifeGraphWMWMDefine[1] = ExistedDataFrame[1]
+        lifeGraph.LifeGraphWMWMDefine[2] = ExistedDataFrame[2]
+        
+        flag_modified(lifeGraph, "LifeGraphWMWMDefine")
+        
+        db.add(lifeGraph)
+        db.commit()
+
+## 5. 1-1 LifeGraphWMWMDefine의 WMWMChunks부분 업데이트 형식
+def UpdateWMWMChunks(lifeGraph, LifeGraphId, Translation, WMWMChunks):
+    
+    updateWMWMChunks = {
+        "LifeGraphId": LifeGraphId,
+        "Translation": Translation,
+        "WMWMChunks": WMWMChunks
+    }
+    
+    lifeGraph.LifeGraphWMWMDefine[1]["WMWMChunks"].append(updateWMWMChunks)
+    # Count 업데이트
+    lifeGraph.LifeGraphWMWMDefine[0]["LifeGraphCount"] = LifeGraphId
+
+## 5. 1-2 LifeGraphWMWMDefine의 WMWMChunks부분 업데이트
+def AddLifeGraphWMWMDefineWMWMChunksToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, WMWMChunks):
+    with get_db() as db:
+    
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+        UpdateWMWMChunks(lifeGraph, LifeGraphId, Translation, WMWMChunks)
+        
+        flag_modified(lifeGraph, "LifeGraphWMWMDefine")
+        
+        db.add(lifeGraph)
+        db.commit()
+
+## 5. 1-3 LifeGraphWMWMDefine의 LifeDataWMWMTexts부분 업데이트 형식
+def UpdateLifeDataWMWMTexts(lifeGraph, LifeGraphId, Translation, Text):
+    
+    updateWMWMChunks = {
+        "LifeGraphId": LifeGraphId,
+        "Translation": Translation,
+        "Text": Text
+    }
+    
+    lifeGraph.LifeGraphWMWMDefine[2]["LifeDataWMWMTexts"].append(updateWMWMChunks)
+    # Count 업데이트
+    lifeGraph.LifeGraphWMWMDefine[0]["LifeDataWMWMTexts"] = LifeGraphId
+
+## 5. 1-4 LifeGraphWMWMDefine의 LifeDataWMWMTexts부분 업데이트
+def AddLifeGraphWMWMDefineLifeDataWMWMTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, Text):
+    with get_db() as db:
+    
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+        UpdateLifeDataWMWMTexts(lifeGraph, LifeGraphId, Translation, Text)
+        
+        flag_modified(lifeGraph, "LifeGraphWMWMDefine")
+        
+        db.add(lifeGraph)
+        db.commit()
+
+## 5. LifeGraphWMWMDefineCount 가져오기
+def LifeGraphWMWMDefineCountLoad(lifeGraphSetName, latestUpdateDate):
+
+    lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+    LifeGraphCount = lifeGraph.LifeGraphWMWMDefine[0]["LifeGraphCount"]
+    LifeGraphTextsCount = lifeGraph.LifeGraphWMWMDefine[0]["LifeGraphTextsCount"]
+    Completion = lifeGraph.LifeGraphWMWMDefine[0]["Completion"]
+    
+    return LifeGraphCount, LifeGraphTextsCount, Completion
+        
+## 5. LifeGraphWMWMDefine의 초기화
+def InitLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate):
+    LifeGraphDataPath = GetLifeGraphDataPath()
+    with get_db() as db:
+    
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+        lifeGraph.LifeGraphWMWMDefine[0]["LifeGraphCount"] = 0
+        lifeGraph.LifeGraphWMWMDefine[0]["LifeGraphTextsCount"] = 0
+        lifeGraph.LifeGraphWMWMDefine[0]["Completion"] = "No"
+        lifeGraph.LifeGraphWMWMDefine[1] = LoadJsonFrame(LifeGraphDataPath + "/e4213_Context/e4213-02_LifeGraphWMWMDefine.json")[1]
+        
+        flag_modified(lifeGraph, "LifeGraphWMWMDefine")
+        
+        db.add(lifeGraph)
+        db.commit()
+        
+## 5. 업데이트된 LifeGraphWMWMDefine 출력
+def UpdatedLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate):
+    with get_db() as db:
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+
+    return lifeGraph.LifeGraphWMWMDefine
+
+## 5. LifeGraphWMWMDefineCompletion 업데이트
+def LifeGraphWMWMDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate):
+    with get_db() as db:
+
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+        lifeGraph.LifeGraphWMWMDefine[0]["Completion"] = "Yes"
+
+        flag_modified(lifeGraph, "LifeGraphWMWMDefine")
+
+        db.add(lifeGraph)
+        db.commit()
+
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################

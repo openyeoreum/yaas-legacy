@@ -62,7 +62,7 @@ def LifeGraphWMWMDefineFilter(MemoTag, responseData, memoryCounter):
             # '핵심문구' 키에 접근하는 부분에 예외 처리 추가
             if not '중요부분' in key:
                 return "JSON에서 오류 발생: JSONKeyError"
-            elif not ('이해상태' in dic[key] and '이해상태선택이유' in dic[key] and '마음상태' in dic[key] and '마음상태선택이유' in dic[key] and '행동상태' in dic[key] and '행동상태선택이유' in dic[key] and '정확도' in dic[key]):
+            elif not ('욕구상태' in dic[key] and '욕구상태선택이유' in dic[key] and '이해상태' in dic[key] and '이해상태선택이유' in dic[key] and '마음상태' in dic[key] and '마음상태선택이유' in dic[key] and '행동상태' in dic[key] and '행동상태선택이유' in dic[key] and '정확도' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -231,13 +231,13 @@ def LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, Process = "Li
 def LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = 'off', mode = "Memory"):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     ContextChunks = lifeGraph.LifeGraphContextDefine[1]['ContextChunks'][1:]
-    # outputMemoryDics = LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
 
-    ########## 테스트 후 삭제 ##########
-    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_05_outputMemoryDics_231212.json"
-    with open(LifeGraphFramePath, 'r', encoding = 'utf-8') as file:
-        outputMemoryDics = json.load(file)
-    ########## 테스트 후 삭제 ##########
+    # ########## 테스트 후 삭제 ##########
+    # LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_05_outputMemoryDics_231212.json"
+    # with open(LifeGraphFramePath, 'r', encoding = 'utf-8') as file:
+    #     outputMemoryDics = json.load(file)
+    # ########## 테스트 후 삭제 ##########
     
     print(outputMemoryDics[0][0])
     
@@ -251,6 +251,8 @@ def LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messages
                 key = list(Dic.keys())[0]
                 ChunkId = j + 1
                 Chunk = ContextChunks[i]['ContextChunks'][j]['Chunk']
+                Needs = Dic[key]['욕구상태']
+                ReasonOfNeeds = Dic[key]['욕구상태선택이유']
                 Wisdom = Dic[key]['이해상태']
                 ReasonOfWisdom = Dic[key]['이해상태선택이유']
                 Mind = Dic[key]['마음상태']
@@ -258,7 +260,7 @@ def LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messages
                 Wildness = Dic[key]['행동상태']
                 ReasonOfWildness = Dic[key]['행동상태선택이유']
                 Accuracy = Dic[key]['정확도']
-                WMWMChunk = {'ChunkId': ChunkId, 'Chunk': Chunk, 'Wisdom': Wisdom, 'ReasonOfWisdom': ReasonOfWisdom, 'Mind': Mind, 'ReasonOfMind': ReasonOfMind, 'Wildness': Wildness, 'ReasonOfWildness': ReasonOfWildness, 'Accuracy': Accuracy}
+                WMWMChunk = {'ChunkId': ChunkId, 'Chunk': Chunk, 'Needs': Needs, 'ReasonOfNeeds': ReasonOfNeeds, 'Wisdom': Wisdom, 'ReasonOfWisdom': ReasonOfWisdom, 'Mind': Mind, 'ReasonOfMind': ReasonOfMind, 'Wildness': Wildness, 'ReasonOfWildness': ReasonOfWildness, 'Accuracy': Accuracy}
                 WMWMChunks.append(WMWMChunk)
             responseJson.append({'LifeGraphId': LifeGraphId, 'Translation': Translation, 'WMWMChunks': WMWMChunks})
 
@@ -341,7 +343,7 @@ def LifeGraphWMWMDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, R
 
 ## 결과물 Json을 LifeGraphWMWMDefine에 업데이트
 def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
-    print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphWMWMDefineUpdate 시작 >")
+    print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphWMWMDefineUpdate 시작 >")
     # LifeGraphWMWMDefine의 Count값 가져오기
     LifeGraphCount, LifeDataTextsCount, Completion = LifeGraphWMWMDefineCountLoad(lifeGraphSetName, latestUpdateDate)
     if Completion == "No":
@@ -349,7 +351,7 @@ def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedLifeGraphWMWMDefineToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
-            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphWMWMDefine로 대처됨 ]\n")
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphWMWMDefine로 대처됨 ]\n")
         else:
             responseJson = LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = MessagesReview, mode = Mode)
             # LifeGraphs를 LifeGraphCount로 슬라이스
@@ -367,6 +369,7 @@ def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview
                 time.sleep(0.0001)
                 
                 LifeGraphId = i + 1
+                Translation = ResponseJson[i]["Translation"]
                 WMWMChunks = ResponseJson[i]["WMWMChunks"]
 
                 AddLifeGraphWMWMDefineWMWMChunksToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, WMWMChunks)
@@ -380,9 +383,9 @@ def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview
             # Completion "Yes" 업데이트
             LifeGraphWMWMDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate)
             
-            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphWMWMDefineUpdate 완료 ]\n")
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphWMWMDefineUpdate 완료 ]\n")
     else:
-        print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphWMWMDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphWMWMDefineUpdate는 이미 완료됨 ]\n")
     
 if __name__ == "__main__":
     
@@ -394,7 +397,7 @@ if __name__ == "__main__":
     mode = "Master"
     #########################################################################
     
-    responseJson = LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate)
+    responseJson = LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = 'on', mode = "Master")
     
     for response in responseJson:
         print(f'{response}\n\n')

@@ -738,11 +738,13 @@ def AddExistedWMWMDefineToDB(projectName, email, ExistedDataFrame):
         db.commit()
 
 ## 9. 1-1 WMWMDefine의 Body(본문) WMWMCompeletions 업데이트 형식
-def UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):    
+def UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):    
     updateWMWMCompeletions = {
         "WMWMChunkId": WMWMChunkId,
         "ChunkId": ChunkId,
         "Chunk": Chunk,
+        "Needs": Needs,
+        "ReasonOfNeeds": ReasonOfNeeds,
         "Wisdom": Wisdom,
         "ReasonOfWisdom": ReasonOfWisdom,
         "Mind": Mind,
@@ -756,11 +758,11 @@ def UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Wisdom, ReasonO
     project.WMWMDefine[0]["WMWMChunkCount"] = WMWMChunkId
     
 ## 9. 1-2 WMWMDefine의 Body(본문) WMWMCompeletions 업데이트
-def AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):
+def AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
+        UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Wisdom, Needs, ReasonOfNeeds, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
         
         flag_modified(project, "WMWMDefine")
         

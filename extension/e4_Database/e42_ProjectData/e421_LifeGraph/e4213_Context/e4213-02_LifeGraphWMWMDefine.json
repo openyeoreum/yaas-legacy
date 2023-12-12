@@ -19,6 +19,8 @@
                     {
                         "ChunkId": 0,
                         "Chunk": "None",
+                        "Needs": "None",
+                        "ReasonOfNeeds": "None",
                         "Wisdom": "None",
                         "ReasonOfWisdom": "None",
                         "Mind": "None",
@@ -49,6 +51,7 @@
                             "Writer": "None"
                         },
                         "WMWM": {
+                            "Needs": "None",
                             "Wisdom": "None",
                             "Mind": "None",
                             "Wildness": "None"

@@ -113,7 +113,7 @@ def WMWMDefineFilter(MemoTag, responseData, memoryCounter):
             if not key in MemoTag:
                 return "JSON에서 오류 발생: JSONMemoTagError"
             else:
-                if not ('이해상태' in dic[key] and '이해상태선택이유' in dic[key] and '마음상태' in dic[key] and '마음상태선택이유' in dic[key] and '행동상태' in dic[key] and '행동상태선택이유' in dic[key] and '정확도' in dic[key]):
+                if not ('욕구상태' in dic[key] and '욕구상태선택이유' in dic[key] and '이해상태' in dic[key] and '이해상태선택이유' in dic[key] and '마음상태' in dic[key] and '마음상태선택이유' in dic[key] and '행동상태' in dic[key] and '행동상태선택이유' in dic[key] and '정확도' in dic[key]):
                     return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -228,9 +228,9 @@ def WMWMDefineProcess(projectName, email, Process = "WMWMDefine", memoryLength =
             else:
                 memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(InputDic))
             
-            MemoTag = ["매칭독자" + match for match in memoTag]
+            MemoTag = ["핵심문구" + match for match in memoTag]
             memoryCounter = " - 이어서 작업할 데이터 (갯수만큼만 딱 맞게 작성): " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + ' -\n'
-            outputEnder = f"{{'매칭독자"
+            outputEnder = f"{{'핵심문구"
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -326,6 +326,8 @@ def WMWMDefineResponseJson(projectName, email, messagesReview = 'off', mode = "M
                 for key, value in dic.items():
                     ChunkId = ContextDefine[ContextDefineCount]['ChunkId']
                     Chunk = ContextDefine[ContextDefineCount]['Chunk']
+                    Needs = value['욕구상태']
+                    ReasonOfNeeds = value['욕구상태선택이유']
                     Wisdom = value['이해상태']
                     ReasonOfWisdom = value['이해상태선택이유']
                     Mind = value['마음상태']
@@ -334,7 +336,7 @@ def WMWMDefineResponseJson(projectName, email, messagesReview = 'off', mode = "M
                     ReasonOfWildness = value['행동상태선택이유']
                     Accuracy = value['정확도']
                     ContextDefineCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Wisdom": Wisdom, "ReasonOfWisdom": ReasonOfWisdom, "Mind": Mind, "ReasonOfMind": ReasonOfMind, "Wildness": Wildness, "ReasonOfWildness": ReasonOfWildness, "Accuracy": Accuracy})
+                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Needs": Needs, "ReasonOfNeeds": ReasonOfNeeds, "Wisdom": Wisdom, "ReasonOfWisdom": ReasonOfWisdom, "Mind": Mind, "ReasonOfMind": ReasonOfMind, "Wildness": Wildness, "ReasonOfWildness": ReasonOfWildness, "Accuracy": Accuracy})
 
     return responseJson
 
@@ -371,15 +373,17 @@ def WMWMDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory"
                 WMWMChunkId += 1
                 ChunkId = ResponseJson[i]["ChunkId"]
                 Chunk = ResponseJson[i]["Chunk"]
+                Needs = ResponseJson[i]["Needs"]
+                ReasonOfNeeds = ResponseJson[i]["ReasonOfNeeds"]
                 Wisdom = ResponseJson[i]["Wisdom"]
                 ReasonOfWisdom = ResponseJson[i]["ReasonOfWisdom"]
                 Mind = ResponseJson[i]["Mind"]
-                ReasonOfPotentialMind = ResponseJson[i]["ReasonOfPotentialMind"]
+                ReasonOfMind = ResponseJson[i]["ReasonOfMind"]
                 Wildness = ResponseJson[i]["Wildness"]
                 ReasonOfWildness = ResponseJson[i]["ReasonOfWildness"]
                 Accuracy = ResponseJson[i]["Accuracy"]
                 
-                AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
+                AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfMind, Wildness, ReasonOfWildness, Accuracy)
                 # i값 수동 업데이트
                 i += 1
             

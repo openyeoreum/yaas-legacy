@@ -9,7 +9,7 @@ from tqdm import tqdm
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph
-# from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddExistedLifeGraphWMWMDefineToDB, AddLifeGraphWMWMDefineWMWMChunksToDB, AddLifeGraphWMWMDefineLifeDataWMWMTextsToDB, LifeGraphWMWMDefineCountLoad, InitLifeGraphWMWMDefine, LifeGraphWMWMDefineCompletionUpdate, UpdatedLifeGraphWMWMDefine
+from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddExistedLifeGraphWMWMDefineToDB, AddLifeGraphWMWMDefineCompeletionsToDB, AddLifeGraphWMWMDefineQuerysToDB, LifeGraphWMWMDefineCountLoad, InitLifeGraphWMWMDefine, LifeGraphWMWMDefineCompletionUpdate, UpdatedLifeGraphWMWMDefine
 
 #########################
 ##### InputList 생성 #####
@@ -231,13 +231,13 @@ def LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, Process = "Li
 def LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = 'off', mode = "Memory"):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     ContextChunks = lifeGraph.LifeGraphContextDefine[1]['ContextChunks'][1:]
-    outputMemoryDics = LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
+    # outputMemoryDics = LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
 
-    # ########## 테스트 후 삭제 ##########
-    # LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_05_outputMemoryDics_231212.json"
-    # with open(LifeGraphFramePath, 'r', encoding = 'utf-8') as file:
-    #     outputMemoryDics = json.load(file)
-    # ########## 테스트 후 삭제 ##########
+    ########## 테스트 후 삭제 ##########
+    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_05_outputMemoryDics_231212.json"
+    with open(LifeGraphFramePath, 'r', encoding = 'utf-8') as file:
+        outputMemoryDics = json.load(file)
+    ########## 테스트 후 삭제 ##########
     
     print(outputMemoryDics[0][0])
     
@@ -266,57 +266,37 @@ def LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messages
 
     return responseJson
 
-def LifeDataToWMWMQuerys(lifeGraphSetName, latestUpdateDate, ResponseJson):
+def WMWMToQuerys(lifeGraphSetName, latestUpdateDate, ResponseJson):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-    LifeDataTextsKo = lifeGraph.LifeGraphTranslationKo[1]['LifeGraphsKo'][1:]
+    lifeGraphContextDefine = lifeGraph.LifeGraphContextDefine[1]['ContextChunks'][1:]
 
-    LifeDataWMWMTexts = []
-    for i in range(len(LifeDataTextsKo)):
-        LifeGraphDate = LifeDataTextsKo[i]["LifeGraphDate"]
-        Name = LifeDataTextsKo[i]["Name"]
-        Age = LifeDataTextsKo[i]["Age"]
-        Email = LifeDataTextsKo[i]["Email"]
-        Language = LifeDataTextsKo[i]["Language"]
-        Translation = LifeDataTextsKo[i]["Translation"]
-        LifeData = []
-        WMWMChunkCount = 0
-        for j in range(len(LifeDataTextsKo[i]["LifeData"])):
+    WMWMQuerys = []
+    for i in range(len(lifeGraphContextDefine)):
+        LifeGraphDate = lifeGraphContextDefine[i]["LifeGraphDate"]
+        Translation = lifeGraphContextDefine[i]["Translation"]
+        Querys = []
+        for j in range(len(lifeGraphContextDefine[i]["ContextChunks"])):
+            ChunkId = j + 1
             
-            StartAge = LifeDataTextsKo[i]["LifeData"][j]["StartAge"]
-            EndAge = LifeDataTextsKo[i]["LifeData"][j]["EndAge"]
-            Score = LifeDataTextsKo[i]["LifeData"][j]["Score"]
+            Purpose = lifeGraphContextDefine[i]['ContextChunks'][j]['Purpose']
+            Reason = lifeGraphContextDefine[i]['ContextChunks'][j]['Reason']
+            Question = lifeGraphContextDefine[i]['ContextChunks'][j]['Question']
+            Chunk = lifeGraphContextDefine[i]['ContextChunks'][j]['Chunk']
+            Subject = lifeGraphContextDefine[i]['ContextChunks'][j]['Subject']
+            Writer = lifeGraphContextDefine[i]['ContextChunks'][j]['Writer']
+            Vector = {"Purpose": Purpose, "Reason": Reason, "Question": Question, "Chunk": Chunk, "Subject": Subject, "Writer": Writer}
+            
+            Needs = ResponseJson[i]['WMWMChunks'][j]['Needs']
+            Wisdom = ResponseJson[i]['WMWMChunks'][j]['Wisdom']
+            Mind = ResponseJson[i]['WMWMChunks'][j]['Mind']
+            Wildness = ResponseJson[i]['WMWMChunks'][j]['Wildness']
+            WMWM = {"Needs": Needs, "Wisdom": Wisdom, "Mind": Mind, "Wildness": Wildness}
+            
+            Querys.append({'ChunkId': ChunkId, 'Vector': Vector, 'WMWM': WMWM})
+            
+        WMWMQuerys.append(Querys)
 
-            if LifeDataTextsKo[i]["LifeData"][j]["ReasonKo"] == '':
-                Reason = '내용없음'
-            else:
-                Reason = LifeDataTextsKo[i]["LifeData"][j]["ReasonKo"]
-
-            WMWMChunk = ResponseJson[i]['WMWMChunks'][WMWMChunkCount]
-            if str(StartAge) == str(WMWMChunk['StartAge']) and str(EndAge) == str(WMWMChunk['EndAge']) and str(Score) == str(WMWMChunk['Score']):
-                Purpose = WMWMChunk['Purpose']
-                Reason = WMWMChunk['Reason']
-                Question = WMWMChunk['Question']
-                Writer = WMWMChunk['Writer']
-                Subject = WMWMChunk['Subject']
-                if WMWMChunkCount < (len(ResponseJson[i]['WMWMChunks']) - 1):
-                    WMWMChunkCount += 1
-
-                if j == (len(LifeDataTextsKo[i]["LifeData"]) - 1):
-                    Memo = f"[메모{WMWMChunkCount}] {{'목적또는문제': '{Purpose}', '원인': '{Reason}', '예상질문': '{Question}', '인물유형': '{Writer}', '주제': '{Subject}'}}"
-                    LifeData.append(f'\n\n[중요문구{WMWMChunkCount}] {StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n{Memo}')
-                else:
-                    Memo = f"[메모{WMWMChunkCount}] {{'목적또는문제': '{Purpose}', '원인': '{Reason}', '예상질문': '{Question}', '인물유형': '{Writer}', '주제': '{Subject}'}}\n"
-                    LifeData.append(f'\n[중요문구{WMWMChunkCount}] {StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n{Memo}\n')
-            else:
-                if j == (len(LifeDataTextsKo[i]["LifeData"]) - 1):
-                    LifeData.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}')
-                else:
-                    LifeData.append(f'{StartAge}-{EndAge} 시기의 행복지수: {Score}, 이유: {Reason}\n\n')
-
-        LifeDataText = f"작성일: {LifeGraphDate}\nEmail: {Email}\n\n● '{Name}'의 {Age}세 까지의 인생\n\n" + "".join(LifeData).replace('\n\n\n', '\n\n')
-        LifeDataWMWMTexts.append({"Name": Name, "Email": Email, "Language": Language, "Translation": Translation, "Text": LifeDataText})
-
-    return LifeDataWMWMTexts
+    return WMWMQuerys
 
 ## LifeDataTexts를 LifeGraphWMWMDefine에 업데이트
 def LifeGraphWMWMDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson):
@@ -335,7 +315,7 @@ def LifeGraphWMWMDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, R
         LifeGraphId = i + 1
         Text = LifeDataTexts[i]["Text"]
         
-        AddLifeGraphWMWMDefineLifeDataWMWMTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Text)
+        AddLifeGraphWMWMDefineQuerysToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Text)
         # i값 수동 업데이트
         i += 1
 
@@ -372,7 +352,7 @@ def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview
                 Translation = ResponseJson[i]["Translation"]
                 WMWMChunks = ResponseJson[i]["WMWMChunks"]
 
-                AddLifeGraphWMWMDefineWMWMChunksToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, WMWMChunks)
+                AddLifeGraphWMWMDefineCompeletionsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, WMWMChunks)
                 # i값 수동 업데이트
                 i += 1
             

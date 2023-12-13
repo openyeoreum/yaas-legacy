@@ -38,7 +38,6 @@
             {
                 "LifeGraphId": 0,
                 "Translation": "None",
-                "QuerySet": "None",
                 "Querys": [
                     {
                         "ChunkId": 0,

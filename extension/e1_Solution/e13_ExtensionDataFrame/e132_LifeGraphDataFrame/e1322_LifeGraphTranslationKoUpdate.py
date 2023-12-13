@@ -213,11 +213,11 @@ def LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, Process = 
         outputMemoryDics.append(OutputDic)
         outputMemory = LifeGraphTranslationKoOutputMemory(outputMemoryDics, MemoryLength)
         
-        # ########## 테스트 후 삭제 ##########
-        # LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_02_outputMemoryDics_231209.json"
-        # with open(LifeGraphFramePath, 'w', encoding='utf-8') as file:
-        #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
-        # ########## 테스트 후 삭제 ##########
+        ########## 테스트 후 삭제 ##########
+        LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_02_outputMemoryDics_231213.json"
+        with open(LifeGraphFramePath, 'w', encoding='utf-8') as file:
+            json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
+        ########## 테스트 후 삭제 ##########
     
     return outputMemoryDics
 
@@ -231,7 +231,7 @@ def LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, messa
     outputMemoryDics = LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
 
     # ########## 테스트 후 삭제 ##########
-    # LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_02_outputMemoryDics_231209.json"
+    # LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_02_outputMemoryDics_231213.json"
     # with open(LifeGraphFramePath, 'r', encoding = 'utf-8') as file:
     #     outputMemoryDics = json.load(file)
     # ########## 테스트 후 삭제 ##########

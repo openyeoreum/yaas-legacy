@@ -7,11 +7,12 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph, GetVideo
-from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddLifeGraphMetaDataToDB, InitLifeGraphFrame, UpdatedLifeGraphFrame, InitLifeGraphTranslationKo, UpdatedLifeGraphTranslationKo, InitLifeGraphTranslationEn, UpdatedLifeGraphTranslationEn, InitLifeGraphContextDefine, UpdatedLifeGraphContextDefine
+from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddLifeGraphMetaDataToDB, InitLifeGraphFrame, UpdatedLifeGraphFrame, InitLifeGraphTranslationKo, UpdatedLifeGraphTranslationKo, InitLifeGraphTranslationEn, UpdatedLifeGraphTranslationEn, InitLifeGraphContextDefine, UpdatedLifeGraphContextDefine, InitLifeGraphWMWMDefine, UpdatedLifeGraphWMWMDefine
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1321_LifeGraphFrameUpdate import LifeGraphFrameUpdate
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1322_LifeGraphTranslationKoUpdate import LifeGraphTranslationKoUpdate
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1323_LifeGraphTranslationEnUpdate import LifeGraphTranslationEnUpdate
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1324_LifeGraphContextDefineUpdate import LifeGraphContextDefineUpdate
+from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1325_LifeGraphWMWMDefineUpdate import LifeGraphWMWMDefineUpdate
 
 ## 오늘 날짜
 def Date(Option = "Day"):
@@ -103,46 +104,61 @@ if __name__ == "__main__":
     existedDataFrame = None
 
 
-    #################################
-    ### 02_LifeGraphTranslationKo ###
-    #################################
-    InitLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate)
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphTranslationKo", LifeGraphDataFramePath)
-    mode = "Master"
-    LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
+    # #################################
+    # ### 02_LifeGraphTranslationKo ###
+    # #################################
+    # InitLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate)
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphTranslationKo", LifeGraphDataFramePath)
+    # mode = "Master"
+    # LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
 
-    if existedDataFrame == None:
-        updatedLifeGraphTranslationKo = UpdatedLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate)
-        SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "02_LifeGraphTranslationKo", updatedLifeGraphTranslationKo, LifeGraphDataFramePath)
-    existedDataTranslationKo = None
+    # if existedDataFrame == None:
+    #     updatedLifeGraphTranslationKo = UpdatedLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate)
+    #     SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "02_LifeGraphTranslationKo", updatedLifeGraphTranslationKo, LifeGraphDataFramePath)
+    # existedDataTranslationKo = None
 
 
-    #################################
-    ### 03_LifeGraphTranslationEn ###
-    #################################
-    InitLifeGraphTranslationEn(lifeGraphSetName, latestUpdateDate)
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphTranslationEn", LifeGraphDataFramePath)
-    mode = "Master"
-    LifeGraphTranslationEnUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
+    # #################################
+    # ### 03_LifeGraphTranslationEn ###
+    # #################################
+    # InitLifeGraphTranslationEn(lifeGraphSetName, latestUpdateDate)
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphTranslationEn", LifeGraphDataFramePath)
+    # mode = "Master"
+    # LifeGraphTranslationEnUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
 
-    if existedDataFrame == None:
-        updatedLifeGraphTranslationEn = UpdatedLifeGraphTranslationEn(lifeGraphSetName, latestUpdateDate)
-        SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "03_LifeGraphTranslationEn", updatedLifeGraphTranslationEn, LifeGraphDataFramePath)
-    existedDataTranslationEn = None
+    # if existedDataFrame == None:
+    #     updatedLifeGraphTranslationEn = UpdatedLifeGraphTranslationEn(lifeGraphSetName, latestUpdateDate)
+    #     SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "03_LifeGraphTranslationEn", updatedLifeGraphTranslationEn, LifeGraphDataFramePath)
+    # existedDataTranslationEn = None
     
     
-    #################################
-    ### 04_LifeGraphContextDefine ###
-    #################################
-    InitLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate)
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphContextDefine", LifeGraphDataFramePath)
-    mode = "Master"
-    LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
+    # #################################
+    # ### 04_LifeGraphContextDefine ###
+    # #################################
+    # InitLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate)
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphContextDefine", LifeGraphDataFramePath)
+    # mode = "Master"
+    # LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
 
-    if existedDataFrame == None:
-        updatedLifeGraphContextDefine = UpdatedLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate)
-        SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "04_LifeGraphContextDefine", updatedLifeGraphContextDefine, LifeGraphDataFramePath)
-    existedDataContextDefine = None
+    # if existedDataFrame == None:
+    #     updatedLifeGraphContextDefine = UpdatedLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate)
+    #     SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "04_LifeGraphContextDefine", updatedLifeGraphContextDefine, LifeGraphDataFramePath)
+    # existedDataContextDefine = None
+    
+    
+    # #################################
+    # ### 05_LifeGraphWMWMDefine ###
+    # #################################
+    # InitLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate)
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphWMWMDefine", LifeGraphDataFramePath)
+    # mode = "Master"
+    # LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
+
+    # if existedDataFrame == None:
+    #     updatedLifeGraphWMWMDefine = UpdatedLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate)
+    #     SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "05_LifeGraphWMWMDefine", updatedLifeGraphWMWMDefine, LifeGraphDataFramePath)
+    # existedDataWMWMDefine = None

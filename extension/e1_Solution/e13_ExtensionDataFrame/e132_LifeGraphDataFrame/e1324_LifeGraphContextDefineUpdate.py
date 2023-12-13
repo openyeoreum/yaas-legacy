@@ -218,7 +218,7 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = 
         outputMemory = LifeGraphContextDefineOutputMemory(outputMemoryDics, MemoryLength)
         
         ########## 테스트 후 삭제 ##########
-        LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_outputMemoryDics_231211.json"
+        LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_outputMemoryDics_231213.json"
         with open(LifeGraphFramePath, 'w', encoding='utf-8') as file:
             json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
         ########## 테스트 후 삭제 ##########
@@ -235,7 +235,7 @@ def LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, messa
     # outputMemoryDics = LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
 
     ########## 테스트 후 삭제 ##########
-    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_outputMemoryDics_231211.json"
+    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_outputMemoryDics_231213.json"
     with open(LifeGraphFramePath, 'r', encoding = 'utf-8') as file:
         outputMemoryDics = json.load(file)
     ########## 테스트 후 삭제 ##########

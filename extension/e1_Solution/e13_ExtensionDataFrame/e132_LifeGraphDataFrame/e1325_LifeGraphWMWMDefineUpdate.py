@@ -217,7 +217,7 @@ def LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, Process = "Li
         outputMemory = LifeGraphWMWMDefineOutputMemory(outputMemoryDics, MemoryLength)
         
         ########## 테스트 후 삭제 ##########
-        LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_05_outputMemoryDics_231212.json"
+        LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_05_outputMemoryDics_231213.json"
         with open(LifeGraphFramePath, 'w', encoding='utf-8') as file:
             json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
         ########## 테스트 후 삭제 ##########
@@ -234,7 +234,7 @@ def LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messages
     # outputMemoryDics = LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
 
     ########## 테스트 후 삭제 ##########
-    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_05_outputMemoryDics_231212.json"
+    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_05_outputMemoryDics_231213.json"
     with open(LifeGraphFramePath, 'r', encoding = 'utf-8') as file:
         outputMemoryDics = json.load(file)
     ########## 테스트 후 삭제 ##########
@@ -272,7 +272,7 @@ def WMWMToQuerys(lifeGraphSetName, latestUpdateDate, ResponseJson):
 
     WMWMQuerys = []
     for i in range(len(lifeGraphContextDefine)):
-        LifeGraphDate = lifeGraphContextDefine[i]["LifeGraphDate"]
+        LifeGraphId = lifeGraphContextDefine[i]["LifeGraphId"]
         Translation = lifeGraphContextDefine[i]["Translation"]
         Querys = []
         for j in range(len(lifeGraphContextDefine[i]["ContextChunks"])):
@@ -294,28 +294,30 @@ def WMWMToQuerys(lifeGraphSetName, latestUpdateDate, ResponseJson):
             
             Querys.append({'ChunkId': ChunkId, 'Vector': Vector, 'WMWM': WMWM})
             
-        WMWMQuerys.append(Querys)
+        WMWMQuery = {'LifeGraphId': LifeGraphId, 'Translation': Translation, 'Querys': Querys}
+        WMWMQuerys.append(WMWMQuery)
 
     return WMWMQuerys
 
 ## LifeDataTexts를 LifeGraphWMWMDefine에 업데이트
-def LifeGraphWMWMDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson):
-    LifeDataTexts = LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson)
-    LifeDataTextsCount = len(LifeDataTexts)
+def LifeGraphWMWMDefineQuerysUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson):
+    WMWMQuerys = WMWMToQuerys(lifeGraphSetName, latestUpdateDate, ResponseJson)
+    WMWMQuerysCount = len(WMWMQuerys)
     
     # TQDM 셋팅
-    UpdateTQDM = tqdm(LifeDataTexts,
-                    total = LifeDataTextsCount,
-                    desc = 'LifeGraphWMWMDefineLifeDataTextsUpdate')
+    UpdateTQDM = tqdm(WMWMQuerys,
+                    total = WMWMQuerysCount,
+                    desc = 'LifeGraphWMWMDefineQuerysUpdate')
     # i값 수동 생성
     i = 0
     for Update in UpdateTQDM:
-        UpdateTQDM.set_description(f'LifeGraphWMWMDefineLifeDataTextsUpdate: {Update["Name"]}, {Update["Email"]} ...')
+        UpdateTQDM.set_description(f'LifeGraphWMWMDefineQuerysUpdate: ...')
         time.sleep(0.0001)
         LifeGraphId = i + 1
-        Text = LifeDataTexts[i]["Text"]
+        Translation = Update['Translation']
+        Querys = Update['Querys']
         
-        AddLifeGraphWMWMDefineQuerysToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Text)
+        AddLifeGraphWMWMDefineQuerysToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, Querys)
         # i값 수동 업데이트
         i += 1
 
@@ -325,7 +327,7 @@ def LifeGraphWMWMDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, R
 def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
     print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphWMWMDefineUpdate 시작 >")
     # LifeGraphWMWMDefine의 Count값 가져오기
-    LifeGraphCount, LifeDataTextsCount, Completion = LifeGraphWMWMDefineCountLoad(lifeGraphSetName, latestUpdateDate)
+    LifeGraphCount, WMWMQuerysCount, Completion = LifeGraphWMWMDefineCountLoad(lifeGraphSetName, latestUpdateDate)
     if Completion == "No":
         
         if ExistedDataFrame != None:
@@ -345,20 +347,20 @@ def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'LifeGraphWMWMDefineUpdate: {ResponseJson[i]["WMWMChunks"][0]["Chunk"]} ...')
+                UpdateTQDM.set_description(f'LifeGraphWMWMDefineUpdate: ...')
                 time.sleep(0.0001)
                 
                 LifeGraphId = i + 1
-                Translation = ResponseJson[i]["Translation"]
-                WMWMChunks = ResponseJson[i]["WMWMChunks"]
+                Translation = Update["Translation"]
+                WMWMChunks = Update["WMWMChunks"]
 
-                AddLifeGraphWMWMDefineCompeletionsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, WMWMChunks)
+                AddLifeGraphWMWMDefineCompeletionsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, WMWMChunks)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             ##### LifeDataTexts 업데이트
-            LifeGraphWMWMDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson)
+            LifeGraphWMWMDefineQuerysUpdate(lifeGraphSetName, latestUpdateDate, ResponseJson)
             #####
             # Completion "Yes" 업데이트
             LifeGraphWMWMDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate)
@@ -376,8 +378,5 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    
-    responseJson = LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = 'on', mode = "Master")
-    
-    for response in responseJson:
-        print(f'{response}\n\n')
+    InitLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate)
+    LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = 'on', Mode = "Master")

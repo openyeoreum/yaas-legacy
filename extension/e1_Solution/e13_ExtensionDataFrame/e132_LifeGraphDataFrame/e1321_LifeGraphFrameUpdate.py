@@ -153,16 +153,16 @@ def LifeGraphFrameUpdate(lifeGraphSetName, latestUpdateDate, QUALITY = 0, Existe
                 time.sleep(0.0001)
                 
                 LifeGraphId = i + 1
-                LifeGraphDate = LifeGraphsList[i]["LifeGraphDate"]
-                Name = LifeGraphsList[i]["Name"]
-                Age = LifeGraphsList[i]["Age"]
-                Source = LifeGraphsList[i]["Source"]
-                Language = LifeGraphsList[i]["Language"]
-                Residence = LifeGraphsList[i]["Residence"]
-                PhoneNumber = LifeGraphsList[i]["PhoneNumber"]
-                Email = LifeGraphsList[i]["Email"]
-                Quality = LifeGraphsList[i]["Quality"]
-                LifeData = LifeGraphsList[i]["LifeData"]
+                LifeGraphDate = Update["LifeGraphDate"]
+                Name = Update["Name"]
+                Age = Update["Age"]
+                Source = Update["Source"]
+                Language = Update["Language"]
+                Residence = Update["Residence"]
+                PhoneNumber = Update["PhoneNumber"]
+                Email = Update["Email"]
+                Quality = Update["Quality"]
+                LifeData = Update["LifeData"]
 
                 AddLifeGraphFrameLifeGraphsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, LifeGraphDate, Name, Age, Source, Language, Residence, PhoneNumber, Email, Quality, LifeData)
                 # i값 수동 업데이트

@@ -362,17 +362,17 @@ def LifeGraphTranslationEnUpdate(lifeGraphSetName, latestUpdateDate, MessagesRev
                 time.sleep(0.0001)
                 
                 LifeGraphId = i + 1
-                LifeGraphDate = ResponseJson[i]["LifeGraphDate"]
-                Name = ResponseJson[i]["Name"]
-                Age = ResponseJson[i]["Age"]
-                Source = ResponseJson[i]["Source"]
-                Language = ResponseJson[i]["Language"]
-                Translation = ResponseJson[i]["Translation"]
-                Residence = ResponseJson[i]["Residence"]
-                PhoneNumber = ResponseJson[i]["PhoneNumber"]
-                Email = ResponseJson[i]["Email"]
-                Quality = ResponseJson[i]["Quality"]
-                LifeData = ResponseJson[i]["LifeData"]
+                LifeGraphDate = Update["LifeGraphDate"]
+                Name = Update["Name"]
+                Age = Update["Age"]
+                Source = Update["Source"]
+                Language = Update["Language"]
+                Translation = Update["Translation"]
+                Residence = Update["Residence"]
+                PhoneNumber = Update["PhoneNumber"]
+                Email = Update["Email"]
+                Quality = Update["Quality"]
+                LifeData = Update["LifeData"]
 
                 AddLifeGraphTranslationEnLifeGraphsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, LifeGraphDate, Name, Age, Source, Language, Translation, Residence, PhoneNumber, Email, Quality, LifeData)
                 # i값 수동 업데이트

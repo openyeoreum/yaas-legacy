@@ -337,8 +337,8 @@ def LifeGraphContextDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate
         UpdateTQDM.set_description(f'LifeGraphContextDefineLifeDataTextsUpdate: {Update["Name"]}, {Update["Email"]} ...')
         time.sleep(0.0001)
         LifeGraphId = i + 1
-        Translation = LifeDataTexts[i]["Translation"]
-        Text = LifeDataTexts[i]["Text"]
+        Translation = Update["Translation"]
+        Text = Update["Text"]
         
         AddLifeGraphContextDefineLifeDataContextTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, Text)
         # i값 수동 업데이트
@@ -374,8 +374,8 @@ def LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesRev
                 time.sleep(0.0001)
                 
                 LifeGraphId = i + 1
-                Translation = ResponseJson[i]["Translation"]
-                ContextChunks = ResponseJson[i]["ContextChunks"]
+                Translation = Update["Translation"]
+                ContextChunks = Update["ContextChunks"]
 
                 AddLifeGraphContextDefineContextChunksToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, ContextChunks)
                 # i값 수동 업데이트

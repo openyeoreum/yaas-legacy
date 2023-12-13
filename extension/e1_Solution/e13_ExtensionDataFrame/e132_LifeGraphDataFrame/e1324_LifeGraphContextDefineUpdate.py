@@ -9,7 +9,7 @@ from tqdm import tqdm
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph
-from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddExistedLifeGraphContextDefineToDB, AddLifeGraphContextDefineContextChunksToDB, AddLifeGraphContextDefineLifeDataContextTextsToDB, LifeGraphContextDefineCountLoad, InitLifeGraphContextDefine, LifeGraphContextDefineCompletionUpdate, UpdatedLifeGraphContextDefine
+from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import LoadExtensionOutputMemory, SaveExtensionOutputMemory, AddExistedLifeGraphContextDefineToDB, AddLifeGraphContextDefineContextChunksToDB, AddLifeGraphContextDefineLifeDataContextTextsToDB, LifeGraphContextDefineCountLoad, InitLifeGraphContextDefine, LifeGraphContextDefineCompletionUpdate, UpdatedLifeGraphContextDefine
 
 #########################
 ##### InputList 생성 #####
@@ -120,9 +120,12 @@ def LifeGraphContextDefineOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## LifeGraphContextDefine 프롬프트 요청 및 결과물 Json화
-def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = "LifeGraphContextDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, Process = "LifeGraphContextDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
 
-    InputList = LifeDataTextsKoToInputList(lifeGraphSetName, latestUpdateDate)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, '04', LifeGraphDataFramePath)    
+    inputList = LifeDataTextsKoToInputList(lifeGraphSetName, latestUpdateDate)
+    InputList = inputList[OutputMemoryCount:]
+    
     TotalCount = 0
     ProcessCount = 1
     ContinueCount = 0
@@ -130,7 +133,7 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = 
     inputMemory = []
     InputDic = InputList[0]
     inputMemoryDics.append(InputDic)
-    outputMemoryDics = []
+    outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
         
     # ContextDefineProcess
@@ -190,12 +193,12 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = 
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"LifeGraphSetName: {lifeGraphSetName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
+                print(f"LifeGraphSetName: {lifeGraphSetName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | {Filter}")
                 continue
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                print(f"LifeGraphSetName: {lifeGraphSetName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
+                print(f"LifeGraphSetName: {lifeGraphSetName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | JSONDecode 완료")
                 
         else:
             OutputDic = "Pass"
@@ -217,11 +220,7 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = 
         outputMemoryDics.append(OutputDic)
         outputMemory = LifeGraphContextDefineOutputMemory(outputMemoryDics, MemoryLength)
         
-        ########## 테스트 후 삭제 ##########
-        LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_outputMemoryDics_231213.json"
-        with open(LifeGraphFramePath, 'w', encoding='utf-8') as file:
-            json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
-        ########## 테스트 후 삭제 ##########
+        SaveExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, outputMemoryDics, '04', LifeGraphDataFramePath)
     
     return outputMemoryDics
 
@@ -229,16 +228,10 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, Process = 
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
 
-def LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = 'off', mode = "Memory"):
+def LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, messagesReview = 'off', mode = "Memory"):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     LifeDataTextsKo = lifeGraph.LifeGraphTranslationKo[1]['LifeGraphsKo'][1:]
-    # outputMemoryDics = LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
-
-    ########## 테스트 후 삭제 ##########
-    LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_outputMemoryDics_231213.json"
-    with open(LifeGraphFramePath, 'r', encoding = 'utf-8') as file:
-        outputMemoryDics = json.load(file)
-    ########## 테스트 후 삭제 ##########
+    outputMemoryDics = LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     for i, response in enumerate(outputMemoryDics):
@@ -347,7 +340,7 @@ def LifeGraphContextDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate
     UpdateTQDM.close()
 
 ## 결과물 Json을 LifeGraphContextDefine에 업데이트
-def LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
+def LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
     print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphContextDefineUpdate 시작 >")
     # LifeGraphContextDefine의 Count값 가져오기
     LifeGraphCount, LifeDataTextsCount, Completion = LifeGraphContextDefineCountLoad(lifeGraphSetName, latestUpdateDate)
@@ -358,7 +351,7 @@ def LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesRev
             AddExistedLifeGraphContextDefineToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
             print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphContextDefine로 대처됨 ]\n")
         else:
-            responseJson = LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = MessagesReview, mode = Mode)
+            responseJson = LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, messagesReview = MessagesReview, mode = Mode)
             # LifeGraphs를 LifeGraphCount로 슬라이스
             ResponseJson = responseJson[LifeGraphCount:]
             ResponseJsonCount = len(ResponseJson)

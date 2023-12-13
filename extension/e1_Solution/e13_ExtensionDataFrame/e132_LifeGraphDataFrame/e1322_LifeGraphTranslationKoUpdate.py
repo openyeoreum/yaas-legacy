@@ -9,7 +9,7 @@ from tqdm import tqdm
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph
-from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import AddExistedLifeGraphTranslationKoToDB, AddLifeGraphTranslationKoLifeGraphsToDB, AddLifeGraphTranslationKoLifeDataTextsToDB, LifeGraphTranslationKoCountLoad, InitLifeGraphTranslationKo, LifeGraphTranslationKoCompletionUpdate, UpdatedLifeGraphTranslationKo
+from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import LoadExtensionOutputMemory, SaveExtensionOutputMemory, AddExistedLifeGraphTranslationKoToDB, AddLifeGraphTranslationKoLifeGraphsToDB, AddLifeGraphTranslationKoLifeDataTextsToDB, LifeGraphTranslationKoCountLoad, InitLifeGraphTranslationKo, LifeGraphTranslationKoCompletionUpdate, UpdatedLifeGraphTranslationKo
 
 #########################
 ##### InputList 생성 #####
@@ -116,9 +116,12 @@ def LifeGraphTranslationKoOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## LifeGraphTranslationKo 프롬프트 요청 및 결과물 Json화
-def LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, Process = "LifeGraphTranslationKo", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, Process = "LifeGraphTranslationKo", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
 
-    InputList = LifeGraphFrameTextsToInputList(lifeGraphSetName, latestUpdateDate)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, '02', LifeGraphDataFramePath)    
+    inputList = LifeGraphFrameTextsToInputList(lifeGraphSetName, latestUpdateDate)
+    InputList = inputList[OutputMemoryCount:]
+
     TotalCount = 0
     ProcessCount = 1
     ContinueCount = 0
@@ -126,7 +129,7 @@ def LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, Process = 
     inputMemory = []
     InputDic = InputList[0]
     inputMemoryDics.append(InputDic)
-    outputMemoryDics = []
+    outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
         
     # ContextDefineProcess
@@ -186,12 +189,12 @@ def LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, Process = 
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"LifeGraphSetName: {lifeGraphSetName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
+                print(f"LifeGraphSetName: {lifeGraphSetName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | {Filter}")
                 continue
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                print(f"LifeGraphSetName: {lifeGraphSetName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
+                print(f"LifeGraphSetName: {lifeGraphSetName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | JSONDecode 완료")
                 
         else:
             OutputDic = "Pass"
@@ -213,11 +216,7 @@ def LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, Process = 
         outputMemoryDics.append(OutputDic)
         outputMemory = LifeGraphTranslationKoOutputMemory(outputMemoryDics, MemoryLength)
         
-        ########## 테스트 후 삭제 ##########
-        LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_02_outputMemoryDics_231213.json"
-        with open(LifeGraphFramePath, 'w', encoding='utf-8') as file:
-            json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
-        ########## 테스트 후 삭제 ##########
+        SaveExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, outputMemoryDics, '02', LifeGraphDataFramePath)
     
     return outputMemoryDics
 
@@ -225,16 +224,10 @@ def LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, Process = 
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
 
-def LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = 'off', mode = "Memory"):
+def LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, messagesReview = 'off', mode = "Memory"):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     LifeGraphs = lifeGraph.LifeGraphFrame[1]['LifeGraphs'][1:]
-    outputMemoryDics = LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode)
-
-    # ########## 테스트 후 삭제 ##########
-    # LifeGraphFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_02_outputMemoryDics_231213.json"
-    # with open(LifeGraphFramePath, 'r', encoding = 'utf-8') as file:
-    #     outputMemoryDics = json.load(file)
-    # ########## 테스트 후 삭제 ##########
+    outputMemoryDics = LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     TranslatedKeys = {
         '지역': 'Area',
@@ -342,7 +335,7 @@ def LifeGraphTranslationKoLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate
     UpdateTQDM.close()
 
 ## 결과물 Json을 LifeGraphTranslationKo에 업데이트
-def LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
+def LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
     print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 02_LifeGraphTranslationKoUpdate 시작 >")
     # LifeGraphTranslationKo의 Count값 가져오기
     LifeGraphCount, LifeDataTextsCount, Completion = LifeGraphTranslationKoCountLoad(lifeGraphSetName, latestUpdateDate)
@@ -353,7 +346,7 @@ def LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, MessagesRev
             AddExistedLifeGraphTranslationKoToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
             print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 02_LifeGraphTranslationKo로 대처됨 ]\n")
         else:
-            responseJson = LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, messagesReview = MessagesReview, mode = Mode)
+            responseJson = LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, messagesReview = MessagesReview, mode = Mode)
             # LifeGraphs를 LifeGraphCount로 슬라이스
             ResponseJson = responseJson[LifeGraphCount:]
             ResponseJsonCount = len(ResponseJson)
@@ -406,7 +399,6 @@ if __name__ == "__main__":
     mode = "Master"
     #########################################################################
     
-    # outputMemoryDics = LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, Mode = "Master")
-    
-    LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate)
-    
+    OutputMemoryCount = LoadExtensionOutputMemoryCount(lifeGraphSetName, latestUpdateDate, '02', LifeGraphDataFramePath)    
+    InputList = LifeGraphFrameTextsToInputList(lifeGraphSetName, latestUpdateDate)
+    InputList = InputList[OutputMemoryCount:]

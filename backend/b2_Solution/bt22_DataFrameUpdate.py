@@ -115,7 +115,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath):
 
         # 변경된 데이터 저장
         with open(FilePath, 'w', encoding='utf-8') as file:
-            json.dump(ExistedDataFrame, file, ensure_ascii=False, indent=4)
+            json.dump(ExistedDataFrame, file, ensure_ascii = False, indent = 4)
 
     return None
 

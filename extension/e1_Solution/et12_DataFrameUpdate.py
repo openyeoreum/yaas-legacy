@@ -111,7 +111,7 @@ if __name__ == "__main__":
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphTranslationKo", LifeGraphDataFramePath)
     mode = "Master"
-    LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
+    LifeGraphTranslationKoUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
 
     if existedDataFrame == None:
         updatedLifeGraphTranslationKo = UpdatedLifeGraphTranslationKo(lifeGraphSetName, latestUpdateDate)
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphTranslationEn", LifeGraphDataFramePath)
     mode = "Master"
-    LifeGraphTranslationEnUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
+    LifeGraphTranslationEnUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
 
     if existedDataFrame == None:
         updatedLifeGraphTranslationEn = UpdatedLifeGraphTranslationEn(lifeGraphSetName, latestUpdateDate)
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphContextDefine", LifeGraphDataFramePath)
     mode = "Master"
-    LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
+    LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
 
     if existedDataFrame == None:
         updatedLifeGraphContextDefine = UpdatedLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate)
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "LifeGraphWMWMDefine", LifeGraphDataFramePath)
     mode = "Master"
-    LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
+    LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame)
 
     if existedDataFrame == None:
         updatedLifeGraphWMWMDefine = UpdatedLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate)

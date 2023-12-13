@@ -11,7 +11,7 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedContextDefineToDB, AddContextDefineChunksToDB, ContextDefineCountLoad, ContextDefineCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedContextDefineToDB, AddContextDefineChunksToDB, ContextDefineCountLoad, ContextDefineCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -166,7 +166,7 @@ def ContextDefineOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## ContextDefine 프롬프트 요청 및 결과물 Json화
-def ContextDefineProcess(projectName, email, Process = "ContextDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -339,13 +339,13 @@ def ContextDefineToBodys(projectName, email, ResponseJson):
     db.commit()
 
 ## 데이터 치환
-def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def ContextDefineResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
     
     # 데이터 치환
-    outputMemoryDics = ContextDefineProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = ContextDefineProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     for response in outputMemoryDics:
@@ -489,7 +489,7 @@ def ContextDefineResponseJson(projectName, email, messagesReview = 'off', mode =
     return newResponseJson
 
 ## 프롬프트 요청 및 결과물 Json을 ContextDefine에 업데이트
-def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+def ContextDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 07_ContextDefineUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, ContextCount, Completion = ContextDefineCountLoad(projectName, email)
@@ -501,7 +501,7 @@ def ContextDefineUpdate(projectName, email, MessagesReview = 'off', Mode = "Memo
             AddExistedDataSetToDB(projectName, email, "ContextDefine", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 07_ContextDefineUpdate는 ExistedContextDefine으로 대처됨 ]\n")
         else:
-            responseJson = ContextDefineResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = ContextDefineResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]

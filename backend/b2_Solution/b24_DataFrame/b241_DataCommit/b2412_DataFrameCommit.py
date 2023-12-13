@@ -1,6 +1,10 @@
+import os
+import re
+import json
 import sys
 sys.path.append("/yaas")
 
+from datetime import datetime
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import Project
@@ -8,6 +12,59 @@ from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 from backend.b2_Solution.b23_Project.b231_ProjectCommit import GetProjectDataPath, LoadJsonFrame
 
+############################################
+########## DataFrameCommitGeneral ##########
+############################################
+
+## 오늘 날짜
+def Date(Option = "Day"):
+    if Option == "Day":
+      now = datetime.now()
+      date = now.strftime('%y%m%d')
+    elif Option == "Second":
+      now = datetime.now()
+      date = now.strftime('%y%m%d%H%M%S')
+    
+    return date
+
+## 업데이트된 OutputMemoryDics 파일 Count 불러오기
+def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
+    # 정규 표현식 패턴 정의
+    pattern = re.compile(rf"{re.escape(DataFramePath + email + '_' + projectName + '_' + ProcessNum + '_')}outputMemoryDics_.*\.json")
+
+    OutputMemoryCount = 0
+    for filename in os.listdir(DataFramePath):
+        FullPath = os.path.join(DataFramePath, filename)
+        if pattern.match(FullPath):
+            with open(FullPath, 'r', encoding='utf-8') as file:
+                OutputMemoryDicsFile = json.load(file)
+            OutputMemoryCount = len(OutputMemoryDicsFile)
+            break  # 첫 번째 일치하는 파일을 찾으면 반복 종료
+
+    return OutputMemoryDicsFile, OutputMemoryCount
+
+## 업데이트된 OutputMemoryDics 파일 저장하기
+def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFramePath):
+    # 정규 표현식 패턴 정의
+    pattern = re.compile(rf"{re.escape(email + '_' + projectName + '_' + ProcessNum + '_outputMemoryDics_')}.*\.json")
+
+    # 일치하는 파일 검색
+    matched_file = None
+    for filename in os.listdir(DataFramePath):
+        if pattern.match(filename):
+            matched_file = filename
+            break
+
+    if matched_file:
+        # 일치하는 파일이 있는 경우
+        OutputMemoryDicsFilename = os.path.join(DataFramePath, matched_file)
+    else:
+        # 일치하는 파일이 없는 경우 새 파일명 생성
+        OutputMemoryDicsFilename = os.path.join(DataFramePath, email + '_' + projectName + '_' + ProcessNum + '_outputMemoryDics_' + str(Date()) + '.json')
+
+    # OutputMemoryDics 데이터를 파일에 덮어쓰기
+    with open(OutputMemoryDicsFilename, 'w', encoding='utf-8') as file:
+        json.dump(OutputMemoryDics, file, ensure_ascii = False, indent = 4)
 
 ###################################################
 ##### 전체 DataFrame의 MetaData(식별)부분을 업데이트 #####

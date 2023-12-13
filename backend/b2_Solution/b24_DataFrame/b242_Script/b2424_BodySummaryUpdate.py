@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSummaryBodyFrameToDB, AddSummaryBodyFrameBodyToDB, SummaryBodyFrameCountLoad, SummaryBodyFrameCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedSummaryBodyFrameToDB, AddSummaryBodyFrameBodyToDB, SummaryBodyFrameCountLoad, SummaryBodyFrameCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 ## BodyFrameBodys 로드
@@ -112,17 +112,20 @@ def BodySummaryOutputMemory(outputMemoryDics, MemoryLength):
     return outputMemory
 
 ## BodySummary 프롬프트 요청 및 결과물 Json화
-def BodySummaryProcess(projectName, email, Process = "BodySummary", memoryLength = 2, MessagesReview = "off", Mode = "Memory"):
+def BodySummaryProcess(projectName, email, DataFramePath, Process = "BodySummary", memoryLength = 2, MessagesReview = "off", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
     
-    InputList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '06', DataFramePath)
+    inputList = BodyFrameBodysToInputList(projectName, email)
+    InputList = inputList[OutputMemoryCount:]
+    
     TotalCount = 0
     ContinueCount = 0
     inputMemoryDics = []
     InputDic = InputList[0]
     inputMemoryDics.append(InputDic)
-    outputMemoryDics = []
+    outputMemoryDics = OutputMemoryDicsFile
         
     # BodySummaryProcess
     while TotalCount < len(InputList):
@@ -231,8 +234,8 @@ def BodySummaryProcess(projectName, email, Process = "BodySummary", memoryLength
     return outputMemoryDics
 
 ## 데이터 치환
-def BodySummaryResponseJson(projectName, email, messagesReview = "off", mode = "Memory"):
-    outputMemoryDics = BodySummaryProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+def BodySummaryResponseJson(projectName, email, DataFramePath, messagesReview = "off", mode = "Memory"):
+    outputMemoryDics = BodySummaryProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
 
     responseJson = []
     for response in outputMemoryDics:
@@ -248,7 +251,7 @@ def BodySummaryResponseJson(projectName, email, messagesReview = "off", mode = "
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 IndexFrame에 업데이트
-def SummaryBodyFrameUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+def SummaryBodyFrameUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 06_SummaryBodyFrameUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, Completion = SummaryBodyFrameCountLoad(projectName, email)
@@ -260,7 +263,7 @@ def SummaryBodyFrameUpdate(projectName, email, MessagesReview = 'off', Mode = "M
             AddExistedDataSetToDB(projectName, email, "BodySummary", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 06_SummaryBodyFrameUpdate는 ExistedSummaryBodyFrame으로 대처됨 ]\n")
         else:
-            responseJson = BodySummaryResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = BodySummaryResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
                 
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]

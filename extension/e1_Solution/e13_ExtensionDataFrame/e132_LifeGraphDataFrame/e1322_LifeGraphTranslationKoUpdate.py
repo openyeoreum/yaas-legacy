@@ -398,7 +398,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    
-    OutputMemoryCount = LoadExtensionOutputMemoryCount(lifeGraphSetName, latestUpdateDate, '02', LifeGraphDataFramePath)    
-    InputList = LifeGraphFrameTextsToInputList(lifeGraphSetName, latestUpdateDate)
-    InputList = InputList[OutputMemoryCount:]

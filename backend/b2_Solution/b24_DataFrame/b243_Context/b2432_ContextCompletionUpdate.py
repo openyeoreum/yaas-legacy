@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedContextCompletionToDB, AddContextCompletionChunksToDB, ContextCompletionCountLoad, ContextCompletionCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedContextCompletionToDB, AddContextCompletionChunksToDB, ContextCompletionCountLoad, ContextCompletionCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -165,7 +165,7 @@ def ContextCompletionOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## ContextCompletion 프롬프트 요청 및 결과물 Json화
-def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def ContextCompletionProcess(projectName, email, DataFramePath, Process = "ContextCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -300,13 +300,13 @@ def ContextCompletionProcess(projectName, email, Process = "ContextCompletion", 
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
 ## 데이터 치환
-def ContextCompletionResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def ContextCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     ContextDefine = project.ContextDefine[1]['ContextChunks'][1:]
     
     # 데이터 치환
-    outputMemoryDics = ContextCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = ContextCompletionProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
         
     responseJson = []
     ContextDefineCount = 0
@@ -328,7 +328,7 @@ def ContextCompletionResponseJson(projectName, email, messagesReview = 'off', mo
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 ContextCompletion에 업데이트
-def ContextCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+def ContextCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 08_ContextCompletionUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, ContextCount, Completion = ContextCompletionCountLoad(projectName, email)
@@ -340,7 +340,7 @@ def ContextCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "
             AddExistedDataSetToDB(projectName, email, "ContextCompletion", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 08_ContextCompletionUpdate는 ExistedContextCompletion으로 대처됨 ]\n")
         else:
-            responseJson = ContextCompletionResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson = ContextCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]

@@ -8,7 +8,7 @@ from tqdm import tqdm
 from collections import Counter
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedCharacterCompletionToDB, AddCharacterCompletionChunksToDB, AddCharacterCompletionCheckedCharacterTagsToDB, CharacterCompletionCountLoad, CharacterCompletionCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedCharacterCompletionToDB, AddCharacterCompletionChunksToDB, AddCharacterCompletionCheckedCharacterTagsToDB, CharacterCompletionCountLoad, CharacterCompletionCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -185,7 +185,7 @@ def CharacterCompletionOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## CharacterCompletion 프롬프트 요청 및 결과물 Json화
-def CharacterCompletionProcess(projectName, email, Process = "CharacterCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "CharacterCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -411,7 +411,7 @@ def MainCharacterFilter(responseJson):
     return responseJson, sortedCharacters
 
 ## 데이터 치환
-def CharacterCompletionResponseJson(projectName, email, messagesReview = 'off', mode = "Memory"):
+def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
@@ -424,7 +424,7 @@ def CharacterCompletionResponseJson(projectName, email, messagesReview = 'off', 
                 CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
     
     # 데이터 치환
-    OutputMemoryDics = CharacterCompletionProcess(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    OutputMemoryDics = CharacterCompletionProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
         
     outputMemoryDics = MergeOutputMemoryDics(OutputMemoryDics)
     
@@ -451,7 +451,7 @@ def CharacterCompletionResponseJson(projectName, email, messagesReview = 'off', 
     return ResponseJson, sortedCharacters
 
 ## 프롬프트 요청 및 결과물 Json을 CharacterCompletion에 업데이트
-def CharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate 시작 >")
     # SummaryBodyFrame의 Count값 가져오기
     ContinueCount, CharacterCount, Completion = CharacterCompletionCountLoad(projectName, email)
@@ -463,7 +463,7 @@ def CharacterCompletionUpdate(projectName, email, MessagesReview = 'off', Mode =
             AddExistedDataSetToDB(projectName, email, "CharacterCompletion", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate는 ExistedCharacterCompletion으로 대처됨 ]\n")
         else:
-            responseJson, sortedCharacters = CharacterCompletionResponseJson(projectName, email, messagesReview = MessagesReview, mode = Mode)
+            responseJson, sortedCharacters = CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             print(f"Project: {projectName} | Process: CharacterCompletion | CharacterFilter 완료\n{projectName}의 등장인물 {len(sortedCharacters)}명 : {sortedCharacters}")
             
             # ResponseJson을 ContinueCount로 슬라이스

@@ -338,7 +338,10 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    InputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '26', DataFramePath)    
+    inputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
+    InputList = inputList[OutputMemoryCount:]
+
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
@@ -348,7 +351,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
     InputDic = InputList[0]
     InputChunkId = inputChunkIdList[0]
     inputMemoryDics.append(InputDic)
-    outputMemoryDics = []
+    outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
     nonCommonPartList = []
         
@@ -456,6 +459,8 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
         outputMemory = CorrectionKoOutputMemory(outputMemoryDics, MemoryLength)
+        
+        SaveOutputMemory(projectName, email, outputMemoryDics, '26', DataFramePath)
         
         # nonCommonPartList 형성
         nonCommonPartList.append(nonCommonParts)
@@ -708,10 +713,10 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                 UpdateTQDM.set_description(f'CorrectionKoUpdate: {Update}')
                 time.sleep(0.0001)
                 AddCorrectionKoSplitedBodysToDB(projectName, email)
-                for j in range(len(responseJson[i]['CorrectionChunks'])):
-                    ChunkId = responseJson[i]['CorrectionChunks'][j]['ChunkId']
-                    Tag = responseJson[i]['CorrectionChunks'][j]['Tag']
-                    ChunkTokens = responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']
+                for j in range(len(Update['CorrectionChunks'])):
+                    ChunkId = Update['CorrectionChunks'][j]['ChunkId']
+                    Tag = Update['CorrectionChunks'][j]['Tag']
+                    ChunkTokens = Update['CorrectionChunks'][j]['CorrectionChunkTokens']
                 
                     AddCorrectionKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens)
                 # i값 수동 업데이트

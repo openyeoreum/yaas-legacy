@@ -170,7 +170,11 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    InputList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '07', DataFramePath)    
+    inputList = BodyFrameBodysToInputList(projectName, email)
+    InputList = inputList[OutputMemoryCount:]
+
+    
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
@@ -179,7 +183,7 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
     inputMemory = []
     InputDic = InputList[0]
     inputMemoryDics.append(InputDic)
-    outputMemoryDics = []
+    outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
         
     # ContextDefineProcess
@@ -288,6 +292,8 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
         outputMemory = ContextDefineOutputMemory(outputMemoryDics, MemoryLength)
+        
+        SaveOutputMemory(projectName, email, outputMemoryDics, '07', DataFramePath)
     
     return outputMemoryDics
 
@@ -519,15 +525,15 @@ def ContextDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off
                 UpdateTQDM.set_description(f'ContextDefineUpdate: {Update}')
                 time.sleep(0.0001)
                 ContextChunkId += 1
-                ChunkId = ResponseJson[i]["ChunkId"]
-                Chunk = ResponseJson[i]["Chunk"]
-                Phrases = ResponseJson[i]["Phrases"]
-                Reader = ResponseJson[i]["Reader"]
-                Subject = ResponseJson[i]["Subject"]
-                Purpose = ResponseJson[i]["Purpose"]
-                Reason = ResponseJson[i]["Reason"]
-                Question = ResponseJson[i]["Question"]
-                Importance = ResponseJson[i]["Importance"]
+                ChunkId = Update["ChunkId"]
+                Chunk = Update["Chunk"]
+                Phrases = Update["Phrases"]
+                Reader = Update["Reader"]
+                Subject = Update["Subject"]
+                Purpose = Update["Purpose"]
+                Reason = Update["Reason"]
+                Question = Update["Question"]
+                Importance = Update["Importance"]
                 
                 AddContextDefineChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance)
                 # i값 수동 업데이트

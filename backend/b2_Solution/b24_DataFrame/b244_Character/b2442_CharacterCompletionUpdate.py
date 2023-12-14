@@ -189,7 +189,10 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    InputList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '12', DataFramePath)    
+    inputList = BodyFrameBodysToInputList(projectName, email)
+    InputList = inputList[OutputMemoryCount:]
+
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
@@ -198,7 +201,7 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
     inputMemory = []
     InputDic = InputList[0]
     inputMemoryDics.append(InputDic)
-    outputMemoryDics = []
+    outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
         
     # CharacterCompletionProcess
@@ -313,6 +316,8 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
         outputMemory = CharacterCompletionOutputMemory(outputMemoryDics, MemoryLength)
+        
+        SaveOutputMemory(projectName, email, outputMemoryDics, '12', DataFramePath)
     
     return outputMemoryDics
 
@@ -482,11 +487,11 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview 
                 UpdateTQDM.set_description(f'CharacterCompletionUpdate: {Update}')
                 time.sleep(0.0001)
                 CharacterChunkId += 1
-                ChunkId = ResponseJson[i]["ChunkId"]
-                Chunk = ResponseJson[i]["Chunk"]
-                Character = ResponseJson[i]["Character"]
-                MainCharacter = ResponseJson[i]["MainCharacter"]
-                AuthorRelationship = ResponseJson[i]["AuthorRelationship"]
+                ChunkId = Update["ChunkId"]
+                Chunk = Update["Chunk"]
+                Character = Update["Character"]
+                MainCharacter = Update["MainCharacter"]
+                AuthorRelationship = Update["AuthorRelationship"]
                 
                 AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship)
                 # i값 수동 업데이트

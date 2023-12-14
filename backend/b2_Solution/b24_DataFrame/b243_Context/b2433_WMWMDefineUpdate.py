@@ -169,7 +169,10 @@ def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine",
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    InputList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '09', DataFramePath)    
+    inputList = BodyFrameBodysToInputList(projectName, email)
+    InputList = inputList[OutputMemoryCount:]
+
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
@@ -178,7 +181,7 @@ def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine",
     inputMemory = []
     InputDic = InputList[0]
     inputMemoryDics.append(InputDic)
-    outputMemoryDics = []
+    outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
         
     # WMWMDefineProcess
@@ -293,6 +296,8 @@ def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine",
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
         outputMemory = WMWMDefineOutputMemory(outputMemoryDics, MemoryLength)
+        
+        SaveOutputMemory(projectName, email, outputMemoryDics, '09', DataFramePath)
     
     return outputMemoryDics
 
@@ -371,17 +376,17 @@ def WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', 
                 UpdateTQDM.set_description(f'WMWMDefineUpdate: {Update}')
                 time.sleep(0.0001)
                 WMWMChunkId += 1
-                ChunkId = ResponseJson[i]["ChunkId"]
-                Chunk = ResponseJson[i]["Chunk"]
-                Needs = ResponseJson[i]["Needs"]
-                ReasonOfNeeds = ResponseJson[i]["ReasonOfNeeds"]
-                Wisdom = ResponseJson[i]["Wisdom"]
-                ReasonOfWisdom = ResponseJson[i]["ReasonOfWisdom"]
-                Mind = ResponseJson[i]["Mind"]
-                ReasonOfMind = ResponseJson[i]["ReasonOfMind"]
-                Wildness = ResponseJson[i]["Wildness"]
-                ReasonOfWildness = ResponseJson[i]["ReasonOfWildness"]
-                Accuracy = ResponseJson[i]["Accuracy"]
+                ChunkId = Update["ChunkId"]
+                Chunk = Update["Chunk"]
+                Needs = Update["Needs"]
+                ReasonOfNeeds = Update["ReasonOfNeeds"]
+                Wisdom = Update["Wisdom"]
+                ReasonOfWisdom = Update["ReasonOfWisdom"]
+                Mind = Update["Mind"]
+                ReasonOfMind = Update["ReasonOfMind"]
+                Wildness = Update["Wildness"]
+                ReasonOfWildness = Update["ReasonOfWildness"]
+                Accuracy = Update["Accuracy"]
                 
                 AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfMind, Wildness, ReasonOfWildness, Accuracy)
                 # i값 수동 업데이트

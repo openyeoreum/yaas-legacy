@@ -169,7 +169,10 @@ def ContextCompletionProcess(projectName, email, DataFramePath, Process = "Conte
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    InputList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '08', DataFramePath)    
+    inputList = BodyFrameBodysToInputList(projectName, email)
+    InputList = inputList[OutputMemoryCount:]
+    
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
@@ -178,7 +181,7 @@ def ContextCompletionProcess(projectName, email, DataFramePath, Process = "Conte
     inputMemory = []
     InputDic = InputList[0]
     inputMemoryDics.append(InputDic)
-    outputMemoryDics = []
+    outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
         
     # ContextCompletionProcess
@@ -293,6 +296,8 @@ def ContextCompletionProcess(projectName, email, DataFramePath, Process = "Conte
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
         outputMemory = ContextCompletionOutputMemory(outputMemoryDics, MemoryLength)
+        
+        SaveOutputMemory(projectName, email, outputMemoryDics, '08', DataFramePath)
     
     return outputMemoryDics
 
@@ -358,14 +363,14 @@ def ContextCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
                 UpdateTQDM.set_description(f'ContextCompletionUpdate: {Update}')
                 time.sleep(0.0001)
                 ContextChunkId += 1
-                ChunkId = ResponseJson[i]["ChunkId"]
-                Chunk = ResponseJson[i]["Chunk"]
-                Genre = ResponseJson[i]["Genre"]
-                Gender = ResponseJson[i]["Gender"]
-                Age = ResponseJson[i]["Age"]
-                Personality = ResponseJson[i]["Personality"]
-                Emotion = ResponseJson[i]["Emotion"]
-                Accuracy = ResponseJson[i]["Accuracy"]
+                ChunkId = Update["ChunkId"]
+                Chunk = Update["Chunk"]
+                Genre = Update["Genre"]
+                Gender = Update["Gender"]
+                Age = Update["Age"]
+                Personality = Update["Personality"]
+                Emotion = Update["Emotion"]
+                Accuracy = Update["Accuracy"]
                 
                 AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy)
                 # i값 수동 업데이트

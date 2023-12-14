@@ -166,7 +166,10 @@ def CharacterDefineProcess(projectName, email, DataFramePath, Process = "Charact
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    InputList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '11', DataFramePath)    
+    inputList = BodyFrameBodysToInputList(projectName, email)
+    InputList = inputList[OutputMemoryCount:]
+
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
@@ -175,7 +178,7 @@ def CharacterDefineProcess(projectName, email, DataFramePath, Process = "Charact
     inputMemory = []
     InputDic = InputList[0]
     inputMemoryDics.append(InputDic)
-    outputMemoryDics = []
+    outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
         
     # CharacterDefineProcess
@@ -286,6 +289,8 @@ def CharacterDefineProcess(projectName, email, DataFramePath, Process = "Charact
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
         outputMemory = CharacterDefineOutputMemory(outputMemoryDics, MemoryLength)
+        
+        SaveOutputMemory(projectName, email, outputMemoryDics, '11', DataFramePath)
     
     return outputMemoryDics
 
@@ -361,15 +366,15 @@ def CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'o
                 UpdateTQDM.set_description(f'CharacterDefineUpdate: {Update}')
                 time.sleep(0.0001)
                 CharacterChunkId += 1
-                ChunkId = ResponseJson[i]["ChunkId"]
-                Chunk = ResponseJson[i]["Chunk"]
-                Character = ResponseJson[i]["Character"]
-                Type = ResponseJson[i]["Type"]
-                Gender = ResponseJson[i]["Gender"]
-                Age = ResponseJson[i]["Age"]
-                Emotion = ResponseJson[i]["Emotion"]
-                Role = ResponseJson[i]["Role"]
-                Listener = ResponseJson[i]["Listener"]
+                ChunkId = Update["ChunkId"]
+                Chunk = Update["Chunk"]
+                Character = Update["Character"]
+                Type = Update["Type"]
+                Gender = Update["Gender"]
+                Age = Update["Age"]
+                Emotion = Update["Emotion"]
+                Role = Update["Role"]
+                Listener = Update["Listener"]
                 
                 AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
                 # i값 수동 업데이트

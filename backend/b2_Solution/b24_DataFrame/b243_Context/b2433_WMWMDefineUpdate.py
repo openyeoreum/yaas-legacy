@@ -343,7 +343,7 @@ def WMWMDefineResponseJson(projectName, email, DataFramePath, messagesReview = '
 ## 프롬프트 요청 및 결과물 Json을 WMWMDefine에 업데이트
 def WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 09_WMWMDefineUpdate 시작 >")
-    # SummaryBodyFrame의 Count값 가져오기
+    # WMWMDefine의 Count값 가져오기
     ContinueCount, WMWMCount, Completion = WMWMDefineCountLoad(projectName, email)
     if Completion == "No":
         

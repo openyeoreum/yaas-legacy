@@ -680,7 +680,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
 ## 프롬프트 요청 및 결과물 Json을 CorrectionKo에 업데이트
 def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 26_CorrectionKoUpdate 시작 >")
-    # SummaryBodyFrame의 Count값 가져오기
+    # CorrectionKo의 Count값 가져오기
     ContinueCount, ContextCount, Completion = CorrectionKoCountLoad(projectName, email)
     if Completion == "No":
         

@@ -453,7 +453,7 @@ def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesR
 ## 프롬프트 요청 및 결과물 Json을 CharacterCompletion에 업데이트
 def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate 시작 >")
-    # SummaryBodyFrame의 Count값 가져오기
+    # CharacterCompletion의 Count값 가져오기
     ContinueCount, CharacterCount, Completion = CharacterCompletionCountLoad(projectName, email)
     if Completion == "No":
         

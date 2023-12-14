@@ -333,7 +333,7 @@ def CharacterDefineResponseJson(projectName, email, DataFramePath, messagesRevie
 ## 프롬프트 요청 및 결과물 Json을 CharacterDefine에 업데이트
 def CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 11_CharacterDefineUpdate 시작 >")
-    # SummaryBodyFrame의 Count값 가져오기
+    # CharacterDefine의 Count값 가져오기
     ContinueCount, CharacterCount, Completion = CharacterDefineCountLoad(projectName, email)
     if Completion == "No":
         

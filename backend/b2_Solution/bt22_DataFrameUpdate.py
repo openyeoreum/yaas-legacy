@@ -207,7 +207,7 @@ if __name__ == "__main__":
     #     existedDataFrame = LoadexistedDataFrame(projectName, email, "SummaryBodyFrame", DataFramePath)
     #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodySummary", RawDataSetPath)
     # mode = "ExampleFineTuning"
-    # SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # SummaryBodyFrameUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
     # if existedDataFrame == None:
     #     updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
@@ -226,7 +226,7 @@ if __name__ == "__main__":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextDefine", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextDefine", RawDataSetPath)
     mode = "Master"
-    ContextDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    ContextDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
     if existedDataFrame == None:
         updatedContextDefine = UpdatedContextDefine(projectName, email)
@@ -247,7 +247,7 @@ if __name__ == "__main__":
     #     existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextCompletion", DataFramePath)
     #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextCompletion", RawDataSetPath)
     # mode = "Master"
-    # ContextCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # ContextCompletionUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
     # if existedDataFrame == None:
     #     updatedContextCompletion = UpdatedContextCompletion(projectName, email)
@@ -266,7 +266,7 @@ if __name__ == "__main__":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "WMWMDefine", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "WMWMDefine", RawDataSetPath)
     mode = "Master"
-    WMWMDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
     if existedDataFrame == None:
         updatedWMWMDefine = UpdatedWMWMDefine(projectName, email)
@@ -285,7 +285,7 @@ if __name__ == "__main__":
     #     existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterDefine", DataFramePath)
     #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterDefine", RawDataSetPath)
     # mode = "Master"
-    # CharacterDefineUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
     # if existedDataFrame == None:
     #     updatedCharacterDefine = UpdatedCharacterDefine(projectName, email)
@@ -304,7 +304,7 @@ if __name__ == "__main__":
     #     existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterCompletion", DataFramePath)
     #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterCompletion", RawDataSetPath)
     # mode = "Master"
-    # CharacterCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
     # if existedDataFrame == None:
     #     updatedCharacterCompletion = UpdatedCharacterCompletion(projectName, email)
@@ -323,7 +323,7 @@ if __name__ == "__main__":
     #     existedDataFrame = LoadexistedDataFrame(projectName, email, "CorrectionKo", DataFramePath)
     #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CorrectionKo", RawDataSetPath)
     # mode = "Master"
-    # CorrectionKoUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
     # if existedDataFrame == None:
     #     updatedCorrectionKo = UpdatedCorrectionKo(projectName, email)

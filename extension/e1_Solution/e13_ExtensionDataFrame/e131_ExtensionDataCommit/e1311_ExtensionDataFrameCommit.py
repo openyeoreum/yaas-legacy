@@ -32,6 +32,7 @@ def LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, ProcessNum, Da
     # 정규 표현식 패턴 정의
     pattern = re.compile(rf"{re.escape(DataFramePath + str(latestUpdateDate) + '_' + lifeGraphSetName + '_' + ProcessNum + '_')}outputMemoryDics_.*\.json")
 
+    OutputMemoryDicsFile = []
     OutputMemoryCount = 0
     for filename in os.listdir(DataFramePath):
         FullPath = os.path.join(DataFramePath, filename)

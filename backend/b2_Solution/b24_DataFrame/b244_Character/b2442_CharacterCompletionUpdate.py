@@ -277,12 +277,12 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | {Filter}")
                 continue
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:

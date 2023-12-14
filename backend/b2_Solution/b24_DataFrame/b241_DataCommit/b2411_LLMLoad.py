@@ -269,11 +269,11 @@ def LLMresponse(projectName, email, Process, Input, Count, root = "backend", Mod
 
           return Response, Usage, Model
       
-      except:
+      except Exception as e:
           if isinstance(email, str):
-            print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생")
+            print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생\n\n{e}")
           else:
-            print(f"LifeGraphSetName: {projectName} | Process: {Process} | LLMresponse에서 오류 발생")
+            print(f"LifeGraphSetName: {projectName} | Process: {Process} | LLMresponse에서 오류 발생\n\n{e}")
           time.sleep(random.uniform(5, 10))
           continue
       # except openai.APIError as e:

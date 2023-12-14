@@ -51,7 +51,7 @@ def BodySummaryFilter(InputDic, responseData, memoryCounter):
     #     responseData = responseData[:index] + '\"' + responseData[index+1:]
         
     # print(f'\n\n@@@@@@@@@@@@@@@\n\n{responseData}\n\n@@@@@@@@@@@@@@@\n\n')
-    
+    print(responseData)
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         OutputDic = json.loads(responseData)
@@ -121,12 +121,15 @@ def BodySummaryProcess(projectName, email, DataFramePath, Process = "BodySummary
     InputList = inputList[OutputMemoryCount:]
     
     TotalCount = 0
+    ProcessCount = 1
     ContinueCount = 0
     inputMemoryDics = []
+    inputMemory = []
     InputDic = InputList[0]
     inputMemoryDics.append(InputDic)
     outputMemoryDics = OutputMemoryDicsFile
-        
+    outputMemory = []
+
     # BodySummaryProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
@@ -169,7 +172,7 @@ def BodySummaryProcess(projectName, email, DataFramePath, Process = "BodySummary
             memoryCounter = " - 이어서 작업할 나머지 부분 Id: " + inputDicId + ", 형식을 꼭 유지합니다! -\n"
             # memoryCounter = ""
             outputEnder = ""
-            
+
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
@@ -195,11 +198,11 @@ def BodySummaryProcess(projectName, email, DataFramePath, Process = "BodySummary
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
                 continue
             else:
                 OutputDic = Filter
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{len(InputList)} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | JSONDecode 완료")
 
             # DataSets 업데이트
             if mode in ["Example", "ExampleFineTuning"]:
@@ -219,6 +222,8 @@ def BodySummaryProcess(projectName, email, DataFramePath, Process = "BodySummary
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
         outputMemory = BodySummaryOutputMemory(outputMemoryDics, MemoryLength)
+        
+        SaveOutputMemory(projectName, email, outputMemoryDics, '06', DataFramePath)
         
         TotalCount += 1
         ProcessCount = TotalCount + 1
@@ -281,8 +286,8 @@ def SummaryBodyFrameUpdate(projectName, email, DataFramePath, MessagesReview = '
                 UpdateTQDM.set_description(f'SummaryBodyFrameUpdate: {Update}')
                 time.sleep(0.0001)
                 BodyId += 1
-                Summary = ResponseJson[i]["Summary"]
-                BodySummaryScript = ResponseJson[i]["BodySummaryScript"]
+                Summary = Update["Summary"]
+                BodySummaryScript = Update["BodySummaryScript"]
                 
                 AddSummaryBodyFrameBodyToDB(projectName, email, BodyId, Summary, BodySummaryScript)
                 # i값 수동 업데이트
@@ -307,4 +312,4 @@ if __name__ == "__main__":
     mode = "Memory"
     #########################################################################
     
-    SummaryBodyFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    SummaryBodyFrameUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)

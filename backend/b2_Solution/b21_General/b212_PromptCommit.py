@@ -28,7 +28,6 @@ def AddPromptToDB():
         # preprocessBody = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-04_PreprocessBody.json")
         captionPhargraph = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-05_CaptionPhargraph.json")
         # transitionPhargraph = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-06_TransitionPhargraph.json")
-        bodySummary = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-07_BodySummary.json")
         contextDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-01_ContextDefine.json")
         contextCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-02_ContextCompletion.json")
         wMWMDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-03_WMWMDefine.json")
@@ -53,7 +52,6 @@ def AddPromptToDB():
                 # ExistingPrompt.PreprocessBody = preprocessBody
                 ExistingPrompt.CaptionPhargraph = captionPhargraph
                 # ExistingPrompt.TransitionPhargraph = transitionPhargraph
-                ExistingPrompt.BodySummary = bodySummary
                 ExistingPrompt.ContextDefine = contextDefine
                 ExistingPrompt.ContextCompletion = contextCompletion
                 ExistingPrompt.WMWMDefine = wMWMDefine
@@ -77,7 +75,6 @@ def AddPromptToDB():
                 # PreprocessBody = preprocessBody,
                 CaptionPhargraph = captionPhargraph,
                 # TransitionPhargraph = transitionPhargraph,
-                BodySummary = bodySummary,
                 ContextDefine = contextDefine,
                 ContextCompletion = contextCompletion,
                 WMWMDefine = wMWMDefine,

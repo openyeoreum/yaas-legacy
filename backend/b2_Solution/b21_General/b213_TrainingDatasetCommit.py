@@ -42,7 +42,6 @@ def AddTrainingDatasetToDB(projectName, email):
             # ExistingDataset.PreprocessBody = trainingDataset
             ExistingDataset.CaptionPhargraph = trainingDataset
             # ExistingDataset.TransitionPhargraph = trainingDataset
-            ExistingDataset.BodySummary = trainingDataset
             ExistingDataset.ContextDefine = trainingDataset
             ExistingDataset.ContextCompletion = trainingDataset
             ExistingDataset.WMWMDefine = trainingDataset
@@ -71,7 +70,6 @@ def AddTrainingDatasetToDB(projectName, email):
                 # PreprocessBody = trainingDataset,
                 CaptionPhargraph = trainingDataset,
                 # TransitionPhargraph = trainingDataset,
-                BodySummary = trainingDataset,
                 ContextDefine = trainingDataset,
                 ContextCompletion = trainingDataset,
                 WMWMDefine = trainingDataset,

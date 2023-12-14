@@ -12,7 +12,6 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_HalfBodyFrameUpdate import HalfBodyFrameUpdate
-from backend.b2_Solution.b24_DataFrame.b242_Script.b2424_BodySummaryUpdate import SummaryBodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2431_ContextDefineUpdate import ContextDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2432_ContextCompletionUpdate import ContextCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2433_WMWMDefineUpdate import WMWMDefineUpdate
@@ -196,25 +195,6 @@ if __name__ == "__main__":
         updatedHalfBodyFrame = UpdatedHalfBodyFrame(projectName, email)
         SaveDataFrame(projectName, email, "02_HalfBodyFrame", updatedHalfBodyFrame, DataFramePath)
     existedDataFrame = None
-
-
-    # #########################################
-    # ### 06_SummaryBodyFrame-[BodySummary] ###
-    # #########################################
-    # InitSummaryBodyFrame(projectName, email)
-    # InitRawDataSet(projectName, email, "BodySummary")
-    # if existedDataFrameMode == "on":
-    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "SummaryBodyFrame", DataFramePath)
-    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BodySummary", RawDataSetPath)
-    # mode = "ExampleFineTuning"
-    # SummaryBodyFrameUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
-    
-    # if existedDataFrame == None:
-    #     updatedSummaryBodyFrame = UpdatedSummaryBodyFrame(projectName, email)
-    #     SaveDataFrame(projectName, email, "06_SummaryBodyFrame", updatedSummaryBodyFrame, DataFramePath)
-    #     SaveDataSet(projectName, email, "06", "BodySummary", RawDataSetPath)
-    # existedDataFrame = None
-    # existedDataSet = None
 
 
     ########################

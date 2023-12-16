@@ -45,7 +45,7 @@ def LifeDataTextsKoToInputList(lifeGraphSetName, latestUpdateDate):
 ##### Filter 조건 #####
 ######################
 ## LifeGraphContextDefine의 Filter(Error 예외처리)
-def LifeGraphContextDefineFilter(Input, responseData, memoryCounter):
+def LifeGraphContextDefineFilter(responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -56,21 +56,12 @@ def LifeGraphContextDefineFilter(Input, responseData, memoryCounter):
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"  
     # Error3: 자료의 구조가 다를 때의 예외 처리
-    INPUT = re.sub("[^가-힣]", "", str(Input))
     for dic in OutputDic:
         try:
             key = list(dic.keys())[0]
             # '핵심문구' 키에 접근하는 부분에 예외 처리 추가
-            try:
-                OUTPUT = re.sub("[^가-힣]", "", str(dic[key]['이유']))
-            except TypeError:
-                return "JSON에서 오류 발생: TypeError"
-            except KeyError:
-                return "JSON에서 오류 발생: KeyError"
             if not '중요부분' in key:
                 return "JSON에서 오류 발생: JSONKeyError"
-            elif not OUTPUT in INPUT:
-                return f"JSON에서 오류 발생: JSON '이유'가 Input에 포함되지 않음 Error\n문구: {dic[key]['이유']}"
             elif not ('시기' in dic[key] and '행복지수' in dic[key] and '이유' in dic[key] and '목적또는문제' in dic[key] and '원인' in dic[key] and '예상질문' in dic[key] and '인물유형' in dic[key] and '주제' in dic[key] and '정확도' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
@@ -188,7 +179,7 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphD
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = LifeGraphContextDefineFilter(Input, responseData, memoryCounter)
+            Filter = LifeGraphContextDefineFilter(responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

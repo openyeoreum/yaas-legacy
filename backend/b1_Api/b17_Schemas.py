@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Any
 
 class UserSchema(BaseModel):
     Email: str
@@ -6,7 +7,7 @@ class UserSchema(BaseModel):
     ProfileImagePath: str
     
     class Config:
-        from_attributes = True
+        from_attributes = Any
         
 # class ProjectsStorageSchema(BaseModel):
 #     ProjectsStorageID: int
@@ -17,13 +18,8 @@ class UserSchema(BaseModel):
 #     class Config:
 #         from_attributes = True
         
-# class ProjectsSchema(BaseModel):
-#     UserId: int
-#     UserDate: datetime.datetime
-#     Email: str
-#     _password: str
-#     UserName: str
-#     UserPath: str
+class ProjectsProcessSchema(BaseModel):
+    Process: int
     
-#     class Config:
-#         from_attributes = True
+    class Config:
+        from_attributes = True

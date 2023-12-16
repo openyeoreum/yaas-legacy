@@ -7,7 +7,7 @@ class UserSchema(BaseModel):
     ProfileImagePath: str
     
     class Config:
-        from_attributes = Any
+        from_attributes = True
         
 # class ProjectsStorageSchema(BaseModel):
 #     ProjectsStorageID: int
@@ -19,7 +19,7 @@ class UserSchema(BaseModel):
 #         from_attributes = True
         
 class ProjectsProcessSchema(BaseModel):
-    Process: int
+    Process: Any
     
     class Config:
         from_attributes = True

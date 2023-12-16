@@ -15,14 +15,18 @@ UserRouter = APIRouter(
 @UserRouter.get("/{email}", response_model = UserSchema)
 def UserDetail(email: str, db: Session = Depends(get_DB)):
     dbUser = GetUser(db, email = email)
+
     if dbUser is None:
         raise HTTPException(status_code = 404, detail = "User not found")
+
     return dbUser
 
 @UserRouter.get("/{email}/{projectname}/{process}", response_model = ProjectsProcessSchema)
 def ProjectsProcess(email: str, projectname: str, process: str, db: Session = Depends(get_DB)):
     dbProjectsProcess = GetProjectsProcess(db, email = email, projectname = projectname, process = process)
-    if dbProjectsProcess is None:
-        raise HTTPException(status_code=404, detail="Process not found")
 
-    return dbProjectsProcess
+    if dbProjectsProcess is None:
+        raise HTTPException(status_code = 404, detail = "Process not found")
+
+    ProjectsProcess = ProjectsProcessSchema(Process = dbProjectsProcess)
+    return ProjectsProcess

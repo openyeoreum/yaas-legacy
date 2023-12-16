@@ -109,6 +109,7 @@ def AddProjectToDB(projectName, email):
         translationEn = LoadJsonFrame(ProjectDataPath + "/b537_Translation/b537-02_TranslationEn.json")
         correctionKo = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-01_CorrectionKo.json")
         correctionEn = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-02_CorrectionEn.json")
+        mixingMasteringKo = LoadJsonFrame(ProjectDataPath + "/b5310_Mixing-Mastering/b5310-01_Mixing-MasteringKo.json")
         ### 아래로 추가되는 데이터프레임 작성 ###
 
         ExistingProject = db.query(Project).filter(Project.UserId == user.UserId, Project.ProjectName == projectName).first()
@@ -163,6 +164,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.TranslationEn = translationEn
             ExistingProject.CorrectionKo = correctionKo
             ExistingProject.CorrectionEn = correctionEn
+            ExistingProject.MixingMasteringKo = mixingMasteringKo
             ### 아래로 추가되는 데이터프레임 작성 ###
             
             print(f"[ Email: {email} | ProjectName: {projectName} | AddProjectToDB 변경사항 업데이트 ]")
@@ -215,7 +217,8 @@ def AddProjectToDB(projectName, email):
                 TranslationKo = translationKo,
                 TranslationEn = translationEn,
                 CorrectionKo = correctionKo,
-                CorrectionEn = correctionEn
+                CorrectionEn = correctionEn,
+                MixingMasteringKo = mixingMasteringKo
                 ### 아래로 추가되는 데이터프레임 작성 ###
                 )
             db.add(project)

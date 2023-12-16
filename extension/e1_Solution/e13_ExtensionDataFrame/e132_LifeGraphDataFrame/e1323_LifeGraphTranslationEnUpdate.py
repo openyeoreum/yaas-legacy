@@ -121,6 +121,8 @@ def LifeGraphTranslationEnProcess(lifeGraphSetName, latestUpdateDate, LifeGraphD
     OutputMemoryDicsFile, OutputMemoryCount = LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, '03', LifeGraphDataFramePath)    
     inputList = LifeGraphFrameTextsToInputList(lifeGraphSetName, latestUpdateDate)
     InputList = inputList[OutputMemoryCount:]
+    if InputList == []:
+        return OutputMemoryDicsFile
     
     TotalCount = 0
     ProcessCount = 1

@@ -341,6 +341,8 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '26', DataFramePath)    
     inputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
+    if InputList == []:
+        return OutputMemoryDicsFile
 
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0

@@ -169,6 +169,8 @@ def CharacterDefineProcess(projectName, email, DataFramePath, Process = "Charact
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '11', DataFramePath)    
     inputList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
+    if InputList == []:
+        return OutputMemoryDicsFile
 
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0

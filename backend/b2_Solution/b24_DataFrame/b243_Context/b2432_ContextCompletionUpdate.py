@@ -172,6 +172,8 @@ def ContextCompletionProcess(projectName, email, DataFramePath, Process = "Conte
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '08', DataFramePath)    
     inputList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
+    if InputList == []:
+        return OutputMemoryDicsFile
     
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0

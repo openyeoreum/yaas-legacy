@@ -125,6 +125,8 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphD
     OutputMemoryDicsFile, OutputMemoryCount = LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, '04', LifeGraphDataFramePath)    
     inputList = LifeDataTextsKoToInputList(lifeGraphSetName, latestUpdateDate)
     InputList = inputList[OutputMemoryCount:]
+    if InputList == []:
+        return OutputMemoryDicsFile
     
     TotalCount = 0
     ProcessCount = 1
@@ -232,6 +234,8 @@ def LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, LifeG
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     LifeDataTextsKo = lifeGraph.LifeGraphTranslationKo[1]['LifeGraphsKo'][1:]
     outputMemoryDics = LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = messagesReview, Mode = mode)
+    print(len(LifeDataTextsKo))
+    print(len(outputMemoryDics))
     
     responseJson = []
     for i, response in enumerate(outputMemoryDics):
@@ -262,6 +266,8 @@ def LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, LifeG
 def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     LifeDataTextsKo = lifeGraph.LifeGraphTranslationKo[1]['LifeGraphsKo'][1:]
+    print(len(ResponseJson))
+    print(len(LifeDataTextsKo))
 
     LifeDataContextTexts = []
     for i in range(len(LifeDataTextsKo)):
@@ -284,8 +290,10 @@ def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
                 Reason = '내용없음'
             else:
                 Reason = LifeDataTextsKo[i]["LifeData"][j]["ReasonKo"]
-
-            ContextChunk = ResponseJson[i]['ContextChunks'][ContextChunkCount]
+            try:
+                ContextChunk = ResponseJson[i]['ContextChunks'][ContextChunkCount]
+            except:
+                print(ResponseJson[i])
             if str(StartAge) == str(ContextChunk['StartAge']) and str(EndAge) == str(ContextChunk['EndAge']) and str(Score) == str(ContextChunk['Score']):
                 Purpose = ContextChunk['Purpose']
                 Reason = ContextChunk['Reason']

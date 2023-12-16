@@ -173,6 +173,8 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '07', DataFramePath)    
     inputList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
+    if InputList == []:
+        return OutputMemoryDicsFile
 
     
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")

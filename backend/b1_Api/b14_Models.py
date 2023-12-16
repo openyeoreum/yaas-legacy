@@ -36,23 +36,23 @@ class User(Base):
     UserDate = Column(DateTime, default=SeoulNow)
     Email = Column(String)
     _password = Column("Password", String(128))
-    
+
     def SetPassword(self, password: str):
         self._password = HashPassword(password)
 
     def VerifyPassword(self, password: str) -> bool:
 
         return CheckPassword(self._password.encode('utf-8'), password)
-    
+
     UserName = Column(String(64))
     UserPath = Column(Text)
     ProfileImagePath = Column(Text)
 
     TTSapiKey = Column(Text)
     LLMapiKey = Column(Text)
-    
+
     history = relationship("UserHistory", backref="user")
-    
+
 class UserHistory(Base):
     __tablename__ = "UserHistorys"
     

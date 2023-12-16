@@ -192,6 +192,8 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '12', DataFramePath)    
     inputList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
+    if InputList == []:
+        return OutputMemoryDicsFile
 
     FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0

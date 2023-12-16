@@ -121,6 +121,8 @@ def LifeGraphTranslationKoProcess(lifeGraphSetName, latestUpdateDate, LifeGraphD
     OutputMemoryDicsFile, OutputMemoryCount = LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, '02', LifeGraphDataFramePath)    
     inputList = LifeGraphFrameTextsToInputList(lifeGraphSetName, latestUpdateDate)
     InputList = inputList[OutputMemoryCount:]
+    if InputList == []:
+        return OutputMemoryDicsFile
 
     TotalCount = 0
     ProcessCount = 1
@@ -245,6 +247,7 @@ def LifeGraphTranslationKoResponseJson(lifeGraphSetName, latestUpdateDate, LifeG
             Source = LifeGraphs[i]['Source']
             Language = LifeGraphs[i]['Language']
             Translation = 'ko'
+            print(response[1]["예상거주지"])
             residence = {TranslatedKeys[key]: value for key, value in response[1]["예상거주지"].items()}
             Residence = residence
             PhoneNumber = LifeGraphs[i]['PhoneNumber']

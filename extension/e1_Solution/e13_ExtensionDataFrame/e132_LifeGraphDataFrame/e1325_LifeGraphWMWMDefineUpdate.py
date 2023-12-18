@@ -17,13 +17,13 @@ from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311
 # LifeDataContextTexts 로드
 def LoadLifeDataContextTexts(lifeGraphSetName, latestUpdateDate):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-    LifeDataContextTexts = lifeGraph.LifeGraphContextDefine[2]['LifeDataContextTexts'][1:109]
+    LifeDataContextTexts = lifeGraph.LifeGraphContextDefine[2]['LifeDataContextTexts'][1:]
     
     return LifeDataContextTexts
 
 ## LifeGraphFrameTexts의 inputList 치환
 def LifeDataContextTextsToInputList(lifeGraphSetName, latestUpdateDate):
-    LifeDataContextTexts = LoadLifeDataContextTexts(lifeGraphSetName, latestUpdateDate)   
+    LifeDataContextTexts = LoadLifeDataContextTexts(lifeGraphSetName, latestUpdateDate)
     
     InputList = []
     for i in range(len(LifeDataContextTexts)):

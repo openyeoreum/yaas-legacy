@@ -223,16 +223,14 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphD
 
 def LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, messagesReview = 'off', mode = "Memory"):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-    LifeDataTextsKo = lifeGraph.LifeGraphTranslationKo[1]['LifeGraphsKo'][1:]
+    LifeGraphsKo = lifeGraph.LifeGraphTranslationKo[1]['LifeGraphsKo'][1:]
     outputMemoryDics = LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = messagesReview, Mode = mode)
-    print(len(LifeDataTextsKo))
-    print(len(outputMemoryDics))
     
     responseJson = []
     for i, response in enumerate(outputMemoryDics):
         if response != "Pass":
             LifeGraphId = i + 1
-            Translation = LifeDataTextsKo[i]['Translation']
+            Translation = LifeGraphsKo[i]['Translation']
             ContextChunks = []
             for j, Dic in enumerate(response):
                 key = list(Dic.keys())[0]
@@ -250,15 +248,28 @@ def LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, LifeG
                 Accuracy = Dic[key]['정확도']
                 ContextChunk = {'ChunkId': ChunkId, 'StartAge': StartAge, 'EndAge': EndAge, 'Score': Score, 'Chunk': Chunk, 'Purpose': Purpose, 'Reason': Reason, 'Question': Question, 'Writer': Writer, 'Subject': Subject, 'Accuracy': Accuracy}
                 ContextChunks.append(ContextChunk)
-            responseJson.append({'LifeGraphId': LifeGraphId, 'Translation': Translation, 'ContextChunks': ContextChunks})
+        else:
+            LifeGraphId = i + 1
+            Translation = LifeGraphsKo[i]['Translation']
+            ChunkId = 0
+            StartAge = 0
+            EndAge = 0
+            Score = 0
+            Chunk = "None"
+            Purpose = "None"
+            Reason = "None"
+            Question = "None"
+            Writer = "None"
+            Subject = "None"
+            Accuracy = 0
+            ContextChunks = [{'ChunkId': ChunkId, 'StartAge': StartAge, 'EndAge': EndAge, 'Score': Score, 'Chunk': Chunk, 'Purpose': Purpose, 'Reason': Reason, 'Question': Question, 'Writer': Writer, 'Subject': Subject, 'Accuracy': Accuracy}]
+        responseJson.append({'LifeGraphId': LifeGraphId, 'Translation': Translation, 'ContextChunks': ContextChunks})
 
     return responseJson
 
 def LifeDataToText(lifeGraphSetName, latestUpdateDate, ResponseJson):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     LifeDataTextsKo = lifeGraph.LifeGraphTranslationKo[1]['LifeGraphsKo'][1:]
-    print(len(ResponseJson))
-    print(len(LifeDataTextsKo))
 
     LifeDataContextTexts = []
     for i in range(len(LifeDataTextsKo)):

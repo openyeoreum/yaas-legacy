@@ -9,14 +9,13 @@ class UserSchema(BaseModel):
     class Config:
         from_attributes = True
         
-# class ProjectsStorageSchema(BaseModel):
-#     ProjectsStorageID: int
-#     ProjectsStorageDate: datetime.datetime
-#     ProjectsStorageName: str
-#     ProjectsStoragePath: str
+class ProjectsStorageSchema(BaseModel):
+    ProjectsStorageId: int
+    ProjectsStorageName: str
+    ProjectsStoragePath: str
     
-#     class Config:
-#         from_attributes = True
+    class Config:
+        from_attributes = True
         
 class ProjectsProcessSchema(BaseModel):
     Process: Any

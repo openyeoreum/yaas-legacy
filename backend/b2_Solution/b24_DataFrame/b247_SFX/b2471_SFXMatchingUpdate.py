@@ -11,7 +11,8 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedCorrectionKoToDB, AddCorrectionKoSplitedBodysToDB, AddCorrectionKoChunksToDB, CorrectionKoCountLoad, CorrectionKoCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory
+# from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSFXMatchingToDB, AddSFXMatchingSplitedBodysToDB, AddSFXMatchingChunksToDB, SFXMatchingCountLoad, SFXMatchingCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -71,7 +72,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
     for i in range(len(BodyFrameBodys)):
         Id = BodyFrameBodys[i]['BodyId']
         task = BodyFrameBodys[i]['Task']
-        TaskBody = BodyFrameBodys[i]['Correction']
+        TaskBody = BodyFrameBodys[i][Task]
 
         if Task in task:
             Tag = 'Continue'
@@ -106,198 +107,48 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
 ######################
 ##### Filter 조건 #####
 ######################
-## DiffINPUT과 DiffOUTPUT의 공통부분을 찾고 아닌 앞부분 출력
-def CommonSubstring(INPUT, OUTPUT):
-  m = [[0] * (1 + len(OUTPUT)) for i in range(1 + len(INPUT))]
-  longest, x_longest = 0, 0
-  for x in range(1, 1 + len(INPUT)):
-      for y in range(1, 1 + len(OUTPUT)):
-          if INPUT[x - 1] == OUTPUT[y - 1]:
-              m[x][y] = m[x - 1][y - 1] + 1
-              if m[x][y] > longest:
-                  longest = m[x][y]
-                  x_longest = x
-          else:
-              m[x][y] = 0
-
-  return INPUT[x_longest - longest: x_longest]
-
-## DiffINPUT과 DiffOUTPUT의 공통부분을 찾고 아닌 앞부분 출력
-def CommonPart(DiffINPUT, DiffOUTPUT, commonSubstring):
-  nonCommonPartInput = DiffINPUT.split(commonSubstring)[0] if commonSubstring in DiffINPUT else ''
-  nonCommonPartOutput = DiffOUTPUT.split(commonSubstring)[0] if commonSubstring in DiffOUTPUT else ''
-
-  return nonCommonPartInput, nonCommonPartOutput
-
-## DiffINPUT과 DiffOUTPUT의 공통부분을 찾고 아닌 앞부분 출력
-def DiffOutputDic(Input, OutputDic):
-  INPUT = re.sub(r'[^가-힣]', '', str(Input))
-  INPUT = INPUT + "콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼"
-  OUTPUT = re.sub(r'[^가-힣]', '', str(OutputDic))
-  OUTPUT = OUTPUT + "콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼콼"
-
-  nonCommonParts = []
-  try:
-    for i in range(len(INPUT)):
-      if INPUT[i] != OUTPUT[i]:
-        DiffINPUT = INPUT[i:i+10]
-        DiffOUTPUT = OUTPUT[i:i+10]
-
-        commonSubstring = CommonSubstring(DiffINPUT, DiffOUTPUT)
-        nonCommonPartInput, nonCommonPartOutput = CommonPart(DiffINPUT, DiffOUTPUT, commonSubstring)
-        nonCommonParts.append({'DiffINPUT': DiffINPUT, 'NonINPUT': nonCommonPartInput, 'DiffOUTPUT': DiffOUTPUT, 'NonOUTPUT': nonCommonPartOutput})
-
-        if len(nonCommonPartInput) == len(nonCommonPartOutput):
-          nonCommonPartInputNum = 0
-          nonCommonPartOutput = 0
-        else:
-          nonCommonPartInputNum = len(nonCommonPartInput)
-          nonCommonPartOutput = len(nonCommonPartOutput)
-        commonSubstringINPUT = DiffINPUT.replace(DiffINPUT, commonSubstring)
-        INPUT = INPUT[:i] + commonSubstringINPUT + INPUT[i + 10 - nonCommonPartOutput:]
-        commonSubstringOUTPUT = DiffOUTPUT.replace(DiffOUTPUT, commonSubstring)
-        OUTPUT = OUTPUT[:i] + commonSubstringOUTPUT + OUTPUT[i + 10 - nonCommonPartInputNum:]
-  except IndexError:
-      pass
-
-  # Input과 OutputDic의 차이를 %로 환산
-  INPUTnonCommonPartCount = 0
-  OUTPUTnonCommonPartCount = 0
-  for nonCommonPart in nonCommonParts:
-    INPUTnonCommonPartCount += len(nonCommonPart['NonINPUT'])
-    OUTPUTnonCommonPartCount += len(nonCommonPart['NonOUTPUT'])
-
-  INPUTnonCommonPartCount += len(INPUT)
-  OUTPUTnonCommonPartCount += len(OUTPUT)
-  nonCommonPartRatio = round(abs((INPUTnonCommonPartCount - OUTPUTnonCommonPartCount)/INPUTnonCommonPartCount), 3)
-  nonCommonPartRatio = (1 - nonCommonPartRatio) * 100
-
-  return nonCommonParts, nonCommonPartRatio
-
-## ● 을 [n]으로 변경
-def DotsToNumbers(DotsText):
-    parts = DotsText.split('●')
-    numtext = ''.join(f'{part}[{i}]' for i, part in enumerate(parts, start=1) if part.strip())
-    return numtext
-
-## [n] 을 ●으로 변경
-def NumbersToDots(NumText):
-    text = re.sub(r'\[\d+\]', '●', NumText)
-    return text
-
-## DiffINPUT과 DiffOUTPUT중 가장 긴 공통문자열 찾기(CleanInput의 replace를 통한 데이터 무결성 확인)
-def LongCommonSubstring(DiffINPUT, DiffOUTPUT):
-    # Create a matrix to keep track of matches
-    dp = [[0 for _ in range(len(DiffOUTPUT)+1)] for _ in range(len(DiffINPUT)+1)]
-    longest, end_pos = 0, 0
-
-    # Iterate through each character in both strings
-    for i in range(1, len(DiffINPUT)+1):
-        for j in range(1, len(DiffOUTPUT)+1):
-            if DiffINPUT[i-1] == DiffOUTPUT[j-1]:
-                dp[i][j] = dp[i-1][j-1] + 1
-                if dp[i][j] > longest:
-                    longest = dp[i][j]
-                    end_pos = i  # Mark the end position of the common substring
-            else:
-                dp[i][j] = 0  # Reset if characters don't match
-
-    # Extract the common substring
-    return DiffINPUT[end_pos-longest:end_pos]
-
-## CorrectionKo의 Filter(Error 예외처리)
-def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
-    responseData = NumbersToDots(responseData)
-    responseData = responseData.replace('<끊어읽기보정>\n\n', '')
-    responseData = responseData.replace('<끊어읽기보정>\n', '')
-    responseData = responseData.replace('<끊어읽기보정>', '')
-    responseData = responseData.replace('●\n\n\n\n', '●')
-    responseData = responseData.replace('●\n\n\n', '●')
-    responseData = responseData.replace('●\n\n', '●')
-    responseData = responseData.replace('●\n', '●')
-    responseData = responseData.replace('●  ', '●')
-    responseData = responseData.replace('  ●', '●')
-    responseData = responseData.replace('● ', '●')
-    responseData = responseData.replace(' ●', '●')
-    responseData = responseData.replace('{', '[')
-    responseData = responseData.replace('}', ']')
-    responseData = responseData.rstrip('●')
-    
-    OutputDic = responseData.split('●')
-    OutputDic = [Output for Output in OutputDic if Output]
-    OutputDic = [item for item in OutputDic if item.strip() != '']
-    InputDic = DotsInput.split('●')
-    InputDic = [Input for Input in InputDic if Input]
-    InputDic = [item for item in InputDic if item.strip() != '']
-
-    # Error1: 결과가 list가 아닐 때의 예외 처리
-    if not isinstance(OutputDic, list):
-        return "JSONType에서 오류 발생: JSONTypeError"
-    # Error2: INPUT, OUTPUT 불일치시 예외 처리
+## SFXMatching의 Filter(Error 예외처리)
+def SFXMatchingFilter(Input, responseData, memoryCounter):
+    # Error1: json 형식이 아닐 때의 예외 처리
     try:
-        nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
-        if nonCommonPartRatio < 98.5:
-            return f"INPUT, OUTPUT 불일치율 1.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
-    except ValueError as e:
-        return f"INPUT, OUTPUT 매우 높은 불일치율 발생: {e}"
-    # Error3: InputDots, responseDataDots 불일치시 예외 처리
-    if len(InputDic) != len(OutputDic) != InputDots:
-        print(f'@@@@@@@@@@\nInputDic: {InputDic}\nOutputDic: {OutputDic}\n@@@@@@@@@@')
-        return f"INPUT, OUTPUT [n] 갯수 불일치 오류 발생: INPUT({len(InputDic)}), OUTPUT({len(OutputDic)}), InputDots({InputDots})"
-    # Error4: Input, responseData 불일치시 예외 처리
-    nonCommonPartsNum = 0
-    for i in range(len(InputDic)):
-        CleanInput = re.sub("[^가-힣]", "", InputDic[i])
-        CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
-        
-        if CleanInput != CleanOutput:
+        outputJson = json.loads(responseData)
+        OutputDic = [{key: value} for key, value in outputJson.items()]
+    except json.JSONDecodeError:
+        return "JSONDecode에서 오류 발생: JSONDecodeError"
+    # Error2: 결과가 list가 아닐 때의 예외 처리
+    if not isinstance(OutputDic, list):
+        return "JSONType에서 오류 발생: JSONTypeError"  
+    # Error3: 자료의 구조가 다를 때의 예외 처리
+    INPUT = re.sub("[^가-힣]", "", str(Input))
+    for dic in OutputDic:
+        try:
+            key = list(dic.keys())[0]
+            # '핵심문구' 키에 접근하는 부분에 예외 처리 추가
             try:
-                nonCommonPart = nonCommonParts[nonCommonPartsNum]
-                DiffINPUT = nonCommonPart['DiffINPUT']
-                print(f'\n\n\n({i}, {nonCommonPartsNum})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
-                DiffOUTPUT = nonCommonPart['DiffOUTPUT']
-                print(f'DiffOUTPUT: {DiffOUTPUT}')
-                longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
-                longCommonSubstring = longCommonSubstring.replace('콼', '')
-                print(f'longCommonSubstring: {longCommonSubstring}')
-                NonINPUT = nonCommonPart['NonINPUT']
-                print(f'NonINPUT: {NonINPUT}')
-                NonOUTPUT = nonCommonPart['NonOUTPUT']
-                print(f'NonOUTPUT: {NonOUTPUT}')
-                if longCommonSubstring in CleanInput:
-                    ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
-                    ReplaceCleanOutput = CleanOutput
-                else:
-                    ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
-                    ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
-                print(f'replace1: {NonINPUT + longCommonSubstring}')
-                print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')
-                print(f'CleanInput: {CleanInput}')
-                print(f'CleanOutput: {CleanOutput}')
-                print(f'ReplaceCleanInput: {ReplaceCleanInput}')
-                print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-                    
-                if ReplaceCleanInput == ReplaceCleanOutput:
-                    nonCommonPartsNum += 1
-                else:
-                    for i in range(len(CleanInput) + 1):
-                        ReplaceCleanInput = CleanInput[:i] + NonOUTPUT + CleanInput[i:]
-                        ReplaceCleanOutput = CleanOutput[:i] + NonINPUT + CleanOutput[i:]
-                        if ReplaceCleanInput == CleanOutput or CleanInput == ReplaceCleanOutput:
-                            nonCommonPartsNum += 1
-                            continue
-                        else:
-                            return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})"
-            except IndexError as e:
-                return f"INPUT, OUTPUT [n] 불일치 오류 발생: IndexError({e})"
-
-    return {'json': OutputDic, 'filter': OutputDic, 'nonCommonParts': nonCommonParts}
+                OUTPUT = str(dic[key]['길이']).replace('<시작>', '')
+                OUTPUT = OUTPUT.replace('<끝>', '')
+                OUTPUT = re.sub("[^가-힣]", "", OUTPUT)
+            except TypeError:
+                return "JSON에서 오류 발생: TypeError"
+            except KeyError:
+                return "JSON에서 오류 발생: KeyError"
+            if not '효과음' in key:
+                return "JSON에서 오류 발생: JSONKeyError"
+            elif not OUTPUT in INPUT:
+                return f"JSON에서 오류 발생: JSON '핵심문구'가 Input에 포함되지 않음 Error\n문구: {dic[key]['효과음']}"
+            elif not ('명칭' in dic[key] and '유형' in dic[key] and '역할' in dic[key] and '공간음향' in dic[key] and '길이' in dic[key] and '필요성' in dic[key]):
+                return "JSON에서 오류 발생: JSONKeyError"
+        # Error4: 자료의 형태가 Str일 때의 예외처리
+        except AttributeError:
+            return "JSON에서 오류 발생: strJSONError"
+        
+    return {'json': outputJson, 'filter': OutputDic}
 
 ######################
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def CorrectionKoInputMemory(inputMemoryDics, MemoryLength):
+def SFXMatchingInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -313,7 +164,7 @@ def CorrectionKoInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def CorrectionKoOutputMemory(outputMemoryDics, MemoryLength):
+def SFXMatchingOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -333,12 +184,12 @@ def CorrectionKoOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## CorrectionKo 프롬프트 요청 및 결과물 Json화
-def CorrectionKoProcess(projectName, email, DataFramePath, Process = "CorrectionKo", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## SFXMatching 프롬프트 요청 및 결과물 Json화
+def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '26', DataFramePath)    
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '20', DataFramePath)    
     inputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
@@ -357,7 +208,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
     outputMemory = []
     nonCommonPartList = []
         
-    # CorrectionKoProcess
+    # SFXMatchingProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -383,20 +234,11 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             mode = "Example"
             
         if "Continue" in InputDic:
-            DotsInput = InputDic['Continue']
-            # Input의 [n] 전처리
-            DotsInput = DotsInput.replace('\n\n\n\n●', '●\n\n\n\n')
-            DotsInput = DotsInput.replace('\n\n\n●', '●\n\n\n')
-            DotsInput = DotsInput.replace('\n\n●', '●\n\n')
-            DotsInput = DotsInput.replace('\n●', '●\n')
-            DotsInput = DotsInput.replace('[', '{')
-            DotsInput = DotsInput.replace(']', '}')
-            InputDots = str(DotsInput).count('●')
-            Input = DotsToNumbers(DotsInput)
+            Input = InputDic['Continue']
             
             # Filter, MemoryCounter, OutputEnder 처리
-            memoryCounter = f" - 중요: 꼼꼼한 끊어읽기!, [1] ~ [{InputDots}]까지 그대로 유지! -\n"
-            outputEnder = ""
+            memoryCounter = "\n"
+            outputEnder = "{{'효과음"
             
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -416,7 +258,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId)
+            Filter = SFXMatchingFilter(Input, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -428,7 +270,6 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                nonCommonParts = Filter['nonCommonParts']
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트
@@ -452,22 +293,18 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
         # inputMemory 형성
         try:
             InputDic = InputList[TotalCount]
-            InputChunkId = inputChunkIdList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = CorrectionKoInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = SFXMatchingInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = CorrectionKoOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = SFXMatchingOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '26', DataFramePath)
-        
-        # nonCommonPartList 형성
-        nonCommonPartList.append(nonCommonParts)
+        SaveOutputMemory(projectName, email, outputMemoryDics, '20', DataFramePath)
     
-    return outputMemoryDics, nonCommonPartList
+    return outputMemoryDics
 
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
@@ -500,13 +337,13 @@ def SplitChunkIntoTokens(Chunk):
     return Tokens
 
 ## 데이터 치환
-def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
+def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
 
     # 데이터 치환
-    outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics, nonCommonPartList = SFXMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
 
     ########## 테스트 후 삭제 ##########
     # filePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_outputMemoryDics_231128.json"
@@ -526,7 +363,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
     CorrectionChunks = []
     k = 0
     for i in range(len(BodyFrameSplitedBodyScripts)):
-        CorrectionKoSplitedBody = {"OutputId": None, "BodyId": i + 1, "CorrectionChunks": []}
+        SFXMatchingSplitedBody = {"OutputId": None, "BodyId": i + 1, "CorrectionChunks": []}
         for j in range(len(BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'])):
             Tag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][j]['Tag']
             CorrectionChunk = outputMemoryDicsList[k]['Output']
@@ -535,10 +372,10 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
             OutputId = outputMemoryDicsList[k]['outputId']
             k += 1
 
-        CorrectionKoSplitedBody['OutputId'] = OutputId + 1
-        CorrectionKoSplitedBody['CorrectionChunks'] = CorrectionChunks
+        SFXMatchingSplitedBody['OutputId'] = OutputId + 1
+        SFXMatchingSplitedBody['CorrectionChunks'] = CorrectionChunks
         CorrectionChunks = []
-        responseJson.append(CorrectionKoSplitedBody)
+        responseJson.append(SFXMatchingSplitedBody)
 
     # responseJson의 끊어읽기 보정(말의 끝맺음 뒤에 끊어읽기가 존재할 경우 삭제)
     for i in range(len(responseJson)):
@@ -684,20 +521,20 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                         
     return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 CorrectionKo에 업데이트
-def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 26_CorrectionKoUpdate 시작 >")
-    # CorrectionKo의 Count값 가져오기
-    ContinueCount, ContextCount, Completion = CorrectionKoCountLoad(projectName, email)
+## 프롬프트 요청 및 결과물 Json을 SFXMatching에 업데이트
+def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 26_SFXMatchingUpdate 시작 >")
+    # SFXMatching의 Count값 가져오기
+    ContinueCount, ContextCount, Completion = SFXMatchingCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CorrectionKo", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate는 ExistedCorrectionKo으로 대처됨 ]\n")
+            AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "SFXMatching", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 26_SFXMatchingUpdate는 ExistedSFXMatching으로 대처됨 ]\n")
         else:
-            responseJson = CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+            responseJson = SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -708,39 +545,39 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'CorrectionKoUpdate')
+                            desc = 'SFXMatchingUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'CorrectionKoUpdate: {Update}')
+                UpdateTQDM.set_description(f'SFXMatchingUpdate: {Update}')
                 time.sleep(0.0001)
-                AddCorrectionKoSplitedBodysToDB(projectName, email)
+                AddSFXMatchingSplitedBodysToDB(projectName, email)
                 for j in range(len(Update['CorrectionChunks'])):
                     ChunkId = Update['CorrectionChunks'][j]['ChunkId']
                     Tag = Update['CorrectionChunks'][j]['Tag']
                     ChunkTokens = Update['CorrectionChunks'][j]['CorrectionChunkTokens']
                 
-                    AddCorrectionKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens)
+                    AddSFXMatchingChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            CorrectionKoCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate 완료 ]\n")
+            SFXMatchingCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 26_SFXMatchingUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 26_SFXMatchingUpdate는 이미 완료됨 ]\n")
     
     
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "웹3.0메타버스"
+    projectName = "우리는행복을진단한다"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    CorrectionKoResponseJson(projectName, email)
+    SFXMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)

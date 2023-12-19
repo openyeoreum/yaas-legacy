@@ -233,11 +233,6 @@ class Project(Base):
     SFXMatching = Column(JSON)
     SFXMultiQuery = Column(JSON)
     
-    # MultiQuery
-    CharacterMultiQuery = Column(JSON)
-    SoundMultiQuery = Column(JSON)
-    SFXMultiQuery = Column(JSON)
-    
     # Translation
     TranslationKo = Column(JSON)
     TranslationEn = Column(JSON)
@@ -362,11 +357,6 @@ class ProjectHistory(Base):
     # SFX
     SFXMatchingStatus = Column(JSON(64))
     SFXMultiQueryStatus = Column(JSON(64))
-    
-    # MultiQuery
-    CharacterMultiQueryStatus = Column(String(64))
-    SoundMultiQueryStatus = Column(String(64))
-    SFXMultiQueryStatus = Column(String(64))
     
     # Translation
     TranslationKoStatus = Column(String(64))
@@ -527,11 +517,6 @@ class TrainingDataset(Base):
     
     # SFXDataset
     SFXMatching = Column(JSON)
-    SFXMultiQuery = Column(JSON)
-
-    # MultiQueryDataset
-    CharacterMultiQuery = Column(JSON)
-    SoundMultiQuery = Column(JSON)
     SFXMultiQuery = Column(JSON)
     
     # TranslationDataset

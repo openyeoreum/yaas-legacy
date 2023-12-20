@@ -268,12 +268,12 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | {Filter}")
                 continue
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -501,12 +501,6 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                     Endtoken = tokens[-1]
                     if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
                         tokens.append({"Pause": "(0.20)"})
-                        
-    ########## 테스트 후 삭제 ##########
-    # filePath2 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_responseJson_231128.json"
-    
-    # with open(filePath2, "w", encoding = 'utf-8') as file:
-    #     json.dump(responseJson, file, ensure_ascii = False, indent = 4)
     
     responseJsonText = ""
     for i in range(len(responseJson)):

@@ -70,7 +70,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "<태그.json>\n",
+            "OutputMark": "<태그.json>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -130,7 +130,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "<태그.json>\n",
+            "OutputMark": "<태그.json>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"

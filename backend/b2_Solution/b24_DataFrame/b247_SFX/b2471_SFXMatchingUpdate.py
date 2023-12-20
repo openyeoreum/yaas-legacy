@@ -134,8 +134,11 @@ def SFXMatchingFilter(Input, responseData, memoryCounter):
                 return "JSON에서 오류 발생: KeyError"
             if not '효과음' in key:
                 return "JSON에서 오류 발생: JSONKeyError"
+            elif not ('<시작>' in dic[key]['길이'] and '<끝>' in dic[key]['길이']):
+                return f"JSON에서 오류 발생: JSON <시작>, <끝>의 표기가 Output에 포함되지 않음 Error\n문구: {dic[key]['길이']}"
             elif not OUTPUT in INPUT:
-                return f"JSON에서 오류 발생: JSON '길이'의 문구가 Input에 포함되지 않음 Error\n문구: {dic[key]['길이']}"
+                print(f"JSON에서 오류 발생: JSON '길이'의 문구가 Input에 포함되지 않음 Error\n문구: {dic[key]['길이']}")
+                dic[key]['길이'] = ''
             elif not ('명칭' in dic[key] and '유형' in dic[key] and '역할' in dic[key] and '공간음향' in dic[key] and '길이' in dic[key] and '필요성' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
@@ -178,7 +181,7 @@ def SFXMatchingOutputMemory(outputMemoryDics, MemoryLength):
     outputMemory = outputMemory[:-1] + ", "
     outputMemory = outputMemory.replace("[, ", "[")
     # print(f"@@@@@@@@@@\noutputMemory :{outputMemory}\n@@@@@@@@@@")
-    
+
     return outputMemory
 
 #######################

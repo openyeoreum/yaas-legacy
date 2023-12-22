@@ -15,141 +15,60 @@
     {
         "SFXBodys": [
             {
-                "BodyId": 1,
-                "SFXChunks":
-                [
-                    {"ChunkId": "",
-                    "SFXChunkTokens":
-                    [
-                        {"TokenId": "", "Text": "수업은"},
-                        {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Text": "대화와"},
-                        {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Text": "강의가"},
-                        {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "Text": "함께하는"},
-                        {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "Text": "방식으로"},
-                        {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "Text": "진행하고"},
-                        {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "Text": "싶었으나"},
-                        {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "Text": "학생들에게"},
-                        {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "Text": "익숙한"},
-                        {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "Text": "방식은"},
-                        {"TokenId": "", "Space": " "},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Text": "아니었다."},
-                        {"TokenId": "", "Period": "."}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "SFXChunkTokens":
-                    [
-                        {"TokenId": "", "Text": ""},
-                        {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Period": ""},
-                        {"TokenId": "", "Enter": ""}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "SFXChunkTokens":
-                    [
-                        {"TokenId": "", "Text": ""},
-                        {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Period": ""},
-                        {"TokenId": "", "Enter": ""}
-                    ]
-                    }
-                ]
-            },
-            {
-                "BodyId": 2,
-                "SFXChunks":
-                [
-                    {"ChunkId": "",
-                    "SFXChunkTokens":
-                    [
-                        {"TokenId": "", "Text": ""},
-                        {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Period": ""},
-                        {"TokenId": "", "Enter": ""}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "SFXChunkTokens":
-                    [
-                        {"TokenId": "", "Text": ""},
-                        {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Period": ""},
-                        {"TokenId": "", "Enter": ""}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "SFXChunkTokens":
-                    [
-                        {"TokenId": "", "Text": ""},
-                        {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Period": ""},
-                        {"TokenId": "", "Enter": ""}
-                    ]
-                    }
-                ]
-            },
-            {
-                "BodyId": 3,
-                "SFXChunks":
-                [
-                    {"ChunkId": "",
-                    "SFXChunkTokens":
-                    [
-                        {"TokenId": "", "Text": ""},
-                        {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Period": ""},
-                        {"TokenId": "", "Enter": ""}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "SFXChunkTokens":
-                    [
-                        {"TokenId": "", "Text": ""},
-                        {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Period": ""},
-                        {"TokenId": "", "Enter": ""}
-                    ]
-                    },
-                    {"ChunkId": "",
-                    "SFXChunkTokens":
-                    [
-                        {"TokenId": "", "Text": ""},
-                        {"TokenId": "", "Space": ""},
-                        {"TokenId": "", "MatchedSFXTag":
-                        {"SFXId": "None", "SFX": "None", "Type": "None", "Role": "None", "Direction": "None", "Range": "None", "Importance": "None"}},
-                        {"TokenId": "", "Period": ""},
-                        {"TokenId": "", "Enter": ""}
-                    ]
+                "BodyId": 0,
+                "SFXChunks": [
+                    {
+                        "ChunkId": 0,
+                        "SFXChunkTokens": [
+                            {
+                                "SFX": {
+                                    "SFXId": 0,
+                                    "SFXKo": "None",
+                                    "SFXEn": "None",
+                                    "Type": "None",
+                                    "Role": "None",
+                                    "Direction": "None",
+                                    "Range": "None",
+                                    "Importance": "None"
+                                }
+                            },
+                            {
+                                "Space": "None"
+                            },
+                            {
+                                "Enter": "None"
+                            },
+                            {
+                                "Comma": "None"
+                            },
+                            {
+                                "Quotes": "None"
+                            },
+                            {
+                                "Period": "None"
+                            },
+                            {
+                                "ETC": "None"
+                            },
+                            {
+                                "Number": "None"
+                            },
+                            {
+                                "Ko": "None"
+                            },
+                            {
+                                "En": "None"
+                            },
+                            {
+                                "Ja": "None"
+                            },
+                            {
+                                "Zh": "None"
+                            },
+                            {
+                                "Es": "None"
+                            }
+                        ]
                     }
                 ]
             }

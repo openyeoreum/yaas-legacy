@@ -255,7 +255,24 @@ def LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, LifeGrap
                 Accuracy = Dic[key]['정확도']
                 WMWMChunk = {'ChunkId': ChunkId, 'Chunk': Chunk, 'Needs': Needs, 'ReasonOfNeeds': ReasonOfNeeds, 'Wisdom': Wisdom, 'ReasonOfWisdom': ReasonOfWisdom, 'Mind': Mind, 'ReasonOfMind': ReasonOfMind, 'Wildness': Wildness, 'ReasonOfWildness': ReasonOfWildness, 'Accuracy': Accuracy}
                 WMWMChunks.append(WMWMChunk)
-            responseJson.append({'LifeGraphId': LifeGraphId, 'Translation': Translation, 'WMWMChunks': WMWMChunks})
+        else:
+            LifeGraphId = i + 1
+            Translation = ContextChunks[i]['Translation']
+            WMWMChunks = []
+            ChunkId = 1
+            Chunk = "None"
+            Needs = "None"
+            ReasonOfNeeds = "None"
+            Wisdom = "None"
+            ReasonOfWisdom = "None"
+            Mind = "None"
+            ReasonOfMind = "None"
+            Wildness = "None"
+            ReasonOfWildness = "None"
+            Accuracy = 0
+            WMWMChunk = {'ChunkId': ChunkId, 'Chunk': Chunk, 'Needs': Needs, 'ReasonOfNeeds': ReasonOfNeeds, 'Wisdom': Wisdom, 'ReasonOfWisdom': ReasonOfWisdom, 'Mind': Mind, 'ReasonOfMind': ReasonOfMind, 'Wildness': Wildness, 'ReasonOfWildness': ReasonOfWildness, 'Accuracy': Accuracy}
+            WMWMChunks.append(WMWMChunk)
+        responseJson.append({'LifeGraphId': LifeGraphId, 'Translation': Translation, 'WMWMChunks': WMWMChunks})
 
     return responseJson
 
@@ -279,10 +296,17 @@ def WMWMToQuerys(lifeGraphSetName, latestUpdateDate, ResponseJson):
             Writer = lifeGraphContextDefine[i]['ContextChunks'][j]['Writer']
             Vector = {"Purpose": Purpose, "Reason": Reason, "Question": Question, "Chunk": Chunk, "Subject": Subject, "Writer": Writer}
             
-            Needs = ResponseJson[i]['WMWMChunks'][j]['Needs']
-            Wisdom = ResponseJson[i]['WMWMChunks'][j]['Wisdom']
-            Mind = ResponseJson[i]['WMWMChunks'][j]['Mind']
-            Wildness = ResponseJson[i]['WMWMChunks'][j]['Wildness']
+            if Translation != 'ko':
+                Needs = ResponseJson[i]['WMWMChunks'][j]['Needs']
+                Wisdom = ResponseJson[i]['WMWMChunks'][j]['Wisdom']
+                Mind = ResponseJson[i]['WMWMChunks'][j]['Mind']
+                Wildness = ResponseJson[i]['WMWMChunks'][j]['Wildness']
+            else:
+                Needs = ResponseJson[i]['WMWMChunks'][0]['Needs']
+                Wisdom = ResponseJson[i]['WMWMChunks'][0]['Wisdom']
+                Mind = ResponseJson[i]['WMWMChunks'][0]['Mind']
+                Wildness = ResponseJson[i]['WMWMChunks'][0]['Wildness']
+                
             WMWM = {"Needs": Needs, "Wisdom": Wisdom, "Mind": Mind, "Wildness": Wildness}
             
             Querys.append({'ChunkId': ChunkId, 'Vector': Vector, 'WMWM': WMWM})

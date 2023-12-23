@@ -340,192 +340,149 @@ def SplitChunkIntoTokens(Chunk):
     return Tokens
 
 ## 데이터 치환
-def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
+def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory", importance = 0):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
-
+    InputList, InputChunkIdList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
+    BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
+    
     # 데이터 치환
     outputMemoryDics = SFXMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
 
-    # 기존 데이터 구조 responseJson 형성
+    # outputMemoryDics의 ChunksList 형성
+    ChunkList = []
+    for i in range(len(BodyFrameSplitedBodyScripts)):
+        for j in range(len(BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'])):
+            chunk = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][j]
+            ChunkId = chunk['ChunkId']
+            Chunk = chunk['Chunk']
+            ChunkList.append({'ChunkId': ChunkId, 'Chunk': Chunk})
+    
+    InputsList = []
+    ChunkListCount = 0
+    for i in range(len(InputChunkIdList)):
+        ChunksList = []
+        for j in range(ChunkListCount, len(ChunkList)):
+            if ChunkList[j]['ChunkId'] in InputChunkIdList[i]:
+                outputId = i + 1
+                ChunkId = ChunkList[j]['ChunkId']
+                Chunk = ChunkList[j]['Chunk']
+                ChunksList.append({'outputId': outputId, 'ChunkId': ChunkId, 'Chunk': Chunk})
+            else:
+                ChunkListCount = j
+                break
+        InputsList.append(ChunksList)
+    
+    # outputMemoryDics의 전처리
     SFXID = 1
     outputMemoryDicsList = []
     for i in range(len(outputMemoryDics)):
         for j in range(len(outputMemoryDics[i])):
             key = next(iter(outputMemoryDics[i][j]))
             SFXDic = outputMemoryDics[i][j][key]
-            Chunk = SFXDic['길이']
-            SFXId = SFXID
-            SFXKo = SFXDic['명칭']
-            # SFXEn = SFXDic['프롬프트']
-            Type = SFXDic['유형']
-            Role = SFXDic['역할']
-            Direction = SFXDic['공간음향']
-            Range = SFXDic['길이']
-            Importance = SFXDic['필요성']
+            RANGE = SFXDic['길이']
+            ImportanceScore = int(SFXDic['필요성'])
             
-            outputMemoryDicsList.append({"BodyId": i + 1, "Chunk": Chunk, "SFX": {"SFXId": SFXId, "SFXKo": SFXKo, "SFXEn": "None", "Type": Type, "Role": Role, "Direction": Direction, "Range": Range, "Importance": Importance}})
-            SFXID += 1
-    
-    for i in range(len(BodyFrameSplitedBodyScripts)):
-        print(f'{BodyFrameSplitedBodyScripts[i]}\n\n')
+            if ImportanceScore >= importance:
+                if '<시작>' in RANGE and '<끝>' in RANGE:
+                    RANGE = RANGE.replace('<시작>', f'<시작{SFXID}>')
+                    RANGE = RANGE.replace('<끝>', f'<끝{SFXID}>')
+                    
+                    Chunk = RANGE
+                    SFXId = SFXID
+                    SFXKo = SFXDic['명칭']
+                    # SFXEn = SFXDic['프롬프트']
+                    Type = SFXDic['유형']
+                    Role = SFXDic['역할']
+                    Direction = SFXDic['공간음향']
+                    Range = RANGE
+                    Importance = SFXDic['필요성']
+                    
+                    outputMemoryDicsList.append({"outputId": i + 1, "Chunk": Chunk, "SFX": {"SFXId": SFXId, "SFXKo": SFXKo, "SFXEn": "None", "Type": Type, "Role": Role, "Direction": Direction, "Range": Range, "Importance": Importance}})
+                    SFXID += 1
 
-    # responseJson = []
-    # CorrectionChunks = []
-    # k = 0
-    # for i in range(len(BodyFrameSplitedBodyScripts)):
-    #     SFXMatchingSplitedBody = {"OutputId": None, "BodyId": i + 1, "CorrectionChunks": []}
-    #     for j in range(len(BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'])):
-    #         Tag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][j]['Tag']
-    #         CorrectionChunk = outputMemoryDicsList[k]['Output']
-    #         CorrectionChunkTokens = SplitChunkIntoTokens(CorrectionChunk)
-    #         CorrectionChunks.append({'ChunkId': k + 1, 'Tag': Tag, 'CorrectionChunkTokens': CorrectionChunkTokens})
-    #         OutputId = outputMemoryDicsList[k]['outputId']
-    #         k += 1
-
-    #     SFXMatchingSplitedBody['OutputId'] = OutputId + 1
-    #     SFXMatchingSplitedBody['CorrectionChunks'] = CorrectionChunks
-    #     CorrectionChunks = []
-    #     responseJson.append(SFXMatchingSplitedBody)
-
-    # # responseJson의 끊어읽기 보정(말의 끝맺음 뒤에 끊어읽기가 존재할 경우 삭제)
-    # for i in range(len(responseJson)):
-    #     for j in range(len(responseJson[i]['CorrectionChunks'])):
-    #         tokens = responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']
-    #         if len(tokens) >= 2:
-    #             BeforeEndtoken = tokens[-2]
-    #             Endtoken = tokens[-1]
-    #             if 'Period' in BeforeEndtoken and 'Pause' in Endtoken:
-    #                 del tokens[-1]
-    #             if len(tokens) >= 6:
-    #                 for k in range(len(tokens) - 6):
-    #                     try:
-    #                         if 'Comma' in tokens[k] and 'Pause' in tokens[k+1]:
-    #                             del tokens[k]
-    #                         elif 'Pause' in tokens[k] and 'Comma' in tokens[k+1]:
-    #                             del tokens[k+1]
-    #                     except IndexError:
-    #                         pass
-    #             if len(tokens) >= 6:
-    #                 for l in range(len(tokens) - 6):
-    #                     try:
-    #                         if ('Ko' in tokens[l] and 'Period' in tokens[l+1] and 'Pause' in tokens[l+2]) or ('En' in tokens[l] and 'Period' in tokens[l+1] and 'Pause' in tokens[l+2]):
-    #                             del tokens[l+2]
-    #                     except IndexError:
-    #                         pass
-                        
-    # # responseJson의 끊어읽기 보정(끝맺음 부분 끊어읽기 추가)
-    # for i in range(len(responseJson)):
-    #     for j in range(len(responseJson[i]['CorrectionChunks'])):
-    #         tag = responseJson[i]['CorrectionChunks'][j]['Tag']
+    # outputMemoryDics의 전처리
+    ResponseJson = []
+    MemoryDicsCount = 0
+    for i in range(len(InputsList)):
+        outputId = i + 1
+        Inputs = InputsList[i]
+        for j in range(len(InputsList[i])):
+            InputsId = Inputs[j]['outputId']
             
-    #         Aftertag = None
-    #         if j < (len(responseJson[i]['CorrectionChunks']) - 1):
-    #             Aftertag = responseJson[i]['CorrectionChunks'][j + 1]['Tag']
+            if j >= 2:
+                BeBeforeInputsChunk = Inputs[j-2]['Chunk']
+                CleanBeBeforeInputsChunk = re.sub("[^가-힣]", "", BeBeforeInputsChunk)
+                BeforeInputsChunk = Inputs[j-1]['Chunk']
+                CleanBeforeInputsChunk = re.sub("[^가-힣]", "", BeforeInputsChunk)
+            InputsChunk = Inputs[j]['Chunk']
+            CleanInputsChunk = re.sub("[^가-힣]", "", InputsChunk)
+            
+            for k in range(MemoryDicsCount, len(outputMemoryDicsList)):
+                MemoryDicsOutput = outputMemoryDicsList[k]
+                MemoryDicsOutputId = MemoryDicsOutput['outputId']
                 
-    #         AfterAftertag = None
-    #         if j < (len(responseJson[i]['CorrectionChunks']) - 2):
-    #             AfterAftertag = responseJson[i]['CorrectionChunks'][j + 2]['Tag']
-            
-    #         # 새로운 조건을 위한 변수
-    #         NextChunkFirstTag = None
-    #         if i < (len(responseJson) - 1):
-    #             NextChunkFirstTag = responseJson[i+1]['CorrectionChunks'][0]['Tag']
-            
-    #         tokens = responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']
-            
-    #         # Title, 일반 문장 처리
-    #         if tag == "Title":
-    #             tokens.append({"Pause": "(2.00)"})
-    #             tokens.append({"Enter": "\n"})
-    #         elif tag in ["Logue", "Part", "Chapter"]:
-    #             tokens.append({"Pause": "(1.50)"})
-    #             tokens.append({"Enter": "\n"})
-    #         elif tag == "Index":
-    #             tokens.append({"Pause": "(1.30)"})
-    #             tokens.append({"Enter": "\n"})
-    #         elif tag == "Caption":
-    #             tokens.append({"Pause": "(1.20)"})
-    #             tokens.append({"Enter": "\n"})
-    #         # elif tag == "Comment":
-    #         #     tokens.append({"Pause": "(0.40)"})
-    #         #     tokens.append({"Enter": "\n"})
-    #         else:
-    #             if len(tokens) >= 2:
-    #                 BeforeEndtoken = tokens[-2]
-    #                 Endtoken = tokens[-1]
-    #                 if ('Ko' in BeforeEndtoken and 'Period' in Endtoken) or ('En' in BeforeEndtoken and 'Period' in Endtoken):
-    #                     tokens.append({"Pause": "(0.70)"})
-    #                     tokens.append({"Enter": "\n"})
-    #                 if len(tokens) >= 5:
-    #                     for k in range(len(tokens) - 5):
-    #                         if ('Ko' in tokens[k] and 'Period' in tokens[k+1]) or ('En' in tokens[k] and 'Period' in tokens[k+1]):
-    #                             tokens.insert(k + 2, {"Pause": "(0.60)"})
-            
-    #         # 앞, 뒤Chunk를 통한 처리
-    #         if tag == "Character" and Aftertag == "Character":
-    #             tokens.append({"Pause": "(0.70)"})
-    #             tokens.append({"Enter": "\n"})
-    #         elif tag == "Character" and Aftertag == "Narrator":
-    #             tokens.append({"Pause": "(0.30)"})
-    #             tokens.append({"Enter": "\n"})
-    #         elif tag == "Character" and Aftertag == "Comment":
-    #             tokens.append({"Pause": "(0.20)"})
-    #             tokens.append({"Enter": "\n"})
-    #         elif tag == "Narrator" and Aftertag == "Character":
-    #             if len(tokens) >= 2:
-    #                 BeforeEndtoken = tokens[-2]
-    #                 Endtoken = tokens[-1]
-    #                 if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
-    #                     tokens.append({"Pause": "(0.40)"})
-    #                     tokens.append({"Enter": "\n"})
-    #         elif (tag == "Narrator" and Aftertag == "Comment") or (tag == "Caption" and Aftertag == "CaptionComment"):
-    #             if len(tokens) >= 2:
-    #                 BeforeEndtoken = tokens[-2]
-    #                 Endtoken = tokens[-1]
-    #                 if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
-    #                     tokens.append({"Pause": "(0.20)"})
-
-    #         # Chunk가 중간에 끊길 경우 처리
-    #         if tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Character":
-    #             tokens.append({"Pause": "(0.70)"})
-    #             tokens.append({"Enter": "\n"})
-    #         elif tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Narrator":
-    #             tokens.append({"Pause": "(0.30)"})
-    #             tokens.append({"Enter": "\n"})
-    #         elif tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Comment":
-    #             tokens.append({"Pause": "(0.20)"})
-    #             tokens.append({"Enter": "\n"})
-    #         elif tag == "Narrator" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Character":
-    #             if len(tokens) >= 2:
-    #                 BeforeEndtoken = tokens[-2]
-    #                 Endtoken = tokens[-1]
-    #                 if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
-    #                     tokens.append({"Pause": "(0.40)"})
-    #                     tokens.append({"Enter": "\n"})
-    #         elif (tag == "Narrator" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Comment") or (tag == "Caption" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "CaptionComment"):
-    #             if len(tokens) >= 2:
-    #                 BeforeEndtoken = tokens[-2]
-    #                 Endtoken = tokens[-1]
-    #                 if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
-    #                     tokens.append({"Pause": "(0.20)"})
-    
-    # responseJsonText = ""
-    # for i in range(len(responseJson)):
-    #     for j in range(len(responseJson[i]['CorrectionChunks'])):
-    #         for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
-    #             # 딕셔너리에서 value 추출 (딕셔너리의 첫 번째 값)
-    #             token = next(iter(token_dict.values()))
-    #             responseJsonText += token
-
-    # filePath3 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_responseJson_231128.txt"
-    # # 텍스트 파일에 저장
-    # with open(filePath3, "w", encoding="utf-8") as file:
-    #     file.write(responseJsonText)
-    # ########## 테스트 후 삭제 ##########
+                if outputId == InputsId == MemoryDicsOutputId:
+                    SFX = MemoryDicsOutput['SFX']
+                    SFXchunk = MemoryDicsOutput['Chunk']
+                    Match = re.search(r'<시작\d{1,5}>(.*?)<끝\d{1,5}>', SFXchunk)
+                    if Match:
+                        ExtractedSFXchunk = Match.group(0)
+                        ExtractedSFXchunk = re.sub(r'<시작\d{1,5}>', '', ExtractedSFXchunk)
+                        ExtractedSFXchunk = re.sub(r'<끝\d{1,5}>', '', ExtractedSFXchunk)
+                        CleanExtractedSFXchunk = re.sub("[^가-힣]", "", ExtractedSFXchunk)
+                        if CleanExtractedSFXchunk == '':
+                            CleanExtractedSFXchunk = "None"
+                    else:
+                        CleanExtractedSFXchunk = "None"
                         
-    # return responseJson
+                    if '아차싶으면' in CleanInputsChunk:
+                        print(CleanInputsChunk)
+                    
+                    if CleanExtractedSFXchunk in CleanInputsChunk:
+                        ChunkId = Inputs[j]['ChunkId']
+                        Chunk = InputsChunk
+                        ResponseJson.append({"outputId": outputId, "ChunkId": ChunkId, "Chunk": Chunk, "SFX": SFX})
+                        MemoryDicsCount = k + 1
+                    elif j >= 2:
+                        if CleanExtractedSFXchunk in CleanBeforeInputsChunk + CleanInputsChunk:
+                            ChunkId = [Inputs[j-1]['ChunkId'], Inputs[j]['ChunkId']]
+                            Chunk = BeforeInputsChunk + ' ' + InputsChunk
+                            ResponseJson.append({"outputId": outputId, "ChunkId": ChunkId, "Chunk": Chunk, "SFX": SFX})
+                            MemoryDicsCount = k + 1
+
+                        elif CleanExtractedSFXchunk in CleanBeBeforeInputsChunk + CleanBeforeInputsChunk + CleanInputsChunk:
+                            ChunkId = [Inputs[j-2]['ChunkId'], Inputs[j-1]['ChunkId'], Inputs[j]['ChunkId']]
+                            Chunk = BeBeforeInputsChunk + ' ' + BeforeInputsChunk + ' ' + InputsChunk
+                            ResponseJson.append({"outputId": outputId, "ChunkId": ChunkId, "Chunk": Chunk, "SFX": SFX})
+                            MemoryDicsCount = k + 1
+
+    # numList = []
+    # for i in range(len(ResponseJson)):
+    #     numList.append(ResponseJson[i]["SFX"]["SFXId"])
+        
+    # def find_missing_numbers(num_list):
+    #     # 전체 범위에서 리스트에 있는 숫자들을 뺀다.
+    #     # 이렇게 하면 빈 숫자들만 남게 됨.
+    #     full_range = set(range(1, num_list[-1] + 1))
+    #     missing_numbers = full_range - set(num_list)
+    #     return sorted(list(missing_numbers))
+
+    # # 빈 숫자 찾기
+    # missing_numbers = find_missing_numbers(numList)
+    # print(len(outputMemoryDicsList))
+    # print(len(numList))
+    # print(len(missing_numbers))
+    # print(missing_numbers)
+    
+    # for num in missing_numbers:
+    #     print(f'{num - 1}: {outputMemoryDicsList[num - 1]}\n\n')
+    
+    # file_path = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/Test.json"
+    # with open(file_path, 'w', encoding = 'utf-8') as file:
+    #     json.dump(ResponseJson, file, ensure_ascii = False, indent = 4)
+                        
+    return ResponseJson
 
 ## 프롬프트 요청 및 결과물 Json을 SFXMatching에 업데이트
 def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):

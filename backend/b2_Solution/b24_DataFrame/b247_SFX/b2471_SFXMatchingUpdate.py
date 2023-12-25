@@ -139,7 +139,7 @@ def SFXMatchingFilter(Input, responseData, memoryCounter):
             elif not OUTPUT in INPUT:
                 print(f"JSON에서 오류 발생: JSON '길이'의 문구가 Input에 포함되지 않음 Error\n문구: {dic[key]['길이']}")
                 dic[key]['길이'] = ''
-            elif not ('명칭' in dic[key] and '유형' in dic[key] and '역할' in dic[key] and '공간음향' in dic[key] and '길이' in dic[key] and '필요성' in dic[key]):
+            elif not ('명칭' in dic[key] and '영어명칭' in dic[key] and '유형' in dic[key] and '역할' in dic[key] and '공간음향' in dic[key] and '길이' in dic[key] and '필요성' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -372,14 +372,48 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                 ChunkListCount = j
                 break
         InputsList.append(ChunksList)
+        
+    # outputMemoryDics의 전처리
     
+    OutputMemoryDics = []
+    pattern = r"[A-Za-z’]+(?:\s+[A-Za-z’]+)*"
+    for i in range(len(InputList)):
+        Input = InputList[i]['Continue']
+        EngInput = re.sub(pattern, "영문어문글장", Input)
+        CleanInput = re.sub("[^가-힣]", "", EngInput)
+        
+        OutputDic = outputMemoryDics[i]
+        CleanOutputs = []
+        for Output in OutputDic:
+            OutputValue = next(iter(Output.values()))
+            Output = OutputValue['길이']
+            EngOutput = re.sub(pattern, "영문어문글장", Output)
+            startIndex = EngOutput.find('<시작>') + len('<시작>')
+            endIndex = EngOutput.find('<끝>')
+            Content = EngOutput[startIndex:endIndex].strip()
+            CleanContent = re.sub("[^가-힣]", "", Content)
+            CleanOutputs.append(CleanContent)
+        
+        positions = [(CleanInput.find(word), index) for index, word in enumerate(CleanOutputs)]
+        # 위치 정보를 기준으로 정렬
+        positions.sort()
+        # 정렬된 순서대로 새로운 리스트와 변경된 순서값 생성
+        NewCleanOutputs = [CleanOutputs[index] for position, index in positions]
+        NewOutputsOrder = [index for position, index in positions]
+        
+        NewDics = []
+        for NewOrder in NewOutputsOrder:
+            NewDics.append(OutputDic[NewOrder])
+            
+        OutputMemoryDics.append(NewDics)
+
     # outputMemoryDics의 전처리
     SFXID = 1
     outputMemoryDicsList = []
-    for i in range(len(outputMemoryDics)):
-        for j in range(len(outputMemoryDics[i])):
-            key = next(iter(outputMemoryDics[i][j]))
-            SFXDic = outputMemoryDics[i][j][key]
+    for i in range(len(OutputMemoryDics)):
+        for j in range(len(OutputMemoryDics[i])):
+            key = next(iter(OutputMemoryDics[i][j]))
+            SFXDic = OutputMemoryDics[i][j][key]
             RANGE = SFXDic['길이']
             ImportanceScore = int(SFXDic['필요성'])
             
@@ -457,30 +491,30 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                             ResponseJson.append({"outputId": outputId, "ChunkId": ChunkId, "Chunk": Chunk, "SFX": SFX})
                             MemoryDicsCount = k + 1
 
-    # numList = []
-    # for i in range(len(ResponseJson)):
-    #     numList.append(ResponseJson[i]["SFX"]["SFXId"])
+    numList = []
+    for i in range(len(ResponseJson)):
+        numList.append(ResponseJson[i]["SFX"]["SFXId"])
         
-    # def find_missing_numbers(num_list):
-    #     # 전체 범위에서 리스트에 있는 숫자들을 뺀다.
-    #     # 이렇게 하면 빈 숫자들만 남게 됨.
-    #     full_range = set(range(1, num_list[-1] + 1))
-    #     missing_numbers = full_range - set(num_list)
-    #     return sorted(list(missing_numbers))
+    def find_missing_numbers(num_list):
+        # 전체 범위에서 리스트에 있는 숫자들을 뺀다.
+        # 이렇게 하면 빈 숫자들만 남게 됨.
+        full_range = set(range(1, num_list[-1] + 1))
+        missing_numbers = full_range - set(num_list)
+        return sorted(list(missing_numbers))
 
-    # # 빈 숫자 찾기
-    # missing_numbers = find_missing_numbers(numList)
-    # print(len(outputMemoryDicsList))
-    # print(len(numList))
-    # print(len(missing_numbers))
-    # print(missing_numbers)
+    # 빈 숫자 찾기
+    missing_numbers = find_missing_numbers(numList)
+    print(len(outputMemoryDicsList))
+    print(len(numList))
+    print(len(missing_numbers))
+    print(missing_numbers)
     
-    # for num in missing_numbers:
-    #     print(f'{num - 1}: {outputMemoryDicsList[num - 1]}\n\n')
+    for num in missing_numbers:
+        print(f'{num - 1}: {outputMemoryDicsList[num - 1]}\n\n')
     
-    # file_path = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/Test.json"
-    # with open(file_path, 'w', encoding = 'utf-8') as file:
-    #     json.dump(ResponseJson, file, ensure_ascii = False, indent = 4)
+    file_path = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/Test.json"
+    with open(file_path, 'w', encoding = 'utf-8') as file:
+        json.dump(ResponseJson, file, ensure_ascii = False, indent = 4)
                         
     return ResponseJson
 
@@ -543,4 +577,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode)
+    SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode, importance = 0)

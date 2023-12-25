@@ -312,6 +312,27 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
+## Chunk에서 ExtractedSFXchunk와 가장 유사한 부분을 찾아서 ExtractedSFXchunk로 대처
+def ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID):
+    # Chunk의 각 부분 문자열과 ExtractedSFXchunk를 비교하여 가장 유사한 부분 찾기
+    best_ratio = 0
+    best_start = 0
+    best_end = 0
+
+    for start in range(len(Chunk)):
+        for end in range(start + 1, len(Chunk) + 1):
+            substring = Chunk[start:end]
+            ratio = difflib.SequenceMatcher(None, substring, ExtractedSFXchunk).ratio()
+            if ratio > best_ratio:
+                best_ratio = ratio
+                best_start = start
+                best_end = end
+
+    # 가장 유사한 부분을 target_chunk로 변경
+    NewChunk = Chunk[:best_start] + f'<시작{SFXID}>' + ExtractedSFXchunk + f'<끝{SFXID}>' + Chunk[best_end:]
+
+    return NewChunk
+
 ## Chunk를 Tokens로 치환
 def SplitChunkIntoTokens(Chunk):
 
@@ -373,8 +394,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                 break
         InputsList.append(ChunksList)
         
-    # outputMemoryDics의 전처리
-    
+    # outputMemoryDics의 순서를 글의 순서대로 전처리
     OutputMemoryDics = []
     pattern = r"[A-Za-z’]+(?:\s+[A-Za-z’]+)*"
     for i in range(len(InputList)):
@@ -407,7 +427,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
             
         OutputMemoryDics.append(NewDics)
 
-    # outputMemoryDics의 전처리
+    # outputMemoryDics의 Chunk단위 전처리
     SFXID = 1
     outputMemoryDicsList = []
     for i in range(len(OutputMemoryDics)):
@@ -420,7 +440,12 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
             if ImportanceScore >= importance:
                 if '<시작>' in RANGE and '<끝>' in RANGE:
                     RANGE = RANGE.replace('<시작>', f'<시작{SFXID}>')
+                    RANGE = RANGE.replace(f'<시작{SFXID}>. ', f'. <시작{SFXID}>')
+                    RANGE = RANGE.replace(f'.<시작{SFXID}>', f'<시작{SFXID}>.')
+                    RANGE = RANGE.replace(f',<시작{SFXID}>', f'<시작{SFXID}>,')
                     RANGE = RANGE.replace('<끝>', f'<끝{SFXID}>')
+                    RANGE = RANGE.replace(f'.<끝{SFXID}>', f'<끝{SFXID}>.')
+                    RANGE = RANGE.replace(f',<끝{SFXID}>', f'<끝{SFXID}>,')
                     
                     Chunk = RANGE
                     SFXId = SFXID
@@ -469,32 +494,45 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                             CleanExtractedSFXchunk = "None"
                     else:
                         CleanExtractedSFXchunk = "None"
-                        
-                    if '아차싶으면' in CleanInputsChunk:
-                        print(CleanInputsChunk)
-                    
+                                            
                     if CleanExtractedSFXchunk in CleanInputsChunk:
                         ChunkId = Inputs[j]['ChunkId']
+                        SFXID = SFX['SFXId']
                         Chunk = InputsChunk
+                        Chunk = ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID)
                         ResponseJson.append({"outputId": outputId, "ChunkId": ChunkId, "Chunk": Chunk, "SFX": SFX})
                         MemoryDicsCount = k + 1
                     elif j >= 2:
                         if CleanExtractedSFXchunk in CleanBeforeInputsChunk + CleanInputsChunk:
                             ChunkId = [Inputs[j-1]['ChunkId'], Inputs[j]['ChunkId']]
+                            SFXID = SFX['SFXId']
                             Chunk = BeforeInputsChunk + ' ' + InputsChunk
+                            Chunk = ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID)
                             ResponseJson.append({"outputId": outputId, "ChunkId": ChunkId, "Chunk": Chunk, "SFX": SFX})
                             MemoryDicsCount = k + 1
 
                         elif CleanExtractedSFXchunk in CleanBeBeforeInputsChunk + CleanBeforeInputsChunk + CleanInputsChunk:
                             ChunkId = [Inputs[j-2]['ChunkId'], Inputs[j-1]['ChunkId'], Inputs[j]['ChunkId']]
+                            SFXID = SFX['SFXId']
                             Chunk = BeBeforeInputsChunk + ' ' + BeforeInputsChunk + ' ' + InputsChunk
+                            Chunk = ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID)
                             ResponseJson.append({"outputId": outputId, "ChunkId": ChunkId, "Chunk": Chunk, "SFX": SFX})
                             MemoryDicsCount = k + 1
-    
-    for Response in ResponseJson:
-        print(f'{Response}\n\n')
 
-                        
+    for Response in ResponseJson:
+        if not "<시작" in Response['Chunk']:
+            print(Response)
+            
+    print(len(ResponseJson))
+    # 파일로 저장할 경로
+    file_path = '/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/Test.json'
+
+    # 파일로 저장
+    with open(file_path, 'w', encoding='utf-8') as file:
+        json.dump(ResponseJson, file, ensure_ascii=False, indent=4)
+    # for Response in ResponseJson:
+    #     print(f'{Response}\n\n')
+
     return ResponseJson
 
 ## 프롬프트 요청 및 결과물 Json을 SFXMatching에 업데이트

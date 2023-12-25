@@ -425,14 +425,14 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                     Chunk = RANGE
                     SFXId = SFXID
                     SFXKo = SFXDic['명칭']
-                    # SFXEn = SFXDic['프롬프트']
+                    SFXEn = SFXDic['영어명칭']
                     Type = SFXDic['유형']
                     Role = SFXDic['역할']
                     Direction = SFXDic['공간음향']
                     Range = RANGE
                     Importance = SFXDic['필요성']
                     
-                    outputMemoryDicsList.append({"outputId": i + 1, "Chunk": Chunk, "SFX": {"SFXId": SFXId, "SFXKo": SFXKo, "SFXEn": "None", "Type": Type, "Role": Role, "Direction": Direction, "Range": Range, "Importance": Importance}})
+                    outputMemoryDicsList.append({"outputId": i + 1, "Chunk": Chunk, "SFX": {"SFXId": SFXId, "SFXKo": SFXKo, "SFXEn": SFXEn, "Type": Type, "Role": Role, "Direction": Direction, "Range": Range, "Importance": Importance}})
                     SFXID += 1
 
     # outputMemoryDics의 전처리
@@ -490,31 +490,10 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                             Chunk = BeBeforeInputsChunk + ' ' + BeforeInputsChunk + ' ' + InputsChunk
                             ResponseJson.append({"outputId": outputId, "ChunkId": ChunkId, "Chunk": Chunk, "SFX": SFX})
                             MemoryDicsCount = k + 1
-
-    numList = []
-    for i in range(len(ResponseJson)):
-        numList.append(ResponseJson[i]["SFX"]["SFXId"])
-        
-    def find_missing_numbers(num_list):
-        # 전체 범위에서 리스트에 있는 숫자들을 뺀다.
-        # 이렇게 하면 빈 숫자들만 남게 됨.
-        full_range = set(range(1, num_list[-1] + 1))
-        missing_numbers = full_range - set(num_list)
-        return sorted(list(missing_numbers))
-
-    # 빈 숫자 찾기
-    missing_numbers = find_missing_numbers(numList)
-    print(len(outputMemoryDicsList))
-    print(len(numList))
-    print(len(missing_numbers))
-    print(missing_numbers)
     
-    for num in missing_numbers:
-        print(f'{num - 1}: {outputMemoryDicsList[num - 1]}\n\n')
-    
-    file_path = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/Test.json"
-    with open(file_path, 'w', encoding = 'utf-8') as file:
-        json.dump(ResponseJson, file, ensure_ascii = False, indent = 4)
+    for Response in ResponseJson:
+        print(f'{Response}\n\n')
+
                         
     return ResponseJson
 

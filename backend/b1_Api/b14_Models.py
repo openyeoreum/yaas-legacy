@@ -218,20 +218,15 @@ class Project(Base):
     # Character
     CharacterDefine = Column(JSON)
     CharacterCompletion = Column(JSON)
-    CharacterMultiQuery = Column(JSON)
     
     # Music
-    MusicTagging = Column(JSON)
-    MusicMultiQuery = Column(JSON)
+    MusicMatching = Column(JSON)
     
     # Sound
-    SoundTagging = Column(JSON)
     SoundMatching = Column(JSON)
-    SoundMultiQuery = Column(JSON)
     
     # SFX
     SFXMatching = Column(JSON)
-    SFXMultiQuery = Column(JSON)
     
     # Translation
     TranslationKo = Column(JSON)
@@ -248,18 +243,11 @@ class Project(Base):
     CorrectionEs = Column(JSON)
     
     # Selection-Generation
-    VoiceGenerationKo = Column(JSON)
-    VoiceGenerationEn = Column(JSON)
-    VoiceGenerationJa = Column(JSON)
-    VoiceGenerationZh = Column(JSON)
-    VoiceGenerationEs = Column(JSON)
-    MusicSelection = Column(JSON)
-    SoundSelection = Column(JSON)
-    SFXSelectionKo = Column(JSON)
-    SFXSelectionEn = Column(JSON)
-    SFXSelectionJa = Column(JSON)
-    SFXSelectionZh = Column(JSON)
-    SFXSelectionEs = Column(JSON)
+    SelectionGenerationKo = Column(JSON)
+    SelectionGenerationEn = Column(JSON)
+    SelectionGenerationJa = Column(JSON)
+    SelectionGenerationZh = Column(JSON)
+    SelectionGenerationEs = Column(JSON)
     
     # Mixing-Mastering
     MixingMasteringKo = Column(JSON)
@@ -343,20 +331,15 @@ class ProjectHistory(Base):
     # Character
     CharacterDefineStatus = Column(JSON(64))
     CharacterCompletionStatus = Column(JSON(64))
-    CharacterMultiQueryStatus = Column(JSON(64))
     
     # Music
-    MusicTaggingStatus = Column(JSON(64))
-    MusicMultiQueryStatus = Column(JSON(64))
+    MusicMatchingStatus = Column(JSON(64))
     
     # Sound
-    SoundTaggingStatus = Column(JSON(64))
     SoundMatchingStatus = Column(JSON(64))
-    SoundMultiQueryStatus = Column(JSON(64))
     
     # SFX
     SFXMatchingStatus = Column(JSON(64))
-    SFXMultiQueryStatus = Column(JSON(64))
     
     # Translation
     TranslationKoStatus = Column(String(64))
@@ -373,18 +356,11 @@ class ProjectHistory(Base):
     CorrectionEsStatus = Column(String(64))
     
     # Selection-Generation
-    VoiceGenerationKoStatus = Column(String(64))
-    VoiceGenerationEnStatus = Column(String(64))
-    VoiceGenerationJaStatus = Column(String(64))
-    VoiceGenerationZhStatus = Column(String(64))
-    VoiceGenerationEsStatus = Column(String(64))
-    MusicSelectionStatus = Column(String(64))
-    SoundSelectionStatus = Column(String(64))
-    SFXSelectionKoStatus = Column(String(64))
-    SFXSelectionEnStatus = Column(String(64))
-    SFXSelectionJaStatus = Column(String(64))
-    SFXSelectionZhStatus = Column(String(64))
-    SFXSelectionEsStatus = Column(String(64))
+    SelectionGenerationKoStatus = Column(String(64))
+    SelectionGenerationEnStatus = Column(String(64))
+    SelectionGenerationJaStatus = Column(String(64))
+    SelectionGenerationZhStatus = Column(String(64))
+    SelectionGenerationEsStatus = Column(String(64))
     
     # Mixing-Mastering
     MixingMasteringKoStatus = Column(String(64))
@@ -420,16 +396,12 @@ class Prompt(Base):
     # CharacterPrompt
     CharacterDefine = Column(JSON)
     CharacterCompletion = Column(JSON)
-    # CharacterMultiQuery = Column(JSON)
     
     # # MusicPrompt
-    # MusicTagging = Column(JSON)
-    # MusicMultiQuery = Column(JSON)
+    # MusicMatching = Column(JSON)
     
     # # SoundPrompt
-    # SoundTagging = Column(JSON)
     # SoundMatching = Column(JSON)
-    # SoundMultiQuery = Column(JSON)
     
     # SFXPrompt
     SFXMatching = Column(JSON)
@@ -450,20 +422,11 @@ class Prompt(Base):
     # CorrectionEs = Column(JSON)
     
     # # Selection-GenerationPrompt
-    # VoiceGenerationKo = Column(JSON)
-    # VoiceGenerationEn = Column(JSON)
-    # VoiceGenerationJa = Column(JSON)
-    # VoiceGenerationZh = Column(JSON)
-    # VoiceGenerationEs = Column(JSON)
-    
-    # MusicSelection = Column(JSON)
-    # SoundSelection = Column(JSON)
-    
-    # SFXSelectionKo = Column(JSON)
-    # SFXSelectionEn = Column(JSON)
-    # SFXSelectionJa = Column(JSON)
-    # SFXSelectionZh = Column(JSON)
-    # SFXSelectionEs = Column(JSON)
+    # SelectionGenerationKo = Column(JSON)
+    # SelectionGenerationEn = Column(JSON)
+    # SelectionGenerationJa = Column(JSON)
+    # SelectionGenerationZh = Column(JSON)
+    # SelectionGenerationEs = Column(JSON)
     
     # # Mixing-MasteringPrompt
     # MixingMasteringKo = Column(JSON)
@@ -504,16 +467,12 @@ class TrainingDataset(Base):
     # CharacterDataset
     CharacterDefine = Column(JSON)
     CharacterCompletion = Column(JSON)
-    # CharacterMultiQuery = Column(JSON)
     
     # # MusicDataset
-    # MusicTagging = Column(JSON)
-    # MusicMultiQuery = Column(JSON)
+    # MusicMatching = Column(JSON)
     
     # # SoundDataset
-    # SoundTagging = Column(JSON)
     # SoundMatching = Column(JSON)
-    # SoundMultiQuery = Column(JSON)
     
     # SFXDataset
     SFXMatching = Column(JSON)
@@ -534,20 +493,11 @@ class TrainingDataset(Base):
     CorrectionEs = Column(JSON)
     
     # # Selection-GenerationDataset
-    # VoiceGenerationKo = Column(JSON)
-    # VoiceGenerationEn = Column(JSON)
-    # VoiceGenerationJa = Column(JSON)
-    # VoiceGenerationZh = Column(JSON)
-    # VoiceGenerationEs = Column(JSON)
-    
-    # MusicSelection = Column(JSON)
-    # SoundSelection = Column(JSON)
-    
-    # SFXSelectionKo = Column(JSON)
-    # SFXSelectionEn = Column(JSON)
-    # SFXSelectionJa = Column(JSON)
-    # SFXSelectionZh = Column(JSON)
-    # SFXSelectionEs = Column(JSON)
+    # SelectionGenerationKo = Column(JSON)
+    # SelectionGenerationEn = Column(JSON)
+    # SelectionGenerationJa = Column(JSON)
+    # SelectionGenerationZh = Column(JSON)
+    # SelectionGenerationEs = Column(JSON)
     
     # # Mixing-MasteringDataset
     # MixingMasteringKo = Column(JSON)

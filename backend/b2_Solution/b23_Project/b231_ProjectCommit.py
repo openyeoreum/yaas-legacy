@@ -104,7 +104,6 @@ def AddProjectToDB(projectName, email):
         characterDefine = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-01_CharacterDefine.json")
         characterCompletion = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-02_CharacterCompletion.json")
         sFXMatching = LoadJsonFrame(ProjectDataPath + "/b536_SFX/b536-01_SFXMatching.json")
-        sFXMultiQuery = LoadJsonFrame(ProjectDataPath + "/b536_SFX/b536-02_SFXMultiQuery.json")
         translationKo = LoadJsonFrame(ProjectDataPath + "/b537_Translation/b537-01_TranslationKo.json")
         translationEn = LoadJsonFrame(ProjectDataPath + "/b537_Translation/b537-02_TranslationEn.json")
         correctionKo = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-01_CorrectionKo.json")
@@ -159,7 +158,6 @@ def AddProjectToDB(projectName, email):
             ExistingProject.CharacterDefine = characterDefine
             ExistingProject.CharacterCompletion = characterCompletion
             ExistingProject.SFXMatching = sFXMatching
-            ExistingProject.SFXMultiQuery = sFXMultiQuery
             ExistingProject.TranslationKo = translationKo
             ExistingProject.TranslationEn = translationEn
             ExistingProject.CorrectionKo = correctionKo
@@ -213,7 +211,6 @@ def AddProjectToDB(projectName, email):
                 CharacterDefine = characterDefine,
                 CharacterCompletion = characterCompletion,
                 SFXMatching = sFXMatching,
-                SFXMultiQuery = sFXMultiQuery,
                 TranslationKo = translationKo,
                 TranslationEn = translationEn,
                 CorrectionKo = correctionKo,

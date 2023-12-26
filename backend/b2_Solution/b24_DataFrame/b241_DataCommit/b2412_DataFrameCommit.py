@@ -1030,6 +1030,90 @@ def CharacterCompletionCompletionUpdate(projectName, email):
 
 
 ###################################
+##### 20_SFXMatching Process #####
+###################################
+## 20. 1-0 SFXMatching이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.SFXMatching[1] = ExistedDataFrame[1]
+        
+        flag_modified(project, "SFXMatching")
+        
+        db.add(project)
+        db.commit()
+        
+## 20. 1-1 SFXMatching의 Body(본문) SFXSplitedBodys 업데이트 형식
+def UpdateSFXSplitedBodys(project, SFXSplitedBodyChunks):
+    BodyId = len(project.SFXMatching[1]["SFXSplitedBodys"])
+    
+    updateSFXSplitedBodys = {
+        "BodyId": BodyId,
+        "SFXSplitedBodyChunks": SFXSplitedBodyChunks
+    }
+    
+    project.SFXMatching[1]["SFXSplitedBodys"].append(updateSFXSplitedBodys)
+    project.SFXMatching[0]["BodyCount"] = BodyId
+    
+## 20. 1-2 SFXMatching의 Body(본문) SFXSplitedBodys 업데이트
+def AddSFXSplitedBodysToDB(projectName, email, SFXSplitedBodyChunks):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateSFXSplitedBodys(project, SFXSplitedBodyChunks)
+        
+        flag_modified(project, "SFXMatching")
+        
+        db.add(project)
+        db.commit()
+        
+## 20. SFXMatching의Count의 가져오기
+def SFXMatchingCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    BodyCount = project.SFXMatching[0]["BodyCount"]
+    Completion = project.SFXMatching[0]["Completion"]
+    
+    return BodyCount, Completion
+
+## 20. SFXMatching의 초기화
+def InitSFXMatching(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.SFXMatching[0]["BodyCount"] = 0
+        project.SFXMatching[0]["Completion"] = "No"
+        project.SFXMatching[1] = LoadJsonFrame(ProjectDataPath + "/b536_SFX/b536-01_SFXMatching.json")[1]
+
+        flag_modified(project, "SFXMatching")
+        
+        db.add(project)
+        db.commit()
+        
+## 20. 업데이트된 SFXMatching 출력
+def UpdatedSFXMatching(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        
+    return project.SFXMatching
+        
+## 20. SFXMatchingCompletion 업데이트
+def SFXMatchingCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.SFXMatching[0]["Completion"] = "Yes"
+
+        flag_modified(project, "SFXMatching")
+
+        db.add(project)
+        db.commit()
+
+
+###################################
 ##### 26_CorrectionKo Process #####
 ###################################
 ## 26. 1-0 CorrectionKo이 이미 ExistedFrame으로 존재할때 업데이트

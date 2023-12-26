@@ -7,16 +7,14 @@
         "Content": "Body",
         "Language": "Ko",
         "TaskName": "SFXMatching",
-        "TaskCount": 0,
         "BodyCount": 0,
-        "ChunkCount": 0,
         "Completion": "No"
     },
     {
-        "SFXBodys": [
+        "SFXSplitedBodys": [
             {
                 "BodyId": 0,
-                "SFXChunks": [
+                "SFXSplitedBodyChunks": [
                     {
                         "ChunkId": 0,
                         "SFX": {
@@ -30,42 +28,20 @@
                             "Importance": "None"
                         },
                         "SFXChunkTokens": [
-                            {
-                                "Space": "None"
-                            },
-                            {
-                                "Enter": "None"
-                            },
-                            {
-                                "Comma": "None"
-                            },
-                            {
-                                "Quotes": "None"
-                            },
-                            {
-                                "Period": "None"
-                            },
-                            {
-                                "ETC": "None"
-                            },
-                            {
-                                "Number": "None"
-                            },
-                            {
-                                "Ko": "None"
-                            },
-                            {
-                                "En": "None"
-                            },
-                            {
-                                "Ja": "None"
-                            },
-                            {
-                                "Zh": "None"
-                            },
-                            {
-                                "Es": "None"
-                            }
+                            {"SFXStart": "None"},
+                            {"SFXEnd": "None"},
+                            {"Space": "None"},
+                            {"Enter": "None"},
+                            {"Comma": "None"},
+                            {"Quotes": "None"},
+                            {"Period": "None"},
+                            {"ETC": "None"},
+                            {"Number": "None"},
+                            {"Ko": "None"},
+                            {"En": "None"},
+                            {"Ja": "None"},
+                            {"Zh": "None"},
+                            {"Es": "None"}
                         ]
                     }
                 ]

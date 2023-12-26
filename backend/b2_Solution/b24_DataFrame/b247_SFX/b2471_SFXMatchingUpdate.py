@@ -12,7 +12,7 @@ from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory
-# from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSFXMatchingToDB, AddSFXMatchingSplitedBodysToDB, AddSFXMatchingChunksToDB, SFXMatchingCountLoad, SFXMatchingCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSFXMatchingToDB, AddSFXSplitedBodysToDB, SFXMatchingCountLoad, SFXMatchingCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -464,6 +464,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
     # outputMemoryDics의 전처리
     ResponseJson = []
     MemoryDicsCount = 0
+    SFXIdCounter = 1
     for i in range(len(InputsList)):
         outputId = i + 1
         Inputs = InputsList[i]
@@ -485,6 +486,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                 
                 if outputId == InputsId == MemoryDicsOutputId:
                     SFX = MemoryDicsOutput['SFX']
+                    SFX['SFXId'] = SFXIdCounter
                     SFXchunk = MemoryDicsOutput['Chunk']
                     Match = re.search(r'<시작\d{1,5}>(.*?)<끝\d{1,5}>', SFXchunk)
                     if Match:
@@ -502,8 +504,10 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                         SFXID = SFX['SFXId']
                         Chunk = InputsChunk
                         Chunk = ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID)
-                        ChunkTokens = SplitChunkIntoTokens(Chunk)
-                        ResponseJson.append({"outputId": outputId, "BodyId": BodyId, "ChunkId": ChunkId, "SFXChunkTokens":{"SFX": SFX, "ChunkTokens": ChunkTokens}})
+                        SFX['Range'] = Chunk
+                        SFXChunkTokens = SplitChunkIntoTokens(Chunk)
+                        ResponseJson.append({"outputId": outputId, "BodyId": BodyId, "SFXChunk":{"ChunkId": ChunkId, "SFX": SFX, "SFXChunkTokens": SFXChunkTokens}})
+                        SFXIdCounter += 1
                         MemoryDicsCount = k + 1
                     elif j >= 2:
                         if CleanExtractedSFXchunk in CleanBeforeInputsChunk + CleanInputsChunk:
@@ -511,8 +515,10 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                             SFXID = SFX['SFXId']
                             Chunk = BeforeInputsChunk + ' ' + InputsChunk
                             Chunk = ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID)
-                            ChunkTokens = SplitChunkIntoTokens(Chunk)
-                            ResponseJson.append({"outputId": outputId, "BodyId": BodyId, "ChunkId": ChunkId, "SFXChunkTokens":{"SFX": SFX, "ChunkTokens": ChunkTokens}})
+                            SFX['Range'] = Chunk
+                            SFXChunkTokens = SplitChunkIntoTokens(Chunk)
+                            ResponseJson.append({"outputId": outputId, "BodyId": BodyId, "SFXChunk":{"ChunkId": ChunkId, "SFX": SFX, "SFXChunkTokens": SFXChunkTokens}})
+                            SFXIdCounter += 1
                             MemoryDicsCount = k + 1
 
                         elif CleanExtractedSFXchunk in CleanBeBeforeInputsChunk + CleanBeforeInputsChunk + CleanInputsChunk:
@@ -520,61 +526,49 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                             SFXID = SFX['SFXId']
                             Chunk = BeBeforeInputsChunk + ' ' + BeforeInputsChunk + ' ' + InputsChunk
                             Chunk = ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID)
-                            ChunkTokens = SplitChunkIntoTokens(Chunk)
-                            ResponseJson.append({"outputId": outputId, "BodyId": BodyId, "ChunkId": ChunkId, "SFXChunkTokens":{"SFX": SFX, "ChunkTokens": ChunkTokens}})
+                            SFX['Range'] = Chunk
+                            SFXChunkTokens = SplitChunkIntoTokens(Chunk)
+                            ResponseJson.append({"outputId": outputId, "BodyId": BodyId, "SFXChunk":{"ChunkId": ChunkId, "SFX": SFX, "SFXChunkTokens": SFXChunkTokens}})
+                            SFXIdCounter += 1
                             MemoryDicsCount = k + 1
 
     # 최종 responseJson구조 완성
     responseJson = []
-    ResponseCount = 0
     BODYID = 1
-    SFXChunkTokens = []
-    ChunkId = []
-    Responses = None
+    SFXChunks = []
 
-    for i in range(ResponseCount, len(ResponseJson)):
-        if ResponseJson[i]['BodyId'] == BODYID:
-            chunkid = ResponseJson[i]['ChunkId']
-            if isinstance(chunkid, list):
-                ChunkId += chunkid
-            else:
-                ChunkId.append(chunkid)
-            SFXChunkTokens.append(ResponseJson[i]['SFXChunkTokens'])
+    for Response in ResponseJson:
+        if Response['BodyId'] == BODYID:
+            SFXChunks.append(Response['SFXChunk'])
         else:
-            if Responses:
-                responseJson.append(Responses)
-            BODYID += 1
-            ResponseCount = i
-            SFXChunkTokens = []
-            ChunkId = []
+            # 현재 BodyId에 대한 데이터 추가
+            responseJson.append({"BodyId": BODYID, "SFXSplitedBodyChunks": SFXChunks})
+            
+            # 다음 BodyId까지 비어있는 BodyId를 체크하고 추가
+            for emptyBodyId in range(BODYID + 1, Response['BodyId']):
+                responseJson.append({"BodyId": emptyBodyId, "SFXSplitedBodyChunks": []})
+            
+            # 다음 BodyId로 이동
+            BODYID = Response['BodyId']
+            SFXChunks = [Response['SFXChunk']]
 
-        Responses = {"BodyId": BODYID, "ChunkId": ChunkId, "SFXChunkTokens": SFXChunkTokens}
-
-    # 반복문 완료 후 마지막 Responses 추가
-    if Responses:
-        responseJson.append(Responses)
-        
-    # 파일로 저장할 경로
-    file_path = '/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/Test.json'
-
-    # 파일로 저장
-    with open(file_path, 'w', encoding='utf-8') as file:
-        json.dump(responseJson, file, ensure_ascii=False, indent=4)
+    # 마지막 BodyId에 대한 처리
+    responseJson.append({"BodyId": BODYID, "SFXSplitedBodyChunks": SFXChunks})
 
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 SFXMatching에 업데이트
 def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 26_SFXMatchingUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 20_SFXMatchingUpdate 시작 >")
     # SFXMatching의 Count값 가져오기
-    ContinueCount, ContextCount, Completion = SFXMatchingCountLoad(projectName, email)
+    ContinueCount, Completion = SFXMatchingCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "SFXMatching", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 26_SFXMatchingUpdate는 ExistedSFXMatching으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 20_SFXMatchingUpdate는 ExistedSFXMatching으로 대처됨 ]\n")
         else:
             responseJson = SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
@@ -582,7 +576,7 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
             ResponseJson = responseJson[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
             
-            ContextChunkId = ContinueCount
+            SFXBodyId = ContinueCount
             
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
@@ -591,25 +585,21 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'SFXMatchingUpdate: {Update}')
+                UpdateTQDM.set_description(f"SFXMatchingUpdate: {Update['BodyId']}")
                 time.sleep(0.0001)
-                AddSFXMatchingSplitedBodysToDB(projectName, email)
-                for j in range(len(Update['CorrectionChunks'])):
-                    ChunkId = Update['CorrectionChunks'][j]['ChunkId']
-                    Tag = Update['CorrectionChunks'][j]['Tag']
-                    ChunkTokens = Update['CorrectionChunks'][j]['CorrectionChunkTokens']
-                
-                    AddSFXMatchingChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens)
+                SFXSplitedBodyChunks = Update['SFXSplitedBodyChunks']
+                AddSFXSplitedBodysToDB(projectName, email, SFXSplitedBodyChunks)
+
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             SFXMatchingCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 26_SFXMatchingUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 20_SFXMatchingUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 26_SFXMatchingUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 20_SFXMatchingUpdate는 이미 완료됨 ]\n")
     
     
 if __name__ == "__main__":
@@ -622,4 +612,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode, importance = 0)

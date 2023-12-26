@@ -22,7 +22,8 @@
                         "Tag": "None",
                         "CorrectionJaChunkTokens":[
                             {"Pause": "None"},
-                            {"SFX": "None"},
+                            {"SFXStart": "None"},
+                            {"SFXEnd": "None"},
                             {"Space": "None"},
                             {"Enter": "None"},
                             {"Comma": "None"},

@@ -713,7 +713,7 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'CorrectionKoUpdate: {Update}')
+                UpdateTQDM.set_description(f"CorrectionKoUpdate: {Update['BodyId']}")
                 time.sleep(0.0001)
                 AddCorrectionKoSplitedBodysToDB(projectName, email)
                 for j in range(len(Update['CorrectionChunks'])):
@@ -722,6 +722,7 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                     ChunkTokens = Update['CorrectionChunks'][j]['CorrectionChunkTokens']
                 
                     AddCorrectionKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens)
+
                 # i값 수동 업데이트
                 i += 1
             

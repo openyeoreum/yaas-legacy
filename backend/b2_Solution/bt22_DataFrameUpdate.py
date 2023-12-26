@@ -198,25 +198,25 @@ if __name__ == "__main__":
     existedDataFrame = None
 
 
-    ########################
-    ### 07_ContextDefine ###
-    ########################
-    InitContextDefine(projectName, email)
-    InitRawDataSet(projectName, email, "ContextDefine")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextDefine", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextDefine", RawDataSetPath)
-    mode = "Master"
-    ContextDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    # ########################
+    # ### 07_ContextDefine ###
+    # ########################
+    # InitContextDefine(projectName, email)
+    # InitRawDataSet(projectName, email, "ContextDefine")
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextDefine", DataFramePath)
+    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextDefine", RawDataSetPath)
+    # mode = "Master"
+    # ContextDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
-    if existedDataFrame == None:
-        updatedContextDefine = UpdatedContextDefine(projectName, email)
-        SaveDataFrame(projectName, email, "07_ContextDefine", updatedContextDefine, DataFramePath)
-        SaveDataSet(projectName, email, "07", "ContextDefine", RawDataSetPath)
-        # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
-        LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)
-    existedDataFrame = None
-    existedDataSet = None
+    # if existedDataFrame == None:
+    #     updatedContextDefine = UpdatedContextDefine(projectName, email)
+    #     SaveDataFrame(projectName, email, "07_ContextDefine", updatedContextDefine, DataFramePath)
+    #     SaveDataSet(projectName, email, "07", "ContextDefine", RawDataSetPath)
+    #     # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
+    #     LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)
+    # existedDataFrame = None
+    # existedDataSet = None
 
 
     # ############################
@@ -313,7 +313,7 @@ if __name__ == "__main__":
     existedDataFrame = None
     existedDataSet = None
 
-    
+
     # #######################
     # ### 26_CorrectionKo ###
     # #######################

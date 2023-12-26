@@ -1,0 +1,114 @@
+[
+    {
+        "UserId": "",
+        "ProjectsStorageID": "",
+        "ProjectId": "",
+        "ProjectName": "",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "Selection-GenerationKo",
+        "ChunkCount": 0,
+        "Completion": "No"
+    },
+    {
+        "Selection-GenerationKoChunks": [
+            {
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Tag": "None",
+                "Context":
+                {
+                    "Vector":
+                    {
+                        "Purpose": "None",
+                        "Reason": "None",
+                        "Question": "None",
+                        "Subject": "None",
+                        "Reader": "None",
+                        "Importance": 0
+                    },
+                    "WMWM":
+                    {
+                        "Needs": "None",
+                        "Wisdom": "None",
+                        "Mind": "None",
+                        "Wildness": "None",
+                        "Accuracy": 0
+                    }
+                },
+                "Voice":
+                {
+                    "Character": "None",
+                    "Type": "None",
+                    "Gender": "None",
+                    "Age": "None",
+                    "Emotion": "None",
+                    "Role": "None"
+                },
+                "Music":
+                {
+                    "Genre": "None",
+                    "Gender": "None",
+                    "Age": "None",
+                    "Personality": "None",
+                    "Emotion": "None",
+                    "Accuracy": "None"
+                },
+                "Sound": {},
+                "SFX":
+                {
+                    "SFX": "골프공 치는 소리",
+                    "Prompt": "The sound of a golf ball being hit",
+                    "Type": "행동",
+                    "Role": "대상음",
+                    "Direction": "앞",
+                    "Importance": "90"
+                },
+                "Selection-GenerationKoChunkTokens": [
+                    {
+                        "Pause": "None"
+                    },
+                    {
+                        "SFX": "None"
+                    },
+                    {
+                        "Space": "None"
+                    },
+                    {
+                        "Enter": "None"
+                    },
+                    {
+                        "Comma": "None"
+                    },
+                    {
+                        "Quotes": "None"
+                    },
+                    {
+                        "Period": "None"
+                    },
+                    {
+                        "ETC": "None"
+                    },
+                    {
+                        "Number": "None"
+                    },
+                    {
+                        "Ko": "None"
+                    },
+                    {
+                        "En": "None"
+                    },
+                    {
+                        "Ja": "None"
+                    },
+                    {
+                        "Zh": "None"
+                    },
+                    {
+                        "Es": "None"
+                    }
+                ]
+            }
+        ]
+    }
+]

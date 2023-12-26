@@ -450,15 +450,15 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                     
                     Chunk = RANGE
                     SFXId = SFXID
-                    SFXKo = SFXDic['명칭']
-                    SFXEn = SFXDic['영어명칭']
+                    sFX = SFXDic['명칭']
+                    Prompt = SFXDic['영어명칭']
                     Type = SFXDic['유형']
                     Role = SFXDic['역할']
                     Direction = SFXDic['공간음향']
                     Range = RANGE
                     Importance = SFXDic['필요성']
                     
-                    outputMemoryDicsList.append({"outputId": i + 1, "Chunk": Chunk, "SFX": {"SFXId": SFXId, "SFXKo": SFXKo, "SFXEn": SFXEn, "Type": Type, "Role": Role, "Direction": Direction, "Range": Range, "Importance": Importance}})
+                    outputMemoryDicsList.append({"outputId": i + 1, "Chunk": Chunk, "SFX": {"SFXId": SFXId, "SFX": sFX, "Prompt": Prompt, "Type": Type, "Role": Role, "Direction": Direction, "Range": Range, "Importance": Importance}})
                     SFXID += 1
 
     # outputMemoryDics의 전처리

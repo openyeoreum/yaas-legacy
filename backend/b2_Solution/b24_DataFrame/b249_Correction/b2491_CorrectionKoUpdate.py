@@ -477,7 +477,6 @@ def SplitChunkIntoTokens(Chunk):
 
     pattern = r"""
         (?P<Pause>\(\d\.\d\)) | # 끊어읽기 '(0.n)'
-        (?P<SFX>\{효과음\d+\}) | # 효과음 '{효과음n}'
         (?P<Space>\s) | # 띄어쓰기 ' '
         (?P<Enter>\\n) | # 줄바꿈 '\n'
         (?P<Comma>,) | # 콤마 ','

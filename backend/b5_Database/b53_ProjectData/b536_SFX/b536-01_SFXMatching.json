@@ -19,19 +19,17 @@
                 "SFXChunks": [
                     {
                         "ChunkId": 0,
+                        "SFX": {
+                            "SFXId": 0,
+                            "SFXKo": "None",
+                            "SFXEn": "None",
+                            "Type": "None",
+                            "Role": "None",
+                            "Direction": "None",
+                            "Range": "None",
+                            "Importance": "None"
+                        },
                         "SFXChunkTokens": [
-                            {
-                                "SFX": {
-                                    "SFXId": 0,
-                                    "SFXKo": "None",
-                                    "SFXEn": "None",
-                                    "Type": "None",
-                                    "Role": "None",
-                                    "Direction": "None",
-                                    "Range": "None",
-                                    "Importance": "None"
-                                }
-                            },
                             {
                                 "Space": "None"
                             },

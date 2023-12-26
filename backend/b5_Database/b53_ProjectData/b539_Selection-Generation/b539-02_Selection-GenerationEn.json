@@ -5,15 +5,15 @@
         "ProjectId": "",
         "ProjectName": "",
         "Content": "Body",
-        "Language": "Ko",
-        "TaskName": "Selection-GenerationKo",
+        "Language": "En",
+        "TaskName": "Selection-GenerationEn",
         "IndexCount": 0,
         "BodyCount": 0,
         "ChunkCount": 0,
         "Completion": "No"
     },
     {
-        "Selection-GenerationKoSplitedBodys": [
+        "Selection-GenerationEnSplitedBodys": [
             {
                 "IndexId": 0,
                 "IndexTag": "None",
@@ -68,7 +68,7 @@
                         "Accuracy": 0
                     }
                 },
-                "Selection-GenerationKoSplitedBodyChunks": [
+                "Selection-GenerationEnSplitedBodyChunks": [
                     {
                         "ChunkId": 0,
                         "Chunk": "None",
@@ -112,7 +112,7 @@
                             "Direction": "앞",
                             "Importance": "90"
                         },
-                        "Selection-GenerationKoChunkTokens": [
+                        "Selection-GenerationEnChunkTokens": [
                             {
                                 "Pause": "None"
                             },

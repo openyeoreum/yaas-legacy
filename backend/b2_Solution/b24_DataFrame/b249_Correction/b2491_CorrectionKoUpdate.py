@@ -236,8 +236,8 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
     # Error2: INPUT, OUTPUT 불일치시 예외 처리
     try:
         nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
-        if nonCommonPartRatio < 98.5:
-            return f"INPUT, OUTPUT 불일치율 1.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
+        if nonCommonPartRatio < 98:
+            return f"INPUT, OUTPUT 불일치율 2% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
     except ValueError as e:
         return f"INPUT, OUTPUT 매우 높은 불일치율 발생: {e}"
     # Error3: InputDots, responseDataDots 불일치시 예외 처리

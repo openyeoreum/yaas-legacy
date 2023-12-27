@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import unicodedata
 import sys
 sys.path.append("/yaas")
 
@@ -35,7 +36,8 @@ def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
     OutputMemoryDicsFile = []
     OutputMemoryCount = 0
     for filename in os.listdir(DataFramePath):
-        FullPath = os.path.join(DataFramePath, filename)
+        normalizedFilename = unicodedata.normalize('NFC', filename)
+        FullPath = os.path.join(DataFramePath, normalizedFilename)
         if pattern.match(FullPath):
             print(f"< User: {email} | Project: {projectName} | {FullPath} 로드 >")
             with open(FullPath, 'r', encoding='utf-8') as file:

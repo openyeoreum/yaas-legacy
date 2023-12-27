@@ -35,8 +35,10 @@ def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
     OutputMemoryDicsFile = []
     OutputMemoryCount = 0
     for filename in os.listdir(DataFramePath):
+        print(filename)
         FullPath = os.path.join(DataFramePath, filename)
         if pattern.match(FullPath):
+            print(f"< User: {email} | Project: {projectName} | {FullPath} 로드 >")
             with open(FullPath, 'r', encoding='utf-8') as file:
                 OutputMemoryDicsFile = json.load(file)
             OutputMemoryCount = len(OutputMemoryDicsFile)

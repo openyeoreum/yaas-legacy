@@ -169,7 +169,7 @@ def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine",
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '09', DataFramePath)    
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '09', DataFramePath)
     inputList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
@@ -315,15 +315,6 @@ def WMWMDefineResponseJson(projectName, email, DataFramePath, messagesReview = '
     
     # 데이터 치환
     outputMemoryDics = WMWMDefineProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
-    
-    ##### 테스트 후 삭제 #####
-    filePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_웹3.0메타버스_09_outputMemoryDics_231127.json"
-    with open(filePath, "w", encoding = 'utf-8') as file:
-        json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
-        
-    with open(filePath, "r", encoding='utf-8') as file:
-        outputMemoryDics = json.load(file)
-    ##### 테스트 후 삭제 #####
     
     responseJson = []
     ContextDefineCount = 0

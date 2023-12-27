@@ -113,7 +113,7 @@ def LifeGraphContextDefineOutputMemory(outputMemoryDics, MemoryLength):
 ## LifeGraphContextDefine 프롬프트 요청 및 결과물 Json화
 def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, Process = "LifeGraphContextDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, '04', LifeGraphDataFramePath)    
+    OutputMemoryDicsFile, OutputMemoryCount = LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, '05', LifeGraphDataFramePath)    
     inputList = LifeDataTextsKoToInputList(lifeGraphSetName, latestUpdateDate)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
@@ -213,7 +213,7 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphD
         outputMemoryDics.append(OutputDic)
         outputMemory = LifeGraphContextDefineOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, outputMemoryDics, '04', LifeGraphDataFramePath)
+        SaveExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, outputMemoryDics, '05', LifeGraphDataFramePath)
     
     return outputMemoryDics
 
@@ -351,7 +351,7 @@ def LifeGraphContextDefineLifeDataTextsUpdate(lifeGraphSetName, latestUpdateDate
 
 ## 결과물 Json을 LifeGraphContextDefine에 업데이트
 def LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
-    print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphContextDefineUpdate 시작 >")
+    print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphContextDefineUpdate 시작 >")
     # LifeGraphContextDefine의 Count값 가져오기
     LifeGraphCount, LifeDataTextsCount, Completion = LifeGraphContextDefineCountLoad(lifeGraphSetName, latestUpdateDate)
     if Completion == "No":
@@ -359,7 +359,7 @@ def LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDa
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedLifeGraphContextDefineToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
-            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphContextDefine로 대처됨 ]\n")
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphContextDefine로 대처됨 ]\n")
         else:
             responseJson = LifeGraphContextDefineResponseJson(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, messagesReview = MessagesReview, mode = Mode)
             # LifeGraphs를 LifeGraphCount로 슬라이스
@@ -391,9 +391,9 @@ def LifeGraphContextDefineUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDa
             # Completion "Yes" 업데이트
             LifeGraphContextDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate)
             
-            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphContextDefineUpdate 완료 ]\n")
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphContextDefineUpdate 완료 ]\n")
     else:
-        print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 04_LifeGraphContextDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphContextDefineUpdate는 이미 완료됨 ]\n")
     
 if __name__ == "__main__":
     

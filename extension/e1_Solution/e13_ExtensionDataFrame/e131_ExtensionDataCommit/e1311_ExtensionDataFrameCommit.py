@@ -473,9 +473,9 @@ def LifeGraphTranslationEnCompletionUpdate(lifeGraphSetName, latestUpdateDate):
         db.commit()
 
 #############################################
-##### 04_LifeGraphContextDefine Process #####
+##### 05_LifeGraphContextDefine Process #####
 #############################################
-## 4. 1-0 LifeGraphContextDefine이 이미 ExistedFrame으로 존재할때 업데이트
+## 5. 1-0 LifeGraphContextDefine이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedLifeGraphContextDefineToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame):
     with get_db() as db:
     
@@ -489,7 +489,7 @@ def AddExistedLifeGraphContextDefineToDB(lifeGraphSetName, latestUpdateDate, Exi
         db.add(lifeGraph)
         db.commit()
 
-## 4. 1-1 LifeGraphContextDefine의 ContextChunks부분 업데이트 형식
+## 5. 1-1 LifeGraphContextDefine의 ContextChunks부분 업데이트 형식
 def UpdateContextChunks(lifeGraph, LifeGraphId, Translation, ContextChunks):
     
     updateContextChunks = {
@@ -502,7 +502,7 @@ def UpdateContextChunks(lifeGraph, LifeGraphId, Translation, ContextChunks):
     # Count 업데이트
     lifeGraph.LifeGraphContextDefine[0]["LifeGraphCount"] = LifeGraphId
 
-## 4. 1-2 LifeGraphContextDefine의 ContextChunks부분 업데이트
+## 5. 1-2 LifeGraphContextDefine의 ContextChunks부분 업데이트
 def AddLifeGraphContextDefineContextChunksToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, ContextChunks):
     with get_db() as db:
     
@@ -514,7 +514,7 @@ def AddLifeGraphContextDefineContextChunksToDB(lifeGraphSetName, latestUpdateDat
         db.add(lifeGraph)
         db.commit()
 
-## 4. 1-3 LifeGraphContextDefine의 LifeDataContextTexts부분 업데이트 형식
+## 5. 1-3 LifeGraphContextDefine의 LifeDataContextTexts부분 업데이트 형식
 def UpdateLifeDataContextTexts(lifeGraph, LifeGraphId, Translation, Text):
     
     updateContextChunks = {
@@ -527,7 +527,7 @@ def UpdateLifeDataContextTexts(lifeGraph, LifeGraphId, Translation, Text):
     # Count 업데이트
     lifeGraph.LifeGraphContextDefine[0]["LifeGraphTextsCount"] = LifeGraphId
 
-## 4. 1-4 LifeGraphContextDefine의 LifeDataContextTexts부분 업데이트
+## 5. 1-4 LifeGraphContextDefine의 LifeDataContextTexts부분 업데이트
 def AddLifeGraphContextDefineLifeDataContextTextsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, Text):
     with get_db() as db:
     
@@ -539,7 +539,7 @@ def AddLifeGraphContextDefineLifeDataContextTextsToDB(lifeGraphSetName, latestUp
         db.add(lifeGraph)
         db.commit()
 
-## 4. LifeGraphContextDefineCount 가져오기
+## 5. LifeGraphContextDefineCount 가져오기
 def LifeGraphContextDefineCountLoad(lifeGraphSetName, latestUpdateDate):
 
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
@@ -549,7 +549,7 @@ def LifeGraphContextDefineCountLoad(lifeGraphSetName, latestUpdateDate):
     
     return LifeGraphCount, LifeGraphTextsCount, Completion
         
-## 4. LifeGraphContextDefine의 초기화
+## 5. LifeGraphContextDefine의 초기화
 def InitLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate):
     LifeGraphDataPath = GetLifeGraphDataPath()
     with get_db() as db:
@@ -565,14 +565,14 @@ def InitLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate):
         db.add(lifeGraph)
         db.commit()
         
-## 4. 업데이트된 LifeGraphContextDefine 출력
+## 5. 업데이트된 LifeGraphContextDefine 출력
 def UpdatedLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate):
     with get_db() as db:
         lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
 
     return lifeGraph.LifeGraphContextDefine
 
-## 4. LifeGraphContextDefineCompletion 업데이트
+## 5. LifeGraphContextDefineCompletion 업데이트
 def LifeGraphContextDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate):
     with get_db() as db:
 
@@ -585,9 +585,9 @@ def LifeGraphContextDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate):
         db.commit()
 
 #############################################
-##### 05_LifeGraphWMWMDefine Process #####
+##### 06_LifeGraphWMWMDefine Process #####
 #############################################
-## 5. 1-0 LifeGraphWMWMDefine이 이미 ExistedFrame으로 존재할때 업데이트
+## 6. 1-0 LifeGraphWMWMDefine이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedLifeGraphWMWMDefineToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame):
     with get_db() as db:
     
@@ -601,7 +601,7 @@ def AddExistedLifeGraphWMWMDefineToDB(lifeGraphSetName, latestUpdateDate, Existe
         db.add(lifeGraph)
         db.commit()
 
-## 5. 1-1 LifeGraphWMWMDefine의 WMWMCompeletions부분 업데이트 형식
+## 6. 1-1 LifeGraphWMWMDefine의 WMWMCompeletions부분 업데이트 형식
 def UpdateWMWMCompeletions(lifeGraph, LifeGraphId, Translation, WMWMChunks):
     
     updateWMWMCompeletions = {
@@ -614,7 +614,7 @@ def UpdateWMWMCompeletions(lifeGraph, LifeGraphId, Translation, WMWMChunks):
     # Count 업데이트
     lifeGraph.LifeGraphWMWMDefine[0]["LifeGraphCount"] = LifeGraphId
 
-## 5. 1-2 LifeGraphWMWMDefine의 WMWMCompeletions부분 업데이트
+## 6. 1-2 LifeGraphWMWMDefine의 WMWMCompeletions부분 업데이트
 def AddLifeGraphWMWMDefineCompeletionsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, WMWMChunks):
     with get_db() as db:
     
@@ -626,7 +626,7 @@ def AddLifeGraphWMWMDefineCompeletionsToDB(lifeGraphSetName, latestUpdateDate, L
         db.add(lifeGraph)
         db.commit()
 
-## 5. 1-3 LifeGraphWMWMDefine의 WMWMQuerys부분 업데이트 형식
+## 6. 1-3 LifeGraphWMWMDefine의 WMWMQuerys부분 업데이트 형식
 def UpdateWMWMQuerys(lifeGraph, LifeGraphId, Translation, Querys):
     
     updateWMWMQuerys = {
@@ -639,7 +639,7 @@ def UpdateWMWMQuerys(lifeGraph, LifeGraphId, Translation, Querys):
     # Count 업데이트
     lifeGraph.LifeGraphWMWMDefine[0]["WMWMQuerysCount"] = LifeGraphId
 
-## 5. 1-4 LifeGraphWMWMDefine의 LifeDataWMWMTexts부분 업데이트
+## 6. 1-4 LifeGraphWMWMDefine의 LifeDataWMWMTexts부분 업데이트
 def AddLifeGraphWMWMDefineQuerysToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, Querys):
     with get_db() as db:
     
@@ -651,7 +651,7 @@ def AddLifeGraphWMWMDefineQuerysToDB(lifeGraphSetName, latestUpdateDate, LifeGra
         db.add(lifeGraph)
         db.commit()
 
-## 5. LifeGraphWMWMDefineCount 가져오기
+## 6. LifeGraphWMWMDefineCount 가져오기
 def LifeGraphWMWMDefineCountLoad(lifeGraphSetName, latestUpdateDate):
 
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
@@ -661,7 +661,7 @@ def LifeGraphWMWMDefineCountLoad(lifeGraphSetName, latestUpdateDate):
     
     return LifeGraphCount, WMWMQuerysCount, Completion
         
-## 5. LifeGraphWMWMDefine의 초기화
+## 6. LifeGraphWMWMDefine의 초기화
 def InitLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate):
     LifeGraphDataPath = GetLifeGraphDataPath()
     with get_db() as db:
@@ -677,14 +677,14 @@ def InitLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate):
         db.add(lifeGraph)
         db.commit()
         
-## 5. 업데이트된 LifeGraphWMWMDefine 출력
+## 6. 업데이트된 LifeGraphWMWMDefine 출력
 def UpdatedLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate):
     with get_db() as db:
         lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
 
     return lifeGraph.LifeGraphWMWMDefine
 
-## 5. LifeGraphWMWMDefineCompletion 업데이트
+## 6. LifeGraphWMWMDefineCompletion 업데이트
 def LifeGraphWMWMDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate):
     with get_db() as db:
 

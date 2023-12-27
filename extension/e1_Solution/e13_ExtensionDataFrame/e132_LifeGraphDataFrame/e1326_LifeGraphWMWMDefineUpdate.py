@@ -115,7 +115,7 @@ def LifeGraphWMWMDefineOutputMemory(outputMemoryDics, MemoryLength):
 ## LifeGraphWMWMDefine 프롬프트 요청 및 결과물 Json화
 def LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, Process = "LifeGraphWMWMDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, '05', LifeGraphDataFramePath)    
+    OutputMemoryDicsFile, OutputMemoryCount = LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, '06', LifeGraphDataFramePath)    
     inputList = LifeDataContextTextsToInputList(lifeGraphSetName, latestUpdateDate)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
@@ -221,7 +221,7 @@ def LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphData
         outputMemoryDics.append(OutputDic)
         outputMemory = LifeGraphWMWMDefineOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, outputMemoryDics, '05', LifeGraphDataFramePath)
+        SaveExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, outputMemoryDics, '06', LifeGraphDataFramePath)
     
     return outputMemoryDics
 
@@ -342,7 +342,7 @@ def LifeGraphWMWMDefineQuerysUpdate(lifeGraphSetName, latestUpdateDate, Response
 
 ## 결과물 Json을 LifeGraphWMWMDefine에 업데이트
 def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None):
-    print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphWMWMDefineUpdate 시작 >")
+    print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 06_LifeGraphWMWMDefineUpdate 시작 >")
     # LifeGraphWMWMDefine의 Count값 가져오기
     LifeGraphCount, WMWMQuerysCount, Completion = LifeGraphWMWMDefineCountLoad(lifeGraphSetName, latestUpdateDate)
     if Completion == "No":
@@ -350,7 +350,7 @@ def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataF
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedLifeGraphWMWMDefineToDB(lifeGraphSetName, latestUpdateDate, ExistedDataFrame)
-            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphWMWMDefine로 대처됨 ]\n")
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 06_LifeGraphWMWMDefine로 대처됨 ]\n")
         else:
             responseJson = LifeGraphWMWMDefineResponseJson(lifeGraphSetName, latestUpdateDate, LifeGraphDataFramePath, messagesReview = MessagesReview, mode = Mode)
             # LifeGraphs를 LifeGraphCount로 슬라이스
@@ -382,9 +382,9 @@ def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataF
             # Completion "Yes" 업데이트
             LifeGraphWMWMDefineCompletionUpdate(lifeGraphSetName, latestUpdateDate)
             
-            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphWMWMDefineUpdate 완료 ]\n")
+            print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 06_LifeGraphWMWMDefineUpdate 완료 ]\n")
     else:
-        print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 05_LifeGraphWMWMDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | 06_LifeGraphWMWMDefineUpdate는 이미 완료됨 ]\n")
     
 if __name__ == "__main__":
     

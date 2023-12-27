@@ -11,8 +11,8 @@ from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1321_LifeGraphFrameUpdate import LifeGraphFrameUpdate
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1322_LifeGraphTranslationKoUpdate import LifeGraphTranslationKoUpdate
 from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1323_LifeGraphTranslationEnUpdate import LifeGraphTranslationEnUpdate
-from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1324_LifeGraphContextDefineUpdate import LifeGraphContextDefineUpdate
-from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1325_LifeGraphWMWMDefineUpdate import LifeGraphWMWMDefineUpdate
+from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1325_LifeGraphContextDefineUpdate import LifeGraphContextDefineUpdate
+from extension.e1_Solution.e13_ExtensionDataFrame.e132_LifeGraphDataFrame.e1326_LifeGraphWMWMDefineUpdate import LifeGraphWMWMDefineUpdate
 
 ## 오늘 날짜
 def Date(Option = "Day"):
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     
     
     #################################
-    ### 04_LifeGraphContextDefine ###
+    ### 05_LifeGraphContextDefine ###
     #################################
     InitLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate)
     if existedDataFrameMode == "on":
@@ -145,12 +145,12 @@ if __name__ == "__main__":
 
     if existedDataFrame == None:
         updatedLifeGraphContextDefine = UpdatedLifeGraphContextDefine(lifeGraphSetName, latestUpdateDate)
-        SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "04_LifeGraphContextDefine", updatedLifeGraphContextDefine, LifeGraphDataFramePath)
+        SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "05_LifeGraphContextDefine", updatedLifeGraphContextDefine, LifeGraphDataFramePath)
     existedDataContextDefine = None
     
     
     #################################
-    ### 05_LifeGraphWMWMDefine ###
+    ### 06_LifeGraphWMWMDefine ###
     #################################
     InitLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate)
     if existedDataFrameMode == "on":
@@ -160,5 +160,5 @@ if __name__ == "__main__":
 
     if existedDataFrame == None:
         updatedLifeGraphWMWMDefine = UpdatedLifeGraphWMWMDefine(lifeGraphSetName, latestUpdateDate)
-        SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "05_LifeGraphWMWMDefine", updatedLifeGraphWMWMDefine, LifeGraphDataFramePath)
+        SaveExtensionDataFrame(lifeGraphSetName, latestUpdateDate, "06_LifeGraphWMWMDefine", updatedLifeGraphWMWMDefine, LifeGraphDataFramePath)
     existedDataWMWMDefine = None

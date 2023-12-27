@@ -19,7 +19,7 @@ def LoadIndexText(projectName, email):
     return indexText
 
 # IndexPreprocess 프롬프트 요청 및 결과물 Text화
-def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess", MaxRetries = 100, Mode = "Example", MESSAGESREVIEW = "off"):
+def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess", MaxRetries = 100, mode = "Example", MESSAGESREVIEW = "off"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -29,7 +29,7 @@ def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess",
     
     while TotalCount < MaxRetries:
       
-      Response, Usage, Model = LLMresponse(projectName, email, Process, Input, TotalCount + 1, messagesReview = MESSAGESREVIEW)
+      Response, Usage, Model = LLMresponse(projectName, email, Process, Input, TotalCount + 1, Mode = mode, messagesReview = MESSAGESREVIEW)
 
       cleanInput = re.sub("[^가-힣]", "", Input)
       cleanResponse = re.sub("[^가-힣]", "", Response)
@@ -38,7 +38,7 @@ def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess",
         print(f"Project: {projectName} | Process: {Process} | CleanTextMatching 완료")
 
         # DataSets 업데이트
-        AddProjectRawDatasetToDB(projectName, email, Process, Mode, Model, Usage, Input, Response)
+        AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, Input, Response)
         AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, Response)
 
         return Response
@@ -51,7 +51,7 @@ def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess",
 # IndexDefine 프롬프트 요청 및 결과물 Json화
 def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None, MaxRetries = 100, Mode = "Example", MessagesReview = "off"):
     if Input == None:
-      Input = IndexDefinePreprocess(projectName, email, MESSAGESREVIEW = MessagesReview)
+      Input = IndexDefinePreprocess(projectName, email, mode = Mode, MESSAGESREVIEW = MessagesReview)
     Input = Input.replace("'", "")
     Input = Input.replace('"', '')
     
@@ -62,7 +62,7 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
     
     while TotalCount < MaxRetries:
       
-      Response, Usage, Model = LLMresponse(projectName, email, Process, Input, TotalCount + 1, messagesReview = MessagesReview)
+      Response, Usage, Model = LLMresponse(projectName, email, Process, Input, TotalCount + 1, Mode = Mode, messagesReview = MessagesReview)
 
       cleanInput = re.sub("[^가-힣]", "", Input)
       cleanResponse = re.sub("[^가-힣]", "", Response)
@@ -110,7 +110,7 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
         TotalCount += 1
 
 # IndexDefine 프롬프트 요청 및 결과물이 긴 경우 나누어 처리
-def IndexDefineDivision(projectName, email, maxTokens = 3000, mode = "Example", messagesReview = "off"):
+def IndexDefineDivision(projectName, email, maxTokens = 2700, mode = "Example", messagesReview = "off"):
     indexText = LoadIndexText(projectName, email)
     encoding = tiktoken.get_encoding("cl100k_base")
     indexTokens = len(encoding.encode(indexText))
@@ -119,7 +119,7 @@ def IndexDefineDivision(projectName, email, maxTokens = 3000, mode = "Example", 
     if indexTokens >= maxTokens:
       print(f"--- IndexDefineDivision 모드, 토큰수: {indexTokens} ---")
       # preprocessedIndexText를 둘다 앞부분에 Title을 붙혀서 2개로 분할
-      preprocessedIndexText = IndexDefinePreprocess(projectName, email, Mode = mode, MESSAGESREVIEW = messagesReview)
+      preprocessedIndexText = IndexDefinePreprocess(projectName, email, mode = mode, MESSAGESREVIEW = messagesReview)
       # print(f"{type(preprocessedIndexText)}\npreprocessedIndexText: {preprocessedIndexText}")
       sections = preprocessedIndexText.split('\n\n')
       totalTokens = sum(len(section.split()) for section in sections)
@@ -155,7 +155,7 @@ def IndexDefineDivision(projectName, email, maxTokens = 3000, mode = "Example", 
       return combineResponseJson
     
     else:
-      responseJson = IndexDefineProcess(projectName, email, MessagesReview = messagesReview)[1:]
+      responseJson = IndexDefineProcess(projectName, email, Mode = mode, MessagesReview = messagesReview)[1:]
       
       return responseJson
 

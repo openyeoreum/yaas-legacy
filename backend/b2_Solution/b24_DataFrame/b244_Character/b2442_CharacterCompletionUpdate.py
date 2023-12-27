@@ -471,7 +471,7 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview 
             print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate는 ExistedCharacterCompletion으로 대처됨 ]\n")
         else:
             responseJson, sortedCharacters = CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
-            print(f"Project: {projectName} | Process: CharacterCompletion | CharacterFilter 완료\n{projectName}의 등장인물 {len(sortedCharacters)}명 : {sortedCharacters}")
+            print(f"< Project: {projectName} | Process: CharacterCompletion | CharacterFilter 완료\n{projectName}의 등장인물 {len(sortedCharacters)}명 : {sortedCharacters}> ")
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]

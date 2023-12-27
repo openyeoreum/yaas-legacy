@@ -1,0 +1,55 @@
+[
+    {
+        "UserId": "9dc8a56ed8e748c1a0fc04bda92d65ad284858359417fcb8123c7af93d956fc5",
+        "ProjectsStorageID": 1,
+        "ProjectId": 8,
+        "ProjectName": "살아서천국극락낙원에가는방법",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "CharacterCompletion",
+        "CharacterChunkCount": 0,
+        "CharacterCount": 0,
+        "Completion": "Yes",
+        "Memo": "캐릭터의 증거를 알아내는 프로세스"
+    },
+    {
+        "CharacterCompeletions": [
+            {
+                "CharacterChunkId": 0,
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Character": "None",
+                "MainCharacter": "None",
+                "AuthorRelationship": "None"
+            }
+        ]
+    },
+    {
+        "CheckedCharacterTags": [
+            {
+                "CharacterId": 0,
+                "CharacterTag": "Narrator",
+                "CharacterList": [
+                    "None"
+                ],
+                "Character": "None"
+            },
+            {
+                "CharacterId": 0,
+                "CharacterTag": "MainChracter",
+                "CharacterList": [
+                    "None"
+                ],
+                "Character": "None"
+            },
+            {
+                "CharacterId": 0,
+                "CharacterTag": "Chracter",
+                "CharacterList": [
+                    "None"
+                ],
+                "Character": "None"
+            }
+        ]
+    }
+]

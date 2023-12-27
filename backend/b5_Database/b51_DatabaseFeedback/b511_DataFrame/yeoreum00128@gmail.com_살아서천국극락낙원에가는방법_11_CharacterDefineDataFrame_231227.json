@@ -1,0 +1,31 @@
+[
+    {
+        "UserId": "9dc8a56ed8e748c1a0fc04bda92d65ad284858359417fcb8123c7af93d956fc5",
+        "ProjectsStorageID": 1,
+        "ProjectId": 8,
+        "ProjectName": "살아서천국극락낙원에가는방법",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "CharacterDefine",
+        "CharacterChunkCount": 0,
+        "CharacterCount": 0,
+        "Completion": "Yes",
+        "Memo": "전체 캐릭터를 알아내는 프로세스"
+    },
+    {
+        "CharacterChunks": [
+            {
+                "CharacterChunkId": 0,
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Character": "None",
+                "Type": "None",
+                "Gender": "None",
+                "Age": "None",
+                "Emotion": "None",
+                "Role": "None",
+                "Listener": "None"
+            }
+        ]
+    }
+]

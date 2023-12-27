@@ -324,6 +324,7 @@ def WMWMDefineResponseJson(projectName, email, DataFramePath, messagesReview = '
                 for key, value in dic.items():
                     ChunkId = ContextDefine[ContextDefineCount]['ChunkId']
                     Chunk = ContextDefine[ContextDefineCount]['Chunk']
+                    print(value)
                     Needs = value['욕구상태']
                     ReasonOfNeeds = value['욕구상태선택이유']
                     Wisdom = value['이해상태']

@@ -35,7 +35,6 @@ def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
     OutputMemoryDicsFile = []
     OutputMemoryCount = 0
     for filename in os.listdir(DataFramePath):
-        print(filename)
         FullPath = os.path.join(DataFramePath, filename)
         if pattern.match(FullPath):
             print(f"< User: {email} | Project: {projectName} | {FullPath} 로드 >")

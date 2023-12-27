@@ -37,6 +37,7 @@ def LoadExtensionOutputMemory(lifeGraphSetName, latestUpdateDate, ProcessNum, Da
     for filename in os.listdir(DataFramePath):
         FullPath = os.path.join(DataFramePath, filename)
         if pattern.match(FullPath):
+            print(f"< LifeGraphSetName: {lifeGraphSetName} | LatestUpdateDate: {latestUpdateDate} | {FullPath} 로드 >")
             with open(FullPath, 'r', encoding='utf-8') as file:
                 OutputMemoryDicsFile = json.load(file)
             OutputMemoryCount = len(OutputMemoryDicsFile)

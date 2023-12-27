@@ -405,50 +405,81 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    
+    # LifeGraphSet 로드
+    def LoadLifeGraphSet(lifeGraphSetName, latestUpdateDate):
+        lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
+        DataPattern = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}%3A\d{2}%3A\d{2}")
+        
+        lifeGraphSets = lifeGraph.LifeGraphSets
+        lifeGraphList = list(lifeGraphSets.items())
+        
+        return lifeGraphList
+
+
     LifeGraphsKo, LifeGraphsEn = LoadLifeGraphs(lifeGraphSetName, latestUpdateDate)
     LifeGraphsGlobalList = []
-    TotalCount = 0
+    LifeGraphId = 1
     ResidenceAccuracyText = ''
     
     for i in range(len(LifeGraphsKo)):
         LifeDataEn = LifeGraphsEn[i]['LifeData']
-        print(f"{LifeGraphsEn[i]['LifeGraphId']}, {LifeGraphsKo[i]['Residence']['Accuracy']}")
-        ResidenceAccuracyText = LifeGraphsKo[i]['Residence']['Accuracy']
-        if ResidenceAccuracyText == '':
+        ResidenceKo = LifeGraphsKo[i]['Residence']
+        try:
+            ResidenceAccuracyText = ResidenceKo['Accuracy']
+            if ResidenceAccuracyText == '':
+                ResidenceAccuracy = 0
+            else:
+                ResidenceAccuracy = int(ResidenceAccuracyText)
+        except:
             ResidenceAccuracy = 0
-        else:
-            ResidenceAccuracy = int(ResidenceAccuracyText)
         LifeDataEnTextCount = 0
         
         for j in range(len(LifeDataEn)):
             LifeDataEnTextCount += len(LifeDataEn[j]['ReasonEn'])
-        if LifeDataEnTextCount >= 800 and ResidenceAccuracy >= 80:
-            TotalCount += 1
+        if LifeDataEnTextCount >= 700 and ResidenceAccuracy >= 85:
+            LifeGraphDate = LifeGraphsKo[i]['LifeGraphDate']
+            Name = LifeGraphsKo[i]['Name']
+            Age = LifeGraphsKo[i]['Age']
+            Source = LifeGraphsKo[i]['Source']
+            Language = LifeGraphsKo[i]['Language']
+            ResidenceEn = LifeGraphsEn[i]['Residence']
+            Email = LifeGraphsKo[i]['Email']
+            LifeDataKo = LifeGraphsKo[i]['LifeData']
+            LifeGraphsGlobal = {
+                "LifeGraphId": LifeGraphId,
+                "ImageId": None,
+                "LifeGraphDate": LifeGraphDate,
+                "Name": Name,
+                "Age": Age,
+                "Source": Source,
+                "Language": Language,
+                "Translation": ["ko", "en"],
+                "ResidenceKo": ResidenceKo,
+                "ResidenceEn": ResidenceEn,
+                "Email": Email,
+                "LifeDataKo": LifeDataKo,
+                "LifeDataEn": LifeDataEn
+            }
+            LifeGraphsGlobalList.append(LifeGraphsGlobal)
+            LifeGraphId += 1
+
+    lifeGraphList = LoadLifeGraphSet(lifeGraphSetName, latestUpdateDate)
+    
+    LifeGraphsGlobalCount = 0
+    for i in range(len(lifeGraphList)):
+        lifeGraphName = lifeGraphList[i][0].replace(' ', '')
+        LifeGraphsGlobalName = LifeGraphsGlobalList[LifeGraphsGlobalCount]['Name'].replace(' ', '')
+        lifeGraphAge = lifeGraphList[i][1]['age']
+        LifeGraphsGlobalAge = LifeGraphsGlobalList[LifeGraphsGlobalCount]['Age']
+        if lifeGraphName == LifeGraphsGlobalName and lifeGraphAge == LifeGraphsGlobalAge:
+            LifeGraphsGlobalList[LifeGraphsGlobalCount]['ImageId'] = i - 2
+            if LifeGraphsGlobalCount < len(LifeGraphsGlobalList) - 1:
+                LifeGraphsGlobalCount += 1
+    
+    print(len(LifeGraphsGlobalList)) 
+    print(LifeGraphsGlobalCount)
             
-    print(TotalCount)
-            
-            # LifeGraphId = LifeGraphsKo[i]['LifeGraphId']
-            # LifeGraphDate = LifeGraphsKo[i]['LifeGraphDate']
-            # Name = LifeGraphsKo[i]['Name']
-            # Age = LifeGraphsKo[i]['Age']
-            # Source = LifeGraphsKo[i]['Source']
-            # Language = LifeGraphsKo[i]['Language']
-            # ResidenceKo = LifeGraphsKo[i]['Residence']
-            # Email = LifeGraphsKo[i]['Email']
-            # LifeDataKo = LifeGraphsKo[i]['LifeData']
-            # LifeDataEn = LifeGraphsEn[i]['LifeData']
-            # LifeGraphsGlobal = {
-            #     "LifeGraphId": LifeGraphId - 2,
-            #     "LifeGraphDate": LifeGraphDate,
-            #     "Name": Name,
-            #     "Age": Age,
-            #     "Source": Source,
-            #     "Language": Language,
-            #     "Translation": ["ko", "en"],
-            #     "ResidenceKo": ResidenceKo,
-            #     "ResidenceEn": ResidenceEn,
-            #     "Email": Email,
-            #     "LifeDataKo": LifeDataKo,
-            #     "LifeDataEn": LifeDataEn
-            # }
+    LifeGraphsGlobalListPath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_LifeGraphNearbyCenterDataFrame_231216.json"
+    with open(LifeGraphsGlobalListPath, 'w', encoding='utf-8') as file:
+        json.dump(LifeGraphsGlobalList, file, ensure_ascii=False, indent=4)
+        

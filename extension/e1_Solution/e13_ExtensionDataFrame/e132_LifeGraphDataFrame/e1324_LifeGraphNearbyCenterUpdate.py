@@ -473,11 +473,9 @@ if __name__ == "__main__":
         LifeGraphsGlobalAge = LifeGraphsGlobalList[LifeGraphsGlobalCount]['Age']
         if lifeGraphName == LifeGraphsGlobalName and lifeGraphAge == LifeGraphsGlobalAge:
             LifeGraphsGlobalList[LifeGraphsGlobalCount]['ImageId'] = i - 2
+            
             if LifeGraphsGlobalCount < len(LifeGraphsGlobalList) - 1:
                 LifeGraphsGlobalCount += 1
-    
-    print(len(LifeGraphsGlobalList)) 
-    print(LifeGraphsGlobalCount)
             
     LifeGraphsGlobalListPath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_LifeGraphNearbyCenterDataFrame_231216.json"
     with open(LifeGraphsGlobalListPath, 'w', encoding='utf-8') as file:

@@ -11,7 +11,7 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedCorrectionKoToDB, AddCorrectionKoSplitedBodysToDB, AddCorrectionKoChunksToDB, CorrectionKoCountLoad, CorrectionKoCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, SaveAddOutputMemory, AddExistedCorrectionKoToDB, AddCorrectionKoSplitedBodysToDB, AddCorrectionKoChunksToDB, CorrectionKoCountLoad, CorrectionKoCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -236,8 +236,8 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
     # Error2: INPUT, OUTPUT 불일치시 예외 처리
     try:
         nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
-        if nonCommonPartRatio < 97.5:
-            return f"INPUT, OUTPUT 불일치율 2.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
+        if nonCommonPartRatio < 98.5:
+            return f"INPUT, OUTPUT 불일치율 1.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
     except ValueError as e:
         return f"INPUT, OUTPUT 매우 높은 불일치율 발생: {e}"
     # Error3: InputDots, responseDataDots 불일치시 예외 처리
@@ -466,11 +466,12 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
         outputMemoryDics.append(OutputDic)
         outputMemory = CorrectionKoOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '26', DataFramePath)
-        
         # nonCommonPartList 형성
         nonCommonPartList.append(nonCommonParts)
-    
+        
+        SaveOutputMemory(projectName, email, outputMemoryDics, '26', DataFramePath)
+        SaveAddOutputMemory(projectName, email, nonCommonPartList, '26', DataFramePath)
+
     return outputMemoryDics, nonCommonPartList
 
 ################################

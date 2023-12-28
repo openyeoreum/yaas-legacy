@@ -69,6 +69,29 @@ def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFrame
     # OutputMemoryDics 데이터를 파일에 덮어쓰기
     with open(OutputMemoryDicsFilename, 'w', encoding='utf-8') as file:
         json.dump(OutputMemoryDics, file, ensure_ascii = False, indent = 4)
+        
+## 업데이트된 AddOutputMemoryDics 파일 저장하기
+def SaveAddOutputMemory(projectName, email, AddOutputMemoryDics, ProcessNum, DataFramePath):
+    # 정규 표현식 패턴 정의
+    pattern = re.compile(rf"{re.escape(email + '_' + projectName + '_' + ProcessNum + '_addOutputMemoryDics_')}.*\.json")
+
+    # 일치하는 파일 검색
+    matched_file = None
+    for filename in os.listdir(DataFramePath):
+        if pattern.match(filename):
+            matched_file = filename
+            break
+
+    if matched_file:
+        # 일치하는 파일이 있는 경우
+        AddOutputMemoryDicsFilename = os.path.join(DataFramePath, matched_file)
+    else:
+        # 일치하는 파일이 없는 경우 새 파일명 생성
+        AddOutputMemoryDicsFilename = os.path.join(DataFramePath, email + '_' + projectName + '_' + ProcessNum + '_addOutputMemoryDics_' + str(Date()) + '.json')
+
+    # OutputMemoryDics 데이터를 파일에 덮어쓰기
+    with open(AddOutputMemoryDicsFilename, 'w', encoding='utf-8') as file:
+        json.dump(AddOutputMemoryDics, file, ensure_ascii = False, indent = 4)
 
 ###################################################
 ##### 전체 DataFrame의 MetaData(식별)부분을 업데이트 #####

@@ -192,7 +192,7 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '20', DataFramePath)    
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '15', DataFramePath)    
     inputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
@@ -305,7 +305,7 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
         outputMemoryDics.append(OutputDic)
         outputMemory = SFXMatchingOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '20', DataFramePath)
+        SaveOutputMemory(projectName, email, outputMemoryDics, '15', DataFramePath)
     
     return outputMemoryDics
 
@@ -559,7 +559,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
 
 ## 프롬프트 요청 및 결과물 Json을 SFXMatching에 업데이트
 def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 20_SFXMatchingUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 15_SFXMatchingUpdate 시작 >")
     # SFXMatching의 Count값 가져오기
     ContinueCount, Completion = SFXMatchingCountLoad(projectName, email)
     if Completion == "No":
@@ -568,7 +568,7 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "SFXMatching", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 20_SFXMatchingUpdate는 ExistedSFXMatching으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate는 ExistedSFXMatching으로 대처됨 ]\n")
         else:
             responseJson = SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
@@ -596,10 +596,10 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             SFXMatchingCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 20_SFXMatchingUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 20_SFXMatchingUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate는 이미 완료됨 ]\n")
     
     
 if __name__ == "__main__":

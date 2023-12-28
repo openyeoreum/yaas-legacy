@@ -205,9 +205,9 @@ def IndexFrameCompletionUpdate(projectName, email):
 
 
 ##############################################
-##### 02_BodySplit, IndexTagging Process #####
+##### 03_BodySplit, IndexTagging Process #####
 ##############################################
-## 2. 1-0 BodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
+## 3. 1-0 BodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -220,7 +220,7 @@ def AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 2. 1-2 BodyFrame의 Body(본문) Body부분 업데이트 형식
+## 3. 1-2 BodyFrame의 Body(본문) Body부분 업데이트 형식
 def UpdateSplitedBodyScripts(project, IndexId, IndexTag, Index):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.BodyFrame[1]["SplitedBodyScripts"])
@@ -238,7 +238,7 @@ def UpdateSplitedBodyScripts(project, IndexId, IndexTag, Index):
     project.BodyFrame[0]["IndexCount"] = IndexId
     project.BodyFrame[0]["BodyCount"] = BodyId
 
-## 2. 1-3 BodyFrame의 Body(본문) Body부분 업데이트
+## 3. 1-3 BodyFrame의 Body(본문) Body부분 업데이트
 def AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
     with get_db() as db:
         
@@ -250,7 +250,7 @@ def AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
         db.add(project)
         db.commit()
 
-## 2. 2-1 BodyFrame의 Body(본문) TagChunks부분 업데이트 형식
+## 3. 2-1 BodyFrame의 Body(본문) TagChunks부분 업데이트 형식
 def UpdateSplitedBodyTagChunks(project, ChunkId, Tag, Chunk):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.BodyFrame[1]["SplitedBodyScripts"]) -1
@@ -265,7 +265,7 @@ def UpdateSplitedBodyTagChunks(project, ChunkId, Tag, Chunk):
     # Count 업데이트
     project.BodyFrame[0]["ChunkCount"] = ChunkId
 
-## 2. 2-2 BodyFrame의 Body(본문) TagChunks부분 업데이트
+## 3. 2-2 BodyFrame의 Body(본문) TagChunks부분 업데이트
 def AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
     with get_db() as db:
         
@@ -277,7 +277,7 @@ def AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
         db.add(project)
         db.commit()
         
-## 2. 3-1 BodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
+## 3. 3-1 BodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
 def UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = "None"):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.BodyFrame[2]["Bodys"])
@@ -294,7 +294,7 @@ def UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = 
     
     project.BodyFrame[2]["Bodys"].append(updateBodys)
     
-## 2. 3-2 BodyFrame의 Bodys(부문) Bodys부분 업데이트
+## 3. 3-2 BodyFrame의 Bodys(부문) Bodys부분 업데이트
 def AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character, context = "None"):
     with get_db() as db:
         
@@ -306,7 +306,7 @@ def AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, 
         db.add(project)
         db.commit()
                 
-## 2. BodyFrame의Count의 가져오기
+## 3. BodyFrame의Count의 가져오기
 def BodyFrameCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
@@ -317,7 +317,7 @@ def BodyFrameCountLoad(projectName, email):
     
     return IndexCount, BodyCount, ChunkCount, Completion
 
-## 2. BodyFrame의 초기화
+## 3. BodyFrame의 초기화
 def InitBodyFrame(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
@@ -335,7 +335,7 @@ def InitBodyFrame(projectName, email):
         db.add(project)
         db.commit()
         
-## 2. 업데이트된 BodyFrame 출력
+## 3. 업데이트된 BodyFrame 출력
 def UpdatedBodyFrame(projectName, email):
     with get_db() as db:
 
@@ -343,7 +343,7 @@ def UpdatedBodyFrame(projectName, email):
 
     return project.BodyFrame
 
-## 2. BodyFrameCompletion 업데이트
+## 3. BodyFrameCompletion 업데이트
 def BodyFrameCompletionUpdate(projectName, email):
     with get_db() as db:
 
@@ -357,9 +357,9 @@ def BodyFrameCompletionUpdate(projectName, email):
         
 
 ##################################################
-##### 02_HalfBodySplit, IndexTagging Process #####
+##### 04_HalfBodySplit, IndexTagging Process #####
 ##################################################
-## 2. 1-0 HalfBodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
+## 4. 1-0 HalfBodyFrame이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedHalfBodyFrameToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -372,7 +372,7 @@ def AddExistedHalfBodyFrameToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 2. 1-2 HalfBodyFrame의 Body(본문) Body부분 업데이트 형식
+## 4. 1-2 HalfBodyFrame의 Body(본문) Body부분 업데이트 형식
 def UpdateSplitedHalfBodyScripts(project, IndexId, IndexTag, Index):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.HalfBodyFrame[1]["SplitedBodyScripts"])
@@ -390,7 +390,7 @@ def UpdateSplitedHalfBodyScripts(project, IndexId, IndexTag, Index):
     project.HalfBodyFrame[0]["IndexCount"] = IndexId
     project.HalfBodyFrame[0]["BodyCount"] = BodyId
 
-## 2. 1-3 HalfBodyFrame의 Body(본문) Body부분 업데이트
+## 4. 1-3 HalfBodyFrame의 Body(본문) Body부분 업데이트
 def AddHalfBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
     with get_db() as db:
         
@@ -402,7 +402,7 @@ def AddHalfBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
         db.add(project)
         db.commit()
 
-## 2. 2-1 HalfBodyFrame의 Body(본문) TagChunks부분 업데이트 형식
+## 4. 2-1 HalfBodyFrame의 Body(본문) TagChunks부분 업데이트 형식
 def UpdateSplitedHalfBodyTagChunks(project, ChunkId, Tag, Chunk):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.HalfBodyFrame[1]["SplitedBodyScripts"]) -1
@@ -417,7 +417,7 @@ def UpdateSplitedHalfBodyTagChunks(project, ChunkId, Tag, Chunk):
     # Count 업데이트
     project.HalfBodyFrame[0]["ChunkCount"] = ChunkId
 
-## 2. 2-2 HalfBodyFrame의 Body(본문) TagChunks부분 업데이트
+## 4. 2-2 HalfBodyFrame의 Body(본문) TagChunks부분 업데이트
 def AddHalfBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
     with get_db() as db:
         
@@ -429,7 +429,7 @@ def AddHalfBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
         db.add(project)
         db.commit()
         
-## 2. 3-1 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
+## 4. 3-1 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
 def UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Context = "None"):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.HalfBodyFrame[2]["Bodys"])
@@ -446,7 +446,7 @@ def UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Contex
     
     project.HalfBodyFrame[2]["Bodys"].append(updateBodys)
     
-## 2. 3-2 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트
+## 4. 3-2 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트
 def AddHalfBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character, context = "None"):
     with get_db() as db:
         
@@ -458,7 +458,7 @@ def AddHalfBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correcti
         db.add(project)
         db.commit()
                 
-## 2. HalfBodyFrame의Count의 가져오기
+## 4. HalfBodyFrame의Count의 가져오기
 def HalfBodyFrameCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
@@ -469,7 +469,7 @@ def HalfBodyFrameCountLoad(projectName, email):
     
     return IndexCount, BodyCount, ChunkCount, Completion
 
-## 2. HalfBodyFrame의 초기화
+## 4. HalfBodyFrame의 초기화
 def InitHalfBodyFrame(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
@@ -487,7 +487,7 @@ def InitHalfBodyFrame(projectName, email):
         db.add(project)
         db.commit()
         
-## 2. 업데이트된 HalfBodyFrame 출력
+## 4. 업데이트된 HalfBodyFrame 출력
 def UpdatedHalfBodyFrame(projectName, email):
     with get_db() as db:
 
@@ -495,7 +495,7 @@ def UpdatedHalfBodyFrame(projectName, email):
 
     return project.HalfBodyFrame
 
-## 2. HalfBodyFrameCompletion 업데이트
+## 4. HalfBodyFrameCompletion 업데이트
 def HalfBodyFrameCompletionUpdate(projectName, email):
     with get_db() as db:
 
@@ -1056,9 +1056,9 @@ def CharacterCompletionCompletionUpdate(projectName, email):
 
 
 ###################################
-##### 20_SFXMatching Process #####
+##### 15_SFXMatching Process #####
 ###################################
-## 20. 1-0 SFXMatching이 이미 ExistedFrame으로 존재할때 업데이트
+## 15. 1-0 SFXMatching이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -1070,7 +1070,7 @@ def AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 20. 1-1 SFXMatching의 Body(본문) SFXSplitedBodys 업데이트 형식
+## 15. 1-1 SFXMatching의 Body(본문) SFXSplitedBodys 업데이트 형식
 def UpdateSFXSplitedBodys(project, SFXSplitedBodyChunks):
     BodyId = len(project.SFXMatching[1]["SFXSplitedBodys"])
     
@@ -1082,7 +1082,7 @@ def UpdateSFXSplitedBodys(project, SFXSplitedBodyChunks):
     project.SFXMatching[1]["SFXSplitedBodys"].append(updateSFXSplitedBodys)
     project.SFXMatching[0]["BodyCount"] = BodyId
     
-## 20. 1-2 SFXMatching의 Body(본문) SFXSplitedBodys 업데이트
+## 15. 1-2 SFXMatching의 Body(본문) SFXSplitedBodys 업데이트
 def AddSFXSplitedBodysToDB(projectName, email, SFXSplitedBodyChunks):
     with get_db() as db:
         
@@ -1094,7 +1094,7 @@ def AddSFXSplitedBodysToDB(projectName, email, SFXSplitedBodyChunks):
         db.add(project)
         db.commit()
         
-## 20. SFXMatching의Count의 가져오기
+## 15. SFXMatching의Count의 가져오기
 def SFXMatchingCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
@@ -1103,7 +1103,7 @@ def SFXMatchingCountLoad(projectName, email):
     
     return BodyCount, Completion
 
-## 20. SFXMatching의 초기화
+## 15. SFXMatching의 초기화
 def InitSFXMatching(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
@@ -1118,7 +1118,7 @@ def InitSFXMatching(projectName, email):
         db.add(project)
         db.commit()
         
-## 20. 업데이트된 SFXMatching 출력
+## 15. 업데이트된 SFXMatching 출력
 def UpdatedSFXMatching(projectName, email):
     with get_db() as db:
 
@@ -1126,7 +1126,7 @@ def UpdatedSFXMatching(projectName, email):
         
     return project.SFXMatching
         
-## 20. SFXMatchingCompletion 업데이트
+## 15. SFXMatchingCompletion 업데이트
 def SFXMatchingCompletionUpdate(projectName, email):
     with get_db() as db:
 
@@ -1140,9 +1140,9 @@ def SFXMatchingCompletionUpdate(projectName, email):
 
 
 ###################################
-##### 26_CorrectionKo Process #####
+##### 21_CorrectionKo Process #####
 ###################################
-## 26. 1-0 CorrectionKo이 이미 ExistedFrame으로 존재할때 업데이트
+## 21. 1-0 CorrectionKo이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -1154,7 +1154,7 @@ def AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 26. 1-1 CorrectionKo의 Body(본문) CorrectionKoSplitedBodys 업데이트 형식
+## 21. 1-1 CorrectionKo의 Body(본문) CorrectionKoSplitedBodys 업데이트 형식
 def UpdateCorrectionKoSplitedBodys(project):
     BodyId = len(project.CorrectionKo[1]["CorrectionKoSplitedBodys"])
     
@@ -1166,7 +1166,7 @@ def UpdateCorrectionKoSplitedBodys(project):
     project.CorrectionKo[1]["CorrectionKoSplitedBodys"].append(updateCorrectionKoSplitedBodys)
     project.CorrectionKo[0]["BodyCount"] = BodyId
     
-## 26. 1-2 CorrectionKo의 Body(본문) CorrectionKoSplitedBodys 업데이트
+## 21. 1-2 CorrectionKo의 Body(본문) CorrectionKoSplitedBodys 업데이트
 def AddCorrectionKoSplitedBodysToDB(projectName, email):
     with get_db() as db:
         
@@ -1178,7 +1178,7 @@ def AddCorrectionKoSplitedBodysToDB(projectName, email):
         db.add(project)
         db.commit()
         
-## 26. 2-1 CorrectionKo의 Body(본문) CorrectionKoChunk 업데이트 형식
+## 21. 2-1 CorrectionKo의 Body(본문) CorrectionKoChunk 업데이트 형식
 def UpdateCorrectionKoSplitedChunks(project, ChunkId, Tag, ChunkTokens):
     # 새롭게 생성되는 BodyId는 CorrectionKoSplitedBodys의 Len값과 동일
     BodyId = len(project.CorrectionKo[1]["CorrectionKoSplitedBodys"]) -1
@@ -1194,7 +1194,7 @@ def UpdateCorrectionKoSplitedChunks(project, ChunkId, Tag, ChunkTokens):
     # Count 업데이트
     project.CorrectionKo[0]["ChunkCount"] = ChunkId
     
-## 26. 2-2 CorrectionKo의 Body(본문) CorrectionKoChunk 업데이트
+## 21. 2-2 CorrectionKo의 Body(본문) CorrectionKoChunk 업데이트
 def AddCorrectionKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens):
     with get_db() as db:
         
@@ -1206,7 +1206,7 @@ def AddCorrectionKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens):
         db.add(project)
         db.commit()
         
-## 26. CorrectionKo의Count의 가져오기
+## 21. CorrectionKo의Count의 가져오기
 def CorrectionKoCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
@@ -1216,7 +1216,7 @@ def CorrectionKoCountLoad(projectName, email):
     
     return BodyCount, ChunkCount, Completion
 
-## 26. CorrectionKo의 초기화
+## 21. CorrectionKo의 초기화
 def InitCorrectionKo(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
@@ -1232,7 +1232,7 @@ def InitCorrectionKo(projectName, email):
         db.add(project)
         db.commit()
         
-## 26. 업데이트된 CorrectionKo 출력
+## 21. 업데이트된 CorrectionKo 출력
 def UpdatedCorrectionKo(projectName, email):
     with get_db() as db:
 
@@ -1240,7 +1240,7 @@ def UpdatedCorrectionKo(projectName, email):
         
     return project.CorrectionKo
         
-## 26. CorrectionKoCompletion 업데이트
+## 21. CorrectionKoCompletion 업데이트
 def CorrectionKoCompletionUpdate(projectName, email):
     with get_db() as db:
 

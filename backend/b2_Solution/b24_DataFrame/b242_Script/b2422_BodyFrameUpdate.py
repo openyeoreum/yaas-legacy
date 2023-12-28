@@ -556,7 +556,7 @@ def BodyFrameBodysUpdate(projectName, email):
 ###################################################
 
 def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = None):
-    print(f"< User: {email} | Project: {projectName} | 02_BodyFrameUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 03_BodyFrameUpdate 시작 >")
     # BodyFrame의 Count값 가져오기
     IndexCount, BodyCount, ChunkCount, Completion = BodyFrameCountLoad(projectName, email)
     if Completion == "No":
@@ -564,7 +564,7 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame)
-            print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate는 ExistedBodyFrame으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 03_BodyFrameUpdate는 ExistedBodyFrame으로 대처됨 ]\n")
         else:
             indexBodyUnitChunksList = TaggedChunksToUnitedChunks(projectName, email, tokensCount)
             
@@ -625,9 +625,9 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
             if INPUT != OUTPUT:
                 print(f"IndexBodyUnitChunksList와 BodyFrameList 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | BodyFrameUpdateError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
             else:
-                print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate 완료 ]\n")
+                print(f"[ User: {email} | Project: {projectName} | 03_BodyFrameUpdate 완료 ]\n")
     else:
-        print(f"[ User: {email} | Project: {projectName} | 02_BodyFrameUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 03_BodyFrameUpdate는 이미 완료됨 ]\n")
     
 if __name__ == "__main__":
 

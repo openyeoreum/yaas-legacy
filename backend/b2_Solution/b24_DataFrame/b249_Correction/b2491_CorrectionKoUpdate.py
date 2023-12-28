@@ -342,7 +342,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '26', DataFramePath)    
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '21', DataFramePath)    
     inputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
@@ -469,8 +469,8 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
         # nonCommonPartList 형성
         nonCommonPartList.append(nonCommonParts)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '26', DataFramePath)
-        SaveAddOutputMemory(projectName, email, nonCommonPartList, '26', DataFramePath)
+        SaveOutputMemory(projectName, email, outputMemoryDics, '21', DataFramePath)
+        SaveAddOutputMemory(projectName, email, nonCommonPartList, '21', DataFramePath)
 
     return outputMemoryDics, nonCommonPartList
 
@@ -515,7 +515,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
     outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
 
     ########## 테스트 후 삭제 ##########
-    # filePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_outputMemoryDics_231128.json"
+    # filePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_21_outputMemoryDics_231128.json"
     # with open(filePath, "w", encoding = 'utf-8') as file:
     #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
     # with open(filePath, "r", encoding = 'utf-8') as file:
@@ -669,7 +669,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                         tokens.append({"Pause": "(0.20)"})
                         
     ########## 테스트 후 삭제 ##########
-    # filePath2 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_responseJson_231128.json"
+    # filePath2 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_21_responseJson_231128.json"
     
     # with open(filePath2, "w", encoding = 'utf-8') as file:
     #     json.dump(responseJson, file, ensure_ascii = False, indent = 4)
@@ -682,7 +682,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                 token = next(iter(token_dict.values()))
                 responseJsonText += token
 
-    filePath3 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_26_responseJson_231128.txt"
+    filePath3 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_21_responseJson_231128.txt"
     # 텍스트 파일에 저장
     with open(filePath3, "w", encoding="utf-8") as file:
         file.write(responseJsonText)
@@ -692,7 +692,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
 
 ## 프롬프트 요청 및 결과물 Json을 CorrectionKo에 업데이트
 def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 26_CorrectionKoUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 21_CorrectionKoUpdate 시작 >")
     # CorrectionKo의 Count값 가져오기
     ContinueCount, ContextCount, Completion = CorrectionKoCountLoad(projectName, email)
     if Completion == "No":
@@ -701,7 +701,7 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "CorrectionKo", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate는 ExistedCorrectionKo으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 21_CorrectionKoUpdate는 ExistedCorrectionKo으로 대처됨 ]\n")
         else:
             responseJson = CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
@@ -734,10 +734,10 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             CorrectionKoCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 21_CorrectionKoUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 21_CorrectionKoUpdate는 이미 완료됨 ]\n")
     
     
 if __name__ == "__main__":

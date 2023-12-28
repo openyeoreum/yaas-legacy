@@ -554,7 +554,7 @@ def HalfBodyFrameBodysUpdate(projectName, email):
 ###################################################
 
 def HalfBodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = None):
-    print(f"< User: {email} | Project: {projectName} | 02_HalfBodyFrameUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 04_HalfBodyFrameUpdate 시작 >")
     # HalfBodyFrame의 Count값 가져오기
     IndexCount, BodyCount, ChunkCount, Completion = HalfBodyFrameCountLoad(projectName, email)
     if Completion == "No":
@@ -562,7 +562,7 @@ def HalfBodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedHalfBodyFrameToDB(projectName, email, ExistedDataFrame)
-            print(f"[ User: {email} | Project: {projectName} | 02_HalfBodyFrameUpdate는 ExistedHalfBodyFrame으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 04_HalfBodyFrameUpdate는 ExistedHalfBodyFrame으로 대처됨 ]\n")
         else:
             indexBodyUnitChunksList = TaggedChunksToUnitedChunks(projectName, email, tokensCount)
             
@@ -623,9 +623,9 @@ def HalfBodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame
             if INPUT != OUTPUT:
                 print(f"IndexBodyUnitChunksList와 HalfBodyFrameList 불일치 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | HalfBodyFrameUpdateError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
             else:
-                print(f"[ User: {email} | Project: {projectName} | 02_HalfBodyFrameUpdate 완료 ]\n")
+                print(f"[ User: {email} | Project: {projectName} | 04_HalfBodyFrameUpdate 완료 ]\n")
     else:
-        print(f"[ User: {email} | Project: {projectName} | 02_HalfBodyFrameUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 04_HalfBodyFrameUpdate는 이미 완료됨 ]\n")
     
 if __name__ == "__main__":
 

@@ -283,6 +283,10 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
                     for i in range(len(CleanInput) + 1):
                         ReplaceCleanInput = CleanInput[:i] + NonOUTPUT + CleanInput[i:]
                         ReplaceCleanOutput = CleanOutput[:i] + NonINPUT + CleanOutput[i:]
+                        print(f'1) ReplaceCleanInput: {ReplaceCleanInput}')
+                        print(f'1) CleanOutput: {CleanOutput}\n')
+                        print(f'2) CleanInput: {CleanInput}')
+                        print(f'2) ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
                         if ReplaceCleanInput == CleanOutput or CleanInput == ReplaceCleanOutput:
                             nonCommonPartsNum += 1
                             continue

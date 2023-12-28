@@ -302,7 +302,6 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
-
 ## ContextDefine의 Bodys전환
 def ContextDefineToBodys(projectName, email, ResponseJson):
     with get_db() as db:

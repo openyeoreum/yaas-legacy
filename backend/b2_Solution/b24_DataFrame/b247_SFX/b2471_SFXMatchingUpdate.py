@@ -316,39 +316,65 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
 def SFXToBodys(projectName, email, ResponseJson):
     # ResponseJson의 RangeList화
     SFXChunkList = []
+    SameIdChunkList = []
+
     for i in range(len(ResponseJson)):
         response = ResponseJson[i]['SFXSplitedBodyChunks']
         for j in range(len(response)):
             ChunkId = response[j]['ChunkId']
-            Chunk = response[j]['Chunk']
-            SFXChunk = response[j]['SFX']['Range']
-            SFXChunkList.append({'ChunkId': ChunkId, 'Chunk': Chunk, 'SFXChunk': SFXChunk})
+
+            if j > 0 and response[j-1]['ChunkId'] == ChunkId:
+                # 동일한 ChunkId를 가진 경우, SFXChunk만 SameIdChunkList에 추가
+                SameIdChunkList.append(response[j-1]['SFX']['Range'])
+                print(SameIdChunkList)
+            else:
+                # 새로운 ChunkId가 나타나면, 이전 ChunkId에 대한 정보를 SFXChunkList에 추가
+                if j > 0:
+                    SFXChunkList.append({
+                        'ChunkId': response[j-1]['ChunkId'], 
+                        'Chunk': response[j-1]['Chunk'], 
+                        'SFXChunk': SameIdChunkList
+                    })
+                    print({
+                        'ChunkId': response[j-1]['ChunkId'], 
+                        'Chunk': response[j-1]['Chunk'], 
+                        'SFXChunk': SameIdChunkList
+                    })
+                SameIdChunkList = [response[j-1]['SFX']['Range']]  # SameIdChunkList 초기화
+
+    # 마지막 청크 추가
+    if SameIdChunkList:
+        SFXChunkList.append({
+            'ChunkId': response[-1]['ChunkId'],
+            'Chunk': response[-1]['Chunk'],
+            'SFXChunk': SameIdChunkList
+        })
         
-    with get_db() as db:
-        project = GetProject(projectName, email)
-        bodyFrame = project.BodyFrame
-        Bodys = bodyFrame[2]["Bodys"][1:]
+    # with get_db() as db:
+    #     project = GetProject(projectName, email)
+    #     bodyFrame = project.BodyFrame
+    #     Bodys = bodyFrame[2]["Bodys"][1:]
 
-        for body in Bodys:
-            SFXBody = body['Body']
-            SFXBodyChunkIds = body['ChunkId']
-            for i in range(len(SFXChunkList)):
-                SFXChunkDic = SFXChunkList[i]
-                ChunkId = SFXChunkDic['ChunkId']
-                if ChunkId in SFXBodyChunkIds:
-                    Chunk = SFXChunkDic['Chunk']
-                    SFXChunk = SFXChunkDic['SFXChunk']
-                    SFXBody = SFXBody.replace(Chunk, SFXChunk, 1)
-                    if SFXChunk not in SFXBody:
-                        print(Chunk)
-                        print(SFXChunk)
+    #     for body in Bodys:
+    #         SFXBody = body['Body']
+    #         SFXBodyChunkIds = body['ChunkId']
+    #         for i in range(len(SFXChunkList)):
+    #             SFXChunkDic = SFXChunkList[i]
+    #             ChunkId = SFXChunkDic['ChunkId']
+    #             if ChunkId in SFXBodyChunkIds:
+    #                 Chunk = SFXChunkDic['Chunk']
+    #                 SFXChunk = SFXChunkDic['SFXChunk']
+    #                 SFXBody = SFXBody.replace(Chunk, SFXChunk, 1)
+    #                 if SFXChunk not in SFXBody:
+    #                     print(Chunk)
+    #                     print(SFXChunk)
 
-            body['Task'].append('SFX')
-            body['SFX'] = SFXBody
+    #         body['Task'].append('SFX')
+    #         body['SFX'] = SFXBody
 
-    json_data = json.dumps(Bodys, ensure_ascii = False, indent = 4)
-    with open('Bodys.json', 'w', encoding='utf-8') as file:
-        file.write(json_data)
+    # json_data = json.dumps(Bodys, ensure_ascii = False, indent = 4)
+    # with open('Bodys.json', 'w', encoding='utf-8') as file:
+    #     file.write(json_data)
 
     # flag_modified(project, "BodyFrame")
     
@@ -652,11 +678,11 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "웹3.0메타버스"
+    projectName = "우리는행복을진단한다"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    # responseJson = SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode, importance = 0)
-    # SFXToBodys(projectName, email, responseJson)
+    responseJson = SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode, importance = 0)
+    SFXToBodys(projectName, email, responseJson)

@@ -316,39 +316,43 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
 def SFXToBodys(projectName, email, ResponseJson):
     # ResponseJson의 RangeList화
     SFXChunkList = []
-    SameIdChunkList = []
-
+    SameIdSFXChunkList = []
+    SameIdRangePointList = []
+    lastChunkId = None
     for i in range(len(ResponseJson)):
         response = ResponseJson[i]['SFXSplitedBodyChunks']
         for j in range(len(response)):
             ChunkId = response[j]['ChunkId']
+            Chunk = response[j]['Chunk']
+            SFXChunk = response[j]['SFX']['Range']
+            RangePoint = response[j]['SFX']['RangePoint']
 
-            if j > 0 and response[j-1]['ChunkId'] == ChunkId:
-                # 동일한 ChunkId를 가진 경우, SFXChunk만 SameIdChunkList에 추가
-                SameIdChunkList.append(response[j-1]['SFX']['Range'])
-                print(SameIdChunkList)
+            if ChunkId == lastChunkId:
+                # 동일한 ChunkId를 가진 경우, SFXChunk를 SameIdSFXChunkList에 추가
+                SameIdSFXChunkList.append(SFXChunk)
+                SameIdRangePointList.append(RangePoint)
+                print(SameIdSFXChunkList)
             else:
-                # 새로운 ChunkId가 나타나면, 이전 ChunkId에 대한 정보를 SFXChunkList에 추가
-                if j > 0:
-                    SFXChunkList.append({
-                        'ChunkId': response[j-1]['ChunkId'], 
-                        'Chunk': response[j-1]['Chunk'], 
-                        'SFXChunk': SameIdChunkList
-                    })
-                    print({
-                        'ChunkId': response[j-1]['ChunkId'], 
-                        'Chunk': response[j-1]['Chunk'], 
-                        'SFXChunk': SameIdChunkList
-                    })
-                SameIdChunkList = [response[j-1]['SFX']['Range']]  # SameIdChunkList 초기화
+                # ChunkId가 변경된 경우 이전 데이터 처리
+                if SameIdSFXChunkList:
+                    # 이전 ChunkId의 데이터를 SFXChunkList에 추가
+                    SFXChunkList.append({'ChunkId': lastChunkId, 'Chunk': lastChunk, 'SFXChunk': SameIdSFXChunkList, 'RangePoint': SameIdRangePointList})
+                    SameIdSFXChunkList = []
+                    SameIdRangePointList = []
 
-    # 마지막 청크 추가
-    if SameIdChunkList:
-        SFXChunkList.append({
-            'ChunkId': response[-1]['ChunkId'],
-            'Chunk': response[-1]['Chunk'],
-            'SFXChunk': SameIdChunkList
-        })
+                # 새로운 ChunkId 시작
+                SameIdSFXChunkList.append(SFXChunk)
+                SameIdRangePointList.append(RangePoint)
+                lastChunkId = ChunkId
+                lastChunk = Chunk
+
+    # 반복문 종료 후 마지막 데이터 처리
+    if SameIdSFXChunkList:
+        SFXChunkList.append({'ChunkId': lastChunkId, 'Chunk': lastChunk, 'SFXChunk': SameIdSFXChunkList, 'RangePoint': SameIdRangePointList})
+        
+    json_data = json.dumps(SFXChunkList, ensure_ascii = False, indent = 4)
+    with open('SFXChunkList.json', 'w', encoding = 'utf-8') as file:
+        file.write(json_data)
         
     # with get_db() as db:
     #     project = GetProject(projectName, email)
@@ -380,6 +384,51 @@ def SFXToBodys(projectName, email, ResponseJson):
     
     # db.add(project)
     # db.commit()
+    
+## SFXChunk의 위치데이터 저장
+def SFXChunkToSFXDic(SFXChunk):
+    # 정규 표현식을 사용하여 모든 형태의 SFX 태그 찾기
+    StartTagPattern = r"<효과음시작(\d{1,5})>"
+    EndTagPattern = r"<효과음끝(\d{1,5})>"
+    # 태그가 시작되는 지점 찾기
+    StartTagMatch = re.search(StartTagPattern, SFXChunk)
+    EndTagMatch = re.search(EndTagPattern, SFXChunk)
+    # Chunk 만들기
+    Chunk = SFXChunk.replace(StartTagMatch[0], '')
+    Chunk = Chunk.replace(EndTagMatch[0], '')
+    # 태그 바로 전 지점의 문자열 길이를 구함
+    StartPoint = StartTagMatch.start() if StartTagMatch else None
+    EndPoint = EndTagMatch.start() - len(StartTagMatch[0]) if EndTagMatch else None
+
+    sfxPoint = [StartPoint, EndPoint] if StartPoint is not None and EndPoint is not None else None
+    
+    return {"Chunk": Chunk, "SFX": [StartTagMatch[0], EndTagMatch[0]], "SFXPoint": sfxPoint}
+
+def SFXDicToSFXChunk(SFXDics):
+    # SFXDics가 리스트가 아니라면 리스트로 변환
+    if not isinstance(SFXDics, list):
+        SFXDics = [SFXDics]
+    # 태그와 해당 위치를 저장할 리스트
+    tags = []
+    Chunk = SFXDics[0]['Chunk']
+    # 각 SFXDic에서 태그와 위치를 추출하여 tags 리스트에 추가
+    for SFXDic in SFXDics:
+        StartTag, EndTag = SFXDic['SFX']
+        StartPoint, EndPoint = SFXDic['SFXPoint']
+        tags.append((StartPoint, StartTag))
+        tags.append((EndPoint, EndTag))
+    # 시작점을 기준으로 태그들을 정렬
+    tags.sort(key=lambda x: x[0])
+    # 태그를 Chunk에 삽입
+    SFXChunk = ""
+    last_index = 0
+    for point, tag in tags:
+        SFXChunk += Chunk[last_index:point] + tag
+        last_index = point
+    # 마지막 부분 추가
+    SFXChunk += Chunk[last_index:]
+
+    return SFXChunk
 
 ## Chunk에서 ExtractedSFXchunk와 가장 유사한 부분을 찾아서 ExtractedSFXchunk로 대처
 def ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID):
@@ -404,7 +453,6 @@ def ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID):
 
 ## Chunk를 Tokens로 치환
 def SplitChunkIntoTokens(Chunk):
-
     pattern = r"""
         (?P<SFXStart>\<효과음시작\d{1,5}\>) | # 효과음시작 '<시작n>'
         (?P<SFXEnd>\<효과음끝\d{1,5}\>) | # 효과음끝 '<끝n>'
@@ -513,9 +561,11 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                     RANGE = RANGE.replace(f'<시작{SFXID}>. ', f'. <시작{SFXID}>')
                     RANGE = RANGE.replace(f'.<시작{SFXID}>', f'<시작{SFXID}>.')
                     RANGE = RANGE.replace(f',<시작{SFXID}>', f'<시작{SFXID}>,')
+                    RANGE = RANGE.replace(f'<시작{SFXID}> ', f'<시작{SFXID}>')
                     RANGE = RANGE.replace('<끝>', f'<끝{SFXID}>')
                     RANGE = RANGE.replace(f'.<끝{SFXID}>', f'<끝{SFXID}>.')
                     RANGE = RANGE.replace(f',<끝{SFXID}>', f'<끝{SFXID}>,')
+                    RANGE = RANGE.replace(f' <끝{SFXID}>', f'<끝{SFXID}>')
                     
                     Chunk = RANGE
                     SFXId = SFXID
@@ -527,7 +577,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                     Range = RANGE
                     Importance = SFXDic['필요성']
                     
-                    outputMemoryDicsList.append({"outputId": i + 1, "Chunk": Chunk, "SFX": {"SFXId": SFXId, "SFX": sFX, "Prompt": Prompt, "Type": Type, "Role": Role, "Direction": Direction, "Range": Range, "Importance": Importance}})
+                    outputMemoryDicsList.append({"outputId": i + 1, "Chunk": Chunk, "SFX": {"SFXId": SFXId, "SFX": sFX, "Prompt": Prompt, "Type": Type, "Role": Role, "Direction": Direction, "Range": Range, "RangePoint": None, "Importance": Importance}})
                     SFXID += 1
 
     # outputMemoryDics의 전처리
@@ -575,6 +625,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                         Chunk = InputsChunk
                         Chunk = ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID)
                         SFX['Range'] = Chunk
+                        SFX['RangePoint'] = SFXChunkToSFXDic(Chunk)
                         SFXChunkTokens = SplitChunkIntoTokens(Chunk)
                         ResponseJson.append({"outputId": outputId, "BodyId": BodyId, "SFXChunk":{"ChunkId": ChunkId, "Chunk": OrigianlChunk, "SFX": SFX, "SFXChunkTokens": SFXChunkTokens}})
                         SFXIdCounter += 1
@@ -587,6 +638,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                             Chunk = BeforeInputsChunk + ' ' + InputsChunk
                             Chunk = ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID)
                             SFX['Range'] = Chunk
+                            SFX['RangePoint'] = SFXChunkToSFXDic(Chunk)
                             SFXChunkTokens = SplitChunkIntoTokens(Chunk)
                             ResponseJson.append({"outputId": outputId, "BodyId": BodyId, "SFXChunk":{"ChunkId": ChunkId, "Chunk": OrigianlChunk, "SFX": SFX, "SFXChunkTokens": SFXChunkTokens}})
                             SFXIdCounter += 1
@@ -599,6 +651,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                             Chunk = BeBeforeInputsChunk + ' ' + BeforeInputsChunk + ' ' + InputsChunk
                             Chunk = ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID)
                             SFX['Range'] = Chunk
+                            SFX['RangePoint'] = SFXChunkToSFXDic(Chunk)
                             SFXChunkTokens = SplitChunkIntoTokens(Chunk)
                             ResponseJson.append({"outputId": outputId, "BodyId": BodyId, "SFXChunk":{"ChunkId": ChunkId, "Chunk": OrigianlChunk, "SFX": SFX, "SFXChunkTokens": SFXChunkTokens}})
                             SFXIdCounter += 1
@@ -664,16 +717,15 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
 
                 # i값 수동 업데이트
                 i += 1
-            
+
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             SFXMatchingCompletionUpdate(projectName, email)
             print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate 완료 ]\n")
-        
+
     else:
         print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate는 이미 완료됨 ]\n")
-    
-    
+
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################

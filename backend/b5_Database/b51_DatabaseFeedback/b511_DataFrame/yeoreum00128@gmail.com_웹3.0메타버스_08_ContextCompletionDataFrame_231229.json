@@ -1,0 +1,3341 @@
+[
+    {
+        "UserId": "fc8eaf7c821f9f8a7bc3d07a73d7e52da46f1794c814c0fe1f858b6054241404",
+        "ProjectsStorageID": 1,
+        "ProjectId": 3,
+        "ProjectName": "웹3.0메타버스",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "ContextCompletion",
+        "ContextChunkCount": 276,
+        "ContextCount": 0,
+        "Completion": "Yes"
+    },
+    {
+        "ContextCompeletions": [
+            {
+                "ContextChunkId": 0,
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Genre": "None",
+                "Gender": "None",
+                "Age": "None",
+                "Personality": "None",
+                "Emotion": "None",
+                "Accuracy": "None"
+            },
+            {
+                "ContextChunkId": 1,
+                "ChunkId": 3,
+                "Chunk": "메타버스는웹3.0이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 2,
+                "ChunkId": 33,
+                "Chunk": "현실과 가상 간의 경계가 사라지면서 시간과 공간이 초월 적으로 융합되는 세상, 그것이 궁극적 메타버스의 모습입니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 3,
+                "ChunkId": [
+                    37,
+                    38
+                ],
+                "Chunk": [
+                    "'메타버스'라는 용어는 학술용어나 공식적으로 합의된 명칭이 아 닙니다.",
+                    "이전부터 사이버, 온라인, 멀티버스 다중우주, 디지털 트윈, 거울 세계, 가상현실 VR, 증강현실 AR, 혼합현실 MR 등등 다양한 이름으로 불 렸었지요."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 4,
+                "ChunkId": 47,
+                "Chunk": "뒤집어 말하면, 메타버스의 본질과 원 리가 웹3.0입니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 5,
+                "ChunkId": [
+                    53,
+                    54,
+                    56,
+                    57,
+                    58
+                ],
+                "Chunk": [
+                    "그리고 웹3.0 메타버스의 두 기둥은 NFT",
+                    "대체불가토큰와",
+                    "Alternate Reality Game, 대체현실게임",
+                    "입니다.",
+                    "NFT는 메타버스의 경제를 떠받치고, ARG 는 메타버스를 역동적으로 만듭니다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 6,
+                "ChunkId": 59,
+                "Chunk": "이 책의 부제처럼 NFT와 ARG 가 비즈니스의 법칙을 바꾸고 있습니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "86"
+            },
+            {
+                "ContextChunkId": 7,
+                "ChunkId": 62,
+                "Chunk": "30여 년 전 인터넷이라는 자궁에서 메타버스라는 새로운 생명체가 잉태되고, 지능이 생기면서 웹2.0으로 진화한 역 사를 조망해 보면 웹3.0 메타버스의 본질과 원리를 간파할 수 있습니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "89"
+            },
+            {
+                "ContextChunkId": 8,
+                "ChunkId": 68,
+                "Chunk": "메타버스 플랫폼을 만들려면 작동 원리를 알아야 합니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 9,
+                "ChunkId": [
+                    70,
+                    71
+                ],
+                "Chunk": [
+                    "NFT는 메타버스의 피와 같은 것입니다.",
+                    "심장인 블록체인에서 만 들어지는 NFT 없이는 메타버스 경제가 존속하기 어렵습니다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 10,
+                "ChunkId": 79,
+                "Chunk": "웹3.0 메타버스에서는 경쟁, 시장, 소비자 등의 마케팅 명제가 달라져야 하고, 상품의 개념도 확대되어야 합니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 11,
+                "ChunkId": [
+                    87,
+                    88
+                ],
+                "Chunk": [
+                    "메타버스 사업을 기획하려면 대체현실에 대한 이해가 필수적입니다.",
+                    "많은 사업기회가 숨어 있고 궁극적인 메타버스로 가는 브리지가 바로 대체현실이기 때문입니다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 12,
+                "ChunkId": [
+                    126,
+                    127
+                ],
+                "Chunk": [
+                    "메타버스는 문명의 이동 현상입니다.",
+                    "산업문명이 저물고 인류가 스 마트문명 시대로 진입한 거지요."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "82"
+            },
+            {
+                "ContextChunkId": 13,
+                "ChunkId": 129,
+                "Chunk": "메타버스는 잠깐 일어났다 사그라지는 파도가 아니라 증폭되면서 밀려오고 있는 거대한 쓰나미입니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥분",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 14,
+                "ChunkId": 134,
+                "Chunk": "지난 30년간 추적해 왔던 융합마케팅, 4차산업혁명, 블록체인 등 변화의 퍼즐 조각들이 웹3.0 메타버스에서 착착 맞춰지는 흥분감을 지울 수 없습니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥분",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 15,
+                "ChunkId": 137,
+                "Chunk": "낯선 곳에 여행 가려면 그 지역의 언어, 역사, 문화, 라이프스타 일, 경제시스템, 법과 제도 등을 미리 파악하고 가야 하듯이, 웹3.0 메타버스에서 살아가려면 공부가 필요합니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 16,
+                "ChunkId": 147,
+                "Chunk": "1990년대 초, PC통신에 빠진 컴퓨터 마니아들이 있었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥분",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 17,
+                "ChunkId": [
+                    167,
+                    168
+                ],
+                "Chunk": [
+                    "사람 들이 여행을 좋아하는 것도 같은 원리다.",
+                    "낯선 환경에서 다른 사람들 을 만날 때 우리 두뇌는 새로운 조합들을 만들어 내느라 분주해진다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "희열",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 18,
+                "ChunkId": 175,
+                "Chunk": "4차원이라 할 수는 없더라도 인터넷은 3차원 시공간의 물리법칙 을 파괴한 사건이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "놀람",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 19,
+                "ChunkId": 177,
+                "Chunk": "이렇게 1990년대는 전 세계가 인터넷으로 하이퍼링크 된 시기였고, 사람들이 희열을 느끼고 인터넷에 열광한 건 기존 시공간 의 족쇄를 걷어치우면서 오랫동안 꿈꾸던 높은 차원의 신세계를 발견했기 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "희열",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 20,
+                "ChunkId": 192,
+                "Chunk": "하이퍼텍스트는 번역하면 초월적 문서인데, 세상에 존재하는 텍 스트들이 외떨어져 있는 것이 아니라 모두 시공간을 초월해서 연결 되는 구조를 의미한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥미",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 21,
+                "ChunkId": 196,
+                "Chunk": "이것이 하이퍼텍스트의 구조인데, 하이퍼텍스트라는 개념이 인터 넷 생태계의 핵심원리이고, 인터넷이 메타버스를 창조할 수 있었던 힘은 바로 하이퍼텍스트에서 나온 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥미",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 22,
+                "ChunkId": 198,
+                "Chunk": "HTTP 이전에는 일반인들은 인터넷에 접근할 수 없었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 23,
+                "ChunkId": [
+                    205,
+                    206,
+                    207,
+                    208,
+                    209
+                ],
+                "Chunk": [
+                    "1980년대 들어 TCP·IP 프로토콜이 정비되고, 서버와 클라이언트 간 파일을 전송하기 위한 FTP",
+                    "File Transfer Protocol",
+                    "나 전자메일을 보내고 받는 데 사용되는 SMTP",
+                    "Simple Mail Transfer Protocol",
+                    "등이 활용되고 있었다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 24,
+                "ChunkId": 210,
+                "Chunk": "여기에 HTTP를 추가시킴으로써 일반인들도 인터넷에 접속하게 만든 일등공신이 팀 버너스 리다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 25,
+                "ChunkId": 224,
+                "Chunk": "하이퍼텍스트란 초월과 문서의 합성어로서 문서들을 중첩시켜, 다른 말로 하면 하이퍼링 크를 통해 여러 문서를 넘나들 수 있도록 하는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 26,
+                "ChunkId": 227,
+                "Chunk": "HTTP를 주창하면서 HTML과 관련 소프트웨어를 만들었고. 월드와이드웹이라는 개념을 창시했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 27,
+                "ChunkId": 228,
+                "Chunk": "테드 넬슨의 제나두 프로젝트는 비록 완성되지 못했지만 팀 버너스 리에 의해 계승되어 웹으로 구현되었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 28,
+                "ChunkId": 233,
+                "Chunk": "인터넷에 일반인들이 접속하게 된 것은 국제정치적 변화와도 관 련되어 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 29,
+                "ChunkId": [
+                    257,
+                    258
+                ],
+                "Chunk": [
+                    "여기서 잠깐, 인터넷과 웹은 다른 차원 의 개념임을 이해하고 가야 한다.",
+                    "한마디로 정리하자면, 인터넷은 하 드웨어고 웹은 소프트웨어다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 30,
+                "ChunkId": 261,
+                "Chunk": "즉, 1990년대 대중에게 확산되기 시작한 인터넷이 웹이라는 가상의 땅을 만든 것이고, 웹2.0 환경에서 플랫폼으로, 그리고 디지털과 ICT 기술의 진화로 플랫폼이 입체적이고 다이내믹하고 지 능적인 모습으로 진화한 생태계가 메타버스다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 31,
+                "ChunkId": 262,
+                "Chunk": "그래서 메타버스를 웹3.0이라 하는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 32,
+                "ChunkId": 264,
+                "Chunk": "1990년대 들어 조성된 웹은 새로운 기회의 땅으로 부상했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥분",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 33,
+                "ChunkId": 266,
+                "Chunk": "모험적인 젊은이들의 사이버 신대륙 개척 이 본격화되었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥분",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 34,
+                "ChunkId": 283,
+                "Chunk": "이베이는 인터넷의 연결성을 이용해서 사람들이 소유하고 있는 잉여자원을 서로 사고팔 수 있는 최초의 플랫폼이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥미",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 35,
+                "ChunkId": 289,
+                "Chunk": "신문이나 잡지, 주위 사람들과 의 대화 등등 그런데, 아마존은 미디어 기능을 유통에 융합시킴으로 써 후일 플랫폼으로의 도약의 발판을 마련한 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "통찰",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 36,
+                "ChunkId": 291,
+                "Chunk": "중국도 웹에 있어서는 만만디가 아니었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 37,
+                "ChunkId": 301,
+                "Chunk": "일일 이 거론하기 힘들지만 1990년대는 수를 셀 수없이 많은 성공과 실패 사례들이 쏟아지면서 지구상에 새로운 기운이 감돌던 시기였다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "희열",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 38,
+                "ChunkId": 304,
+                "Chunk": "1990년대 인터넷은 지각판을 흔들면서 게임의 법칙을 바꿔 놓았다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 39,
+                "ChunkId": 324,
+                "Chunk": "용어야 어찌 됐든 연결과 융합, 역전과 이동 등 무시무시한 변화가 일어난 것은 사실이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 40,
+                "ChunkId": [
+                    327,
+                    328,
+                    329
+                ],
+                "Chunk": [
+                    "초기의 웹 생태계가 1차원 수준이었다면 2차원",
+                    "웹2.0",
+                    "으로 진화하면서 근원적 인 전환이 일어난 것이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥분",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 41,
+                "ChunkId": 333,
+                "Chunk": "확률론적 방정식과 애자일 경영학",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 42,
+                "ChunkId": 348,
+                "Chunk": "메타버스는 양자역학에서 말하는 불확정성의 원리가 적용되는 곳이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "불확정성",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 43,
+                "ChunkId": 352,
+                "Chunk": "그러므로 메타버스 비즈니스의 성공조건은 애자일 agile 경영이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 44,
+                "ChunkId": 361,
+                "Chunk": "메타버스에서는 빠른 속도로 계속해서 움직이는 노마드 정신이 필요하다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 45,
+                "ChunkId": 401,
+                "Chunk": "일반인들을 집필진으로 끌어들이자는 발상의 전환이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 46,
+                "ChunkId": 405,
+                "Chunk": "위키피디아는 지구인 누구나 집필진으로 참여할 수 있고, 해당 주제어에 대해 자유롭게 업로드하거나 수정할 수 있는 집단지성형 백과사전이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 47,
+                "ChunkId": 412,
+                "Chunk": "메타버스도 그렇다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "80"
+            },
+            {
+                "ContextChunkId": 48,
+                "ChunkId": 421,
+                "Chunk": "블로그 생태계가 활성화되자 월수입이 수천만원에 이르는 슈퍼 블로거들이 나타나기 시작했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 49,
+                "ChunkId": 422,
+                "Chunk": "자신이 좋아하고 관심 있는 주제로 블로그에 글을 올리기만 해도 돈을 벌 수 있는 인프라가 조성되었기 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 50,
+                "ChunkId": 428,
+                "Chunk": "비즈니스 모델이 독특한 것도 아닌 데 다 차별화 포인트도 없었고, 어떤 식으로 돈을 벌겠다는 계획도 없이 두 공대생이 자신들의 박사학위 논문을 사업모델화한 것이었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 51,
+                "ChunkId": 435,
+                "Chunk": "세르게이 브린과 래리 페이지는 페이지랭크 알고리즘을 적용한 검색엔진을 만들고 검색사이트를 열었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 52,
+                "ChunkId": 450,
+                "Chunk": "구글의 잠재력을 알아보고 투자해 준 실리콘밸리의 천사들이 없었더 라면 구글은 젊은 청년들의 취미활동으로 끝났을 수도 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "두려움",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 53,
+                "ChunkId": 454,
+                "Chunk": "애드워즈와 애드센스인데, 애드워즈는 대부분 포털 사이트의 주 수익원인 검색어 광고, 다른 말로 키워 드광고다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 54,
+                "ChunkId": 467,
+                "Chunk": "구글에게 엄청난 수익을 안겨 주고, 또 일반 대중들도 생산자로 변신해 서 돈을 벌 수 있는 새로운 경제시스템을 만든 것은 애드센스 AdSense다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 55,
+                "ChunkId": 469,
+                "Chunk": "웹을 놀이터에서 일터로 바꾼 애드센스",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 56,
+                "ChunkId": 491,
+                "Chunk": "또 웹 생태계를 단순한 놀이터가 아닌 일터로 전환시켜 오늘날 메타버스 경제시스템의 주춧돌이 된 것이 애드센스다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 57,
+                "ChunkId": 492,
+                "Chunk": "오픈 플랫폼에서의 마케팅 문법",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 58,
+                "ChunkId": 513,
+                "Chunk": "그러나 오픈 플랫폼에서는 생산 과정에 참 여하는 프로슈머고, 마케팅 파트너다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 59,
+                "ChunkId": 521,
+                "Chunk": "웹3.0 메타버스에서는 코페르니쿠스적인 인식의 전환이 필요하다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 60,
+                "ChunkId": 530,
+                "Chunk": "21세기 접어들면서 고객을 끌어들이고 울타리 안에 머물게 하는 전략이 먹히지 않는 환경의 변화가 일어났고, 기업들이 고객을 찾아 바깥세상으로 나가서 소통하는 전략이 필요해진 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "평온",
+                "Accuracy": "95"
+            },
+            {
+                "ContextChunkId": 61,
+                "ChunkId": 534,
+                "Chunk": "SNS는 마이크로 블 로그라 할 수 있는데, 블로그의 연결성과 사용성을 향상시킨 소셜 미디어다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 62,
+                "ChunkId": [
+                    562,
+                    563
+                ],
+                "Chunk": [
+                    "즉, 웹2.0은 하나의 거대한 광장이 되는 셈이다.",
+                    "사람들이 정보 를 찾기 위해 포털의 울타리 안으로 들어가는 것이 아니라 광장으로 나가는 변화가 일어난 것이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 63,
+                "ChunkId": 566,
+                "Chunk": "즉, 포털에서 플랫폼으로, 서핑에서 서치로의 행동 변화가 일어났다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 64,
+                "ChunkId": 568,
+                "Chunk": "후술하겠지만, 웹은 점점 3차원으로 진화하는데 그것이 웹3.0인 메타버스다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "피곤",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 65,
+                "ChunkId": 591,
+                "Chunk": "지구가 인간 두뇌의 뉴런과 시냅스처럼 연결되면서 지능화된 스마트지구로 변하기 시작했고 사람 들도 똑똑한 지구인, 스마트몹이 된 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 66,
+                "ChunkId": 593,
+                "Chunk": "집단지성은 \"다수의 개체들이 서로 협력 혹은 경쟁을 통하여 얻게 되는 결과\" 를 의미하는데. \"소수의 우수한 개체나 전문가의 능력보다 다양성과 독립성을 가진 집단의 통합된 지성이 올바른 결론에 가깝다는 주장이다.\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 67,
+                "ChunkId": 597,
+                "Chunk": "캐나다 경영 컨설턴트 돈 탭스콧은 위키노믹스라는 신조어를 주창했는데, 《위키노믹스 : 경제 패러다임을 바꾼 집단의 지성 과 지혜》에서 스마트 몹들이 인터넷을 통해 참여하고 협업하면서 가 치를 만들어 내는 새로운 비즈니스 패러다임이 앞으로의 경제 논리 가 될 것이라 주장했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 68,
+                "ChunkId": 605,
+                "Chunk": "위키노믹스나 동료생산경제는 블록체인의 본질이자 메타버스의 원리다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 69,
+                "ChunkId": 606,
+                "Chunk": "웹3.0 메타버스의 가치방정식은 기업이 상품·서비스를 생산 하고 시장에서 가치가 교환되는 것이 아니라 모두가 함께 가치를 창출하고 공유하는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 70,
+                "ChunkId": 616,
+                "Chunk": "3장, 스마트폰, 메타버스로 가는 길을 열다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 71,
+                "ChunkId": 618,
+                "Chunk": "2007년 1월 29일 스티브 잡스가 아이폰을 발표하는 영상은 지금도 프레젠테이션의 본보기로 회자되고 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 72,
+                "ChunkId": 624,
+                "Chunk": "스마트폰을 대중화한 일등공신은 자타공인 애플이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 73,
+                "ChunkId": 636,
+                "Chunk": "위닝샷은 앱 스토어였다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 74,
+                "ChunkId": 637,
+                "Chunk": "아이폰 출시 당시 애플의 앱 스 토어에는 이미 수십만 개의 애플리케이션들이 존재하고 있었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 75,
+                "ChunkId": 650,
+                "Chunk": "또 로블록스나 제페토, 더샌드박스 등 메타버스 플랫폼에서 게 임이나 아이템 등을 만들어 판매하는 콘텐츠 장터의 원조가 아이튠 즈 스토어다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 76,
+                "ChunkId": 662,
+                "Chunk": "그렇다면 왜 스티브 잡스는 아이팟을 선택했으며, 속셈은 무엇이었을까?",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 77,
+                "ChunkId": 665,
+                "Chunk": "스티브 잡스는 시대의 흐름을 읽는 데 있어 동물적인 감각을 가진 인물이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 78,
+                "ChunkId": 675,
+                "Chunk": "그가 만들려고 했던 것은 단순히 mp3 재생기기가 아니라 융합된 모바일 기기였고, 아이팟을 발전시킨 게 아이폰이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 79,
+                "ChunkId": [
+                    698,
+                    699,
+                    700,
+                    701,
+                    702
+                ],
+                "Chunk": [
+                    "애플의 성공은 음원 유통",
+                    "아이튠즈",
+                    "과 mp3 기기",
+                    "아이팟",
+                    "의 융합에서 비롯된다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 80,
+                "ChunkId": 703,
+                "Chunk": "아이튠즈는 클라우드 서비스의 효시이자 음악 메타버스의 원조 라 할 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 81,
+                "ChunkId": 707,
+                "Chunk": "즉, 다른 제조회사들은 어떻게 하면 품질 좋게 개선 할까, 기능이나 성능을 차별화할 수 있을까 하면서 하드웨어 제품의 틀 안에서만 생각하고 있는 동안, 애플은 음원 회사들을 쫓아다니며 제휴와 네트워킹을 통해 음악콘텐츠와의 융합을 시도했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 82,
+                "ChunkId": 710,
+                "Chunk": "시야의 차이가 사업의 성패를 갈라놓는다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 83,
+                "ChunkId": 719,
+                "Chunk": "또 그가 삼절굉을 겪지 않았더라면 콘텐츠의 중요성을 실감하지 못했을 것이고, 현재의 애플은 여러 컴퓨터 회사 중의 하나로 기억됐을지도 모른다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "슬픔",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 84,
+                "ChunkId": 722,
+                "Chunk": "스티브 잡스 의 시선은 메타버스를 향하고 있었고 그가 휘두른 한칼은 기기와 콘텐츠의 융합이었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 85,
+                "ChunkId": 723,
+                "Chunk": "온라인과 오프라인을 융합하다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 86,
+                "ChunkId": 725,
+                "Chunk": "호모 사피엔스의 시공간을 바꿔 놓았고, 메타버스로 가 는 길을 열었기 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 87,
+                "ChunkId": 727,
+                "Chunk": "첫째, 스마트폰은 온라인과 오프라인의 경계를 허물어 버렸다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 88,
+                "ChunkId": 743,
+                "Chunk": "전지적 시점을 제공하다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 89,
+                "ChunkId": 761,
+                "Chunk": "빅 데이터 시대를 열다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 90,
+                "ChunkId": 783,
+                "Chunk": "데이터를 유의미한 정보로 전환하기 위해서는 데이터 정 제기술이 절대적으로 필요한데, 이게 쉽지 않았다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 91,
+                "ChunkId": 786,
+                "Chunk": "그렇기에 클라우딩이 가능해 지려면 두 가지가 필수적인데, 하나는 서버 가상화 기술이고 또 하나는 빅 데이터 분산 처리기술이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 92,
+                "ChunkId": 819,
+                "Chunk": "인공지능은 인간이 만들었지만, 인공지능이 어디로 튈지 무엇을 만들어 낼지 인간은 예측할 수 없게 된 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 93,
+                "ChunkId": 826,
+                "Chunk": "AI, VR, 3D 기술 등이 결합되면서 메타버스를 여행할 수 있는 셔틀버스가 만들어진 셈이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 94,
+                "ChunkId": 830,
+                "Chunk": "그런데 역설적이게도 메타버스의 원조가 스마트폰 시대에 적응하지 못하고 몰락하게 된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "슬픔",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 95,
+                "ChunkId": 833,
+                "Chunk": "메타버스의 원조는 단연 세컨드라이프다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 96,
+                "ChunkId": 850,
+                "Chunk": "또 세컨드 라이프에서 아이템을 사고팔려면 가상화폐인 린든 달러로 환전해야 했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 97,
+                "ChunkId": 852,
+                "Chunk": "이처럼 세컨드라이프는 메타버스의 프로토타입이라 할 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 98,
+                "ChunkId": 859,
+                "Chunk": "실시간으로 소통하 고 사진이나 동영상을 찍어 정보를 주고받는 라이프스타일의 변화도 일어났다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 99,
+                "ChunkId": 861,
+                "Chunk": "모바일 시대가 되면서 즉시 성과 실시간 소통이 중요해진 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 100,
+                "ChunkId": 882,
+                "Chunk": "메타버스, 형체를 드러내다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 101,
+                "ChunkId": 884,
+                "Chunk": "현재 메타버스 플랫폼으로 부상하는 포트나이트, 제 페토, 로블록스, 마인크래프트, 동물의 숲, 어스2, 더샌드박스, 디센 트럴랜드 등은 세컨드라이프의 후예인 셈이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 102,
+                "ChunkId": 885,
+                "Chunk": "스마트폰이 촉발한 빅 데이터와 인공지능, 그리고 클라우드, 5G 네트워크, VR·AR, 3D, 센서 등 관련 기술 등은 씨앗을 성숙시키는 자양분이 되었고, 세컨드라이프의 실험, 그리고 2009년 영화 〈아바 타〉의 흥행 성공은 지구인들에게 메타버스의 모습을 짐작할 수 있게 하는 계기가 되었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 103,
+                "ChunkId": 889,
+                "Chunk": "\"우리는 99%다.\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 104,
+                "ChunkId": 913,
+                "Chunk": "과잉금융은 처참한 결과를 낳았다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "슬픔",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 105,
+                "ChunkId": 931,
+                "Chunk": "\"1% 은행 너희 비켜, 정부도 끼어들지 마 이제 우리 99%끼리 알아서 할게 어떤 식으로? P2P 직거래 방식으로\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 106,
+                "ChunkId": 938,
+                "Chunk": "\"중앙은행은 통화가치를 떨어뜨리지 않는다는 신뢰를 주어야 하는데, 법정화폐들의 역사를 보면 배임투성이\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "89"
+            },
+            {
+                "ContextChunkId": 107,
+                "ChunkId": 963,
+                "Chunk": "비트코인은 사토시의 논문에 정의되어 있듯 시스템 이고, 블록체인은 시스템을 만드는 논리와 프로세스, 즉 알고리즘이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 108,
+                "ChunkId": 973,
+                "Chunk": "1970년대 초 일어난 워터게이트 정치스캔들을 보면 당시 미국 사회에 도청과 감시가 얼마나 만연했었는지 짐작할 수 있다. 1970-80년대는 정치적으로 냉전 분위기가 극에 달했고. 국민들이 미국 정부의 폭력성에 염증을 느끼던 시점이었다. 사이퍼펑크 운동도 이런 분위기에서 생겨났다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 109,
+                "ChunkId": 976,
+                "Chunk": "블록체인의 뿌리를 캐 보면 미국에서 1980년대 불기 시작한 사이퍼펑크 운동에 닿는다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 110,
+                "ChunkId": 1005,
+                "Chunk": "실리콘밸리는 블록체인의 정신적 고향이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 111,
+                "ChunkId": 1006,
+                "Chunk": "비트세대, 히피운동, 사이퍼펑크 등에서 뿌리가 뻗쳐 나온 블록체인은 기존 체제와 질서에 저항하는 DNA를 가졌고, 국가, 정부, 금융, 산업 등 1% 중심의 기울어진 운동장을 99% 집단지성의 힘으로 평평한 유토피아로 만들자는 철학이기 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "두려움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 112,
+                "ChunkId": [
+                    1008,
+                    1009
+                ],
+                "Chunk": [
+                    "실리콘밸 리는 메타버스의 정신적 고향이라고도 할 수 있고, 그들이 꿈꿨던 유 토피아는 메타버스에서 실현될 것이다.",
+                    "그리고 블록체인은 메타버스를 실현케 하는 핵심 알고리즘이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "희망",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 113,
+                "ChunkId": 1011,
+                "Chunk": "사실 블록체인의 뿌리가 된 사이퍼펑크는 사이버펑크를 패러디 한 단어다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 114,
+                "ChunkId": 1017,
+                "Chunk": "사이버펑크는 사이버 기술을 무기로 사회 기득제도권에 저항하고, 예술을 통해 세상을 바꾸고자 했던 사회운동이라 할 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 115,
+                "ChunkId": [
+                    1019,
+                    1020,
+                    1021,
+                    1022,
+                    1023
+                ],
+                "Chunk": [
+                    "뉴로맨서는 neuro",
+                    "신경",
+                    "와 necromancer",
+                    "영혼 마법사",
+                    "의 합성어인 데, 이 소설에 몇 가지 흥미로운 개념들이 처음 등장한다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "놀람",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 116,
+                "ChunkId": 1031,
+                "Chunk": "《뉴로맨서》에서 그려지는 미래사회의 모습은 음울한 디스토피아다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "슬픔",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 117,
+                "ChunkId": 1042,
+                "Chunk": "사이버펑크는 묵시록이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 118,
+                "ChunkId": 1049,
+                "Chunk": "사이버펑크는 대개 무정부주의적이며 급진적이고 반항적인 태도를 가지고 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "두려움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 119,
+                "ChunkId": 1058,
+                "Chunk": "블록체인은 메타버스를 움직이는 엔진이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 120,
+                "ChunkId": [
+                    1064,
+                    1065,
+                    1066
+                ],
+                "Chunk": [
+                    "블록체인의 본질은 집단지성",
+                    "collective intelligence",
+                    "이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 121,
+                "ChunkId": 1070,
+                "Chunk": "함께 꾸미고 소통하면서 함께 생산하고 문 제를 해결해 가는 꿈속의 유토피아가 궁극의 메타버스다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 122,
+                "ChunkId": 1071,
+                "Chunk": "\"함께\" DNA : 함께 만들라, 그러면 그들이 머물 것이다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 123,
+                "ChunkId": 1082,
+                "Chunk": "\"거꾸로\" DNA : 보이는 세상은 실재가 아니다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "놀람",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 124,
+                "ChunkId": [
+                    1086,
+                    1087
+                ],
+                "Chunk": [
+                    "메타버스에서는 거꾸로 생각해야 한다.",
+                    "상식과 통념에도 저항해야 하고, 비즈니스도 다른 방식으로 해야 한다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "75"
+            },
+            {
+                "ContextChunkId": 125,
+                "ChunkId": 1106,
+                "Chunk": "\"진실의 사막에 오신 걸 환영합니다.\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 126,
+                "ChunkId": [
+                    1123,
+                    1124
+                ],
+                "Chunk": [
+                    "메타버스로의 여행은 절대 일시적 유행이 아니다.",
+                    "인류 역사적 으로 뿌리 깊은 것이고 인간의 심연이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 127,
+                "ChunkId": [
+                    1136,
+                    1137,
+                    1138
+                ],
+                "Chunk": [
+                    "4차 산업혁명은 한 마디로, 지능",
+                    "intelligence",
+                    "의 혁명이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 128,
+                "ChunkId": 1141,
+                "Chunk": "이 두 가지 지능, 즉 인공지능 AI과 집단지성 CI의 콜라보가 4차 산업혁명의 본질이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 129,
+                "ChunkId": 1155,
+                "Chunk": "즉, 웹3.0 메타버스를 움직이는 에너지는 4차 산업혁명의 두 핵인 인공지능과 집단지성에서 나온다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 130,
+                "ChunkId": 1159,
+                "Chunk": "지금 기업들이 해야 할 일은 메타버스의 미래모습을 예측하는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 131,
+                "ChunkId": 1165,
+                "Chunk": "기술이 진화를 만들기 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 132,
+                "ChunkId": 1173,
+                "Chunk": "메타버스의 두뇌, 인공지능",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 133,
+                "ChunkId": 1183,
+                "Chunk": "인공지능은 사물을 생물로 만드는 기술이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥미",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 134,
+                "ChunkId": 1207,
+                "Chunk": "스마트홈이 스마트카와 연결되고 스마트신호등, 스마트거리 등과 소통하게 되면 도시 전체가 스마트시티로 발전한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥미",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 135,
+                "ChunkId": 1208,
+                "Chunk": "인간과 사물, 공 간이 온통 하나로 융합된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "중립적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 136,
+                "ChunkId": 1238,
+                "Chunk": "공유경제는 산업시대 생산경제를 붕괴시키는 룰 파괴자이자 게임 체인저다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 137,
+                "ChunkId": 1251,
+                "Chunk": "정리하자면 집단지성이라는 DNA가 공유경제, 블록체인, 그리고 메타버스로 이어지면서 유전되고 있는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 138,
+                "ChunkId": 1255,
+                "Chunk": "이렇듯 메타버스는 인공지능과 집단지성의 투트랙 위에서 굴러간다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 139,
+                "ChunkId": [
+                    1258,
+                    1259
+                ],
+                "Chunk": [
+                    "메타버스는 지능화된 스마트 스페이스다.",
+                    "여기서 사람들은 전지 全知해지고 모든 것이 숨김없이 투명하게 오픈된다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "투명",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 140,
+                "ChunkId": [
+                    1263,
+                    1264
+                ],
+                "Chunk": [
+                    "메타버스는 동굴과 같은 곳이다.",
+                    "인류가 메타버스를 그리워하는 것은 집단무의식이 꿈틀대기 때문이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 141,
+                "ChunkId": 1268,
+                "Chunk": "메타버스의 몸체, UI",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥미",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 142,
+                "ChunkId": 1274,
+                "Chunk": "인공지능은 메타버스의 두뇌. 집단지성은 심장. UI기술은 몸체의 기능을 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 143,
+                "ChunkId": 1283,
+                "Chunk": "특히 2010년대 들어 컴퓨팅 파워와 네트워크 속도가 급성장했고, 그와 같은 인프라 위에 클라우드, 인공지능 등 기술이 가세하면서 UI와 3D 디스플레이 관련 기술들이 급발전했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 144,
+                "ChunkId": 1285,
+                "Chunk": "VR 기술, 메타버스로 들어가는 문을 열다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 145,
+                "ChunkId": 1287,
+                "Chunk": "가상현실은 물리적 현실과는 정반대 지점에 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 146,
+                "ChunkId": 1307,
+                "Chunk": "VR 기술은 현실세계의 감각을 차단하고 메타버스로 들어가는 문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 147,
+                "ChunkId": 1312,
+                "Chunk": "햅틱 기술은 메타버스와 현실세계를 연결하는 인터페이스에 있어 핵심적인 요소다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "흥미",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 148,
+                "ChunkId": [
+                    1349,
+                    1350
+                ],
+                "Chunk": [
+                    "VR 웨어러블은 계속 늘어나고 있다.",
+                    "만일 인류가 햅틱 기술이 적용된 VR 모자, 글라스, 손목밴드, 장갑, 의상 등을 착용하고 다닌다면, 또는 두뇌에 칩을 임플란트한다면 어떤 일이 일어날까?"
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥미",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 149,
+                "ChunkId": 1356,
+                "Chunk": "햅틱 기술이 고도화되면 현실세계와 가상세계의 경계가 흐릿해지고 쉽게 넘나들 수 있게 된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "놀람",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 150,
+                "ChunkId": 1363,
+                "Chunk": "웹3.0 메타버스의 궁극적 모습은 인간과 사물이 연결되어 고도로 지능화된 스마트 스페이스다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 151,
+                "ChunkId": 1366,
+                "Chunk": "다시 한번 메타버스의 역사를 돌이켜 보자 1990년대 인터넷 이 지구를 거미줄처럼 연결시켰고, 집단지성이 생기면서 웹 환경은 2.0으로 진화했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "82"
+            },
+            {
+                "ContextChunkId": 152,
+                "ChunkId": 1377,
+                "Chunk": "\"미래는 이미 와 있다. 단지 골고루 퍼져 있지 않을 뿐이다. 그런데, 점점 골고루 퍼져 가는 중이다. 가속되기 시작했다. 앞으로 10년, 우리는 그것을 생생히 목격하게 될 것이다. \"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "희망",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 153,
+                "ChunkId": [
+                    1381,
+                    1382
+                ],
+                "Chunk": [
+                    "웹3.0은 초창기 웹에 비해 크게 세 가 지 방향으로 진화해 왔다.",
+                    "지능화, 입체화, 역동성이 방향축이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 154,
+                "ChunkId": 1388,
+                "Chunk": "첫째, 비즈니스의 중심축이 메타버스로 이동한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 155,
+                "ChunkId": 1389,
+                "Chunk": "웹1.0 환경 은 포털 중심이었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "80"
+            },
+            {
+                "ContextChunkId": 156,
+                "ChunkId": [
+                    1398,
+                    1399
+                ],
+                "Chunk": [
+                    "플랫폼은 양면 비즈니스다.",
+                    "생산자와 소비자들이 만날 수 있는 게임판의 역할을 하는 것이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 157,
+                "ChunkId": 1408,
+                "Chunk": "앞으로는 플랫폼이라는 용어를 메타버스가 대체하게 될 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 158,
+                "ChunkId": 1410,
+                "Chunk": "메타버스로의 피봇팅",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 159,
+                "ChunkId": 1412,
+                "Chunk": "피봇팅이 필요하다는 얘기다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 160,
+                "ChunkId": 1415,
+                "Chunk": "차원이 달라지면 속성과 작동 원 리도 달라진다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 161,
+                "ChunkId": 1418,
+                "Chunk": "둘째, 지능화된 웹3.0 환경에서는 봇이 사업성과를 좌우한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 162,
+                "ChunkId": 1420,
+                "Chunk": "봇 없이는 메타버스를 구현하거나 운영할 수 없고, 앞으로 모든 기업은 자사의 봇을 만들어 보유하게 될 것인데, 그게 브랜드 아바타다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 163,
+                "ChunkId": 1429,
+                "Chunk": "그러나 웹3.0 메타버스의 시대가 본격화되면 앱은 무용지물이 될 수도 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "82"
+            },
+            {
+                "ContextChunkId": 164,
+                "ChunkId": 1456,
+                "Chunk": "구매자가 중심이 되고 그 주위로 판매자들이 모여들어 시장을 구성하게 되는 구조다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 165,
+                "ChunkId": 1458,
+                "Chunk": "아바타는 봇이다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 166,
+                "ChunkId": 1465,
+                "Chunk": "앱의 시대가 가고 아바타 봇의 시대가 오는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 167,
+                "ChunkId": 1467,
+                "Chunk": "메타버스는 AI 아바타의 영역이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 168,
+                "ChunkId": 1473,
+                "Chunk": "웹3.0이 일으키는 세 번째 변화는 웨어러블의 부상이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥미",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 169,
+                "ChunkId": 1499,
+                "Chunk": "PC에서 스마트폰 시대로 변하면서 비즈니스 헤게모니가 이동했던 역사다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 170,
+                "ChunkId": 1500,
+                "Chunk": "넥스트 스마트폰 시대가 온다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 171,
+                "ChunkId": 1508,
+                "Chunk": "웨어러블은 사물인터넷의 연장선상에 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 172,
+                "ChunkId": 1524,
+                "Chunk": "기기의 운영체제를 지배한 자가 비즈니스 헤게모니를 장악했던 역사의 교훈을 새겨야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 173,
+                "ChunkId": 1533,
+                "Chunk": "웹3.0은 메타버스의 시대다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 174,
+                "ChunkId": [
+                    1542,
+                    1543
+                ],
+                "Chunk": [
+                    "앞으로의 메타버스 전쟁은 인공지능의 대리전이 될 것이다.",
+                    "누가 더 똑똑한 AI를 보유하고 있는가에 사활이 걸려 있는데, 여기서 총알은 빅 데이터다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 175,
+                "ChunkId": 1544,
+                "Chunk": "데이터를 많이 먹을수록 AI가 더 똑똑해지기 때문 이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 176,
+                "ChunkId": 1548,
+                "Chunk": "기술이 고도화될수록 메타버스는 현실세계를 닮아 가고 유저들은 실재감과 몰입감을 추구한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 177,
+                "ChunkId": 1583,
+                "Chunk": "인앱결제란 애플 앱 스토어와 구글 플레이에서 팔리는 모든 앱과 콘텐츠를 결제할 때 애플과 구글이 제공하는 결제시스템을 이용하게 하는 정책이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 178,
+                "ChunkId": 1591,
+                "Chunk": "스마트폰 생태계에서는 구글과 애플이 짜놓은 게임의 법칙에 종속될 수밖에 없고 미래가 불안정하다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "불안",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 179,
+                "ChunkId": 1593,
+                "Chunk": "스마트폰을 웨어러블로 분산시켜 그들의 손아귀에서 벗어나겠다는 의지의 표현이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "희망",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 180,
+                "ChunkId": 1594,
+                "Chunk": "왕좌의 게임이 시작됐다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 181,
+                "ChunkId": 1605,
+                "Chunk": "\"웹3.0 메타버스가 오고 있다\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥미",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 182,
+                "ChunkId": [
+                    1630,
+                    1631
+                ],
+                "Chunk": [
+                    "왕좌의 게임이 벌어진 것이다.",
+                    "누가 왕좌를 차지할 수 있을까?"
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "무감정",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 183,
+                "ChunkId": 1633,
+                "Chunk": "웹 3.0 메타버스 게임의 법칙은 봇과 웨어러블의 싸움이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 184,
+                "ChunkId": 1635,
+                "Chunk": "메타버스는 글로벌기업이나 대기업만의 게임장이 아니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "중립적",
+                "Emotion": "희망",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 185,
+                "ChunkId": 1654,
+                "Chunk": "나는 메타버스의 유형을 가상현실, 증강현실, 대체현실로 분류 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 186,
+                "ChunkId": 1661,
+                "Chunk": "디지털 세계의 특징은 융합이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 187,
+                "ChunkId": [
+                    1676,
+                    1677
+                ],
+                "Chunk": [
+                    "카이로스는 기회의 신이다.",
+                    "정확 하고 빠르게 판단하고 결단해야 기회를 잡을 수 있음을 상징하는데, 카이로스를 붙잡은자는 절대적시간 속에서 자유를 누릴수 있다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 188,
+                "ChunkId": 1680,
+                "Chunk": "그런데. 인류가 인터넷이라는 토끼굴에 빠지면서 시간과 공간의 개념이 바뀌기 시작했다. 인터넷은 시공간의 개념을 파괴한 사건이다. 즉. 순차적으로 흘러가는 연대기적인 시간뿐 아니라 초월적이고 개인적인 시공간도 존재한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "놀람",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 189,
+                "ChunkId": 1685,
+                "Chunk": "네 가지 세상을 발견하다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 190,
+                "ChunkId": 1696,
+                "Chunk": "가상현실은 실제로는 볼 수도 만질 수도 없는 상상 속의 세상이지 만 인류는 이야기를 통해 그런 세상을 꿈꾸어 왔다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥미",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 191,
+                "ChunkId": 1715,
+                "Chunk": "그리고 가상현실, 증강현실, 대체현실을 메타버스의 3유형이라 할 수 있고, 이를 통틀어서 메타버스라 부르는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "평온",
+                "Accuracy": "89"
+            },
+            {
+                "ContextChunkId": 192,
+                "ChunkId": 1717,
+                "Chunk": "다음은 증강현실에 대해 논의해 보자 (자료 3-3)처럼 증강현실은 연대기적 시공간 크로노스과 디지털을 조합한 세상이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥미",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 193,
+                "ChunkId": [
+                    1753,
+                    1754,
+                    1755
+                ],
+                "Chunk": [
+                    "마지막으로 대체현실은 아날로그와 초월적 시공간",
+                    "카이로스",
+                    "의 조합이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 194,
+                "ChunkId": 1764,
+                "Chunk": "대체현실이라는 표현이 더 적절하다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 195,
+                "ChunkId": 1802,
+                "Chunk": "디지털 트윈 기술은 매우 다양한 영역에서 활용된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 196,
+                "ChunkId": 1808,
+                "Chunk": "메타버스 기술진화의 최종목표는 물리적 현실과 가상 현실의 융합이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 197,
+                "ChunkId": 1815,
+                "Chunk": "메타버스는 크게 두 개의 방향축으로 진화해 갈 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 198,
+                "ChunkId": 1826,
+                "Chunk": "웨어러블 기기는 물리적 현실의 나와 메타버스의 아바타를 점차 동기화시킬 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥미",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 199,
+                "ChunkId": 1842,
+                "Chunk": "21세기 인류는 메타버스에서 시공간의 대전환을 겪게 될 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 200,
+                "ChunkId": 1860,
+                "Chunk": "기술과 철학은 양대축이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 201,
+                "ChunkId": 1863,
+                "Chunk": "웹3.0 메타버스 게임은 세계관 전쟁이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 202,
+                "ChunkId": 1866,
+                "Chunk": "그가 의미하는 스토리는 단순한 서사가 아니라 삶의 철학이 융합된 히스토리다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 203,
+                "ChunkId": 1920,
+                "Chunk": "미국에 로블록스가 있다면 한국에는 제페토가 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥미",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 204,
+                "ChunkId": 1937,
+                "Chunk": "제페토에서 큰 수익을 올리는 크리에이터들이 늘고 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 205,
+                "ChunkId": 1966,
+                "Chunk": "이제 메타버스는 단순히 놀이터가 아닌 일터로 변하 고 있는 중이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 206,
+                "ChunkId": [
+                    1972,
+                    1973
+                ],
+                "Chunk": [
+                    "3C는 콘텐츠, 커뮤니티, 커머스다.",
+                    "첫째, 콘텐츠는 플랫폼의 핵심, 즉 엔진이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 207,
+                "ChunkId": 2016,
+                "Chunk": "스스로 만들고, 개발하고 수정도 할 수 있어야 유저들이 플랫폼에 머물면서 즐긴다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 208,
+                "ChunkId": 2056,
+                "Chunk": "블록체인은 모순과 비대칭을 해소하는 알고리즘이며, 1%가 독점하던 이익과 가치를 99%가 공유하자는 게 블록 체인의 정신이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 209,
+                "ChunkId": 2080,
+                "Chunk": "메타버스는 선택이 아니라 필수기 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 210,
+                "ChunkId": 2091,
+                "Chunk": "어스2나 디센트럴랜드 이야기가 어처구니없어 보인다면 달나라 대사관은 어떤가?",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "놀람",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 211,
+                "ChunkId": 2108,
+                "Chunk": "커뮤니티는 플랫폼의 바퀴다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 212,
+                "ChunkId": 2133,
+                "Chunk": "메타버스 왕좌를 노리는 자들의 야심은 국가를 대체하겠다는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 213,
+                "ChunkId": 2159,
+                "Chunk": "2016년 애플과 미국 법원이 한판 붙은 사건이 발생한 적이 있었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 214,
+                "ChunkId": 2169,
+                "Chunk": "커머스는 플랫폼의 연료다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 215,
+                "ChunkId": [
+                    2211,
+                    2212
+                ],
+                "Chunk": [
+                    "메타버스는 나와는 거리가 먼 대기업이나 플랫폼 기업들만의 게임으로 치부되어서는 안 된다.",
+                    "개인이나 중소기업 에게도 예기치 못한 기회가 올 수 있다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "희망",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 216,
+                "ChunkId": 2226,
+                "Chunk": "이처럼 대체불가란 유일하다, 독특하다, 또는 고유성이 있다는 의미로 무언가에 스탬프나 인증마크를 찍어 희소가치를 부여한 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "흥미",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 217,
+                "ChunkId": 2245,
+                "Chunk": "토큰은 특정 플랫폼 안에서 통용되는 화폐이고, NFT는 특정 자산의 소유권을 인정 받는 유가증권이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 218,
+                "ChunkId": 2279,
+                "Chunk": "NFT는 고유의 식별정보를 부여하는 데이터를 담아 소유권을 인 정해 주는 디지털 증서라고 정의할 수 있고, 유가증권처럼 자산 가치를 갖는다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 219,
+                "ChunkId": 2283,
+                "Chunk": "디지털자산의 소유권 보증이 어려운 이유",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 220,
+                "ChunkId": 2324,
+                "Chunk": "즉, 블록체인은 P2P 네트워크의 집단지성을 활용해서 디지털 자산의 소유권을 보증 해 주고 이동도 할 수 있게 해 주는 알고리즘이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 221,
+                "ChunkId": [
+                    2353,
+                    2354
+                ],
+                "Chunk": [
+                    "블록체인은 글로벌 온라인 마을 회의라고 정의할 수 있다.",
+                    "현실세 계에서 소유권을 보증해 주는 국가와 중앙기관들의 역할을 전 세계에 P2P 네트워크로 연결되어 있는 블록체인 메인넷 상의 노드들이 하는 것이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 222,
+                "ChunkId": 2363,
+                "Chunk": "NFT는 누구나 쉽게 발행하고 판매까지 할 수 있기 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 223,
+                "ChunkId": [
+                    2389,
+                    2390
+                ],
+                "Chunk": [
+                    "또 NFT를 판 매할 수 있는 관련 인프라도 잘 구축되어 있다.",
+                    "예를 들어, 현재 NFT 의 최대거래소는 오픈시인데, 오픈시는 이더리움 블록체인의 메인넷에서 돌아가는 애플리케이션이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 224,
+                "ChunkId": [
+                    2420,
+                    2421
+                ],
+                "Chunk": [
+                    "또 NFT의 선구자이기도 하다.",
+                    "그러면 메타버스 자산의 소유권 보증서인 NFT는 어떻게 생겼나?"
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 225,
+                "ChunkId": 2428,
+                "Chunk": "모든 것은 NFT가 될 수 있다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 226,
+                "ChunkId": 2446,
+                "Chunk": "메타버스에 NFT 시장이 열리고 사람들이 모여들고 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 227,
+                "ChunkId": 2454,
+                "Chunk": "앞 장에서 강조했듯이, 주주 자본주의가 아니라 플랫폼의 가치를 성장시킨 기여도에 비례해 99%가 공평하게 보상받는 토큰 이코노미가 실현되어야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 228,
+                "ChunkId": 2492,
+                "Chunk": "브랜드가 주는 아우라가 중요한 이유다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 229,
+                "ChunkId": 2509,
+                "Chunk": "스타벅스뿐 아니라 모든 기업이 메타버스 회사가 될 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 230,
+                "ChunkId": 2522,
+                "Chunk": "그런데 웹3.0 메타버스에서는 상품의 정의가 달라지고 개념이 재구성된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 231,
+                "ChunkId": 2552,
+                "Chunk": "상품의 가치를 증강하는 요소들이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 232,
+                "ChunkId": 2570,
+                "Chunk": "브랜디드 콘텐츠의 중요성",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 233,
+                "ChunkId": 2582,
+                "Chunk": "메타버스 플랫폼은 증강상품을 기획할 수 있는 아주 좋은 환경을 제공한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 234,
+                "ChunkId": [
+                    2635,
+                    2636
+                ],
+                "Chunk": [
+                    "AR 디지털 기술의 사용 유무가 중요한 게 아니다.",
+                    "본질은 증강이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 235,
+                "ChunkId": 2641,
+                "Chunk": "대체상품은 아날로그와 초월적 시공간의 조합인 대체현실에 존재하는 상품이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 236,
+                "ChunkId": 2677,
+                "Chunk": "또 디지털 트윈은 자율주행차 테스트에 도 유용하게 활용될 수 있고, 위험한 실험이나 의료 수술, 훈련이나 교육에도 접목될 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 237,
+                "ChunkId": [
+                    2681,
+                    2682
+                ],
+                "Chunk": [
+                    "갈수록 현실과 메타버스가 닮은꼴이 되리라는 예측은 그리 어려운 일이 아니다.",
+                    "결국은 똑같아져 분간할 수 없는 특이점이 다가오고 있다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 238,
+                "ChunkId": 2692,
+                "Chunk": "메타폴리스는 현실세계에서 임대하던 오프라인 사무실을 없애고 직방의 직원들이 원격근무를 할 수 있도록 만든 가상 오피스인데, 이는 단순한 협업공간을 넘어 회사 홈페이지와 융합될 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 239,
+                "ChunkId": 2700,
+                "Chunk": "메타버스에 은행의 디지털 트윈을 만들면 방문하는 모든 고객에게 VIP 서비스를 제공할 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 240,
+                "ChunkId": 2711,
+                "Chunk": "내 아바타가 주민센터 메타버스에 가면 실제 주민센터의 동선과 닮은 3D 모습이 펼쳐지게 만드는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "중립적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 241,
+                "ChunkId": 2740,
+                "Chunk": "나이키 플러스는 사람들을 시공간의 제약을 받지 않는 초월적 시공간 으로 들어가게 해서 물리적 현실에서는 불가능했던 일들을 가능하게 하고, 모든 사람과 연결될 수 있는 소셜화를 이루고, 게임식의 마케팅 으로 변모할 수 있게 해준 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 242,
+                "ChunkId": 2752,
+                "Chunk": "대체현실의 개념은 게임에도 접목되어 마케팅의 한 기법으로 부상하고 있는데, 그것이 대체현실게임 ARG이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥미",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 243,
+                "ChunkId": [
+                    2762,
+                    2763
+                ],
+                "Chunk": [
+                    "그들의 표현처럼 고객들의",
+                    "\"뇌가 (어떤 마케팅 노력도) 원천 봉쇄해 버린다. 안 그러면 돌아 버릴지도 모른다. \""
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 244,
+                "ChunkId": 2775,
+                "Chunk": "디지털과 인터넷 시대가 되면서 RPG에 수천, 수만 명도 동시에 모일 수 있게 되었는데, 메타버스의 작동 원리도 여기서 발원한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "흥미",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 245,
+                "ChunkId": 2801,
+                "Chunk": "대체현실게임은 현실세계 오프라인와 게임의 경계를 모호하게 만들면서 사람들을 몰입시키는 기법이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 246,
+                "ChunkId": 2814,
+                "Chunk": "메타버스의 본질도 3D 그래픽이나 게임 CG 등이 아니라 서사에 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 247,
+                "ChunkId": 2828,
+                "Chunk": "이후 ARG 기법을 활용한 수많은 마케팅 성공사례들이 이어졌다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 248,
+                "ChunkId": 2864,
+                "Chunk": "이 미션을 충실하게 수행한 사람들은 유명인사들과 슈퍼 블로거 들이 참석하는 아이맥스 영화관 파티에 초대되었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 249,
+                "ChunkId": 2892,
+                "Chunk": "\"새로운 형태의 쌍방향 픽션으로서 허구와 현실뿐 아니라 엔터테인먼트와 광 고의 경계도 모호하게 만들었다. 대체현실게임으로 알려진 이런 경험은 게 임과 스토리가 한데 어우러진 혼합물이다. 한 사람이 해결하기에는 워낙 복잡한 작업이다. 하지만 웹의 응집력 덕분에 집단이성이 출현하고 그 조각들을 조립해 미스터리를 해결하며. 온라인을 통해 스토리를 퍼뜨리고 재생산하는 과정이 되풀이된다. 궁극적으로 관객은 스토리의 주인이 된다. 영화만으로는 불가능한 방식이다.\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 250,
+                "ChunkId": 2896,
+                "Chunk": "즉, 함께 미디어의 경계를 넘나들면서 즐기는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 251,
+                "ChunkId": 2922,
+                "Chunk": "게임식으로 학습하는 G러닝은 학생들의 자발적인 몰입도가 높기 에 학습효과가 뛰어날 수밖에 없다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 252,
+                "ChunkId": 2955,
+                "Chunk": "메타버스 플랫폼들이 활성화되면 현실세계와 대체 현실을 넘나드는 게임방식의 마케팅이 다시 각광받게 될 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 253,
+                "ChunkId": 2958,
+                "Chunk": "메타버스는 ARG를 펼칠 수 있는 최적의 환경을 제공한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 254,
+                "ChunkId": 2992,
+                "Chunk": "던더 미플린의 홈페이지를 따로 만들지 않고 메타버스에 가상회사를 세우면 된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 255,
+                "ChunkId": 3020,
+                "Chunk": "이제 상품은 닫혀 있는 공간, 즉 스튜디오나 공장에서 만들어지는 것이 아니라 열린 광장에서 소비자와 함께 만들어진다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 256,
+                "ChunkId": 3035,
+                "Chunk": "커뮤니케이션은 인류의 본능이기 때문에 광고의 심층구조는 변하지 않는다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 257,
+                "ChunkId": 3051,
+                "Chunk": "비즈니스 생태계가 메타버스로 변하고 있는 시점에서 기업들이 체질을 바꿔 가야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 258,
+                "ChunkId": [
+                    3060,
+                    3061
+                ],
+                "Chunk": [
+                    "웹3.0 메타버스 시대, 마케팅3.0 전략으로 전환해야 한다.",
+                    "마케팅3.0은 입체적이고 역동적인 3차원 방식이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 259,
+                "ChunkId": 3101,
+                "Chunk": "즉, 화폐개혁은 경제시스템과 비즈니스 생태계의 일대 전환이 일어날 것이라는 시그널이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 260,
+                "ChunkId": 3106,
+                "Chunk": "메타버스 에서의 마케팅 핵심키워드는 융합이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 261,
+                "ChunkId": 3167,
+                "Chunk": "메타버스 가치방정식은 연결과 융합을 통해 네트워크 효과를 일으키는 과정에서 가치가 창출되는 방식이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 262,
+                "ChunkId": [
+                    3211,
+                    3212
+                ],
+                "Chunk": [
+                    "메타버스에서는 유통 패러다임을 재정립해야 한다.",
+                    "단순히 연결해 주고 수수료 받는 비즈 모델은 메타버스 가치방정식과 맞지 않는다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 263,
+                "ChunkId": 3241,
+                "Chunk": "세 번째가 가장 극적인 변화인데, 소비자가 똑똑해진 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 264,
+                "ChunkId": 3252,
+                "Chunk": "소비자는 마케팅의 대상이 아니라 마케팅 파트너다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 265,
+                "ChunkId": 3264,
+                "Chunk": "메타버스 가치방정식은 판매수량×마진=이익이 아니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 266,
+                "ChunkId": 3273,
+                "Chunk": "돈 쓰는 소비자가 아니라 함께 돈 버는 파트너로 대우해 주어야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "즐거움",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 267,
+                "ChunkId": 3290,
+                "Chunk": "상품은 다른 차원으로 진화하고 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 268,
+                "ChunkId": 3311,
+                "Chunk": "상품에 경험이나 문화, 콘텐츠, 재미와 감성, 커뮤니티 등의 가치를 융합하는 마케팅 방식으로의 전환, 이것이 융합마케팅의 요체다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 269,
+                "ChunkId": 3318,
+                "Chunk": "로컬 모터스가 예고하는 미래 생산양식",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 270,
+                "ChunkId": 3340,
+                "Chunk": "메타버스에서는 이런 모델이 활성화될 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 271,
+                "ChunkId": 3357,
+                "Chunk": "웹3.0 메타버스에서는 입 체적, 역동적, 지능적인 수익모델이 요구된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 272,
+                "ChunkId": 3367,
+                "Chunk": "메타버스에서는 유통회사도 생산자라는 정체성을 갖고 색다른 쇼핑경험 상품을 개발해야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 273,
+                "ChunkId": 3368,
+                "Chunk": "웹3.0 메타버스의 본질은 경험경제다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 274,
+                "ChunkId": 3387,
+                "Chunk": "웹3.0 메타버스 마케팅은 전쟁이 아니라 놀이가 되어야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 275,
+                "ChunkId": 3405,
+                "Chunk": "그러므로 메타버스 마케 팅은 유쾌해져야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 276,
+                "ChunkId": 3413,
+                "Chunk": "변화는 무서운 게 아니라, 가슴 뛰게 하는 ARG다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            }
+        ]
+    },
+    {
+        "CheckedContextTags": [
+            {
+                "ContextId": 0,
+                "ContextTag": "Narrator",
+                "ContextList": [
+                    "None"
+                ],
+                "Context": "None"
+            },
+            {
+                "ContextId": 0,
+                "ContextTag": "MainChracter",
+                "ContextList": [
+                    "None"
+                ],
+                "Context": "None"
+            },
+            {
+                "ContextId": 0,
+                "ContextTag": "Chracter",
+                "ContextList": [
+                    "None"
+                ],
+                "Context": "None"
+            }
+        ]
+    }
+]

@@ -509,7 +509,7 @@ def ResponseJsonText(projectName, email, responseJson):
 
 
 ## SFXChunk와 CorrectionChunk를 결합
-def MergeSFXChunk(ChunkId, correctionChunk):
+def MergeSFXChunk(ChunkId, correctionChunk, SFXChunk):              
     
     print(f"{ChunkId}, {correctionChunk}")
     return correctionChunk
@@ -553,6 +553,21 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
     # 데이터 치환
     outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
 
+    # SFXChunks 생성
+    project = GetProject(projectName, email)
+    SFXMatching = project.SFXMatching[1]['SFXSplitedBodys'][1:]
+    
+    SFXChunks = []
+    for i in range(len(SFXMatching)):
+        if SFXMatching[i] != []:
+            SFXChunks = SFXMatching[i]['SFXSplitedBodyChunks']
+            for j in range(len(SFXChunks)):
+                ChunkId = SFXChunks[j]['ChunkId']
+                SFX = SFXChunks[j]['SFX']
+                SFXChunk = SFX['Range']
+                SFXPoint = SFX['RangePoint']
+                SFXChunks.append({'ChunkId': ChunkId, 'SFXChunk': SFXChunk, 'SFXPoint': SFXPoint})
+
     # 기존 데이터 구조 responseJson 형성
     outputMemoryDicsList = []
     for i in range(len(outputMemoryDics)):
@@ -561,14 +576,20 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
     
     responseJson = []
     CorrectionChunks = []
+    SFXChunkCount = 0
     k = 0
     for i in range(len(BodyFrameSplitedBodyScripts)):
         CorrectionKoSplitedBody = {"OutputId": None, "BodyId": i + 1, "CorrectionChunks": []}
         for j in range(len(BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'])):
+            SFXChunk = SFXChunks[SFXChunkCount]
             ChunkId = k + 1
             Tag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][j]['Tag']
-            correctionChunk = outputMemoryDicsList[k]['Output']
-            CorrectionChunk = MergeSFXChunk(ChunkId, correctionChunk)
+            CorrectionChunk = outputMemoryDicsList[k]['Output']
+            
+            if SFXChunk['ChunkId'] == ChunkId:
+                CorrectionChunk = MergeSFXChunk(ChunkId, CorrectionChunk, SFXChunk)
+                SFXChunkCount += 1
+                
             CorrectionChunkTokens = SplitChunkIntoTokens(CorrectionChunk)
             CorrectionChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'CorrectionChunk': CorrectionChunk, 'CorrectionChunkTokens': CorrectionChunkTokens})
             OutputId = outputMemoryDicsList[k]['outputId']

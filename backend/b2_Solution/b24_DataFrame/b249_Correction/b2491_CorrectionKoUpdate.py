@@ -6,6 +6,7 @@ import difflib
 import sys
 sys.path.append("/yaas")
 
+from datetime import datetime
 from tqdm import tqdm
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
@@ -399,7 +400,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             Input = DotsToNumbers(DotsInput)
             
             # Filter, MemoryCounter, OutputEnder 처리
-            memoryCounter = f" - 중요: 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음, [1] ~ [{InputDots}]까지 그대로 유지! -\n"
+            memoryCounter = f" - 중요: 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음!, [1] ~ [{InputDots}]까지 그대로 유지! -\n"
             outputEnder = ""
             
             # Response 생성
@@ -477,6 +478,32 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
+## 오늘 날짜
+def Date(Option = "Day"):
+    if Option == "Day":
+      now = datetime.now()
+      date = now.strftime('%y%m%d')
+    elif Option == "Second":
+      now = datetime.now()
+      date = now.strftime('%y%m%d%H%M%S')
+    
+    return date
+
+## ResponseJson의 Text변환
+def ResponseJsonText(projectName, email, responseJson):
+    responseJsonText = ""
+    for i in range(len(responseJson)):
+        for j in range(len(responseJson[i]['CorrectionChunks'])):
+            for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
+                # 딕셔너리에서 value 추출 (딕셔너리의 첫 번째 값)
+                token = next(iter(token_dict.values()))
+                responseJsonText += token
+
+    filePath3 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/{email}_{projectName}_21_responseJson_{str(Date())}.txt"
+    # 텍스트 파일에 저장
+    with open(filePath3, "w", encoding="utf-8") as file:
+        file.write(responseJsonText)
+
 ## Chunk를 Tokens로 치환
 def SplitChunkIntoTokens(Chunk):
 
@@ -513,14 +540,6 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
 
     # 데이터 치환
     outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
-
-    ########## 테스트 후 삭제 ##########
-    # filePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_21_outputMemoryDics_231128.json"
-    # with open(filePath, "w", encoding = 'utf-8') as file:
-    #     json.dump(outputMemoryDics, file, ensure_ascii = False, indent = 4)
-    # with open(filePath, "r", encoding = 'utf-8') as file:
-    #     outputMemoryDics = json.load(file)
-    ########## 테스트 후 삭제 ##########
 
     # 기존 데이터 구조 responseJson 형성
     outputMemoryDicsList = []
@@ -667,26 +686,9 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                     Endtoken = tokens[-1]
                     if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
                         tokens.append({"Pause": "(0.20)"})
-                        
-    ########## 테스트 후 삭제 ##########
-    # filePath2 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_21_responseJson_231128.json"
     
-    # with open(filePath2, "w", encoding = 'utf-8') as file:
-    #     json.dump(responseJson, file, ensure_ascii = False, indent = 4)
-    
-    responseJsonText = ""
-    for i in range(len(responseJson)):
-        for j in range(len(responseJson[i]['CorrectionChunks'])):
-            for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
-                # 딕셔너리에서 value 추출 (딕셔너리의 첫 번째 값)
-                token = next(iter(token_dict.values()))
-                responseJsonText += token
-
-    filePath3 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/yeoreum00128@gmail.com_{projectName}_21_responseJson_231128.txt"
-    # 텍스트 파일에 저장
-    with open(filePath3, "w", encoding="utf-8") as file:
-        file.write(responseJsonText)
-    ########## 테스트 후 삭제 ##########
+    # ResponseJson의 Text변환
+    ResponseJsonText(projectName, email, responseJson)
                         
     return responseJson
 
@@ -750,4 +752,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    CorrectionKoResponseJson(projectName, email)

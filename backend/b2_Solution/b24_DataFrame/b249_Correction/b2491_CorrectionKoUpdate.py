@@ -506,13 +506,34 @@ def ResponseJsonText(projectName, email, responseJson):
         file.write(responseJsonText)
 
 
+## CorrectionChunk의 위치데이터 저장
+def CorrectionChunkToCorrectionDic(CorrectionChunk):
+    # Regular expression to find all instances of (0.n)
+    CorrectionPattern = r"\(0\.\d\)"
+    
+    # Find all matches of the pattern
+    Corrections = re.findall(CorrectionPattern, CorrectionChunk)
+    CorrectionPoints = []
 
+    # Iterate over the matches to find their positions
+    startIndex = 0
+    for correction in Corrections:
+        foundIndex = CorrectionChunk.find(correction, startIndex)
+        CorrectionPoints.append(foundIndex)
+        startIndex = foundIndex + len(correction)
+
+    # Remove the patterns from the chunk
+    Chunk = re.sub(CorrectionPattern, '', CorrectionChunk)
+
+    # Return the results
+    return {"Chunk": Chunk, "Correction": Corrections, "CorrectionPoint": CorrectionPoints}
 
 ## SFXChunk와 CorrectionChunk를 결합
-def MergeSFXChunk(ChunkId, correctionChunk, SFXChunk):              
-    
-    print(f"{ChunkId}, {correctionChunk}")
-    return correctionChunk
+def MergeSFXChunk(CorrectionChunkDic, SFXChunkDic):              
+    print(CorrectionChunkDic)
+    print(SFXChunkDic)
+    print('\n')
+    return CorrectionChunkDic['CorrectionChunk']
 
 
 
@@ -557,16 +578,16 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
     project = GetProject(projectName, email)
     SFXMatching = project.SFXMatching[1]['SFXSplitedBodys'][1:]
     
-    SFXChunks = []
+    SFXChunkList = []
     for i in range(len(SFXMatching)):
-        if SFXMatching[i] != []:
-            SFXChunks = SFXMatching[i]['SFXSplitedBodyChunks']
+        SFXChunks = SFXMatching[i]['SFXSplitedBodyChunks']
+        if SFXChunks != []:
             for j in range(len(SFXChunks)):
                 ChunkId = SFXChunks[j]['ChunkId']
                 SFX = SFXChunks[j]['SFX']
                 SFXChunk = SFX['Range']
                 SFXPoint = SFX['RangePoint']
-                SFXChunks.append({'ChunkId': ChunkId, 'SFXChunk': SFXChunk, 'SFXPoint': SFXPoint})
+                SFXChunkList.append({'ChunkId': ChunkId, 'SFXChunk': SFXChunk, 'SFXPoint': SFXPoint})
 
     # 기존 데이터 구조 responseJson 형성
     outputMemoryDicsList = []
@@ -581,14 +602,17 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
     for i in range(len(BodyFrameSplitedBodyScripts)):
         CorrectionKoSplitedBody = {"OutputId": None, "BodyId": i + 1, "CorrectionChunks": []}
         for j in range(len(BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'])):
-            SFXChunk = SFXChunks[SFXChunkCount]
             ChunkId = k + 1
             Tag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][j]['Tag']
             CorrectionChunk = outputMemoryDicsList[k]['Output']
             
-            if SFXChunk['ChunkId'] == ChunkId:
-                CorrectionChunk = MergeSFXChunk(ChunkId, CorrectionChunk, SFXChunk)
-                SFXChunkCount += 1
+            for l in range(SFXChunkCount, len(SFXChunkList)):
+                SFXChunkDic = SFXChunkList[l]
+                if SFXChunkDic['ChunkId'] == ChunkId:
+                    CorrectionPoint = CorrectionChunkToCorrectionDic(CorrectionChunk)
+                    CorrectionChunkDic = {'ChunkId': ChunkId, 'CorrectionChunk': CorrectionChunk, 'CorrectionPoint': CorrectionPoint}
+                    CorrectionChunk = MergeSFXChunk(CorrectionChunkDic, SFXChunkDic)
+                    SFXChunkCount = l + 1
                 
             CorrectionChunkTokens = SplitChunkIntoTokens(CorrectionChunk)
             CorrectionChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'CorrectionChunk': CorrectionChunk, 'CorrectionChunkTokens': CorrectionChunkTokens})

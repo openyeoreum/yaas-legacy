@@ -399,7 +399,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             Input = DotsToNumbers(DotsInput)
             
             # Filter, MemoryCounter, OutputEnder 처리
-            memoryCounter = f" - 중요: 꼼꼼한 끊어읽기!, [1] ~ [{InputDots}]까지 그대로 유지! -\n"
+            memoryCounter = f" - 중요: 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음, [1] ~ [{InputDots}]까지 그대로 유지! -\n"
             outputEnder = ""
             
             # Response 생성

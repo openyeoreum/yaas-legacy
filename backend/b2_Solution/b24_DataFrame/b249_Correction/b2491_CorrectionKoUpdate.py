@@ -529,7 +529,7 @@ def CorrectionChunkToCorrectionDic(CorrectionChunk):
     return {"Chunk": Chunk, "Correction": Corrections, "CorrectionPoint": CorrectionPoints}
 
 ## SFXChunk와 CorrectionChunk를 결합
-def MergeSFXChunk(CorrectionChunkDic, SFXChunkDic):              
+def MergeSFXChunk(CorrectionChunkDic, SFXChunkDic):
     print(CorrectionChunkDic)
     print(SFXChunkDic)
     print('\n')

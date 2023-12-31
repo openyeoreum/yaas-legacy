@@ -490,7 +490,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
             ChunkId = chunk['ChunkId']
             Chunk = chunk['Chunk']
             ChunkList.append({'BodyId': BodyId, 'ChunkId': ChunkId, 'Chunk': Chunk})
-    
+
     InputsList = []
     ChunkListCount = 0
     for i in range(len(InputChunkIdList)):
@@ -506,7 +506,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                 ChunkListCount = j
                 break
         InputsList.append(ChunksList)
-        
+
     # outputMemoryDics의 순서를 글의 순서대로 전처리
     OutputMemoryDics = []
     pattern = r"[A-Za-z’]+(?:\s+[A-Za-z’]+)*"
@@ -556,12 +556,11 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                     RANGE = RANGE.replace(f'<시작{SFXID}>. ', f'. <시작{SFXID}>')
                     RANGE = RANGE.replace(f'.<시작{SFXID}>', f'<시작{SFXID}>.')
                     RANGE = RANGE.replace(f',<시작{SFXID}>', f'<시작{SFXID}>,')
-                    RANGE = RANGE.replace(f'<시작{SFXID}> ', f'<시작{SFXID}>')
+                    RANGE = RANGE.replace(f'<시작{SFXID}> ', f' <시작{SFXID}>')
                     RANGE = RANGE.replace('<끝>', f'<끝{SFXID}>')
                     RANGE = RANGE.replace(f'.<끝{SFXID}>', f'<끝{SFXID}>.')
                     RANGE = RANGE.replace(f',<끝{SFXID}>', f'<끝{SFXID}>,')
-                    RANGE = RANGE.replace(f' <끝{SFXID}>', f'<끝{SFXID}>')
-                    
+                    RANGE = RANGE.replace(f'<끝{SFXID}> ', f' <끝{SFXID}>')
                     Chunk = RANGE
                     SFXId = SFXID
                     sFX = SFXDic['명칭']
@@ -576,13 +575,19 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
                     SFXID += 1
 
     # outputMemoryDics의 전처리
+    # TQDM 셋팅
+    InputsListCount = len(InputsList)
+    UpdateTQDM = tqdm(InputsList,
+                    total = InputsListCount,
+                    desc = 'SFXMatchingOutputMemoryDicsPreprocess')
+
     ResponseJson = []
     MemoryDicsCount = 0
     SFXIdCounter = 1
-    for i in range(len(InputsList)):
+    for i, Update in enumerate(UpdateTQDM):
         outputId = i + 1
-        Inputs = InputsList[i]
-        for j in range(len(InputsList[i])):
+        Inputs = Update
+        for j in range(len(Update)):
             InputsId = Inputs[j]['outputId']
             BodyId = Inputs[j]['BodyId']
             
@@ -681,7 +686,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 SFXMatching에 업데이트
-def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+def SFXMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, Importance = 0):
     print(f"< User: {email} | Project: {projectName} | 15_SFXMatchingUpdate 시작 >")
     # SFXMatching의 Count값 가져오기
     ContinueCount, Completion = SFXMatchingCountLoad(projectName, email)
@@ -693,7 +698,7 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
             AddExistedDataSetToDB(projectName, email, "SFXMatching", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate는 ExistedSFXMatching으로 대처됨 ]\n")
         else:
-            responseJson = SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+            responseJson = SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode, importance = Importance)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -734,4 +739,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode, importance = 0)

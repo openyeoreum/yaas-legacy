@@ -163,6 +163,7 @@ if __name__ == "__main__":
     if existedDataFrame == None:
         updatedIndexFrame = UpdatedIndexFrame(projectName, email)
         SaveDataFrame(projectName, email, "01_IndexFrame", updatedIndexFrame, DataFramePath)
+    if existedDataSet1 == None:
         SaveDataSet(projectName, email, "01", "IndexDefinePreprocess", RawDataSetPath)
         SaveDataSet(projectName, email, "01", "IndexDefine", RawDataSetPath)
     existedDataFrame = None
@@ -212,9 +213,10 @@ if __name__ == "__main__":
     if existedDataFrame == None:
         updatedContextDefine = UpdatedContextDefine(projectName, email)
         SaveDataFrame(projectName, email, "07_ContextDefine", updatedContextDefine, DataFramePath)
-        SaveDataSet(projectName, email, "07", "ContextDefine", RawDataSetPath)
         # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
         LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)
+    if existedDataSet == None:
+        SaveDataSet(projectName, email, "07", "ContextDefine", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
 
@@ -233,6 +235,7 @@ if __name__ == "__main__":
     if existedDataFrame == None:
         updatedContextCompletion = UpdatedContextCompletion(projectName, email)
         SaveDataFrame(projectName, email, "08_ContextCompletion", updatedContextCompletion, DataFramePath)
+    if existedDataSet == None:
         SaveDataSet(projectName, email, "08", "ContextCompletion", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
@@ -252,6 +255,7 @@ if __name__ == "__main__":
     if existedDataFrame == None:
         updatedWMWMDefine = UpdatedWMWMDefine(projectName, email)
         SaveDataFrame(projectName, email, "09_WMWMDefine", updatedWMWMDefine, DataFramePath)
+    if existedDataSet == None:
         SaveDataSet(projectName, email, "09", "WMWMDefine", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
@@ -270,7 +274,8 @@ if __name__ == "__main__":
     
     if existedDataFrame == None:
         updatedCharacterDefine = UpdatedCharacterDefine(projectName, email)
-        SaveDataFrame(projectName, email, "11_CharacterDefine", updatedCharacterDefine, DataFramePath)       
+        SaveDataFrame(projectName, email, "11_CharacterDefine", updatedCharacterDefine, DataFramePath)
+    if existedDataSet == None:
         SaveDataSet(projectName, email, "11", "CharacterDefine", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
@@ -289,7 +294,8 @@ if __name__ == "__main__":
     
     if existedDataFrame == None:
         updatedCharacterCompletion = UpdatedCharacterCompletion(projectName, email)
-        SaveDataFrame(projectName, email, "12_CharacterCompletion", updatedCharacterCompletion, DataFramePath)       
+        SaveDataFrame(projectName, email, "12_CharacterCompletion", updatedCharacterCompletion, DataFramePath)
+    if existedDataSet == None:
         SaveDataSet(projectName, email, "12", "CharacterCompletion", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
@@ -304,11 +310,14 @@ if __name__ == "__main__":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "SFXMatching", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "SFXMatching", RawDataSetPath)
     mode = "Master"
-    SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet, Importance = 0)
     
     if existedDataFrame == None:
         updatedSFXMatching = UpdatedSFXMatching(projectName, email)
-        SaveDataFrame(projectName, email, "15_SFXMatching", updatedSFXMatching, DataFramePath)       
+        SaveDataFrame(projectName, email, "15_SFXMatching", updatedSFXMatching, DataFramePath)
+        # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
+        LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)
+    if existedDataSet == None:     
         SaveDataSet(projectName, email, "15", "SFXMatching", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None

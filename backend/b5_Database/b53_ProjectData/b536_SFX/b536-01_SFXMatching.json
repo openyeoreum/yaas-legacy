@@ -25,6 +25,7 @@
                             "Role": "None",
                             "Direction": "None",
                             "Range": "None",
+                            "RangePoint": "None",
                             "Importance": "None"
                         },
                         "SFXChunkTokens": [

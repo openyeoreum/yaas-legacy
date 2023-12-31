@@ -47,6 +47,23 @@ def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
 
     return OutputMemoryDicsFile, OutputMemoryCount
 
+## 업데이트된 AddOutputMemoryDics 파일 Count 불러오기
+def LoadAddOutputMemory(projectName, email, ProcessNum, DataFramePath):
+    # 정규 표현식 패턴 정의
+    pattern = re.compile(rf"{re.escape(DataFramePath + email + '_' + projectName + '_' + ProcessNum + '_')}addOutputMemoryDics_.*\.json")
+
+    AddOutputMemoryDicsFile = []
+    for filename in os.listdir(DataFramePath):
+        normalizedFilename = unicodedata.normalize('NFC', filename)
+        FullPath = os.path.join(DataFramePath, normalizedFilename)
+        if pattern.match(FullPath):
+            print(f"< User: {email} | Project: {projectName} | {FullPath} 로드 >")
+            with open(FullPath, 'r', encoding='utf-8') as file:
+                AddOutputMemoryDicsFile = json.load(file)
+            break  # 첫 번째 일치하는 파일을 찾으면 반복 종료
+
+    return AddOutputMemoryDicsFile
+
 ## 업데이트된 OutputMemoryDics 파일 저장하기
 def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFramePath):
     # 정규 표현식 패턴 정의

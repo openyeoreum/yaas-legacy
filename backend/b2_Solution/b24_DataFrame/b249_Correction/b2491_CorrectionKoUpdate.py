@@ -12,7 +12,7 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, SaveAddOutputMemory, AddExistedCorrectionKoToDB, AddCorrectionKoSplitedBodysToDB, AddCorrectionKoChunksToDB, CorrectionKoCountLoad, CorrectionKoCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, LoadAddOutputMemory, SaveOutputMemory, SaveAddOutputMemory, AddExistedCorrectionKoToDB, AddCorrectionKoSplitedBodysToDB, AddCorrectionKoChunksToDB, CorrectionKoCountLoad, CorrectionKoCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -343,11 +343,12 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '21', DataFramePath)    
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '21', DataFramePath)
     inputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
-        return OutputMemoryDicsFile
+        AddOutputMemoryDicsFile = LoadAddOutputMemory(projectName, email, '21', DataFramePath)
+        return OutputMemoryDicsFile, AddOutputMemoryDicsFile
 
     # FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
@@ -504,9 +505,20 @@ def ResponseJsonText(projectName, email, responseJson):
     with open(filePath3, "w", encoding="utf-8") as file:
         file.write(responseJsonText)
 
+
+
+
+## SFXChunk와 CorrectionChunk를 결합
+def MergeSFXChunk(ChunkId, correctionChunk):
+    
+    print(f"{ChunkId}, {correctionChunk}")
+    return correctionChunk
+
+
+
+
 ## Chunk를 Tokens로 치환
 def SplitChunkIntoTokens(Chunk):
-
     pattern = r"""
         (?P<Pause>\(\d\.\d\)) | # 끊어읽기 '(0.n)'
         (?P<SFXStart>\<효과음시작\d{1,5}\>) | # 효과음시작 '<시작n>'
@@ -546,17 +558,19 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
     for i in range(len(outputMemoryDics)):
         for j in range(len(outputMemoryDics[i])):
             outputMemoryDicsList.append({"outputId": i, "Output": outputMemoryDics[i][j]})
-
+    
     responseJson = []
     CorrectionChunks = []
     k = 0
     for i in range(len(BodyFrameSplitedBodyScripts)):
         CorrectionKoSplitedBody = {"OutputId": None, "BodyId": i + 1, "CorrectionChunks": []}
         for j in range(len(BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'])):
+            ChunkId = k + 1
             Tag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][j]['Tag']
-            CorrectionChunk = outputMemoryDicsList[k]['Output']
+            correctionChunk = outputMemoryDicsList[k]['Output']
+            CorrectionChunk = MergeSFXChunk(ChunkId, correctionChunk)
             CorrectionChunkTokens = SplitChunkIntoTokens(CorrectionChunk)
-            CorrectionChunks.append({'ChunkId': k + 1, 'Tag': Tag, 'CorrectionChunkTokens': CorrectionChunkTokens})
+            CorrectionChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'CorrectionChunk': CorrectionChunk, 'CorrectionChunkTokens': CorrectionChunkTokens})
             OutputId = outputMemoryDicsList[k]['outputId']
             k += 1
 
@@ -746,9 +760,10 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "웹3.0메타버스"
+    projectName = "살아서천국극락낙원에가는방법"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode)

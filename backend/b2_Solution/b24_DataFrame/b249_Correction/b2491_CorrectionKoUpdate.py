@@ -507,20 +507,6 @@ def ResponseJsonText(projectName, email, responseJson):
         with open(fullFilePath, "w", encoding="utf-8") as file:
             file.write(responseJsonText)
 
-# def ResponseJsonText(projectName, email, responseJson):
-#     responseJsonText = ""
-#     for i in range(len(responseJson)):
-#         for j in range(len(responseJson[i]['CorrectionChunks'])):
-#             for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
-#                 # 딕셔너리에서 value 추출 (딕셔너리의 첫 번째 값)
-#                 token = next(iter(token_dict.values()))
-#                 responseJsonText += token
-
-#     filePath3 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/{email}_{projectName}_21_responseJson_{str(Date())}.txt"
-#     # 텍스트 파일에 저장
-#     with open(filePath3, "w", encoding="utf-8") as file:
-#         file.write(responseJsonText)
-
 ## CorrectionChunk의 위치데이터 저장
 def CorrectionChunkToCorrectionDic(CorrectionChunk):
     # Regular expression to find all instances of (0.n)

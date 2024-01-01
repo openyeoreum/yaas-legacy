@@ -496,18 +496,30 @@ def ResponseJsonText(projectName, email, responseJson):
     for i in range(len(responseJson)):
         for j in range(len(responseJson[i]['CorrectionChunks'])):
             for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
-                # 딕셔너리에서 value 추출 (딕셔너리의 첫 번째 값)
                 token = next(iter(token_dict.values()))
                 responseJsonText += token
 
-    filePath3 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/{email}_{projectName}_21_responseJson_{str(Date())}.txt"
-    # 텍스트 파일에 저장
-    with open(filePath3, "w", encoding="utf-8") as file:
-        file.write(responseJsonText)
+    baseFilePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/{email}_{projectName}_21_responseJson"
+    fullFilePath = f"{baseFilePath}_{str(Date())}.txt"
 
+    # 파일이 존재하는지 확인
+    if not any(re.match(f"{baseFilePath}_\d{{6}}\.txt", filename) for filename in os.listdir(os.path.dirname(baseFilePath))):
+        with open(fullFilePath, "w", encoding="utf-8") as file:
+            file.write(responseJsonText)
 
+# def ResponseJsonText(projectName, email, responseJson):
+#     responseJsonText = ""
+#     for i in range(len(responseJson)):
+#         for j in range(len(responseJson[i]['CorrectionChunks'])):
+#             for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
+#                 # 딕셔너리에서 value 추출 (딕셔너리의 첫 번째 값)
+#                 token = next(iter(token_dict.values()))
+#                 responseJsonText += token
 
-
+#     filePath3 = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/{email}_{projectName}_21_responseJson_{str(Date())}.txt"
+#     # 텍스트 파일에 저장
+#     with open(filePath3, "w", encoding="utf-8") as file:
+#         file.write(responseJsonText)
 
 ## CorrectionChunk의 위치데이터 저장
 def CorrectionChunkToCorrectionDic(CorrectionChunk):
@@ -522,23 +534,46 @@ def CorrectionChunkToCorrectionDic(CorrectionChunk):
         foundIndex = CorrectionChunk.find(correction, startIndex)
         CorrectionPoints.append(foundIndex)
         startIndex = foundIndex + len(correction)
+    # CorrectionPoints를 Correction값이 없을때의 위치로 업데이트
+    for i in(range(len(CorrectionPoints))):
+        CorrectionPoint = CorrectionPoints[i]
+        ReduceCorrectionPoint = CorrectionPoint - (i * 5)
+        CorrectionPoints[i] = ReduceCorrectionPoint
     # Remove the patterns from the chunk
     Chunk = re.sub(CorrectionPattern, '', CorrectionChunk)
     # Return the results
     return {"Chunk": Chunk, "Correction": Corrections, "CorrectionPoint": CorrectionPoints}
 
+## SFXChunk와 CorrectionChunk를 결합하여 문장 완성
+def MergSFX(CorrectionChunk, SFXElements, UpdatedSfxPoint):
+    # CorrectionPoint 문자열을 조작하기 위해 리스트로 변환
+    correctionList = list(CorrectionChunk)
+    
+    # SFXElements 요소를 역순으로 처리하여 문자열에 삽입
+    for sfx, pos in reversed(list(zip(SFXElements, UpdatedSfxPoint))):
+        correctionList.insert(pos, sfx)
+    
+    # 최종 문자열을 생성
+    MergedSFXChunk = ''.join(correctionList)
+    return MergedSFXChunk
+
 ## SFXChunk와 CorrectionChunk를 결합
 def MergeSFXChunk(CorrectionChunkDic, SFXChunkDic):
-    # print(CorrectionChunkDic)
-    # print(SFXChunkDic)
-    # print('\n')
-    return CorrectionChunkDic['CorrectionChunk']
+    CorrectionChunk = CorrectionChunkDic['CorrectionChunk']
+    CorrectionPoint = CorrectionChunkDic['CorrectionPoint']['CorrectionPoint']
+    SFXPoint = SFXChunkDic['SFXPoint']['SFXPoint']
+    SFXElements = SFXChunkDic['SFXPoint']['SFX']
 
-
-
-
-
-
+    if CorrectionPoint == []:
+        return SFXChunkDic['SFXChunk']
+    else:
+        UpdatedSfxPoint = []
+        for SFX in SFXPoint:
+            # CorrectionPoint의 각 요소가 SFX보다 작은지 확인하고 카운트
+            Count = sum(1 for Correction in CorrectionPoint if Correction <= SFX)
+            # 해당 카운트에 5를 곱하여 SFX 값에 더함
+            UpdatedSfxPoint.append(SFX + 5 * Count)
+        return MergSFX(CorrectionChunk, SFXElements, UpdatedSfxPoint)
 
 ## Chunk를 Tokens로 치환
 def SplitChunkIntoTokens(Chunk):
@@ -638,7 +673,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                 for j in range(DiffRange):
                     Range = DiffRange - j
                     ChagedOutput = Output.replace(DiffOUTPUT[:Range], DiffINPUT[:Range], 1)
-                    print(f'{DiffOUTPUT[:Range]}, {DiffINPUT[:Range]}')
+                    # print(f'{DiffOUTPUT[:Range]}, {DiffINPUT[:Range]}')
                     CleanChagedOutput = re.sub("[^가-힣]", "", ChagedOutput)
                     if CleanInput == CleanChagedOutput:
                         outputMemoryDicsList[i]['Output'] = ChagedOutput
@@ -648,7 +683,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                 for j in range(DiffRange - DifferenceRangeValue):
                     Range = DiffRange - j
                     ChagedOutput = Output.replace(DiffOUTPUT[:Range - DifferenceRangeValue], DiffINPUT[:Range], 1)
-                    print(f'{DiffOUTPUT[:Range - DifferenceRangeValue]}, {DiffINPUT[:Range]}')
+                    # print(f'{DiffOUTPUT[:Range - DifferenceRangeValue]}, {DiffINPUT[:Range]}')
                     CleanChagedOutput = re.sub("[^가-힣]", "", ChagedOutput)
                     if CleanInput == CleanChagedOutput:
                         outputMemoryDicsList[i]['Output'] = ChagedOutput
@@ -658,13 +693,14 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                 for j in range(DiffRange):
                     Range = DiffRange - j
                     ChagedOutput = Output.replace(DiffOUTPUT[:Range], DiffINPUT[:Range + DifferenceRangeValue], 1)
-                    print(f'{DiffOUTPUT[:Range]}, {DiffINPUT[:Range + DifferenceRangeValue]}')
+                    # print(f'{DiffOUTPUT[:Range]}, {DiffINPUT[:Range + DifferenceRangeValue]}')
                     CleanChagedOutput = re.sub("[^가-힣]", "", ChagedOutput)
                     if CleanInput == CleanChagedOutput:
                         outputMemoryDicsList[i]['Output'] = ChagedOutput
                         outputMemoryDicsList[i]['NonCommonPart'] = None
                         break
     
+    # responseJson 생성
     responseJson = []
     CorrectionChunks = []
     SFXChunkCount = 0

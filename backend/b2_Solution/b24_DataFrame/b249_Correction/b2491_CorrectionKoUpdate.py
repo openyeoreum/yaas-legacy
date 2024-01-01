@@ -591,8 +591,18 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                 SFXPoint = SFX['RangePoint']
                 SFXChunkList.append({'ChunkId': ChunkId, 'SFXChunk': SFXChunk, 'SFXPoint': SFXPoint})
 
+    # 기본 Chunks 생성
+    InputList = []
+    for i in range(len(BodyFrameSplitedBodyScripts)):
+        SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
+        for j in range(len(SplitedBodyChunks)):
+            ChunkId = SplitedBodyChunks[j]['ChunkId']
+            Chunk = SplitedBodyChunks[j]['Chunk']
+            InputList.append({'ChunkId': ChunkId, 'Chunk': Chunk})
+
     # 기존 데이터 구조 responseJson 형성
     outputMemoryDicsList = []
+    InputCount = 0
     NonCommonPart = None
     for i in range(len(outputMemoryDics)):
         NonCommonParts = nonCommonPartList[i]
@@ -600,16 +610,22 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
             Output = outputMemoryDics[i][j]
             CleanOutput = re.sub("[^가-힣]", "", Output)
             for NonCommonDic in NonCommonParts:
-                if NonCommonDic['DiffOUTPUT'] in CleanOutput:
+                DiffOUTPUT = NonCommonDic['DiffOUTPUT']
+                if DiffOUTPUT in CleanOutput:
                     NonCommonPart = NonCommonDic
                 else:
                     NonCommonPart = None
-            outputMemoryDicsList.append({"outputId": i, "Output": Output, "NonCommonPart": NonCommonPart})
-            
+            Input = InputList[InputCount]['Chunk']
+            outputMemoryDicsList.append({"outputId": i, "Input": Input, "Output": Output, "NonCommonPart": NonCommonPart})
+            InputCount += 1
+            NonCommonPart = None
+    
     # 생성 과정에서 변경된 CorrectionChunks 데이터 복구
     for i in range(len(outputMemoryDicsList)):
         NonCommonPart = outputMemoryDicsList[i]['NonCommonPart']
         if NonCommonPart != None:
+            Input = outputMemoryDicsList[i]['Input']
+            CleanInput = re.sub("[^가-힣]", "", Input)
             Output = outputMemoryDicsList[i]['Output']
             DiffOUTPUT = NonCommonPart['DiffOUTPUT']
             DiffINPUT = NonCommonPart['DiffINPUT']
@@ -621,27 +637,30 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
             if DifferenceRangeValue == 0:
                 for j in range(DiffRange):
                     Range = DiffRange - j
-                    ChagedOutput = Output.replace(DiffOUTPUT[:Range], DiffINPUT[:Range])
+                    ChagedOutput = Output.replace(DiffOUTPUT[:Range], DiffINPUT[:Range], 1)
+                    print(f'{DiffOUTPUT[:Range]}, {DiffINPUT[:Range]}')
                     CleanChagedOutput = re.sub("[^가-힣]", "", ChagedOutput)
-                    if DiffINPUT in CleanChagedOutput:
+                    if CleanInput == CleanChagedOutput:
                         outputMemoryDicsList[i]['Output'] = ChagedOutput
                         outputMemoryDicsList[i]['NonCommonPart'] = None
                         break
             elif DifferenceRangeValue > 0:
                 for j in range(DiffRange - DifferenceRangeValue):
                     Range = DiffRange - j
-                    ChagedOutput = Output.replace(DiffOUTPUT[:Range - DifferenceRangeValue], DiffINPUT[:Range])
+                    ChagedOutput = Output.replace(DiffOUTPUT[:Range - DifferenceRangeValue], DiffINPUT[:Range], 1)
+                    print(f'{DiffOUTPUT[:Range - DifferenceRangeValue]}, {DiffINPUT[:Range]}')
                     CleanChagedOutput = re.sub("[^가-힣]", "", ChagedOutput)
-                    if DiffINPUT in CleanChagedOutput:
+                    if CleanInput == CleanChagedOutput:
                         outputMemoryDicsList[i]['Output'] = ChagedOutput
                         outputMemoryDicsList[i]['NonCommonPart'] = None
                         break
             elif DifferenceRangeValue < 0:
-                for j in range(DiffRange + DifferenceRangeValue):
+                for j in range(DiffRange):
                     Range = DiffRange - j
-                    ChagedOutput = Output.replace(DiffOUTPUT[:Range], DiffINPUT[:Range + DifferenceRangeValue])
+                    ChagedOutput = Output.replace(DiffOUTPUT[:Range], DiffINPUT[:Range + DifferenceRangeValue], 1)
+                    print(f'{DiffOUTPUT[:Range]}, {DiffINPUT[:Range + DifferenceRangeValue]}')
                     CleanChagedOutput = re.sub("[^가-힣]", "", ChagedOutput)
-                    if DiffINPUT in CleanChagedOutput:
+                    if CleanInput == CleanChagedOutput:
                         outputMemoryDicsList[i]['Output'] = ChagedOutput
                         outputMemoryDicsList[i]['NonCommonPart'] = None
                         break

@@ -376,7 +376,7 @@ def SFXToBodys(projectName, email, ResponseJson):
                 # 동일한 ChunkId를 가진 경우, SFXChunk를 SameIdSFXChunkList에 추가
                 SameIdSFXChunkList.append(SFXChunk)
                 SameIdRangePointList.append(RangePoint)
-                print(SameIdSFXChunkList)
+                # print(SameIdSFXChunkList)
             else:
                 # ChunkId가 변경된 경우 이전 데이터 처리
                 if SameIdSFXChunkList:
@@ -397,11 +397,11 @@ def SFXToBodys(projectName, email, ResponseJson):
 
     with get_db() as db:
         project = GetProject(projectName, email)
-        bodyFrame = project.BodyFrame
-        Bodys = bodyFrame[2]["Bodys"][1:]
+        HalfBodyFrame = project.HalfBodyFrame
+        Bodys = HalfBodyFrame[2]["Bodys"][1:]
 
         for body in Bodys:
-            SFXBody = body['Body']
+            SFXBody = body['Correction']
             SFXBodyChunkIds = body['ChunkId']
             for i in range(len(SFXChunkList)):
                 SFXChunkDic = SFXChunkList[i]
@@ -411,6 +411,8 @@ def SFXToBodys(projectName, email, ResponseJson):
                 if ChunkId in SFXBodyChunkIds:
                     Chunk = SFXChunkDic['Chunk']
                     SFXChunk = SFXChunkDic['SFXChunk']
+                    SFXChunk = SFXChunk.replace('<효과음시작', '<S')
+                    SFXChunk = SFXChunk.replace('<효과음끝', '<E')
                     SFXBody = SFXBody.replace(Chunk, SFXChunk, 1)
 
             body['Task'].append('SFX')
@@ -420,7 +422,7 @@ def SFXToBodys(projectName, email, ResponseJson):
     with open('Bodys.json', 'w', encoding='utf-8') as file:
         file.write(json_data)
 
-    flag_modified(project, "BodyFrame")
+    flag_modified(project, "HalfBodyFrame")
     
     db.add(project)
     db.commit()

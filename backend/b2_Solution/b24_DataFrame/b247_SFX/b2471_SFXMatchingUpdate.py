@@ -409,18 +409,28 @@ def SFXToBodys(projectName, email, ResponseJson):
                 if isinstance(ChunkId, list):
                     ChunkId = ChunkId[0]
                 if ChunkId in SFXBodyChunkIds:
+                    ChunksPattern = r'(?<=\S)\.\s(?=\S)'
                     Chunk = SFXChunkDic['Chunk']
+                    Chunk = re.sub(ChunksPattern, '. ●', Chunk)
+                    
                     SFXChunk = SFXChunkDic['SFXChunk']
                     SFXChunk = SFXChunk.replace('<효과음시작', '<S')
                     SFXChunk = SFXChunk.replace('<효과음끝', '<E')
+                    SFXChunk = re.sub(ChunksPattern, '. ●', SFXChunk)
+                    
                     SFXBody = SFXBody.replace(Chunk, SFXChunk, 1)
+                    if SFXChunk not in SFXBody:
+                        print('\n')
+                        print(Chunk)
+                        print(SFXChunk)
+                        print('\n')
 
             body['Task'].append('SFX')
             body['SFX'] = SFXBody
 
-    json_data = json.dumps(Bodys, ensure_ascii = False, indent = 4)
-    with open('Bodys.json', 'w', encoding='utf-8') as file:
-        file.write(json_data)
+    # json_data = json.dumps(Bodys, ensure_ascii = False, indent = 4)
+    # with open('Bodys.json', 'w', encoding='utf-8') as file:
+    #     file.write(json_data)
 
     flag_modified(project, "HalfBodyFrame")
     

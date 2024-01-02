@@ -295,7 +295,7 @@ def AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
         db.commit()
         
 ## 3. 3-1 BodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
-def UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = "None"):
+def UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = "None", SFX = "None"):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.BodyFrame[2]["Bodys"])
     
@@ -306,17 +306,18 @@ def UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = 
         "Body": Body,
         "Correction": Correction,
         "Character": Character,
-        "Context": Context
+        "Context": Context,
+        "SFX": SFX
     }
     
     project.BodyFrame[2]["Bodys"].append(updateBodys)
     
 ## 3. 3-2 BodyFrame의 Bodys(부문) Bodys부분 업데이트
-def AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character, context = "None"):
+def AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character, context = "None", sfx = "None"):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = context)
+        UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = context, SFX = sfx)
         
         flag_modified(project, "BodyFrame")
         
@@ -447,7 +448,7 @@ def AddHalfBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
         db.commit()
         
 ## 4. 3-1 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
-def UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Context = "None"):
+def UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Context = "None", SFX = "None"):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
     BodyId = len(project.HalfBodyFrame[2]["Bodys"])
     
@@ -458,17 +459,18 @@ def UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Contex
         "Body": Body,
         "Correction": Correction,
         "Character": Character,
-        "Context": Context
+        "Context": Context,
+        "SFX": SFX
     }
     
     project.HalfBodyFrame[2]["Bodys"].append(updateBodys)
     
 ## 4. 3-2 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트
-def AddHalfBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character, context = "None"):
+def AddHalfBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character, context = "None", sfx = "None"):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Context = context)
+        UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Context = context, SFX = sfx)
         
         flag_modified(project, "HalfBodyFrame")
         

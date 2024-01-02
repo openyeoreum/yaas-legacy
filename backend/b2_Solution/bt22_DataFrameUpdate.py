@@ -76,20 +76,25 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
 
 ## BodyFrameBodys Context 부분 json파일에 업데이트 반영
 def LoadAndUpdateBodyFrameBodys(projectName, email, Process, DataFramePath):
-    
+
     project = GetProject(projectName, email)
-    bodyFrame = project.BodyFrame
+
+    if Process == "BodyFrame":
+        bodyFrame = project.BodyFrame
+    elif Process == "HalfBodyFrame":
+        bodyFrame = project.HalfBodyFrame
+
     Bodys = bodyFrame[2]["Bodys"]
-    
+
     # 문자열 정규화
     EmailNormalized = unicodedata.normalize('NFC', email)
     ProjectNameNormalized = unicodedata.normalize('NFC', projectName)
     ProcessNormalized = unicodedata.normalize('NFC', Process)
-    
+
     # 정규 표현식으로 파일명에서 생성날짜와 프로세스 이름 추출
     patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+_{re.escape(ProcessNormalized)}DataFrame_(\d+).json"
     pattern = re.compile(patternSTR)
-    
+
     MaxDate = 0
     RecentFile = None
 

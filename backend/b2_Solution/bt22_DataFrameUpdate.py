@@ -75,8 +75,7 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
     return None
 
 ## BodyFrameBodys Context 부분 json파일에 업데이트 반영
-def LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath):
-    Process = "BodyFrame"
+def LoadAndUpdateBodyFrameBodys(projectName, email, Process, DataFramePath):
     
     project = GetProject(projectName, email)
     bodyFrame = project.BodyFrame
@@ -215,7 +214,7 @@ if __name__ == "__main__":
             updatedContextDefine = UpdatedContextDefine(projectName, email)
             SaveDataFrame(projectName, email, "07_ContextDefine", updatedContextDefine, DataFramePath)
             # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
-            LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)
+            LoadAndUpdateBodyFrameBodys(projectName, email, "BodyFrame", DataFramePath)
         if existedDataSet == None:
             SaveDataSet(projectName, email, "07", "ContextDefine", RawDataSetPath)
         existedDataFrame = None
@@ -317,7 +316,7 @@ if __name__ == "__main__":
             updatedSFXMatching = UpdatedSFXMatching(projectName, email)
             SaveDataFrame(projectName, email, "15_SFXMatching", updatedSFXMatching, DataFramePath)
             # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
-            LoadAndUpdateBodyFrameBodys(projectName, email, DataFramePath)
+            LoadAndUpdateBodyFrameBodys(projectName, email, "HalfBodyFrame", DataFramePath)
         if existedDataSet == None:     
             SaveDataSet(projectName, email, "15", "SFXMatching", RawDataSetPath)
         existedDataFrame = None

@@ -337,7 +337,8 @@ def ContextDefineToBodys(projectName, email, ResponseJson):
                         responseCount = i + 1
             
             if memoAdded:
-                body['Task'].append('Context')
+                if 'Context' not in body['Task']:
+                    body['Task'].append('Context')
             body['Context'] = ContextBody
         
     flag_modified(project, "BodyFrame")

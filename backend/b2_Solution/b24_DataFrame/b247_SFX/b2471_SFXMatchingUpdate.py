@@ -398,12 +398,22 @@ def SFXToBodys(projectName, email, ResponseJson):
                 # 동일한 ChunkId를 가진 경우, SFXChunk를 SameIdSFXChunkList에 추가
                 SameIdSFXChunkList.append(SFXChunk)
                 SameIdRangePointList.append(RangePoint)
-                # print(SameIdSFXChunkList)
             else:
                 # ChunkId가 변경된 경우 이전 데이터 처리
                 if SameIdSFXChunkList:
+                    sfxchunk = SFXDicToSFXChunk(SameIdRangePointList)
+                    sfxlist = []
+                    sfxpointlist = []
+                    for SameIdRangePoint in SameIdRangePointList:
+                        sfx = SameIdRangePoint['SFX']
+                        sfxpoint = SameIdRangePoint['SFXPoint']
+                        sfxlist += sfx
+                        sfxpointlist += sfxpoint
+                    chunk = SameIdRangePoint['Chunk']
+                    rangePoint = {'Chunk': chunk, 'SFX': sfxlist, 'SFXPoint': sfxpointlist}
+                    # print(f"{lastChunkId}: {rangePoint}\n\n")
                     # 이전 ChunkId의 데이터를 SFXChunkList에 추가
-                    SFXChunkList.append({'ChunkId': lastChunkId, 'Chunk': lastChunk, 'SFXChunk': SFXDicToSFXChunk(SameIdRangePointList), 'SFXChunks': SameIdSFXChunkList, 'RangePoint': SameIdRangePointList})
+                    SFXChunkList.append({'ChunkId': lastChunkId, 'Chunk': lastChunk, 'SFXChunk': sfxchunk, 'SFXChunks': SameIdSFXChunkList, 'RangePoint': rangePoint})
                     SameIdSFXChunkList = []
                     SameIdRangePointList = []
 
@@ -415,7 +425,18 @@ def SFXToBodys(projectName, email, ResponseJson):
 
     # 반복문 종료 후 마지막 데이터 처리
     if SameIdSFXChunkList:
-        SFXChunkList.append({'ChunkId': lastChunkId, 'Chunk': lastChunk, 'SFXChunk': SFXDicToSFXChunk(SameIdRangePointList), 'SFXChunks': SameIdSFXChunkList, 'RangePoint': SameIdRangePointList})
+        sfxchunk = SFXDicToSFXChunk(SameIdRangePointList)
+        sfxlist = []
+        sfxpointlist = []
+        for SameIdRangePoint in SameIdRangePointList:
+            sfx = SameIdRangePoint['SFX']
+            sfxpoint = SameIdRangePoint['SFXPoint']
+            sfxlist += sfx
+            sfxpointlist += sfxpoint
+        chunk = SameIdRangePoint['Chunk']
+        rangePoint = {'Chunk': chunk, 'SFX': sfxlist, 'SFXPoint': sfxpointlist}
+        
+        SFXChunkList.append({'ChunkId': lastChunkId, 'Chunk': lastChunk, 'SFXChunk': sfxchunk, 'SFXChunks': SameIdSFXChunkList, 'RangePoint': rangePoint})
 
     with get_db() as db:
         project = GetProject(projectName, email)
@@ -442,7 +463,7 @@ def SFXToBodys(projectName, email, ResponseJson):
             SFXChunkIdx = SFXChunkDic['ChunkId']
             if not isinstance(SFXChunkIdx, list):
                 SFXChunkIdx = [SFXChunkIdx]
-            SFXChunk = SFXChunkDic['Chunk']
+            # SFXChunk = SFXChunkDic['Chunk']
             for j in range(len(ChunkList)):
                 ChunkDic = ChunkList[j]
                 ChunkId = ChunkDic['ChunkId']
@@ -471,9 +492,9 @@ def SFXToBodys(projectName, email, ResponseJson):
                         Chunks = []
                         break
 
-        json_data = json.dumps(CorrectionChunkList, ensure_ascii = False, indent = 4)
-        with open('CorrectionChunkList.json', 'w', encoding='utf-8') as file:
-            file.write(json_data)
+        # json_data = json.dumps(CorrectionChunkList, ensure_ascii = False, indent = 4)
+        # with open('CorrectionChunkList.json', 'w', encoding='utf-8') as file:
+        #     file.write(json_data)
 
         # SFXCorrectionChunk 합성
         SFXCorrectionChunkList = []
@@ -481,8 +502,11 @@ def SFXToBodys(projectName, email, ResponseJson):
             ChunkId = SFXChunkList[i]['ChunkId']
             Chunk = SFXChunkList[i]['Chunk']
             SFXChunk = SFXChunkList[i]['SFXChunk']
-            SFXPoint = SFXChunkList[i]['RangePoint'][0]['SFXPoint']
-            SFXTag = SFXChunkList[i]['RangePoint'][0]['SFX']
+            SFXPoint = SFXChunkList[i]['RangePoint']['SFXPoint']
+            # print(ChunkId)
+            # print(SFXPoint)
+            # print('')
+            SFXTag = SFXChunkList[i]['RangePoint']['SFX']
             
             CorrectionChunk = CorrectionChunkList[i]['CorrectionChunk']
             CorrectionPoint = CorrectionChunkList[i]['CorrectionPoint']
@@ -509,7 +533,8 @@ def SFXToBodys(projectName, email, ResponseJson):
                     
                     SFXBody = SFXBody.replace(CorrectionChunk, SFXCorrectionChunk, 1)
 
-            body['Task'].append('SFX')
+            if 'SFX' not in body['Task']:
+                body['Task'].append('SFX')
             body['SFX'] = SFXBody
 
     # json_data = json.dumps(Bodys, ensure_ascii = False, indent = 4)

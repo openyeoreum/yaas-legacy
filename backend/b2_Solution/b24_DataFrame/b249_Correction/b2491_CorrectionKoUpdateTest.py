@@ -72,7 +72,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
     for i in range(len(BodyFrameBodys)):
         Id = BodyFrameBodys[i]['BodyId']
         task = BodyFrameBodys[i]['Task']
-        TaskBody = BodyFrameBodys[i]['Correction']
+        TaskBody = BodyFrameBodys[i]['SFX']
 
         if Task in task:
             Tag = 'Continue'
@@ -207,7 +207,7 @@ def LongCommonSubstring(DiffINPUT, DiffOUTPUT):
     return DiffINPUT[end_pos-longest:end_pos]
 
 ## CorrectionKo의 Filter(Error 예외처리)
-def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
+def CorrectionKoFilter(DotsInput, responseData, InputDots, InputSFXTags, InputChunkId):
     responseData = NumbersToDots(responseData)
     responseData = responseData.replace('<끊어읽기보정>\n\n', '')
     responseData = responseData.replace('<끊어읽기보정>\n', '')
@@ -237,10 +237,14 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
     # Error2: INPUT, OUTPUT 불일치시 예외 처리
     try:
         nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
-        if nonCommonPartRatio < 98.5:
-            return f"INPUT, OUTPUT 불일치율 1.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
+        if nonCommonPartRatio < 97.5:
+            return f"INPUT, OUTPUT 불일치율 2.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
     except ValueError as e:
         return f"INPUT, OUTPUT 매우 높은 불일치율 발생: {e}"
+    # Error3: 
+    for SFXTag in InputSFXTags:
+        if SFXTag not in responseData:
+            return f"OUTPUT 내에 SFXTag 불일치 오류 발생: INPUT({SFXTag})"
     # Error3: InputDots, responseDataDots 불일치시 예외 처리
     if len(InputDic) != len(OutputDic) != InputDots:
         print(f'@@@@@@@@@@\nInputDic: {InputDic}\nOutputDic: {OutputDic}\n@@@@@@@@@@')
@@ -398,6 +402,9 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             DotsInput = DotsInput.replace('[', '{')
             DotsInput = DotsInput.replace(']', '}')
             InputDots = str(DotsInput).count('●')
+            SFXTagsPattern = r"<[SE]\d{1,5}>"
+            InputSFXTags = re.findall(SFXTagsPattern, DotsInput)
+            
             Input = DotsToNumbers(DotsInput)
             
             # Filter, MemoryCounter, OutputEnder 처리
@@ -422,7 +429,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId)
+            Filter = CorrectionKoFilter(DotsInput, responseData, InputDots, InputSFXTags, InputChunkId)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -903,4 +910,6 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode)
+    InputList, InputChunkIdList = BodyFrameBodysToInputList(projectName, email)
+    for input in InputList:
+        print(input['Continue'])

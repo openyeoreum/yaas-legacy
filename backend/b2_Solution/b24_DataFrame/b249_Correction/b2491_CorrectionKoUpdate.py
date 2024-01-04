@@ -72,7 +72,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
     for i in range(len(BodyFrameBodys)):
         Id = BodyFrameBodys[i]['BodyId']
         task = BodyFrameBodys[i]['Task']
-        TaskBody = BodyFrameBodys[i]['Correction']
+        TaskBody = BodyFrameBodys[i]['SFX']
 
         if Task in task:
             Tag = 'Continue'
@@ -207,7 +207,7 @@ def LongCommonSubstring(DiffINPUT, DiffOUTPUT):
     return DiffINPUT[end_pos-longest:end_pos]
 
 ## CorrectionKo의 Filter(Error 예외처리)
-def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
+def CorrectionKoFilter(DotsInput, responseData, InputDots, InputSFXTags, InputChunkId):
     responseData = NumbersToDots(responseData)
     responseData = responseData.replace('<끊어읽기보정>\n\n', '')
     responseData = responseData.replace('<끊어읽기보정>\n', '')
@@ -237,15 +237,19 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId):
     # Error2: INPUT, OUTPUT 불일치시 예외 처리
     try:
         nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
-        if nonCommonPartRatio < 98.5:
-            return f"INPUT, OUTPUT 불일치율 1.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
+        if nonCommonPartRatio < 97.5:
+            return f"INPUT, OUTPUT 불일치율 2.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
     except ValueError as e:
         return f"INPUT, OUTPUT 매우 높은 불일치율 발생: {e}"
-    # Error3: InputDots, responseDataDots 불일치시 예외 처리
+    # Error3: OUTPUT 내에 SFXTag 불일치시 예외 처리
+    for SFXTag in InputSFXTags:
+        if SFXTag not in responseData:
+            return f"OUTPUT 내에 SFXTag 불일치 오류 발생: INPUT({SFXTag})"
+    # Error4: InputDots, responseDataDots 불일치시 예외 처리
     if len(InputDic) != len(OutputDic) != InputDots:
         print(f'@@@@@@@@@@\nInputDic: {InputDic}\nOutputDic: {OutputDic}\n@@@@@@@@@@')
         return f"INPUT, OUTPUT [n] 갯수 불일치 오류 발생: INPUT({len(InputDic)}), OUTPUT({len(OutputDic)}), InputDots({InputDots})"
-    # Error4: Input, responseData 불일치시 예외 처리
+    # Error5: Input, responseData 불일치시 예외 처리
     nonCommonPartsNum = 0
     for i in range(len(InputDic)):
         CleanInput = re.sub("[^가-힣]", "", InputDic[i])
@@ -398,10 +402,13 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             DotsInput = DotsInput.replace('[', '{')
             DotsInput = DotsInput.replace(']', '}')
             InputDots = str(DotsInput).count('●')
+            SFXTagsPattern = r"<[SE]\d{1,5}>"
+            InputSFXTags = re.findall(SFXTagsPattern, DotsInput)
+            
             Input = DotsToNumbers(DotsInput)
             
             # Filter, MemoryCounter, OutputEnder 처리
-            memoryCounter = f" - 중요: 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음!, [1] ~ [{InputDots}]까지 그대로 유지! -\n"
+            memoryCounter = f" - 중요: 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음!, <Sn> <En>의 기호와 [1] ~ [{InputDots}]까지 그대로 유지! -\n"
             outputEnder = ""
             
             # Response 생성
@@ -422,7 +429,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = CorrectionKoFilter(DotsInput, responseData, InputDots, InputChunkId)
+            Filter = CorrectionKoFilter(DotsInput, responseData, InputDots, InputSFXTags, InputChunkId)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -490,6 +497,23 @@ def Date(Option = "Day"):
     
     return date
 
+## ResponseJson의 Text변환
+def ResponseJsonText(projectName, email, responseJson):
+    responseJsonText = ""
+    for i in range(len(responseJson)):
+        for j in range(len(responseJson[i]['CorrectionChunks'])):
+            for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
+                token = next(iter(token_dict.values()))
+                responseJsonText += token
+
+    baseFilePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/{email}_{projectName}_21_responseJson"
+    fullFilePath = f"{baseFilePath}_{str(Date())}.txt"
+
+    # 파일이 존재하는지 확인
+    if not any(re.match(f"{baseFilePath}_\d{{6}}\.txt", filename) for filename in os.listdir(os.path.dirname(baseFilePath))):
+        with open(fullFilePath, "w", encoding="utf-8") as file:
+            file.write(responseJsonText)
+
 ## CorrectionChunk의 위치데이터 저장
 def CorrectionChunkToCorrectionDic(CorrectionChunk):
     # Regular expression to find all instances of (0.n)
@@ -530,7 +554,6 @@ def MergSFX(CorrectionChunk, SFXElements, UpdatedSfxPoint):
 def MergeSFXChunk(CorrectionChunkDic, SFXChunkDic):
     CorrectionChunk = CorrectionChunkDic['CorrectionChunk']
     CorrectionPoint = CorrectionChunkDic['CorrectionPoint']['CorrectionPoint']
-    # SFXChunk = SFXChunkDic['SFXChunk']
     SFXPoint = SFXChunkDic['SFXPoint']['SFXPoint']
     SFXElements = SFXChunkDic['SFXPoint']['SFX']
 
@@ -571,23 +594,6 @@ def SplitChunkIntoTokens(Chunk):
         Tokens.append({kind: match.group()})
 
     return Tokens
-
-## ResponseJson의 Text변환
-def ResponseJsonText(projectName, email, responseJson):
-    responseJsonText = ""
-    for i in range(len(responseJson)):
-        for j in range(len(responseJson[i]['CorrectionChunks'])):
-            for tokenDict in responseJson[i]['CorrectionChunks'][j]['SFXCorrectionChunkTokens']:
-                sfxtoken = next(iter(tokenDict.values()))
-                responseJsonText += sfxtoken
-
-    baseFilePath = f"/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/{email}_{projectName}_21_responseJson"
-    fullFilePath = f"{baseFilePath}_{str(Date())}.txt"
-
-    # 파일이 존재하는지 확인
-    if not any(re.match(f"{baseFilePath}_\d{{6}}\.txt", filename) for filename in os.listdir(os.path.dirname(baseFilePath))):
-        with open(fullFilePath, "w", encoding="utf-8") as file:
-            file.write(responseJsonText)
 
 ## 데이터 치환
 def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
@@ -697,20 +703,18 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         for j in range(len(BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'])):
             ChunkId = k + 1
             Tag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][j]['Tag']
-            
             CorrectionChunk = outputMemoryDicsList[k]['Output']
-            SFXCorrectionChunk = outputMemoryDicsList[k]['Output']
+            
             for l in range(SFXChunkCount, len(SFXChunkList)):
                 SFXChunkDic = SFXChunkList[l]
                 if SFXChunkDic['ChunkId'] == ChunkId:
-                    CorrectionPoint = CorrectionChunkToCorrectionDic(SFXCorrectionChunk)
-                    CorrectionChunkDic = {'ChunkId': ChunkId, 'CorrectionChunk': SFXCorrectionChunk, 'CorrectionPoint': CorrectionPoint}
-                    SFXCorrectionChunk = MergeSFXChunk(CorrectionChunkDic, SFXChunkDic)
+                    CorrectionPoint = CorrectionChunkToCorrectionDic(CorrectionChunk)
+                    CorrectionChunkDic = {'ChunkId': ChunkId, 'CorrectionChunk': CorrectionChunk, 'CorrectionPoint': CorrectionPoint}
+                    CorrectionChunk = MergeSFXChunk(CorrectionChunkDic, SFXChunkDic)
                     SFXChunkCount = l + 1
-                        
+                
             CorrectionChunkTokens = SplitChunkIntoTokens(CorrectionChunk)
-            SFXCorrectionChunkTokens = SplitChunkIntoTokens(SFXCorrectionChunk)
-            CorrectionChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'CorrectionChunk': CorrectionChunk, 'CorrectionChunkTokens': CorrectionChunkTokens, 'SFXCorrectionChunkTokens': SFXCorrectionChunkTokens})
+            CorrectionChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'CorrectionChunk': CorrectionChunk, 'CorrectionChunkTokens': CorrectionChunkTokens})
             OutputId = outputMemoryDicsList[k]['outputId']
             k += 1
 
@@ -763,86 +767,83 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
             if i < (len(responseJson) - 1):
                 NextChunkFirstTag = responseJson[i+1]['CorrectionChunks'][0]['Tag']
             
-            # 분석의 대상이 되는 CorrectionChunkTokens
             tokens = responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']
-            # 실제 데이터 추가의 대상이 되는 SFXCorrectionChunkTokens
-            sfxtokens = responseJson[i]['CorrectionChunks'][j]['SFXCorrectionChunkTokens']
             
             # Title, 일반 문장 처리
             if tag == "Title":
-                sfxtokens.append({"Pause": "(2.00)"})
-                sfxtokens.append({"Enter": "\n"})
+                tokens.append({"Pause": "(2.00)"})
+                tokens.append({"Enter": "\n"})
             elif tag in ["Logue", "Part", "Chapter"]:
-                sfxtokens.append({"Pause": "(1.50)"})
-                sfxtokens.append({"Enter": "\n"})
+                tokens.append({"Pause": "(1.50)"})
+                tokens.append({"Enter": "\n"})
             elif tag == "Index":
-                sfxtokens.append({"Pause": "(1.30)"})
-                sfxtokens.append({"Enter": "\n"})
+                tokens.append({"Pause": "(1.30)"})
+                tokens.append({"Enter": "\n"})
             elif tag == "Caption":
-                sfxtokens.append({"Pause": "(1.20)"})
-                sfxtokens.append({"Enter": "\n"})
+                tokens.append({"Pause": "(1.20)"})
+                tokens.append({"Enter": "\n"})
             # elif tag == "Comment":
-            #     sfxtokens.append({"Pause": "(0.40)"})
-            #     sfxtokens.append({"Enter": "\n"})
+            #     tokens.append({"Pause": "(0.40)"})
+            #     tokens.append({"Enter": "\n"})
             else:
                 if len(tokens) >= 2:
                     BeforeEndtoken = tokens[-2]
                     Endtoken = tokens[-1]
                     if ('Ko' in BeforeEndtoken and 'Period' in Endtoken) or ('En' in BeforeEndtoken and 'Period' in Endtoken):
-                        sfxtokens.append({"Pause": "(0.70)"})
-                        sfxtokens.append({"Enter": "\n"})
-                if len(sfxtokens) >= 5:
-                    for k in range(len(sfxtokens) - 5):
-                        if ('Ko' in sfxtokens[k] and 'Period' in sfxtokens[k+1]) or ('En' in sfxtokens[k] and 'Period' in sfxtokens[k+1]) or ('SFXEnd' in sfxtokens[k] and 'Period' in sfxtokens[k+1]):
-                            sfxtokens.insert(k + 2, {"Pause": "(0.60)"})
+                        tokens.append({"Pause": "(0.70)"})
+                        tokens.append({"Enter": "\n"})
+                    if len(tokens) >= 5:
+                        for k in range(len(tokens) - 5):
+                            if ('Ko' in tokens[k] and 'Period' in tokens[k+1]) or ('En' in tokens[k] and 'Period' in tokens[k+1]):
+                                tokens.insert(k + 2, {"Pause": "(0.60)"})
             
             # 앞, 뒤Chunk를 통한 처리
             if tag == "Character" and Aftertag == "Character":
-                sfxtokens.append({"Pause": "(0.70)"})
-                sfxtokens.append({"Enter": "\n"})
+                tokens.append({"Pause": "(0.70)"})
+                tokens.append({"Enter": "\n"})
             elif tag == "Character" and Aftertag == "Narrator":
-                sfxtokens.append({"Pause": "(0.30)"})
-                sfxtokens.append({"Enter": "\n"})
+                tokens.append({"Pause": "(0.30)"})
+                tokens.append({"Enter": "\n"})
             elif tag == "Character" and Aftertag == "Comment":
-                sfxtokens.append({"Pause": "(0.20)"})
-                sfxtokens.append({"Enter": "\n"})
+                tokens.append({"Pause": "(0.20)"})
+                tokens.append({"Enter": "\n"})
             elif tag == "Narrator" and Aftertag == "Character":
                 if len(tokens) >= 2:
                     BeforeEndtoken = tokens[-2]
                     Endtoken = tokens[-1]
                     if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
-                        sfxtokens.append({"Pause": "(0.40)"})
-                        sfxtokens.append({"Enter": "\n"})
+                        tokens.append({"Pause": "(0.40)"})
+                        tokens.append({"Enter": "\n"})
             elif (tag == "Narrator" and Aftertag == "Comment") or (tag == "Caption" and Aftertag == "CaptionComment"):
                 if len(tokens) >= 2:
                     BeforeEndtoken = tokens[-2]
                     Endtoken = tokens[-1]
                     if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
-                        sfxtokens.append({"Pause": "(0.20)"})
+                        tokens.append({"Pause": "(0.20)"})
 
             # Chunk가 중간에 끊길 경우 처리
             if tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Character":
-                sfxtokens.append({"Pause": "(0.70)"})
-                sfxtokens.append({"Enter": "\n"})
+                tokens.append({"Pause": "(0.70)"})
+                tokens.append({"Enter": "\n"})
             elif tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Narrator":
-                sfxtokens.append({"Pause": "(0.30)"})
-                sfxtokens.append({"Enter": "\n"})
+                tokens.append({"Pause": "(0.30)"})
+                tokens.append({"Enter": "\n"})
             elif tag == "Character" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Comment":
-                sfxtokens.append({"Pause": "(0.20)"})
-                sfxtokens.append({"Enter": "\n"})
+                tokens.append({"Pause": "(0.20)"})
+                tokens.append({"Enter": "\n"})
             elif tag == "Narrator" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Character":
                 if len(tokens) >= 2:
                     BeforeEndtoken = tokens[-2]
                     Endtoken = tokens[-1]
                     if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
-                        sfxtokens.append({"Pause": "(0.40)"})
-                        sfxtokens.append({"Enter": "\n"})
+                        tokens.append({"Pause": "(0.40)"})
+                        tokens.append({"Enter": "\n"})
             elif (tag == "Narrator" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "Comment") or (tag == "Caption" and j == (len(responseJson[i]['CorrectionChunks']) - 1) and NextChunkFirstTag == "CaptionComment"):
                 if len(tokens) >= 2:
                     BeforeEndtoken = tokens[-2]
                     Endtoken = tokens[-1]
                     if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
-                        sfxtokens.append({"Pause": "(0.20)"})
+                        tokens.append({"Pause": "(0.20)"})
     
     # ResponseJson의 Text변환
     ResponseJsonText(projectName, email, responseJson)
@@ -883,7 +884,7 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                 for j in range(len(Update['CorrectionChunks'])):
                     ChunkId = Update['CorrectionChunks'][j]['ChunkId']
                     Tag = Update['CorrectionChunks'][j]['Tag']
-                    ChunkTokens = Update['CorrectionChunks'][j]['SFXCorrectionChunkTokens']
+                    ChunkTokens = Update['CorrectionChunks'][j]['CorrectionChunkTokens']
                 
                     AddCorrectionKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens)
 
@@ -909,4 +910,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode)

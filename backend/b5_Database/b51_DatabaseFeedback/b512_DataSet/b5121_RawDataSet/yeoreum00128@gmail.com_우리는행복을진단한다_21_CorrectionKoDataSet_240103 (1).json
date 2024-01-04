@@ -1,0 +1,54 @@
+{
+    "TaskName": "CorrectionKo",
+    "UserId": "cc51fb3ea8742fd388fc3b453a35d93f874f0f23004bdac12c306f6b9b9d0066",
+    "ProjectsStorageID": 1,
+    "ProjectId": 7,
+    "ProjectName": "우리는행복을진단한다",
+    "RawDataSetCount": 0,
+    "FeedbackDatasetCount": 0,
+    "EmbeddingDatasetCount": 0,
+    "Completion": "No",
+    "Accuracy": {},
+    "Context": {
+        "Language": "None",
+        "Genre": "None",
+        "Gender": "None",
+        "Age": "None",
+        "Personality": "None",
+        "Emotion": "None",
+        "Environment": "None",
+        "Situation": "None",
+        "Era": "None",
+        "Culture": "None"
+    },
+    "RawDataset": [
+        {
+            "DataSetId": 0,
+            "Mode": "None",
+            "TrainingModel": "None",
+            "Tokens": "None",
+            "InputMemory": "None",
+            "Input": "None",
+            "Output": "None"
+        }
+    ],
+    "FeedbackDataset": [
+        {
+            "DataSetId": 0,
+            "InputMemory": "None",
+            "Input": "None",
+            "Feedback": "None",
+            "Check": "No",
+            "Accuracy": "None"
+        }
+    ],
+    "FeedbackCompletion": "No",
+    "EmbeddingDataset": [
+        {
+            "DataSetId": 0,
+            "InputMemoryEmbedding": "None",
+            "InputEmbedding": "None",
+            "OutputEmbedding": "None"
+        }
+    ]
+}

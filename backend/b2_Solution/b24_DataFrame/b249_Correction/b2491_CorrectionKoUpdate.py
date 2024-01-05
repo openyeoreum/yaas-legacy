@@ -348,10 +348,10 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
     AddProjectContextToDB(projectName, email, Process)
 
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '21', DataFramePath)
+    AddOutputMemoryDicsFile = LoadAddOutputMemory(projectName, email, '21', DataFramePath)
     inputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
-        AddOutputMemoryDicsFile = LoadAddOutputMemory(projectName, email, '21', DataFramePath)
         return OutputMemoryDicsFile, AddOutputMemoryDicsFile
 
     # FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
@@ -365,7 +365,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
     inputMemoryDics.append(InputDic)
     outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
-    nonCommonPartList = []
+    nonCommonPartList = AddOutputMemoryDicsFile
         
     # CorrectionKoProcess
     while TotalCount < len(InputList):
@@ -628,6 +628,8 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
             Chunk = SplitedBodyChunks[j]['Chunk']
             InputList.append({'ChunkId': ChunkId, 'Chunk': Chunk})
 
+    print(len(outputMemoryDics))
+    print(len(nonCommonPartList))
     # 기존 데이터 구조 responseJson 형성
     outputMemoryDicsList = []
     InputCount = 0
@@ -910,3 +912,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode)

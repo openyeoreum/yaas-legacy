@@ -1,26 +1,56 @@
 [
+    [],
+    [],
     [
         {
-            "DiffINPUT": "차별화포인트도없었고",
-            "NonINPUT": "",
-            "DiffOUTPUT": "른차별화포인트도없었",
-            "NonOUTPUT": "른"
-        },
-        {
-            "DiffINPUT": "열거하는반면페이지랭",
-            "NonINPUT": "열거",
-            "DiffOUTPUT": "나열하는반면페이지랭",
-            "NonOUTPUT": "나열"
+            "DiffINPUT": "와대체현실게임입니다",
+            "NonINPUT": "와",
+            "DiffOUTPUT": "과대체현실게임입니다",
+            "NonOUTPUT": "과"
         }
     ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
     [
         {
-            "DiffINPUT": "더라면구글은젊은청년",
-            "NonINPUT": "더라",
-            "DiffOUTPUT": "다면구글은젊은청년들",
-            "NonOUTPUT": "다"
+            "DiffINPUT": "창했고지금우리가사용",
+            "NonINPUT": "창",
+            "DiffOUTPUT": "장했고지금우리가사용",
+            "NonOUTPUT": "장"
         }
     ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+        {
+            "DiffINPUT": "스메신저를개발하면서",
+            "NonINPUT": "스",
+            "DiffOUTPUT": "트메신저를개발하면서",
+            "NonOUTPUT": "트"
+        }
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
     [],
     [],
     [],

@@ -600,6 +600,18 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                 del tokens[-1]
             elif 'Pause' in BeforeEndtoken and 'Period' in Endtoken:
                 del tokens[-2]
+            elif 'Period' in BeforeEndtoken and 'SFXEnd' in Endtoken:
+                tokens[-2], tokens[-1] = tokens[-1], tokens[-2]
+
+        if len(tokens) >= 4:
+            PreviousPreviousBeforeEndtoken = tokens[-4]
+            PreviousBeforeEndtoken = tokens[-3]
+            BeforeEndtoken = tokens[-2]
+            Endtoken = tokens[-1]
+            if 'Period' in PreviousPreviousBeforeEndtoken and 'SFXEnd' in PreviousBeforeEndtoken and 'SFXEnd' in BeforeEndtoken and 'SFXEnd' in Endtoken:
+                tokens[-4], tokens[-3], tokens[-2], tokens[-1] = tokens[-1], tokens[-4], tokens[-3], tokens[-2]
+            elif 'Period' in PreviousBeforeEndtoken and 'SFXEnd' in BeforeEndtoken and 'SFXEnd' in Endtoken:
+                tokens[-3], tokens[-2], tokens[-1] = tokens[-1], tokens[-3], tokens[-2]
 
         if len(tokens) >= 5:
             PreviousBeforeEndtoken = tokens[-3]
@@ -650,7 +662,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
             if len(tokens) >= 2:
                 BeforeEndtoken = tokens[-2]
                 Endtoken = tokens[-1]
-                if ('Ko' in BeforeEndtoken and 'Period' in Endtoken) or ('En' in BeforeEndtoken and 'Period' in Endtoken):
+                if ('Ko' in BeforeEndtoken and 'Period' in Endtoken) or ('En' in BeforeEndtoken and 'Period' in Endtoken) or ('SFXEnd' in BeforeEndtoken and 'Period' in Endtoken):
                     tokens.append({"Pause": "(0.70)"})
                     tokens.append({"Enter": "\n"})
                 if len(tokens) >= 5:

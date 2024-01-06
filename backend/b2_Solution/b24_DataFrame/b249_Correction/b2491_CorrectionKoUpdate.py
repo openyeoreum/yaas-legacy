@@ -644,57 +644,57 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         
         # Title, 일반 문장 처리
         if tag == "Title":
-            tokens.append({"Pause": "(2.00)"})
+            tokens.append({"Pause": "(2.0)"})
             tokens.append({"Enter": "\n"})
         elif tag in ["Logue", "Part", "Chapter"]:
-            tokens.append({"Pause": "(1.50)"})
+            tokens.append({"Pause": "(1.5)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Index":
-            tokens.append({"Pause": "(1.30)"})
+            tokens.append({"Pause": "(1.3)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Caption" and Aftertag != "Caption" or tag == "Caption" and Aftertag != "CaptionComment":
-            tokens.append({"Pause": "(1.20)"})
+            tokens.append({"Pause": "(1.2)"})
             tokens.append({"Enter": "\n"})
         # elif tag == "Comment":
-        #     tokens.append({"Pause": "(0.40)"})
+        #     tokens.append({"Pause": "(0.4)"})
         #     tokens.append({"Enter": "\n"})
         else:
             if len(tokens) >= 2:
                 BeforeEndtoken = tokens[-2]
                 Endtoken = tokens[-1]
                 if ('Ko' in BeforeEndtoken and 'Period' in Endtoken) or ('En' in BeforeEndtoken and 'Period' in Endtoken) or ('SFXEnd' in BeforeEndtoken and 'Period' in Endtoken):
-                    tokens.append({"Pause": "(0.70)"})
+                    tokens.append({"Pause": "(0.7)"})
                     tokens.append({"Enter": "\n"})
                 if len(tokens) >= 5:
                     for k in range(len(tokens) - 5):
                         if ('Ko' in tokens[k] and 'Period' in tokens[k+1]) or ('En' in tokens[k] and 'Period' in tokens[k+1]) or ('SFXEnd' in tokens[k] and 'Period' in tokens[k+1]):
-                            tokens.insert(k + 2, {"Pause": "(0.60)"})
+                            tokens.insert(k + 2, {"Pause": "(0.6)"})
 
         RemoveSFXtokens = [item for item in tokens if "SFXEnd" not in item and "SFXStart" not in item]
         
         # 앞, 뒤Chunk를 통한 처리
         if tag == "Character" and Aftertag == "Character":
-            tokens.append({"Pause": "(0.70)"})
+            tokens.append({"Pause": "(0.7)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Character" and Aftertag == "Narrator":
-            tokens.append({"Pause": "(0.30)"})
+            tokens.append({"Pause": "(0.3)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Character" and Aftertag == "Comment":
-            tokens.append({"Pause": "(0.20)"})
+            tokens.append({"Pause": "(0.2)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Narrator" and Aftertag == "Character":
             if len(RemoveSFXtokens) >= 2:
                 BeforeEndtoken = RemoveSFXtokens[-2]
                 Endtoken = RemoveSFXtokens[-1]
                 if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
-                    tokens.append({"Pause": "(0.40)"})
+                    tokens.append({"Pause": "(0.4)"})
                     tokens.append({"Enter": "\n"})
         elif (tag == "Narrator" and Aftertag == "Comment") or (tag == "Caption" and Aftertag == "CaptionComment"):
             if len(RemoveSFXtokens) >= 2:
                 BeforeEndtoken = RemoveSFXtokens[-2]
                 Endtoken = RemoveSFXtokens[-1]
                 if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
-                    tokens.append({"Pause": "(0.20)"})
+                    tokens.append({"Pause": "(0.2)"})
 
     # responseJson 구조 형성###
     responseJson = []

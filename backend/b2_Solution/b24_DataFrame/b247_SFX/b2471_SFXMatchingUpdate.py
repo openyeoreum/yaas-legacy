@@ -108,7 +108,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
 ##### Filter 조건 #####
 ######################
 ## SFXMatching의 Filter(Error 예외처리)
-def SFXMatchingFilter(Input, responseData, memoryCounter):
+def SFXMatchingFilter(Input, responseData, InPutPeriods, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -117,8 +117,13 @@ def SFXMatchingFilter(Input, responseData, memoryCounter):
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
-        return "JSONType에서 오류 발생: JSONTypeError"  
-    # Error3: 자료의 구조가 다를 때의 예외 처리
+        return "JSONType에서 오류 발생: JSONTypeError"
+    # Error3: 결과가 list가 아닐 때의 예외 처리
+    OutPutPeriods = str(responseData).count('.')
+    Difference = abs(OutPutPeriods - InPutPeriods) / InPutPeriods * 100
+    if Difference >= 25:
+        return f"INPUT, OUTPUT '.(Periods)' 불일치율 25% 이상 오류 발생: 불일치율({Difference}))"
+    # Error4: 자료의 구조가 다를 때의 예외 처리
     INPUT = re.sub("[^가-힣]", "", str(Input))
     for dic in OutputDic:
         try:
@@ -238,6 +243,7 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
+            InPutPeriods = str(Input).count('.')
             
             # Filter, MemoryCounter, OutputEnder 처리
             memoryCounter = "\n"
@@ -261,7 +267,7 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = SFXMatchingFilter(Input, responseData, memoryCounter)
+            Filter = SFXMatchingFilter(Input, responseData, InPutPeriods, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

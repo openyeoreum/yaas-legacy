@@ -719,6 +719,10 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         CorrectionChunks = []
         responseJson.append(CorrectionKoSplitedBody)
 
+    # JSON 파일로 저장
+    with open('/yaas/response2.json', 'w', encoding = 'utf-8') as file:
+        json.dump(responseJson, file, ensure_ascii = False, indent = 4)
+
     # responseJson의 끊어읽기 보정(말의 끝맺음 뒤에 끊어읽기가 존재할 경우 삭제)
     for i in range(len(responseJson)):
         for j in range(len(responseJson[i]['CorrectionChunks'])):

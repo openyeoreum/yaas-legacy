@@ -13,7 +13,27 @@
         "Completion": "No"
     },
     {
-        "Selection-GenerationEsSplitedBodys": [
+        "BookContext":
+        {
+            "Vector":
+            {
+                "Purpose": "None",
+                "Reason": "None",
+                "Question": "None",
+                "Subject": "None",
+                "Reader": "None",
+                "Importance": 0
+            },
+            "WMWM":
+            {
+                "Needs": "None",
+                "Wisdom": "None",
+                "Mind": "None",
+                "Wildness": "None",
+                "Accuracy": 0
+            }
+        },
+        "Selection-GenerationEsSplitedIndexs": [
             {
                 "IndexId": 0,
                 "IndexTag": "None",
@@ -47,33 +67,11 @@
                     "Emotion": "None",
                     "Accuracy": "None"
                 },
-                "BodyId": 0,
-                "BodyContext":
-                {
-                    "Vector":
+                "Sound": {},
+                "Selection-GenerationEsSplitedBodys": [
                     {
-                        "Purpose": "None",
-                        "Reason": "None",
-                        "Question": "None",
-                        "Subject": "None",
-                        "Reader": "None",
-                        "Importance": 0
-                    },
-                    "WMWM":
-                    {
-                        "Needs": "None",
-                        "Wisdom": "None",
-                        "Mind": "None",
-                        "Wildness": "None",
-                        "Accuracy": 0
-                    }
-                },
-                "Selection-GenerationEsSplitedBodyChunks": [
-                    {
-                        "ChunkId": 0,
-                        "Chunk": "None",
-                        "Tag": "None",
-                        "ChunkContext":
+                        "BodyId": 0,
+                        "BodyContext":
                         {
                             "Vector":
                             {
@@ -93,67 +91,96 @@
                                 "Accuracy": 0
                             }
                         },
-                        "Voice":
-                        {
-                            "Character": "None",
-                            "Type": "None",
-                            "Gender": "None",
-                            "Age": "None",
-                            "Emotion": "None",
-                            "Role": "None"
-                        },
-                        "Sound": {},
-                        "SFX":
-                        {
-                            "SFX": "골프공 치는 소리",
-                            "Prompt": "The sound of a golf ball being hit",
-                            "Type": "행동",
-                            "Role": "대상음",
-                            "Direction": "앞",
-                            "Importance": "90"
-                        },
-                        "Selection-GenerationEsChunkTokens": [
+                        "Selection-GenerationEsSplitedChunks": [
                             {
-                                "Pause": "None"
-                            },
-                            {
-                                "SFX": "None"
-                            },
-                            {
-                                "Space": "None"
-                            },
-                            {
-                                "Enter": "None"
-                            },
-                            {
-                                "Comma": "None"
-                            },
-                            {
-                                "Quotes": "None"
-                            },
-                            {
-                                "Period": "None"
-                            },
-                            {
-                                "ETC": "None"
-                            },
-                            {
-                                "Number": "None"
-                            },
-                            {
-                                "Ko": "None"
-                            },
-                            {
-                                "En": "None"
-                            },
-                            {
-                                "Ja": "None"
-                            },
-                            {
-                                "Zh": "None"
-                            },
-                            {
-                                "Es": "None"
+                                "ChunkId": 0,
+                                "Chunk": "None",
+                                "Tag": "None",
+                                "ChunkContext":
+                                {
+                                    "Vector":
+                                    {
+                                        "Purpose": "None",
+                                        "Reason": "None",
+                                        "Question": "None",
+                                        "Subject": "None",
+                                        "Reader": "None",
+                                        "Importance": 0
+                                    },
+                                    "WMWM":
+                                    {
+                                        "Needs": "None",
+                                        "Wisdom": "None",
+                                        "Mind": "None",
+                                        "Wildness": "None",
+                                        "Accuracy": 0
+                                    }
+                                },
+                                "Voice":
+                                {
+                                    "Character": "None",
+                                    "Type": "None",
+                                    "Gender": "None",
+                                    "Age": "None",
+                                    "Emotion": "None",
+                                    "Role": "None"
+                                },
+                                "SFX":
+                                {
+                                    "SFX": "골프공 치는 소리",
+                                    "Prompt": "The sound of a golf ball being hit",
+                                    "Type": "행동",
+                                    "Role": "대상음",
+                                    "Direction": "앞",
+                                    "Importance": "90"
+                                },
+                                "Selection-GenerationEsChunkTokens": [
+                                    {
+                                        "Pause": "None"
+                                    },
+                                    {
+                                        "SFXStart": "None"
+                                    },
+                                    {
+                                        "SFXEnd": "None"
+                                    },
+                                    {
+                                        "Space": "None"
+                                    },
+                                    {
+                                        "Enter": "None"
+                                    },
+                                    {
+                                        "Comma": "None"
+                                    },
+                                    {
+                                        "Quotes": "None"
+                                    },
+                                    {
+                                        "Period": "None"
+                                    },
+                                    {
+                                        "ETC": "None"
+                                    },
+                                    {
+                                        "Number": "None"
+                                    },
+                                    {
+                                        "Ko": "None"
+                                    },
+                                    {
+                                        "En": "None"
+                                    },
+                                    {
+                                        "Ja": "None"
+                                    },
+                                    {
+                                        "Zh": "None"
+                                    },
+                                    {
+                                        "Es": "None"
+                                    }
+                                ]
                             }
                         ]
                     }

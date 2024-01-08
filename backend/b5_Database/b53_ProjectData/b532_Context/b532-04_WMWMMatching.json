@@ -12,38 +12,91 @@
         "Completion": "No"
     },
     {
-        "WMWMCompeletions": [
+        "BookContext":
+        {
+            "Title": "None",
+            "Vector":
             {
-                "WMWMChunkId": 0,
-                "ChunkId": 0,
-                "Chunk": "None",
-                "Domain": "None",
-                "Wildness": "None",
+                "Purpose": "None",
+                "Reason": "None",
+                "Question": "None",
+                "Subject": "None",
+                "Reader": "None",
+                "Importance": 0
+            },
+            "WMWM":
+            {
+                "Needs": "None",
                 "Wisdom": "None",
                 "Mind": "None",
-                "Accuracy": "None"
+                "Wildness": "None",
+                "Accuracy": 0
             }
-        ]
-    },
-    {
-        "WMWMQuerys": [
+        },
+        "SplitedIndexContexts": [
             {
-                "WMWMId": 0,
-                "WMWMTag": "Narrator",
-                "WMWMList": ["None"],
-                "WMWM": "None"
-            },
+                "IndexId":0,
+                "Vector":
+                {
+                    "Purpose": "None",
+                    "Reason": "None",
+                    "Question": "None",
+                    "Subject": "None",
+                    "Reader": "None",
+                    "Importance": 0
+                },
+                "WMWM":
+                {
+                    "Needs": "None",
+                    "Wisdom": "None",
+                    "Mind": "None",
+                    "Wildness": "None",
+                    "Accuracy": 0
+                }
+            }
+        ],
+        "SplitedBodyContexts": [
             {
-                "WMWMId": 0,
-                "WMWMTag": "MainChracter",
-                "WMWMList": ["None"],
-                "WMWM": "None"
-            },
+                "BodyId": 0,
+                "Vector":
+                {
+                    "Purpose": "None",
+                    "Reason": "None",
+                    "Question": "None",
+                    "Subject": "None",
+                    "Reader": "None",
+                    "Importance": 0
+                },
+                "WMWM":
+                {
+                    "Needs": "None",
+                    "Wisdom": "None",
+                    "Mind": "None",
+                    "Wildness": "None",
+                    "Accuracy": 0
+                }
+            }
+        ],
+        "SplitedChunkContexts": [
             {
-                "WMWMId": 0,
-                "WMWMTag": "Chracter",
-                "WMWMList": ["None"],
-                "WMWM": "None"
+                "ChunkId": 0,
+                "Vector":
+                {
+                    "Purpose": "None",
+                    "Reason": "None",
+                    "Question": "None",
+                    "Subject": "None",
+                    "Reader": "None",
+                    "Importance": 0
+                },
+                "WMWM":
+                {
+                    "Needs": "None",
+                    "Wisdom": "None",
+                    "Mind": "None",
+                    "Wildness": "None",
+                    "Accuracy": 0
+                }
             }
         ]
     }

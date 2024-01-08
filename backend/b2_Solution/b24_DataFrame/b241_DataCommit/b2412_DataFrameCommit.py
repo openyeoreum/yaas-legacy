@@ -781,7 +781,7 @@ def AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Nee
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Wisdom, Needs, ReasonOfNeeds, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
+        UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
         
         flag_modified(project, "WMWMDefine")
         

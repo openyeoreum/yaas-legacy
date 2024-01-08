@@ -18,19 +18,18 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 ## ContextFrame 로드
 def LoadContextCompeletions(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
+    HalfBodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
     ContextChunks = project.ContextDefine[1]['ContextChunks'][1:]
     ContextCompeletions = project.ContextCompletion[1]['ContextCompeletions'][1:]
     WMWMCompeletions =  project.WMWMDefine[1]['WMWMCompeletions'][1:]
     # CharacterChunks = project.CharacterDefine[1]['CharacterChunks'][1:]
     # SFXSplitedBodys = project.SFXMatching[1]['SFXSplitedBodys'][1:]
     
-    
-    return BodyFrameSplitedBodyScripts, ContextChunks, ContextCompeletions, WMWMCompeletions
+    return HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompeletions, WMWMCompeletions
 
 ## BodyFrameBodys의 inputList 치환
 def ContextCompeletionsToInputList(projectName, email):
-    BodyFrameSplitedBodyScripts, ContextChunks, ContextCompeletions, WMWMCompeletions = LoadContextCompeletions(projectName, email)
+    HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompeletions, WMWMCompeletions = LoadContextCompeletions(projectName, email)
     
     Scores = {
         "생리": 1, "안전": 2, "애정": 3, "존경": 4, "자아실현": 5,
@@ -38,12 +37,12 @@ def ContextCompeletionsToInputList(projectName, email):
         "거절": 1, "부정": 2, "중립": 3, "긍정": 4, "수용": 5,
         "소극": 1, "수동": 2, "능동": 3, "적극": 4, "성공": 5
     }
+    BookTitle = HalfBodyFrameSplitedBodyScripts[0]['Index']
     SplitedBodyContexts = []
     SplitedBodyTexts = []
     ContextChunksCount = 0
-    print(len(BodyFrameSplitedBodyScripts))
-    for i in range(len(BodyFrameSplitedBodyScripts)):
-        SplitedBodyScripts = BodyFrameSplitedBodyScripts[i]
+    for i in range(len(HalfBodyFrameSplitedBodyScripts)):
+        SplitedBodyScripts = HalfBodyFrameSplitedBodyScripts[i]
         IndexId = SplitedBodyScripts['IndexId']
         IndexTag = SplitedBodyScripts['IndexTag']
         Index = SplitedBodyScripts['Index']
@@ -99,7 +98,7 @@ def ContextCompeletionsToInputList(projectName, email):
                 if isinstance(ChunkId, list):
                     ChunkId = ChunkId[0]
                 
-                SplitedBodyContextsText.append(f"○ {ContextChunksCount + 1}번째 토론: '{Chunk}' {Index} 중에서\n\n- 토론 도서 -\n\n목차: {Index}\n장르: {Genre}\n성별: {Gender}\n연령: {Age}\n성향: {Personality}\n감성: {Emotion}\n\n- 토론의 내용 -\n\n문구: {Chunk}\n대상독자: {Reader}\n주제: {Subject}\n목적: {Purpose}\n이유: {Reason}\n대표질문: {Question}\n\n- 토론의 유익성 -\n\n필요성: {NeedsScore}\n필요성 배점 이유: {ReasonOfNeeds}\n지식적 유익성: {WisdomScore}\n지식적 유익성 배점 이유: {ReasonOfWisdom}\n마음가짐의 유익성: {MindScore}\n마음가짐의 유익성 배점 이유: {ReasonOfPotentialMind}\n실천의 유익성: {WildnessScore}\n실천의 유익성 배점 이유: {ReasonOfWildness}\n\n\n")
+                SplitedBodyContextsText.append(f"○ {ContextChunksCount + 1}번째 토론: '{Chunk}' {BookTitle} 중에서\n\n- 토론 도서 -\n\n도서명: {BookTitle}\n목차: {Index}\n장르: {Genre}\n성별: {Gender}\n연령: {Age}\n성향: {Personality}\n감성: {Emotion}\n\n- 토론의 내용 -\n\n문구: {Chunk}\n대상독자: {Reader}\n주제: {Subject}\n목적: {Purpose}\n이유: {Reason}\n대표질문: {Question}\n\n- 토론의 유익성 -\n\n필요성: {NeedsScore}\n필요성 배점 이유: {ReasonOfNeeds}\n지식적 유익성: {WisdomScore}\n지식적 유익성 배점 이유: {ReasonOfWisdom}\n마음가짐의 유익성: {MindScore}\n마음가짐의 유익성 배점 이유: {ReasonOfPotentialMind}\n실천의 유익성: {WildnessScore}\n실천의 유익성 배점 이유: {ReasonOfWildness}\n\n\n")
                 
                 ContextChunksCount += 1
                 
@@ -187,6 +186,7 @@ def WMWMMatchingProcess(projectName, email, DataFramePath, Process = "WMWMMatchi
 
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '10', DataFramePath)
     SplitedBodyContexts, inputList = ContextCompeletionsToInputList(projectName, email)
+    
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
         return OutputMemoryDicsFile
@@ -398,4 +398,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    WMWMMatchingProcess(projectName, email, DataFramePath)
+    WMWMMatchingProcess(projectName, email, DataFramePath, Mode = "Example")

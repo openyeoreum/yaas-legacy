@@ -12,71 +12,6 @@
         "Completion": "No"
     },
     {
-        "BookContext":
-        {
-            "Title": "None",
-            "Vector":
-            {
-                "Purpose": "None",
-                "Reason": "None",
-                "Question": "None",
-                "Subject": "None",
-                "Reader": "None",
-                "Importance": 0
-            },
-            "WMWM":
-            {
-                "Needs": "None",
-                "Wisdom": "None",
-                "Mind": "None",
-                "Wildness": "None",
-                "Accuracy": 0
-            }
-        },
-        "SplitedIndexContexts": [
-            {
-                "IndexId":0,
-                "Vector":
-                {
-                    "Purpose": "None",
-                    "Reason": "None",
-                    "Question": "None",
-                    "Subject": "None",
-                    "Reader": "None",
-                    "Importance": 0
-                },
-                "WMWM":
-                {
-                    "Needs": "None",
-                    "Wisdom": "None",
-                    "Mind": "None",
-                    "Wildness": "None",
-                    "Accuracy": 0
-                }
-            }
-        ],
-        "SplitedBodyContexts": [
-            {
-                "BodyId": 0,
-                "Vector":
-                {
-                    "Purpose": "None",
-                    "Reason": "None",
-                    "Question": "None",
-                    "Subject": "None",
-                    "Reader": "None",
-                    "Importance": 0
-                },
-                "WMWM":
-                {
-                    "Needs": "None",
-                    "Wisdom": "None",
-                    "Mind": "None",
-                    "Wildness": "None",
-                    "Accuracy": 0
-                }
-            }
-        ],
         "SplitedChunkContexts": [
             {
                 "ChunkId": 0,
@@ -99,5 +34,76 @@
                 }
             }
         ]
+    },
+    {
+        "SplitedBodyContexts": [
+            {
+                "BodyId": 0,
+                "Vector":
+                {
+                    "Purpose": "None",
+                    "Reason": "None",
+                    "Question": "None",
+                    "Subject": "None",
+                    "Reader": "None",
+                    "Importance": 0
+                },
+                "WMWM":
+                {
+                    "Needs": "None",
+                    "Wisdom": "None",
+                    "Mind": "None",
+                    "Wildness": "None",
+                    "Accuracy": 0
+                }
+            }
+        ]
+    },
+    {
+        "SplitedIndexContexts": [
+            {
+                "IndexId":0,
+                "Vector":
+                {
+                    "Purpose": "None",
+                    "Reason": "None",
+                    "Question": "None",
+                    "Subject": "None",
+                    "Reader": "None",
+                    "Importance": 0
+                },
+                "WMWM":
+                {
+                    "Needs": "None",
+                    "Wisdom": "None",
+                    "Mind": "None",
+                    "Wildness": "None",
+                    "Accuracy": 0
+                }
+            }
+        ]
+    },
+    {
+        "BookContext":
+        {
+            "Title": "None",
+            "Vector":
+            {
+                "Purpose": "None",
+                "Reason": "None",
+                "Question": "None",
+                "Subject": "None",
+                "Reader": "None",
+                "Importance": 0
+            },
+            "WMWM":
+            {
+                "Needs": "None",
+                "Wisdom": "None",
+                "Mind": "None",
+                "Wildness": "None",
+                "Accuracy": 0
+            }
+        }
     }
 ]

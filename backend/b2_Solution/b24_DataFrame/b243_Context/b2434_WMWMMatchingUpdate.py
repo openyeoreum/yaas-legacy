@@ -8,7 +8,8 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedWMWMDefineToDB, AddWMWMDefineChunksToDB, WMWMDefineCountLoad, WMWMDefineCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory
+# AddExistedWMWMMatchingToDB, AddWMWMMatchingChunksToDB, WMWMMatchingCountLoad, WMWMMatchingCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -40,6 +41,7 @@ def ContextCompeletionsToInputList(projectName, email):
     SplitedBodyContexts = []
     SplitedBodyTexts = []
     ContextChunksCount = 0
+    print(len(BodyFrameSplitedBodyScripts))
     for i in range(len(BodyFrameSplitedBodyScripts)):
         SplitedBodyScripts = BodyFrameSplitedBodyScripts[i]
         IndexId = SplitedBodyScripts['IndexId']
@@ -97,7 +99,7 @@ def ContextCompeletionsToInputList(projectName, email):
                 if isinstance(ChunkId, list):
                     ChunkId = ChunkId[0]
                 
-                SplitedBodyContextsText.append(f"○ {ContextChunksCount}번째 토론: '{Chunk}' {Index} 중에서\n\n- 토론 도서 -\n\n목차: {Index}\n장르: {Genre}\n성별: {Gender}\n연령: {Age}\n성향: {Personality}\n감성: {Emotion}\n\n- 토론의 내용 -\n\n문구: {Chunk}\대상독자: {Reader}\n주제: {Subject}\n목적: {Purpose}\n이유: {Reason}\n대표질문: {Question}\n\n- 토론의 유익성 -\n\n필요성: {NeedsScore}\n필요성 배점 이유: {ReasonOfNeeds}\n지식적 유익성: {WisdomScore}\n지식적 유익성 배점 이유: {ReasonOfWisdom}\n마음가짐의 유익성: {MindScore}\n마음가짐의 유익성 배점 이유: {ReasonOfPotentialMind}\n실천의 유익성: {WildnessScore}\n실천의 유익성 배점 이유: {ReasonOfWildness}\n\n\n")
+                SplitedBodyContextsText.append(f"○ {ContextChunksCount + 1}번째 토론: '{Chunk}' {Index} 중에서\n\n- 토론 도서 -\n\n목차: {Index}\n장르: {Genre}\n성별: {Gender}\n연령: {Age}\n성향: {Personality}\n감성: {Emotion}\n\n- 토론의 내용 -\n\n문구: {Chunk}\n대상독자: {Reader}\n주제: {Subject}\n목적: {Purpose}\n이유: {Reason}\n대표질문: {Question}\n\n- 토론의 유익성 -\n\n필요성: {NeedsScore}\n필요성 배점 이유: {ReasonOfNeeds}\n지식적 유익성: {WisdomScore}\n지식적 유익성 배점 이유: {ReasonOfWisdom}\n마음가짐의 유익성: {MindScore}\n마음가짐의 유익성 배점 이유: {ReasonOfPotentialMind}\n실천의 유익성: {WildnessScore}\n실천의 유익성 배점 이유: {ReasonOfWildness}\n\n\n")
                 
                 ContextChunksCount += 1
                 
@@ -106,7 +108,7 @@ def ContextCompeletionsToInputList(projectName, email):
             TaskBody = ''.join(SplitedBodyContextsText)
             SplitedBodyTexts.append({'Id': BodyId, 'Continue': TaskBody})
         else:
-            SplitedBodyTexts.append({'Id': BodyId, 'Pass': 'None'})
+            SplitedBodyTexts.append({'Id': BodyId, 'Pass': ''})
         
     InputList = SplitedBodyTexts
         
@@ -115,8 +117,8 @@ def ContextCompeletionsToInputList(projectName, email):
 ######################
 ##### Filter 조건 #####
 ######################
-## WMWMDefine의 Filter(Error 예외처리)
-def WMWMDefineFilter(MemoTag, responseData, memoryCounter):
+## WMWMMatching의 Filter(Error 예외처리)
+def WMWMMatchingFilter(responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -129,18 +131,12 @@ def WMWMDefineFilter(MemoTag, responseData, memoryCounter):
     # Error3: 자료의 구조가 다를 때의 예외 처리
     for dic in OutputDic:
         try:
-            key = list(dic.keys())[0]
-            if not key in MemoTag:
-                return "JSON에서 오류 발생: JSONMemoTagError"
-            else:
-                if not ('욕구상태' in dic[key] and '욕구상태선택이유' in dic[key] and '이해상태' in dic[key] and '이해상태선택이유' in dic[key] and '마음상태' in dic[key] and '마음상태선택이유' in dic[key] and '행동상태' in dic[key] and '행동상태선택이유' in dic[key] and '정확도' in dic[key]):
-                    return "JSON에서 오류 발생: JSONKeyError"
+            key = '토론요약'
+            if not ('장르' in dic[key] and '성별' in dic[key] and '연령' in dic[key] and '성향' in dic[key] and '감성' in dic[key] and '문구' in dic[key] and '대상독자' in dic[key] and '주제' in dic[key] and '목적' in dic[key] and '이유' in dic[key] and '대표질문' in dic[key] and '필요성' in dic[key] and '필요성배점이유' in dic[key] and '지식적유익성' in dic[key] and '지식적유익성배점이유' in dic[key] and '마음가짐의유익성' in dic[key] and '마음가짐의유익성배점이유' in dic[key] and '실천의유익성' in dic[key] and '실천의유익성배점이유' in dic[key]):
+                return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
-        # Error4: Input과 Output의 개수가 다를 때의 예외처리
-        if len(OutputDic) != len(MemoTag):
-            return f"JSONCount에서 오류 발생: JSONCountError, OutputDic: {len(OutputDic)}, MemoTag: {len(MemoTag)}"
         
     return {'json': outputJson, 'filter': OutputDic}
 
@@ -148,7 +144,7 @@ def WMWMDefineFilter(MemoTag, responseData, memoryCounter):
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def WMWMDefineInputMemory(inputMemoryDics, MemoryLength):
+def WMWMMatchingInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -164,7 +160,7 @@ def WMWMDefineInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def WMWMDefineOutputMemory(outputMemoryDics, MemoryLength):
+def WMWMMatchingOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -184,18 +180,17 @@ def WMWMDefineOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## WMWMDefine 프롬프트 요청 및 결과물 Json화
-def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## WMWMMatching 프롬프트 요청 및 결과물 Json화
+def WMWMMatchingProcess(projectName, email, DataFramePath, Process = "WMWMMatching", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '09', DataFramePath)
-    inputList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '10', DataFramePath)
+    SplitedBodyContexts, inputList = ContextCompeletionsToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
         return OutputMemoryDicsFile
 
-    FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
     ContinueCount = 0
@@ -206,7 +201,7 @@ def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine",
     outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
         
-    # WMWMDefineProcess
+    # WMWMMatchingProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -221,41 +216,21 @@ def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine",
                 ContinueCount += 1
             if ContinueCount == 1:
                 mode = "ExampleFineTuning"
-                # "ExampleFineTuning"의 fineTuningMemory 형성
-                FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
             else:
                 mode = "MemoryFineTuning"
         # Example 계열 모드의 순서
         elif Mode == "Master":
             mode = "Master"
-            # "Master"의 MasterMemory 형성
-            MasterMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
         elif Mode == "ExampleFineTuning":
             mode = "ExampleFineTuning"
-            # "ExampleFineTuning"의 fineTuningMemory 형성
-            FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
         elif Mode == "Example":
             mode = "Example"
             
         if "Continue" in InputDic:
-            if Mode == "Master":
-                Keys = list(MasterMemory.keys())
-                Input = MasterMemory[Keys[1]] + InputDic['Continue']
-            elif Mode == "ExampleFineTuning":
-                Keys = list(FineTuningMemory.keys())
-                Input = FineTuningMemory[Keys[1]] + InputDic['Continue']
-            else:
-                Input = InputDic['Continue']
+            Input = InputDic['Continue']
             
-            # Filter, MemoryCounter, OutputEnder 처리
-            if Mode == "Master" or Mode == "ExampleFineTuning":
-                memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(Input))
-            else:
-                memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(InputDic))
-            
-            MemoTag = ["핵심문구" + match for match in memoTag]
-            memoryCounter = " - 이어서 작업할 데이터 (갯수만큼만 딱 맞게 작성): " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + ' -\n'
-            outputEnder = f"{{'핵심문구"
+            memoryCounter = "\n"
+            outputEnder = ""
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -275,7 +250,7 @@ def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine",
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                                 
-            Filter = WMWMDefineFilter(MemoTag, responseData, memoryCounter)
+            Filter = WMWMMatchingFilter(responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -311,15 +286,15 @@ def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine",
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = WMWMDefineInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = WMWMMatchingInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = WMWMDefineOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = WMWMMatchingOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '09', DataFramePath)
+        SaveOutputMemory(projectName, email, outputMemoryDics, '10', DataFramePath)
     
     return outputMemoryDics
 
@@ -328,13 +303,13 @@ def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine",
 ################################
     
 ## 데이터 치환
-def WMWMDefineResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
+def WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     ContextDefine = project.ContextDefine[1]['ContextChunks'][1:]
     
     # 데이터 치환
-    outputMemoryDics = WMWMDefineProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     ContextDefineCount = 0
@@ -358,20 +333,20 @@ def WMWMDefineResponseJson(projectName, email, DataFramePath, messagesReview = '
 
     return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 WMWMDefine에 업데이트
-def WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 09_WMWMDefineUpdate 시작 >")
-    # WMWMDefine의 Count값 가져오기
-    ContinueCount, WMWMCount, Completion = WMWMDefineCountLoad(projectName, email)
+## 프롬프트 요청 및 결과물 Json을 WMWMMatching에 업데이트
+def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 10_WMWMMatchingUpdate 시작 >")
+    # WMWMMatching의 Count값 가져오기
+    ContinueCount, WMWMCount, Completion = WMWMMatchingCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedWMWMDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "WMWMDefine", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 09_WMWMDefineUpdate는 ExistedWMWMDefine으로 대처됨 ]\n")
+            AddExistedWMWMMatchingToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "WMWMMatching", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 10_WMWMMatchingUpdate는 ExistedWMWMMatching으로 대처됨 ]\n")
         else:
-            responseJson = WMWMDefineResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+            responseJson = WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -382,11 +357,11 @@ def WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', 
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'WMWMDefineUpdate')
+                            desc = 'WMWMMatchingUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'WMWMDefineUpdate: {Update}')
+                UpdateTQDM.set_description(f'WMWMMatchingUpdate: {Update}')
                 time.sleep(0.0001)
                 WMWMChunkId += 1
                 ChunkId = Update["ChunkId"]
@@ -401,17 +376,17 @@ def WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', 
                 ReasonOfWildness = Update["ReasonOfWildness"]
                 Accuracy = Update["Accuracy"]
                 
-                AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfMind, Wildness, ReasonOfWildness, Accuracy)
+                AddWMWMMatchingChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfMind, Wildness, ReasonOfWildness, Accuracy)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            WMWMDefineCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 09_WMWMDefineUpdate 완료 ]\n")
+            WMWMMatchingCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 10_WMWMMatchingUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 09_WMWMDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 10_WMWMMatchingUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 
@@ -423,4 +398,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    ContextCompeletionsToInputList(projectName, email)
+    WMWMMatchingProcess(projectName, email, DataFramePath)

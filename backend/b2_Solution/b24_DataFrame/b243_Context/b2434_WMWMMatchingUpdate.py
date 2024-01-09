@@ -365,7 +365,13 @@ def outputMemoryDicsToResponseJson(SplitedContexts, outputMemoryDics):
             Reason = responseDic['이유']
             Question = responseDic['대표질문']
             Subject = responseDic['주제']
+            # Subject가 리스트가 아닐 경우의 처리
+            if not isinstance(Subject, list):
+                Subject = [s.strip() for s in Subject.split(',')]
             Reader = responseDic['대상독자']
+            # Reader가 리스트가 아닐 경우의 처리
+            if not isinstance(Reader, list):
+                Reader = [r.strip() for r in Reader.split(',')]
             importanceList = []
             for j in (range(len(splitedContexts))):
                 importance = splitedContexts[j]['Vector']['ContextDefine']['Importance']
@@ -419,13 +425,15 @@ def outputMemoryDicsToResponseJson(SplitedContexts, outputMemoryDics):
     return ResponseJson
 
 ## WMWMMatchingBody 데이터 치환
-def WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, processNumber = '10-1', messagesReview = 'off', mode = "Memory"):   
+def WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Example"):   
     # 데이터 치환
-    SplitedContexts, SplitedChunkContexts, outputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, ProcessNumber = processNumber, MessagesReview = messagesReview, Mode = mode)
+    ## B. Body Process ##
+    SplitedContexts, SplitedChunkContexts, outputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, ProcessNumber = '10-1', MessagesReview = messagesReview, Mode = mode)
     
+    ## B. BodyResponseJson 생성 ##
     BodyResponseJson = outputMemoryDicsToResponseJson(SplitedContexts, outputMemoryDics)
 
-    # Inputlist 작성
+    ## B. IndexInputlist 생성 ##
     Input = []
     Inputlist = []
     indexid = 1
@@ -456,7 +464,6 @@ def WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, processNumbe
     
     # inputlist 만들기
     HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompletions, WMWMCompletions = LoadContextCompletions(projectName, email)
-    
     BookTitle = HalfBodyFrameSplitedBodyScripts[0]['Index']
     inputlist = []
     for input in Inputlist:
@@ -480,15 +487,17 @@ def WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, processNumbe
         else:
             inputlist.append({'Id': BodyId, 'Pass': ''})
 
-    return SplitedChunkContexts, BodyResponseJson, inputlist
+    return SplitedChunkContexts, BodyResponseJson, inputlist, BookTitle
 
-## WMWMMatchingIndex 데이터 치환
-def WMWMMatchingIndexResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
+## WMWMMatchingIndex, Book 데이터 치환
+def WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Example"):
 
-    SplitedChunkContexts, BodyResponseJson, inputlist = WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, processNumber = '10-1')
+    SplitedChunkContexts, BodyResponseJson, inputlist, BookTitle = WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode)
     
-    SplitedContexts, SplitedChunkContexts, outputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = inputlist, Process = "WMWMMatching", ProcessNumber = '10-2', MessagesReview = messagesReview, Mode = mode)
+    ## C. Index Process ##
+    SplitedContexts, SplitedChunkContexts, outputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = inputlist, ProcessNumber = '10-2', MessagesReview = messagesReview, Mode = mode)
 
+    ## C. SplitedIndexContexts 생성 ##
     SplitedIndexContexts = []
     CurrentContexts = None
 
@@ -513,16 +522,62 @@ def WMWMMatchingIndexResponseJson(projectName, email, DataFramePath, messagesRev
     if CurrentContexts is not None:
         SplitedIndexContexts.append(CurrentContexts)
     
+    ## C. IndexResponseJson 생성 ##
     IndexResponseJson = outputMemoryDicsToResponseJson(SplitedIndexContexts, outputMemoryDics)
     
+    ## C. BookInputlist 생성 ##
+    Inputlist = [{'Id': 1, 'Continue': None}]
+    inputText = []
     for IndexResponse in IndexResponseJson:
-        print(IndexResponse)
+        IndexId = IndexResponse['IndexId']
+        Index = IndexResponse['Index']
+        Phrases = IndexResponse['Phrases']
+        ContextDefine = IndexResponse['Vector']['ContextDefine']
+        ContextCompletion = IndexResponse['Vector']['ContextCompletion']
+        WMWM = IndexResponse['WMWM']
+        TaskBody = ContextToText(IndexId, BookTitle, Index, Phrases, ContextDefine, ContextCompletion, WMWM)
+        inputText.append(TaskBody)
+        
+    Inputlist[0]['Continue'] = ''.join(inputText)
+    
+    ## D. Book Process ##
+    SplitedContexts, SplitedChunkContexts, OutputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = Inputlist, ProcessNumber = '10-3', MessagesReview = messagesReview, Mode = "Master")
+    
+    ## D. SplitedBodyContexts 생성 ##
+    IndexId = []
+    IndexTag = []
+    Index = []
+    BodyId = []
+    SplitedBodyContexts = []
+    for IndexContexts in SplitedIndexContexts:
+        IndexId.append(IndexContexts['IndexId'])
+        IndexTag.append(IndexContexts['IndexTag'])
+        Index.append(IndexContexts['Index'])
+        BodyId.append(IndexContexts['BodyId'])
+        SplitedBodyContexts += IndexContexts['SplitedBodyContexts']
+        
+    BookContexts = [{"IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "SplitedBodyContexts": SplitedBodyContexts}]
+    
+    ## D. BookResponseJson 생성 ##
+    RawBookResponseJson = outputMemoryDicsToResponseJson(BookContexts, OutputMemoryDics)
+    Phrases = RawBookResponseJson[0]['Phrases']
+    Vector = RawBookResponseJson[0]['Vector']
+    WMWM = RawBookResponseJson[0]['WMWM']
+    BookResponseJson = [{"BookId": 0, "Title": BookTitle, "Phrases": Phrases, "Vector": Vector, "WMWM": WMWM}]
+    
+    ## A. ChunkResponseJson 생성 ##
+    ChunkResponseJson = []
+    for i in range(len(SplitedChunkContexts)):
+        for j in range(len(SplitedChunkContexts[i])):
+            ChunkResponseJson.append(SplitedChunkContexts[i][j])
+    
+    return ChunkResponseJson, BodyResponseJson, IndexResponseJson, BookResponseJson
                                                                                  
 ## 프롬프트 요청 및 결과물 Json을 WMWMMatching에 업데이트
 def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 10_WMWMMatchingUpdate 시작 >")
     # WMWMMatching의 Count값 가져오기
-    ContinueCount, WMWMCount, Completion = WMWMMatchingCountLoad(projectName, email)
+    WMWMChunkCount, WMWMBodyCount, WMWMIndexCount, Completion = WMWMMatchingCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
@@ -531,37 +586,105 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             AddExistedDataSetToDB(projectName, email, "WMWMMatching", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 10_WMWMMatchingUpdate는 ExistedWMWMMatching으로 대처됨 ]\n")
         else:
-            SplitedChunkContexts, responseJson = WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+            ChunkResponseJson, BodyResponseJson, IndexResponseJson, BookResponseJson = WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
+            ## A. ChunkResponseJson ##
             # ResponseJson을 ContinueCount로 슬라이스
-            ResponseJson = responseJson[ContinueCount:]
+            ResponseJson = ChunkResponseJson[WMWMChunkCount:]
             ResponseJsonCount = len(ResponseJson)
+                        
+            # TQDM 셋팅
+            UpdateTQDM = tqdm(ResponseJson,
+                            total = ResponseJsonCount,
+                            desc = 'WMWMMatchingChunkUpdate')
+            # i값 수동 생성
+            i = 0
+            for Update in UpdateTQDM:
+                UpdateTQDM.set_description(f'WMWMMatchingChunkUpdate: {Update}')
+                time.sleep(0.0001)
+                ChunkId = Update["ChunkId"]
+                Chunk = Update["Chunk"]
+                Vector = Update["Vector"]
+                WMWM = Update["WMWM"]
+                
+                AddWMWMMatchingChunksToDB(projectName, email, ChunkId, Chunk, Vector, WMWM)
+                # i값 수동 업데이트
+                i += 1
             
-            WMWMChunkId = ContinueCount
+            UpdateTQDM.close()
+            
+            ## B. BodyResponseJson ##
+            # ResponseJson을 ContinueCount로 슬라이스
+            ResponseJson = BodyResponseJson[WMWMBodyCount:]
+            ResponseJsonCount = len(ResponseJson)
             
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'WMWMMatchingUpdate')
+                            desc = 'WMWMMatchingBodyUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'WMWMMatchingUpdate: {Update}')
+                UpdateTQDM.set_description(f'WMWMMatchingBodyUpdate: {Update}')
                 time.sleep(0.0001)
-                WMWMChunkId += 1
-                ChunkId = Update["ChunkId"]
-                Chunk = Update["Chunk"]
-                Needs = Update["Needs"]
-                ReasonOfNeeds = Update["ReasonOfNeeds"]
-                Wisdom = Update["Wisdom"]
-                ReasonOfWisdom = Update["ReasonOfWisdom"]
-                Mind = Update["Mind"]
-                ReasonOfMind = Update["ReasonOfMind"]
-                Wildness = Update["Wildness"]
-                ReasonOfWildness = Update["ReasonOfWildness"]
-                Accuracy = Update["Accuracy"]
+                BodyId = Update["BodyId"]
+                Phrases = Update["Phrases"]
+                Vector = Update["Vector"]
+                WMWM = Update["WMWM"]
                 
-                AddWMWMMatchingChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfMind, Wildness, ReasonOfWildness, Accuracy)
+                AddWMWMMatchingBodysToDB(projectName, email, BodyId, Phrases, Vector, WMWM)
+                # i값 수동 업데이트
+                i += 1
+            
+            UpdateTQDM.close()
+            
+            ## C. IndexResponseJson ##
+            # ResponseJson을 ContinueCount로 슬라이스
+            ResponseJson = IndexResponseJson[WMWMIndexCount:]
+            ResponseJsonCount = len(ResponseJson)
+            
+            # TQDM 셋팅
+            UpdateTQDM = tqdm(ResponseJson,
+                            total = ResponseJsonCount,
+                            desc = 'WMWMMatchingIndexUpdate')
+            # i값 수동 생성
+            i = 0
+            for Update in UpdateTQDM:
+                UpdateTQDM.set_description(f'WMWMMatchingIndexUpdate: {Update}')
+                time.sleep(0.0001)
+                IndexId = Update["IndexId"]
+                Index = Update["Index"]
+                Phrases = Update["Phrases"]
+                Vector = Update["Vector"]
+                WMWM = Update["WMWM"]
+                
+                AddWMWMMatchingIndexsToDB(projectName, email, IndexId, Index, Phrases, Vector, WMWM)
+                # i값 수동 업데이트
+                i += 1
+            
+            UpdateTQDM.close()
+            
+            ## D. BookResponseJson ##
+            # ResponseJson을 ContinueCount로 슬라이스
+            ResponseJson = BookResponseJson
+            ResponseJsonCount = len(ResponseJson)
+            
+            # TQDM 셋팅
+            UpdateTQDM = tqdm(ResponseJson,
+                            total = ResponseJsonCount,
+                            desc = 'WMWMMatchingBookUpdate')
+            # i값 수동 생성
+            i = 0
+            for Update in UpdateTQDM:
+                UpdateTQDM.set_description(f'WMWMMatchingBookUpdate: {Update}')
+                time.sleep(0.0001)
+                BookId = Update["BookId"]
+                Title = Update["Title"]
+                Phrases = Update["Phrases"]
+                Vector = Update["Vector"]
+                WMWM = Update["WMWM"]
+                
+                AddWMWMMatchingBookToDB(projectName, email, BookId, Title, Phrases, Vector, WMWM)
                 # i값 수동 업데이트
                 i += 1
             
@@ -583,4 +706,18 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Example"
     #########################################################################
-    WMWMMatchingIndexResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode)
+    # ChunkResponseJson, BodyResponseJson, IndexResponseJson, BookResponseJson = WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview)
+    # print('ChunkResponseJson')
+    # print(len(ChunkResponseJson))
+    # print(ChunkResponseJson[0])
+    # print('\n\nBodyResponseJson')
+    # print(len(BodyResponseJson))
+    # print(BodyResponseJson[0])
+    # print('\n\nIndexResponseJson')
+    # print(len(IndexResponseJson))
+    # print(IndexResponseJson[0])
+    # print('\n\nBookResponseJson')
+    # print(len(BookResponseJson))
+    # print(BookResponseJson[0])
+    
+    WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = None, ExistedDataSet = None)

@@ -100,7 +100,8 @@ def AddProjectToDB(projectName, email):
         sFXContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-11_SFXContextTags.json")
         contextDefine = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-01_ContextDefine.json")
         contextCompletion = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-02_ContextCompletion.json")
-        WMWMDefine = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_WMWMDefine.json")
+        wMWMDefine = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_WMWMDefine.json")
+        wMWMMatching = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-04_WMWMMatching.json")
         characterDefine = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-01_CharacterDefine.json")
         characterCompletion = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-02_CharacterCompletion.json")
         sFXMatching = LoadJsonFrame(ProjectDataPath + "/b536_SFX/b536-01_SFXMatching.json")
@@ -154,7 +155,8 @@ def AddProjectToDB(projectName, email):
             ExistingProject.SFXContextTags = sFXContextTags
             ExistingProject.ContextDefine = contextDefine
             ExistingProject.ContextCompletion = contextCompletion
-            ExistingProject.WMWMDefine = WMWMDefine
+            ExistingProject.WMWMDefine = wMWMDefine
+            ExistingProject.WMWMMatching = wMWMMatching
             ExistingProject.CharacterDefine = characterDefine
             ExistingProject.CharacterCompletion = characterCompletion
             ExistingProject.SFXMatching = sFXMatching
@@ -207,7 +209,8 @@ def AddProjectToDB(projectName, email):
                 SFXContextTags = sFXContextTags,
                 ContextDefine = contextDefine,
                 ContextCompletion = contextCompletion,
-                WMWMDefine = WMWMDefine,
+                WMWMDefine = wMWMDefine,
+                WMWMMatching = wMWMMatching,
                 CharacterDefine = characterDefine,
                 CharacterCompletion = characterCompletion,
                 SFXMatching = sFXMatching,

@@ -7,8 +7,9 @@
         "Content": "Body",
         "Language": "Ko",
         "TaskName": "WMWMMatching",
+        "WMWMIndexCount": 0,
+        "WMWMBodyCount": 0,
         "WMWMChunkCount": 0,
-        "WMWMCount": 0,
         "Completion": "No"
     },
     {
@@ -33,9 +34,7 @@
                     "Accuracy": 0
                 }
             }
-        ]
-    },
-    {
+        ],
         "SplitedBodyContexts": [
             {
                 "BodyId": 0,
@@ -57,9 +56,7 @@
                     "Accuracy": 0
                 }
             }
-        ]
-    },
-    {
+        ],
         "SplitedIndexContexts": [
             {
                 "IndexId":0,
@@ -81,9 +78,7 @@
                     "Accuracy": 0
                 }
             }
-        ]
-    },
-    {
+        ],
         "BookContext":
         {
             "Title": "None",

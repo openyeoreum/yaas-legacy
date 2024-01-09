@@ -873,7 +873,6 @@ def AddExistedWMWMMatchingToDB(projectName, email, ExistedDataFrame):
     
         project = GetProject(projectName, email)
         project.WMWMMatching[1] = ExistedDataFrame[1]
-        project.WMWMMatching[2] = ExistedDataFrame[2]
         
         flag_modified(project, "WMWMMatching")
         

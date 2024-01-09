@@ -600,7 +600,7 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'WMWMMatchingChunkUpdate: {Update}')
+                UpdateTQDM.set_description(f'WMWMMatchingChunkUpdate: {Update["Chunk"]}')
                 time.sleep(0.0001)
                 ChunkId = Update["ChunkId"]
                 Chunk = Update["Chunk"]
@@ -625,7 +625,7 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'WMWMMatchingBodyUpdate: {Update}')
+                UpdateTQDM.set_description(f'WMWMMatchingBodyUpdate: {Update["Phrases"]}')
                 time.sleep(0.0001)
                 BodyId = Update["BodyId"]
                 Phrases = Update["Phrases"]
@@ -650,7 +650,7 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'WMWMMatchingIndexUpdate: {Update}')
+                UpdateTQDM.set_description(f'WMWMMatchingIndexUpdate: {Update["Phrases"]}')
                 time.sleep(0.0001)
                 IndexId = Update["IndexId"]
                 Index = Update["Index"]
@@ -676,7 +676,7 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'WMWMMatchingBookUpdate: {Update}')
+                UpdateTQDM.set_description(f'WMWMMatchingBookUpdate: {Update["Title"]}')
                 time.sleep(0.0001)
                 BookId = Update["BookId"]
                 Title = Update["Title"]
@@ -706,18 +706,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Example"
     #########################################################################
-    # ChunkResponseJson, BodyResponseJson, IndexResponseJson, BookResponseJson = WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview)
-    # print('ChunkResponseJson')
-    # print(len(ChunkResponseJson))
-    # print(ChunkResponseJson[0])
-    # print('\n\nBodyResponseJson')
-    # print(len(BodyResponseJson))
-    # print(BodyResponseJson[0])
-    # print('\n\nIndexResponseJson')
-    # print(len(IndexResponseJson))
-    # print(IndexResponseJson[0])
-    # print('\n\nBookResponseJson')
-    # print(len(BookResponseJson))
-    # print(BookResponseJson[0])
-    
-    WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = None, ExistedDataSet = None)

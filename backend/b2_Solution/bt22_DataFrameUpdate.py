@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
@@ -15,6 +15,7 @@ from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_HalfBodyFrameUpdate imp
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2431_ContextDefineUpdate import ContextDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2432_ContextCompletionUpdate import ContextCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2433_WMWMDefineUpdate import WMWMDefineUpdate
+from backend.b2_Solution.b24_DataFrame.b243_Context.b2434_WMWMMatchingUpdate import WMWMMatchingUpdate
 from backend.b2_Solution.b24_DataFrame.b244_Character.b2441_CharacterDefineUpdate import CharacterDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b244_Character.b2442_CharacterCompletionUpdate import CharacterCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b247_SFX.b2471_SFXMatchingUpdate import SFXMatchingUpdate
@@ -262,6 +263,26 @@ if __name__ == "__main__":
             SaveDataFrame(projectName, email, "09_WMWMDefine", updatedWMWMDefine, DataFramePath)
         if existedDataSet == None:
             SaveDataSet(projectName, email, "09", "WMWMDefine", RawDataSetPath)
+        existedDataFrame = None
+        existedDataSet = None
+        
+        
+        #####################
+        ### 10_WMWMMatching ###
+        #####################
+        InitWMWMMatching(projectName, email)
+        InitRawDataSet(projectName, email, "WMWMMatching")
+        if existedDataFrameMode == "on":
+            existedDataFrame = LoadexistedDataFrame(projectName, email, "WMWMMatching", DataFramePath)
+            recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "WMWMMatching", RawDataSetPath)
+        mode = "Example"
+        WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+        
+        if existedDataFrame == None:
+            updatedWMWMMatching = UpdatedWMWMMatching(projectName, email)
+            SaveDataFrame(projectName, email, "10_WMWMMatching", updatedWMWMMatching, DataFramePath)
+        if existedDataSet == None:
+            SaveDataSet(projectName, email, "10", "WMWMMatching", RawDataSetPath)
         existedDataFrame = None
         existedDataSet = None
 

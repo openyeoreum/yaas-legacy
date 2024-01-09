@@ -128,7 +128,7 @@
                 }
             }
         ],
-        "BookContext": [
+        "BookContexts": [
             {
                 "BookId": 0,
                 "Title": "None",

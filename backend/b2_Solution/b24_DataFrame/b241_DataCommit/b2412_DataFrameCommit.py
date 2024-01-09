@@ -998,7 +998,6 @@ def InitWMWMMatching(projectName, email):
         project.WMWMMatching[0]["WMWMIndexCount"] = 0
         project.WMWMMatching[0]["Completion"] = "No"
         project.WMWMMatching[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-04_WMWMMatching.json")[1]
-        project.WMWMMatching[2] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-04_WMWMMatching.json")[2]
 
         flag_modified(project, "WMWMMatching")
         

@@ -635,9 +635,9 @@ def AddExistedContextCompletionToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
 
-## 8. 1-1 ContextCompletion의 Body(본문) ContextCompeletions 업데이트 형식
-def UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy):    
-    updateContextCompeletions = {
+## 8. 1-1 ContextCompletion의 Body(본문) ContextCompletions 업데이트 형식
+def UpdateCompletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy):    
+    updateContextCompletions = {
         "ContextChunkId": ContextChunkId,
         "ChunkId": ChunkId,
         "Chunk": Chunk,
@@ -649,15 +649,15 @@ def UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Ge
         "Accuracy": Accuracy
     }
     
-    project.ContextCompletion[1]["ContextCompeletions"].append(updateContextCompeletions)
+    project.ContextCompletion[1]["ContextCompletions"].append(updateContextCompletions)
     project.ContextCompletion[0]["ContextChunkCount"] = ContextChunkId
     
-## 8. 1-2 ContextCompletion의 Body(본문) ContextCompeletions 업데이트
+## 8. 1-2 ContextCompletion의 Body(본문) ContextCompletions 업데이트
 def AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy)
+        UpdateCompletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy)
         
         flag_modified(project, "ContextCompletion")
         
@@ -756,9 +756,9 @@ def AddExistedWMWMDefineToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
 
-## 9. 1-1 WMWMDefine의 Body(본문) WMWMCompeletions 업데이트 형식
-def UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):    
-    updateWMWMCompeletions = {
+## 9. 1-1 WMWMDefine의 Body(본문) WMWMCompletions 업데이트 형식
+def UpdateCompletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):    
+    updateWMWMCompletions = {
         "WMWMChunkId": WMWMChunkId,
         "ChunkId": ChunkId,
         "Chunk": Chunk,
@@ -773,15 +773,15 @@ def UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOf
         "Accuracy": Accuracy
     }
     
-    project.WMWMDefine[1]["WMWMCompeletions"].append(updateWMWMCompeletions)
+    project.WMWMDefine[1]["WMWMCompletions"].append(updateWMWMCompletions)
     project.WMWMDefine[0]["WMWMChunkCount"] = WMWMChunkId
     
-## 9. 1-2 WMWMDefine의 Body(본문) WMWMCompeletions 업데이트
+## 9. 1-2 WMWMDefine의 Body(본문) WMWMCompletions 업데이트
 def AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
+        UpdateCompletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
         
         flag_modified(project, "WMWMDefine")
         
@@ -879,60 +879,97 @@ def AddExistedWMWMMatchingToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
 
-## 10. 1-1 WMWMMatching의 Body(본문) WMWMCompeletions 업데이트 형식
-def UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):    
-    updateWMWMCompeletions = {
-        "WMWMChunkId": WMWMChunkId,
+## 10. 1-1 WMWMMatching의 Body(본문) SplitedChunkContexts 업데이트 형식
+def UpdateSplitedChunkContexts(project, ChunkId, Chunk, Vector, WMWM):    
+    updateSplitedChunkContexts = {
         "ChunkId": ChunkId,
         "Chunk": Chunk,
-        "Needs": Needs,
-        "ReasonOfNeeds": ReasonOfNeeds,
-        "Wisdom": Wisdom,
-        "ReasonOfWisdom": ReasonOfWisdom,
-        "Mind": Mind,
-        "ReasonOfPotentialMind": ReasonOfPotentialMind,
-        "Wildness": Wildness,
-        "ReasonOfWildness": ReasonOfWildness,
-        "Accuracy": Accuracy
+        "Vector": Vector,
+        "WMWM": WMWM
     }
     
-    project.WMWMMatching[1]["WMWMCompeletions"].append(updateWMWMCompeletions)
-    project.WMWMMatching[0]["WMWMChunkCount"] = WMWMChunkId
+    project.WMWMMatching[1]["SplitedChunkContexts"].append(updateSplitedChunkContexts)
+    project.WMWMMatching[0]["WMWMChunkCount"] = ChunkId
     
-## 10. 1-2 WMWMMatching의 Body(본문) WMWMCompeletions 업데이트
-def AddWMWMMatchingChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):
+## 10. 1-2 WMWMMatching의 Body(본문) SplitedChunkContexts 업데이트
+def AddWMWMMatchingChunksToDB(projectName, email, ChunkId, Chunk, Vector, WMWM):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
+        UpdateSplitedChunkContexts(project, ChunkId, Chunk, Vector, WMWM)
         
         flag_modified(project, "WMWMMatching")
         
         db.add(project)
         db.commit()
         
-## 10. 2-1 WMWMMatching의 WMWM(부문) WMWMTags부분 업데이트 형식
-def updateWMWMQuerys(project, WMWMChunkId, ChunkId, Vector, WMWM):
-    # 새롭게 생성되는 WMWMId는 WMWMQuerys의 Len값과 동일
-    WMWMId = len(project.WMWMMatching[2]["WMWMQuerys"]) -1
-    
-    ### 실제 테스크시 수정 요망 ###
-    updateWMWMQuerys = {
-        "WMWMChunkId": WMWMChunkId,
-        "ChunkId": ChunkId,
+## 10. 1-3 WMWMMatching의 Body(본문) SplitedBodyContexts 업데이트 형식
+def UpdateSplitedBodyContexts(project, BodyId, Phrases, Vector, WMWM):    
+    updateSplitedBodyContexts = {
+        "BodyId": BodyId,
+        "Phrases": Phrases,
         "Vector": Vector,
         "WMWM": WMWM
     }
     
-    project.WMWMMatching[2]["WMWMQuerys"].append(updateWMWMQuerys)
-    project.WMWMMatching[0]["WMWMCount"] = WMWMId
+    project.WMWMMatching[1]["SplitedBodyContexts"].append(updateSplitedBodyContexts)
+    project.WMWMMatching[0]["WMWMBodyCount"] = BodyId
     
-## 10. 2-2 WMWMMatching의 WMWM(부문) WMWMTags부분 업데이트
-def AddWMWMMatchingWMWMQuerysToDB(projectName, email, WMWMChunkId, ChunkId, Vector, WMWM):
+## 10. 1-4 WMWMMatching의 Body(본문) SplitedBodyContexts 업데이트
+def AddWMWMMatchingBodysToDB(projectName, email, BodyId, Phrases, Vector, WMWM):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        updateWMWMQuerys(project, WMWMChunkId, ChunkId, Vector, WMWM)
+        UpdateSplitedBodyContexts(project, BodyId, Phrases, Vector, WMWM)
+        
+        flag_modified(project, "WMWMMatching")
+        
+        db.add(project)
+        db.commit()
+        
+## 10. 1-5 WMWMMatching의 Index(본문) SplitedIndexContexts 업데이트 형식
+def UpdateSplitedIndexContexts(project, IndexId, Index, Phrases, Vector, WMWM):    
+    updateSplitedIndexContexts = {
+        "IndexId": IndexId,
+        "Index": Index,
+        "Phrases": Phrases,
+        "Vector": Vector,
+        "WMWM": WMWM
+    }
+    
+    project.WMWMMatching[1]["SplitedIndexContexts"].append(updateSplitedIndexContexts)
+    project.WMWMMatching[0]["WMWMIndexCount"] = IndexId
+    
+## 10. 1-6 WMWMMatching의 Index(본문) SplitedIndexContexts 업데이트
+def AddWMWMMatchingIndexsToDB(projectName, email, IndexId, Index, Phrases, Vector, WMWM):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateSplitedIndexContexts(project, IndexId, Index, Phrases, Vector, WMWM)
+        
+        flag_modified(project, "WMWMMatching")
+        
+        db.add(project)
+        db.commit()
+        
+## 10. 1-7 WMWMMatching의 Book(본문) SplitedBookContexts 업데이트 형식
+def UpdateBookContexts(project, BookId, Title, Phrases, Vector, WMWM):    
+    updateBookContexts = {
+        "BookId": BookId,
+        "Title": Title,
+        "Phrases": Phrases,
+        "Vector": Vector,
+        "WMWM": WMWM
+    }
+    
+    project.WMWMMatching[1]["BookContexts"].append(updateBookContexts)
+    
+## 10. 1-8 WMWMMatching의 Book(본문) SplitedBookContexts 업데이트
+def AddWMWMMatchingBookToDB(projectName, email, BookId, Title, Phrases, Vector, WMWM):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateBookContexts(project, BookId, Title, Phrases, Vector, WMWM)
         
         flag_modified(project, "WMWMMatching")
         
@@ -944,10 +981,11 @@ def WMWMMatchingCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
     WMWMChunkCount = project.WMWMMatching[0]["WMWMChunkCount"]
-    WMWMCount = project.WMWMMatching[0]["WMWMCount"]
+    WMWMBodyCount = project.WMWMMatching[0]["WMWMBodyCount"]
+    WMWMIndexCount = project.WMWMMatching[0]["WMWMIndexCount"]
     Completion = project.WMWMMatching[0]["Completion"]
     
-    return WMWMChunkCount, WMWMCount, Completion
+    return WMWMChunkCount, WMWMBodyCount, WMWMIndexCount, Completion
 
 ## 10. WMWMMatching의 초기화
 def InitWMWMMatching(projectName, email):
@@ -956,10 +994,11 @@ def InitWMWMMatching(projectName, email):
     
         project = GetProject(projectName, email)
         project.WMWMMatching[0]["WMWMChunkCount"] = 0
-        project.WMWMMatching[0]["WMWMCount"] = 0
+        project.WMWMMatching[0]["WMWMBodyCount"] = 0
+        project.WMWMMatching[0]["WMWMIndexCount"] = 0
         project.WMWMMatching[0]["Completion"] = "No"
-        project.WMWMMatching[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_WMWMMatching.json")[1]
-        project.WMWMMatching[2] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_WMWMMatching.json")[2]
+        project.WMWMMatching[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-04_WMWMMatching.json")[1]
+        project.WMWMMatching[2] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-04_WMWMMatching.json")[2]
 
         flag_modified(project, "WMWMMatching")
         
@@ -1095,9 +1134,9 @@ def AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
         
-## 12. 1-1 CharacterCompletion의 Body(본문) CharacterCompeletions 업데이트 형식
-def UpdateCompeletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship):    
-    updateCharacterCompeletions = {
+## 12. 1-1 CharacterCompletion의 Body(본문) CharacterCompletions 업데이트 형식
+def UpdateCompletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship):    
+    updateCharacterCompletions = {
         "CharacterChunkId": CharacterChunkId,
         "ChunkId": ChunkId,
         "Chunk": Chunk,
@@ -1106,15 +1145,15 @@ def UpdateCompeletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Chara
         "AuthorRelationship": AuthorRelationship
     }
     
-    project.CharacterCompletion[1]["CharacterCompeletions"].append(updateCharacterCompeletions)
+    project.CharacterCompletion[1]["CharacterCompletions"].append(updateCharacterCompletions)
     project.CharacterCompletion[0]["CharacterChunkCount"] = CharacterChunkId
     
-## 12. 1-2 CharacterCompletion의 Body(본문) CharacterCompeletions 업데이트
+## 12. 1-2 CharacterCompletion의 Body(본문) CharacterCompletions 업데이트
 def AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateCompeletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship)
+        UpdateCompletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship)
         
         flag_modified(project, "CharacterCompletion")
         

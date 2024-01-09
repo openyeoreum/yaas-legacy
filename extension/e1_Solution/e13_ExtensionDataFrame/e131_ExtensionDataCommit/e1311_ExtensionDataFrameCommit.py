@@ -603,25 +603,25 @@ def AddExistedLifeGraphWMWMDefineToDB(lifeGraphSetName, latestUpdateDate, Existe
         db.add(lifeGraph)
         db.commit()
 
-## 6. 1-1 LifeGraphWMWMDefine의 WMWMCompeletions부분 업데이트 형식
-def UpdateWMWMCompeletions(lifeGraph, LifeGraphId, Translation, WMWMChunks):
+## 6. 1-1 LifeGraphWMWMDefine의 WMWMCompletions부분 업데이트 형식
+def UpdateWMWMCompletions(lifeGraph, LifeGraphId, Translation, WMWMChunks):
     
-    updateWMWMCompeletions = {
+    updateWMWMCompletions = {
         "LifeGraphId": LifeGraphId,
         "Translation": Translation,
         "WMWMChunks": WMWMChunks
     }
     
-    lifeGraph.LifeGraphWMWMDefine[1]["WMWMCompeletions"].append(updateWMWMCompeletions)
+    lifeGraph.LifeGraphWMWMDefine[1]["WMWMCompletions"].append(updateWMWMCompletions)
     # Count 업데이트
     lifeGraph.LifeGraphWMWMDefine[0]["LifeGraphCount"] = LifeGraphId
 
-## 6. 1-2 LifeGraphWMWMDefine의 WMWMCompeletions부분 업데이트
-def AddLifeGraphWMWMDefineCompeletionsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, WMWMChunks):
+## 6. 1-2 LifeGraphWMWMDefine의 WMWMCompletions부분 업데이트
+def AddLifeGraphWMWMDefineCompletionsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, WMWMChunks):
     with get_db() as db:
     
         lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
-        UpdateWMWMCompeletions(lifeGraph, LifeGraphId, Translation, WMWMChunks)
+        UpdateWMWMCompletions(lifeGraph, LifeGraphId, Translation, WMWMChunks)
         
         flag_modified(lifeGraph, "LifeGraphWMWMDefine")
         

@@ -8,37 +8,85 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory
-# AddExistedWMWMMatchingToDB, AddWMWMMatchingChunksToDB, WMWMMatchingCountLoad, WMWMMatchingCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddWMWMMatchingChunksToDB, AddWMWMMatchingBodysToDB, AddWMWMMatchingIndexsToDB, AddWMWMMatchingBookToDB, WMWMMatchingCountLoad, WMWMMatchingCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
 ##### InputList 생성 #####
 #########################
 ## ContextFrame 로드
-def LoadContextCompeletions(projectName, email):
+def LoadContextCompletions(projectName, email):
     project = GetProject(projectName, email)
     HalfBodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
     ContextChunks = project.ContextDefine[1]['ContextChunks'][1:]
-    ContextCompeletions = project.ContextCompletion[1]['ContextCompeletions'][1:]
-    WMWMCompeletions =  project.WMWMDefine[1]['WMWMCompeletions'][1:]
+    ContextCompletions = project.ContextCompletion[1]['ContextCompletions'][1:]
+    WMWMCompletions =  project.WMWMDefine[1]['WMWMCompletions'][1:]
     # CharacterChunks = project.CharacterDefine[1]['CharacterChunks'][1:]
     # SFXSplitedBodys = project.SFXMatching[1]['SFXSplitedBodys'][1:]
     
-    return HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompeletions, WMWMCompeletions
+    return HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompletions, WMWMCompletions
 
 ## BodyFrameBodys의 inputList 치환
-def ContextCompeletionsToInputList(projectName, email):
-    HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompeletions, WMWMCompeletions = LoadContextCompeletions(projectName, email)
+def ContextToText(Id, BookTitle, Index, Chunk, ContextDefine, ContextCompletion, WMWM):
     
     Scores = {
-        "생리": 1, "안전": 2, "애정": 3, "존경": 4, "자아실현": 5,
-        "무지": 1, "인지": 2, "이해": 3, "확신": 4, "지혜": 5,
-        "거절": 1, "부정": 2, "중립": 3, "긍정": 4, "수용": 5,
-        "소극": 1, "수동": 2, "능동": 3, "적극": 4, "성공": 5
+    "생리": 1, "안전": 2, "애정": 3, "존경": 4, "자아실현": 5,
+    "무지": 1, "인지": 2, "이해": 3, "확신": 4, "지혜": 5,
+    "거절": 1, "부정": 2, "중립": 3, "긍정": 4, "수용": 5,
+    "소극": 1, "수동": 2, "능동": 3, "적극": 4, "성공": 5
     }
+    
+    Purpose = ContextDefine['Purpose']
+    Reason = ContextDefine['Reason']
+    Question = ContextDefine['Question']
+    Subject = ContextDefine['Subject']
+    Reader = ContextDefine['Reader']
+    
+    Genre = ContextCompletion['Genre']
+    Gender = ContextCompletion['Gender']
+    Age = ContextCompletion['Age']
+    Personality = ContextCompletion['Personality']
+    Emotion = ContextCompletion['Emotion']
+    
+    Needs = WMWM['Needs']
+    ReasonOfNeeds = WMWM['ReasonOfNeeds']
+    Wisdom = WMWM['Wisdom']
+    ReasonOfWisdom = WMWM['ReasonOfWisdom']
+    Mind = WMWM['Mind']
+    ReasonOfPotentialMind = WMWM['ReasonOfPotentialMind']
+    Wildness = WMWM['Wildness']
+    ReasonOfWildness = WMWM['ReasonOfWildness']
+
+    if not isinstance(Needs, (int, float, complex)):
+        NeedsScore = Scores.get(Needs, 0)
+    else:
+        NeedsScore = Needs
+        
+    if not isinstance(Wisdom, (int, float, complex)):
+        WisdomScore = Scores.get(Wisdom, 0)
+    else:
+        WisdomScore = Wisdom
+        
+    if not isinstance(Mind, (int, float, complex)):
+        MindScore = Scores.get(Mind, 0)
+    else:
+        MindScore = Mind
+        
+    if not isinstance(Wildness, (int, float, complex)):
+        WildnessScore = Scores.get(Wildness, 0)
+    else:
+        WildnessScore = Wildness
+    
+    ContextText = f"○ {Id}번째 토론: '{Chunk}' {BookTitle} 중에서\n\n- 토론 도서 -\n\n도서명: {BookTitle}\n목차: {Index}\n장르: {Genre}\n성별: {Gender}\n연령: {Age}\n성향: {Personality}\n감성: {Emotion}\n\n- 토론의 내용 -\n\n문구: {Chunk}\n대상독자: {Reader}\n주제: {Subject}\n목적: {Purpose}\n이유: {Reason}\n대표질문: {Question}\n\n- 토론의 유익성 -\n\n필요성: {NeedsScore}\n필요성 배점 이유: {ReasonOfNeeds}\n지식적 유익성: {WisdomScore}\n지식적 유익성 배점 이유: {ReasonOfWisdom}\n마음가짐의 유익성: {MindScore}\n마음가짐의 유익성 배점 이유: {ReasonOfPotentialMind}\n실천의 유익성: {WildnessScore}\n실천의 유익성 배점 이유: {ReasonOfWildness}\n\n\n"
+    
+    return ContextText
+    
+def ContextCompletionsToInputList(projectName, email):
+    HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompletions, WMWMCompletions = LoadContextCompletions(projectName, email)
+    
     BookTitle = HalfBodyFrameSplitedBodyScripts[0]['Index']
-    SplitedBodyContexts = []
+    SplitedContexts = []
+    SplitedChunkContexts = []
     SplitedBodyTexts = []
     ContextChunksCount = 0
     for i in range(len(HalfBodyFrameSplitedBodyScripts)):
@@ -61,49 +109,44 @@ def ContextCompeletionsToInputList(projectName, email):
                 ChunkId = ContextCounkId
                 Chunk = ContextChunks[ContextChunksCount]['Chunk']
                 
-                Reader = ContextChunks[ContextChunksCount]['Reader']
-                Subject = ContextChunks[ContextChunksCount]['Subject']
                 Purpose = ContextChunks[ContextChunksCount]['Purpose']
                 Reason = ContextChunks[ContextChunksCount]['Reason']
                 Question = ContextChunks[ContextChunksCount]['Question']
+                Subject = ContextChunks[ContextChunksCount]['Subject']
+                Reader = ContextChunks[ContextChunksCount]['Reader']
                 Importance = ContextChunks[ContextChunksCount]['Importance']
-                ContextDefine = {"Reader": Reader, "Subject": Subject, "Purpose": Purpose, "Reason": Reason, "Question": Question, "Importance": Importance}
+                ContextDefine = {"Purpose": Purpose, "Reason": Reason, "Question": Question, "Subject": Subject, "Reader": Reader, "Importance": Importance}
                 
-                Genre = ContextCompeletions[ContextChunksCount]['Genre']
-                Gender = ContextCompeletions[ContextChunksCount]['Gender']
-                Age = ContextCompeletions[ContextChunksCount]['Age']
-                Personality = ContextCompeletions[ContextChunksCount]['Personality']
-                Emotion = ContextCompeletions[ContextChunksCount]['Emotion']
-                Accuracy = ContextCompeletions[ContextChunksCount]['Accuracy']
-                ContextCompeletion = {"Genre": Genre, "Gender": Gender, "Age": Age, "Personality": Personality, "Emotion": Emotion, "Accuracy": Accuracy}
+                Genre = ContextCompletions[ContextChunksCount]['Genre']
+                Gender = ContextCompletions[ContextChunksCount]['Gender']
+                Age = ContextCompletions[ContextChunksCount]['Age']
+                Personality = ContextCompletions[ContextChunksCount]['Personality']
+                Emotion = ContextCompletions[ContextChunksCount]['Emotion']
+                Accuracy = ContextCompletions[ContextChunksCount]['Accuracy']
+                ContextCompletion = {"Genre": Genre, "Gender": Gender, "Age": Age, "Personality": Personality, "Emotion": Emotion, "Accuracy": Accuracy}
                 
-                Needs = WMWMCompeletions[ContextChunksCount]['Needs']
-                ReasonOfNeeds = WMWMCompeletions[ContextChunksCount]['ReasonOfNeeds']
-                Wisdom = WMWMCompeletions[ContextChunksCount]['Wisdom']
-                ReasonOfWisdom = WMWMCompeletions[ContextChunksCount]['ReasonOfWisdom']
-                Mind = WMWMCompeletions[ContextChunksCount]['Mind']
-                ReasonOfPotentialMind = WMWMCompeletions[ContextChunksCount]['ReasonOfPotentialMind']
-                Wildness = WMWMCompeletions[ContextChunksCount]['Wildness']
-                ReasonOfWildness = WMWMCompeletions[ContextChunksCount]['ReasonOfWildness']
-                accuracy = WMWMCompeletions[ContextChunksCount]['Accuracy']
-                WMWMCompeletion = {"Needs": Needs, "ReasonOfNeeds": ReasonOfNeeds, "Wisdom": Wisdom, "ReasonOfWisdom": ReasonOfWisdom, "Mind": Mind, "ReasonOfPotentialMind": ReasonOfPotentialMind, "Wildness": Wildness, "ReasonOfWildness": ReasonOfWildness, "accuracy": accuracy}
+                Needs = WMWMCompletions[ContextChunksCount]['Needs']
+                ReasonOfNeeds = WMWMCompletions[ContextChunksCount]['ReasonOfNeeds']
+                Wisdom = WMWMCompletions[ContextChunksCount]['Wisdom']
+                ReasonOfWisdom = WMWMCompletions[ContextChunksCount]['ReasonOfWisdom']
+                Mind = WMWMCompletions[ContextChunksCount]['Mind']
+                ReasonOfPotentialMind = WMWMCompletions[ContextChunksCount]['ReasonOfPotentialMind']
+                Wildness = WMWMCompletions[ContextChunksCount]['Wildness']
+                ReasonOfWildness = WMWMCompletions[ContextChunksCount]['ReasonOfWildness']
+                accuracy = WMWMCompletions[ContextChunksCount]['Accuracy']
+                WMWM = {"Needs": Needs, "ReasonOfNeeds": ReasonOfNeeds, "Wisdom": Wisdom, "ReasonOfWisdom": ReasonOfWisdom, "Mind": Mind, "ReasonOfPotentialMind": ReasonOfPotentialMind, "Wildness": Wildness, "ReasonOfWildness": ReasonOfWildness, "Accuracy": accuracy}
                 
-                SplitedBodyContextsList.append({"ChunkId": ChunkId, "Chunk": Chunk, "ContextDefine": ContextDefine, "ContextCompeletion": ContextCompeletion, "WMWMCompeletion": WMWMCompeletion})
+                SplitedBodyContextsList.append({"ChunkId": ChunkId, "Chunk": Chunk, "Vector": {"ContextDefine": ContextDefine, "ContextCompletion": ContextCompletion}, "WMWM": WMWM})
                 
-                NeedsScore = Scores.get(Needs, 0)
-                WisdomScore = Scores.get(Wisdom, 0)
-                MindScore = Scores.get(Mind, 0)
-                WildnessScore = Scores.get(Wildness, 0)
-
-                if isinstance(ChunkId, list):
-                    ChunkId = ChunkId[0]
+                ContextText = ContextToText(ContextChunksCount + 1, BookTitle, Index, Chunk, ContextDefine, ContextCompletion, WMWM)
                 
-                SplitedBodyContextsText.append(f"○ {ContextChunksCount + 1}번째 토론: '{Chunk}' {BookTitle} 중에서\n\n- 토론 도서 -\n\n도서명: {BookTitle}\n목차: {Index}\n장르: {Genre}\n성별: {Gender}\n연령: {Age}\n성향: {Personality}\n감성: {Emotion}\n\n- 토론의 내용 -\n\n문구: {Chunk}\n대상독자: {Reader}\n주제: {Subject}\n목적: {Purpose}\n이유: {Reason}\n대표질문: {Question}\n\n- 토론의 유익성 -\n\n필요성: {NeedsScore}\n필요성 배점 이유: {ReasonOfNeeds}\n지식적 유익성: {WisdomScore}\n지식적 유익성 배점 이유: {ReasonOfWisdom}\n마음가짐의 유익성: {MindScore}\n마음가짐의 유익성 배점 이유: {ReasonOfPotentialMind}\n실천의 유익성: {WildnessScore}\n실천의 유익성 배점 이유: {ReasonOfWildness}\n\n\n")
+                SplitedBodyContextsText.append(ContextText)
                 
                 ContextChunksCount += 1
-                
-        SplitedBodyContexts.append({"IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "SplitedBodyContexts": SplitedBodyContextsList})
+
+        SplitedContexts.append({"IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "SplitedBodyContexts": SplitedBodyContextsList})  
         if SplitedBodyContextsText != []:
+            SplitedChunkContexts.append(SplitedBodyContextsList)
             TaskBody = ''.join(SplitedBodyContextsText)
             SplitedBodyTexts.append({'Id': BodyId, 'Continue': TaskBody})
         else:
@@ -111,7 +154,7 @@ def ContextCompeletionsToInputList(projectName, email):
         
     InputList = SplitedBodyTexts
         
-    return SplitedBodyContexts, InputList
+    return SplitedContexts, SplitedChunkContexts, InputList
 
 ######################
 ##### Filter 조건 #####
@@ -180,16 +223,19 @@ def WMWMMatchingOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## WMWMMatching 프롬프트 요청 및 결과물 Json화
-def WMWMMatchingProcess(projectName, email, DataFramePath, Process = "WMWMMatching", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = None, Process = "WMWMMatching", ProcessNumber = '10-1', memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '10', DataFramePath)
-    SplitedBodyContexts, inputList = ContextCompeletionsToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, ProcessNumber, DataFramePath)
+    SplitedContexts, SplitedChunkContexts, inputList = ContextCompletionsToInputList(projectName, email)
     
+    if BeforeResponse != None:
+        inputList = BeforeResponse
+        
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
-        return OutputMemoryDicsFile
+        return SplitedContexts, SplitedChunkContexts, OutputMemoryDicsFile
 
     TotalCount = 0
     ProcessCount = 1
@@ -294,45 +340,157 @@ def WMWMMatchingProcess(projectName, email, DataFramePath, Process = "WMWMMatchi
         outputMemoryDics.append(OutputDic)
         outputMemory = WMWMMatchingOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '10', DataFramePath)
+        SaveOutputMemory(projectName, email, outputMemoryDics, ProcessNumber, DataFramePath)
     
-    return outputMemoryDics
+    return SplitedContexts, SplitedChunkContexts, outputMemoryDics
 
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
-    
-## 데이터 치환
-def WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
-    # Chunk, ChunkId 데이터 추출
-    project = GetProject(projectName, email)
-    ContextDefine = project.ContextDefine[1]['ContextChunks'][1:]
-    
-    # 데이터 치환
-    outputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
-    
-    responseJson = []
-    ContextDefineCount = 0
-    for response in outputMemoryDics:
+### 데이터 치환
+
+## outputMemoryDics의 ResponseJson변환
+def outputMemoryDicsToResponseJson(SplitedContexts, outputMemoryDics):
+    ResponseJson = []
+    for i, response in enumerate(outputMemoryDics):
         if response != "Pass":
-            for dic in response:
-                for key, value in dic.items():
-                    ChunkId = ContextDefine[ContextDefineCount]['ChunkId']
-                    Chunk = ContextDefine[ContextDefineCount]['Chunk']
-                    Needs = value['욕구상태']
-                    ReasonOfNeeds = value['욕구상태선택이유']
-                    Wisdom = value['이해상태']
-                    ReasonOfWisdom = value['이해상태선택이유']
-                    Mind = value['마음상태']
-                    ReasonOfMind = value['마음상태선택이유']
-                    Wildness = value['행동상태']
-                    ReasonOfWildness = value['행동상태선택이유']
-                    Accuracy = value['정확도']
-                    ContextDefineCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Needs": Needs, "ReasonOfNeeds": ReasonOfNeeds, "Wisdom": Wisdom, "ReasonOfWisdom": ReasonOfWisdom, "Mind": Mind, "ReasonOfMind": ReasonOfMind, "Wildness": Wildness, "ReasonOfWildness": ReasonOfWildness, "Accuracy": Accuracy})
+            responseDic = response[0]['토론요약']
+            IndexId = SplitedContexts[i]['IndexId']
+            Index = SplitedContexts[i]['Index']
+            BodyId = SplitedContexts[i]['BodyId']
+            Phrases = responseDic['문구']
+            splitedContexts = SplitedContexts[i]['SplitedBodyContexts']        
 
-    return responseJson
+            Purpose = responseDic['목적']
+            Reason = responseDic['이유']
+            Question = responseDic['대표질문']
+            Subject = responseDic['주제']
+            Reader = responseDic['대상독자']
+            importanceList = []
+            for j in (range(len(splitedContexts))):
+                importance = splitedContexts[j]['Vector']['ContextDefine']['Importance']
+                importanceList.append(int(importance))
+            
+            total = sum(importanceList)
+            count = len(importanceList)
+            Importance = total / count
+            
+            ContextDefine = {"Purpose": Purpose, "Reason": Reason, "Question": Question, "Subject": Subject, "Reader": Reader, "Importance": Importance}
+            
+            Genre = responseDic['장르']
+            Gender = responseDic['성별']
+            Age = responseDic['연령']
+            Personality = responseDic['성향']
+            Emotion = responseDic['감성']
 
+            accuracyList = []
+            for j in (range(len(splitedContexts))):
+                accuracy = splitedContexts[j]['Vector']['ContextCompletion']['Accuracy']
+                accuracyList.append(int(accuracy))
+            
+            total = sum(accuracyList)
+            count = len(accuracyList)
+            Accuracy = total / count
+
+            ContextCompletion = {"Genre": Genre, "Gender": Gender, "Age": Age, "Personality": Personality, "Emotion": Emotion, "Accuracy": Accuracy}
+            
+            Needs = responseDic['필요성']
+            ReasonOfNeeds = responseDic['필요성배점이유']
+            Wisdom = responseDic['지식적유익성']
+            ReasonOfWisdom = responseDic['지식적유익성배점이유']
+            Mind = responseDic['마음가짐의유익성']
+            ReasonOfPotentialMind = responseDic['마음가짐의유익성배점이유']
+            Wildness = responseDic['실천의유익성']
+            ReasonOfWildness = responseDic['실천의유익성배점이유']
+
+            accuracyList = []
+            for j in (range(len(splitedContexts))):
+                accuracy = splitedContexts[j]['WMWM']['Accuracy']
+                accuracyList.append(int(accuracy))
+            
+            total = sum(accuracyList)
+            count = len(accuracyList)
+            Accuracy = total / count
+
+            WMWM = {"Needs": Needs, "ReasonOfNeeds": ReasonOfNeeds, "Wisdom": Wisdom, "ReasonOfWisdom": ReasonOfWisdom, "Mind": Mind, "ReasonOfPotentialMind": ReasonOfPotentialMind, "Wildness": Wildness, "ReasonOfWildness": ReasonOfWildness, "Accuracy": Accuracy}           
+            
+            ResponseJson.append({"IndexId": IndexId, "Index": Index, "BodyId": BodyId, "Phrases": Phrases, "Vector": {"ContextDefine": ContextDefine, "ContextCompletion": ContextCompletion}, "WMWM": WMWM})
+            
+    return ResponseJson
+
+## WMWMMatchingBody 데이터 치환
+def WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, processNumber = '10-1', messagesReview = 'off', mode = "Memory"):   
+    # 데이터 치환
+    SplitedContexts, SplitedChunkContexts, outputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, ProcessNumber = processNumber, MessagesReview = messagesReview, Mode = mode)
+    
+    BodyResponseJson = outputMemoryDicsToResponseJson(SplitedContexts, outputMemoryDics)
+
+    # Inputlist 작성
+    Input = []
+    Inputlist = []
+    indexid = 1
+    for i in range(len(SplitedContexts)):
+        IndexId = SplitedContexts[i]['IndexId']
+        BodyId = SplitedContexts[i]['BodyId']
+
+        if IndexId == indexid:
+            # 현재 IndexId와 동일한 BodyId의 데이터를 모음
+            for j in range(len(BodyResponseJson)):
+                BodyResponseJsonId = BodyResponseJson[j]['BodyId']
+                if BodyId == BodyResponseJsonId:
+                    Input.append(BodyResponseJson[j])
+        else:
+            # IndexId가 변경되면 현재까지 수집된 데이터를 Inputlist에 추가
+            Inputlist.append(Input)
+            Input = []
+            indexid = IndexId  # indexid 업데이트
+            # 새로운 IndexId에 대한 첫 번째 BodyId 처리
+            for j in range(len(BodyResponseJson)):
+                BodyResponseJsonId = BodyResponseJson[j]['BodyId']
+                if BodyId == BodyResponseJsonId:
+                    Input.append(BodyResponseJson[j])
+
+    # 마지막 IndexId에 대한 데이터를 Inputlist에 추가
+    if Input:
+        Inputlist.append(Input)
+    
+    # inputlist 만들기
+    HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompletions, WMWMCompletions = LoadContextCompletions(projectName, email)
+    
+    BookTitle = HalfBodyFrameSplitedBodyScripts[0]['Index']
+    inputlist = []
+    for input in Inputlist:
+        if input != []:
+            inputText = []
+            for inputBody in input:
+                BodyId = inputBody['BodyId']
+                Index = inputBody['Index']
+                Phrases = inputBody['Phrases']
+                ContextDefine = inputBody['Vector']['ContextDefine']
+                ContextCompletion = inputBody['Vector']['ContextCompletion']
+                WMWM = inputBody['WMWM']
+                TaskBody = ContextToText(BodyId, BookTitle, Index, Phrases, ContextDefine, ContextCompletion, WMWM)
+                inputText.append(TaskBody)
+            if len(inputText) == 1:
+                TaskBody = ''.join(inputText)
+                inputlist.append({'Id': BodyId, 'Pass': TaskBody})
+            else:
+                TaskBody = ''.join(inputText)
+                inputlist.append({'Id': BodyId, 'Continue': TaskBody})
+        else:
+            inputlist.append({'Id': BodyId, 'Pass': ''})
+
+    return SplitedChunkContexts, BodyResponseJson, inputlist
+
+## WMWMMatchingIndex 데이터 치환
+def WMWMMatchingIndexResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
+
+    SplitedChunkContexts, BodyResponseJson, inputlist = WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, processNumber = '10-1')
+    
+    SplitedContexts, SplitedChunkContexts, outputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = inputlist, Process = "WMWMMatching", ProcessNumber = '10-2', MessagesReview = messagesReview, Mode = mode)
+    
+    IndexResponseJson = outputMemoryDicsToResponseJson(SplitedContexts, outputMemoryDics)
+                                                                                 
 ## 프롬프트 요청 및 결과물 Json을 WMWMMatching에 업데이트
 def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 10_WMWMMatchingUpdate 시작 >")
@@ -342,11 +500,11 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedWMWMMatchingToDB(projectName, email, ExistedDataFrame)
+            AddWMWMMatchingBodysToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "WMWMMatching", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 10_WMWMMatchingUpdate는 ExistedWMWMMatching으로 대처됨 ]\n")
         else:
-            responseJson = WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+            SplitedChunkContexts, responseJson = WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -396,6 +554,6 @@ if __name__ == "__main__":
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
-    mode = "Master"
+    mode = "Example"
     #########################################################################
-    WMWMMatchingProcess(projectName, email, DataFramePath, Mode = "Example")
+    WMWMMatchingIndexResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode)

@@ -7,30 +7,46 @@
         "Content": "Body",
         "Language": "Ko",
         "TaskName": "WMWMMatching",
-        "WMWMIndexCount": 0,
-        "WMWMBodyCount": 0,
         "WMWMChunkCount": 0,
+        "WMWMBodyCount": 0,
+        "WMWMIndexCount": 0,
         "Completion": "No"
     },
     {
         "SplitedChunkContexts": [
             {
                 "ChunkId": 0,
-                "Vector":
-                {
-                    "Purpose": "None",
-                    "Reason": "None",
-                    "Question": "None",
-                    "Subject": "None",
-                    "Reader": "None",
-                    "Importance": 0
+                "Chunk": "None",
+                "Vector":{
+                    "ContextDefine":
+                    {
+                        "Purpose": "None",
+                        "Reason": "None",
+                        "Question": "None",
+                        "Subject": "None",
+                        "Reader": "None",
+                        "Importance": 0
+                    },
+                    "ContextCompletion":
+                    {
+                        "Genre": "None",
+                        "Gender": "None",
+                        "Age": "None",
+                        "Personality": "None",
+                        "Emotion": "None",
+                        "Accuracy": 0
+                    }
                 },
                 "WMWM":
                 {
                     "Needs": "None",
+                    "ReasonOfNeeds": "None",
                     "Wisdom": "None",
+                    "ReasonOfWisdom": "None",
                     "Mind": "None",
+                    "ReasonOfMind": "None",
                     "Wildness": "None",
+                    "ReasonOfWildness": "None",
                     "Accuracy": 0
                 }
             }
@@ -38,21 +54,37 @@
         "SplitedBodyContexts": [
             {
                 "BodyId": 0,
-                "Vector":
-                {
-                    "Purpose": "None",
-                    "Reason": "None",
-                    "Question": "None",
-                    "Subject": "None",
-                    "Reader": "None",
-                    "Importance": 0
+                "Phrases": "None",
+                "Vector":{
+                    "ContextDefine":
+                    {
+                        "Purpose": "None",
+                        "Reason": "None",
+                        "Question": "None",
+                        "Subject": "None",
+                        "Reader": "None",
+                        "Importance": 0
+                    },
+                    "ContextCompletion":
+                    {
+                        "Genre": "None",
+                        "Gender": "None",
+                        "Age": "None",
+                        "Personality": "None",
+                        "Emotion": "None",
+                        "Accuracy": 0
+                    }
                 },
                 "WMWM":
                 {
                     "Needs": "None",
+                    "ReasonOfNeeds": "None",
                     "Wisdom": "None",
+                    "ReasonOfWisdom": "None",
                     "Mind": "None",
+                    "ReasonOfMind": "None",
                     "Wildness": "None",
+                    "ReasonOfWildness": "None",
                     "Accuracy": 0
                 }
             }
@@ -60,45 +92,80 @@
         "SplitedIndexContexts": [
             {
                 "IndexId":0,
-                "Vector":
-                {
-                    "Purpose": "None",
-                    "Reason": "None",
-                    "Question": "None",
-                    "Subject": "None",
-                    "Reader": "None",
-                    "Importance": 0
+                "Index": "None",
+                "Phrases": "None",
+                "Vector":{
+                    "ContextDefine":
+                    {
+                        "Purpose": "None",
+                        "Reason": "None",
+                        "Question": "None",
+                        "Subject": "None",
+                        "Reader": "None",
+                        "Importance": 0
+                    },
+                    "ContextCompletion":
+                    {
+                        "Genre": "None",
+                        "Gender": "None",
+                        "Age": "None",
+                        "Personality": "None",
+                        "Emotion": "None",
+                        "Accuracy": 0
+                    }
                 },
                 "WMWM":
                 {
                     "Needs": "None",
+                    "ReasonOfNeeds": "None",
                     "Wisdom": "None",
+                    "ReasonOfWisdom": "None",
                     "Mind": "None",
+                    "ReasonOfMind": "None",
                     "Wildness": "None",
+                    "ReasonOfWildness": "None",
                     "Accuracy": 0
                 }
             }
         ],
-        "BookContext":
-        {
-            "Title": "None",
-            "Vector":
+        "BookContext": [
             {
-                "Purpose": "None",
-                "Reason": "None",
-                "Question": "None",
-                "Subject": "None",
-                "Reader": "None",
-                "Importance": 0
-            },
-            "WMWM":
-            {
-                "Needs": "None",
-                "Wisdom": "None",
-                "Mind": "None",
-                "Wildness": "None",
-                "Accuracy": 0
+                "BookId": 0,
+                "Title": "None",
+                "Phrases": "None",
+                "Vector":{
+                    "ContextDefine":
+                    {
+                        "Purpose": "None",
+                        "Reason": "None",
+                        "Question": "None",
+                        "Subject": "None",
+                        "Reader": "None",
+                        "Importance": 0
+                    },
+                    "ContextCompletion":
+                    {
+                        "Genre": "None",
+                        "Gender": "None",
+                        "Age": "None",
+                        "Personality": "None",
+                        "Emotion": "None",
+                        "Accuracy": 0
+                    }
+                },
+                "WMWM":
+                {
+                    "Needs": "None",
+                    "ReasonOfNeeds": "None",
+                    "Wisdom": "None",
+                    "ReasonOfWisdom": "None",
+                    "Mind": "None",
+                    "ReasonOfMind": "None",
+                    "Wildness": "None",
+                    "ReasonOfWildness": "None",
+                    "Accuracy": 0
+                }
             }
-        }
+        ]
     }
 ]

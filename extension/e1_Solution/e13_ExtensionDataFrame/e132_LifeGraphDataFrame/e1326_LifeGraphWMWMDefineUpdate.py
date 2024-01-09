@@ -9,7 +9,7 @@ from tqdm import tqdm
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph
-from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import LoadExtensionOutputMemory, SaveExtensionOutputMemory, AddExistedLifeGraphWMWMDefineToDB, AddLifeGraphWMWMDefineCompeletionsToDB, AddLifeGraphWMWMDefineQuerysToDB, LifeGraphWMWMDefineCountLoad, InitLifeGraphWMWMDefine, LifeGraphWMWMDefineCompletionUpdate, UpdatedLifeGraphWMWMDefine
+from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import LoadExtensionOutputMemory, SaveExtensionOutputMemory, AddExistedLifeGraphWMWMDefineToDB, AddLifeGraphWMWMDefineCompletionsToDB, AddLifeGraphWMWMDefineQuerysToDB, LifeGraphWMWMDefineCountLoad, InitLifeGraphWMWMDefine, LifeGraphWMWMDefineCompletionUpdate, UpdatedLifeGraphWMWMDefine
 
 #########################
 ##### InputList 생성 #####
@@ -371,7 +371,7 @@ def LifeGraphWMWMDefineUpdate(lifeGraphSetName, latestUpdateDate, LifeGraphDataF
                 Translation = Update["Translation"]
                 WMWMChunks = Update["WMWMChunks"]
 
-                AddLifeGraphWMWMDefineCompeletionsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, WMWMChunks)
+                AddLifeGraphWMWMDefineCompletionsToDB(lifeGraphSetName, latestUpdateDate, LifeGraphId, Translation, WMWMChunks)
                 # i값 수동 업데이트
                 i += 1
             

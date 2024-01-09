@@ -488,8 +488,35 @@ def WMWMMatchingIndexResponseJson(projectName, email, DataFramePath, messagesRev
     SplitedChunkContexts, BodyResponseJson, inputlist = WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, processNumber = '10-1')
     
     SplitedContexts, SplitedChunkContexts, outputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = inputlist, Process = "WMWMMatching", ProcessNumber = '10-2', MessagesReview = messagesReview, Mode = mode)
+
+    SplitedIndexContexts = []
+    CurrentContexts = None
+
+    for context in SplitedContexts:
+        if CurrentContexts is None or CurrentContexts['IndexId'] == context['IndexId']:
+            # 현재 처리 중인 IndexId와 동일하거나 처음인 경우
+            if CurrentContexts is None:
+                CurrentContexts = context.copy()
+                CurrentContexts['BodyId'] = [context['BodyId']]
+                CurrentContexts['SplitedBodyContexts'] = context['SplitedBodyContexts']
+            else:
+                CurrentContexts['BodyId'].append(context['BodyId'])
+                CurrentContexts['SplitedBodyContexts'] += context['SplitedBodyContexts']
+        else:
+            # 현재 처리 중인 IndexId와 다른 경우
+            SplitedIndexContexts.append(CurrentContexts)
+            CurrentContexts = context.copy()
+            CurrentContexts['BodyId'] = [context['BodyId']]
+            CurrentContexts['SplitedBodyContexts'] = context['SplitedBodyContexts']
+
+    # 마지막으로 처리 중인 데이터 추가
+    if CurrentContexts is not None:
+        SplitedIndexContexts.append(CurrentContexts)
     
-    IndexResponseJson = outputMemoryDicsToResponseJson(SplitedContexts, outputMemoryDics)
+    IndexResponseJson = outputMemoryDicsToResponseJson(SplitedIndexContexts, outputMemoryDics)
+    
+    for IndexResponse in IndexResponseJson:
+        print(IndexResponse)
                                                                                  
 ## 프롬프트 요청 및 결과물 Json을 WMWMMatching에 업데이트
 def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):

@@ -21,8 +21,6 @@ def LoadContextCompletions(projectName, email):
     ContextChunks = project.ContextDefine[1]['ContextChunks'][1:]
     ContextCompletions = project.ContextCompletion[1]['ContextCompletions'][1:]
     WMWMCompletions =  project.WMWMDefine[1]['WMWMCompletions'][1:]
-    # CharacterChunks = project.CharacterDefine[1]['CharacterChunks'][1:]
-    # SFXSplitedBodys = project.SFXMatching[1]['SFXSplitedBodys'][1:]
     
     return HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompletions, WMWMCompletions
 
@@ -83,7 +81,7 @@ def ContextToText(Id, BookTitle, Index, Chunk, ContextDefine, ContextCompletion,
     
 def ContextCompletionsToInputList(projectName, email):
     HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompletions, WMWMCompletions = LoadContextCompletions(projectName, email)
-    
+
     BookTitle = HalfBodyFrameSplitedBodyScripts[0]['Index']
     SplitedContexts = []
     SplitedChunkContexts = []
@@ -106,6 +104,8 @@ def ContextCompletionsToInputList(projectName, email):
             else:
                 ContextCounkIdList = [ContextCounkId]
             if FrameChunkId in ContextCounkIdList:
+                # print(FrameChunkId)
+                # print(ContextCounkIdList)
                 ChunkId = ContextCounkId
                 Chunk = ContextChunks[ContextChunksCount]['Chunk']
                 
@@ -142,7 +142,8 @@ def ContextCompletionsToInputList(projectName, email):
                 
                 SplitedBodyContextsText.append(ContextText)
                 
-                ContextChunksCount += 1
+                if ContextChunksCount < len(ContextChunks)-1:
+                    ContextChunksCount += 1
 
         SplitedContexts.append({"IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "SplitedBodyContexts": SplitedBodyContextsList})  
         if SplitedBodyContextsText != []:
@@ -700,9 +701,11 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "웹3.0메타버스"
+    projectName = "데미안"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     mode = "Example"
     #########################################################################
+
+    WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)

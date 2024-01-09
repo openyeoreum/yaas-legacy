@@ -211,7 +211,7 @@ def LLMresponse(projectName, email, Process, Input, Count, root = "backend", Mod
     if Mode == "Master":
       Model = promptFrame[0]["MasterModel"]
     else:
-      if TotalTokens < 4500:
+      if TotalTokens < 14000:
         if Mode in ["Example", "Memory"]:
           Model = promptFrame[0]["BaseModel"]["ShortTokensModel"]
         if Mode == "ExampleFineTuning":

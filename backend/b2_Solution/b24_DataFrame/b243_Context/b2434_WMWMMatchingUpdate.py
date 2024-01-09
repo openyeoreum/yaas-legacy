@@ -2,6 +2,7 @@ import os
 import re
 import json
 import time
+import ast
 import sys
 sys.path.append("/yaas")
 
@@ -275,7 +276,6 @@ def WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = None
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            
             memoryCounter = "\n"
             outputEnder = ""
 
@@ -365,14 +365,27 @@ def outputMemoryDicsToResponseJson(SplitedContexts, outputMemoryDics):
             Purpose = responseDic['목적']
             Reason = responseDic['이유']
             Question = responseDic['대표질문']
+            
             Subject = responseDic['주제']
             # Subject가 리스트가 아닐 경우의 처리
-            if not isinstance(Subject, list):
-                Subject = [s.strip() for s in Subject.split(',')]
+            if isinstance(Subject, str):
+                try:
+                    # 문자열이 리스트 형식이면, 실제 리스트로 변환
+                    Subject = ast.literal_eval(Subject)
+                except (ValueError, SyntaxError):
+                    # 문자열이 일반 문자열이면, 쉼표로 분할
+                    Subject = [s.strip() for s in Subject.split(',')]
+                    
             Reader = responseDic['대상독자']
             # Reader가 리스트가 아닐 경우의 처리
-            if not isinstance(Reader, list):
-                Reader = [r.strip() for r in Reader.split(',')]
+            if isinstance(Reader, str):
+                try:
+                    # 문자열이 리스트 형식이면, 실제 리스트로 변환
+                    Reader = ast.literal_eval(Reader)
+                except (ValueError, SyntaxError):
+                    # 문자열이 일반 문자열이면, 쉼표로 분할
+                    Reader = [r.strip() for r in Reader.split(',')]
+                    
             importanceList = []
             for j in (range(len(splitedContexts))):
                 importance = splitedContexts[j]['Vector']['ContextDefine']['Importance']

@@ -2,7 +2,7 @@
     "TaskName": "IndexDefineDivisionPreprocess",
     "BaseModel": {
         "ShortTokensModel": "gpt-3.5-turbo-1106",
-        "LongTokensModel": "gpt-3.5-turbo-1106"
+        "LongTokensModel": "gpt-4-1106-preview"
     },
     "ExampleFineTunedModel": {
         "ShortTokensModel": [],

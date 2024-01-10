@@ -38,7 +38,7 @@
             {
                 "SFXContextId": 5,
                 "SFXContextTag": "Environment",
-                "SFXContexts": ["산", "숲", "바다", "하늘", "강/계곡", "사막", "시골", "도시", "산업지역","도로"]
+                "SFXContexts": ["산", "숲", "바다", "하늘", "강/계곡", "사막", "시골", "도시", "산업지역", "도로"]
             },
             {
                 "SFXContextId": 6,

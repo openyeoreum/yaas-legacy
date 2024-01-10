@@ -17,26 +17,27 @@
                 "EnvSounds":
                 [
                     {
+                        "ChunkIds": "None",
                         "Sound": "None",
                         "Prompt": "None",
                         "Environment": "None",
                         "Situation": "None",
                         "Era": "None",
                         "Culture": "None",
-                        "Range": "None",
                         "Importance": 0
                     }
                 ],
                 "TrasitionSounds":
                 [
                     {
+                        "ChunkId": "None",
                         "Sound": "None",
                         "Prompt": "None",
+                        "Type": "None",
                         "Environment": "None",
                         "Situation": "None",
                         "Era": "None",
                         "Culture": "None",
-                        "Spot": "None",
                         "Importance": 0
                     }
                 ]

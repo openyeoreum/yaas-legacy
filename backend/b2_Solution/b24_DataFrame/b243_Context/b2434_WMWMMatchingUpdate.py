@@ -9,7 +9,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddWMWMMatchingChunksToDB, AddWMWMMatchingBodysToDB, AddWMWMMatchingIndexsToDB, AddWMWMMatchingBookToDB, WMWMMatchingCountLoad, WMWMMatchingCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedWMWMMatchingToDB, AddWMWMMatchingChunksToDB, AddWMWMMatchingBODYsToDB, AddWMWMMatchingIndexsToDB, AddWMWMMatchingBookToDB, WMWMMatchingCountLoad, WMWMMatchingCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -596,7 +596,7 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddWMWMMatchingBodysToDB(projectName, email, ExistedDataFrame)
+            AddExistedWMWMMatchingToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "WMWMMatching", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 10_WMWMMatchingUpdate는 ExistedWMWMMatching으로 대처됨 ]\n")
         else:
@@ -646,7 +646,7 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                 Vector = Update["Vector"]
                 WMWM = Update["WMWM"]
                 
-                AddWMWMMatchingBodysToDB(projectName, email, BodyId, Phrases, Vector, WMWM)
+                AddWMWMMatchingBODYsToDB(projectName, email, BodyId, Phrases, Vector, WMWM)
                 # i값 수동 업데이트
                 i += 1
             
@@ -720,5 +720,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Example"
     #########################################################################
-
-    WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)

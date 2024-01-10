@@ -916,7 +916,7 @@ def UpdateSplitedBodyContexts(project, BodyId, Phrases, Vector, WMWM):
     project.WMWMMatching[0]["WMWMBodyCount"] = BodyId
     
 ## 10. 1-4 WMWMMatching의 Body(본문) SplitedBodyContexts 업데이트
-def AddWMWMMatchingBodysToDB(projectName, email, BodyId, Phrases, Vector, WMWM):
+def AddWMWMMatchingBODYsToDB(projectName, email, BodyId, Phrases, Vector, WMWM):
     with get_db() as db:
         
         project = GetProject(projectName, email)

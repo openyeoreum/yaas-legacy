@@ -7,6 +7,7 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
+from collections import Counter
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedWMWMMatchingToDB, AddWMWMMatchingChunksToDB, AddWMWMMatchingBODYsToDB, AddWMWMMatchingIndexsToDB, AddWMWMMatchingBookToDB, WMWMMatchingCountLoad, WMWMMatchingCompletionUpdate
@@ -554,6 +555,46 @@ def WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview =
         
     Inputlist[0]['Continue'] = ''.join(inputText)
     
+    ## A. ChunkResponseJson 생성 ##
+    ChunkResponseJson = []
+    GenreList = []
+    GenderList = []
+    AgeList = []
+    PersonalityList = []
+    EmotionList = []
+    for i in range(len(SplitedChunkContexts)):
+        for j in range(len(SplitedChunkContexts[i])):
+            ChunkResponseJson.append(SplitedChunkContexts[i][j])
+            # 각 요소 리스트 형성
+            ContextCompletion = SplitedChunkContexts[i][j]['Vector']['ContextCompletion']
+            GenreList.append(ContextCompletion['Genre'])
+            GenderList.append(ContextCompletion['Gender'])
+            AgeList.append(ContextCompletion['Age'])
+            PersonalityList.append(ContextCompletion['Personality'])
+            EmotionList.append(ContextCompletion['Emotion'])
+    
+    # 각 요소별 % 계산
+    def CalculateRatio(lst):
+        count = Counter(lst)
+        total = len(lst)
+        return {k: (v / total) * 100 for k, v in count.items()}
+    
+    def ItemsWithOthers(RatioDict):
+        sorted_items = sorted(RatioDict.items(), key=lambda item: item[1], reverse=True)
+        Top3 = dict(sorted_items[:3])
+        OthersRatio = 100 - sum(Top3.values())
+        if OthersRatio > 0:
+            Top3['기타'] = OthersRatio
+        return Top3
+
+    GenresRatio = CalculateRatio(GenreList)
+    GendersRatio = CalculateRatio(GenderList)
+    AgesRatio = CalculateRatio(AgeList)
+    PersonalitisRatio = CalculateRatio(PersonalityList)
+    EmotionsRatio = CalculateRatio(EmotionList)
+            
+    ContextCompletionRatio = {"GenreRatio": ItemsWithOthers(GenresRatio), "GenderRatio": ItemsWithOthers(GendersRatio), "AgeRatio": ItemsWithOthers(AgesRatio), "PersonalityRatio": ItemsWithOthers(PersonalitisRatio), "EmotionRatio": ItemsWithOthers(EmotionsRatio)}
+    
     ## D. Book Process ##
     SplitedContexts, SplitedChunkContexts, OutputMemoryDics = WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = Inputlist, ProcessNumber = '10-3', MessagesReview = messagesReview, Mode = "Master")
     
@@ -575,16 +616,34 @@ def WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview =
     ## D. BookResponseJson 생성 ##
     RawBookResponseJson = outputMemoryDicsToResponseJson(BookContexts, OutputMemoryDics)
     Phrases = RawBookResponseJson[0]['Phrases']
-    Vector = RawBookResponseJson[0]['Vector']
+    ContextDefine = RawBookResponseJson[0]['Vector']['ContextDefine']
+    
+    ContextCompletion = RawBookResponseJson[0]['Vector']['ContextCompletion']
+    Genre = ContextCompletion['Genre']
+    GenreRatio = ContextCompletionRatio['GenreRatio']
+    GenreSet = {"Genre": Genre, "GenreRatio": GenreRatio}
+    
+    Gender = ContextCompletion['Gender']
+    GenderRatio = ContextCompletionRatio['GenderRatio']
+    GenderSet = {"Gender": Gender, "GenderRatio": GenderRatio}
+    
+    Age = ContextCompletion['Age']
+    AgeRatio = ContextCompletionRatio['AgeRatio']
+    AgeSet = {"Age": Age, "AgeRatio": AgeRatio}
+    
+    Personality = ContextCompletion['Personality']
+    PersonalityRatio = ContextCompletionRatio['PersonalityRatio']
+    PersonalitySet = {"Personality": Personality, "PersonalityRatio": PersonalityRatio}
+    
+    Emotion = ContextCompletion['Emotion']
+    EmotionRatio = ContextCompletionRatio['EmotionRatio']
+    EmotionSet = {"Emotion": Emotion, "EmotionRatio": EmotionRatio}
+    
+    ContextCompletion = {"Genre": GenreSet, "Gender": GenderSet, "Age": AgeSet, "Personality": PersonalitySet, "Emotion": EmotionSet}
+    
     WMWM = RawBookResponseJson[0]['WMWM']
-    BookResponseJson = [{"BookId": 0, "Title": BookTitle, "Phrases": Phrases, "Vector": Vector, "WMWM": WMWM}]
-    
-    ## A. ChunkResponseJson 생성 ##
-    ChunkResponseJson = []
-    for i in range(len(SplitedChunkContexts)):
-        for j in range(len(SplitedChunkContexts[i])):
-            ChunkResponseJson.append(SplitedChunkContexts[i][j])
-    
+    BookResponseJson = [{"BookId": 0, "Title": BookTitle, "Phrases": Phrases, "Vector": {"ContextDefine": ContextDefine, "ContextCompletion":ContextCompletion}, "WMWM": WMWM}]
+
     return ChunkResponseJson, BodyResponseJson, IndexResponseJson, BookResponseJson
                                                                                  
 ## 프롬프트 요청 및 결과물 Json을 WMWMMatching에 업데이트

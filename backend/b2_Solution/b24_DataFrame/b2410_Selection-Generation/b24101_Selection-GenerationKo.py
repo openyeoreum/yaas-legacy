@@ -18,7 +18,7 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 ##### InputList 생성 #####
 #########################
 ## BodyFrameBodys 로드
-def LoadBodyFrameBodys(projectName, email):
+def LoadFrames(projectName, email):
     project = GetProject(projectName, email)
     BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
     BodyFrameBodys = project.HalfBodyFrame[2]['Bodys'][1:]

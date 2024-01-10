@@ -65,9 +65,20 @@
                     "Age": "None",
                     "Personality": "None",
                     "Emotion": "None",
-                    "Accuracy": "None"
+                    "Accuracy": 0
                 },
-                "Sound": {},
+                "EnvSound": [
+                    {
+                        "ChunkIds": "None",
+                        "Sound": "None",
+                        "Prompt": "None",
+                        "Environment": "None",
+                        "Situation": "None",
+                        "Era": "None",
+                        "Culture": "None",
+                        "Importance": 0
+                    }
+                ],
                 "Selection-GenerationEnSplitedBodys": [
                     {
                         "BodyId": 0,
@@ -116,6 +127,25 @@
                                         "Accuracy": 0
                                     }
                                 },
+                                "CaptionMusic":
+                                {
+                                    "Genre": "None",
+                                    "Gender": "None",
+                                    "Age": "None",
+                                    "Personality": "None",
+                                    "Emotion": "None",
+                                    "Accuracy": 0
+                                },
+                                "TrasitionSound":
+                                {
+                                    "Sound": "None",
+                                    "Prompt": "None",
+                                    "Environment": "None",
+                                    "Situation": "None",
+                                    "Era": "None",
+                                    "Culture": "None",
+                                    "Importance": 0
+                                },
                                 "Voice":
                                 {
                                     "Character": "None",
@@ -132,7 +162,7 @@
                                     "Type": "행동",
                                     "Role": "대상음",
                                     "Direction": "앞",
-                                    "Importance": "90"
+                                    "Importance": 0
                                 },
                                 "Selection-GenerationEnChunkTokens": [
                                     {

@@ -6,39 +6,39 @@
         "ProjectName": "",
         "Content": "Body",
         "Language": "Ko",
-        "TaskName": "SoundMatching",
-        "TaskCount": 0
+        "TaskName": "SFXMatching",
+        "BodyCount": 0,
+        "Completion": "No"
     },
     {
-        "SoundMatchedSplitedBodys": [
+        "SoundSplitedIndexs": [
             {
-                "BodyId": 1,
-                "SoundMatchedSplitedBodyChunks":
+                "IndexId": 1,
+                "EnvSounds":
                 [
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": [{"SoundContextTag": "logue"}, {"SoundContext": "서평"}]},
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": [{"SoundContextTag": "logue"}, {"SoundContext": "서평"}]},
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": [{"SoundContextTag": "logue"}, {"SoundContext": "서평"}]},
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": "None"}
-                ]
-            },
-            {
-                "BodyId": 2,
-                "SoundMatchedSplitedBodyChunks":
+                    {
+                        "Sound": "None",
+                        "Prompt": "None",
+                        "Environment": "None",
+                        "Situation": "None",
+                        "Era": "None",
+                        "Culture": "None",
+                        "Range": "None",
+                        "Importance": 0
+                    }
+                ],
+                "TrasitionSounds":
                 [
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": [{"SoundContextTag": "caption"}, {"SoundContext": "사진"}]},
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": [{"SoundContextTag": "caption"}, {"SoundContext": "사진"}]},
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": [{"SoundContextTag": "caption"}, {"SoundContext": "사진"}]},
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": "None"}
-                ]
-            },
-            {
-                "BodyId": 3,
-                "SoundMatchedSplitedBodyChunks":
-                [
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": [{"SoundContextTag": "transition"}, {"SoundContext": "장소"}]},
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": [{"SoundContextTag": "transition"}, {"SoundContext": "장소"}]},
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": [{"SoundContextTag": "transition"}, {"SoundContext": "장소"}]},
-                    {"ChunkId": "", "SoundId": "", "MatchedSoundTag": "None"}
+                    {
+                        "Sound": "None",
+                        "Prompt": "None",
+                        "Environment": "None",
+                        "Situation": "None",
+                        "Era": "None",
+                        "Culture": "None",
+                        "Spot": "None",
+                        "Importance": 0
+                    }
                 ]
             }
         ]

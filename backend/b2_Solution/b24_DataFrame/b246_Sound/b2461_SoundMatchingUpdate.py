@@ -12,7 +12,7 @@ from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSFXMatchingToDB, AddSFXSplitedBodysToDB, SFXMatchingCountLoad, SFXMatchingCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSoundMatchingToDB, AddSFXSplitedBodysToDB, SoundMatchingCountLoad, SoundMatchingCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -30,47 +30,41 @@ def LoadBodyFrameBodys(projectName, email):
 def BodyFrameBodysToInputList(projectName, email, Task = "Correction"):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     
-    inputList = []
+    InputList = []
     IndexId = 1
     CorrectionTexts = []
-    for i in range(len(BodyFrameBodys)):
-        BodyFrameIndexId = BodyFrameSplitedBodyScripts[i]['BodyId']
+    for i in range(len(BodyFrameSplitedBodyScripts)):
+        BodyFrameIndexId = BodyFrameSplitedBodyScripts[i]['IndexId']
         if BodyFrameIndexId == IndexId:
-            TaskBody = BodyFrameBodys[i][Task]
-            CorrectionTexts.append(TaskBody)
+            SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
+            for j in range(len(SplitedBodyChunks)):
+                ChunkId = SplitedBodyChunks[j]['ChunkId']
+                Chunk = SplitedBodyChunks[j]['Chunk']
+                CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
         else:
-            CorrectionText = ' ●'.join(CorrectionTexts)
-            InputDic = {'Id': IndexId, "Continue": CorrectionText}
-            inputList.append(InputDic)
+            if len(CorrectionTexts) <= 1:
+                Tag = 'Pass'
+            else:
+                Tag = 'Continue'
+            CorrectionText = ' '.join(CorrectionTexts)
+            InputDic = {'Id': IndexId, Tag: CorrectionText}
+            InputList.append(InputDic)
             CorrectionTexts = []
             
-            TaskBody = BodyFrameBodys[i][Task]
-            CorrectionTexts.append(TaskBody)
+            SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
+            for j in range(len(SplitedBodyChunks)):
+                ChunkId = SplitedBodyChunks[j]['ChunkId']
+                Chunk = SplitedBodyChunks[j]['Chunk']
+                CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
             IndexId += 1
-    
-    # # ChunkIdList 형성
-    # InputChunkIdList = []
-    # for Input in InputList:
-    #     InputChunkIds = []
-
-    #     # 'Id'가 리스트인지 확인
-    #     if isinstance(Input['Id'], list):
-    #         for Id in Input['Id']:
-    #             InputChunkIds += BodyFrameBodys[Id - 1]['ChunkId']
-    #     else:
-    #         # 'Id'가 단일 정수인 경우
-    #         Id = Input['Id']
-    #         InputChunkIds += BodyFrameBodys[Id - 1]['ChunkId']
-
-    #     InputChunkIdList.append(InputChunkIds)
         
-    return InputList, InputChunkIdList
+    return InputList
 
 ######################
 ##### Filter 조건 #####
 ######################
-## SFXMatching의 Filter(Error 예외처리)
-def SFXMatchingFilter(Input, responseData, InPutPeriods, memoryCounter):
+## SoundMatching의 Filter(Error 예외처리)
+def SoundMatchingFilter(Input, responseData, InPutPeriods, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -118,7 +112,7 @@ def SFXMatchingFilter(Input, responseData, InPutPeriods, memoryCounter):
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def SFXMatchingInputMemory(inputMemoryDics, MemoryLength):
+def SoundMatchingInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -134,7 +128,7 @@ def SFXMatchingInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def SFXMatchingOutputMemory(outputMemoryDics, MemoryLength):
+def SoundMatchingOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -154,8 +148,8 @@ def SFXMatchingOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## SFXMatching 프롬프트 요청 및 결과물 Json화
-def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## SoundMatching 프롬프트 요청 및 결과물 Json화
+def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatching", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -178,7 +172,7 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
     outputMemory = []
     nonCommonPartList = []
         
-    # SFXMatchingProcess
+    # SoundMatchingProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -229,7 +223,7 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = SFXMatchingFilter(Input, responseData, InPutPeriods, memoryCounter)
+            Filter = SoundMatchingFilter(Input, responseData, InPutPeriods, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -265,13 +259,13 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = SFXMatchingInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = SoundMatchingInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = SFXMatchingOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = SoundMatchingOutputMemory(outputMemoryDics, MemoryLength)
         
         SaveOutputMemory(projectName, email, outputMemoryDics, '15', DataFramePath)
     
@@ -562,13 +556,13 @@ def SplitChunkIntoTokens(Chunk):
     return Tokens
 
 ## 데이터 치환
-def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory", importance = 0):
+def SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory", importance = 0):
     # Chunk, ChunkId 데이터 추출
     InputList, InputChunkIdList = BodyFrameBodysToInputList(projectName, email, Task = "Correction")
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     
     # 데이터 치환
-    outputMemoryDics = SFXMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = SoundMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
 
     # outputMemoryDics의 ChunksList 형성
     ChunkList = []
@@ -668,7 +662,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
     InputsListCount = len(InputsList)
     UpdateTQDM = tqdm(InputsList,
                     total = InputsListCount,
-                    desc = 'SFXMatchingOutputMemoryDicsPreprocess')
+                    desc = 'SoundMatchingOutputMemoryDicsPreprocess')
 
     ResponseJson = []
     MemoryDicsCount = 0
@@ -774,20 +768,20 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
 
     return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 SFXMatching에 업데이트
-def SFXMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, Importance = 0):
-    print(f"< User: {email} | Project: {projectName} | 15_SFXMatchingUpdate 시작 >")
-    # SFXMatching의 Count값 가져오기
-    ContinueCount, Completion = SFXMatchingCountLoad(projectName, email)
+## 프롬프트 요청 및 결과물 Json을 SoundMatching에 업데이트
+def SoundMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, Importance = 0):
+    print(f"< User: {email} | Project: {projectName} | 15_SoundMatchingUpdate 시작 >")
+    # SoundMatching의 Count값 가져오기
+    ContinueCount, Completion = SoundMatchingCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "SFXMatching", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate는 ExistedSFXMatching으로 대처됨 ]\n")
+            AddExistedSoundMatchingToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "SoundMatching", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 15_SoundMatchingUpdate는 ExistedSoundMatching으로 대처됨 ]\n")
         else:
-            responseJson = SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode, importance = Importance)
+            responseJson = SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode, importance = Importance)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -798,11 +792,11 @@ def SFXMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off', 
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'SFXMatchingUpdate')
+                            desc = 'SoundMatchingUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f"SFXMatchingUpdate: {Update['BodyId']}")
+                UpdateTQDM.set_description(f"SoundMatchingUpdate: {Update['BodyId']}")
                 time.sleep(0.0001)
                 SFXSplitedBodyChunks = Update['SFXSplitedBodyChunks']
                 AddSFXSplitedBodysToDB(projectName, email, SFXSplitedBodyChunks)
@@ -812,11 +806,11 @@ def SFXMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off', 
 
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            SFXMatchingCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate 완료 ]\n")
+            SoundMatchingCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 15_SoundMatchingUpdate 완료 ]\n")
 
     else:
-        print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 15_SoundMatchingUpdate는 이미 완료됨 ]\n")
 
 if __name__ == "__main__":
 

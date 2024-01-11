@@ -21,86 +21,48 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
-    BodyFrameBodys = project.HalfBodyFrame[2]['Bodys'][1:]
+    BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
+    BodyFrameBodys = project.BodyFrame[2]['Bodys'][1:]
     
     return BodyFrameSplitedBodyScripts, BodyFrameBodys
 
-## inputList의 InputList 치환 (인덱스, 캡션 부분 합치기)
-def MergeInputList(inputList):
-    InputList = []
-    MergeBuffer = ''
-    MergeIds = []
-    NonMergeFound = False
-
-    for item in inputList:
-        if list(item.keys())[1] == 'Merge':
-            # 'Merge' 태그가 붙은 항목의 내용을 버퍼에 추가하고 ID를 MergeIds에 추가합니다.
-            MergeBuffer += list(item.values())[1]
-            MergeIds.append(item['Id'])
-        else:
-            # 'Merge'가 아닌 태그가 발견된 경우
-            NonMergeFound = True
-            if MergeBuffer:
-                # 버퍼에 내용이 있으면 현재 항목과 합칩니다.
-                content = MergeBuffer + list(item.values())[1]
-                # 'Id'는 MergeIds에 현재 항목의 'Id'를 추가하여 리스트로 만듭니다.
-                currentId = MergeIds + [item['Id']]
-                # 합쳐진 내용과 'Id' 리스트를 가진 새 딕셔너리를 만듭니다.
-                mergedItem = {'Id': currentId, list(item.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
-                InputList.append(mergedItem)
-                # 버퍼와 ID 리스트를 초기화합니다.
-                MergeBuffer = ''
-                MergeIds = []
-            else:
-                # 버퍼가 비어 있으면 현재 항목을 결과 리스트에 그대로 추가합니다.
-                InputList.append(item)
-    
-    # 리스트의 끝에 도달했을 때 버퍼에 남아 있는 'Merge' 내용을 처리합니다.
-    if MergeBuffer and not NonMergeFound:
-        # 모든 항목이 'Merge'인 경우 마지막 항목만 처리합니다.
-        mergedItem = {'Id': MergeIds, list(item.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
-        InputList.append(mergedItem)
-
-    return InputList
-
 ## BodyFrameBodys의 inputList 치환
-def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
+def BodyFrameBodysToInputList(projectName, email, Task = "Correction"):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     
     inputList = []
+    IndexId = 1
+    CorrectionTexts = []
     for i in range(len(BodyFrameBodys)):
-        Id = BodyFrameBodys[i]['BodyId']
-        task = BodyFrameBodys[i]['Task']
-        TaskBody = BodyFrameBodys[i][Task]
-
-        if Task in task:
-            Tag = 'Continue'
-        elif 'Body' not in task:
-            Tag = 'Merge'
+        BodyFrameIndexId = BodyFrameSplitedBodyScripts[i]['BodyId']
+        if BodyFrameIndexId == IndexId:
+            TaskBody = BodyFrameBodys[i][Task]
+            CorrectionTexts.append(TaskBody)
         else:
-            Tag = 'Pass'
+            CorrectionText = ' ●'.join(CorrectionTexts)
+            InputDic = {'Id': IndexId, "Continue": CorrectionText}
+            inputList.append(InputDic)
+            CorrectionTexts = []
             
-        InputDic = {'Id': Id, Tag: TaskBody}
-        inputList.append(InputDic)
-        
-    InputList = MergeInputList(inputList)
+            TaskBody = BodyFrameBodys[i][Task]
+            CorrectionTexts.append(TaskBody)
+            IndexId += 1
     
-    # ChunkIdList 형성
-    InputChunkIdList = []
-    for Input in InputList:
-        InputChunkIds = []
+    # # ChunkIdList 형성
+    # InputChunkIdList = []
+    # for Input in InputList:
+    #     InputChunkIds = []
 
-        # 'Id'가 리스트인지 확인
-        if isinstance(Input['Id'], list):
-            for Id in Input['Id']:
-                InputChunkIds += BodyFrameBodys[Id - 1]['ChunkId']
-        else:
-            # 'Id'가 단일 정수인 경우
-            Id = Input['Id']
-            InputChunkIds += BodyFrameBodys[Id - 1]['ChunkId']
+    #     # 'Id'가 리스트인지 확인
+    #     if isinstance(Input['Id'], list):
+    #         for Id in Input['Id']:
+    #             InputChunkIds += BodyFrameBodys[Id - 1]['ChunkId']
+    #     else:
+    #         # 'Id'가 단일 정수인 경우
+    #         Id = Input['Id']
+    #         InputChunkIds += BodyFrameBodys[Id - 1]['ChunkId']
 
-        InputChunkIdList.append(InputChunkIds)
+    #     InputChunkIdList.append(InputChunkIds)
         
     return InputList, InputChunkIdList
 
@@ -602,7 +564,7 @@ def SplitChunkIntoTokens(Chunk):
 ## 데이터 치환
 def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory", importance = 0):
     # Chunk, ChunkId 데이터 추출
-    InputList, InputChunkIdList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
+    InputList, InputChunkIdList = BodyFrameBodysToInputList(projectName, email, Task = "Correction")
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     
     # 데이터 치환
@@ -866,4 +828,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode, importance = 0)
+    BodyFrameBodysToInputList(projectName, email, Task = "Correction")

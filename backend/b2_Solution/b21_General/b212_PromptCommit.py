@@ -34,6 +34,7 @@ def AddPromptToDB():
         wMWMMatching = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-04_WMWMMatching.json")
         characterDefine = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-01_CharacterDefine.json")
         characterCompletion = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-02_CharacterCompletion.json")
+        soundMatching = LoadJsonFrame(PromptDataPath + "/b545_SoundPrompt/b545-01_SoundMatching.json")
         sFXMatching = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-01_SFXMatching.json")
         sFXMultiQuery = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-02_SFXMultiQuery.json")
         translationKo = LoadJsonFrame(PromptDataPath + "/b547_TranslationPrompt/b547-01_TranslationKo.json")
@@ -58,6 +59,7 @@ def AddPromptToDB():
                 ExistingPrompt.WMWMMatching = wMWMMatching
                 ExistingPrompt.CharacterDefine = characterDefine
                 ExistingPrompt.CharacterCompletion = characterCompletion
+                ExistingPrompt.SoundMatching = soundMatching
                 ExistingPrompt.SFXMatching = sFXMatching
                 ExistingPrompt.SFXMultiQuery = sFXMultiQuery
                 ExistingPrompt.TranslationKo = translationKo
@@ -81,6 +83,7 @@ def AddPromptToDB():
                 WMWMMatching = wMWMMatching,
                 CharacterDefine = characterDefine,
                 CharacterCompletion = characterCompletion,
+                SoundMatching = soundMatching,
                 SFXMatching = sFXMatching,
                 SFXMultiQuery = sFXMultiQuery,
                 TranslationKo = translationKo,

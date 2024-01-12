@@ -104,6 +104,7 @@ def AddProjectToDB(projectName, email):
         wMWMMatching = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-04_WMWMMatching.json")
         characterDefine = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-01_CharacterDefine.json")
         characterCompletion = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-02_CharacterCompletion.json")
+        soundMatching = LoadJsonFrame(ProjectDataPath + "/b535_Sound/b535-01_SoundMatching.json")
         sFXMatching = LoadJsonFrame(ProjectDataPath + "/b536_SFX/b536-01_SFXMatching.json")
         translationKo = LoadJsonFrame(ProjectDataPath + "/b537_Translation/b537-01_TranslationKo.json")
         translationEn = LoadJsonFrame(ProjectDataPath + "/b537_Translation/b537-02_TranslationEn.json")
@@ -159,6 +160,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.WMWMMatching = wMWMMatching
             ExistingProject.CharacterDefine = characterDefine
             ExistingProject.CharacterCompletion = characterCompletion
+            ExistingProject.SoundMatching = soundMatching
             ExistingProject.SFXMatching = sFXMatching
             ExistingProject.TranslationKo = translationKo
             ExistingProject.TranslationEn = translationEn
@@ -213,6 +215,7 @@ def AddProjectToDB(projectName, email):
                 WMWMMatching = wMWMMatching,
                 CharacterDefine = characterDefine,
                 CharacterCompletion = characterCompletion,
+                SoundMatching = soundMatching,
                 SFXMatching = sFXMatching,
                 TranslationKo = translationKo,
                 TranslationEn = translationEn,

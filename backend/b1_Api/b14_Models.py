@@ -397,11 +397,11 @@ class Prompt(Base):
     CharacterDefine = Column(JSON)
     CharacterCompletion = Column(JSON)
     
-    # # MusicPrompt
-    # MusicMatching = Column(JSON)
+    # MusicPrompt
+    MusicMatching = Column(JSON)
     
-    # # SoundPrompt
-    # SoundMatching = Column(JSON)
+    # SoundPrompt
+    SoundMatching = Column(JSON)
     
     # SFXPrompt
     SFXMatching = Column(JSON)
@@ -468,11 +468,11 @@ class TrainingDataset(Base):
     CharacterDefine = Column(JSON)
     CharacterCompletion = Column(JSON)
     
-    # # MusicDataset
-    # MusicMatching = Column(JSON)
+    # MusicDataset
+    MusicMatching = Column(JSON)
     
-    # # SoundDataset
-    # SoundMatching = Column(JSON)
+    # SoundDataset
+    SoundMatching = Column(JSON)
     
     # SFXDataset
     SFXMatching = Column(JSON)

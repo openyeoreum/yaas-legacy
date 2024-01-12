@@ -12,7 +12,7 @@ from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSoundMatchingToDB, AddSFXSplitedBodysToDB, SoundMatchingCountLoad, SoundMatchingCompletionUpdate
+# from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSoundMatchingToDB, AddSFXSplitedBodysToDB, SoundMatchingCountLoad, SoundMatchingCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -153,8 +153,8 @@ def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatc
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '15', DataFramePath)    
-    inputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '14', DataFramePath)    
+    inputList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
         return OutputMemoryDicsFile
@@ -166,11 +166,9 @@ def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatc
     inputMemoryDics = []
     inputMemory = []
     InputDic = InputList[0]
-    InputChunkId = inputChunkIdList[0]
     inputMemoryDics.append(InputDic)
     outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
-    nonCommonPartList = []
         
     # SoundMatchingProcess
     while TotalCount < len(InputList):
@@ -267,7 +265,7 @@ def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatc
         outputMemoryDics.append(OutputDic)
         outputMemory = SoundMatchingOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '15', DataFramePath)
+        SaveOutputMemory(projectName, email, outputMemoryDics, '14', DataFramePath)
     
     return outputMemoryDics
 
@@ -770,7 +768,7 @@ def SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview 
 
 ## 프롬프트 요청 및 결과물 Json을 SoundMatching에 업데이트
 def SoundMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, Importance = 0):
-    print(f"< User: {email} | Project: {projectName} | 15_SoundMatchingUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 14_SoundMatchingUpdate 시작 >")
     # SoundMatching의 Count값 가져오기
     ContinueCount, Completion = SoundMatchingCountLoad(projectName, email)
     if Completion == "No":
@@ -779,7 +777,7 @@ def SoundMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off'
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedSoundMatchingToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "SoundMatching", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 15_SoundMatchingUpdate는 ExistedSoundMatching으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 14_SoundMatchingUpdate는 ExistedSoundMatching으로 대처됨 ]\n")
         else:
             responseJson = SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode, importance = Importance)
             
@@ -807,10 +805,10 @@ def SoundMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off'
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             SoundMatchingCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 15_SoundMatchingUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 14_SoundMatchingUpdate 완료 ]\n")
 
     else:
-        print(f"[ User: {email} | Project: {projectName} | 15_SoundMatchingUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 14_SoundMatchingUpdate는 이미 완료됨 ]\n")
 
 if __name__ == "__main__":
 
@@ -822,4 +820,6 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    BodyFrameBodysToInputList(projectName, email, Task = "Correction")
+    InputList = BodyFrameBodysToInputList(projectName, email)
+    print(InputList[0])
+    # SoundMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)

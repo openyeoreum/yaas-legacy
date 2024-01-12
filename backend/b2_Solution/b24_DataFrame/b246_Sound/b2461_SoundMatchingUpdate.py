@@ -29,35 +29,65 @@ def LoadBodyFrameBodys(projectName, email):
 ## BodyFrameBodys의 inputList 치환
 def BodyFrameBodysToInputList(projectName, email, Task = "Correction"):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
-    
+
     InputList = []
     IndexId = 1
     CorrectionTexts = []
     for i in range(len(BodyFrameSplitedBodyScripts)):
         BodyFrameIndexId = BodyFrameSplitedBodyScripts[i]['IndexId']
+        SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
         if BodyFrameIndexId == IndexId:
-            SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
-            for j in range(len(SplitedBodyChunks)):
-                ChunkId = SplitedBodyChunks[j]['ChunkId']
-                Chunk = SplitedBodyChunks[j]['Chunk']
-                CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
-        else:
-            if len(CorrectionTexts) <= 1:
+            if len(SplitedBodyChunks) == 1:
                 Tag = 'Pass'
-            else:
-                Tag = 'Continue'
-            CorrectionText = ' '.join(CorrectionTexts)
-            InputDic = {'Id': IndexId, Tag: CorrectionText}
-            InputList.append(InputDic)
-            CorrectionTexts = []
-            
-            SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
-            for j in range(len(SplitedBodyChunks)):
-                ChunkId = SplitedBodyChunks[j]['ChunkId']
-                Chunk = SplitedBodyChunks[j]['Chunk']
+                ChunkId = SplitedBodyChunks[0]['ChunkId']
+                Chunk = SplitedBodyChunks[0]['Chunk']
                 CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
+                CorrectionText = ' '.join(CorrectionTexts)
+                InputDic = {'Id': IndexId, Tag: CorrectionText}
+                InputList.append(InputDic)
+                CorrectionTexts = []
+            else:
+                for j in range(len(SplitedBodyChunks)):
+                    ChunkId = SplitedBodyChunks[j]['ChunkId']
+                    Chunk = SplitedBodyChunks[j]['Chunk']
+                    CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
+        else:
+            if len(CorrectionTexts) != 0:
+                if len(CorrectionTexts) == 1:
+                    Tag = 'Pass'
+                else:
+                    Tag = 'Continue'
+                CorrectionText = ' '.join(CorrectionTexts)
+                InputDic = {'Id': IndexId, Tag: CorrectionText}
+                InputList.append(InputDic)
+                CorrectionTexts = []
+
+            if len(SplitedBodyChunks) == 1:
+                Tag = 'Pass'
+                ChunkId = SplitedBodyChunks[0]['ChunkId']
+                Chunk = SplitedBodyChunks[0]['Chunk']
+                CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
+                CorrectionText = ' '.join(CorrectionTexts)
+                InputDic = {'Id': IndexId, Tag: CorrectionText}
+                InputList.append(InputDic)
+                CorrectionTexts = []
+            else:
+                for j in range(len(SplitedBodyChunks)):
+                    ChunkId = SplitedBodyChunks[j]['ChunkId']
+                    Chunk = SplitedBodyChunks[j]['Chunk']
+                    CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
             IndexId += 1
-        
+
+    if CorrectionTexts:
+        if len(CorrectionTexts) <= 1:
+            Tag = 'Pass'
+        else:
+            Tag = 'Continue'
+        CorrectionText = ' '.join(CorrectionTexts)
+        InputDic = {'Id': IndexId, Tag: CorrectionText}
+        InputList.append(InputDic)
+        CorrectionTexts = []
+
     return InputList
 
 ######################
@@ -820,6 +850,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    InputList = BodyFrameBodysToInputList(projectName, email)
-    print(InputList[0])
-    # SoundMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    SoundMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)

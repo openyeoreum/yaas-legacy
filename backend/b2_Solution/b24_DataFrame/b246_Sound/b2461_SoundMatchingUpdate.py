@@ -94,7 +94,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Correction"):
 ##### Filter 조건 #####
 ######################
 ## SoundMatching의 Filter(Error 예외처리)
-def SoundMatchingFilter(Input, responseData, InPutPeriods, memoryCounter):
+def SoundMatchingFilter(responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -103,34 +103,12 @@ def SoundMatchingFilter(Input, responseData, InPutPeriods, memoryCounter):
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
-        return "JSONType에서 오류 발생: JSONTypeError"
-    # Error3: 결과가 list가 아닐 때의 예외 처리
-    OutPutPeriods = str(responseData).count('.')
-    Difference = abs(OutPutPeriods - InPutPeriods) / InPutPeriods * 100
-    if Difference >= 25:
-        return f"INPUT, OUTPUT '.(Periods)' 불일치율 25% 이상 오류 발생: 불일치율({Difference}))"
-    # Error4: 자료의 구조가 다를 때의 예외 처리
-    INPUT = re.sub("[^가-힣]", "", str(Input))
+        return "JSONType에서 오류 발생: JSONTypeError"  
+    # Error3: 자료의 구조가 다를 때의 예외 처리
     for dic in OutputDic:
         try:
             key = list(dic.keys())[0]
-            # '핵심문구' 키에 접근하는 부분에 예외 처리 추가
-            try:
-                OUTPUT = str(dic[key]['길이']).replace('<시작>', '')
-                OUTPUT = OUTPUT.replace('<끝>', '')
-                OUTPUT = re.sub("[^가-힣]", "", OUTPUT)
-            except TypeError:
-                return "JSON에서 오류 발생: TypeError"
-            except KeyError:
-                return "JSON에서 오류 발생: KeyError"
-            if not '효과음' in key:
-                return "JSON에서 오류 발생: JSONKeyError"
-            elif not ('<시작>' in dic[key]['길이'] and '<끝>' in dic[key]['길이']):
-                return f"JSON에서 오류 발생: JSON <시작>, <끝>의 표기가 Output에 포함되지 않음 Error\n문구: {dic[key]['길이']}"
-            elif not OUTPUT in INPUT:
-                print(f"JSON에서 오류 발생: JSON '길이'의 문구가 Input에 포함되지 않음 Error\n문구: {dic[key]['길이']}")
-                dic[key]['길이'] = ''
-            elif not ('명칭' in dic[key] and '영어명칭' in dic[key] and '유형' in dic[key] and '역할' in dic[key] and '공간음향' in dic[key] and '길이' in dic[key] and '필요성' in dic[key]):
+            if not ('전환소리명칭' in dic[key] and '전환소리영어명칭' in dic[key] and '전환소리필요성' in dic[key] and '배경소리명칭' in dic[key] and '배경소리영어명칭' in dic[key] and '배경소리필요성' in dic[key] and '배경소리길이' in dic[key] and '유형' in dic[key] and '환경' in dic[key] and '상황' in dic[key] and '시대' in dic[key] and '문화' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
@@ -230,8 +208,8 @@ def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatc
             InPutPeriods = str(Input).count('.')
             
             # Filter, MemoryCounter, OutputEnder 처리
-            memoryCounter = " - '배경소리'가 자주 변경되면 오디오북의 품질이 매우 낮아짐으로, 가능한 배경소리의 횟수는 최대한 적게, 배경소리 길이는 최대한 길게 하는 것이 중요 -\n"
-            outputEnder = "{{'효과음"
+            memoryCounter = " - '배경소리'와 '전환소리'는 추상적으로 않고 구체적이고 물리적으로 작성 -\n"
+            outputEnder = ""
             
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -251,7 +229,7 @@ def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatc
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = SoundMatchingFilter(Input, responseData, InPutPeriods, memoryCounter)
+            Filter = SoundMatchingFilter(responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -844,7 +822,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "웹3.0메타버스"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"

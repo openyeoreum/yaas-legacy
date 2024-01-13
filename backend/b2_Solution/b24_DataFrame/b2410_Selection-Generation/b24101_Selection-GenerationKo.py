@@ -20,10 +20,51 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 ## BodyFrameBodys 로드
 def LoadFrames(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
-    BodyFrameBodys = project.HalfBodyFrame[2]['Bodys'][1:]
+    BodyFrame = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
     
-    return BodyFrameSplitedBodyScripts, BodyFrameBodys
+    WMWMFrameBookContext = project.WMWMMatching[1]['BookContexts'][1:]
+    WMWMFrameIndexs = project.WMWMMatching[1]['SplitedIndexContexts'][1:]
+    WMWMFrameBodys = project.WMWMMatching[1]['SplitedBodyContexts'][1:]
+    WMWMFrameChunks = project.WMWMMatching[1]['SplitedChunkContexts'][1:]
+    CharacterFrame = project.CharacterCompletion[1]['CharacterCompletions'][1:]
+    SoundFrame = project.SoundMatching[1]['SoundSplitedIndexs'][1:]
+    CorrectionKoFrame = project.CorrectionKo[1]['CorrectionKoSplitedBodys'][1:]
+    
+    SelectionGenerationKoSplitedIndexs = []
+    SelectionGenerationKoSplitedBodys = []
+    IndexCount = 1
+
+    # SelectionGenerationKoSplitedIndexs 구조 구성
+    for i in range(len(BodyFrame)):
+        BodyFrameIndexId = BodyFrame[i]['IndexId']
+        IndexTag = BodyFrame[i]['IndexTag']
+        Index = BodyFrame[i]['Index']
+        
+        if IndexCount != BodyFrameIndexId:
+            if SelectionGenerationKoSplitedBodys:  # BodyIds가 비어 있지 않은 경우에만 추가
+                SelectionGenerationKoSplitedIndexs.append({'IndexId': IndexCount, 'IndexTag': IndexTag, 'Index': Index, 'IndexContext': None, 'Music': None, 'Sound': None, 'Selection-GenerationKoSplitedBodys': SelectionGenerationKoSplitedBodys})
+            SelectionGenerationKoSplitedBodys = []  # BodyIds 초기화
+            IndexCount = BodyFrameIndexId
+
+        BodyFrameBodyId = BodyFrame[i]['BodyId']
+        BodyId = {'BodyId': BodyFrameBodyId, 'BodyContext': None, 'ChunkId': [], 'Selection-GenerationKoSplitedChunks': []}
+        SplitedBodyChunks = BodyFrame[i]['SplitedBodyChunks']
+        for j in range(len(SplitedBodyChunks)):
+            BodyFrameChunkId = SplitedBodyChunks[j]['ChunkId']
+            BodyId['ChunkId'].append(BodyFrameChunkId)
+
+        SelectionGenerationKoSplitedBodys.append(BodyId)
+
+    # 마지막 BodyIds 추가
+    if SelectionGenerationKoSplitedBodys:
+        SelectionGenerationKoSplitedIndexs.append({'IndexId': IndexCount, 'IndexTag': IndexTag, 'Index': Index, 'IndexContext': None, 'Music': None, 'Sound': None, 'Selection-GenerationKoSplitedBodys': SelectionGenerationKoSplitedBodys})
+    
+    file_path = "/yaas/text.json"
+    with open(file_path, 'w', encoding='utf-8') as file:
+        json.dump(SelectionGenerationKoSplitedIndexs, file, ensure_ascii = False, indent = 4)
+        
+    # # SelectionGenerationKoSplitedIndexs 데이터 구축
+    # for i in range(len(SelectionGenerationKoSplitedIndexs)):
 
 ## inputList의 InputList 치환 (인덱스, 캡션 부분 합치기)
 def MergeInputList(inputList):
@@ -745,4 +786,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    CorrectionKoResponseJson(projectName, email)
+    LoadFrames(projectName, email)

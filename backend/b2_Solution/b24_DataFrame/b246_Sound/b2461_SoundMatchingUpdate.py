@@ -12,7 +12,7 @@ from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory
-# from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSoundMatchingToDB, AddSFXSplitedBodysToDB, SoundMatchingCountLoad, SoundMatchingCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSoundMatchingToDB, AddSoundSplitedIndexsToDB, SoundMatchingCountLoad, SoundMatchingCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -294,7 +294,7 @@ def SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview 
                 ChunkId = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][j]['ChunkId']
                 ChunkIds.append(ChunkId)
         else:
-            IndexChunkIds.append(ChunkIds)
+            IndexChunkIds.append({'IndexId': IndexId, 'IndexChunkId': ChunkIds, 'Sounds': []})
             ChunkIds = []
             IndexId += 1
             
@@ -303,10 +303,7 @@ def SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview 
                 ChunkIds.append(ChunkId)
             
     if ChunkIds != []:
-        IndexChunkIds.append(ChunkIds)
-    
-    for index in IndexChunkIds:
-        print(index)
+        IndexChunkIds.append({'IndexId': IndexId, 'IndexChunkId': ChunkIds, 'Sounds': []})
     
     # 데이터 치환
     outputMemoryDics = SoundMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
@@ -323,7 +320,8 @@ def SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview 
                 if transitionImportance >= TransitionImportance and backgroundImportance >= BackgroundImportance:
                     dic = outputMemoryDics[i][j][key]
                     SoundRange = dic['배경소리길이']
-                    start, end = map(int, SoundRange.split('-'))
+                    FormattedSoundRange = re.sub(r'\[|\]', '', SoundRange)
+                    start, end = map(int, FormattedSoundRange.split('-'))
                     ChunkIds = list(range(start, end + 1))
                     TransitionSound = dic['전환소리명칭']
                     TransitionSoundPrompt = dic['전환소리영어명칭']
@@ -336,10 +334,22 @@ def SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview 
                     Culture = dic['문화']
                     responseJson.append({'ChunkId': ChunkIds, 'TransitionSound': TransitionSound, 'TransitionSoundPrompt': TransitionSoundPrompt, 'TransitionSoundImportance': transitionImportance, 'BackgroundSound': BackgroundSound, 'BackgroundSoundPrompt': BackgroundSoundPrompt, 'BackgroundSoundImportance': backgroundImportance, 'Type': Type, 'Environment': Environment, 'Situation': Situation, 'Era': Era, 'Culture': Culture})
     
-    return responseJson
+    # responseJson 구조변경
+    ResponseCount = 0
+    for i in range(len(IndexChunkIds)):
+        IndexChunkId = IndexChunkIds[i]['IndexChunkId']
+        for j in range(ResponseCount, len(responseJson)):
+            SoundChunkId = responseJson[j]['ChunkId']
+            if all(Ids in IndexChunkId for Ids in SoundChunkId):
+                IndexChunkIds[i]['Sounds'].append(responseJson[j])
+            else:
+                ResponseCount = j
+                break
+    
+    return IndexChunkIds
 
 ## 프롬프트 요청 및 결과물 Json을 SoundMatching에 업데이트
-def SoundMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, Importance = 0):
+def SoundMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, transitionImportance = 0, backgroundImportance = 0):
     print(f"< User: {email} | Project: {projectName} | 14_SoundMatchingUpdate 시작 >")
     # SoundMatching의 Count값 가져오기
     ContinueCount, Completion = SoundMatchingCountLoad(projectName, email)
@@ -351,13 +361,13 @@ def SoundMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off'
             AddExistedDataSetToDB(projectName, email, "SoundMatching", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 14_SoundMatchingUpdate는 ExistedSoundMatching으로 대처됨 ]\n")
         else:
-            responseJson = SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode, importance = Importance)
+            responseJson = SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory", TransitionImportance = transitionImportance, BackgroundImportance = backgroundImportance)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
             
-            SFXBodyId = ContinueCount
+            IndexId = ContinueCount
             
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
@@ -366,10 +376,11 @@ def SoundMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off'
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f"SoundMatchingUpdate: {Update['BodyId']}")
+                UpdateTQDM.set_description(f"SoundMatchingUpdate: {Update['IndexId']}")
                 time.sleep(0.0001)
-                SFXSplitedBodyChunks = Update['SFXSplitedBodyChunks']
-                AddSFXSplitedBodysToDB(projectName, email, SFXSplitedBodyChunks)
+                IndexId = Update['IndexId']
+                Sounds = Update['Sounds']
+                AddSoundSplitedIndexsToDB(projectName, email, IndexId, Sounds)
 
                 # i값 수동 업데이트
                 i += 1
@@ -392,6 +403,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    responseJson = SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode, TransitionImportance = 0, BackgroundImportance = 0)
-    # for response in responseJson:
-    #     print(f'{response}\n\n')

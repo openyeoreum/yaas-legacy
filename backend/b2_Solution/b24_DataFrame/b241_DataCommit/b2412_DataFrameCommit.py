@@ -1251,21 +1251,21 @@ def AddExistedSoundMatchingToDB(projectName, email, ExistedDataFrame):
         db.commit()
         
 ## 14. 1-1 SoundMatching의 Body(본문) SoundSplitedBodys 업데이트 형식
-def UpdateSoundSplitedBodys(project, SoundSplitedBodyChunks):
-    updateSoundSplitedBodys = {
-        "BodyId": BodyId,
-        "SoundSplitedBodyChunks": SoundSplitedBodyChunks
+def UpdateSoundSplitedIndexs(project, IndexId, Sounds):
+    updateSoundSplitedIndexs = {
+        "IndexId": IndexId,
+        "Sounds": Sounds
     }
     
-    project.SoundMatching[1]["SoundSplitedBodys"].append(updateSoundSplitedBodys)
-    project.SoundMatching[0]["BodyCount"] = BodyId
+    project.SoundMatching[1]["SoundSplitedIndexs"].append(updateSoundSplitedIndexs)
+    project.SoundMatching[0]["IndexCount"] = IndexId
     
 ## 14. 1-2 SoundMatching의 Body(본문) SoundSplitedBodys 업데이트
-def AddSoundSplitedBodysToDB(projectName, email, SoundSplitedBodyChunks):
+def AddSoundSplitedIndexsToDB(projectName, email, IndexId, Sounds):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateSoundSplitedBodys(project, SoundSplitedBodyChunks)
+        UpdateSoundSplitedIndexs(project, IndexId, Sounds)
         
         flag_modified(project, "SoundMatching")
         
@@ -1289,8 +1289,8 @@ def InitSoundMatching(projectName, email):
         project = GetProject(projectName, email)
         project.SoundMatching[0]["BodyCount"] = 0
         project.SoundMatching[0]["Completion"] = "No"
-        project.SoundMatching[1] = LoadJsonFrame(ProjectDataPath + "/b536_Sound/b536-01_SoundMatching.json")[1]
-
+        project.SoundMatching[1] = LoadJsonFrame(ProjectDataPath + "/b535_Sound/b535-01_SoundMatching.json")[1]
+        
         flag_modified(project, "SoundMatching")
         
         db.add(project)

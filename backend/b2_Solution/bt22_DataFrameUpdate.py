@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
@@ -18,6 +18,7 @@ from backend.b2_Solution.b24_DataFrame.b243_Context.b2433_WMWMDefineUpdate impor
 from backend.b2_Solution.b24_DataFrame.b243_Context.b2434_WMWMMatchingUpdate import WMWMMatchingUpdate
 from backend.b2_Solution.b24_DataFrame.b244_Character.b2441_CharacterDefineUpdate import CharacterDefineUpdate
 from backend.b2_Solution.b24_DataFrame.b244_Character.b2442_CharacterCompletionUpdate import CharacterCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b246_Sound.b2461_SoundMatchingUpdate import SoundMatchingUpdate
 from backend.b2_Solution.b24_DataFrame.b247_SFX.b2471_SFXMatchingUpdate import SFXMatchingUpdate
 from backend.b2_Solution.b24_DataFrame.b249_Correction.b2491_CorrectionKoUpdate import CorrectionKoUpdate
 
@@ -323,6 +324,28 @@ if __name__ == "__main__":
             SaveDataFrame(projectName, email, "12_CharacterCompletion", updatedCharacterCompletion, DataFramePath)
         if existedDataSet == None:
             SaveDataSet(projectName, email, "12", "CharacterCompletion", RawDataSetPath)
+        existedDataFrame = None
+        existedDataSet = None
+
+
+        #######################
+        ### 14_SoundMatching ###
+        #######################
+        InitSoundMatching(projectName, email)
+        InitRawDataSet(projectName, email, "SoundMatching")
+        if existedDataFrameMode == "on":
+            existedDataFrame = LoadexistedDataFrame(projectName, email, "SoundMatching", DataFramePath)
+            recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "SoundMatching", RawDataSetPath)
+        mode = "Master"
+        SoundMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet, transitionImportance = 0, backgroundImportance = 0)
+        
+        if existedDataFrame == None:
+            updatedSoundMatching = UpdatedSoundMatching(projectName, email)
+            SaveDataFrame(projectName, email, "14_SoundMatching", updatedSoundMatching, DataFramePath)
+            # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
+            LoadAndUpdateBodyFrameBodys(projectName, email, "HalfBodyFrame", DataFramePath)
+        if existedDataSet == None:     
+            SaveDataSet(projectName, email, "14", "SoundMatching", RawDataSetPath)
         existedDataFrame = None
         existedDataSet = None
 

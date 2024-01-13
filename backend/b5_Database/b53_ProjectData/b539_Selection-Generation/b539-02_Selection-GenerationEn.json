@@ -67,17 +67,20 @@
                     "Emotion": "None",
                     "Accuracy": 0
                 },
-                "EnvSound": [
+                "Sound": [
                     {
-                        "ChunkIds": "None",
-                        "Sound": "None",
-                        "Prompt": "None",
+                        "ChunkId": "None",
+                        "TransitionSound": "None",
+                        "TransitionSoundPrompt": "None",
+                        "TransitionSoundImportance": "None",
+                        "BackgroundSound": "None",
+                        "BackgroundSoundPrompt": "None",
+                        "BackgroundSoundImportance": "None",
                         "Type": "None",
-                        "Environment": "None",
-                        "Situation": "None",
-                        "Era": "None",
-                        "Culture": "None",
-                        "Importance": 0
+                        "Environment": "Environment",
+                        "Situation": "Situation",
+                        "Era": "Era",
+                        "Culture": "Culture"
                     }
                 ],
                 "Selection-GenerationEnSplitedBodys": [
@@ -136,16 +139,6 @@
                                     "Personality": "None",
                                     "Emotion": "None",
                                     "Accuracy": 0
-                                },
-                                "TrasitionSound":
-                                {
-                                    "Sound": "None",
-                                    "Prompt": "None",
-                                    "Environment": "None",
-                                    "Situation": "None",
-                                    "Era": "None",
-                                    "Culture": "None",
-                                    "Importance": 0
                                 },
                                 "Voice":
                                 {

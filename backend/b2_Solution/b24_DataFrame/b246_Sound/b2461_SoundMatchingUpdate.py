@@ -349,7 +349,7 @@ def SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview 
     return IndexChunkIds
 
 ## 프롬프트 요청 및 결과물 Json을 SoundMatching에 업데이트
-def SoundMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, transitionImportance = 0, backgroundImportance = 0):
+def SoundMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, transitionImportance = 0, backgroundImportance = 0):
     print(f"< User: {email} | Project: {projectName} | 14_SoundMatchingUpdate 시작 >")
     # SoundMatching의 Count값 가져오기
     ContinueCount, Completion = SoundMatchingCountLoad(projectName, email)
@@ -361,7 +361,7 @@ def SoundMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off'
             AddExistedDataSetToDB(projectName, email, "SoundMatching", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 14_SoundMatchingUpdate는 ExistedSoundMatching으로 대처됨 ]\n")
         else:
-            responseJson = SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory", TransitionImportance = transitionImportance, BackgroundImportance = backgroundImportance)
+            responseJson = SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode, TransitionImportance = transitionImportance, BackgroundImportance = backgroundImportance)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -397,9 +397,10 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "웹3.0메타버스"
+    projectName = "살아서천국극락낙원에가는방법"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    SoundMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, transitionImportance = 0, backgroundImportance = 0)

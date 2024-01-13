@@ -14,7 +14,7 @@
     {
         "SoundSplitedIndexs": [
             {
-                "IndexId": 1,
+                "IndexId": 0,
                 "Sounds": [
                     {
                         "ChunkId": "None",

@@ -1235,6 +1235,88 @@ def CharacterCompletionCompletionUpdate(projectName, email):
         db.commit()
 
 
+####################################
+##### 14_SoundMatching Process #####
+####################################
+## 14. 1-0 SoundMatching이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedSoundMatchingToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.SoundMatching[1] = ExistedDataFrame[1]
+        
+        flag_modified(project, "SoundMatching")
+        
+        db.add(project)
+        db.commit()
+        
+## 14. 1-1 SoundMatching의 Body(본문) SoundSplitedBodys 업데이트 형식
+def UpdateSoundSplitedBodys(project, SoundSplitedBodyChunks):
+    updateSoundSplitedBodys = {
+        "BodyId": BodyId,
+        "SoundSplitedBodyChunks": SoundSplitedBodyChunks
+    }
+    
+    project.SoundMatching[1]["SoundSplitedBodys"].append(updateSoundSplitedBodys)
+    project.SoundMatching[0]["BodyCount"] = BodyId
+    
+## 14. 1-2 SoundMatching의 Body(본문) SoundSplitedBodys 업데이트
+def AddSoundSplitedBodysToDB(projectName, email, SoundSplitedBodyChunks):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateSoundSplitedBodys(project, SoundSplitedBodyChunks)
+        
+        flag_modified(project, "SoundMatching")
+        
+        db.add(project)
+        db.commit()
+        
+## 14. SoundMatching의Count의 가져오기
+def SoundMatchingCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    BodyCount = project.SoundMatching[0]["BodyCount"]
+    Completion = project.SoundMatching[0]["Completion"]
+    
+    return BodyCount, Completion
+
+## 14. SoundMatching의 초기화
+def InitSoundMatching(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.SoundMatching[0]["BodyCount"] = 0
+        project.SoundMatching[0]["Completion"] = "No"
+        project.SoundMatching[1] = LoadJsonFrame(ProjectDataPath + "/b536_Sound/b536-01_SoundMatching.json")[1]
+
+        flag_modified(project, "SoundMatching")
+        
+        db.add(project)
+        db.commit()
+        
+## 14. 업데이트된 SoundMatching 출력
+def UpdatedSoundMatching(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        
+    return project.SoundMatching
+        
+## 14. SoundMatchingCompletion 업데이트
+def SoundMatchingCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.SoundMatching[0]["Completion"] = "Yes"
+
+        flag_modified(project, "SoundMatching")
+
+        db.add(project)
+        db.commit()
+
+
 ###################################
 ##### 15_SFXMatching Process #####
 ###################################

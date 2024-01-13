@@ -14,31 +14,21 @@
         "SoundSplitedIndexs": [
             {
                 "IndexId": 1,
-                "EnvSounds":
-                [
-                    {
-                        "ChunkIds": "None",
-                        "Sound": "None",
-                        "Prompt": "None",
-                        "Environment": "None",
-                        "Situation": "None",
-                        "Era": "None",
-                        "Culture": "None",
-                        "Importance": 0
-                    }
-                ],
-                "TrasitionSounds":
+                "Sounds":
                 [
                     {
                         "ChunkId": "None",
-                        "Sound": "None",
-                        "Prompt": "None",
+                        "TransitionSound": "None",
+                        "TransitionSoundPrompt": "None",
+                        "TransitionSoundImportance": "None",
+                        "BackgroundSound": "None",
+                        "BackgroundSoundPrompt": "None",
+                        "BackgroundSoundImportance": "None",
                         "Type": "None",
-                        "Environment": "None",
-                        "Situation": "None",
-                        "Era": "None",
-                        "Culture": "None",
-                        "Importance": 0
+                        "Environment": "Environment",
+                        "Situation": "Situation",
+                        "Era": "Era",
+                        "Culture": "Culture"
                     }
                 ]
             }

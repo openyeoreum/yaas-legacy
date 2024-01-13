@@ -30,24 +30,40 @@ def LoadFrames(projectName, email):
     SoundFrame = project.SoundMatching[1]['SoundSplitedIndexs'][1:]
     CorrectionKoFrame = project.CorrectionKo[1]['CorrectionKoSplitedBodys'][1:]
     
-    SelectionGenerationKoSplitedIndexs = []
-    SelectionGenerationKoSplitedBodys = []
-    IndexCount = 1
-
     # SelectionGenerationKoSplitedIndexs 구조 구성
+    SelectionGenerationKoSplitedBodys = []
+    SelectionGenerationKoSplitedIndexs = []
+    lastIndexId = None
+
     for i in range(len(BodyFrame)):
         BodyFrameIndexId = BodyFrame[i]['IndexId']
         IndexTag = BodyFrame[i]['IndexTag']
         Index = BodyFrame[i]['Index']
         
-        if IndexCount != BodyFrameIndexId:
-            if SelectionGenerationKoSplitedBodys:  # BodyIds가 비어 있지 않은 경우에만 추가
-                SelectionGenerationKoSplitedIndexs.append({'IndexId': IndexCount, 'IndexTag': IndexTag, 'Index': Index, 'IndexContext': None, 'Music': None, 'Sound': None, 'Selection-GenerationKoSplitedBodys': SelectionGenerationKoSplitedBodys})
-            SelectionGenerationKoSplitedBodys = []  # BodyIds 초기화
-            IndexCount = BodyFrameIndexId
+        # 새로운 IndexId가 시작될 때
+        if lastIndexId is not None and lastIndexId != BodyFrameIndexId:
+            SelectionGenerationKoSplitedIndexs.append({
+                'IndexId': lastIndexId,
+                'IndexTag': lastTag,
+                'Index': lastIndex,
+                'IndexContext': None,
+                'Music': None,
+                'Sound': None,
+                'Selection-GenerationKoSplitedBodys': SelectionGenerationKoSplitedBodys
+            })
+            SelectionGenerationKoSplitedBodys = []
+
+        lastIndexId = BodyFrameIndexId
+        lastTag = IndexTag
+        lastIndex = Index
 
         BodyFrameBodyId = BodyFrame[i]['BodyId']
-        BodyId = {'BodyId': BodyFrameBodyId, 'BodyContext': None, 'ChunkId': [], 'Selection-GenerationKoSplitedChunks': []}
+        BodyId = {
+            'BodyId': BodyFrameBodyId,
+            'BodyContext': None,
+            'ChunkId': [],
+            'Selection-GenerationKoSplitedChunks': []
+        }
         SplitedBodyChunks = BodyFrame[i]['SplitedBodyChunks']
         for j in range(len(SplitedBodyChunks)):
             BodyFrameChunkId = SplitedBodyChunks[j]['ChunkId']
@@ -55,16 +71,34 @@ def LoadFrames(projectName, email):
 
         SelectionGenerationKoSplitedBodys.append(BodyId)
 
-    # 마지막 BodyIds 추가
+    # 마지막 IndexId에 대한 항목 추가
     if SelectionGenerationKoSplitedBodys:
-        SelectionGenerationKoSplitedIndexs.append({'IndexId': IndexCount, 'IndexTag': IndexTag, 'Index': Index, 'IndexContext': None, 'Music': None, 'Sound': None, 'Selection-GenerationKoSplitedBodys': SelectionGenerationKoSplitedBodys})
-    
+        SelectionGenerationKoSplitedIndexs.append({
+            'IndexId': lastIndexId,
+            'IndexTag': lastTag,
+            'Index': lastIndex,
+            'IndexContext': None,
+            'Music': None,
+            'Sound': None,
+            'Selection-GenerationKoSplitedBodys': SelectionGenerationKoSplitedBodys
+        })
+
+    # SelectionGenerationKoSplitedIndexs 데이터 구축
+    # Index 부분
+    for i in range(len(SelectionGenerationKoSplitedIndexs)):
+        for j in range(len(WMWMFrameIndexs)):
+            if SelectionGenerationKoSplitedIndexs[i]['IndexId'] == WMWMFrameIndexs[j]['IndexId']:
+                SelectionGenerationKoSplitedIndexs[i]['IndexContext'] = {'Vector': WMWMFrameIndexs[j]['Vector']['ContextDefine'], 'WMWM': WMWMFrameIndexs[j]['WMWM']}
+                SelectionGenerationKoSplitedIndexs[i]['Music'] = WMWMFrameIndexs[j]['Vector']['ContextCompletion']
+                break
+        for k in range(len(SoundFrame)):
+            if SelectionGenerationKoSplitedIndexs[i]['IndexId'] == SoundFrame[k]['IndexId']:
+                SelectionGenerationKoSplitedIndexs[i]['Sound'] = SoundFrame[k]['Sounds']
+                break
+
     file_path = "/yaas/text.json"
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(SelectionGenerationKoSplitedIndexs, file, ensure_ascii = False, indent = 4)
-        
-    # # SelectionGenerationKoSplitedIndexs 데이터 구축
-    # for i in range(len(SelectionGenerationKoSplitedIndexs)):
 
 ## inputList의 InputList 치환 (인덱스, 캡션 부분 합치기)
 def MergeInputList(inputList):

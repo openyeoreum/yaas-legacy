@@ -1,0 +1,257 @@
+{
+    "TaskName": "CharacterPostCompletion",
+    "BaseModel": {
+        "ShortTokensModel": "gpt-3.5-turbo-1106",
+        "LongTokensModel": "gpt-4-1106-preview"
+    },
+    "ExampleFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
+    "MemoryFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
+    "MasterModel": "gpt-4-1106-preview",
+    "Temperature": 0.5,
+    "OutputTokensRatio": 0.5,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 오디오북 제작 디렉터 입니다. 오디오북은 한정적인 수의 성우로 제작되기 때문에 도서 내에 유사한 인물의 경우는 이를 묶어서 한명의 성우낭독으로 통합하는 작업이 중요합니다. 즉, <인물리스트>의 인물들을 바탕으로 최소한의 성우를 선정하여  <성우.json>을 작성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<성우.json> 요소)\n",
+                    "Message": "1) 성별: 담당 성우의 성별로서 '남', '여' 중 선택\n2) 연령: 담당 성우의 연령대로 '유년', '청소년', '청년', '중년', '장년', '노년' 중 선택"
+                },
+                {
+                    "Mark": "\n\n(<성우.json> 구조, a, b, c, d ... 등은 모두 인물의 번호)\n",
+                    "Message": "{'메인성우': {'성별': 메인성우의 성별, '연령': 메인성우의 연령', '담당인물번호': [a, b, c ...]}, '일반성우1': {'성별': 성우의 성별, '연령': 성우의 연령, '담당인물번호': [d, e, f ...]}, ... '일반성우n': {'성별': 성우의 성별, '연령': 성우의 연령, '담당인물번호': [g, h, i ...]}}"
+                },
+                {
+                    "Mark": "\n\n(<성우.json> 작성 요청)\n",
+                    "Message": "1. 오디오북은 한정적인 수의 성우로 제작되기 때문에 도서에 등장하는 <인물리스트>중에 유사한 유형의 인물들은 한명의 성우로 낭독 합니다.\n2. 성우는 '메인성우'와 '일반성우'로 나누어 집니다.\n3. 인물1 - 인물n (등장횟수, 성별, 연령, 비중)을 분석한 뒤 유사한 인물들끼리 묶어서 '메인성우'와 '일반성우n'의 낭독으로 통합합니다.\n4. '메인성우'는 '저자', '내용속에 등장하는 저자', '나레이터' 등 도서의 대부분을 낭독하는 가장 비중이 큰 성우로서 스토리 전체를 이끌며 도서에 자신이 등장할 경우 자신의 대사도 낭독하는 성우입니다.\n5. '일반성우'는 '메인성우'에게 담당된 인물 이외의 여러유사한 인물을 낭독하는 성우입니다.\n6. <인물리스트>를 바탕으로 '메인성우'와 이외에 최소한의 '일반성우'로 성별, 연령, 담당인물번호 리스트를 작성하여 <성우.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(성우 선정 작업)\n",
+                    "InputMark": "<인물리스트>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<성우.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 오디오북 제작 디렉터 입니다. 오디오북은 한정적인 수의 성우로 제작되기 때문에 도서 내에 유사한 인물의 경우는 이를 묶어서 한명의 성우낭독으로 통합하는 작업이 중요합니다. 즉, <인물리스트>의 인물들을 바탕으로 최소한의 성우를 선정하여  <성우.json>을 작성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<성우.json> 요소)\n",
+                    "Message": "1) 성별: 담당 성우의 성별로서 '남', '여' 중 선택\n2) 연령: 담당 성우의 연령대로 '유년', '청소년', '청년', '중년', '장년', '노년' 중 선택"
+                },
+                {
+                    "Mark": "\n\n(<성우.json> 구조, a, b, c, d ... 등은 모두 인물의 번호)\n",
+                    "Message": "{'메인성우': {'성별': 메인성우의 성별, '연령': 메인성우의 연령', '담당인물번호': [a, b, c ...]}, '일반성우1': {'성별': 성우의 성별, '연령': 성우의 연령, '담당인물번호': [d, e, f ...]}, ... '일반성우n': {'성별': 성우의 성별, '연령': 성우의 연령, '담당인물번호': [g, h, i ...]}}"
+                },
+                {
+                    "Mark": "\n\n(<성우.json> 작성 요청)\n",
+                    "Message": "1. 오디오북은 한정적인 수의 성우로 제작되기 때문에 도서에 등장하는 <인물리스트>중에 유사한 유형의 인물들은 한명의 성우로 낭독 합니다.\n2. 성우는 '메인성우'와 '일반성우'로 나누어 집니다.\n3. 인물1 - 인물n (등장횟수, 성별, 연령, 비중)을 분석한 뒤 유사한 인물들끼리 묶어서 '메인성우'와 '일반성우n'의 낭독으로 통합합니다.\n4. '메인성우'는 '저자', '내용속에 등장하는 저자', '나레이터' 등 도서의 대부분을 낭독하는 가장 비중이 큰 성우로서 스토리 전체를 이끌며 도서에 자신이 등장할 경우 자신의 대사도 낭독하는 성우입니다.\n5. '일반성우'는 '메인성우'에게 담당된 인물 이외의 여러유사한 인물을 낭독하는 성우입니다.\n6. <인물리스트>를 바탕으로 '메인성우'와 이외에 최소한의 '일반성우'로 성별, 연령, 담당인물번호 리스트를 작성하여 <성우.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(성우 선정 작업)\n",
+                    "InputMark": "<인물리스트>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<성우.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 오디오북 제작자 입니다. <내용>에 [말n]에는 동일한 인물이지만 그, 나, 이름 ... 등의 다양한 명칭으로 작성된 경우가 있습니다. 이를 하나의 대표 명칭으로 통합합니다. 그리고 말하는 인물이 도서의 저자와 동일 인물인지를 파악하여 <태그.json>을 완성합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<성우.json> 요소)\n",
+                    "Message": "1) 성별: 담당 성우의 성별로서 '남', '여' 중 선택\n2) 연령: 담당 성우의 연령대로 '유년', '청소년', '청년', '중년', '장년', '노년' 중 선택"
+                },
+                {
+                    "Mark": "\n\n(<성우.json> 구조, a, b, c, d ... 등은 모두 인물의 번호)\n",
+                    "Message": "{'메인성우': {'성별': 메인성우의 성별, '연령': 메인성우의 연령', '담당인물번호': [a, b, c ...]}, '일반성우1': {'성별': 성우의 성별, '연령': 성우의 연령, '담당인물번호': [d, e, f ...]}, ... '일반성우n': {'성별': 성우의 성별, '연령': 성우의 연령, '담당인물번호': [g, h, i ...]}}"
+                },
+                {
+                    "Mark": "\n\n(<성우.json> 작성 요청)\n",
+                    "Message": "1. 오디오북은 한정적인 수의 성우로 제작되기 때문에 도서에 등장하는 <인물리스트>중에 유사한 유형의 인물들은 한명의 성우로 낭독 합니다.\n2. 성우는 '메인성우'와 '일반성우'로 나누어 집니다.\n3. 인물1 - 인물n (등장횟수, 성별, 연령, 비중)을 분석한 뒤 유사한 인물들끼리 묶어서 '메인성우'와 '일반성우n'의 낭독으로 통합합니다.\n4. '메인성우'는 '저자', '내용속에 등장하는 저자', '나레이터' 등 도서의 대부분을 낭독하는 가장 비중이 큰 성우로서 스토리 전체를 이끌며 도서에 자신이 등장할 경우 자신의 대사도 낭독하는 성우입니다.\n5. '일반성우'는 '메인성우'에게 담당된 인물 이외의 여러유사한 인물을 낭독하는 성우입니다.\n6. <인물리스트>를 바탕으로 '메인성우'와 이외에 최소한의 '일반성우'로 성별, 연령, 담당인물번호 리스트를 작성하여 <성우.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(성우 선정 작업)\n",
+                    "InputMark": "<인물리스트>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<태그.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 오디오북 제작자 입니다. <내용>에 [말n]에는 동일한 인물이지만 그, 나, 이름 ... 등의 다양한 명칭으로 작성된 경우가 있습니다. 이를 하나의 대표 명칭으로 통합합니다. 그리고 말하는 인물이 도서의 저자와 동일 인물인지를 파악하여 <태그.json>을 완성합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<성우.json> 요소)\n",
+                    "Message": "1) 성별: 담당 성우의 성별로서 '남', '여' 중 선택\n2) 연령: 담당 성우의 연령대로 '유년', '청소년', '청년', '중년', '장년', '노년' 중 선택"
+                },
+                {
+                    "Mark": "\n\n(<성우.json> 구조, a, b, c, d ... 등은 모두 인물의 번호)\n",
+                    "Message": "{'메인성우': {'성별': 메인성우의 성별, '연령': 메인성우의 연령', '담당인물번호': [a, b, c ...]}, '일반성우1': {'성별': 성우의 성별, '연령': 성우의 연령, '담당인물번호': [d, e, f ...]}, ... '일반성우n': {'성별': 성우의 성별, '연령': 성우의 연령, '담당인물번호': [g, h, i ...]}}"
+                },
+                {
+                    "Mark": "\n\n(<성우.json> 작성 요청)\n",
+                    "Message": "1. 오디오북은 한정적인 수의 성우로 제작되기 때문에 도서에 등장하는 <인물리스트>중에 유사한 유형의 인물들은 한명의 성우로 낭독 합니다.\n2. 성우는 '메인성우'와 '일반성우'로 나누어 집니다.\n3. 인물1 - 인물n (등장횟수, 성별, 연령, 비중)을 분석한 뒤 유사한 인물들끼리 묶어서 '메인성우'와 '일반성우n'의 낭독으로 통합합니다.\n4. '메인성우'는 '저자', '내용속에 등장하는 저자', '나레이터' 등 도서의 대부분을 낭독하는 가장 비중이 큰 성우로서 스토리 전체를 이끌며 도서에 자신이 등장할 경우 자신의 대사도 낭독하는 성우입니다.\n5. '일반성우'는 '메인성우'에게 담당된 인물 이외의 여러유사한 인물을 낭독하는 성우입니다.\n6. <인물리스트>를 바탕으로 '메인성우'와 이외에 최소한의 '일반성우'로 성별, 연령, 담당인물번호 리스트를 작성하여 <성우.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(성우 선정 작업)\n",
+                    "InputMark": "<인물리스트>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<성우.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

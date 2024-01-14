@@ -409,19 +409,124 @@ def MainCharacterFilter(responseJson):
             elif comparedName in currentName and len(comparedName) < len(currentName):
                 responseJson[j]['MainCharacter'] = currentName
 
-
-
     # 캐릭터 선별5 실제 등장인물의 리스트
     characterCounts = Counter(dic['MainCharacter'] for dic in responseJson)
     sortedCharacters = sorted(characterCounts, key=characterCounts.get, reverse=True)
     
     return responseJson, sortedCharacters
 
+## 단어리스트 %로 표현
+def WordFrequency(words):
+    wordFrequency = {}
+    for word in words:
+        wordFrequency[word] = wordFrequency.get(word, 0) + 1
+    # Calculating total number of words
+    TotalWords = len(words)
+    # Converting frequency to percentage and rounding to 2 decimal places
+    WordPercentage = {word: round((count / TotalWords) * 100, 2) for word, count in wordFrequency.items()}
+    
+    # Sorting the dictionary by frequency in descending order and converting back to dictionary
+    SortedWordPercentage = dict(sorted(WordPercentage.items(), key=lambda x: x[1], reverse=True))
+    
+    return SortedWordPercentage
+
+## 평균 나이 계산기
+def AgeAverageCalculator(SelectedAge):
+    AgeList = ['유년', '청소년', '청년', '중년', '장년', '노년']
+    AgeCount = 0
+    for Age in AgeList:
+        if Age in SelectedAge:
+            AgeCount += 1
+            
+    if AgeCount == 0:
+        return next(iter(SelectedAge))
+    
+    else:
+        SelectedAge = {key: value for key, value in SelectedAge.items() if key in AgeList}
+        # 각 나이대의 범위 정의
+        AgeRanges = {AgeList[0]: (0, 10), AgeList[1]: (10, 20), AgeList[2]: (20, 35), AgeList[3]: (35, 50), AgeList[4]: (50, 65), AgeList[5]: (65, 80)}
+        # 평균 나이 계산
+        AverageAge = sum((AgeRanges[age][0] + AgeRanges[age][1]) / 2 * percentage for age, percentage in SelectedAge.items()) / 100
+        # 평균 나이에 가장 가까운 나이대 찾기
+        ClosestAgeCategory = min(AgeRanges.keys(), key=lambda x: abs((AgeRanges[x][0] + AgeRanges[x][1]) / 2 - AverageAge))
+
+        return ClosestAgeCategory
+
+## 캐릭터 더 선별하기
+def CarefullySelectedCharacter(SelectedCharacters):
+    SelectedCharactersTexts = []
+    for Selected in SelectedCharacters:
+        if '남' in Selected['Gender'] and '여' in Selected['Gender']:
+            Gender = '남/여'
+        else:
+            Gender = next(iter(Selected['Gender']))
+        Age = AgeAverageCalculator(Selected['Age'])
+        
+        SelectedCharactersText = f"인물{Selected['Id']} \"{Selected['MainCharacter']}\" (등장횟수: {Selected['Frequency']}번, 성별: {Gender}, 연령: {Age}, 역할의 비중: {Selected['Role']})\n\n"
+        print(SelectedCharactersText)
+        SelectedCharactersTexts.append(SelectedCharactersText)
+
+## 캐릭터 나머지 요소 합치기
+def SelectedCharacterFilter(ResponseJson, sortedCharacters):
+    # Character 요소들 모두 합치기
+    SelectedCharacters = []
+    Id = 1
+    for Character in sortedCharacters:
+        Type = []
+        Gender = []
+        Age = []
+        Emotion = []
+        Role = []
+        frequency = 0
+        for Response in ResponseJson:
+            MainCharacter = Response['MainCharacter']
+            if Character == MainCharacter:
+                frequency += 1
+                if isinstance(Response['Type'], list):
+                    Type += Response['Type']
+                else:
+                    Type.append(Response['Type'])
+                if isinstance(Response['Gender'], list):
+                    Gender += Response['Gender']
+                else:
+                    Gender.append(Response['Gender'])
+                if isinstance(Response['Age'], list):
+                    Age += Response['Age']
+                else:
+                    Age.append(Response['Age'])
+                if isinstance(Response['Emotion'], list):
+                    Emotion += Response['Emotion']
+                else:
+                    Emotion.append(Response['Emotion'])
+                if isinstance(Response['Role'], list):
+                    Role += Response['Role']
+                else:
+                    Role.append(Response['Role'])
+                if isinstance(Response['AuthorRelationship'], list):
+                    Role += Response['AuthorRelationship']
+                else:
+                    Role.append(Response['AuthorRelationship'])
+                
+        type = WordFrequency(Type)
+        gender = WordFrequency(Gender)
+        age = WordFrequency(Age)
+        emotion = WordFrequency(Emotion)
+        role = WordFrequency(Role)
+        SelectedCharacter = {'Id': Id, 'MainCharacter': Character, 'Frequency': frequency, 'Type': type, 'Gender': gender, 'Age': age, 'Emotion': emotion, 'Role': role}
+        SelectedCharacters.append(SelectedCharacter)
+        Id += 1
+        
+    CarefullySelectedCharacter(SelectedCharacters)
+        
+    return SelectedCharacters
+
 ## 데이터 치환
 def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
+    CharacterDefine = project.CharacterDefine[1]['CharacterChunks'][1:]
+    
     CharacterTagChunk = []
     CharacterTagChunkId = []
     for i in range(len(BodyFrame)):
@@ -434,10 +539,10 @@ def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesR
     OutputMemoryDics = CharacterCompletionProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
         
     outputMemoryDics = MergeOutputMemoryDics(OutputMemoryDics)
-    
+
     responseJson = []
     responseCount = 0
-    
+    CharacterCount = 0
     for response in outputMemoryDics:
         if response != "Pass":
             # if responseCount >= len(CharacterTagChunkId):
@@ -449,12 +554,20 @@ def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesR
                 for key, value in dic.items():
                     Character = value['말하는인물']
                     MainCharacter = value['대표명칭']
+                    Type = CharacterDefine[CharacterCount]['Type']
+                    Gender = CharacterDefine[CharacterCount]['Gender']
+                    Age = CharacterDefine[CharacterCount]['Age']
+                    Emotion = CharacterDefine[CharacterCount]['Emotion']
+                    Role = CharacterDefine[CharacterCount]['Role']
                     AuthorRelationship = value['저자와동일인물여부']
+                CharacterCount += 1
                 responseCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "MainCharacter": MainCharacter, "AuthorRelationship": AuthorRelationship})
+                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "MainCharacter": MainCharacter, "Type": Type, "Gender": Gender, "Age": Age, "Emotion": Emotion, "Role": Role, "AuthorRelationship": AuthorRelationship})
     
     ResponseJson, sortedCharacters = MainCharacterFilter(responseJson)
     
+    SelectedResponseJson = SelectedCharacterFilter(ResponseJson, sortedCharacters)
+
     return ResponseJson, sortedCharacters
 
 ## 프롬프트 요청 및 결과물 Json을 CharacterCompletion에 업데이트
@@ -515,7 +628,6 @@ if __name__ == "__main__":
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
-    mode = "Example"
+    mode = "Master"
     #########################################################################
-    
-    # CharacterCompletionUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode)
+    CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode)

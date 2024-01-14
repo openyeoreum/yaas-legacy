@@ -116,20 +116,25 @@ def LoadFrames(projectName, email):
                         Chunk = ''.join(CorrectionKoChunk['CorrectionKoChunkTokens'])
                         Tag = CorrectionKoChunk['Tag']
                         SelectionGenerationKoChunkTokens = CorrectionKoChunk['CorrectionKoChunkTokens']
-                for CharacterChunk in CharacterFrame:
-                    if CharacterChunk['ChunkId'] == chunkid:
-                        Voice = 
-                for SFXChunk in SFXFrame:
-                    if SFXChunk['ChunkId'] == chunkid:
-                        SFX = 
-    # Chunk 중 BodyContext 부분
-    for i in range(len(SelectionGenerationKoSplitedIndexs)):
+                # for CharacterChunk in CharacterFrame:
+                #     if CharacterFrame['ChunkId'] == chunkid:
+                #         Character = 
+                #         Type = 
+                #         Gender = 
+                #         Age = 
+                #         Emotion = 
+                #         Role =
+                # for SFXChunk in SFXFrame:
+                #     if SFXChunk['ChunkId'] == chunkid:
+                #         SFX = 
+                
 
     SelectionGenerationKoFrame = {'BookContext': WMWMFrameBookContext, 'Selection-GenerationKoSplitedIndexs': SelectionGenerationKoSplitedIndexs}
     file_path = "/yaas/SelectionGenerationKoFrame.json"
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(SelectionGenerationKoFrame, file, ensure_ascii = False, indent = 4)
-
+        
+    return SelectionGenerationKoFrame
 
 
 

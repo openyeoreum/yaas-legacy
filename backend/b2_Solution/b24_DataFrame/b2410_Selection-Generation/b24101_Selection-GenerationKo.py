@@ -108,12 +108,14 @@ def LoadFrames(projectName, email):
             for chunkid in range(len(ChunkIds)):
                 for WMWMFrameChunk in WMWMFrameChunks:
                     if WMWMFrameChunk['ChunkId'] == chunkid:
-                        ChunkContext = 
-                        ChunkContext = 
+                        Vector = WMWMFrameChunk['Vector']
+                        WMWM = WMWMFrameChunk['WMWM']
+                        ChunkContext = {'Vector': Vector, 'WMWM': WMWM}
                 for CorrectionKoChunk in CorrectionKoFrame:
                     if CorrectionKoChunk['ChunkId'] == chunkid:
-                        Tag = 
-                        SelectionGenerationKoChunkTokens = 
+                        Chunk = ''.join(CorrectionKoChunk['CorrectionKoChunkTokens'])
+                        Tag = CorrectionKoChunk['Tag']
+                        SelectionGenerationKoChunkTokens = CorrectionKoChunk['CorrectionKoChunkTokens']
                 for CharacterChunk in CharacterFrame:
                     if CharacterChunk['ChunkId'] == chunkid:
                         Voice = 

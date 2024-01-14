@@ -28,6 +28,7 @@ def LoadFrames(projectName, email):
     WMWMFrameChunks = project.WMWMMatching[1]['SplitedChunkContexts'][1:]
     CharacterFrame = project.CharacterCompletion[1]['CharacterCompletions'][1:]
     SoundFrame = project.SoundMatching[1]['SoundSplitedIndexs'][1:]
+    SFXFrame =  project.SFXMatching[1]['SFXSplitedBodys'][1:]
     CorrectionKoFrame = project.CorrectionKo[1]['CorrectionKoSplitedBodys'][1:]
     
     ## SelectionGenerationKoSplitedIndexs 구조 구성
@@ -102,12 +103,40 @@ def LoadFrames(projectName, email):
             for k in range(len(WMWMFrameBodys)):
                 if SelectionGenerationKoSplitedBodys[j]['BodyId'] == WMWMFrameBodys[k]['BodyId']:
                     SelectionGenerationKoSplitedBodys[j]['BodyContext'] = {'Vector': WMWMFrameBodys[k]['Vector'], 'WMWM': WMWMFrameBodys[k]['WMWM']}
-            
+
+            ChunkIds = SelectionGenerationKoSplitedBodys[j]['ChunkId']
+            for chunkid in range(len(ChunkIds)):
+                for WMWMFrameChunk in WMWMFrameChunks:
+                    if WMWMFrameChunk['ChunkId'] == chunkid:
+                        ChunkContext = 
+                        ChunkContext = 
+                for CorrectionKoChunk in CorrectionKoFrame:
+                    if CorrectionKoChunk['ChunkId'] == chunkid:
+                        Tag = 
+                        SelectionGenerationKoChunkTokens = 
+                for CharacterChunk in CharacterFrame:
+                    if CharacterChunk['ChunkId'] == chunkid:
+                        Voice = 
+                for SFXChunk in SFXFrame:
+                    if SFXChunk['ChunkId'] == chunkid:
+                        SFX = 
+    # Chunk 중 BodyContext 부분
+    for i in range(len(SelectionGenerationKoSplitedIndexs)):
 
     SelectionGenerationKoFrame = {'BookContext': WMWMFrameBookContext, 'Selection-GenerationKoSplitedIndexs': SelectionGenerationKoSplitedIndexs}
     file_path = "/yaas/SelectionGenerationKoFrame.json"
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(SelectionGenerationKoFrame, file, ensure_ascii = False, indent = 4)
+
+
+
+
+
+
+
+
+
+
 
 ## inputList의 InputList 치환 (인덱스, 캡션 부분 합치기)
 def MergeInputList(inputList):

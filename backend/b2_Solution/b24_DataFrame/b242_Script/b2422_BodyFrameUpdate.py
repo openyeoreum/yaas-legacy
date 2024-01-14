@@ -325,14 +325,18 @@ def IndexMatching(projectName, email):
                     if re.search(r'(\d)부', chunk["TagChunks"]) or re.search(r'(\d) 부', chunk["TagChunks"]):
                         tagChunk = re.sub(r'(\d)부', r'\1부,', tagChunk)
                         tagChunk = re.sub(r'(\d)부,.', r'\1부,', tagChunk)
+                        tagChunk = re.sub(r'(\d)부.,', r'\1부,', tagChunk)
                         tagChunk = re.sub(r'(\d) 부', r'\1 부,', tagChunk)
                         tagChunk = re.sub(r'(\d) 부,.', r'\1 부,', tagChunk)
+                        tagChunk = re.sub(r'(\d) 부.,', r'\1 부,', tagChunk)
                         indexTag = "Part"
                     if re.search(r'(\d)장', chunk["TagChunks"]) or re.search(r'(\d) 장', chunk["TagChunks"]):
                         tagChunk = re.sub(r'(\d)장', r'\1장,', tagChunk)
-                        tagChunk = re.sub(r'(\d)장,.', r'\1장,', tagChunk)
+                        tagChunk = re.sub(r'(\d)장,', r'\1장,', tagChunk)
+                        tagChunk = re.sub(r'(\d)장.,', r'\1장,', tagChunk)
                         tagChunk = re.sub(r'(\d) 장', r'\1 장,', tagChunk)
-                        tagChunk = re.sub(r'(\d) 장,.', r'\1 장,', tagChunk)
+                        tagChunk = re.sub(r'(\d) 장,', r'\1 장,', tagChunk)
+                        tagChunk = re.sub(r'(\d) 장.,', r'\1 장,', tagChunk)
                         indexTag = "Chapter"
 
                 IndexMatchedChunks[i] = {"IndexTag": indexTag, "TagChunks": tagChunk}

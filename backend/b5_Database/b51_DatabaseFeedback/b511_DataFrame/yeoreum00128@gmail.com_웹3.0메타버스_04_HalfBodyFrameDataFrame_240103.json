@@ -842,13 +842,13 @@
             {
                 "IndexId": 4,
                 "IndexTag": "Chapter",
-                "Index": "1장,. 1990년대, 메타버스가 잉태되다",
+                "Index": "1장, 1990년대, 메타버스가 잉태되다",
                 "BodyId": 12,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 145,
                         "Tag": "Chapter",
-                        "Chunk": "1장,. 1990년대, 메타버스가 잉태되다"
+                        "Chunk": "1장, 1990년대, 메타버스가 잉태되다"
                     }
                 ]
             },
@@ -2173,13 +2173,13 @@
             {
                 "IndexId": 14,
                 "IndexTag": "Chapter",
-                "Index": "2장,. 웹2.0시대, 집단지성이 태동하다",
+                "Index": "2장, 웹2.0시대, 집단지성이 태동하다",
                 "BodyId": 39,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 368,
                         "Tag": "Chapter",
-                        "Chunk": "2장,. 웹2.0시대, 집단지성이 태동하다"
+                        "Chunk": "2장, 웹2.0시대, 집단지성이 태동하다"
                     }
                 ]
             },
@@ -3661,13 +3661,13 @@
             {
                 "IndexId": 25,
                 "IndexTag": "Chapter",
-                "Index": "3장,. 스마트폰, 메타버스로 가는 길을 열다",
+                "Index": "3장, 스마트폰, 메타버스로 가는 길을 열다",
                 "BodyId": 70,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 616,
                         "Tag": "Chapter",
-                        "Chunk": "3장,. 스마트폰, 메타버스로 가는 길을 열다"
+                        "Chunk": "3장, 스마트폰, 메타버스로 가는 길을 열다"
                     }
                 ]
             },
@@ -5309,13 +5309,13 @@
             {
                 "IndexId": 39,
                 "IndexTag": "Chapter",
-                "Index": "4장,. 메타버스의 DNA 분석",
+                "Index": "4장, 메타버스의 DNA 분석",
                 "BodyId": 106,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 888,
                         "Tag": "Chapter",
-                        "Chunk": "4장,. 메타버스의 DNA 분석"
+                        "Chunk": "4장, 메타버스의 DNA 분석"
                     }
                 ]
             },
@@ -6778,13 +6778,13 @@
             {
                 "IndexId": 51,
                 "IndexTag": "Chapter",
-                "Index": "5장,. 4차 산업혁명, 메타버스의 형체를 만들다",
+                "Index": "5장, 4차 산업혁명, 메타버스의 형체를 만들다",
                 "BodyId": 139,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 1129,
                         "Tag": "Chapter",
-                        "Chunk": "5장,. 4차 산업혁명, 메타버스의 형체를 만들다"
+                        "Chunk": "5장, 4차 산업혁명, 메타버스의 형체를 만들다"
                     }
                 ]
             },
@@ -8255,13 +8255,13 @@
             {
                 "IndexId": 62,
                 "IndexTag": "Chapter",
-                "Index": "6장,. 웹3.0 시대 게임의 법칙이 바뀌었다",
+                "Index": "6장, 웹3.0 시대 게임의 법칙이 바뀌었다",
                 "BodyId": 168,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 1378,
                         "Tag": "Chapter",
-                        "Chunk": "6장,. 웹3.0 시대 게임의 법칙이 바뀌었다"
+                        "Chunk": "6장, 웹3.0 시대 게임의 법칙이 바뀌었다"
                     }
                 ]
             },
@@ -9869,13 +9869,13 @@
             {
                 "IndexId": 78,
                 "IndexTag": "Chapter",
-                "Index": "7장,. 메타버스의 세 가지 유형",
+                "Index": "7장, 메타버스의 세 가지 유형",
                 "BodyId": 206,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 1640,
                         "Tag": "Chapter",
-                        "Chunk": "7장,. 메타버스의 세 가지 유형"
+                        "Chunk": "7장, 메타버스의 세 가지 유형"
                     }
                 ]
             },
@@ -11257,13 +11257,13 @@
             {
                 "IndexId": 90,
                 "IndexTag": "Chapter",
-                "Index": "8장,. 메타버스 플랫폼이 갖추어야 할 필수템, 3C",
+                "Index": "8장, 메타버스 플랫폼이 갖추어야 할 필수템, 3C",
                 "BodyId": 237,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 1868,
                         "Tag": "Chapter",
-                        "Chunk": "8장,. 메타버스 플랫폼이 갖추어야 할 필수템, 3C"
+                        "Chunk": "8장, 메타버스 플랫폼이 갖추어야 할 필수템, 3C"
                     }
                 ]
             },
@@ -13341,13 +13341,13 @@
             {
                 "IndexId": 104,
                 "IndexTag": "Chapter",
-                "Index": "9장,. 디지털 자산보증서, NFT",
+                "Index": "9장, 디지털 자산보증서, NFT",
                 "BodyId": 280,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 2216,
                         "Tag": "Chapter",
-                        "Chunk": "9장,. 디지털 자산보증서, NFT"
+                        "Chunk": "9장, 디지털 자산보증서, NFT"
                     }
                 ]
             },
@@ -14892,13 +14892,13 @@
             {
                 "IndexId": 117,
                 "IndexTag": "Chapter",
-                "Index": "10장,. 네 가지 상품기획",
+                "Index": "10장, 네 가지 상품기획",
                 "BodyId": 312,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 2475,
                         "Tag": "Chapter",
-                        "Chunk": "10장,. 네 가지 상품기획"
+                        "Chunk": "10장, 네 가지 상품기획"
                     }
                 ]
             },
@@ -16587,13 +16587,13 @@
             {
                 "IndexId": 130,
                 "IndexTag": "Chapter",
-                "Index": "11장,. 대체현실게임(ARG)의 귀환",
+                "Index": "11장, 대체현실게임(ARG)의 귀환",
                 "BodyId": 347,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 2758,
                         "Tag": "Chapter",
-                        "Chunk": "11장,. 대체현실게임(ARG)의 귀환"
+                        "Chunk": "11장, 대체현실게임(ARG)의 귀환"
                     }
                 ]
             },
@@ -18463,13 +18463,13 @@
             {
                 "IndexId": 145,
                 "IndexTag": "Chapter",
-                "Index": "12장,. 융합마케팅 전략",
+                "Index": "12장, 융합마케팅 전략",
                 "BodyId": 389,
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 3066,
                         "Tag": "Chapter",
-                        "Chunk": "12장,. 융합마케팅 전략"
+                        "Chunk": "12장, 융합마케팅 전략"
                     }
                 ]
             },
@@ -20808,11 +20808,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n1장,. 1990년대, 메타버스가 잉태되다\n",
-                "Correction": "\n\n1장,. 1990년대, 메타버스가 잉태되다\n●",
-                "Character": "\n\n1장,. 1990년대, 메타버스가 잉태되다\n",
+                "Body": "\n\n1장, 1990년대, 메타버스가 잉태되다\n",
+                "Correction": "\n\n1장, 1990년대, 메타버스가 잉태되다\n●",
+                "Character": "\n\n1장, 1990년대, 메타버스가 잉태되다\n",
                 "Context": "None",
-                "SFX": "\n\n1장,. 1990년대, 메타버스가 잉태되다\n●"
+                "SFX": "\n\n1장, 1990년대, 메타버스가 잉태되다\n●"
             },
             {
                 "BodyId": 13,
@@ -21413,11 +21413,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n2장,. 웹2.0시대, 집단지성이 태동하다\n",
-                "Correction": "\n\n2장,. 웹2.0시대, 집단지성이 태동하다\n●",
-                "Character": "\n\n2장,. 웹2.0시대, 집단지성이 태동하다\n",
+                "Body": "\n\n2장, 웹2.0시대, 집단지성이 태동하다\n",
+                "Correction": "\n\n2장, 웹2.0시대, 집단지성이 태동하다\n●",
+                "Character": "\n\n2장, 웹2.0시대, 집단지성이 태동하다\n",
                 "Context": "None",
-                "SFX": "\n\n2장,. 웹2.0시대, 집단지성이 태동하다\n●"
+                "SFX": "\n\n2장, 웹2.0시대, 집단지성이 태동하다\n●"
             },
             {
                 "BodyId": 40,
@@ -22098,11 +22098,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n3장,. 스마트폰, 메타버스로 가는 길을 열다\n",
-                "Correction": "\n\n3장,. 스마트폰, 메타버스로 가는 길을 열다\n●",
-                "Character": "\n\n3장,. 스마트폰, 메타버스로 가는 길을 열다\n",
+                "Body": "\n\n3장, 스마트폰, 메타버스로 가는 길을 열다\n",
+                "Correction": "\n\n3장, 스마트폰, 메타버스로 가는 길을 열다\n●",
+                "Character": "\n\n3장, 스마트폰, 메타버스로 가는 길을 열다\n",
                 "Context": "None",
-                "SFX": "\n\n3장,. 스마트폰, 메타버스로 가는 길을 열다\n●"
+                "SFX": "\n\n3장, 스마트폰, 메타버스로 가는 길을 열다\n●"
             },
             {
                 "BodyId": 71,
@@ -22876,11 +22876,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n4장,. 메타버스의 DNA 분석\n",
-                "Correction": "\n\n4장,. 메타버스의 DNA 분석\n●",
-                "Character": "\n\n4장,. 메타버스의 DNA 분석\n",
+                "Body": "\n\n4장, 메타버스의 DNA 분석\n",
+                "Correction": "\n\n4장, 메타버스의 DNA 분석\n●",
+                "Character": "\n\n4장, 메타버스의 DNA 분석\n",
                 "Context": "None",
-                "SFX": "\n\n4장,. 메타버스의 DNA 분석\n●"
+                "SFX": "\n\n4장, 메타버스의 DNA 분석\n●"
             },
             {
                 "BodyId": 107,
@@ -23587,11 +23587,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n5장,. 4차 산업혁명, 메타버스의 형체를 만들다\n",
-                "Correction": "\n\n5장,. 4차 산업혁명, 메타버스의 형체를 만들다\n●",
-                "Character": "\n\n5장,. 4차 산업혁명, 메타버스의 형체를 만들다\n",
+                "Body": "\n\n5장, 4차 산업혁명, 메타버스의 형체를 만들다\n",
+                "Correction": "\n\n5장, 4차 산업혁명, 메타버스의 형체를 만들다\n●",
+                "Character": "\n\n5장, 4차 산업혁명, 메타버스의 형체를 만들다\n",
                 "Context": "None",
-                "SFX": "\n\n5장,. 4차 산업혁명, 메타버스의 형체를 만들다\n●"
+                "SFX": "\n\n5장, 4차 산업혁명, 메타버스의 형체를 만들다\n●"
             },
             {
                 "BodyId": 140,
@@ -24246,11 +24246,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n6장,. 웹3.0 시대 게임의 법칙이 바뀌었다\n",
-                "Correction": "\n\n6장,. 웹3.0 시대 게임의 법칙이 바뀌었다\n●",
-                "Character": "\n\n6장,. 웹3.0 시대 게임의 법칙이 바뀌었다\n",
+                "Body": "\n\n6장, 웹3.0 시대 게임의 법칙이 바뀌었다\n",
+                "Correction": "\n\n6장, 웹3.0 시대 게임의 법칙이 바뀌었다\n●",
+                "Character": "\n\n6장, 웹3.0 시대 게임의 법칙이 바뀌었다\n",
                 "Context": "None",
-                "SFX": "\n\n6장,. 웹3.0 시대 게임의 법칙이 바뀌었다\n●"
+                "SFX": "\n\n6장, 웹3.0 시대 게임의 법칙이 바뀌었다\n●"
             },
             {
                 "BodyId": 169,
@@ -25046,11 +25046,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n7장,. 메타버스의 세 가지 유형\n",
-                "Correction": "\n\n7장,. 메타버스의 세 가지 유형\n●",
-                "Character": "\n\n7장,. 메타버스의 세 가지 유형\n",
+                "Body": "\n\n7장, 메타버스의 세 가지 유형\n",
+                "Correction": "\n\n7장, 메타버스의 세 가지 유형\n●",
+                "Character": "\n\n7장, 메타버스의 세 가지 유형\n",
                 "Context": "None",
-                "SFX": "\n\n7장,. 메타버스의 세 가지 유형\n●"
+                "SFX": "\n\n7장, 메타버스의 세 가지 유형\n●"
             },
             {
                 "BodyId": 207,
@@ -25711,11 +25711,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n8장,. 메타버스 플랫폼이 갖추어야 할 필수템, 3C\n",
-                "Correction": "\n\n8장,. 메타버스 플랫폼이 갖추어야 할 필수템, 3C\n●",
-                "Character": "\n\n8장,. 메타버스 플랫폼이 갖추어야 할 필수템, 3C\n",
+                "Body": "\n\n8장, 메타버스 플랫폼이 갖추어야 할 필수템, 3C\n",
+                "Correction": "\n\n8장, 메타버스 플랫폼이 갖추어야 할 필수템, 3C\n●",
+                "Character": "\n\n8장, 메타버스 플랫폼이 갖추어야 할 필수템, 3C\n",
                 "Context": "None",
-                "SFX": "\n\n8장,. 메타버스 플랫폼이 갖추어야 할 필수템, 3C\n●"
+                "SFX": "\n\n8장, 메타버스 플랫폼이 갖추어야 할 필수템, 3C\n●"
             },
             {
                 "BodyId": 238,
@@ -26666,11 +26666,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n9장,. 디지털 자산보증서, NFT\n",
-                "Correction": "\n\n9장,. 디지털 자산보증서, NFT\n●",
-                "Character": "\n\n9장,. 디지털 자산보증서, NFT\n",
+                "Body": "\n\n9장, 디지털 자산보증서, NFT\n",
+                "Correction": "\n\n9장, 디지털 자산보증서, NFT\n●",
+                "Character": "\n\n9장, 디지털 자산보증서, NFT\n",
                 "Context": "None",
-                "SFX": "\n\n9장,. 디지털 자산보증서, NFT\n●"
+                "SFX": "\n\n9장, 디지털 자산보증서, NFT\n●"
             },
             {
                 "BodyId": 281,
@@ -27378,11 +27378,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n10장,. 네 가지 상품기획\n",
-                "Correction": "\n\n10장,. 네 가지 상품기획\n●",
-                "Character": "\n\n10장,. 네 가지 상품기획\n",
+                "Body": "\n\n10장, 네 가지 상품기획\n",
+                "Correction": "\n\n10장, 네 가지 상품기획\n●",
+                "Character": "\n\n10장, 네 가지 상품기획\n",
                 "Context": "None",
-                "SFX": "\n\n10장,. 네 가지 상품기획\n●"
+                "SFX": "\n\n10장, 네 가지 상품기획\n●"
             },
             {
                 "BodyId": 313,
@@ -28154,11 +28154,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n11장,. 대체현실게임(ARG)의 귀환\n",
-                "Correction": "\n\n11장,. 대체현실게임(ARG)의 귀환\n●",
-                "Character": "\n\n11장,. 대체현실게임(ARG)의 귀환\n",
+                "Body": "\n\n11장, 대체현실게임(ARG)의 귀환\n",
+                "Correction": "\n\n11장, 대체현실게임(ARG)의 귀환\n●",
+                "Character": "\n\n11장, 대체현실게임(ARG)의 귀환\n",
                 "Context": "None",
-                "SFX": "\n\n11장,. 대체현실게임(ARG)의 귀환\n●"
+                "SFX": "\n\n11장, 대체현실게임(ARG)의 귀환\n●"
             },
             {
                 "BodyId": 348,
@@ -29062,11 +29062,11 @@
                     "Index",
                     "SFX"
                 ],
-                "Body": "\n\n12장,. 융합마케팅 전략\n",
-                "Correction": "\n\n12장,. 융합마케팅 전략\n●",
-                "Character": "\n\n12장,. 융합마케팅 전략\n",
+                "Body": "\n\n12장, 융합마케팅 전략\n",
+                "Correction": "\n\n12장, 융합마케팅 전략\n●",
+                "Character": "\n\n12장, 융합마케팅 전략\n",
                 "Context": "None",
-                "SFX": "\n\n12장,. 융합마케팅 전략\n●"
+                "SFX": "\n\n12장, 융합마케팅 전략\n●"
             },
             {
                 "BodyId": 390,

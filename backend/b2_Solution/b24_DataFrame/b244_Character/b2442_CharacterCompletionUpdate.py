@@ -469,7 +469,7 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
 
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = " - 주의사항1: <인물리스트>에서 등장횟수가 큰 인물은 묶지 않으며, 최대한 개별성우로 선정. 주의사항2: <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않음. -\n"
+            memoryCounter = " - 주의사항1: <인물리스트>에서 등장횟수가 큰 인물[특히 앞부분 인물들이 등장횟수가 큼]들은 절대 묶지 않으며, 인물 1인당 1명의 개별성우로 선정. 주의사항2: <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않음. -\n"
             outputEnder = ""
 
             # Response 생성
@@ -851,7 +851,7 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview 
             print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate는 ExistedCharacterCompletion으로 대처됨 ]\n")
         else:
             SelectedResponseJson, CharacterList = CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
-            print(f"< Project: {projectName} | Process: CharacterCompletion | CharacterFilter 완료\n{projectName}의 성우 {len(CharacterList)}명> ")
+            print(f"< Project: {projectName} | Process: CharacterCompletion | CharacterFilter 완료, {projectName}의 성우 {len(CharacterList)}명> ")
             
             ## 12-1. CharacterCompletion
             # ResponseJson을 ContinueCount로 슬라이스

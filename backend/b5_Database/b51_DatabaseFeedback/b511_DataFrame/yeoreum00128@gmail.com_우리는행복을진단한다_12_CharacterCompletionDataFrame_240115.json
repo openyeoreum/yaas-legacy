@@ -8,7 +8,7 @@
         "Language": "Ko",
         "TaskName": "CharacterCompletion",
         "CharacterChunkCount": 104,
-        "CharacterCount": 8,
+        "CharacterCount": 5,
         "Completion": "Yes",
         "Memo": "캐릭터의 증거를 알아내는 프로세스"
     },
@@ -60,9 +60,9 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 3,
-                    "CharacterTag": "Character2",
-                    "Gender": "남",
+                    "CharacterId": 6,
+                    "CharacterTag": "Character5",
+                    "Gender": "여",
                     "Age": "장년"
                 }
             },
@@ -81,10 +81,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 4,
-                    "CharacterTag": "Character3",
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
                     "Gender": "남",
-                    "Age": "노년"
+                    "Age": "중년"
                 }
             },
             {
@@ -234,8 +234,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -255,8 +255,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -276,8 +276,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -297,8 +297,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -432,8 +432,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -477,8 +477,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -567,10 +567,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
-                    "Age": "청년"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -609,8 +609,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
                     "Gender": "남",
                     "Age": "중년"
                 }
@@ -630,8 +630,8 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 4,
-                    "CharacterTag": "Character3",
+                    "CharacterId": 5,
+                    "CharacterTag": "Character4",
                     "Gender": "남",
                     "Age": "노년"
                 }
@@ -672,8 +672,8 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 4,
-                    "CharacterTag": "Character3",
+                    "CharacterId": 5,
+                    "CharacterTag": "Character4",
                     "Gender": "남",
                     "Age": "노년"
                 }
@@ -744,10 +744,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
-                    "Age": "청년"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -813,10 +813,10 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 3,
-                    "CharacterTag": "Character2",
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
                     "Gender": "남",
-                    "Age": "장년"
+                    "Age": "중년"
                 }
             },
             {
@@ -858,10 +858,10 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 3,
-                    "CharacterTag": "Character2",
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
                     "Gender": "남",
-                    "Age": "장년"
+                    "Age": "중년"
                 }
             },
             {
@@ -879,10 +879,10 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 3,
-                    "CharacterTag": "Character2",
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
                     "Gender": "남",
-                    "Age": "장년"
+                    "Age": "중년"
                 }
             },
             {
@@ -927,8 +927,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 4,
-                    "CharacterTag": "Character3",
+                    "CharacterId": 5,
+                    "CharacterTag": "Character4",
                     "Gender": "남",
                     "Age": "노년"
                 }
@@ -969,8 +969,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 6,
-                    "CharacterTag": "Character5",
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
                     "Gender": "여",
                     "Age": "청년"
                 }
@@ -990,8 +990,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 6,
-                    "CharacterTag": "Character5",
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
                     "Gender": "여",
                     "Age": "청년"
                 }
@@ -1011,8 +1011,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -1032,8 +1032,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -1053,8 +1053,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -1095,8 +1095,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 6,
-                    "CharacterTag": "Character5",
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
                     "Gender": "여",
                     "Age": "청년"
                 }
@@ -1116,10 +1116,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 7,
-                    "CharacterTag": "Character6",
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
                     "Gender": "여",
-                    "Age": "중년"
+                    "Age": "청년"
                 }
             },
             {
@@ -1136,7 +1136,12 @@
                     "Emotion": "즐거움",
                     "Role": "조연"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
             },
             {
                 "CharacterChunkId": 53,
@@ -1174,8 +1179,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 4,
-                    "CharacterTag": "Character3",
+                    "CharacterId": 5,
+                    "CharacterTag": "Character4",
                     "Gender": "남",
                     "Age": "노년"
                 }
@@ -1279,9 +1284,9 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 3,
-                    "CharacterTag": "Character2",
-                    "Gender": "남",
+                    "CharacterId": 6,
+                    "CharacterTag": "Character5",
+                    "Gender": "여",
                     "Age": "장년"
                 }
             },
@@ -1300,8 +1305,8 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 4,
-                    "CharacterTag": "Character3",
+                    "CharacterId": 5,
+                    "CharacterTag": "Character4",
                     "Gender": "남",
                     "Age": "노년"
                 }
@@ -1321,10 +1326,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
-                    "Age": "청년"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -1363,10 +1368,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
-                    "Age": "청년"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -1384,10 +1389,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
-                    "Age": "청년"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -1471,9 +1476,9 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
                     "Age": "청년"
                 }
             },
@@ -1495,9 +1500,9 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
                     "Age": "청년"
                 }
             },
@@ -1536,7 +1541,12 @@
                     "Emotion": "화남",
                     "Role": "단역"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
             },
             {
                 "CharacterChunkId": 72,
@@ -1552,7 +1562,12 @@
                     "Emotion": "화남",
                     "Role": "단역"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
             },
             {
                 "CharacterChunkId": 73,
@@ -1572,10 +1587,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
-                    "Age": "청년"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -1593,9 +1608,9 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
                     "Age": "청년"
                 }
             },
@@ -1656,8 +1671,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -1677,8 +1692,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 6,
-                    "CharacterTag": "Character5",
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
                     "Gender": "여",
                     "Age": "청년"
                 }
@@ -1740,10 +1755,10 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 9,
-                    "CharacterTag": "Character8",
-                    "Gender": "없음",
-                    "Age": "없음"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -1761,10 +1776,10 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 9,
-                    "CharacterTag": "Character8",
-                    "Gender": "없음",
-                    "Age": "없음"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -1782,10 +1797,10 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 4,
-                    "CharacterTag": "Character3",
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
                     "Gender": "남",
-                    "Age": "노년"
+                    "Age": "중년"
                 }
             },
             {
@@ -1845,10 +1860,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
-                    "Age": "청년"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -1908,10 +1923,10 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 3,
-                    "CharacterTag": "Character2",
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
                     "Gender": "남",
-                    "Age": "장년"
+                    "Age": "중년"
                 }
             },
             {
@@ -1929,10 +1944,10 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 3,
-                    "CharacterTag": "Character2",
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
                     "Gender": "남",
-                    "Age": "장년"
+                    "Age": "중년"
                 }
             },
             {
@@ -1974,8 +1989,8 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -2016,8 +2031,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 6,
-                    "CharacterTag": "Character5",
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
                     "Gender": "여",
                     "Age": "청년"
                 }
@@ -2058,10 +2073,10 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 4,
-                    "CharacterTag": "Character3",
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
                     "Gender": "남",
-                    "Age": "노년"
+                    "Age": "중년"
                 }
             },
             {
@@ -2079,8 +2094,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 5,
-                    "CharacterTag": "Character4",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -2121,10 +2136,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
-                    "Age": "청년"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -2142,10 +2157,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
-                    "Age": "청년"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -2205,10 +2220,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 8,
-                    "CharacterTag": "Character7",
-                    "Gender": "남/여",
-                    "Age": "청년"
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
                 }
             },
             {
@@ -2250,8 +2265,10 @@
                 "Age": "중년",
                 "MainCharacterList": [
                     "이경률 회장",
+                    "SCL 직원들",
+                    "경영자",
+                    "OECD 보고서",
                     "작가",
-                    "저자",
                     "내레이터",
                     "나레이터"
                 ]
@@ -2269,15 +2286,23 @@
                     "본부장",
                     "SCL 경영진",
                     "구매부 직원",
+                    "하워드 슐츠",
+                    "의과대학 스승",
                     "마틴 매커리 교수",
                     "제프 베조스",
                     "막스 플랑크",
                     "은통",
+                    "저자",
                     "손님",
+                    "인도네시아 현지인",
                     "SCL헬스케어 관계자",
                     "검사부 팀장들",
+                    "환자 또는 환자 보호자",
+                    "코로나 확진자",
                     "행정부서 직원",
+                    "헨리 윌슨",
                     "직원 B",
+                    "이본 쉬나드",
                     "소설 내 등장인물",
                     "파타고니아 대표"
                 ]
@@ -2286,38 +2311,11 @@
                 "CharacterId": 2,
                 "CharacterTag": "Character2",
                 "Gender": "남",
-                "Age": "장년",
-                "MainCharacterList": [
-                    "경영자",
-                    "하워드 슐츠",
-                    "오드리 헵번",
-                    "오프라 윈프리"
-                ]
-            },
-            {
-                "CharacterId": 3,
-                "CharacterTag": "Character3",
-                "Gender": "남",
-                "Age": "노년",
-                "MainCharacterList": [
-                    "의과대학 스승",
-                    "롱펠로",
-                    "앤디 그로브",
-                    "잭 웰치",
-                    "한비자",
-                    "윈스턴 처칠",
-                    "헨리 윌슨",
-                    "이본 쉬나드"
-                ]
-            },
-            {
-                "CharacterId": 4,
-                "CharacterTag": "Character4",
-                "Gender": "남",
                 "Age": "청년",
                 "MainCharacterList": [
                     "공중보건의",
                     "검사부서 직원",
+                    "SCL 분자진단팀 직원",
                     "경쟁기관 영업사원",
                     "스티브 잡스",
                     "영업부서 직원",
@@ -2326,43 +2324,39 @@
                 ]
             },
             {
-                "CharacterId": 5,
-                "CharacterTag": "Character5",
+                "CharacterId": 3,
+                "CharacterTag": "Character3",
                 "Gender": "여",
                 "Age": "청년",
                 "MainCharacterList": [
                     "고객응대부서 직원",
                     "검사부원",
+                    "SCL 검사부 직원",
                     "의료진단사업부 직원",
                     "검사부 여직원"
                 ]
             },
             {
-                "CharacterId": 6,
-                "CharacterTag": "Character6",
+                "CharacterId": 4,
+                "CharacterTag": "Character4",
+                "Gender": "남",
+                "Age": "노년",
+                "MainCharacterList": [
+                    "롱펠로",
+                    "앤디 그로브",
+                    "잭 웰치",
+                    "한비자",
+                    "윈스턴 처칠"
+                ]
+            },
+            {
+                "CharacterId": 5,
+                "CharacterTag": "Character5",
                 "Gender": "여",
-                "Age": "중년",
+                "Age": "장년",
                 "MainCharacterList": [
-                    "SCL 검사부 직원"
-                ]
-            },
-            {
-                "CharacterId": 7,
-                "CharacterTag": "Character7",
-                "Gender": "남/여",
-                "Age": "청년",
-                "MainCharacterList": [
-                    "SCL 직원들",
-                    "SCL 분자진단팀 직원"
-                ]
-            },
-            {
-                "CharacterId": 8,
-                "CharacterTag": "Character8",
-                "Gender": "없음",
-                "Age": "없음",
-                "MainCharacterList": [
-                    "OECD 보고서"
+                    "오드리 헵번",
+                    "오프라 윈프리"
                 ]
             }
         ]

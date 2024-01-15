@@ -8,7 +8,7 @@
         "Language": "Ko",
         "TaskName": "CharacterCompletion",
         "CharacterChunkCount": 82,
-        "CharacterCount": 5,
+        "CharacterCount": 7,
         "Completion": "Yes",
         "Memo": "캐릭터의 증거를 알아내는 프로세스"
     },
@@ -38,7 +38,12 @@
                     "Emotion": "중립",
                     "Role": "단역"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
+                }
             },
             {
                 "CharacterChunkId": 2,
@@ -159,7 +164,12 @@
                     "Emotion": "중립",
                     "Role": "조연"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
+                }
             },
             {
                 "CharacterChunkId": 8,
@@ -176,8 +186,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 2,
-                    "CharacterTag": "Character1",
+                    "CharacterId": 7,
+                    "CharacterTag": "Character6",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -218,8 +228,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 2,
-                    "CharacterTag": "Character1",
+                    "CharacterId": 7,
+                    "CharacterTag": "Character6",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -260,8 +270,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "중년"
                 }
@@ -281,8 +291,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "중년"
                 }
@@ -302,8 +312,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "중년"
                 }
@@ -323,8 +333,8 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 2,
-                    "CharacterTag": "Character1",
+                    "CharacterId": 7,
+                    "CharacterTag": "Character6",
                     "Gender": "남",
                     "Age": "청년"
                 }
@@ -344,8 +354,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "중년"
                 }
@@ -365,8 +375,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "중년"
                 }
@@ -386,8 +396,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "중년"
                 }
@@ -556,7 +566,12 @@
                     "Emotion": "중립",
                     "Role": "단역"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 6,
+                    "CharacterTag": "Character5",
+                    "Gender": "남",
+                    "Age": "장년"
+                }
             },
             {
                 "CharacterChunkId": 27,
@@ -573,10 +588,10 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 3,
-                    "CharacterTag": "Character2",
-                    "Gender": "남",
-                    "Age": "중년"
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
                 }
             },
             {
@@ -594,10 +609,10 @@
                     "Role": "조연"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
-                    "Gender": "남",
-                    "Age": "중년"
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
                 }
             },
             {
@@ -657,8 +672,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "중년"
                 }
@@ -761,7 +776,12 @@
                     "Emotion": "중립",
                     "Role": "단역"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
+                }
             },
             {
                 "CharacterChunkId": 37,
@@ -777,7 +797,12 @@
                     "Emotion": "중립",
                     "Role": "단역"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
+                }
             },
             {
                 "CharacterChunkId": 38,
@@ -863,8 +888,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "중년"
                 }
@@ -887,10 +912,10 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
-                    "Gender": "남",
-                    "Age": "중년"
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
                 }
             },
             {
@@ -940,10 +965,10 @@
                     "Role": "단역"
                 },
                 "Voice": {
-                    "CharacterId": 3,
-                    "CharacterTag": "Character2",
+                    "CharacterId": 7,
+                    "CharacterTag": "Character6",
                     "Gender": "남",
-                    "Age": "중년"
+                    "Age": "청년"
                 }
             },
             {
@@ -963,7 +988,12 @@
                     "Emotion": "중립",
                     "Role": "단역"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
             },
             {
                 "CharacterChunkId": 47,
@@ -1042,7 +1072,12 @@
                     "Emotion": "중립",
                     "Role": "조연"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 6,
+                    "CharacterTag": "Character5",
+                    "Gender": "남",
+                    "Age": "장년"
+                }
             },
             {
                 "CharacterChunkId": 51,
@@ -1503,10 +1538,10 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 6,
-                    "CharacterTag": "Character5",
+                    "CharacterId": 5,
+                    "CharacterTag": "Character4",
                     "Gender": "여",
-                    "Age": "청소년"
+                    "Age": "청년"
                 }
             },
             {
@@ -1523,7 +1558,12 @@
                     "Emotion": "중립",
                     "Role": "중립"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
+                }
             },
             {
                 "CharacterChunkId": 74,
@@ -1650,7 +1690,12 @@
                     "Emotion": "중립",
                     "Role": "단역"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 6,
+                    "CharacterTag": "Character5",
+                    "Gender": "남",
+                    "Age": "장년"
+                }
             },
             {
                 "CharacterChunkId": 80,
@@ -1666,7 +1711,12 @@
                     "Emotion": "중립",
                     "Role": "단역"
                 },
-                "Voice": null
+                "Voice": {
+                    "CharacterId": 6,
+                    "CharacterTag": "Character5",
+                    "Gender": "남",
+                    "Age": "장년"
+                }
             },
             {
                 "CharacterChunkId": 81,
@@ -1683,8 +1733,8 @@
                     "Role": "주인공"
                 },
                 "Voice": {
-                    "CharacterId": 1,
-                    "CharacterTag": "Narrator",
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
                     "Gender": "남",
                     "Age": "중년"
                 }
@@ -1727,13 +1777,9 @@
                 "Gender": "남",
                 "Age": "중년",
                 "MainCharacterList": [
-                    "사토시 나카모토",
                     "저자",
-                    "작가",
-                    "조셉 파인",
                     "내레이터",
-                    "비트코인 논문",
-                    "김용태"
+                    "일반인"
                 ]
             },
             {
@@ -1743,10 +1789,7 @@
                 "Age": "청년",
                 "MainCharacterList": [
                     "조커",
-                    "토론 참여자",
-                    "개발자",
-                    "월스트리트 점령 운동 참가자",
-                    "프로그래머"
+                    "토론 참여자"
                 ]
             },
             {
@@ -1755,7 +1798,9 @@
                 "Gender": "남",
                 "Age": "중년",
                 "MainCharacterList": [
+                    "사토시 나카모토",
                     "와이소시어리어스 회사 인사담당자",
+                    "작가",
                     "지미 웨일스",
                     "필립 로즈데일",
                     "모피어스",
@@ -1768,16 +1813,15 @@
                     "국민",
                     "카를로 로벨리",
                     "마크 저커버그",
-                    "구매자",
                     "올라 켈레니우스",
                     "티리온 라니스터",
-                    "일론 머스크",
                     "요식업 창업자",
                     "이케아 대표",
                     "비스트 스태프",
                     "프랭크 로즈",
                     "프란시스코 곤잘레스",
-                    "한국의 금융회사 관계자"
+                    "한국의 금융회사 관계자",
+                    "김용태"
                 ]
             },
             {
@@ -1798,16 +1842,48 @@
                 "Gender": "여",
                 "Age": "청년",
                 "MainCharacterList": [
-                    "스태프들"
+                    "스태프들",
+                    "캐시스북"
                 ]
             },
             {
                 "CharacterId": 5,
                 "CharacterTag": "Character5",
-                "Gender": "여",
-                "Age": "청소년",
+                "Gender": "남",
+                "Age": "장년",
                 "MainCharacterList": [
-                    "캐시스북"
+                    "윌리엄 깁슨",
+                    "하워드 슐츠",
+                    "빌 게이츠",
+                    "디터 제체"
+                ]
+            },
+            {
+                "CharacterId": 6,
+                "CharacterTag": "Character6",
+                "Gender": "남",
+                "Age": "청년",
+                "MainCharacterList": [
+                    "개발자",
+                    "월스트리트 점령 운동 참가자",
+                    "프로그래머",
+                    "일론 머스크"
+                ]
+            },
+            {
+                "CharacterId": 7,
+                "CharacterTag": "Character7",
+                "Gender": "중립",
+                "Age": "중립",
+                "MainCharacterList": [
+                    "TV 광고",
+                    "USA 투데이",
+                    "구매자",
+                    "조셉 파인",
+                    "미국 IT 전문매체 긱와이어",
+                    "캐치프레이즈",
+                    "비트코인 논문",
+                    "NBC"
                 ]
             }
         ]

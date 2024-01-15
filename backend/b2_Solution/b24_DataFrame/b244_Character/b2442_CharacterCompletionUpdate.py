@@ -110,7 +110,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
 ######################
 ##### Filter 조건 #####
 ######################
-## 10-1. CharacterCompletion의 Filter(Error 예외처리)
+## 12-1. CharacterCompletion의 Filter(Error 예외처리)
 def CharacterCompletionFilter(TalkTag, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
@@ -144,7 +144,69 @@ def CharacterCompletionFilter(TalkTag, responseData, memoryCounter):
 
     return {'json': outputJson, 'filter': OutputDic}
 
-## 10-1. CharacterCompletion의 Filter(Error 예외처리)
+## 12-2. CharacterPostCompletion의 Filter(Error 예외처리)
+## MisMatchCharacters(요청 결과에 오류부분 검출)
+def MisMatchCharacters(inputIdList, outputIdList):
+    # Finding matches, mismatches, and duplicates
+    Match = list(set(inputIdList) & set(outputIdList))
+    MisMatch = list(set(inputIdList) - set(outputIdList))
+
+    # Finding duplicates in outputIdList
+    Duplicate = [item for item in outputIdList if outputIdList.count(item) > 1]
+    Duplicate = list(set(Duplicate))  # Remove duplicates within the duplicate list
+
+    # Calculating the number of elements in MisMatch and Duplicate
+    num_mismatch = len(MisMatch)
+    num_duplicate = len(Duplicate)
+
+    # Total number of elements in inputIdList
+    total_elements_input = len(inputIdList)
+
+    # Calculating the miss ratio
+    miss_ratio = (num_mismatch + num_duplicate) / total_elements_input
+
+    # Creating the result dictionary
+    MisMatchCharactersDic = {'Match': Match, 'MisMatch': MisMatch, 'Duplicate': Duplicate, 'MissRatio': miss_ratio}
+
+    return MisMatchCharactersDic
+
+## 성우 데이터에서 중복된 인물 제거
+def RemoveDuplicates(OutputDic, Duplicate):
+    # Creating a dictionary to hold the highest accuracy for each duplicate character
+    highest_accuracy = {char: 0 for char in Duplicate}
+    
+    # Iterating over the data to find the highest accuracy for each duplicate character
+    for entry in OutputDic:
+        voice_actor = list(entry.keys())[0]
+        accuracy = int(entry[voice_actor]['정확도'])
+        characters = entry[voice_actor]['담당인물번호']
+
+        for char in characters:
+            if char in Duplicate:
+                if accuracy > highest_accuracy[char]:
+                    highest_accuracy[char] = accuracy
+
+    # Creating a list to hold all the character IDs
+    OutputDicIdList = []
+
+    # Removing duplicates based on the highest accuracy and populating OutputDicIdList
+    for entry in OutputDic:
+        voice_actor = list(entry.keys())[0]
+        characters = entry[voice_actor]['담당인물번호']
+
+        # Filtering characters based on the highest accuracy
+        filtered_characters = [char for char in characters if char not in Duplicate or (char in Duplicate and int(entry[voice_actor]['정확도']) == highest_accuracy[char])]
+        entry[voice_actor]['담당인물번호'] = filtered_characters
+
+        # Adding characters to the OutputDicIdList
+        OutputDicIdList.extend(filtered_characters)
+
+    # Removing duplicates in OutputDicIdList
+    OutputDicIdList = list(set(OutputDicIdList))
+
+    return OutputDic, sorted(OutputDicIdList)
+
+## CharacterPostCompletion의 Filter(Error 예외처리)
 def CharacterPostCompletionFilter(inputIdList, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
@@ -160,16 +222,23 @@ def CharacterPostCompletionFilter(inputIdList, responseData, memoryCounter):
     for dic in OutputDic:
         try:
             key = list(dic.keys())[0]
-            if not ('성별' in dic[key] and '연령' in dic[key] and '담당인물번호' in dic[key]):
+            if not ('성별' in dic[key] and '연령' in dic[key] and '담당인물번호' in dic[key] and '정확도' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
             outputIdList += dic[key]['담당인물번호']
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except:
             return "JSON에서 오류 발생: JSONError"
-    # Error5: outputIdList와 inputIdList가 다를 때의 오류
-    ListsEqual = set(inputIdList) == set(outputIdList)
-    if not ListsEqual:
-        return f"JSON에서 오류 발생: {sorted(outputIdList)}와 {inputIdList}가 다를"
+    # Error5: outputIdList와 inputIdList의 불일치가 클 때의 오류
+    MisMatchCharactersDic = MisMatchCharacters(inputIdList, outputIdList)
+    Duplicate = MisMatchCharactersDic['Duplicate']
+    if MisMatchCharactersDic['MissRatio'] >= 0.05:
+        return f"INPUT, OUTPUT [n] 갯수 불일치 오류 발생: MissRatio({MisMatchCharactersDic['MissRatio']}), MisMatchOUTPUT({MisMatchCharactersDic['MisMatch']})"
+    else:
+        OutputDic[0]['메인성우']['담당인물번호'] += MisMatchCharactersDic['MisMatch']
+        OutputDic, OutputDicIdList = RemoveDuplicates(OutputDic, Duplicate)
+    # Error6: 변형된 outputIdList와 inputIdList의 불일치 할때
+    if inputIdList != OutputDicIdList:
+        return f"INPUT, OUTPUT 불일치 오류 발생: InputIdList({inputIdList}), OutputDicIdList({OutputDicIdList})"
 
     return {'json': outputJson, 'filter': OutputDic}
 
@@ -213,7 +282,7 @@ def CharacterCompletionOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## 10-1. CharacterCompletion 프롬프트 요청 및 결과물 Json화
+## 12-1. CharacterCompletion 프롬프트 요청 및 결과물 Json화
 def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "CharacterCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
@@ -311,12 +380,12 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
                 continue
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -352,7 +421,7 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
     
     return outputMemoryDics
 
-## 10-2. CharacterPostCompletion 프롬프트 요청 및 결과물 Json화
+## 12-2. CharacterPostCompletion 프롬프트 요청 및 결과물 Json화
 def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, Process = "CharacterPostCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
@@ -400,7 +469,7 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
 
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = "\n"
+            memoryCounter = " - 작성시 <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않습니다 -\n"
             outputEnder = ""
 
             # Response 생성
@@ -617,8 +686,8 @@ def CarefullySelectedCharacter(SelectedCharacters, DataFramePath, messagesReview
     inputList = [{'Id': 1, 'Continue': TaskBody}]
         
     outputMemoryDics = CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, MessagesReview = messagesReview, Mode = mode)
-
-    print(outputMemoryDics)
+    
+    return outputMemoryDics[0]
 
 ## 캐릭터 나머지 요소 합치기
 def SelectedCharacterFilter(ResponseJson, sortedCharacters, DataFramePath, messagesReview, mode):
@@ -666,13 +735,29 @@ def SelectedCharacterFilter(ResponseJson, sortedCharacters, DataFramePath, messa
         age = WordFrequency(Age)
         emotion = WordFrequency(Emotion)
         role = WordFrequency(Role)
-        SelectedCharacter = {'Id': Id, 'MainCharacter': Character, 'Frequency': frequency, 'Type': type, 'Gender': gender, 'Age': age, 'Emotion': emotion, 'Role': role}
+        SelectedCharacter = {'Id': Id, 'MainCharacter': Character, 'Character': None, 'Frequency': frequency, 'Type': type, 'Gender': gender, 'Age': age, 'Emotion': emotion, 'Role': role}
         SelectedCharacters.append(SelectedCharacter)
         Id += 1
         
-    CarefullySelectedCharacter(SelectedCharacters, DataFramePath, messagesReview, mode)
+    outputMemoryDics = CarefullySelectedCharacter(SelectedCharacters, DataFramePath, messagesReview, mode)
+
+
+    print('1 outputMemoryDics')
+    for i in range(len(outputMemoryDics)):
+        print(outputMemoryDics[i])
+    print('\n\n2 sortedCharacters')
+    for i in range(len(sortedCharacters)):
+        print(sortedCharacters[i])
         
-    return SelectedCharacters
+    
+    
+    # print('\n\n3 SelectedCharacters')
+    # for i in range(len(SelectedCharacters)):
+    #     print(SelectedCharacters[i])
+    # print('\n\n4 ResponseJson')
+    # for i in range(len(ResponseJson)):
+    #     print(ResponseJson[i])
+    # return SelectedResponseJson, SelectedSortedCharacters
 
 ## 데이터 치환
 def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
@@ -717,15 +802,22 @@ def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesR
                 CharacterCount += 1
                 responseCount += 1
                 responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "MainCharacter": MainCharacter, "Type": Type, "Gender": Gender, "Age": Age, "Emotion": Emotion, "Role": Role, "AuthorRelationship": AuthorRelationship})
-    
-    ResponseJson, sortedCharacters = MainCharacterFilter(responseJson)
-    
-    print('여기까지옴')
-    messagesReview = "on"
-    mode = "Master"
-    SelectedResponseJson = SelectedCharacterFilter(ResponseJson, sortedCharacters, DataFramePath, messagesReview, mode)
 
-    return ResponseJson, sortedCharacters
+    ResponseJson, sortedCharacters = MainCharacterFilter(responseJson)
+    ## 12-1. 도서에 대화문이 없는 경우 Pass ##
+    if ResponseJson == []:
+        return ResponseJson, sortedCharacters
+    
+    ## 12-2. 도서에 대화문이 있는 경우 SelectedCharacterFilter(프롬프트 포함) Continue ##
+    else:
+        #### 테스트 후 삭제 ####
+        print('여기까지옴')
+        messagesReview = "on"
+        mode = "Master"
+        #### 테스트 후 삭제 ####
+        SelectedResponseJson, SelectedSortedCharacters = SelectedCharacterFilter(ResponseJson, sortedCharacters, DataFramePath, messagesReview, mode)
+
+        return ResponseJson, sortedCharacters
 
 ## 프롬프트 요청 및 결과물 Json을 CharacterCompletion에 업데이트
 def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):

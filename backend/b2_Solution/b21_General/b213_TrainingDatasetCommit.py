@@ -48,6 +48,7 @@ def AddTrainingDatasetToDB(projectName, email):
             ExistingDataset.WMWMMatching = trainingDataset
             ExistingDataset.CharacterDefine = trainingDataset
             ExistingDataset.CharacterCompletion = trainingDataset
+            ExistingDataset.CharacterPostCompletion = trainingDataset
             ExistingDataset.SoundMatching = trainingDataset
             ExistingDataset.SFXMatching = trainingDataset
             ExistingDataset.SFXMultiQuery = trainingDataset
@@ -77,6 +78,7 @@ def AddTrainingDatasetToDB(projectName, email):
                 WMWMMatching = trainingDataset,
                 CharacterDefine = trainingDataset,
                 CharacterCompletion = trainingDataset,
+                CharacterPostCompletion = trainingDataset,
                 SoundMatching = trainingDataset,
                 SFXMatching = trainingDataset,
                 SFXMultiQuery = trainingDataset,

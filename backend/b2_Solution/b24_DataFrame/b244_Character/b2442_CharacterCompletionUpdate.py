@@ -110,8 +110,8 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
 ######################
 ##### Filter 조건 #####
 ######################
-## CharacterCompletion의 Filter(Error 예외처리)
-def CharNameCharacterCompletionFilter(TalkTag, responseData, memoryCounter):
+## 10-1. CharacterCompletion의 Filter(Error 예외처리)
+def CharacterCompletionFilter(TalkTag, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -141,6 +141,35 @@ def CharNameCharacterCompletionFilter(TalkTag, responseData, memoryCounter):
     # Error6: Input과 Output의 개수가 다를 때의 예외처리
     if len(OutputDic) != len(TalkTag):
         return "JSONCount에서 오류 발생: JSONCountError"
+
+    return {'json': outputJson, 'filter': OutputDic}
+
+## 10-1. CharacterCompletion의 Filter(Error 예외처리)
+def CharacterPostCompletionFilter(inputIdList, responseData, memoryCounter):
+    # Error1: json 형식이 아닐 때의 예외 처리
+    try:
+        outputJson = json.loads(responseData)
+        OutputDic = [{key: value} for key, value in outputJson.items()]
+    except json.JSONDecodeError:
+        return "JSONDecode에서 오류 발생: JSONDecodeError"
+    # Error2: 결과가 list가 아닐 때의 예외 처리
+    if not isinstance(OutputDic, list):
+        return "JSONType에서 오류 발생: JSONTypeError"
+    # Error3: 자료의 구조가 다를 때의 예외 처리
+    outputIdList = []
+    for dic in OutputDic:
+        try:
+            key = list(dic.keys())[0]
+            if not ('성별' in dic[key] and '연령' in dic[key] and '담당인물번호' in dic[key]):
+                return "JSON에서 오류 발생: JSONKeyError"
+            outputIdList += dic[key]['담당인물번호']
+        # Error4: 자료의 형태가 Str일 때의 예외처리
+        except:
+            return "JSON에서 오류 발생: JSONError"
+    # Error5: outputIdList와 inputIdList가 다를 때의 오류
+    ListsEqual = set(inputIdList) == set(outputIdList)
+    if not ListsEqual:
+        return f"JSON에서 오류 발생: {sorted(outputIdList)}와 {inputIdList}가 다를"
 
     return {'json': outputJson, 'filter': OutputDic}
 
@@ -184,12 +213,12 @@ def CharacterCompletionOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## CharacterCompletion 프롬프트 요청 및 결과물 Json화
+## 10-1. CharacterCompletion 프롬프트 요청 및 결과물 Json화
 def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "CharacterCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '12', DataFramePath)    
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '12-1', DataFramePath)    
     inputList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
@@ -275,7 +304,7 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
             
-            Filter = CharNameCharacterCompletionFilter(TalkTag, responseData, memoryCounter)
+            Filter = CharacterCompletionFilter(TalkTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -319,10 +348,126 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
         outputMemoryDics.append(OutputDic)
         outputMemory = CharacterCompletionOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '12', DataFramePath)
+        SaveOutputMemory(projectName, email, outputMemoryDics, '12-1', DataFramePath)
     
     return outputMemoryDics
 
+## 10-2. CharacterPostCompletion 프롬프트 요청 및 결과물 Json화
+def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, Process = "CharacterPostCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+    # DataSetsContext 업데이트
+    AddProjectContextToDB(projectName, email, Process)
+
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '12-2', DataFramePath)
+    InputList = inputList[OutputMemoryCount:]
+    if InputList == []:
+        return OutputMemoryDicsFile
+
+    # FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
+    TotalCount = 0
+    ProcessCount = 1
+    ContinueCount = 0
+    inputMemoryDics = []
+    inputMemory = []
+    InputDic = InputList[0]
+    inputMemoryDics.append(InputDic)
+    outputMemoryDics = OutputMemoryDicsFile
+    outputMemory = []
+        
+    # CharacterPostCompletionProcess
+    while TotalCount < len(InputList):
+        # Momory 계열 모드의 순서
+        if Mode == "Memory":
+            if "Continue" in InputDic:
+                ContinueCount += 1
+            if ContinueCount == 1:
+                mode = "Example"
+            else:
+                mode = "Memory"
+        elif Mode == "MemoryFineTuning":
+            if "Continue" in InputDic:
+                ContinueCount += 1
+            if ContinueCount == 1:
+                mode = "ExampleFineTuning"
+            else:
+                mode = "MemoryFineTuning"
+        # Example 계열 모드의 순서
+        elif Mode == "Master":
+            mode = "Master"
+        elif Mode == "ExampleFineTuning":
+            mode = "ExampleFineTuning"
+        elif Mode == "Example":
+            mode = "Example"
+
+        if "Continue" in InputDic:
+            Input = InputDic['Continue']
+            memoryCounter = "\n"
+            outputEnder = ""
+
+            # Response 생성
+            Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            # print(f"@@@@@@@@@@\n\nResponse: {Response}\n\n@@@@@@@@@@")
+            # OutputStarter, OutputEnder에 따른 Response 전처리
+            promptFrame = GetPromptFrame(Process)
+            if mode in ["Example", "ExampleFineTuning", "Master"]:
+                Example = promptFrame[0]["Example"]
+                if Response.startswith(Example[2]["OutputStarter"]):
+                    Response = Response.replace(Example[2]["OutputStarter"], "", 1)
+                responseData = Example[2]["OutputStarter"] + Response
+            elif mode in ["Memory", "MemoryFineTuning"]:
+                if Response.startswith("[" + outputEnder):
+                    responseData = Response
+                else:
+                    if Response.startswith(outputEnder):
+                        Response = Response.replace(outputEnder, "", 1)
+                    responseData = outputEnder + Response
+            
+            Filter = CharacterPostCompletionFilter(inputIdList, responseData, memoryCounter)
+            
+            if isinstance(Filter, str):
+                if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
+                    ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
+                if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
+                    ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | {Filter}")
+                continue
+            else:
+                OutputDic = Filter['filter']
+                outputJson = Filter['json']
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
+                
+                # DataSets 업데이트
+                if mode in ["Example", "ExampleFineTuning", "Master"]:
+                    # mode가 ["Example", "ExampleFineTuning", "Master"]중 하나인 경우 Memory 초기화
+                    INPUTMemory = "None"
+                elif mode in ["Memory", "MemoryFineTuning"]:
+                    INPUTMemory = inputMemory
+                    
+                AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, InputDic, outputJson, INPUTMEMORY = INPUTMemory)
+                AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, outputJson, INPUTMEMORY = INPUTMemory)
+
+        else:
+            OutputDic = "Pass"
+        
+        TotalCount += 1
+        ProcessCount = TotalCount + 1
+        
+        # Memory 형성
+        MemoryLength = memoryLength
+        # inputMemory 형성
+        try:
+            InputDic = InputList[TotalCount]
+            inputMemoryDics.append(InputDic)
+            inputMemory = CharacterCompletionInputMemory(inputMemoryDics, MemoryLength)
+        except IndexError:
+            pass
+        
+        # outputMemory 형성
+        outputMemoryDics.append(OutputDic)
+        outputMemory = CharacterCompletionOutputMemory(outputMemoryDics, MemoryLength)
+        
+        SaveOutputMemory(projectName, email, outputMemoryDics, '12-2', DataFramePath)
+    
+    return outputMemoryDics
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
@@ -453,9 +598,10 @@ def AgeAverageCalculator(SelectedAge):
         return ClosestAgeCategory
 
 ## 캐릭터 더 선별하기
-def CarefullySelectedCharacter(SelectedCharacters):
+def CarefullySelectedCharacter(SelectedCharacters, DataFramePath, messagesReview, mode):
     SelectedCharactersTexts = []
-    for Selected in SelectedCharacters:
+    inputIdList = []
+    for i, Selected in enumerate(SelectedCharacters):
         if '남' in Selected['Gender'] and '여' in Selected['Gender']:
             Gender = '남/여'
         else:
@@ -463,11 +609,19 @@ def CarefullySelectedCharacter(SelectedCharacters):
         Age = AgeAverageCalculator(Selected['Age'])
         
         SelectedCharactersText = f"인물{Selected['Id']} \"{Selected['MainCharacter']}\" (등장횟수: {Selected['Frequency']}번, 성별: {Gender}, 연령: {Age}, 역할의 비중: {Selected['Role']})\n\n"
-        print(SelectedCharactersText)
         SelectedCharactersTexts.append(SelectedCharactersText)
+        inputIdList.append(i+1)
+
+    # CharacterPostCompletionProcess 실행
+    TaskBody = ''.join(SelectedCharactersTexts)
+    inputList = [{'Id': 1, 'Continue': TaskBody}]
+        
+    outputMemoryDics = CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, MessagesReview = messagesReview, Mode = mode)
+
+    print(outputMemoryDics)
 
 ## 캐릭터 나머지 요소 합치기
-def SelectedCharacterFilter(ResponseJson, sortedCharacters):
+def SelectedCharacterFilter(ResponseJson, sortedCharacters, DataFramePath, messagesReview, mode):
     # Character 요소들 모두 합치기
     SelectedCharacters = []
     Id = 1
@@ -516,7 +670,7 @@ def SelectedCharacterFilter(ResponseJson, sortedCharacters):
         SelectedCharacters.append(SelectedCharacter)
         Id += 1
         
-    CarefullySelectedCharacter(SelectedCharacters)
+    CarefullySelectedCharacter(SelectedCharacters, DataFramePath, messagesReview, mode)
         
     return SelectedCharacters
 
@@ -566,7 +720,10 @@ def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesR
     
     ResponseJson, sortedCharacters = MainCharacterFilter(responseJson)
     
-    SelectedResponseJson = SelectedCharacterFilter(ResponseJson, sortedCharacters)
+    print('여기까지옴')
+    messagesReview = "on"
+    mode = "Master"
+    SelectedResponseJson = SelectedCharacterFilter(ResponseJson, sortedCharacters, DataFramePath, messagesReview, mode)
 
     return ResponseJson, sortedCharacters
 

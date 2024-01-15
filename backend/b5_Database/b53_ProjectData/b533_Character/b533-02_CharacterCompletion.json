@@ -20,7 +20,9 @@
                 "Chunk": "None",
                 "Character": "None",
                 "MainCharacter": "None",
-                "AuthorRelationship": "None"
+                "AuthorRelationship": "None",
+                "Context": "None",
+                "Voice": "None"
             }
         ]
     },
@@ -28,21 +30,10 @@
         "CheckedCharacterTags": [
             {
                 "CharacterId": 0,
-                "CharacterTag": "Narrator",
-                "CharacterList": ["None"],
-                "Character": "None"
-            },
-            {
-                "CharacterId": 0,
-                "CharacterTag": "MainChracter",
-                "CharacterList": ["None"],
-                "Character": "None"
-            },
-            {
-                "CharacterId": 0,
-                "CharacterTag": "Chracter",
-                "CharacterList": ["None"],
-                "Character": "None"
+                "CharacterTag": "None",
+                "Gender": "None",
+                "Age": "None",
+                "MainCharacterList": []
             }
         ]
     }

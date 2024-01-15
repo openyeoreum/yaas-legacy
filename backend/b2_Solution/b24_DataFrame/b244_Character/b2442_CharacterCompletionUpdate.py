@@ -380,12 +380,12 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | {Filter}")
                 continue
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -469,7 +469,7 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
 
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = " - 작성시 <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않습니다 -\n"
+            memoryCounter = " - 주의사항1: <인물리스트>에서 등장횟수가 큰 인물은 묶지 않으며, 최대한 개별성우로 선정. 주의사항2: <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않음. -\n"
             outputEnder = ""
 
             # Response 생성
@@ -497,12 +497,12 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
                 continue
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -667,7 +667,7 @@ def AgeAverageCalculator(SelectedAge):
         return ClosestAgeCategory
 
 ## 캐릭터 더 선별하기
-def CarefullySelectedCharacter(SelectedCharacters, DataFramePath, messagesReview, mode):
+def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, SelectedCharacters):
     SelectedCharactersTexts = []
     inputIdList = []
     for i, Selected in enumerate(SelectedCharacters):
@@ -685,12 +685,34 @@ def CarefullySelectedCharacter(SelectedCharacters, DataFramePath, messagesReview
     TaskBody = ''.join(SelectedCharactersTexts)
     inputList = [{'Id': 1, 'Continue': TaskBody}]
         
-    outputMemoryDics = CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, MessagesReview = messagesReview, Mode = mode)
+    OutputMemoryDics = CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, MessagesReview = messagesReview, Mode = mode)
     
-    return outputMemoryDics[0]
+    outputMemoryDics = OutputMemoryDics[0]
+    # outputMemoryDics 후처리
+    MainActor = outputMemoryDics[0]['메인성우']
+    for actor in outputMemoryDics[1:]:
+        ActorData = list(actor.values())[0]
+        if int(ActorData['정확도']) <= 75 and len(ActorData['담당인물번호']) <= 1:
+            MainActor['담당인물번호'].extend(ActorData['담당인물번호'])
+    # 삭제 조건에 맞는 일반성우 제거
+    outputMemoryDics = [outputMemoryDics[0]] + [actor for actor in outputMemoryDics[1:] if len(list(actor.values())[0]['담당인물번호']) > 0 and int(list(actor.values())[0]['정확도']) >= 80]
+    # 변환
+    CharacterList = []
+    for idx, actor in enumerate(outputMemoryDics, start=1):
+        ActorData = list(actor.values())[0]
+        CharacterName = 'Narrator' if idx == 1 else f'Character{idx-1}'
+        CharacterList.append({'CharacterId': idx, 'CharacterTag': CharacterName, 'Gender': ActorData['성별'], 'Age': ActorData['연령'], 'Actors': sorted(ActorData['담당인물번호'])})
+    
+    # 삭제 조건에 맞는 일반성우 제거
+    for Character in CharacterList:
+        for i in range(len(SelectedCharacters)):
+            if SelectedCharacters[i]['Id'] in Character['Actors']:
+                SelectedCharacters[i]['Voice'] = {'CharacterId': Character['CharacterId'], 'CharacterTag': Character['CharacterTag'], 'Gender': Character['Gender'], 'Age': Character['Age']}
+    
+    return SelectedCharacters, CharacterList
 
 ## 캐릭터 나머지 요소 합치기
-def SelectedCharacterFilter(ResponseJson, sortedCharacters, DataFramePath, messagesReview, mode):
+def SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, mode, ResponseJson, sortedCharacters):
     # Character 요소들 모두 합치기
     SelectedCharacters = []
     Id = 1
@@ -735,37 +757,30 @@ def SelectedCharacterFilter(ResponseJson, sortedCharacters, DataFramePath, messa
         age = WordFrequency(Age)
         emotion = WordFrequency(Emotion)
         role = WordFrequency(Role)
-        SelectedCharacter = {'Id': Id, 'MainCharacter': Character, 'Character': None, 'Frequency': frequency, 'Type': type, 'Gender': gender, 'Age': age, 'Emotion': emotion, 'Role': role}
+        SelectedCharacter = {'Id': Id, 'MainCharacter': Character, 'Voice': None, 'Frequency': frequency, 'Type': type, 'Gender': gender, 'Age': age, 'Emotion': emotion, 'Role': role}
         SelectedCharacters.append(SelectedCharacter)
         Id += 1
-        
-    outputMemoryDics = CarefullySelectedCharacter(SelectedCharacters, DataFramePath, messagesReview, mode)
+    
+    ## SelectedCharacters (캐릭터에 성우 적용)
+    SelectedCharacters, CharacterList = CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, SelectedCharacters)
 
-    # outputMemoryDics 후처리
-    MainActor = outputMemoryDics[0]['메인성우']
-    for actor in outputMemoryDics[1:]:
-        ActorData = list(actor.values())[0]
-        if ActorData['정확도'] <= 75 and len(ActorData['담당인물번호']) <= 1:
-            MainActor['담당인물번호'].extend(ActorData['담당인물번호'])
-    # 삭제 조건에 맞는 일반성우 제거
-    outputMemoryDics = [outputMemoryDics[0]] + [actor for actor in outputMemoryDics[1:] if len(list(actor.values())[0]['담당인물번호']) > 0 and list(actor.values())[0]['정확도'] >= 80]
-    # 변환
-    character_list = []
-    for idx, actor in enumerate(outputMemoryDics, start=1):
-        ActorData = list(actor.values())[0]
-        character_name = 'Narrator' if idx == 1 else f'Character{idx-1}'
-        character_list.append({'CharacterId': idx, 'Voice': {'Character': character_name, 'Gender': ActorData['성별'], 'Age': ActorData['연령'], 'Actors': sorted(ActorData['담당인물번호'])}})
+    # 성우별 담당 배역이름 리스트 업데이트
+    ActorNames =[]
+    for Character in CharacterList:
+        for SelectedCharacter in SelectedCharacters:
+            if SelectedCharacter['Id'] in Character['Actors']:
+                ActorNames.append(SelectedCharacter['MainCharacter'])
+        Character['ActorNames'] = ActorNames
+        ActorNames =[]
+
     
-        
-    
-    
-    # print('\n\n3 SelectedCharacters')
-    # for i in range(len(SelectedCharacters)):
-    #     print(SelectedCharacters[i])
-    # print('\n\n4 ResponseJson')
-    # for i in range(len(ResponseJson)):
-    #     print(ResponseJson[i])
-    # return SelectedResponseJson, SelectedSortedCharacters
+    # 전체 Chunk별 성우 업데이트
+    for Character in SelectedCharacters:
+        for Response in ResponseJson:
+            if Character['MainCharacter'] == Response['MainCharacter']:
+                Response['Voice'] = Character['Voice']
+
+    return ResponseJson, CharacterList
 
 ## 데이터 치환
 def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
@@ -818,14 +833,9 @@ def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesR
     
     ## 12-2. 도서에 대화문이 있는 경우 SelectedCharacterFilter(프롬프트 포함) Continue ##
     else:
-        #### 테스트 후 삭제 ####
-        print('여기까지옴')
-        messagesReview = "on"
-        mode = "Master"
-        #### 테스트 후 삭제 ####
-        SelectedResponseJson, SelectedSortedCharacters = SelectedCharacterFilter(ResponseJson, sortedCharacters, DataFramePath, messagesReview, mode)
+        SelectedResponseJson, CharacterList = SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, mode, ResponseJson, sortedCharacters)
 
-        return ResponseJson, sortedCharacters
+        return SelectedResponseJson, CharacterList
 
 ## 프롬프트 요청 및 결과물 Json을 CharacterCompletion에 업데이트
 def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
@@ -840,11 +850,12 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview 
             AddExistedDataSetToDB(projectName, email, "CharacterCompletion", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate는 ExistedCharacterCompletion으로 대처됨 ]\n")
         else:
-            responseJson, sortedCharacters = CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
-            print(f"< Project: {projectName} | Process: CharacterCompletion | CharacterFilter 완료\n{projectName}의 등장인물 {len(sortedCharacters)}명 : {sortedCharacters}> ")
+            SelectedResponseJson, CharacterList = CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+            print(f"< Project: {projectName} | Process: CharacterCompletion | CharacterFilter 완료\n{projectName}의 성우 {len(CharacterList)}명> ")
             
+            ## 12-1. CharacterCompletion
             # ResponseJson을 ContinueCount로 슬라이스
-            ResponseJson = responseJson[ContinueCount:]
+            ResponseJson = SelectedResponseJson[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
             
             CharacterChunkId = ContinueCount
@@ -856,7 +867,7 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview 
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'CharacterCompletionUpdate: {Update}')
+                UpdateTQDM.set_description(f'CharacterCompletionUpdate: {Update["Character"]}')
                 time.sleep(0.0001)
                 CharacterChunkId += 1
                 ChunkId = Update["ChunkId"]
@@ -865,7 +876,40 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview 
                 MainCharacter = Update["MainCharacter"]
                 AuthorRelationship = Update["AuthorRelationship"]
                 
-                AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship)
+                Type = Update["Type"]
+                Gender = Update["Gender"]
+                Age = Update["Age"]
+                Emotion = Update["Emotion"]
+                Role = Update["Role"]
+                Context = {'Type': Type, 'Gender': Gender, 'Age': Age, 'Emotion': Emotion, 'Role': Role}
+                Voice = Update["Voice"]
+                
+                AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship, Context, Voice)
+                # i값 수동 업데이트
+                i += 1
+            
+            UpdateTQDM.close()
+            
+            ## 12-2. CharacterPostCompletion
+            # ResponseJson을 ContinueCount로 슬라이스
+            ResponseJson = CharacterList[CharacterCount:]
+            ResponseJsonCount = len(ResponseJson)
+            
+            # TQDM 셋팅
+            UpdateTQDM = tqdm(ResponseJson,
+                            total = ResponseJsonCount,
+                            desc = 'CharacterPostCompletionUpdate')
+            # i값 수동 생성
+            i = 0
+            for Update in UpdateTQDM:
+                UpdateTQDM.set_description(f'CharacterPostCompletionUpdate: {Update}')
+                time.sleep(0.0001)
+                CharacterTag = Update["CharacterTag"]
+                Gender = Update["Gender"]
+                Age = Update["Age"]
+                MainCharacterList = Update["ActorNames"]
+                
+                AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, Gender, Age, MainCharacterList)
                 # i값 수동 업데이트
                 i += 1
             
@@ -887,4 +931,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = messagesReview, mode = mode)

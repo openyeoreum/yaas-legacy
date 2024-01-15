@@ -1,6 +1,6 @@
 [
     {
-        "UserId": "cc51fb3ea8742fd388fc3b453a35d93f874f0f23004bdac12c306f6b9b9d0066",
+        "UserId": "fb320c4b46c4de5d2cb77e222b03044530f07e72cb6db1361e350735a8b59b42",
         "ProjectsStorageID": 1,
         "ProjectId": 8,
         "ProjectName": "살아서천국극락낙원에가는방법",
@@ -20,7 +20,9 @@
                 "Chunk": "None",
                 "Character": "None",
                 "MainCharacter": "None",
-                "AuthorRelationship": "None"
+                "AuthorRelationship": "None",
+                "Context": "None",
+                "Voice": "None"
             }
         ]
     },
@@ -28,27 +30,10 @@
         "CheckedCharacterTags": [
             {
                 "CharacterId": 0,
-                "CharacterTag": "Narrator",
-                "CharacterList": [
-                    "None"
-                ],
-                "Character": "None"
-            },
-            {
-                "CharacterId": 0,
-                "CharacterTag": "MainChracter",
-                "CharacterList": [
-                    "None"
-                ],
-                "Character": "None"
-            },
-            {
-                "CharacterId": 0,
-                "CharacterTag": "Chracter",
-                "CharacterList": [
-                    "None"
-                ],
-                "Character": "None"
+                "CharacterTag": "None",
+                "Gender": "None",
+                "Age": "None",
+                "MainCharacterList": []
             }
         ]
     }

@@ -741,13 +741,21 @@ def SelectedCharacterFilter(ResponseJson, sortedCharacters, DataFramePath, messa
         
     outputMemoryDics = CarefullySelectedCharacter(SelectedCharacters, DataFramePath, messagesReview, mode)
 
-
-    print('1 outputMemoryDics')
-    for i in range(len(outputMemoryDics)):
-        print(outputMemoryDics[i])
-    print('\n\n2 sortedCharacters')
-    for i in range(len(sortedCharacters)):
-        print(sortedCharacters[i])
+    # outputMemoryDics 후처리
+    MainActor = outputMemoryDics[0]['메인성우']
+    for actor in outputMemoryDics[1:]:
+        ActorData = list(actor.values())[0]
+        if ActorData['정확도'] <= 75 and len(ActorData['담당인물번호']) <= 1:
+            MainActor['담당인물번호'].extend(ActorData['담당인물번호'])
+    # 삭제 조건에 맞는 일반성우 제거
+    outputMemoryDics = [outputMemoryDics[0]] + [actor for actor in outputMemoryDics[1:] if len(list(actor.values())[0]['담당인물번호']) > 0 and list(actor.values())[0]['정확도'] >= 80]
+    # 변환
+    character_list = []
+    for idx, actor in enumerate(outputMemoryDics, start=1):
+        ActorData = list(actor.values())[0]
+        character_name = 'Narrator' if idx == 1 else f'Character{idx-1}'
+        character_list.append({'CharacterId': idx, 'Voice': {'Character': character_name, 'Gender': ActorData['성별'], 'Age': ActorData['연령'], 'Actors': sorted(ActorData['담당인물번호'])}})
+    
         
     
     

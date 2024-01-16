@@ -36,7 +36,7 @@ def LoadFrames(projectName, email):
     ## SelectionGenerationKoSplitedIndexs 구조 구성
     SelectionGenerationKoSplitedBodys = []
     SelectionGenerationKoSplitedIndexs = []
-    lastIndexId = "None"
+    lastIndexId = None
 
     for i in range(len(BodyFrame)):
         BodyFrameIndexId = BodyFrame[i]['IndexId']
@@ -44,7 +44,7 @@ def LoadFrames(projectName, email):
         Index = BodyFrame[i]['Index']
         
         # 새로운 IndexId가 시작될 때
-        if lastIndexId is not "None" and lastIndexId != BodyFrameIndexId:
+        if lastIndexId is not None and lastIndexId != BodyFrameIndexId:
             SelectionGenerationKoSplitedIndexs.append({
                 'IndexId': lastIndexId,
                 'IndexTag': lastTag,

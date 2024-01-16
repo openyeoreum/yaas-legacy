@@ -647,22 +647,34 @@ def WordFrequency(words):
 ## 평균 나이 계산기
 def AgeAverageCalculator(SelectedAge):
     AgeList = ['유년', '청소년', '청년', '중년', '장년', '노년']
-    AgeCount = 0
-    for Age in AgeList:
-        if Age in SelectedAge:
-            AgeCount += 1
-            
-    if AgeCount == 0:
+
+    # SelectedAge에서 유효한 나이 범위에 속하는 요소들만 필터링
+    FilteredSelectedAge = {key: value for key, value in SelectedAge.items() if key in AgeList}
+    
+    # 필터링된 요소들의 총합 계산
+    TotalPercentage = sum(FilteredSelectedAge.values())
+
+    if TotalPercentage == 0:
+        # 유효한 나이 범위에 속하는 요소가 없을 경우, 원래 SelectedAge의 첫 번째 요소를 반환
         return next(iter(SelectedAge))
     
     else:
-        SelectedAge = {key: value for key, value in SelectedAge.items() if key in AgeList}
+        # 총합이 100이 되도록 각 요소의 비율 조정
+        AdjustedSelectedAge = {key: (value / TotalPercentage) * 100 for key, value in FilteredSelectedAge.items()}
+
         # 각 나이대의 범위 정의
-        AgeRanges = {AgeList[0]: (0, 10), AgeList[1]: (10, 20), AgeList[2]: (20, 35), AgeList[3]: (35, 50), AgeList[4]: (50, 65), AgeList[5]: (65, 80)}
+        AgeRanges = {
+            '유년': (0, 10), '청소년': (10, 20), '청년': (20, 35), 
+            '중년': (35, 50), '장년': (50, 65), '노년': (65, 80)
+        }
+
         # 평균 나이 계산
-        AverageAge = sum((AgeRanges[age][0] + AgeRanges[age][1]) / 2 * percentage for age, percentage in SelectedAge.items()) / 100
+        AverageAge = sum((AgeRanges[age][0] + AgeRanges[age][1]) / 2 * percentage 
+                         for age, percentage in AdjustedSelectedAge.items()) / 100
+
         # 평균 나이에 가장 가까운 나이대 찾기
-        ClosestAgeCategory = min(AgeRanges.keys(), key=lambda x: abs((AgeRanges[x][0] + AgeRanges[x][1]) / 2 - AverageAge))
+        ClosestAgeCategory = min(AgeRanges.keys(), 
+                                 key=lambda x: abs((AgeRanges[x][0] + AgeRanges[x][1]) / 2 - AverageAge))
 
         return ClosestAgeCategory
 
@@ -676,6 +688,7 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
         else:
             Gender = next(iter(Selected['Gender']))
         Age = AgeAverageCalculator(Selected['Age'])
+        # print(f"{i}: {Age}, {Selected['Age']}")
         
         SelectedCharactersText = f"인물{Selected['Id']} \"{Selected['MainCharacter']}\" (등장횟수: {Selected['Frequency']}번, 성별: {Gender}, 연령: {Age}, 역할의 비중(%): {Selected['Role']})\n\n"
         SelectedCharactersTexts.append(SelectedCharactersText)

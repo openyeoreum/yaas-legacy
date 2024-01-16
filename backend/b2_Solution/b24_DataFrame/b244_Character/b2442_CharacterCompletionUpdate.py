@@ -677,7 +677,7 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
             Gender = next(iter(Selected['Gender']))
         Age = AgeAverageCalculator(Selected['Age'])
         
-        SelectedCharactersText = f"인물{Selected['Id']} \"{Selected['MainCharacter']}\" (등장횟수: {Selected['Frequency']}번, 성별: {Gender}, 연령: {Age}, 역할의 비중: {Selected['Role']})\n\n"
+        SelectedCharactersText = f"인물{Selected['Id']} \"{Selected['MainCharacter']}\" (등장횟수: {Selected['Frequency']}번, 성별: {Gender}, 연령: {Age}, 역할의 비중(%): {Selected['Role']})\n\n"
         SelectedCharactersTexts.append(SelectedCharactersText)
         inputIdList.append(i+1)
 
@@ -766,14 +766,25 @@ def SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, m
 
     # 성우별 담당 배역이름 리스트 업데이트
     ActorNames =[]
+    Emotion = []
     for Character in CharacterList:
         for SelectedCharacter in SelectedCharacters:
             if SelectedCharacter['Id'] in Character['Actors']:
                 ActorNames.append(SelectedCharacter['MainCharacter'])
+                Emotions = list(SelectedCharacter['Emotion'].keys())
+                Emotion.append(Emotions[0])
+                
         Character['ActorNames'] = ActorNames
         ActorNames =[]
+        
+        EmotionCounts = Counter(Emotion)
+        TotalEmotions = sum(EmotionCounts.values())
+        # 백분율로 감정 비중 계산
+        EmotionPercentage = {emotion: round((count / TotalEmotions) * 100, 2)
+                            for emotion, count in EmotionCounts.items()}
+        Character['Emotion'] = EmotionPercentage
+        Emotion = []
 
-    
     # 전체 Chunk별 성우 업데이트
     for Character in SelectedCharacters:
         for Response in ResponseJson:
@@ -907,9 +918,10 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview 
                 CharacterTag = Update["CharacterTag"]
                 Gender = Update["Gender"]
                 Age = Update["Age"]
+                Emotion = Update["Emotion"]
                 MainCharacterList = Update["ActorNames"]
                 
-                AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, Gender, Age, MainCharacterList)
+                AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, Gender, Age, Emotion, MainCharacterList)
                 # i값 수동 업데이트
                 i += 1
             

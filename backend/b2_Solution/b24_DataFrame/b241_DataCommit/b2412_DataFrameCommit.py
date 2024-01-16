@@ -1162,9 +1162,9 @@ def AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, Chunk
         db.commit()
         
 ## 12. 2-1 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트 형식
-def updateCheckedCharacterTags(project, CharacterTag, Gender, Age, MainCharacterList):
+def updateCheckedCharacterTags(project, CharacterTag, Gender, Age, Emotion,MainCharacterList):
     # 새롭게 생성되는 CharacterId는 CharacterTags의 Len값과 동일
-    CharacterId = len(project.CharacterCompletion[2]["CheckedCharacterTags"]) -1
+    CharacterId = len(project.CharacterCompletion[2]["CheckedCharacterTags"])
     
     ### 실제 테스크시 수정 요망 ###
     updateCheckedCharacterTags = {
@@ -1172,6 +1172,7 @@ def updateCheckedCharacterTags(project, CharacterTag, Gender, Age, MainCharacter
         "CharacterTag": CharacterTag,
         "Gender": Gender,
         "Age": Age,
+        "Emotion": Emotion,
         "MainCharacterList": MainCharacterList
     }
     
@@ -1179,11 +1180,11 @@ def updateCheckedCharacterTags(project, CharacterTag, Gender, Age, MainCharacter
     project.CharacterCompletion[0]["CharacterCount"] = CharacterId
     
 ## 12. 2-2 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트
-def AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, Gender, Age, MainCharacterList):
+def AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, Gender, Age, Emotion, MainCharacterList):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        updateCheckedCharacterTags(project, CharacterTag, Gender, Age, MainCharacterList)
+        updateCheckedCharacterTags(project, CharacterTag, Gender, Age, Emotion,MainCharacterList)
         
         flag_modified(project, "CharacterCompletion")
         

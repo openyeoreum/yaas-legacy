@@ -28,6 +28,7 @@ def LoadFrames(projectName, email):
     WMWMFrameBodys = project.WMWMMatching[1]['SplitedBodyContexts'][1:]
     WMWMFrameChunks = project.WMWMMatching[1]['SplitedChunkContexts'][1:]
     CharacterFrame = project.CharacterCompletion[1]['CharacterCompletions'][1:]
+    Narrater = project.CharacterCompletion[2]['CheckedCharacterTags'][1]
     SoundFrame = project.SoundMatching[1]['SoundSplitedIndexs'][1:]
     SFXFrame =  project.SFXMatching[1]['SFXSplitedBodys'][1:]
     CorrectionKoFrame = project.CorrectionKo[1]['CorrectionKoSplitedBodys'][1:]
@@ -96,7 +97,7 @@ def LoadFrames(projectName, email):
             if SelectionGenerationKoSplitedIndexs[i]['IndexId'] == SoundFrame[k]['IndexId']:
                 SelectionGenerationKoSplitedIndexs[i]['Sound'] = SoundFrame[k]['Sounds']
                 break
-            
+
     # Body 중 BodyContext, Selection-GenerationKoSplitedChunks 부분
     for i in range(len(SelectionGenerationKoSplitedIndexs)):
         SelectionGenerationKoSplitedBodys = SelectionGenerationKoSplitedIndexs[i]['Selection-GenerationKoSplitedBodys']
@@ -104,44 +105,57 @@ def LoadFrames(projectName, email):
             for k in range(len(WMWMFrameBodys)):
                 if SelectionGenerationKoSplitedBodys[j]['BodyId'] == WMWMFrameBodys[k]['BodyId']:
                     SelectionGenerationKoSplitedBodys[j]['BodyContext'] = {'Vector': WMWMFrameBodys[k]['Vector'], 'WMWM': WMWMFrameBodys[k]['WMWM']}
-
             ChunkIds = SelectionGenerationKoSplitedBodys[j]['ChunkId']
-            for chunkid in range(len(ChunkIds)):
+            for chunkid in ChunkIds:
+                
+                # ChunkContext
+                ChunkContext = 'None'
                 for WMWMFrameChunk in WMWMFrameChunks:
                     if WMWMFrameChunk['ChunkId'] == chunkid:
                         Vector = WMWMFrameChunk['Vector']
                         WMWM = WMWMFrameChunk['WMWM']
                         ChunkContext = {'Vector': Vector, 'WMWM': WMWM}
+                
+                # SelectionGenerationKoChunkTokens
                 for CorrectionKoFrameBody in CorrectionKoFrame:
                     CorrectionKoFrameChunk = CorrectionKoFrameBody['CorrectionKoSplitedBodyChunks']
                     for CorrectionKoChunk in CorrectionKoFrameChunk:
                         if CorrectionKoChunk['ChunkId'] == chunkid:
-                            Chunk = ''.join(CorrectionKoChunk['CorrectionKoChunkTokens'])
+                            ChunkTokens = CorrectionKoChunk['CorrectionKoChunkTokens']
+                            Chunk = ''.join([list(ChunkToken.values())[0] for ChunkToken in ChunkTokens])
                             Tag = CorrectionKoChunk['Tag']
                             SelectionGenerationKoChunkTokens = CorrectionKoChunk['CorrectionKoChunkTokens']
+                
+                # Voice
+                Language = detect(Chunk)
+                emotions = list(Narrater['Emotion'].keys())
+                Voice = {'Character': Narrater['MainCharacterList'][0], 'CharacterTag': Narrater['CharacterTag'], 'Language': Language, 'Gender': Narrater['Gender'], 'Age': Narrater['Age'], 'Emotion': emotions[00]}
                 for CharacterChunk in CharacterFrame:
                     if CharacterChunk['ChunkId'] == chunkid:
                         Character = CharacterChunk['MainCharacter']
                         CharacterTag = CharacterChunk['Voice']['CharacterTag']
-                        Language = detect(CharacterChunk['Chunk'])
                         Gender = CharacterChunk['Voice']['Gender']
                         Age = CharacterChunk['Voice']['Age']
                         Emotion = CharacterChunk['Context']['Emotion']
                         Voice = {'Character': Character, 'CharacterTag': CharacterTag, 'Language': Language, 'Gender': Gender, 'Age': Age, 'Emotion': Emotion}
+                
+                # SFX
+                SFX = 'None'
                 for SFXFrameBody in SFXFrame:
                     SFXFrameChunk = SFXFrameBody['SFXSplitedBodyChunks']
                     for SFXChunk in SFXFrameChunk:
                         if SFXChunk['ChunkId'] == chunkid:
-                            sFX = SFXChunk['SFX']
-                            Prompt = SFXChunk['Prompt']
-                            Type = SFXChunk['Type']
-                            Role = SFXChunk['Role']
-                            Direction = SFXChunk['Direction']
-                            Importance = SFXChunk['Importance']
+                            sFX = SFXChunk['SFX']['SFX']
+                            Prompt = SFXChunk['SFX']['Prompt']
+                            Type = SFXChunk['SFX']['Type']
+                            Role = SFXChunk['SFX']['Role']
+                            Direction = SFXChunk['SFX']['Direction']
+                            Importance = SFXChunk['SFX']['Importance']
                             SFX = {'SFX': sFX, 'Prompt': Prompt, 'Type': Type, 'Role': Role, 'Direction': Direction, 'Importance': Importance}
-                SelectionGenerationKoSplitedBodys[j]['Selection-GenerationKoSplitedChunks'] = {'ChunkId': chunkid, 'Chunk': Chunk, 'Tag': Tag, 'ChunkContext': ChunkContext, 'CaptionMusic': 'None', 'Voice': Voice, 'SFX': SFX, 'Selection-GenerationKoChunkTokens': SelectionGenerationKoChunkTokens}
                 
-
+                ## 모두 합쳐서 Selection-GenerationKoSplitedChunks에 합치기
+                SelectionGenerationKoSplitedBodys[j]['Selection-GenerationKoSplitedChunks'].append({'ChunkId': chunkid, 'Chunk': Chunk, 'Tag': Tag, 'ChunkContext': ChunkContext, 'CaptionMusic': 'None', 'Voice': Voice, 'SFX': SFX, 'Selection-GenerationKoChunkTokens': SelectionGenerationKoChunkTokens})
+                
     SelectionGenerationKoFrame = {'BookContext': WMWMFrameBookContext, 'Selection-GenerationKoSplitedIndexs': SelectionGenerationKoSplitedIndexs}
     file_path = "/yaas/SelectionGenerationKoFrame.json"
     with open(file_path, 'w', encoding='utf-8') as file:

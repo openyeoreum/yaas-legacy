@@ -36,7 +36,7 @@ def LoadFrames(projectName, email):
     ## SelectionGenerationKoSplitedIndexs 구조 구성
     SelectionGenerationKoSplitedBodys = []
     SelectionGenerationKoSplitedIndexs = []
-    lastIndexId = None
+    lastIndexId = "None"
 
     for i in range(len(BodyFrame)):
         BodyFrameIndexId = BodyFrame[i]['IndexId']
@@ -44,14 +44,14 @@ def LoadFrames(projectName, email):
         Index = BodyFrame[i]['Index']
         
         # 새로운 IndexId가 시작될 때
-        if lastIndexId is not None and lastIndexId != BodyFrameIndexId:
+        if lastIndexId is not "None" and lastIndexId != BodyFrameIndexId:
             SelectionGenerationKoSplitedIndexs.append({
                 'IndexId': lastIndexId,
                 'IndexTag': lastTag,
                 'Index': lastIndex,
-                'IndexContext': None,
-                'Music': None,
-                'Sound': None,
+                'IndexContext': "None",
+                'Music': "None",
+                'Sound': "None",
                 'Selection-GenerationKoSplitedBodys': SelectionGenerationKoSplitedBodys
             })
             SelectionGenerationKoSplitedBodys = []
@@ -63,7 +63,7 @@ def LoadFrames(projectName, email):
         BodyFrameBodyId = BodyFrame[i]['BodyId']
         BodyId = {
             'BodyId': BodyFrameBodyId,
-            'BodyContext': None,
+            'BodyContext': "None",
             'ChunkId': [],
             'Selection-GenerationKoSplitedChunks': []
         }
@@ -80,9 +80,9 @@ def LoadFrames(projectName, email):
             'IndexId': lastIndexId,
             'IndexTag': lastTag,
             'Index': lastIndex,
-            'IndexContext': None,
-            'Music': None,
-            'Sound': None,
+            'IndexContext': "None",
+            'Music': "None",
+            'Sound': "None",
             'Selection-GenerationKoSplitedBodys': SelectionGenerationKoSplitedBodys
         })
 
@@ -109,7 +109,7 @@ def LoadFrames(projectName, email):
             for chunkid in ChunkIds:
                 
                 # ChunkContext
-                ChunkContext = 'None'
+                ChunkContext = "None"
                 for WMWMFrameChunk in WMWMFrameChunks:
                     if WMWMFrameChunk['ChunkId'] == chunkid:
                         Vector = WMWMFrameChunk['Vector']
@@ -140,7 +140,7 @@ def LoadFrames(projectName, email):
                         Voice = {'Character': Character, 'CharacterTag': CharacterTag, 'Language': Language, 'Gender': Gender, 'Age': Age, 'Emotion': Emotion}
                 
                 # SFX
-                SFX = 'None'
+                SFX = "None"
                 for SFXFrameBody in SFXFrame:
                     SFXFrameChunk = SFXFrameBody['SFXSplitedBodyChunks']
                     for SFXChunk in SFXFrameChunk:
@@ -154,7 +154,7 @@ def LoadFrames(projectName, email):
                             SFX = {'SFX': sFX, 'Prompt': Prompt, 'Type': Type, 'Role': Role, 'Direction': Direction, 'Importance': Importance}
                 
                 ## 모두 합쳐서 Selection-GenerationKoSplitedChunks에 합치기
-                SelectionGenerationKoSplitedBodys[j]['Selection-GenerationKoSplitedChunks'].append({'ChunkId': chunkid, 'Chunk': Chunk, 'Tag': Tag, 'ChunkContext': ChunkContext, 'CaptionMusic': 'None', 'Voice': Voice, 'SFX': SFX, 'Selection-GenerationKoChunkTokens': SelectionGenerationKoChunkTokens})
+                SelectionGenerationKoSplitedBodys[j]['Selection-GenerationKoSplitedChunks'].append({'ChunkId': chunkid, 'Chunk': Chunk, 'Tag': Tag, 'ChunkContext': ChunkContext, 'CaptionMusic': "None", 'Voice': Voice, 'SFX': SFX, 'Selection-GenerationKoChunkTokens': SelectionGenerationKoChunkTokens})
                 
     SelectionGenerationKoFrame = {'BookContext': WMWMFrameBookContext, 'Selection-GenerationKoSplitedIndexs': SelectionGenerationKoSplitedIndexs}
     file_path = "/yaas/SelectionGenerationKoFrame.json"
@@ -674,7 +674,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
     CorrectionChunks = []
     k = 0
     for i in range(len(BodyFrameSplitedBodyScripts)):
-        CorrectionKoSplitedBody = {"OutputId": None, "BodyId": i + 1, "CorrectionChunks": []}
+        CorrectionKoSplitedBody = {"OutputId": "None", "BodyId": i + 1, "CorrectionChunks": []}
         for j in range(len(BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'])):
             Tag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][j]['Tag']
             CorrectionChunk = outputMemoryDicsList[k]['Output']
@@ -719,16 +719,16 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         for j in range(len(responseJson[i]['CorrectionChunks'])):
             tag = responseJson[i]['CorrectionChunks'][j]['Tag']
             
-            Aftertag = None
+            Aftertag = "None"
             if j < (len(responseJson[i]['CorrectionChunks']) - 1):
                 Aftertag = responseJson[i]['CorrectionChunks'][j + 1]['Tag']
                 
-            AfterAftertag = None
+            AfterAftertag = "None"
             if j < (len(responseJson[i]['CorrectionChunks']) - 2):
                 AfterAftertag = responseJson[i]['CorrectionChunks'][j + 2]['Tag']
             
             # 새로운 조건을 위한 변수
-            NextChunkFirstTag = None
+            NextChunkFirstTag = "None"
             if i < (len(responseJson) - 1):
                 NextChunkFirstTag = responseJson[i+1]['CorrectionChunks'][0]['Tag']
             
@@ -833,13 +833,13 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 CorrectionKo에 업데이트
-def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = "None", ExistedDataSet = "None"):
     print(f"< User: {email} | Project: {projectName} | 26_CorrectionKoUpdate 시작 >")
     # CorrectionKo의 Count값 가져오기
     ContinueCount, ContextCount, Completion = CorrectionKoCountLoad(projectName, email)
     if Completion == "No":
         
-        if ExistedDataFrame != None:
+        if ExistedDataFrame != "None":
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "CorrectionKo", ExistedDataSet)

@@ -143,11 +143,11 @@
                                 "Voice":
                                 {
                                     "Character": "None",
-                                    "Type": "None",
+                                    "CharacterTag": "None",
+                                    "Language": "None",
                                     "Gender": "None",
                                     "Age": "None",
-                                    "Emotion": "None",
-                                    "Role": "None"
+                                    "Emotion": "None"
                                 },
                                 "SFX":
                                 {

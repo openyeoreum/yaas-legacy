@@ -7,6 +7,7 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
+from langdetect import detect
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
@@ -111,22 +112,34 @@ def LoadFrames(projectName, email):
                         Vector = WMWMFrameChunk['Vector']
                         WMWM = WMWMFrameChunk['WMWM']
                         ChunkContext = {'Vector': Vector, 'WMWM': WMWM}
-                for CorrectionKoChunk in CorrectionKoFrame:
-                    if CorrectionKoChunk['ChunkId'] == chunkid:
-                        Chunk = ''.join(CorrectionKoChunk['CorrectionKoChunkTokens'])
-                        Tag = CorrectionKoChunk['Tag']
-                        SelectionGenerationKoChunkTokens = CorrectionKoChunk['CorrectionKoChunkTokens']
-                # for CharacterChunk in CharacterFrame:
-                #     if CharacterFrame['ChunkId'] == chunkid:
-                #         Character = 
-                #         Type = 
-                #         Gender = 
-                #         Age = 
-                #         Emotion = 
-                #         Role =
-                # for SFXChunk in SFXFrame:
-                #     if SFXChunk['ChunkId'] == chunkid:
-                #         SFX = 
+                for CorrectionKoFrameBody in CorrectionKoFrame:
+                    CorrectionKoFrameChunk = CorrectionKoFrameBody['CorrectionKoSplitedBodyChunks']
+                    for CorrectionKoChunk in CorrectionKoFrameChunk:
+                        if CorrectionKoChunk['ChunkId'] == chunkid:
+                            Chunk = ''.join(CorrectionKoChunk['CorrectionKoChunkTokens'])
+                            Tag = CorrectionKoChunk['Tag']
+                            SelectionGenerationKoChunkTokens = CorrectionKoChunk['CorrectionKoChunkTokens']
+                for CharacterChunk in CharacterFrame:
+                    if CharacterChunk['ChunkId'] == chunkid:
+                        Character = CharacterChunk['MainCharacter']
+                        CharacterTag = CharacterChunk['Voice']['CharacterTag']
+                        Language = detect(CharacterChunk['Chunk'])
+                        Gender = CharacterChunk['Voice']['Gender']
+                        Age = CharacterChunk['Voice']['Age']
+                        Emotion = CharacterChunk['Context']['Emotion']
+                        Voice = {'Character': Character, 'CharacterTag': CharacterTag, 'Language': Language, 'Gender': Gender, 'Age': Age, 'Emotion': Emotion}
+                for SFXFrameBody in SFXFrame:
+                    SFXFrameChunk = SFXFrameBody['SFXSplitedBodyChunks']
+                    for SFXChunk in SFXFrameChunk:
+                        if SFXChunk['ChunkId'] == chunkid:
+                            sFX = SFXChunk['SFX']
+                            Prompt = SFXChunk['Prompt']
+                            Type = SFXChunk['Type']
+                            Role = SFXChunk['Role']
+                            Direction = SFXChunk['Direction']
+                            Importance = SFXChunk['Importance']
+                            SFX = {'SFX': sFX, 'Prompt': Prompt, 'Type': Type, 'Role': Role, 'Direction': Direction, 'Importance': Importance}
+                SelectionGenerationKoSplitedBodys[j]['Selection-GenerationKoSplitedChunks'] = {'ChunkId': chunkid, 'Chunk': Chunk, 'Tag': Tag, 'ChunkContext': ChunkContext, 'CaptionMusic': 'None', 'Voice': Voice, 'SFX': SFX, 'Selection-GenerationKoChunkTokens': SelectionGenerationKoChunkTokens}
                 
 
     SelectionGenerationKoFrame = {'BookContext': WMWMFrameBookContext, 'Selection-GenerationKoSplitedIndexs': SelectionGenerationKoSplitedIndexs}

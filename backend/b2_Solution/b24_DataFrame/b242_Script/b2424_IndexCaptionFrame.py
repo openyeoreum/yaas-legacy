@@ -64,11 +64,31 @@ def BodyFrameBodysToInputList(projectName, email):
     BodyFrameSplitedBodyScripts = LoadBodyFrameBodys(projectName, email)
     
     inputList = []
+    CaptionList = []
     for i in range(len(BodyFrameSplitedBodyScripts)):
         SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
-        for j in range(len(SplitedBodyChunks)):
-            if SplitedBodyChunks[j]['Tag'] == 'Caption' or SplitedBodyChunks[j]['Tag'] == 'CaptionComment':
-                print(SplitedBodyChunks[j]['Chunk'])
+        j = 0
+        while j < len(SplitedBodyChunks):
+            if SplitedBodyChunks[j]['Tag'] in ['Caption', 'CaptionComment']:
+                # 연속된 Caption 또는 CaptionComment 찾기
+                combined_caption = SplitedBodyChunks[j]['Chunk']
+                j += 1
+                while j < len(SplitedBodyChunks) and SplitedBodyChunks[j]['Tag'] in ['Caption', 'CaptionComment']:
+                    combined_caption += SplitedBodyChunks[j]['Chunk']
+                    j += 1
+
+                # 앞뒤 5개 요소 포함
+                start_idx = max(j - 6, 0)
+                end_idx = min(j + 5, len(SplitedBodyChunks))
+                combined_chunks = ""
+                for k in range(start_idx, end_idx):
+                    combined_chunks += SplitedBodyChunks[k]['Chunk']
+
+                inputList.append(combined_chunks)
+            else:
+                j += 1
+    
+    print(inputList)
 
     #     if Task in task:
     #         Tag = 'Continue'

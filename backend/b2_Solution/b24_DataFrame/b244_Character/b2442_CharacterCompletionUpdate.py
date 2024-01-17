@@ -469,7 +469,7 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
 
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = " - 주의사항1: <인물리스트>에서 등장횟수가 큰 인물[특히 앞부분 인물들이 등장횟수가 큼]들은 절대 묶지 않으며, 인물 1인당 1명의 개별성우로 선정. 주의사항2: <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않음. -\n"
+            memoryCounter = " - 주의사항2: <인물리스트>에서 등장횟수가 큰 인물[특히 앞부분 인물들이 등장횟수가 큼]들은 절대 묶지 않으며, 인물 1인당 1명의 개별성우로 선정. 주의사항3: <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않음. -\n"
             outputEnder = ""
 
             # Response 생성

@@ -21,75 +21,51 @@ def LoadBodyFrameBodys(projectName, email):
     
     return BodyFrameSplitedBodyScripts
 
-## inputList의 InputList 치환 (인덱스, 캡션 부분 합치기)
-def MergeInputList(inputList):
-    InputList = []
-    MergeBuffer = ''
-    MergeIds = []
-    NonMergeFound = False
-
-    for item in inputList:
-        if list(item.keys())[1] == 'Merge':
-            # 'Merge' 태그가 붙은 항목의 내용을 버퍼에 추가하고 ID를 MergeIds에 추가합니다.
-            MergeBuffer += list(item.values())[1]
-            MergeIds.append(item['Id'])
-        else:
-            # 'Merge'가 아닌 태그가 발견된 경우
-            NonMergeFound = True
-            if MergeBuffer:
-                # 버퍼에 내용이 있으면 현재 항목과 합칩니다.
-                content = MergeBuffer + list(item.values())[1]
-                # 'Id'는 MergeIds에 현재 항목의 'Id'를 추가하여 리스트로 만듭니다.
-                currentId = MergeIds + [item['Id']]
-                # 합쳐진 내용과 'Id' 리스트를 가진 새 딕셔너리를 만듭니다.
-                mergedItem = {'Id': currentId, list(item.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
-                InputList.append(mergedItem)
-                # 버퍼와 ID 리스트를 초기화합니다.
-                MergeBuffer = ''
-                MergeIds = []
-            else:
-                # 버퍼가 비어 있으면 현재 항목을 결과 리스트에 그대로 추가합니다.
-                InputList.append(item)
-    
-    # 리스트의 끝에 도달했을 때 버퍼에 남아 있는 'Merge' 내용을 처리합니다.
-    if MergeBuffer and not NonMergeFound:
-        # 모든 항목이 'Merge'인 경우 마지막 항목만 처리합니다.
-        mergedItem = {'Id': MergeIds, list(item.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
-        InputList.append(mergedItem)
-
-    return InputList
-
 ## BodyFrameBodys의 inputList 치환
-def BodyFrameBodysToInputList(projectName, email):
+def BodyFrameCaptionsToInputList(projectName, email):
     BodyFrameSplitedBodyScripts = LoadBodyFrameBodys(projectName, email)
-    
-    inputList = []
-    CaptionList = []
+
+    SplitedBodyChunkList = []
     for i in range(len(BodyFrameSplitedBodyScripts)):
         SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
-        j = 0
-        while j < len(SplitedBodyChunks):
-            if SplitedBodyChunks[j]['Tag'] in ['Caption', 'CaptionComment']:
-                # 연속된 Caption 또는 CaptionComment 찾기
-                combined_caption = SplitedBodyChunks[j]['Chunk']
+        for j in range(len(SplitedBodyChunks)):
+            SplitedBodyChunkList.append(SplitedBodyChunks[j])
+
+    inputList = []
+    CaptionIdList = []
+    id_counter = 1  # Id를 1부터 시작하기 위한 카운터
+
+    j = 0
+    while j < len(SplitedBodyChunkList):
+        if SplitedBodyChunkList[j]['Tag'] in ['Caption', 'CaptionComment']:
+            # 연속된 Caption 또는 CaptionComment 찾기
+            combined_caption = SplitedBodyChunkList[j]['Chunk']
+            temp_caption_ids = [SplitedBodyChunkList[j]['ChunkId']]  # 현재 ChunkId를 추가
+            j += 1
+            while j < len(SplitedBodyChunkList) and SplitedBodyChunkList[j]['Tag'] in ['Caption', 'CaptionComment']:
+                combined_caption += SplitedBodyChunkList[j]['Chunk'] + ' '
+                temp_caption_ids.append(SplitedBodyChunkList[j]['ChunkId'])  # 추가적인 ChunkId들을 추가
                 j += 1
-                while j < len(SplitedBodyChunks) and SplitedBodyChunks[j]['Tag'] in ['Caption', 'CaptionComment']:
-                    combined_caption += SplitedBodyChunks[j]['Chunk']
-                    j += 1
 
-                # 앞뒤 5개 요소 포함
-                start_idx = max(j - 6, 0)
-                end_idx = min(j + 5, len(SplitedBodyChunks))
-                combined_chunks = ""
-                for k in range(start_idx, end_idx):
-                    combined_chunks += SplitedBodyChunks[k]['Chunk']
+            # 앞뒤 5개 요소 포함하고 CaptionStart, CaptionEnd 추가
+            start_idx = max(j - 6, 0)
+            combined_chunks = ""
+            for k in range(start_idx, j - len(temp_caption_ids)):
+                combined_chunks += SplitedBodyChunkList[k]['Chunk'] + ' '
+            combined_chunks += '\n\n<CaptionStart>\n' + combined_caption + '\n<CaptionEnd>\n\n'
+            end_idx = min(j + 5, len(SplitedBodyChunkList))
+            for k in range(j, end_idx):
+                combined_chunks += SplitedBodyChunkList[k]['Chunk'] + ' '
 
-                inputList.append(combined_chunks)
-            else:
-                j += 1
-    
-    print(inputList)
+            inputList.append({'Id': id_counter, 'Continue': combined_chunks})
+            CaptionIdList.append(temp_caption_ids)
+            id_counter += 1  # 다음 아이템에 대해 Id 증가
+        else:
+            j += 1
 
+    for i in range(len(inputList)):
+        print(f"{CaptionIdList[i]}\n{inputList[i]['Continue']}\n\n")
+        
     #     if Task in task:
     #         Tag = 'Continue'
     #     elif 'Body' not in task:
@@ -420,4 +396,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    BodyFrameBodysToInputList(projectName, email)
+    BodyFrameCaptionsToInputList(projectName, email)

@@ -8,7 +8,8 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedCharacterDefineToDB, AddCharacterDefineChunksToDB, CharacterDefineCountLoad, CharacterDefineCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory
+# AddExistedCaptionCompletionToDB, AddCaptionCompletionChunksToDB, CaptionCompletionCountLoad, CaptionCompletionCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -31,7 +32,7 @@ def BodyFrameCaptionsToInputList(projectName, email):
         for j in range(len(SplitedBodyChunks)):
             SplitedBodyChunkList.append(SplitedBodyChunks[j])
 
-    inputList = []
+    InputList = []
     CaptionIdList = []
     id_counter = 1  # Id를 1부터 시작하기 위한 카운터
 
@@ -52,39 +53,24 @@ def BodyFrameCaptionsToInputList(projectName, email):
             combined_chunks = ""
             for k in range(start_idx, j - len(temp_caption_ids)):
                 combined_chunks += SplitedBodyChunkList[k]['Chunk'] + ' '
-            combined_chunks += '\n\n<CaptionStart>\n' + combined_caption + '\n<CaptionEnd>\n\n'
+            combined_chunks += '\n\n[캡션시작]\n' + combined_caption + '\n[캡션끝]\n\n'
             end_idx = min(j + 5, len(SplitedBodyChunkList))
             for k in range(j, end_idx):
                 combined_chunks += SplitedBodyChunkList[k]['Chunk'] + ' '
 
-            inputList.append({'Id': id_counter, 'Continue': combined_chunks})
+            InputList.append({'Id': id_counter, 'Continue': combined_chunks})
             CaptionIdList.append(temp_caption_ids)
             id_counter += 1  # 다음 아이템에 대해 Id 증가
         else:
             j += 1
-
-    for i in range(len(inputList)):
-        print(f"{CaptionIdList[i]}\n{inputList[i]['Continue']}\n\n")
         
-    #     if Task in task:
-    #         Tag = 'Continue'
-    #     elif 'Body' not in task:
-    #         Tag = 'Merge'
-    #     else:
-    #         Tag = 'Pass'
-            
-    #     InputDic = {'Id': Id, Tag: TaskBody}
-    #     inputList.append(InputDic)
-        
-    # InputList = MergeInputList(inputList)
-        
-    # return InputList
+    return InputList, CaptionIdList
 
 ######################
 ##### Filter 조건 #####
 ######################
-## CharacterDefine의 Filter(Error 예외처리)
-def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
+## CaptionCompletion의 Filter(Error 예외처리)
+def CaptionCompletionFilter(TalkTag, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -121,7 +107,7 @@ def CharacterDefineFilter(TalkTag, responseData, memoryCounter):
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def CharacterDefineInputMemory(inputMemoryDics, MemoryLength):
+def CaptionCompletionInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -137,7 +123,7 @@ def CharacterDefineInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def CharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
+def CaptionCompletionOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -157,18 +143,18 @@ def CharacterDefineOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## CharacterDefine 프롬프트 요청 및 결과물 Json화
-def CharacterDefineProcess(projectName, email, DataFramePath, Process = "CharacterDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## CaptionCompletion 프롬프트 요청 및 결과물 Json화
+def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "CaptionCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '11', DataFramePath)    
-    inputList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '05', DataFramePath)    
+    inputList = BodyFrameCaptionsToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
         return OutputMemoryDicsFile
 
-    FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
+    FineTuningMemoryList = BodyFrameCaptionsToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
     ContinueCount = 0
@@ -179,7 +165,7 @@ def CharacterDefineProcess(projectName, email, DataFramePath, Process = "Charact
     outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
         
-    # CharacterDefineProcess
+    # CaptionCompletionProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -244,7 +230,7 @@ def CharacterDefineProcess(projectName, email, DataFramePath, Process = "Charact
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                     
-            Filter = CharacterDefineFilter(TalkTag, responseData, memoryCounter)
+            Filter = CaptionCompletionFilter(TalkTag, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -280,15 +266,15 @@ def CharacterDefineProcess(projectName, email, DataFramePath, Process = "Charact
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = CharacterDefineInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = CaptionCompletionInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = CharacterDefineOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = CaptionCompletionOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '11', DataFramePath)
+        SaveOutputMemory(projectName, email, outputMemoryDics, '05', DataFramePath)
     
     return outputMemoryDics
 
@@ -297,7 +283,7 @@ def CharacterDefineProcess(projectName, email, DataFramePath, Process = "Charact
 ################################
     
 ## 데이터 치환
-def CharacterDefineResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
+def CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
@@ -310,7 +296,7 @@ def CharacterDefineResponseJson(projectName, email, DataFramePath, messagesRevie
                 CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
     
     # 데이터 치환
-    outputMemoryDics = CharacterDefineProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = CaptionCompletionProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     responseCount = 0
@@ -333,20 +319,20 @@ def CharacterDefineResponseJson(projectName, email, DataFramePath, messagesRevie
     
     return responseJson
 
-## 프롬프트 요청 및 결과물 Json을 CharacterDefine에 업데이트
-def CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 11_CharacterDefineUpdate 시작 >")
-    # CharacterDefine의 Count값 가져오기
-    ContinueCount, CharacterCount, Completion = CharacterDefineCountLoad(projectName, email)
+## 프롬프트 요청 및 결과물 Json을 CaptionCompletion에 업데이트
+def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 05_CaptionCompletionUpdate 시작 >")
+    # CaptionCompletion의 Count값 가져오기
+    ContinueCount, CharacterCount, Completion = CaptionCompletionCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CharacterDefine", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate는 ExistedCharacterDefine으로 대처됨 ]\n")
+            AddExistedCaptionCompletionToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "CaptionCompletion", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 05_CaptionCompletionUpdate는 ExistedCaptionCompletion으로 대처됨 ]\n")
         else:
-            responseJson = CharacterDefineResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+            responseJson = CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -357,11 +343,11 @@ def CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'o
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'CharacterDefineUpdate')
+                            desc = 'CaptionCompletionUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'CharacterDefineUpdate: {Update}')
+                UpdateTQDM.set_description(f'CaptionCompletionUpdate: {Update}')
                 time.sleep(0.0001)
                 CharacterChunkId += 1
                 ChunkId = Update["ChunkId"]
@@ -374,17 +360,17 @@ def CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'o
                 Role = Update["Role"]
                 Listener = Update["Listener"]
                 
-                AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
+                AddCaptionCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            CharacterDefineCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate 완료 ]\n")
+            CaptionCompletionCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 05_CaptionCompletionUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 05_CaptionCompletionUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 
@@ -396,4 +382,6 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    BodyFrameCaptionsToInputList(projectName, email)
+    InputList, CaptionIdList = BodyFrameCaptionsToInputList(projectName, email)
+    for input in InputList:
+        print(input)

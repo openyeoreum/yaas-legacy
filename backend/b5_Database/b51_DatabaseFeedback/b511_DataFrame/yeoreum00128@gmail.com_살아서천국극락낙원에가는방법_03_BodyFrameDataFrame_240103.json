@@ -52,7 +52,7 @@
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 2,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "우명 지음"
                     }
                 ]
@@ -118,7 +118,7 @@
                     },
                     {
                         "ChunkId": 12,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "우명"
                     }
                 ]
@@ -240,7 +240,7 @@
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 30,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "이제는 천국 극락 낙원에 살아서 가서 살 수 있습니다"
                     }
                 ]
@@ -815,7 +815,7 @@
                     },
                     {
                         "ChunkId": 113,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "삽화, 강화도 고인돌"
                     }
                 ]
@@ -897,7 +897,7 @@
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 123,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "참사람이 되고 세상살이를 하면 후일 진실되고 잘살 수가 있다"
                     },
                     {
@@ -1983,7 +1983,7 @@
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 289,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "모든 것은 있는 곳에 가야 찾을 수가 있다"
                     },
                     {
@@ -2194,7 +2194,7 @@
                     },
                     {
                         "ChunkId": 328,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "55"
                     }
                 ]
@@ -2265,7 +2265,7 @@
                     },
                     {
                         "ChunkId": 339,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "삽화, 백두산 천지 백두산 천지"
                     }
                 ]
@@ -2534,7 +2534,7 @@
                     },
                     {
                         "ChunkId": 380,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "삽화, 우루무치 천산천지"
                     }
                 ]
@@ -3759,7 +3759,7 @@
                     },
                     {
                         "ChunkId": 561,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "삽화, 에베레스트, 8848m"
                     }
                 ]
@@ -4451,7 +4451,7 @@
                     },
                     {
                         "ChunkId": 661,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "삽화, 보거다봉 천산, 5400m, 천지"
                     }
                 ]
@@ -5256,7 +5256,7 @@
                 "SplitedBodyChunks": [
                     {
                         "ChunkId": 774,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "진리의 마음이 되면 지혜가 생겨 모든 것을 다 아실 수 있습니다. 사람들이 궁금해하는 질문에 대한 답변입니다"
                     }
                 ]
@@ -7011,7 +7011,7 @@
                     },
                     {
                         "ChunkId": 997,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "삽화, 닐기리 히말라야 6940m"
                     }
                 ]
@@ -7420,7 +7420,7 @@
                     },
                     {
                         "ChunkId": 1050,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "삽화, 만면설의 파노라마 파미르 고원"
                     }
                 ]
@@ -7861,62 +7861,62 @@
                     },
                     {
                         "ChunkId": 1103,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "사람들이 가장 바라는 것은 다음의 열 가지입니다"
                     },
                     {
                         "ChunkId": 1104,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "1. 진리가 된 세상에서 삶 죽음 없이 영원히 사는 것"
                     },
                     {
                         "ChunkId": 1105,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "2. 행복해지는 것"
                     },
                     {
                         "ChunkId": 1106,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "3. 성공하는 것"
                     },
                     {
                         "ChunkId": 1107,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "4. 능력 있는 것"
                     },
                     {
                         "ChunkId": 1108,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "5. 건강해지는 것"
                     },
                     {
                         "ChunkId": 1109,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "6. 마음의 평화를 가지는 것"
                     },
                     {
                         "ChunkId": 1110,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "7. 잡념에서 벗어나 현재에 충실한 것"
                     },
                     {
                         "ChunkId": 1111,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "8. 나쁜 습관에서 벗어나는 것"
                     },
                     {
                         "ChunkId": 1112,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "9. 항상 감사한 마음을 가지는 것"
                     },
                     {
                         "ChunkId": 1113,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "10. 인간관계가 좋아지는 것"
                     },
                     {
                         "ChunkId": 1114,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "당신이 가장 바라는 것은 무엇인가요. 모든 것은 자기 마음속에 있기에 그 답을 찾을 수 있습니다"
                     }
                 ]

@@ -781,7 +781,7 @@
                     },
                     {
                         "ChunkId": 143,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "2022년 1월 김용태"
                     }
                 ]
@@ -8227,7 +8227,7 @@
                     },
                     {
                         "ChunkId": 1437,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "시장이 스마트폰으로 바뀌었을 뿐이다. 스마트폰을 열면 판매자들의 앱 매장이 있고 구매자들은 발품 대신 손품 팔다가 결정한다. 이것은 판"
                     },
                     {
@@ -16284,7 +16284,7 @@
                     },
                     {
                         "ChunkId": 2842,
-                        "Tag": "Caption",
+                        "Tag": "Narrator",
                         "Chunk": "- 발신인: humanresources@whysoseriouscom - 발신일자: 2007.12.3 2pm"
                     },
                     {

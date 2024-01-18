@@ -254,11 +254,13 @@ def CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame):
         for j in range(len(SplitedBodyChunks)):
             for k in range(len(CaptionFrame)):
                 SplitedCaptionChunks = CaptionFrame[k]['SplitedCaptionChunks']
+                ChunkIds = CaptionFrame[k]['ChunkIds']
                 for l in range(len(SplitedCaptionChunks)):
                     if SplitedBodyChunks[j]['ChunkId'] == SplitedCaptionChunks[l]['ChunkId']:
                         SplitedBodyChunks[j]['Tag'] = SplitedCaptionChunks[l]['Tag']
-                        print(f'Old: {SplitedBodyChunks[j]}\nNew: {SplitedCaptionChunks[l]}\n')
-    
+                    if SplitedBodyChunks[j]['ChunkId'] == ChunkIds[0]:
+                        SplitedBodyChunks[j]['CaptionSound'] = "Yes"
+
     return BodyFrame
 
 ## ContextDefine의 Bodys전환
@@ -273,8 +275,10 @@ def ContextDefineToBodys(projectName, email):
         HalfBodyFrame = CaptionTagUpdateToBodyFrame(HalfBodyFrame, CaptionFrame)
         
     flag_modified(project, "BodyFrame")
-    flag_modified(project, "HalfBodyFrame")
+    db.add(project)
+    db.commit()
     
+    flag_modified(project, "HalfBodyFrame")
     db.add(project)
     db.commit()
 

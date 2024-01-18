@@ -154,7 +154,6 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
     if InputList == []:
         return OutputMemoryDicsFile
 
-    FineTuningMemoryList = BodyFrameCaptionsToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
     ContinueCount = 0
@@ -180,37 +179,20 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
                 ContinueCount += 1
             if ContinueCount == 1:
                 mode = "ExampleFineTuning"
-                # "ExampleFineTuning"의 fineTuningMemory 형성
-                FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
             else:
                 mode = "MemoryFineTuning"
         # Example 계열 모드의 순서
         elif Mode == "Master":
             mode = "Master"
-            # "Master"의 MasterMemory 형성
-            MasterMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
         elif Mode == "ExampleFineTuning":
             mode = "ExampleFineTuning"
-            # "ExampleFineTuning"의 fineTuningMemory 형성
-            FineTuningMemory = FineTuningMemoryList[TotalCount - 1] if TotalCount > 0 else {'Id': 0, 'Pass': ''}
         elif Mode == "Example":
             mode = "Example"
             
         if "Continue" in InputDic:
-            if Mode == "Master":
-                Keys = list(MasterMemory.keys())
-                Input = MasterMemory[Keys[1]] + InputDic['Continue']
-            elif Mode == "ExampleFineTuning":
-                Keys = list(FineTuningMemory.keys())
-                Input = FineTuningMemory[Keys[1]] + InputDic['Continue']
-            else:
-                Input = InputDic['Continue']
-            
-            # Filter, MemoryCounter, OutputEnder 처리
-            talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
-            TalkTag = ["말" + match for match in talkTag]
-            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
-            outputEnder = f"{{'{TalkTag[0]}': {{'말의종류': '"
+            Input = InputDic['Continue']
+            memoryCounter = "\n"
+            outputEnder = ""
 
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
@@ -230,7 +212,7 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                     
-            Filter = CaptionCompletionFilter(TalkTag, responseData, memoryCounter)
+            Filter = CaptionCompletionFilter(responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

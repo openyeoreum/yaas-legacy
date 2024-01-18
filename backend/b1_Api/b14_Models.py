@@ -201,7 +201,7 @@ class Project(Base):
     PreprocessFrame = Column(JSON)
     BodyFrame = Column(JSON)
     HalfBodyFrame = Column(JSON)
-    PhargraphCaptionFrame = Column(JSON)
+    CaptionFrame = Column(JSON)
     PhargraphTransitionFrame = Column(JSON)
     BodyContextTags = Column(JSON)
     WMWMContextTags = Column(JSON)
@@ -314,7 +314,7 @@ class ProjectHistory(Base):
     PreprocessFrameStatus = Column(String(64))
     BodyFrameStatus = Column(String(64))
     HalfBodyFrameStatus = Column(String(64))
-    PhargraphCaptionFrameStatus = Column(String(64))
+    CaptionFrameStatus = Column(String(64))
     PhargraphTransitionFrameStatus = Column(String(64))
     BodyContextTagsStatus = Column(String(64))
     WMWMContextTagsStatus = Column(String(64))
@@ -384,7 +384,7 @@ class Prompt(Base):
     IndexDefineDivisionPreprocess = Column(JSON)
     IndexDefine = Column(JSON)
     # PreprocessBody = Column(JSON)
-    CaptionPhargraph = Column(JSON)
+    CaptionCompletion = Column(JSON)
     TransitionPhargraph = Column(JSON)
     
     # ContextPrompt
@@ -456,7 +456,7 @@ class TrainingDataset(Base):
     IndexDefineDivisionPreprocess = Column(JSON)
     IndexDefine = Column(JSON)
     PreprocessBody = Column(JSON)
-    CaptionPhargraph = Column(JSON)
+    CaptionCompletion = Column(JSON)
     TransitionPhargraph = Column(JSON)
     
     # ContextDataset

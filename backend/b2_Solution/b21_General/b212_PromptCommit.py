@@ -26,7 +26,7 @@ def AddPromptToDB():
         indexDefineDivisionPreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-02_IndexDefineDivisionPreprocess.json")
         indexDefine = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-03_IndexDefine.json")
         # preprocessBody = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-04_PreprocessBody.json")
-        captionPhargraph = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-05_CaptionPhargraph.json")
+        captionCompletion = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-05_CaptionCompletion.json")
         # transitionPhargraph = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-06_TransitionPhargraph.json")
         contextDefine = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-01_ContextDefine.json")
         contextCompletion = LoadJsonFrame(PromptDataPath + "/b542_ContextPrompt/b542-02_ContextCompletion.json")
@@ -52,7 +52,7 @@ def AddPromptToDB():
                 ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
                 ExistingPrompt.IndexDefine = indexDefine
                 # ExistingPrompt.PreprocessBody = preprocessBody
-                ExistingPrompt.CaptionPhargraph = captionPhargraph
+                ExistingPrompt.CaptionCompletion = captionCompletion
                 # ExistingPrompt.TransitionPhargraph = transitionPhargraph
                 ExistingPrompt.ContextDefine = contextDefine
                 ExistingPrompt.ContextCompletion = contextCompletion
@@ -77,7 +77,7 @@ def AddPromptToDB():
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,
                 IndexDefine = indexDefine,
                 # PreprocessBody = preprocessBody,
-                CaptionPhargraph = captionPhargraph,
+                CaptionCompletion = captionCompletion,
                 # TransitionPhargraph = transitionPhargraph,
                 ContextDefine = contextDefine,
                 ContextCompletion = contextCompletion,

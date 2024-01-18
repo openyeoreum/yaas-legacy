@@ -91,7 +91,7 @@ def AddProjectToDB(projectName, email):
         preprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_PreprocessFrame.json")
         bodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")
         halfBodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")
-        phargraphCaptionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_PhargraphCaptionFrame.json")
+        captionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_CaptionFrame.json")
         phargraphTransitionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-05_PhargraphTransitionFrame.json")
         bodyContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-07_BodyContextTags.json")
         wMWMContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-08_WMWMContextTags.json")
@@ -147,7 +147,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.PreprocessFrame = preprocessFrame
             ExistingProject.BodyFrame = bodyFrame
             ExistingProject.HalfBodyFrame = halfBodyFrame
-            ExistingProject.PhargraphCaptionFrame = phargraphCaptionFrame
+            ExistingProject.CaptionFrame = captionFrame
             ExistingProject.PhargraphTransitionFrame = phargraphTransitionFrame
             ExistingProject.BodyContextTags = bodyContextTags
             ExistingProject.WMWMContextTags = wMWMContextTags
@@ -202,7 +202,7 @@ def AddProjectToDB(projectName, email):
                 PreprocessFrame = preprocessFrame,
                 BodyFrame = bodyFrame,
                 HalfBodyFrame = halfBodyFrame,
-                PhargraphCaptionFrame = phargraphCaptionFrame,
+                CaptionFrame = captionFrame,
                 PhargraphTransitionFrame = phargraphTransitionFrame,
                 BodyContextTags = bodyContextTags,
                 WMWMContextTags = wMWMContextTags,

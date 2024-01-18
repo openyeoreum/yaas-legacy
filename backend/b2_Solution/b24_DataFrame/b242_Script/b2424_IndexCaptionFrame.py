@@ -48,13 +48,13 @@ def BodyFrameCaptionsToInputList(projectName, email):
                 temp_caption_ids.append(SplitedBodyChunkList[j]['ChunkId'])  # 추가적인 ChunkId들을 추가
                 j += 1
 
-            # 앞뒤 5개 요소 포함하고 CaptionStart, CaptionEnd 추가
-            start_idx = max(j - 6, 0)
+            # 앞뒤 7개 요소 포함하고 CaptionStart, CaptionEnd 추가
+            start_idx = max(j - 8, 0)  # 이전에는 max(j - 6, 0) 이었음
             combined_chunks = ""
             for k in range(start_idx, j - len(temp_caption_ids)):
                 combined_chunks += SplitedBodyChunkList[k]['Chunk'] + ' '
             combined_chunks += '\n\n[캡션시작]\n' + combined_caption + '\n[캡션끝]\n\n'
-            end_idx = min(j + 5, len(SplitedBodyChunkList))
+            end_idx = min(j + 7, len(SplitedBodyChunkList))  # 이전에는 min(j + 5, len(SplitedBodyChunkList)) 이었음
             for k in range(j, end_idx):
                 combined_chunks += SplitedBodyChunkList[k]['Chunk'] + ' '
 
@@ -70,38 +70,20 @@ def BodyFrameCaptionsToInputList(projectName, email):
 ##### Filter 조건 #####
 ######################
 ## CaptionCompletion의 Filter(Error 예외처리)
-def CaptionCompletionFilter(TalkTag, responseData, memoryCounter):
+def CaptionCompletionFilter(responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
-        outputJson = json.loads(responseData)
-        OutputDic = [{key: value} for key, value in outputJson.items()]
+        OutputDic = json.loads(responseData)
     except json.JSONDecodeError:
         return "JSONDecode에서 오류 발생: JSONDecodeError"
-    # Error2: 결과가 list가 아닐 때의 예외 처리
-    if not isinstance(OutputDic, list):
-        return "JSONType에서 오류 발생: JSONTypeError"
-    # # Error3: 결과가 '말하는인물'이 '없음'일 때의 예외 처리 (없음일 경우에는 Narrator 낭독)
-    # for dic in OutputDic:
-    #     for key, value in dic.items():
-    #         if value['말하는인물'] == '없음' or value['말하는인물'] == '' or value['말하는인물'] == 'none':
-    #             return "'말하는인물': '없음' 오류 발생: NonValueError"
-    # Error4: 자료의 구조가 다를 때의 예외 처리
-    for dic in OutputDic:
-        try:
-            key = list(dic.keys())[0]
-            if not key in TalkTag:
-                return "JSON에서 오류 발생: JSONKeyError"
-            else:
-                if not ('말의종류' in dic[key] and '말하는인물' in dic[key] and '말하는인물의성별' in dic[key] and '말하는인물의나이' in dic[key] and '말하는인물의감정' in dic[key] and '인물의역할' in dic[key] and '듣는인물' in dic[key]):
-                    return "JSON에서 오류 발생: JSONKeyError"
-        # Error5: 자료의 형태가 Str일 때의 예외처리
-        except AttributeError:
-            return "JSON에서 오류 발생: strJSONError"
-    # Error6: Input과 Output의 개수가 다를 때의 예외처리
-    if len(OutputDic) != len(TalkTag):
-        return "JSONCount에서 오류 발생: JSONCountError"
+    try:
+        if not ('유형' in OutputDic and '맞는이유' in OutputDic and '아닌이유' in OutputDic and '최종캡션판단여부' in OutputDic and '정확도' in OutputDic) and (OutputDic['최종캡션판단여부'] == '맞다' or OutputDic['최종캡션판단여부'] == '아니다' or OutputDic['최종캡션판단여부'] == '알수없다'):
+            return "JSON에서 오류 발생: JSONKeyError"
+    # Error5: 자료의 형태가 Str일 때의 예외처리
+    except AttributeError:
+        return "JSON에서 오류 발생: strJSONError"
 
-    return {'json': outputJson, 'filter': OutputDic}
+    return {'json': OutputDic, 'filter': OutputDic}
 
 ######################
 ##### Memory 생성 #####
@@ -148,11 +130,11 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '05', DataFramePath)    
-    inputList = BodyFrameCaptionsToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '06', DataFramePath)    
+    inputList, CaptionIdList = BodyFrameCaptionsToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
-        return OutputMemoryDicsFile
+        return OutputMemoryDicsFile, CaptionIdList
 
     TotalCount = 0
     ProcessCount = 1
@@ -219,12 +201,12 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
-                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | {Filter}")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
                 continue
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
-                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | JSONDecode 완료")
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -256,9 +238,9 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
         outputMemoryDics.append(OutputDic)
         outputMemory = CaptionCompletionOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '05', DataFramePath)
+        SaveOutputMemory(projectName, email, outputMemoryDics, '06', DataFramePath)
     
-    return outputMemoryDics
+    return outputMemoryDics, CaptionIdList
 
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
@@ -303,7 +285,7 @@ def CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesRev
 
 ## 프롬프트 요청 및 결과물 Json을 CaptionCompletion에 업데이트
 def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 05_CaptionCompletionUpdate 시작 >")
+    print(f"< User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate 시작 >")
     # CaptionCompletion의 Count값 가져오기
     ContinueCount, CharacterCount, Completion = CaptionCompletionCountLoad(projectName, email)
     if Completion == "No":
@@ -312,7 +294,7 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedCaptionCompletionToDB(projectName, email, ExistedDataFrame)
             AddExistedDataSetToDB(projectName, email, "CaptionCompletion", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 05_CaptionCompletionUpdate는 ExistedCaptionCompletion으로 대처됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate는 ExistedCaptionCompletion으로 대처됨 ]\n")
         else:
             responseJson = CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
@@ -349,10 +331,10 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             CaptionCompletionCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 05_CaptionCompletionUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 05_CaptionCompletionUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate는 이미 완료됨 ]\n")
         
 if __name__ == "__main__":
 
@@ -364,6 +346,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    InputList, CaptionIdList = BodyFrameCaptionsToInputList(projectName, email)
-    for input in InputList:
-        print(input)
+    CaptionCompletionProcess(projectName, email, DataFramePath, Process = "CaptionCompletion", MessagesReview = messagesReview, Mode = mode)

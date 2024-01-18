@@ -17,8 +17,8 @@
                 "CaptionTag": "None",
                 "CaptionType": "None",
                 "Reason": "None",
-                "ChunkIds": 0,
                 "Importance": "None",
+                "ChunkIds": 0,
                 "SplitedCaptionChunks": [
                     {
                         "ChunkId": "None",

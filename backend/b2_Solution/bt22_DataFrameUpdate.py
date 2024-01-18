@@ -78,7 +78,7 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
     return None
 
 ## BodyFrameBodys Context 부분 json파일에 업데이트 반영
-def LoadAndUpdateBodyFrameBodys(projectName, email, Process, DataFramePath):
+def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath):
 
     project = GetProject(projectName, email)
 
@@ -87,7 +87,10 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, DataFramePath):
     elif Process == "HalfBodyFrame":
         bodyFrame = project.HalfBodyFrame
 
-    Bodys = bodyFrame[2]["Bodys"]
+    if Data == "SplitedBodyScripts":
+        Bodys = bodyFrame[1]["SplitedBodyScripts"]
+    elif Data == "Bodys":
+        Bodys = bodyFrame[2]["Bodys"]
 
     # 문자열 정규화
     EmailNormalized = unicodedata.normalize('NFC', email)
@@ -118,7 +121,10 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, DataFramePath):
             ExistedDataFrame = json.load(file)
         
         # Bodys 데이터 업데이트
-        ExistedDataFrame[2]["Bodys"] = Bodys
+        if Data == "SplitedBodyScripts":
+            ExistedDataFrame[1]["SplitedBodyScripts"] = Bodys
+        elif Data == "Bodys":
+            ExistedDataFrame[2]["Bodys"] = Bodys
 
         # 변경된 데이터 저장
         with open(FilePath, 'w', encoding='utf-8') as file:
@@ -208,7 +214,7 @@ if __name__ == "__main__":
 
 
         ############################
-        ### 05_CaptionCompletion ###
+        ### 06_CaptionCompletion ###
         ############################
         InitCaptionCompletion(projectName, email)
         InitRawDataSet(projectName, email, "CaptionCompletion")
@@ -222,7 +228,7 @@ if __name__ == "__main__":
             updatedCaptionCompletion = UpdatedCaptionCompletion(projectName, email)
             SaveDataFrame(projectName, email, "06_CaptionCompletion", updatedCaptionCompletion, DataFramePath)
             # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
-            LoadAndUpdateBodyFrameBodys(projectName, email, "BodyFrame", DataFramePath)
+            LoadAndUpdateBodyFrameBodys(projectName, email, "BodyFrame", "SplitedBodyScripts", DataFramePath)
         if existedDataSet == None:
             SaveDataSet(projectName, email, "06", "CaptionCompletion", RawDataSetPath)
         existedDataFrame = None
@@ -244,7 +250,7 @@ if __name__ == "__main__":
             updatedContextDefine = UpdatedContextDefine(projectName, email)
             SaveDataFrame(projectName, email, "07_ContextDefine", updatedContextDefine, DataFramePath)
             # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
-            LoadAndUpdateBodyFrameBodys(projectName, email, "BodyFrame", DataFramePath)
+            LoadAndUpdateBodyFrameBodys(projectName, email, "BodyFrame", "Bodys", DataFramePath)
         if existedDataSet == None:
             SaveDataSet(projectName, email, "07", "ContextDefine", RawDataSetPath)
         existedDataFrame = None
@@ -366,7 +372,7 @@ if __name__ == "__main__":
             updatedSoundMatching = UpdatedSoundMatching(projectName, email)
             SaveDataFrame(projectName, email, "14_SoundMatching", updatedSoundMatching, DataFramePath)
             # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
-            LoadAndUpdateBodyFrameBodys(projectName, email, "HalfBodyFrame", DataFramePath)
+            LoadAndUpdateBodyFrameBodys(projectName, email, "HalfBodyFrame", "Bodys", DataFramePath)
         if existedDataSet == None:     
             SaveDataSet(projectName, email, "14", "SoundMatching", RawDataSetPath)
         existedDataFrame = None
@@ -388,7 +394,7 @@ if __name__ == "__main__":
             updatedSFXMatching = UpdatedSFXMatching(projectName, email)
             SaveDataFrame(projectName, email, "15_SFXMatching", updatedSFXMatching, DataFramePath)
             # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
-            LoadAndUpdateBodyFrameBodys(projectName, email, "HalfBodyFrame", DataFramePath)
+            LoadAndUpdateBodyFrameBodys(projectName, email, "HalfBodyFrame", "Bodys", DataFramePath)
         if existedDataSet == None:     
             SaveDataSet(projectName, email, "15", "SFXMatching", RawDataSetPath)
         existedDataFrame = None

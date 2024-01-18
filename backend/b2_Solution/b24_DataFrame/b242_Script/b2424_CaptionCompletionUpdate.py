@@ -6,6 +6,8 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
+from sqlalchemy.orm.attributes import flag_modified
+from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedCaptionCompletionToDB, AddCaptionCompletionChunksToDB, CaptionCompletionCountLoad, CaptionCompletionCompletionUpdate
@@ -244,7 +246,38 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
+## BodyFrame CaptionTag 업데이트
+def CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame):
+    ## BodyFrame CaptionTag 업데이트
+    for i in range(len(BodyFrame)):
+        SplitedBodyChunks = BodyFrame[i]['SplitedBodyChunks']
+        for j in range(len(SplitedBodyChunks)):
+            for k in range(len(CaptionFrame)):
+                SplitedCaptionChunks = CaptionFrame[k]['SplitedCaptionChunks']
+                for l in range(len(SplitedCaptionChunks)):
+                    if SplitedBodyChunks[j]['ChunkId'] == SplitedCaptionChunks[l]['ChunkId']:
+                        SplitedBodyChunks[j]['Tag'] = SplitedCaptionChunks[l]['Tag']
+                        print(f'Old: {SplitedBodyChunks[j]}\nNew: {SplitedCaptionChunks[l]}\n')
     
+    return BodyFrame
+
+## ContextDefine의 Bodys전환
+def ContextDefineToBodys(projectName, email):
+    with get_db() as db:
+        project = GetProject(projectName, email)
+        BodyFrame = project.BodyFrame[1]["SplitedBodyScripts"][1:]
+        HalfBodyFrame = project.HalfBodyFrame[1]["SplitedBodyScripts"][1:]
+        CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
+
+        BodyFrame = CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame)
+        HalfBodyFrame = CaptionTagUpdateToBodyFrame(HalfBodyFrame, CaptionFrame)
+        
+    flag_modified(project, "BodyFrame")
+    flag_modified(project, "HalfBodyFrame")
+    
+    db.add(project)
+    db.commit()
+
 ## 데이터 치환
 def CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   
     # 데이터 치환
@@ -325,6 +358,8 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
                 i += 1
             
             UpdateTQDM.close()
+            # BodyFrame CaptionTag 업데이트
+            ContextDefineToBodys(projectName, email)
             # Completion "Yes" 업데이트
             CaptionCompletionCompletionUpdate(projectName, email)
             print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate 완료 ]\n")

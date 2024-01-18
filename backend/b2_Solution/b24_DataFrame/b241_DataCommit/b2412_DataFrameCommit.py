@@ -528,6 +528,93 @@ def HalfBodyFrameCompletionUpdate(projectName, email):
 
 
 ####################################
+##### 06_CaptionCompletion Process #####
+####################################
+## 6. 1-0 CaptionCompletion이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedCaptionCompletionToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.CaptionFrame[1] = ExistedDataFrame[1]
+        
+        flag_modified(project, "CaptionFrame")
+        
+        db.add(project)
+        db.commit()
+
+## 6. 1-1 CaptionCompletion의 Body(본문) updateContextChunks 업데이트 형식
+def UpdateCaptionCompletions(project, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks):    
+    updateCaptionCompletions = {
+        "CaptionId": CaptionId,
+        "CaptionTag": CaptionTag,
+        "CaptionType": CaptionType,
+        "Reason": Reason,
+        "Importance": Importance,
+        "ChunkIds": ChunkIds,
+        "SplitedCaptionChunks": SplitedCaptionChunks
+    }
+    
+    project.CaptionFrame[1]["CaptionCompletions"].append(updateCaptionCompletions)
+    project.CaptionFrame[0]["CaptionCount"] = CaptionId
+    
+## 6. 1-2 CaptionCompletion의 Body(본문) updateContextChunks 업데이트
+def AddCaptionCompletionChunksToDB(projectName, email, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateCaptionCompletions(project, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks)
+        
+        flag_modified(project, "CaptionFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 6. CaptionCompletion의Count의 가져오기
+def CaptionCompletionCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    CaptionCount = project.CaptionFrame[0]["CaptionCount"]
+    Completion = project.CaptionFrame[0]["Completion"]
+    
+    return CaptionCount, Completion
+
+## 6. CaptionCompletion의 초기화
+def InitCaptionCompletion(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.CaptionFrame[0]["CaptionCount"] = 0
+        project.CaptionFrame[0]["Completion"] = "No"
+        project.CaptionFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_CaptionFrame.json")[1]
+
+        flag_modified(project, "CaptionFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 6. 업데이트된 CaptionCompletion 출력
+def UpdatedCaptionCompletion(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+
+    return project.CaptionFrame
+
+## 6. CaptionCompletionCompletion 업데이트
+def CaptionCompletionCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.CaptionFrame[0]["Completion"] = "Yes"
+
+        flag_modified(project, "CaptionFrame")
+
+        db.add(project)
+        db.commit()
+
+
+####################################
 ##### 07_ContextDefine Process #####
 ####################################
 ## 7. 1-0 ContextDefine이 이미 ExistedFrame으로 존재할때 업데이트

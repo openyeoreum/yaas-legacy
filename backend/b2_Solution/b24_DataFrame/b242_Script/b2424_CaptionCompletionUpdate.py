@@ -8,8 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory
-# AddExistedCaptionCompletionToDB, AddCaptionCompletionChunksToDB, CaptionCompletionCountLoad, CaptionCompletionCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedCaptionCompletionToDB, AddCaptionCompletionChunksToDB, CaptionCompletionCountLoad, CaptionCompletionCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -64,7 +63,7 @@ def BodyFrameCaptionsToInputList(projectName, email):
         else:
             j += 1
         
-    return InputList, CaptionIdList
+    return InputList, CaptionIdList, SplitedBodyChunkList
 
 ######################
 ##### Filter 조건 #####
@@ -131,10 +130,10 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
     AddProjectContextToDB(projectName, email, Process)
 
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '06', DataFramePath)    
-    inputList, CaptionIdList = BodyFrameCaptionsToInputList(projectName, email)
+    inputList, CaptionIdList, SplitedBodyChunkList = BodyFrameCaptionsToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
-        return OutputMemoryDicsFile, CaptionIdList
+        return OutputMemoryDicsFile, CaptionIdList, SplitedBodyChunkList
 
     TotalCount = 0
     ProcessCount = 1
@@ -240,46 +239,47 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
         
         SaveOutputMemory(projectName, email, outputMemoryDics, '06', DataFramePath)
     
-    return outputMemoryDics, CaptionIdList
+    return outputMemoryDics, CaptionIdList, SplitedBodyChunkList
 
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
     
 ## 데이터 치환
-def CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
-    # Chunk, ChunkId 데이터 추출
-    project = GetProject(projectName, email)
-    BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    CharacterTagChunk = []
-    CharacterTagChunkId = []
-    for i in range(len(BodyFrame)):
-        for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
-            if BodyFrame[i]['SplitedBodyChunks'][j]['Tag'] == "Character":
-                CharacterTagChunk.append(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk'])
-                CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
-    
+def CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   
     # 데이터 치환
-    outputMemoryDics = CaptionCompletionProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics, CaptionIdList, SplitedBodyChunkList = CaptionCompletionProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
-    responseCount = 0
-    
-    for response in outputMemoryDics:
-        if response != "Pass":
-            for dic in response:
-                ChunkId = CharacterTagChunkId[responseCount]
-                Chunk = CharacterTagChunk[responseCount]
-                for key, value in dic.items():
-                    Character = value['말하는인물']
-                    Type = value['말의종류']
-                    Gender = value['말하는인물의성별']
-                    Age = value['말하는인물의나이']
-                    Emotion = value['말하는인물의감정']
-                    Role = value['인물의역할']
-                    Listener = value['듣는인물']
-                responseCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "Type": Type, "Gender": Gender, "Age": Age, "Emotion": Emotion, "Role": Role, "Listener": Listener})
+    for i, response in enumerate(outputMemoryDics):
+        CaptionId = i + 1
+        CaptionType = response['유형']
+        Importance = response['정확도']
+        if response['최종캡션판단여부'] == '맞다' and int(Importance) >= 80:
+            CaptionTag = 'Caption'
+            Reason = response['맞는이유']
+        else:
+            CaptionTag = 'Narrator'
+            Reason = response['아닌이유']
+        ChunkIds = CaptionIdList[i]
+        CaptionCompletion = {"CaptionId": CaptionId, "CaptionTag": CaptionTag, "CaptionType": CaptionType, "Reason": Reason, "Importance": Importance, "ChunkIds": ChunkIds, "SplitedCaptionChunks": []}
+        for Chunkid in ChunkIds:
+            ChunkId = Chunkid
+            for j in range(len(SplitedBodyChunkList)):
+                if ChunkId == SplitedBodyChunkList[j]['ChunkId']:
+                    Tag = SplitedBodyChunkList[j]['Tag']
+                    Chunk = SplitedBodyChunkList[j]['Chunk']
+                    break
+            if CaptionTag == 'Caption' and Tag == 'Caption':
+                NewTag = 'Caption'
+            elif CaptionTag == 'Caption' and Tag == 'CaptionComment':
+                NewTag = 'CaptionComment'
+            else:
+                NewTag = 'Narrator'
+                
+            CaptionCompletion['SplitedCaptionChunks'].append({"ChunkId": ChunkId, "Tag": NewTag, "Chunk": Chunk})
+        
+        responseJson.append(CaptionCompletion)
     
     return responseJson
 
@@ -287,7 +287,7 @@ def CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesRev
 def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate 시작 >")
     # CaptionCompletion의 Count값 가져오기
-    ContinueCount, CharacterCount, Completion = CaptionCompletionCountLoad(projectName, email)
+    ContinueCount, Completion = CaptionCompletionCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
@@ -302,8 +302,6 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
             ResponseJson = responseJson[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
             
-            CharacterChunkId = ContinueCount
-            
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
@@ -311,20 +309,18 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'CaptionCompletionUpdate: {Update}')
+                UpdateTQDM.set_description(f'CaptionCompletionUpdate: {Update["CaptionType"]}')
                 time.sleep(0.0001)
-                CharacterChunkId += 1
-                ChunkId = Update["ChunkId"]
-                Chunk = Update["Chunk"]
-                Character = Update["Character"]
-                Type = Update["Type"]
-                Gender = Update["Gender"]
-                Age = Update["Age"]
-                Emotion = Update["Emotion"]
-                Role = Update["Role"]
-                Listener = Update["Listener"]
+                print(Update)
+                CaptionId = Update["CaptionId"]
+                CaptionTag = Update["CaptionTag"]
+                CaptionType = Update["CaptionType"]
+                Reason = Update["Reason"]
+                Importance = Update["Importance"]
+                ChunkIds = Update["ChunkIds"]
+                SplitedCaptionChunks = Update["SplitedCaptionChunks"]
                 
-                AddCaptionCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
+                AddCaptionCompletionChunksToDB(projectName, email, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks)
                 # i값 수동 업데이트
                 i += 1
             
@@ -346,4 +342,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    CaptionCompletionProcess(projectName, email, DataFramePath, Process = "CaptionCompletion", MessagesReview = messagesReview, Mode = mode)

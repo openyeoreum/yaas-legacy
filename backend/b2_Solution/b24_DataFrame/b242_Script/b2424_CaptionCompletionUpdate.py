@@ -274,8 +274,6 @@ def CaptionCompletionToBodyFrame(projectName, email):
         CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
 
         BodyFrame = CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame)
-        
-        
     flag_modified(project, "BodyFrame")
     db.add(project)
     db.commit()

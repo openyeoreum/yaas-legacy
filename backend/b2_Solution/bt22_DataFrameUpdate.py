@@ -227,8 +227,9 @@ if __name__ == "__main__":
         if existedDataFrame == None:
             updatedCaptionCompletion = UpdatedCaptionCompletion(projectName, email)
             SaveDataFrame(projectName, email, "06_CaptionCompletion", updatedCaptionCompletion, DataFramePath)
-            # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
+            # 기존 최신 json 파일의 BodyFrame SplitedBodyScripts, HalfBodyFrame SplitedBodyScripts, Context 부분 업데이트
             LoadAndUpdateBodyFrameBodys(projectName, email, "BodyFrame", "SplitedBodyScripts", DataFramePath)
+            LoadAndUpdateBodyFrameBodys(projectName, email, "HalfBodyFrame", "SplitedBodyScripts", DataFramePath)
         if existedDataSet == None:
             SaveDataSet(projectName, email, "06", "CaptionCompletion", RawDataSetPath)
         existedDataFrame = None

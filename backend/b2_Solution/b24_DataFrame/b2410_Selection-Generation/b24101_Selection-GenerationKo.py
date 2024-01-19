@@ -88,19 +88,35 @@ def LoadFrames(projectName, email):
         })
 
     ## SelectionGenerationKoSplitedIndexs 데이터 구축
-    # Index 중 IndexContext, Sound 부분
+    # Index 중 IndexContext, Music, Sound 부분
     for i in range(len(SelectionGenerationKoSplitedIndexs)):
+        # IndexContext
         for j in range(len(WMWMFrameIndexs)):
             if SelectionGenerationKoSplitedIndexs[i]['IndexId'] == WMWMFrameIndexs[j]['IndexId']:
                 SelectionGenerationKoSplitedIndexs[i]['IndexContext'] = {'Vector': WMWMFrameIndexs[j]['Vector'], 'WMWM': WMWMFrameIndexs[j]['WMWM']}
+                LatestIndex = SelectionGenerationKoSplitedIndexs[i]['IndexContext']
                 break
+
+        # Music
+        IndexTag = SelectionGenerationKoSplitedIndexs[i]['IndexTag']
+        if IndexTag == 'Title':
+            bookGenre = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Genre']['Genre']
+            bookGender = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Gender']['Gender']
+            bookAge = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Age']['Age']
+            bookPersonality = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Personality']['Personality']
+            bookEmotion = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Emotion']['Emotion']
+            SelectionGenerationKoSplitedIndexs[i]['Music'] = {"Genre": bookGenre, "Gender": bookGender, "Age": bookAge, "Personality": bookPersonality, "Emotion": bookEmotion}
+        else:
+            SelectionGenerationKoSplitedIndexs[i]['Music'] = LatestIndex['Vector']['ContextCompletion']
+            
+        # Sound
         for k in range(len(SoundFrame)):
             if SelectionGenerationKoSplitedIndexs[i]['IndexId'] == SoundFrame[k]['IndexId']:
                 SelectionGenerationKoSplitedIndexs[i]['Sound'] = SoundFrame[k]['Sounds']
                 break
 
     # Body 중 BodyContext, Selection-GenerationKoSplitedChunks 부분
-    BookContext = {'Vector': WMWMFrameBookContext[0]['Vector'], 'WMWM': WMWMFrameBookContext[0]['WMWM']}
+    BookContext = {'Vector': WMWMFrameBookContext[0]['Vector'], 'WMWM': WMWMFrameBookContext[0]['WMWM']} #####
     for i in range(len(SelectionGenerationKoSplitedIndexs)):
         IndexContext = SelectionGenerationKoSplitedIndexs[i]['IndexContext'] #####
         SelectionGenerationKoSplitedBodys = SelectionGenerationKoSplitedIndexs[i]['Selection-GenerationKoSplitedBodys']
@@ -170,7 +186,9 @@ def LoadFrames(projectName, email):
                 for SFXFrameBody in SFXFrame:
                     SFXFrameChunk = SFXFrameBody['SFXSplitedBodyChunks']
                     for SFXChunk in SFXFrameChunk:
-                        if SFXChunk['ChunkId'] == chunkid:
+                        if not isinstance(SFXChunk['ChunkId'], list):
+                            SFXChunk['ChunkId'] = [SFXChunk['ChunkId']]
+                        if SFXChunk['ChunkId'][0] == chunkid:
                             sFX = SFXChunk['SFX']['SFX']
                             Prompt = SFXChunk['SFX']['Prompt']
                             Type = SFXChunk['SFX']['Type']

@@ -15,14 +15,23 @@
     {
         "BookContext":
         {
-            "Vector":
-            {
-                "Purpose": "None",
-                "Reason": "None",
-                "Question": "None",
-                "Subject": "None",
-                "Reader": "None",
-                "Importance": 0
+            "Vector": {
+                "ContextDefine": {
+                    "Purpose": "None",
+                    "Reason": "None",
+                    "Question": "None",
+                    "Subject": "None",
+                    "Reader": "None",
+                    "Importance": 0
+                },
+                "ContextCompletion": {
+                    "Genre": "None",
+                    "Gender": "None",
+                    "Age": "None",
+                    "Personality": "None",
+                    "Emotion": "None",
+                    "Accuracy": 0
+                }
             },
             "WMWM":
             {
@@ -40,14 +49,23 @@
                 "Index": "None",
                 "IndexContext":
                 {
-                    "Vector":
-                    {
-                        "Purpose": "None",
-                        "Reason": "None",
-                        "Question": "None",
-                        "Subject": "None",
-                        "Reader": "None",
-                        "Importance": 0
+                    "Vector": {
+                        "ContextDefine": {
+                            "Purpose": "None",
+                            "Reason": "None",
+                            "Question": "None",
+                            "Subject": "None",
+                            "Reader": "None",
+                            "Importance": 0
+                        },
+                        "ContextCompletion": {
+                            "Genre": "None",
+                            "Gender": "None",
+                            "Age": "None",
+                            "Personality": "None",
+                            "Emotion": "None",
+                            "Accuracy": 0
+                        }
                     },
                     "WMWM":
                     {
@@ -60,13 +78,11 @@
                 },
                 "Music":
                 {
-                    "ChunkId": "None",
                     "Genre": "None",
                     "Gender": "None",
                     "Age": "None",
                     "Personality": "None",
-                    "Emotion": "None",
-                    "Accuracy": 0
+                    "Emotion": "None"
                 },
                 "Sound": [
                     {
@@ -78,10 +94,10 @@
                         "BackgroundSoundPrompt": "None",
                         "BackgroundSoundImportance": "None",
                         "Type": "None",
-                        "Environment": "Environment",
-                        "Situation": "Situation",
-                        "Era": "Era",
-                        "Culture": "Culture"
+                        "Environment": "None",
+                        "Situation": "None",
+                        "Era": "None",
+                        "Culture": "None"
                     }
                 ],
                 "Selection-GenerationKoSplitedBodys": [
@@ -89,14 +105,23 @@
                         "BodyId": 0,
                         "BodyContext":
                         {
-                            "Vector":
-                            {
-                                "Purpose": "None",
-                                "Reason": "None",
-                                "Question": "None",
-                                "Subject": "None",
-                                "Reader": "None",
-                                "Importance": 0
+                            "Vector": {
+                                "ContextDefine": {
+                                    "Purpose": "None",
+                                    "Reason": "None",
+                                    "Question": "None",
+                                    "Subject": "None",
+                                    "Reader": "None",
+                                    "Importance": 0
+                                },
+                                "ContextCompletion": {
+                                    "Genre": "None",
+                                    "Gender": "None",
+                                    "Age": "None",
+                                    "Personality": "None",
+                                    "Emotion": "None",
+                                    "Accuracy": 0
+                                }
                             },
                             "WMWM":
                             {
@@ -114,14 +139,23 @@
                                 "Tag": "None",
                                 "ChunkContext":
                                 {
-                                    "Vector":
-                                    {
-                                        "Purpose": "None",
-                                        "Reason": "None",
-                                        "Question": "None",
-                                        "Subject": "None",
-                                        "Reader": "None",
-                                        "Importance": 0
+                                    "Vector": {
+                                        "ContextDefine": {
+                                            "Purpose": "None",
+                                            "Reason": "None",
+                                            "Question": "None",
+                                            "Subject": "None",
+                                            "Reader": "None",
+                                            "Importance": 0
+                                        },
+                                        "ContextCompletion": {
+                                            "Genre": "None",
+                                            "Gender": "None",
+                                            "Age": "None",
+                                            "Personality": "None",
+                                            "Emotion": "None",
+                                            "Accuracy": 0
+                                        }
                                     },
                                     "WMWM":
                                     {
@@ -153,11 +187,11 @@
                                 },
                                 "SFX":
                                 {
-                                    "SFX": "골프공 치는 소리",
-                                    "Prompt": "The sound of a golf ball being hit",
-                                    "Type": "행동",
-                                    "Role": "대상음",
-                                    "Direction": "앞",
+                                    "SFX": "None",
+                                    "Prompt": "None",
+                                    "Type": "None",
+                                    "Role": "None",
+                                    "Direction": "None",
                                     "Importance": 0
                                 },
                                 "Selection-GenerationKoChunkTokens": [

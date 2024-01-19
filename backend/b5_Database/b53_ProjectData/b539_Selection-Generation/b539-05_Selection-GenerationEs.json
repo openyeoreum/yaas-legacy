@@ -60,13 +60,11 @@
                 },
                 "Music":
                 {
-                    "ChunkId": "None",
                     "Genre": "None",
                     "Gender": "None",
                     "Age": "None",
                     "Personality": "None",
-                    "Emotion": "None",
-                    "Accuracy": 0
+                    "Emotion": "None"
                 },
                 "Sound": [
                     {

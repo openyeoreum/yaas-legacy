@@ -131,7 +131,7 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '06', DataFramePath)    
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '06', DataFramePath)
     inputList, CaptionIdList, SplitedBodyChunkList = BodyFrameCaptionsToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
@@ -242,7 +242,6 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
         SaveOutputMemory(projectName, email, outputMemoryDics, '06', DataFramePath)
     
     return outputMemoryDics, CaptionIdList, SplitedBodyChunkList
-
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
@@ -253,31 +252,41 @@ def CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame):
         SplitedBodyChunks = BodyFrame[i]['SplitedBodyChunks']
         for j in range(len(SplitedBodyChunks)):
             for k in range(len(CaptionFrame)):
-                SplitedCaptionChunks = CaptionFrame[k]['SplitedCaptionChunks']
+                CaptionTag = CaptionFrame[k]['CaptionTag']
                 ChunkIds = CaptionFrame[k]['ChunkIds']
+                SplitedCaptionChunks = CaptionFrame[k]['SplitedCaptionChunks']
                 for l in range(len(SplitedCaptionChunks)):
                     if SplitedBodyChunks[j]['ChunkId'] == SplitedCaptionChunks[l]['ChunkId']:
-                        SplitedBodyChunks[j]['Tag'] = SplitedCaptionChunks[l]['Tag']
-                    if SplitedBodyChunks[j]['ChunkId'] == ChunkIds[0]:
-                        SplitedBodyChunks[j]['CaptionSound'] = "Yes"
+                        SplitedBodyChunks[j]['NewTag'] = SplitedCaptionChunks[l]['Tag']
+                    if SplitedBodyChunks[j]['ChunkId'] == ChunkIds[0] and CaptionTag == 'Caption':
+                        SplitedBodyChunks[j]['CaptionSound'] = "Start"
+                    elif SplitedBodyChunks[j]['ChunkId'] == ChunkIds[-1] and CaptionTag == 'Caption':
+                        SplitedBodyChunks[j]['CaptionSound'] = "End"
 
     return BodyFrame
 
-## ContextDefine의 Bodys전환
-def ContextDefineToBodys(projectName, email):
+## CaptionCompletion의 BodyFrame전환
+def CaptionCompletionToBodyFrame(projectName, email):
+    # BodyFrame CaptionTag 업데이트
     with get_db() as db:
         project = GetProject(projectName, email)
         BodyFrame = project.BodyFrame[1]["SplitedBodyScripts"][1:]
-        HalfBodyFrame = project.HalfBodyFrame[1]["SplitedBodyScripts"][1:]
         CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
 
         BodyFrame = CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame)
-        HalfBodyFrame = CaptionTagUpdateToBodyFrame(HalfBodyFrame, CaptionFrame)
+        
         
     flag_modified(project, "BodyFrame")
     db.add(project)
     db.commit()
     
+    # HalfBodyFrame CaptionTag 업데이트
+    with get_db() as db:
+        project = GetProject(projectName, email)
+        HalfBodyFrame = project.HalfBodyFrame[1]["SplitedBodyScripts"][1:]
+        CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
+        
+        HalfBodyFrame = CaptionTagUpdateToBodyFrame(HalfBodyFrame, CaptionFrame)
     flag_modified(project, "HalfBodyFrame")
     db.add(project)
     db.commit()
@@ -348,7 +357,6 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'CaptionCompletionUpdate: {Update["CaptionType"]}')
                 time.sleep(0.0001)
-                print(Update)
                 CaptionId = Update["CaptionId"]
                 CaptionTag = Update["CaptionTag"]
                 CaptionType = Update["CaptionType"]
@@ -363,7 +371,7 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
             
             UpdateTQDM.close()
             # BodyFrame CaptionTag 업데이트
-            ContextDefineToBodys(projectName, email)
+            CaptionCompletionToBodyFrame(projectName, email)
             # Completion "Yes" 업데이트
             CaptionCompletionCompletionUpdate(projectName, email)
             print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate 완료 ]\n")

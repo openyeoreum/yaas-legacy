@@ -350,7 +350,6 @@ def WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = None
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
 ### 데이터 치환
-
 ## outputMemoryDics의 ResponseJson변환
 def outputMemoryDicsToResponseJson(SplitedContexts, outputMemoryDics):
     ResponseJson = []

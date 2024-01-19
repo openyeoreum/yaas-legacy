@@ -259,9 +259,9 @@ def CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame):
                     if SplitedBodyChunks[j]['ChunkId'] == SplitedCaptionChunks[l]['ChunkId']:
                         SplitedBodyChunks[j]['NewTag'] = SplitedCaptionChunks[l]['Tag']
                     if SplitedBodyChunks[j]['ChunkId'] == ChunkIds[0] and CaptionTag == 'Caption':
-                        SplitedBodyChunks[j]['CaptionSound'] = "Start"
+                        SplitedBodyChunks[j]['CaptionSoundStart'] = "None"
                     elif SplitedBodyChunks[j]['ChunkId'] == ChunkIds[-1] and CaptionTag == 'Caption':
-                        SplitedBodyChunks[j]['CaptionSound'] = "End"
+                        SplitedBodyChunks[j]['CaptionSoundEnd'] = "None"
 
     return BodyFrame
 

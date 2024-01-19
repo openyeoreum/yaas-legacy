@@ -415,7 +415,6 @@ if __name__ == "__main__":
         
         return lifeGraphList
 
-
     LifeGraphsKo, LifeGraphsEn = LoadLifeGraphs(lifeGraphSetName, latestUpdateDate)
     LifeGraphsGlobalList = []
     LifeGraphId = 1
@@ -436,32 +435,33 @@ if __name__ == "__main__":
         
         for j in range(len(LifeDataEn)):
             LifeDataEnTextCount += len(LifeDataEn[j]['ReasonEn'])
-        if LifeDataEnTextCount >= 700 and ResidenceAccuracy >= 85:
-            LifeGraphDate = LifeGraphsKo[i]['LifeGraphDate']
-            Name = LifeGraphsKo[i]['Name']
-            Age = LifeGraphsKo[i]['Age']
-            Source = LifeGraphsKo[i]['Source']
-            Language = LifeGraphsKo[i]['Language']
-            ResidenceEn = LifeGraphsEn[i]['Residence']
-            Email = LifeGraphsKo[i]['Email']
-            LifeDataKo = LifeGraphsKo[i]['LifeData']
-            LifeGraphsGlobal = {
-                "LifeGraphId": LifeGraphId,
-                "ImageId": None,
-                "LifeGraphDate": LifeGraphDate,
-                "Name": Name,
-                "Age": Age,
-                "Source": Source,
-                "Language": Language,
-                "Translation": ["ko", "en"],
-                "ResidenceKo": ResidenceKo,
-                "ResidenceEn": ResidenceEn,
-                "Email": Email,
-                "LifeDataKo": LifeDataKo,
-                "LifeDataEn": LifeDataEn
-            }
-            LifeGraphsGlobalList.append(LifeGraphsGlobal)
-            LifeGraphId += 1
+        if LifeDataEnTextCount >= 400 and ResidenceAccuracy >= 80:
+            if not (LifeDataEnTextCount >= 700 and ResidenceAccuracy >= 85): #1차 선별
+                LifeGraphDate = LifeGraphsKo[i]['LifeGraphDate']
+                Name = LifeGraphsKo[i]['Name']
+                Age = LifeGraphsKo[i]['Age']
+                Source = LifeGraphsKo[i]['Source']
+                Language = LifeGraphsKo[i]['Language']
+                ResidenceEn = LifeGraphsEn[i]['Residence']
+                Email = LifeGraphsKo[i]['Email']
+                LifeDataKo = LifeGraphsKo[i]['LifeData']
+                LifeGraphsGlobal = {
+                    "LifeGraphId": LifeGraphId,
+                    "ImageId": None,
+                    "LifeGraphDate": LifeGraphDate,
+                    "Name": Name,
+                    "Age": Age,
+                    "Source": Source,
+                    "Language": Language,
+                    "Translation": ["ko", "en"],
+                    "ResidenceKo": ResidenceKo,
+                    "ResidenceEn": ResidenceEn,
+                    "Email": Email,
+                    "LifeDataKo": LifeDataKo,
+                    "LifeDataEn": LifeDataEn
+                }
+                LifeGraphsGlobalList.append(LifeGraphsGlobal)
+                LifeGraphId += 1
 
     lifeGraphList = LoadLifeGraphSet(lifeGraphSetName, latestUpdateDate)
     
@@ -477,7 +477,7 @@ if __name__ == "__main__":
             if LifeGraphsGlobalCount < len(LifeGraphsGlobalList) - 1:
                 LifeGraphsGlobalCount += 1
             
-    LifeGraphsGlobalListPath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_LifeGraphNearbyCenterDataFrame_231216.json"
+    LifeGraphsGlobalListPath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/23120601_CourseraMeditation_04_LifeGraphNearbyCenterDataFrame_240119.json"
     with open(LifeGraphsGlobalListPath, 'w', encoding='utf-8') as file:
         json.dump(LifeGraphsGlobalList, file, ensure_ascii=False, indent=4)
         

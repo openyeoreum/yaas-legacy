@@ -245,49 +245,49 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
-## BodyFrame CaptionTag 업데이트
-def CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame):
-    ## BodyFrame CaptionTag 업데이트
-    for i in range(len(BodyFrame)):
-        SplitedBodyChunks = BodyFrame[i]['SplitedBodyChunks']
-        for j in range(len(SplitedBodyChunks)):
-            for k in range(len(CaptionFrame)):
-                CaptionTag = CaptionFrame[k]['CaptionTag']
-                ChunkIds = CaptionFrame[k]['ChunkIds']
-                SplitedCaptionChunks = CaptionFrame[k]['SplitedCaptionChunks']
-                for l in range(len(SplitedCaptionChunks)):
-                    if SplitedBodyChunks[j]['ChunkId'] == SplitedCaptionChunks[l]['ChunkId']:
-                        SplitedBodyChunks[j]['NewTag'] = SplitedCaptionChunks[l]['Tag']
-                    if SplitedBodyChunks[j]['ChunkId'] == ChunkIds[0] and CaptionTag == 'Caption':
-                        SplitedBodyChunks[j]['CaptionSoundStart'] = "None"
-                    if SplitedBodyChunks[j]['ChunkId'] == ChunkIds[-1] and CaptionTag == 'Caption':
-                        SplitedBodyChunks[j]['CaptionSoundEnd'] = "None"
+# ## BodyFrame CaptionTag 업데이트
+# def CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame):
+#     ## BodyFrame CaptionTag 업데이트
+#     for i in range(len(BodyFrame)):
+#         SplitedBodyChunks = BodyFrame[i]['SplitedBodyChunks']
+#         for j in range(len(SplitedBodyChunks)):
+#             for k in range(len(CaptionFrame)):
+#                 CaptionTag = CaptionFrame[k]['CaptionTag']
+#                 ChunkIds = CaptionFrame[k]['ChunkIds']
+#                 SplitedCaptionChunks = CaptionFrame[k]['SplitedCaptionChunks']
+#                 for l in range(len(SplitedCaptionChunks)):
+#                     if SplitedBodyChunks[j]['ChunkId'] == SplitedCaptionChunks[l]['ChunkId']:
+#                         SplitedBodyChunks[j]['NewTag'] = SplitedCaptionChunks[l]['Tag']
+#                     if SplitedBodyChunks[j]['ChunkId'] == ChunkIds[0] and CaptionTag == 'Caption':
+#                         SplitedBodyChunks[j]['CaptionMusicStart'] = "None"
+#                     if SplitedBodyChunks[j]['ChunkId'] == ChunkIds[-1] and CaptionTag == 'Caption':
+#                         SplitedBodyChunks[j]['CaptionMusicEnd'] = "None"
 
-    return BodyFrame
+#     return BodyFrame
 
-## CaptionCompletion의 BodyFrame전환
-def CaptionCompletionToBodyFrame(projectName, email):
-    # BodyFrame CaptionTag 업데이트
-    with get_db() as db:
-        project = GetProject(projectName, email)
-        BodyFrame = project.BodyFrame[1]["SplitedBodyScripts"][1:]
-        CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
+# ## CaptionCompletion의 BodyFrame전환
+# def CaptionCompletionToBodyFrame(projectName, email):
+#     # BodyFrame CaptionTag 업데이트
+#     with get_db() as db:
+#         project = GetProject(projectName, email)
+#         BodyFrame = project.BodyFrame[1]["SplitedBodyScripts"][1:]
+#         CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
 
-        BodyFrame = CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame)
-    flag_modified(project, "BodyFrame")
-    db.add(project)
-    db.commit()
+#         BodyFrame = CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame)
+#     flag_modified(project, "BodyFrame")
+#     db.add(project)
+#     db.commit()
     
-    # HalfBodyFrame CaptionTag 업데이트
-    with get_db() as db:
-        project = GetProject(projectName, email)
-        HalfBodyFrame = project.HalfBodyFrame[1]["SplitedBodyScripts"][1:]
-        CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
+#     # HalfBodyFrame CaptionTag 업데이트
+#     with get_db() as db:
+#         project = GetProject(projectName, email)
+#         HalfBodyFrame = project.HalfBodyFrame[1]["SplitedBodyScripts"][1:]
+#         CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
         
-        HalfBodyFrame = CaptionTagUpdateToBodyFrame(HalfBodyFrame, CaptionFrame)
-    flag_modified(project, "HalfBodyFrame")
-    db.add(project)
-    db.commit()
+#         HalfBodyFrame = CaptionTagUpdateToBodyFrame(HalfBodyFrame, CaptionFrame)
+#     flag_modified(project, "HalfBodyFrame")
+#     db.add(project)
+#     db.commit()
 
 ## 데이터 치환
 def CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   
@@ -368,8 +368,8 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
                 i += 1
             
             UpdateTQDM.close()
-            # BodyFrame CaptionTag 업데이트
-            CaptionCompletionToBodyFrame(projectName, email)
+            # # BodyFrame CaptionTag 업데이트
+            # CaptionCompletionToBodyFrame(projectName, email)
             # Completion "Yes" 업데이트
             CaptionCompletionCompletionUpdate(projectName, email)
             print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate 완료 ]\n")

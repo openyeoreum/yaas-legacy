@@ -23,6 +23,7 @@ def LoadFrames(projectName, email):
     project = GetProject(projectName, email)
     BodyFrame = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
     
+    CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
     WMWMFrameBookContext = project.WMWMMatching[1]['BookContexts'][1:]
     WMWMFrameIndexs = project.WMWMMatching[1]['SplitedIndexContexts'][1:]
     WMWMFrameBodys = project.WMWMMatching[1]['SplitedBodyContexts'][1:]
@@ -61,7 +62,7 @@ def LoadFrames(projectName, email):
         lastIndex = Index
 
         BodyFrameBodyId = BodyFrame[i]['BodyId']
-        BodyId = {
+        SplitedBodys = {
             'BodyId': BodyFrameBodyId,
             'BodyContext': "None",
             'ChunkId': [],
@@ -70,9 +71,9 @@ def LoadFrames(projectName, email):
         SplitedBodyChunks = BodyFrame[i]['SplitedBodyChunks']
         for j in range(len(SplitedBodyChunks)):
             BodyFrameChunkId = SplitedBodyChunks[j]['ChunkId']
-            BodyId['ChunkId'].append(BodyFrameChunkId)
+            SplitedBodys['ChunkId'].append(BodyFrameChunkId)
 
-        SelectionGenerationKoSplitedBodys.append(BodyId)
+        SelectionGenerationKoSplitedBodys.append(SplitedBodys)
 
     # 마지막 IndexId에 대한 항목 추가
     if SelectionGenerationKoSplitedBodys:
@@ -99,12 +100,15 @@ def LoadFrames(projectName, email):
                 break
 
     # Body 중 BodyContext, Selection-GenerationKoSplitedChunks 부분
+    BookContext = {'Vector': WMWMFrameBookContext[0]['Vector'], 'WMWM': WMWMFrameBookContext[0]['WMWM']}
     for i in range(len(SelectionGenerationKoSplitedIndexs)):
+        IndexContext = SelectionGenerationKoSplitedIndexs[i]['IndexContext'] #####
         SelectionGenerationKoSplitedBodys = SelectionGenerationKoSplitedIndexs[i]['Selection-GenerationKoSplitedBodys']
         for j in range(len(SelectionGenerationKoSplitedBodys)):
             for k in range(len(WMWMFrameBodys)):
                 if SelectionGenerationKoSplitedBodys[j]['BodyId'] == WMWMFrameBodys[k]['BodyId']:
                     SelectionGenerationKoSplitedBodys[j]['BodyContext'] = {'Vector': WMWMFrameBodys[k]['Vector'], 'WMWM': WMWMFrameBodys[k]['WMWM']}
+                    BodyContext = SelectionGenerationKoSplitedBodys[j]['BodyContext'] #####
             ChunkIds = SelectionGenerationKoSplitedBodys[j]['ChunkId']
             for chunkid in ChunkIds:
                 
@@ -125,7 +129,29 @@ def LoadFrames(projectName, email):
                             Chunk = ''.join([list(ChunkToken.values())[0] for ChunkToken in ChunkTokens])
                             Tag = CorrectionKoChunk['Tag']
                             SelectionGenerationKoChunkTokens = CorrectionKoChunk['CorrectionKoChunkTokens']
-                
+
+                # CaptionMusic
+                CaptionMusic = "None"
+                for CaptionFrameChunk in CaptionFrame:
+                    CaptionTag = CaptionFrameChunk['CaptionTag']
+                    if CaptionTag == 'Caption':
+                        CaptionChunkIds = CaptionFrameChunk['ChunkIds']
+                        SplitedCaptionChunks = CaptionFrameChunk['SplitedCaptionChunks']
+                        for SplitedCaptionChunk in SplitedCaptionChunks:
+                            CaptionMusicStart = "None"
+                            CaptionMusicEnd = "None"
+                            if SplitedCaptionChunk['ChunkId'] == chunkid:
+                                if CaptionChunkIds[0] == SplitedCaptionChunk['ChunkId']:
+                                    CaptionMusicStart = "True"
+                                if CaptionChunkIds[-1] == SplitedCaptionChunk['ChunkId']:
+                                    CaptionMusicEnd = "True"
+                                genre = BookContext['Vector']['ContextCompletion']['Genre']
+                                gender = BookContext['Vector']['ContextCompletion']['Gender']
+                                age = BookContext['Vector']['ContextCompletion']['Age']
+                                personality = BookContext['Vector']['ContextCompletion']['Personality']
+                                emotion = BookContext['Vector']['ContextCompletion']['Emotion']
+                                CaptionMusic = {"CaptionMusicStart": CaptionMusicStart, "CaptionMusicEnd": CaptionMusicEnd, "Genre": genre, "Gender": gender, "Age": age, "Personality": personality, "Emotion": emotion}
+
                 # Voice
                 Language = detect(Chunk)
                 emotions = list(Narrater['Emotion'].keys())
@@ -154,9 +180,9 @@ def LoadFrames(projectName, email):
                             SFX = {'SFX': sFX, 'Prompt': Prompt, 'Type': Type, 'Role': Role, 'Direction': Direction, 'Importance': Importance}
                 
                 ## 모두 합쳐서 Selection-GenerationKoSplitedChunks에 합치기
-                SelectionGenerationKoSplitedBodys[j]['Selection-GenerationKoSplitedChunks'].append({'ChunkId': chunkid, 'Chunk': Chunk, 'Tag': Tag, 'ChunkContext': ChunkContext, 'CaptionMusic': "None", 'Voice': Voice, 'SFX': SFX, 'Selection-GenerationKoChunkTokens': SelectionGenerationKoChunkTokens})
+                SelectionGenerationKoSplitedBodys[j]['Selection-GenerationKoSplitedChunks'].append({'ChunkId': chunkid, 'Chunk': Chunk, 'Tag': Tag, 'ChunkContext': ChunkContext, 'CaptionMusic': CaptionMusic, 'Voice': Voice, 'SFX': SFX, 'Selection-GenerationKoChunkTokens': SelectionGenerationKoChunkTokens})
                 
-    SelectionGenerationKoFrame = {'BookContext': WMWMFrameBookContext, 'Selection-GenerationKoSplitedIndexs': SelectionGenerationKoSplitedIndexs}
+    SelectionGenerationKoFrame = {'BookContext': WMWMFrameBookContext[0], 'Selection-GenerationKoSplitedIndexs': SelectionGenerationKoSplitedIndexs}
     file_path = "/yaas/SelectionGenerationKoFrame.json"
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(SelectionGenerationKoFrame, file, ensure_ascii = False, indent = 4)

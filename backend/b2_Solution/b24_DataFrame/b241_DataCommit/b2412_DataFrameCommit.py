@@ -1604,7 +1604,92 @@ def CorrectionKoCompletionUpdate(projectName, email):
 
         db.add(project)
         db.commit()
+
+
+#############################################
+##### 26_Selection-GenerationKo Process #####
+#############################################
+## 26. 1-0 Selection-GenerationKo이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedSelectionGenerationKoToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.SelectionGenerationKo[1] = ExistedDataFrame[1]
         
+        flag_modified(project, "SelectionGenerationKo")
+        
+        db.add(project)
+        db.commit()
+        
+## 26. 1-1 Selection-GenerationKo의 Body(본문) Selection-GenerationKoSplitedBodys 업데이트 형식
+def UpdateSelectionGenerationKoSplitedBodys(project, BookContext, SelectionGenerationKoSplitedIndexs):
+    
+    updateSelectionGenerationKoSplitedBodys = {
+        "BookContext": BookContext,
+        "Selection-GenerationKoSplitedIndexs": SelectionGenerationKoSplitedIndexs
+    }
+    
+    project.SelectionGenerationKo[1]["Selection-GenerationKoSplitedBodys"].append(updateSelectionGenerationKoSplitedBodys)
+    project.SelectionGenerationKo[0]["BodyCount"] = BodyId
+    
+## 26. 1-2 Selection-GenerationKo의 Body(본문) Selection-GenerationKoSplitedBodys 업데이트
+def AddSelectionGenerationKoSplitedBodysToDB(projectName, email):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateSelectionGenerationKoSplitedBodys(project)
+        
+        flag_modified(project, "SelectionGenerationKo")
+        
+        db.add(project)
+        db.commit()
+        
+## 26. Selection-GenerationKo의Count의 가져오기
+def SelectionGenerationKoCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    BodyCount = project.SelectionGenerationKo[0]["BodyCount"]
+    ChunkCount = project.SelectionGenerationKo[0]["ChunkCount"]
+    Completion = project.SelectionGenerationKo[0]["Completion"]
+    
+    return BodyCount, ChunkCount, Completion
+
+## 26. Selection-GenerationKo의 초기화
+def InitSelectionGenerationKo(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.SelectionGenerationKo[0]["BodyCount"] = 0
+        project.SelectionGenerationKo[0]["ChunkCount"] = 0
+        project.SelectionGenerationKo[0]["Completion"] = "No"
+        project.SelectionGenerationKo[1] = LoadJsonFrame(ProjectDataPath + "/b538_Selection-Generation/b538-01_Selection-GenerationKo.json")[1]
+
+        flag_modified(project, "SelectionGenerationKo")
+        
+        db.add(project)
+        db.commit()
+        
+## 26. 업데이트된 Selection-GenerationKo 출력
+def UpdatedSelectionGenerationKo(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        
+    return project.SelectionGenerationKo
+        
+## 26. Selection-GenerationKoCompletion 업데이트
+def SelectionGenerationKoCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.SelectionGenerationKo[0]["Completion"] = "Yes"
+
+        flag_modified(project, "SelectionGenerationKo")
+
+        db.add(project)
+        db.commit()
+
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################

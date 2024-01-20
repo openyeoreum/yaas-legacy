@@ -12,7 +12,7 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedCorrectionKoToDB, AddCorrectionKoSplitedBodysToDB, AddCorrectionKoChunksToDB, CorrectionKoCountLoad, CorrectionKoCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedSelectionGenerationKoToDB, AddSelectionGenerationKoSplitedBodysToDB, AddSelectionGenerationKoChunksToDB, SelectionGenerationKoCountLoad, SelectionGenerationKoCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #############################################
@@ -208,18 +208,18 @@ def SelectionGenerationKoJson(projectName, email):
         
     return SelectionGenerationKoFrame
 
-## 프롬프트 요청 및 결과물 Json을 CorrectionKo에 업데이트
-def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = "None", ExistedDataSet = "None"):
-    print(f"< User: {email} | Project: {projectName} | 26_CorrectionKoUpdate 시작 >")
-    # CorrectionKo의 Count값 가져오기
-    ContinueCount, ContextCount, Completion = CorrectionKoCountLoad(projectName, email)
+## 프롬프트 요청 및 결과물 Json을 SelectionGenerationKo에 업데이트
+def SelectionGenerationKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = "None", ExistedDataSet = "None"):
+    print(f"< User: {email} | Project: {projectName} | 26_Selection-GenerationKoUpdate 시작 >")
+    # Selection-GenerationKo의 Count값 가져오기
+    ContinueCount, ContextCount, Completion = SelectionGenerationKoCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != "None":
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CorrectionKo", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate는 ExistedCorrectionKo으로 대처됨 ]\n")
+            AddExistedSelectionGenerationKoToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "Selection-GenerationKo", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 26_Selection-GenerationKoUpdate는 ExistedSelection-GenerationKo으로 대처됨 ]\n")
         else:
             responseJson = SelectionGenerationKoJson(projectName, email)
             
@@ -227,35 +227,33 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             ResponseJson = responseJson[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
             
-            ContextChunkId = ContinueCount
-            
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'CorrectionKoUpdate')
+                            desc = 'Selection-GenerationKoUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f"CorrectionKoUpdate: {Update['BodyId']}")
+                UpdateTQDM.set_description(f"Selection-GenerationKoUpdate: {Update['BodyId']}")
                 time.sleep(0.0001)
-                AddCorrectionKoSplitedBodysToDB(projectName, email)
+                AddSelectionGenerationKoSplitedBodysToDB(projectName, email)
                 for j in range(len(Update['CorrectionChunks'])):
                     ChunkId = Update['CorrectionChunks'][j]['ChunkId']
                     Tag = Update['CorrectionChunks'][j]['Tag']
                     ChunkTokens = Update['CorrectionChunks'][j]['CorrectionChunkTokens']
                 
-                    AddCorrectionKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens)
+                    AddSelectionGenerationKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens)
 
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            CorrectionKoCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate 완료 ]\n")
+            SelectionGenerationKoCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 26_Selection-GenerationKoUpdate 완료 ]\n")
         
     else:
-        print(f"[ User: {email} | Project: {projectName} | 26_CorrectionKoUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 26_Selection-GenerationKoUpdate는 이미 완료됨 ]\n")
     
     
 if __name__ == "__main__":

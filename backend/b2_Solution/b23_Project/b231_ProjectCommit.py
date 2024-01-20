@@ -110,6 +110,7 @@ def AddProjectToDB(projectName, email):
         translationEn = LoadJsonFrame(ProjectDataPath + "/b537_Translation/b537-02_TranslationEn.json")
         correctionKo = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-01_CorrectionKo.json")
         correctionEn = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-02_CorrectionEn.json")
+        selectionGenerationKo = LoadJsonFrame(ProjectDataPath + "/b539_Selection-Generation/b539-01_Selection-GenerationKo.json")
         mixingMasteringKo = LoadJsonFrame(ProjectDataPath + "/b5310_Mixing-Mastering/b5310-01_Mixing-MasteringKo.json")
         ### 아래로 추가되는 데이터프레임 작성 ###
 
@@ -166,6 +167,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.TranslationEn = translationEn
             ExistingProject.CorrectionKo = correctionKo
             ExistingProject.CorrectionEn = correctionEn
+            ExistingProject.SelectionGenerationKo = selectionGenerationKo
             ExistingProject.MixingMasteringKo = mixingMasteringKo
             ### 아래로 추가되는 데이터프레임 작성 ###
             
@@ -221,6 +223,7 @@ def AddProjectToDB(projectName, email):
                 TranslationEn = translationEn,
                 CorrectionKo = correctionKo,
                 CorrectionEn = correctionEn,
+                SelectionGenerationKo = selectionGenerationKo,
                 MixingMasteringKo = mixingMasteringKo
                 ### 아래로 추가되는 데이터프레임 작성 ###
                 )

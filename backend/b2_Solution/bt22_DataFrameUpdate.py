@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
@@ -22,6 +22,7 @@ from backend.b2_Solution.b24_DataFrame.b244_Character.b2442_CharacterCompletionU
 from backend.b2_Solution.b24_DataFrame.b246_Sound.b2461_SoundMatchingUpdate import SoundMatchingUpdate
 from backend.b2_Solution.b24_DataFrame.b247_SFX.b2471_SFXMatchingUpdate import SFXMatchingUpdate
 from backend.b2_Solution.b24_DataFrame.b249_Correction.b2491_CorrectionKoUpdate import CorrectionKoUpdate
+from backend.b2_Solution.b24_DataFrame.b2410_SelectionGeneration.b24101_SelectionGenerationKo import SelectionGenerationKoUpdate
 
 ## 오늘 날짜
 def Date(Option = "Day"):
@@ -419,3 +420,17 @@ if __name__ == "__main__":
             SaveDataSet(projectName, email, "21", "CorrectionKo", RawDataSetPath)
         existedDataFrame = None
         existedDataSet = None
+        
+
+        ################################
+        ### 26_SelectionGenerationKo ###
+        ################################
+        InitSelectionGenerationKo(projectName, email)
+        if existedDataFrameMode == "on":
+            existedDataFrame = LoadexistedDataFrame(projectName, email, "SelectionGenerationKo", DataFramePath)
+        SelectionGenerationKoUpdate(projectName, email, ExistedDataFrame = existedDataFrame)
+        
+        if existedDataFrame == None:
+            updatedSelectionGenerationKo = UpdatedSelectionGenerationKo(projectName, email)
+            SaveDataFrame(projectName, email, "26_SelectionGenerationKo", updatedSelectionGenerationKo, DataFramePath)       
+        existedDataFrame = None

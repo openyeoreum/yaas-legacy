@@ -1607,9 +1607,9 @@ def CorrectionKoCompletionUpdate(projectName, email):
 
 
 #############################################
-##### 26_Selection-GenerationKo Process #####
+##### 26_SelectionGenerationKo Process #####
 #############################################
-## 26. 1-0 Selection-GenerationKo이 이미 ExistedFrame으로 존재할때 업데이트
+## 26. 1-0 SelectionGenerationKo이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedSelectionGenerationKoToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
     
@@ -1621,12 +1621,12 @@ def AddExistedSelectionGenerationKoToDB(projectName, email, ExistedDataFrame):
         db.add(project)
         db.commit()
 
-## 26. 1-1 Selection-GenerationKo의 Body(본문) Selection-GenerationKoSplitedBodys 업데이트 형식
+## 26. 1-1 SelectionGenerationKo의 Body(본문) SelectionGenerationKoSplitedBodys 업데이트 형식
 def UpdateSelectionGenerationKoBookContext(project, SelectionGenerationKoBookContext):
     
-    project.SelectionGenerationKo[1]["updateSelectionGenerationKoBookContext"].append(SelectionGenerationKoBookContext)
+    project.SelectionGenerationKo[1]["SelectionGenerationKoBookContext"].append(SelectionGenerationKoBookContext)
     
-## 26. 1-2 Selection-GenerationKo의 Body(본문) Selection-GenerationKoSplitedBodys 업데이트
+## 26. 1-2 SelectionGenerationKo의 Body(본문) SelectionGenerationKoSplitedBodys 업데이트
 def AddSelectionGenerationKoBookContextToDB(projectName, email, SelectionGenerationKoBookContext):
     with get_db() as db:
         
@@ -1638,32 +1638,35 @@ def AddSelectionGenerationKoBookContextToDB(projectName, email, SelectionGenerat
         db.add(project)
         db.commit()
 
-## 26. 1-1 Selection-GenerationKo의 Body(본문) Selection-GenerationKoSplitedBodys 업데이트 형식
-def UpdateSelectionGenerationKoSplitedIndexs(project, IndexId, IndexTag, Index, IndexContext):
+## 26. 1-1 SelectionGenerationKo의 Body(본문) SelectionGenerationKoSplitedBodys 업데이트 형식
+def UpdateSelectionGenerationKoSplitedIndexs(project, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys):
     
     updateSelectionGenerationKoSplitedIndex = {
         "IndexId": IndexId,
         "IndexTag": IndexTag,
         "Index": Index,
-        "IndexContext": IndexContext
+        "IndexContext": IndexContext,
+        "Music": Music,
+        "Sound": Sound,
+        "SelectionGenerationKoSplitedBodys": SelectionGenerationKoSplitedBodys
     }
     
-    project.SelectionGenerationKo[1]["Selection-GenerationKoSplitedIndexs"].append(updateSelectionGenerationKoSplitedIndex)
+    project.SelectionGenerationKo[1]["SelectionGenerationKoSplitedIndexs"].append(updateSelectionGenerationKoSplitedIndex)
     project.SelectionGenerationKo[0]["IndexCount"] = IndexId
     
-## 26. 1-2 Selection-GenerationKo의 Body(본문) Selection-GenerationKoSplitedBodys 업데이트
-def AddSelectionGenerationKoSplitedIndexsToDB(projectName, email, IndexId, IndexTag, Index, IndexContext):
+## 26. 1-2 SelectionGenerationKo의 Body(본문) SelectionGenerationKoSplitedBodys 업데이트
+def AddSelectionGenerationKoSplitedIndexsToDB(projectName, email, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateSelectionGenerationKoSplitedIndexs(project, IndexId, IndexTag, Index, IndexContext)
+        UpdateSelectionGenerationKoSplitedIndexs(project, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys)
         
         flag_modified(project, "SelectionGenerationKo")
         
         db.add(project)
         db.commit()
         
-## 26. Selection-GenerationKo의Count의 가져오기
+## 26. SelectionGenerationKo의Count의 가져오기
 def SelectionGenerationKoCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
@@ -1672,7 +1675,7 @@ def SelectionGenerationKoCountLoad(projectName, email):
     
     return IndexCount, Completion
 
-## 26. Selection-GenerationKo의 초기화
+## 26. SelectionGenerationKo의 초기화
 def InitSelectionGenerationKo(projectName, email):
     ProjectDataPath = GetProjectDataPath()
     with get_db() as db:
@@ -1680,14 +1683,14 @@ def InitSelectionGenerationKo(projectName, email):
         project = GetProject(projectName, email)
         project.SelectionGenerationKo[0]["IndexCount"] = 0
         project.SelectionGenerationKo[0]["Completion"] = "No"
-        project.SelectionGenerationKo[1] = LoadJsonFrame(ProjectDataPath + "/b538_Selection-Generation/b538-01_Selection-GenerationKo.json")[1]
+        project.SelectionGenerationKo[1] = LoadJsonFrame(ProjectDataPath + "/b539_SelectionGeneration/b539-01_SelectionGenerationKo.json")[1]
 
         flag_modified(project, "SelectionGenerationKo")
         
         db.add(project)
         db.commit()
         
-## 26. 업데이트된 Selection-GenerationKo 출력
+## 26. 업데이트된 SelectionGenerationKo 출력
 def UpdatedSelectionGenerationKo(projectName, email):
     with get_db() as db:
 
@@ -1695,7 +1698,7 @@ def UpdatedSelectionGenerationKo(projectName, email):
         
     return project.SelectionGenerationKo
         
-## 26. Selection-GenerationKoCompletion 업데이트
+## 26. SelectionGenerationKoCompletion 업데이트
 def SelectionGenerationKoCompletionUpdate(projectName, email):
     with get_db() as db:
 

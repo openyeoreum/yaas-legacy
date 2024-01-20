@@ -242,7 +242,7 @@ class Project(Base):
     CorrectionZh = Column(JSON)
     CorrectionEs = Column(JSON)
     
-    # Selection-Generation
+    # SelectionGeneration
     SelectionGenerationKo = Column(JSON)
     SelectionGenerationEn = Column(JSON)
     SelectionGenerationJa = Column(JSON)
@@ -355,7 +355,7 @@ class ProjectHistory(Base):
     CorrectionZhStatus = Column(String(64))
     CorrectionEsStatus = Column(String(64))
     
-    # Selection-Generation
+    # SelectionGeneration
     SelectionGenerationKoStatus = Column(String(64))
     SelectionGenerationEnStatus = Column(String(64))
     SelectionGenerationJaStatus = Column(String(64))
@@ -422,7 +422,7 @@ class Prompt(Base):
     # CorrectionZh = Column(JSON)
     # CorrectionEs = Column(JSON)
     
-    # # Selection-GenerationPrompt
+    # # SelectionGenerationPrompt
     # SelectionGenerationKo = Column(JSON)
     # SelectionGenerationEn = Column(JSON)
     # SelectionGenerationJa = Column(JSON)
@@ -494,7 +494,7 @@ class TrainingDataset(Base):
     CorrectionZh = Column(JSON)
     CorrectionEs = Column(JSON)
     
-    # # Selection-GenerationDataset
+    # # SelectionGenerationDataset
     # SelectionGenerationKo = Column(JSON)
     # SelectionGenerationEn = Column(JSON)
     # SelectionGenerationJa = Column(JSON)

@@ -8,40 +8,42 @@
         "Language": "Ko",
         "TaskName": "Selection-GenerationKo",
         "IndexCount": 0,
-        "BodyCount": 0,
-        "ChunkCount": 0,
         "Completion": "No"
     },
     {
-        "BookContext":
-        {
-            "Vector": {
-                "ContextDefine": {
-                    "Purpose": "None",
-                    "Reason": "None",
-                    "Question": "None",
-                    "Subject": "None",
-                    "Reader": "None",
-                    "Importance": 0
+        "Selection-GenerationKoBookContext": [
+            {
+                "BookId": 0,
+                "Title": "None",
+                "Phrases": "Phrases",
+                "Vector": {
+                    "ContextDefine": {
+                        "Purpose": "None",
+                        "Reason": "None",
+                        "Question": "None",
+                        "Subject": "None",
+                        "Reader": "None",
+                        "Importance": 0
+                    },
+                    "ContextCompletion": {
+                        "Genre": "None",
+                        "Gender": "None",
+                        "Age": "None",
+                        "Personality": "None",
+                        "Emotion": "None",
+                        "Accuracy": 0
+                    }
                 },
-                "ContextCompletion": {
-                    "Genre": "None",
-                    "Gender": "None",
-                    "Age": "None",
-                    "Personality": "None",
-                    "Emotion": "None",
+                "WMWM":
+                {
+                    "Needs": "None",
+                    "Wisdom": "None",
+                    "Mind": "None",
+                    "Wildness": "None",
                     "Accuracy": 0
                 }
-            },
-            "WMWM":
-            {
-                "Needs": "None",
-                "Wisdom": "None",
-                "Mind": "None",
-                "Wildness": "None",
-                "Accuracy": 0
             }
-        },
+        ],
         "Selection-GenerationKoSplitedIndexs": [
             {
                 "IndexId": 0,

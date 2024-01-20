@@ -1575,7 +1575,7 @@ def InitCorrectionKo(projectName, email):
     with get_db() as db:
     
         project = GetProject(projectName, email)
-        project.CorrectionKo[0]["BodyCount"] = 0
+        project.CorrectionKo[0]["IndexCount"] = 0
         project.CorrectionKo[0]["ChunkCount"] = 0
         project.CorrectionKo[0]["Completion"] = "No"
         project.CorrectionKo[1] = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-01_CorrectionKo.json")[1]
@@ -1620,24 +1620,43 @@ def AddExistedSelectionGenerationKoToDB(projectName, email, ExistedDataFrame):
         
         db.add(project)
         db.commit()
-        
+
 ## 26. 1-1 Selection-GenerationKo의 Body(본문) Selection-GenerationKoSplitedBodys 업데이트 형식
-def UpdateSelectionGenerationKoSplitedBodys(project, BookContext, SelectionGenerationKoSplitedIndexs):
+def UpdateSelectionGenerationKoBookContext(project, SelectionGenerationKoBookContext):
     
-    updateSelectionGenerationKoSplitedBodys = {
-        "BookContext": BookContext,
-        "Selection-GenerationKoSplitedIndexs": SelectionGenerationKoSplitedIndexs
-    }
-    
-    project.SelectionGenerationKo[1]["Selection-GenerationKoSplitedBodys"].append(updateSelectionGenerationKoSplitedBodys)
-    project.SelectionGenerationKo[0]["BodyCount"] = BodyId
+    project.SelectionGenerationKo[1]["updateSelectionGenerationKoBookContext"].append(SelectionGenerationKoBookContext)
     
 ## 26. 1-2 Selection-GenerationKo의 Body(본문) Selection-GenerationKoSplitedBodys 업데이트
-def AddSelectionGenerationKoSplitedBodysToDB(projectName, email):
+def AddSelectionGenerationKoBookContextToDB(projectName, email, SelectionGenerationKoBookContext):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateSelectionGenerationKoSplitedBodys(project)
+        UpdateSelectionGenerationKoBookContext(project, SelectionGenerationKoBookContext)
+        
+        flag_modified(project, "SelectionGenerationKo")
+        
+        db.add(project)
+        db.commit()
+
+## 26. 1-1 Selection-GenerationKo의 Body(본문) Selection-GenerationKoSplitedBodys 업데이트 형식
+def UpdateSelectionGenerationKoSplitedIndexs(project, IndexId, IndexTag, Index, IndexContext):
+    
+    updateSelectionGenerationKoSplitedIndex = {
+        "IndexId": IndexId,
+        "IndexTag": IndexTag,
+        "Index": Index,
+        "IndexContext": IndexContext
+    }
+    
+    project.SelectionGenerationKo[1]["Selection-GenerationKoSplitedIndexs"].append(updateSelectionGenerationKoSplitedIndex)
+    project.SelectionGenerationKo[0]["IndexCount"] = IndexId
+    
+## 26. 1-2 Selection-GenerationKo의 Body(본문) Selection-GenerationKoSplitedBodys 업데이트
+def AddSelectionGenerationKoSplitedIndexsToDB(projectName, email, IndexId, IndexTag, Index, IndexContext):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateSelectionGenerationKoSplitedIndexs(project, IndexId, IndexTag, Index, IndexContext)
         
         flag_modified(project, "SelectionGenerationKo")
         
@@ -1648,11 +1667,10 @@ def AddSelectionGenerationKoSplitedBodysToDB(projectName, email):
 def SelectionGenerationKoCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
-    BodyCount = project.SelectionGenerationKo[0]["BodyCount"]
-    ChunkCount = project.SelectionGenerationKo[0]["ChunkCount"]
+    IndexCount = project.SelectionGenerationKo[0]["IndexCount"]
     Completion = project.SelectionGenerationKo[0]["Completion"]
     
-    return BodyCount, ChunkCount, Completion
+    return IndexCount, Completion
 
 ## 26. Selection-GenerationKo의 초기화
 def InitSelectionGenerationKo(projectName, email):
@@ -1660,8 +1678,7 @@ def InitSelectionGenerationKo(projectName, email):
     with get_db() as db:
     
         project = GetProject(projectName, email)
-        project.SelectionGenerationKo[0]["BodyCount"] = 0
-        project.SelectionGenerationKo[0]["ChunkCount"] = 0
+        project.SelectionGenerationKo[0]["IndexCount"] = 0
         project.SelectionGenerationKo[0]["Completion"] = "No"
         project.SelectionGenerationKo[1] = LoadJsonFrame(ProjectDataPath + "/b538_Selection-Generation/b538-01_Selection-GenerationKo.json")[1]
 

@@ -2,7 +2,6 @@ import os
 import re
 import json
 import time
-import difflib
 import sys
 sys.path.append("/yaas")
 
@@ -12,7 +11,7 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedSelectionGenerationKoToDB, AddSelectionGenerationKoSplitedBodysToDB, AddSelectionGenerationKoChunksToDB, SelectionGenerationKoCountLoad, SelectionGenerationKoCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedSelectionGenerationKoToDB, AddSelectionGenerationKoBookContextToDB, AddSelectionGenerationKoSplitedIndexsToDB, SelectionGenerationKoCountLoad, SelectionGenerationKoCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #############################################
@@ -200,19 +199,20 @@ def SelectionGenerationKoJson(projectName, email):
                 ## 모두 합쳐서 Selection-GenerationKoSplitedChunks에 합치기
                 SelectionGenerationKoSplitedBodys[j]['Selection-GenerationKoSplitedChunks'].append({'ChunkId': chunkid, 'Chunk': Chunk, 'Tag': Tag, 'ChunkContext': ChunkContext, 'CaptionMusic': CaptionMusic, 'Voice': Voice, 'SFX': SFX, 'Selection-GenerationKoChunkTokens': SelectionGenerationKoChunkTokens})
                 
-    SelectionGenerationKoFrame = {'BookContext': WMWMFrameBookContext[0], 'Selection-GenerationKoSplitedIndexs': SelectionGenerationKoSplitedIndexs}
+    SelectionGenerationKoBookContext = WMWMFrameBookContext[0]
+    SelectionGenerationKoSplitedIndexs = SelectionGenerationKoSplitedIndexs
     
     # file_path = "/yaas/SelectionGenerationKoFrame.json"
     # with open(file_path, 'w', encoding='utf-8') as file:
     #     json.dump(SelectionGenerationKoFrame, file, ensure_ascii = False, indent = 4)
         
-    return SelectionGenerationKoFrame
+    return SelectionGenerationKoBookContext, SelectionGenerationKoSplitedIndexs
 
 ## 프롬프트 요청 및 결과물 Json을 SelectionGenerationKo에 업데이트
-def SelectionGenerationKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = "None", ExistedDataSet = "None"):
+def SelectionGenerationKoUpdate(projectName, email, ExistedDataFrame = "None", ExistedDataSet = "None"):
     print(f"< User: {email} | Project: {projectName} | 26_Selection-GenerationKoUpdate 시작 >")
     # Selection-GenerationKo의 Count값 가져오기
-    ContinueCount, ContextCount, Completion = SelectionGenerationKoCountLoad(projectName, email)
+    ContinueCount, Completion = SelectionGenerationKoCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != "None":
@@ -221,28 +221,31 @@ def SelectionGenerationKoUpdate(projectName, email, DataFramePath, MessagesRevie
             AddExistedDataSetToDB(projectName, email, "Selection-GenerationKo", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 26_Selection-GenerationKoUpdate는 ExistedSelection-GenerationKo으로 대처됨 ]\n")
         else:
-            responseJson = SelectionGenerationKoJson(projectName, email)
-            
+            SelectionGenerationKoBookContext, SelectionGenerationKoSplitedIndexs = SelectionGenerationKoJson(projectName, email)
+
+            ## A. SelectionGenerationKoBookContext
+            AddSelectionGenerationKoBookContextToDB(projectName, email, SelectionGenerationKoBookContext)
+
+            ## B. SelectionGenerationKoSplitedIndexs
             # ResponseJson을 ContinueCount로 슬라이스
-            ResponseJson = responseJson[ContinueCount:]
+            ResponseJson = SelectionGenerationKoSplitedIndexs[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
-            
+
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
                             desc = 'Selection-GenerationKoUpdate')
+            
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f"Selection-GenerationKoUpdate: {Update['BodyId']}")
+                UpdateTQDM.set_description(f"Selection-GenerationKoUpdate: {Update['IndexId']}")
                 time.sleep(0.0001)
-                AddSelectionGenerationKoSplitedBodysToDB(projectName, email)
-                for j in range(len(Update['CorrectionChunks'])):
-                    ChunkId = Update['CorrectionChunks'][j]['ChunkId']
-                    Tag = Update['CorrectionChunks'][j]['Tag']
-                    ChunkTokens = Update['CorrectionChunks'][j]['CorrectionChunkTokens']
-                
-                    AddSelectionGenerationKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens)
+                IndexId = Update['IndexId']
+                IndexTag = Update['IndexTag']
+                Index = Update['Index']
+                IndexContext = Update['IndexContext']
+                AddSelectionGenerationKoSplitedIndexsToDB(projectName, email, IndexId, IndexTag, Index, IndexContext)
 
                 # i값 수동 업데이트
                 i += 1
@@ -255,7 +258,6 @@ def SelectionGenerationKoUpdate(projectName, email, DataFramePath, MessagesRevie
     else:
         print(f"[ User: {email} | Project: {projectName} | 26_Selection-GenerationKoUpdate는 이미 완료됨 ]\n")
     
-    
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
@@ -266,4 +268,4 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    SelectionGenerationKoJson(projectName, email)
+    SelectionGenerationKoUpdate(projectName, email)

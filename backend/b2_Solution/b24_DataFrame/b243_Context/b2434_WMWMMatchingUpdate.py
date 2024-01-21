@@ -641,7 +641,7 @@ def WMWMMatchingResponseJson(projectName, email, DataFramePath, messagesReview =
     ContextCompletion = {"Genre": GenreSet, "Gender": GenderSet, "Age": AgeSet, "Personality": PersonalitySet, "Emotion": EmotionSet}
     
     WMWM = RawBookResponseJson[0]['WMWM']
-    BookResponseJson = [{"BookId": 0, "Title": BookTitle, "Phrases": Phrases, "Vector": {"ContextDefine": ContextDefine, "ContextCompletion":ContextCompletion}, "WMWM": WMWM}]
+    BookResponseJson = [{"BookId": 1, "Title": BookTitle, "Phrases": Phrases, "Vector": {"ContextDefine": ContextDefine, "ContextCompletion":ContextCompletion}, "WMWM": WMWM}]
 
     return ChunkResponseJson, BodyResponseJson, IndexResponseJson, BookResponseJson
                                                                                  

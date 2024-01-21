@@ -708,7 +708,8 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
         if int(ActorData['정확도']) <= 75 and len(ActorData['담당인물번호']) <= 1:
             MainActor['담당인물번호'].extend(ActorData['담당인물번호'])
     # 삭제 조건에 맞는 일반성우 제거
-    outputMemoryDics = [outputMemoryDics[0]] + [actor for actor in outputMemoryDics[1:] if len(list(actor.values())[0]['담당인물번호']) > 0 and int(list(actor.values())[0]['정확도']) >= 80]
+    outputMemoryDics = [outputMemoryDics[0]] + [actor for actor in outputMemoryDics[1:] if len(list(actor.values())[0]['담당인물번호']) > 0 and int(list(actor.values())[0]['정확도']) >= 75]
+    
     # 변환
     CharacterList = []
     for idx, actor in enumerate(outputMemoryDics, start=1):

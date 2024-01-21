@@ -6,7 +6,7 @@
         "ProjectName": "",
         "Content": "Body",
         "Language": "Ja",
-        "TaskName": "Mixing-MasteringJa",
+        "TaskName": "MixingMasteringJa",
         "TaskCount": 0
     },
     {
@@ -17,7 +17,7 @@
         "LogoFile": "JaLogo_비문학.wav"
     },
     {
-        "Mixing-MasteringJaSplitedBodys": [
+        "MixingMasteringJaSplitedBodys": [
             {
                 "BodyId": 1,
                 "LayerTime": 50,

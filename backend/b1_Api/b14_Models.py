@@ -249,7 +249,7 @@ class Project(Base):
     SelectionGenerationZh = Column(JSON)
     SelectionGenerationEs = Column(JSON)
     
-    # Mixing-Mastering
+    # MixingMastering
     MixingMasteringKo = Column(JSON)
     MixingMasteringEn = Column(JSON)
     MixingMasteringJa = Column(JSON)
@@ -362,7 +362,7 @@ class ProjectHistory(Base):
     SelectionGenerationZhStatus = Column(String(64))
     SelectionGenerationEsStatus = Column(String(64))
     
-    # Mixing-Mastering
+    # MixingMastering
     MixingMasteringKoStatus = Column(String(64))
     MixingMasteringEnStatus = Column(String(64))
     MixingMasteringJaStatus = Column(String(64))
@@ -429,7 +429,7 @@ class Prompt(Base):
     # SelectionGenerationZh = Column(JSON)
     # SelectionGenerationEs = Column(JSON)
     
-    # # Mixing-MasteringPrompt
+    # # MixingMasteringPrompt
     # MixingMasteringKo = Column(JSON)
     # MixingMasteringEn = Column(JSON)
     # MixingMasteringJa = Column(JSON)
@@ -501,7 +501,7 @@ class TrainingDataset(Base):
     # SelectionGenerationZh = Column(JSON)
     # SelectionGenerationEs = Column(JSON)
     
-    # # Mixing-MasteringDataset
+    # # MixingMasteringDataset
     # MixingMasteringKo = Column(JSON)
     # MixingMasteringEn = Column(JSON)
     # MixingMasteringJa = Column(JSON)

@@ -6,7 +6,7 @@
         "ProjectName": "",
         "Content": "Body",
         "Language": "Zh",
-        "TaskName": "Mixing-MasteringZh",
+        "TaskName": "MixingMasteringZh",
         "TaskCount": 0
     },
     {
@@ -17,7 +17,7 @@
         "LogoFile": "ZhLogo_비문학.wav"
     },
     {
-        "Mixing-MasteringZhSplitedBodys": [
+        "MixingMasteringZhSplitedBodys": [
             {
                 "BodyId": 1,
                 "LayerTime": 50,

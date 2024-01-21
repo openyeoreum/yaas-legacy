@@ -6,7 +6,7 @@
         "ProjectName": "",
         "Content": "Body",
         "Language": "Es",
-        "TaskName": "Mixing-MasteringEs",
+        "TaskName": "MixingMasteringEs",
         "TaskCount": 0
     },
     {
@@ -17,7 +17,7 @@
         "LogoFile": "EsLogo_비문학.wav"
     },
     {
-        "Mixing-MasteringEsSplitedBodys": [
+        "MixingMasteringEsSplitedBodys": [
             {
                 "BodyId": 1,
                 "LayerTime": 50,

@@ -6,7 +6,7 @@
         "ProjectName": "",
         "Content": "Body",
         "Language": "Ko",
-        "TaskName": "Mixing-MasteringKo",
+        "TaskName": "MixingMasteringKo",
         "TaskCount": 0
     },
     {
@@ -17,7 +17,7 @@
         "LogoFile": "KoLogo_비문학.wav"
     },
     {
-        "Mixing-MasteringKoSplitedBodys": [
+        "MixingMasteringKoSplitedBodys": [
             {
                 "BodyId": 1,
                 "LayerTime": 50,

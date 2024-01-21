@@ -1,0 +1,1957 @@
+[
+    {
+        "UserId": "bfb8d2c594f4c93930dfd6946ce8b132e14b478103d7684d4a551cf1edd023ee",
+        "ProjectsStorageID": 1,
+        "ProjectId": 3,
+        "ProjectName": "웹3.0메타버스",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "CharacterCompletion",
+        "CharacterChunkCount": 82,
+        "CharacterCount": 9,
+        "Completion": "Yes",
+        "Memo": "캐릭터의 증거를 알아내는 프로세스"
+    },
+    {
+        "CharacterCompletions": [
+            {
+                "CharacterChunkId": 0,
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Character": "None",
+                "MainCharacter": "None",
+                "AuthorRelationship": "None",
+                "Context": "None",
+                "Voice": "None"
+            },
+            {
+                "CharacterChunkId": 1,
+                "ChunkId": 161,
+                "Chunk": "\"밤새지 마~란 말이야\"",
+                "Character": "TV 광고",
+                "MainCharacter": "TV 광고",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "중립",
+                    "Age": "중립",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 2,
+                "ChunkId": 230,
+                "Chunk": "\"링크로 연결된 문서 조각들의 거미줄이 고정된 계층구조보다 한층 더 유용하다\"",
+                "Character": "팀 버너스 리",
+                "MainCharacter": "팀 버너스 리",
+                "AuthorRelationship": "주인공",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 3,
+                "ChunkId": 345,
+                "Chunk": "\"신은 주 사위 놀이를 하지 않는다. \"",
+                "Character": "아인슈타인",
+                "MainCharacter": "아인슈타인",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "노년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
+                    "Gender": "남",
+                    "Age": "노년"
+                }
+            },
+            {
+                "CharacterChunkId": 4,
+                "ChunkId": 363,
+                "Chunk": "\"Move fast, and break things, 빠르게 움직이고 깨뜨려라. \"",
+                "Character": "메타버스 기업가",
+                "MainCharacter": "메타버스 기업가",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 5,
+                "ChunkId": 384,
+                "Chunk": "\"Jimmy is good at failure 나는 실패에 익숙하다. \"",
+                "Character": "지미 웨일스",
+                "MainCharacter": "지미 웨일스",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 6,
+                "ChunkId": 394,
+                "Chunk": "\"삼절굉지위량의: 팔이 세 번 부러져야 훌륭한 의사가 된다. \"",
+                "Character": "지미 웨일스",
+                "MainCharacter": "지미 웨일스",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 7,
+                "ChunkId": 503,
+                "Chunk": "\"애드센스는 기본적으로 웹을 거대한 구글 광고판으로 전환했다. 그것은 실질적으로 구글이 모든 사람의 콘텐츠를 구글의 광고영역으로 바꾸어 놓았다는 뜻이다. \"",
+                "Character": "USA 투데이",
+                "MainCharacter": "USA 투데이",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "중립",
+                    "Age": "중립",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 8,
+                "ChunkId": 796,
+                "Chunk": "\"이럴 경우에는 이렇게 해, 저럴 경우에는 저렇게 하고\"",
+                "Character": "개발자",
+                "MainCharacter": "개발자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 5,
+                    "CharacterTag": "Character4",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 9,
+                "ChunkId": 836,
+                "Chunk": "\"메타버스를 만들어 보자\"",
+                "Character": "필립 로즈데일",
+                "MainCharacter": "필립 로즈데일",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "즐거움",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 10,
+                "ChunkId": 916,
+                "Chunk": "\"We are the 99%\"",
+                "Character": "월스트리트 점령 운동 참가자",
+                "MainCharacter": "월스트리트 점령 운동 참가자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "화남",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 5,
+                    "CharacterTag": "Character4",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 11,
+                "ChunkId": 919,
+                "Chunk": "\"1%, 은행과 정부 너희들한테 경제운영을 맡겨 놨더니 99%의 삶을 하루아침에 초토화시키고 도대체 이게 뭐냐, 또 99%의 서민들은 엄두도 못 낼 만한 고액 연봉을 받는 1% 너희들은 짜고 치는 고스 톱 하면서 보너스 잔치까지 벌여?\"",
+                "Character": "국민",
+                "MainCharacter": "국민",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "화남",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 12,
+                "ChunkId": 928,
+                "Chunk": "\"online payment to be sent directly from one party to another without going through a financial institution\"",
+                "Character": "사토시 나카모토",
+                "MainCharacter": "사토시 나카모토",
+                "AuthorRelationship": "주인공",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 13,
+                "ChunkId": 931,
+                "Chunk": "\"1% 은행 너희 비켜, 정부도 끼어들지 마 이제 우리 99%끼리 알아서 할게 어떤 식으로? P2P 직거래 방식으로\"",
+                "Character": "사토시 나카모토",
+                "MainCharacter": "사토시 나카모토",
+                "AuthorRelationship": "주인공",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 14,
+                "ChunkId": 938,
+                "Chunk": "\"중앙은행은 통화가치를 떨어뜨리지 않는다는 신뢰를 주어야 하는데, 법정화폐들의 역사를 보면 배임투성이\"",
+                "Character": "사토시 나카모토",
+                "MainCharacter": "사토시 나카모토",
+                "AuthorRelationship": "주인공",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "분노",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 15,
+                "ChunkId": 944,
+                "Chunk": "\"뭐 또 그렇고 그런 재미있는 게 나온 모양이구나. \"",
+                "Character": "프로그래머",
+                "MainCharacter": "프로그래머",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 5,
+                    "CharacterTag": "Character4",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 16,
+                "ChunkId": 967,
+                "Chunk": "\"chain of hash-based proof-of-work 해시 작업 증명의 체인\"",
+                "Character": "사토시 나카모토",
+                "MainCharacter": "사토시 나카모토",
+                "AuthorRelationship": "주인공",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 17,
+                "ChunkId": 1078,
+                "Chunk": "\"잘 만들라. 그러면 그들이 올 것이다. \"",
+                "Character": "작가",
+                "MainCharacter": "작가",
+                "AuthorRelationship": "저자",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 18,
+                "ChunkId": 1080,
+                "Chunk": "\"함께 만들라. 그러면 그들이 머물 것이다. \"",
+                "Character": "작가",
+                "MainCharacter": "작가",
+                "AuthorRelationship": "저자",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 19,
+                "ChunkId": 1089,
+                "Chunk": "\"보이는 세상은 실재가 아니다 Reality is not what it seems\"",
+                "Character": "카를로 로벨리",
+                "MainCharacter": "카를로 로벨리",
+                "AuthorRelationship": [
+                    "단역",
+                    "조연"
+                ],
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 20,
+                "ChunkId": 1109,
+                "Chunk": "\"무엇이 진실일까? 진짜란 두뇌가 해석하는 전기신호에 불과해\"",
+                "Character": "모피어스",
+                "MainCharacter": "모피어스",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 21,
+                "ChunkId": 1117,
+                "Chunk": "\"당신이 아는 것과 달리 지금은 2216년이고, 당신은 21세기 초의 신나는 원 시 세계를 흉내 내는 가상세계 게임에 푹 빠진 심심한 10대일지도 모른다. \"",
+                "Character": "유발 하라리",
+                "MainCharacter": "유발 하라리",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 22,
+                "ChunkId": 1128,
+                "Chunk": "\"진실의 사막에 오신 걸 환영합니다\"",
+                "Character": "모피어스",
+                "MainCharacter": "모피어스",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 23,
+                "ChunkId": 1217,
+                "Chunk": "\"공기보다 무거운 것은 날 수 없다\"",
+                "Character": "캘빈 경",
+                "MainCharacter": "캘빈 경",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "노년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
+                    "Gender": "남",
+                    "Age": "노년"
+                }
+            },
+            {
+                "CharacterChunkId": 24,
+                "ChunkId": 1266,
+                "Chunk": "\"동굴로 돌아가자\"",
+                "Character": "저자",
+                "MainCharacter": "저자",
+                "AuthorRelationship": "저자",
+                "Context": {
+                    "Type": "강조",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 25,
+                "ChunkId": 1300,
+                "Chunk": "\"이번 인수는 미래를 위한 새로운 플랫폼을 준비하는 일이다. 오큘러스는 우리가 일하고, 놀고, 소통하는 방식에 변화를 줄 것이다. \"",
+                "Character": "마크 저커버그",
+                "MainCharacter": "마크 저커버그",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 26,
+                "ChunkId": 1377,
+                "Chunk": "\"미래는 이미 와 있다. 단지 골고루 퍼져 있지 않을 뿐이다. 그런데, 점점 골고루 퍼져 가는 중이다. 가속되기 시작했다. 앞으로 10년, 우리는 그것을 생생히 목격하게 될 것이다. \"",
+                "Character": "윌리엄 깁슨",
+                "MainCharacter": "윌리엄 깁슨",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "장년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 7,
+                    "CharacterTag": "Character6",
+                    "Gender": "남",
+                    "Age": "장년"
+                }
+            },
+            {
+                "CharacterChunkId": 27,
+                "ChunkId": 1443,
+                "Chunk": "\"침대를 사야겠어\"",
+                "Character": "구매자",
+                "MainCharacter": "구매자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "남",
+                    "Age": "중립",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 9,
+                    "CharacterTag": "Character8",
+                    "Gender": "남",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 28,
+                "ChunkId": 1454,
+                "Chunk": "\"The next step is that instead of multiple customers comprising a market, we recognize that multiple markets comprise every customer. 다음 단계는 다수의 고객이 시장을 구성하는 대신, 다수의 시장이 모든 고객을 구성하게 된다. \"",
+                "Character": "조셉 파인",
+                "MainCharacter": "조셉 파인",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중립",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 9,
+                    "CharacterTag": "Character8",
+                    "Gender": "남",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 29,
+                "ChunkId": 1520,
+                "Chunk": "\"메르세데스 벤츠는 이제 자동차기업이 아닌 소프트웨어 기업이며, 자동차는 궁극의 웨어러블이다. \"",
+                "Character": "올라 켈레니우스",
+                "MainCharacter": "올라 켈레니우스",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 30,
+                "ChunkId": 1619,
+                "Chunk": "\"지난 20년 간 놀라운 일이 벌어졌다면 미래 20년은 공상과학영화에서 보던 일 이 벌어질 것이다. 메타버스가 오고 있다. \"",
+                "Character": "젠슨황",
+                "MainCharacter": "젠슨 황",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 31,
+                "ChunkId": 1627,
+                "Chunk": "\"웹3.0 메타버스가 오고 있다\"",
+                "Character": "작가",
+                "MainCharacter": "작가",
+                "AuthorRelationship": "저자",
+                "Context": {
+                    "Type": "강조",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 32,
+                "ChunkId": 1638,
+                "Chunk": "\"미래는 언제나 너무 빨리, 잘못된 순서로 온다. \"",
+                "Character": "앨빈 토플러",
+                "MainCharacter": "앨빈 토플러",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "노년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
+                    "Gender": "남",
+                    "Age": "노년"
+                }
+            },
+            {
+                "CharacterChunkId": 33,
+                "ChunkId": 1646,
+                "Chunk": "\"메타버 스가 오고 있다\"",
+                "Character": "젠슨 황",
+                "MainCharacter": "젠슨 황",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 34,
+                "ChunkId": 1853,
+                "Chunk": "\"또 다른 자아인 아바타를 만나 새로운 세계를 경험한다\"",
+                "Character": "저자",
+                "MainCharacter": "저자",
+                "AuthorRelationship": "저자",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 35,
+                "ChunkId": 1865,
+                "Chunk": "\"무엇이 사람들을 하나로 만들 수 있을까요? 군대? 황금? 깃발? 아니, 스토리입니다. \"",
+                "Character": "티리온 라니스터",
+                "MainCharacter": "티리온 라니스터",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 36,
+                "ChunkId": 1870,
+                "Chunk": "\"어른에게 스타벅스가 있다면 아이들에겐 로블록스가 있다. \"",
+                "Character": "미국 IT 전문매체 긱와이어",
+                "MainCharacter": "미국 IT 전문매체 긱와이어",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "중립",
+                    "Age": "중립",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 37,
+                "ChunkId": 1925,
+                "Chunk": "\"일상이 예능 되는 꿀잼 카메라\"",
+                "Character": "캐치프레이즈",
+                "MainCharacter": "캐치프레이즈",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "중립",
+                    "Age": "중립",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 38,
+                "ChunkId": 2101,
+                "Chunk": "\"세상에 이런 일이\"",
+                "Character": "내레이터",
+                "MainCharacter": "내레이터",
+                "AuthorRelationship": [
+                    "저자",
+                    "주인공"
+                ],
+                "Context": {
+                    "Type": "독백",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 9,
+                    "CharacterTag": "Character8",
+                    "Gender": "남",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 39,
+                "ChunkId": 2125,
+                "Chunk": "\"정당한 물리적 폭력 행사의 독점을 실효적으로 요구하는 인간 공동체\"",
+                "Character": "막스 베버",
+                "MainCharacter": "막스 베버",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "노년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
+                    "Gender": "남",
+                    "Age": "노년"
+                }
+            },
+            {
+                "CharacterChunkId": 40,
+                "ChunkId": 2136,
+                "Chunk": "\"우리는 게임을 만드는 것이 아니라, 새로운 나라를 건설하고 있다. \"",
+                "Character": "필립 로즈데일",
+                "MainCharacter": "필립 로즈데일",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 41,
+                "ChunkId": 2320,
+                "Chunk": "\"We propose a solution to the double spending problem using a peer-to-peer network. \"",
+                "Character": "사토시 나카모토",
+                "MainCharacter": "사토시 나카모토",
+                "AuthorRelationship": [
+                    "주인공",
+                    "저자"
+                ],
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 42,
+                "ChunkId": 2321,
+                "Chunk": "\"P2P 네트워크를 활용해서 이중 지불의 문제를 해결하는 솔루션을 제안한다. \"",
+                "Character": "비트코인 논문",
+                "MainCharacter": "비트코인 논문",
+                "AuthorRelationship": [
+                    "단역",
+                    "저자"
+                ],
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 43,
+                "ChunkId": 2334,
+                "Chunk": "\"저건 누구 거야\"",
+                "Character": "미상",
+                "MainCharacter": "미상의 참여자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "미상",
+                    "Age": "미상",
+                    "Emotion": "중립",
+                    "Role": "미상"
+                },
+                "Voice": {
+                    "CharacterId": 9,
+                    "CharacterTag": "Character8",
+                    "Gender": "남",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 44,
+                "ChunkId": 2358,
+                "Chunk": "\"이게 뭐지\"",
+                "Character": "뉴스화된 사례를 소개하는 인물",
+                "MainCharacter": "미상의 참여자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "중립",
+                    "Age": "중립",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 9,
+                    "CharacterTag": "Character8",
+                    "Gender": "남",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 45,
+                "ChunkId": 2456,
+                "Chunk": "\"웹3.0을 벤처캐피탈들이 소유하려 한다\"",
+                "Character": "일론 머스크",
+                "MainCharacter": "일론 머스크",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 46,
+                "ChunkId": 2458,
+                "Chunk": "\"재주는 곰이 부리고 돈은 주인이 버는\"",
+                "Character": "일반인",
+                "MainCharacter": "일반인",
+                "AuthorRelationship": [
+                    "단역",
+                    "조연"
+                ],
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중립",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 9,
+                    "CharacterTag": "Character8",
+                    "Gender": "남",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 47,
+                "ChunkId": 2463,
+                "Chunk": "\"내가 무슨?\"",
+                "Character": "저자",
+                "MainCharacter": "저자",
+                "AuthorRelationship": "저자",
+                "Context": {
+                    "Type": "독백",
+                    "Gender": "중립",
+                    "Age": "중립",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 48,
+                "ChunkId": 2473,
+                "Chunk": "\"야, 너두 NFT로 돈 벌 수 있어\"",
+                "Character": "저자",
+                "MainCharacter": "저자",
+                "AuthorRelationship": "저자",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "중립",
+                    "Age": "중립",
+                    "Emotion": "즐거움",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 1,
+                    "CharacterTag": "Narrator",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 49,
+                "ChunkId": 2493,
+                "Chunk": "\"맛으로 승부하겠다\"",
+                "Character": "요식업 창업자",
+                "MainCharacter": "요식업 창업자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 50,
+                "ChunkId": 2559,
+                "Chunk": "\"우리는 커피를 팔지 않는다. \"",
+                "Character": "하워드 슐츠",
+                "MainCharacter": "하워드 슐츠",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "장년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 7,
+                    "CharacterTag": "Character6",
+                    "Gender": "남",
+                    "Age": "장년"
+                }
+            },
+            {
+                "CharacterChunkId": 51,
+                "ChunkId": 2607,
+                "Chunk": "\"우리는 더 이상 가구회사가 아니다. \"",
+                "Character": "이케아 대표",
+                "MainCharacter": "이케아 대표",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 52,
+                "ChunkId": 2763,
+                "Chunk": "\"뇌가 (어떤 마케팅 노력도) 원천 봉쇄해 버린다. 안 그러면 돌아 버릴지도 모른다. \"",
+                "Character": "스태프들",
+                "MainCharacter": "스태프들",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "여",
+                    "Age": "청년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 6,
+                    "CharacterTag": "Character5",
+                    "Gender": "여",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 53,
+                "ChunkId": 2789,
+                "Chunk": "\"저게 뭐야?\"",
+                "Character": "미상",
+                "MainCharacter": "미상의 참여자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "미상",
+                    "Age": "미상",
+                    "Emotion": "중립",
+                    "Role": "미상"
+                },
+                "Voice": {
+                    "CharacterId": 9,
+                    "CharacterTag": "Character8",
+                    "Gender": "남",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 54,
+                "ChunkId": 2806,
+                "Chunk": "\"This is not a game. 이건 게임이 아니다. \"",
+                "Character": "비스트 스태프",
+                "MainCharacter": "비스트 스태프",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 55,
+                "ChunkId": 2840,
+                "Chunk": "\"Heads up, clown! Tomorrow means that theres one last shifty step left in the interview process : Arwoeufgryo\"",
+                "Character": "인사담당자",
+                "MainCharacter": "와이소시어리어스 회사 인사담당자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 56,
+                "ChunkId": 2841,
+                "Chunk": "\"정신차려, 얼간아! 내일은 면접의 마지막 shifty 단계를 후딱 해치워야 한다 고 : Arwoeufgryo\"",
+                "Character": "인사담당자",
+                "MainCharacter": "와이소시어리어스 회사 인사담당자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 57,
+                "ChunkId": 2844,
+                "Chunk": "\"이게 뭐지?\"",
+                "Character": "토론 참여자",
+                "MainCharacter": "토론 참여자",
+                "AuthorRelationship": [
+                    "조연",
+                    "주인공"
+                ],
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "호기심",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 58,
+                "ChunkId": 2848,
+                "Chunk": "\"이건 또 뭐지?\"",
+                "Character": "토론 참여자",
+                "MainCharacter": "토론 참여자",
+                "AuthorRelationship": [
+                    "조연",
+                    "주인공"
+                ],
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "호기심",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 59,
+                "ChunkId": 2852,
+                "Chunk": "\"Ive left a very special treat at each location below, held under the name Robin Banks. Only one per location, first come, first served. Keep a low profile. Do NOT call these locations, thats not part of the plan. Time for what youve been waiting for. 1-2-3 Go!\"",
+                "Character": "조커",
+                "MainCharacter": "조커",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 60,
+                "ChunkId": 2853,
+                "Chunk": "\"내가 어떤 특별한 물건을 Robin Banks라는 이름으로 아래 주소에 맡겨 놓았다. 제일먼저도착하는한사람만이그물건을가질수있다. 보안을유지해라. 절대 그리로 전화해서는 안 된다. 계획에 어긋나거든 네가 기다리던 시간이 되었다. 하나, 둘, 셋, 출발해!\"",
+                "Character": "조커",
+                "MainCharacter": "조커",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 61,
+                "ChunkId": 2859,
+                "Chunk": "\"Thank you for calling Rent-a-Clown! Now we know who you are!\"",
+                "Character": "Rent-a-Clown",
+                "MainCharacter": "Rent-a-Clown",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 62,
+                "ChunkId": 2860,
+                "Chunk": "\"전화해 줘서 고마워, 얼간아! 우리는 네가 누군지 알고 있다. \"",
+                "Character": "Rent-a-Clown",
+                "MainCharacter": "Rent-a-Clown",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 63,
+                "ChunkId": 2862,
+                "Chunk": "\"Good work, clown! Keep this phone charged and with you at all times. Dont call me, Ill call youeventually\"",
+                "Character": "와이소시어리어스 회사 인사담당자",
+                "MainCharacter": "와이소시어리어스 회사 인사담당자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 64,
+                "ChunkId": 2863,
+                "Chunk": "\"잘했어, 얼간이! 이 휴대폰을 항상 충전 상태로 휴대하고 있어야 해 나한테 전화해서는 안된다. 내가 너에게 전화할 거야\"",
+                "Character": "와이소시어리어스 회사 인사담당자",
+                "MainCharacter": "와이소시어리어스 회사 인사담당자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 65,
+                "ChunkId": 2874,
+                "Chunk": "\"I believe in Harvey Dent too! Hahahaha!\"",
+                "Character": "조커",
+                "MainCharacter": "조커",
+                "AuthorRelationship": [
+                    "조연",
+                    "주인공"
+                ],
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "즐거움",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 66,
+                "ChunkId": 2880,
+                "Chunk": "\"I always say, you never know what a man is truly made of until you peel the skin off his face one piece at a time. Here is your chance to help\"",
+                "Character": "조커",
+                "MainCharacter": "조커",
+                "AuthorRelationship": [
+                    "조연",
+                    "주인공"
+                ],
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 67,
+                "ChunkId": 2881,
+                "Chunk": "\"내가 늘 말했듯이, 인간은 얼굴 껍질을 다 벗길 때까지는 진짜 무엇으로 만들어졌는지를 모른다. 여기 나를 도와줄 기회가 있다. \"",
+                "Character": "조커",
+                "MainCharacter": "조커",
+                "AuthorRelationship": [
+                    "조연",
+                    "주인공"
+                ],
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 68,
+                "ChunkId": 2883,
+                "Chunk": "\"See you in December, HaHaHaHa\"",
+                "Character": "조커",
+                "MainCharacter": "조커",
+                "AuthorRelationship": [
+                    "조연",
+                    "주인공"
+                ],
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "청년",
+                    "Emotion": "즐거움",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 2,
+                    "CharacterTag": "Character1",
+                    "Gender": "남",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 69,
+                "ChunkId": 2890,
+                "Chunk": "\"whysoseriouscom은 곧 개봉될 새 배트맨 영화 다크나이트와 관련해 기묘한 일들이 벌어지는 사이트로 알려졌다. 최종적으로 전 세계에서 1000만 명이 넘는 사람들이 수수께끼와 퍼즐, 보물찾기 등이 연이어 쏟아지는 배트맨이라는 69년이나 된 스토리의 새로운 장에 빨려 들었다\"",
+                "Character": "프랭크 로즈",
+                "MainCharacter": "프랭크 로즈",
+                "AuthorRelationship": "저자",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 70,
+                "ChunkId": 2908,
+                "Chunk": "\"대학 음악역사박물관에 있는 17세기의 viola da gamba가 도난당했다. 내가 절도범이며, 캠퍼스 어딘가에 이 악기를 숨겨 놓았다. 그것을 찾아라. \"",
+                "Character": "매드잭",
+                "MainCharacter": "매드잭",
+                "AuthorRelationship": "주인공",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "남",
+                    "Age": "미상",
+                    "Emotion": "중립",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 9,
+                    "CharacterTag": "Character8",
+                    "Gender": "남",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 71,
+                "ChunkId": 2915,
+                "Chunk": "\"야, 이 멍청한 굼벵이들아! 너희들 기다리느라 내 천재성이 날아 가겠다. \"",
+                "Character": "매드잭",
+                "MainCharacter": "매드잭",
+                "AuthorRelationship": "주인공",
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "남",
+                    "Age": "미상",
+                    "Emotion": "화남",
+                    "Role": "조연"
+                },
+                "Voice": {
+                    "CharacterId": 9,
+                    "CharacterTag": "Character8",
+                    "Gender": "남",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 72,
+                "ChunkId": 2965,
+                "Chunk": "\"If Found Call 650-266-8233\"",
+                "Character": "캐시스북",
+                "MainCharacter": "캐시스북",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "여",
+                    "Age": "청소년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 6,
+                    "CharacterTag": "Character5",
+                    "Gender": "여",
+                    "Age": "청년"
+                }
+            },
+            {
+                "CharacterChunkId": 73,
+                "ChunkId": 3004,
+                "Chunk": "\"지금까지 느껴 보지 못한 최고의 몰입도를 자랑하는 텔레비전 경험을 확대하고, 관련 커뮤니티를 구축할 것이며, 이를 위해 웹의 힘을 이용하겠다. 시청 자들만 방송과 케이블, 인터넷 등 복수의 플랫폼을 넘나들도록 이끌겠다는 게 아니라 광고주들 또한 동참할 수 있게 하겠다. \"",
+                "Character": "NBC",
+                "MainCharacter": "NBC",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "중립",
+                    "Age": "중립",
+                    "Emotion": "중립",
+                    "Role": "중립"
+                },
+                "Voice": {
+                    "CharacterId": 8,
+                    "CharacterTag": "Character7",
+                    "Gender": "중립",
+                    "Age": "중립"
+                }
+            },
+            {
+                "CharacterChunkId": 74,
+                "ChunkId": 3070,
+                "Chunk": "\"디지털 시대의 은행의 경쟁사는 더 이상 다른 글로벌 금융기관이 아니다. \"",
+                "Character": "프란시스코 곤잘레스",
+                "MainCharacter": "프란시스코 곤잘레스",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 75,
+                "ChunkId": 3073,
+                "Chunk": "\"스타벅스는 이미 커피 회사가 아닌 은행\"",
+                "Character": "한국의 금융회사 관계자",
+                "MainCharacter": "한국의 금융회사 관계자",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 76,
+                "ChunkId": 3090,
+                "Chunk": "\"나는 왜 별보배 고둥 껍데기나 금화나 달러화를 신뢰할까? 내 이웃들이 그것을 신뢰 하기 때문이다. 그리고 내 이웃들이 그것을 신뢰하는 이유는 내가 그것을 신뢰하기 때문이다\"",
+                "Character": "유발 하라리",
+                "MainCharacter": "유발 하라리",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 77,
+                "ChunkId": 3124,
+                "Chunk": "\"전략을 짤 때 대개의 경우 경쟁과 기존 산업을 분석하고 전략 그룹을 살펴본 뒤 집중 공략할 고객을 정한다. 이런 과정을 무의식적으로 거친다면 당신은 레 드오션에 빠져있는 것이다. \"",
+                "Character": "김위찬 교수",
+                "MainCharacter": "김위찬 교수",
+                "AuthorRelationship": [
+                    "단역",
+                    "조연"
+                ],
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 78,
+                "ChunkId": 3130,
+                "Chunk": "\"블루오션으로 가려면 시장 경계선 내에서만 보지 말고 경계선 너머에 있는 새 수요를 볼 수 있어야 한다. \"",
+                "Character": "김위찬 교수",
+                "MainCharacter": "김위찬 교수",
+                "AuthorRelationship": [
+                    "단역",
+                    "조연"
+                ],
+                "Context": {
+                    "Type": "대화",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 79,
+                "ChunkId": 3140,
+                "Chunk": "\"뱅크는 사라지고 뱅킹만 남는다. \"",
+                "Character": "빌 게이츠",
+                "MainCharacter": "빌 게이츠",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "장년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 80,
+                "ChunkId": 3148,
+                "Chunk": "\"이제 자동차는 가솔린이 아니라 소프트웨어로 움직인다\"",
+                "Character": "디터 제체",
+                "MainCharacter": "디터 제체",
+                "AuthorRelationship": "조연",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "장년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 81,
+                "ChunkId": 3271,
+                "Chunk": "\"곳간에서 인심 난다\"",
+                "Character": "김용태",
+                "MainCharacter": "김용태",
+                "AuthorRelationship": "저자",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "중년",
+                    "Emotion": "중립",
+                    "Role": "주인공"
+                },
+                "Voice": {
+                    "CharacterId": 3,
+                    "CharacterTag": "Character2",
+                    "Gender": "남",
+                    "Age": "중년"
+                }
+            },
+            {
+                "CharacterChunkId": 82,
+                "ChunkId": 3345,
+                "Chunk": "\"지구상에 혁명 적인 새로운 부 富 창출체제\"",
+                "Character": "앨빈 토플러",
+                "MainCharacter": "앨빈 토플러",
+                "AuthorRelationship": "단역",
+                "Context": {
+                    "Type": "인용",
+                    "Gender": "남",
+                    "Age": "노년",
+                    "Emotion": "중립",
+                    "Role": "단역"
+                },
+                "Voice": {
+                    "CharacterId": 4,
+                    "CharacterTag": "Character3",
+                    "Gender": "남",
+                    "Age": "노년"
+                }
+            }
+        ]
+    },
+    {
+        "CheckedCharacterTags": [
+            {
+                "CharacterId": 0,
+                "CharacterTag": "None",
+                "Gender": "None",
+                "Age": "None",
+                "MainCharacterList": []
+            },
+            {
+                "CharacterId": 1,
+                "CharacterTag": "Narrator",
+                "Gender": "남",
+                "Age": "중년",
+                "Emotion": {
+                    "중립": 100.0
+                },
+                "MainCharacterList": [
+                    "저자",
+                    "메타버스 기업가"
+                ]
+            },
+            {
+                "CharacterId": 2,
+                "CharacterTag": "Character1",
+                "Gender": "남",
+                "Age": "청년",
+                "Emotion": {
+                    "중립": 50.0,
+                    "호기심": 50.0
+                },
+                "MainCharacterList": [
+                    "조커",
+                    "토론 참여자"
+                ]
+            },
+            {
+                "CharacterId": 3,
+                "CharacterTag": "Character2",
+                "Gender": "남",
+                "Age": "중년",
+                "Emotion": {
+                    "중립": 92.59,
+                    "즐거움": 3.7,
+                    "화남": 3.7
+                },
+                "MainCharacterList": [
+                    "사토시 나카모토",
+                    "와이소시어리어스 회사 인사담당자",
+                    "작가",
+                    "지미 웨일스",
+                    "필립 로즈데일",
+                    "모피어스",
+                    "유발 하라리",
+                    "젠슨 황",
+                    "Rent-a-Clown",
+                    "김위찬 교수",
+                    "팀 버너스 리",
+                    "국민",
+                    "카를로 로벨리",
+                    "마크 저커버그",
+                    "올라 켈레니우스",
+                    "티리온 라니스터",
+                    "비트코인 논문",
+                    "일론 머스크",
+                    "요식업 창업자",
+                    "이케아 대표",
+                    "비스트 스태프",
+                    "프랭크 로즈",
+                    "프란시스코 곤잘레스",
+                    "한국의 금융회사 관계자",
+                    "빌 게이츠",
+                    "디터 제체",
+                    "김용태"
+                ]
+            },
+            {
+                "CharacterId": 4,
+                "CharacterTag": "Character3",
+                "Gender": "남",
+                "Age": "노년",
+                "Emotion": {
+                    "중립": 100.0
+                },
+                "MainCharacterList": [
+                    "앨빈 토플러",
+                    "아인슈타인",
+                    "캘빈 경",
+                    "막스 베버"
+                ]
+            },
+            {
+                "CharacterId": 5,
+                "CharacterTag": "Character4",
+                "Gender": "남",
+                "Age": "청년",
+                "Emotion": {
+                    "중립": 66.67,
+                    "화남": 33.33
+                },
+                "MainCharacterList": [
+                    "개발자",
+                    "월스트리트 점령 운동 참가자",
+                    "프로그래머"
+                ]
+            },
+            {
+                "CharacterId": 6,
+                "CharacterTag": "Character5",
+                "Gender": "여",
+                "Age": "청년",
+                "Emotion": {
+                    "중립": 100.0
+                },
+                "MainCharacterList": [
+                    "스태프들",
+                    "캐시스북"
+                ]
+            },
+            {
+                "CharacterId": 7,
+                "CharacterTag": "Character6",
+                "Gender": "남",
+                "Age": "장년",
+                "Emotion": {
+                    "중립": 100.0
+                },
+                "MainCharacterList": [
+                    "윌리엄 깁슨",
+                    "하워드 슐츠"
+                ]
+            },
+            {
+                "CharacterId": 8,
+                "CharacterTag": "Character7",
+                "Gender": "중립",
+                "Age": "중립",
+                "Emotion": {
+                    "중립": 100.0
+                },
+                "MainCharacterList": [
+                    "TV 광고",
+                    "USA 투데이",
+                    "미국 IT 전문매체 긱와이어",
+                    "캐치프레이즈",
+                    "NBC"
+                ]
+            },
+            {
+                "CharacterId": 9,
+                "CharacterTag": "Character8",
+                "Gender": "남",
+                "Age": "중립",
+                "Emotion": {
+                    "중립": 100.0
+                },
+                "MainCharacterList": [
+                    "미상의 참여자",
+                    "매드잭",
+                    "구매자",
+                    "조셉 파인",
+                    "내레이터",
+                    "일반인"
+                ]
+            }
+        ]
+    }
+]

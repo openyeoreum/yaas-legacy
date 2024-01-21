@@ -111,7 +111,7 @@ def AddProjectToDB(projectName, email):
         correctionKo = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-01_CorrectionKo.json")
         correctionEn = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-02_CorrectionEn.json")
         selectionGenerationKo = LoadJsonFrame(ProjectDataPath + "/b539_SelectionGeneration/b539-01_SelectionGenerationKo.json")
-        mixingMasteringKo = LoadJsonFrame(ProjectDataPath + "/b5310_Mixing-Mastering/b5310-01_Mixing-MasteringKo.json")
+        mixingMasteringKo = LoadJsonFrame(ProjectDataPath + "/b5310_MixingMastering/b5310-01_MixingMasteringKo.json")
         ### 아래로 추가되는 데이터프레임 작성 ###
 
         ExistingProject = db.query(Project).filter(Project.UserId == user.UserId, Project.ProjectName == projectName).first()

@@ -7,6 +7,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from langdetect import detect
+from langdetect.lang_detect_exception import LangDetectException
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
@@ -31,6 +32,7 @@ def SelectionGenerationKoJson(projectName, email):
     if len(project.CharacterCompletion[2]['CheckedCharacterTags']) > 1:
         Narrater = project.CharacterCompletion[2]['CheckedCharacterTags'][1]
     else:
+        # NarraterGenre 기본값
         NarraterGender = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Gender']['Gender']
         NarraterAge = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Age']['Age']
         NarraterEmotion = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Emotion']['Emotion']
@@ -94,10 +96,13 @@ def SelectionGenerationKoJson(projectName, email):
 
     ## SelectionGenerationKoSplitedIndexs 데이터 구축
     # Index 중 IndexContext, Music, Sound 부분
+    # LatestIndex 초기화
+    LatestIndex = None
     for i in range(len(SelectionGenerationKoSplitedIndexs)):
         # IndexContext
         for j in range(len(WMWMFrameIndexs)):
-            print(SelectionGenerationKoSplitedIndexs[i]['IndexId'])
+            # print(SelectionGenerationKoSplitedIndexs[i]['IndexId'])
+            # print(SelectionGenerationKoSplitedIndexs[i]['IndexContext'])
             if SelectionGenerationKoSplitedIndexs[i]['IndexId'] == WMWMFrameIndexs[j]['IndexId']:
                 SelectionGenerationKoSplitedIndexs[i]['IndexContext'] = {'Vector': WMWMFrameIndexs[j]['Vector'], 'WMWM': WMWMFrameIndexs[j]['WMWM']}
                 LatestIndex = SelectionGenerationKoSplitedIndexs[i]['IndexContext']
@@ -113,7 +118,16 @@ def SelectionGenerationKoJson(projectName, email):
             bookEmotion = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Emotion']['Emotion']
             SelectionGenerationKoSplitedIndexs[i]['Music'] = {"Genre": bookGenre, "Gender": bookGender, "Age": bookAge, "Personality": bookPersonality, "Emotion": bookEmotion}
         else:
-            SelectionGenerationKoSplitedIndexs[i]['Music'] = LatestIndex['Vector']['ContextCompletion']
+            if LatestIndex:
+                SelectionGenerationKoSplitedIndexs[i]['Music'] = LatestIndex['Vector']['ContextCompletion']
+            else:
+                # MusicGenre 기본값
+                MusicGenre = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Genre']['Genre']
+                MusicGender = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Gender']['Gender']
+                MusicAge = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Age']['Age']
+                MusicPersonality = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Personality']['Personality']
+                MusicEmotion = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Emotion']['Emotion']
+                SelectionGenerationKoSplitedIndexs[i]['Music'] = {"Genre": MusicGenre, "Gender": MusicGender, "Age": MusicAge, "Personality": MusicPersonality, "Emotion": MusicEmotion, "Accuracy": 100}
             
         # Sound
         for k in range(len(SoundFrame)):
@@ -175,7 +189,11 @@ def SelectionGenerationKoJson(projectName, email):
                                 CaptionMusic = {"CaptionMusicStart": CaptionMusicStart, "CaptionMusicEnd": CaptionMusicEnd, "Genre": genre, "Gender": gender, "Age": age, "Personality": personality, "Emotion": emotion}
 
                 # Voice
-                Language = detect(Chunk)
+                # Chunk가 비어있거나, 내에 문자가 없을 경우의 예외처리
+                try:
+                    Language = detect(Chunk)
+                except LangDetectException:
+                    Language = "ko"
                 emotions = list(Narrater['Emotion'].keys())
                 Voice = {'Character': Narrater['MainCharacterList'][0], 'CharacterTag': Narrater['CharacterTag'], 'Language': Language, 'Gender': Narrater['Gender'], 'Age': Narrater['Age'], 'Emotion': emotions[00]}
                 for CharacterChunk in CharacterFrame:
@@ -271,7 +289,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "웹3.0메타버스"
+    projectName = "우리는행복을진단한다"
     DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"

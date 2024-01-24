@@ -1,7 +1,9 @@
+import os
 import re
 import json
 import tiktoken
 import time
+import shutil
 import sys
 sys.path.append("/yaas")
 
@@ -464,7 +466,12 @@ if __name__ == "__main__":
                 LifeGraphId += 1
 
     lifeGraphList = LoadLifeGraphSet(lifeGraphSetName, latestUpdateDate)
-    
+
+    # 폴더 생성 코드
+    selected_images_path = '/yaas/Images/SelectedImages'
+    if not os.path.exists(selected_images_path):
+        os.makedirs(selected_images_path, exist_ok=True)
+
     LifeGraphsGlobalCount = 0
     for i in range(len(lifeGraphList)):
         lifeGraphName = lifeGraphList[i][0].replace(' ', '')
@@ -473,6 +480,24 @@ if __name__ == "__main__":
         LifeGraphsGlobalAge = LifeGraphsGlobalList[LifeGraphsGlobalCount]['Age']
         if lifeGraphName == LifeGraphsGlobalName and lifeGraphAge == LifeGraphsGlobalAge:
             LifeGraphsGlobalList[LifeGraphsGlobalCount]['ImageId'] = i - 2
+            print(i - 2)
+            
+            # 이미지 이동 코드
+            image_id = LifeGraphsGlobalList[LifeGraphsGlobalCount]['ImageId']
+            name = LifeGraphsGlobalList[LifeGraphsGlobalCount]['Name']
+            age = LifeGraphsGlobalList[LifeGraphsGlobalCount]['Age']
+
+            old_image_path = f'/yaas/Images/{image_id}_{name}_{age}_LifeGraph.jpg'  # 파일 이름 형식에 따라 조정
+            new_image_path = f'/yaas/Images/SelectedImages/{image_id}_{name}_{age}_LifeGraph.jpg'  # 새 경로
+
+            # 디버깅 메시지
+            print(f"Trying to move: {old_image_path} to {new_image_path}")
+
+            if os.path.exists(old_image_path):
+                shutil.move(old_image_path, new_image_path)
+                print(f"Moved {old_image_path} to {new_image_path}")
+            else:
+                print(f"File not found: {old_image_path}")
             
             if LifeGraphsGlobalCount < len(LifeGraphsGlobalList) - 1:
                 LifeGraphsGlobalCount += 1

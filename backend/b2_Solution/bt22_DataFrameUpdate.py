@@ -47,7 +47,6 @@ def FindDataframeFilePaths(email, projectName, userStoragePath):
 
         # 정규 표현식 패턴 구성
         pattern = rf"{userStoragePath}/.*_{username}_user/.*/{projectName}/{projectName}_dataframe_file"
-
         DataFrameFilePaths = []
         # userStoragePath 내의 모든 파일과 디렉토리를 순회
         for root, dirs, files in os.walk(userStoragePath):
@@ -59,7 +58,9 @@ def FindDataframeFilePaths(email, projectName, userStoragePath):
                 if re.match(pattern, FullPath):
                     DataFrameFilePaths.append(FullPath)
 
-    return DataFrameFilePaths[0] + '/'
+        MatchedDataFrameFilePath = DataFrameFilePaths[0] + '/'
+
+    return MatchedDataFrameFilePath
 
 ## 업데이트된 DataFrame 파일저장
 def SaveDataFrame(projectName, email, Process, UpdatedFrame, RawDataSetPath):
@@ -164,11 +165,12 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
-    userStoragePath = "/yaas/backend/b6_Storage/b62_UserStorage/"
+    userStoragePath = "/yaas/backend/b6_Storage/b62_UserStorage"
     projectNameList = ['데미안', '살아서천국극락낙원에가는방법', '우리는행복을진단한다', '웹3.0메타버스']
     
     for projectName in projectNameList:
         DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
+        print(DataFramePath)
         RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
         messagesReview = "on"
         

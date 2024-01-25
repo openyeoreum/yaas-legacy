@@ -1,4 +1,5 @@
 import os
+import glob
 import hashlib
 # from dotenv import load_dotenv
 import sys
@@ -25,10 +26,20 @@ def AddUserToDB(email, username, password):
         GeneratedUserId = GenerateUserId(email)
         # BasePath 생성
         BasePath = GetBasePath()
-        # UserPath 생성
-        userPath = os.path.join(BasePath, f"{SeoulNow()}_{username}_user")
-        # ProfileImageFilePath 생성
-        profileImageFilePath = os.path.join(userPath, f"{SeoulNow()}_{username}_profile_image")
+
+        # 가능한 모든 UserPath 검색
+        possiblePaths = glob.glob(os.path.join(BasePath, f"*_{username}_user"))
+        # 존재하는 경로 중 가장 최근 것 사용
+        if possiblePaths:
+            userPath = max(possiblePaths, key=os.path.getctime)
+            print(userPath)
+            profileImageFilePath = os.path.join(userPath, f"{os.path.basename(userPath)}_profile_image")
+        else:
+            # 존재하는 경로가 없으면 새로운 경로 생성
+            userPath = os.path.join(BasePath, f"{SeoulNow()}_{username}_user")
+            profileImageFilePath = os.path.join(userPath, f"{SeoulNow()}_{username}_profile_image")
+            # 새로운 폴더 생성
+            os.makedirs(userPath, exist_ok=True)
         
         # APIkey 가져오기
         tTSapiKey = os.getenv("TTSapiKey")

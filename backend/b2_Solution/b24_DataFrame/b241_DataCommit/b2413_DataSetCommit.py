@@ -11,7 +11,7 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import TrainingDataset
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetTrainingDataset
-
+from backend.b2_Solution.bt22_DataFrameUpdate import FindDataframeFilePaths
 
 #########################################################
 ##### 전체 TrainingDataSet의 MetaData(식별)부분을 업데이트 #####
@@ -419,26 +419,12 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    name = "yeoreum"
     projectName = "우리는행복을진단한다"
     process = 'CharacterDefine'
+    userStoragePath = "/yaas/backend/b6_Storage/b62_UserStorage"
+    DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     FeedbackDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5122_FeedbackDataSet/"
     CompleteDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5123_CompleteDataSet/"
     TrainingDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5124_TrainingDataSet/"
     #########################################################################
-    
-    # AddDataSetMetaDataToDB(projectName, email)
-    # AddProjectContextToDB(projectName, email, process)
-    # AddProjectRawDatasetToDB(projectName, email, process, "Model", "Usage", "Input", "Output")
-    # AddProjectFeedbackDataSetsToDB(projectName, email, process, "Input", "Output")
-    # AddProjectEmbeddingDataSetsToDB(projectName, email, process, "InputEmbedding", "OutputEmbedding")
-    
-    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_11_CharacterDefineDataSet.json", 'r', encoding='utf-8') as file:
-    #     processDataset = json.load(file)
-    # processDataset = OutputAccuracy(projectName, email, process, processDataset)
-    
-    # with open(RawDataSetPath + "yeoreum00128@gmail.com_231022_우리는행복을진단한다_11_CharacterDefineDataSet_Accuracy.json", 'w', encoding='utf-8') as file:
-    #     json.dump(processDataset, file, ensure_ascii = False, indent = 4)
-        
-    AddProjectFeedbackDataSets(projectName, email, "CharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)

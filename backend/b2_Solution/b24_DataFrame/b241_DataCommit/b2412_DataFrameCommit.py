@@ -12,6 +12,7 @@ from backend.b1_Api.b14_Models import Project
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 from backend.b2_Solution.b23_Project.b231_ProjectCommit import GetProjectDataPath, LoadJsonFrame
+from backend.b2_Solution.bt22_DataFrameUpdate import FindDataframeFilePaths
 
 ############################################
 ########## DataFrameCommitGeneral ##########
@@ -1714,9 +1715,11 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    name = "yeoreum"
     projectName = "우리는행복을진단한다"
     process = 'IndexDefinePreprocess'
-    DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
+    userStoragePath = "/yaas/backend/b6_Storage/b62_UserStorage"
+    DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
+    messagesReview = "on"
+    mode = "Master"
     #########################################################################

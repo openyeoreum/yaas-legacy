@@ -10,6 +10,7 @@ from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromp
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedWMWMDefineToDB, AddWMWMDefineChunksToDB, WMWMDefineCountLoad, WMWMDefineCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
+from backend.b2_Solution.bt22_DataFrameUpdate import FindDataframeFilePaths
 
 #########################
 ##### InputList 생성 #####
@@ -397,9 +398,9 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    name = "yeoreum"
-    projectName = "웹3.0메타버스"
-    DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
+    projectName = "우리는행복을진단한다"
+    userStoragePath = "/yaas/backend/b6_Storage/b62_UserStorage"
+    DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
     messagesReview = "on"
     mode = "Master"

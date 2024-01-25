@@ -15,7 +15,7 @@ from backend.b1_Api.b14_Models import User, Prompt
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetPromptFrame, GetTrainingDataset
 from backend.b2_Solution.b21_General.b212_PromptCommit import GetPromptDataPath, LoadJsonFrame
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
-
+from backend.b2_Solution.bt22_DataFrameUpdate import FindDataframeFilePaths
 
 ######################
 ##### LLM 공통사항 #####
@@ -447,9 +447,9 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    name = "yeoreum"
     projectName = "우리는행복을진단한다"
-    DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
+    userStoragePath = "/yaas/backend/b6_Storage/b62_UserStorage"
+    DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     FeedbackDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5122_FeedbackDataSet/"
     CompleteDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5123_CompleteDataSet/"
     TrainingDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5124_TrainingDataSet/"

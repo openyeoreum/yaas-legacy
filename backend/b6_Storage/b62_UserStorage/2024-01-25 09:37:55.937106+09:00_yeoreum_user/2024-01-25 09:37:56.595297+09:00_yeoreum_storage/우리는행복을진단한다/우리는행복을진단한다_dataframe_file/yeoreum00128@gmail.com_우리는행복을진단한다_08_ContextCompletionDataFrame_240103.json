@@ -1,0 +1,2209 @@
+[
+    {
+        "UserId": "cc51fb3ea8742fd388fc3b453a35d93f874f0f23004bdac12c306f6b9b9d0066",
+        "ProjectsStorageID": 1,
+        "ProjectId": 7,
+        "ProjectName": "우리는행복을진단한다",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "ContextCompletion",
+        "ContextChunkCount": 186,
+        "ContextCount": 0,
+        "Completion": "Yes"
+    },
+    {
+        "ContextCompletions": [
+            {
+                "ContextChunkId": 0,
+                "ChunkId": 0,
+                "Chunk": "None",
+                "Genre": "None",
+                "Gender": "None",
+                "Age": "None",
+                "Personality": "None",
+                "Emotion": "None",
+                "Accuracy": "None"
+            },
+            {
+                "ContextChunkId": 1,
+                "ChunkId": 12,
+                "Chunk": "\"사람이 건강하고 행복하게 살아가는 데 도움이 되는 의료기관\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 2,
+                "ChunkId": 23,
+                "Chunk": "SCL은 1983년 창립 이후 정확히 40주년이 된 현재까지 인간의 건 강과 행복을 위해 오롯이 한길을 걸어왔다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "89"
+            },
+            {
+                "ContextChunkId": 3,
+                "ChunkId": 31,
+                "Chunk": "이제는 대한민국을 넘어 전 세계에 우리나라 진단검사의학의 우수성을 알리고 싶다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "외향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 4,
+                "ChunkId": 39,
+                "Chunk": "\"자네들이 쥔 칼은 사람을 살리는 칼이 되어야 해\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 5,
+                "ChunkId": [
+                    49,
+                    50
+                ],
+                "Chunk": [
+                    "남들이 가지 않는 길은 덜 안전하다",
+                    "그러나 덜 안전한 길은 기업을 성장시킨다"
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 6,
+                "ChunkId": 87,
+                "Chunk": "\"저런 식으로 혈관을 건드리면 환자는 목숨을 잃는다. 의사의 사소한 실수 하나가 환자의 생명을 앗아 갈 수 있다는 걸 명심하도록!\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 7,
+                "ChunkId": 104,
+                "Chunk": "카데바를 신중하게 다루지 못하면 앞으로 살아 있는 신체를 어떻게 다룰 것이며, 어떻게 생명을 지켜 줄 수 있겠는가.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "89"
+            },
+            {
+                "ContextChunkId": 8,
+                "ChunkId": 110,
+                "Chunk": "의사의 실수는 환자가 최종 피해자가 되는 ‘리스크’이기 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 9,
+                "ChunkId": 128,
+                "Chunk": "그러니까 의대생들은 1년 내내 시험이라는 마음으로 항상 긴장을 유지하고 공부를 해야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 10,
+                "ChunkId": 138,
+                "Chunk": "그는 본과 실습 그리고 테니스 코트에서 스승들의 조언을 많이 들을 수 있었으나 정신과, 성형외과 등 호기심이 가는 학문이 여럿이라 쉽게 전공을 결정할 수 없었다고 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "무감정",
+                "Accuracy": "80"
+            },
+            {
+                "ContextChunkId": 11,
+                "ChunkId": 152,
+                "Chunk": "그는 횡성군수에게 사정을 설명하여 횡성군 역사상 처음으로 자동 약 포장기를 도입했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 12,
+                "ChunkId": 170,
+                "Chunk": "\"아픈 곳이 나아서 후련해하는 환자들의 표정을 보면 정말 행복했다\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 13,
+                "ChunkId": 209,
+                "Chunk": "미국에서는 의료과실로 매년 25만명 이상이 사망한다는 연구결과가 나왔다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 14,
+                "ChunkId": 219,
+                "Chunk": "진단검사의학은 의사가 실수하지 않고 환자를 치료해 환자 및 의료진 모두의 목적을 달성하도록 돕는 학문이며, 이 중요성을 인식하고 극적으로 활용하는 것이 근거중심의학",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 15,
+                "ChunkId": 234,
+                "Chunk": "환자마다 신체적 특징, 질환의 양상이 다른 만큼 의사들의 주관적 경험이 아니라 환자 정보를 분석한 진단·치료가 필요한 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 16,
+                "ChunkId": 235,
+                "Chunk": "진단검사의학은 의사가 실수하지 않고 환자를 치료해 환자 및 의료진 모두의 목적을 달성하도록 돕는 학문이며, 이 중요성을 인식하고 적극적으로 활용하는 것이 근거중심의학(EBM)이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 17,
+                "ChunkId": 258,
+                "Chunk": "진단검사의학의 무궁무진한 가능성을 남들보다 한발 앞서서 발견한 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 18,
+                "ChunkId": 260,
+                "Chunk": "기업이 명확한 비전을 갖는건 성장 발전을 위해 필수적이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 19,
+                "ChunkId": 291,
+                "Chunk": "이경률 회장은 청년 시절부터 끊임없이 국내외 의학계의 흐름을 관찰했고 남들이 미처 알아보지 못했던 새로운 기회를 찾아내 비전으로 삼았다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 20,
+                "ChunkId": 300,
+                "Chunk": "CEO를 비롯한 경영진이 모호하고 추상적인 말로 비전을 표현한다면, 듣기 좋은 단어들을 다 모아 놨어도 정작 뭘 하자는 것이고 어떻게 실천하자는 건지 알맹이는 쏙 빠져 있다면, 당신은 지체 없이 그 회사를 떠나도 좋다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 21,
+                "ChunkId": 321,
+                "Chunk": "오늘날에는 이렇게 체계적이고 빠르게 검체검사가 진행되지만, 과거에는 달랐다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 22,
+                "ChunkId": 343,
+                "Chunk": "스퍼트를 올려야 할 순간",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 23,
+                "ChunkId": 361,
+                "Chunk": "SCL은 야간 검사 인 력을 충원하여 24시간으로 쉬지 않고 검사를 할 수 있는 시스템을 갖 추었고, 여기에 자동화 시스템을 도입해 검사 시간을 앞당겼다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 24,
+                "ChunkId": 368,
+                "Chunk": "SCL은 창업 초기부터 10년간 적자에 시달렸지만, 과감하고 공격적인 투자로 스퍼트를 올려 타 수탁기관들보다 앞서 나갈 수 있었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 25,
+                "ChunkId": 372,
+                "Chunk": "빠르고 정확하게 내 주문이 실행되어 결과를 얻는 것이 모든 소비자들의 바람이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 26,
+                "ChunkId": 395,
+                "Chunk": "퀀텀 점프를 하고 싶다면 경쟁사들과의 차별화를 시도하지 않으면 안된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 27,
+                "ChunkId": 416,
+                "Chunk": "가치를 인정하기만 하면 돈을 아끼지 않는 요즘 소비자들의 라이프 스타일을 정확하게 겨냥한 차별화라고 할 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 28,
+                "ChunkId": 444,
+                "Chunk": "디자인으로 차별화를 꾀하고자 했던 잡스의 의도가 적중한 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 29,
+                "ChunkId": 447,
+                "Chunk": "차별화 전략에 성공한 기업들은 퀀텀 점프를 하여 업계 선두로 올라설 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 30,
+                "ChunkId": 454,
+                "Chunk": "가격을 깎는 방식의 출혈적 경쟁을 피할 수 있다는 이점도 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 31,
+                "ChunkId": 474,
+                "Chunk": "퀀텀 점프를 이룰 수 있는 차별화 전략은 고객이 원하는 게 무엇인지 철저 하게 따져 봄으로써 가능해진다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 32,
+                "ChunkId": 489,
+                "Chunk": "‘기회는 준비된자들에게 찾아온다’는 진부하고도 선명한 진리를 잊어서는 안 된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 33,
+                "ChunkId": 498,
+                "Chunk": "‘1등’ 혹은 ‘최초’가 갖는 의미는 내 존재감, 가치를 가장 확실하게 드러낼 수 있다는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 34,
+                "ChunkId": 507,
+                "Chunk": "SCL은 빛나고 영광스러운 ‘최초’란 수식어를 여러 번 따냈다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "자부심",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 35,
+                "ChunkId": 540,
+                "Chunk": "검사의 정확성, 안전한 검사실 환경, 검사자 들의 실력 등을 공인받는 것은 검체검사기관에게는 필수적이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 36,
+                "ChunkId": 546,
+                "Chunk": "우물 안 개구리처럼 내가 속한 그라운드만 본 것이 아니 라 바깥세상으로 눈을 돌려서 민감하게 관찰하고, 관찰한 것들을 파고들어 연구하며, 어떻게 하면 우리 시장에 접목해 새로운 가치를 창 조할 수 있는지를 궁리한 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 37,
+                "ChunkId": 553,
+                "Chunk": "선즉제인(先則制人)의 전략",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 38,
+                "ChunkId": 554,
+                "Chunk": "남들이 시도치 못한 걸 최초로 시도한 기업들은 해당 산업을 선도 하는 위치를 차지하게 된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 39,
+                "ChunkId": 557,
+                "Chunk": "이를 경제학에 서는 ‘선점우위효과’라고 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 40,
+                "ChunkId": 604,
+                "Chunk": "선두를 치고 나가면 확고한 우위를 점할 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 41,
+                "ChunkId": 610,
+                "Chunk": "진입장벽을 넘어서기 위해서는 소비자들의 마음 을 사로잡는 획기적인 제품을 만들어야 할 테고, 많은 자본이나 인력 투입이 불가피하게 된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "두려움",
+                "Accuracy": "80"
+            },
+            {
+                "ContextChunkId": 42,
+                "ChunkId": 635,
+                "Chunk": "승자의 저주는 기업 현장 곳곳에서 나타난다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 43,
+                "ChunkId": 657,
+                "Chunk": "고객의 마음을 속속들이 읽으려는 노력 그리고 단계별 목표 설정, 이 두 가지가 불확실한 시장환경 속에서 승자의 저주를 피하는 가장 좋은 방법이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 44,
+                "ChunkId": 659,
+                "Chunk": "쇠는 담금질과 벼름질을 통해 강도가 높아진다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 45,
+                "ChunkId": 661,
+                "Chunk": "일류와 삼류의 결정적 차이",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 46,
+                "ChunkId": 711,
+                "Chunk": "진정한 프로는 자기 일을 자신과 동일시한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 47,
+                "ChunkId": 715,
+                "Chunk": "조직을 떠날 때도 자신의 자리를 정돈하고 간다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 48,
+                "ChunkId": 743,
+                "Chunk": "\"죽은 과거를 묻고 살아 있는 현재에 행동하라\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 49,
+                "ChunkId": 763,
+                "Chunk": "\"가장 중요한 건 우리가 여전히 고객의 니즈를 채워 줄 수 있는가 하는 것이다. \"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 50,
+                "ChunkId": 767,
+                "Chunk": "그렇게 하여 만들어진 것이 검사 전 과정 자동화 시스템이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 51,
+                "ChunkId": 769,
+                "Chunk": "2002년에 구축된 시스 템은 IT 기술을 접목해 기존에 수작업으로 진행되던 검체 분류·접수 과정을 자동화함으로써 에러 발생 가능성을 사전에 배제하고 분석 시 간을 단축해 검사결과의 신속성과 안정성을 높인 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 52,
+                "ChunkId": 788,
+                "Chunk": "IT 전문기업이 일을 주도하더라도 임상병리 정보시스템의 정보를 잘 알고 있는 내부직원들의 역할이 매우 중요하다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 53,
+                "ChunkId": 808,
+                "Chunk": "SCL은 기업들의 문의를 접하면서 임상시험 영역을 키워 가기로 마 음먹고 학술지원부의 업무를 재정의하였다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 54,
+                "ChunkId": 817,
+                "Chunk": "2000년대 초 SCL이 위기를 돌파해 낸 일련의 과정을 ‘존속적 혁신’ 과 ‘파괴적 혁신’으로 정의할 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 55,
+                "ChunkId": 820,
+                "Chunk": "존속적 혁신은 시장에서 기대하는 수준에 맞춰 기존 제품 서비스의 성능을 점진적으로 향상시켜서 고객들에게 높은 가격으로 제공함으로써 시장점유율을 키워 가는 전략이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 56,
+                "ChunkId": 821,
+                "Chunk": "반면에 파괴적 혁신은 성능이 떨어지지만 가격이 저렴한 제품 서비스로 시장에 진입해 밑바닥부터 공략한 다음 점차 높은 품질로 끌어올려 가면서 시장점유율을 높여서 시장을 장악하는 전략을 말한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "두려움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 57,
+                "ChunkId": [
+                    851,
+                    852
+                ],
+                "Chunk": [
+                    "기업은 이 두 가지 중 어느 것 하나도 소홀히 해서는 안 된다.",
+                    "만약 한 기업이 존속적·파괴적 혁신을 함께 구사해, 시장에서 절대 우위를 지켜 가면서 바닥 소비자층까지 공략할 수 있다면 업계 1위를 굳건히 지킬 수 있을 것이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 58,
+                "ChunkId": 865,
+                "Chunk": "SCL은 크나큰 위기를 만났지만 훌륭하게 이겨 냈다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 59,
+                "ChunkId": 878,
+                "Chunk": "검사결과가 정확하고 신속 하게 나올수록 사람의 생명을 살릴 수 있으니까.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 60,
+                "ChunkId": 883,
+                "Chunk": "인간의 역사는 실수의 역사라 해도 과언이 아니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 61,
+                "ChunkId": 892,
+                "Chunk": "사고를 막기 위해서는 업무 수행자에게 실수를 하지 말라고 강조할 게 아니라 사람의 불완전성을 보완해 줄 시스템을 만드는 게 더 합리적이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "95"
+            },
+            {
+                "ContextChunkId": 62,
+                "ChunkId": 913,
+                "Chunk": "오늘날 임상시험의 중요도는 과거에 비할 수 없을 만큼 올라갔다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "89"
+            },
+            {
+                "ContextChunkId": 63,
+                "ChunkId": [
+                    945,
+                    946
+                ],
+                "Chunk": [
+                    "SOP는 우리나라에서 ‘표준작업지침서’ 혹은 ‘표준운영절차’라고 불린다.",
+                    "업무를 일관적으로 실시할 목적으로 절차 및 수행 방법을 상세 하게 기술한 것이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 64,
+                "ChunkId": 953,
+                "Chunk": "SOP의 목적은 궁극적으로 사람으로 인해 발생하는 변수를 차단하는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 65,
+                "ChunkId": [
+                    955,
+                    956,
+                    957
+                ],
+                "Chunk": [
+                    "SOP는 품질관리",
+                    "Quality Control",
+                    "가 필요한 모든 영역에서 유용한데, 그 는 이것이 임상시험에서 반드시 필요하다고 판단하였다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 66,
+                "ChunkId": 983,
+                "Chunk": "SOP는 인간의 실수를 방지하는 게 목적인 만큼 일반적인 상황보다 돌발 상황에 더욱 효과를 발휘할 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 67,
+                "ChunkId": 986,
+                "Chunk": "\"어떻게 보면 사람의 인식을 바꾸는 일이고, 인식을 바꾸기 위해서 사람의 인식하고 싸우는 일인 것 같아요. \"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "80"
+            },
+            {
+                "ContextChunkId": 68,
+                "ChunkId": [
+                    987,
+                    988
+                ],
+                "Chunk": [
+                    "사람의 인식을 바꾸는 건 어찌 보면 가장 어렵다.",
+                    "사람은 누구나 자 기 확신을 가지고 살아가기 때문이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 69,
+                "ChunkId": 1012,
+                "Chunk": "경영자의 믿음이 필요한 순간",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 70,
+                "ChunkId": 1030,
+                "Chunk": "경영진의 전폭적 지원으로 부서원들은 생경한 SOP를 만들어 가 는 데 의기투합할 수 있었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 71,
+                "ChunkId": 1049,
+                "Chunk": "사람과 조직을 성장시키는 지혜로운 리더가 되고 싶다면 CEO 스스로 한계를 깨닫는 게 먼저다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 72,
+                "ChunkId": 1069,
+                "Chunk": "감정을 배제하고 객관적 데이터에 입각해 사실을 전달해야 한다고 위 사안의 경우 동네 병원을 통해 SCL에 의뢰된 검사는 스크리닝 검사",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 73,
+                "ChunkId": 1101,
+                "Chunk": "이럴 때 나올 수 있는 실수를 방지하기 위해 이중, 삼중으로 확인하는 절차를 거친다..",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 74,
+                "ChunkId": [
+                    1112,
+                    1113
+                ],
+                "Chunk": [
+                    "가뜩이나 예민한 이들에게 전화는 더할 나위 없는 자극제이다.",
+                    "검사부원들은 신입직원이 들어올 때마다 자신과 가족이 병원에서 검사를 받는다는 마음으로 일할 것을 강조한다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 75,
+                "ChunkId": 1114,
+                "Chunk": "\"검사를 통해 환자의 발병 사실을 찾아내면 생명을 살리는 거지만, 반대로 놓치면 환자가 위험해지니까 정신을 바싹 차려야죠. 검사자는 검체 너머에 있는 환자를 봐야 해요. \"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "책임감",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 76,
+                "ChunkId": 1126,
+                "Chunk": "흔히 하는 말로, 돈으로 좌지우지되지 않는 사람들이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 77,
+                "ChunkId": 1127,
+                "Chunk": "단지 검체를 분석하고 판독하는 기술만 뛰어나다고 이 일을 선택해서는 안 된다. 생명에 대한 사 명감과 책임감 외에 성실함, 집중력, 꼼꼼함, 협동심 등등 여러 자질이 필요하다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 78,
+                "ChunkId": [
+                    1137,
+                    1138
+                ],
+                "Chunk": [
+                    "유사한 사례가 더 있었는데 그때마다 과학적으로 도출된 결과를 전달할 뿐 타협하지 않았다.",
+                    "매출에 손해가 되는 결정이라도 경영진 역시 미련이 없었다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 79,
+                "ChunkId": 1156,
+                "Chunk": "번아웃의 사전적 의미는 ‘어떤 활동이 끝난 후 심신이 지친 상태’를 말한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 80,
+                "ChunkId": 1163,
+                "Chunk": "SCL 검사부 직원들은 사람의 생명을 살리는 일을 하고 있다는 자 부심이 강하지만 한편으로는 빡빡한 업무량, 빈틈 없는 일처리로 인 한 스트레스 때문에 힘들 때가 많다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 81,
+                "ChunkId": 1177,
+                "Chunk": "SCL 검사부원들이 겪는 어려움은 그들만의 문제가 아니다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "피곤",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 82,
+                "ChunkId": 1207,
+                "Chunk": "고난은 인간을 단련시키지만, 인간의 에너지는 제한적인 측면이 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 83,
+                "ChunkId": 1208,
+                "Chunk": "기업 경영진은 힘들어도 참고 견디면 성장할 수 있다며 직원들이 과도한 업무에 시달리는 걸 방치해서는 안 된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 84,
+                "ChunkId": 1211,
+                "Chunk": "탁월함은 오늘에 안주하지 않고 내일을 보는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 85,
+                "ChunkId": 1214,
+                "Chunk": "사람의 마음을 여는 가장 쉬운 방법",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 86,
+                "ChunkId": 1247,
+                "Chunk": "\"상대의 마음을 헤아리는 것\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 87,
+                "ChunkId": 1256,
+                "Chunk": "멀리 가고 싶으면 함께 가라",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 88,
+                "ChunkId": 1294,
+                "Chunk": "또한 인도네시아가 길이 복잡해서 교통체증이 흔하다는 점도 고려해야 했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 89,
+                "ChunkId": 1303,
+                "Chunk": "더 넓은 세계를 향한 도약",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 90,
+                "ChunkId": 1310,
+                "Chunk": "우리나라 검체검사 기술 발달을 촉진시키는 중요한 요인은 건강보험제도였다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 91,
+                "ChunkId": 1345,
+                "Chunk": "첫 번째는 진출하고픈 해외시장에 대한 정확한 분석이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 92,
+                "ChunkId": 1360,
+                "Chunk": "두 번째 성공 요인은 현지를 잘 아는 국내 파트너를 만난 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 93,
+                "ChunkId": 1373,
+                "Chunk": "세 번째 요인은 열정적인 직원들이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 94,
+                "ChunkId": 1403,
+                "Chunk": "해외에 진출을 모색 중인 기업들은 어떤 마음가짐으로 해당 국가 국민들에게 다가가야 하는지를 진지하게 생각해 볼 필요가 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 95,
+                "ChunkId": 1423,
+                "Chunk": "실패를 분석해서 기초 자료로 삼았기에 성공할 수 있었던것.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 96,
+                "ChunkId": 1438,
+                "Chunk": "가뜩이나 출산율이 감소된 상황에서 고위험 임신이 증가하므로, 산전기형아검사에 대한 관심이 높 아지고 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "걱정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 97,
+                "ChunkId": 1454,
+                "Chunk": "SCL은 기존에 시행되던 침습적 또는 일부 비침습적 검사들보다 훨 씬 더 정확도가 높은 검사를 최근 자체 개발하였다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "희망",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 98,
+                "ChunkId": 1463,
+                "Chunk": "SCL에서 개발한 NGS를 활용한 NIPT 검사법 은 검증 결과 민감도 특이도 모두 100%이고, 위양성률·위음성률 모두 0%이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "자신감",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 99,
+                "ChunkId": 1485,
+                "Chunk": "일하는 과정에서 어려움에 맞닥뜨리더라도 이를 재정비의 기회로 삼 고 다음을 준비해야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 100,
+                "ChunkId": 1487,
+                "Chunk": "실패 뒤의 성공을 발견해 내는 용기",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "희망",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 101,
+                "ChunkId": 1531,
+                "Chunk": "만약 창립자 노먼 라슨과 그의 직원들이 39번의 실패가 끝나고 좌절해 더 이상 시도하지 않았다면 WD-40은 탄생하지 못했을 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 102,
+                "ChunkId": 1549,
+                "Chunk": "우리가 실패를 드러내놓고 말해야 하는 이유는 이것이야말로 성공으로 나아가기 위해 반드시 거쳐야 할 관문이기 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 103,
+                "ChunkId": [
+                    1552,
+                    1553
+                ],
+                "Chunk": [
+                    "기업은 직원의 실패를 용인할 수 있어야 한다.",
+                    "실패를 낮춰 평가하 고 그에 대한 책임을 묻는다면 어느 누구도 창의적 아이디어에 도전 하려 하지 않을 것이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 104,
+                "ChunkId": 1559,
+                "Chunk": "\"실패는 우리가 어떻게 실 패에 대처하느냐에 따라 정의된다\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "80"
+            },
+            {
+                "ContextChunkId": 105,
+                "ChunkId": 1564,
+                "Chunk": "과학적 데이터에 대한 사명감",
+                "Genre": "학술",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 106,
+                "ChunkId": 1640,
+                "Chunk": "단지 눈으로 드러난 고통뿐 아니라 정신적 어려움, 경제적 피해까지 피해자들의 고통은 여전히 현재진행형이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "슬픔",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 107,
+                "ChunkId": 1645,
+                "Chunk": "아무리 좋은 기술이 있어도 그걸 올바르게 사용하지 못하면 무가치하다. 개발자 연구자는 자신이 하는 일이 세상에 꼭 필요한 빛이 될 수도, 불특정 다수를 해치는 흉기가 될 수도 있음을 알아야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 108,
+                "ChunkId": 1649,
+                "Chunk": "그 어떤 것도 인간의 생명보다 앞서서는 안 된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "슬픔",
+                "Accuracy": "95"
+            },
+            {
+                "ContextChunkId": 109,
+                "ChunkId": 1655,
+                "Chunk": "누가 무엇을 의뢰하든 과학적 데이터를 만들어 내겠다는 사명감이 있었기에 가능했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "무감정",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 110,
+                "ChunkId": 1663,
+                "Chunk": "윤리를 저버린 상품에 동조하는 이들은 순간 시장을 지배할 순 있어도, 종국 에는 스스로가 만든 악어에 잡아먹히고 말 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 111,
+                "ChunkId": [
+                    1667,
+                    1668
+                ],
+                "Chunk": [
+                    "위기를 탓하기보다 극복하기 위해 노력하라.",
+                    "그러면 다이아몬드처럼 빛나는 기회를 움켜쥐게 될 것이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 112,
+                "ChunkId": 1690,
+                "Chunk": "팀장은 지금 사정이 급박하니 예정보다 2주만이라도 더 일해 달라고 부탁했 는데, 고맙게도 그는 한 달 더 일하겠다고 화답해 주었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "중립적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 113,
+                "ChunkId": 1705,
+                "Chunk": "\"견디다 못해 그만둔 직원들 이 50% 가까이 되는 것 같다\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "슬픔",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 114,
+                "ChunkId": 1752,
+                "Chunk": "의료인들은 자기 몸을 기꺼이 내던졌고 의료기관들, 검 체검사기관들이 희생을 감수하면서 총력전을 펼쳤다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 115,
+                "ChunkId": 1762,
+                "Chunk": "팬데믹 초기 분자진단팀이 겪었던 여러 가지 어려움 중 하나는 ‘COVID-19’라는 바이러스에 대한 정보가 부족하다는 것이었다. COVID-19는 기존에 한 번도 경험해 보지 못한 새로운 유형의 바이러스였다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 116,
+                "ChunkId": [
+                    1795,
+                    1796,
+                    1797
+                ],
+                "Chunk": [
+                    "PCR 검사, 정확히 ‘역전사 중합효소 연쇄반응’",
+                    "RT-PCR",
+                    "을 실시하는 검사자들은 레벨D 방호복을 착용한다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 117,
+                "ChunkId": 1806,
+                "Chunk": "방호복 안에 수술복을 입는 이유도 땀 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 118,
+                "ChunkId": 1818,
+                "Chunk": "고통스러운 시간을 견디게 하는 힘",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 119,
+                "ChunkId": 1819,
+                "Chunk": "코로나가 확산되던 초기, 코비드-19 검체검사를 담당한 SCL 분자 진단팀 직원들은 집에 귀가하지 않았다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 120,
+                "ChunkId": 1821,
+                "Chunk": "신종 바이러스에 대한 실체 가 모두 파악되지 않았을 때였다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 121,
+                "ChunkId": 1864,
+                "Chunk": "코로나19 바이러스 감염 여부를 확인하는 검사는 유전자 핵산 검사이다. 전 세계적으로 유전자 중 어느 부위를 검출하느냐에 차이가 있다. 우리나라의 PCR 검사 때 확인하는 유전자는 E유전자, ORF1b 유전자의 RdRp 부위, N유전자로 총 세 개이다. 비인두와 구강인두에 면봉을 넣어 검체를 채취하고, 여기에서 RNA를 추출 및 증폭해서 이들 유전자를 확인한다. 알려진 것처럼 검사결과는 음성 아니면 양성확진이다. 양성으로 확진되었다가 완쾌되어 최종 음성으로 가기까지 사람마다 개인차가 크다. 누군가는 단번에 음성 판정을 받지만, 감염성은 없으나 바이러스가 몸 안에 남아 있어 양성으로 나오기도 한다. 이럴 때는 음성이 나올 때까지 계속 검사를 받아야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "불안",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 122,
+                "ChunkId": 1886,
+                "Chunk": "사명감이 대체 무엇이길래 고통스러운 일을 이겨 내게 하는 힘이 된다는 걸까.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 123,
+                "ChunkId": 1887,
+                "Chunk": "사명감은 ‘주어진 임무를 잘 수행하려는 마음가짐’을 말한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 124,
+                "ChunkId": 1917,
+                "Chunk": "거익태산",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 125,
+                "ChunkId": 1935,
+                "Chunk": "검사에 필요한 소모품 하나라도 부족하면 검사가 올 스톱된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 126,
+                "ChunkId": 1940,
+                "Chunk": "마스크 제조사마다 연락을 돌린 것은 물론 제품을 만드는 공장까지 수소문해서 물량 확보에 매달렸다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 127,
+                "ChunkId": 1963,
+                "Chunk": "2020년 3월 5일, 정부는 ‘마스크 5부제’라는 이름의 수급 안정화 대책을 발표했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "중립적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 128,
+                "ChunkId": 1973,
+                "Chunk": "서로에게 버팀목이 되어",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 129,
+                "ChunkId": 1994,
+                "Chunk": "최전선에서 코로나와 싸우는 전문가들이지만 인간적인 두려움은 어쩔 수 없었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 130,
+                "ChunkId": 2007,
+                "Chunk": "\"개미가 절구통을 물어 간다\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 131,
+                "ChunkId": 2014,
+                "Chunk": "감염병에 대한 준비된 대처 능력",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 132,
+                "ChunkId": 2019,
+                "Chunk": "\"검사,추적,격리치료의 ‘3T 전략’으로 알려졌다\"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 133,
+                "ChunkId": 2023,
+                "Chunk": "민관이 협력하여 2주 만에 전국 단위 검사 체계를 만들고 확진자들을 빠르게 격리한 점을 높게 샀다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 134,
+                "ChunkId": [
+                    2072,
+                    2073
+                ],
+                "Chunk": [
+                    "위기 극복은 어느 날 갑자기 할 수 있는 게 아니다.",
+                    "평소에 기초체질을 튼튼히 하고 미래에 닥쳐 올 위기를 예상해 대비책을 차근차근 준비해 두어야 가능하다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 135,
+                "ChunkId": 2079,
+                "Chunk": "자기 조직이 만날 수 있는 돌발 변수 등 생존을 위협하는 모든 경우의 수를 사전에 식별하여 대응책을 만들어야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 136,
+                "ChunkId": 2112,
+                "Chunk": "그것은 SCL이 검사의 질 향상을 위해 오랫동안 꾸준히 투자해 왔기 때문일 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 137,
+                "ChunkId": 2115,
+                "Chunk": "SCL은 세계적 권위를 가진 CAP 인증과 까다롭기로 정평이 난 진단검사의학회의 우수검사 실신임인증을 20여 년간 계속 획득했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 138,
+                "ChunkId": 2133,
+                "Chunk": "우리 정부에 코로나19 검체검사와 관련된 핀란드 메이라이넨 병원 의 의뢰가 있다는 사실을 보고했다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 139,
+                "ChunkId": 2141,
+                "Chunk": "전용기 비용, 검 사 비용이 만만찮지만 핀란드는 비용보다 검사의 신뢰성을 중요하게 보고 해외 검사기관을 선택했다고 볼 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 140,
+                "ChunkId": 2145,
+                "Chunk": "과정은 신속하게, 결과는 정확하게",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "중립적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 141,
+                "ChunkId": 2169,
+                "Chunk": "고객은 자기가 원하는 바에 신속하게 반응 하고 정확하게 해결해 주는 기업에 호감을 갖는다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 142,
+                "ChunkId": 2172,
+                "Chunk": "신속하고 정확한 서비스로 고객의 사랑을 받는 회사들이 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 143,
+                "ChunkId": 2183,
+                "Chunk": "기업이 신속, 정확하게 고객의 니즈를 충족시키면 충성고객을 확보하여 높은 매출로 보답받게 된다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 144,
+                "ChunkId": 2187,
+                "Chunk": "숱한 고통과 어려움을 이겨 내야 오롯이 빛날 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 145,
+                "ChunkId": 2225,
+                "Chunk": "\"어쩔 수 없이 고통 분담이 필요하다면 경영진이 먼저 솔선수범해야죠. 그리고 회사 사정을 최대한 직원들에게 정확히 알리는 게 필요 하다고 생각해요. 그냥 통보가 아니라 정보 공개를 바탕으로 양해를 요청하는 거죠. 그래야 직원들도 어떻게 하는 게 좋을지 올바른 판단을 내릴 수 있지 않을까요. \"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 146,
+                "ChunkId": 2226,
+                "Chunk": "인사부 부서장은 위기 극복의 요건으로 경영진의 솔선수범, 투명한 정보 공개와 아울러 적절한 보상을 꼽았다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 147,
+                "ChunkId": 2235,
+                "Chunk": "노와 사가 함께 두 손을 맞잡는 한 어떤 위기든 넘어가지 못할 건 없다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 148,
+                "ChunkId": 2261,
+                "Chunk": "서로가 서로를 지지하고 아껴 주는 동료 애를 보면 진정한 의미의 가족 같은 회사라 할 만하다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 149,
+                "ChunkId": 2269,
+                "Chunk": "SCL 직원들이 말하는 가족 같은 회사의 비결은 경영진의 선제적인 배려이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 150,
+                "ChunkId": 2291,
+                "Chunk": "도요타 노사는 일련의 과정을 거치면서 상호신뢰, 상호책임의 관계를 원칙으로 지켜 나가고 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 151,
+                "ChunkId": 2301,
+                "Chunk": "회사의 위기 를 돌파하기 위해선 경쟁력 제고가 불가피하다는 걸 노조가 동의했기에 가능한 합의였다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "피곤",
+                "Accuracy": "82"
+            },
+            {
+                "ContextChunkId": 152,
+                "ChunkId": 2318,
+                "Chunk": "노사가 똘똘 뭉쳐 노력하는 모 습을 본 고객들은 감동해 재이용하게 되었고 회사 매출이 상승하게 되었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 153,
+                "ChunkId": 2351,
+                "Chunk": "그래서 노 사 모두 관계의 원칙을 평소에 정해 둘 필요가 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "중립적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 154,
+                "ChunkId": 2356,
+                "Chunk": "‘노’는 ‘사’를, ‘사’는 ‘노’를 배려하는 게 필요하다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "89"
+            },
+            {
+                "ContextChunkId": 155,
+                "ChunkId": 2363,
+                "Chunk": "여기에 직원들이 자유롭게 자기 생각을 밝힐 수 있는 창구를 만든다면 금상첨화다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 156,
+                "ChunkId": 2388,
+                "Chunk": "직원들이 호평하는 회사를 좋은 회사로 인정할 수 있는 이유도 이 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 157,
+                "ChunkId": 2389,
+                "Chunk": "고객만족경영을 논할 때 직원들을 일컬어 내부고객이라고 한다. 기업은 직원들을 단지 노무를 제공하는 이 아닌, ‘일차적으로 만족시켜야 할 고객’으로 봐야 한다는 취지에서 이렇게 부르게 되었다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 158,
+                "ChunkId": 2390,
+                "Chunk": "SCL은 10년 이상 일하는 장기근속자가 많은 회사이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "중립적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 159,
+                "ChunkId": 2417,
+                "Chunk": "동호회 활동은 서로 다른 부서와 직급의 임직원들이 서로를 이해하고 화합하는 계기가 되어 부서 간의 소통과 직장생활에 큰 도움이 되고있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 160,
+                "ChunkId": [
+                    2426,
+                    2427,
+                    2428
+                ],
+                "Chunk": [
+                    "헬스케어그룹이라는 특징에 가장 부합하는 복지제도는 임직원 가족들에게까지",
+                    "당사자 및 가족 6명까지",
+                    "연 1회 건강검진과 독감 예방접종을 지원해 준다는 것이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 161,
+                "ChunkId": [
+                    2441,
+                    2442
+                ],
+                "Chunk": [
+                    "일하기 좋은 직장을 만들면 직원들이 열심히 일할 수 있다.",
+                    "또한 훌륭한 인재들이 모여들고 이직률을 줄일 수 있다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 162,
+                "ChunkId": 2448,
+                "Chunk": "세계적인 숙박중개기업 에어비앤비는 직원들이 원하는 장소에서 일하는 것을 허용한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "즐거움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 163,
+                "ChunkId": 2484,
+                "Chunk": "직원들이 원하는 만큼 휴가를 쓸 수 있는 무제 한 유급휴가, 건강증진을 위한 웰니스 프로그램도 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 164,
+                "ChunkId": 2495,
+                "Chunk": "복지제도는 직원들의 근무의욕을 고취시키고 기업 생산성을 향상시키는 좋은 수단이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "중립적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 165,
+                "ChunkId": 2502,
+                "Chunk": "한 사람 한 사람이 중요하다",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 166,
+                "ChunkId": 2517,
+                "Chunk": "그런데 SCL은 실수 를 저지른 직원에게 문책하기보다는 실수를 만회할 수 있는 기회를 주려고 노력하고 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 167,
+                "ChunkId": 2525,
+                "Chunk": "목표를 정하고 관리하지만, 반드시 달성해야 한다고 무조건 압박하기보다 각 구성원들이 자신이 맡은 직무에서 최대한의 역량을 낼 수 있도록 해주는 것이 더 중요한 가치라고 여기는 회사인 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 168,
+                "ChunkId": 2529,
+                "Chunk": "성과보다 사람이 더 중요하기 때문이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "장년",
+                "Personality": "중립적",
+                "Emotion": "행복",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 169,
+                "ChunkId": 2545,
+                "Chunk": "SCL은 전문가들 이 자기 역할과 소명을 잘 이해하고 직무능력을 키울 수 있도록 SCL 아카데미를 오픈하여 교육을 실시하고 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 170,
+                "ChunkId": [
+                    2546,
+                    2547
+                ],
+                "Chunk": [
+                    "SCL 아카데미는 2020년 3월 처음 만들어졌다.",
+                    "검체검사기관들 중 에서 직원들 대상으로 온라인교육센터를 설립한 것은 SCL이 최초이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 171,
+                "ChunkId": 2576,
+                "Chunk": "\"목소리를 높여서 질책한다고 팀원이 일을 잘할 수 있게 되는 건 아니죠. 그런 강압적 방법이 아니라 팀원들이 스스로 최선을 다할 수 있게끔 리드할 줄 아는 사람이 진짜 리더라고 생각해요. \"",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 172,
+                "ChunkId": 2577,
+                "Chunk": "SCL은 협업을 중시하는 만큼 한 명의 특출난 천재보다 평범한 다수의 힘을 더 믿는다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 173,
+                "ChunkId": 2580,
+                "Chunk": "자기 팀의 특징과 팀원들의 개성에 맞게 꾸려 갈 수 있도록 자율성을 주는 것이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "87"
+            },
+            {
+                "ContextChunkId": 174,
+                "ChunkId": 2596,
+                "Chunk": "재능과 능력보다 성품과 소양을 중요시하는 기업 인재상의 변화는 근래에 계속되는 추세이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "피곤",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 175,
+                "ChunkId": 2625,
+                "Chunk": "조직에서 각광 받고 싶다면 무엇보다 인격과 소양을 갖추도록 노력하자 성실하고 책임감 있게 맡은 바 임무를 완수하고 팀원들과 원활하게 소통하는 능력이야말로 오늘날 핵심인재의 최고 덕목이라는 사실을 잊지 말아야 한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 176,
+                "ChunkId": 2638,
+                "Chunk": "희귀질환자들은 병을 치료해 줄 전문가와 치료법 치료제 등이 부족 해 어려움을 겪고 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "무감정",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 177,
+                "ChunkId": 2657,
+                "Chunk": "고통 속에 홀로 신음하는 이가 없도록",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "슬픔",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 178,
+                "ChunkId": 2658,
+                "Chunk": "SCL은 의료기관이자 글로벌 헬스케어 기업으로서 사회적 책임을 다하기 위해 사회공헌활동에 주력해 왔다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 179,
+                "ChunkId": 2666,
+                "Chunk": "이 외에도 대한적십자사 경기도지사와 코로나19 전담 의료진을 위한 구호물품을 지원하였고, 성남시 및 안양시 청소년재단에 코로나19 자가진단키트를 기부하였으며, ‘2022 인천 SK텔레콤 그랑프리대회’에 참가한 선 수단과 관계자를 대상으로 코로나19 검사 등 방역을 지원한 바 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "외향적",
+                "Emotion": "피곤",
+                "Accuracy": "80"
+            },
+            {
+                "ContextChunkId": 180,
+                "ChunkId": 2694,
+                "Chunk": "SCL이 사회공헌활동을 꾸준히 펼쳐 온 이유는, 어떤 사람도 고통 속에서 홀로 신음하게 두고 싶지 않다는 마음의 발로이다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 181,
+                "ChunkId": 2703,
+                "Chunk": "장애인 고용 비중을 확대해 나간 것",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 182,
+                "ChunkId": [
+                    2751,
+                    2753,
+                    2754,
+                    2755
+                ],
+                "Chunk": [
+                    "기업의 사회적 책임",
+                    "이란 기업의 이해관 계자들",
+                    "근로자, 소비자, 지역사회, 시민단체, 정부 등",
+                    "이 기업에게 기대 및 요구하는 사회적 의무들을 기업이 자발적으로 수행하는 활동을 말한다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "90"
+            },
+            {
+                "ContextChunkId": 183,
+                "ChunkId": 2777,
+                "Chunk": "기업은 근로 자, 소비자, 지역사회, 시민단체, 정부 등 많은 이해관계자들에게 영향 을 미치는 만큼 사회적 책임을 망각했을 때 예상을 뛰어넘는 불행한 일들이 벌어질 수 있다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "두려움",
+                "Accuracy": "85"
+            },
+            {
+                "ContextChunkId": 184,
+                "ChunkId": 2778,
+                "Chunk": "글로벌 스포츠 브랜드 나이키는 1990년대 무렵 제3세계 아동들 의 노동을 착취했다는 비난에 휩싸였다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "외향적",
+                "Emotion": "슬픔",
+                "Accuracy": "88"
+            },
+            {
+                "ContextChunkId": 185,
+                "ChunkId": 2794,
+                "Chunk": "앞서 소개한 것처럼 파타고니아는 미국 친환경 아웃도어 브랜드로 등산, 산악 자전거, 서핑, 스키, 플라이낚시 등과 관련된 장비와 의류를 생산·판 매한다.",
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "청년",
+                "Personality": "내향적",
+                "Emotion": "행복",
+                "Accuracy": "92"
+            },
+            {
+                "ContextChunkId": 186,
+                "ChunkId": [
+                    2826,
+                    2827
+                ],
+                "Chunk": [
+                    "앞으로도 SCL은 사회공헌활동에 박차를 가할 생각이다.",
+                    "기업이 사 회적으로 책임을 다한다는 것은 단지 이익에만 목을 매지 않겠다는 뜻이다."
+                ],
+                "Genre": "비문학",
+                "Gender": "중성",
+                "Age": "중년",
+                "Personality": "내향적",
+                "Emotion": "평온",
+                "Accuracy": "92"
+            }
+        ]
+    },
+    {
+        "CheckedContextTags": [
+            {
+                "ContextId": 0,
+                "ContextTag": "Narrator",
+                "ContextList": [
+                    "None"
+                ],
+                "Context": "None"
+            },
+            {
+                "ContextId": 0,
+                "ContextTag": "MainChracter",
+                "ContextList": [
+                    "None"
+                ],
+                "Context": "None"
+            },
+            {
+                "ContextId": 0,
+                "ContextTag": "Chracter",
+                "ContextList": [
+                    "None"
+                ],
+                "Context": "None"
+            }
+        ]
+    }
+]

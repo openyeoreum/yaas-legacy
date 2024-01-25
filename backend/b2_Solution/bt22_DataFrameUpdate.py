@@ -170,7 +170,6 @@ if __name__ == "__main__":
     
     for projectName in projectNameList:
         DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
-        print(DataFramePath)
         RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
         messagesReview = "on"
         

@@ -1,0 +1,4161 @@
+[
+    {
+        "UserId": "5cb732602618b3753be48cbd41ac60fbcaad9479e1481570826b57d438d0caac",
+        "ProjectsStorageID": 1,
+        "ProjectId": 8,
+        "ProjectName": "살아서천국극락낙원에가는방법",
+        "Content": "Body",
+        "Language": "Ko",
+        "TaskName": "SFXMatching",
+        "IndexCount": 145,
+        "Completion": "Yes",
+        "BodyCount": 0
+    },
+    {
+        "SoundSplitedIndexs": [
+            {
+                "IndexId": 0,
+                "Sounds": [
+                    {
+                        "ChunkId": "None",
+                        "TransitionSound": "None",
+                        "TransitionSoundPrompt": "None",
+                        "TransitionSoundImportance": "None",
+                        "BackgroundSound": "None",
+                        "BackgroundSoundPrompt": "None",
+                        "BackgroundSoundImportance": "None",
+                        "Type": "None",
+                        "Environment": "Environment",
+                        "Situation": "Situation",
+                        "Era": "Era",
+                        "Culture": "Culture"
+                    }
+                ]
+            },
+            {
+                "IndexId": 1,
+                "Sounds": []
+            },
+            {
+                "IndexId": 2,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            5
+                        ],
+                        "TransitionSound": "무한대 우주허공 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Infinite Cosmic Void Transition",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "우주허공 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Cosmic Void Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "하늘",
+                        "Situation": "명상",
+                        "Era": "미래",
+                        "Culture": "자연"
+                    },
+                    {
+                        "ChunkId": [
+                            6,
+                            7
+                        ],
+                        "TransitionSound": "진리나라 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Truth Kingdom Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "진리나라 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Truth Kingdom Ambience",
+                        "BackgroundSoundImportance": 88,
+                        "Type": "문화",
+                        "Environment": "도시",
+                        "Situation": "교육",
+                        "Era": "현대",
+                        "Culture": "농경"
+                    },
+                    {
+                        "ChunkId": [
+                            9,
+                            10,
+                            11
+                        ],
+                        "TransitionSound": "세계평화 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Global Peace Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "세계평화 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Global Peace Ambience",
+                        "BackgroundSoundImportance": 92,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "국제회의",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    }
+                ]
+            },
+            {
+                "IndexId": 3,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            14,
+                            15,
+                            16,
+                            17
+                        ],
+                        "TransitionSound": "조용한 사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Quiet Contemplation Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "조용한 도서관 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Library",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    },
+                    {
+                        "ChunkId": [
+                            18,
+                            19,
+                            20,
+                            21
+                        ],
+                        "TransitionSound": "과학기술 발전의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Technological Advancement Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "현대 도시의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Modern Urban Environment",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "이동",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    },
+                    {
+                        "ChunkId": [
+                            22
+                        ],
+                        "TransitionSound": "긴급 상황의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Emergency Transition",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "병원 응급실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Hospital Emergency Room",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "노동",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    },
+                    {
+                        "ChunkId": [
+                            23,
+                            24,
+                            25,
+                            26,
+                            27,
+                            28
+                        ],
+                        "TransitionSound": "평화로운 세상의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Peaceful World Transition",
+                        "TransitionSoundImportance": 70,
+                        "BackgroundSound": "자연과 함께하는 평화로운 마을 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Peaceful Village with Nature",
+                        "BackgroundSoundImportance": 88,
+                        "Type": "환경",
+                        "Environment": "시골",
+                        "Situation": "놀이",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 4,
+                "Sounds": []
+            },
+            {
+                "IndexId": 5,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            32,
+                            33,
+                            34,
+                            35,
+                            36,
+                            37,
+                            38
+                        ],
+                        "TransitionSound": "진리 탐구 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Enlightenment Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "평화로운 사색의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Peaceful Contemplation",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "먼과거",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 6,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            40,
+                            41,
+                            42,
+                            43,
+                            44,
+                            45
+                        ],
+                        "TransitionSound": "천상의 하프소리",
+                        "TransitionSoundPrompt": "The Sound of Celestial Harp",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "천국의 평화로운 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Heavenly Peace",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "문화",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    },
+                    {
+                        "ChunkId": [
+                            46,
+                            47,
+                            48,
+                            49,
+                            50,
+                            51,
+                            52,
+                            53
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "명상실의 조용한 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Quiet Meditation Room",
+                        "BackgroundSoundImportance": 88,
+                        "Type": "문화",
+                        "Environment": "사막",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    },
+                    {
+                        "ChunkId": [
+                            54,
+                            55,
+                            56,
+                            57
+                        ],
+                        "TransitionSound": "우주의 에코소리",
+                        "TransitionSoundPrompt": "The Sound of Cosmic Echo",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "우주적 공명의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Universal Resonance",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "하늘",
+                        "Situation": "명상",
+                        "Era": "미래",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 7,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            59,
+                            60,
+                            61,
+                            62,
+                            63,
+                            64,
+                            65,
+                            66
+                        ],
+                        "TransitionSound": "진리의 나라 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Transition to the Realm of Truth",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "천국적 환희의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Heavenly Bliss",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "문화",
+                        "Environment": "산",
+                        "Situation": "사색",
+                        "Era": "먼과거",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 8,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            68,
+                            69,
+                            70,
+                            71,
+                            72,
+                            73,
+                            74,
+                            75
+                        ],
+                        "TransitionSound": "명상 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "사막",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 9,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            77,
+                            78,
+                            79,
+                            80,
+                            81,
+                            82,
+                            83
+                        ],
+                        "TransitionSound": "천상의 화음 소리",
+                        "TransitionSoundPrompt": "The Sound of Celestial Harmony",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "천국의 평화로운 소리",
+                        "BackgroundSoundPrompt": "The Sound of Heavenly Peace",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "하늘",
+                        "Situation": "명상",
+                        "Era": "먼과거",
+                        "Culture": "자연"
+                    },
+                    {
+                        "ChunkId": [
+                            84
+                        ],
+                        "TransitionSound": "고산의 바람 소리",
+                        "TransitionSoundPrompt": "The Sound of High Mountain Wind",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "산봉우리의 자연 소리",
+                        "BackgroundSoundPrompt": "The Sound of Mountain Peak Nature",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "탐험",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 10,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            86,
+                            87,
+                            88,
+                            89
+                        ],
+                        "TransitionSound": "평화로운 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Peaceful Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "평화로운 대화소리",
+                        "BackgroundSoundPrompt": "The Sound of Peaceful Dialogue",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 11,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            91,
+                            92,
+                            93,
+                            94
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "조용한 사찰의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Temple",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 12,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            96,
+                            97
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "사원의 평화로운 분위기 소리",
+                        "BackgroundSoundPrompt": "The Sound of Serene Temple Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "사원",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 13,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            99,
+                            100,
+                            101,
+                            102,
+                            103
+                        ],
+                        "TransitionSound": "조용한 사색의 소리",
+                        "TransitionSoundPrompt": "The Sound of Quiet Contemplation",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "조용한 방의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 14,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            105,
+                            106,
+                            107,
+                            108,
+                            109,
+                            110,
+                            111,
+                            112,
+                            113
+                        ],
+                        "TransitionSound": "사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Contemplation Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "고요한 사색의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Serene Contemplation",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "",
+                        "Situation": "사색",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 15,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            115,
+                            116,
+                            117,
+                            118,
+                            119,
+                            120,
+                            121
+                        ],
+                        "TransitionSound": "천상의 하프소리",
+                        "TransitionSoundPrompt": "The Sound of Heavenly Harp",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "천국의 새소리와 바람소리",
+                        "BackgroundSoundPrompt": "The Sound of Birds and Wind in Heaven",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "하늘",
+                        "Situation": "수업",
+                        "Era": "먼과거",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 16,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            123,
+                            124,
+                            125,
+                            126,
+                            127
+                        ],
+                        "TransitionSound": "학교종 소리",
+                        "TransitionSoundPrompt": "The Sound of School Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "교실 분위기 소리",
+                        "BackgroundSoundPrompt": "The Sound of Classroom Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    },
+                    {
+                        "ChunkId": [
+                            128,
+                            129,
+                            130,
+                            131,
+                            132,
+                            133,
+                            134
+                        ],
+                        "TransitionSound": "평화로운 도시 소리",
+                        "TransitionSoundPrompt": "The Sound of Peaceful City",
+                        "TransitionSoundImportance": 70,
+                        "BackgroundSound": "도시 생활 소리",
+                        "BackgroundSoundPrompt": "The Sound of Urban Life",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "이동",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 17,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            136,
+                            137,
+                            138,
+                            139,
+                            140
+                        ],
+                        "TransitionSound": "생각의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Thought Transition",
+                        "TransitionSoundImportance": 65,
+                        "BackgroundSound": "내면의 목소리소리",
+                        "BackgroundSoundPrompt": "The Sound of Inner Voice",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 18,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            142,
+                            143,
+                            144,
+                            145
+                        ],
+                        "TransitionSound": "내면의 소리",
+                        "TransitionSoundPrompt": "The Sound of Inner Voice",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "조용한 방 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Room",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "사무",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    }
+                ]
+            },
+            {
+                "IndexId": 19,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            147,
+                            148,
+                            149,
+                            150,
+                            151,
+                            152
+                        ],
+                        "TransitionSound": "고대 서사시 낭독소리",
+                        "TransitionSoundPrompt": "The Sound of Ancient Epic Recitation",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "고대 서사시 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Ancient Epic Background",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "시대",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "먼과거",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 20,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            154,
+                            155,
+                            156,
+                            157,
+                            158,
+                            159,
+                            160,
+                            161,
+                            162,
+                            163,
+                            164,
+                            165,
+                            166,
+                            167,
+                            168
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "명상실의 평화로운 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Peaceful Meditation Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "사막",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 21,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            170,
+                            171,
+                            172,
+                            173
+                        ],
+                        "TransitionSound": "고대 종교의식 소리",
+                        "TransitionSoundPrompt": "The Sound of Ancient Religious Ritual",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "고대 사원 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Ancient Temple Ambience",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "시대",
+                        "Environment": "사원",
+                        "Situation": "종교의식",
+                        "Era": "먼과거",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 22,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            175,
+                            176,
+                            177
+                        ],
+                        "TransitionSound": "학교종소리",
+                        "TransitionSoundPrompt": "The Sound of a School Bell",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "교실소음소리",
+                        "BackgroundSoundPrompt": "The Sound of Classroom Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    },
+                    {
+                        "ChunkId": [
+                            178,
+                            179
+                        ],
+                        "TransitionSound": "건설현장소리",
+                        "TransitionSoundPrompt": "The Sound of Construction Site",
+                        "TransitionSoundImportance": 70,
+                        "BackgroundSound": "사무실소음소리",
+                        "BackgroundSoundPrompt": "The Sound of Office Ambience",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "사무",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    },
+                    {
+                        "ChunkId": [
+                            180,
+                            181,
+                            182
+                        ],
+                        "TransitionSound": "사찰종소리",
+                        "TransitionSoundPrompt": "The Sound of a Temple Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "사찰환경소리",
+                        "BackgroundSoundPrompt": "The Sound of Temple Ambience",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "문화",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    },
+                    {
+                        "ChunkId": [
+                            183,
+                            184,
+                            185,
+                            186
+                        ],
+                        "TransitionSound": "고요한침묵소리",
+                        "TransitionSoundPrompt": "The Sound of Silence",
+                        "TransitionSoundImportance": 60,
+                        "BackgroundSound": "산사의평화로움소리",
+                        "BackgroundSoundPrompt": "The Sound of Serene Monastery",
+                        "BackgroundSoundImportance": 70,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    },
+                    {
+                        "ChunkId": [
+                            187
+                        ],
+                        "TransitionSound": "산악풍경전환소리",
+                        "TransitionSoundPrompt": "The Sound of Mountain Scenery Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "산악풍경소리",
+                        "BackgroundSoundPrompt": "The Sound of Mountain Landscape",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "이동",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 23,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            189,
+                            190,
+                            191,
+                            192,
+                            193,
+                            194
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "명상실의 평화로운 소리",
+                        "BackgroundSoundPrompt": "The Sound of Peace in a Meditation Room",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 24,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            196,
+                            197,
+                            198,
+                            199,
+                            200,
+                            201
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "사찰의 평화로운 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Serene Temple",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "사찰",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 25,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            203,
+                            204,
+                            205,
+                            206,
+                            207,
+                            208,
+                            209,
+                            210,
+                            211,
+                            212,
+                            213,
+                            214
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "히말라야의 평화로운 자연소리",
+                        "BackgroundSoundPrompt": "The Sound of Peaceful Himalayan Nature",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 26,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            216,
+                            217,
+                            218,
+                            219,
+                            220
+                        ],
+                        "TransitionSound": "학교종 소리",
+                        "TransitionSoundPrompt": "The Sound of School Bell",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "학교 분위기 소리",
+                        "BackgroundSoundPrompt": "The Sound of School Ambiance",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    },
+                    {
+                        "ChunkId": [
+                            221,
+                            222,
+                            223,
+                            224
+                        ],
+                        "TransitionSound": "헛된 꿈 각성 소리",
+                        "TransitionSoundPrompt": "The Sound of Awakening from Vain Dreams",
+                        "TransitionSoundImportance": 70,
+                        "BackgroundSound": "조용한 명상의 공간 소리",
+                        "BackgroundSoundPrompt": "The Sound of Quiet Meditation Space",
+                        "BackgroundSoundImportance": 75,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "노동",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 27,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            226,
+                            227,
+                            228,
+                            229,
+                            230,
+                            231,
+                            232,
+                            233,
+                            234,
+                            235,
+                            236,
+                            237,
+                            238,
+                            239,
+                            240,
+                            241
+                        ],
+                        "TransitionSound": "종교의식 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Religious Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "종교의식 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Religious Ceremony",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "문화",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양, 동양, 중동"
+                    }
+                ]
+            },
+            {
+                "IndexId": 28,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            243,
+                            244,
+                            245,
+                            246,
+                            247,
+                            248,
+                            249,
+                            250,
+                            251,
+                            252,
+                            253,
+                            254,
+                            255,
+                            256,
+                            257,
+                            258,
+                            259,
+                            260,
+                            261,
+                            262,
+                            263,
+                            264,
+                            265,
+                            266,
+                            267
+                        ],
+                        "TransitionSound": "사유의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Thought Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambiance",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "사유",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 29,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            269,
+                            270,
+                            271
+                        ],
+                        "TransitionSound": "깨달음의 순간 소리",
+                        "TransitionSoundPrompt": "The Sound of Enlightenment Moment",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "조용한 명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 30,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            273,
+                            274,
+                            275,
+                            276,
+                            277,
+                            278,
+                            279,
+                            280,
+                            281
+                        ],
+                        "TransitionSound": "시대전환소리",
+                        "TransitionSoundPrompt": "The Sound of Era Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "고대시장소리",
+                        "BackgroundSoundPrompt": "The Sound of Ancient Marketplace",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "시대",
+                        "Environment": "시골",
+                        "Situation": "노동",
+                        "Era": "먼과거",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 31,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            283,
+                            284,
+                            285,
+                            286,
+                            287
+                        ],
+                        "TransitionSound": "종교적인 서사 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Religious Narrative Transition",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "종교적 서사 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Religious Narrative Ambience",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "문화",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "미래",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 32,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            289,
+                            290,
+                            291,
+                            292,
+                            293,
+                            294,
+                            295,
+                            296,
+                            297
+                        ],
+                        "TransitionSound": "종교적 강연 시작 소리",
+                        "TransitionSoundPrompt": "The Sound of Religious Lecture Beginning",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "종교적 강연 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Religious Sermon Ambiance",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 33,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            299,
+                            300,
+                            301,
+                            302,
+                            303,
+                            304,
+                            305,
+                            306,
+                            307,
+                            308,
+                            309,
+                            310,
+                            311,
+                            312,
+                            313,
+                            314,
+                            315,
+                            316,
+                            317,
+                            318,
+                            319,
+                            320,
+                            321,
+                            322,
+                            323,
+                            324,
+                            325,
+                            326,
+                            327,
+                            328
+                        ],
+                        "TransitionSound": "종교적 명상소리",
+                        "TransitionSoundPrompt": "The Sound of Religious Meditation",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "사원과 교회의 조용한 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Temple and Church",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "문화",
+                        "Environment": "사원, 교회",
+                        "Situation": "명상, 기도",
+                        "Era": "현대",
+                        "Culture": "서양, 동양, 중동"
+                    }
+                ]
+            },
+            {
+                "IndexId": 34,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            330,
+                            331,
+                            332,
+                            333,
+                            334,
+                            335,
+                            336,
+                            337
+                        ],
+                        "TransitionSound": "종교의식 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Religious Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "종교의식 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Religious Ceremony",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "문화",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양, 동양, 중동"
+                    },
+                    {
+                        "ChunkId": [
+                            339
+                        ],
+                        "TransitionSound": "자연환경 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Nature Transition",
+                        "TransitionSoundImportance": 70,
+                        "BackgroundSound": "산의 자연환경 소리",
+                        "BackgroundSoundPrompt": "The Sound of Mountain Nature",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "놀이",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 35,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            341,
+                            342,
+                            343,
+                            344
+                        ],
+                        "TransitionSound": "종교적 집회소리",
+                        "TransitionSoundPrompt": "The Sound of Religious Gathering",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "기도하는 사람들의 소리",
+                        "BackgroundSoundPrompt": "The Sound of Praying People",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "문화",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양, 동양, 중동"
+                    }
+                ]
+            },
+            {
+                "IndexId": 36,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            346,
+                            347,
+                            348,
+                            349,
+                            350,
+                            351,
+                            352,
+                            353,
+                            354
+                        ],
+                        "TransitionSound": "우주적 공명소리",
+                        "TransitionSoundPrompt": "The Sound of Cosmic Resonance",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "우주 허공 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Cosmic Emptiness",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "우주",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 37,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            356,
+                            357,
+                            358,
+                            359,
+                            360,
+                            361,
+                            362,
+                            363,
+                            364,
+                            365,
+                            366,
+                            367,
+                            368,
+                            369,
+                            370,
+                            371,
+                            372,
+                            373
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "조용한 사원의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Temple",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "사원",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 38,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            375,
+                            376,
+                            377,
+                            378,
+                            379,
+                            380
+                        ],
+                        "TransitionSound": "고대 종교 의식 소리",
+                        "TransitionSoundPrompt": "The Sound of Ancient Ritual",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "고대 사원 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Ancient Temple Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "시대",
+                        "Environment": "산",
+                        "Situation": "종교의식",
+                        "Era": "먼 과거",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 39,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            382,
+                            383,
+                            384,
+                            385,
+                            386
+                        ],
+                        "TransitionSound": "깊은 사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Deep Contemplation Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "조용한 도서관 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Library Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    }
+                ]
+            },
+            {
+                "IndexId": 40,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            388,
+                            389,
+                            390,
+                            391,
+                            392,
+                            393,
+                            394,
+                            395
+                        ],
+                        "TransitionSound": "우주창조의 소리",
+                        "TransitionSoundPrompt": "The Sound of Cosmic Creation",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "우주 허공의 소리",
+                        "BackgroundSoundPrompt": "The Sound of Cosmic Void",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "하늘",
+                        "Situation": "창조",
+                        "Era": "먼과거",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 41,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            397,
+                            398,
+                            399,
+                            400,
+                            401,
+                            402
+                        ],
+                        "TransitionSound": "생각의 끝 소리",
+                        "TransitionSoundPrompt": "The Sound of Contemplation Ending",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "조용한 명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 42,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            404,
+                            405,
+                            406,
+                            407
+                        ],
+                        "TransitionSound": "성당 종소리",
+                        "TransitionSoundPrompt": "The Sound of Church Bells",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "성가대 노래소리",
+                        "BackgroundSoundPrompt": "The Sound of a Choir Singing",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "문화",
+                        "Environment": "성당",
+                        "Situation": "예배",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 43,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            409,
+                            410,
+                            411,
+                            412,
+                            413
+                        ],
+                        "TransitionSound": "종교의식 시작 소리",
+                        "TransitionSoundPrompt": "The Sound of Religious Ceremony Beginning",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "종교의식 배경 소리",
+                        "BackgroundSoundPrompt": "The Sound of Religious Ceremony Ambiance",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "문화",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 44,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            415,
+                            416,
+                            417,
+                            418,
+                            419
+                        ],
+                        "TransitionSound": "시대전환소리",
+                        "TransitionSoundPrompt": "The Sound of Era Transition",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "영적각성소리",
+                        "BackgroundSoundPrompt": "The Sound of Spiritual Awakening",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "시대",
+                        "Environment": "도시",
+                        "Situation": "정신개벽",
+                        "Era": "미래",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 45,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            421,
+                            422,
+                            423,
+                            424,
+                            425,
+                            426,
+                            427,
+                            428
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "명상실의 평온함",
+                        "BackgroundSoundPrompt": "The Sound of Serene Meditation Room",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 46,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            430,
+                            431,
+                            432,
+                            433,
+                            434,
+                            435,
+                            436,
+                            437,
+                            438,
+                            439
+                        ],
+                        "TransitionSound": "사색의 순간 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Contemplative Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "조용한 도서관 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Library",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 47,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            441,
+                            442,
+                            443,
+                            444,
+                            445,
+                            446
+                        ],
+                        "TransitionSound": "종교경전 넘기는 소리",
+                        "TransitionSoundPrompt": "The Sound of Flipping Religious Scriptures",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "종교의식 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Religious Ceremony Ambience",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "문화",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양, 동양, 중동"
+                    }
+                ]
+            },
+            {
+                "IndexId": 48,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            448,
+                            449,
+                            450,
+                            451,
+                            452,
+                            453,
+                            454,
+                            455,
+                            456,
+                            457,
+                            458,
+                            459,
+                            460,
+                            461,
+                            462,
+                            463,
+                            464,
+                            465
+                        ],
+                        "TransitionSound": "영적 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Spiritual Transition",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambience",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "사원/교회/모스크",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 49,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            467,
+                            468,
+                            469,
+                            470
+                        ],
+                        "TransitionSound": "시대전환소리",
+                        "TransitionSoundPrompt": "The Sound of Era Transition",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "우주완성소리",
+                        "BackgroundSoundPrompt": "The Sound of Cosmic Completion",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "시대",
+                        "Environment": "우주",
+                        "Situation": "변화",
+                        "Era": "미래",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 50,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            472,
+                            473,
+                            474,
+                            475,
+                            476,
+                            477,
+                            478,
+                            479,
+                            480,
+                            481
+                        ],
+                        "TransitionSound": "종교적식전소리",
+                        "TransitionSoundPrompt": "The Sound of Religious Rite",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "종교적기도소리",
+                        "BackgroundSoundPrompt": "The Sound of Religious Prayer",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "문화",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양, 동양, 중동"
+                    }
+                ]
+            },
+            {
+                "IndexId": 51,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            483,
+                            484,
+                            485,
+                            486,
+                            487
+                        ],
+                        "TransitionSound": "우주창조 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Cosmic Creation",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "우주공간 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Outer Space",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "우주",
+                        "Situation": "창조",
+                        "Era": "먼과거",
+                        "Culture": "자연"
+                    },
+                    {
+                        "ChunkId": [
+                            488,
+                            489,
+                            490,
+                            491,
+                            492,
+                            493,
+                            494,
+                            495
+                        ],
+                        "TransitionSound": "영적 깨달음 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Spiritual Awakening",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 52,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            497,
+                            498,
+                            499,
+                            500,
+                            501,
+                            502,
+                            503,
+                            504,
+                            505,
+                            506,
+                            507
+                        ],
+                        "TransitionSound": "사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Contemplation Transition",
+                        "TransitionSoundImportance": 70,
+                        "BackgroundSound": "조용한 방의 사색소리",
+                        "BackgroundSoundPrompt": "The Sound of Quiet Room Contemplation",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    },
+                    {
+                        "ChunkId": [
+                            509
+                        ],
+                        "TransitionSound": "역사적 장소 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Historical Place Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "고대 유적지의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Ancient Ruins Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "이동",
+                        "Era": "먼과거",
+                        "Culture": "중동"
+                    }
+                ]
+            },
+            {
+                "IndexId": 53,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            511,
+                            512,
+                            513,
+                            514
+                        ],
+                        "TransitionSound": "깨달음의 순간 소리",
+                        "TransitionSoundPrompt": "The Sound of Epiphany",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "조용한 사색 소리",
+                        "BackgroundSoundPrompt": "The Sound of Quiet Contemplation",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "사막",
+                        "Situation": "수업",
+                        "Era": "먼과거",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 54,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            516,
+                            517,
+                            518,
+                            519,
+                            520,
+                            521,
+                            522,
+                            523,
+                            524
+                        ],
+                        "TransitionSound": "우주적 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Cosmic Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "우주적 공간소리",
+                        "BackgroundSoundPrompt": "The Sound of Cosmic Space",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "하늘",
+                        "Situation": "이동",
+                        "Era": "미래",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 55,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            526,
+                            527,
+                            528,
+                            529
+                        ],
+                        "TransitionSound": "천상의 문 열리는 소리",
+                        "TransitionSoundPrompt": "The Sound of Heavenly Gates Opening",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "천상의 조화로운 음악 소리",
+                        "BackgroundSoundPrompt": "The Sound of Harmonious Heavenly Music",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "하늘",
+                        "Situation": "구원",
+                        "Era": "먼과거",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 56,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            531,
+                            532,
+                            533,
+                            534,
+                            535,
+                            536,
+                            537,
+                            538,
+                            539,
+                            540
+                        ],
+                        "TransitionSound": "고대 중동 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Ancient Middle Eastern Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "고대 중동 시장소리",
+                        "BackgroundSoundPrompt": "The Sound of an Ancient Middle Eastern Market",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "시대",
+                        "Environment": "도시",
+                        "Situation": "사무",
+                        "Era": "먼과거",
+                        "Culture": "중동"
+                    }
+                ]
+            },
+            {
+                "IndexId": 57,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            542,
+                            543,
+                            544,
+                            545,
+                            546
+                        ],
+                        "TransitionSound": "진리의 문을 여는 소리",
+                        "TransitionSoundPrompt": "The Sound of Opening the Gate of Truth",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "고요한 새벽의 숲 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Serene Dawn Forest",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "숲",
+                        "Situation": "수업",
+                        "Era": "미정",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 58,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            548,
+                            549,
+                            550,
+                            551,
+                            552,
+                            553,
+                            554,
+                            555,
+                            556,
+                            557,
+                            558,
+                            559,
+                            560
+                        ],
+                        "TransitionSound": "우주적 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Cosmic Transition",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "우주적 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of the Universe",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "우주",
+                        "Situation": "수업",
+                        "Era": "먼 과거",
+                        "Culture": "자연"
+                    },
+                    {
+                        "ChunkId": [
+                            561
+                        ],
+                        "TransitionSound": "고요한 산의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Tranquil Mountain Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "에베레스트 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Mount Everest",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "이동",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 59,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            563,
+                            564,
+                            565,
+                            566,
+                            567,
+                            568,
+                            569,
+                            570,
+                            571,
+                            572,
+                            573,
+                            574,
+                            575,
+                            576,
+                            577,
+                            578,
+                            579
+                        ],
+                        "TransitionSound": "창조의 소리",
+                        "TransitionSoundPrompt": "The Sound of Creation",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "영원한 천국의 소리",
+                        "BackgroundSoundPrompt": "The Sound of Eternal Heaven",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "하늘",
+                        "Situation": "창조",
+                        "Era": "먼과거",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 60,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            581,
+                            582,
+                            583,
+                            584
+                        ],
+                        "TransitionSound": "고요한 새벽 소리",
+                        "TransitionSoundPrompt": "The Sound of Tranquil Dawn",
+                        "TransitionSoundImportance": 70,
+                        "BackgroundSound": "조용한 산속 명상 소리",
+                        "BackgroundSoundPrompt": "The Sound of Quiet Mountain Meditation",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 61,
+                "Sounds": []
+            },
+            {
+                "IndexId": 62,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            588,
+                            589,
+                            590
+                        ],
+                        "TransitionSound": "지혜의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Wisdom Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "평화로운 도서관 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Peaceful Library",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    }
+                ]
+            },
+            {
+                "IndexId": 63,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            592,
+                            593,
+                            594,
+                            595,
+                            596,
+                            597,
+                            598,
+                            599,
+                            600,
+                            601,
+                            602,
+                            603,
+                            604,
+                            605,
+                            606,
+                            607,
+                            608,
+                            609,
+                            610,
+                            611
+                        ],
+                        "TransitionSound": "사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Contemplation Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambiance",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 64,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            613,
+                            614,
+                            615,
+                            616,
+                            617
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Meditation Room",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 65,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            619,
+                            620,
+                            621,
+                            622,
+                            623,
+                            624,
+                            625,
+                            626,
+                            627,
+                            628,
+                            629
+                        ],
+                        "TransitionSound": "행복한 순간 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Blissful Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "평온한 명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Serene Meditation Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 66,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            631,
+                            632,
+                            633,
+                            634,
+                            635,
+                            636
+                        ],
+                        "TransitionSound": "마음의 목소리 소리",
+                        "TransitionSoundPrompt": "The Sound of Inner Voice",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "조용한 명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "상황",
+                        "Environment": "내부",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 67,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            638,
+                            639,
+                            640,
+                            641
+                        ],
+                        "TransitionSound": "명상실의 조용한 분위기 전환소리",
+                        "TransitionSoundPrompt": "The Sound of a Quiet Meditation Room Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "명상실의 조용한 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "실내",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 68,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            643,
+                            644,
+                            645,
+                            646,
+                            647
+                        ],
+                        "TransitionSound": "다양한 문화 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Cultural Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "국제시장 소리",
+                        "BackgroundSoundPrompt": "The Sound of International Marketplace",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "문화",
+                        "Environment": "도시",
+                        "Situation": "이동",
+                        "Era": "현대",
+                        "Culture": "서양, 동양, 중동, 아프리카"
+                    }
+                ]
+            },
+            {
+                "IndexId": 69,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            649,
+                            650,
+                            651,
+                            652,
+                            653,
+                            654
+                        ],
+                        "TransitionSound": "우주적인 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Cosmic Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "우주적 공간 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Cosmic Space",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "하늘",
+                        "Situation": "이동",
+                        "Era": "미래",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 70,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            656,
+                            657,
+                            658,
+                            659,
+                            660
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "산사의 평화로운 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Serene Monastery",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "먼과거",
+                        "Culture": "동양"
+                    },
+                    {
+                        "ChunkId": [
+                            661
+                        ],
+                        "TransitionSound": "산악지대 바람소리",
+                        "TransitionSoundPrompt": "The Sound of Mountain Wind",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "고산지대 자연환경소리",
+                        "BackgroundSoundPrompt": "The Sound of High Altitude Nature",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "등산",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 71,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            663,
+                            664,
+                            665,
+                            666,
+                            667,
+                            668,
+                            669,
+                            670,
+                            671,
+                            672,
+                            673
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "명상실환경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambience",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    },
+                    {
+                        "ChunkId": [
+                            674
+                        ],
+                        "TransitionSound": "산속 바람소리",
+                        "TransitionSoundPrompt": "The Sound of Wind in the Mountains",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "산속 자연환경소리",
+                        "BackgroundSoundPrompt": "The Sound of Mountain Nature Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "자연",
+                        "Era": "현재",
+                        "Culture": "중동"
+                    }
+                ]
+            },
+            {
+                "IndexId": 72,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            676,
+                            677,
+                            678,
+                            679,
+                            680,
+                            681,
+                            682,
+                            683,
+                            684,
+                            685,
+                            686,
+                            687
+                        ],
+                        "TransitionSound": "마음의 세상 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Mind World Transition",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "고요한 사색의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Tranquil Contemplation",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    }
+                ]
+            },
+            {
+                "IndexId": 73,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            689,
+                            690,
+                            691,
+                            692,
+                            693,
+                            694,
+                            695
+                        ],
+                        "TransitionSound": "우주적 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Cosmic Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "우주적 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of the Universe",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "우주",
+                        "Situation": "",
+                        "Era": "미래",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 74,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            697,
+                            698,
+                            699
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 75,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            701,
+                            702,
+                            703,
+                            704,
+                            705
+                        ],
+                        "TransitionSound": "성당 종소리",
+                        "TransitionSoundPrompt": "The Sound of Church Bells",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "조용한 성당 내부소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Church Interior",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "시대",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "먼과거",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 76,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            707,
+                            708,
+                            709,
+                            710,
+                            711,
+                            712,
+                            713,
+                            714
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 77,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            716,
+                            717,
+                            718
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "조용한 사찰 환경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Temple Environment",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "사찰",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 78,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            720,
+                            721
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "명상실의 평화로운 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Peaceful Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 79,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            723,
+                            724,
+                            725,
+                            726,
+                            727,
+                            728,
+                            729,
+                            730,
+                            731,
+                            732
+                        ],
+                        "TransitionSound": "마음속 깊은 곳으로의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Transition to Inner Self",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "마음의 평화와 명상의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Peaceful Mind and Meditation",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "내부",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 80,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            734,
+                            735,
+                            736
+                        ],
+                        "TransitionSound": "천상의 코러스 소리",
+                        "TransitionSoundPrompt": "The Sound of Heavenly Chorus",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "성경 읽는 소리",
+                        "BackgroundSoundPrompt": "The Sound of Bible Reading",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "문화",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 81,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            738,
+                            739,
+                            740,
+                            741,
+                            742,
+                            743,
+                            744,
+                            745,
+                            746,
+                            747,
+                            748,
+                            749,
+                            750
+                        ],
+                        "TransitionSound": "사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Contemplation Transition",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "조용한 사색의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Quiet Contemplation",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "먼과거",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 82,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            752,
+                            753,
+                            754,
+                            755,
+                            756,
+                            757,
+                            758,
+                            759,
+                            760,
+                            761,
+                            762
+                        ],
+                        "TransitionSound": "심오한 사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Deep Contemplation Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "명상실의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Meditation Room Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "내부",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 83,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            764,
+                            765,
+                            766,
+                            767
+                        ],
+                        "TransitionSound": "조용한 사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Quiet Contemplation Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "조용한 도서관 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Library",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 84,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            769,
+                            770,
+                            771,
+                            772
+                        ],
+                        "TransitionSound": "창조의 순간 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Creation Transition",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "창조주의 말씀 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of the Creator's Voice",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "시대",
+                        "Environment": "산",
+                        "Situation": "창조",
+                        "Era": "먼과거",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 85,
+                "Sounds": []
+            },
+            {
+                "IndexId": 86,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            776,
+                            777,
+                            778,
+                            779,
+                            780
+                        ],
+                        "TransitionSound": "깨달음의 순간 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Enlightenment Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Meditation Room Ambiance",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "내부",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 87,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            782,
+                            783,
+                            784,
+                            785
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "조용한 명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 88,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            787,
+                            788,
+                            789,
+                            790
+                        ],
+                        "TransitionSound": "깨달음의 순간 소리",
+                        "TransitionSoundPrompt": "The Sound of Epiphany",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "조용한 명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "사막",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 89,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            792,
+                            793,
+                            794,
+                            795,
+                            796,
+                            797,
+                            798
+                        ],
+                        "TransitionSound": "명상실 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Room Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambience",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 90,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            800,
+                            801,
+                            802
+                        ],
+                        "TransitionSound": "마음속의 고뇌 소리",
+                        "TransitionSoundPrompt": "The Sound of Inner Turmoil",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "조용한 명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "실내",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 91,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            804,
+                            805,
+                            806,
+                            807
+                        ],
+                        "TransitionSound": "마음의 세계로의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Transition to the Inner World",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "내면의 목소리와 사색의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Inner Voice and Contemplation",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "사막",
+                        "Situation": "사색",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 92,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            809,
+                            810,
+                            811
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "산사의 평화로운 바람소리",
+                        "BackgroundSoundPrompt": "The Sound of Peaceful Wind in a Mountain Temple",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 93,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            813,
+                            814,
+                            815,
+                            816,
+                            817,
+                            818,
+                            819,
+                            820
+                        ],
+                        "TransitionSound": "마음의 평화 소리",
+                        "TransitionSoundPrompt": "The Sound of Inner Peace",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "산사의 평온 소리",
+                        "BackgroundSoundPrompt": "The Sound of Serene Monastery",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 94,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            822,
+                            823,
+                            824,
+                            825,
+                            826,
+                            827
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "조용한 명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 95,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            829,
+                            830,
+                            831,
+                            832,
+                            833
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 65,
+                        "BackgroundSound": "조상의 목소리와 전통 악기 소리",
+                        "BackgroundSoundPrompt": "The Sound of Ancestors' Voices and Traditional Instruments",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "문화",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "먼과거",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 96,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            835,
+                            836,
+                            837,
+                            838,
+                            839
+                        ],
+                        "TransitionSound": "고대 문서 넘기는 소리",
+                        "TransitionSoundPrompt": "The Sound of Ancient Pages Turning",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "고대 서고 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of an Ancient Library",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "시대",
+                        "Environment": "",
+                        "Situation": "",
+                        "Era": "먼과거",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 97,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            841,
+                            842,
+                            843
+                        ],
+                        "TransitionSound": "마음의 변화 소리",
+                        "TransitionSoundPrompt": "The Sound of Changing Heart",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "내면의 고요함 소리",
+                        "BackgroundSoundPrompt": "The Sound of Inner Tranquility",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "사막",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 98,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            845,
+                            846
+                        ],
+                        "TransitionSound": "고요한 아침의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of a Tranquil Morning Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "조용한 사색의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Quiet Contemplation",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 99,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            848,
+                            849,
+                            850,
+                            851,
+                            852,
+                            853
+                        ],
+                        "TransitionSound": "사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Contemplation Transition",
+                        "TransitionSoundImportance": 65,
+                        "BackgroundSound": "조용한 서재 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Study Room",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 100,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            855,
+                            856,
+                            857,
+                            858,
+                            859,
+                            860,
+                            861
+                        ],
+                        "TransitionSound": "깨달음의 순간 소리",
+                        "TransitionSoundPrompt": "The Sound of Enlightenment Moment",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "시골",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 101,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            863,
+                            864,
+                            865,
+                            866
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "산사의 평화로운 분위기 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Tranquil Mountain Monastery",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 102,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            868,
+                            869
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "명상실의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 103,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            871,
+                            872,
+                            873,
+                            874,
+                            875,
+                            876,
+                            877
+                        ],
+                        "TransitionSound": "내면의 사색 소리",
+                        "TransitionSoundPrompt": "The Sound of Inner Contemplation",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "조용한 방 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "방",
+                        "Situation": "사색",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 104,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            879,
+                            880,
+                            881,
+                            882
+                        ],
+                        "TransitionSound": "명상실 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Room Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "실내",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 105,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            884,
+                            885,
+                            886,
+                            887,
+                            888,
+                            889
+                        ],
+                        "TransitionSound": "명상소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "내면탐색소리",
+                        "BackgroundSoundPrompt": "The Sound of Inner Exploration",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 106,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            891,
+                            892,
+                            893,
+                            894
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 70,
+                        "BackgroundSound": "조용한 명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 107,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            896,
+                            897,
+                            898,
+                            899
+                        ],
+                        "TransitionSound": "사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Contemplation Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "조용한 도서관 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Library",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "사색",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 108,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            901,
+                            902,
+                            903,
+                            904
+                        ],
+                        "TransitionSound": "고요한 새벽소리",
+                        "TransitionSoundPrompt": "The Sound of Tranquil Dawn",
+                        "TransitionSoundImportance": 70,
+                        "BackgroundSound": "조용한 사색의 소리",
+                        "BackgroundSoundPrompt": "The Sound of Quiet Contemplation",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "",
+                        "Situation": "사색",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 109,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            906,
+                            907,
+                            908,
+                            909
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "명상실의 평화로운 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Peaceful Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "사막",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 110,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            911,
+                            912,
+                            913
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "명상실 내부 소리",
+                        "BackgroundSoundPrompt": "The Sound of Inside a Meditation Hall",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    },
+                    {
+                        "ChunkId": [
+                            914
+                        ],
+                        "TransitionSound": "히말라야 바람소리",
+                        "TransitionSoundPrompt": "The Sound of Himalayan Wind",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "히말라야 산맥의 자연 소리",
+                        "BackgroundSoundPrompt": "The Sound of Nature in the Himalayas",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "이동",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 111,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            916,
+                            917,
+                            918,
+                            919
+                        ],
+                        "TransitionSound": "마음의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Mind Transition",
+                        "TransitionSoundImportance": 70,
+                        "BackgroundSound": "내면 사색소리",
+                        "BackgroundSoundPrompt": "The Sound of Inner Contemplation",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "사무",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 112,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            921,
+                            922,
+                            923,
+                            924,
+                            925,
+                            926
+                        ],
+                        "TransitionSound": "마음회개소리",
+                        "TransitionSoundPrompt": "The Sound of Repentance",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "조용한 기도실소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Prayer Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 113,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            928,
+                            929,
+                            930,
+                            931
+                        ],
+                        "TransitionSound": "명상의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "명상실의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "실내",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 114,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            933,
+                            934
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 115,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            936,
+                            937,
+                            938,
+                            939,
+                            940
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "사찰의 평화로운 분위기 소리",
+                        "BackgroundSoundPrompt": "The Sound of Peaceful Temple Ambiance",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "사찰",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 116,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            942,
+                            943,
+                            944,
+                            945,
+                            946,
+                            947,
+                            948,
+                            949
+                        ],
+                        "TransitionSound": "명상소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "조용한 명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 117,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            951,
+                            952
+                        ],
+                        "TransitionSound": "마음의 변화 소리",
+                        "TransitionSoundPrompt": "The Sound of Heart Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "내면의 목소리 소리",
+                        "BackgroundSoundPrompt": "The Sound of Inner Voice",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "사무",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 118,
+                "Sounds": []
+            },
+            {
+                "IndexId": 119,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            956,
+                            957
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "산사의 평화로운 소리",
+                        "BackgroundSoundPrompt": "The Sound of Serene Mountain Temple",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 120,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            959,
+                            960,
+                            961,
+                            962,
+                            963,
+                            964,
+                            965,
+                            966,
+                            967,
+                            968,
+                            969,
+                            970,
+                            971
+                        ],
+                        "TransitionSound": "종교적 집회 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Religious Gathering Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "종교적 집회 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Religious Gathering",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "문화",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "미완성 시대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 121,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            973,
+                            974
+                        ],
+                        "TransitionSound": "깨달음의 순간 소리",
+                        "TransitionSoundPrompt": "The Sound of Enlightenment Moment",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "내면의 평화 소리",
+                        "BackgroundSoundPrompt": "The Sound of Inner Peace",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 122,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            976,
+                            977,
+                            978
+                        ],
+                        "TransitionSound": "마음의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Mind Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "내면의 목소리 소리",
+                        "BackgroundSoundPrompt": "The Sound of Inner Voice",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "내부",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 123,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            980,
+                            981,
+                            982,
+                            983,
+                            984,
+                            985
+                        ],
+                        "TransitionSound": "명상실 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Room Transition",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 124,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            987,
+                            988,
+                            989,
+                            990
+                        ],
+                        "TransitionSound": "깨달음의 순간 소리",
+                        "TransitionSoundPrompt": "The Sound of Enlightenment Moment",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "조용한 명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Meditation Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 125,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            992,
+                            993,
+                            994,
+                            995,
+                            996
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 95,
+                        "BackgroundSound": "명상실내소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambience",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    },
+                    {
+                        "ChunkId": [
+                            997
+                        ],
+                        "TransitionSound": "산악풍경 전환효과음",
+                        "TransitionSoundPrompt": "The Sound of Mountainous Transition Effect",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "히말라야 산악바람소리",
+                        "BackgroundSoundPrompt": "The Sound of Himalayan Mountain Wind",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 126,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            999,
+                            1000,
+                            1001
+                        ],
+                        "TransitionSound": "명상실 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Room Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambiance",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 127,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1003,
+                            1004,
+                            1005,
+                            1006
+                        ],
+                        "TransitionSound": "명상 시작 소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Start",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "산 속 명상 소리",
+                        "BackgroundSoundPrompt": "The Sound of Mountain Meditation",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 128,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1008,
+                            1009,
+                            1010,
+                            1011
+                        ],
+                        "TransitionSound": "마음의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Mind Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "내면의 명상소리",
+                        "BackgroundSoundPrompt": "The Sound of Inner Meditation",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "",
+                        "Situation": "수업",
+                        "Era": "",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 129,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1013,
+                            1014,
+                            1015,
+                            1016,
+                            1017,
+                            1018,
+                            1019
+                        ],
+                        "TransitionSound": "사색의 시작 소리",
+                        "TransitionSoundPrompt": "The Sound of Contemplation Beginning",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "조용한 서재 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Study Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "사무",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    }
+                ]
+            },
+            {
+                "IndexId": 130,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1021,
+                            1022,
+                            1023,
+                            1024,
+                            1025
+                        ],
+                        "TransitionSound": "명상 시작 소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Beginning",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "명상실 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Meditation Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "실내",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 131,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1027,
+                            1028
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "명상실 내부 소리",
+                        "BackgroundSoundPrompt": "The Sound of Inside a Meditation Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "실내",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 132,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1030,
+                            1031
+                        ],
+                        "TransitionSound": "깨달음의 순간 소리",
+                        "TransitionSoundPrompt": "The Sound of Realization",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "명상실내 소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 133,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1033,
+                            1034,
+                            1035,
+                            1036,
+                            1037
+                        ],
+                        "TransitionSound": "내면의 목소리 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Inner Voice Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambiance",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 134,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1039,
+                            1040,
+                            1041,
+                            1042,
+                            1043,
+                            1044,
+                            1045,
+                            1046,
+                            1047,
+                            1048,
+                            1049
+                        ],
+                        "TransitionSound": "자연의 평화로움으로의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Transition to Natural Serenity",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "대자연의 평화로운 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Grand Natural Peace",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    },
+                    {
+                        "ChunkId": [
+                            1050
+                        ],
+                        "TransitionSound": "고요한 산의 아침 전환소리",
+                        "TransitionSoundPrompt": "The Sound of a Quiet Mountain Morning Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "파노라마 파미르 고원의 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Panoramic Pamir Plateau",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "탐험",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 135,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1052,
+                            1053,
+                            1054,
+                            1055
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambience",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "상황",
+                        "Environment": "실내",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 136,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1057,
+                            1058
+                        ],
+                        "TransitionSound": "책상에 앉는 소리",
+                        "TransitionSoundPrompt": "The Sound of Sitting at a Desk",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "도서관의 공부하는 소리",
+                        "BackgroundSoundPrompt": "The Sound of Studying in a Library",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "도시"
+                    }
+                ]
+            },
+            {
+                "IndexId": 137,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1060,
+                            1061,
+                            1062,
+                            1063,
+                            1064
+                        ],
+                        "TransitionSound": "심오한 사색 소리",
+                        "TransitionSoundPrompt": "The Sound of Deep Contemplation",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "조용한 도서관 소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Library",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "도시",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 138,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1066,
+                            1067,
+                            1068,
+                            1069,
+                            1070
+                        ],
+                        "TransitionSound": "깨달음의 순간 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Enlightenment Transition",
+                        "TransitionSoundImportance": 85,
+                        "BackgroundSound": "고요한 새벽 명상소리",
+                        "BackgroundSoundPrompt": "The Sound of Tranquil Dawn Meditation",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 139,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1072,
+                            1073,
+                            1074,
+                            1075,
+                            1076,
+                            1077,
+                            1078
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "명상실의 평화로운 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Peaceful Meditation Room",
+                        "BackgroundSoundImportance": 90,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 140,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1080,
+                            1081,
+                            1082
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of a Meditation Bell",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Meditation Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 141,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1084,
+                            1085,
+                            1086,
+                            1087
+                        ],
+                        "TransitionSound": "명상 시작 소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Beginning",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "명상실 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Room Ambience",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "실내",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 142,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1089,
+                            1090
+                        ],
+                        "TransitionSound": "명상시작소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Start",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "명상배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Meditation Background",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "상황",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 143,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1092,
+                            1093
+                        ],
+                        "TransitionSound": "감사함의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Gratitude Transition",
+                        "TransitionSoundImportance": 75,
+                        "BackgroundSound": "평화로운 자연환경 소리",
+                        "BackgroundSoundPrompt": "The Sound of Peaceful Nature",
+                        "BackgroundSoundImportance": 80,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "수업",
+                        "Era": "현대",
+                        "Culture": "자연"
+                    }
+                ]
+            },
+            {
+                "IndexId": 144,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1095,
+                            1096,
+                            1097,
+                            1098
+                        ],
+                        "TransitionSound": "깊은 사색의 전환소리",
+                        "TransitionSoundPrompt": "The Sound of Deep Contemplation Transition",
+                        "TransitionSoundImportance": 80,
+                        "BackgroundSound": "조용한 서재 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of a Quiet Study Room",
+                        "BackgroundSoundImportance": 85,
+                        "Type": "환경",
+                        "Environment": "도서관/서재",
+                        "Situation": "사색",
+                        "Era": "현대",
+                        "Culture": "서양"
+                    }
+                ]
+            },
+            {
+                "IndexId": 145,
+                "Sounds": [
+                    {
+                        "ChunkId": [
+                            1100,
+                            1101,
+                            1102,
+                            1103,
+                            1104,
+                            1105,
+                            1106,
+                            1107,
+                            1108,
+                            1109,
+                            1110,
+                            1111,
+                            1112,
+                            1113,
+                            1114
+                        ],
+                        "TransitionSound": "명상의 종소리",
+                        "TransitionSoundPrompt": "The Sound of Meditation Bell",
+                        "TransitionSoundImportance": 90,
+                        "BackgroundSound": "명상실의 평온한 배경소리",
+                        "BackgroundSoundPrompt": "The Sound of Serene Meditation Room",
+                        "BackgroundSoundImportance": 95,
+                        "Type": "환경",
+                        "Environment": "산",
+                        "Situation": "명상",
+                        "Era": "현대",
+                        "Culture": "동양"
+                    }
+                ]
+            }
+        ]
+    }
+]

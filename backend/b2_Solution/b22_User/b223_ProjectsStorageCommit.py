@@ -1,4 +1,5 @@
 import os
+import glob
 import sys
 
 sys.path.append("/yaas")
@@ -26,7 +27,18 @@ def AddProjectsStorageToDB(projectsStorageName, email):
             return
 
         UserPath = user.UserPath
-        projectsStoragePath = os.path.join(UserPath, f"{SeoulNow()}_{projectsStorageName}_storage")
+        # 가능한 모든 ProjectsStoragePath 검색
+        possiblePaths = glob.glob(os.path.join(UserPath, f"*_{projectsStorageName}_storage"))
+
+        # 존재하는 경로 중 가장 최근 것 사용
+        if possiblePaths:
+            projectsStoragePath = max(possiblePaths, key=os.path.getctime)
+        else:
+            # 존재하는 경로가 없으면 새로운 경로 생성
+            projectsStoragePath = os.path.join(UserPath, f"{SeoulNow()}_{projectsStorageName}_storage")
+            # 새로운 폴더 생성
+            os.makedirs(projectsStoragePath, exist_ok=True)
+            
         ExistingProjectsStorage = db.query(ProjectsStorage).filter(ProjectsStorage.UserId == user.UserId, ProjectsStorage.ProjectsStorageName == projectsStorageName).first()
 
         # ProjectsStorage 객체 생성 및 초기 정보 입력

@@ -32,7 +32,6 @@ def AddUserToDB(email, username, password):
         # 존재하는 경로 중 가장 최근 것 사용
         if possiblePaths:
             userPath = max(possiblePaths, key=os.path.getctime)
-            print(userPath)
             profileImageFilePath = os.path.join(userPath, f"{os.path.basename(userPath)}_profile_image")
         else:
             # 존재하는 경로가 없으면 새로운 경로 생성

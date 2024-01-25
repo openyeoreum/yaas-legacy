@@ -8,9 +8,9 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import LoadOutputMemory, SaveOutputMemory, AddExistedCharacterDefineToDB, AddCharacterDefineChunksToDB, CharacterDefineCountLoad, CharacterDefineCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCharacterDefineToDB, AddCharacterDefineChunksToDB, CharacterDefineCountLoad, CharacterDefineCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
-from backend.b2_Solution.bt22_DataFrameUpdate import FindDataframeFilePaths
+
 
 #########################
 ##### InputList 생성 #####

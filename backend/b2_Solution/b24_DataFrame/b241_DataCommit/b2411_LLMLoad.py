@@ -15,7 +15,7 @@ from backend.b1_Api.b14_Models import User, Prompt
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetPromptFrame, GetTrainingDataset
 from backend.b2_Solution.b21_General.b212_PromptCommit import GetPromptDataPath, LoadJsonFrame
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
-from backend.b2_Solution.bt22_DataFrameUpdate import FindDataframeFilePaths
+
 
 ######################
 ##### LLM 공통사항 #####

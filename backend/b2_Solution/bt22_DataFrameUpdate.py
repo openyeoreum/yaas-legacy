@@ -9,7 +9,7 @@ from datetime import datetime
 from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_BodyFrameUpdate import BodyFrameUpdate
@@ -36,31 +36,6 @@ def Date(Option = "Day"):
       date = now.strftime('%y%m%d%H%M%S')
     
     return date
-
-def FindDataframeFilePaths(email, projectName, userStoragePath):
-    with get_db() as db:
-        user = db.query(User).filter(User.Email == email).first()
-        if user is None:
-            raise ValueError("User not found with the provided email")
-        
-        username = user.UserName
-
-        # 정규 표현식 패턴 구성
-        pattern = rf"{userStoragePath}/.*_{username}_user/.*/{projectName}/{projectName}_dataframe_file"
-        DataFrameFilePaths = []
-        # userStoragePath 내의 모든 파일과 디렉토리를 순회
-        for root, dirs, files in os.walk(userStoragePath):
-            for dir in dirs:
-                # 전체 디렉토리 경로
-                FullPath = os.path.join(root, dir)
-
-                # 정규 표현식과 일치하는 경우 리스트에 추가
-                if re.match(pattern, FullPath):
-                    DataFrameFilePaths.append(FullPath)
-
-        MatchedDataFrameFilePath = DataFrameFilePaths[0] + '/'
-
-    return MatchedDataFrameFilePath
 
 ## 업데이트된 DataFrame 파일저장
 def SaveDataFrame(projectName, email, Process, UpdatedFrame, RawDataSetPath):

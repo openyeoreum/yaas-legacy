@@ -6,13 +6,15 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
+from backend.b1_Api.b14_Models import User
+from backend.b1_Api.b13_Database import get_db
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import Project
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 from backend.b2_Solution.b23_Project.b231_ProjectCommit import GetProjectDataPath, LoadJsonFrame
-from backend.b2_Solution.bt22_DataFrameUpdate import FindDataframeFilePaths
+
 
 ############################################
 ########## DataFrameCommitGeneral ##########
@@ -64,6 +66,32 @@ def LoadAddOutputMemory(projectName, email, ProcessNum, DataFramePath):
             break  # 첫 번째 일치하는 파일을 찾으면 반복 종료
 
     return AddOutputMemoryDicsFile
+
+## 각 유저별 DataframeFilePaths 찾기
+def FindDataframeFilePaths(email, projectName, userStoragePath):
+    with get_db() as db:
+        user = db.query(User).filter(User.Email == email).first()
+        if user is None:
+            raise ValueError("User not found with the provided email")
+        
+        username = user.UserName
+
+        # 정규 표현식 패턴 구성
+        pattern = rf"{userStoragePath}/.*_{username}_user/.*/{projectName}/{projectName}_dataframe_file"
+        DataFrameFilePaths = []
+        # userStoragePath 내의 모든 파일과 디렉토리를 순회
+        for root, dirs, files in os.walk(userStoragePath):
+            for dir in dirs:
+                # 전체 디렉토리 경로
+                FullPath = os.path.join(root, dir)
+
+                # 정규 표현식과 일치하는 경우 리스트에 추가
+                if re.match(pattern, FullPath):
+                    DataFrameFilePaths.append(FullPath)
+
+        MatchedDataFrameFilePath = DataFrameFilePaths[0] + '/'
+
+    return MatchedDataFrameFilePath
 
 ## 업데이트된 OutputMemoryDics 파일 저장하기
 def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFramePath):

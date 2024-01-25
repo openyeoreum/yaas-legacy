@@ -4,7 +4,7 @@ import sys
 sys.path.append("/yaas")
 
 
-from backend.b2_Solution.bt22_DataFrameUpdate import FindDataframeFilePaths
+
 
 if __name__ == "__main__":
     

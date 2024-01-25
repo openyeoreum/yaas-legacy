@@ -6,8 +6,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddExistedBodyFrameToDB, AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, InitBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
-from backend.b2_Solution.bt22_DataFrameUpdate import FindDataframeFilePaths
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddExistedBodyFrameToDB, AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, InitBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
 
 # BodyText 로드
 def LoadBodyText(projectName, email):

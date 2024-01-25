@@ -61,7 +61,7 @@ def TypecastVoiceGenerator(TEXT, EMOTION):
         if ret['status'] == 'done':
             # download audio file
             r = requests.get(ret['audio_download_url'])
-            with open('test.wav', 'wb') as f:
+            with open(TEXT + '.wav', 'wb') as f:
                 f.write(r.content)
             break
         else:
@@ -80,6 +80,6 @@ if __name__ == "__main__":
         print(SelectionGenerationKoChunks[i])
         
 
-    TEXT = '(지구인들은. 메타버스에서 살고 있는 셈입니다.) (그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다.) (그러나. 아직 여운이 남아 있긴 합니다.) (스크린 골프 이야기로 돌아가 보죠.) 지금은 현실세계와. 가상세계 간. 경계가 나뉘어져 있습니다. 스크린이. 경계선입니다. 스크린 이쪽은. 물리적 현실세계. 저쪽은. 초월적 가상세계니까요. 그런데. 기술이 더 발달하면, 스크린이 없어질 수 있습니다.'
+    TEXT = '지구인들은. 메타버스에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 그러나. 아직 여운이 남아 있긴 합니다. 스크린 골프 이야기로 돌아가 보죠. 지금은 현실세계와. 가상세계 간. 경계가 나뉘어져 있습니다. 스크린이. 경계선입니다. 스크린 이쪽은. 물리적 현실세계. 저쪽은. 초월적 가상세계니까요. 그런데. 기술이 더 발달하면, 스크린이 없어질 수 있습니다.'
     EMOTION = 'tonedown-1'
     TypecastVoiceGenerator(TEXT, EMOTION)

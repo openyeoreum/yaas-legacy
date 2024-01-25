@@ -32,6 +32,7 @@ def AddProjectToDB(projectName, email):
         projectPath = os.path.join(pojectsStoragePath, f"{projectName}")
         scriptPath = os.path.join(projectPath, f"{projectName}_script_file")
         dataFramePath = os.path.join(projectPath, f"{projectName}_dataframe_file")
+        dataSetPath = os.path.join(projectPath, f"{projectName}_dataset_file")
         mixedAudioBookPath = os.path.join(projectPath, f"{projectName}_mixed_audiobook_file")
         
         voiceLayersPath = os.path.join(mixedAudioBookPath, 'VoiceLayers')
@@ -63,6 +64,7 @@ def AddProjectToDB(projectName, email):
             os.makedirs(projectPath)
             os.makedirs(scriptPath)
             os.makedirs(dataFramePath)
+            os.makedirs(dataSetPath)
             os.makedirs(mixedAudioBookPath)
             os.makedirs(voiceLayersPath)
             os.makedirs(narratorPath)
@@ -124,6 +126,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.ProjectPath = projectPath
             ExistingProject.ScriptPath = scriptPath
             ExistingProject.DataFramePath = dataFramePath
+            ExistingProject.DataSetPath = dataSetPath
             ExistingProject.MixedAudioBookPath = mixedAudioBookPath
             ExistingProject.VoiceLayersPath = voiceLayersPath
             ExistingProject.NarratorPath = narratorPath
@@ -180,6 +183,7 @@ def AddProjectToDB(projectName, email):
                 ProjectPath = projectPath,
                 ScriptPath = scriptPath,
                 DataFramePath = dataFramePath,
+                DataSetPath = dataSetPath,
                 MixedAudioBookPath = mixedAudioBookPath,
                 VoiceLayersPath = voiceLayersPath,
                 NarratorPath = narratorPath,

@@ -6,6 +6,8 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
+from backend.b1_Api.b14_Models import User
+from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
@@ -34,6 +36,29 @@ def Date(Option = "Day"):
       date = now.strftime('%y%m%d%H%M%S')
     
     return date
+
+def FindDataframeFilePaths(email, projectName, UserStoragePath):
+    with get_db() as db:
+        user = db.query(User).filter(User.Email == email).first()
+
+        username = user.UserName
+        
+        # 정규 표현식 패턴 구성
+        pattern = rf"{UserStoragePath}/.*_{username}_user/.*/{projectName}/{projectName}_dataframe_file"
+
+        DataFrameFilePaths = []
+
+        # UserStoragePath 내의 모든 파일과 디렉토리를 순회
+        for root, dirs, files in os.walk(UserStoragePath):
+            for dir in dirs:
+                # 전체 디렉토리 경로
+                FullPath = os.path.join(root, dir)
+
+                # 정규 표현식과 일치하는 경우 리스트에 추가
+                if re.match(pattern, FullPath):
+                    DataFrameFilePaths.append(FullPath)
+
+    return DataFrameFilePaths[0] + '/'
 
 ## 업데이트된 DataFrame 파일저장
 def SaveDataFrame(projectName, email, Process, UpdatedFrame, RawDataSetPath):
@@ -138,9 +163,11 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
+    
     projectNameList = ['데미안', '살아서천국극락낙원에가는방법', '우리는행복을진단한다', '웹3.0메타버스']
     for projectName in projectNameList:
-        DataFramePath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b511_DataFrame/"
+        UserStoragePath = "/yaas/backend/b6_Storage/b62_UserStorage/"
+        DataFramePath = FindDataframeFilePaths(email, projectName, UserStoragePath)
         RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
         messagesReview = "on"
         

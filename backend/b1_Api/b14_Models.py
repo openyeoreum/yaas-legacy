@@ -159,6 +159,7 @@ class Project(Base):
     
     # DataFrameFile
     DataFramePath = Column(Text)
+    DataSetPath = Column(Text)
     
     # MixedAudioBookFile
     MixedAudioBookPath = Column(Text)
@@ -277,7 +278,11 @@ class ProjectHistory(Base):
     IndexFile = Column(Text)
     CharacterFile = Column(Text)
     BodyFile = Column(Text)
-    
+
+    # DataFrameFile
+    DataFramePath = Column(Text)
+    DataSetPath = Column(Text)
+
     # MixedAudioBookFile
     MixedAudioBookPath = Column(Text)
 

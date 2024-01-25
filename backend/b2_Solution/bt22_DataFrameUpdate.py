@@ -37,19 +37,20 @@ def Date(Option = "Day"):
     
     return date
 
-def FindDataframeFilePaths(email, projectName, UserStoragePath):
+def FindDataframeFilePaths(email, projectName, userStoragePath):
     with get_db() as db:
         user = db.query(User).filter(User.Email == email).first()
-
-        username = user.UserName
+        if user is None:
+            raise ValueError("User not found with the provided email")
         
+        username = user.UserName
+
         # 정규 표현식 패턴 구성
-        pattern = rf"{UserStoragePath}/.*_{username}_user/.*/{projectName}/{projectName}_dataframe_file"
+        pattern = rf"{userStoragePath}/.*_{username}_user/.*/{projectName}/{projectName}_dataframe_file"
 
         DataFrameFilePaths = []
-
-        # UserStoragePath 내의 모든 파일과 디렉토리를 순회
-        for root, dirs, files in os.walk(UserStoragePath):
+        # userStoragePath 내의 모든 파일과 디렉토리를 순회
+        for root, dirs, files in os.walk(userStoragePath):
             for dir in dirs:
                 # 전체 디렉토리 경로
                 FullPath = os.path.join(root, dir)
@@ -163,11 +164,11 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
-    
+    userStoragePath = "/yaas/backend/b6_Storage/b62_UserStorage/"
     projectNameList = ['데미안', '살아서천국극락낙원에가는방법', '우리는행복을진단한다', '웹3.0메타버스']
+    
     for projectName in projectNameList:
-        UserStoragePath = "/yaas/backend/b6_Storage/b62_UserStorage/"
-        DataFramePath = FindDataframeFilePaths(email, projectName, UserStoragePath)
+        DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
         RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
         messagesReview = "on"
         

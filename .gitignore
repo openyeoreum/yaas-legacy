@@ -19,9 +19,9 @@ backend/databaseVolumesPostgres/
 backend/b5_Database/b50_DatabaseVolumesPostgres/
 
 # # b62_UserStorage 폴더 내의 특정 폴더 및 파일만 유지
-# backend/b6_Storage/b62_UserStorage/*
-# !backend/b6_Storage/b62_UserStorage/230923_script_files/
-# !backend/b6_Storage/b62_UserStorage/230923_script_files/*
+# storage/s1_Yeoreum/s11_UserStorage/*
+# !storage/s1_Yeoreum/s11_UserStorage/230923_script_files/
+# !storage/s1_Yeoreum/s11_UserStorage/230923_script_files/*
 
 # alembic 파일
 alembic.ini

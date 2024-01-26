@@ -18,7 +18,7 @@ def LoadTextFile(filepath):
 
 # 개발시에만 활용
 def MoveTextFile(projectName, email):
-    ScriptFilesPath = "/yaas/backend/b6_Storage/b62_UserStorage/230923_script_files"
+    ScriptFilesPath = "/yaas/storage/s1_Yeoreum/s11_UserStorage/230923_script_files"
     IndexFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Index.txt")
     BodyFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Body.txt")
     

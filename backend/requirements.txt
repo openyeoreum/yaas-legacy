@@ -6,6 +6,8 @@ langdetect
 nltk
 konlpy
 git+https://github.com/allinux/PyKoSpacing.git
+langdetect
+--upgrade openai
 # Web Framework, DB
 fastapi
 tzdata

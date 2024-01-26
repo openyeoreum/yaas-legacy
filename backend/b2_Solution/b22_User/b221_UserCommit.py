@@ -9,9 +9,15 @@ sys.path.append("/yaas")
 from backend.b1_Api.b14_Models import User, SeoulNow
 from backend.b1_Api.b13_Database import get_db
 
-def GetBasePath(relativePath='../../b6_Storage/b62_UserStorage/'):
+def GetBasePath():
+    sys.path.append("/yaas")
+    relativePath = 'storage/s1_Yeoreum/s11_UserStorage'
+    # 현재 파일의 디렉토리 경로 얻기
     CurrentDir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(CurrentDir, relativePath)
+    # 현재 디렉토리와 상대 경로를 결합하여 최종 경로 생성
+    finalPath = os.path.join(CurrentDir, relativePath)
+
+    return finalPath
 
 ### 이메일과 현재 시간을 기반으로 UserId를 생성하는 함수
 def GenerateUserId(email: str) -> str:

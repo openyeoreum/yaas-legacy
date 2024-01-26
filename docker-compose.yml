@@ -31,6 +31,7 @@ services:
     volumes:
       - ./backend:/yaas/backend
       - ./extension:/yaas/extension
+      - ./storage:/yaas/storage
       - ./.git:/yaas/.git
       - ./.gitignore:/yaas/.gitignore
       - ./docker-compose.yml:/yaas/docker-compose.yml

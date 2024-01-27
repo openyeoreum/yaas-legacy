@@ -1,0 +1,116 @@
+[
+    {
+        "DataBaseId": "None",
+        "DataBaseName": "None",
+        "Type": "TypeCastCharacter"
+    },
+    {
+        "TypeCastCharacters": [
+            {
+                "CharacterId": 1,
+                "Query": {
+                    "CharacterTag": ["Narrator"],
+                    "Genre": ["비문학", "학술"],
+                    "Personality": [{"외향적": }, "중립적", "내향적"],
+                    "Tone": ["None"],
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": ["청년", "중년"],
+                    "Emotion": ["중립", "즐거움", "침착함"],
+                    "Quality": 100
+                },
+                "Name": {
+                    "ko": "연우(일반)",
+                    "en": "Yeonwoo"
+                },
+                "ApiSetting": {
+                    "emotion_tone_preset": {
+                        "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
+                        "emotion_prompt": "None"
+                    },
+                    "emotion_prompt": {
+                        "emotion_tone_preset": "emotion_prompt",
+                        "emotion_prompt": "None"
+                    },
+                    "volume": 100,
+                    "speed_x": 1.05,
+                    "tempo": 1.0,
+                    "pitch": 0,
+                    "max_seconds": 60,
+                    "force_length": 0,
+                    "last_pitch": 0
+                }
+            },
+            {
+                "CharacterId": 2,
+                "Query": {
+                    "CharacterTag": ["Narrator"],
+                    "Genre": ["비문학", "학술"],
+                    "Personality": ["중립적", "내향적"],
+                    "Tone": ["None"],
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": ["중년"],
+                    "Emotion": ["중립", "침착함"],
+                    "Quality": 100
+                },
+                "Name": {
+                    "ko": "연우(톤다운)",
+                    "en": "Yeonwoo"
+                },
+                "ApiSetting": {
+                    "emotion_tone_preset": {
+                        "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
+                        "emotion_prompt": "None"
+                    },
+                    "emotion_prompt": {
+                        "emotion_tone_preset": "emotion_prompt",
+                        "emotion_prompt": "None"
+                    },
+                    "volume": 100,
+                    "speed_x": 1.05,
+                    "tempo": 1.0,
+                    "pitch": -1,
+                    "max_seconds": 60,
+                    "force_length": 0,
+                    "last_pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3,
+                "Query": {
+                    "CharacterTag": ["Narrator"],
+                    "Genre": ["비문학", "학술"],
+                    "Personality": ["외향적", "중립적"],
+                    "Tone": ["None"],
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": ["청년"],
+                    "Emotion": ["중립", "즐거움"],
+                    "Quality": 70
+                },
+                "Name": {
+                    "ko": "진우(일반)",
+                    "en": "Jinwoo"
+                },
+                "ApiSetting": {
+                    "emotion_tone_preset": {
+                        "emotion_tone_preset": ["tonemid-1", "tonemid-2"],
+                        "emotion_prompt": "None"
+                    },
+                    "emotion_prompt": {
+                        "emotion_tone_preset": "emotion_prompt",
+                        "emotion_prompt": "None"
+                    },
+                    "volume": 100,
+                    "speed_x": 1.00,
+                    "tempo": 1.0,
+                    "pitch": -1,
+                    "max_seconds": 60,
+                    "force_length": 0,
+                    "last_pitch": 0
+                }
+            }
+        ]
+    }
+]

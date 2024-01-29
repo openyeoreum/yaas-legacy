@@ -10,6 +10,7 @@
             {
                 "CharacterId": 0,
                 "Name": "None",
+                "Quality": 0,
                 "Query": {
                     "CharacterTag": ["None"],
                     "Language": ["None"],
@@ -74,6 +75,7 @@
             {
                 "CharacterId": 1,
                 "Name": "연우(일반)",
+                "Quality": 100,
                 "Query": {
                     "CharacterTag": ["Narrator"],
                     "Language": ["Ko"],
@@ -138,6 +140,7 @@
             {
                 "CharacterId": 2,
                 "Name": "연우(톤다운)",
+                "Quality": 100,
                 "Query": {
                     "CharacterTag": ["Narrator"],
                     "Language": ["Ko"],
@@ -202,6 +205,7 @@
             {
                 "CharacterId": 3,
                 "Name": "진우(일반)",
+                "Quality": 0,
                 "Query": {
                     "CharacterTag": ["Narrator"],
                     "Language": ["Ko"],
@@ -266,6 +270,7 @@
             {
                 "CharacterId": 4,
                 "Name": "진우(톤다운)",
+                "Quality": 0,
                 "Query": {
                     "CharacterTag": ["Narrator"],
                     "Language": ["Ko"],

@@ -15,6 +15,7 @@ backend/.env
 frontend/
 migrations/
 storage/
+voice/
 backend/databaseVolumesPostgres/
 backend/b5_Database/b50_DatabaseVolumesPostgres/
 

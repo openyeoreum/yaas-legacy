@@ -35,7 +35,18 @@ def SelectionGenerationKoJson(projectName, email):
         # NarraterGenre 기본값
         NarraterGender = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Gender']['Gender']
         NarraterAge = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Age']['Age']
-        NarraterEmotion = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Emotion']['Emotion']
+        # BookEmotion을 CharacterEmotion으로 치환
+        bookemotion = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Emotion']['Emotion']
+        if bookemotion in ['행복', '즐거움']:
+            NarraterEmotion = '즐거움'
+        elif bookemotion in ['평온', '침착']:
+            NarraterEmotion = '침착함'
+        elif bookemotion in ['슬픔', '두려움']:
+            NarraterEmotion = '슬픔'
+        elif bookemotion in ['놀람', '화남']:
+            NarraterEmotion = '화남'
+        else:
+            NarraterEmotion = '중립'
         Narrater = {"CharacterId": 1, "CharacterTag": "Narrator", "Gender": NarraterGender, "Age": NarraterAge, "Emotion": {NarraterEmotion: 100.0}, "MainCharacterList": ["저자"]}
     SoundFrame = project.SoundMatching[1]['SoundSplitedIndexs'][1:]
     SFXFrame =  project.SFXMatching[1]['SFXSplitedBodys'][1:]

@@ -1,6 +1,7 @@
 import os
 import requests
 import time
+import random
 import re
 import sys
 sys.path.append("/yaas")
@@ -76,7 +77,7 @@ def VoiceLayerPath(projectName, email, VoiceCharacter):
 
 # def TextSetting(Text):
 
-def TypecastVoiceGenerator(TEXT, EMOTION):
+def TypecastVoiceGenerator(TEXT, EMOTION, LASTPITCH):
     api_token = os.getenv("TYPECAST_API_TOKEN")
     HEADERS = {'Authorization': f'Bearer {api_token}'}
 
@@ -103,7 +104,7 @@ def TypecastVoiceGenerator(TEXT, EMOTION):
         'pitch': -1, # 음성 피치로 기본값은 0, 범위: -12 - 12
         'max_seconds': 60, # 음성의 최대 길이로 기본값은 30, 범위: 1 - 60
         'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
-        'last_pitch': 0, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
+        'last_pitch': -1, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
     })
     speak_url = r.json()['result']['speak_v2_url']
 
@@ -115,7 +116,7 @@ def TypecastVoiceGenerator(TEXT, EMOTION):
         if ret['status'] == 'done':
             # download audio file
             r = requests.get(ret['audio_download_url'])
-            with open("연우(톤다운)" + '.wav', 'wb') as f:
+            with open("유라(중간톤)" + '.wav', 'wb') as f:
                 f.write(r.content)
             break
         else:
@@ -136,7 +137,10 @@ if __name__ == "__main__":
     # final_path = VoiceLayerPath(projectName, email, VoiceCharacter)
     # print(final_path)
         
-    TEXT = '지구인들은. 메타버스에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다.'
+    TEXT = '지구인들은. 메타버스에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다. 무브 패스트, 앤드 브레이크 띵스, 빠르게 움직이고 깨뜨려라.'
     print(len(TEXT))
-    EMOTION = 'tonedown-1'
-    TypecastVoiceGenerator(TEXT, EMOTION)
+    EMOTION = ['tonemid-1', 'tonemid-2', 'tonemid-3', 'tonemid-4']
+    RandomEMOTION = random.choice(EMOTION)
+    LASTPITCH = [-1, -2]
+    RandomLASTPITCH = random.choice(LASTPITCH)
+    TypecastVoiceGenerator(TEXT, RandomEMOTION, RandomLASTPITCH)

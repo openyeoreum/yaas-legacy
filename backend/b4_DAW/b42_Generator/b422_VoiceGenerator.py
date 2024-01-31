@@ -77,7 +77,7 @@ def VoiceLayerPath(projectName, email, VoiceCharacter):
 
 # def TextSetting(Text):
 
-def TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, Speed, Pitch, RandomLASTPITCH, voiceLayerPath):
+def TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath):
     api_token = os.getenv("TYPECAST_API_TOKEN")
     HEADERS = {'Authorization': f'Bearer {api_token}'}
 
@@ -99,7 +99,7 @@ def TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTI
         'emotion_tone_preset': RandomEMOTION, # 감정으로, actor_id를 사용하여 Actor API 에서 캐릭터에 사용 가능한 감정을 검색
         'emotion_prompt': None, # 감정 프롬프트(한/영)를 입력, 입력시 'emotion_tone_preset'는 'emotion_prompt'로 설정
         'volume': 100, # 오디오 볼륨으로 기본값은 100, 범위: 0.5배는 50 - 2배는 200, 
-        'speed_x': Speed, # 말하는 속도로 기본값은 1, 범위: 0.5(빠름) - 1.5(느림)
+        'speed_x': RandomSPEED, # 말하는 속도로 기본값은 1, 범위: 0.5(빠름) - 1.5(느림)
         'tempo': 1.0, # 음성 재생속도로 기본값은 1, 범위: 0.5(0.5배 느림) - 2.0(2배 빠름)
         'pitch': Pitch, # 음성 피치로 기본값은 0, 범위: -12 - 12
         'max_seconds': 60, # 음성의 최대 길이로 기본값은 30, 범위: 1 - 60
@@ -136,14 +136,15 @@ if __name__ == "__main__":
     # VoiceCharacter = 'Narrater'
     # final_path = VoiceLayerPath(projectName, email, VoiceCharacter)
     # print(final_path)
-    Name = '민지(화남)'
+    Name = '아리(일반)'
     ChunkId = 0
     Chunk = f'지구인들은. {{{{메타버스}}}}에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다. {{{{무브 패스트, 앤드 브레이크 띵스}}}}, 빠르게 움직이고 깨뜨려라.'
-    Speed = 1.05
     Pitch = 0
-    EMOTION = ['sad-1']
+    SPEED = [1.05]
+    RandomSPEED = random.choice(SPEED)
+    EMOTION = ['normal-1']
     RandomEMOTION = random.choice(EMOTION)
-    LASTPITCH = [0]
+    LASTPITCH = [-1]
     RandomLASTPITCH = random.choice(LASTPITCH)
     voiceLayerPath = '/yaas/voice/'
-    TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, Speed, Pitch, RandomLASTPITCH, voiceLayerPath)
+    TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)

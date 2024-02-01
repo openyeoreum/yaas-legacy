@@ -517,27 +517,15 @@ class TrainingDataset(Base):
 #####################
 ### VoiceDatabase ###
 #####################
-class Voice(Base):
-    __tablename__ = "Voices"
+class VoiceSet(Base):
+    __tablename__ = "VoiceSets"
 
-    VoiceId = Column(Integer, primary_key=True, autoincrement=True)
-    VoiceDate = Column(DateTime, default=SeoulNow)
-    VoiceName = Column(String(64))
+    VoiceSetId = Column(Integer, primary_key=True, autoincrement=True)
+    VoiceSetDate = Column(DateTime, default=SeoulNow)
+    VoiceSetPlatform = Column(String(64))
     
-    # VoiceGeneralPointTag
-    Genre = Column(String(64))
-    Gender = Column(String(64))
-    Age = Column(Integer)
-    Personality = Column(String(64))
-    Emotion = Column(String(64))
-    
-    # VoiceOptionTag
-    TTSPlatform = Column(String(64))
-    TTSName = Column(String(64))
-    TTSEmotion = Column(String(64))
-    TTSLanguage = Column(String(64))
-    TTSSpeed = Column(Float)
-    TTSPitch = Column(Integer)
+    # VoiceDataSet
+    TypeCastVoiceDataSet = Column(JSON)
     
 
 #####################

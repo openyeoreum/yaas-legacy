@@ -3,6 +3,7 @@ sys.path.append("/yaas")
 
 from backend.b2_Solution.b21_General.b212_PromptCommit import AddPromptToDB
 from backend.b2_Solution.b21_General.b213_TrainingDatasetCommit import AddTrainingDatasetToDB
+from backend.b2_Solution.b21_General.b214_VoiceDatasetCommit import AddVoiceDataSetToDB
 from backend.b2_Solution.b22_User.b221_UserCommit import AddUserToDB
 from backend.b2_Solution.b22_User.b223_ProjectsStorageCommit import AddProjectsStorageToDB
 from backend.b2_Solution.b23_Project.b231_ProjectCommit import AddProjectToDB
@@ -15,8 +16,11 @@ if __name__ == "__main__":
     name = "yeoreum"
     #########################################################################
 
-    ### b211_PromptCommit ###
+    ### b212_PromptCommit ###
     AddPromptToDB()
+    
+    ### b214_PromptCommit ###
+    AddVoiceDataSetToDB()
 
     ### b221_UserCommit ###
     AddUserToDB(email, name, '0128')

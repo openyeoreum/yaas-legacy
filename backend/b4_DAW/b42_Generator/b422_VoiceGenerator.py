@@ -15,6 +15,8 @@ from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 ###########################################
 def LoadSelectionGenerationKoChunks(projectName, email):
     project = GetProject(projectName, email)
+    CharacterSet = project.
+    SelectionGenerationKoBookContext = project.SelectionGenerationKo[1]['SelectionGenerationKoBookContext'][1]
     SelectionGenerationKoSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGenerationKoSplitedIndexs'][1:]
     
     SelectionGenerationKoChunks = []
@@ -28,7 +30,15 @@ def LoadSelectionGenerationKoChunks(projectName, email):
                 Voice = SelectionGenerationKoSplitedChunks[k]['Voice']
                 SelectionGenerationKoChunks.append({'ChunkId': ChunkId, 'Chunk': Chunk, 'Voice': Voice})
     
-    return SelectionGenerationKoChunks
+    return SelectionGenerationKoBookContext, SelectionGenerationKoChunks
+
+def ActorMatching(projectName, email):
+    SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email)
+    # print(SelectionGenerationKoBookContext['Vector'])
+    for i in range(len(SelectionGenerationKoChunks)):
+        print(f"{i+1}: {SelectionGenerationKoChunks[i]['Context']}, {SelectionGenerationKoChunks[i]['Voice']}")
+
+# def TextSetting(Text):
 
 ## VoiceLayerPath(TTS 저장) 경로 생성
 def VoiceLayerPath(projectName, email, VoiceCharacter):
@@ -68,14 +78,6 @@ def VoiceLayerPath(projectName, email, VoiceCharacter):
     voiceLayerPath = os.path.join(SecondFolderPath, SecondFolder, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", VoiceCharacter)
 
     return voiceLayerPath
-
-# def ActorMatching(CharacterTag, Language, Gender, Age, Emotion):
-
-# def ActorMatching(CharacterTag, Language, Gender, Age, Emotion):
-
-# def ActorSetting(ActorName, Emotion):
-
-# def TextSetting(Text):
 
 def TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath):
     api_token = os.getenv("TYPECAST_API_TOKEN")
@@ -127,24 +129,19 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "테스트"
+    projectName = "웹3.0메타버스"
     #########################################################################
-    # SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email)
-    # for i in range(len(SelectionGenerationKoChunks)):
-    #     print(SelectionGenerationKoChunks[i])
+    # Name = '아리(일반)'
+    # ChunkId = 0
+    # Chunk = f'지구인들은. {{{{메타버스}}}}에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다. {{{{무브 패스트, 앤드 브레이크 띵스}}}}, 빠르게 움직이고 깨뜨려라.'
+    # Pitch = 0
+    # SPEED = [1.05]
+    # RandomSPEED = random.choice(SPEED)
+    # EMOTION = ['normal-1']
+    # RandomEMOTION = random.choice(EMOTION)
+    # LASTPITCH = [-1]
+    # RandomLASTPITCH = random.choice(LASTPITCH)
+    # voiceLayerPath = '/yaas/voice/'
+    # TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
     
-    # VoiceCharacter = 'Narrater'
-    # final_path = VoiceLayerPath(projectName, email, VoiceCharacter)
-    # print(final_path)
-    Name = '아리(일반)'
-    ChunkId = 0
-    Chunk = f'지구인들은. {{{{메타버스}}}}에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다. {{{{무브 패스트, 앤드 브레이크 띵스}}}}, 빠르게 움직이고 깨뜨려라.'
-    Pitch = 0
-    SPEED = [1.05]
-    RandomSPEED = random.choice(SPEED)
-    EMOTION = ['normal-1']
-    RandomEMOTION = random.choice(EMOTION)
-    LASTPITCH = [-1]
-    RandomLASTPITCH = random.choice(LASTPITCH)
-    voiceLayerPath = '/yaas/voice/'
-    TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+    ActorMatching(projectName, email)

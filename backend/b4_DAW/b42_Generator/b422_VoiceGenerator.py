@@ -8,14 +8,14 @@ sys.path.append("/yaas")
 
 from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
-from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
+from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoiceDataSet
 
 ###########################################
 ##### SelectionGenerationKoChunks 생성 #####
 ###########################################
-def LoadSelectionGenerationKoChunks(projectName, email):
+def LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet):
     project = GetProject(projectName, email)
-    CharacterSet = project.
+    VoiceDataSet = GetVoiceDataSet(voiceDataSet)
     SelectionGenerationKoBookContext = project.SelectionGenerationKo[1]['SelectionGenerationKoBookContext'][1]
     SelectionGenerationKoSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGenerationKoSplitedIndexs'][1:]
     

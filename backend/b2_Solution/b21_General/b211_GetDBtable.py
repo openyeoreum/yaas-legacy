@@ -50,6 +50,16 @@ def GetTrainingDataset(projectName, email):
             print(f"No Project found for email: {email}")
             return None
         
+def GetVoiceDataSet(VoiceDataSet):
+    with get_db() as db:
+        column = getattr(Prompt, VoiceDataSet, None)
+        if column is None:
+            raise ValueError(f"No such column: {VoiceDataSet}")
+        
+        # order_by를 사용해 PromptId 기준으로 내림차순 정렬 후 첫 번째 행을 가져옵니다.
+        voiceDataSet = db.query(column).first()
+    return voiceDataSet
+        
 if __name__ == "__main__":
     
     GetPromptFrame("IndexDefinePreprocess")

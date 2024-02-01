@@ -15,7 +15,7 @@ from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoice
 ###########################################
 def LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet):
     project = GetProject(projectName, email)
-    VoiceDataSet = GetVoiceDataSet(voiceDataSet)
+    VoiceDataSet = GetVoiceDataSet(voiceDataSet)[1]
     SelectionGenerationKoBookContext = project.SelectionGenerationKo[1]['SelectionGenerationKoBookContext'][1]
     SelectionGenerationKoSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGenerationKoSplitedIndexs'][1:]
     
@@ -30,10 +30,10 @@ def LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet):
                 Voice = SelectionGenerationKoSplitedChunks[k]['Voice']
                 SelectionGenerationKoChunks.append({'ChunkId': ChunkId, 'Chunk': Chunk, 'Voice': Voice})
     
-    return SelectionGenerationKoBookContext, SelectionGenerationKoChunks
+    return VoiceDataSet, SelectionGenerationKoBookContext, SelectionGenerationKoChunks
 
 def ActorMatching(projectName, email):
-    SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email)
+    VoiceDataSet, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email)
     # print(SelectionGenerationKoBookContext['Vector'])
     for i in range(len(SelectionGenerationKoChunks)):
         print(f"{i+1}: {SelectionGenerationKoChunks[i]['Context']}, {SelectionGenerationKoChunks[i]['Voice']}")

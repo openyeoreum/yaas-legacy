@@ -1,4 +1,5 @@
 import os
+import json
 import requests
 import time
 import random
@@ -13,12 +14,15 @@ from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoice
 ###########################################
 ##### SelectionGenerationKoChunks 생성 #####
 ###########################################
-def LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet):
+def LoadSelectionGenerationKoChunks(projectName, email, voicedataset):
+    voiceDataSet = GetVoiceDataSet(voicedataset)
+    VoiceDataSet = voiceDataSet[0][1]
+    
     project = GetProject(projectName, email)
-    VoiceDataSet = GetVoiceDataSet(voiceDataSet)[1]
+    
     SelectionGenerationKoBookContext = project.SelectionGenerationKo[1]['SelectionGenerationKoBookContext'][1]
     SelectionGenerationKoSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGenerationKoSplitedIndexs'][1:]
-    
+    CharacterCompletion = project.CharacterCompletion[2]['CheckedCharacterTags'][1:]
     SelectionGenerationKoChunks = []
     for i in range(len(SelectionGenerationKoSplitedIndexs)):
         SelectionGenerationKoSplitedBodys = SelectionGenerationKoSplitedIndexs[i]['SelectionGenerationKoSplitedBodys']
@@ -30,14 +34,128 @@ def LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet):
                 Voice = SelectionGenerationKoSplitedChunks[k]['Voice']
                 SelectionGenerationKoChunks.append({'ChunkId': ChunkId, 'Chunk': Chunk, 'Voice': Voice})
     
-    return VoiceDataSet, SelectionGenerationKoBookContext, SelectionGenerationKoChunks
+    return VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks
 
-def ActorMatching(projectName, email):
-    VoiceDataSet, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email)
-    # print(SelectionGenerationKoBookContext['Vector'])
-    for i in range(len(SelectionGenerationKoChunks)):
-        print(f"{i+1}: {SelectionGenerationKoChunks[i]['Context']}, {SelectionGenerationKoChunks[i]['Voice']}")
+# NarratorSet에서 ContextScore 계산
+def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, CharacterTag):
+    if CharacterTag == "Narrator":
+        VoiceDataSetCharacter = VoiceDataSet["Narrator"][1:]
+    else:
+        # VoiceDataSetCharacter = VoiceDataSet["Character"][1:]
+        VoiceDataSetCharacter = VoiceDataSet["Narrator"][1:]
+    BookGenre = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Genre']
+    BookGender = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Gender']
+    BookAge = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Age']
+    BookPersonality = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Personality']
+    BookAtmosphere = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Emotion']
 
+    for Character in VoiceDataSetCharacter:
+        # Genre 스코어 계산
+        CharacterGenre = Character['Context']['Genre']
+        GenreScore = 0
+        for NGenre in CharacterGenre:
+            if NGenre['index'] in BookGenre['GenreRatio']:
+                GenreScore += (BookGenre['GenreRatio'][NGenre['index']] * NGenre['Score'])
+        GenreScore = GenreScore / 1000
+        # Gender 스코어 계산
+        CharacterGender = Character['Context']['Gender']
+        GenderScore = 0
+        for NGender in CharacterGender:
+            if NGender['index'] in BookGender['GenderRatio']:
+                GenderScore += (BookGender['GenderRatio'][NGender['index']] * NGender['Score'])
+        GenderScore = GenderScore / 1000
+        # Age 스코어 계산
+        CharacterAge = Character['Context']['Age']
+        AgeScore = 0
+        for NAge in CharacterAge:
+            if NAge['index'] in BookAge['AgeRatio']:
+                AgeScore += (BookAge['AgeRatio'][NAge['index']] * NAge['Score'])
+        AgeScore = AgeScore / 1000
+        # Personality 스코어 계산
+        CharacterPersonality = Character['Context']['Personality']
+        PersonalityScore = 0
+        for NPersonality in CharacterPersonality:
+            if NPersonality['index'] in BookPersonality['PersonalityRatio']:
+                PersonalityScore += (BookPersonality['PersonalityRatio'][NPersonality['index']] * NPersonality['Score'])
+        PersonalityScore = PersonalityScore / 1000
+        # Atmosphere 스코어 계산
+        CharacterAtmosphere = Character['Context']['Atmosphere']
+        AtmosphereScore = 0
+        for NAtmosphere in CharacterAtmosphere:
+            if NAtmosphere['index'] in BookAtmosphere['Emotion']:
+                AtmosphereScore += (BookAtmosphere['EmotionRatio'][NAtmosphere['index']] * NAtmosphere['Score'])
+        AtmosphereScore = AtmosphereScore / 1000
+        
+        ContextScore = (GenreScore * GenderScore * AgeScore * PersonalityScore)
+        
+        Character['Choice'] = 'No'
+        Character['ContextScore'] = ContextScore
+        # print(f"{NarratorName} : {Narrator['ContextScore']}\n\n1. BookGenre:{BookGenre}\nNarratorGenre:{NarratorGenre}\n\n")
+        # print(f'2. BookGender:{BookGender}\nNarratorGender:{NarratorGender}\n\n')
+        # print(f'3. BookAge:{BookAge}\nNarratorAge:{NarratorAge}\n\n')
+        # print(f'4. BookPersonality:{BookPersonality}\nNarratorPersonality:{NarratorPersonality}\n\n')
+        # print(f'5. BookAtmosphere:{BookAtmosphere}\nNarratorAtmosphere:{NarratorAtmosphere}\n\n\n\n')
+    
+    return VoiceDataSetCharacter
+
+# NarratorSet에서 VoiceScore 계산
+def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacter, CharacterTag):
+    for Character in CharacterCompletion:
+        if Character['CharacterTag'] == CharacterTag:
+            for Voice in VoiceDataSetCharacter:
+                # Gender 스코어 계산
+                VoiceGender = Voice['Voice']['Gender']
+                if Character['Gender'] in VoiceGender:
+                    GenderScore = 1
+                elif (Character['Gender'] not in VoiceGender) and (Character['Gender'] == '남' or Character['Gender'] == '여'):
+                    GenderScore = 0
+                else:
+                    GenderScore = 0.5
+                # Age 스코어 계산
+                VoiceAge = Voice['Voice']['Age']
+                AgeScore = 0
+                for VAge in VoiceAge:
+                    if VAge['index'] == Character['Age']:
+                        AgeScore += VAge['Score']
+                AgeScore = AgeScore / 10
+                # Emotion 스코어 계산
+                VoiceEmotion = Voice['Voice']['Emotion']
+                EmotionScore = 0
+                for VEmotion in VoiceEmotion:
+                    if VEmotion['index'] in Character['Emotion']:
+                        EmotionScore += (Character['Emotion'][VEmotion['index']] * VEmotion['Score'])
+                EmotionScore = EmotionScore / 1000
+                
+                VoiceScore = (GenderScore * AgeScore * EmotionScore)
+                
+                Voice[CharacterTag + 'Score'] = Voice['ContextScore'] * VoiceScore
+                
+    return VoiceDataSetCharacter
+
+# 낭독 ActorMatching
+def ActorMatching(projectName, email, voiceDataSet):
+    VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet)
+    
+    # CharacterTags 구하기
+    CharacterTags = []
+    for Character in CharacterCompletion:
+        CharacterTags.append(Character['CharacterTag'])
+    
+    # Narrator 점수계산
+    NarratorTag = CharacterTags[0]
+    VoiceDataSetCharacter = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, NarratorTag)
+    VoiceDataSetCharacter = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacter, NarratorTag)
+
+    # Character 점수계산
+    if CharacterTags[1:] != []:
+        for CharacterTag in CharacterTags[1:]:
+            VoiceDataSetCharacter = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, CharacterTag)
+            VoiceDataSetCharacter = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacter, CharacterTag)
+
+    with open('VoiceDataSetCharacter.json', 'w', encoding='utf-8') as json_file:
+        json.dump(VoiceDataSetCharacter, json_file, ensure_ascii=False, indent=4)
+
+# 낭독 TextSetting
 # def TextSetting(Text):
 
 ## VoiceLayerPath(TTS 저장) 경로 생성
@@ -129,7 +247,8 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "웹3.0메타버스"
+    projectName = "우리는행복을진단한다"
+    voiceDataSet = "TypeCastVoiceDataSet"
     #########################################################################
     # Name = '아리(일반)'
     # ChunkId = 0
@@ -144,4 +263,4 @@ if __name__ == "__main__":
     # voiceLayerPath = '/yaas/voice/'
     # TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
     
-    ActorMatching(projectName, email)
+    ActorMatching(projectName, email, voiceDataSet)

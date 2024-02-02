@@ -84,10 +84,11 @@ def FindDataframeFilePaths(email, projectName, userStoragePath):
             for dir in dirs:
                 # 전체 디렉토리 경로
                 FullPath = os.path.join(root, dir)
+                normalizedFullPath = unicodedata.normalize('NFC', FullPath)
 
                 # 정규 표현식과 일치하는 경우 리스트에 추가
-                if re.match(pattern, FullPath):
-                    DataFrameFilePaths.append(FullPath)
+                if re.match(pattern, normalizedFullPath):
+                    DataFrameFilePaths.append(FullPath)  # 정규화되지 않은 원본 경로 사용
 
         MatchedDataFrameFilePath = DataFrameFilePaths[0] + '/'
 

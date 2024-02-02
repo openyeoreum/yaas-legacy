@@ -7,6 +7,7 @@ import re
 import sys
 sys.path.append("/yaas")
 
+from tqdm import tqdm
 from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoiceDataSet
@@ -36,20 +37,19 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset):
     
     return VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks
 
+#############################
+##### MatchedActors 생성 #####
+#############################
 # NarratorSet에서 ContextScore 계산
-def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, CharacterTag):
-    if CharacterTag == "Narrator":
-        VoiceDataSetCharacter = VoiceDataSet["Narrator"][1:]
-    else:
-        # VoiceDataSetCharacter = VoiceDataSet["Character"][1:]
-        VoiceDataSetCharacter = VoiceDataSet["Narrator"][1:]
+def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext):
+    VoiceDataSetCharacters = VoiceDataSet["Characters"][1:]
     BookGenre = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Genre']
     BookGender = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Gender']
     BookAge = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Age']
     BookPersonality = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Personality']
     BookAtmosphere = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Emotion']
 
-    for Character in VoiceDataSetCharacter:
+    for Character in VoiceDataSetCharacters:
         # Genre 스코어 계산
         CharacterGenre = Character['Context']['Genre']
         GenreScore = 0
@@ -89,20 +89,21 @@ def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, CharacterTag
         ContextScore = (GenreScore * GenderScore * AgeScore * PersonalityScore)
         
         Character['Choice'] = 'No'
-        Character['ContextScore'] = ContextScore
+        Character['Score'] = {'ContextScore': 'None'}
+        Character['Score']['ContextScore'] = ContextScore
         # print(f"{NarratorName} : {Narrator['ContextScore']}\n\n1. BookGenre:{BookGenre}\nNarratorGenre:{NarratorGenre}\n\n")
         # print(f'2. BookGender:{BookGender}\nNarratorGender:{NarratorGender}\n\n')
         # print(f'3. BookAge:{BookAge}\nNarratorAge:{NarratorAge}\n\n')
         # print(f'4. BookPersonality:{BookPersonality}\nNarratorPersonality:{NarratorPersonality}\n\n')
         # print(f'5. BookAtmosphere:{BookAtmosphere}\nNarratorAtmosphere:{NarratorAtmosphere}\n\n\n\n')
     
-    return VoiceDataSetCharacter
+    return VoiceDataSetCharacters
 
 # NarratorSet에서 VoiceScore 계산
-def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacter, CharacterTag):
+def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
     for Character in CharacterCompletion:
         if Character['CharacterTag'] == CharacterTag:
-            for Voice in VoiceDataSetCharacter:
+            for Voice in VoiceDataSetCharacters:
                 # Gender 스코어 계산
                 VoiceGender = Voice['Voice']['Gender']
                 if Character['Gender'] in VoiceGender:
@@ -128,12 +129,67 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacter, CharacterTag):
                 
                 VoiceScore = (GenderScore * AgeScore * EmotionScore)
                 
-                Voice[CharacterTag + 'Score'] = Voice['ContextScore'] * VoiceScore
+                Voice['Score'][CharacterTag] = Voice['Score']['ContextScore'] * VoiceScore
                 
-    return VoiceDataSetCharacter
+    return VoiceDataSetCharacters
+
+# 최고 점수 캐릭터 선정
+def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag):
+    HighestScore = 0  # 최고 점수를 매우 낮은 값으로 초기화
+    HighestScoreVoices = []  # 최고 점수를 가진 데이터들을 저장할 리스트
+
+    for VoiceData in VoiceDataSetCharacters:
+        if VoiceData['Choice'] == 'No':
+            score = VoiceData['Score'][CharacterTag]
+            if score > HighestScore:
+                HighestScore = score
+                HighestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
+            elif score == HighestScore:
+                HighestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
+
+    # 최고 점수 데이터들 중 랜덤으로 하나를 선택하여 'Choice'를 CharacterTag로 설정
+    if HighestScoreVoices:
+        HighestScoreVoice = random.choice(HighestScoreVoices)
+        HighestScoreVoice['Choice'] = CharacterTag
+    else:
+        HighestScoreVoice = {'Name': 'None', 'ApiSetting': 'None'}
+
+    return VoiceDataSetCharacters, HighestScoreVoice
+
+# 낭독 TextSetting
+def ActorChunkSetting(RawChunk):
+    ActorChunk = RawChunk.replace('(0.1)', '.')
+    ActorChunk = ActorChunk.replace('(0.2)', '.')
+    ActorChunk = ActorChunk.replace('(0.20)', ',')
+    ActorChunk = ActorChunk.replace('(0.3)', ',')
+    ActorChunk = ActorChunk.replace('(0.30)', '')
+    ActorChunk = ActorChunk.replace('(0.40)', '')
+    ActorChunk = ActorChunk.replace('(0.70)', '')
+    ActorChunk = ActorChunk.replace('(1.20)', '')
+    ActorChunk = ActorChunk.replace('(1.30)', '')
+    ActorChunk = ActorChunk.replace('(1.50)', '')
+    ActorChunk = ActorChunk.replace('(2.00)', '')
+    
+    ActorChunk = ActorChunk.replace(',,', ',')
+    ActorChunk = ActorChunk.replace(',.', ',')
+    ActorChunk = ActorChunk.replace('.,', ',')
+    ActorChunk = ActorChunk.replace('..', '.')
+    
+    ActorChunk = ActorChunk.replace('\n', '')
+    
+    SFXPattern = r"<효과음시작[0-9]{1,5}>|<효과음끝[0-9]{1,5}>"
+    ActorChunk = re.sub(SFXPattern, "", ActorChunk)
+    
+    if '(0.60)' in ActorChunk:
+        ActorChunk = ActorChunk.split("(0.60)")
+        
+    if not isinstance(ActorChunk, list):
+        ActorChunk = [ActorChunk]
+    
+    return ActorChunk
 
 # 낭독 ActorMatching
-def ActorMatching(projectName, email, voiceDataSet):
+def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
     VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet)
     
     # CharacterTags 구하기
@@ -141,25 +197,39 @@ def ActorMatching(projectName, email, voiceDataSet):
     for Character in CharacterCompletion:
         CharacterTags.append(Character['CharacterTag'])
     
-    # Narrator 점수계산
-    NarratorTag = CharacterTags[0]
-    VoiceDataSetCharacter = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, NarratorTag)
-    VoiceDataSetCharacter = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacter, NarratorTag)
+    # Characters 점수계산 및 MatchedActors 생성
+    MatchedActors = []
+    VoiceDataSetCharacters = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext)
+    for CharacterTag in CharacterTags:
+        VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
+        VoiceDataSetCharacters, HighestScoreVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)
+        MatchedActor = {'CharacterTag': CharacterTag, 'ActorName': HighestScoreVoice['Name'], 'ApiSetting': HighestScoreVoice['ApiSetting']}
+        MatchedActors.append(MatchedActor)
 
-    # Character 점수계산
-    if CharacterTags[1:] != []:
-        for CharacterTag in CharacterTags[1:]:
-            VoiceDataSetCharacter = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, CharacterTag)
-            VoiceDataSetCharacter = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacter, CharacterTag)
-
-    with open('VoiceDataSetCharacter.json', 'w', encoding='utf-8') as json_file:
-        json.dump(VoiceDataSetCharacter, json_file, ensure_ascii=False, indent=4)
-
-# 낭독 TextSetting
-# def TextSetting(Text):
-
+    ### 테스트 후 삭제 ###
+    with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ###
+    
+    # SelectionGenerationKoChunks의 MatchedActors 삽입
+    for GenerationKoChunks in SelectionGenerationKoChunks:
+        for MatchedActor in MatchedActors:
+            if GenerationKoChunks['Voice']['CharacterTag'] == MatchedActor['CharacterTag']:
+                GenerationKoChunks['ActorName'] = MatchedActor['ActorName']
+                GenerationKoChunks['ActorChunk'] = ActorChunkSetting(GenerationKoChunks['Chunk'])
+                if '(0.60)' in GenerationKoChunks['Chunk']:
+                    GenerationKoChunks['Chunk'] = GenerationKoChunks['Chunk'].split("(0.60)")
+                GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
+                
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    
+    return MatchedActors, SelectionGenerationKoChunks
+    
 ## VoiceLayerPath(TTS 저장) 경로 생성
-def VoiceLayerPath(projectName, email, VoiceCharacter):
+def VoiceLayerPathGen(projectName, email, FileName):
     # 데이터베이스에서 사용자 이름 찾기
     with get_db() as db:
         user = db.query(User).filter(User.Email == email).first()
@@ -193,11 +263,107 @@ def VoiceLayerPath(projectName, email, VoiceCharacter):
         raise FileNotFoundError("Second pattern folder not found")
 
     # 최종 경로 생성
-    voiceLayerPath = os.path.join(SecondFolderPath, SecondFolder, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", VoiceCharacter)
+    voiceLayerPath = os.path.join(SecondFolderPath, SecondFolder, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", FileName)
 
     return voiceLayerPath
 
-def TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath):
+################################
+##### BookToSpeech 파일 생성 #####
+################################
+## TypecastVoice 생성
+def TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath):
+    api_token = os.getenv("TYPECAST_API_TOKEN")
+    HEADERS = {'Authorization': f'Bearer {api_token}'}
+
+    # get my actor
+    r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
+    my_actors = r.json()['result']
+    print(my_actors)
+    my_first_actor = my_actors[0]
+    my_first_actor_id = my_first_actor['actor_id']
+
+    # request speech synthesis
+    r = requests.post('https://typecast.ai/api/speak', headers = HEADERS, json = {
+        'text': Chunk, # 음성을 합성하는 문장
+        'actor_id': my_first_actor_id, # 캐릭터 아이디로 Actor API에서 캐릭터를 검색
+        'lang': 'auto', # text의 언어 코드['en-us', 'ko-kr', 'ja-jp', 'es-es', 'auto'], auto는 자동 언어 감지
+        'xapi_hd': True, # 샘플레이트로 True는 고품질(44.1KHz), False는 저품질(16KHz)
+        'xapi_audio_format': 'wav', # 오디오 포멧으로 기본값은 'wav', 'mp3'
+        'model_version': 'latest', # 모델(캐릭터) 버전으로 API를 참고, 최신 모델은 "latest"
+        'emotion_tone_preset': RandomEMOTION, # 감정으로, actor_id를 사용하여 Actor API 에서 캐릭터에 사용 가능한 감정을 검색
+        'emotion_prompt': None, # 감정 프롬프트(한/영)를 입력, 입력시 'emotion_tone_preset'는 'emotion_prompt'로 설정
+        'volume': 100, # 오디오 볼륨으로 기본값은 100, 범위: 0.5배는 50 - 2배는 200, 
+        'speed_x': RandomSPEED, # 말하는 속도로 기본값은 1, 범위: 0.5(빠름) - 1.5(느림)
+        'tempo': 1.0, # 음성 재생속도로 기본값은 1, 범위: 0.5(0.5배 느림) - 2.0(2배 빠름)
+        'pitch': Pitch, # 음성 피치로 기본값은 0, 범위: -12 - 12
+        'max_seconds': 60, # 음성의 최대 길이로 기본값은 30, 범위: 1 - 60
+        'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
+        'last_pitch': RandomLASTPITCH, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
+    })
+    speak_url = r.json()['result']['speak_v2_url']
+
+    # polling the speech synthesis result
+    for _ in range(120):
+        r = requests.get(speak_url, headers=HEADERS)
+        ret = r.json()['result']
+        # audio is ready
+        if ret['status'] == 'done':
+            # download audio file
+            r = requests.get(ret['audio_download_url'])
+            with open(voiceLayerPath, 'wb') as f:
+                f.write(r.content)
+            break
+        else:
+            print(f"status: {ret['status']}, waiting 1 second")
+            time.sleep(1)
+
+## 프롬프트 요청 및 결과물 BookToSpeech
+def BookToSpeech(projectName, email, voiceDataSet, mode = "Manual"):
+    MatchedActors, SelectionGenerationKoChunks = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet)
+    print(f"< User: {email} | Project: {projectName} | BookToSpeech 시작 >")
+    
+    for MatchedActor in MatchedActors:
+        CharacterTag = MatchedActor['CharacterTag']
+        ActorName = MatchedActor['ActorName']
+        print(f"[{CharacterTag}: {ActorName}]")
+
+    SelectionGenerationKoCount = len(SelectionGenerationKoChunks)
+    # TQDM 셋팅
+    UpdateTQDM = tqdm(SelectionGenerationKoChunks,
+                    total = SelectionGenerationKoCount,
+                    desc = 'CharacterDefineUpdate')
+
+    for Update in UpdateTQDM:
+        UpdateTQDM.set_description(f"ChunkToSpeech: {Update['ActorChunk']}")
+        Name = Update['ActorName']
+        ChunkId = Update['ChunkId']
+        Chunks = Update['ActorChunk']
+        ApiSetting = Update['ApiSetting']
+        ApiToken = ApiSetting['ApiToken']
+        EMOTION = ApiSetting['emotion_tone_preset']['emotion_tone_preset']
+        SPEED = ApiSetting['speed_x']
+        Pitch = ApiSetting['pitch']
+        LASTPITCH = ApiSetting['last_pitch']
+        for i in range(len(Chunks)):
+            Chunk = Chunks[i]
+            RandomEMOTION = random.choice(EMOTION)
+            RandomSPEED = random.choice(SPEED)
+            RandomLASTPITCH = random.choice(LASTPITCH)
+            FileName = projectName + '_' + str(ChunkId) + '_' + Name + (str(i)) + '.wav'
+            voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+            TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+            
+    print(f"[ User: {email} | Project: {projectName} | BookToSpeech 완료 ]\n")
+
+
+
+
+
+
+
+
+##### 테스트 후 삭제 #####
+def TypecastVoiceGeneratorTest(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath):
     api_token = os.getenv("TYPECAST_API_TOKEN")
     HEADERS = {'Authorization': f'Bearer {api_token}'}
 
@@ -247,8 +413,9 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "웹3.0메타버스"
     voiceDataSet = "TypeCastVoiceDataSet"
+    mode = "Manual"
     #########################################################################
     # Name = '아리(일반)'
     # ChunkId = 0
@@ -261,6 +428,6 @@ if __name__ == "__main__":
     # LASTPITCH = [-1]
     # RandomLASTPITCH = random.choice(LASTPITCH)
     # voiceLayerPath = '/yaas/voice/'
-    # TypecastVoiceGenerator(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+    # TypecastVoiceGeneratorTest(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
     
-    ActorMatching(projectName, email, voiceDataSet)
+    BookToSpeech(projectName, email, voiceDataSet, mode = "Manual")

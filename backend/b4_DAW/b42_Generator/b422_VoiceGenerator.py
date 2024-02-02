@@ -230,7 +230,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
         json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
     ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
-    return CharacterTags, MatchedActors, SelectionGenerationKoChunks
+    return MatchedActors, SelectionGenerationKoChunks
     
 ## VoiceLayerPath(TTS 저장) 경로 생성
 def VoiceLayerPathGen(projectName, email, FileName):
@@ -328,21 +328,38 @@ def TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, 
             time.sleep(1)
 
 ## 프롬프트 요청 및 결과물 BookToSpeech
-def BookToSpeech(projectName, email, voiceDataSet, mode = "Manual", actor = "None"):
-    MatchedActors, SelectionGenerationKoChunks = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet)
+def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual", Actor = "None"):
     print(f"< User: {email} | Project: {projectName} | BookToSpeech 시작 >")
-    for MatchedActor in MatchedActors:
-        CharacterTag = MatchedActor['CharacterTag']
-        ActorName = MatchedActor['ActorName']
-        print(f"[ {CharacterTag}: {ActorName} ]")
+    # MatchedActors 경로 생성
+    fileName = projectName + '_' + 'MatchedActors.json'
+    MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
+    # MatchedChunks 경로 생성
+    fileName = projectName + '_' + 'MatchedChunks.json'
+    MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName)
+    
+    ## MatchedActors.json이 존재하면 해당 파일로 BookToSpeech 진행, 아닐경우 새롭게 생성
+    if not os.path.exists(MatchedActorsPath):
+        MatchedActors, SelectionGenerationKoChunks = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet)
+        # MatchedActors, MatchedChunks 저장
+        fileName = projectName + '_' + 'MatchedActors.json'
+        MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
+        with open(MatchedActorsPath, 'w', encoding = 'utf-8') as json_file:
+            json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
+        with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
+            json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    else:
+        with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
+            MatchedActors = json.load(MatchedActorsJson)
+        with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
+            SelectionGenerationKoChunks = json.load(MatchedChunksJson)
 
     ## 일부만 생성하는지, 전체를 생성하는지의 옵션
-    if mode == 'Manual':
+    if Mode == 'Manual':
         GenerationKoChunks = []
         for GenerationKoChunk in SelectionGenerationKoChunks:
-            if GenerationKoChunk['Voice'][ActorName] == actor:
+            if GenerationKoChunk['ActorName'] == Actor:
                 GenerationKoChunks.append(GenerationKoChunk)
-    elif mode == 'Auto':
+    elif Mode == 'Auto':
         GenerationKoChunks = SelectionGenerationKoChunks
 
     ## BookToSpeech 생성
@@ -375,7 +392,8 @@ def BookToSpeech(projectName, email, voiceDataSet, mode = "Manual", actor = "Non
             RandomLASTPITCH = random.choice(LASTPITCH)
             FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
             voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-            TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+            if not os.path.exists(voiceLayerPath):
+                TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
 
     print(f"[ User: {email} | Project: {projectName} | BookToSpeech 완료 ]\n")
 
@@ -440,6 +458,7 @@ if __name__ == "__main__":
     projectName = "웹3.0메타버스"
     voiceDataSet = "TypeCastVoiceDataSet"
     mode = "Manual"
+    actor = "연우(중간톤)"
     #########################################################################
     # Name = '아리(일반)'
     # ChunkId = 0
@@ -453,30 +472,50 @@ if __name__ == "__main__":
     # RandomLASTPITCH = random.choice(LASTPITCH)
     # voiceLayerPath = '/yaas/voice/'
     # TypecastVoiceGeneratorTest(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+    # ##########
+    # ##########
 
+
+
+    # ##########
+    # ##########
+    # BookToSpeech(projectName, email, voiceDataSet, Mode = mode, Actor = actor)
+    # ##########
+    # ##########
     
-    BookToSpeech(projectName, email, voiceDataSet, mode = "Manual")
     
-    # from pydub import AudioSegment
-
-    # # 오디오 파일 로드
-    # bass = "/yaas/storage/s1_Yeoreum/s11_UserStorage/2024-01-25 09:37:55.937106+09:00_yeoreum_user/2024-01-25 09:37:56.595297+09:00_yeoreum_storage/웹3.0메타버스/웹3.0메타버스_mixed_audiobook_file/VoiceLayers/"
-    # audio1 = AudioSegment.from_file(bass + "웹3.0메타버스_1_연우(중간톤)_(1).wav")
-    # audio2 = AudioSegment.from_file(bass + "웹3.0메타버스_2_연우(중간톤)_(1).wav")
-    # audio3 = AudioSegment.from_file(bass + "웹3.0메타버스_3_연우(중간톤)_(1).wav")
-    # audio4 = AudioSegment.from_file(bass + "웹3.0메타버스_4_연우(중간톤)_(1).wav")
-    # audio5 = AudioSegment.from_file(bass + "웹3.0메타버스_5_연우(중간톤)_(1).wav")
-    # audio6 = AudioSegment.from_file(bass + "웹3.0메타버스_6_연우(중간톤)_(1).wav")
-    # audio7 = AudioSegment.from_file(bass + "웹3.0메타버스_7_연우(중간톤)_(1).wav")
-    # audio8 = AudioSegment.from_file(bass + "웹3.0메타버스_8_연우(중간톤)_(1).wav")
-    # audio9 = AudioSegment.from_file(bass + "웹3.0메타버스_9_연우(중간톤)_(1).wav")
-
-    # # 0.8초의 침묵(공백) 생성
-    # silence20 = AudioSegment.silent(duration=800) # 단위는 밀리초
-    # silence15 = AudioSegment.silent(duration=800) # 단위는 밀리초
-    # silence07 = AudioSegment.silent(duration=800) # 단위는 밀리초
-
-    # # 오디오 조각 사이에 침묵 추가하여 합치기
-    # combined_audio = audio1 + silence20 + audio2 + silence15 + audio3 + silence07 + audio4 + silence07 + audio5 + silence07 + audio6 + silence07 + audio7 + silence07 + audio8 + silence07 + audio9
     
-    # combined_audio.export(bass + "audio.wav", format="wav")
+    ##########
+    ##########
+    from pydub import AudioSegment
+
+    # 오디오 파일 로드
+    bass = "/yaas/storage/s1_Yeoreum/s11_UserStorage/2024-01-25 09:37:55.937106+09:00_yeoreum_user/2024-01-25 09:37:56.595297+09:00_yeoreum_storage/웹3.0메타버스/웹3.0메타버스_mixed_audiobook_file/VoiceLayers/"
+    audio1 = AudioSegment.from_file(bass + "웹3.0메타버스_1_연우(중간톤)_(0).wav")
+    audio2 = AudioSegment.from_file(bass + "웹3.0메타버스_2_연우(중간톤)_(0).wav")
+    audio3 = AudioSegment.from_file(bass + "웹3.0메타버스_3_연우(중간톤)_(0).wav")
+    audio4 = AudioSegment.from_file(bass + "웹3.0메타버스_4_연우(중간톤)_(0).wav")
+    audio5 = AudioSegment.from_file(bass + "웹3.0메타버스_5_연우(중간톤)_(0).wav")
+    audio6 = AudioSegment.from_file(bass + "웹3.0메타버스_6_연우(중간톤)_(0).wav")
+    audio7 = AudioSegment.from_file(bass + "웹3.0메타버스_7_연우(중간톤)_(0).wav")
+    audio8 = AudioSegment.from_file(bass + "웹3.0메타버스_8_연우(중간톤)_(0).wav")
+    audio9 = AudioSegment.from_file(bass + "웹3.0메타버스_9_연우(중간톤)_(0).wav")
+    audio10 = AudioSegment.from_file(bass + "웹3.0메타버스_10_연우(중간톤)_(0).wav")
+    audio11 = AudioSegment.from_file(bass + "웹3.0메타버스_11_연우(중간톤)_(0).wav")
+    audio12 = AudioSegment.from_file(bass + "웹3.0메타버스_12_연우(중간톤)_(0).wav")
+    audio13 = AudioSegment.from_file(bass + "웹3.0메타버스_13_연우(중간톤)_(0).wav")
+    audio14 = AudioSegment.from_file(bass + "웹3.0메타버스_14_연우(중간톤)_(0).wav")
+    audio15 = AudioSegment.from_file(bass + "웹3.0메타버스_15_연우(중간톤)_(0).wav")
+    audio16 = AudioSegment.from_file(bass + "웹3.0메타버스_16_연우(중간톤)_(0).wav")
+
+    # 0.8초의 침묵(공백) 생성
+    silence20 = AudioSegment.silent(duration = 2000) # 단위는 밀리초
+    silence15 = AudioSegment.silent(duration = 1500) # 단위는 밀리초
+    silence07 = AudioSegment.silent(duration = 700) # 단위는 밀리초
+
+    # 오디오 조각 사이에 침묵 추가하여 합치기
+    combined_audio = audio1 + silence20 + audio2 + silence15 + audio3 + silence07 + audio4 + silence07 + audio5 + silence07 + audio6 + silence07 + audio7 + silence07 + audio8 + silence07 + audio9 + silence07 + audio10 + silence07 + audio11 + silence07 + audio12 + silence07 + audio13 + silence07 + audio14 + silence07 + audio15 + silence07 + audio16
+    
+    combined_audio.export(bass + "audio.wav", format="wav")
+    ##########
+    ##########

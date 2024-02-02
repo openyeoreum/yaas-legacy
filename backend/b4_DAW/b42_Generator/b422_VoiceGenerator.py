@@ -160,11 +160,12 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag):
 # 낭독 TextSetting
 def ActorChunkSetting(RawChunk):
     ActorChunk = RawChunk.replace('(0.1)', '.')
-    ActorChunk = ActorChunk.replace('(0.2)', '.')
+    ActorChunk = ActorChunk.replace('(0.2)', '~.')
     ActorChunk = ActorChunk.replace('(0.20)', ',')
     ActorChunk = ActorChunk.replace('(0.3)', ',')
     ActorChunk = ActorChunk.replace('(0.30)', '')
     ActorChunk = ActorChunk.replace('(0.40)', '')
+    ActorChunk = ActorChunk.replace('(0.60)', '곬갌끚')
     ActorChunk = ActorChunk.replace('(0.70)', '')
     ActorChunk = ActorChunk.replace('(1.20)', '')
     ActorChunk = ActorChunk.replace('(1.30)', '')
@@ -181,11 +182,11 @@ def ActorChunkSetting(RawChunk):
     SFXPattern = r"<효과음시작[0-9]{1,5}>|<효과음끝[0-9]{1,5}>"
     ActorChunk = re.sub(SFXPattern, "", ActorChunk)
     
-    ETCPattern = r'[^\w\s.,]'
+    ETCPattern = r'[^\w\s~.,?]'
     ActorChunk = re.sub(ETCPattern, '', ActorChunk)
     
-    if '(0.60)' in ActorChunk:
-        ActorChunk = ActorChunk.split("(0.60)")
+    if '곬갌끚' in ActorChunk:
+        ActorChunk = ActorChunk.split("곬갌끚")
         
     if not isinstance(ActorChunk, list):
         ActorChunk = [ActorChunk]
@@ -210,10 +211,10 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
         MatchedActor = {'CharacterTag': CharacterTag, 'ActorName': HighestScoreVoice['Name'], 'ApiSetting': HighestScoreVoice['ApiSetting']}
         MatchedActors.append(MatchedActor)
 
-    ### 테스트 후 삭제 ###
-    with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
-    ### 테스트 후 삭제 ###
+    # ### 테스트 후 삭제 ###
+    # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    # ### 테스트 후 삭제 ###
     
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
@@ -222,13 +223,15 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
                 GenerationKoChunks['ActorName'] = MatchedActor['ActorName']
                 GenerationKoChunks['ActorChunk'] = ActorChunkSetting(GenerationKoChunks['Chunk'])
                 if '(0.60)' in GenerationKoChunks['Chunk']:
-                    GenerationKoChunks['Chunk'] = GenerationKoChunks['Chunk'].split("(0.60)")
+                    # "(0.60)"을 기준으로 모든 부분을 나눔
+                    parts = GenerationKoChunks['Chunk'].split("(0.60)")
+                    GenerationKoChunks['Chunk'] = [part + "(0.60)" for part in parts[:-1]] + [parts[-1]]
                 GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
                 
-    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
     return MatchedActors, SelectionGenerationKoChunks
     
@@ -458,7 +461,7 @@ if __name__ == "__main__":
     projectName = "웹3.0메타버스"
     voiceDataSet = "TypeCastVoiceDataSet"
     mode = "Manual"
-    actor = "연우(중간톤)"
+    actor = "연우(톤다운)"
     #########################################################################
     # Name = '아리(일반)'
     # ChunkId = 0
@@ -477,45 +480,45 @@ if __name__ == "__main__":
 
 
 
-    # ##########
-    # ##########
-    # BookToSpeech(projectName, email, voiceDataSet, Mode = mode, Actor = actor)
-    # ##########
-    # ##########
+    ##########
+    ##########
+    BookToSpeech(projectName, email, voiceDataSet, Mode = mode, Actor = actor)
+    ##########
+    ##########
     
     
     
     ##########
     ##########
-    from pydub import AudioSegment
+    # from pydub import AudioSegment
 
-    # 오디오 파일 로드
-    bass = "/yaas/storage/s1_Yeoreum/s11_UserStorage/2024-01-25 09:37:55.937106+09:00_yeoreum_user/2024-01-25 09:37:56.595297+09:00_yeoreum_storage/웹3.0메타버스/웹3.0메타버스_mixed_audiobook_file/VoiceLayers/"
-    audio1 = AudioSegment.from_file(bass + "웹3.0메타버스_1_연우(중간톤)_(0).wav")
-    audio2 = AudioSegment.from_file(bass + "웹3.0메타버스_2_연우(중간톤)_(0).wav")
-    audio3 = AudioSegment.from_file(bass + "웹3.0메타버스_3_연우(중간톤)_(0).wav")
-    audio4 = AudioSegment.from_file(bass + "웹3.0메타버스_4_연우(중간톤)_(0).wav")
-    audio5 = AudioSegment.from_file(bass + "웹3.0메타버스_5_연우(중간톤)_(0).wav")
-    audio6 = AudioSegment.from_file(bass + "웹3.0메타버스_6_연우(중간톤)_(0).wav")
-    audio7 = AudioSegment.from_file(bass + "웹3.0메타버스_7_연우(중간톤)_(0).wav")
-    audio8 = AudioSegment.from_file(bass + "웹3.0메타버스_8_연우(중간톤)_(0).wav")
-    audio9 = AudioSegment.from_file(bass + "웹3.0메타버스_9_연우(중간톤)_(0).wav")
-    audio10 = AudioSegment.from_file(bass + "웹3.0메타버스_10_연우(중간톤)_(0).wav")
-    audio11 = AudioSegment.from_file(bass + "웹3.0메타버스_11_연우(중간톤)_(0).wav")
-    audio12 = AudioSegment.from_file(bass + "웹3.0메타버스_12_연우(중간톤)_(0).wav")
-    audio13 = AudioSegment.from_file(bass + "웹3.0메타버스_13_연우(중간톤)_(0).wav")
-    audio14 = AudioSegment.from_file(bass + "웹3.0메타버스_14_연우(중간톤)_(0).wav")
-    audio15 = AudioSegment.from_file(bass + "웹3.0메타버스_15_연우(중간톤)_(0).wav")
-    audio16 = AudioSegment.from_file(bass + "웹3.0메타버스_16_연우(중간톤)_(0).wav")
+    # # 오디오 파일 로드
+    # bass = "/yaas/storage/s1_Yeoreum/s11_UserStorage/2024-01-25 09:37:55.937106+09:00_yeoreum_user/2024-01-25 09:37:56.595297+09:00_yeoreum_storage/웹3.0메타버스/웹3.0메타버스_mixed_audiobook_file/VoiceLayers/"
+    # audio1 = AudioSegment.from_file(bass + "웹3.0메타버스_1_연우(중간톤)_(0).wav")
+    # audio2 = AudioSegment.from_file(bass + "웹3.0메타버스_2_연우(중간톤)_(0).wav")
+    # audio3 = AudioSegment.from_file(bass + "웹3.0메타버스_3_연우(중간톤)_(0).wav")
+    # audio4 = AudioSegment.from_file(bass + "웹3.0메타버스_4_연우(중간톤)_(0).wav")
+    # audio5 = AudioSegment.from_file(bass + "웹3.0메타버스_5_연우(중간톤)_(0).wav")
+    # audio6 = AudioSegment.from_file(bass + "웹3.0메타버스_6_연우(중간톤)_(0).wav")
+    # audio7 = AudioSegment.from_file(bass + "웹3.0메타버스_7_연우(중간톤)_(0).wav")
+    # audio8 = AudioSegment.from_file(bass + "웹3.0메타버스_8_연우(중간톤)_(0).wav")
+    # audio9 = AudioSegment.from_file(bass + "웹3.0메타버스_9_연우(중간톤)_(0).wav")
+    # audio10 = AudioSegment.from_file(bass + "웹3.0메타버스_10_연우(중간톤)_(0).wav")
+    # audio11 = AudioSegment.from_file(bass + "웹3.0메타버스_11_연우(중간톤)_(0).wav")
+    # audio12 = AudioSegment.from_file(bass + "웹3.0메타버스_12_연우(중간톤)_(0).wav")
+    # audio13 = AudioSegment.from_file(bass + "웹3.0메타버스_13_연우(중간톤)_(0).wav")
+    # audio14 = AudioSegment.from_file(bass + "웹3.0메타버스_14_연우(중간톤)_(0).wav")
+    # audio15 = AudioSegment.from_file(bass + "웹3.0메타버스_15_연우(중간톤)_(0).wav")
+    # audio16 = AudioSegment.from_file(bass + "웹3.0메타버스_16_연우(중간톤)_(0).wav")
 
-    # 0.8초의 침묵(공백) 생성
-    silence20 = AudioSegment.silent(duration = 2000) # 단위는 밀리초
-    silence15 = AudioSegment.silent(duration = 1500) # 단위는 밀리초
-    silence07 = AudioSegment.silent(duration = 700) # 단위는 밀리초
+    # # 0.8초의 침묵(공백) 생성
+    # silence20 = AudioSegment.silent(duration = 2000) # 단위는 밀리초
+    # silence15 = AudioSegment.silent(duration = 1500) # 단위는 밀리초
+    # silence07 = AudioSegment.silent(duration = 700) # 단위는 밀리초
 
-    # 오디오 조각 사이에 침묵 추가하여 합치기
-    combined_audio = audio1 + silence20 + audio2 + silence15 + audio3 + silence07 + audio4 + silence07 + audio5 + silence07 + audio6 + silence07 + audio7 + silence07 + audio8 + silence07 + audio9 + silence07 + audio10 + silence07 + audio11 + silence07 + audio12 + silence07 + audio13 + silence07 + audio14 + silence07 + audio15 + silence07 + audio16
+    # # 오디오 조각 사이에 침묵 추가하여 합치기
+    # combined_audio = audio1 + silence20 + audio2 + silence15 + audio3 + silence07 + audio4 + silence07 + audio5 + silence07 + audio6 + silence07 + audio7 + silence07 + audio8 + silence07 + audio9 + silence07 + audio10 + silence07 + audio11 + silence07 + audio12 + silence07 + audio13 + silence07 + audio14 + silence07 + audio15 + silence07 + audio16
     
-    combined_audio.export(bass + "audio.wav", format="wav")
+    # combined_audio.export(bass + "audio.wav", format="wav")
     ##########
     ##########

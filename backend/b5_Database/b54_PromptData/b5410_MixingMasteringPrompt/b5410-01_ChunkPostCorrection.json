@@ -1,0 +1,257 @@
+{
+    "TaskName": "ChunkPostCorrection",
+    "BaseModel": {
+        "ShortTokensModel": "gpt-3.5-turbo-1106",
+        "LongTokensModel": "gpt-4-1106-preview"
+    },
+    "ExampleFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
+    "MemoryFineTunedModel": {
+        "ShortTokensModel": [],
+        "LongTokensModel": []
+    },
+    "MasterModel": "gpt-4-1106-preview",
+    "Temperature": 0.4,
+    "OutputTokensRatio": 0.5,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 <원문>에서 숫자, 영어, 외국어 등을 한글발음으로 변경하여 낭독되는 그대로의 <발음문.json>을 완성하는 전문가 입니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(양식)\n",
+                    "Message": "{'발음문': '<원문>의 한국발음 변경문'}"
+                },
+                {
+                    "Mark": "\n\n(예시)\n",
+                    "Message": "<원문>\nNFT와 ARG가 바꾸는 비즈니스 법칙. 웹3.0 메타버스\n\n<발음문.json>\n{'발음문': '엔에프티와 에이알지가 바꾸는 비즈니스 법칙. 웹삼쩜영 메타버스'}"
+                },
+                {
+                    "Mark": "\n\n(<발음문.json> 완성 작업)\n",
+                    "Message": "1. <원문>에서 숫자, 영어, 외국어 등을 한국발음으로 변경하여 낭독되는 그대로의 <발음문.json>을 완성합니다.\n2. 숫자는 한국어로 발음합니다.\n3. 특수문자 등 낭독에서 읽히지 않는 부분은 한국발음으로 변경하지 않습니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<발음문.json>작업 시작)\n",
+                    "InputMark": "<원문>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<발음문.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 <원문>에서 숫자, 영어, 외국어 등을 한글발음으로 변경하여 낭독되는 그대로의 <발음문.json>을 완성하는 전문가 입니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(양식)\n",
+                    "Message": "{'발음문': '<원문>의 한국발음 변경문'}"
+                },
+                {
+                    "Mark": "\n\n(예시)\n",
+                    "Message": "<원문>\nNFT와 ARG가 바꾸는 비즈니스 법칙. 웹3.0 메타버스\n\n<발음문.json>\n{'발음문': '엔에프티와 에이알지가 바꾸는 비즈니스 법칙. 웹삼쩜영 메타버스'}"
+                },
+                {
+                    "Mark": "\n\n(<발음문.json> 완성 작업)\n",
+                    "Message": "1. <원문>에서 숫자, 영어, 외국어 등을 한국발음으로 변경하여 낭독되는 그대로의 <발음문.json>을 완성합니다.\n2. 숫자는 한국어로 발음합니다.\n3. 특수문자 등 낭독에서 읽히지 않는 부분은 한국발음으로 변경하지 않습니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<발음문.json>작업 시작)\n",
+                    "InputMark": "<원문>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<발음문.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 <원문>에서 숫자, 영어, 외국어 등을 한글발음으로 변경하여 낭독되는 그대로의 <발음문.json>을 완성하는 전문가 입니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(양식)\n",
+                    "Message": "{'발음문': '<원문>의 한국발음 변경문'}"
+                },
+                {
+                    "Mark": "\n\n(예시)\n",
+                    "Message": "<원문>\nNFT와 ARG가 바꾸는 비즈니스 법칙. 웹3.0 메타버스\n\n<발음문.json>\n{'발음문': '엔에프티와 에이알지가 바꾸는 비즈니스 법칙. 웹삼쩜영 메타버스'}"
+                },
+                {
+                    "Mark": "\n\n(<발음문.json> 완성 작업)\n",
+                    "Message": "1. <원문>에서 숫자, 영어, 외국어 등을 한국발음으로 변경하여 낭독되는 그대로의 <발음문.json>을 완성합니다.\n2. 숫자는 한국어로 발음합니다.\n3. 특수문자 등 낭독에서 읽히지 않는 부분은 한국발음으로 변경하지 않습니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "\n\n(<발음문.json>작업 시작)\n",
+                    "InputMark": "<원문>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<발음문.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 <원문>에서 숫자, 영어, 외국어 등을 한글발음으로 변경하여 낭독되는 그대로의 <발음문.json>을 완성하는 전문가 입니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(양식)\n",
+                    "Message": "{'발음문': '<원문>의 한국발음 변경문'}"
+                },
+                {
+                    "Mark": "\n\n(예시)\n",
+                    "Message": "<원문>\nNFT와 ARG가 바꾸는 비즈니스 법칙. 웹3.0 메타버스\n\n<발음문.json>\n{'발음문': '엔에프티와 에이알지가 바꾸는 비즈니스 법칙. 웹삼쩜영 메타버스'}"
+                },
+                {
+                    "Mark": "\n\n(<발음문.json> 완성 작업)\n",
+                    "Message": "1. <원문>에서 숫자, 영어, 외국어 등을 한국발음으로 변경하여 낭독되는 그대로의 <발음문.json>을 완성합니다.\n2. 숫자는 한국어로 발음합니다.\n3. 특수문자 등 낭독에서 읽히지 않는 부분은 한국발음으로 변경하지 않습니다."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "\n\n(<발음문.json>작업 시작)\n",
+                    "InputMark": "<원문>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<발음문.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

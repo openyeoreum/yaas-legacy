@@ -230,7 +230,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
         json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
     ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
-    return MatchedActors, SelectionGenerationKoChunks
+    return CharacterTags, MatchedActors, SelectionGenerationKoChunks
     
 ## VoiceLayerPath(TTS 저장) 경로 생성
 def VoiceLayerPathGen(projectName, email, FileName):
@@ -328,20 +328,30 @@ def TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, 
             time.sleep(1)
 
 ## 프롬프트 요청 및 결과물 BookToSpeech
-def BookToSpeech(projectName, email, voiceDataSet, mode = "Manual"):
+def BookToSpeech(projectName, email, voiceDataSet, mode = "Manual", actor = "None"):
     MatchedActors, SelectionGenerationKoChunks = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet)
     print(f"< User: {email} | Project: {projectName} | BookToSpeech 시작 >")
-    
     for MatchedActor in MatchedActors:
         CharacterTag = MatchedActor['CharacterTag']
         ActorName = MatchedActor['ActorName']
         print(f"[ {CharacterTag}: {ActorName} ]")
 
-    SelectionGenerationKoCount = len(SelectionGenerationKoChunks)
-    # TQDM 셋팅
-    UpdateTQDM = tqdm(SelectionGenerationKoChunks,
-                    total = SelectionGenerationKoCount,
-                    desc = 'CharacterDefineUpdate')
+    ## 일부만 생성하는지, 전체를 생성하는지의 옵션
+    if mode == 'Manual':
+        GenerationKoChunks = []
+        for GenerationKoChunk in SelectionGenerationKoChunks:
+            if GenerationKoChunk['Voice'][ActorName] == actor:
+                GenerationKoChunks.append(GenerationKoChunk)
+    elif mode == 'Auto':
+        GenerationKoChunks = SelectionGenerationKoChunks
+
+    ## BookToSpeech 생성
+    GenerationKoChunksCount = len(GenerationKoChunks)
+    
+    ## TQDM 셋팅
+    UpdateTQDM = tqdm(GenerationKoChunks,
+                    total = GenerationKoChunksCount,
+                    desc = 'BookToSpeech')
 
     for Update in UpdateTQDM:
         UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['ActorChunk']}")
@@ -363,10 +373,10 @@ def BookToSpeech(projectName, email, voiceDataSet, mode = "Manual"):
             RandomEMOTION = random.choice(EMOTION)
             RandomSPEED = random.choice(SPEED)
             RandomLASTPITCH = random.choice(LASTPITCH)
-            FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i+1)})' + '.wav'
+            FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
             voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
             TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
-            
+
     print(f"[ User: {email} | Project: {projectName} | BookToSpeech 완료 ]\n")
 
 
@@ -445,28 +455,28 @@ if __name__ == "__main__":
     # TypecastVoiceGeneratorTest(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
 
     
-    # BookToSpeech(projectName, email, voiceDataSet, mode = "Manual")
+    BookToSpeech(projectName, email, voiceDataSet, mode = "Manual")
     
-    from pydub import AudioSegment
+    # from pydub import AudioSegment
 
-    # 오디오 파일 로드
-    bass = "/yaas/storage/s1_Yeoreum/s11_UserStorage/2024-01-25 09:37:55.937106+09:00_yeoreum_user/2024-01-25 09:37:56.595297+09:00_yeoreum_storage/웹3.0메타버스/웹3.0메타버스_mixed_audiobook_file/VoiceLayers/"
-    audio1 = AudioSegment.from_file(bass + "웹3.0메타버스_1_연우(중간톤)_(1).wav")
-    audio2 = AudioSegment.from_file(bass + "웹3.0메타버스_2_연우(중간톤)_(1).wav")
-    audio3 = AudioSegment.from_file(bass + "웹3.0메타버스_3_연우(중간톤)_(1).wav")
-    audio4 = AudioSegment.from_file(bass + "웹3.0메타버스_4_연우(중간톤)_(1).wav")
-    audio5 = AudioSegment.from_file(bass + "웹3.0메타버스_5_연우(중간톤)_(1).wav")
-    audio6 = AudioSegment.from_file(bass + "웹3.0메타버스_6_연우(중간톤)_(1).wav")
-    audio7 = AudioSegment.from_file(bass + "웹3.0메타버스_7_연우(중간톤)_(1).wav")
-    audio8 = AudioSegment.from_file(bass + "웹3.0메타버스_8_연우(중간톤)_(1).wav")
-    audio9 = AudioSegment.from_file(bass + "웹3.0메타버스_9_연우(중간톤)_(1).wav")
+    # # 오디오 파일 로드
+    # bass = "/yaas/storage/s1_Yeoreum/s11_UserStorage/2024-01-25 09:37:55.937106+09:00_yeoreum_user/2024-01-25 09:37:56.595297+09:00_yeoreum_storage/웹3.0메타버스/웹3.0메타버스_mixed_audiobook_file/VoiceLayers/"
+    # audio1 = AudioSegment.from_file(bass + "웹3.0메타버스_1_연우(중간톤)_(1).wav")
+    # audio2 = AudioSegment.from_file(bass + "웹3.0메타버스_2_연우(중간톤)_(1).wav")
+    # audio3 = AudioSegment.from_file(bass + "웹3.0메타버스_3_연우(중간톤)_(1).wav")
+    # audio4 = AudioSegment.from_file(bass + "웹3.0메타버스_4_연우(중간톤)_(1).wav")
+    # audio5 = AudioSegment.from_file(bass + "웹3.0메타버스_5_연우(중간톤)_(1).wav")
+    # audio6 = AudioSegment.from_file(bass + "웹3.0메타버스_6_연우(중간톤)_(1).wav")
+    # audio7 = AudioSegment.from_file(bass + "웹3.0메타버스_7_연우(중간톤)_(1).wav")
+    # audio8 = AudioSegment.from_file(bass + "웹3.0메타버스_8_연우(중간톤)_(1).wav")
+    # audio9 = AudioSegment.from_file(bass + "웹3.0메타버스_9_연우(중간톤)_(1).wav")
 
-    # 0.8초의 침묵(공백) 생성
-    silence20 = AudioSegment.silent(duration=800) # 단위는 밀리초
-    silence15 = AudioSegment.silent(duration=800) # 단위는 밀리초
-    silence07 = AudioSegment.silent(duration=800) # 단위는 밀리초
+    # # 0.8초의 침묵(공백) 생성
+    # silence20 = AudioSegment.silent(duration=800) # 단위는 밀리초
+    # silence15 = AudioSegment.silent(duration=800) # 단위는 밀리초
+    # silence07 = AudioSegment.silent(duration=800) # 단위는 밀리초
 
-    # 오디오 조각 사이에 침묵 추가하여 합치기
-    combined_audio = audio1 + silence20 + audio2 + silence15 + audio3 + silence07 + audio4 + silence07 + audio5 + silence07 + audio6 + silence07 + audio7 + silence07 + audio8 + silence07 + audio9
+    # # 오디오 조각 사이에 침묵 추가하여 합치기
+    # combined_audio = audio1 + silence20 + audio2 + silence15 + audio3 + silence07 + audio4 + silence07 + audio5 + silence07 + audio6 + silence07 + audio7 + silence07 + audio8 + silence07 + audio9
     
-    combined_audio.export(bass + "audio.wav", format="wav")
+    # combined_audio.export(bass + "audio.wav", format="wav")

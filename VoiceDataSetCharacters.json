@@ -1492,7 +1492,7 @@
             ],
             "En": "None"
         },
-        "Choice": "Character7",
+        "Choice": "Character3",
         "Score": {
             "ContextScore": 0.02182071175577669,
             "Narrator": 0.0,
@@ -1922,7 +1922,7 @@
             ],
             "En": "None"
         },
-        "Choice": "Character3",
+        "Choice": "Character7",
         "Score": {
             "ContextScore": 0.02182071175577669,
             "Narrator": 0.0,

@@ -32,8 +32,9 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset):
             for k in range(len(SelectionGenerationKoSplitedChunks)):
                 ChunkId = SelectionGenerationKoSplitedChunks[k]['ChunkId']
                 Chunk = SelectionGenerationKoSplitedChunks[k]['Chunk']
+                Tag = SelectionGenerationKoSplitedChunks[k]['Tag']
                 Voice = SelectionGenerationKoSplitedChunks[k]['Voice']
-                SelectionGenerationKoChunks.append({'ChunkId': ChunkId, 'Chunk': Chunk, 'Voice': Voice})
+                SelectionGenerationKoChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'Chunk': Chunk, 'Voice': Voice})
     
     return VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks
 
@@ -176,9 +177,12 @@ def ActorChunkSetting(RawChunk):
     ActorChunk = ActorChunk.replace('..', '.')
     
     ActorChunk = ActorChunk.replace('\n', '')
-    
+
     SFXPattern = r"<효과음시작[0-9]{1,5}>|<효과음끝[0-9]{1,5}>"
     ActorChunk = re.sub(SFXPattern, "", ActorChunk)
+    
+    ETCPattern = r'[^\w\s.,]'
+    ActorChunk = re.sub(ETCPattern, '', ActorChunk)
     
     if '(0.60)' in ActorChunk:
         ActorChunk = ActorChunk.split("(0.60)")
@@ -278,7 +282,13 @@ def TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, 
     # get my actor
     r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
     my_actors = r.json()['result']
-    print(my_actors)
+    # print(Chunk)
+    # print(RandomEMOTION)
+    # print(RandomSPEED)
+    # print(Pitch)
+    # print(RandomLASTPITCH)
+    # print(voiceLayerPath)
+    # print(my_actors)
     my_first_actor = my_actors[0]
     my_first_actor_id = my_first_actor['actor_id']
 
@@ -325,7 +335,7 @@ def BookToSpeech(projectName, email, voiceDataSet, mode = "Manual"):
     for MatchedActor in MatchedActors:
         CharacterTag = MatchedActor['CharacterTag']
         ActorName = MatchedActor['ActorName']
-        print(f"[{CharacterTag}: {ActorName}]")
+        print(f"[ {CharacterTag}: {ActorName} ]")
 
     SelectionGenerationKoCount = len(SelectionGenerationKoChunks)
     # TQDM 셋팅
@@ -334,7 +344,7 @@ def BookToSpeech(projectName, email, voiceDataSet, mode = "Manual"):
                     desc = 'CharacterDefineUpdate')
 
     for Update in UpdateTQDM:
-        UpdateTQDM.set_description(f"ChunkToSpeech: {Update['ActorChunk']}")
+        UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['ActorChunk']}")
         Name = Update['ActorName']
         ChunkId = Update['ChunkId']
         Chunks = Update['ActorChunk']
@@ -343,13 +353,17 @@ def BookToSpeech(projectName, email, voiceDataSet, mode = "Manual"):
         EMOTION = ApiSetting['emotion_tone_preset']['emotion_tone_preset']
         SPEED = ApiSetting['speed_x']
         Pitch = ApiSetting['pitch']
-        LASTPITCH = ApiSetting['last_pitch']
+        if Update['Tag'] not in ['Narrator', 'Character']:
+            LASTPITCH = [-2]
+        else:
+            LASTPITCH = ApiSetting['last_pitch']
+
         for i in range(len(Chunks)):
             Chunk = Chunks[i]
             RandomEMOTION = random.choice(EMOTION)
             RandomSPEED = random.choice(SPEED)
             RandomLASTPITCH = random.choice(LASTPITCH)
-            FileName = projectName + '_' + str(ChunkId) + '_' + Name + (str(i)) + '.wav'
+            FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i+1)})' + '.wav'
             voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
             TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
             
@@ -429,5 +443,30 @@ if __name__ == "__main__":
     # RandomLASTPITCH = random.choice(LASTPITCH)
     # voiceLayerPath = '/yaas/voice/'
     # TypecastVoiceGeneratorTest(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+
     
-    BookToSpeech(projectName, email, voiceDataSet, mode = "Manual")
+    # BookToSpeech(projectName, email, voiceDataSet, mode = "Manual")
+    
+    from pydub import AudioSegment
+
+    # 오디오 파일 로드
+    bass = "/yaas/storage/s1_Yeoreum/s11_UserStorage/2024-01-25 09:37:55.937106+09:00_yeoreum_user/2024-01-25 09:37:56.595297+09:00_yeoreum_storage/웹3.0메타버스/웹3.0메타버스_mixed_audiobook_file/VoiceLayers/"
+    audio1 = AudioSegment.from_file(bass + "웹3.0메타버스_1_연우(중간톤)_(1).wav")
+    audio2 = AudioSegment.from_file(bass + "웹3.0메타버스_2_연우(중간톤)_(1).wav")
+    audio3 = AudioSegment.from_file(bass + "웹3.0메타버스_3_연우(중간톤)_(1).wav")
+    audio4 = AudioSegment.from_file(bass + "웹3.0메타버스_4_연우(중간톤)_(1).wav")
+    audio5 = AudioSegment.from_file(bass + "웹3.0메타버스_5_연우(중간톤)_(1).wav")
+    audio6 = AudioSegment.from_file(bass + "웹3.0메타버스_6_연우(중간톤)_(1).wav")
+    audio7 = AudioSegment.from_file(bass + "웹3.0메타버스_7_연우(중간톤)_(1).wav")
+    audio8 = AudioSegment.from_file(bass + "웹3.0메타버스_8_연우(중간톤)_(1).wav")
+    audio9 = AudioSegment.from_file(bass + "웹3.0메타버스_9_연우(중간톤)_(1).wav")
+
+    # 0.8초의 침묵(공백) 생성
+    silence20 = AudioSegment.silent(duration=800) # 단위는 밀리초
+    silence15 = AudioSegment.silent(duration=800) # 단위는 밀리초
+    silence07 = AudioSegment.silent(duration=800) # 단위는 밀리초
+
+    # 오디오 조각 사이에 침묵 추가하여 합치기
+    combined_audio = audio1 + silence20 + audio2 + silence15 + audio3 + silence07 + audio4 + silence07 + audio5 + silence07 + audio6 + silence07 + audio7 + silence07 + audio8 + silence07 + audio9
+    
+    combined_audio.export(bass + "audio.wav", format="wav")

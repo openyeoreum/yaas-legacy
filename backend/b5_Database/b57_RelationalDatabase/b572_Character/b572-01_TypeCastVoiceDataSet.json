@@ -86,7 +86,8 @@
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [0],
-                    "En": "None"
+                    "En": "None",
+                    "Caption": "None"
                 }
             },
             {
@@ -168,7 +169,8 @@
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [0],
-                    "En": "None"
+                    "En": "None",
+                    "Caption": "None"
                 }
             },
             {
@@ -250,7 +252,8 @@
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [0],
-                    "En": "None"
+                    "En": "None",
+                    "Caption": "None"
                 }
             },
             {
@@ -332,7 +335,8 @@
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-1, -2],
-                    "En": "None"
+                    "En": "None",
+                    "Caption": "None"
                 }
             },
             {
@@ -414,7 +418,8 @@
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-1, -2],
-                    "En": "None"
+                    "En": "None",
+                    "Caption": "None"
                 }
             },
             {
@@ -496,7 +501,8 @@
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [0],
-                    "En": "None"
+                    "En": "None",
+                    "Caption": "None"
                 }
             },
             {
@@ -578,7 +584,8 @@
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [0],
-                    "En": "None"
+                    "En": "None",
+                    "Caption": "None"
                 }
             },
             {
@@ -660,7 +667,8 @@
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-1, -2],
-                    "En": "None"
+                    "En": "None",
+                    "Caption": "None"
                 }
             },
             {
@@ -742,7 +750,8 @@
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-1, -2],
-                    "En": "None"
+                    "En": "None",
+                    "Caption": "None"
                 }
             },
             {
@@ -824,7 +833,8 @@
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-1, -2],
-                    "En": "None"
+                    "En": "None",
+                    "Caption": "None"
                 }
             }
         ]

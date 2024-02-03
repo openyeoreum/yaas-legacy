@@ -198,6 +198,13 @@ def SelectionGenerationKoJson(projectName, email):
                                 personality = BookContext['Vector']['ContextCompletion']['Personality']
                                 emotion = BookContext['Vector']['ContextCompletion']['Emotion']
                                 CaptionMusic = {"CaptionMusicStart": CaptionMusicStart, "CaptionMusicEnd": CaptionMusicEnd, "Genre": genre, "Gender": gender, "Age": age, "Personality": personality, "Emotion": emotion}
+                    # New Caption Tag 적용
+                    else:
+                        CaptionChunkIds = CaptionFrameChunk['ChunkIds']
+                        SplitedCaptionChunks = CaptionFrameChunk['SplitedCaptionChunks']
+                        for SplitedCaptionChunk in SplitedCaptionChunks:
+                            if SplitedCaptionChunk['ChunkId'] == chunkid:
+                                Tag = SplitedCaptionChunk['Tag']
 
                 # Voice
                 # Chunk가 비어있거나, 내에 문자가 없을 경우의 예외처리

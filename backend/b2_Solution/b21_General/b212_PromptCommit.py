@@ -62,6 +62,7 @@ def AddPromptToDB():
                 ExistingPrompt.CharacterDefine = characterDefine
                 ExistingPrompt.CharacterCompletion = characterCompletion
                 ExistingPrompt.CharacterPostCompletion = characterPostCompletion
+                ExistingPrompt.CharacterPostCompletionLiterary = characterPostCompletionLiterary
                 ExistingPrompt.SoundMatching = soundMatching
                 ExistingPrompt.SFXMatching = sFXMatching
                 ExistingPrompt.SFXMultiQuery = sFXMultiQuery
@@ -87,6 +88,7 @@ def AddPromptToDB():
                 CharacterDefine = characterDefine,
                 CharacterCompletion = characterCompletion,
                 CharacterPostCompletion = characterPostCompletion,
+                CharacterPostCompletionLiterary = characterPostCompletionLiterary,
                 SoundMatching = soundMatching,
                 SFXMatching = sFXMatching,
                 SFXMultiQuery = sFXMultiQuery,

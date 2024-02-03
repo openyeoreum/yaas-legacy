@@ -23,6 +23,13 @@ def LoadBodyFrameBodys(projectName, email):
     
     return BodyFrameSplitedBodyScripts, BodyFrameBodys
 
+## BodyFrameBodys 로드
+def LoadWMWMMatchingBookGenre(projectName, email):
+    project = GetProject(projectName, email)
+    BookGenre = project.WMWMMatching[1]['BookContexts'][1]['Vector']['ContextCompletion']['Genre']['Genre']
+    
+    return BookGenre
+
 ## CharacterDefine 로드
 def LoadCharacterDefine(projectName, email):
     project = GetProject(projectName, email)
@@ -423,7 +430,13 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
     return outputMemoryDics
 
 ## 12-2. CharacterPostCompletion 프롬프트 요청 및 결과물 Json화
-def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, Process = "CharacterPostCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+    # BookGenre에 따른 Process 선정
+    BookGenre = LoadWMWMMatchingBookGenre(projectName, email)
+    if BookGenre in ['문학', '아동']:
+        Process = "CharacterPostCompletionLiterary"
+    else:
+        Process = "CharacterPostCompletion"
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 

@@ -402,6 +402,7 @@ class Prompt(Base):
     CharacterDefine = Column(JSON)
     CharacterCompletion = Column(JSON)
     CharacterPostCompletion = Column(JSON)
+    CharacterPostCompletionLiterary = Column(JSON)
     
     # MusicPrompt
     MusicMatching = Column(JSON)
@@ -474,6 +475,7 @@ class TrainingDataset(Base):
     CharacterDefine = Column(JSON)
     CharacterCompletion = Column(JSON)
     CharacterPostCompletion = Column(JSON)
+    CharacterPostCompletionLiterary = Column(JSON)
     
     # MusicDataset
     MusicMatching = Column(JSON)

@@ -49,6 +49,7 @@ def AddTrainingDatasetToDB(projectName, email):
             ExistingDataset.CharacterDefine = trainingDataset
             ExistingDataset.CharacterCompletion = trainingDataset
             ExistingDataset.CharacterPostCompletion = trainingDataset
+            ExistingDataset.CharacterPostCompletionLiterary = trainingDataset
             ExistingDataset.SoundMatching = trainingDataset
             ExistingDataset.SFXMatching = trainingDataset
             ExistingDataset.SFXMultiQuery = trainingDataset
@@ -79,6 +80,7 @@ def AddTrainingDatasetToDB(projectName, email):
                 CharacterDefine = trainingDataset,
                 CharacterCompletion = trainingDataset,
                 CharacterPostCompletion = trainingDataset,
+                CharacterPostCompletionLiterary = trainingDataset,
                 SoundMatching = trainingDataset,
                 SFXMatching = trainingDataset,
                 SFXMultiQuery = trainingDataset,

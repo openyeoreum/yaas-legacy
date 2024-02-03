@@ -35,6 +35,7 @@ def AddPromptToDB():
         characterDefine = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-01_CharacterDefine.json")
         characterCompletion = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-02_CharacterCompletion.json")
         characterPostCompletion = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-03_CharacterPostCompletion.json")
+        characterPostCompletionLiterary = LoadJsonFrame(PromptDataPath + "/b543_CharacterPrompt/b543-04_CharacterPostCompletionLiterary.json")
         soundMatching = LoadJsonFrame(PromptDataPath + "/b545_SoundPrompt/b545-01_SoundMatching.json")
         sFXMatching = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-01_SFXMatching.json")
         sFXMultiQuery = LoadJsonFrame(PromptDataPath + "/b546_SFXPrompt/b546-02_SFXMultiQuery.json")

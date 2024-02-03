@@ -199,20 +199,24 @@
                 0
             ],
             "En": "None",
-            "Caption": "None"
+            "Caption": "유라(중간톤, 피치다운)"
         },
         "Choice": "Narrator",
         "Score": {
-            "ContextScore": 1.0000000000000002,
-            "Narrator": 1.0000000000000002,
-            "Character1": 0.5000000000000001,
-            "Character2": 0.9629000000000003,
-            "Character3": 0.0,
-            "Character4": 0.6667000000000002,
+            "ContextScore": 1.0,
+            "Narrator": 1.0,
+            "Character1": 0.0,
+            "Character2": 0.5,
+            "Character3": 0.75,
+            "Character4": 0.8332999999999999,
             "Character5": 0.0,
             "Character6": 0.0,
             "Character7": 0.0,
-            "Character8": 0.0
+            "Character8": 0.5,
+            "Character9": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0,
+            "Character12": 0.0
         }
     },
     {
@@ -417,18 +421,22 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character1",
+        "Choice": "Character3",
         "Score": {
-            "ContextScore": 0.6420554688817676,
-            "Narrator": 0.513644375105414,
-            "Character1": 0.23113996879743634,
-            "Character2": 0.4755833269101029,
-            "Character3": 0.0,
-            "Character4": 0.3082020343945016,
+            "ContextScore": 0.6782561383928571,
+            "Narrator": 0.5426049107142857,
+            "Character1": 0.21704196428571432,
+            "Character2": 0.2441722098214286,
+            "Character3": 0.4273013671875,
+            "Character4": 0.4069374048883929,
             "Character5": 0.0,
-            "Character6": 0.20545775004216565,
+            "Character6": 0.0,
             "Character7": 0.0,
-            "Character8": 0.0
+            "Character8": 0.13565122767857143,
+            "Character9": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0,
+            "Character12": 0.0
         }
     },
     {
@@ -634,18 +642,22 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character3",
+        "Choice": "Character2",
         "Score": {
-            "ContextScore": 1.0000000000000002,
+            "ContextScore": 1.0,
             "Narrator": 0.0,
             "Character1": 0.0,
-            "Character2": 0.0,
+            "Character2": 0.5,
             "Character3": 0.0,
             "Character4": 0.0,
-            "Character5": 1.0000000000000002,
+            "Character5": 0.0,
             "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0
+            "Character7": 1.0,
+            "Character8": 0.0,
+            "Character9": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0,
+            "Character12": 0.0
         }
     },
     {
@@ -851,18 +863,22 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character5",
+        "Choice": "Caption",
         "Score": {
-            "ContextScore": 0.6753246753246754,
+            "ContextScore": 0.7008928571428572,
             "Narrator": 0.0,
             "Character1": 0.0,
-            "Character2": 0.0,
+            "Character2": 0.3504464285714286,
             "Character3": 0.0,
             "Character4": 0.0,
-            "Character5": 0.6753246753246754,
+            "Character5": 0.0,
             "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0
+            "Character7": 0.4205357142857143,
+            "Character8": 0.0,
+            "Character9": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0,
+            "Character12": 0.0
         }
     },
     {
@@ -1067,18 +1083,22 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character2",
+        "Choice": "Character5",
         "Score": {
-            "ContextScore": 0.03946702648001349,
-            "Narrator": 0.03946702648001349,
-            "Character1": 0.0,
-            "Character2": 0.03654251981784449,
-            "Character3": 0.0,
+            "ContextScore": 0.3035116390306123,
+            "Narrator": 0.3035116390306123,
+            "Character1": 0.3035116390306123,
+            "Character2": 0.0,
+            "Character3": 0.22763372927295922,
             "Character4": 0.0,
             "Character5": 0.0,
-            "Character6": 0.03946702648001349,
+            "Character6": 0.0,
             "Character7": 0.0,
-            "Character8": 0.0
+            "Character8": 0.07587790975765307,
+            "Character9": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0,
+            "Character12": 0.0
         }
     },
     {
@@ -1283,18 +1303,22 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character6",
+        "Choice": "Character1",
         "Score": {
-            "ContextScore": 0.03946702648001349,
-            "Narrator": 0.03946702648001349,
-            "Character1": 0.0,
-            "Character2": 0.03654251981784449,
-            "Character3": 0.0,
+            "ContextScore": 0.3035116390306123,
+            "Narrator": 0.3035116390306123,
+            "Character1": 0.3035116390306123,
+            "Character2": 0.0,
+            "Character3": 0.22763372927295922,
             "Character4": 0.0,
             "Character5": 0.0,
-            "Character6": 0.03946702648001349,
+            "Character6": 0.0,
             "Character7": 0.0,
-            "Character8": 0.0
+            "Character8": 0.07587790975765307,
+            "Character9": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0,
+            "Character12": 0.0
         }
     },
     {
@@ -1499,18 +1523,22 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character7",
+        "Choice": "Character4",
         "Score": {
-            "ContextScore": 0.02182071175577669,
+            "ContextScore": 0.15272241709183673,
             "Narrator": 0.0,
             "Character1": 0.0,
             "Character2": 0.0,
             "Character3": 0.0,
             "Character4": 0.0,
             "Character5": 0.0,
-            "Character6": 0.0,
+            "Character6": 0.15272241709183673,
             "Character7": 0.0,
-            "Character8": 0.0
+            "Character8": 0.0,
+            "Character9": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0,
+            "Character12": 0.0
         }
     },
     {
@@ -1715,18 +1743,22 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character4",
+        "Choice": "Character6",
         "Score": {
-            "ContextScore": 0.02182071175577669,
+            "ContextScore": 0.15272241709183673,
             "Narrator": 0.0,
             "Character1": 0.0,
             "Character2": 0.0,
             "Character3": 0.0,
             "Character4": 0.0,
             "Character5": 0.0,
-            "Character6": 0.0,
+            "Character6": 0.15272241709183673,
             "Character7": 0.0,
-            "Character8": 0.0
+            "Character8": 0.0,
+            "Character9": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0,
+            "Character12": 0.0
         }
     },
     {
@@ -1931,18 +1963,22 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character8",
+        "Choice": "Character7",
         "Score": {
-            "ContextScore": 0.02182071175577669,
+            "ContextScore": 0.15272241709183673,
             "Narrator": 0.0,
             "Character1": 0.0,
             "Character2": 0.0,
             "Character3": 0.0,
             "Character4": 0.0,
             "Character5": 0.0,
-            "Character6": 0.0,
+            "Character6": 0.15272241709183673,
             "Character7": 0.0,
-            "Character8": 0.0
+            "Character8": 0.0,
+            "Character9": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0,
+            "Character12": 0.0
         }
     }
 ]

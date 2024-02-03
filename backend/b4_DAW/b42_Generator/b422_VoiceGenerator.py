@@ -135,7 +135,7 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
     return VoiceDataSetCharacters
 
 # 최고 점수 캐릭터 선정
-def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag):
+def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, Caption = "None"):
     HighestScore = 0  # 최고 점수를 매우 낮은 값으로 초기화
     HighestScoreVoices = []  # 최고 점수를 가진 데이터들을 저장할 리스트
 
@@ -154,8 +154,17 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag):
         HighestScoreVoice['Choice'] = CharacterTag
     else:
         HighestScoreVoice = {'Name': 'None', 'ApiSetting': 'None'}
+    
+    # CharacterTag가 Narrator인 경우 Caption 선정
+    CaptionVoice = "None"
+    if CharacterTag == "Narrator":
+        for VoiceData in VoiceDataSetCharacters:
+            if VoiceData['Name'] == HighestScoreVoice['ApiSetting']['Caption']:
+                VoiceData['Choice'] = 'Caption'
+                CaptionVoice = VoiceData
+                break
 
-    return VoiceDataSetCharacters, HighestScoreVoice
+    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice
 
 # 낭독 TextSetting
 def ActorChunkSetting(RawChunk):
@@ -207,19 +216,26 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
     VoiceDataSetCharacters = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext)
     for CharacterTag in CharacterTags:
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
-        VoiceDataSetCharacters, HighestScoreVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)
+        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)
         MatchedActor = {'CharacterTag': CharacterTag, 'ActorName': HighestScoreVoice['Name'], 'ApiSetting': HighestScoreVoice['ApiSetting']}
         MatchedActors.append(MatchedActor)
+        if CaptionVoice != "None":
+            CaptionActor = {'CharacterTag': 'Caption', 'ActorName': CaptionVoice['Name'], 'ApiSetting': CaptionVoice['ApiSetting']}
+            MatchedActors.append(CaptionActor)
 
-    # ### 테스트 후 삭제 ###
-    # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ###
+    ### 테스트 후 삭제 ###
+    with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ###
     
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
         for MatchedActor in MatchedActors:
-            if GenerationKoChunks['Voice']['CharacterTag'] == MatchedActor['CharacterTag']:
+            if GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
+                ChunkCharacterTag = 'Caption'
+            else:
+                ChunkCharacterTag = GenerationKoChunks['Voice']['CharacterTag']
+            if ChunkCharacterTag == MatchedActor['CharacterTag']:
                 GenerationKoChunks['ActorName'] = MatchedActor['ActorName']
                 GenerationKoChunks['ActorChunk'] = ActorChunkSetting(GenerationKoChunks['Chunk'])
                 if '(0.60)' in GenerationKoChunks['Chunk']:
@@ -228,10 +244,10 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
                     GenerationKoChunks['Chunk'] = [part + "(0.60)" for part in parts[:-1]] + [parts[-1]]
                 GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
                 
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
     return MatchedActors, SelectionGenerationKoChunks
     
@@ -330,40 +346,78 @@ def TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, 
             print(f"status: {ret['status']}, waiting 1 second")
             time.sleep(1)
 
+## Pause 추출
+def ExtractPause(chunk):
+    # 정규 표현식을 사용하여 텍스트 끝 부분의 괄호와 숫자를 찾음
+    match = re.search(r'\((\d+(\.\d+)?)\)$', chunk)
+    if match:
+        floatVal = float(match.group(1))
+        if floatVal.is_integer():
+            Pause = int(floatVal)
+        else:
+            Pause = floatVal
+        return Pause
+    else:
+        # 숫자를 찾지 못했다면, 빈 문자열 반환
+        return 0
+    
+# ## 생성된 음성파일 합치기
+# def VoiceGenerator(voiceLayerPath, SelectionGenerationKoChunks):
+
 ## 프롬프트 요청 및 결과물 BookToSpeech
 def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual", Actor = "None"):
     print(f"< User: {email} | Project: {projectName} | BookToSpeech 시작 >")
     # MatchedActors 경로 생성
     fileName = projectName + '_' + 'MatchedActors.json'
     MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
-    # MatchedChunks 경로 생성
-    fileName = projectName + '_' + 'MatchedChunks.json'
+    # MatchedChunksEdit 경로 생성
+    fileName = projectName + '_' + 'MatchedChunksEdit.json'
     MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName)
     
     ## MatchedActors.json이 존재하면 해당 파일로 BookToSpeech 진행, 아닐경우 새롭게 생성
     if not os.path.exists(MatchedActorsPath):
         MatchedActors, SelectionGenerationKoChunks = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet)
+        # SelectionGenerationKoChunks의 EditGenerationKoChunks화
+        EditGenerationKoChunks = []
+        for GenerationKoChunk in SelectionGenerationKoChunks:
+            chunkid = GenerationKoChunk['ChunkId']
+            tag = GenerationKoChunk['Tag']
+            actorname = GenerationKoChunk['ActorName']
+            actorchunks = GenerationKoChunk['ActorChunk']
+            
+            # Pause 추출
+            if isinstance(GenerationKoChunk['Chunk'], list):
+                chunks = GenerationKoChunk['Chunk']
+            else:
+                chunks = [GenerationKoChunk['Chunk']]
+            pauses = []
+            for chunk in chunks:
+                pause = ExtractPause(chunk)
+                pauses.append(pause)
+                
+            EditGenerationKoChunk = {"ChunkId": chunkid, "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pause}
+            EditGenerationKoChunks.append(EditGenerationKoChunk)
         # MatchedActors, MatchedChunks 저장
         fileName = projectName + '_' + 'MatchedActors.json'
         MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
         with open(MatchedActorsPath, 'w', encoding = 'utf-8') as json_file:
             json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
         with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
-            json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+            json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
     else:
         with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
             MatchedActors = json.load(MatchedActorsJson)
         with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
-            SelectionGenerationKoChunks = json.load(MatchedChunksJson)
+            EditGenerationKoChunks = json.load(MatchedChunksJson)
 
     ## 일부만 생성하는지, 전체를 생성하는지의 옵션
     if Mode == 'Manual':
         GenerationKoChunks = []
-        for GenerationKoChunk in SelectionGenerationKoChunks:
+        for GenerationKoChunk in EditGenerationKoChunks:
             if GenerationKoChunk['ActorName'] == Actor:
                 GenerationKoChunks.append(GenerationKoChunk)
     elif Mode == 'Auto':
-        GenerationKoChunks = SelectionGenerationKoChunks
+        GenerationKoChunks = EditGenerationKoChunks
 
     ## BookToSpeech 생성
     GenerationKoChunksCount = len(GenerationKoChunks)
@@ -372,17 +426,42 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual", Actor = "Non
     UpdateTQDM = tqdm(GenerationKoChunks,
                     total = GenerationKoChunksCount,
                     desc = 'BookToSpeech')
+    
+    ## VoiceDataSet 불러오기
+    VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet)
 
+    ## 히스토리 불러오기
+    fileName = projectName + '_' + 'MatchedChunkHistorys.json'
+    MatchedChunkHistorysPath = VoiceLayerPathGen(projectName, email, fileName)
+    if os.path.exists(MatchedChunkHistorysPath):
+        with open(MatchedChunkHistorysPath, 'r', encoding = 'utf-8') as MatchedChunkHistorysJson:
+            GenerationKoChunkHistorys = json.load(MatchedChunkHistorysJson)
+    else:
+        GenerationKoChunkHistorys = []
+
+    ## 생성시작 ##
     for Update in UpdateTQDM:
         UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['ActorChunk']}")
-        Name = Update['ActorName']
         ChunkId = Update['ChunkId']
+        Name = Update['ActorName']
         Chunks = Update['ActorChunk']
-        ApiSetting = Update['ApiSetting']
-        ApiToken = ApiSetting['ApiToken']
-        EMOTION = ApiSetting['emotion_tone_preset']['emotion_tone_preset']
-        SPEED = ApiSetting['speed_x']
-        Pitch = ApiSetting['pitch']
+        
+        # 수정생성
+        Modify = "No"
+        for History in GenerationKoChunkHistorys:
+            if (History['ChunkId'] == ChunkId) and (History['ActorName'] != Name or History['ActorChunk'] != Chunks):
+                History['ActorName'] = Name
+                History['ActorChunk'] = Chunks
+                Modify = "Yes"
+
+        # 보이스 선정
+        for VoiceData in VoiceDataSet['Characters']:
+            if Name == VoiceData['Name']:
+                ApiSetting = VoiceData['ApiSetting']
+                ApiToken = ApiSetting['ApiToken']
+                EMOTION = ApiSetting['emotion_tone_preset']['emotion_tone_preset']
+                SPEED = ApiSetting['speed_x']
+                Pitch = ApiSetting['pitch']
         if Update['Tag'] not in ['Narrator', 'Character']:
             LASTPITCH = [-2]
         else:
@@ -393,76 +472,89 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual", Actor = "Non
             RandomEMOTION = random.choice(EMOTION)
             RandomSPEED = random.choice(SPEED)
             RandomLASTPITCH = random.choice(LASTPITCH)
-            FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
-            voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+            
+            # 수정 여부에 따라 파일명 변경
+            if Modify == "Yes":
+                FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + 'M.wav'
+                voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+            else:
+                FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
+                voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+            
             if not os.path.exists(voiceLayerPath):
                 TypecastVoiceGen(Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+            
+        ## 히스토리 저장
+        GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunks}
+        GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
+        with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+            json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                
+    ## 생성된 음성파일 합치기
+
 
     print(f"[ User: {email} | Project: {projectName} | BookToSpeech 완료 ]\n")
 
-
-
-
-
-
-
-
-##### 테스트 후 삭제 #####
-def TypecastVoiceGeneratorTest(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath):
-    api_token = os.getenv("TYPECAST_API_TOKEN")
-    HEADERS = {'Authorization': f'Bearer {api_token}'}
-
-    # get my actor
-    r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
-    my_actors = r.json()['result']
-    print(my_actors)
-    my_first_actor = my_actors[0]
-    my_first_actor_id = my_first_actor['actor_id']
-
-    # request speech synthesis
-    r = requests.post('https://typecast.ai/api/speak', headers = HEADERS, json = {
-        'text': Chunk, # 음성을 합성하는 문장
-        'actor_id': my_first_actor_id, # 캐릭터 아이디로 Actor API에서 캐릭터를 검색
-        'lang': 'auto', # text의 언어 코드['en-us', 'ko-kr', 'ja-jp', 'es-es', 'auto'], auto는 자동 언어 감지
-        'xapi_hd': True, # 샘플레이트로 True는 고품질(44.1KHz), False는 저품질(16KHz)
-        'xapi_audio_format': 'wav', # 오디오 포멧으로 기본값은 'wav', 'mp3'
-        'model_version': 'latest', # 모델(캐릭터) 버전으로 API를 참고, 최신 모델은 "latest"
-        'emotion_tone_preset': RandomEMOTION, # 감정으로, actor_id를 사용하여 Actor API 에서 캐릭터에 사용 가능한 감정을 검색
-        'emotion_prompt': None, # 감정 프롬프트(한/영)를 입력, 입력시 'emotion_tone_preset'는 'emotion_prompt'로 설정
-        'volume': 100, # 오디오 볼륨으로 기본값은 100, 범위: 0.5배는 50 - 2배는 200, 
-        'speed_x': RandomSPEED, # 말하는 속도로 기본값은 1, 범위: 0.5(빠름) - 1.5(느림)
-        'tempo': 1.0, # 음성 재생속도로 기본값은 1, 범위: 0.5(0.5배 느림) - 2.0(2배 빠름)
-        'pitch': Pitch, # 음성 피치로 기본값은 0, 범위: -12 - 12
-        'max_seconds': 60, # 음성의 최대 길이로 기본값은 30, 범위: 1 - 60
-        'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
-        'last_pitch': RandomLASTPITCH, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
-    })
-    speak_url = r.json()['result']['speak_v2_url']
-
-    # polling the speech synthesis result
-    for _ in range(120):
-        r = requests.get(speak_url, headers=HEADERS)
-        ret = r.json()['result']
-        # audio is ready
-        if ret['status'] == 'done':
-            # download audio file
-            r = requests.get(ret['audio_download_url'])
-            with open(voiceLayerPath + projectName + '_' + str(ChunkId) + '_' + Name + '.wav', 'wb') as f:
-                f.write(r.content)
-            break
-        else:
-            print(f"status: {ret['status']}, waiting 1 second")
-            time.sleep(1)
-            
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "웹3.0메타버스"
+    projectName = "우리는행복을진단한다"
     voiceDataSet = "TypeCastVoiceDataSet"
     mode = "Manual"
-    actor = "연우(톤다운)"
+    actor = "연우(중간톤)"
     #########################################################################
+    # ##########
+    # ##########
+    # ##### 테스트 후 삭제 #####
+    # def TypecastVoiceGeneratorTest(projectName, email, Name, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath):
+    #     api_token = os.getenv("TYPECAST_API_TOKEN")
+    #     HEADERS = {'Authorization': f'Bearer {api_token}'}
+
+    #     # get my actor
+    #     r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
+    #     my_actors = r.json()['result']
+    #     print(my_actors)
+    #     my_first_actor = my_actors[0]
+    #     my_first_actor_id = my_first_actor['actor_id']
+
+    #     # request speech synthesis
+    #     r = requests.post('https://typecast.ai/api/speak', headers = HEADERS, json = {
+    #         'text': Chunk, # 음성을 합성하는 문장
+    #         'actor_id': my_first_actor_id, # 캐릭터 아이디로 Actor API에서 캐릭터를 검색
+    #         'lang': 'auto', # text의 언어 코드['en-us', 'ko-kr', 'ja-jp', 'es-es', 'auto'], auto는 자동 언어 감지
+    #         'xapi_hd': True, # 샘플레이트로 True는 고품질(44.1KHz), False는 저품질(16KHz)
+    #         'xapi_audio_format': 'wav', # 오디오 포멧으로 기본값은 'wav', 'mp3'
+    #         'model_version': 'latest', # 모델(캐릭터) 버전으로 API를 참고, 최신 모델은 "latest"
+    #         'emotion_tone_preset': RandomEMOTION, # 감정으로, actor_id를 사용하여 Actor API 에서 캐릭터에 사용 가능한 감정을 검색
+    #         'emotion_prompt': None, # 감정 프롬프트(한/영)를 입력, 입력시 'emotion_tone_preset'는 'emotion_prompt'로 설정
+    #         'volume': 100, # 오디오 볼륨으로 기본값은 100, 범위: 0.5배는 50 - 2배는 200, 
+    #         'speed_x': RandomSPEED, # 말하는 속도로 기본값은 1, 범위: 0.5(빠름) - 1.5(느림)
+    #         'tempo': 1.0, # 음성 재생속도로 기본값은 1, 범위: 0.5(0.5배 느림) - 2.0(2배 빠름)
+    #         'pitch': Pitch, # 음성 피치로 기본값은 0, 범위: -12 - 12
+    #         'max_seconds': 60, # 음성의 최대 길이로 기본값은 30, 범위: 1 - 60
+    #         'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
+    #         'last_pitch': RandomLASTPITCH, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
+    #     })
+    #     speak_url = r.json()['result']['speak_v2_url']
+
+    #     # polling the speech synthesis result
+    #     for _ in range(120):
+    #         r = requests.get(speak_url, headers=HEADERS)
+    #         ret = r.json()['result']
+    #         # audio is ready
+    #         if ret['status'] == 'done':
+    #             # download audio file
+    #             r = requests.get(ret['audio_download_url'])
+    #             with open(voiceLayerPath + projectName + '_' + str(ChunkId) + '_' + Name + '.wav', 'wb') as f:
+    #                 f.write(r.content)
+    #             break
+    #         else:
+    #             print(f"status: {ret['status']}, waiting 1 second")
+    #             time.sleep(1)
+    #
+    # ##########
+    # ##########
     # Name = '아리(일반)'
     # ChunkId = 0
     # Chunk = f'지구인들은. {{{{메타버스}}}}에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다. {{{{무브 패스트, 앤드 브레이크 띵스}}}}, 빠르게 움직이고 깨뜨려라.'
@@ -488,8 +580,8 @@ if __name__ == "__main__":
     
     
     
-    ##########
-    ##########
+    # ##########
+    # ##########
     # from pydub import AudioSegment
 
     # # 오디오 파일 로드
@@ -510,6 +602,17 @@ if __name__ == "__main__":
     # audio14 = AudioSegment.from_file(bass + "웹3.0메타버스_14_연우(중간톤)_(0).wav")
     # audio15 = AudioSegment.from_file(bass + "웹3.0메타버스_15_연우(중간톤)_(0).wav")
     # audio16 = AudioSegment.from_file(bass + "웹3.0메타버스_16_연우(중간톤)_(0).wav")
+    # audio17 = AudioSegment.from_file(bass + "웹3.0메타버스_17_연우(중간톤)_(0).wav")
+    # audio18 = AudioSegment.from_file(bass + "웹3.0메타버스_18_연우(중간톤)_(0).wav")
+    # audio19 = AudioSegment.from_file(bass + "웹3.0메타버스_19_연우(중간톤)_(0).wav")
+    # audio20 = AudioSegment.from_file(bass + "웹3.0메타버스_20_연우(중간톤)_(0).wav")
+    # audio21 = AudioSegment.from_file(bass + "웹3.0메타버스_21_연우(중간톤)_(0).wav")
+    # audio22 = AudioSegment.from_file(bass + "웹3.0메타버스_22_연우(중간톤)_(0).wav")
+    # audio23 = AudioSegment.from_file(bass + "웹3.0메타버스_23_연우(중간톤)_(0).wav")
+    # audio24 = AudioSegment.from_file(bass + "웹3.0메타버스_24_연우(중간톤)_(0).wav")
+    # audio25 = AudioSegment.from_file(bass + "웹3.0메타버스_25_연우(중간톤)_(0).wav")
+    # audio26 = AudioSegment.from_file(bass + "웹3.0메타버스_26_연우(중간톤)_(0).wav")
+    # audio27 = AudioSegment.from_file(bass + "웹3.0메타버스_27_연우(중간톤)_(0).wav")
 
     # # 0.8초의 침묵(공백) 생성
     # silence20 = AudioSegment.silent(duration = 2000) # 단위는 밀리초
@@ -517,8 +620,8 @@ if __name__ == "__main__":
     # silence07 = AudioSegment.silent(duration = 700) # 단위는 밀리초
 
     # # 오디오 조각 사이에 침묵 추가하여 합치기
-    # combined_audio = audio1 + silence20 + audio2 + silence15 + audio3 + silence07 + audio4 + silence07 + audio5 + silence07 + audio6 + silence07 + audio7 + silence07 + audio8 + silence07 + audio9 + silence07 + audio10 + silence07 + audio11 + silence07 + audio12 + silence07 + audio13 + silence07 + audio14 + silence07 + audio15 + silence07 + audio16
+    # combined_audio = audio1 + silence20 + audio2 + silence15 + audio3 + silence07 + audio4 + silence07 + audio5 + silence07 + audio6 + silence07 + audio7 + silence07 + audio8 + silence07 + audio9 + silence07 + audio10 + silence07 + audio11 + silence07 + audio12 + silence07 + audio13 + silence07 + audio14 + silence07 + audio15 + silence07 + audio16 + silence07 + audio17 + silence07 + audio18 + silence07 + audio19 + silence07 + audio20 + silence07 + audio21 + silence07 + audio22 + silence07 + audio23 + silence07 + audio24 + silence07 + audio25 + silence07 + audio26 + silence07 + audio27
     
     # combined_audio.export(bass + "audio.wav", format="wav")
-    ##########
-    ##########
+    # #########
+    # #########

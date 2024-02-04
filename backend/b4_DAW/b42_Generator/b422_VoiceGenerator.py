@@ -452,7 +452,7 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual"):
         fileName = projectName + '_' + 'MatchedActors.json'
         MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
         # MatchedChunksEdit 경로 생성
-        fileName = projectName + '_' + 'MatchedChunksEdit.json'
+        fileName = '[' + projectName + '_' + 'MatchedChunksEdit].json'
         MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName)
         
         ## MatchedChunksPath.json이 존재하면 해당 파일로 BookToSpeech 진행, 아닐경우 새롭게 생성

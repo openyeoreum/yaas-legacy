@@ -1083,7 +1083,7 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character1",
+        "Choice": "Character4",
         "Score": {
             "ContextScore": 0.3035116390306123,
             "Narrator": 0.3035116390306123,
@@ -1303,7 +1303,7 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character7",
+        "Choice": "Character1",
         "Score": {
             "ContextScore": 0.3035116390306123,
             "Narrator": 0.3035116390306123,
@@ -1523,7 +1523,7 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character4",
+        "Choice": "Character6",
         "Score": {
             "ContextScore": 0.15272241709183673,
             "Narrator": 0.0,
@@ -1963,7 +1963,7 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character6",
+        "Choice": "Character7",
         "Score": {
             "ContextScore": 0.15272241709183673,
             "Narrator": 0.0,

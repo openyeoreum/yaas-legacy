@@ -529,8 +529,10 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual"):
             ## 수정생성 ##
             Modify = "No"
             for History in GenerationKoChunkHistorys:
-                if (History['ChunkId'] == ChunkId) and (History['ActorName'] != Name or History['ActorChunk'] != Chunks):
+                if (History['ChunkId'] == ChunkId) and (History['ActorName'] != Name):
                     History['ActorName'] = Name
+                    Modify = "Yes"
+                if (History['ChunkId'] == ChunkId) and (History['ActorChunk'] != Chunks):
                     History['ActorChunk'] = Chunks
                     Modify = "Yes"
 
@@ -566,22 +568,29 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual"):
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + 'M.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+                    
+                    with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                        json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                    
+                    cp = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+                    if cp != 'Continue':
+                        print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {cp} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                        sys.exit()
                 else:
                     FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-                
-                if not os.path.exists(voiceLayerPath):
-                    cp = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+                    if not os.path.exists(voiceLayerPath):
+                        cp = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
 
-                    if cp == 'Continue':
-                        ## 히스토리 저장 ##
-                        GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunks}
-                        GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
-                        with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                            json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                    else:
-                        print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {cp} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
-                        sys.exit()                          
+                        if cp == 'Continue':
+                            ## 히스토리 저장 ##
+                            GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunks}
+                            GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
+                            with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                                json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                        else:
+                            print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {cp} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                            sys.exit()
                 
     ## 생성된 음성파일 합치기
     time.sleep(0.3)

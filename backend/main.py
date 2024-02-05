@@ -1,15 +1,13 @@
 import sys
 sys.path.append("/yaas")
 
-from b2_Solution.bm21_GeneralUpdate import SolutionAccountUpdate, SolutionProjectUpdate
+from b2_Solution.bm21_GeneralUpdate import AccountUpdate, SolutionProjectUpdate
 from b2_Solution.bm22_DataFrameUpdate import SolutionDataFrameUpdate
 from b2_Solution.bm23_DataSetUpdate import SolutionDataSetUpdate
 
-def SolutionUpdate(email, name, password, projectNameList, MessagesReview):
+### Main1 : 솔루션 업데이트 ###
+def SolutionUpdate(email, projectNameList, MessagesReview):
 
-    ### Step1 : 솔루션에 계정 업데이트 ###
-    SolutionAccountUpdate(email, name, password)
-    
     if isinstance(projectNameList, list):
         for projectName in projectNameList:
 
@@ -41,5 +39,5 @@ if __name__ == "__main__":
     projectNameList = ['데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법']
     MessagesReview = "on"
     #########################################################################
-    
-    SolutionUpdate(email, name, password, projectNameList, MessagesReview)
+    AccountUpdate(email, name, password)
+    SolutionUpdate(email, projectNameList, MessagesReview)

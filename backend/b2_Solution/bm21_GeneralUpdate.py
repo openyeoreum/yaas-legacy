@@ -16,7 +16,7 @@ from backend.b2_Solution.b23_Project.b232_ProjectFileCommit import MoveTextFile,
 #################################
 
 ### 솔루션에 계정 업데이트 ###
-def SolutionAccountUpdate(email, name, password):
+def AccountUpdate(email, name, password):
 
     ### b212_PromptCommit ###
     AddPromptToDB()
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     #########################################################################
     
     ### Step1 : 솔루션에 계정 업데이트 ###
-    SolutionAccountUpdate(email, name, password)
+    AccountUpdate(email, name, password)
     
     ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
     for projectName in projectNameList:

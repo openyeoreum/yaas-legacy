@@ -34,7 +34,7 @@
         {
             "DataSetId": 1,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2807,
                 "Output": 256,
@@ -78,7 +78,7 @@
         {
             "DataSetId": 2,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 6103,
                 "Output": 338,
@@ -130,7 +130,7 @@
         {
             "DataSetId": 3,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 5576,
                 "Output": 256,
@@ -174,7 +174,7 @@
         {
             "DataSetId": 4,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4661,
                 "Output": 340,
@@ -226,7 +226,7 @@
         {
             "DataSetId": 5,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3640,
                 "Output": 172,
@@ -262,7 +262,7 @@
         {
             "DataSetId": 6,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3637,
                 "Output": 258,
@@ -306,7 +306,7 @@
         {
             "DataSetId": 7,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2064,
                 "Output": 87,
@@ -331,7 +331,7 @@
         {
             "DataSetId": 8,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4202,
                 "Output": 258,
@@ -372,7 +372,7 @@
         {
             "DataSetId": 9,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4876,
                 "Output": 257,
@@ -417,7 +417,7 @@
         {
             "DataSetId": 10,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3742,
                 "Output": 156,
@@ -453,7 +453,7 @@
         {
             "DataSetId": 11,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4153,
                 "Output": 257,
@@ -497,7 +497,7 @@
         {
             "DataSetId": 12,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3496,
                 "Output": 171,
@@ -533,7 +533,7 @@
         {
             "DataSetId": 13,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1343,
                 "Output": 88,
@@ -558,7 +558,7 @@
         {
             "DataSetId": 14,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3660,
                 "Output": 86,
@@ -583,7 +583,7 @@
         {
             "DataSetId": 15,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3238,
                 "Output": 86,
@@ -608,7 +608,7 @@
         {
             "DataSetId": 16,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3625,
                 "Output": 170,
@@ -641,7 +641,7 @@
         {
             "DataSetId": 17,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3912,
                 "Output": 172,
@@ -677,7 +677,7 @@
         {
             "DataSetId": 18,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3821,
                 "Output": 259,
@@ -721,7 +721,7 @@
         {
             "DataSetId": 19,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2618,
                 "Output": 171,
@@ -757,7 +757,7 @@
         {
             "DataSetId": 20,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3843,
                 "Output": 253,
@@ -801,7 +801,7 @@
         {
             "DataSetId": 21,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1377,
                 "Output": 87,
@@ -826,7 +826,7 @@
         {
             "DataSetId": 22,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3782,
                 "Output": 172,
@@ -862,7 +862,7 @@
         {
             "DataSetId": 23,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4457,
                 "Output": 338,
@@ -914,7 +914,7 @@
         {
             "DataSetId": 24,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3916,
                 "Output": 171,
@@ -950,7 +950,7 @@
         {
             "DataSetId": 25,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3751,
                 "Output": 257,
@@ -994,7 +994,7 @@
         {
             "DataSetId": 26,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3806,
                 "Output": 255,
@@ -1038,7 +1038,7 @@
         {
             "DataSetId": 27,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1487,
                 "Output": 87,
@@ -1063,7 +1063,7 @@
         {
             "DataSetId": 28,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3385,
                 "Output": 170,
@@ -1096,7 +1096,7 @@
         {
             "DataSetId": 29,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2639,
                 "Output": 87,
@@ -1121,7 +1121,7 @@
         {
             "DataSetId": 30,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2192,
                 "Output": 87,
@@ -1146,7 +1146,7 @@
         {
             "DataSetId": 31,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3579,
                 "Output": 172,
@@ -1179,7 +1179,7 @@
         {
             "DataSetId": 32,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3533,
                 "Output": 256,
@@ -1223,7 +1223,7 @@
         {
             "DataSetId": 33,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4101,
                 "Output": 255,
@@ -1267,7 +1267,7 @@
         {
             "DataSetId": 34,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2966,
                 "Output": 170,
@@ -1303,7 +1303,7 @@
         {
             "DataSetId": 35,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2047,
                 "Output": 87,
@@ -1328,7 +1328,7 @@
         {
             "DataSetId": 36,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2142,
                 "Output": 171,
@@ -1361,7 +1361,7 @@
         {
             "DataSetId": 37,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2526,
                 "Output": 87,
@@ -1390,7 +1390,7 @@
         {
             "DataSetId": 38,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4164,
                 "Output": 87,
@@ -1415,7 +1415,7 @@
         {
             "DataSetId": 39,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4598,
                 "Output": 173,
@@ -1451,7 +1451,7 @@
         {
             "DataSetId": 40,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3755,
                 "Output": 171,
@@ -1487,7 +1487,7 @@
         {
             "DataSetId": 41,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2243,
                 "Output": 87,
@@ -1515,7 +1515,7 @@
         {
             "DataSetId": 42,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3809,
                 "Output": 259,
@@ -1559,7 +1559,7 @@
         {
             "DataSetId": 43,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4126,
                 "Output": 341,
@@ -1611,7 +1611,7 @@
         {
             "DataSetId": 44,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3728,
                 "Output": 174,
@@ -1647,7 +1647,7 @@
         {
             "DataSetId": 45,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4492,
                 "Output": 257,
@@ -1691,7 +1691,7 @@
         {
             "DataSetId": 46,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2288,
                 "Output": 88,
@@ -1716,7 +1716,7 @@
         {
             "DataSetId": 47,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2623,
                 "Output": 87,
@@ -1741,7 +1741,7 @@
         {
             "DataSetId": 48,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4114,
                 "Output": 87,
@@ -1766,7 +1766,7 @@
         {
             "DataSetId": 49,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2208,
                 "Output": 87,
@@ -1791,7 +1791,7 @@
         {
             "DataSetId": 50,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2977,
                 "Output": 87,
@@ -1816,7 +1816,7 @@
         {
             "DataSetId": 51,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3199,
                 "Output": 255,
@@ -1861,7 +1861,7 @@
         {
             "DataSetId": 52,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2597,
                 "Output": 173,
@@ -1897,7 +1897,7 @@
         {
             "DataSetId": 53,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1399,
                 "Output": 87,
@@ -1922,7 +1922,7 @@
         {
             "DataSetId": 54,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4447,
                 "Output": 256,
@@ -1963,7 +1963,7 @@
         {
             "DataSetId": 55,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3116,
                 "Output": 172,
@@ -1999,7 +1999,7 @@
         {
             "DataSetId": 56,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3441,
                 "Output": 254,
@@ -2043,7 +2043,7 @@
         {
             "DataSetId": 57,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2481,
                 "Output": 86,
@@ -2068,7 +2068,7 @@
         {
             "DataSetId": 58,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3061,
                 "Output": 170,
@@ -2101,7 +2101,7 @@
         {
             "DataSetId": 59,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1354,
                 "Output": 86,
@@ -2126,7 +2126,7 @@
         {
             "DataSetId": 60,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4543,
                 "Output": 173,
@@ -2159,7 +2159,7 @@
         {
             "DataSetId": 61,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3853,
                 "Output": 86,
@@ -2187,7 +2187,7 @@
         {
             "DataSetId": 62,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3357,
                 "Output": 172,
@@ -2223,7 +2223,7 @@
         {
             "DataSetId": 63,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2947,
                 "Output": 255,
@@ -2267,7 +2267,7 @@
         {
             "DataSetId": 64,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2399,
                 "Output": 87,
@@ -2296,7 +2296,7 @@
         {
             "DataSetId": 65,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3417,
                 "Output": 342,
@@ -2348,7 +2348,7 @@
         {
             "DataSetId": 66,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2643,
                 "Output": 87,
@@ -2373,7 +2373,7 @@
         {
             "DataSetId": 67,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2994,
                 "Output": 172,
@@ -2406,7 +2406,7 @@
         {
             "DataSetId": 68,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3681,
                 "Output": 257,
@@ -2450,7 +2450,7 @@
         {
             "DataSetId": 69,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3557,
                 "Output": 87,
@@ -2478,7 +2478,7 @@
         {
             "DataSetId": 70,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1695,
                 "Output": 87,
@@ -2503,7 +2503,7 @@
         {
             "DataSetId": 71,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3217,
                 "Output": 171,
@@ -2536,7 +2536,7 @@
         {
             "DataSetId": 72,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2734,
                 "Output": 172,
@@ -2572,7 +2572,7 @@
         {
             "DataSetId": 73,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1692,
                 "Output": 87,
@@ -2597,7 +2597,7 @@
         {
             "DataSetId": 74,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3395,
                 "Output": 172,
@@ -2630,7 +2630,7 @@
         {
             "DataSetId": 75,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2778,
                 "Output": 85,
@@ -2658,7 +2658,7 @@
         {
             "DataSetId": 76,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2037,
                 "Output": 170,
@@ -2694,7 +2694,7 @@
         {
             "DataSetId": 77,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2754,
                 "Output": 87,
@@ -2722,7 +2722,7 @@
         {
             "DataSetId": 78,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4275,
                 "Output": 257,
@@ -2766,7 +2766,7 @@
         {
             "DataSetId": 79,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1401,
                 "Output": 86,
@@ -2791,7 +2791,7 @@
         {
             "DataSetId": 80,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1921,
                 "Output": 87,
@@ -2816,7 +2816,7 @@
         {
             "DataSetId": 81,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3926,
                 "Output": 258,
@@ -2857,7 +2857,7 @@
         {
             "DataSetId": 82,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3567,
                 "Output": 170,
@@ -2893,7 +2893,7 @@
         {
             "DataSetId": 83,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2903,
                 "Output": 171,
@@ -2929,7 +2929,7 @@
         {
             "DataSetId": 84,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1946,
                 "Output": 87,
@@ -2954,7 +2954,7 @@
         {
             "DataSetId": 85,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4204,
                 "Output": 171,
@@ -2990,7 +2990,7 @@
         {
             "DataSetId": 86,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3605,
                 "Output": 86,
@@ -3018,7 +3018,7 @@
         {
             "DataSetId": 87,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3659,
                 "Output": 170,
@@ -3054,7 +3054,7 @@
         {
             "DataSetId": 88,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3667,
                 "Output": 171,
@@ -3090,7 +3090,7 @@
         {
             "DataSetId": 89,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2789,
                 "Output": 171,
@@ -3126,7 +3126,7 @@
         {
             "DataSetId": 90,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2640,
                 "Output": 87,
@@ -3154,7 +3154,7 @@
         {
             "DataSetId": 91,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3212,
                 "Output": 257,
@@ -3198,7 +3198,7 @@
         {
             "DataSetId": 92,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3018,
                 "Output": 87,
@@ -3226,7 +3226,7 @@
         {
             "DataSetId": 93,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4318,
                 "Output": 174,
@@ -3262,7 +3262,7 @@
         {
             "DataSetId": 94,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3578,
                 "Output": 87,
@@ -3290,7 +3290,7 @@
         {
             "DataSetId": 95,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3057,
                 "Output": 88,
@@ -3318,7 +3318,7 @@
         {
             "DataSetId": 96,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4294,
                 "Output": 87,
@@ -3346,7 +3346,7 @@
         {
             "DataSetId": 97,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3371,
                 "Output": 87,
@@ -3374,7 +3374,7 @@
         {
             "DataSetId": 98,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3179,
                 "Output": 87,
@@ -3402,7 +3402,7 @@
         {
             "DataSetId": 99,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2897,
                 "Output": 87,
@@ -3427,7 +3427,7 @@
         {
             "DataSetId": 100,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4820,
                 "Output": 171,
@@ -3463,7 +3463,7 @@
         {
             "DataSetId": 101,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2840,
                 "Output": 87,
@@ -3488,7 +3488,7 @@
         {
             "DataSetId": 102,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2969,
                 "Output": 87,
@@ -3516,7 +3516,7 @@
         {
             "DataSetId": 103,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2037,
                 "Output": 86,
@@ -3545,7 +3545,7 @@
         {
             "DataSetId": 104,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3073,
                 "Output": 87,
@@ -3573,7 +3573,7 @@
         {
             "DataSetId": 105,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4580,
                 "Output": 87,
@@ -3601,7 +3601,7 @@
         {
             "DataSetId": 106,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 1382,
                 "Output": 87,
@@ -3626,7 +3626,7 @@
         {
             "DataSetId": 107,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2754,
                 "Output": 87,
@@ -3654,7 +3654,7 @@
         {
             "DataSetId": 108,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3406,
                 "Output": 87,
@@ -3682,7 +3682,7 @@
         {
             "DataSetId": 109,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3045,
                 "Output": 88,
@@ -3710,7 +3710,7 @@
         {
             "DataSetId": 110,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3816,
                 "Output": 87,
@@ -3738,7 +3738,7 @@
         {
             "DataSetId": 111,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2465,
                 "Output": 87,
@@ -3766,7 +3766,7 @@
         {
             "DataSetId": 112,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2226,
                 "Output": 85,
@@ -3791,7 +3791,7 @@
         {
             "DataSetId": 113,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4105,
                 "Output": 173,
@@ -3827,7 +3827,7 @@
         {
             "DataSetId": 114,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3377,
                 "Output": 87,
@@ -3857,7 +3857,7 @@
         {
             "DataSetId": 115,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3187,
                 "Output": 86,
@@ -3885,7 +3885,7 @@
         {
             "DataSetId": 116,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3630,
                 "Output": 87,
@@ -3913,7 +3913,7 @@
         {
             "DataSetId": 117,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2348,
                 "Output": 87,
@@ -3941,7 +3941,7 @@
         {
             "DataSetId": 118,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2125,
                 "Output": 88,
@@ -3966,7 +3966,7 @@
         {
             "DataSetId": 119,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3448,
                 "Output": 88,
@@ -3994,7 +3994,7 @@
         {
             "DataSetId": 120,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3689,
                 "Output": 86,
@@ -4022,7 +4022,7 @@
         {
             "DataSetId": 121,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3141,
                 "Output": 87,
@@ -4050,7 +4050,7 @@
         {
             "DataSetId": 122,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3836,
                 "Output": 172,
@@ -4086,7 +4086,7 @@
         {
             "DataSetId": 123,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3642,
                 "Output": 255,
@@ -4130,7 +4130,7 @@
         {
             "DataSetId": 124,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3026,
                 "Output": 88,
@@ -4158,7 +4158,7 @@
         {
             "DataSetId": 125,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3168,
                 "Output": 87,
@@ -4186,7 +4186,7 @@
         {
             "DataSetId": 126,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4287,
                 "Output": 172,
@@ -4223,7 +4223,7 @@
         {
             "DataSetId": 127,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3353,
                 "Output": 88,
@@ -4251,7 +4251,7 @@
         {
             "DataSetId": 128,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3507,
                 "Output": 85,
@@ -4279,7 +4279,7 @@
         {
             "DataSetId": 129,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3684,
                 "Output": 88,
@@ -4307,7 +4307,7 @@
         {
             "DataSetId": 130,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3991,
                 "Output": 88,
@@ -4335,7 +4335,7 @@
         {
             "DataSetId": 131,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3654,
                 "Output": 173,
@@ -4371,7 +4371,7 @@
         {
             "DataSetId": 132,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4138,
                 "Output": 85,
@@ -4399,7 +4399,7 @@
         {
             "DataSetId": 133,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3866,
                 "Output": 86,
@@ -4427,7 +4427,7 @@
         {
             "DataSetId": 134,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3191,
                 "Output": 85,
@@ -4455,7 +4455,7 @@
         {
             "DataSetId": 135,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3895,
                 "Output": 88,
@@ -4483,7 +4483,7 @@
         {
             "DataSetId": 136,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3621,
                 "Output": 87,
@@ -4511,7 +4511,7 @@
         {
             "DataSetId": 137,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2917,
                 "Output": 87,
@@ -4539,7 +4539,7 @@
         {
             "DataSetId": 138,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3925,
                 "Output": 173,
@@ -4575,7 +4575,7 @@
         {
             "DataSetId": 139,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4269,
                 "Output": 87,
@@ -4604,7 +4604,7 @@
         {
             "DataSetId": 140,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3662,
                 "Output": 87,
@@ -4632,7 +4632,7 @@
         {
             "DataSetId": 141,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3930,
                 "Output": 87,
@@ -4660,7 +4660,7 @@
         {
             "DataSetId": 142,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4520,
                 "Output": 87,
@@ -4688,7 +4688,7 @@
         {
             "DataSetId": 143,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3263,
                 "Output": 85,
@@ -4716,7 +4716,7 @@
         {
             "DataSetId": 144,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3573,
                 "Output": 257,
@@ -4760,7 +4760,7 @@
         {
             "DataSetId": 145,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4450,
                 "Output": 173,
@@ -4796,7 +4796,7 @@
         {
             "DataSetId": 146,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2507,
                 "Output": 87,
@@ -4821,7 +4821,7 @@
         {
             "DataSetId": 147,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4147,
                 "Output": 87,
@@ -4846,7 +4846,7 @@
         {
             "DataSetId": 148,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3609,
                 "Output": 87,
@@ -4874,7 +4874,7 @@
         {
             "DataSetId": 149,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3551,
                 "Output": 171,
@@ -4910,7 +4910,7 @@
         {
             "DataSetId": 150,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 2885,
                 "Output": 88,
@@ -4938,7 +4938,7 @@
         {
             "DataSetId": 151,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 3766,
                 "Output": 172,

@@ -34,7 +34,7 @@
         {
             "DataSetId": 1,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 4781,
                 "Output": 3260,
@@ -45,7 +45,7 @@
             "Output": [
                 {
                     "Response": {
-                        "Model": "gpt-4-1106-preview",
+                        "Model": "gpt-4-turbo-preview",
                         "InputTokens": 4781,
                         "OutputTokens": 3260
                     }
@@ -540,7 +540,7 @@
             "Feedback": [
                 {
                     "Response": {
-                        "Model": "gpt-4-1106-preview",
+                        "Model": "gpt-4-turbo-preview",
                         "InputTokens": 4781,
                         "OutputTokens": 3260
                     }

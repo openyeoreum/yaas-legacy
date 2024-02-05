@@ -2,7 +2,7 @@
     "TaskName": "WMWMMatching",
     "BaseModel": {
         "ShortTokensModel": "gpt-3.5-turbo-1106",
-        "LongTokensModel": "gpt-4-1106-preview"
+        "LongTokensModel": "gpt-4-turbo-preview"
     },
     "ExampleFineTunedModel": {
         "ShortTokensModel": [],
@@ -12,7 +12,7 @@
         "ShortTokensModel": [],
         "LongTokensModel": []
     },
-    "MasterModel": "gpt-4-1106-preview",
+    "MasterModel": "gpt-4-turbo-preview",
     "Temperature": 0.4,
     "OutputTokensRatio": 0.5,
     "OutputFormat": "json",

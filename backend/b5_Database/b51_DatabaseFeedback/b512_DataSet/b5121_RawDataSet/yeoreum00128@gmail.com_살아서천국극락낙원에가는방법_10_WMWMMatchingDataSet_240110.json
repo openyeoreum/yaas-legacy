@@ -10022,7 +10022,7 @@
         {
             "DataSetId": 223,
             "Mode": "Master",
-            "TrainingModel": "gpt-4-1106-preview",
+            "TrainingModel": "gpt-4-turbo-preview",
             "Tokens": {
                 "Input": 41798,
                 "Output": 870,

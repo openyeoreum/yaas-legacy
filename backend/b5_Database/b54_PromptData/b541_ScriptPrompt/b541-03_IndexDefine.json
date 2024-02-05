@@ -15,7 +15,7 @@
     "MasterModel": "gpt-4-turbo-preview",
     "Temperature": 0.5,
     "OutputTokensRatio": 2,
-    "OutputFormat": "json",
+    "OutputFormat": "text",
     "Example": [
         {
             "Role": "system",
@@ -116,7 +116,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "<태그된 목차.json>\n",
+            "OutputMark": "<태그된 목차.json> - 태그된 목차 예시.json의 구조를 그대로 지켜주세요! -\n",
             "OutputStarter": "",
             "Output": "OUTPUT"
         }
@@ -221,7 +221,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "<태그된 목차.json>\n",
+            "OutputMark": "<태그된 목차.json> - 태그된 목차 예시.json의 구조를 그대로 지켜주세요! -\n",
             "OutputStarter": "",
             "Output": "OUTPUT"
         }
@@ -277,7 +277,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "<태그된 목차.json>\n",
+            "OutputMark": "<태그된 목차.json> - 태그된 목차 예시.json의 구조를 그대로 지켜주세요! -\n",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
@@ -336,7 +336,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "<태그된 목차.json>\n",
+            "OutputMark": "<태그된 목차.json> - 태그된 목차 예시.json의 구조를 그대로 지켜주세요! -\n",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",

@@ -241,7 +241,7 @@ def LLMresponse(projectName, email, Process, Input, Count, root = "backend", Mod
 
     Temperature = temperature
 
-    for _ in range(MaxAttempts):
+    for Attempt in range(MaxAttempts):
       try:
           if promptFrame[0]["OutputFormat"] == 'json':
             response = client.chat.completions.create(
@@ -271,11 +271,13 @@ def LLMresponse(projectName, email, Process, Input, Count, root = "backend", Mod
       
       except Exception as e:
           if isinstance(email, str):
-            print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생\n\n{e}")
+              print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생\n\n{e}")
           else:
-            print(f"LifeGraphSetName: {projectName} | Process: {Process} | LLMresponse에서 오류 발생\n\n{e}")
+              print(f"LifeGraphSetName: {projectName} | Process: {Process} | LLMresponse에서 오류 발생\n\n{e}")
           time.sleep(random.uniform(5, 10))
-          continue
+          if Attempt == MaxAttempts - 1:  # 마지막 시도에서 예외가 발생한 경우
+              print("최대 시도 횟수에 도달했습니다. 프로세스를 종료합니다.")
+              sys.exit(1)  # 오류 상태와 함께 프로그램을 종료합니다.
       # except openai.APIError as e:
       #     print(f"Project: {projectName} | Process: {Process} | LLMresponse에서 오류 발생: OpenAI API returned an API Error: {e}")
       #     time.sleep(random.uniform(5, 10))

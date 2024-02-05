@@ -71,10 +71,12 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
       if cleanInput == cleanResponse:
         print(f"Project: {projectName} | Process: {Process} | CleanTextMatching 완료")
         
-        # Response = Response.replace("<태그된 목차4.json>", "")
+        Response = Response.replace("<태그된 목차4.json>", "")
         # Response = Response.replace("[{'Title':'", "").replace("[{'Title': '", "")
         # Response = Response.replace('[{"Title":"', '').replace('[{"Title": "', '')
         # Response = Response.replace('"{"Title": ', '')
+        Response = Response.replace('```json', '')
+        Response = Response.replace('```', '')
         # Response = re.sub(r'^"', '', Response)
         # Response = re.sub(r"^'", '', Response)
         
@@ -82,7 +84,6 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
         Example = promptFrame[0]["Example"]
         responseData = Example[2]["OutputStarter"] + Response
         responseData = responseData.replace("'", "\"")
-        print(responseData)
         try:
             responseContent = json.loads(responseData)
         except json.JSONDecodeError:

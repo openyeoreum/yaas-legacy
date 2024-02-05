@@ -76,24 +76,17 @@ def FindDataframeFilePaths(email, projectName, userStoragePath):
         
         username = user.UserName
 
-        # 정규 표현식 패턴 구성
-        pattern = rf"{userStoragePath}/.*_{username}_user/.*/{projectName}/{projectName}_dataframe_file"
-        DataFrameFilePaths = []
-        # userStoragePath 내의 모든 파일과 디렉토리를 순회
-        for root, dirs, files in os.walk(userStoragePath):
-            for dir in dirs:
-                # 전체 디렉토리 경로
-                FullPath = os.path.join(root, dir)
-                normalizedFullPath = unicodedata.normalize('NFC', FullPath)
-                # print(normalizedFullPath)
+        # 데이터프레임 파일 경로 구성
+        expectedFilePath = os.path.join(userStoragePath, f"{username}_user", f"{username}_storage", projectName, f"{projectName}_dataframe_file")
+        normalizedFilePath = unicodedata.normalize('NFC', expectedFilePath)
 
-                # 정규 표현식과 일치하는 경우 리스트에 추가
-                if re.match(pattern, normalizedFullPath):
-                    DataFrameFilePaths.append(FullPath)  # 정규화되지 않은 원본 경로 사용
-
-        MatchedDataFrameFilePath = DataFrameFilePaths[0] + '/'
-
-    return MatchedDataFrameFilePath
+        # 파일 존재 여부 확인
+        if os.path.exists(normalizedFilePath):
+            # 파일이 존재하면 정규화된 파일 경로 반환
+            return normalizedFilePath + '/'
+        else:
+            # 파일이 존재하지 않으면, 빈 리스트 반환
+            return None
 
 ## 업데이트된 OutputMemoryDics 파일 저장하기
 def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFramePath):

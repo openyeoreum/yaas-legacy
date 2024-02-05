@@ -464,6 +464,8 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, Mode = "Manual"):
         # MatchedChunksEdit 경로 생성
         fileName = '[' + projectName + '_' + 'VoiceLayer_Edit].json'
         MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName)
+        OriginFileName = '' + projectName + '_' + 'VoiceLayer_Origin.json'
+        MatchedChunksOriginPath = VoiceLayerPathGen(projectName, email, OriginFileName)
         
         ## MatchedChunksPath.json이 존재하면 해당 파일로 VoiceLayerGenerator 진행, 아닐경우 새롭게 생성
         if not os.path.exists(MatchedChunksPath):
@@ -493,6 +495,8 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, Mode = "Manual"):
             with open(MatchedActorsPath, 'w', encoding = 'utf-8') as json_file:
                 json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
             with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
+                json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+            with open(MatchedChunksOriginPath, 'w', encoding = 'utf-8') as json_file:
                 json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
         else:
             with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
@@ -618,7 +622,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "웹3.0메타버스"
     voiceDataSet = "TypeCastVoiceDataSet"
     mode = "Manual"
     #########################################################################

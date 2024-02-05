@@ -65,9 +65,9 @@ def AddProjectToDB(projectName, email):
         print("뭐지??")
         print("뭐지??")
         print("뭐지??")
+        print(scriptPath)
         # 디렉토리 생성
         if not os.path.exists(scriptPath):
-            print("생성")
             os.makedirs(projectPath)
             os.makedirs(scriptPath)
             os.makedirs(dataFramePath)

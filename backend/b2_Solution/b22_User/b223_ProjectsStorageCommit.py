@@ -29,10 +29,11 @@ def AddProjectsStorageToDB(projectsStorageName, email):
         UserPath = user.UserPath
         # 가능한 모든 ProjectsStoragePath 검색
         possiblePaths = glob.glob(os.path.join(UserPath, f"*_{projectsStorageName}_storage"))
-
+        print(f'있다 경로 : {possiblePaths}')
         # 존재하는 경로 중 가장 최근 것 사용
         if possiblePaths:
-            projectsStoragePath = max(possiblePaths, key=os.path.getctime)
+            projectsStoragePath = max(possiblePaths, key = os.path.getctime)
+            print(f'본래 경로 : {possiblePaths}')
         else:
             # 존재하는 경로가 없으면 새로운 경로 생성
             projectsStoragePath = os.path.join(UserPath, f"{SeoulNow()}_{projectsStorageName}_storage")

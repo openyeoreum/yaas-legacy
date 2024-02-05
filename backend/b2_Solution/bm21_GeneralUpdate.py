@@ -77,6 +77,9 @@ if __name__ == "__main__":
     projectNameList = ['데미안', '빨간머리앤', '웹3.0메타버스', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법']
     #########################################################################
     
+    ### Step1 : 솔루션에 계정 업데이트 ###
     SolutionAccountUpdate(email, name, password)
+    
+    ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
     for projectName in projectNameList:
         SolutionProjectUpdate(email, projectName)

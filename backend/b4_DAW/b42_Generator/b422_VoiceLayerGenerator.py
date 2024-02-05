@@ -427,6 +427,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
         for j in range(len(EditGenerationKoChunks)):
             if int(chunkid) == EditGenerationKoChunks[j]['ChunkId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
                 Files.append(RawFiles[i])
+                break
     
     # 폴더 내의 모든 .wav 파일 목록 정렬/필터
     FilteredFiles = SortAndRemoveDuplicates(VoiceLayerFileName, Files)

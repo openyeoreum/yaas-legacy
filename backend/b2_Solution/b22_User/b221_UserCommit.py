@@ -59,6 +59,6 @@ def AddUserToDB(email, username, password):
 
 if __name__ == "__main__":
     
-    # AddUserToDB('yeoreum00128@gmail.com', 'yeoreum', '0128')
-    # AddUserToDB('junsun0128@gmail.com', 'junyoung', '0128')
-    # AddUserToDB('ahyeon0128@gmail.com', 'ahyeon', '0128')
+    AddUserToDB('yeoreum00128@gmail.com', 'yeoreum', '0128')
+    AddUserToDB('junsun0128@gmail.com', 'junyoung', '0128')
+    AddUserToDB('ahyeon0128@gmail.com', 'ahyeon', '0128')

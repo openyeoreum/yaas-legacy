@@ -31,7 +31,7 @@ def AddProjectsStorageToDB(projectsStorageName, email):
         # 폴더 존재 여부 확인
         if not os.path.exists(projectsStoragePath):
             # 새로운 폴더 생성
-            os.makedirs(projectsStoragePath, exist_ok=True)
+            os.makedirs(projectsStoragePath, exist_ok = True)
             
         ExistingProjectsStorage = db.query(ProjectsStorage).filter(ProjectsStorage.UserId == user.UserId, ProjectsStorage.ProjectsStorageName == projectsStorageName).first()
 
@@ -43,9 +43,6 @@ def AddProjectsStorageToDB(projectsStorageName, email):
                 ProjectsStoragePath = projectsStoragePath
                 )
             db.add(projectsStorage)
-            # 사용자 스토리지 폴더 생성
-            os.makedirs(projectsStoragePath, exist_ok = True)
-        
             db.commit()
             print(f"[ Email: {email} | ProjectsStorageName: {projectsStorageName} | AddProjectsStorageToDB 완료 ]")
         else:

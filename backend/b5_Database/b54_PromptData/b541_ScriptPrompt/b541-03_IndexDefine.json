@@ -117,7 +117,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<태그된 목차.json>\n",
-            "OutputStarter": "[{'Title': '",
+            "OutputStarter": "",
             "Output": "OUTPUT"
         }
     ],
@@ -222,7 +222,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<태그된 목차.json>\n",
-            "OutputStarter": "[{'Title': '",
+            "OutputStarter": "",
             "Output": "OUTPUT"
         }
     ],

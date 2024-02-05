@@ -71,7 +71,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<분할된 목차 리스트3>\n",
-            "OutputStarter": "[{'Count': 1, 'Text': '",
+            "OutputStarter": "",
             "Output": "OUTPUT"
         }
     ],
@@ -130,7 +130,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<분할된 목차 리스트3>\n",
-            "OutputStarter": "[{'Count': 1, 'Text': '",
+            "OutputStarter": "",
             "Output": "OUTPUT"
         }
     ],

@@ -57,7 +57,6 @@ def AddProjectToDB(projectName, email):
         music1FolderPath = os.path.join(musicLayersPath, 'Music1Folder')
         music2FolderPath = os.path.join(musicLayersPath, 'Music2Folder')
         
-        print(projectPath)
         masterAudioBookPath = os.path.join(projectPath, f"{projectName}_master_audiobook_file")
         # 디렉토리 생성
         if not os.path.exists(scriptPath):

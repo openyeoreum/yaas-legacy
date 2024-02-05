@@ -291,9 +291,9 @@ def VoiceLayerPathGen(projectName, email, FileName):
 
     return voiceLayerPath
 
-################################
-##### BookToSpeech 파일 생성 #####
-################################
+#######################################
+##### VoiceLayerGenerator 파일 생성 #####
+#######################################
 ## TypecastVoice 생성 ##
 def TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath):
     api_token = os.getenv("TYPECAST_API_TOKEN")
@@ -384,10 +384,10 @@ def SortAndRemoveDuplicates(VoiceLayerFileName, files):
         return None
 
     # 파일 정보를 기반으로 정렬 및 중복 제거
-    SortedFiles = sorted(files, key = lambda x: (
-        ExtractFileInfo(x)['gen_num'],
-        ExtractFileInfo(x)['detail_gen_num'],
-        not ExtractFileInfo(x)['has_M']  # 'M'이 없는 파일을 우선 정렬
+    SortedFiles = sorted(files, key = lambda File: (
+        ExtractFileInfo(File)['gen_num'],
+        ExtractFileInfo(File)['detail_gen_num'],
+        not ExtractFileInfo(File)['has_M']  # 'M'이 없는 파일을 우선 정렬
     ))
 
     # 중복 제거
@@ -407,17 +407,27 @@ def SortAndRemoveDuplicates(VoiceLayerFileName, files):
 
     return UniqueFiles
 
-
 ## 생성된 음성파일 합치기
 def VoiceGenerator(projectName, email, EditGenerationKoChunks):
     VoiceLayerFileName = projectName + "_VoiceLayer.wav"
     voiceLayerPath = VoiceLayerPathGen(projectName, email, '')
 
     # 폴더 내의 모든 .wav 파일 목록 추출
-    Files = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav')]
-    # VoiceLayer 파일이 생성되었을 경우 해당 파일명을 리스트에서 삭제
-    if VoiceLayerFileName in Files:
-        Files.remove(VoiceLayerFileName)
+    RawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav')]
+    # VoiceLayer 파일이 생성되었을 경우 해당 파일명을 RawFiles 리스트에서 삭제
+    if VoiceLayerFileName in RawFiles:
+        RawFiles.remove(VoiceLayerFileName)
+    # 성우 변경 파일이 생성되었을 경우 이전 성우 파일명으로 새로운 RawFiles 리스트에서 생성
+    Files = []
+    VoiceFilePattern = r".*?_(\d+)_([가-힣]+\([가-힣]+\)).*?\.wav"
+    for i in range(len(RawFiles)):
+        VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
+        if VoiceFileMatch:
+            chunkid, actorname = VoiceFileMatch.groups()
+        for j in range(len(EditGenerationKoChunks)):
+            if int(chunkid) == EditGenerationKoChunks[j]['ChunkId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
+                Files.append(RawFiles[i])
+    
     # 폴더 내의 모든 .wav 파일 목록 정렬/필터
     FilteredFiles = SortAndRemoveDuplicates(VoiceLayerFileName, Files)
     
@@ -440,22 +450,22 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
     CombinedSound.export(os.path.join(voiceLayerPath, projectName + "_VoiceLayer.wav"), format = "wav")
 
 
-## 프롬프트 요청 및 결과물 BookToSpeech
-def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual"):
-    print(f"< User: {email} | Project: {projectName} | BookToSpeech 시작 >")
+## 프롬프트 요청 및 결과물 VoiceLayerGenerator
+def VoiceLayerGenerator(projectName, email, voiceDataSet, Mode = "Manual"):
+    print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     MatchedActors, SelectionGenerationKoChunks = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet)
     for MatchedActor in MatchedActors:
         Actor = MatchedActor['ActorName']
 
-        print(f"< Project: {projectName} | Actor: {Actor} | BookToSpeech 시작 >")
+        print(f"< Project: {projectName} | Actor: {Actor} | VoiceLayerGenerator 시작 >")
         # MatchedActors 경로 생성
-        fileName = projectName + '_' + 'MatchedActors.json'
+        fileName = projectName + '_' + 'MatchedVoices.json'
         MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
         # MatchedChunksEdit 경로 생성
-        fileName = '[' + projectName + '_' + 'MatchedChunksEdit].json'
+        fileName = '[' + projectName + '_' + 'VoiceLayer_Edit].json'
         MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName)
         
-        ## MatchedChunksPath.json이 존재하면 해당 파일로 BookToSpeech 진행, 아닐경우 새롭게 생성
+        ## MatchedChunksPath.json이 존재하면 해당 파일로 VoiceLayerGenerator 진행, 아닐경우 새롭게 생성
         if not os.path.exists(MatchedChunksPath):
             # SelectionGenerationKoChunks의 EditGenerationKoChunks화
             EditGenerationKoChunks = []
@@ -478,7 +488,7 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual"):
                 EditGenerationKoChunk = {"ChunkId": chunkid, "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses}
                 EditGenerationKoChunks.append(EditGenerationKoChunk)
             # MatchedActors, MatchedChunks 저장
-            fileName = projectName + '_' + 'MatchedActors.json'
+            fileName = projectName + '_' + 'MatchedVoices.json'
             MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
             with open(MatchedActorsPath, 'w', encoding = 'utf-8') as json_file:
                 json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
@@ -499,19 +509,19 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual"):
         elif Mode == 'Auto':
             GenerationKoChunks = EditGenerationKoChunks
 
-        ## BookToSpeech 생성
+        ## VoiceLayerGenerator 생성
         GenerationKoChunksCount = len(GenerationKoChunks)
         
         ## TQDM 셋팅
         UpdateTQDM = tqdm(GenerationKoChunks,
                         total = GenerationKoChunksCount,
-                        desc = 'BookToSpeech')
+                        desc = 'VoiceLayerGenerator')
         
         ## VoiceDataSet 불러오기
         VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet)
 
         ## 히스토리 불러오기
-        fileName = projectName + '_' + 'MatchedChunkHistorys_' + Actor + '.json'
+        fileName = projectName + '_' + 'VoiceLayer_History_' + Actor + '.json'
         MatchedChunkHistorysPath = VoiceLayerPathGen(projectName, email, fileName)
         if os.path.exists(MatchedChunkHistorysPath):
             with open(MatchedChunkHistorysPath, 'r', encoding = 'utf-8') as MatchedChunkHistorysJson:
@@ -519,22 +529,23 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual"):
         else:
             GenerationKoChunkHistorys = []
 
-        ## 생성시작 ##
+        ### 생성시작 ###
         for Update in UpdateTQDM:
             UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['ActorChunk']}")
             ChunkId = Update['ChunkId']
             Name = Update['ActorName']
             Chunks = Update['ActorChunk']
             
-            ## 수정생성 ##
+            ## 수정생성(Modify) 여부확인 ##
             Modify = "No"
             for History in GenerationKoChunkHistorys:
-                if (History['ChunkId'] == ChunkId) and (History['ActorName'] != Name):
-                    History['ActorName'] = Name
-                    Modify = "Yes"
-                if (History['ChunkId'] == ChunkId) and (History['ActorChunk'] != Chunks):
-                    History['ActorChunk'] = Chunks
-                    Modify = "Yes"
+                if History['ChunkId'] == ChunkId:
+                    if History['ActorName'] != Name:
+                        History['ActorName'] = Name
+                        Modify = "Yes"
+                    if History['ActorChunk'] != Chunks:
+                        History['ActorChunk'] = Chunks
+                        Modify = "Yes"
 
             ## 보이스 선정 ##
             for VoiceData in VoiceDataSet['Characters']:
@@ -546,7 +557,7 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual"):
                     SPEED = ApiSetting['speed_x']
                     Pitch = ApiSetting['pitch']
             
-            # 'Narrator', 'Character' 태그가 아닌 경우 끝음 조절하기
+            ## 'Narrator', 'Character' 태그가 아닌 경우 끝음 조절하기 ##
             if Update['Tag'] not in ['Narrator', 'Character']:
                 LASTPITCH = [-2]
             else:
@@ -556,15 +567,20 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual"):
                 Chunk = Chunks[i]
                 
                 # 단어로 끝나는 경우 끝음 조절하기
-                if '.' not in Chunk[-2:]:
-                    lastpitch = [-2]
+                if '?' not in Chunk[-2:]:
+                    if '.' not in Chunk[-2:]:
+                        lastpitch = [-2]
+                    elif '다' not in Chunk[-2:]:
+                        lastpitch = [-2]
+                    else:
+                        lastpitch = LASTPITCH
                 else:
                     lastpitch = LASTPITCH
                 RandomEMOTION = random.choice(EMOTION)
                 RandomSPEED = random.choice(SPEED)
                 RandomLASTPITCH = random.choice(lastpitch)
                 
-                ## 수정 여부에 따라 파일명 변경 ##s
+                ## 수정 여부에 따라 파일명 변경 ##
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + 'M.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
@@ -592,11 +608,11 @@ def BookToSpeech(projectName, email, voiceDataSet, Mode = "Manual"):
                             print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {cp} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
                             sys.exit()
                 
-    ## 생성된 음성파일 합치기
-    time.sleep(0.3)
+    ## 최종 생성된 음성파일 합치기 ##
+    time.sleep(0.1)
     VoiceGenerator(projectName, email, EditGenerationKoChunks)
 
-    print(f"[ User: {email} | Project: {projectName} | BookToSpeech 완료 ]\n")
+    print(f"[ User: {email} | Project: {projectName} | VoiceLayerGenerator 완료 ]\n")
 
 if __name__ == "__main__":
 
@@ -681,7 +697,7 @@ if __name__ == "__main__":
 
     ##########
     ##########
-    BookToSpeech(projectName, email, voiceDataSet, Mode = mode)
+    VoiceLayerGenerator(projectName, email, voiceDataSet, Mode = mode)
     ##########
     ##########
     

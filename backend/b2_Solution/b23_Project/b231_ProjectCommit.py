@@ -36,11 +36,11 @@ def AddProjectToDB(projectName, email):
         mixedAudioBookPath = os.path.join(projectPath, f"{projectName}_mixed_audiobook_file")
         
         voiceLayersPath = os.path.join(mixedAudioBookPath, 'VoiceLayers')
-        narratorPath = os.path.join(voiceLayersPath, 'Narrator')
-        character1Path = os.path.join(voiceLayersPath, 'Character1')
-        character2Path = os.path.join(voiceLayersPath, 'Character2')
-        character3Path = os.path.join(voiceLayersPath, 'Character3')
-        character4Path = os.path.join(voiceLayersPath, 'Character4')
+        # narratorPath = os.path.join(voiceLayersPath, 'Narrator')
+        # character1Path = os.path.join(voiceLayersPath, 'Character1')
+        # character2Path = os.path.join(voiceLayersPath, 'Character2')
+        # character3Path = os.path.join(voiceLayersPath, 'Character3')
+        # character4Path = os.path.join(voiceLayersPath, 'Character4')
         
         sFXLayersPath = os.path.join(mixedAudioBookPath, 'SFXLayers')
         sFX1Path = os.path.join(sFXLayersPath, 'SFX1')
@@ -129,11 +129,11 @@ def AddProjectToDB(projectName, email):
             ExistingProject.DataSetPath = dataSetPath
             ExistingProject.MixedAudioBookPath = mixedAudioBookPath
             ExistingProject.VoiceLayersPath = voiceLayersPath
-            ExistingProject.NarratorPath = narratorPath
-            ExistingProject.Character1Path = character1Path
-            ExistingProject.Character2Path = character2Path
-            ExistingProject.Character3Path = character3Path
-            ExistingProject.Character4Path = character4Path
+            # ExistingProject.NarratorPath = narratorPath
+            # ExistingProject.Character1Path = character1Path
+            # ExistingProject.Character2Path = character2Path
+            # ExistingProject.Character3Path = character3Path
+            # ExistingProject.Character4Path = character4Path
             ExistingProject.SFXLayersPath = sFXLayersPath
             ExistingProject.SFX1Path = sFX1Path
             ExistingProject.SFX2Path = sFX2Path
@@ -186,11 +186,11 @@ def AddProjectToDB(projectName, email):
                 DataSetPath = dataSetPath,
                 MixedAudioBookPath = mixedAudioBookPath,
                 VoiceLayersPath = voiceLayersPath,
-                NarratorPath = narratorPath,
-                Character1Path = character1Path,
-                Character2Path = character2Path,
-                Character3Path = character3Path,
-                Character4Path = character4Path,
+                # NarratorPath = narratorPath,
+                # Character1Path = character1Path,
+                # Character2Path = character2Path,
+                # Character3Path = character3Path,
+                # Character4Path = character4Path,
                 SFXLayersPath = sFXLayersPath,
                 SFX1Path = sFX1Path,
                 SFX2Path = sFX2Path,

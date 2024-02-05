@@ -165,11 +165,11 @@ class Project(Base):
     MixedAudioBookPath = Column(Text)
 
     VoiceLayersPath = Column(Text)
-    NarratorPath = Column(Text)
-    Character1Path = Column(Text)
-    Character2Path = Column(Text)
-    Character3Path = Column(Text)
-    Character4Path = Column(Text)
+    # NarratorPath = Column(Text)
+    # Character1Path = Column(Text)
+    # Character2Path = Column(Text)
+    # Character3Path = Column(Text)
+    # Character4Path = Column(Text)
     
     SFXLayersPath = Column(Text)
     SFX1Path = Column(Text)
@@ -287,11 +287,11 @@ class ProjectHistory(Base):
     MixedAudioBookPath = Column(Text)
 
     VoiceLayersPath = Column(Text)
-    NarratorPath = Column(Text)
-    Character1Path = Column(Text)
-    Character2Path = Column(Text)
-    Character3Path = Column(Text)
-    Character4Path = Column(Text)
+    # NarratorPath = Column(Text)
+    # Character1Path = Column(Text)
+    # Character2Path = Column(Text)
+    # Character3Path = Column(Text)
+    # Character4Path = Column(Text)
     
     SFXLayersPath = Column(Text)
     SFX1Path = Column(Text)

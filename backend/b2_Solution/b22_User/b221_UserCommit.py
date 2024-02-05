@@ -35,16 +35,15 @@ def AddUserToDB(email, username, password):
         BasePath = GetBasePath()
 
         # 가능한 모든 UserPath 검색
-        possiblePaths = glob.glob(os.path.join(BasePath, f"*_{username}_user"))
-        possiblePathsNormalized = unicodedata.normalize('NFC', possiblePaths)
-        # 존재하는 경로 중 가장 최근 것 사용
-        if possiblePathsNormalized:
-            userPath = max(possiblePathsNormalized, key = os.path.getctime)
+        possiblePaths = glob.glob(os.path.join(BasePath, f"{username}_user"))
+        # 존재하는 경로 사용
+        if possiblePaths:
+            userPath = max(possiblePaths, key = os.path.getctime)
             profileImageFilePath = os.path.join(userPath, f"{os.path.basename(userPath)}_profile_image")
         else:
             # 존재하는 경로가 없으면 새로운 경로 생성
-            userPath = os.path.join(BasePath, f"{SeoulNow()}_{username}_user")
-            profileImageFilePath = os.path.join(userPath, f"{SeoulNow()}_{username}_profile_image")
+            userPath = os.path.join(BasePath, f"{username}_user")
+            profileImageFilePath = os.path.join(userPath, f"{username}_profile_image")
             # 새로운 폴더 생성
             os.makedirs(userPath, exist_ok=True)
         

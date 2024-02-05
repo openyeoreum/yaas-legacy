@@ -8,16 +8,6 @@ sys.path.append("/yaas")
 from backend.b1_Api.b14_Models import User, SeoulNow
 from backend.b1_Api.b13_Database import get_db
 
-def GetBasePath():
-    sys.path.append("/yaas")
-    relativePath = 'storage/s1_Yeoreum/s11_UserStorage'
-    # 현재 파일의 디렉토리 경로 얻기
-    CurrentDir = os.path.dirname(os.path.abspath(__file__))
-    # 현재 디렉토리와 상대 경로를 결합하여 최종 경로 생성
-    finalPath = os.path.join(CurrentDir, relativePath)
-
-    return finalPath
-
 ### 이메일과 현재 시간을 기반으로 UserId를 생성하는 함수
 def GenerateUserId(email: str) -> str:
     UniqueString = email + str(SeoulNow())
@@ -30,8 +20,8 @@ def AddUserToDB(email, username, password):
         # UserId 생성
         GeneratedUserId = GenerateUserId(email)
         # BasePath 생성
-        BasePath = GetBasePath()
-        
+        BasePath = '/yaas/storage/s1_Yeoreum/s11_UserStorage'
+        # UserPath 생성
         userPath = os.path.join(BasePath, f"{username}_user")
         profileImageFilePath = os.path.join(userPath, f"{username}_profile_image")
 
@@ -69,6 +59,8 @@ def AddUserToDB(email, username, password):
 
 if __name__ == "__main__":
     
-    AddUserToDB('yeoreum00128@gmail.com', 'yeoreum', '0128')
-    AddUserToDB('junsun0128@gmail.com', 'junyoung', '0128')
-    AddUserToDB('ahyeon0128@gmail.com', 'ahyeon', '0128')
+    # AddUserToDB('yeoreum00128@gmail.com', 'yeoreum', '0128')
+    # AddUserToDB('junsun0128@gmail.com', 'junyoung', '0128')
+    # AddUserToDB('ahyeon0128@gmail.com', 'ahyeon', '0128')
+    
+    print(GetBasePath())

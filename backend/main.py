@@ -41,6 +41,6 @@ if __name__ == "__main__":
     # projectNameList = ['노인을위한나라는있다', '데미안', '빨간머리앤', '웹3.0메타버스', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법']
     MessagesReview = "on"
     #########################################################################
-    
+
     AccountUpdate(email, name, password)
     SolutionUpdate(email, projectNameList, MessagesReview)

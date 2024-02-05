@@ -15,7 +15,7 @@
     "MasterModel": "gpt-4-turbo-preview",
     "Temperature": 0.5,
     "OutputTokensRatio": 2,
-    "OutputFormat": "text",
+    "OutputFormat": "json",
     "Example": [
         {
             "Role": "system",

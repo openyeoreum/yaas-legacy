@@ -1,6 +1,4 @@
 import os
-import glob
-import unicodedata
 import hashlib
 # from dotenv import load_dotenv
 import sys
@@ -33,17 +31,12 @@ def AddUserToDB(email, username, password):
         GeneratedUserId = GenerateUserId(email)
         # BasePath 생성
         BasePath = GetBasePath()
+        
+        userPath = os.path.join(BasePath, f"{username}_user")
+        profileImageFilePath = os.path.join(userPath, f"{username}_profile_image")
 
-        # 가능한 모든 UserPath 검색
-        possiblePaths = glob.glob(os.path.join(BasePath, f"{username}_user"))
         # 존재하는 경로 사용
-        if possiblePaths:
-            userPath = max(possiblePaths, key = os.path.getctime)
-            profileImageFilePath = os.path.join(userPath, f"{os.path.basename(userPath)}_profile_image")
-        else:
-            # 존재하는 경로가 없으면 새로운 경로 생성
-            userPath = os.path.join(BasePath, f"{username}_user")
-            profileImageFilePath = os.path.join(userPath, f"{username}_profile_image")
+        if not os.path.exists(userPath):
             # 새로운 폴더 생성
             os.makedirs(userPath, exist_ok=True)
         

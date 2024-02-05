@@ -1,6 +1,4 @@
 import os
-import glob
-import unicodedata
 import sys
 
 sys.path.append("/yaas")
@@ -28,14 +26,11 @@ def AddProjectsStorageToDB(projectsStorageName, email):
             return
 
         UserPath = user.UserPath
-        # 가능한 모든 ProjectsStoragePath 검색
-        possiblePaths = glob.glob(os.path.join(UserPath, f"{projectsStorageName}_storage"))
-        # 존재하는 경로 사용
-        if possiblePaths:
-            projectsStoragePath = f"{projectsStorageName}_storage"
-        else:
-            # 존재하는 경로가 없으면 새로운 경로 생성
-            projectsStoragePath = os.path.join(UserPath, f"{projectsStorageName}_storage")
+        # ProjectsStoragePath 검색
+        projectsStoragePath = os.path.join(UserPath, f"{projectsStorageName}_storage")
+
+        # 폴더 존재 여부 확인
+        if not os.path.exists(projectsStoragePath):
             # 새로운 폴더 생성
             os.makedirs(projectsStoragePath, exist_ok=True)
             

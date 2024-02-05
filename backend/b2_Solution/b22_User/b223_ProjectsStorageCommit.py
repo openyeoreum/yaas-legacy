@@ -26,7 +26,6 @@ def AddProjectsStorageToDB(projectsStorageName, email):
             return
 
         UserPath = user.UserPath
-        # ProjectsStoragePath 검색
         projectsStoragePath = os.path.join(UserPath, f"{projectsStorageName}_storage")
 
         # 폴더 존재 여부 확인

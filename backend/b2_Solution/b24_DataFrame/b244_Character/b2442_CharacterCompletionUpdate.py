@@ -393,7 +393,7 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
                 
                 ErrorCount += 1
                 if ErrorCount == 7:
-                    print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 10회 초과, 프롬프트 종료")
+                    print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                     sys.exit(1)  # 오류 상태와 함께 프로그램을 종료합니다.
                     
                 continue
@@ -438,13 +438,16 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
     return outputMemoryDics
 
 ## 12-2. CharacterPostCompletion 프롬프트 요청 및 결과물 Json화
-def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
-    # BookGenre에 따른 Process 선정
-    BookGenre = LoadWMWMMatchingBookGenre(projectName, email)
+def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, memoryLength = 2, MessagesReview = "on", Mode = "Memory", BookGenre = "Auto"):
+    if BookGenre == "Auto":
+        # BookGenre에 따른 Process 선정
+        BookGenre = LoadWMWMMatchingBookGenre(projectName, email)
+
     if BookGenre in ['문학', '아동']:
         Process = "CharacterPostCompletionLiterary"
     else:
         Process = "CharacterPostCompletion"
+    
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -492,7 +495,7 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
 
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = " - 주의사항2: <인물리스트>에서 등장횟수가 큰 인물[특히 앞부분 인물들이 등장횟수가 큼]들은 절대 묶지 않으며, 인물 1인당 1명의 개별성우로 선정. 주의사항3: <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않음. -\n"
+            memoryCounter = " - 주의사항2: <인물리스트>에서 등장횟수가 큰 인물[특히 앞부분 인물들이 등장횟수가 큼]들은 절대 묶지 않으며, 인물 1인당 1명의 개별성우로 선정. 주의사항3: <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않음. 주의사항4: 성우와 인물의 성별은 같아야 함 -\n"
             outputEnder = ""
 
             # Response 생성
@@ -524,7 +527,7 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
                 
                 ErrorCount += 1
                 if ErrorCount == 7:
-                    print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 10회 초과, 프롬프트 종료")
+                    print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                     sys.exit(1)  # 오류 상태와 함께 프로그램을 종료합니다.
                     
                 continue
@@ -709,7 +712,7 @@ def AgeAverageCalculator(SelectedAge):
         return ClosestAgeCategory
 
 ## 캐릭터 더 선별하기
-def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, SelectedCharacters):
+def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, SelectedCharacters, bookGenre):
     SelectedCharactersTexts = []
     inputIdList = []
     for i, Selected in enumerate(SelectedCharacters):
@@ -728,7 +731,7 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
     TaskBody = ''.join(SelectedCharactersTexts)
     inputList = [{'Id': 1, 'Continue': TaskBody}]
         
-    OutputMemoryDics = CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, MessagesReview = messagesReview, Mode = mode)
+    OutputMemoryDics = CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, MessagesReview = messagesReview, Mode = mode, BookGenre = bookGenre)
     
     outputMemoryDics = OutputMemoryDics[0]
     # outputMemoryDics 후처리
@@ -756,7 +759,7 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
     return SelectedCharacters, CharacterList
 
 ## 캐릭터 나머지 요소 합치기
-def SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, mode, ResponseJson, sortedCharacters):
+def SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, mode, ResponseJson, sortedCharacters, bookGenre):
     # Character 요소들 모두 합치기
     SelectedCharacters = []
     Id = 1
@@ -806,7 +809,7 @@ def SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, m
         Id += 1
     
     ## SelectedCharacters (캐릭터에 성우 적용)
-    SelectedCharacters, CharacterList = CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, SelectedCharacters)
+    SelectedCharacters, CharacterList = CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, SelectedCharacters, bookGenre)
 
     # 성우별 담당 배역이름 리스트 업데이트
     ActorNames =[]
@@ -838,7 +841,7 @@ def SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, m
     return ResponseJson, CharacterList
 
 ## 데이터 치환
-def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
+def CharacterCompletionResponseJson(projectName, email, DataFramePath, bookGenre, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
     BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
@@ -888,12 +891,12 @@ def CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesR
     
     ## 12-2. 도서에 대화문이 있는 경우 SelectedCharacterFilter(프롬프트 포함) Continue ##
     else:
-        SelectedResponseJson, CharacterList = SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, mode, ResponseJson, sortedCharacters)
+        SelectedResponseJson, CharacterList = SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, mode, ResponseJson, sortedCharacters, bookGenre)
 
         return SelectedResponseJson, CharacterList
 
 ## 프롬프트 요청 및 결과물 Json을 CharacterCompletion에 업데이트
-def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+def CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate 시작 >")
     # CharacterCompletion의 Count값 가져오기
     ContinueCount, CharacterCount, Completion = CharacterCompletionCountLoad(projectName, email)
@@ -905,7 +908,7 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview 
             AddExistedDataSetToDB(projectName, email, "CharacterCompletion", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate는 ExistedCharacterCompletion으로 대처됨 ]\n")
         else:
-            SelectedResponseJson, CharacterList = CharacterCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+            SelectedResponseJson, CharacterList = CharacterCompletionResponseJson(projectName, email, DataFramePath, bookGenre, messagesReview = MessagesReview, mode = Mode)
             print(f"< Project: {projectName} | Process: CharacterCompletion | CharacterFilter 완료, {projectName}의 성우 {len(CharacterList)}명> ")
             
             ## 12-1. CharacterCompletion

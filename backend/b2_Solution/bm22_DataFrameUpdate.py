@@ -140,7 +140,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
 ###################################
 
 ### 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 업데이트 ###
-def SolutionDataFrameUpdate(email, projectName, messagesReview = "on"):
+def SolutionDataFrameUpdate(email, projectName, messagesReview = "on", bookGenre = "Auto"):
     ############################ 하이퍼 파라미터 설정 ############################
     userStoragePath = "/yaas/storage/s1_Yeoreum/s11_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
@@ -351,7 +351,7 @@ def SolutionDataFrameUpdate(email, projectName, messagesReview = "on"):
         existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterCompletion", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterCompletion", RawDataSetPath)
     mode = "Master"
-    CharacterCompletionUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
     if existedDataFrame == None:
         updatedCharacterCompletion = UpdatedCharacterCompletion(projectName, email)
@@ -444,8 +444,9 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     projectNameList = ['데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법']
     MessagesReview = "on"
+    BookGenre = "Auto"
     ############################ 하이퍼 파라미터 설정 ############################
     
     ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 업데이트 ###
     for projectName in projectNameList:
-        SolutionDataFrameUpdate(email, projectName, messagesReview = MessagesReview)
+        SolutionDataFrameUpdate(email, projectName, messagesReview = MessagesReview, bookGenre = BookGenre)

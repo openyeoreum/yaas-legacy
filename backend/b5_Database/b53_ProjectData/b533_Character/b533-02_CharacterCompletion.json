@@ -33,6 +33,7 @@
                 "CharacterTag": "None",
                 "Gender": "None",
                 "Age": "None",
+                "Frequency": 0,
                 "MainCharacterList": []
             }
         ]

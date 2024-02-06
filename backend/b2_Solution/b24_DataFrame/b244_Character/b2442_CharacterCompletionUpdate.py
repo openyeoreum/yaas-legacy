@@ -748,14 +748,25 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
     for idx, actor in enumerate(outputMemoryDics, start=1):
         ActorData = list(actor.values())[0]
         CharacterName = 'Narrator' if idx == 1 else f'Character{idx-1}'
-        CharacterList.append({'CharacterId': idx, 'CharacterTag': CharacterName, 'Gender': ActorData['성별'], 'Age': ActorData['연령'], 'Actors': sorted(ActorData['담당인물번호'])})
+        
+        actoridx = sorted(ActorData['담당인물번호'])
+        Actors = []
+        Frequency = 0
+        for actorid in actoridx:
+            for SelectedCharacter in SelectedCharacters:
+                if actorid == SelectedCharacter['Id']:
+                    Actor = {"Id": SelectedCharacter['Id'], "MainCharacter": SelectedCharacter['MainCharacter'], "Frequency": SelectedCharacter['Frequency']}
+                    Actors.append(Actor)
+                    Frequency += SelectedCharacter['Frequency']
+                
+        CharacterList.append({'CharacterId': idx, 'CharacterTag': CharacterName, 'Gender': ActorData['성별'], 'Age': ActorData['연령'], 'Actors': Actors, 'Frequency': Frequency, 'ActorIdx': actoridx})
     
     # 삭제 조건에 맞는 일반성우 제거
     for Character in CharacterList:
         for i in range(len(SelectedCharacters)):
-            if SelectedCharacters[i]['Id'] in Character['Actors']:
+            if SelectedCharacters[i]['Id'] in Character['ActorIdx']:
                 SelectedCharacters[i]['Voice'] = {'CharacterId': Character['CharacterId'], 'CharacterTag': Character['CharacterTag'], 'Gender': Character['Gender'], 'Age': Character['Age']}
-    
+        
     return SelectedCharacters, CharacterList
 
 ## 캐릭터 나머지 요소 합치기
@@ -812,17 +823,12 @@ def SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, m
     SelectedCharacters, CharacterList = CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, SelectedCharacters, bookGenre)
 
     # 성우별 담당 배역이름 리스트 업데이트
-    ActorNames =[]
     Emotion = []
     for Character in CharacterList:
         for SelectedCharacter in SelectedCharacters:
-            if SelectedCharacter['Id'] in Character['Actors']:
-                ActorNames.append(SelectedCharacter['MainCharacter'])
+            if SelectedCharacter['Id'] in Character['ActorIdx']:
                 Emotions = list(SelectedCharacter['Emotion'].keys())
                 Emotion.append(Emotions[0])
-                
-        Character['ActorNames'] = ActorNames
-        ActorNames =[]
         
         EmotionCounts = Counter(Emotion)
         TotalEmotions = sum(EmotionCounts.values())
@@ -966,9 +972,10 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, Mess
                 Gender = Update["Gender"]
                 Age = Update["Age"]
                 Emotion = Update["Emotion"]
-                MainCharacterList = Update["ActorNames"]
+                Frequency = Update["Frequency"]
+                MainCharacterList = Update["Actors"]
                 
-                AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, Gender, Age, Emotion, MainCharacterList)
+                AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, Gender, Age, Emotion, Frequency, MainCharacterList)
                 # i값 수동 업데이트
                 i += 1
             

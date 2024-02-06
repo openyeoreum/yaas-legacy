@@ -311,6 +311,7 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
     inputMemoryDics.append(InputDic)
     outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
+    ErrorCount = 0
         
     # CharacterCompletionProcess
     while TotalCount < len(InputList):
@@ -389,6 +390,12 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | {Filter}")
+                
+                ErrorCount += 1
+                if ErrorCount == 10:
+                    print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 10회 초과, 프롬프트 종료")
+                    sys.exit(1)  # 오류 상태와 함께 프로그램을 종료합니다.
+                    
                 continue
             else:
                 OutputDic = Filter['filter']
@@ -455,6 +462,7 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
     inputMemoryDics.append(InputDic)
     outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
+    ErrorCount = 0
         
     # CharacterPostCompletionProcess
     while TotalCount < len(InputList):
@@ -512,6 +520,12 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
+                
+                ErrorCount += 1
+                if ErrorCount == 10:
+                    print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 10회 초과, 프롬프트 종료")
+                    sys.exit(1)  # 오류 상태와 함께 프로그램을 종료합니다.
+                    
                 continue
             else:
                 OutputDic = Filter['filter']

@@ -77,8 +77,8 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
         # Response = Response.replace('"{"Title": ', '')
         Response = Response.replace('```json', '')
         Response = Response.replace('```', '')
-        # Response = re.sub(r'^"', '', Response)
-        # Response = re.sub(r"^'", '', Response)
+        Response = re.sub(r'^"', '', Response)
+        Response = re.sub(r"^'", '', Response)
         
         promptFrame = GetPromptFrame(Process)
         Example = promptFrame[0]["Example"]

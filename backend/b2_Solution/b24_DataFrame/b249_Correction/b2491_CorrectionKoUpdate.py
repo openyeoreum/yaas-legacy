@@ -236,7 +236,7 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputSFXTags, InPutPe
     # Error1: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"
-    # Error2: 결과가 list가 아닐 때의 예외 처리
+    # Error2: INPUT, OUTPUT .(Periods) 불일치시 예외 처리
     OutPutPeriods = str(responseData).count('.')
     Difference = abs(OutPutPeriods - InPutPeriods) / InPutPeriods * 100
     if Difference >= 25:
@@ -372,6 +372,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
     inputMemoryDics.append(InputDic)
     outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
+    ErrorCount = 0
     nonCommonPartList = AddOutputMemoryDicsFile
         
     # CorrectionKoProcess
@@ -445,6 +446,12 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | {Filter}")
+                
+                ErrorCount += 1
+                if ErrorCount == 10:
+                    print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 10회 초과, 프롬프트 종료")
+                    sys.exit(1)  # 오류 상태와 함께 프로그램을 종료합니다.
+                    
                 continue
             else:
                 OutputDic = Filter['filter']

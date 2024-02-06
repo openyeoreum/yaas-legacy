@@ -237,10 +237,12 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputSFXTags, InPutPe
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"
     # Error2: INPUT, OUTPUT .(Periods) 불일치시 예외 처리
-    OutPutPeriods = str(responseData).count('.')
-    Difference = abs(OutPutPeriods - InPutPeriods) / InPutPeriods * 100
-    if Difference >= 25:
-        return f"INPUT, OUTPUT '.(Periods)' 불일치율 25% 이상 오류 발생: 불일치율({Difference}))"
+    if InPutPeriods != 1:
+        PeriodsPattern = r"(?<!\d)\.(?!\d)"
+        OutPutPeriods = len(re.findall(PeriodsPattern, responseData))
+        Difference = abs(OutPutPeriods - InPutPeriods) / InPutPeriods * 100
+        if Difference >= 25:
+            return f"INPUT, OUTPUT '.(Periods)' 불일치율 25% 이상 오류 발생: 불일치율({Difference}))"
     # Error3: INPUT, OUTPUT 불일치시 예외 처리
     try:
         nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)

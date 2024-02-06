@@ -39,11 +39,19 @@ def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
     OutputMemoryDicsFile = []
     OutputMemoryCount = 0
     for filename in os.listdir(DataFramePath):
-        normalizedFilename = unicodedata.normalize('NFC', filename)
-        FullPath = os.path.join(DataFramePath, normalizedFilename)
+        FullPath = os.path.join(DataFramePath, filename)
         if pattern.match(FullPath):
             print(f"< User: {email} | Project: {projectName} | {FullPath} 로드 >")
             with open(FullPath, 'r', encoding='utf-8') as file:
+                OutputMemoryDicsFile = json.load(file)
+            OutputMemoryCount = len(OutputMemoryDicsFile)
+            break  # 첫 번째 일치하는 파일을 찾으면 반복 종료
+
+        normalizedFilename = unicodedata.normalize('NFC', filename)
+        normalizedFullPath = os.path.join(DataFramePath, normalizedFilename)
+        if pattern.match(normalizedFullPath):
+            print(f"< User: {email} | Project: {projectName} | {normalizedFullPath} 로드 >")
+            with open(normalizedFullPath, 'r', encoding='utf-8') as file:
                 OutputMemoryDicsFile = json.load(file)
             OutputMemoryCount = len(OutputMemoryDicsFile)
             break  # 첫 번째 일치하는 파일을 찾으면 반복 종료

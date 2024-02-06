@@ -197,14 +197,12 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
     if InputList == []:
         return OutputMemoryDicsFile
 
-    # FineTuningMemoryList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     TotalCount = 0
     ProcessCount = 1
     ContinueCount = 0
     inputMemoryDics = []
     inputMemory = []
     InputDic = InputList[0]
-    InputChunkId = inputChunkIdList[0]
     inputMemoryDics.append(InputDic)
     outputMemoryDics = OutputMemoryDicsFile
     outputMemory = []
@@ -812,7 +810,7 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 SFXMatching에 업데이트
-def SFXMatchingUpdate(projectName, email, DataFramePath,MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, Importance = 0):
+def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, Importance = 0):
     print(f"< User: {email} | Project: {projectName} | 15_SFXMatchingUpdate 시작 >")
     # SFXMatching의 Count값 가져오기
     ContinueCount, Completion = SFXMatchingCountLoad(projectName, email)

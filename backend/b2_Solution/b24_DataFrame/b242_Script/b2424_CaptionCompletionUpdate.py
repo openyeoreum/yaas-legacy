@@ -206,7 +206,7 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
                 
                 ErrorCount += 1
-                if ErrorCount == 10:
+                if ErrorCount == 5:
                     print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 10회 초과, 프롬프트 종료")
                     sys.exit(1)  # 오류 상태와 함께 프로그램을 종료합니다.
                     

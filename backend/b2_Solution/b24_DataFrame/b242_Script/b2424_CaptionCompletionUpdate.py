@@ -215,6 +215,7 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | JSONDecode 완료")
+                ErrorCount = 0
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:

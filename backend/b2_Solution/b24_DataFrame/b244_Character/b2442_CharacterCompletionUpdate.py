@@ -401,6 +401,7 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
+                ErrorCount = 0
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
@@ -531,7 +532,8 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | JSONDecode 완료")
-                
+                ErrorCount = 0
+
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:
                     # mode가 ["Example", "ExampleFineTuning", "Master"]중 하나인 경우 Memory 초기화

@@ -269,6 +269,7 @@ def CharacterDefineProcess(projectName, email, DataFramePath, Process = "Charact
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | JSONDecode 완료")
+                ErrorCount = 0
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:

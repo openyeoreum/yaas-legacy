@@ -207,7 +207,8 @@ def LifeGraphWMWMDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphData
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
                 print(f"LifeGraphSetName: {lifeGraphSetName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | JSONDecode 완료")
-                
+                ErrorCount = 0
+                 
         else:
             OutputDic = "Pass"
         

@@ -271,6 +271,7 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | JSONDecode 완료")
+                ErrorCount = 0
                 
                 # DataSets 업데이트
                 if mode in ["Example", "ExampleFineTuning", "Master"]:

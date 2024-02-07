@@ -567,7 +567,6 @@ def ResponseJsonText(projectName, email, responseJson):
     for i in range(len(responseJson)):
         for j in range(len(responseJson[i]['CorrectionChunks'])):
             for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
-                print(token_dict)
                 token = next(iter(token_dict.values()))
                 responseJsonText += token
 

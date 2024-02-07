@@ -269,7 +269,7 @@ def VoiceLayerPathGen(projectName, email, FileName):
 
     # 최종 경로 생성
     voiceLayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", FileName)
-    print(voiceLayerPath)
+    # print(voiceLayerPath)
 
     return voiceLayerPath
 

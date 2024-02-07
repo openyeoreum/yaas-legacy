@@ -9,7 +9,7 @@ from backend.b4_Creation.b42_Generator.b422_VoiceLayerGenerator import VoiceLaye
 ###########################
 ###########################
 
-### DAW에 오디오북 제작 및 업데이트 ###
+### Creation에 오디오북 제작 및 업데이트 ###
 def CreationAudioBookUpdate(projectName, email, voiceDataSet, mode = "Manual"):
     
     #####################

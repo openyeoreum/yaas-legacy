@@ -577,8 +577,7 @@ def ResponseJsonText(projectName, email, responseJson):
             raise ValueError("User not found with the provided email")
         
         username = user.UserName
-
-    baseFilePath = f"/yaas/storage/s1_Yeoreum/s11_UserStorage/{username}_user/{username}_storage/{projectName}/{projectName}_mixed_audiobook_file/VoiceLayers/{email}_{projectName}_21_responseJson"
+    baseFilePath = f"/yaas/storage/s1_Yeoreum/s11_UserStorage/{username}_user/{username}_storage/{projectName}/{projectName}_dataframe_file/{email}_{projectName}_21_responseJson"
     fullFilePath = f"{baseFilePath}_{str(Date())}.txt"
 
     # 파일이 존재하는지 확인
@@ -776,9 +775,9 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         CorrectionKoSplitedBody = {'BodyId': BodyId, 'CorrectionChunks': CorrectionChunks}
         responseJson.append(CorrectionKoSplitedBody)
             
-    # JSON 파일로 저장
-    with open('/yaas/response.json', 'w', encoding = 'utf-8') as file:
-        json.dump(responseJson, file, ensure_ascii = False, indent = 4)
+    # # JSON 파일로 저장
+    # with open('/yaas/response.json', 'w', encoding = 'utf-8') as file:
+    #     json.dump(responseJson, file, ensure_ascii = False, indent = 4)
 
     # ResponseJson의 Text변환
     ResponseJsonText(projectName, email, responseJson)
@@ -842,7 +841,7 @@ if __name__ == "__main__":
     projectName = "우리는행복을진단한다"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s11_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
-    RawDataSetPath = "/yaas/backend/b5_Database/b51_DatabaseFeedback/b512_DataSet/b5121_RawDataSet/"
+    RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################

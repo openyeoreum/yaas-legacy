@@ -567,6 +567,7 @@ def ResponseJsonText(projectName, email, responseJson):
     for i in range(len(responseJson)):
         for j in range(len(responseJson[i]['CorrectionChunks'])):
             for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
+                print(token_dict)
                 token = next(iter(token_dict.values()))
                 responseJsonText += token
 
@@ -737,9 +738,15 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         
         # 앞, 뒤Chunk를 통한 처리
         if Aftertag in ["Logue", "Part", "Chapter"]:
-            tokens.append({"Pause": "(1.50)"})
+            if "Pause" in tokens[-2]:
+                tokens[-2]['Pause'] = "(1.50)"
+            else:
+                tokens.append({"Pause": "(1.50)"})
         elif Aftertag == "Index":
-            tokens.append({"Pause": "(1.30)"})
+            if "Pause" in tokens[-2]:
+                tokens[-2]['Pause'] = "(1.30)"
+            else:
+                tokens.append({"Pause": "(1.30)"})
         elif tag == "Character" and Aftertag == "Character":
             tokens.append({"Pause": "(0.70)"})
             tokens.append({"Enter": "\n"})

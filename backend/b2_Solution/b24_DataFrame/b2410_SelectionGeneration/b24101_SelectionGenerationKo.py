@@ -217,7 +217,6 @@ def SelectionGenerationKoJson(projectName, email):
                 Voice = {'Character': Narrater['MainCharacterList'][0]['Id'], 'CharacterTag': Narrater['CharacterTag'], 'Language': Language, 'Gender': Narrater['Gender'], 'Age': Narrater['Age'], 'Emotion': emotions[00]}
                 for CharacterChunk in CharacterFrame:
                     if CharacterChunk['ChunkId'] == chunkid:
-                        print(CharacterChunk)
                         Character = CharacterChunk['MainCharacter']
                         CharacterTag = CharacterChunk['Voice']['CharacterTag']
                         Gender = CharacterChunk['Voice']['Gender']

@@ -1075,7 +1075,7 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character3",
+        "Choice": "Character4",
         "Score": {
             "ContextScore": 0.12029025230386657,
             "Narrator": 0.100237867244812,
@@ -1293,7 +1293,7 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character4",
+        "Choice": "Character3",
         "Score": {
             "ContextScore": 0.1305589323785869,
             "Narrator": 0.10879475835107645,
@@ -1511,7 +1511,7 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character5",
+        "Choice": "Character7",
         "Score": {
             "ContextScore": 0.08155271342635022,
             "Narrator": 0.0,
@@ -1729,7 +1729,7 @@
             "En": "None",
             "Caption": "None"
         },
-        "Choice": "Character7",
+        "Choice": "Character5",
         "Score": {
             "ContextScore": 0.08155271342635022,
             "Narrator": 0.0,

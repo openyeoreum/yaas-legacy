@@ -255,10 +255,13 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
     responseData = responseData.rstrip('●')
 
     OutputDic = responseData.replace('<S', '<효과음시작')
-    OutputDic = responseData.replace('<E', '<효과음끝')
-    OutputDic = responseData.split('●')
+    OutputDic = OutputDic.replace('<E', '<효과음끝')
+    OutputDic = OutputDic.split('●')
     OutputDic = [Output for Output in OutputDic if Output]
     OutputDic = [item for item in OutputDic if item.strip() != '']
+
+    DotsInput = DotsInput.replace('<S', '<효과음시작')
+    DotsInput = DotsInput.replace('<E', '<효과음끝')
     InputDic = DotsInput.split('●')
     InputDic = [Input for Input in InputDic if Input]
     InputDic = [item for item in InputDic if item.strip() != '']

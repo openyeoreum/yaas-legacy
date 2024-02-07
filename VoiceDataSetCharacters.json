@@ -1,0 +1,1966 @@
+[
+    {
+        "CharacterId": 1,
+        "Name": "연우(중간톤)",
+        "Context": {
+            "Genre": [
+                {
+                    "index": "문학",
+                    "Score": 0
+                },
+                {
+                    "index": "비문학",
+                    "Score": 10
+                },
+                {
+                    "index": "아동",
+                    "Score": 0
+                },
+                {
+                    "index": "시",
+                    "Score": 10
+                },
+                {
+                    "index": "학술",
+                    "Score": 10
+                }
+            ],
+            "Gender": [
+                {
+                    "index": "남",
+                    "Score": 10
+                },
+                {
+                    "index": "여",
+                    "Score": 0
+                },
+                {
+                    "index": "중성",
+                    "Score": 10
+                }
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 10
+                },
+                {
+                    "index": "청년",
+                    "Score": 10
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Personality": [
+                {
+                    "index": "외향적",
+                    "Score": 10
+                },
+                {
+                    "index": "중립적",
+                    "Score": 10
+                },
+                {
+                    "index": "내향적",
+                    "Score": 10
+                }
+            ],
+            "Atmosphere": [
+                {
+                    "index": "행복",
+                    "Score": 0
+                },
+                {
+                    "index": "즐거움",
+                    "Score": 0
+                },
+                {
+                    "index": "평온",
+                    "Score": 10
+                },
+                {
+                    "index": "무감정",
+                    "Score": 10
+                },
+                {
+                    "index": "피곤",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "두려움",
+                    "Score": 0
+                },
+                {
+                    "index": "놀람",
+                    "Score": 0
+                }
+            ]
+        },
+        "Voice": {
+            "Language": [
+                "Ko"
+            ],
+            "Gender": [
+                "남"
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 10
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 0
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Emotion": [
+                {
+                    "index": "즐거움",
+                    "Score": 10
+                },
+                {
+                    "index": "침착함",
+                    "Score": 10
+                },
+                {
+                    "index": "중립",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "화남",
+                    "Score": 0
+                }
+            ],
+            "TypeCastContext": {}
+        },
+        "ApiSetting": {
+            "name": "연우",
+            "ApiToken": "None",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "tonemid-1",
+                    "tonemid-2",
+                    "tonemid-3",
+                    "tonemid-4"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 100,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": 0,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                0
+            ],
+            "En": "None",
+            "Caption": "유라(중간톤, 피치다운)"
+        },
+        "Choice": "Narrator",
+        "Score": {
+            "ContextScore": 0.4559633118619401,
+            "Narrator": 0.4559633118619401,
+            "Character1": 0.4559633118619401,
+            "Character2": 0.0,
+            "Character3": 0.0,
+            "Character4": 0.0,
+            "Character5": 0.4559633118619401,
+            "Character6": 0.0,
+            "Character7": 0.3951834023907435,
+            "Character8": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0
+        }
+    },
+    {
+        "CharacterId": 2,
+        "Name": "연우(톤다운)",
+        "Context": {
+            "Genre": [
+                {
+                    "index": "문학",
+                    "Score": 8
+                },
+                {
+                    "index": "비문학",
+                    "Score": 10
+                },
+                {
+                    "index": "아동",
+                    "Score": 0
+                },
+                {
+                    "index": "시",
+                    "Score": 10
+                },
+                {
+                    "index": "학술",
+                    "Score": 10
+                }
+            ],
+            "Gender": [
+                {
+                    "index": "남",
+                    "Score": 10
+                },
+                {
+                    "index": "여",
+                    "Score": 0
+                },
+                {
+                    "index": "중성",
+                    "Score": 10
+                }
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 3
+                },
+                {
+                    "index": "청년",
+                    "Score": 9
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 9
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Personality": [
+                {
+                    "index": "외향적",
+                    "Score": 3
+                },
+                {
+                    "index": "중립적",
+                    "Score": 10
+                },
+                {
+                    "index": "내향적",
+                    "Score": 9
+                }
+            ],
+            "Atmosphere": [
+                {
+                    "index": "행복",
+                    "Score": 0
+                },
+                {
+                    "index": "즐거움",
+                    "Score": 0
+                },
+                {
+                    "index": "평온",
+                    "Score": 4
+                },
+                {
+                    "index": "무감정",
+                    "Score": 8
+                },
+                {
+                    "index": "피곤",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 7
+                },
+                {
+                    "index": "두려움",
+                    "Score": 9
+                },
+                {
+                    "index": "놀람",
+                    "Score": 0
+                }
+            ]
+        },
+        "Voice": {
+            "Language": [
+                "Ko"
+            ],
+            "Gender": [
+                "남"
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 9
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 4
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Emotion": [
+                {
+                    "index": "즐거움",
+                    "Score": 0
+                },
+                {
+                    "index": "침착함",
+                    "Score": 7
+                },
+                {
+                    "index": "중립",
+                    "Score": 8
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 6
+                },
+                {
+                    "index": "화남",
+                    "Score": 0
+                }
+            ],
+            "TypeCastContext": {}
+        },
+        "ApiSetting": {
+            "name": "연우",
+            "ApiToken": "None",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "tonedown-1",
+                    "tonedown-2",
+                    "tonedown-3",
+                    "tonedown-4"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 100,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": 0,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                0
+            ],
+            "En": "None",
+            "Caption": "None"
+        },
+        "Choice": "Character1",
+        "Score": {
+            "ContextScore": 0.3245585544195019,
+            "Narrator": 0.21636371471821672,
+            "Character1": 0.2596468435356015,
+            "Character2": 0.0,
+            "Character3": 0.0,
+            "Character4": 0.10385873741424062,
+            "Character5": 0.23368215918204138,
+            "Character6": 0.0,
+            "Character7": 0.20555591485604732,
+            "Character8": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0
+        }
+    },
+    {
+        "CharacterId": 3,
+        "Name": "유라(중간톤)",
+        "Context": {
+            "Genre": [
+                {
+                    "index": "문학",
+                    "Score": 0
+                },
+                {
+                    "index": "비문학",
+                    "Score": 10
+                },
+                {
+                    "index": "아동",
+                    "Score": 10
+                },
+                {
+                    "index": "시",
+                    "Score": 0
+                },
+                {
+                    "index": "학술",
+                    "Score": 10
+                }
+            ],
+            "Gender": [
+                {
+                    "index": "남",
+                    "Score": 0
+                },
+                {
+                    "index": "여",
+                    "Score": 10
+                },
+                {
+                    "index": "중성",
+                    "Score": 10
+                }
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 10
+                },
+                {
+                    "index": "청년",
+                    "Score": 10
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Personality": [
+                {
+                    "index": "외향적",
+                    "Score": 10
+                },
+                {
+                    "index": "중립적",
+                    "Score": 10
+                },
+                {
+                    "index": "내향적",
+                    "Score": 10
+                }
+            ],
+            "Atmosphere": [
+                {
+                    "index": "행복",
+                    "Score": 10
+                },
+                {
+                    "index": "즐거움",
+                    "Score": 10
+                },
+                {
+                    "index": "평온",
+                    "Score": 10
+                },
+                {
+                    "index": "무감정",
+                    "Score": 10
+                },
+                {
+                    "index": "피곤",
+                    "Score": 0
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "두려움",
+                    "Score": 0
+                },
+                {
+                    "index": "놀람",
+                    "Score": 0
+                }
+            ]
+        },
+        "Voice": {
+            "Language": [
+                "Ko"
+            ],
+            "Gender": [
+                "여"
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 10
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 0
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Emotion": [
+                {
+                    "index": "즐거움",
+                    "Score": 10
+                },
+                {
+                    "index": "침착함",
+                    "Score": 10
+                },
+                {
+                    "index": "중립",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "화남",
+                    "Score": 0
+                }
+            ],
+            "TypeCastContext": {}
+        },
+        "ApiSetting": {
+            "name": "유라",
+            "ApiToken": "None",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "tonemid-1",
+                    "tonemid-2",
+                    "tonemid-3",
+                    "tonemid-4"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 100,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": 0,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                -1,
+                -2
+            ],
+            "En": "None",
+            "Caption": "None"
+        },
+        "Choice": "Character2",
+        "Score": {
+            "ContextScore": 0.4559633118619401,
+            "Narrator": 0.0,
+            "Character1": 0.0,
+            "Character2": 0.4559633118619401,
+            "Character3": 0.0,
+            "Character4": 0.0,
+            "Character5": 0.0,
+            "Character6": 0.0,
+            "Character7": 0.0,
+            "Character8": 0.0,
+            "Character10": 0.3989678978791976,
+            "Character11": 0.0
+        }
+    },
+    {
+        "CharacterId": 4,
+        "Name": "유라(중간톤, 피치다운)",
+        "Context": {
+            "Genre": [
+                {
+                    "index": "문학",
+                    "Score": 0
+                },
+                {
+                    "index": "비문학",
+                    "Score": 10
+                },
+                {
+                    "index": "아동",
+                    "Score": 0
+                },
+                {
+                    "index": "시",
+                    "Score": 0
+                },
+                {
+                    "index": "학술",
+                    "Score": 10
+                }
+            ],
+            "Gender": [
+                {
+                    "index": "남",
+                    "Score": 0
+                },
+                {
+                    "index": "여",
+                    "Score": 10
+                },
+                {
+                    "index": "중성",
+                    "Score": 10
+                }
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 10
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Personality": [
+                {
+                    "index": "외향적",
+                    "Score": 0
+                },
+                {
+                    "index": "중립적",
+                    "Score": 10
+                },
+                {
+                    "index": "내향적",
+                    "Score": 10
+                }
+            ],
+            "Atmosphere": [
+                {
+                    "index": "행복",
+                    "Score": 0
+                },
+                {
+                    "index": "즐거움",
+                    "Score": 10
+                },
+                {
+                    "index": "평온",
+                    "Score": 10
+                },
+                {
+                    "index": "무감정",
+                    "Score": 10
+                },
+                {
+                    "index": "피곤",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "두려움",
+                    "Score": 0
+                },
+                {
+                    "index": "놀람",
+                    "Score": 0
+                }
+            ]
+        },
+        "Voice": {
+            "Language": [
+                "Ko"
+            ],
+            "Gender": [
+                "여"
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 10
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 0
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Emotion": [
+                {
+                    "index": "즐거움",
+                    "Score": 0
+                },
+                {
+                    "index": "침착함",
+                    "Score": 10
+                },
+                {
+                    "index": "중립",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "화남",
+                    "Score": 0
+                }
+            ],
+            "TypeCastContext": {}
+        },
+        "ApiSetting": {
+            "name": "유라",
+            "ApiToken": "None",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "tonemid-1",
+                    "tonemid-2",
+                    "tonemid-3",
+                    "tonemid-4"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 100,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": -1,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                -1,
+                -2
+            ],
+            "En": "None",
+            "Caption": "None"
+        },
+        "Choice": "Caption",
+        "Score": {
+            "ContextScore": 0.3022678134815108,
+            "Narrator": 0.0,
+            "Character1": 0.0,
+            "Character2": 0.3022678134815108,
+            "Character3": 0.0,
+            "Character4": 0.0,
+            "Character5": 0.0,
+            "Character6": 0.0,
+            "Character7": 0.0,
+            "Character8": 0.0,
+            "Character10": 0.2267008601111331,
+            "Character11": 0.0
+        }
+    },
+    {
+        "CharacterId": 5,
+        "Name": "준상(중간톤)",
+        "Context": {
+            "Genre": [
+                {
+                    "index": "문학",
+                    "Score": 0
+                },
+                {
+                    "index": "비문학",
+                    "Score": 10
+                },
+                {
+                    "index": "아동",
+                    "Score": 0
+                },
+                {
+                    "index": "시",
+                    "Score": 0
+                },
+                {
+                    "index": "학술",
+                    "Score": 10
+                }
+            ],
+            "Gender": [
+                {
+                    "index": "남",
+                    "Score": 10
+                },
+                {
+                    "index": "여",
+                    "Score": 0
+                },
+                {
+                    "index": "중성",
+                    "Score": 10
+                }
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 0
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Personality": [
+                {
+                    "index": "외향적",
+                    "Score": 0
+                },
+                {
+                    "index": "중립적",
+                    "Score": 10
+                },
+                {
+                    "index": "내향적",
+                    "Score": 10
+                }
+            ],
+            "Atmosphere": [
+                {
+                    "index": "행복",
+                    "Score": 0
+                },
+                {
+                    "index": "즐거움",
+                    "Score": 10
+                },
+                {
+                    "index": "평온",
+                    "Score": 10
+                },
+                {
+                    "index": "무감정",
+                    "Score": 10
+                },
+                {
+                    "index": "피곤",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "두려움",
+                    "Score": 0
+                },
+                {
+                    "index": "놀람",
+                    "Score": 0
+                }
+            ]
+        },
+        "Voice": {
+            "Language": [
+                "Ko"
+            ],
+            "Gender": [
+                "남"
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 0
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Emotion": [
+                {
+                    "index": "즐거움",
+                    "Score": 0
+                },
+                {
+                    "index": "침착함",
+                    "Score": 10
+                },
+                {
+                    "index": "중립",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "화남",
+                    "Score": 0
+                }
+            ],
+            "TypeCastContext": {}
+        },
+        "ApiSetting": {
+            "name": "준상",
+            "ApiToken": "None",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "tonemid-1",
+                    "tonemid-2",
+                    "tonemid-3",
+                    "tonemid-4"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 100,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": 0,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                0
+            ],
+            "En": "None",
+            "Caption": "None"
+        },
+        "Choice": "Character3",
+        "Score": {
+            "ContextScore": 0.12029025230386657,
+            "Narrator": 0.100237867244812,
+            "Character1": 0.12029025230386657,
+            "Character2": 0.0,
+            "Character3": 0.0,
+            "Character4": 0.12029025230386657,
+            "Character5": 0.0,
+            "Character6": 0.0,
+            "Character7": 0.0922265364413745,
+            "Character8": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0
+        }
+    },
+    {
+        "CharacterId": 6,
+        "Name": "준상(톤다운)",
+        "Context": {
+            "Genre": [
+                {
+                    "index": "문학",
+                    "Score": 10
+                },
+                {
+                    "index": "비문학",
+                    "Score": 10
+                },
+                {
+                    "index": "아동",
+                    "Score": 0
+                },
+                {
+                    "index": "시",
+                    "Score": 0
+                },
+                {
+                    "index": "학술",
+                    "Score": 10
+                }
+            ],
+            "Gender": [
+                {
+                    "index": "남",
+                    "Score": 10
+                },
+                {
+                    "index": "여",
+                    "Score": 0
+                },
+                {
+                    "index": "중성",
+                    "Score": 10
+                }
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 0
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Personality": [
+                {
+                    "index": "외향적",
+                    "Score": 0
+                },
+                {
+                    "index": "중립적",
+                    "Score": 10
+                },
+                {
+                    "index": "내향적",
+                    "Score": 10
+                }
+            ],
+            "Atmosphere": [
+                {
+                    "index": "행복",
+                    "Score": 0
+                },
+                {
+                    "index": "즐거움",
+                    "Score": 0
+                },
+                {
+                    "index": "평온",
+                    "Score": 10
+                },
+                {
+                    "index": "무감정",
+                    "Score": 10
+                },
+                {
+                    "index": "피곤",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "두려움",
+                    "Score": 10
+                },
+                {
+                    "index": "놀람",
+                    "Score": 10
+                }
+            ]
+        },
+        "Voice": {
+            "Language": [
+                "Ko"
+            ],
+            "Gender": [
+                "남"
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 0
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Emotion": [
+                {
+                    "index": "즐거움",
+                    "Score": 0
+                },
+                {
+                    "index": "침착함",
+                    "Score": 10
+                },
+                {
+                    "index": "중립",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "화남",
+                    "Score": 0
+                }
+            ],
+            "TypeCastContext": {}
+        },
+        "ApiSetting": {
+            "name": "준상",
+            "ApiToken": "None",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "tonedown-1",
+                    "tonedown-2",
+                    "tonedown-3",
+                    "tonedown-4"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 100,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": 0,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                0
+            ],
+            "En": "None",
+            "Caption": "None"
+        },
+        "Choice": "Character4",
+        "Score": {
+            "ContextScore": 0.1305589323785869,
+            "Narrator": 0.10879475835107645,
+            "Character1": 0.1305589323785869,
+            "Character2": 0.0,
+            "Character3": 0.0,
+            "Character4": 0.1305589323785869,
+            "Character5": 0.0,
+            "Character6": 0.0,
+            "Character7": 0.10009953345466259,
+            "Character8": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0
+        }
+    },
+    {
+        "CharacterId": 7,
+        "Name": "미선(일반)",
+        "Context": {
+            "Genre": [
+                {
+                    "index": "문학",
+                    "Score": 0
+                },
+                {
+                    "index": "비문학",
+                    "Score": 10
+                },
+                {
+                    "index": "아동",
+                    "Score": 0
+                },
+                {
+                    "index": "시",
+                    "Score": 0
+                },
+                {
+                    "index": "학술",
+                    "Score": 10
+                }
+            ],
+            "Gender": [
+                {
+                    "index": "남",
+                    "Score": 0
+                },
+                {
+                    "index": "여",
+                    "Score": 10
+                },
+                {
+                    "index": "중성",
+                    "Score": 10
+                }
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 0
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Personality": [
+                {
+                    "index": "외향적",
+                    "Score": 10
+                },
+                {
+                    "index": "중립적",
+                    "Score": 10
+                },
+                {
+                    "index": "내향적",
+                    "Score": 0
+                }
+            ],
+            "Atmosphere": [
+                {
+                    "index": "행복",
+                    "Score": 0
+                },
+                {
+                    "index": "즐거움",
+                    "Score": 10
+                },
+                {
+                    "index": "평온",
+                    "Score": 10
+                },
+                {
+                    "index": "무감정",
+                    "Score": 10
+                },
+                {
+                    "index": "피곤",
+                    "Score": 0
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "두려움",
+                    "Score": 0
+                },
+                {
+                    "index": "놀람",
+                    "Score": 0
+                }
+            ]
+        },
+        "Voice": {
+            "Language": [
+                "Ko"
+            ],
+            "Gender": [
+                "여"
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 0
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Emotion": [
+                {
+                    "index": "즐거움",
+                    "Score": 0
+                },
+                {
+                    "index": "침착함",
+                    "Score": 10
+                },
+                {
+                    "index": "중립",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "화남",
+                    "Score": 0
+                }
+            ],
+            "TypeCastContext": {}
+        },
+        "ApiSetting": {
+            "name": "미선",
+            "ApiToken": "None",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "normal-1",
+                    "normal-2",
+                    "normal-3"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 100,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": 0,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                -1,
+                -2
+            ],
+            "En": "None",
+            "Caption": "None"
+        },
+        "Choice": "Character5",
+        "Score": {
+            "ContextScore": 0.08155271342635022,
+            "Narrator": 0.0,
+            "Character1": 0.0,
+            "Character2": 0.0,
+            "Character3": 0.0,
+            "Character4": 0.0,
+            "Character5": 0.0,
+            "Character6": 0.0,
+            "Character7": 0.0,
+            "Character8": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0
+        }
+    },
+    {
+        "CharacterId": 8,
+        "Name": "미선(일반, 피치다운)",
+        "Context": {
+            "Genre": [
+                {
+                    "index": "문학",
+                    "Score": 0
+                },
+                {
+                    "index": "비문학",
+                    "Score": 10
+                },
+                {
+                    "index": "아동",
+                    "Score": 0
+                },
+                {
+                    "index": "시",
+                    "Score": 0
+                },
+                {
+                    "index": "학술",
+                    "Score": 10
+                }
+            ],
+            "Gender": [
+                {
+                    "index": "남",
+                    "Score": 0
+                },
+                {
+                    "index": "여",
+                    "Score": 10
+                },
+                {
+                    "index": "중성",
+                    "Score": 10
+                }
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 0
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Personality": [
+                {
+                    "index": "외향적",
+                    "Score": 10
+                },
+                {
+                    "index": "중립적",
+                    "Score": 10
+                },
+                {
+                    "index": "내향적",
+                    "Score": 0
+                }
+            ],
+            "Atmosphere": [
+                {
+                    "index": "행복",
+                    "Score": 0
+                },
+                {
+                    "index": "즐거움",
+                    "Score": 10
+                },
+                {
+                    "index": "평온",
+                    "Score": 10
+                },
+                {
+                    "index": "무감정",
+                    "Score": 10
+                },
+                {
+                    "index": "피곤",
+                    "Score": 0
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "두려움",
+                    "Score": 0
+                },
+                {
+                    "index": "놀람",
+                    "Score": 0
+                }
+            ]
+        },
+        "Voice": {
+            "Language": [
+                "Ko"
+            ],
+            "Gender": [
+                "여"
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 0
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Emotion": [
+                {
+                    "index": "즐거움",
+                    "Score": 0
+                },
+                {
+                    "index": "침착함",
+                    "Score": 10
+                },
+                {
+                    "index": "중립",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "화남",
+                    "Score": 0
+                }
+            ],
+            "TypeCastContext": {}
+        },
+        "ApiSetting": {
+            "name": "미선",
+            "ApiToken": "None",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "normal-1",
+                    "normal-2",
+                    "normal-3"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 100,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": -1,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                -1,
+                -2
+            ],
+            "En": "None",
+            "Caption": "None"
+        },
+        "Choice": "Character7",
+        "Score": {
+            "ContextScore": 0.08155271342635022,
+            "Narrator": 0.0,
+            "Character1": 0.0,
+            "Character2": 0.0,
+            "Character3": 0.0,
+            "Character4": 0.0,
+            "Character5": 0.0,
+            "Character6": 0.0,
+            "Character7": 0.0,
+            "Character8": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0
+        }
+    },
+    {
+        "CharacterId": 9,
+        "Name": "미선(일반, 피치다운)",
+        "Context": {
+            "Genre": [
+                {
+                    "index": "문학",
+                    "Score": 0
+                },
+                {
+                    "index": "비문학",
+                    "Score": 10
+                },
+                {
+                    "index": "아동",
+                    "Score": 0
+                },
+                {
+                    "index": "시",
+                    "Score": 0
+                },
+                {
+                    "index": "학술",
+                    "Score": 10
+                }
+            ],
+            "Gender": [
+                {
+                    "index": "남",
+                    "Score": 0
+                },
+                {
+                    "index": "여",
+                    "Score": 10
+                },
+                {
+                    "index": "중성",
+                    "Score": 10
+                }
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 0
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Personality": [
+                {
+                    "index": "외향적",
+                    "Score": 10
+                },
+                {
+                    "index": "중립적",
+                    "Score": 10
+                },
+                {
+                    "index": "내향적",
+                    "Score": 0
+                }
+            ],
+            "Atmosphere": [
+                {
+                    "index": "행복",
+                    "Score": 0
+                },
+                {
+                    "index": "즐거움",
+                    "Score": 10
+                },
+                {
+                    "index": "평온",
+                    "Score": 10
+                },
+                {
+                    "index": "무감정",
+                    "Score": 10
+                },
+                {
+                    "index": "피곤",
+                    "Score": 0
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "두려움",
+                    "Score": 0
+                },
+                {
+                    "index": "놀람",
+                    "Score": 0
+                }
+            ]
+        },
+        "Voice": {
+            "Language": [
+                "Ko"
+            ],
+            "Gender": [
+                "여"
+            ],
+            "Age": [
+                {
+                    "index": "유년",
+                    "Score": 0
+                },
+                {
+                    "index": "청소년",
+                    "Score": 0
+                },
+                {
+                    "index": "청년",
+                    "Score": 0
+                },
+                {
+                    "index": "중년",
+                    "Score": 10
+                },
+                {
+                    "index": "장년",
+                    "Score": 10
+                },
+                {
+                    "index": "노년",
+                    "Score": 0
+                }
+            ],
+            "Emotion": [
+                {
+                    "index": "즐거움",
+                    "Score": 0
+                },
+                {
+                    "index": "침착함",
+                    "Score": 10
+                },
+                {
+                    "index": "중립",
+                    "Score": 10
+                },
+                {
+                    "index": "슬픔",
+                    "Score": 0
+                },
+                {
+                    "index": "화남",
+                    "Score": 0
+                }
+            ],
+            "TypeCastContext": {}
+        },
+        "ApiSetting": {
+            "name": "미선",
+            "ApiToken": "None",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "normal-1",
+                    "normal-2",
+                    "normal-3"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 100,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": -1,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                -1,
+                -2
+            ],
+            "En": "None",
+            "Caption": "None"
+        },
+        "Choice": "Character6",
+        "Score": {
+            "ContextScore": 0.08155271342635022,
+            "Narrator": 0.0,
+            "Character1": 0.0,
+            "Character2": 0.0,
+            "Character3": 0.0,
+            "Character4": 0.0,
+            "Character5": 0.0,
+            "Character6": 0.0,
+            "Character7": 0.0,
+            "Character8": 0.0,
+            "Character10": 0.0,
+            "Character11": 0.0
+        }
+    }
+]

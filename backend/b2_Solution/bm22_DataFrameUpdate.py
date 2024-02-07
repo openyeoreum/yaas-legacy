@@ -139,7 +139,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
 ###################################
 ###################################
 
-### 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 업데이트 ###
+### 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
 def SolutionDataFrameUpdate(email, projectName, messagesReview = "on", bookGenre = "Auto"):
     ############################ 하이퍼 파라미터 설정 ############################
     userStoragePath = "/yaas/storage/s1_Yeoreum/s11_UserStorage"
@@ -447,6 +447,6 @@ if __name__ == "__main__":
     BookGenre = "Auto"
     ############################ 하이퍼 파라미터 설정 ############################
     
-    ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 업데이트 ###
+    ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
     for projectName in projectNameList:
         SolutionDataFrameUpdate(email, projectName, messagesReview = MessagesReview, bookGenre = BookGenre)

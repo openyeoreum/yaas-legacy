@@ -736,7 +736,11 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         RemoveSFXtokens = [item for item in tokens if "SFXEnd" not in item and "SFXStart" not in item]
         
         # 앞, 뒤Chunk를 통한 처리
-        if tag == "Character" and Aftertag == "Character":
+        if Aftertag in ["Logue", "Part", "Chapter"]:
+            tokens.append({"Pause": "(1.50)"})
+        elif Aftertag == "Index":
+            tokens.append({"Pause": "(1.30)"})
+        elif tag == "Character" and Aftertag == "Character":
             tokens.append({"Pause": "(0.70)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Character" and Aftertag == "Narrator":

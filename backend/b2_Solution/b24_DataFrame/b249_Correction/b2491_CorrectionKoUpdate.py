@@ -227,8 +227,8 @@ def FindUnmatchedChunkAndSpot(InputText, CorrectionText):
             UnmatchedSpot = SpotSearch.group(1) + chunk + SpotSearch.group(2)
             UnmatchedSpots.append(UnmatchedSpot)
             
-    UnmatchedText = ', '.join(Unmatched)
-    UnmatchedSpotsText = ', '.join(UnmatchedSpots)
+    UnmatchedText = ' | '.join(Unmatched)
+    UnmatchedSpotsText = " | ".join([f"...{text}..." for text in UnmatchedSpots])
 
     return UnmatchedText, UnmatchedSpotsText
 
@@ -452,7 +452,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             
             # Filter, MemoryCounter, OutputEnder 처리
             if UnmatchedSpot != "":
-                momoryCounterAttention = f", 특히 '...{UnmatchedSpot}...' 부분 주의해주세요. -"
+                momoryCounterAttention = f", 특히 '{UnmatchedSpot}' 부분 주의해주세요. -"
             else:
                 momoryCounterAttention = " -"
             memoryCounter = f" - 중요: 매우 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음!, 효과음 시작/끝 기호 <Sn> <En> 숫자 절대 그래도 유지!, 청크 기호 [1] ~ [{InputDots}]까지 숫자를 절대 하나도 빠트리지 않고 그대로 작성!" + momoryCounterAttention

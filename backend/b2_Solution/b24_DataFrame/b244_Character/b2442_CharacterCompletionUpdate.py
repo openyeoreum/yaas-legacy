@@ -745,6 +745,7 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
     
     # 변환
     CharacterList = []
+    TotalFrequency = 0
     for idx, actor in enumerate(outputMemoryDics, start=1):
         ActorData = list(actor.values())[0]
         CharacterName = 'Narrator' if idx == 1 else f'Character{idx-1}'
@@ -760,12 +761,35 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
                     Frequency += SelectedCharacter['Frequency']
                 
         CharacterList.append({'CharacterId': idx, 'CharacterTag': CharacterName, 'Gender': ActorData['성별'], 'Age': ActorData['연령'], 'Actors': Actors, 'Frequency': Frequency, 'ActorIdx': actoridx})
+        TotalFrequency += Frequency
+        
+    # 빈도수가 적고 특성이 유사한 Character는 Narrator로 편입
+    Narrator = CharacterList[0]
+    NewCharacter = []
+    NewCharacterCount = 2
+    AgeScore = {'유년': 1, '청소년': 2, '청년': 3, '중년': 4, '장년': 5, '노년': 6}
+    for Character in CharacterList[1:]:
+        if (Character['Frequency'] / TotalFrequency < 0.035) and (Narrator['Gender'] == Character['Gender'] or '남/여' == Character['Gender']) and (abs(AgeScore[Narrator['Age']] - AgeScore[Character['Age']]) <= 1):
+            NewActors = sorted(Narrator['Actors'] + Character['Actors'], key = lambda actor: actor['Id'])
+            Narrator['Actors'] = NewActors
+        else:
+            Character['CharacterId'] = NewCharacterCount
+            NewCharacter.append(Character)
+            NewCharacterCount += 1
     
-    # 삭제 조건에 맞는 일반성우 제거
+    CharacterList = [Narrator] + NewCharacter
+
+    # CharacterList에 Voice 데이터 참가
     for Character in CharacterList:
         for i in range(len(SelectedCharacters)):
             if SelectedCharacters[i]['Id'] in Character['ActorIdx']:
                 SelectedCharacters[i]['Voice'] = {'CharacterId': Character['CharacterId'], 'CharacterTag': Character['CharacterTag'], 'Gender': Character['Gender'], 'Age': Character['Age']}
+                
+    # 비어있는 번호를 Narrator에 추가
+    for SelectedCharacter in SelectedCharacters:
+        if SelectedCharacter['Voice'] == None:
+            Narrator = CharacterList[0]
+            SelectedCharacter['Voice'] = {'CharacterId': Narrator['CharacterId'], 'CharacterTag': Narrator['CharacterTag'], 'Gender': Narrator['Gender'], 'Age': Narrator['Age']}
         
     return SelectedCharacters, CharacterList
 

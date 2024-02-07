@@ -29,8 +29,9 @@ def SelectionGenerationKoJson(projectName, email):
     WMWMFrameBodys = project.WMWMMatching[1]['SplitedBodyContexts'][1:]
     WMWMFrameChunks = project.WMWMMatching[1]['SplitedChunkContexts'][1:]
     CharacterFrame = project.CharacterCompletion[1]['CharacterCompletions'][1:]
+    CharacterTags = project.CharacterCompletion[2]['CheckedCharacterTags'][1:]
     if len(project.CharacterCompletion[2]['CheckedCharacterTags']) > 1:
-        Narrater = project.CharacterCompletion[2]['CheckedCharacterTags'][1]
+        Narrater = CharacterTags[0]
     else:
         # NarraterGenre 기본값
         NarraterGender = WMWMFrameBookContext[0]['Vector']['ContextCompletion']['Gender']['Gender']
@@ -47,7 +48,7 @@ def SelectionGenerationKoJson(projectName, email):
             NarraterEmotion = '화남'
         else:
             NarraterEmotion = '중립'
-        Narrater = {"CharacterId": 1, "CharacterTag": "Narrator", "Gender": NarraterGender, "Age": NarraterAge, "Emotion": {NarraterEmotion: 100.0}, "MainCharacterList": ["저자"]}
+        Narrater = {"CharacterId": 1, "CharacterTag": "Narrator", "Gender": NarraterGender, "Age": NarraterAge, "Emotion": {NarraterEmotion: 100.0}, "MainCharacterList": {"Id": 1, "MainCharacter": "저자"}}
     SoundFrame = project.SoundMatching[1]['SoundSplitedIndexs'][1:]
     SFXFrame =  project.SFXMatching[1]['SFXSplitedBodys'][1:]
     CorrectionKoFrame = project.CorrectionKo[1]['CorrectionKoSplitedBodys'][1:]
@@ -213,9 +214,10 @@ def SelectionGenerationKoJson(projectName, email):
                 except LangDetectException:
                     Language = "ko"
                 emotions = list(Narrater['Emotion'].keys())
-                Voice = {'Character': Narrater['MainCharacterList'][0], 'CharacterTag': Narrater['CharacterTag'], 'Language': Language, 'Gender': Narrater['Gender'], 'Age': Narrater['Age'], 'Emotion': emotions[00]}
+                Voice = {'Character': Narrater['MainCharacterList'][0]['Id'], 'CharacterTag': Narrater['CharacterTag'], 'Language': Language, 'Gender': Narrater['Gender'], 'Age': Narrater['Age'], 'Emotion': emotions[00]}
                 for CharacterChunk in CharacterFrame:
                     if CharacterChunk['ChunkId'] == chunkid:
+                        print(CharacterChunk)
                         Character = CharacterChunk['MainCharacter']
                         CharacterTag = CharacterChunk['Voice']['CharacterTag']
                         Gender = CharacterChunk['Voice']['Gender']

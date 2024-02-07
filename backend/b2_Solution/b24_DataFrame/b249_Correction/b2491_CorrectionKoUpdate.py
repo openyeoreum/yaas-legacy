@@ -206,8 +206,38 @@ def LongCommonSubstring(DiffINPUT, DiffOUTPUT):
     # Extract the common substring
     return DiffINPUT[end_pos-longest:end_pos]
 
+## [n] 불일치 오류시 이를 찾을 수 있도록 UnmatchedSpotsText를 작성
+def FindUnmatchedChunkAndSpot(InputText, CorrectionText):
+    # Find all chunk markers in the InputText and corrected texts
+    InputChunks = re.findall(r'\[\d+\]', InputText)
+    CorrectionChunks = re.findall(r'\[\d+\]', CorrectionText)
+
+    # Find Unmatched chunk markers that are in InputText but not in CorrectionText
+    Unmatched = list(set(InputChunks) - set(CorrectionChunks))
+
+    # Initialize list to store the Unmatched spots
+    UnmatchedSpots = []
+
+    # For each Unmatched chunk marker, find the surrounding text in the InputText string
+    for chunk in Unmatched:
+        # Pattern to find the text immediately before and after the Unmatched chunk marker
+        pattern = r'(.{0,10}\s?)' + re.escape(chunk) + r'(\s?.{0,10})'
+        SpotSearch = re.search(pattern, InputText)
+        if SpotSearch:
+            UnmatchedSpot = SpotSearch.group(1) + chunk + SpotSearch.group(2)
+            UnmatchedSpots.append(UnmatchedSpot)
+            
+    UnmatchedText = ', '.join(Unmatched)
+    UnmatchedSpotsText = ', '.join(UnmatchedSpots)
+
+    return UnmatchedText, UnmatchedSpotsText
+
 ## CorrectionKo의 Filter(Error 예외처리)
-def CorrectionKoFilter(DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId):
+def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId):
+    # [n] 불일치 오류시 이를 찾을 수 있도록 CorrectionText를 미리 저장
+    CorrectionText = responseData
+    
+    # [n]을 통해 문장 분리 및 전처리가 가능하도록 [n]을 '●'로 치환
     responseData = NumbersToDots(responseData)
     responseData = responseData.replace('<끊어읽기보정>\n\n', '')
     responseData = responseData.replace('<끊어읽기보정>\n', '')
@@ -223,7 +253,7 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputSFXTags, InPutPe
     responseData = responseData.replace('{', '[')
     responseData = responseData.replace('}', ']')
     responseData = responseData.rstrip('●')
-    
+
     OutputDic = responseData.replace('<S', '<효과음시작')
     OutputDic = responseData.replace('<E', '<효과음끝')
     OutputDic = responseData.split('●')
@@ -257,7 +287,8 @@ def CorrectionKoFilter(DotsInput, responseData, InputDots, InputSFXTags, InPutPe
     # Error5: InputDots, responseDataDots 불일치시 예외 처리
     if len(InputDic) != len(OutputDic) != InputDots:
         print(f'@@@@@@@@@@\nInputDic: {InputDic}\nOutputDic: {OutputDic}\n@@@@@@@@@@')
-        return f"INPUT, OUTPUT [n] 갯수 불일치 오류 발생: INPUT({len(InputDic)}), OUTPUT({len(OutputDic)}), InputDots({InputDots})"
+        UnmatchedText, UnmatchedSpotsText = FindUnmatchedChunkAndSpot(Input, CorrectionText)
+        return {"Error": f"INPUT, OUTPUT [n] 갯수 불일치 오류 발생: INPUT({len(InputDic)}), OUTPUT({len(OutputDic)}), InputDots({InputDots})", "Unmatched": UnmatchedText, "UnmatchedSpot": UnmatchedSpotsText}
     # Error6: Input, responseData 불일치시 예외 처리
     nonCommonPartsNum = 0
     for i in range(len(InputDic)):
@@ -376,6 +407,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
     outputMemory = []
     ErrorCount = 0
     nonCommonPartList = AddOutputMemoryDicsFile
+    UnmatchedSpot = ""
         
     # CorrectionKoProcess
     while TotalCount < len(InputList):
@@ -419,7 +451,11 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             InPutPeriods = str(Input).count('.')
             
             # Filter, MemoryCounter, OutputEnder 처리
-            memoryCounter = f" - 중요: 매우 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음!, 효과음 시작/끝 기호 <Sn> <En> 숫자 절대 그래도 유지!, 청크 기호 [1] ~ [{InputDots}]까지 숫자 절대 그대로 유지! -\n"
+            if UnmatchedSpot != "":
+                momoryCounterAttention = f", 특히 '...{UnmatchedSpot}...' 부분 주의해주세요. -"
+            else:
+                momoryCounterAttention = " -"
+            memoryCounter = f" - 중요: 매우 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음!, 효과음 시작/끝 기호 <Sn> <En> 숫자 절대 그래도 유지!, 청크 기호 [1] ~ [{InputDots}]까지 숫자를 절대 하나도 빠트리지 않고 그대로 작성!" + momoryCounterAttention
             outputEnder = ""
             
             # Response 생성
@@ -440,15 +476,19 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = CorrectionKoFilter(DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId)
+            Filter = CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId)
             
-            if isinstance(Filter, str):
+            if isinstance(Filter, str) or "UnmatchedSpot" in Filter:
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
                     ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | {Filter}")
-                
+                if "UnmatchedSpot" in Filter:
+                    UnmatchedSpot = Filter['UnmatchedSpot']
+                else:
+                    UnmatchedSpot = ""
+                    
                 ErrorCount += 1
                 if ErrorCount == 7:
                     print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
@@ -460,6 +500,8 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                 outputJson = Filter['json']
                 nonCommonParts = Filter['nonCommonParts']
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | JSONDecode 완료")
+                UnmatchedSpot = ""
+                
                 ErrorCount = 0
                 
                 # DataSets 업데이트

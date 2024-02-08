@@ -82,6 +82,8 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
         EMOTION = ['tonedown-1', 'tonedown-2', 'tonedown-3', 'tonedown-4']
     elif emotion == '중간톤':
         EMOTION = ['tonemid-1', 'tonemid-2', 'tonemid-3', 'tonemid-4']
+    elif emotion == '부드러운':
+        EMOTION = ['tonemid-1', 'tonemid-2', 'tonemid-3', 'tonemid-4']
         
     RandomEMOTION = random.choice(EMOTION)
     RandomLASTPITCH = random.choice(lastpitch)

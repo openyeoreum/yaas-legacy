@@ -60,6 +60,9 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
     if pitch == '다운':
         Pitch = -1
         pitchname = ', 피치다운'
+    elif pitch == '업':
+        Pitch = 1
+        pitchname = ', 피치업'
         
     filename = name + '(' + emotion + pitchname + ')'
     ChunkId = 0
@@ -83,7 +86,13 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
     elif emotion == '중간톤':
         EMOTION = ['tonemid-1', 'tonemid-2', 'tonemid-3', 'tonemid-4']
     elif emotion == '부드러운':
-        EMOTION = ['tonemid-1', 'tonemid-2', 'tonemid-3', 'tonemid-4']
+        EMOTION = ['soft-1', 'soft-2', 'soft-3', 'soft-4']
+    elif emotion == '속삭임':
+        EMOTION = ['whisper-1', 'whisper-2', 'whisper-3', 'whisper-4']
+    elif emotion == '응원':
+        EMOTION = ['cheer-1', 'cheer-2', 'cheer-3', 'cheer-4']
+    elif emotion == '차가움':
+        EMOTION = ['cold-1', 'cold-2', 'cold-3', 'cold-4']
         
     RandomEMOTION = random.choice(EMOTION)
     RandomLASTPITCH = random.choice(lastpitch)
@@ -94,10 +103,11 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     testerName = "테스트(아현)"
-    name = '지안'
-    emotion = '중간톤'
-    pitch = '다운'
+    name = '준호'
+    emotionlist = ['화남']
+    pitch = ''
     lastpitch = [-1, -2]
     #########################################################################
-    
-    VoiceSampleGen(testerName, name, emotion, pitch, lastpitch)
+    for emotion in emotionlist:
+        VoiceSampleGen(testerName, name, emotion, pitch, lastpitch)
+        time.sleep(1)

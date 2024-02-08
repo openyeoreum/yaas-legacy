@@ -1749,7 +1749,7 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
     process = 'IndexDefinePreprocess'
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s11_UserStorage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

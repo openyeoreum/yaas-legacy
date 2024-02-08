@@ -577,7 +577,7 @@ def ResponseJsonText(projectName, email, responseJson):
             raise ValueError("User not found with the provided email")
         
         username = user.UserName
-    baseFilePath = f"/yaas/storage/s1_Yeoreum/s11_UserStorage/{username}_user/{username}_storage/{projectName}/{projectName}_dataframe_file/{email}_{projectName}_21_responseJson"
+    baseFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{username}_user/{username}_storage/{projectName}/{projectName}_dataframe_file/{email}_{projectName}_21_responseJson"
     fullFilePath = f"{baseFilePath}_{str(Date())}.txt"
 
     # 파일이 존재하는지 확인
@@ -849,7 +849,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s11_UserStorage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

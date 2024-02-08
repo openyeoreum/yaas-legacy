@@ -20,7 +20,7 @@ def AddUserToDB(email, username, password):
         # UserId 생성
         GeneratedUserId = GenerateUserId(email)
         # BasePath 생성
-        BasePath = '/yaas/storage/s1_Yeoreum/s11_UserStorage'
+        BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage'
         # UserPath 생성
         userPath = os.path.join(BasePath, f"{username}_user")
         profileImageFilePath = os.path.join(userPath, f"{username}_profile_image")

@@ -38,8 +38,20 @@ def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
 
     OutputMemoryDicsFile = []
     OutputMemoryCount = 0
-    for filename in os.listdir(DataFramePath):
-        FullPath = os.path.join(DataFramePath, filename)
+    
+    # 문자열 정규화
+    DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
+    
+    ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
+    try:
+        DataFramePathList = os.listdir(DataFramePath)
+        dataFramePath = DataFramePath
+    except: 
+        DataFramePathList = os.listdir(DataFramePathNormalized)
+        dataFramePath = DataFramePathNormalized
+        
+    for filename in DataFramePathList:
+        FullPath = os.path.join(dataFramePath, filename)
         if pattern.match(FullPath):
             print(f"< User: {email} | Project: {projectName} | {FullPath} 로드 >")
             with open(FullPath, 'r', encoding='utf-8') as file:
@@ -48,7 +60,7 @@ def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
             break  # 첫 번째 일치하는 파일을 찾으면 반복 종료
 
         normalizedFilename = unicodedata.normalize('NFC', filename)
-        normalizedFullPath = os.path.join(DataFramePath, normalizedFilename)
+        normalizedFullPath = os.path.join(dataFramePath, normalizedFilename)
         if pattern.match(normalizedFullPath):
             print(f"< User: {email} | Project: {projectName} | {normalizedFullPath} 로드 >")
             with open(normalizedFullPath, 'r', encoding='utf-8') as file:

@@ -54,15 +54,24 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
     EmailNormalized = unicodedata.normalize('NFC', email)
     ProjectNameNormalized = unicodedata.normalize('NFC', projectName)
     ProcessNormalized = unicodedata.normalize('NFC', Process)
+    DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
     
     # 정규 표현식으로 파일명에서 생성날짜와 프로세스 이름 추출
     patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+_{re.escape(ProcessNormalized)}DataFrame_(\d+).json"
     pattern = re.compile(patternSTR)
-    
+
     MaxDate = 0
     RecentFile = None
 
-    for FileName in os.listdir(DataFramePath):
+    ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
+    try:
+        DataFramePathList = os.listdir(DataFramePath)
+        dataFramePath = DataFramePath
+    except:
+        DataFramePathList = os.listdir(DataFramePathNormalized)
+        dataFramePath = DataFramePathNormalized
+        
+    for FileName in DataFramePathList:
         FileNameNormalized = unicodedata.normalize('NFC', FileName)
         match = pattern.match(FileNameNormalized)
         if match:
@@ -72,7 +81,7 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
                 RecentFile = FileName
 
     if RecentFile:
-        with open(os.path.join(DataFramePath, RecentFile), 'r', encoding='utf-8') as file:
+        with open(os.path.join(dataFramePath, RecentFile), 'r', encoding='utf-8') as file:
             ExistedDataFrame = json.load(file)
             return ExistedDataFrame
 
@@ -97,6 +106,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
     EmailNormalized = unicodedata.normalize('NFC', email)
     ProjectNameNormalized = unicodedata.normalize('NFC', projectName)
     ProcessNormalized = unicodedata.normalize('NFC', Process)
+    DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
 
     # 정규 표현식으로 파일명에서 생성날짜와 프로세스 이름 추출
     patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+_{re.escape(ProcessNormalized)}DataFrame_(\d+).json"
@@ -105,8 +115,15 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
     MaxDate = 0
     RecentFile = None
 
-    # 가장 최근 파일 찾기
-    for FileName in os.listdir(DataFramePath):
+    ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
+    try:
+        DataFramePathList = os.listdir(DataFramePath)
+        dataFramePath = DataFramePath
+    except:
+        DataFramePathList = os.listdir(DataFramePathNormalized)
+        dataFramePath = DataFramePathNormalized
+        
+    for FileName in DataFramePathList:
         FileNameNormalized = unicodedata.normalize('NFC', FileName)
         match = pattern.match(FileNameNormalized)
         if match:
@@ -117,7 +134,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
 
     # 파일 읽기 및 데이터 업데이트
     if RecentFile:
-        FilePath = os.path.join(DataFramePath, RecentFile)
+        FilePath = os.path.join(dataFramePath, RecentFile)
         with open(FilePath, 'r', encoding='utf-8') as file:
             ExistedDataFrame = json.load(file)
         

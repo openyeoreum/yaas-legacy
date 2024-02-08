@@ -49,7 +49,7 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
     password = "0128"
-    projectNameList = ['노인을위한나라는있다'] # '데미안', '빨간머리앤', '웹3.0메타버스', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법']
+    projectNameList = ['노인을위한나라는있다', '데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법'] #, '빨간머리앤', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업']
     MessagesReview = "on"
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
     VoiceDataSet = "TypeCastVoiceDataSet"
@@ -59,5 +59,5 @@ if __name__ == "__main__":
     AccountUpdate(email, name, password)
     SolutionUpdate(email, projectNameList, MessagesReview, BookGenre)
     
-    ### Main2 : 크리에이션 제작 ###
-    CreationUpdate(projectNameList, email, VoiceDataSet)
+    # ### Main2 : 크리에이션 제작 ###
+    # CreationUpdate(projectNameList, email, VoiceDataSet)

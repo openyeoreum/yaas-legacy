@@ -58,6 +58,10 @@
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
                     ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 0}
+                    ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
                         {"index": "침착함", "Score": 0},
@@ -140,6 +144,10 @@
                         {"index": "중년", "Score": 10},
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "연기", "Score": 4}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 10},
@@ -224,6 +232,10 @@
                         {"index": "장년", "Score": 4},
                         {"index": "노년", "Score": 0}
                     ],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 6}
+                    ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
                         {"index": "침착함", "Score": 7},
@@ -306,6 +318,10 @@
                         {"index": "중년", "Score": 10},
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 6}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 10},
@@ -390,6 +406,10 @@
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
                     ],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 6}
+                    ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
                         {"index": "침착함", "Score": 10},
@@ -472,6 +492,10 @@
                         {"index": "중년", "Score": 10},
                         {"index": "장년", "Score": 10},
                         {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 7}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
@@ -556,6 +580,10 @@
                         {"index": "장년", "Score": 10},
                         {"index": "노년", "Score": 0}
                     ],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 7}
+                    ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
                         {"index": "침착함", "Score": 10},
@@ -638,6 +666,10 @@
                         {"index": "중년", "Score": 10},
                         {"index": "장년", "Score": 10},
                         {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 4}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
@@ -722,88 +754,9 @@
                         {"index": "장년", "Score": 10},
                         {"index": "노년", "Score": 0}
                     ],
-                    "Emotion": [
-                        {"index": "즐거움", "Score": 0},
-                        {"index": "침착함", "Score": 10},
-                        {"index": "중립", "Score": 10},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "화남", "Score": 0}
-                    ],
-                "TypeCastContext": {
-                }
-                },
-                "ApiSetting": {
-                    "name": "미선",
-                    "ApiToken": "None",
-                    "emotion_tone_preset": {
-                        "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
-                        "emotion_prompt": "None"
-                    },
-                    "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
-                    "volume": 100,
-                    "speed_x": [1.05],
-                    "tempo": 1.0,
-                    "pitch": -1,
-                    "max_seconds": 60,
-                    "force_length": 0,
-                    "last_pitch": [-1, -2],
-                    "En": "None",
-                    "Caption": "None"
-                }
-            },
-            {
-                "CharacterId": 9,
-                "Name": "미선(일반, 피치다운)",
-                "Context": {
-                    "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 10},
-                        {"index": "아동", "Score": 0},
-                        {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 10}
-                    ],
-                    "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 10},
-                        {"index": "중성", "Score": 10}
-                    ],
-                    "Age": [
-                        {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 10},
-                        {"index": "장년", "Score": 10},
-                        {"index": "노년", "Score": 0}
-                    ],
-                    "Personality": [
-                        {"index": "외향적", "Score": 10},
-                        {"index": "중립적", "Score": 10},
-                        {"index": "내향적", "Score": 0}
-                    ],
-                    "Atmosphere": [
-                        {"index": "행복", "Score": 0},
-                        {"index": "즐거움", "Score": 10},
-                        {"index": "평온", "Score": 10},
-                        {"index": "무감정", "Score": 10},
-                        {"index": "피곤", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "두려움", "Score": 0},
-                        {"index": "놀람", "Score": 0}
-                    ]
-                },
-                "Voice": {
-                    "Language": ["Ko"],
-                    "Gender": ["여"],
-                    "Age": [
-                        {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 10},
-                        {"index": "장년", "Score": 10},
-                        {"index": "노년", "Score": 0}
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 4}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},

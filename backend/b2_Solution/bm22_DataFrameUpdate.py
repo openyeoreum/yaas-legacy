@@ -67,9 +67,11 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
     try:
         DataFramePathList = os.listdir(DataFramePath)
         dataFramePath = DataFramePath
+        print(DataFramePath)
     except:
         DataFramePathList = os.listdir(DataFramePathNormalized)
         dataFramePath = DataFramePathNormalized
+        print(DataFramePathNormalized)
         
     for FileName in DataFramePathList:
         FileNameNormalized = unicodedata.normalize('NFC', FileName)

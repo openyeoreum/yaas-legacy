@@ -2,6 +2,7 @@ import re
 import json
 import time
 import sys
+import random
 sys.path.append("/yaas")
 
 from tqdm import tqdm
@@ -767,9 +768,9 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
     Narrator = CharacterList[0]
     NewCharacter = []
     NewCharacterCount = 2
-    AgeScore = {'유년': 1, '청소년': 2, '청년': 3, '중년': 4, '장년': 5, '노년': 6}
+    AgeScore = {'유년': 1, '청소년': 2, '청년': 3, '미상': random.choice([3, 4]), '중년': 4, '장년': 5, '노년': 6}
     for Character in CharacterList[1:]:
-        if (Character['Frequency'] / TotalFrequency < 0.035) and (Narrator['Gender'] == Character['Gender'] or '남/여' == Character['Gender']) and (abs(AgeScore[Narrator['Age']] - AgeScore[Character['Age']]) <= 1):
+        if (Character['Frequency'] / TotalFrequency < 0.035) and (Narrator['Gender'] == Character['Gender'] or '남/여' == Character['Gender'] or '미상' == Character['Gender']) and (abs(AgeScore[Narrator['Age']] - AgeScore[Character['Age']]) <= 1):
             NewActors = sorted(Narrator['Actors'] + Character['Actors'], key = lambda actor: actor['Id'])
             Narrator['Actors'] = NewActors
         else:

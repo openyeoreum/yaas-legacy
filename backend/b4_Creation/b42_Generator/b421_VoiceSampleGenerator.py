@@ -67,7 +67,6 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
     filename = name + '(' + emotion + pitchname + ')'
     ChunkId = 0
     Chunk = f'지구인들은. {{{{메타버스}}}}에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다. {{{{무브 패스트, 앤드 브레이크 띵스}}}}, 빠르게 움직이고 깨뜨려라.'
-    Pitch = 0
     SPEED = [1.05]
     
     RandomSPEED = random.choice(SPEED)
@@ -102,10 +101,10 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
-    testerName = "테스트(아현)"
-    name = '준호'
-    emotionlist = ['화남']
-    pitch = ''
+    testerName = "테스트(가)"
+    name = '유라'
+    emotionlist = ['톤업']
+    pitch = '다운'
     lastpitch = [-1, -2]
     #########################################################################
     for emotion in emotionlist:

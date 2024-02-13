@@ -52,6 +52,8 @@ def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext):
     BookAtmosphere = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Emotion']
 
     for Character in VoiceDataSetCharacters:
+        # Quilty 스코어 계산
+        QuiltyScore = Character['Quilty']
         # Genre 스코어 계산
         CharacterGenre = Character['Context']['Genre']
         GenreScore = 0
@@ -88,7 +90,7 @@ def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext):
                 AtmosphereScore += (BookAtmosphere['EmotionRatio'][NAtmosphere['index']] * NAtmosphere['Score'])
         AtmosphereScore = AtmosphereScore / 1000
         
-        ContextScore = (GenreScore * GenderScore * AgeScore * PersonalityScore)
+        ContextScore = (QuiltyScore * GenreScore * GenderScore * AgeScore * PersonalityScore)
         
         Character['Choice'] = 'No'
         Character['Score'] = {'ContextScore': 'None'}

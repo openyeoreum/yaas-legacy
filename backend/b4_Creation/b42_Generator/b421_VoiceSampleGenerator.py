@@ -86,6 +86,8 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
         EMOTION = ['happy-1', 'happy-2', 'happy-3', 'happy-4']
     elif emotion == '화남':
         EMOTION = ['angry-1', 'angry-2', 'angry-3', 'angry-4']
+    elif emotion == '절규':
+        EMOTION = ["scream-1", "scream-2", "scream-3"]
     elif emotion == '속삭임':
         EMOTION = ['whisper-1', 'whisper-2', 'whisper-3', 'whisper-4']
     elif emotion == '신뢰':

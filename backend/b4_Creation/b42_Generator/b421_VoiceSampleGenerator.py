@@ -70,24 +70,27 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
     SPEED = [1.05]
     
     RandomSPEED = random.choice(SPEED)
-    if emotion == '기쁨':
-        EMOTION = ['happy-1', 'happy-2', 'happy-3', 'happy-4']
-    elif emotion == '일반':
+
+    if emotion == '일반':
         EMOTION = ['normal-1', 'normal-2', 'normal-3', 'normal-4']
-    elif emotion == '화남':
-        EMOTION = ['angry-1', 'angry-2', 'angry-3', 'angry-4']
-    elif emotion == '슬픔':
-        EMOTION = ['sad-1', 'sad-2', 'sad-3', 'sad-4']
     elif emotion == '톤업':
         EMOTION = ['toneup-1', 'toneup-2', 'toneup-3', 'toneup-4']
-    elif emotion == '톤다운':
-        EMOTION = ['tonedown-1', 'tonedown-2', 'tonedown-3', 'tonedown-4']
     elif emotion == '중간톤':
         EMOTION = ['tonemid-1', 'tonemid-2', 'tonemid-3', 'tonemid-4']
-    elif emotion == '부드러운':
-        EMOTION = ['soft-1', 'soft-2', 'soft-3', 'soft-4']
+    elif emotion == '톤다운':
+        EMOTION = ['tonedown-1', 'tonedown-2', 'tonedown-3', 'tonedown-4']
+    elif emotion == '슬픔':
+        EMOTION = ['sad-1', 'sad-2', 'sad-3', 'sad-4']
+    elif emotion == '기쁨':
+        EMOTION = ['happy-1', 'happy-2', 'happy-3', 'happy-4']
+    elif emotion == '화남':
+        EMOTION = ['angry-1', 'angry-2', 'angry-3', 'angry-4']
     elif emotion == '속삭임':
         EMOTION = ['whisper-1', 'whisper-2', 'whisper-3', 'whisper-4']
+    elif emotion == '신뢰':
+        EMOTION = ['trustful-1']
+    elif emotion == '부드러운':
+        EMOTION = ['soft-1', 'soft-2', 'soft-3', 'soft-4']
     elif emotion == '응원':
         EMOTION = ['cheer-1', 'cheer-2', 'cheer-3', 'cheer-4']
     elif emotion == '차가움':
@@ -102,8 +105,8 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     testerName = "테스트(가)"
-    name = '김건'
-    emotionlist = ['일반', '중간톤', '슬픔', '기쁨', '화남']
+    name = '현주'
+    emotionlist = ['슬픔', '일반', '중간톤', '톤다운', '화남']
     pitch = '다운'
     lastpitch = [-1, -2]
     #########################################################################

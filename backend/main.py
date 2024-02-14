@@ -1,4 +1,5 @@
 import os
+import unicodedata
 import sys
 sys.path.append("/yaas")
 
@@ -13,6 +14,7 @@ def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
 
     if isinstance(projectNameList, list):
         for projectName in projectNameList:
+            projectName = unicodedata.normalize('NFC', projectName)
 
             ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
             SolutionProjectUpdate(email, projectName)
@@ -39,6 +41,7 @@ def CreationUpdate(email, projectNameList, VoiceDataSet):
 
     if isinstance(projectNameList, list):
         for projectName in projectNameList:
+            projectName = unicodedata.normalize('NFC', projectName)
             
             ### Step6 : 크리에이션이 오디오북 제작 ###
             CreationAudioBookUpdate(projectName, email, VoiceDataSet)

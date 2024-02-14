@@ -54,6 +54,7 @@ def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext):
     for Character in VoiceDataSetCharacters:
         # Quilty 스코어 계산
         QuiltyScore = Character['Quilty']
+        QuiltyScore = QuiltyScore
         # Genre 스코어 계산
         CharacterGenre = Character['Context']['Genre']
         GenreScore = 0
@@ -90,7 +91,7 @@ def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext):
                 AtmosphereScore += (BookAtmosphere['EmotionRatio'][NAtmosphere['index']] * NAtmosphere['Score'])
         AtmosphereScore = AtmosphereScore / 1000
         
-        ContextScore = (QuiltyScore * GenreScore * GenderScore * AgeScore * PersonalityScore)
+        ContextScore = (QuiltyScore * GenreScore * GenderScore * AgeScore * PersonalityScore * AtmosphereScore)
         
         Character['Choice'] = 'No'
         Character['Score'] = {'ContextScore': 'None'}
@@ -123,6 +124,14 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
                     if VAge['index'] == Character['Age']:
                         AgeScore += VAge['Score']
                 AgeScore = AgeScore / 10
+                # Role 스코어 계산
+                VoiceRole = Voice['Voice']['Role']
+                RoleScore = 0
+                if Character['CharacterTag'] == "Narrator":
+                    RoleScore = VoiceRole[0]['Score']
+                else:
+                    RoleScore = VoiceRole[1]['Score']
+                RoleScore = RoleScore / 10
                 # Emotion 스코어 계산
                 VoiceEmotion = Voice['Voice']['Emotion']
                 EmotionScore = 0
@@ -131,7 +140,7 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
                         EmotionScore += (Character['Emotion'][VEmotion['index']] * VEmotion['Score'])
                 EmotionScore = EmotionScore / 1000
                 
-                VoiceScore = (GenderScore * AgeScore * EmotionScore)
+                VoiceScore = (GenderScore * AgeScore * RoleScore * EmotionScore)
                 
                 Voice['Score'][CharacterTag] = Voice['Score']['ContextScore'] * VoiceScore
                 
@@ -158,16 +167,26 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, Caption = "None")
     else:
         HighestScoreVoice = {'Name': 'None', 'ApiSetting': 'None'}
     
-    # CharacterTag가 Narrator인 경우 Caption 선정
+    # CharacterTag가 Narrator인 경우 Caption선정
     CaptionVoice = "None"
+    SecondaryVoice = "None"
+    CaptionCount = 0
+    SecondaryCount = 0
     if CharacterTag == "Narrator":
+        CaptionVoice = random.choice(HighestScoreVoice['ApiSetting']['Caption'])
+        SecondaryVoice = random.choice(HighestScoreVoice['ApiSetting']['SecondaryVoice'])
         for VoiceData in VoiceDataSetCharacters:
-            if VoiceData['Name'] == HighestScoreVoice['ApiSetting']['Caption']:
+            if VoiceData['Name'] == CaptionVoice:
                 VoiceData['Choice'] = 'Caption'
                 CaptionVoice = VoiceData
+                CaptionCount = 1
+            if VoiceData['Name'] == SecondaryVoice:
+                SecondaryVoice = VoiceData
+                SecondaryCount = 1
+            if CaptionCount == 1 and SecondaryCount == 1:
                 break
 
-    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice
+    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice
 
 # 낭독 TextSetting
 def ActorChunkSetting(RawChunk):
@@ -219,25 +238,35 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
     VoiceDataSetCharacters = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext)
     for CharacterTag in CharacterTags:
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
-        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)
+        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)
         MatchedActor = {'CharacterTag': CharacterTag, 'ActorName': HighestScoreVoice['Name'], 'ApiSetting': HighestScoreVoice['ApiSetting']}
         MatchedActors.append(MatchedActor)
         if CaptionVoice != "None":
             CaptionActor = {'CharacterTag': 'Caption', 'ActorName': CaptionVoice['Name'], 'ApiSetting': CaptionVoice['ApiSetting']}
             MatchedActors.append(CaptionActor)
+        if SecondaryVoice != "None":
+            SecondaryActor = {'CharacterTag': 'SecondaryNarrator', 'ActorName': SecondaryVoice['Name'], 'ApiSetting': SecondaryVoice['ApiSetting']}
+            MatchedActors.append(SecondaryActor)
 
     # ### 테스트 후 삭제 ###
     # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
     #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    # with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
+    # with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
     # ### 테스트 후 삭제 ###
     
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
+        if GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
+            ChunkCharacterTag = 'Caption'
+        elif GenerationKoChunks['Tag'] == 'Character' and GenerationKoChunks['Voice']['CharacterTag'] == 'Narrator':
+            ChunkCharacterTag = 'SecondaryNarrator'
+        else:
+            ChunkCharacterTag = GenerationKoChunks['Voice']['CharacterTag']
+            
         for MatchedActor in MatchedActors:
-            if GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
-                ChunkCharacterTag = 'Caption'
-            else:
-                ChunkCharacterTag = GenerationKoChunks['Voice']['CharacterTag']
             if ChunkCharacterTag == MatchedActor['CharacterTag']:
                 GenerationKoChunks['ActorName'] = MatchedActor['ActorName']
                 GenerationKoChunks['ActorChunk'] = ActorChunkSetting(GenerationKoChunks['Chunk'])

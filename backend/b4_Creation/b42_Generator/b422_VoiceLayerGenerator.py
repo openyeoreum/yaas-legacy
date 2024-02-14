@@ -26,12 +26,11 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset):
     SelectionGenerationKoSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGenerationKoSplitedIndexs'][1:]
     CharacterCompletion = project.CharacterCompletion[2]['CheckedCharacterTags'][1:]
     
+    # SecondaryNarratorList, TertiaryNarratorList 형성
     SecondaryNarratorList = [CharacterCompletion[0]['MainCharacterList'][0]['MainCharacter']]
-    print(SecondaryNarratorList)
     TertiaryNarratorList = []
     for Character in CharacterCompletion[0]['MainCharacterList'][1:]:
         TertiaryNarratorList.append(Character['MainCharacter'])
-    print(TertiaryNarratorList)
     
     SelectionGenerationKoChunks = []
     for i in range(len(SelectionGenerationKoSplitedIndexs)):

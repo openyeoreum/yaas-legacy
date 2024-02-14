@@ -25,6 +25,14 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset):
     SelectionGenerationKoBookContext = project.SelectionGenerationKo[1]['SelectionGenerationKoBookContext'][1]
     SelectionGenerationKoSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGenerationKoSplitedIndexs'][1:]
     CharacterCompletion = project.CharacterCompletion[2]['CheckedCharacterTags'][1:]
+    
+    SecondaryNarratorList = [CharacterCompletion[0]['MainCharacterList'][0]['MainCharacter']]
+    print(SecondaryNarratorList)
+    TertiaryNarratorList = []
+    for Character in CharacterCompletion[0]['MainCharacterList'][1:]:
+        TertiaryNarratorList.append(Character['MainCharacter'])
+    print(TertiaryNarratorList)
+    
     SelectionGenerationKoChunks = []
     for i in range(len(SelectionGenerationKoSplitedIndexs)):
         SelectionGenerationKoSplitedBodys = SelectionGenerationKoSplitedIndexs[i]['SelectionGenerationKoSplitedBodys']
@@ -35,6 +43,10 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset):
                 Chunk = SelectionGenerationKoSplitedChunks[k]['Chunk']
                 Tag = SelectionGenerationKoSplitedChunks[k]['Tag']
                 Voice = SelectionGenerationKoSplitedChunks[k]['Voice']
+                if Voice['Character'] in SecondaryNarratorList:
+                    Voice['CharacterTag'] = 'SecondaryNarrator'
+                if Voice['Character'] in TertiaryNarratorList:
+                    Voice['CharacterTag'] = 'TertiaryNarrator'
                 SelectionGenerationKoChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'Chunk': Chunk, 'Voice': Voice})
     
     return VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks
@@ -170,23 +182,29 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, Caption = "None")
     # CharacterTag가 Narrator인 경우 Caption선정
     CaptionVoice = "None"
     SecondaryVoice = "None"
+    TertiaryVoice = "None"
     CaptionCount = 0
     SecondaryCount = 0
+    TertiaryCount = 0
     if CharacterTag == "Narrator":
-        CaptionVoice = random.choice(HighestScoreVoice['ApiSetting']['Caption'])
-        SecondaryVoice = random.choice(HighestScoreVoice['ApiSetting']['SecondaryVoice'])
+        captionVoice = random.choice(HighestScoreVoice['ApiSetting']['Caption'])
+        secondaryVoice = random.choice(HighestScoreVoice['ApiSetting']['SecondaryVoice'])
+        tertiaryVoice = random.choice(HighestScoreVoice['ApiSetting']['TertiaryVoice'])
         for VoiceData in VoiceDataSetCharacters:
-            if VoiceData['Name'] == CaptionVoice:
+            if VoiceData['Name'] == captionVoice:
                 VoiceData['Choice'] = 'Caption'
                 CaptionVoice = VoiceData
                 CaptionCount = 1
-            if VoiceData['Name'] == SecondaryVoice:
+            if VoiceData['Name'] == secondaryVoice:
                 SecondaryVoice = VoiceData
                 SecondaryCount = 1
-            if CaptionCount == 1 and SecondaryCount == 1:
+            if VoiceData['Name'] == tertiaryVoice:
+                TertiaryVoice = VoiceData
+                TertiaryCount = 1
+            if CaptionCount == 1 and SecondaryCount == 1 and TertiaryCount == 1:
                 break
 
-    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice
+    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice
 
 # 낭독 TextSetting
 def ActorChunkSetting(RawChunk):
@@ -238,7 +256,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
     VoiceDataSetCharacters = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext)
     for CharacterTag in CharacterTags:
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
-        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)
+        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)
         MatchedActor = {'CharacterTag': CharacterTag, 'ActorName': HighestScoreVoice['Name'], 'ApiSetting': HighestScoreVoice['ApiSetting']}
         MatchedActors.append(MatchedActor)
         if CaptionVoice != "None":
@@ -247,6 +265,9 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
         if SecondaryVoice != "None":
             SecondaryActor = {'CharacterTag': 'SecondaryNarrator', 'ActorName': SecondaryVoice['Name'], 'ApiSetting': SecondaryVoice['ApiSetting']}
             MatchedActors.append(SecondaryActor)
+        if TertiaryVoice != "None":
+            TertiaryActor = {'CharacterTag': 'TertiaryNarrator', 'ActorName': TertiaryVoice['Name'], 'ApiSetting': TertiaryVoice['ApiSetting']}
+            MatchedActors.append(TertiaryActor)
 
     # ### 테스트 후 삭제 ###
     # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
@@ -261,8 +282,6 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
     for GenerationKoChunks in SelectionGenerationKoChunks:
         if GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
             ChunkCharacterTag = 'Caption'
-        elif GenerationKoChunks['Tag'] == 'Character' and GenerationKoChunks['Voice']['CharacterTag'] == 'Narrator':
-            ChunkCharacterTag = 'SecondaryNarrator'
         else:
             ChunkCharacterTag = GenerationKoChunks['Voice']['CharacterTag']
             
@@ -276,10 +295,10 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
                     GenerationKoChunks['Chunk'] = [part + "(0.60)" for part in parts[:-1]] + [parts[-1]]
                 GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
                 
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
     return MatchedActors, SelectionGenerationKoChunks
     

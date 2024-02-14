@@ -109,183 +109,183 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
 
 if __name__ == "__main__":
 
-    # ############################ 하이퍼 파라미터 설정 ############################
-    # testerName = "테스트(가)"
-    # name = '올리비아'
-    # emotionlist = ['일반', '화남', '톤업', '슬픔', '기쁨']
-    # pitch = '다운'
-    # lastpitch = [-1, -2]
+    ############################ 하이퍼 파라미터 설정 ############################
+    testerName = "테스트(가)"
+    name = '올리비아'
+    emotionlist = ['일반', '화남', '톤업', '슬픔', '기쁨']
+    pitch = '다운'
+    lastpitch = [-1, -2]
+    #########################################################################
+    for emotion in emotionlist:
+        VoiceSampleGen(testerName, name, emotion, pitch, lastpitch)
+        time.sleep(1)
+
+
+
+
     # #########################################################################
-    # for emotion in emotionlist:
-    #     VoiceSampleGen(testerName, name, emotion, pitch, lastpitch)
-    #     time.sleep(1)
+    # #########################################################################
+    # def extract_info_from_filename(filename):
+    #     parts = filename.split('_')
+    #     character_id = parts[0]
+    #     name_option = parts[1].split('(')
+    #     name = name_option[0]
+    #     option = name_option[1].rstrip(').wav') if len(name_option) > 1 else ""
+    #     # full_name 변수를 사용하지 않고, name과 option을 분리하여 반환
+    #     return int(character_id), name, option
 
+    # # 디렉토리 경로 설정
+    # directory_path = '/yaas/storage/s1_Yeoreum/s14_VoiceStorage'
 
-
-
-    #########################################################################
-    #########################################################################
-    def extract_info_from_filename(filename):
-        parts = filename.split('_')
-        character_id = parts[0]
-        name_option = parts[1].split('(')
-        name = name_option[0]
-        option = name_option[1].rstrip(').wav') if len(name_option) > 1 else ""
-        # full_name 변수를 사용하지 않고, name과 option을 분리하여 반환
-        return int(character_id), name, option
-
-    # 디렉토리 경로 설정
-    directory_path = '/yaas/storage/s1_Yeoreum/s14_VoiceStorage'
-
-    # 디렉토리 내의 파일 리스트 불러오기
-    file_list = os.listdir(directory_path)
-    sorted_file_list = sorted(file_list, key=lambda x: int(x.split('_')[0]))
+    # # 디렉토리 내의 파일 리스트 불러오기
+    # file_list = os.listdir(directory_path)
+    # sorted_file_list = sorted(file_list, key=lambda x: int(x.split('_')[0]))
     
-    Characters = []
-    for filename in sorted_file_list:
+    # Characters = []
+    # for filename in sorted_file_list:
 
-        CharDic = {
-            "CharacterId": 0,
-            "Name": "None",
-            "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/.wav",
-            "Quilty": 0,
-            "Context": {
-                "Genre": [
-                    {"index": "문학", "Score": 0},
-                    {"index": "비문학", "Score": 0},
-                    {"index": "아동", "Score": 0},
-                    {"index": "시", "Score": 0},
-                    {"index": "학술", "Score": 0}
-                ],
-                "Gender": [
-                    {"index": "남", "Score": 0},
-                    {"index": "여", "Score": 0},
-                    {"index": "중성", "Score": 0}
-                ],
-                "Age": [
-                    {"index": "유년", "Score": 0},
-                    {"index": "청소년", "Score": 0},
-                    {"index": "청년", "Score": 0},
-                    {"index": "중년", "Score": 0},
-                    {"index": "장년", "Score": 0},
-                    {"index": "노년", "Score": 0}
-                ],
-                "Personality": [
-                    {"index": "외향적", "Score": 0},
-                    {"index": "중립적", "Score": 0},
-                    {"index": "내향적", "Score": 0}
-                ],
-                "Atmosphere": [
-                    {"index": "행복", "Score": 0},
-                    {"index": "즐거움", "Score": 0},
-                    {"index": "평온", "Score": 0},
-                    {"index": "무감정", "Score": 0},
-                    {"index": "피곤", "Score": 0},
-                    {"index": "슬픔", "Score": 0},
-                    {"index": "두려움", "Score": 0},
-                    {"index": "놀람", "Score": 0}
-                ]
-            },
-            "Voice": {
-                "Language": ["None"],
-                "Gender": ["None"],
-                "Age": [
-                    {"index": "유년", "Score": 0},
-                    {"index": "청소년", "Score": 0},
-                    {"index": "청년", "Score": 0},
-                    {"index": "중년", "Score": 0},
-                    {"index": "장년", "Score": 0},
-                    {"index": "노년", "Score": 0}
-                ],
-                "Role": [
-                    {"index": "낭독", "Score": 0},
-                    {"index": "대화", "Score": 0}
-                ],
-                "Emotion": [
-                    {"index": "즐거움", "Score": 0},
-                    {"index": "침착함", "Score": 0},
-                    {"index": "중립", "Score": 0},
-                    {"index": "슬픔", "Score": 0},
-                    {"index": "화남", "Score": 0}
-                ],
-            "TypeCastContext": {
-            }
-            },
-            "ApiSetting": {
-                "name": "None",
-                "ApiToken": "None",
-                "emotion_tone_preset": {
-                    "emotion_tone_preset": ["None"],
-                    "emotion_prompt": "None"
-                },
-                "emotion_prompt": {
-                    "emotion_tone_preset": "emotion_prompt",
-                    "emotion_prompt": "None"
-                },
-                "volume": 120,
-                "speed_x": [1.05],
-                "tempo": 1.0,
-                "pitch": 0,
-                "max_seconds": 60,
-                "force_length": 0,
-                "last_pitch": [0],
-                "En": [],
-                "Caption": []
-            }
-        }
+    #     CharDic = {
+    #         "CharacterId": 0,
+    #         "Name": "None",
+    #         "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/.wav",
+    #         "Quilty": 0,
+    #         "Context": {
+    #             "Genre": [
+    #                 {"index": "문학", "Score": 0},
+    #                 {"index": "비문학", "Score": 0},
+    #                 {"index": "아동", "Score": 0},
+    #                 {"index": "시", "Score": 0},
+    #                 {"index": "학술", "Score": 0}
+    #             ],
+    #             "Gender": [
+    #                 {"index": "남", "Score": 0},
+    #                 {"index": "여", "Score": 0},
+    #                 {"index": "중성", "Score": 0}
+    #             ],
+    #             "Age": [
+    #                 {"index": "유년", "Score": 0},
+    #                 {"index": "청소년", "Score": 0},
+    #                 {"index": "청년", "Score": 0},
+    #                 {"index": "중년", "Score": 0},
+    #                 {"index": "장년", "Score": 0},
+    #                 {"index": "노년", "Score": 0}
+    #             ],
+    #             "Personality": [
+    #                 {"index": "외향적", "Score": 0},
+    #                 {"index": "중립적", "Score": 0},
+    #                 {"index": "내향적", "Score": 0}
+    #             ],
+    #             "Atmosphere": [
+    #                 {"index": "행복", "Score": 0},
+    #                 {"index": "즐거움", "Score": 0},
+    #                 {"index": "평온", "Score": 0},
+    #                 {"index": "무감정", "Score": 0},
+    #                 {"index": "피곤", "Score": 0},
+    #                 {"index": "슬픔", "Score": 0},
+    #                 {"index": "두려움", "Score": 0},
+    #                 {"index": "놀람", "Score": 0}
+    #             ]
+    #         },
+    #         "Voice": {
+    #             "Language": ["None"],
+    #             "Gender": ["None"],
+    #             "Age": [
+    #                 {"index": "유년", "Score": 0},
+    #                 {"index": "청소년", "Score": 0},
+    #                 {"index": "청년", "Score": 0},
+    #                 {"index": "중년", "Score": 0},
+    #                 {"index": "장년", "Score": 0},
+    #                 {"index": "노년", "Score": 0}
+    #             ],
+    #             "Role": [
+    #                 {"index": "낭독", "Score": 0},
+    #                 {"index": "대화", "Score": 0}
+    #             ],
+    #             "Emotion": [
+    #                 {"index": "즐거움", "Score": 0},
+    #                 {"index": "침착함", "Score": 0},
+    #                 {"index": "중립", "Score": 0},
+    #                 {"index": "슬픔", "Score": 0},
+    #                 {"index": "화남", "Score": 0}
+    #             ],
+    #         "TypeCastContext": {
+    #         }
+    #         },
+    #         "ApiSetting": {
+    #             "name": "None",
+    #             "ApiToken": "None",
+    #             "emotion_tone_preset": {
+    #                 "emotion_tone_preset": ["None"],
+    #                 "emotion_prompt": "None"
+    #             },
+    #             "emotion_prompt": {
+    #                 "emotion_tone_preset": "emotion_prompt",
+    #                 "emotion_prompt": "None"
+    #             },
+    #             "volume": 120,
+    #             "speed_x": [1.05],
+    #             "tempo": 1.0,
+    #             "pitch": 0,
+    #             "max_seconds": 60,
+    #             "force_length": 0,
+    #             "last_pitch": [0],
+    #             "En": [],
+    #             "Caption": []
+    #         }
+    #     }
 
-        NameTuple = (extract_info_from_filename(filename))
-        CharacterId = NameTuple[0]
-        Name = NameTuple[1] + '(' + NameTuple[2] + ')'
-        name = NameTuple[1]
+    #     NameTuple = (extract_info_from_filename(filename))
+    #     CharacterId = NameTuple[0]
+    #     Name = NameTuple[1] + '(' + NameTuple[2] + ')'
+    #     name = NameTuple[1]
             
-        if '일반' in NameTuple[2]:
-            emotion_tone_preset = ['normal-1', 'normal-2', 'normal-3', 'normal-4']
-        elif '톤업' in NameTuple[2]:
-            emotion_tone_preset = ['toneup-1', 'toneup-2', 'toneup-3', 'toneup-4']
-        elif '중간톤' in NameTuple[2]:
-            emotion_tone_preset = ['tonemid-1', 'tonemid-2', 'tonemid-3', 'tonemid-4']
-        elif '톤다운' in NameTuple[2]:
-            emotion_tone_preset = ['tonedown-1', 'tonedown-2', 'tonedown-3', 'tonedown-4']
-        elif '슬픔' in NameTuple[2]:
-            emotion_tone_preset = ['sad-1', 'sad-2', 'sad-3', 'sad-4']
-        elif '기쁨' in NameTuple[2]:
-            emotion_tone_preset = ['happy-1', 'happy-2', 'happy-3', 'happy-4']
-        elif '화남' in NameTuple[2]:
-            emotion_tone_preset = ['angry-1', 'angry-2', 'angry-3', 'angry-4']
-        elif '속삭임' in NameTuple[2]:
-            emotion_tone_preset = ['whisper-1', 'whisper-2', 'whisper-3', 'whisper-4']
-        elif '신뢰' in NameTuple[2]:
-            emotion_tone_preset = ['trustful-1']
-        elif '부드러운' in NameTuple[2]:
-            emotion_tone_preset = ['soft-1', 'soft-2', 'soft-3', 'soft-4']
-        elif '응원' in NameTuple[2]:
-            emotion_tone_preset = ['cheer-1', 'cheer-2', 'cheer-3', 'cheer-4']
-        elif '차가움' in NameTuple[2]:
-            emotion_tone_preset = ['cold-1', 'cold-2', 'cold-3', 'cold-4']
-        elif '설득' in NameTuple[2]:
-            emotion_tone_preset = ['inspire-1', 'inspire-2']
-        else:
-            emotion_tone_preset = ['None']
+    #     if '일반' in NameTuple[2]:
+    #         emotion_tone_preset = ['normal-1', 'normal-2', 'normal-3', 'normal-4']
+    #     elif '톤업' in NameTuple[2]:
+    #         emotion_tone_preset = ['toneup-1', 'toneup-2', 'toneup-3', 'toneup-4']
+    #     elif '중간톤' in NameTuple[2]:
+    #         emotion_tone_preset = ['tonemid-1', 'tonemid-2', 'tonemid-3', 'tonemid-4']
+    #     elif '톤다운' in NameTuple[2]:
+    #         emotion_tone_preset = ['tonedown-1', 'tonedown-2', 'tonedown-3', 'tonedown-4']
+    #     elif '슬픔' in NameTuple[2]:
+    #         emotion_tone_preset = ['sad-1', 'sad-2', 'sad-3', 'sad-4']
+    #     elif '기쁨' in NameTuple[2]:
+    #         emotion_tone_preset = ['happy-1', 'happy-2', 'happy-3', 'happy-4']
+    #     elif '화남' in NameTuple[2]:
+    #         emotion_tone_preset = ['angry-1', 'angry-2', 'angry-3', 'angry-4']
+    #     elif '속삭임' in NameTuple[2]:
+    #         emotion_tone_preset = ['whisper-1', 'whisper-2', 'whisper-3', 'whisper-4']
+    #     elif '신뢰' in NameTuple[2]:
+    #         emotion_tone_preset = ['trustful-1']
+    #     elif '부드러운' in NameTuple[2]:
+    #         emotion_tone_preset = ['soft-1', 'soft-2', 'soft-3', 'soft-4']
+    #     elif '응원' in NameTuple[2]:
+    #         emotion_tone_preset = ['cheer-1', 'cheer-2', 'cheer-3', 'cheer-4']
+    #     elif '차가움' in NameTuple[2]:
+    #         emotion_tone_preset = ['cold-1', 'cold-2', 'cold-3', 'cold-4']
+    #     elif '설득' in NameTuple[2]:
+    #         emotion_tone_preset = ['inspire-1', 'inspire-2']
+    #     else:
+    #         emotion_tone_preset = ['None']
             
-        if '피치다운' in NameTuple[2]:
-            pitch = -1
-        elif '피치업' in NameTuple[2]:
-            pitch = 1
-        else:
-            pitch = 0
+    #     if '피치다운' in NameTuple[2]:
+    #         pitch = -1
+    #     elif '피치업' in NameTuple[2]:
+    #         pitch = 1
+    #     else:
+    #         pitch = 0
             
-        CharDic['CharacterId'] = CharacterId
-        CharDic['Name'] = Name
-        CharDic['SamplePath'] = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/" + str(CharacterId) + '_' + Name + ".wav"
-        CharDic['ApiSetting']['name'] = name
-        CharDic['ApiSetting']['emotion_tone_preset']['emotion_tone_preset'] = emotion_tone_preset
-        CharDic['ApiSetting']['pitch'] = pitch
+    #     CharDic['CharacterId'] = CharacterId
+    #     CharDic['Name'] = Name
+    #     CharDic['SamplePath'] = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/" + str(CharacterId) + '_' + Name + ".wav"
+    #     CharDic['ApiSetting']['name'] = name
+    #     CharDic['ApiSetting']['emotion_tone_preset']['emotion_tone_preset'] = emotion_tone_preset
+    #     CharDic['ApiSetting']['pitch'] = pitch
         
-        Characters.append(CharDic)
+    #     Characters.append(CharDic)
          
-    file_path = 'characters.json'  # 저장할 파일 경로와 이름
-    with open(file_path, 'w', encoding = 'utf-8') as f:
-        json.dump(Characters, f, ensure_ascii = False, indent = 4)
-    #########################################################################
-    #########################################################################
+    # file_path = directory_path + 'characters.json'  # 저장할 파일 경로와 이름
+    # with open(file_path, 'w', encoding = 'utf-8') as f:
+    #     json.dump(Characters, f, ensure_ascii = False, indent = 4)
+    # #########################################################################
+    # #########################################################################

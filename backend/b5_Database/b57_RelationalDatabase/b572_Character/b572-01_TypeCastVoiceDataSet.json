@@ -3879,79 +3879,69 @@
                     "Caption": []
                 }
             },
-
-
-
-
-
-
-
-
-
-            
             {
                 "CharacterId": 44,
                 "Name": "건우(슬픔)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/44_건우(슬픔).wav",
-                "Quilty": 0,
+                "Quilty": 8,
                 "Context": {
                     "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
+                        {"index": "문학", "Score": 5},
+                        {"index": "비문학", "Score": 5},
+                        {"index": "아동", "Score": 10},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "남", "Score": 7},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
                     ],
                     "Age": [
-                        {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
+                        {"index": "유년", "Score": 10},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 8},
+                        {"index": "중년", "Score": 2},
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
                     ],
                     "Personality": [
-                        {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
-                        {"index": "내향적", "Score": 0}
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 8},
+                        {"index": "내향적", "Score": 8}
                     ],
                     "Atmosphere": [
-                        {"index": "행복", "Score": 0},
-                        {"index": "즐거움", "Score": 0},
-                        {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 0},
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 10},
+                        {"index": "무감정", "Score": 8},
                         {"index": "피곤", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
+                        {"index": "슬픔", "Score": 5},
                         {"index": "두려움", "Score": 0},
                         {"index": "놀람", "Score": 0}
                     ]
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["중성"],
                     "Age": [
-                        {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
+                        {"index": "유년", "Score": 10},
+                        {"index": "청소년", "Score": 8},
                         {"index": "청년", "Score": 0},
                         {"index": "중년", "Score": 0},
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
-                        {"index": "낭독", "Score": 0},
-                        {"index": "대화", "Score": 0}
+                        {"index": "낭독", "Score": 5},
+                        {"index": "대화", "Score": 10}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
                         {"index": "침착함", "Score": 0},
-                        {"index": "중립", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "화남", "Score": 0}
+                        {"index": "중립", "Score": 7},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 8}
                     ],
                     "TypeCastContext": {}
                 },
@@ -3967,7 +3957,7 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.05],
+                    "speed_x": [1],
                     "tempo": 1.0,
                     "pitch": 0,
                     "max_seconds": 60,
@@ -3981,38 +3971,38 @@
                 "CharacterId": 45,
                 "Name": "경호(화남)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/45_경호(화남).wav",
-                "Quilty": 0,
+                "Quilty": 6,
                 "Context": {
                     "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
+                        {"index": "문학", "Score": 6},
+                        {"index": "비문학", "Score": 5},
+                        {"index": "아동", "Score": 8},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "남", "Score": 6},
+                        {"index": "여", "Score": 6},
+                        {"index": "중성", "Score": 6}
                     ],
                     "Age": [
-                        {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 7},
+                        {"index": "청년", "Score": 5},
+                        {"index": "중년", "Score": 4},
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
                     ],
                     "Personality": [
-                        {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
+                        {"index": "외향적", "Score": 8},
+                        {"index": "중립적", "Score": 8},
                         {"index": "내향적", "Score": 0}
                     ],
                     "Atmosphere": [
-                        {"index": "행복", "Score": 0},
-                        {"index": "즐거움", "Score": 0},
-                        {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 0},
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 5},
+                        {"index": "무감정", "Score": 5},
                         {"index": "피곤", "Score": 0},
                         {"index": "슬픔", "Score": 0},
                         {"index": "두려움", "Score": 0},
@@ -4021,25 +4011,25 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
+                        {"index": "청소년", "Score": 7},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 5},
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 0},
-                        {"index": "대화", "Score": 0}
+                        {"index": "대화", "Score": 7}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
                         {"index": "침착함", "Score": 0},
-                        {"index": "중립", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "화남", "Score": 0}
+                        {"index": "중립", "Score": 3},
+                        {"index": "슬픔", "Score": 7},
+                        {"index": "화남", "Score": 6}
                     ],
                     "TypeCastContext": {}
                 },
@@ -4069,39 +4059,39 @@
                 "CharacterId": 46,
                 "Name": "경호(차가움)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/46_경호(차가움).wav",
-                "Quilty": 0,
+                "Quilty": 8,
                 "Context": {
                     "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
+                        {"index": "문학", "Score": 8},
+                        {"index": "비문학", "Score": 8},
+                        {"index": "아동", "Score": 5},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "남", "Score": 8},
+                        {"index": "여", "Score": 8},
+                        {"index": "중성", "Score": 10}
                     ],
                     "Age": [
-                        {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
+                        {"index": "유년", "Score": 5},
+                        {"index": "청소년", "Score": 6},
+                        {"index": "청년", "Score": 8},
+                        {"index": "중년", "Score": 5},
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
                     ],
                     "Personality": [
-                        {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
-                        {"index": "내향적", "Score": 0}
+                        {"index": "외향적", "Score": 8},
+                        {"index": "중립적", "Score": 5},
+                        {"index": "내향적", "Score": 8}
                     ],
                     "Atmosphere": [
-                        {"index": "행복", "Score": 0},
-                        {"index": "즐거움", "Score": 0},
-                        {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 0},
-                        {"index": "피곤", "Score": 0},
+                        {"index": "행복", "Score": 6},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 5},
+                        {"index": "무감정", "Score": 5},
+                        {"index": "피곤", "Score": 7},
                         {"index": "슬픔", "Score": 0},
                         {"index": "두려움", "Score": 0},
                         {"index": "놀람", "Score": 0}
@@ -4109,25 +4099,25 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
+                        {"index": "청소년", "Score": 7},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 5},
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 0},
-                        {"index": "대화", "Score": 0}
+                        {"index": "대화", "Score": 8}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
                         {"index": "침착함", "Score": 0},
-                        {"index": "중립", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "화남", "Score": 0}
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 9}
                     ],
                     "TypeCastContext": {}
                 },
@@ -4157,39 +4147,39 @@
                 "CharacterId": 47,
                 "Name": "김경화앵커(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/47_김경화앵커(일반).wav",
-                "Quilty": 0,
+                "Quilty": 9,
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 8},
                         {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 0}
+                        {"index": "학술", "Score": 10}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
                     ],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청소년", "Score": 6},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
                         {"index": "노년", "Score": 0}
                     ],
                     "Personality": [
-                        {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
-                        {"index": "내향적", "Score": 0}
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 5}
                     ],
                     "Atmosphere": [
-                        {"index": "행복", "Score": 0},
-                        {"index": "즐거움", "Score": 0},
-                        {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 0},
-                        {"index": "피곤", "Score": 0},
+                        {"index": "행복", "Score": 5},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 10},
+                        {"index": "무감정", "Score": 10},
+                        {"index": "피곤", "Score": 5},
                         {"index": "슬픔", "Score": 0},
                         {"index": "두려움", "Score": 0},
                         {"index": "놀람", "Score": 0}
@@ -4197,23 +4187,23 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["여"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 5},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
-                        {"index": "낭독", "Score": 0},
+                        {"index": "낭독", "Score": 10},
                         {"index": "대화", "Score": 0}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
-                        {"index": "침착함", "Score": 0},
-                        {"index": "중립", "Score": 0},
+                        {"index": "침착함", "Score": 10},
+                        {"index": "중립", "Score": 10},
                         {"index": "슬픔", "Score": 0},
                         {"index": "화남", "Score": 0}
                     ],
@@ -4245,39 +4235,39 @@
                 "CharacterId": 48,
                 "Name": "김경화앵커(일반, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/48_김경화앵커(일반, 피치다운).wav",
-                "Quilty": 0,
+                "Quilty": 9,
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 8},
                         {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 0}
+                        {"index": "학술", "Score": 10}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
                     ],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청소년", "Score": 7},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
                         {"index": "노년", "Score": 0}
                     ],
                     "Personality": [
-                        {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
-                        {"index": "내향적", "Score": 0}
+                        {"index": "외향적", "Score": 8},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 5}
                     ],
                     "Atmosphere": [
-                        {"index": "행복", "Score": 0},
-                        {"index": "즐거움", "Score": 0},
-                        {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 0},
-                        {"index": "피곤", "Score": 0},
+                        {"index": "행복", "Score": 5},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 10},
+                        {"index": "무감정", "Score": 10},
+                        {"index": "피곤", "Score": 5},
                         {"index": "슬픔", "Score": 0},
                         {"index": "두려움", "Score": 0},
                         {"index": "놀람", "Score": 0}
@@ -4285,23 +4275,23 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["여"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 5},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
-                        {"index": "낭독", "Score": 0},
+                        {"index": "낭독", "Score": 10},
                         {"index": "대화", "Score": 0}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
-                        {"index": "침착함", "Score": 0},
-                        {"index": "중립", "Score": 0},
+                        {"index": "침착함", "Score": 10},
+                        {"index": "중립", "Score": 10},
                         {"index": "슬픔", "Score": 0},
                         {"index": "화남", "Score": 0}
                     ],
@@ -4326,46 +4316,46 @@
                     "force_length": 0,
                     "last_pitch": [0],
                     "En": [],
-                    "Caption": []
+                    "Caption": ["김경화앵커(일반)"]
                 }
             },
             {
                 "CharacterId": 49,
                 "Name": "남준(톤다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/49_남준(톤다운).wav",
-                "Quilty": 0,
+                "Quilty": 7,
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 8},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 0}
+                        {"index": "학술", "Score": 5}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
+                        {"index": "남", "Score": 8},
                         {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "중성", "Score": 8}
                     ],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
-                        {"index": "노년", "Score": 0}
+                        {"index": "청소년", "Score": 5},
+                        {"index": "청년", "Score": 8},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 6},
+                        {"index": "노년", "Score": 3}
                     ],
                     "Personality": [
-                        {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
-                        {"index": "내향적", "Score": 0}
+                        {"index": "외향적", "Score": 7},
+                        {"index": "중립적", "Score": 9},
+                        {"index": "내향적", "Score": 9}
                     ],
                     "Atmosphere": [
                         {"index": "행복", "Score": 0},
                         {"index": "즐거움", "Score": 0},
-                        {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 0},
-                        {"index": "피곤", "Score": 0},
+                        {"index": "평온", "Score": 8},
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 7},
                         {"index": "슬픔", "Score": 0},
                         {"index": "두려움", "Score": 0},
                         {"index": "놀람", "Score": 0}
@@ -4373,23 +4363,23 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 5},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
-                        {"index": "낭독", "Score": 0},
+                        {"index": "낭독", "Score": 10},
                         {"index": "대화", "Score": 0}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
-                        {"index": "침착함", "Score": 0},
-                        {"index": "중립", "Score": 0},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 8},
                         {"index": "슬픔", "Score": 0},
                         {"index": "화남", "Score": 0}
                     ],
@@ -4399,7 +4389,7 @@
                     "name": "남준",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
+                        "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -4419,34 +4409,34 @@
             },
             {
                 "CharacterId": 50,
-                "Name": "노을(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/50_노을(일반).wav",
-                "Quilty": 0,
+                "Name": "노을(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/50_노을(슬픔).wav",
+                "Quilty": 8.5,
                 "Context": {
                     "Genre": [
-                        {"index": "문학", "Score": 0},
+                        {"index": "문학", "Score": 10},
                         {"index": "비문학", "Score": 0},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
                     ],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 6},
                         {"index": "노년", "Score": 0}
                     ],
                     "Personality": [
                         {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
-                        {"index": "내향적", "Score": 0}
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
                     ],
                     "Atmosphere": [
                         {"index": "행복", "Score": 0},
@@ -4454,32 +4444,32 @@
                         {"index": "평온", "Score": 0},
                         {"index": "무감정", "Score": 0},
                         {"index": "피곤", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "두려움", "Score": 0},
-                        {"index": "놀람", "Score": 0}
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 10},
+                        {"index": "놀람", "Score": 10}
                     ]
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 0},
-                        {"index": "대화", "Score": 0}
+                        {"index": "대화", "Score": 10}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
                         {"index": "침착함", "Score": 0},
                         {"index": "중립", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "화남", "Score": 0}
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "화남", "Score": 10}
                     ],
                     "TypeCastContext": {}
                 },
@@ -4487,7 +4477,7 @@
                     "name": "노을",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
+                        "emotion_tone_preset": ["sad-1", "sad-2"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -4495,7 +4485,7 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.05],
+                    "speed_x": [1],
                     "tempo": 1.0,
                     "pitch": 0,
                     "max_seconds": 60,
@@ -4507,67 +4497,67 @@
             },
             {
                 "CharacterId": 51,
-                "Name": "노을(신뢰)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/51_노을(신뢰).wav",
-                "Quilty": 0,
+                "Name": "노을(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/51_노을(일반).wav",
+                "Quilty": 8,
                 "Context": {
                     "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 5},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
                     ],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 6},
                         {"index": "노년", "Score": 0}
                     ],
                     "Personality": [
-                        {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
-                        {"index": "내향적", "Score": 0}
+                        {"index": "외향적", "Score": 5},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
                     ],
                     "Atmosphere": [
                         {"index": "행복", "Score": 0},
                         {"index": "즐거움", "Score": 0},
                         {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 0},
-                        {"index": "피곤", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "두려움", "Score": 0},
-                        {"index": "놀람", "Score": 0}
+                        {"index": "무감정", "Score": 5},
+                        {"index": "피곤", "Score": 3},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 10},
+                        {"index": "놀람", "Score": 10}
                     ]
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
                         {"index": "장년", "Score": 0},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 0},
-                        {"index": "대화", "Score": 0}
+                        {"index": "대화", "Score": 10}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
                         {"index": "침착함", "Score": 0},
                         {"index": "중립", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "화남", "Score": 0}
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "화남", "Score": 10}
                     ],
                     "TypeCastContext": {}
                 },
@@ -4575,7 +4565,7 @@
                     "name": "노을",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["trustful-1"],
+                        "emotion_tone_preset": ["normal-1", "normal-2"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -4595,67 +4585,67 @@
             },
             {
                 "CharacterId": 52,
-                "Name": "노을(차가운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/52_노을(차가운).wav",
-                "Quilty": 0,
+                "Name": "노을(설득)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/52_노을(설득).wav",
+                "Quilty": 9,
                 "Context": {
                     "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 6},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
                     ],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 6},
                         {"index": "노년", "Score": 0}
                     ],
                     "Personality": [
-                        {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
-                        {"index": "내향적", "Score": 0}
+                        {"index": "외향적", "Score": 4},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
                     ],
                     "Atmosphere": [
                         {"index": "행복", "Score": 0},
                         {"index": "즐거움", "Score": 0},
                         {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 0},
-                        {"index": "피곤", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "두려움", "Score": 0},
-                        {"index": "놀람", "Score": 0}
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 9},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 10},
+                        {"index": "놀람", "Score": 10}
                     ]
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 6},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 0},
-                        {"index": "대화", "Score": 0}
+                        {"index": "대화", "Score": 10}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
-                        {"index": "침착함", "Score": 0},
-                        {"index": "중립", "Score": 0},
-                        {"index": "슬픔", "Score": 0},
-                        {"index": "화남", "Score": 0}
+                        {"index": "침착함", "Score": 5},
+                        {"index": "중립", "Score": 6},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 10}
                     ],
                     "TypeCastContext": {}
                 },
@@ -4663,7 +4653,7 @@
                     "name": "노을",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["None"],
+                        "emotion_tone_preset": ["sarcasm-1", "inspire-1", "inspire-2"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -4685,38 +4675,38 @@
                 "CharacterId": 53,
                 "Name": "도희(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/53_도희(일반).wav",
-                "Quilty": 0,
+                "Quilty": 8.5,
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 6},
                         {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 0}
+                        {"index": "학술", "Score": 8}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "남", "Score": 8},
+                        {"index": "여", "Score": 8},
+                        {"index": "중성", "Score": 9}
                     ],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
-                        {"index": "노년", "Score": 0}
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 7}
                     ],
                     "Personality": [
-                        {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
-                        {"index": "내향적", "Score": 0}
+                        {"index": "외향적", "Score": 8},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
                     ],
                     "Atmosphere": [
-                        {"index": "행복", "Score": 0},
-                        {"index": "즐거움", "Score": 0},
-                        {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 0},
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 10},
+                        {"index": "무감정", "Score": 7},
                         {"index": "피곤", "Score": 0},
                         {"index": "슬픔", "Score": 0},
                         {"index": "두려움", "Score": 0},
@@ -4725,23 +4715,23 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["여"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 6},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
-                        {"index": "낭독", "Score": 0},
+                        {"index": "낭독", "Score": 10},
                         {"index": "대화", "Score": 0}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
-                        {"index": "침착함", "Score": 0},
-                        {"index": "중립", "Score": 0},
+                        {"index": "침착함", "Score": 10},
+                        {"index": "중립", "Score": 10},
                         {"index": "슬픔", "Score": 0},
                         {"index": "화남", "Score": 0}
                     ],
@@ -4773,39 +4763,39 @@
                 "CharacterId": 54,
                 "Name": "도희(일반, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/54_도희(일반, 피치다운).wav",
-                "Quilty": 0,
+                "Quilty": 8.8,
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
-                        {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 0}
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 4},
+                        {"index": "시", "Score": 7},
+                        {"index": "학술", "Score": 9}
                     ],
                     "Gender": [
-                        {"index": "남", "Score": 0},
-                        {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 0}
+                        {"index": "남", "Score": 9},
+                        {"index": "여", "Score": 9},
+                        {"index": "중성", "Score": 9}
                     ],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
-                        {"index": "노년", "Score": 0}
+                        {"index": "청소년", "Score": 6},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 9}
                     ],
                     "Personality": [
-                        {"index": "외향적", "Score": 0},
-                        {"index": "중립적", "Score": 0},
-                        {"index": "내향적", "Score": 0}
+                        {"index": "외향적", "Score": 4},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
                     ],
                     "Atmosphere": [
-                        {"index": "행복", "Score": 0},
-                        {"index": "즐거움", "Score": 0},
-                        {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 0},
-                        {"index": "피곤", "Score": 0},
+                        {"index": "행복", "Score": 4},
+                        {"index": "즐거움", "Score": 6},
+                        {"index": "평온", "Score": 10},
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 5},
                         {"index": "슬픔", "Score": 0},
                         {"index": "두려움", "Score": 0},
                         {"index": "놀람", "Score": 0}
@@ -4813,23 +4803,23 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["None"],
+                    "Gender": ["여"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
-                        {"index": "청년", "Score": 0},
-                        {"index": "중년", "Score": 0},
-                        {"index": "장년", "Score": 0},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 8},
                         {"index": "노년", "Score": 0}
                     ],
                     "Role": [
-                        {"index": "낭독", "Score": 0},
+                        {"index": "낭독", "Score": 10},
                         {"index": "대화", "Score": 0}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
-                        {"index": "침착함", "Score": 0},
-                        {"index": "중립", "Score": 0},
+                        {"index": "침착함", "Score": 10},
+                        {"index": "중립", "Score": 10},
                         {"index": "슬픔", "Score": 0},
                         {"index": "화남", "Score": 0}
                     ],
@@ -4861,7 +4851,7 @@
                 "CharacterId": 55,
                 "Name": "류은(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/55_류은(일반).wav",
-                "Quilty": 0,
+                "Quilty": 9,
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},

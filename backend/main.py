@@ -37,18 +37,18 @@ def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
         
 ### Main2 : 콘텐츠 제작 ###
 
-def CreationUpdate(email, projectNameList, VoiceDataSet):
+def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang):
 
     if isinstance(projectNameList, list):
         for projectName in projectNameList:
             projectName = unicodedata.normalize('NFC', projectName)
             
             ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, VoiceDataSet)
+            CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang)
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainProcess):
+def YaaS(email, name, password, projectNameList, MessagesReview, MainLang, BookGenre, VoiceDataSet, MainProcess):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
@@ -57,7 +57,7 @@ def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, Voic
     elif MainProcess == 'Creation':
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, MessagesReview, BookGenre)
-        CreationUpdate(email, projectNameList, VoiceDataSet)
+        CreationUpdate(email, projectNameList, VoiceDataSet, MainLang)
 
 if __name__ == "__main__":
 
@@ -67,6 +67,7 @@ if __name__ == "__main__":
     password = "0128"
     projectNameList = ['노인을위한나라는있다'] # , '데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법', '빨간머리앤', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업']
     MessagesReview = "on"
+    MainLang = "Ko" # 'Ko', 'En'
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
     VoiceDataSet = "TypeCastVoiceDataSet"
     MainProcess = "Creation" # 'Solution', 'Creation'

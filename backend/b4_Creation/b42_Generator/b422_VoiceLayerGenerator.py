@@ -54,8 +54,13 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset):
 ##### MatchedActors 생성 #####
 #############################
 # NarratorSet에서 ContextScore 계산
-def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext):
-    VoiceDataSetCharacters = VoiceDataSet["Characters"][1:]
+def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, MainLang):
+    # 언어별 데이터셋 불러오기
+    if MainLang == 'Ko':
+        VoiceDataSetCharacters = VoiceDataSet['CharactersKo'][1:]
+    if MainLang == 'En':
+        VoiceDataSetCharacters = VoiceDataSet['CharactersEn'][1:]
+    
     BookGenre = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Genre']
     BookGender = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Gender']
     BookAge = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Age']
@@ -158,12 +163,12 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
     return VoiceDataSetCharacters
 
 # 최고 점수 캐릭터 선정
-def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, Caption = "None"):
+def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag):
     HighestScore = 0  # 최고 점수를 매우 낮은 값으로 초기화
     HighestScoreVoices = []  # 최고 점수를 가진 데이터들을 저장할 리스트
 
     for VoiceData in VoiceDataSetCharacters:
-        if VoiceData['Choice'] == 'No':
+        if VoiceData['Choice'] == 'No' and VoiceData:
             score = VoiceData['Score'][CharacterTag]
             if score > HighestScore:
                 HighestScore = score
@@ -244,7 +249,7 @@ def ActorChunkSetting(RawChunk):
     return ActorChunk
 
 # 낭독 ActorMatching
-def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
+def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang):
     VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet)
     
     # CharacterTags 구하기
@@ -254,7 +259,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
     
     # Characters 점수계산 및 MatchedActors 생성
     MatchedActors = []
-    VoiceDataSetCharacters = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext)
+    VoiceDataSetCharacters = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, MainLang)
     for CharacterTag in CharacterTags:
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
         VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)
@@ -485,9 +490,9 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
 
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerGenerator(projectName, email, voiceDataSet, Mode = "Manual"):
+def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
-    MatchedActors, SelectionGenerationKoChunks = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet)
+    MatchedActors, SelectionGenerationKoChunks = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
     for MatchedActor in MatchedActors:
         Actor = MatchedActor['ActorName']
 
@@ -586,7 +591,13 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, Mode = "Manual"):
                         Modify = "Yes"
 
             ## 보이스 선정 ##
-            for VoiceData in VoiceDataSet['Characters']:
+            # 언어별 데이터셋 불러오기
+            if MainLang == 'Ko':
+                VoiceDataset = VoiceDataSet['CharactersKo']
+            if MainLang == 'En':
+                VoiceDataset = VoiceDataSet['CharactersEn']
+                
+            for VoiceData in VoiceDataset:
                 if Name == VoiceData['Name']:
                     ApiSetting = VoiceData['ApiSetting']
                     name = ApiSetting['name']

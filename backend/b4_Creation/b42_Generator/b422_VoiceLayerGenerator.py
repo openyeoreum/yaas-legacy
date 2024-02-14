@@ -178,7 +178,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, Caption = "None")
     else:
         HighestScoreVoice = {'Name': 'None', 'ApiSetting': 'None'}
     
-    # CharacterTag가 Narrator인 경우 Caption선정
+    # CharacterTag가 Narrator인 경우 Caption, secondaryVoice, tertiaryVoice선정
     CaptionVoice = "None"
     SecondaryVoice = "None"
     TertiaryVoice = "None"
@@ -195,9 +195,11 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, Caption = "None")
                 CaptionVoice = VoiceData
                 CaptionCount = 1
             if VoiceData['Name'] == secondaryVoice:
+                VoiceData['Choice'] = 'SecondaryNarrator'
                 SecondaryVoice = VoiceData
                 SecondaryCount = 1
             if VoiceData['Name'] == tertiaryVoice:
+                VoiceData['Choice'] = 'TertiaryNarrator'
                 TertiaryVoice = VoiceData
                 TertiaryCount = 1
             if CaptionCount == 1 and SecondaryCount == 1 and TertiaryCount == 1:
@@ -294,10 +296,10 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet):
                     GenerationKoChunks['Chunk'] = [part + "(0.60)" for part in parts[:-1]] + [parts[-1]]
                 GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
                 
-    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
     return MatchedActors, SelectionGenerationKoChunks
     

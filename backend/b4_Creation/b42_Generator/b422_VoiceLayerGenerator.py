@@ -16,15 +16,50 @@ from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoice
 ###########################################
 ##### SelectionGenerationKoChunks 생성 #####
 ###########################################
-def LoadSelectionGenerationKoChunks(projectName, email, voicedataset):
+## MainLang의 언어별 SelectionGenerationKoChunks와 Voicedataset 불러오기
+def LoadVoiceDataSetCharacters(voicedataset, MainLang):
+    
+    # MainLang의 언어별 보이스 데이터셋 불러오기
     voiceDataSet = GetVoiceDataSet(voicedataset)
     VoiceDataSet = voiceDataSet[0][1]
     
-    project = GetProject(projectName, email)
+    if MainLang == 'Ko':
+        VoiceDataSetCharacters = VoiceDataSet['CharactersKo'][1:]
+    if MainLang == 'En':
+        VoiceDataSetCharacters = VoiceDataSet['CharactersEn'][1:]
+    # if MainLang == 'Ja':
+    #     VoiceDataSetCharacters = VoiceDataSet['CharactersJa'][1:]
+    # if MainLang == 'Zh':
+    #     VoiceDataSetCharacters = VoiceDataSet['CharactersZh'][1:]
+    # if MainLang == 'Es':
+    #     VoiceDataSetCharacters = VoiceDataSet['CharactersEs'][1:]
+        
+    return VoiceDataSetCharacters
+
+## SelectionGenerationKoChunks와 언어별 보이스 데이터셋 불러오기
+def LoadSelectionGenerationKoChunks(projectName, email, voicedataset, MainLang):
+
+    VoiceDataSetCharacters = LoadVoiceDataSetCharacters(voicedataset, MainLang)
     
-    SelectionGenerationKoBookContext = project.SelectionGenerationKo[1]['SelectionGenerationKoBookContext'][1]
-    SelectionGenerationKoSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGenerationKoSplitedIndexs'][1:]
+    project = GetProject(projectName, email)
     CharacterCompletion = project.CharacterCompletion[2]['CheckedCharacterTags'][1:]
+    
+    ## MainLang의 언어별 SelectionGenerationKoChunks 불러오기
+    if MainLang == 'Ko':
+        SelectionGenerationKoBookContext = project.SelectionGenerationKo[1]['SelectionGenerationKoBookContext'][1]
+        SelectionGenerationKoSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGenerationKoSplitedIndexs'][1:]
+    if MainLang == 'En':
+        SelectionGenerationEnBookContext = project.SelectionGenerationEn[1]['SelectionGenerationEnBookContext'][1]
+        SelectionGenerationEnSplitedIndexs = project.SelectionGenerationEn[1]['SelectionGenerationEnSplitedIndexs'][1:]
+    # if MainLang == 'Ja':
+        SelectionGenerationJaBookContext = project.SelectionGenerationJa[1]['SelectionGenerationJaBookContext'][1]
+        SelectionGenerationJaSplitedIndexs = project.SelectionGenerationJa[1]['SelectionGenerationJaSplitedIndexs'][1:]
+    # if MainLang == 'Zh':
+        SelectionGenerationZhBookContext = project.SelectionGenerationZh[1]['SelectionGenerationZhBookContext'][1]
+        SelectionGenerationZhSplitedIndexs = project.SelectionGenerationZh[1]['SelectionGenerationZhSplitedIndexs'][1:]
+    # if MainLang == 'Es':
+        SelectionGenerationEsBookContext = project.SelectionGenerationEs[1]['SelectionGenerationEsBookContext'][1]
+        SelectionGenerationEsSplitedIndexs = project.SelectionGenerationEs[1]['SelectionGenerationEsSplitedIndexs'][1:]
     
     # SecondaryNarratorList, TertiaryNarratorList 형성
     SecondaryNarratorList = [CharacterCompletion[0]['MainCharacterList'][0]['MainCharacter']]
@@ -48,19 +83,14 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset):
                     Voice['CharacterTag'] = 'TertiaryNarrator'
                 SelectionGenerationKoChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'Chunk': Chunk, 'Voice': Voice})
     
-    return VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks
+    return VoiceDataSetCharacters, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks
 
 #############################
 ##### MatchedActors 생성 #####
 #############################
 # NarratorSet에서 ContextScore 계산
-def ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, MainLang):
-    # 언어별 데이터셋 불러오기
-    if MainLang == 'Ko':
-        VoiceDataSetCharacters = VoiceDataSet['CharactersKo'][1:]
-    if MainLang == 'En':
-        VoiceDataSetCharacters = VoiceDataSet['CharactersEn'][1:]
-    
+def ContextScoreCal(VoiceDataSetCharacters, SelectionGenerationKoBookContext, MainLang):
+   
     BookGenre = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Genre']
     BookGender = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Gender']
     BookAge = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Age']
@@ -250,7 +280,7 @@ def ActorChunkSetting(RawChunk):
 
 # 낭독 ActorMatching
 def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang):
-    VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet)
+    voiceDataSetCharacters, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet)
     
     # CharacterTags 구하기
     CharacterTags = []
@@ -259,7 +289,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
     
     # Characters 점수계산 및 MatchedActors 생성
     MatchedActors = []
-    VoiceDataSetCharacters = ContextScoreCal(VoiceDataSet, SelectionGenerationKoBookContext, MainLang)
+    VoiceDataSetCharacters = ContextScoreCal(voiceDataSetCharacters, SelectionGenerationKoBookContext, MainLang)
     for CharacterTag in CharacterTags:
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
         VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)
@@ -561,7 +591,7 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                         desc = 'VoiceLayerGenerator')
         
         ## VoiceDataSet 불러오기
-        VoiceDataSet, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet)
+        VoiceDataSetCharacters = LoadVoiceDataSetCharacters(voiceDataSet, MainLang)
 
         ## 히스토리 불러오기
         fileName = projectName + '_' + 'VoiceLayer_History_' + Actor + '.json'
@@ -590,14 +620,8 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                         History['ActorChunk'] = Chunks
                         Modify = "Yes"
 
-            ## 보이스 선정 ##
-            # 언어별 데이터셋 불러오기
-            if MainLang == 'Ko':
-                VoiceDataset = VoiceDataSet['CharactersKo']
-            if MainLang == 'En':
-                VoiceDataset = VoiceDataSet['CharactersEn']
-                
-            for VoiceData in VoiceDataset:
+            ## 보이스 선정 ##                
+            for VoiceData in VoiceDataSetCharacters:
                 if Name == VoiceData['Name']:
                     ApiSetting = VoiceData['ApiSetting']
                     name = ApiSetting['name']
@@ -669,5 +693,6 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     projectName = "웹3.0메타버스"
     voiceDataSet = "TypeCastVoiceDataSet"
+    mainLang = 'Ko'
     mode = "Manual"
     #########################################################################

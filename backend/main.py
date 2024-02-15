@@ -48,7 +48,7 @@ def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang):
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, MessagesReview, MainLang, BookGenre, VoiceDataSet, MainProcess):
+def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, MainProcess):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
@@ -67,10 +67,10 @@ if __name__ == "__main__":
     password = "0128"
     projectNameList = ['노인을위한나라는있다'] # , '데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법', '빨간머리앤', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업']
     MessagesReview = "on"
-    MainLang = "Ko" # 'Ko', 'En'
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
     VoiceDataSet = "TypeCastVoiceDataSet"
+    MainLang = "Ko" # 'Ko', 'En'
     MainProcess = "Creation" # 'Solution', 'Creation'
     #########################################################################
 
-    YaaS(email, name, password, projectNameList, MessagesReview, MainLang, BookGenre, VoiceDataSet, MainProcess)
+    YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, MainProcess)

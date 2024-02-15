@@ -696,3 +696,13 @@ if __name__ == "__main__":
     mainLang = 'Ko'
     mode = "Manual"
     #########################################################################
+    
+    VoiceDataSetCharacters = LoadVoiceDataSetCharacters(voiceDataSet, mainLang)
+    
+    CharacterList = []
+    for Character in VoiceDataSetCharacters:
+        CharacterDic = {"CharacterId": Character['CharacterId'] ,"Name": Character['Name']}
+        CharacterList.append(CharacterDic)
+        
+    with open('CharacterList.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)

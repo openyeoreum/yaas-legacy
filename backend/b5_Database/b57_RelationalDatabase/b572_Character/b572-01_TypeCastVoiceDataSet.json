@@ -250,7 +250,7 @@
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 10},
-                        {"index": "연기", "Score": 3}
+                        {"index": "대화", "Score": 3}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 10},
@@ -431,7 +431,7 @@
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 10},
-                        {"index": "대화", "Score": 6}
+                        {"index": "대화", "Score": 3}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
@@ -1952,7 +1952,7 @@
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 10},
-                        {"index": "대화", "Score": 7}
+                        {"index": "대화", "Score": 5}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
@@ -2045,7 +2045,7 @@
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 10},
-                        {"index": "대화", "Score": 7}
+                        {"index": "대화", "Score": 6}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
@@ -2500,7 +2500,7 @@
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 10},
-                        {"index": "대화", "Score": 8}
+                        {"index": "대화", "Score": 7}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},

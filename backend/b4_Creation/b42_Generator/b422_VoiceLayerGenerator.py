@@ -193,7 +193,7 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
     return VoiceDataSetCharacters
 
 # 최고 점수 캐릭터 선정
-def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag):
+def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
     HighestScore = 0  # 최고 점수를 매우 낮은 값으로 초기화
     HighestScoreVoices = []  # 최고 점수를 가진 데이터들을 저장할 리스트
     CaptionVoice = "None"
@@ -206,13 +206,15 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag):
     # CharacterTag가 "Narrator"일 경우
     if CharacterTag == "Narrator":
         for VoiceData in VoiceDataSetCharacters:
-            if VoiceData['Grade'] == 'Main' and VoiceData['Choice'] == 'No':
-                score = VoiceData['Score'][CharacterTag]
-                if score > HighestScore:
-                    HighestScore = score
-                    HighestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
-                elif score == HighestScore:
-                    HighestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
+            # CharacterGender가 '남', '여'가 아니거나, 또는 VoiceData의 성별에 포함될 때 점수 합산 진행
+            if (CharacterGender not in ['남', '여']) or (CharacterGender in VoiceData['Voice']['Gender']):
+                if VoiceData['Grade'] == 'Main' and VoiceData['Choice'] == 'No':
+                    score = VoiceData['Score'][CharacterTag]
+                    if score > HighestScore:
+                        HighestScore = score
+                        HighestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
+                    elif score == HighestScore:
+                        HighestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
 
         # 최고 점수 데이터들 중 랜덤으로 하나를 선택하여 'Choice'를 CharacterTag로 설정
         if HighestScoreVoices:
@@ -245,13 +247,15 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag):
     # CharacterTag가 "CharacterN"일 경우
     else:
         for VoiceData in VoiceDataSetCharacters:
-            if VoiceData['Choice'] == 'No':
-                score = VoiceData['Score'][CharacterTag]
-                if score > HighestScore:
-                    HighestScore = score
-                    HighestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
-                elif score == HighestScore:
-                    HighestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
+            # CharacterGender가 '남', '여'가 아니거나, 또는 VoiceData의 성별에 포함될 때 점수 합산 진행
+            if (CharacterGender not in ['남', '여']) or (CharacterGender in VoiceData['Voice']['Gender']):
+                if VoiceData['Choice'] == 'No':
+                    score = VoiceData['Score'][CharacterTag]
+                    if score > HighestScore:
+                        HighestScore = score
+                        HighestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
+                    elif score == HighestScore:
+                        HighestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
 
         # 최고 점수 데이터들 중 랜덤으로 하나를 선택하여 'Choice'를 CharacterTag로 설정
         if HighestScoreVoices:
@@ -302,17 +306,19 @@ def ActorChunkSetting(RawChunk):
 def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang):
     voiceDataSetCharacters, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
     
-    # CharacterTags 구하기
+    # CharacterTags 구하기 (케릭터 태그와 성별 선정)
     CharacterTags = []
     for Character in CharacterCompletion:
-        CharacterTags.append(Character['CharacterTag'])
+        CharacterTags.append({'CharacterTag': Character['CharacterTag'], 'CharacterGender': Character['Gender']})
     
     # Characters 점수계산 및 MatchedActors 생성
     MatchedActors = []
     VoiceDataSetCharacters = ContextScoreCal(voiceDataSetCharacters, SelectionGenerationKoBookContext)
-    for CharacterTag in CharacterTags:
+    for character in CharacterTags:
+        CharacterTag = character['CharacterTag']
+        CharacterGender = character['CharacterGender']
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
-        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)
+        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender)
         MatchedActor = {'CharacterTag': CharacterTag, 'ActorName': HighestScoreVoice['Name'], 'ApiSetting': HighestScoreVoice['ApiSetting']}
         MatchedActors.append(MatchedActor)
         if CaptionVoice != "None":

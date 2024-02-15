@@ -77,7 +77,7 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset, MainLang):
                 Chunk = SelectionGenerationSplitedChunks[k]['Chunk']
                 Tag = SelectionGenerationSplitedChunks[k]['Tag']
                 Voice = SelectionGenerationSplitedChunks[k]['Voice']
-                if Voice['Character'] in SecondaryNarratorList:
+                if (Tag == "Character") and (Voice['Character'] in SecondaryNarratorList):
                     Voice['CharacterTag'] = 'SecondaryNarrator'
                 if Voice['Character'] in TertiaryNarratorList:
                     Voice['CharacterTag'] = 'TertiaryNarrator'
@@ -309,7 +309,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
     
     # Characters 점수계산 및 MatchedActors 생성
     MatchedActors = []
-    VoiceDataSetCharacters = ContextScoreCal(voiceDataSetCharacters, SelectionGenerationKoBookContext, MainLang)
+    VoiceDataSetCharacters = ContextScoreCal(voiceDataSetCharacters, SelectionGenerationKoBookContext)
     for CharacterTag in CharacterTags:
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
         VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag)

@@ -214,7 +214,7 @@ def SelectionGenerationKoJson(projectName, email):
                 except LangDetectException:
                     Language = "ko"
                 emotions = list(Narrater['Emotion'].keys())
-                Voice = {'Character': Narrater['MainCharacterList'][0]['Id'], 'CharacterTag': Narrater['CharacterTag'], 'Language': Language, 'Gender': Narrater['Gender'], 'Age': Narrater['Age'], 'Emotion': emotions[0]}
+                Voice = {'Character': Narrater['MainCharacterList'][0]['MainCharacter'], 'CharacterTag': Narrater['CharacterTag'], 'Language': Language, 'Gender': Narrater['Gender'], 'Age': Narrater['Age'], 'Emotion': emotions[0]}
                 for CharacterChunk in CharacterFrame:
                     if CharacterChunk['ChunkId'] == chunkid:
                         Character = CharacterChunk['MainCharacter']

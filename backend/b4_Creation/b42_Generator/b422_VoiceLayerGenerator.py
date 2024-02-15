@@ -24,15 +24,15 @@ def LoadVoiceDataSetCharacters(voicedataset, MainLang):
     VoiceDataSet = voiceDataSet[0][1]
     
     if MainLang == 'Ko':
-        VoiceDataSetCharacters = VoiceDataSet['CharactersKo'][1:]
+        VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
     if MainLang == 'En':
-        VoiceDataSetCharacters = VoiceDataSet['CharactersEn'][1:]
+        VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
     # if MainLang == 'Ja':
-    #     VoiceDataSetCharacters = VoiceDataSet['CharactersJa'][1:]
+    #     VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
     # if MainLang == 'Zh':
-    #     VoiceDataSetCharacters = VoiceDataSet['CharactersZh'][1:]
+    #     VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
     # if MainLang == 'Es':
-    #     VoiceDataSetCharacters = VoiceDataSet['CharactersEs'][1:]
+    #     VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
         
     return VoiceDataSetCharacters
 
@@ -46,20 +46,20 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset, MainLang):
     
     ## MainLang의 언어별 SelectionGenerationKoChunks 불러오기
     if MainLang == 'Ko':
-        SelectionGenerationKoBookContext = project.SelectionGenerationKo[1]['SelectionGenerationKoBookContext'][1]
-        SelectionGenerationKoSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGenerationKoSplitedIndexs'][1:]
+        SelectionGenerationBookContext = project.SelectionGenerationKo[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+        SelectionGenerationSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     if MainLang == 'En':
-        SelectionGenerationEnBookContext = project.SelectionGenerationEn[1]['SelectionGenerationEnBookContext'][1]
-        SelectionGenerationEnSplitedIndexs = project.SelectionGenerationEn[1]['SelectionGenerationEnSplitedIndexs'][1:]
+        SelectionGenerationBookContext = project.SelectionGenerationEn[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+        SelectionGenerationSplitedIndexs = project.SelectionGenerationEn[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     # if MainLang == 'Ja':
-        SelectionGenerationJaBookContext = project.SelectionGenerationJa[1]['SelectionGenerationJaBookContext'][1]
-        SelectionGenerationJaSplitedIndexs = project.SelectionGenerationJa[1]['SelectionGenerationJaSplitedIndexs'][1:]
+        SelectionGenerationBookContext = project.SelectionGenerationJa[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+        SelectionGenerationSplitedIndexs = project.SelectionGenerationJa[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     # if MainLang == 'Zh':
-        SelectionGenerationZhBookContext = project.SelectionGenerationZh[1]['SelectionGenerationZhBookContext'][1]
-        SelectionGenerationZhSplitedIndexs = project.SelectionGenerationZh[1]['SelectionGenerationZhSplitedIndexs'][1:]
+        SelectionGenerationBookContext = project.SelectionGenerationZh[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+        SelectionGenerationSplitedIndexs = project.SelectionGenerationZh[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     # if MainLang == 'Es':
-        SelectionGenerationEsBookContext = project.SelectionGenerationEs[1]['SelectionGenerationEsBookContext'][1]
-        SelectionGenerationEsSplitedIndexs = project.SelectionGenerationEs[1]['SelectionGenerationEsSplitedIndexs'][1:]
+        SelectionGenerationBookContext = project.SelectionGenerationEs[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+        SelectionGenerationSplitedIndexs = project.SelectionGenerationEs[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     
     # SecondaryNarratorList, TertiaryNarratorList 형성
     SecondaryNarratorList = [CharacterCompletion[0]['MainCharacterList'][0]['MainCharacter']]
@@ -67,29 +67,29 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset, MainLang):
     for Character in CharacterCompletion[0]['MainCharacterList'][1:]:
         TertiaryNarratorList.append(Character['MainCharacter'])
     
-    SelectionGenerationKoChunks = []
-    for i in range(len(SelectionGenerationKoSplitedIndexs)):
-        SelectionGenerationKoSplitedBodys = SelectionGenerationKoSplitedIndexs[i]['SelectionGenerationKoSplitedBodys']
-        for j in range(len(SelectionGenerationKoSplitedBodys)):
-            SelectionGenerationKoSplitedChunks = SelectionGenerationKoSplitedBodys[j]['SelectionGenerationKoSplitedChunks']
-            for k in range(len(SelectionGenerationKoSplitedChunks)):
-                ChunkId = SelectionGenerationKoSplitedChunks[k]['ChunkId']
-                Chunk = SelectionGenerationKoSplitedChunks[k]['Chunk']
-                Tag = SelectionGenerationKoSplitedChunks[k]['Tag']
-                Voice = SelectionGenerationKoSplitedChunks[k]['Voice']
+    SelectionGenerationChunks = []
+    for i in range(len(SelectionGenerationSplitedIndexs)):
+        SelectionGenerationSplitedBodys = SelectionGenerationSplitedIndexs[i]['SelectionGeneration' + MainLang + 'SplitedBodys']
+        for j in range(len(SelectionGenerationSplitedBodys)):
+            SelectionGenerationSplitedChunks = SelectionGenerationSplitedBodys[j]['SelectionGeneration' + MainLang + 'SplitedChunks']
+            for k in range(len(SelectionGenerationSplitedChunks)):
+                ChunkId = SelectionGenerationSplitedChunks[k]['ChunkId']
+                Chunk = SelectionGenerationSplitedChunks[k]['Chunk']
+                Tag = SelectionGenerationSplitedChunks[k]['Tag']
+                Voice = SelectionGenerationSplitedChunks[k]['Voice']
                 if Voice['Character'] in SecondaryNarratorList:
                     Voice['CharacterTag'] = 'SecondaryNarrator'
                 if Voice['Character'] in TertiaryNarratorList:
                     Voice['CharacterTag'] = 'TertiaryNarrator'
-                SelectionGenerationKoChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'Chunk': Chunk, 'Voice': Voice})
+                SelectionGenerationChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'Chunk': Chunk, 'Voice': Voice})
     
-    return VoiceDataSetCharacters, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks
+    return VoiceDataSetCharacters, CharacterCompletion, SelectionGenerationBookContext, SelectionGenerationChunks
 
 #############################
 ##### MatchedActors 생성 #####
 #############################
 # NarratorSet에서 ContextScore 계산
-def ContextScoreCal(VoiceDataSetCharacters, SelectionGenerationKoBookContext, MainLang):
+def ContextScoreCal(VoiceDataSetCharacters, SelectionGenerationKoBookContext):
    
     BookGenre = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Genre']
     BookGender = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Gender']
@@ -196,34 +196,36 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
 def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag):
     HighestScore = 0  # 최고 점수를 매우 낮은 값으로 초기화
     HighestScoreVoices = []  # 최고 점수를 가진 데이터들을 저장할 리스트
-
-    for VoiceData in VoiceDataSetCharacters:
-        if VoiceData['Choice'] == 'No' and VoiceData:
-            score = VoiceData['Score'][CharacterTag]
-            if score > HighestScore:
-                HighestScore = score
-                HighestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
-            elif score == HighestScore:
-                HighestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
-
-    # 최고 점수 데이터들 중 랜덤으로 하나를 선택하여 'Choice'를 CharacterTag로 설정
-    if HighestScoreVoices:
-        HighestScoreVoice = random.choice(HighestScoreVoices)
-        HighestScoreVoice['Choice'] = CharacterTag
-    else:
-        HighestScoreVoice = {'Name': 'None', 'ApiSetting': 'None'}
-    
-    # CharacterTag가 Narrator인 경우 Caption, secondaryVoice, tertiaryVoice선정
     CaptionVoice = "None"
     SecondaryVoice = "None"
     TertiaryVoice = "None"
     CaptionCount = 0
     SecondaryCount = 0
     TertiaryCount = 0
+
+    # CharacterTag가 "Narrator"일 경우
     if CharacterTag == "Narrator":
-        captionVoice = random.choice(HighestScoreVoice['ApiSetting']['Caption'])
-        secondaryVoice = random.choice(HighestScoreVoice['ApiSetting']['SecondaryVoice'])
-        tertiaryVoice = random.choice(HighestScoreVoice['ApiSetting']['TertiaryVoice'])
+        for VoiceData in VoiceDataSetCharacters:
+            if VoiceData['Grade'] == 'Main' and VoiceData['Choice'] == 'No':
+                score = VoiceData['Score'][CharacterTag]
+                if score > HighestScore:
+                    HighestScore = score
+                    HighestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
+                elif score == HighestScore:
+                    HighestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
+
+        # 최고 점수 데이터들 중 랜덤으로 하나를 선택하여 'Choice'를 CharacterTag로 설정
+        if HighestScoreVoices:
+            HighestScoreVoice = random.choice(HighestScoreVoices)
+            HighestScoreVoice['Choice'] = CharacterTag
+        else:
+            HighestScoreVoice = {'Name': 'None', 'ApiSetting': 'None'}
+    
+        # CharacterTag가 Narrator인 경우 Caption, secondaryVoice, tertiaryVoice선정
+        captionVoice = random.choice(HighestScoreVoice['Options']['CaptionVoice'])
+        secondaryVoice = random.choice(HighestScoreVoice['Options']['SecondaryVoice'])
+        tertiaryVoice = random.choice(HighestScoreVoice['Options']['TertiaryVoice'])
+        
         for VoiceData in VoiceDataSetCharacters:
             if VoiceData['Name'] == captionVoice:
                 VoiceData['Choice'] = 'Caption'
@@ -239,6 +241,24 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag):
                 TertiaryCount = 1
             if CaptionCount == 1 and SecondaryCount == 1 and TertiaryCount == 1:
                 break
+    
+    # CharacterTag가 "CharacterN"일 경우
+    else:
+        for VoiceData in VoiceDataSetCharacters:
+            if VoiceData['Choice'] == 'No':
+                score = VoiceData['Score'][CharacterTag]
+                if score > HighestScore:
+                    HighestScore = score
+                    HighestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
+                elif score == HighestScore:
+                    HighestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
+
+        # 최고 점수 데이터들 중 랜덤으로 하나를 선택하여 'Choice'를 CharacterTag로 설정
+        if HighestScoreVoices:
+            HighestScoreVoice = random.choice(HighestScoreVoices)
+            HighestScoreVoice['Choice'] = CharacterTag
+        else:
+            HighestScoreVoice = {'Name': 'None', 'ApiSetting': 'None'}
 
     return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice
 
@@ -280,7 +300,7 @@ def ActorChunkSetting(RawChunk):
 
 # 낭독 ActorMatching
 def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang):
-    voiceDataSetCharacters, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet)
+    voiceDataSetCharacters, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
     
     # CharacterTags 구하기
     CharacterTags = []
@@ -305,19 +325,20 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
             TertiaryActor = {'CharacterTag': 'TertiaryNarrator', 'ActorName': TertiaryVoice['Name'], 'ApiSetting': TertiaryVoice['ApiSetting']}
             MatchedActors.append(TertiaryActor)
 
-    # ### 테스트 후 삭제 ###
-    # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
-    # with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
-    # with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ###
+    ### 테스트 후 삭제 ###
+    with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
+    with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ###
     
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
         if GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
             ChunkCharacterTag = 'Caption'
+            GenerationKoChunks['Voice']['CharacterTag'] = 'Caption'
         else:
             ChunkCharacterTag = GenerationKoChunks['Voice']['CharacterTag']
             
@@ -331,10 +352,10 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
                     GenerationKoChunks['Chunk'] = [part + "(0.60)" for part in parts[:-1]] + [parts[-1]]
                 GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
                 
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
     return MatchedActors, SelectionGenerationKoChunks
     

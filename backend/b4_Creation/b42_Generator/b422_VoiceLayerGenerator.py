@@ -169,7 +169,7 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
                 for VAge in VoiceAge:
                     if VAge['index'] == Character['Age']:
                         AgeScore += VAge['Score']
-                AgeScore = AgeScore / 10
+                AgeScore = AgeScore / 3.5
                 # Role 스코어 계산
                 VoiceRole = Voice['Voice']['Role']
                 RoleScore = 0
@@ -194,75 +194,45 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
 
 # 최고 점수 캐릭터 선정
 def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
-    HighestScore = 0  # 최고 점수를 매우 낮은 값으로 초기화
-    HighestScoreVoices = []  # 최고 점수를 가진 데이터들을 저장할 리스트
+    
+    def _highestScoreVoice(VoiceDataSetCharacters, CheckCharacterTag, CharacterTag, CharacterGender, Grade):
+        highestScore = 0  # 최고 점수를 매우 낮은 값으로 초기화
+        highestScoreVoices = []  # 최고 점수를 가진 데이터들을 저장할 리스트
+        for VoiceData in VoiceDataSetCharacters:
+            # CharacterGender가 '남', '여'가 아니거나, 또는 VoiceData의 성별에 포함될 때 점수 합산 진행
+            if (CharacterGender not in ['남', '여']) or (CharacterGender in VoiceData['Voice']['Gender']):
+                if Grade in VoiceData['Grade'] and VoiceData['Choice'] == 'No':
+                    score = VoiceData['Score'][CharacterTag]
+                    if score > highestScore:
+                        highestScore = score
+                        highestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
+                    elif score == highestScore:
+                        highestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
+                        
+        # 최고 점수 데이터들 중 랜덤으로 하나를 선택하여 'Choice'를 CharacterTag로 설정
+        if highestScoreVoices:
+            highestScoreVoice = random.choice(highestScoreVoices)
+            highestScoreVoice['Choice'] = CheckCharacterTag
+        else:
+            highestScoreVoice = {'Name': 'None', 'ApiSetting': 'None'}
+            
+        return highestScoreVoice
+
+    HighestScoreVoice = "None"
     CaptionVoice = "None"
     SecondaryVoice = "None"
     TertiaryVoice = "None"
-    CaptionCount = 0
-    SecondaryCount = 0
-    TertiaryCount = 0
 
     # CharacterTag가 "Narrator"일 경우
     if CharacterTag == "Narrator":
-        for VoiceData in VoiceDataSetCharacters:
-            # CharacterGender가 '남', '여'가 아니거나, 또는 VoiceData의 성별에 포함될 때 점수 합산 진행
-            if (CharacterGender not in ['남', '여']) or (CharacterGender in VoiceData['Voice']['Gender']):
-                if 'Main' in VoiceData['Grade'] and VoiceData['Choice'] == 'No':
-                    score = VoiceData['Score'][CharacterTag]
-                    if score > HighestScore:
-                        HighestScore = score
-                        HighestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
-                    elif score == HighestScore:
-                        HighestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
-
-        # 최고 점수 데이터들 중 랜덤으로 하나를 선택하여 'Choice'를 CharacterTag로 설정
-        if HighestScoreVoices:
-            HighestScoreVoice = random.choice(HighestScoreVoices)
-            HighestScoreVoice['Choice'] = CharacterTag
-        else:
-            HighestScoreVoice = {'Name': 'None', 'ApiSetting': 'None'}
-    
-        # CharacterTag가 Narrator인 경우 Caption, secondaryVoice, tertiaryVoice선정
-        captionVoice = random.choice(HighestScoreVoice['Options']['CaptionVoice'])
-        secondaryVoice = random.choice(HighestScoreVoice['Options']['SecondaryVoice'])
-        tertiaryVoice = random.choice(HighestScoreVoice['Options']['TertiaryVoice'])
-        
-        for VoiceData in VoiceDataSetCharacters:
-            if VoiceData['Name'] == captionVoice:
-                VoiceData['Choice'] = 'Caption'
-                CaptionVoice = VoiceData
-                CaptionCount = 1
-            if VoiceData['Name'] == secondaryVoice:
-                VoiceData['Choice'] = 'SecondaryNarrator'
-                SecondaryVoice = VoiceData
-                SecondaryCount = 1
-            if VoiceData['Name'] == tertiaryVoice:
-                VoiceData['Choice'] = 'TertiaryNarrator'
-                TertiaryVoice = VoiceData
-                TertiaryCount = 1
-            if CaptionCount == 1 and SecondaryCount == 1 and TertiaryCount == 1:
-                break
+        HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Main")
+        CaptionVoice = _highestScoreVoice(VoiceDataSetCharacters, 'Caption', CharacterTag, CharacterGender, "Caption")
+        SecondaryVoice = _highestScoreVoice(VoiceDataSetCharacters, 'SecondaryNarrator', CharacterTag, CharacterGender, "Actor")
+        TertiaryVoice = _highestScoreVoice(VoiceDataSetCharacters, 'TertiaryNarrator', CharacterTag, CharacterGender, "Actor")
     
     # CharacterTag가 "CharacterN"일 경우
     else:
-        for VoiceData in VoiceDataSetCharacters:
-            # CharacterGender가 '남', '여'가 아니거나, 또는 VoiceData의 성별에 포함될 때 점수 합산 진행
-            if (CharacterGender not in ['남', '여']) or (CharacterGender in VoiceData['Voice']['Gender']):
-                if 'Actor' in VoiceData['Grade'] and VoiceData['Choice'] == 'No':
-                    score = VoiceData['Score'][CharacterTag]
-                    if score > HighestScore:
-                        HighestScore = score
-                        HighestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
-                    elif score == HighestScore:
-                        HighestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
-
-        # 최고 점수 데이터들 중 랜덤으로 하나를 선택하여 'Choice'를 CharacterTag로 설정
-        if HighestScoreVoices:
-            HighestScoreVoice = random.choice(HighestScoreVoices)
-            HighestScoreVoice['Choice'] = CharacterTag
-        else:
-            HighestScoreVoice = {'Name': 'None', 'ApiSetting': 'None'}
+        HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Actor")
 
     return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice
 

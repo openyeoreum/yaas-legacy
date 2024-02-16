@@ -193,7 +193,7 @@
                 "Name": "연우(중간톤)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/2_연우(중간톤).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["연우(톤다운)"],
@@ -374,7 +374,7 @@
                 "Name": "연우(톤다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/4_연우(톤다운).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["연우(중간톤)"],
@@ -731,7 +731,7 @@
                 "Name": "유라(중간톤)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/8_유라(중간톤).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["유라(중간톤, 피치다운)"],
@@ -824,7 +824,7 @@
                 "Name": "유라(중간톤, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/9_유라(중간톤, 피치다운).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["유라(중간톤)"],
@@ -1357,7 +1357,7 @@
                 "Name": "김건(슬픔)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/15_김건(슬픔).wav",
                 "Quilty": 10,
-                "Grade": ["Main", "Actor"],
+                "Grade": ["Main", "Caption", "Actor"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["김건(일반)"],
@@ -1450,7 +1450,7 @@
                 "Name": "김건(슬픔, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/16_김건(슬픔, 피치다운).wav",
                 "Quilty": 10,
-                "Grade": ["Main", "Actor"],
+                "Grade": ["Main", "Caption", "Actor"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["김건(일반)"],
@@ -1895,7 +1895,7 @@
                 "Name": "준상(중간톤)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/21_준상(중간톤).wav",
                 "Quilty": 9,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["최석(일반)"],
@@ -1988,7 +1988,7 @@
                 "Name": "준상(톤다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/22_준상(톤다운).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["최석(일반)"],
@@ -2257,7 +2257,7 @@
                 "Name": "한준(중간톤)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/25_한준(중간톤).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["한준(톤다운)"],
@@ -2350,7 +2350,7 @@
                 "Name": "한준(중간톤, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/26_한준(중간톤, 피치다운).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["한준(일반)"],
@@ -2443,7 +2443,7 @@
                 "Name": "한준(톤다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/27_한준(톤다운).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["한준(일반)"],
@@ -2536,7 +2536,7 @@
                 "Name": "한준(톤다운, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/28_한준(톤다운, 피치다운).wav",
                 "Quilty": 8,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["한준(일반)"],
@@ -2629,7 +2629,7 @@
                 "Name": "한준(슬픔)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/29_한준(슬픔).wav",
                 "Quilty": 9,
-                "Grade": ["Main", "Actor"],
+                "Grade": ["Main", "Caption", "Actor"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": [""],
@@ -2722,7 +2722,7 @@
                 "Name": "한준(슬픔, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/30_한준(슬픔, 피치다운).wav",
                 "Quilty": 9,
-                "Grade": ["Main", "Actor"],
+                "Grade": ["Main", "Caption", "Actor"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["한준(일반)"],
@@ -2903,7 +2903,7 @@
                 "Name": "미선(일반, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/32_미선(일반, 피치다운).wav",
                 "Quilty": 9,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["미선(일반)"],
@@ -3084,7 +3084,7 @@
                 "Name": "주호(일반톤, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/34_주호(일반톤, 피치다운).wav",
                 "Quilty": 9,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["연우(중간톤)"],
@@ -3441,7 +3441,7 @@
                 "Name": "지훈(중간톤)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/38_지훈(중간톤).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["지훈(톤업)"],
@@ -5030,7 +5030,7 @@
                 "Name": "류은(일반, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/56_류은(일반, 피치다운).wav",
                 "Quilty": 9,
-                "Grade": ["Main", "Actor"],
+                "Grade": ["Main", "Caption", "Actor"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["류은(일반)"],
@@ -6267,7 +6267,7 @@
                 "Name": "민지(톤다운, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/70_민지(톤다운, 피치다운).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["민지(톤다운)"],
@@ -6712,7 +6712,7 @@
                 "Name": "범수(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/75_범수(일반).wav",
                 "Quilty": 9.5,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["범수(톤업)"],
@@ -6893,7 +6893,7 @@
                 "Name": "범수(중간톤)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/77_범수(중간톤).wav",
                 "Quilty": 9,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["범수(톤업)"],
@@ -9362,7 +9362,7 @@
                 "Name": "세희(중간톤, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/105_세희(중간톤, 피치다운).wav",
                 "Quilty": 10,
-                "Grade": ["Main"],
+                "Grade": ["Main", "Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["세희(일반)"],

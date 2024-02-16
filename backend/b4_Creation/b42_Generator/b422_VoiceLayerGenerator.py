@@ -239,7 +239,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
             if VoiceData['Choice'] == 'Narrator':
                 NonGenderVoiceVolume = VoiceData['ApiSetting']['volume'] * 1.05
                 VoiceData['ApiSetting']['volume'] = NonGenderVoiceVolume
-                NonGenderVoiceSpeed = VoiceData['ApiSetting']['speed_x'] * 0.97
+                NonGenderVoiceSpeed = VoiceData['ApiSetting']['speed_x'][0] * 100 / 105
                 VoiceData['ApiSetting']['speed_x'] = NonGenderVoiceSpeed
                 NonGenderVoicePitch = VoiceData['ApiSetting']['pitch'] + 1
                 VoiceData['ApiSetting']['pitch'] = NonGenderVoicePitch

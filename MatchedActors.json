@@ -429,7 +429,7 @@
     },
     {
         "CharacterTag": "Character11",
-        "ActorName": "연우(중간톤)",
+        "ActorName": "연우(중간톤, 중성)",
         "ApiSetting": {
             "name": "연우",
             "ApiToken": "None",

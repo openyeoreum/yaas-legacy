@@ -243,6 +243,8 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
                 # VoiceData의 깊은 복사본을 생성
                 ModifiedVoiceData = copy.deepcopy(VoiceData)
                 # 복사본에 대해 변경 적용
+                NonGenderActorName = ModifiedVoiceData['Name'][:-1] + ', 중성)'
+                ModifiedVoiceData['Name'] = NonGenderActorName
                 NonGenderVoiceVolume = ModifiedVoiceData['ApiSetting']['volume'] * 1.05
                 ModifiedVoiceData['ApiSetting']['volume'] = NonGenderVoiceVolume
                 NonGenderVoiceSpeed = ModifiedVoiceData['ApiSetting']['speed_x'][0] * 100 / 105

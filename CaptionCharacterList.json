@@ -1,0 +1,452 @@
+[
+    {
+        "CharacterId": 2,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "연우(중간톤)"
+    },
+    {
+        "CharacterId": 3,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 8
+        },
+        "Name": "연우(중간톤, 피치다운)"
+    },
+    {
+        "CharacterId": 4,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "연우(톤다운)"
+    },
+    {
+        "CharacterId": 5,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "연우(톤다운, 피치다운)"
+    },
+    {
+        "CharacterId": 6,
+        "Quilty": 8,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "유라(톤업)"
+    },
+    {
+        "CharacterId": 8,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "유라(중간톤)"
+    },
+    {
+        "CharacterId": 9,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "유라(중간톤, 피치다운)"
+    },
+    {
+        "CharacterId": 15,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "김건(슬픔)"
+    },
+    {
+        "CharacterId": 16,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 8
+        },
+        "Name": "김건(슬픔, 피치다운)"
+    },
+    {
+        "CharacterId": 21,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "준상(중간톤)"
+    },
+    {
+        "CharacterId": 22,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "준상(톤다운)"
+    },
+    {
+        "CharacterId": 24,
+        "Quilty": 8,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "한준(일반)"
+    },
+    {
+        "CharacterId": 25,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "한준(중간톤)"
+    },
+    {
+        "CharacterId": 26,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "한준(중간톤, 피치다운)"
+    },
+    {
+        "CharacterId": 27,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "한준(톤다운)"
+    },
+    {
+        "CharacterId": 28,
+        "Quilty": 8,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "한준(톤다운, 피치다운)"
+    },
+    {
+        "CharacterId": 29,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 0
+        },
+        "Name": "한준(슬픔)"
+    },
+    {
+        "CharacterId": 30,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "한준(슬픔, 피치다운)"
+    },
+    {
+        "CharacterId": 31,
+        "Quilty": 8,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "미선(일반)"
+    },
+    {
+        "CharacterId": 32,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "미선(일반, 피치다운)"
+    },
+    {
+        "CharacterId": 33,
+        "Quilty": 8,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "주호(일반톤)"
+    },
+    {
+        "CharacterId": 34,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "주호(일반톤, 피치다운)"
+    },
+    {
+        "CharacterId": 36,
+        "Quilty": 8,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "지훈(톤업)"
+    },
+    {
+        "CharacterId": 37,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "지훈(톤업, 피치다운)"
+    },
+    {
+        "CharacterId": 38,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "지훈(중간톤)"
+    },
+    {
+        "CharacterId": 39,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "지훈(중간톤, 피치다운)"
+    },
+    {
+        "CharacterId": 47,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "김경화앵커(일반)"
+    },
+    {
+        "CharacterId": 48,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "김경화앵커(일반, 피치다운)"
+    },
+    {
+        "CharacterId": 49,
+        "Quilty": 7,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "남준(톤다운)"
+    },
+    {
+        "CharacterId": 53,
+        "Quilty": 8.5,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "도희(일반)"
+    },
+    {
+        "CharacterId": 54,
+        "Quilty": 8.8,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "도희(일반, 피치다운)"
+    },
+    {
+        "CharacterId": 56,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 6
+        },
+        "Name": "류은(일반, 피치다운)"
+    },
+    {
+        "CharacterId": 64,
+        "Quilty": 8,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "모건(일반)"
+    },
+    {
+        "CharacterId": 66,
+        "Quilty": 8.5,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "모건(톤다운)"
+    },
+    {
+        "CharacterId": 67,
+        "Quilty": 8,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "모건(슬픔)"
+    },
+    {
+        "CharacterId": 68,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "민준(중간톤)"
+    },
+    {
+        "CharacterId": 69,
+        "Quilty": 9.5,
+        "Role": {
+            "index": "낭독",
+            "Score": 8
+        },
+        "Name": "민지(톤다운)"
+    },
+    {
+        "CharacterId": 70,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "민지(톤다운, 피치다운)"
+    },
+    {
+        "CharacterId": 75,
+        "Quilty": 9.5,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "범수(일반)"
+    },
+    {
+        "CharacterId": 76,
+        "Quilty": 8.5,
+        "Role": {
+            "index": "낭독",
+            "Score": 7
+        },
+        "Name": "범수(톤업)"
+    },
+    {
+        "CharacterId": 77,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 8
+        },
+        "Name": "범수(중간톤)"
+    },
+    {
+        "CharacterId": 84,
+        "Quilty": 8,
+        "Role": {
+            "index": "낭독",
+            "Score": 7
+        },
+        "Name": "서준(일반)"
+    },
+    {
+        "CharacterId": 86,
+        "Quilty": 8.5,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "서준(중간톤)"
+    },
+    {
+        "CharacterId": 87,
+        "Quilty": 7.5,
+        "Role": {
+            "index": "낭독",
+            "Score": 9
+        },
+        "Name": "서준(기쁨)"
+    },
+    {
+        "CharacterId": 88,
+        "Quilty": 8,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "석표(중간톤, 피치다운)"
+    },
+    {
+        "CharacterId": 89,
+        "Quilty": 8.5,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "성호(일반)"
+    },
+    {
+        "CharacterId": 90,
+        "Quilty": 8.5,
+        "Role": {
+            "index": "낭독",
+            "Score": 10
+        },
+        "Name": "성호(중간톤)"
+    },
+    {
+        "CharacterId": 103,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 8
+        },
+        "Name": "세희(일반)"
+    },
+    {
+        "CharacterId": 104,
+        "Quilty": 9,
+        "Role": {
+            "index": "낭독",
+            "Score": 8
+        },
+        "Name": "세희(중간톤)"
+    },
+    {
+        "CharacterId": 105,
+        "Quilty": 10,
+        "Role": {
+            "index": "낭독",
+            "Score": 8
+        },
+        "Name": "세희(중간톤, 피치다운)"
+    }
+]

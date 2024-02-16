@@ -208,7 +208,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
         for VoiceData in VoiceDataSetCharacters:
             # CharacterGender가 '남', '여'가 아니거나, 또는 VoiceData의 성별에 포함될 때 점수 합산 진행
             if (CharacterGender not in ['남', '여']) or (CharacterGender in VoiceData['Voice']['Gender']):
-                if VoiceData['Grade'] == 'Main' and VoiceData['Choice'] == 'No':
+                if 'Main' in VoiceData['Grade'] and VoiceData['Choice'] == 'No':
                     score = VoiceData['Score'][CharacterTag]
                     if score > HighestScore:
                         HighestScore = score
@@ -249,7 +249,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
         for VoiceData in VoiceDataSetCharacters:
             # CharacterGender가 '남', '여'가 아니거나, 또는 VoiceData의 성별에 포함될 때 점수 합산 진행
             if (CharacterGender not in ['남', '여']) or (CharacterGender in VoiceData['Voice']['Gender']):
-                if VoiceData['Choice'] == 'No':
+                if 'Actor' in VoiceData['Grade'] and VoiceData['Choice'] == 'No':
                     score = VoiceData['Score'][CharacterTag]
                     if score > HighestScore:
                         HighestScore = score
@@ -726,10 +726,17 @@ if __name__ == "__main__":
     
     VoiceDataSetCharacters = LoadVoiceDataSetCharacters(voiceDataSet, mainLang)
     
-    CharacterList = []
+    ActorCharacterList = []
+    CaptionCharacterList = []
     for Character in VoiceDataSetCharacters:
-        CharacterDic = {"CharacterId": Character['CharacterId'] ,"Name": Character['Name']}
-        CharacterList.append(CharacterDic)
+        if 'Actor' in Character['Grade']:
+            ActorCharacterDic = {"CharacterId": Character['CharacterId'] ,"Quilty": Character['Quilty'], "Role": Character['Voice']['Role'][1], "Name": Character['Name']}
+            ActorCharacterList.append(ActorCharacterDic)
+        if 'Caption' in Character['Grade'] or 'Main' in Character['Grade']:
+            CaptionCharacterDic = {"CharacterId": Character['CharacterId'] ,"Quilty": Character['Quilty'], "Role": Character['Voice']['Role'][0], "Name": Character['Name']}
+            CaptionCharacterList.append(CaptionCharacterDic)
         
-    with open('CharacterList.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
+    with open('ActorCharacterList.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(ActorCharacterList, json_file, ensure_ascii = False, indent = 4)        
+    with open('CaptionCharacterList.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(CaptionCharacterList, json_file, ensure_ascii = False, indent = 4)

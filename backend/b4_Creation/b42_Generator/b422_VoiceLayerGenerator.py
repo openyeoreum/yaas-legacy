@@ -257,7 +257,7 @@ def ActorChunkSetting(RawChunk):
     ActorChunk = ActorChunk.replace('(0.30)', '')
     ActorChunk = ActorChunk.replace('(0.40)', '')
     ActorChunk = ActorChunk.replace('(0.60)', '곬갌끚')
-    ActorChunk = ActorChunk.replace('(0.70)', '')
+    ActorChunk = ActorChunk.replace('(0.80)', '')
     ActorChunk = ActorChunk.replace('(1.20)', '')
     ActorChunk = ActorChunk.replace('(1.30)', '')
     ActorChunk = ActorChunk.replace('(1.50)', '')
@@ -520,9 +520,10 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
             silence = AudioSegment.silent(duration=PauseDuration_ms)
             CombinedSound += sound_file + silence
             FilesCount += 1
-
-    # 마지막 파일에 추가된 쉬는 시간을 제거
-    CombinedSound = CombinedSound[:-SilenceDuration_ms]
+    
+    # 여기에 5초간의 공백 추가
+    FinalSilence = AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
+    CombinedSound += FinalSilence 
 
     # 최종적으로 합쳐진 음성 파일 저장
     CombinedSound.export(os.path.join(voiceLayerPath, projectName + "_VoiceLayer.wav"), format = "wav")

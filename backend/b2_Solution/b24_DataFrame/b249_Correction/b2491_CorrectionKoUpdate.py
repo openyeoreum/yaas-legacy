@@ -726,7 +726,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                 BeforeEndtoken = tokens[-2]
                 Endtoken = tokens[-1]
                 if ('Ko' in BeforeEndtoken and 'Period' in Endtoken) or ('En' in BeforeEndtoken and 'Period' in Endtoken) or ('SFXEnd' in BeforeEndtoken and 'Period' in Endtoken):
-                    tokens.append({"Pause": "(0.70)"})
+                    tokens.append({"Pause": "(0.80)"})
                     tokens.append({"Enter": "\n"})
                 if len(tokens) >= 5:
                     for k in range(len(tokens) - 5):
@@ -747,10 +747,10 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
             else:
                 tokens.append({"Pause": "(1.30)"})
         elif tag == "Character" and Aftertag == "Character":
-            tokens.append({"Pause": "(0.70)"})
+            tokens.append({"Pause": "(0.80)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Character" and Aftertag == "Narrator":
-            tokens.append({"Pause": "(0.30)"})
+            tokens.append({"Pause": "(0.40)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Character" and Aftertag == "Comment":
             tokens.append({"Pause": "(0.20)"})

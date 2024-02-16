@@ -222,7 +222,6 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
     CaptionVoice = "None"
     SecondaryVoice = "None"
     TertiaryVoice = "None"
-
     # CharacterTag가 "Narrator"일 경우
     if CharacterTag == "Narrator":
         HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Main")
@@ -233,6 +232,19 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
     # CharacterTag가 "CharacterN"일 경우
     else:
         HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Actor")
+
+    # CharacterGender가 '남', '여'가 아닐 경우
+    if (CharacterTag != "Narrator") and (CharacterGender not in ['남', '여']):
+        for VoiceData in VoiceDataSetCharacters:
+            if VoiceData['Choice'] == 'Narrator':
+                NonGenderVoiceVolume = VoiceData['ApiSetting']['volume'] * 1.05
+                VoiceData['ApiSetting']['volume'] = NonGenderVoiceVolume
+                NonGenderVoiceSpeed = VoiceData['ApiSetting']['speed_x'] * 0.97
+                VoiceData['ApiSetting']['speed_x'] = NonGenderVoiceSpeed
+                NonGenderVoicePitch = VoiceData['ApiSetting']['pitch'] + 1
+                VoiceData['ApiSetting']['pitch'] = NonGenderVoicePitch
+                HighestScoreVoice = VoiceData
+                break
 
     return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice
 

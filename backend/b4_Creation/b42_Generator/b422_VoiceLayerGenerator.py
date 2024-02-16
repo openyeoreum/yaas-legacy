@@ -4,6 +4,7 @@ import requests
 import time
 import random
 import re
+import copy
 import sys
 sys.path.append("/yaas")
 
@@ -234,19 +235,26 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
         HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Actor")
 
     # CharacterGender가 '남', '여'가 아닐 경우
+    NonGenderCharacterTag = "None"
     if (CharacterTag != "Narrator") and (CharacterGender not in ['남', '여']):
+        NonGenderCharacterTag = CharacterTag
         for VoiceData in VoiceDataSetCharacters:
             if VoiceData['Choice'] == 'Narrator':
-                NonGenderVoiceVolume = VoiceData['ApiSetting']['volume'] * 1.05
-                VoiceData['ApiSetting']['volume'] = NonGenderVoiceVolume
-                NonGenderVoiceSpeed = VoiceData['ApiSetting']['speed_x'][0] * 100 / 105
-                VoiceData['ApiSetting']['speed_x'] = NonGenderVoiceSpeed
-                NonGenderVoicePitch = VoiceData['ApiSetting']['pitch'] + 1
-                VoiceData['ApiSetting']['pitch'] = NonGenderVoicePitch
-                HighestScoreVoice = VoiceData
+                # VoiceData의 깊은 복사본을 생성
+                ModifiedVoiceData = copy.deepcopy(VoiceData)
+                # 복사본에 대해 변경 적용
+                NonGenderVoiceVolume = ModifiedVoiceData['ApiSetting']['volume'] * 1.05
+                ModifiedVoiceData['ApiSetting']['volume'] = NonGenderVoiceVolume
+                NonGenderVoiceSpeed = ModifiedVoiceData['ApiSetting']['speed_x'][0] * 100 / 105
+                ModifiedVoiceData['ApiSetting']['speed_x'] = NonGenderVoiceSpeed
+                NonGenderVoicePitch = ModifiedVoiceData['ApiSetting']['pitch'] + 1
+                ModifiedVoiceData['ApiSetting']['pitch'] = NonGenderVoicePitch
+
+                # 변경된 복사본을 HighestScoreVoice로 사용
+                HighestScoreVoice = ModifiedVoiceData
                 break
 
-    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice
+    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NonGenderCharacterTag
 
 # 낭독 TextSetting
 def ActorChunkSetting(RawChunk):
@@ -300,7 +308,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
         CharacterTag = character['CharacterTag']
         CharacterGender = character['CharacterGender']
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
-        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender)
+        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NonGenderCharacterTag = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender)
         MatchedActor = {'CharacterTag': CharacterTag, 'ActorName': HighestScoreVoice['Name'], 'ApiSetting': HighestScoreVoice['ApiSetting']}
         MatchedActors.append(MatchedActor)
         if CaptionVoice != "None":
@@ -313,18 +321,20 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
             TertiaryActor = {'CharacterTag': 'TertiaryNarrator', 'ActorName': TertiaryVoice['Name'], 'ApiSetting': TertiaryVoice['ApiSetting']}
             MatchedActors.append(TertiaryActor)
 
-    # ### 테스트 후 삭제 ###
-    # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
-    # with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
-    # with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ###
+    ### 테스트 후 삭제 ###
+    with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
+    with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ###
     
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
-        if GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
+        if (GenerationKoChunks['Tag'] == "Character") and (GenerationKoChunks['Voice']['CharacterTag'] == "Narrator"):
+            GenerationKoChunks['Voice']['CharacterTag'] = NonGenderCharacterTag
+        elif GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
             ChunkCharacterTag = 'Caption'
             GenerationKoChunks['Voice']['CharacterTag'] = 'Caption'
         else:
@@ -340,10 +350,10 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
                     GenerationKoChunks['Chunk'] = [part + "(0.60)" for part in parts[:-1]] + [parts[-1]]
                 GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
                 
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
     return MatchedActors, SelectionGenerationKoChunks
     
@@ -510,7 +520,6 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
     FilteredFiles = SortAndRemoveDuplicates(VoiceLayerFileName, Files)
     
     CombinedSound = AudioSegment.empty()
-    SilenceDuration_ms = 1000  # 기본값, 실제로는 사용되지 않음
 
     FilesCount = 0
     for i in range(len(EditGenerationKoChunks)):

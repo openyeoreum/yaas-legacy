@@ -525,9 +525,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
     # VoiceFilePattern = r".*?_(\d+)_([가-힣]+\([가-힣]+\)).*?\.wav"
     VoiceFilePattern = r".*?_(\d+)_([가-힣]+\(.*?\)).*?\.wav"
     for i in range(len(RawFiles)):
-        print(RawFiles[i])
         VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
-        print(VoiceFileMatch)
         if VoiceFileMatch:
             chunkid, actorname = VoiceFileMatch.groups()
         for j in range(len(EditGenerationKoChunks)):

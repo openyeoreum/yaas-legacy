@@ -244,12 +244,19 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
                 # VoiceData의 깊은 복사본을 생성
                 ModifiedVoiceData = copy.deepcopy(VoiceData)
                 # 복사본에 대해 변경 적용
+                # 이름
                 NeuterActorName = ModifiedVoiceData['Name'][:-1] + ', 중성)'
                 ModifiedVoiceData['Name'] = NeuterActorName
+                # 감정
+                NeuterVoiceEmotion = ModifiedVoiceData['ApiSetting']['emotion_tone_preset']['neuter_emotion_tone_preset']
+                ModifiedVoiceData['ApiSetting']['emotion_tone_preset']['emotion_tone_preset'] = NeuterVoiceEmotion
+                # 볼륨
                 NeuterVoiceVolume = ModifiedVoiceData['ApiSetting']['volume'] * 1.05
                 ModifiedVoiceData['ApiSetting']['volume'] = NeuterVoiceVolume
+                # 속도
                 NeuterVoiceSpeed = [ModifiedVoiceData['ApiSetting']['speed_x'][0] * 100 / 105]
                 ModifiedVoiceData['ApiSetting']['speed_x'] = NeuterVoiceSpeed
+                # 피치
                 NeuterVoicePitch = ModifiedVoiceData['ApiSetting']['pitch'] + 1
                 ModifiedVoiceData['ApiSetting']['pitch'] = NeuterVoicePitch
 

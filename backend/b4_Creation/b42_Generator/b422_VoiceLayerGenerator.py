@@ -235,29 +235,29 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
         HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Actor")
 
     # CharacterGender가 '남', '여'가 아닐 경우 (중성캐릭터의 나레이터 대체)
-    NonGenderCharacterTag = "None"
-    NonGenderActorName = "None"
+    NeuterCharacterTag = "None"
+    NeuterActorName = "None"
     if (CharacterTag != "Narrator") and (CharacterGender not in ['남', '여']):
-        NonGenderCharacterTag = CharacterTag
+        NeuterCharacterTag = CharacterTag
         for VoiceData in VoiceDataSetCharacters:
             if VoiceData['Choice'] == 'Narrator':
                 # VoiceData의 깊은 복사본을 생성
                 ModifiedVoiceData = copy.deepcopy(VoiceData)
                 # 복사본에 대해 변경 적용
-                NonGenderActorName = ModifiedVoiceData['Name'][:-1] + ', 중성)'
-                ModifiedVoiceData['Name'] = NonGenderActorName
-                NonGenderVoiceVolume = ModifiedVoiceData['ApiSetting']['volume'] * 1.05
-                ModifiedVoiceData['ApiSetting']['volume'] = NonGenderVoiceVolume
-                NonGenderVoiceSpeed = [ModifiedVoiceData['ApiSetting']['speed_x'][0] * 100 / 105]
-                ModifiedVoiceData['ApiSetting']['speed_x'] = NonGenderVoiceSpeed
-                NonGenderVoicePitch = ModifiedVoiceData['ApiSetting']['pitch'] + 1
-                ModifiedVoiceData['ApiSetting']['pitch'] = NonGenderVoicePitch
+                NeuterActorName = ModifiedVoiceData['Name'][:-1] + ', 중성)'
+                ModifiedVoiceData['Name'] = NeuterActorName
+                NeuterVoiceVolume = ModifiedVoiceData['ApiSetting']['volume'] * 1.05
+                ModifiedVoiceData['ApiSetting']['volume'] = NeuterVoiceVolume
+                NeuterVoiceSpeed = [ModifiedVoiceData['ApiSetting']['speed_x'][0] * 100 / 105]
+                ModifiedVoiceData['ApiSetting']['speed_x'] = NeuterVoiceSpeed
+                NeuterVoicePitch = ModifiedVoiceData['ApiSetting']['pitch'] + 1
+                ModifiedVoiceData['ApiSetting']['pitch'] = NeuterVoicePitch
 
                 # 변경된 복사본을 HighestScoreVoice로 사용
                 HighestScoreVoice = ModifiedVoiceData
                 break
 
-    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NonGenderActorName, NonGenderCharacterTag
+    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NeuterActorName, NeuterCharacterTag
 
 # 낭독 TextSetting
 def ActorChunkSetting(RawChunk):
@@ -315,7 +315,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
         CharacterTag = character['CharacterTag']
         CharacterGender = character['CharacterGender']
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
-        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NonGenderActorName, NonGenderCharacterTag = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender)
+        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NeuterActorName, NeuterCharacterTag = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender)
         MatchedActor = {'CharacterTag': CharacterTag, 'ActorName': HighestScoreVoice['Name'], 'ApiSetting': HighestScoreVoice['ApiSetting']}
         MatchedActors.append(MatchedActor)
         if CaptionVoice != "None":
@@ -328,11 +328,11 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
             TertiaryActor = {'CharacterTag': 'TertiaryNarrator', 'ActorName': TertiaryVoice['Name'], 'ApiSetting': TertiaryVoice['ApiSetting']}
             MatchedActors.append(TertiaryActor)
         ## 중성 캐릭터를 VoiceDataSetCharacters에 합치기
-        if NonGenderCharacterTag != 'None':
-            NonGenderVoiceId = VoiceDataSetCharacters[-1]['CharacterId'] + 1
-            HighestScoreVoice['CharacterId'] = NonGenderVoiceId
-            NonGenderVoice = HighestScoreVoice
-            VoiceDataSetCharacters.append(NonGenderVoice)
+        if NeuterCharacterTag != 'None':
+            NeuterVoiceId = VoiceDataSetCharacters[-1]['CharacterId'] + 1
+            HighestScoreVoice['CharacterId'] = NeuterVoiceId
+            NeuterVoice = HighestScoreVoice
+            VoiceDataSetCharacters.append(NeuterVoice)
 
     # ### 테스트 후 삭제 ###
     # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
@@ -347,8 +347,8 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
     for GenerationKoChunks in SelectionGenerationKoChunks:
         ## 중성 캐릭터의 ActorName과 CharacterTag 변경
         if (GenerationKoChunks['Tag'] == "Character") and (GenerationKoChunks['Voice']['CharacterTag'] == "Narrator"):
-            GenerationKoChunks['ActorName'] = NonGenderActorName
-            GenerationKoChunks['Voice']['CharacterTag'] = NonGenderCharacterTag
+            GenerationKoChunks['ActorName'] = NeuterActorName
+            GenerationKoChunks['Voice']['CharacterTag'] = NeuterCharacterTag
             
         if GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
             ChunkCharacterTag = 'Caption'

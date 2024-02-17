@@ -17,8 +17,7 @@
                     "EnVoice": ["None"],
                     "CaptionVoice": ["None"],
                     "SecondaryVoice": ["None"],
-                    "TertiaryVoice": ["None"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["None"]
                 },
                 "Context": {
                     "Genre": [
@@ -199,8 +198,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["연우(톤다운)"],
                     "SecondaryVoice": ["연우(일반, 피치다운)"],
-                    "TertiaryVoice": ["한준(중간톤)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["한준(중간톤)"]
                 },
                 "Context": {
                     "Genre": [
@@ -268,6 +266,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "neuter_emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -381,8 +380,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["연우(중간톤)"],
                     "SecondaryVoice": ["연우(일반, 피치다운)"],
-                    "TertiaryVoice": ["한준(중간톤)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["한준(중간톤)"]
                 },
                 "Context": {
                     "Genre": [
@@ -739,8 +737,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["유라(중간톤, 피치다운)"],
                     "SecondaryVoice": ["유라(톤업, 피치다운)"],
-                    "TertiaryVoice": ["유라(슬픔)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["유라(슬픔)"]
                 },
                 "Context": {
                     "Genre": [
@@ -833,8 +830,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["유라(중간톤)"],
                     "SecondaryVoice": ["유라(톤업, 피치다운)"],
-                    "TertiaryVoice": ["유라(슬픔)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["유라(슬픔)"]
                 },
                 "Context": {
                     "Genre": [
@@ -1367,8 +1363,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["김건(일반)"],
                     "SecondaryVoice": ["김건(슬픔, 피치다운)"],
-                    "TertiaryVoice": ["김건(일반, 피치다운)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["김건(일반, 피치다운)"]
                 },
                 "Context": {
                     "Genre": [
@@ -1461,8 +1456,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["김건(일반)"],
                     "SecondaryVoice": ["김건(슬픔)"],
-                    "TertiaryVoice": ["김건(일반, 피치다운)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["김건(일반, 피치다운)"]
                 },
                 "Context": {
                     "Genre": [
@@ -1907,8 +1901,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["최석(일반)"],
                     "SecondaryVoice": ["준상(톤다운)"],
-                    "TertiaryVoice": ["준상(슬픔)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["준상(슬픔)"]
                 },
                 "Context": {
                     "Genre": [
@@ -2001,8 +1994,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["최석(일반)"],
                     "SecondaryVoice": ["준상(일반)"],
-                    "TertiaryVoice": ["준상(슬픔)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["준상(슬픔)"]
                 },
                 "Context": {
                     "Genre": [
@@ -2271,8 +2263,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["한준(톤다운)"],
                     "SecondaryVoice": ["한준(일반)"],
-                    "TertiaryVoice": ["한준(중간톤, 피치다운)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["한준(중간톤, 피치다운)"]
                 },
                 "Context": {
                     "Genre": [
@@ -2365,8 +2356,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["한준(일반)"],
                     "SecondaryVoice": ["한준(중간톤)"],
-                    "TertiaryVoice": ["한준(톤다운)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["한준(톤다운)"]
                 },
                 "Context": {
                     "Genre": [
@@ -2459,8 +2449,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["한준(일반)"],
                     "SecondaryVoice": ["한준(중간톤)"],
-                    "TertiaryVoice": ["한준(톤다운, 피치다운)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["한준(톤다운, 피치다운)"]
                 },
                 "Context": {
                     "Genre": [
@@ -2553,8 +2542,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["한준(일반)"],
                     "SecondaryVoice": ["한준(중간톤, 피치다운)"],
-                    "TertiaryVoice": ["한준(중간톤)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["한준(중간톤)"]
                 },
                 "Context": {
                     "Genre": [
@@ -2647,8 +2635,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": [""],
                     "SecondaryVoice": [""],
-                    "TertiaryVoice": [""],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": [""]
                 },
                 "Context": {
                     "Genre": [
@@ -2741,8 +2728,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["한준(일반)"],
                     "SecondaryVoice": ["한준(중간톤, 피치다운)"],
-                    "TertiaryVoice": ["한준(중간톤)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["한준(중간톤)"]
                 },
                 "Context": {
                     "Genre": [
@@ -2923,8 +2909,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["미선(일반)"],
                     "SecondaryVoice": ["민지(톤다운, 피치다운)"],
-                    "TertiaryVoice": ["민지(톤다운)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["민지(톤다운)"]
                 },
                 "Context": {
                     "Genre": [
@@ -3105,8 +3090,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["연우(중간톤)"],
                     "SecondaryVoice": ["주호(일반톤)"],
-                    "TertiaryVoice": ["지훈(중간톤, 피치다운)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["지훈(중간톤, 피치다운)"]
                 },
                 "Context": {
                     "Genre": [
@@ -3463,8 +3447,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["지훈(톤업)"],
                     "SecondaryVoice": ["지훈(중간톤, 피치다운)"],
-                    "TertiaryVoice": ["지훈(톤업, 피치다운)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["지훈(톤업, 피치다운)"]
                 },
                 "Context": {
                     "Genre": [
@@ -5053,8 +5036,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["류은(일반)"],
                     "SecondaryVoice": ["류은(중간톤)"],
-                    "TertiaryVoice": ["류은(기쁨)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["류은(기쁨)"]
                 },
                 "Context": {
                     "Genre": [
@@ -6291,8 +6273,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["민지(톤다운)"],
                     "SecondaryVoice": ["세나(일반)"],
-                    "TertiaryVoice": ["애란(기쁨)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["애란(기쁨)"]
                 },
                 "Context": {
                     "Genre": [
@@ -6737,8 +6718,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["범수(톤업)"],
                     "SecondaryVoice": ["범수(중간톤)"],
-                    "TertiaryVoice": ["범수(슬픔)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["범수(슬픔)"]
                 },
                 "Context": {
                     "Genre": [
@@ -6919,8 +6899,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["범수(톤업)"],
                     "SecondaryVoice": ["범수(일반)"],
-                    "TertiaryVoice": ["범수(슬픔)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["범수(슬픔)"]
                 },
                 "Context": {
                     "Genre": [
@@ -9389,8 +9368,7 @@
                     "EnVoice": [""],
                     "CaptionVoice": ["세희(일반)"],
                     "SecondaryVoice": ["세희(중간톤)"],
-                    "TertiaryVoice": ["민지(화남)"],
-                    "NeuterVoice": [""]
+                    "TertiaryVoice": ["민지(화남)"]
                 },
                 "Context": {
                     "Genre": [

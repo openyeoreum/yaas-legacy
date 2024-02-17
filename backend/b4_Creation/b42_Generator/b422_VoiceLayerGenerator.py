@@ -236,6 +236,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
 
     # CharacterGender가 '남', '여'가 아닐 경우
     NonGenderCharacterTag = "None"
+    NonGenderActorName = "None"
     if (CharacterTag != "Narrator") and (CharacterGender not in ['남', '여']):
         NonGenderCharacterTag = CharacterTag
         for VoiceData in VoiceDataSetCharacters:
@@ -256,7 +257,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
                 HighestScoreVoice = ModifiedVoiceData
                 break
 
-    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NonGenderCharacterTag
+    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NonGenderActorName, NonGenderCharacterTag
 
 # 낭독 TextSetting
 def ActorChunkSetting(RawChunk):
@@ -267,7 +268,11 @@ def ActorChunkSetting(RawChunk):
     ActorChunk = ActorChunk.replace('(0.30)', '')
     ActorChunk = ActorChunk.replace('(0.40)', '')
     ActorChunk = ActorChunk.replace('(0.60)', '곬갌끚')
+    ActorChunk = ActorChunk.replace('(0.70)', '')
     ActorChunk = ActorChunk.replace('(0.80)', '')
+    ActorChunk = ActorChunk.replace('(0.90)', '')
+    ActorChunk = ActorChunk.replace('(1.00)', '')
+    ActorChunk = ActorChunk.replace('(1.10)', '')
     ActorChunk = ActorChunk.replace('(1.20)', '')
     ActorChunk = ActorChunk.replace('(1.30)', '')
     ActorChunk = ActorChunk.replace('(1.50)', '')
@@ -310,7 +315,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
         CharacterTag = character['CharacterTag']
         CharacterGender = character['CharacterGender']
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
-        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NonGenderCharacterTag = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender)
+        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NonGenderActorName, NonGenderCharacterTag = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender)
         MatchedActor = {'CharacterTag': CharacterTag, 'ActorName': HighestScoreVoice['Name'], 'ApiSetting': HighestScoreVoice['ApiSetting']}
         MatchedActors.append(MatchedActor)
         if CaptionVoice != "None":
@@ -322,26 +327,30 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
         if TertiaryVoice != "None":
             TertiaryActor = {'CharacterTag': 'TertiaryNarrator', 'ActorName': TertiaryVoice['Name'], 'ApiSetting': TertiaryVoice['ApiSetting']}
             MatchedActors.append(TertiaryActor)
+        ## 중성 캐릭터를 VoiceDataSetCharacters에 합치기
         if NonGenderCharacterTag != 'None':
             NonGenderVoiceId = VoiceDataSetCharacters[-1]['CharacterId'] + 1
             HighestScoreVoice['CharacterId'] = NonGenderVoiceId
             NonGenderVoice = HighestScoreVoice
             VoiceDataSetCharacters.append(NonGenderVoice)
 
-    ### 테스트 후 삭제 ###
-    with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
-    with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
-    with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
-    ### 테스트 후 삭제 ###
+    # ### 테스트 후 삭제 ###
+    # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    # with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
+    # with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
+    # ### 테스트 후 삭제 ###
     
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
+        ## 중성 캐릭터의 ActorName과 CharacterTag 변경
         if (GenerationKoChunks['Tag'] == "Character") and (GenerationKoChunks['Voice']['CharacterTag'] == "Narrator"):
+            GenerationKoChunks['ActorName'] = NonGenderActorName
             GenerationKoChunks['Voice']['CharacterTag'] = NonGenderCharacterTag
-        elif GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
+            
+        if GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
             ChunkCharacterTag = 'Caption'
             GenerationKoChunks['Voice']['CharacterTag'] = 'Caption'
         else:
@@ -357,10 +366,10 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
                     GenerationKoChunks['Chunk'] = [part + "(0.60)" for part in parts[:-1]] + [parts[-1]]
                 GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
                 
-    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
     return MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters
     
@@ -720,19 +729,19 @@ if __name__ == "__main__":
     mode = "Manual"
     #########################################################################
     
-    VoiceDataSetCharacters = LoadVoiceDataSetCharacters(voiceDataSet, mainLang)
+    # VoiceDataSetCharacters = LoadVoiceDataSetCharacters(voiceDataSet, mainLang)
     
-    ActorCharacterList = []
-    CaptionCharacterList = []
-    for Character in VoiceDataSetCharacters:
-        if 'Actor' in Character['Grade']:
-            ActorCharacterDic = {"CharacterId": Character['CharacterId'] ,"Quilty": Character['Quilty'], "Role": Character['Voice']['Role'][1], "Name": Character['Name']}
-            ActorCharacterList.append(ActorCharacterDic)
-        if 'Caption' in Character['Grade'] or 'Main' in Character['Grade']:
-            CaptionCharacterDic = {"CharacterId": Character['CharacterId'] ,"Quilty": Character['Quilty'], "Role": Character['Voice']['Role'][0], "Name": Character['Name']}
-            CaptionCharacterList.append(CaptionCharacterDic)
+    # ActorCharacterList = []
+    # CaptionCharacterList = []
+    # for Character in VoiceDataSetCharacters:
+    #     if 'Actor' in Character['Grade']:
+    #         ActorCharacterDic = {"CharacterId": Character['CharacterId'] ,"Quilty": Character['Quilty'], "Role": Character['Voice']['Role'][1], "Name": Character['Name']}
+    #         ActorCharacterList.append(ActorCharacterDic)
+    #     if 'Caption' in Character['Grade'] or 'Main' in Character['Grade']:
+    #         CaptionCharacterDic = {"CharacterId": Character['CharacterId'] ,"Quilty": Character['Quilty'], "Role": Character['Voice']['Role'][0], "Name": Character['Name']}
+    #         CaptionCharacterList.append(CaptionCharacterDic)
         
-    with open('ActorCharacterList.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(ActorCharacterList, json_file, ensure_ascii = False, indent = 4)        
-    with open('CaptionCharacterList.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(CaptionCharacterList, json_file, ensure_ascii = False, indent = 4)
+    # with open('ActorCharacterList.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(ActorCharacterList, json_file, ensure_ascii = False, indent = 4)        
+    # with open('CaptionCharacterList.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(CaptionCharacterList, json_file, ensure_ascii = False, indent = 4)

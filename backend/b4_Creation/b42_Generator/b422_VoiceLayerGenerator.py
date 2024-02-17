@@ -234,7 +234,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
     else:
         HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Actor")
 
-    # CharacterGender가 '남', '여'가 아닐 경우
+    # CharacterGender가 '남', '여'가 아닐 경우 (중성캐릭터의 나레이터 대체)
     NonGenderCharacterTag = "None"
     NonGenderActorName = "None"
     if (CharacterTag != "Narrator") and (CharacterGender not in ['남', '여']):

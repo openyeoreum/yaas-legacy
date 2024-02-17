@@ -248,7 +248,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
                 ModifiedVoiceData['Name'] = NonGenderActorName
                 NonGenderVoiceVolume = ModifiedVoiceData['ApiSetting']['volume'] * 1.05
                 ModifiedVoiceData['ApiSetting']['volume'] = NonGenderVoiceVolume
-                NonGenderVoiceSpeed = ModifiedVoiceData['ApiSetting']['speed_x'][0] * 100 / 105
+                NonGenderVoiceSpeed = [ModifiedVoiceData['ApiSetting']['speed_x'][0] * 100 / 105]
                 ModifiedVoiceData['ApiSetting']['speed_x'] = NonGenderVoiceSpeed
                 NonGenderVoicePitch = ModifiedVoiceData['ApiSetting']['pitch'] + 1
                 ModifiedVoiceData['ApiSetting']['pitch'] = NonGenderVoicePitch
@@ -522,9 +522,12 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
         RawFiles.remove(VoiceLayerFileName)
     # 성우 변경 파일이 생성되었을 경우 이전 성우 파일명으로 새로운 RawFiles 리스트에서 생성
     Files = []
-    VoiceFilePattern = r".*?_(\d+)_([가-힣]+\([가-힣]+\)).*?\.wav"
+    # VoiceFilePattern = r".*?_(\d+)_([가-힣]+\([가-힣]+\)).*?\.wav"
+    VoiceFilePattern = r".*?_(\d+)_([가-힣]+\(.*?\)).*?\.wav"
     for i in range(len(RawFiles)):
+        print(RawFiles[i])
         VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
+        print(VoiceFileMatch)
         if VoiceFileMatch:
             chunkid, actorname = VoiceFileMatch.groups()
         for j in range(len(EditGenerationKoChunks)):

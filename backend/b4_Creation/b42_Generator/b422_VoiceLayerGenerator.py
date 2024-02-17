@@ -259,6 +259,9 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
                 # 피치
                 NeuterVoicePitch = ModifiedVoiceData['ApiSetting']['pitch'] + 1
                 ModifiedVoiceData['ApiSetting']['pitch'] = NeuterVoicePitch
+                # 라스트피치
+                NeuterVoiceLastPitch = [-2]
+                ModifiedVoiceData['ApiSetting']['last_pitch'] = NeuterVoiceLastPitch
 
                 # 변경된 복사본을 HighestScoreVoice로 사용
                 HighestScoreVoice = ModifiedVoiceData
@@ -275,7 +278,9 @@ def ActorChunkSetting(RawChunk):
     ActorChunk = ActorChunk.replace('(0.30)', '')
     ActorChunk = ActorChunk.replace('(0.40)', '')
     ActorChunk = ActorChunk.replace('(0.60)', '곬갌끚')
+    ActorChunk = ActorChunk.replace('(0.65)', '')
     ActorChunk = ActorChunk.replace('(0.70)', '')
+    ActorChunk = ActorChunk.replace('(0.75)', '')
     ActorChunk = ActorChunk.replace('(0.80)', '')
     ActorChunk = ActorChunk.replace('(0.90)', '')
     ActorChunk = ActorChunk.replace('(1.00)', '')

@@ -104,7 +104,7 @@
                 "CharacterId": 1,
                 "Name": "연우(일반, 피치다운)",
                 "SamplePath": "/Users/yeoreum/yaas/storage/s1_Yeoreum/s14_VoiceStorage/1_연우(일반, 피치다운).wav",
-                "Quilty": 7,
+                "Quilty": 0,
                 "Grade": ["Sub"],
                 "Options": "None",
                 "Context": {
@@ -266,7 +266,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
-                        "neuter_emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -277,6 +277,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -448,6 +449,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -458,6 +460,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -805,6 +808,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -815,6 +819,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1]
@@ -898,6 +903,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -908,6 +914,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": -1,
+                    "neuter_pitch": -2,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1]
@@ -1005,7 +1012,7 @@
                 "CharacterId": 11,
                 "Name": "김건(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/11_김건(일반).wav",
-                "Quilty": 5,
+                "Quilty": 0,
                 "Grade": ["None"],
                 "Options": "None",
                 "Context": {
@@ -1093,7 +1100,7 @@
                 "CharacterId": 12,
                 "Name": "김건(일반, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/12_김건(일반, 피치다운).wav",
-                "Quilty": 5,
+                "Quilty": 0,
                 "Grade": ["None"],
                 "Options": "None",
                 "Context": {
@@ -1431,6 +1438,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -1441,6 +1449,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -1524,6 +1533,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -1534,6 +1544,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": -1,
+                    "neuter_pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -1969,6 +1980,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -1979,6 +1991,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -2062,6 +2075,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -2072,6 +2086,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -2331,6 +2346,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -2341,6 +2357,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": 1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -2424,6 +2441,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -2434,6 +2452,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": -1,
+                    "neuter_pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -2517,6 +2536,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -2527,6 +2547,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -2610,6 +2631,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -2620,6 +2642,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": -1,
+                    "neuter_pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -2703,6 +2726,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -2713,6 +2737,7 @@
                     "speed_x": [1.1],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": 1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -2796,6 +2821,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -2806,6 +2832,7 @@
                     "speed_x": [1.1],
                     "tempo": 1.0,
                     "pitch": -1,
+                    "neuter_pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -2904,7 +2931,7 @@
                 "Name": "미선(일반, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/32_미선(일반, 피치다운).wav",
                 "Quilty": 9,
-                "Grade": ["Main", "Caption"],
+                "Grade": ["Caption"],
                 "Options": {
                     "EnVoice": [""],
                     "CaptionVoice": ["미선(일반)"],
@@ -2976,7 +3003,7 @@
                     "name": "미선",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
+                        "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -3157,7 +3184,8 @@
                     "name": "주호",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
+                        "emotion_tone_preset": ["normal-1", "normal-2"],
+                        "neuter_emotion_tone_preset": ["normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -3168,6 +3196,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": -1,
+                    "neuter_pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -3515,6 +3544,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -3525,6 +3555,7 @@
                     "speed_x": [1.1],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": 1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1]
@@ -4942,7 +4973,7 @@
                 "CharacterId": 55,
                 "Name": "류은(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/55_류은(일반).wav",
-                "Quilty": 9,
+                "Quilty": 0,
                 "Grade": ["Actor"],
                 "Options": "None",
                 "Context": {
@@ -5103,7 +5134,8 @@
                     "name": "류은",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
+                        "emotion_tone_preset": ["normal-3", "normal-4"],
+                        "neuter_emotion_tone_preset": ["normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -5114,6 +5146,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": -1,
+                    "neuter_pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2]
@@ -6341,6 +6374,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -6351,6 +6385,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": -1,
+                    "neuter_pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -6786,6 +6821,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -6796,6 +6832,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": 1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1]
@@ -6967,6 +7004,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -6977,6 +7015,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": 0,
+                    "neuter_pitch": 1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]
@@ -9436,6 +9475,7 @@
                     "ApiToken": "None",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -9446,6 +9486,7 @@
                     "speed_x": [1.05],
                     "tempo": 1.0,
                     "pitch": -1,
+                    "neuter_pitch": 1,
                     "max_seconds": 60,
                     "force_length": 0,
                     "last_pitch": [-2, -1, 0]

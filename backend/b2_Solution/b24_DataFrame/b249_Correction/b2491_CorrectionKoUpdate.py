@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import random
 import time
 import difflib
 import sys
@@ -726,7 +727,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                 BeforeEndtoken = tokens[-2]
                 Endtoken = tokens[-1]
                 if ('Ko' in BeforeEndtoken and 'Period' in Endtoken) or ('En' in BeforeEndtoken and 'Period' in Endtoken) or ('SFXEnd' in BeforeEndtoken and 'Period' in Endtoken):
-                    tokens.append({"Pause": "(0.80)"})
+                    tokens.append({"Pause": random.choice("(0.65)", "(0.70)", "(0.75)", "(0.80)")})
                     tokens.append({"Enter": "\n"})
                 if len(tokens) >= 5:
                     for k in range(len(tokens) - 5):

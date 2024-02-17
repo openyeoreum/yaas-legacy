@@ -322,6 +322,11 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
         if TertiaryVoice != "None":
             TertiaryActor = {'CharacterTag': 'TertiaryNarrator', 'ActorName': TertiaryVoice['Name'], 'ApiSetting': TertiaryVoice['ApiSetting']}
             MatchedActors.append(TertiaryActor)
+        if NonGenderCharacterTag != 'None':
+            NonGenderVoiceId = VoiceDataSetCharacters[-1]['CharacterId'] + 1
+            HighestScoreVoice['CharacterId'] = NonGenderVoiceId
+            NonGenderVoice = HighestScoreVoice
+            VoiceDataSetCharacters.append(NonGenderVoice)
 
     ### 테스트 후 삭제 ###
     with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
@@ -357,7 +362,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
         json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
     ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
-    return MatchedActors, SelectionGenerationKoChunks
+    return MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters
     
 ## VoiceLayerPath(TTS 저장) 경로 생성
 def VoiceLayerPathGen(projectName, email, FileName):
@@ -543,7 +548,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
-    MatchedActors, SelectionGenerationKoChunks = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
+    MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
     for MatchedActor in MatchedActors:
         Actor = MatchedActor['ActorName']
 
@@ -610,9 +615,6 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
         UpdateTQDM = tqdm(GenerationKoChunks,
                         total = GenerationKoChunksCount,
                         desc = 'VoiceLayerGenerator')
-        
-        ## VoiceDataSet 불러오기
-        VoiceDataSetCharacters = LoadVoiceDataSetCharacters(voiceDataSet, MainLang)
 
         ## 히스토리 불러오기
         fileName = projectName + '_' + 'VoiceLayer_History_' + Actor + '.json'

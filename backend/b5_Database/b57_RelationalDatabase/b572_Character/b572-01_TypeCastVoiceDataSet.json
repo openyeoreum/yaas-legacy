@@ -13,12 +13,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/.wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": {
-                    "EnVoice": ["None"],
-                    "CaptionVoice": ["None"],
-                    "SecondaryVoice": ["None"],
-                    "TertiaryVoice": ["None"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -106,7 +100,6 @@
                 "SamplePath": "/Users/yeoreum/yaas/storage/s1_Yeoreum/s14_VoiceStorage/1_연우(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["Sub"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -194,12 +187,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/2_연우(중간톤).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["연우(톤다운)"],
-                    "SecondaryVoice": ["연우(일반, 피치다운)"],
-                    "TertiaryVoice": ["한준(중간톤)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -289,7 +276,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/3_연우(중간톤, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -377,12 +363,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/4_연우(톤다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["연우(중간톤)"],
-                    "SecondaryVoice": ["연우(일반, 피치다운)"],
-                    "TertiaryVoice": ["한준(중간톤)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -472,7 +452,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/5_연우(톤다운, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -560,7 +539,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/6_유라(톤업).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -648,7 +626,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/7_유라(톤업, 피치다운).wav",
                 "Quilty": 6,
                 "Grade": ["Sub"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -736,12 +713,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/8_유라(중간톤).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["유라(중간톤, 피치다운)"],
-                    "SecondaryVoice": ["유라(톤업, 피치다운)"],
-                    "TertiaryVoice": ["유라(슬픔)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -831,12 +802,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/9_유라(중간톤, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["유라(중간톤)"],
-                    "SecondaryVoice": ["유라(톤업, 피치다운)"],
-                    "TertiaryVoice": ["유라(슬픔)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -926,7 +891,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/10_유라(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -1014,7 +978,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/11_김건(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -1102,7 +1065,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/12_김건(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 5},
@@ -1190,7 +1152,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/13_김건(중간톤).wav",
                 "Quilty": 4,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 5},
@@ -1278,7 +1239,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/14_김건(중간톤, 피치다운).wav",
                 "Quilty": 4,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -1366,12 +1326,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/15_김건(슬픔).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption", "Actor"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["김건(일반)"],
-                    "SecondaryVoice": ["김건(슬픔, 피치다운)"],
-                    "TertiaryVoice": ["김건(일반, 피치다운)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -1461,12 +1415,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/16_김건(슬픔, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption", "Actor"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["김건(일반)"],
-                    "SecondaryVoice": ["김건(슬픔)"],
-                    "TertiaryVoice": ["김건(일반, 피치다운)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -1556,7 +1504,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/17_김건(기쁨).wav",
                 "Quilty": 4,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -1644,7 +1591,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/18_김건(기쁨, 피치다운).wav",
                 "Quilty": 4,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -1732,7 +1678,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/19_김건(화남).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -1820,7 +1765,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/20_김건(화남, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -1908,12 +1852,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/21_준상(중간톤).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["최석(일반)"],
-                    "SecondaryVoice": ["준상(톤다운)"],
-                    "TertiaryVoice": ["준상(슬픔)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -2003,12 +1941,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/22_준상(톤다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["최석(일반)"],
-                    "SecondaryVoice": ["준상(일반)"],
-                    "TertiaryVoice": ["준상(슬픔)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -2098,7 +2030,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/23_준상(슬픔).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -2186,7 +2117,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/24_한준(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -2274,12 +2204,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/25_한준(중간톤).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["한준(톤다운)"],
-                    "SecondaryVoice": ["한준(일반)"],
-                    "TertiaryVoice": ["한준(중간톤, 피치다운)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -2369,12 +2293,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/26_한준(중간톤, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["한준(일반)"],
-                    "SecondaryVoice": ["한준(중간톤)"],
-                    "TertiaryVoice": ["한준(톤다운)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -2464,12 +2382,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/27_한준(톤다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["한준(일반)"],
-                    "SecondaryVoice": ["한준(중간톤)"],
-                    "TertiaryVoice": ["한준(톤다운, 피치다운)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -2559,12 +2471,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/28_한준(톤다운, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["한준(일반)"],
-                    "SecondaryVoice": ["한준(중간톤, 피치다운)"],
-                    "TertiaryVoice": ["한준(중간톤)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -2654,12 +2560,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/29_한준(슬픔).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption", "Actor"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": [""],
-                    "SecondaryVoice": [""],
-                    "TertiaryVoice": [""]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -2749,12 +2649,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/30_한준(슬픔, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption", "Actor"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["한준(일반)"],
-                    "SecondaryVoice": ["한준(중간톤, 피치다운)"],
-                    "TertiaryVoice": ["한준(중간톤)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -2844,7 +2738,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/31_미선(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -2932,12 +2825,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/32_미선(일반, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["미선(일반)"],
-                    "SecondaryVoice": ["민지(톤다운, 피치다운)"],
-                    "TertiaryVoice": ["민지(톤다운)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -3025,7 +2912,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/33_주호(일반톤).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -3113,12 +2999,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/34_주호(일반톤, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["연우(중간톤)"],
-                    "SecondaryVoice": ["주호(일반톤)"],
-                    "TertiaryVoice": ["지훈(중간톤, 피치다운)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -3208,7 +3088,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/35_지훈(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -3296,7 +3175,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/36_지훈(톤업).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -3384,7 +3262,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/37_지훈(톤업, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -3472,12 +3349,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/38_지훈(중간톤).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["지훈(톤업)"],
-                    "SecondaryVoice": ["지훈(중간톤, 피치다운)"],
-                    "TertiaryVoice": ["지훈(톤업, 피치다운)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -3567,7 +3438,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/39_지훈(중간톤, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -3655,7 +3525,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/40_지훈(슬픔).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -3743,7 +3612,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/41_지훈(슬픔, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -3831,7 +3699,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/42_가희(일반).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -3919,7 +3786,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/43_가희(절규).wav",
                 "Quilty": 10,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -4007,7 +3873,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/44_건우(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 5},
@@ -4095,7 +3960,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/45_경호(화남).wav",
                 "Quilty": 6,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 6},
@@ -4183,7 +4047,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/46_경호(차가움).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -4271,7 +4134,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/47_김경화앵커(일반).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -4359,7 +4221,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/48_김경화앵커(일반, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -4447,7 +4308,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/49_남준(톤다운).wav",
                 "Quilty": 7,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -4535,7 +4395,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/50_노을(슬픔).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -4623,7 +4482,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/51_노을(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -4711,7 +4569,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/52_노을(설득).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -4799,7 +4656,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/53_도희(일반).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -4887,7 +4743,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/54_도희(일반, 피치다운).wav",
                 "Quilty": 8.8,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -4975,7 +4830,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/55_류은(일반).wav",
                 "Quilty": 0,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -5063,12 +4917,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/56_류은(일반, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption", "Actor"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["류은(일반)"],
-                    "SecondaryVoice": ["류은(중간톤)"],
-                    "TertiaryVoice": ["류은(기쁨)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -5158,7 +5006,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/57_류은(중간톤).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -5246,7 +5093,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/58_류은(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -5334,7 +5180,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/59_류은(기쁨).wav",
                 "Quilty": 7,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -5422,7 +5267,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/60_류은(화남).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -5510,7 +5354,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/61_류은(화남, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -5598,7 +5441,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/62_명주(일반).wav",
                 "Quilty": 6,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -5686,7 +5528,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/62_명주(일반, 피치다운).wav",
                 "Quilty": 6.5,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -5774,7 +5615,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/64_모건(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 6},
@@ -5862,7 +5702,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/65_모건(중간톤).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -5950,7 +5789,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/66_모건(톤다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7.5},
@@ -6038,7 +5876,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/67_모건(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -6126,7 +5963,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/68_민준(중간톤).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 4},
@@ -6214,7 +6050,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/69_민지(톤다운).wav",
                 "Quilty": 9.5,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -6302,12 +6137,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/70_민지(톤다운, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["민지(톤다운)"],
-                    "SecondaryVoice": ["세나(일반)"],
-                    "TertiaryVoice": ["애란(기쁨)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 6},
@@ -6397,7 +6226,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/71_민지(슬픔).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -6485,7 +6313,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/72_민지(슬픔, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -6573,7 +6400,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/73_민지(화남).wav",
                 "Quilty": 6,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -6661,7 +6487,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/74_민지(화남, 피치다운).wav",
                 "Quilty": 5.8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -6749,12 +6574,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/75_범수(일반).wav",
                 "Quilty": 9.5,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["범수(톤업)"],
-                    "SecondaryVoice": ["범수(중간톤)"],
-                    "TertiaryVoice": ["범수(슬픔)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 6},
@@ -6844,7 +6663,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/76_범수(톤업).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 5},
@@ -6932,12 +6750,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/77_범수(중간톤).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["범수(톤업)"],
-                    "SecondaryVoice": ["범수(일반)"],
-                    "TertiaryVoice": ["범수(슬픔)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 5},
@@ -7027,7 +6839,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/78_범수(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
@@ -7115,7 +6926,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/79_범수(슬픔, 피치다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -7203,7 +7013,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/80_범수(기쁨).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -7291,7 +7100,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/81_범수(화남).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -7379,7 +7187,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/82_범수(화남, 피치다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -7467,7 +7274,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/83_상우(슬픔).wav",
                 "Quilty": 7.9,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -7555,7 +7361,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/84_서준(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 4},
@@ -7643,7 +7448,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/85_서준(톤업).wav",
                 "Quilty": 6,
                 "Grade": ["Sub"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -7731,7 +7535,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/86_서준(중간톤).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 4},
@@ -7819,7 +7622,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/87_서준(기쁨).wav",
                 "Quilty": 7.5,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 4},
@@ -7907,7 +7709,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/88_석표(중간톤, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 5},
@@ -7995,7 +7796,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/89_성호(일반).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 3},
@@ -8083,7 +7883,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/90_성호(중간톤).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 5},
@@ -8171,7 +7970,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/91_세나(일반).wav",
                 "Quilty": 7.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -8259,7 +8057,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/92_세진(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -8347,7 +8144,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/93_세진(일반, 피치다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -8435,7 +8231,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/94_세진(톤업, 피치다운).wav",
                 "Quilty": 7.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -8523,7 +8318,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/95_세진(중간톤).wav",
                 "Quilty": 6,
                 "Grade": ["Sub"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -8611,7 +8405,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/96_세진(중간톤, 피치다운).wav",
                 "Quilty": 7,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -8699,7 +8492,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/97_세진(톤다운, 피치다운).wav",
                 "Quilty": 7,
                 "Grade": ["Sub"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 7},
@@ -8787,7 +8579,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/98_세진(슬픔, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -8875,7 +8666,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/99_세진(화남, 피치다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -8963,7 +8753,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/100_세진(속삭임).wav",
                 "Quilty": 7,
                 "Grade": ["ETC"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -9051,7 +8840,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/101_세진(속삭임, 피치다운).wav",
                 "Quilty": 7,
                 "Grade": ["ETC"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -9139,7 +8927,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/102_세진(응원, 피치다운).wav",
                 "Quilty": 7.5,
                 "Grade": ["Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 8},
@@ -9227,7 +9014,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/103_세희(일반).wav",
                 "Quilty": 9,
                 "Grade": ["Caption", "Actor"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -9315,7 +9101,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/104_세희(중간톤).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -9403,12 +9188,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/105_세희(중간톤, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
-                "Options": {
-                    "EnVoice": [""],
-                    "CaptionVoice": ["세희(일반)"],
-                    "SecondaryVoice": ["세희(중간톤)"],
-                    "TertiaryVoice": ["민지(화남)"]
-                },
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 9},
@@ -9498,7 +9277,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/106_송진섭스토리텔러(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -9586,7 +9364,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/107_송진섭스토리텔러(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -9674,7 +9451,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/108_수호(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -9762,7 +9538,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/109_수호(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -9850,7 +9625,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/110_수호(슬픔).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -9938,7 +9712,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/111_순이(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10026,7 +9799,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/112_순이(슬픔).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10114,7 +9886,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/113_시연(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10202,7 +9973,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/114_시연(톤다운, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10290,7 +10060,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/115_시원(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10378,7 +10147,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/116_신혜(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10466,7 +10234,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/117_아리(속삭임).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10554,7 +10321,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/118_애란(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10642,7 +10408,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/119_애란(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10730,7 +10495,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/120_애란(톤업).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10818,7 +10582,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/121_애란(톤업, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10906,7 +10669,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/122_애란(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -10994,7 +10756,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/123_애란(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11082,7 +10843,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/124_애란(톤다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11170,7 +10930,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/125_애란(톤다운, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11258,7 +11017,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/126_애란(슬픔).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11346,7 +11104,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/127_애란(슬픔, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11434,7 +11191,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/128_애란(기쁨).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11522,7 +11278,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/129_애란(기쁨, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11610,7 +11365,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/130_애란(화남, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11698,7 +11452,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/131_영규(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11786,7 +11539,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/132_영규(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11874,7 +11626,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/133_영규(슬픔).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -11962,7 +11713,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/134_영규(화남).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12050,7 +11800,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/135_예린(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12138,7 +11887,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/136_예린(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12226,7 +11974,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/137_예린(슬픔).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12314,7 +12061,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/138_예린(슬픔, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12402,7 +12148,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/139_재준(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12490,7 +12235,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/140_재호(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12578,7 +12322,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/141_재호(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12666,7 +12409,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/142_정민(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12754,7 +12496,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/143_정원(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12842,7 +12583,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/144_정원(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -12930,7 +12670,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/145_정원(톤업, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13018,7 +12757,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/146_정원(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13106,7 +12844,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/147_정원(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13194,7 +12931,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/148_정원(톤다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13282,7 +13018,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/149_정원(톤다운, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13370,7 +13105,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/150_정원(슬픔).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13458,7 +13192,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/151_정원(슬픔, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13546,7 +13279,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/152_정원(기쁨, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13634,7 +13366,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/153_정재(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13722,7 +13453,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/154_준호(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13810,7 +13540,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/155_준호(톤업).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13898,7 +13627,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/156_준호(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -13986,7 +13714,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/157_준호(화남).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14074,7 +13801,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/158_준호(부드러운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14162,7 +13888,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/159_지안(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14250,7 +13975,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/160_지안(톤업).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14338,7 +14062,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/161_지안(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14426,7 +14149,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/162_지안(슬픔).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14514,7 +14236,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/163_지안(기쁨).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14602,7 +14323,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/164_지안(화남).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14690,7 +14410,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/165_지우(중간).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14778,7 +14497,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/165_지우(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14866,7 +14584,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/166_지우(슬픔).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -14954,7 +14671,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/167_지우(기쁨).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15042,7 +14758,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/168_지우(화남).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15130,7 +14845,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/169_진우(톤업).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15218,7 +14932,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/170_진우(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15306,7 +15019,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/171_진우(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15394,7 +15106,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/172_진우(기쁨).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15482,7 +15193,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/173_진우(화남).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15570,7 +15280,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/174_최석(톤다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15658,7 +15367,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/175_현민(톤다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15746,7 +15454,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/176_현승(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15834,7 +15541,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/177_현승(톤다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -15922,7 +15628,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/178_현승(귀여움).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16010,7 +15715,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/179_현승(속삭임).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16098,7 +15802,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/180_현우(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16186,7 +15889,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/181_현우(슬픔, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16274,7 +15976,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/182_현주(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16362,7 +16063,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/183_현주(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16450,7 +16150,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/184_현주(톤다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16538,7 +16237,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/185_현주(톤다운, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16626,7 +16324,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/186_현주(슬픔, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16714,7 +16411,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/187_현주(화남, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16802,7 +16498,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/188_민지(톤업).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16890,7 +16585,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/189_민지(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -16978,7 +16672,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/190_머루(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17066,7 +16759,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/191_샷건(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17154,7 +16846,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/192_샷건(일반, 피치업).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17242,7 +16933,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/193_이승주기자(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17330,7 +17020,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/194_정순(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17418,7 +17107,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/195_주하(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17506,7 +17194,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/196_주하(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17594,7 +17281,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/197_중현(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17682,7 +17368,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/198_지영(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17770,7 +17455,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/199_지철(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17858,7 +17542,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/200_진(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -17946,7 +17629,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/201_창배(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18034,7 +17716,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/202_채린아(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18122,7 +17803,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/203_최석(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18210,7 +17890,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/204_최석(톤업).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18298,7 +17977,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/205_파캉(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18386,7 +18064,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/206_오언(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18474,7 +18151,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/207_케일럽(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18562,7 +18238,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/208_올리비아(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18650,7 +18325,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/209_올리비아(톤업, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18738,7 +18412,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/210_올리비아(슬픔, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18826,7 +18499,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/211_올리비아(기쁨, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -18914,7 +18586,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/212_올리비아(화남, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -19004,7 +18675,6 @@
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/.wav",
                 "Quilty": 0,
                 "Grade": ["None"],
-                "Options": "None",
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},

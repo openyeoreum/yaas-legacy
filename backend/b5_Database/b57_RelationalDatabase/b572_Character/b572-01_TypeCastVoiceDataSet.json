@@ -97,7 +97,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -185,7 +185,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -278,7 +278,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -366,7 +366,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -459,7 +459,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -547,7 +547,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -635,7 +635,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -723,7 +723,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -816,7 +816,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, -2]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -909,7 +909,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, -2]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -997,7 +997,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -1085,7 +1085,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -1173,7 +1173,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -1261,7 +1261,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -1349,7 +1349,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -1442,7 +1442,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -1535,7 +1535,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -1623,7 +1623,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -1711,7 +1711,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -1799,7 +1799,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -1887,7 +1887,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -1980,7 +1980,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -2073,7 +2073,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -2161,7 +2161,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -2249,7 +2249,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -2342,7 +2342,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -2435,7 +2435,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -2528,7 +2528,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -2621,7 +2621,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -2714,7 +2714,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -2807,7 +2807,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -2895,7 +2895,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -2988,7 +2988,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -3076,7 +3076,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -3169,7 +3169,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -3244,7 +3244,7 @@
                     "name": "지훈",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
+                        "emotion_tone_preset": ["normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -3257,7 +3257,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -3345,7 +3345,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -3433,7 +3433,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -3526,7 +3526,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -3614,7 +3614,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -3702,7 +3702,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -3790,7 +3790,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -3878,7 +3878,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -3966,7 +3966,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -4054,7 +4054,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -4142,7 +4142,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -4230,7 +4230,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -4318,7 +4318,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -4406,7 +4406,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -4494,7 +4494,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -4582,7 +4582,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -4670,7 +4670,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -4758,7 +4758,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -4846,7 +4846,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -4934,7 +4934,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -5022,7 +5022,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -5115,7 +5115,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -5203,7 +5203,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -5291,7 +5291,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -5379,7 +5379,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -5467,7 +5467,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -5555,7 +5555,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -5638,12 +5638,12 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.05],
+                    "speed_x": [1.1],
                     "tempo": 1.0,
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -5726,12 +5726,12 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.05],
+                    "speed_x": [1.1],
                     "tempo": 1.0,
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -5814,12 +5814,12 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.05],
+                    "speed_x": [1.08],
                     "tempo": 1.0,
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -5902,12 +5902,12 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.05],
+                    "speed_x": [1.08],
                     "tempo": 1.0,
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -5990,12 +5990,12 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.05],
+                    "speed_x": [1.08],
                     "tempo": 1.0,
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -6083,7 +6083,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -6171,7 +6171,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -6259,7 +6259,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -6352,7 +6352,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -6440,7 +6440,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -6528,7 +6528,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -6616,7 +6616,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -6704,7 +6704,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -6797,7 +6797,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -6880,12 +6880,12 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.05],
+                    "speed_x": [1.1],
                     "tempo": 1.0,
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -6978,7 +6978,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -7066,7 +7066,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -7154,7 +7154,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -7242,7 +7242,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -7330,7 +7330,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -7418,7 +7418,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -7506,7 +7506,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -7594,7 +7594,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -7682,7 +7682,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -7770,7 +7770,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -7858,7 +7858,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -7946,7 +7946,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -8034,7 +8034,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -8122,7 +8122,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -8210,7 +8210,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -8298,7 +8298,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -8386,7 +8386,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -8474,7 +8474,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -8562,7 +8562,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -8650,7 +8650,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -8738,7 +8738,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -8821,12 +8821,12 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.05],
+                    "speed_x": [1.1],
                     "tempo": 1.0,
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -8909,12 +8909,12 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.05],
+                    "speed_x": [1.1],
                     "tempo": 1.0,
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -9002,7 +9002,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -9090,7 +9090,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -9178,7 +9178,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -9266,7 +9266,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -9354,7 +9354,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -9447,7 +9447,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -9535,7 +9535,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -9623,7 +9623,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -9711,7 +9711,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -9799,7 +9799,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -9887,7 +9887,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -9975,7 +9975,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -10063,7 +10063,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -10151,7 +10151,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -10239,7 +10239,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -10327,7 +10327,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -10415,7 +10415,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -10503,7 +10503,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -10591,7 +10591,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -10679,7 +10679,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -10767,7 +10767,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -10855,7 +10855,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -10943,7 +10943,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -11031,7 +11031,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -11119,7 +11119,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -11207,7 +11207,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -11295,7 +11295,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -11383,7 +11383,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -11471,7 +11471,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -11559,7 +11559,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -11647,7 +11647,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -11735,7 +11735,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -11823,7 +11823,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -11911,7 +11911,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -11999,7 +11999,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -12087,7 +12087,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -12175,7 +12175,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -12263,7 +12263,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -12351,7 +12351,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -12439,7 +12439,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -12527,7 +12527,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -12615,7 +12615,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -12703,7 +12703,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -12778,7 +12778,7 @@
                     "name": "정원",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
+                        "emotion_tone_preset": ["normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -12791,7 +12791,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -12879,7 +12879,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -12967,7 +12967,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -13055,7 +13055,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -13143,7 +13143,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -13231,7 +13231,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -13319,7 +13319,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -13407,7 +13407,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -13495,7 +13495,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -13583,7 +13583,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -13671,7 +13671,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -13759,7 +13759,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -13847,7 +13847,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -13935,7 +13935,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14023,7 +14023,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14111,7 +14111,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14199,7 +14199,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14287,7 +14287,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14375,7 +14375,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14463,7 +14463,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14551,7 +14551,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14639,7 +14639,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14727,7 +14727,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14815,7 +14815,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14903,7 +14903,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -14991,7 +14991,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -15079,7 +15079,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -15154,7 +15154,7 @@
                     "name": "진우",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
+                        "emotion_tone_preset": ["toneup-1"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -15167,7 +15167,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -15255,7 +15255,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -15343,7 +15343,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -15431,7 +15431,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -15506,7 +15506,7 @@
                     "name": "진우",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
+                        "emotion_tone_preset": ["angry-3"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -15519,7 +15519,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -15607,7 +15607,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -15695,7 +15695,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -15783,7 +15783,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -15871,7 +15871,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -15959,7 +15959,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -16047,7 +16047,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -16135,7 +16135,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -16223,7 +16223,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -16311,7 +16311,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -16399,7 +16399,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2]
                 }
             },
             {
@@ -16487,7 +16487,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -16575,7 +16575,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -16650,7 +16650,7 @@
                     "name": "현주",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
+                        "emotion_tone_preset": ["sad-1", "sad-2", "sad-3"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -16663,7 +16663,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -16738,7 +16738,7 @@
                     "name": "현주",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
+                        "emotion_tone_preset": ["angry-1", "angry-2"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -16751,7 +16751,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -16839,7 +16839,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -16914,7 +16914,7 @@
                     "name": "민지",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "emotion_tone_preset": ["tonemid-1"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -16927,7 +16927,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -17015,7 +17015,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -17103,7 +17103,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -17191,7 +17191,7 @@
                     "pitch": 1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -17279,7 +17279,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -17367,7 +17367,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -17455,7 +17455,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -17543,7 +17543,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -17618,7 +17618,7 @@
                     "name": "중현",
                     "ApiToken": "None",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
+                        "emotion_tone_preset": ["tonemid-2", "tonemid-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {
@@ -17631,7 +17631,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -17719,7 +17719,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -17807,7 +17807,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -17895,7 +17895,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -17983,7 +17983,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -18071,7 +18071,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -18159,7 +18159,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -18247,7 +18247,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -18335,7 +18335,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -18423,7 +18423,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -18511,7 +18511,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -18599,7 +18599,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1]
                 }
             },
             {
@@ -18687,7 +18687,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -18775,7 +18775,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -18863,7 +18863,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             },
             {
@@ -18951,7 +18951,7 @@
                     "pitch": -1,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             }
         ],
@@ -19041,7 +19041,7 @@
                     "pitch": 0,
                     "max_seconds": 60,
                     "force_length": 0,
-                    "last_pitch": [-1, 0]
+                    "last_pitch": [-2, -1, 0]
                 }
             }
         ]

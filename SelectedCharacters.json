@@ -1,0 +1,3049 @@
+[
+    {
+        "Id": 1,
+        "MainCharacter": "김한섭 씨 일행",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 169,
+        "Type": {
+            "대화": 81.07,
+            "독백": 18.93
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 40.83,
+            "청년": 37.28,
+            "중년": 20.71,
+            "장년": 1.18
+        },
+        "Emotion": {
+            "중립": 63.91,
+            "즐거움": 14.2,
+            "화남": 10.06,
+            "침착함": 3.55,
+            "슬픔": 1.78,
+            "놀람": 1.18,
+            "혼란": 1.18,
+            "서운함": 0.59,
+            "비장함": 0.59,
+            "감사함": 0.59,
+            "호기심": 0.59,
+            "피로함": 0.59,
+            "당황": 0.59,
+            "감사": 0.59
+        },
+        "Role": {
+            "주인공": 92.01,
+            "저자": 5.23,
+            "조연": 2.75
+        }
+    },
+    {
+        "Id": 2,
+        "MainCharacter": "이동현 대통령, 김한섭 대통령",
+        "Voice": {
+            "CharacterId": 2,
+            "CharacterTag": "Character1",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 51,
+        "Type": {
+            "대화": 82.35,
+            "인용": 9.8,
+            "독백": 5.88,
+            "강조": 1.96
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 31.37,
+            "장년": 31.37,
+            "중년": 19.61,
+            "노년": 15.69,
+            "중년, 노년": 1.96
+        },
+        "Emotion": {
+            "중립": 80.39,
+            "화남": 17.65,
+            "놀람": 1.96
+        },
+        "Role": {
+            "주인공": 68.33,
+            "조연": 16.67,
+            "단역": 14.17,
+            "주인공, 조연": 0.83
+        }
+    },
+    {
+        "Id": 3,
+        "MainCharacter": "지연",
+        "Voice": {
+            "CharacterId": 3,
+            "CharacterTag": "Character2",
+            "Gender": "여",
+            "Age": "청년"
+        },
+        "Frequency": 48,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 100.0
+        },
+        "Age": {
+            "청년": 81.25,
+            "중년": 18.75
+        },
+        "Emotion": {
+            "중립": 70.83,
+            "즐거움": 16.67,
+            "슬픔": 6.25,
+            "놀람": 4.17,
+            "질문": 2.08
+        },
+        "Role": {
+            "조연": 54.84,
+            "주인공": 45.16
+        }
+    },
+    {
+        "Id": 4,
+        "MainCharacter": "다른 노인",
+        "Voice": {
+            "CharacterId": 11,
+            "CharacterTag": "Character11",
+            "Gender": "남/여",
+            "Age": "노년"
+        },
+        "Frequency": 42,
+        "Type": {
+            "대화": 97.62,
+            "독백": 2.38
+        },
+        "Gender": {
+            "남": 83.33,
+            "여": 16.67
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 57.14,
+            "화남": 38.1,
+            "슬픔": 4.76
+        },
+        "Role": {
+            "단역": 70.24,
+            "조연": 29.76
+        }
+    },
+    {
+        "Id": 5,
+        "MainCharacter": "김한섭 대통령과 각료들",
+        "Voice": {
+            "CharacterId": 2,
+            "CharacterTag": "Character1",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 34,
+        "Type": {
+            "대화": 91.18,
+            "독백": 5.88,
+            "인용": 2.94
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "장년": 61.76,
+            "노년": 38.24
+        },
+        "Emotion": {
+            "중립": 64.71,
+            "즐거움": 32.35,
+            "침착함": 2.94
+        },
+        "Role": {
+            "주인공": 68.54,
+            "조연": 30.34,
+            "단역": 1.12
+        }
+    },
+    {
+        "Id": 6,
+        "MainCharacter": "한섭 씨의 친구",
+        "Voice": {
+            "CharacterId": 4,
+            "CharacterTag": "Character3",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 25,
+        "Type": {
+            "대화": 96.0,
+            "독백": 4.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 52.0,
+            "즐거움": 32.0,
+            "화남": 16.0
+        },
+        "Role": {
+            "조연": 87.27,
+            "단역": 12.73
+        }
+    },
+    {
+        "Id": 7,
+        "MainCharacter": "한섭의 아버지",
+        "Voice": {
+            "CharacterId": 5,
+            "CharacterTag": "Character4",
+            "Gender": "남",
+            "Age": "장년"
+        },
+        "Frequency": 21,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "장년": 100.0
+        },
+        "Emotion": {
+            "중립": 66.67,
+            "화남": 19.05,
+            "즐거움": 9.52,
+            "슬픔": 4.76
+        },
+        "Role": {
+            "조연": 69.77,
+            "단역": 27.91,
+            "주인공": 2.33
+        }
+    },
+    {
+        "Id": 8,
+        "MainCharacter": "옆 사무실의 선배",
+        "Voice": {
+            "CharacterId": 6,
+            "CharacterTag": "Character5",
+            "Gender": "남",
+            "Age": "청년"
+        },
+        "Frequency": 20,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 55.0,
+            "중년": 45.0
+        },
+        "Emotion": {
+            "중립": 75.0,
+            "즐거움": 15.0,
+            "화남": 5.0,
+            "놀람": 5.0
+        },
+        "Role": {
+            "조연": 81.25,
+            "단역": 18.75
+        }
+    },
+    {
+        "Id": 9,
+        "MainCharacter": "유 노인",
+        "Voice": {
+            "CharacterId": 4,
+            "CharacterTag": "Character3",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 19,
+        "Type": {
+            "대화": 84.21,
+            "독백": 15.79
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 47.37,
+            "회상": 21.05,
+            "슬픔": 15.79,
+            "궁금함": 5.26,
+            "놀람": 5.26,
+            "화남": 5.26
+        },
+        "Role": {
+            "주인공": 58.33,
+            "조연": 41.67
+        }
+    },
+    {
+        "Id": 10,
+        "MainCharacter": "금테안경",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 18,
+        "Type": {
+            "대화": 94.44,
+            "독백": 5.56
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 44.44,
+            "화남": 44.44,
+            "즐거움": 5.56,
+            "슬픔": 5.56
+        },
+        "Role": {
+            "조연": 52.63,
+            "단역": 47.37
+        }
+    },
+    {
+        "Id": 11,
+        "MainCharacter": "경찰 간부",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 18,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 77.78,
+            "청년": 16.67,
+            "불명": 5.56
+        },
+        "Emotion": {
+            "중립": 83.33,
+            "화남": 16.67
+        },
+        "Role": {
+            "단역": 89.47,
+            "조연": 10.53
+        }
+    },
+    {
+        "Id": 12,
+        "MainCharacter": "검사",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 16,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 68.75,
+            "침착함": 18.75,
+            "화남": 6.25,
+            "즐거움": 6.25
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 13,
+        "MainCharacter": "연출자",
+        "Voice": {
+            "CharacterId": 6,
+            "CharacterTag": "Character5",
+            "Gender": "남",
+            "Age": "청년"
+        },
+        "Frequency": 13,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 76.92,
+            "중년": 23.08
+        },
+        "Emotion": {
+            "중립": 69.23,
+            "궁금함": 23.08,
+            "놀람": 7.69
+        },
+        "Role": {
+            "단역": 54.84,
+            "조연": 45.16
+        }
+    },
+    {
+        "Id": 14,
+        "MainCharacter": "선희 씨",
+        "Voice": {
+            "CharacterId": 7,
+            "CharacterTag": "Character6",
+            "Gender": "여",
+            "Age": "장년"
+        },
+        "Frequency": 12,
+        "Type": {
+            "대화": 91.67,
+            "독백": 8.33
+        },
+        "Gender": {
+            "여": 100.0
+        },
+        "Age": {
+            "노년": 75.0,
+            "청년": 16.67,
+            "중년": 8.33
+        },
+        "Emotion": {
+            "즐거움": 50.0,
+            "중립": 25.0,
+            "호기심": 16.67,
+            "슬픔": 8.33
+        },
+        "Role": {
+            "조연": 82.76,
+            "주인공": 17.24
+        }
+    },
+    {
+        "Id": 15,
+        "MainCharacter": "덩치 큰 사내",
+        "Voice": {
+            "CharacterId": 6,
+            "CharacterTag": "Character5",
+            "Gender": "남",
+            "Age": "청년"
+        },
+        "Frequency": 11,
+        "Type": {
+            "대화": 81.82,
+            "독백": 9.09,
+            "인용": 9.09
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 72.73,
+            "중년": 27.27
+        },
+        "Emotion": {
+            "중립": 63.64,
+            "화남": 18.18,
+            "즐거움": 18.18
+        },
+        "Role": {
+            "단역": 54.55,
+            "조연": 45.45
+        }
+    },
+    {
+        "Id": 16,
+        "MainCharacter": "젊은이",
+        "Voice": {
+            "CharacterId": 11,
+            "CharacterTag": "Character11",
+            "Gender": "남/여",
+            "Age": "노년"
+        },
+        "Frequency": 11,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 90.91,
+            "여": 9.09
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "화남": 54.55,
+            "슬픔": 18.18,
+            "중립": 18.18,
+            "즐거움": 9.09
+        },
+        "Role": {
+            "조연": 52.17,
+            "단역": 47.83
+        }
+    },
+    {
+        "Id": 17,
+        "MainCharacter": "김 노인",
+        "Voice": {
+            "CharacterId": 11,
+            "CharacterTag": "Character11",
+            "Gender": "남/여",
+            "Age": "노년"
+        },
+        "Frequency": 11,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 72.73,
+            "남": 27.27
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 27.27,
+            "즐거움": 27.27,
+            "슬픔": 18.18,
+            "놀람": 9.09,
+            "궁금함": 9.09,
+            "회상": 9.09
+        },
+        "Role": {
+            "주인공": 69.23,
+            "조연": 30.77
+        }
+    },
+    {
+        "Id": 18,
+        "MainCharacter": "친구들과 지인들",
+        "Voice": {
+            "CharacterId": 5,
+            "CharacterTag": "Character4",
+            "Gender": "남",
+            "Age": "장년"
+        },
+        "Frequency": 10,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "장년": 50.0,
+            "노년": 40.0,
+            "중년": 10.0
+        },
+        "Emotion": {
+            "중립": 50.0,
+            "즐거움": 20.0,
+            "화남": 20.0,
+            "슬픔": 10.0
+        },
+        "Role": {
+            "조연": 76.0,
+            "단역": 24.0
+        }
+    },
+    {
+        "Id": 19,
+        "MainCharacter": "종길 씨",
+        "Voice": {
+            "CharacterId": 5,
+            "CharacterTag": "Character4",
+            "Gender": "남",
+            "Age": "장년"
+        },
+        "Frequency": 10,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 70.0,
+            "장년": 20.0,
+            "청년": 10.0
+        },
+        "Emotion": {
+            "중립": 80.0,
+            "즐거움": 10.0,
+            "화남": 10.0
+        },
+        "Role": {
+            "주인공": 86.36,
+            "단역": 13.64
+        }
+    },
+    {
+        "Id": 20,
+        "MainCharacter": "미스터 모리스",
+        "Voice": {
+            "CharacterId": 5,
+            "CharacterTag": "Character4",
+            "Gender": "남",
+            "Age": "장년"
+        },
+        "Frequency": 10,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 85.0,
+            "주인공": 15.0
+        }
+    },
+    {
+        "Id": 21,
+        "MainCharacter": "뉴스 보도",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 9,
+        "Type": {
+            "인용": 100.0
+        },
+        "Gender": {
+            "없음": 100.0
+        },
+        "Age": {
+            "없음": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 22,
+        "MainCharacter": "시위대",
+        "Voice": {
+            "CharacterId": 11,
+            "CharacterTag": "Character11",
+            "Gender": "남/여",
+            "Age": "노년"
+        },
+        "Frequency": 9,
+        "Type": {
+            "강조": 66.67,
+            "대화": 33.33
+        },
+        "Gender": {
+            "남": 66.67,
+            "여": 33.33
+        },
+        "Age": {
+            "노년": 77.78,
+            "중년": 22.22
+        },
+        "Emotion": {
+            "즐거움": 77.78,
+            "중립": 22.22
+        },
+        "Role": {
+            "단역": 61.11,
+            "조연": 38.89
+        }
+    },
+    {
+        "Id": 23,
+        "MainCharacter": "취재기자",
+        "Voice": {
+            "CharacterId": 10,
+            "CharacterTag": "Character10",
+            "Gender": "여",
+            "Age": "청년"
+        },
+        "Frequency": 8,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 87.5,
+            "없음": 12.5
+        },
+        "Age": {
+            "청년": 87.5,
+            "없음": 12.5
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 56.25,
+            "조연": 43.75
+        }
+    },
+    {
+        "Id": 24,
+        "MainCharacter": "코디네이터",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 7,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 85.71,
+            "자신감": 14.29
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 25,
+        "MainCharacter": "정부 측 대표",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 7,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 100.0
+        }
+    },
+    {
+        "Id": 26,
+        "MainCharacter": "중년 여성",
+        "Voice": {
+            "CharacterId": 10,
+            "CharacterTag": "Character10",
+            "Gender": "여",
+            "Age": "청년"
+        },
+        "Frequency": 6,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 100.0
+        },
+        "Age": {
+            "청년": 83.33,
+            "중년": 16.67
+        },
+        "Emotion": {
+            "중립": 66.67,
+            "즐거움": 33.33
+        },
+        "Role": {
+            "단역": 83.33,
+            "조연": 16.67
+        }
+    },
+    {
+        "Id": 27,
+        "MainCharacter": "경찰 지휘관",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 6,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 83.33,
+            "불명": 16.67
+        },
+        "Emotion": {
+            "중립": 83.33,
+            "화남": 16.67
+        },
+        "Role": {
+            "단역": 50.0,
+            "조연": 50.0
+        }
+    },
+    {
+        "Id": 28,
+        "MainCharacter": "곰탕집 주인",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 6,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 50.0,
+            "장년": 33.33,
+            "중년": 16.67
+        },
+        "Emotion": {
+            "중립": 66.67,
+            "감사": 16.67,
+            "슬픔": 16.67
+        },
+        "Role": {
+            "단역": 60.0,
+            "조연": 40.0
+        }
+    },
+    {
+        "Id": 29,
+        "MainCharacter": "동현의 부장",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 6,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 100.0
+        }
+    },
+    {
+        "Id": 30,
+        "MainCharacter": "판사",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 5,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "화남": 60.0,
+            "중립": 40.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 31,
+        "MainCharacter": "구사일생의 의원",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 5,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 100.0
+        }
+    },
+    {
+        "Id": 32,
+        "MainCharacter": "불명",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 5,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "불명": 60.0,
+            "남": 40.0
+        },
+        "Age": {
+            "불명": 60.0,
+            "중년": 20.0,
+            "노년": 20.0
+        },
+        "Emotion": {
+            "중립": 60.0,
+            "즐거움": 40.0
+        },
+        "Role": {
+            "단역": 76.92,
+            "조연": 23.08
+        }
+    },
+    {
+        "Id": 33,
+        "MainCharacter": "시위 참가자",
+        "Voice": {
+            "CharacterId": 11,
+            "CharacterTag": "Character11",
+            "Gender": "남/여",
+            "Age": "노년"
+        },
+        "Frequency": 4,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 75.0,
+            "여": 25.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "화남": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 34,
+        "MainCharacter": "사회자",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 4,
+        "Type": {
+            "대화": 50.0,
+            "독백": 25.0,
+            "인용": 25.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 60.0,
+            "조연": 40.0
+        }
+    },
+    {
+        "Id": 35,
+        "MainCharacter": "치안담당 장관",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 4,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 75.0,
+            "슬픔": 25.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 36,
+        "MainCharacter": "캐스터",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 4,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 75.0,
+            "슬픔": 25.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 37,
+        "MainCharacter": "지점장",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 3,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 66.67,
+            "즐거움": 33.33
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 38,
+        "MainCharacter": "여학생",
+        "Voice": {
+            "CharacterId": 10,
+            "CharacterTag": "Character10",
+            "Gender": "여",
+            "Age": "청년"
+        },
+        "Frequency": 3,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 39,
+        "MainCharacter": "진행자",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 3,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 66.67,
+            "없음": 33.33
+        },
+        "Age": {
+            "중년": 66.67,
+            "없음": 33.33
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 66.67,
+            "조연": 33.33
+        }
+    },
+    {
+        "Id": 40,
+        "MainCharacter": "노인들",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 3,
+        "Type": {
+            "대화": 66.67,
+            "독백": 33.33
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 66.67,
+            "슬픔": 33.33
+        },
+        "Role": {
+            "단역": 66.67,
+            "조연": 33.33
+        }
+    },
+    {
+        "Id": 41,
+        "MainCharacter": "시위 주동자",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 3,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "화남": 33.33,
+            "중립": 33.33,
+            "즐거움": 33.33
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 42,
+        "MainCharacter": "미상",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 3,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "미상": 100.0
+        },
+        "Age": {
+            "미상": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 50.0,
+            "조연": 50.0
+        }
+    },
+    {
+        "Id": 43,
+        "MainCharacter": "택시 기사",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 3,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "화남": 33.33,
+            "중립": 33.33,
+            "즐거움": 33.33
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 44,
+        "MainCharacter": "세신사",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 3,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 66.67,
+            "침착함": 33.33
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 45,
+        "MainCharacter": "경호원",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 75.0,
+            "조연": 25.0
+        }
+    },
+    {
+        "Id": 46,
+        "MainCharacter": "슈퍼바이저",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 47,
+        "MainCharacter": "학생 A",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "슬픔": 50.0,
+            "즐거움": 50.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 48,
+        "MainCharacter": "여성들",
+        "Voice": {
+            "CharacterId": 10,
+            "CharacterTag": "Character10",
+            "Gender": "여",
+            "Age": "청년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 49,
+        "MainCharacter": "작가",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "서술": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 50.0,
+            "중립": 50.0
+        },
+        "Role": {
+            "주인공": 50.0,
+            "저자": 50.0
+        }
+    },
+    {
+        "Id": 50,
+        "MainCharacter": "당숙",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 50.0,
+            "중립": 50.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 51,
+        "MainCharacter": "이명훈",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 50.0,
+            "강조": 50.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 50.0,
+            "즐거움": 50.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 52,
+        "MainCharacter": "배식원",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 53,
+        "MainCharacter": "임종학 강사",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "독백": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 54,
+        "MainCharacter": "고참",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "화남": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 55,
+        "MainCharacter": "보좌관",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "미상": 100.0
+        },
+        "Age": {
+            "미상": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 50.0,
+            "조연": 50.0
+        }
+    },
+    {
+        "Id": 56,
+        "MainCharacter": "변호사 친구",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 100.0
+        }
+    },
+    {
+        "Id": 57,
+        "MainCharacter": "창당준비위원회의 간사",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 58,
+        "MainCharacter": "김한섭 대통령의 어머니",
+        "Voice": {
+            "CharacterId": 11,
+            "CharacterTag": "Character11",
+            "Gender": "남/여",
+            "Age": "노년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 50.0,
+            "회상": 50.0
+        },
+        "Gender": {
+            "남": 50.0,
+            "여": 50.0
+        },
+        "Age": {
+            "노년": 50.0,
+            "장년": 50.0
+        },
+        "Emotion": {
+            "중립": 50.0,
+            "화남": 50.0
+        },
+        "Role": {
+            "주인공": 50.0,
+            "조연": 25.0,
+            "단역": 25.0
+        }
+    },
+    {
+        "Id": 59,
+        "MainCharacter": "광장의 민주공화국 관계자",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 2,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 60,
+        "MainCharacter": "학생 B",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 61,
+        "MainCharacter": "학생 C",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 62,
+        "MainCharacter": "학생 D",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 63,
+        "MainCharacter": "학생 E",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 64,
+        "MainCharacter": "학생 F",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 65,
+        "MainCharacter": "학생 G",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "화남": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 66,
+        "MainCharacter": "학생 H",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 67,
+        "MainCharacter": "학생 I",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "독백": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "슬픔": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 68,
+        "MainCharacter": "학생 J",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 69,
+        "MainCharacter": "학생 K",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 70,
+        "MainCharacter": "학생 L",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 71,
+        "MainCharacter": "지역 본부장",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 72,
+        "MainCharacter": "고객",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 73,
+        "MainCharacter": "야당 의원",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 74,
+        "MainCharacter": "부모들",
+        "Voice": {
+            "CharacterId": 11,
+            "CharacterTag": "Character11",
+            "Gender": "남/여",
+            "Age": "노년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남/여": 100.0
+        },
+        "Age": {
+            "장년": 100.0
+        },
+        "Emotion": {
+            "슬픔": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 75,
+        "MainCharacter": "한섭의 어머니",
+        "Voice": {
+            "CharacterId": 7,
+            "CharacterTag": "Character6",
+            "Gender": "여",
+            "Age": "장년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 100.0
+        },
+        "Age": {
+            "장년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 76,
+        "MainCharacter": "상사",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "장년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 77,
+        "MainCharacter": "DJ",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "서술": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 78,
+        "MainCharacter": "일동",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 79,
+        "MainCharacter": "간부 학생",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 80,
+        "MainCharacter": "다방 레지",
+        "Voice": {
+            "CharacterId": 10,
+            "CharacterTag": "Character10",
+            "Gender": "여",
+            "Age": "청년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 81,
+        "MainCharacter": "무료 급식소의 스태프",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 82,
+        "MainCharacter": "노년의 여성",
+        "Voice": {
+            "CharacterId": 10,
+            "CharacterTag": "Character10",
+            "Gender": "여",
+            "Age": "청년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 83,
+        "MainCharacter": "인솔자",
+        "Voice": {
+            "CharacterId": 10,
+            "CharacterTag": "Character10",
+            "Gender": "여",
+            "Age": "청년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 84,
+        "MainCharacter": "다국적 참가자들",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "장년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 85,
+        "MainCharacter": "지배인",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 86,
+        "MainCharacter": "국무위원",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 87,
+        "MainCharacter": "땡석재 대표",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "장년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 88,
+        "MainCharacter": "석재회사 영업부장",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 89,
+        "MainCharacter": "준비위원회의 일원",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 90,
+        "MainCharacter": "행사 참가자",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 66.67,
+            "조연": 33.33
+        }
+    },
+    {
+        "Id": 91,
+        "MainCharacter": "이동현 정권 대변인",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 92,
+        "MainCharacter": "자식들",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "슬픔": 100.0
+        },
+        "Role": {
+            "단역": 66.67,
+            "조연": 33.33
+        }
+    },
+    {
+        "Id": 93,
+        "MainCharacter": "진압군 지휘관",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "화남": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 94,
+        "MainCharacter": "안내자",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 95,
+        "MainCharacter": "취임식 참석자들",
+        "Voice": {
+            "CharacterId": 11,
+            "CharacterTag": "Character11",
+            "Gender": "남/여",
+            "Age": "노년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 96,
+        "MainCharacter": "모니터를 지켜보는 사람들",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "화남": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 97,
+        "MainCharacter": "문화 분야 장관 후보자",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 98,
+        "MainCharacter": "경제 분야 장관 후보자",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 99,
+        "MainCharacter": "법무 담당 장관 후보자",
+        "Voice": {
+            "CharacterId": 9,
+            "CharacterTag": "Character8",
+            "Gender": "남",
+            "Age": "노년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "노년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 66.67,
+            "단역": 33.33
+        }
+    },
+    {
+        "Id": 100,
+        "MainCharacter": "광장의 민주공화국 정부 관계자",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 101,
+        "MainCharacter": "경찰관",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "인용": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 102,
+        "MainCharacter": "비서관",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "청년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 103,
+        "MainCharacter": "등산객",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "단역": 100.0
+        }
+    },
+    {
+        "Id": 104,
+        "MainCharacter": "권선희 여사",
+        "Voice": {
+            "CharacterId": 10,
+            "CharacterTag": "Character10",
+            "Gender": "여",
+            "Age": "청년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "여": 100.0
+        },
+        "Age": {
+            "장년": 100.0
+        },
+        "Emotion": {
+            "슬픔": 100.0
+        },
+        "Role": {
+            "조연": 100.0
+        }
+    },
+    {
+        "Id": 105,
+        "MainCharacter": "수의사",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 106,
+        "MainCharacter": "시민",
+        "Voice": {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "즐거움": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 107,
+        "MainCharacter": "욕실 관리자",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "대화": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "중립": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    },
+    {
+        "Id": 108,
+        "MainCharacter": "장례위원장",
+        "Voice": {
+            "CharacterId": 8,
+            "CharacterTag": "Character7",
+            "Gender": "남",
+            "Age": "중년"
+        },
+        "Frequency": 1,
+        "Type": {
+            "독백": 100.0
+        },
+        "Gender": {
+            "남": 100.0
+        },
+        "Age": {
+            "중년": 100.0
+        },
+        "Emotion": {
+            "슬픔": 100.0
+        },
+        "Role": {
+            "조연": 50.0,
+            "단역": 50.0
+        }
+    }
+]

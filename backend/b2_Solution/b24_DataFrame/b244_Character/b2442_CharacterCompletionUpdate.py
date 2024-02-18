@@ -712,8 +712,65 @@ def AgeAverageCalculator(SelectedAge):
 
         return ClosestAgeCategory
 
+## 대화가 이어지는 Character는 나누기
+def DividedIntoContinuousConversation(ResponseJson, CharacterList):
+    def check_continuity(chunk_ids_list):
+        all_chunk_ids = sorted(set(sum([actor['ChunkIds'] for actor in chunk_ids_list], [])))
+        for i in range(len(all_chunk_ids) - 1):
+            if all_chunk_ids[i] + 1 == all_chunk_ids[i + 1]:
+                return True
+        return False
+
+    # 빈도수가 많은 인물을 선택하는 함수
+    def select_by_frequency(actors_list):
+        return sorted(actors_list, key=lambda x: x['Frequency'], reverse=True)[0]
+
+    # 가장 대화가 많은 인물을 제거
+    for MainCharacter in CharacterList:
+        for mainCharacter in MainCharacter['Actors']:
+            ChunkIds = []
+            for character in ResponseJson:
+                if mainCharacter['MainCharacter'] == character['MainCharacter']:
+                    ChunkIds.append(character['ChunkId'])
+            mainCharacter['ChunkIds'] = ChunkIds
+            
+            # 메인 로직
+            selected_actors = []
+            removed_actors = []
+
+            while MainCharacter['Actors']:
+                current_actor = MainCharacter['Actors'].pop(0)
+                conflicting_actors = [current_actor] + [actor for actor in MainCharacter['Actors'] if check_continuity([current_actor, actor])]
+                
+                if len(conflicting_actors) > 1:
+                    selected_actor = select_by_frequency(conflicting_actors)
+                    selected_actors.append(selected_actor)
+                    for actor in conflicting_actors:
+                        if actor != selected_actor:
+                            removed_actors.append(actor)
+                            MainCharacter['Actors'].remove(actor)
+                else:
+                    selected_actors.append(current_actor)
+
+            # 결과 출력
+            print("선택된 인물들:")
+            for actor in selected_actors:
+                print(actor["MainCharacter"], actor["Frequency"], actor["ChunkIds"])
+
+            print("\n제외된 인물들:")
+            for actor in removed_actors:
+                print(actor["MainCharacter"], actor["Frequency"], actor["ChunkIds"])
+
+    
+    ##################
+    with open('CharacterList.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
+    ##################
+    
+    return CharacterList
+
 ## 캐릭터 더 선별하기
-def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, SelectedCharacters, bookGenre):
+def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, ResponseJson, SelectedCharacters, bookGenre):
     SelectedCharactersTexts = []
     inputIdList = []
     for i, Selected in enumerate(SelectedCharacters):
@@ -757,7 +814,7 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
         for actorid in actoridx:
             for SelectedCharacter in SelectedCharacters:
                 if actorid == SelectedCharacter['Id']:
-                    Actor = {"Id": SelectedCharacter['Id'], "MainCharacter": SelectedCharacter['MainCharacter'], "Frequency": SelectedCharacter['Frequency']}
+                    Actor = {"Id": SelectedCharacter['Id'], "MainCharacter": SelectedCharacter['MainCharacter'], "Frequency": SelectedCharacter['Frequency'], "ChunkIds": "None"}
                     Actors.append(Actor)
                     Frequency += SelectedCharacter['Frequency']
                 
@@ -779,18 +836,28 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
             NewCharacterCount += 1
     
     CharacterList = [Narrator] + NewCharacter
+    
+    # 대화가 이어지는 Character는 나누기
+    CharacterList = DividedIntoContinuousConversation(ResponseJson, CharacterList)
 
     # CharacterList에 Voice 데이터 참가
     for Character in CharacterList:
         for i in range(len(SelectedCharacters)):
             if SelectedCharacters[i]['Id'] in Character['ActorIdx']:
                 SelectedCharacters[i]['Voice'] = {'CharacterId': Character['CharacterId'], 'CharacterTag': Character['CharacterTag'], 'Gender': Character['Gender'], 'Age': Character['Age']}
-                
+
     # 비어있는 번호를 Narrator에 추가
     for SelectedCharacter in SelectedCharacters:
         if SelectedCharacter['Voice'] == None:
             Narrator = CharacterList[0]
             SelectedCharacter['Voice'] = {'CharacterId': Narrator['CharacterId'], 'CharacterTag': Narrator['CharacterTag'], 'Gender': Narrator['Gender'], 'Age': Narrator['Age']}
+
+    ##################
+    with open('CharacterList.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
+    with open('SelectedCharacters.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(SelectedCharacters, json_file, ensure_ascii = False, indent = 4)
+    ##################
         
     return SelectedCharacters, CharacterList
 
@@ -845,7 +912,7 @@ def SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, m
         Id += 1
     
     ## SelectedCharacters (캐릭터에 성우 적용)
-    SelectedCharacters, CharacterList = CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, SelectedCharacters, bookGenre)
+    SelectedCharacters, CharacterList = CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview, mode, ResponseJson, SelectedCharacters, bookGenre)
 
     # 성우별 담당 배역이름 리스트 업데이트
     Emotion = []

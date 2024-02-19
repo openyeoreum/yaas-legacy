@@ -712,19 +712,49 @@ def AgeAverageCalculator(SelectedAge):
 
         return ClosestAgeCategory
 
+## 연속 문장 번호를 가진 인물 찾기
+def find_continuous_characters(actors):
+    chunk_to_actor = {}  # 문장 번호를 키로, 인물 ID를 값으로 가지는 딕셔너리
+    for actor in actors:
+        for chunk_id in actor["ChunkIds"]:
+            chunk_to_actor[chunk_id] = actor["Id"]
+    
+    continuous_chunks = []  # 연속된 문장 번호를 저장하는 리스트
+    sorted_chunks = sorted(chunk_to_actor.keys())  # 문장 번호를 정렬
+    for i in range(1, len(sorted_chunks)):
+        if sorted_chunks[i] - sorted_chunks[i-1] == 1:
+            continuous_chunks.append((sorted_chunks[i-1], sorted_chunks[i]))
+    
+    # 연속된 문장 번호를 가진 인물들의 ID 찾기
+    continuous_actors = set()
+    for chunk1, chunk2 in continuous_chunks:
+        actor1, actor2 = chunk_to_actor[chunk1], chunk_to_actor[chunk2]
+        if actor1 != actor2:  # 다른 인물이라면
+            continuous_actors.add((actor1, actor2))
+    
+    return continuous_actors
+
+## 연속된 문장 번호를 가진 인물 중 빈도수가 낮은 인물 제거
+def remove_actors_based_on_frequency(actors, continuous_actors):
+    id_to_actor = {actor["Id"]: actor for actor in actors}  # ID를 키로 인물 정보를 저장
+    to_remove = set()  # 제거할 인물의 ID를 저장하는 집합
+    for actor1_id, actor2_id in continuous_actors:
+        actor1, actor2 = id_to_actor[actor1_id], id_to_actor[actor2_id]
+        if actor1["Frequency"] > actor2["Frequency"]:
+            to_remove.add(actor2_id)
+        else:
+            to_remove.add(actor1_id)
+    
+    # 인물 리스트 업데이트
+    updated_actors = [actor for actor in actors if actor["Id"] not in to_remove]
+    removed_actors = [actor for actor in actors if actor["Id"] in to_remove]
+    
+    return updated_actors, removed_actors
+
 ## 대화가 이어지는 Character는 나누기
 def DividedIntoContinuousConversation(ResponseJson, CharacterList):
-    def check_continuity(chunk_ids_list):
-        all_chunk_ids = sorted(set(sum([actor['ChunkIds'] for actor in chunk_ids_list], [])))
-        for i in range(len(all_chunk_ids) - 1):
-            if all_chunk_ids[i] + 1 == all_chunk_ids[i + 1]:
-                return True
-        return False
 
-    # 빈도수가 많은 인물을 선택하는 함수
-    def select_by_frequency(actors_list):
-        return sorted(actors_list, key=lambda x: x['Frequency'], reverse=True)[0]
-
+    DividedCharacterList = []
     # 가장 대화가 많은 인물을 제거
     for MainCharacter in CharacterList:
         for mainCharacter in MainCharacter['Actors']:
@@ -734,34 +764,15 @@ def DividedIntoContinuousConversation(ResponseJson, CharacterList):
                     ChunkIds.append(character['ChunkId'])
             mainCharacter['ChunkIds'] = ChunkIds
             
-            # 메인 로직
-            selected_actors = []
-            removed_actors = []
+        # 연속된 문장 번호를 가진 인물 찾기
+        continuousActors = find_continuous_characters(MainCharacter['Actors'])
+        # 인물 제거 및 업데이트
+        updatedActors, removedActors = remove_actors_based_on_frequency(MainCharacter['Actors'], continuousActors)
+        # DividedCharacterList.append()
+        print('@@@@@@@@@@@@@@@@@@@@@')
+        # print(updatedActors)
+        print(removedActors)
 
-            while MainCharacter['Actors']:
-                current_actor = MainCharacter['Actors'].pop(0)
-                conflicting_actors = [current_actor] + [actor for actor in MainCharacter['Actors'] if check_continuity([current_actor, actor])]
-                
-                if len(conflicting_actors) > 1:
-                    selected_actor = select_by_frequency(conflicting_actors)
-                    selected_actors.append(selected_actor)
-                    for actor in conflicting_actors:
-                        if actor != selected_actor:
-                            removed_actors.append(actor)
-                            MainCharacter['Actors'].remove(actor)
-                else:
-                    selected_actors.append(current_actor)
-
-            # 결과 출력
-            print("선택된 인물들:")
-            for actor in selected_actors:
-                print(actor["MainCharacter"], actor["Frequency"], actor["ChunkIds"])
-
-            print("\n제외된 인물들:")
-            for actor in removed_actors:
-                print(actor["MainCharacter"], actor["Frequency"], actor["ChunkIds"])
-
-    
     ##################
     with open('CharacterList.json', 'w', encoding = 'utf-8') as json_file:
         json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)

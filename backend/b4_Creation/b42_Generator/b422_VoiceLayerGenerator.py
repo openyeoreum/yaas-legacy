@@ -1,4 +1,5 @@
 import os
+import unicodedata
 import json
 import requests
 import time
@@ -361,6 +362,10 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
         if (GenerationKoChunks['Tag'] == "Character") and (GenerationKoChunks['Voice']['CharacterTag'] == "Narrator"):
             GenerationKoChunks['ActorName'] = NeuterActorName
             GenerationKoChunks['Voice']['CharacterTag'] = NeuterCharacterTag
+        
+        ## 캐릭터가 선정되지 않은 경우 'TertiaryNarrator' 배정
+        if GenerationKoChunks['Voice']['CharacterTag'] == 'None':
+            GenerationKoChunks['Voice']['CharacterTag'] = 'TertiaryNarrator'
             
         if GenerationKoChunks['Tag'] in ['Caption', 'CaptionComment']:
             ChunkCharacterTag = 'Caption'
@@ -484,10 +489,13 @@ def ExtractPause(chunk):
         return 0
 
 ## 생성된 음성파일 정렬/필터
-def SortAndRemoveDuplicates(VoiceLayerFileName, files):
+def SortAndRemoveDuplicates(files):
     # 파일명에서 필요한 정보를 추출하는 함수
     def ExtractFileInfo(FileName):
         match = re.match(r"(.+)_(\d+)_(.+?)\((.+?)\)_\((\d+)\)(M?)\.wav", FileName)
+        if match == None:
+            normalizeFileName = unicodedata.normalize('NFC', FileName)
+            match = re.match(r"(.+)_(\d+)_(.+?)\((.+?)\)_\((\d+)\)(M?)\.wav", normalizeFileName)
         if match:
             # 생성넘버, 세부생성넘버, M의 유무를 반환
             return {
@@ -525,19 +533,32 @@ def SortAndRemoveDuplicates(VoiceLayerFileName, files):
 ## 생성된 음성파일 합치기
 def VoiceGenerator(projectName, email, EditGenerationKoChunks):
     VoiceLayerFileName = projectName + "_VoiceLayer.wav"
+    normalizeVoiceLayerFileName = unicodedata.normalize('NFC', VoiceLayerFileName)
     voiceLayerPath = VoiceLayerPathGen(projectName, email, '')
 
     # 폴더 내의 모든 .wav 파일 목록 추출
     RawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav')]
+    # 모든 .wav 파일 목록의 노멀라이즈
+    RawFiles = [unicodedata.normalize('NFC', s) for s in RawFiles]
     # VoiceLayer 파일이 생성되었을 경우 해당 파일명을 RawFiles 리스트에서 삭제
-    if VoiceLayerFileName in RawFiles:
-        RawFiles.remove(VoiceLayerFileName)
+    if (VoiceLayerFileName in RawFiles) or (normalizeVoiceLayerFileName in RawFiles):
+        try:
+            RawFiles.remove(VoiceLayerFileName)
+        except ValueError:
+            pass
+        try:
+            RawFiles.remove(normalizeVoiceLayerFileName)
+        except ValueError:
+            pass
     # 성우 변경 파일이 생성되었을 경우 이전 성우 파일명으로 새로운 RawFiles 리스트에서 생성
     Files = []
-    # VoiceFilePattern = r".*?_(\d+)_([가-힣]+\([가-힣]+\)).*?\.wav"
-    VoiceFilePattern = r".*?_(\d+)_([가-힣]+\(.*?\)).*?\.wav"
+    VoiceFilePattern = r".*?_(\d+)_([가-힣]+\(.*?\))_\(\d+\)M?\.wav"
     for i in range(len(RawFiles)):
         VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
+        if VoiceFileMatch == None:
+            normalizeRawFile = unicodedata.normalize('NFC', RawFiles[i])
+            VoiceFileMatch = re.match(VoiceFilePattern, normalizeRawFile)
+        
         if VoiceFileMatch:
             chunkid, actorname = VoiceFileMatch.groups()
         for j in range(len(EditGenerationKoChunks)):
@@ -546,7 +567,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
                 break
     
     # 폴더 내의 모든 .wav 파일 목록 정렬/필터
-    FilteredFiles = SortAndRemoveDuplicates(VoiceLayerFileName, Files)
+    FilteredFiles = SortAndRemoveDuplicates(Files)
     
     CombinedSound = AudioSegment.empty()
 

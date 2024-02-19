@@ -713,7 +713,7 @@ def AgeAverageCalculator(SelectedAge):
         return ClosestAgeCategory
 
 ## 연속 문장 번호를 가진 인물 찾기
-def find_continuous_characters(actors):
+def FindContinuousCharacters(actors):
     chunk_to_actor = {}  # 문장 번호를 키로, 인물 ID를 값으로 가지는 딕셔너리
     for actor in actors:
         for chunk_id in actor["ChunkIds"]:
@@ -722,7 +722,7 @@ def find_continuous_characters(actors):
     continuous_chunks = []  # 연속된 문장 번호를 저장하는 리스트
     sorted_chunks = sorted(chunk_to_actor.keys())  # 문장 번호를 정렬
     for i in range(1, len(sorted_chunks)):
-        if sorted_chunks[i] - sorted_chunks[i-1] == 1:
+        if sorted_chunks[i] - sorted_chunks[i-1] <= 2:
             continuous_chunks.append((sorted_chunks[i-1], sorted_chunks[i]))
     
     # 연속된 문장 번호를 가진 인물들의 ID 찾기
@@ -735,7 +735,7 @@ def find_continuous_characters(actors):
     return continuous_actors
 
 ## 연속된 문장 번호를 가진 인물 중 빈도수가 낮은 인물 제거
-def remove_actors_based_on_frequency(actors, continuous_actors):
+def RemoveActorsBasedOnFrequency(actors, continuous_actors):
     id_to_actor = {actor["Id"]: actor for actor in actors}  # ID를 키로 인물 정보를 저장
     to_remove = set()  # 제거할 인물의 ID를 저장하는 집합
     for actor1_id, actor2_id in continuous_actors:
@@ -746,13 +746,17 @@ def remove_actors_based_on_frequency(actors, continuous_actors):
             to_remove.add(actor1_id)
     
     # 인물 리스트 업데이트
-    updated_actors = [actor for actor in actors if actor["Id"] not in to_remove]
-    removed_actors = [actor for actor in actors if actor["Id"] in to_remove]
+    updatedActors = [actor for actor in actors if actor["Id"] not in to_remove]
+    removedActors = [actor for actor in actors if actor["Id"] in to_remove]
     
-    return updated_actors, removed_actors
+    return updatedActors, removedActors
 
 ## 대화가 이어지는 Character는 나누기
 def DividedIntoContinuousConversation(ResponseJson, CharacterList):
+    # ##################
+    # with open('OldCharacterList.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
+    # ##################
     for MainCharacter in CharacterList:
         for mainCharacter in MainCharacter['Actors']:
             ChunkIds = []
@@ -763,19 +767,34 @@ def DividedIntoContinuousConversation(ResponseJson, CharacterList):
         
         actors = MainCharacter['Actors']
         # 연속된 문장 번호를 가진 인물 찾기
-        continuousActors = find_continuous_characters(actors)
+        continuousActors = FindContinuousCharacters(actors)
         # 인물 제거 및 업데이트
-        updatedActors, removedActors = remove_actors_based_on_frequency(actors, continuousActors)
-        filtered_actors = [actor for actor in actors if actor["Id"] != 28]
-        # DividedCharacterList.append()
-        print('@@@@@@@@@@@@@@@@@@@@@')
-        # print(updatedActors)
-        print(removedActors)
+        updatedActors, removedActors = RemoveActorsBasedOnFrequency(actors, continuousActors)
+        if removedActors != []:
+            removedactorIds = []
+            removedactorFrequencys = 0
+            for removedactor in removedActors:
+                removedactorIds.append(removedactor['Id'])
+                removedactorFrequencys += removedactor['Frequency']
+            filteredActors = [actor for actor in actors if actor["Id"] not in removedactorIds]
+            
+            # 제거되지 않은 Actors 업데이트
+            MainCharacter['Actors'] = filteredActors
+            MainCharacter['Frequency'] = MainCharacter['Frequency'] - removedactorFrequencys
+            MainCharacter['ActorIdx'] = [id for id in MainCharacter['ActorIdx'] if id not in removedactorIds]
+            
+            # 제거된 Actors 새로운 캐릭터로 추가하기
+            DividedCharacterId = len(CharacterList) + 1
+            DividedCharacterTag = 'Character' + str(DividedCharacterId)
+            
+            DividedCharacterDic = {'CharacterId': DividedCharacterId, 'CharacterTag': DividedCharacterTag, 'Gender': MainCharacter['Gender'], 'Age': MainCharacter['Age'], 'Actors': removedActors, 'Frequency': removedactorFrequencys, 'ActorIdx': removedactorIds}
+            
+            CharacterList.append(DividedCharacterDic)
 
-    ##################
-    with open('CharacterList.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
-    ##################
+    # ##################
+    # with open('NewCharacterList.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
+    # ##################
     
     return CharacterList
 

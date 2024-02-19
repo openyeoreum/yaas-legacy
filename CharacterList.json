@@ -198,19 +198,6 @@
                 ]
             },
             {
-                "Id": 28,
-                "MainCharacter": "곰탕집 주인",
-                "Frequency": 6,
-                "ChunkIds": [
-                    1324,
-                    1326,
-                    1330,
-                    1600,
-                    1603,
-                    1605
-                ]
-            },
-            {
                 "Id": 32,
                 "MainCharacter": "불명",
                 "Frequency": 5,
@@ -268,102 +255,6 @@
                 ]
             },
             {
-                "Id": 60,
-                "MainCharacter": "학생 B",
-                "Frequency": 1,
-                "ChunkIds": [
-                    176
-                ]
-            },
-            {
-                "Id": 61,
-                "MainCharacter": "학생 C",
-                "Frequency": 1,
-                "ChunkIds": [
-                    177
-                ]
-            },
-            {
-                "Id": 62,
-                "MainCharacter": "학생 D",
-                "Frequency": 1,
-                "ChunkIds": [
-                    178
-                ]
-            },
-            {
-                "Id": 63,
-                "MainCharacter": "학생 E",
-                "Frequency": 1,
-                "ChunkIds": [
-                    179
-                ]
-            },
-            {
-                "Id": 64,
-                "MainCharacter": "학생 F",
-                "Frequency": 1,
-                "ChunkIds": [
-                    180
-                ]
-            },
-            {
-                "Id": 65,
-                "MainCharacter": "학생 G",
-                "Frequency": 1,
-                "ChunkIds": [
-                    182
-                ]
-            },
-            {
-                "Id": 66,
-                "MainCharacter": "학생 H",
-                "Frequency": 1,
-                "ChunkIds": [
-                    183
-                ]
-            },
-            {
-                "Id": 67,
-                "MainCharacter": "학생 I",
-                "Frequency": 1,
-                "ChunkIds": [
-                    184
-                ]
-            },
-            {
-                "Id": 68,
-                "MainCharacter": "학생 J",
-                "Frequency": 1,
-                "ChunkIds": [
-                    185
-                ]
-            },
-            {
-                "Id": 69,
-                "MainCharacter": "학생 K",
-                "Frequency": 1,
-                "ChunkIds": [
-                    186
-                ]
-            },
-            {
-                "Id": 70,
-                "MainCharacter": "학생 L",
-                "Frequency": 1,
-                "ChunkIds": [
-                    187
-                ]
-            },
-            {
-                "Id": 73,
-                "MainCharacter": "야당 의원",
-                "Frequency": 1,
-                "ChunkIds": [
-                    637
-                ]
-            },
-            {
                 "Id": 76,
                 "MainCharacter": "상사",
                 "Frequency": 1,
@@ -377,14 +268,6 @@
                 "Frequency": 1,
                 "ChunkIds": [
                     1076
-                ]
-            },
-            {
-                "Id": 78,
-                "MainCharacter": "일동",
-                "Frequency": 1,
-                "ChunkIds": [
-                    1233
                 ]
             },
             {
@@ -436,14 +319,6 @@
                 ]
             },
             {
-                "Id": 103,
-                "MainCharacter": "등산객",
-                "Frequency": 1,
-                "ChunkIds": [
-                    2630
-                ]
-            },
-            {
                 "Id": 106,
                 "MainCharacter": "시민",
                 "Frequency": 1,
@@ -452,7 +327,7 @@
                 ]
             }
         ],
-        "Frequency": 187,
+        "Frequency": 167,
         "ActorIdx": [
             1,
             21,
@@ -525,53 +400,11 @@
                     2583,
                     2588
                 ]
-            },
-            {
-                "Id": 5,
-                "MainCharacter": "김한섭 대통령과 각료들",
-                "Frequency": 34,
-                "ChunkIds": [
-                    332,
-                    334,
-                    789,
-                    2503,
-                    2507,
-                    2511,
-                    2539,
-                    2542,
-                    2544,
-                    2546,
-                    2548,
-                    2550,
-                    2552,
-                    2553,
-                    2555,
-                    2557,
-                    2559,
-                    2562,
-                    2564,
-                    2567,
-                    2575,
-                    2578,
-                    2580,
-                    2582,
-                    2584,
-                    2626,
-                    2632,
-                    2636,
-                    2638,
-                    2641,
-                    2643,
-                    2665,
-                    2679,
-                    2731
-                ]
             }
         ],
-        "Frequency": 85,
+        "Frequency": 51,
         "ActorIdx": [
-            2,
-            5
+            2
         ]
     },
     {
@@ -1400,14 +1233,6 @@
                 ]
             },
             {
-                "Id": 90,
-                "MainCharacter": "행사 참가자",
-                "Frequency": 1,
-                "ChunkIds": [
-                    2358
-                ]
-            },
-            {
                 "Id": 97,
                 "MainCharacter": "문화 분야 장관 후보자",
                 "Frequency": 1,
@@ -1432,7 +1257,7 @@
                 ]
             }
         ],
-        "Frequency": 27,
+        "Frequency": 26,
         "ActorIdx": [
             31,
             40,
@@ -1444,7 +1269,6 @@
             87,
             88,
             89,
-            90,
             97,
             98,
             99
@@ -1702,6 +1526,340 @@
             58,
             74,
             95
+        ]
+    },
+    {
+        "CharacterId": 12,
+        "CharacterTag": "Character12",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 28,
+                "MainCharacter": "곰탕집 주인",
+                "Frequency": 6,
+                "ChunkIds": [
+                    1324,
+                    1326,
+                    1330,
+                    1600,
+                    1603,
+                    1605
+                ]
+            },
+            {
+                "Id": 70,
+                "MainCharacter": "학생 L",
+                "Frequency": 1,
+                "ChunkIds": [
+                    187
+                ]
+            },
+            {
+                "Id": 73,
+                "MainCharacter": "야당 의원",
+                "Frequency": 1,
+                "ChunkIds": [
+                    637
+                ]
+            },
+            {
+                "Id": 78,
+                "MainCharacter": "일동",
+                "Frequency": 1,
+                "ChunkIds": [
+                    1233
+                ]
+            },
+            {
+                "Id": 103,
+                "MainCharacter": "등산객",
+                "Frequency": 1,
+                "ChunkIds": [
+                    2630
+                ]
+            }
+        ],
+        "Frequency": 10,
+        "ActorIdx": [
+            28,
+            70,
+            73,
+            78,
+            103
+        ]
+    },
+    {
+        "CharacterId": 13,
+        "CharacterTag": "Character13",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 5,
+                "MainCharacter": "김한섭 대통령과 각료들",
+                "Frequency": 34,
+                "ChunkIds": [
+                    332,
+                    334,
+                    789,
+                    2503,
+                    2507,
+                    2511,
+                    2539,
+                    2542,
+                    2544,
+                    2546,
+                    2548,
+                    2550,
+                    2552,
+                    2553,
+                    2555,
+                    2557,
+                    2559,
+                    2562,
+                    2564,
+                    2567,
+                    2575,
+                    2578,
+                    2580,
+                    2582,
+                    2584,
+                    2626,
+                    2632,
+                    2636,
+                    2638,
+                    2641,
+                    2643,
+                    2665,
+                    2679,
+                    2731
+                ]
+            }
+        ],
+        "Frequency": 34,
+        "ActorIdx": [
+            5
+        ]
+    },
+    {
+        "CharacterId": 14,
+        "CharacterTag": "Character14",
+        "Gender": "남",
+        "Age": "노년",
+        "Actors": [
+            {
+                "Id": 90,
+                "MainCharacter": "행사 참가자",
+                "Frequency": 1,
+                "ChunkIds": [
+                    2358
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            90
+        ]
+    },
+    {
+        "CharacterId": 15,
+        "CharacterTag": "Character15",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 69,
+                "MainCharacter": "학생 K",
+                "Frequency": 1,
+                "ChunkIds": [
+                    186
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            69
+        ]
+    },
+    {
+        "CharacterId": 16,
+        "CharacterTag": "Character16",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 68,
+                "MainCharacter": "학생 J",
+                "Frequency": 1,
+                "ChunkIds": [
+                    185
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            68
+        ]
+    },
+    {
+        "CharacterId": 17,
+        "CharacterTag": "Character17",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 67,
+                "MainCharacter": "학생 I",
+                "Frequency": 1,
+                "ChunkIds": [
+                    184
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            67
+        ]
+    },
+    {
+        "CharacterId": 18,
+        "CharacterTag": "Character18",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 66,
+                "MainCharacter": "학생 H",
+                "Frequency": 1,
+                "ChunkIds": [
+                    183
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            66
+        ]
+    },
+    {
+        "CharacterId": 19,
+        "CharacterTag": "Character19",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 65,
+                "MainCharacter": "학생 G",
+                "Frequency": 1,
+                "ChunkIds": [
+                    182
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            65
+        ]
+    },
+    {
+        "CharacterId": 20,
+        "CharacterTag": "Character20",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 64,
+                "MainCharacter": "학생 F",
+                "Frequency": 1,
+                "ChunkIds": [
+                    180
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            64
+        ]
+    },
+    {
+        "CharacterId": 21,
+        "CharacterTag": "Character21",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 63,
+                "MainCharacter": "학생 E",
+                "Frequency": 1,
+                "ChunkIds": [
+                    179
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            63
+        ]
+    },
+    {
+        "CharacterId": 22,
+        "CharacterTag": "Character22",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 62,
+                "MainCharacter": "학생 D",
+                "Frequency": 1,
+                "ChunkIds": [
+                    178
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            62
+        ]
+    },
+    {
+        "CharacterId": 23,
+        "CharacterTag": "Character23",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 61,
+                "MainCharacter": "학생 C",
+                "Frequency": 1,
+                "ChunkIds": [
+                    177
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            61
+        ]
+    },
+    {
+        "CharacterId": 24,
+        "CharacterTag": "Character24",
+        "Gender": "남",
+        "Age": "중년",
+        "Actors": [
+            {
+                "Id": 60,
+                "MainCharacter": "학생 B",
+                "Frequency": 1,
+                "ChunkIds": [
+                    176
+                ]
+            }
+        ],
+        "Frequency": 1,
+        "ActorIdx": [
+            60
         ]
     }
 ]

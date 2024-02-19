@@ -881,12 +881,12 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
             Narrator = CharacterList[0]
             SelectedCharacter['Voice'] = {'CharacterId': Narrator['CharacterId'], 'CharacterTag': Narrator['CharacterTag'], 'Gender': Narrator['Gender'], 'Age': Narrator['Age']}
 
-    ##################
-    with open('CharacterList.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
-    with open('SelectedCharacters.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(SelectedCharacters, json_file, ensure_ascii = False, indent = 4)
-    ##################
+    # ##################
+    # with open('CharacterList.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
+    # with open('SelectedCharacters.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(SelectedCharacters, json_file, ensure_ascii = False, indent = 4)
+    # ##################
         
     return SelectedCharacters, CharacterList
 

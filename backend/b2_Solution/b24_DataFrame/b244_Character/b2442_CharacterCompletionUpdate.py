@@ -753,9 +753,6 @@ def remove_actors_based_on_frequency(actors, continuous_actors):
 
 ## 대화가 이어지는 Character는 나누기
 def DividedIntoContinuousConversation(ResponseJson, CharacterList):
-
-    DividedCharacterList = []
-    # 가장 대화가 많은 인물을 제거
     for MainCharacter in CharacterList:
         for mainCharacter in MainCharacter['Actors']:
             ChunkIds = []
@@ -763,11 +760,13 @@ def DividedIntoContinuousConversation(ResponseJson, CharacterList):
                 if mainCharacter['MainCharacter'] == character['MainCharacter']:
                     ChunkIds.append(character['ChunkId'])
             mainCharacter['ChunkIds'] = ChunkIds
-            
+        
+        actors = MainCharacter['Actors']
         # 연속된 문장 번호를 가진 인물 찾기
-        continuousActors = find_continuous_characters(MainCharacter['Actors'])
+        continuousActors = find_continuous_characters(actors)
         # 인물 제거 및 업데이트
-        updatedActors, removedActors = remove_actors_based_on_frequency(MainCharacter['Actors'], continuousActors)
+        updatedActors, removedActors = remove_actors_based_on_frequency(actors, continuousActors)
+        filtered_actors = [actor for actor in actors if actor["Id"] != 28]
         # DividedCharacterList.append()
         print('@@@@@@@@@@@@@@@@@@@@@')
         # print(updatedActors)

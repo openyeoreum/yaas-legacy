@@ -18748,7 +18748,7 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.00],
+                    "speed_x": [1.08],
                     "tempo": 1.0,
                     "pitch": 0,
                     "max_seconds": 60,
@@ -18835,7 +18835,7 @@
                         "emotion_prompt": "None"
                     },
                     "volume": 120,
-                    "speed_x": [1.00],
+                    "speed_x": [1.08],
                     "tempo": 1.0,
                     "pitch": 0,
                     "max_seconds": 60,

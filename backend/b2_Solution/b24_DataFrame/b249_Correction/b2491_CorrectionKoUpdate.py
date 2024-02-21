@@ -708,7 +708,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         
         # Title, 일반 문장 처리
         if tag == "Title":
-            tokens.append({"Pause": "(2.00)"})
+            tokens.append({"Pause": "(3.00)"})
             tokens.append({"Enter": "\n"})
         elif tag in ["Logue", "Part", "Chapter"]:
             tokens.append({"Pause": "(1.50)"})
@@ -739,7 +739,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         # 앞, 뒤Chunk를 통한 처리
         if Aftertag in ["Logue", "Part", "Chapter"]:
             if "Pause" in tokens[-2]:
-                tokens[-2]['Pause'] = "(1.50)"
+                tokens[-2]['Pause'] = "(2.00)"
             else:
                 tokens.append({"Pause": "(1.50)"})
         elif Aftertag == "Index":

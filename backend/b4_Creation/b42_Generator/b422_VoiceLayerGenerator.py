@@ -299,6 +299,7 @@ def ActorChunkSetting(RawChunk):
     ActorChunk = ActorChunk.replace('(1.30)', '')
     ActorChunk = ActorChunk.replace('(1.50)', '')
     ActorChunk = ActorChunk.replace('(2.00)', '')
+    ActorChunk = ActorChunk.replace('(3.00)', '')
     
     ActorChunk = ActorChunk.replace(',,', ',')
     ActorChunk = ActorChunk.replace(',.', ',')

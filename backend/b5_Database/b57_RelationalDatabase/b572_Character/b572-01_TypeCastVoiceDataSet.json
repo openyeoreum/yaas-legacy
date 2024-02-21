@@ -1181,7 +1181,7 @@
                     "Atmosphere": [
                         {"index": "행복", "Score": 0},
                         {"index": "즐거움", "Score": 0},
-                        {"index": "평온", "Score": 0},
+                        {"index": "평온", "Score": 3},
                         {"index": "무감정", "Score": 5},
                         {"index": "피곤", "Score": 4},
                         {"index": "슬픔", "Score": 4},
@@ -1328,15 +1328,15 @@
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
                     "Genre": [
-                        {"index": "문학", "Score": 10},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "문학", "Score": 12},
+                        {"index": "비문학", "Score": 6},
                         {"index": "아동", "Score": 0},
-                        {"index": "시", "Score": 10},
+                        {"index": "시", "Score": 8},
                         {"index": "학술", "Score": 0}
                     ],
                     "Gender": [
                         {"index": "남", "Score": 10},
-                        {"index": "여", "Score": 8},
+                        {"index": "여", "Score": 0},
                         {"index": "중성", "Score": 10}
                     ],
                     "Age": [
@@ -1355,9 +1355,9 @@
                     "Atmosphere": [
                         {"index": "행복", "Score": 0},
                         {"index": "즐거움", "Score": 0},
-                        {"index": "평온", "Score": 0},
-                        {"index": "무감정", "Score": 10},
-                        {"index": "피곤", "Score": 10},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 11},
+                        {"index": "피곤", "Score": 11},
                         {"index": "슬픔", "Score": 10},
                         {"index": "두려움", "Score": 6},
                         {"index": "놀람", "Score": 8}
@@ -1368,22 +1368,22 @@
                     "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 9},
+                        {"index": "청소년", "Score": 8},
                         {"index": "청년", "Score": 10},
-                        {"index": "중년", "Score": 8},
+                        {"index": "중년", "Score": 10},
                         {"index": "장년", "Score": 1},
                         {"index": "노년", "Score": 1}
                     ],
                     "Role": [
                         {"index": "낭독", "Score": 10},
-                        {"index": "대화", "Score": 8}
+                        {"index": "대화", "Score": 10}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
-                        {"index": "침착함", "Score": 8},
-                        {"index": "중립", "Score": 9},
+                        {"index": "침착함", "Score": 10},
+                        {"index": "중립", "Score": 10},
                         {"index": "슬픔", "Score": 10},
-                        {"index": "화남", "Score": 0}
+                        {"index": "화남", "Score": 3}
                     ],
                     "TypeCastContext": {}
                 },
@@ -1417,16 +1417,16 @@
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
                     "Genre": [
-                        {"index": "문학", "Score": 10},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "문학", "Score": 11},
+                        {"index": "비문학", "Score": 6},
                         {"index": "아동", "Score": 0},
-                        {"index": "시", "Score": 0},
+                        {"index": "시", "Score": 8},
                         {"index": "학술", "Score": 0}
                     ],
                     "Gender": [
                         {"index": "남", "Score": 10},
                         {"index": "여", "Score": 0},
-                        {"index": "중성", "Score": 7}
+                        {"index": "중성", "Score": 10}
                     ],
                     "Age": [
                         {"index": "유년", "Score": 0},
@@ -1464,15 +1464,15 @@
                         {"index": "노년", "Score": 1}
                     ],
                     "Role": [
-                        {"index": "낭독", "Score": 8},
+                        {"index": "낭독", "Score": 10},
                         {"index": "대화", "Score": 9}
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
-                        {"index": "침착함", "Score": 8},
-                        {"index": "중립", "Score": 8},
+                        {"index": "침착함", "Score": 10},
+                        {"index": "중립", "Score": 10},
                         {"index": "슬픔", "Score": 10},
-                        {"index": "화남", "Score": 0}
+                        {"index": "화남", "Score": 3}
                     ],
                     "TypeCastContext": {}
                 },

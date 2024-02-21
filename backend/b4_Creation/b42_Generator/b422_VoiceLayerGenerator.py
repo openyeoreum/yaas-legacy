@@ -92,7 +92,7 @@ def LoadSelectionGenerationKoChunks(projectName, email, voicedataset, MainLang):
 #############################
 # NarratorSet에서 ContextScore 계산
 def ContextScoreCal(VoiceDataSetCharacters, SelectionGenerationKoBookContext):
-   
+    # print(SelectionGenerationKoBookContext)
     BookGenre = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Genre']
     BookGender = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Gender']
     BookAge = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Age']
@@ -140,7 +140,16 @@ def ContextScoreCal(VoiceDataSetCharacters, SelectionGenerationKoBookContext):
         AtmosphereScore = AtmosphereScore / 1000
         
         ContextScore = (QuiltyScore * GenreScore * GenderScore * AgeScore * PersonalityScore * AtmosphereScore)
-        
+        # if '김건' in Character['Name']:
+        #     print(Character['Name'])
+        #     print(f'QuiltyScore: {QuiltyScore}')
+        #     print(f'GenreScore: {GenreScore}')
+        #     print(f'GenderScore: {GenreScore}')
+        #     print(f'AgeScore: {AgeScore}')
+        #     print(f'PersonalityScore: {PersonalityScore}')
+        #     print(f'AtmosphereScore: {AtmosphereScore}')
+        #     print(f'ContextScore: {ContextScore}')
+        #     print('\n\n')
         Character['Choice'] = 'No'
         Character['Score'] = {'ContextScore': 'None'}
         Character['Score']['ContextScore'] = ContextScore
@@ -347,14 +356,14 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
             NeuterVoice = HighestScoreVoice
             VoiceDataSetCharacters.append(NeuterVoice)
 
-    # ### 테스트 후 삭제 ###
-    # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
-    # with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
-    # with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ###
+    ### 테스트 후 삭제 ###
+    with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
+    with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ###
     
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
@@ -383,10 +392,10 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
                     GenerationKoChunks['Chunk'] = [part + "(0.60)" for part in parts[:-1]] + [parts[-1]]
                 GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
                 
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
     return MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters
     

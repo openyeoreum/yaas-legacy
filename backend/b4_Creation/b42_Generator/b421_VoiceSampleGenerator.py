@@ -67,8 +67,8 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
         
     filename = name + '(' + emotion + pitchname + ')'
     ChunkId = 0
-    # Chunk = f'지구인들은. {{{{메타버스}}}}에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다. {{{{무브 패스트, 앤드 브레이크 띵스}}}}, 빠르게 움직이고 깨뜨려라. 그 아저씨들 기억나죠요고, 응돈 던지고, 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀린거지?, 그런거지?, 야 너 잠시만 이리로 와봐, 나는 그 사실이 너무 슬픈걸 어떡하니?'
-    Chunk = f"Humans are essentially living in the metaverse. Thus, Jensen Huang's statement that the metaverse is coming is incorrect. The argument that we must consider the reality of the ecosystem has clashed with this. According to Elon Musk, no one has seen Web 3.0. To make it visually apparent, we need to create a form for Web 3.0. It wasn't even necessary for the general public."
+    Chunk = f'지구인들은. {{{{메타버스}}}}에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다. {{{{무브 패스트, 앤드 브레이크 띵스}}}}, 빠르게 움직이고 깨뜨려라. 그 아저씨들 기억나죠요고, 응돈 던지고, 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀린거지?, 그런거지?, 야 너 잠시만 이리로 와봐, 나는 그 사실이 너무 슬픈걸 어떡하니?'
+    # Chunk = f"Humans are essentially living in the metaverse. Thus, Jensen Huang's statement that the metaverse is coming is incorrect. The argument that we must consider the reality of the ecosystem has clashed with this. According to Elon Musk, no one has seen Web 3.0. To make it visually apparent, we need to create a form for Web 3.0. It wasn't even necessary for the general public."
     SPEED = [1.05]
     
     RandomSPEED = random.choice(SPEED)
@@ -111,8 +111,8 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     testerName = "테스트(가)"
-    name = '올리비아'
-    emotionlist = ['일반', '화남', '톤업', '슬픔', '기쁨']
+    name = '만년대리'
+    emotionlist = ['일반']
     pitch = '다운'
     lastpitch = [-1, -2]
     #########################################################################

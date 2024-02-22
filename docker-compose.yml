@@ -25,7 +25,7 @@ services:
   yaas:
     image: yeoreum/yaas:1.0.0
     environment:
-      - DATABASE_URL=postgres://yeoreum:0128@db:5432/db
+      - DATABASE_URL=postgres://yeoreum:0128@yaasdb:5432/yaasdb
     ports:
       - "5173:3000"
     volumes:
@@ -38,3 +38,13 @@ services:
       - ./dockerfile:/yaas/dockerfile
     depends_on:
       - yaasdb
+
+  selenium:
+    image: seleniarm/standalone-chromium
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "4444:4444"
+    depends_on:
+      - yaasdb
+      - yaas

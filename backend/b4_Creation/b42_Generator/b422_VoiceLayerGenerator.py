@@ -603,13 +603,19 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
 def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
+    
+    ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
+    # MatchedActors 경로 생성
+    fileName = projectName + '_' + 'MatchedVoices.json'
+    MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
+    if os.path.exists(MatchedActorsPath):
+        with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
+            MatchedActors = json.load(MatchedActorsJson)
+
     for MatchedActor in MatchedActors:
         Actor = MatchedActor['ActorName']
 
         print(f"< Project: {projectName} | Actor: {Actor} | VoiceLayerGenerator 시작 >")
-        # MatchedActors 경로 생성
-        fileName = projectName + '_' + 'MatchedVoices.json'
-        MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
         # MatchedChunksEdit 경로 생성
         fileName = '[' + projectName + '_' + 'VoiceLayer_Edit].json'
         MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName)
@@ -648,8 +654,6 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
             with open(MatchedChunksOriginPath, 'w', encoding = 'utf-8') as json_file:
                 json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
         else:
-            with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
-                MatchedActors = json.load(MatchedActorsJson)
             with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
                 EditGenerationKoChunks = json.load(MatchedChunksJson)
 
@@ -702,7 +706,7 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                 if Name == VoiceData['Name']:
                     ApiSetting = VoiceData['ApiSetting']
                     name = ApiSetting['name']
-                    ApiToken = ApiSetting['ApiToken']
+                    # ApiToken = ApiSetting['ApiToken']
                     EMOTION = ApiSetting['emotion_tone_preset']['emotion_tone_preset']
                     SPEED = ApiSetting['speed_x']
                     Pitch = ApiSetting['pitch']

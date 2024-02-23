@@ -10,12 +10,12 @@ from backend.b4_Creation.b42_Generator.b422_VoiceLayerGenerator import VoiceLaye
 ###########################
 
 ### Creation에 오디오북 제작 및 업데이트 ###
-def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, mode = "Manual"):
+def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, mode = "Manual", macro = "Manual"):
     
     #####################
     ### 01_VoiceLayer ###
     #####################
-    VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode)
+    VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro)
 
 if __name__ == "__main__":
 
@@ -24,7 +24,8 @@ if __name__ == "__main__":
     projectName = '노인을위한나라는있다' # '데미안', '빨간머리앤', '웹3.0메타버스', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법'
     voiceDataSet = "TypeCastVoiceDataSet"
     mainLang = "Ko"
+    macro = "Manual"
     #########################################################################
     
     ### Step6 : 크리에이션이 오디오북 제작 ###
-    CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang)
+    CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, macro = macro)

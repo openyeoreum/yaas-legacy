@@ -37,14 +37,14 @@ def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
         
 ### Main2 : 콘텐츠 제작 ###
 
-def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang):
+def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Macro):
 
     if isinstance(projectNameList, list):
         for projectName in projectNameList:
             projectName = unicodedata.normalize('NFC', projectName)
             
             ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang)
+            CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang, macro = macro)
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
@@ -71,6 +71,7 @@ if __name__ == "__main__":
     VoiceDataSet = "TypeCastVoiceDataSet"
     MainLang = "Ko" # 'Ko', 'En'
     MainProcess = "Creation" # 'Solution', 'Creation'
+    Macro = "Manual" # 'Auto', 'Manual'
     #########################################################################
 
     YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, MainProcess)

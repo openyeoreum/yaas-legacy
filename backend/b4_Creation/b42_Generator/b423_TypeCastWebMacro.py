@@ -76,7 +76,7 @@ def TypeCastAPICharacter(driver, email, name):
     change_character_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@id='app']/div[5]/div/div[3]/div/button/span")))
     change_character_button.click()
 
-    time.sleep(random.randint(3, 5))
+    time.sleep(random.randint(10, 15))
     # driver.save_screenshot("/yaas/TypeCastAPICharacter_" + name + ".png")
     print(f"[ User: {email} | Character: {name} | TypeCastAPICharacter 완료 ]\n")
 
@@ -99,10 +99,10 @@ def TypeCastMacro(name):
     ## TypeCastAPI 로그인
     TypeCastAPILogin(driver, email, password)
     
-    ## TypeCastAPI 로그아웃
+    ## TypeCastAPICharacter 변경
     TypeCastAPICharacter(driver, email, name)
     
-    ## TypeCastAPICharacter 변경
+    ## TypeCastAPI 로그아웃
     TypeCastAPILogout(email, driver)
     
 if __name__ == "__main__":

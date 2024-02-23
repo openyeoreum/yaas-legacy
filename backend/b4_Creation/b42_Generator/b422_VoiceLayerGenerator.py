@@ -712,66 +712,63 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                 LASTPITCH = [-2]
             else:
                 LASTPITCH = ApiSetting['last_pitch']
-
-            for i in range(len(Chunks)):
-                Chunk = Chunks[i]
-                
-                # 단어로 끝나는 경우 끝음 조절하기
-                if '?' not in Chunk[-2:]:
-                    if '.' not in Chunk[-2:]:
-                        lastpitch = [-2]
-                    elif '다' not in Chunk[-2:]:
-                        lastpitch = [-2]
+            
+            ## TypeCastMacro에 따른 restart 코드 ##
+            restart = True
+            while restart:
+                restart = False  # 반복 시작 시 재시작 플래그를 초기화
+                for i in range(len(Chunks)):
+                    Chunk = Chunks[i]
+                    
+                    # 단어로 끝나는 경우 끝음 조절하기
+                    if '?' not in Chunk[-2:]:
+                        if '.' not in Chunk[-2:]:
+                            lastpitch = [-2]
+                        elif '다' not in Chunk[-2:]:
+                            lastpitch = [-2]
+                        else:
+                            lastpitch = LASTPITCH
                     else:
                         lastpitch = LASTPITCH
-                else:
-                    lastpitch = LASTPITCH
-                RandomEMOTION = random.choice(EMOTION)
-                RandomSPEED = random.choice(SPEED)
-                RandomLASTPITCH = random.choice(lastpitch)
-                
-                ## 수정 여부에 따라 파일명 변경 ##
-                if Modify == "Yes":
-                    FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + 'M.wav'
-                    voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-                    with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                        json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                    ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+                    RandomEMOTION = random.choice(EMOTION)
+                    RandomSPEED = random.choice(SPEED)
+                    RandomLASTPITCH = random.choice(lastpitch)
                     
-                    if ChangedName != 'Continue':
-                        ## 메크로 실행
-                        TypeCastMacro(ChangedName)
-                        time.sleep(random.randint(3, 5))
+                    ## 수정 여부에 따라 파일명 변경 ##
+                    if Modify == "Yes":
+                        FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + 'M.wav'
+                        voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+                        
                         with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
                             json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                        ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
                         
-                        # print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
-                        # sys.exit()
-                else:
-                    FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
-                    voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-                    if not os.path.exists(voiceLayerPath):
                         ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
-
-                        if ChangedName == 'Continue':
-                            ## 히스토리 저장 ##
-                            GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunks}
-                            GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
-                            with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                                json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                        else:
-                            ## 메크로 실행
+                        if ChangedName != 'Continue':
                             TypeCastMacro(ChangedName)
                             time.sleep(random.randint(3, 5))
-                            ## 히스토리 저장 ##
-                            GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunks}
-                            GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
-                            with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                                json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                            
+                            restart = True
+                            break
                             # print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
                             # sys.exit()
+                    else:
+                        FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
+                        voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+                        if not os.path.exists(voiceLayerPath):
+                            ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+
+                            if ChangedName == 'Continue':
+                                ## 히스토리 저장 ##
+                                GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunks}
+                                GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
+                                with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                                    json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                            else:
+                                TypeCastMacro(ChangedName)
+                                time.sleep(random.randint(3, 5))
+                                restart = True
+                                break
+                                # print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                                # sys.exit()
                 
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)

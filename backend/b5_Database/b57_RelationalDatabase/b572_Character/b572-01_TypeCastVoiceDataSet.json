@@ -4485,7 +4485,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 10},
-                        {"index": "비문학", "Score": 5},
+                        {"index": "비문학", "Score": 2},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4505,7 +4505,7 @@
                     ],
                     "Personality": [
                         {"index": "외향적", "Score": 5},
-                        {"index": "중립적", "Score": 10},
+                        {"index": "중립적", "Score": 7},
                         {"index": "내향적", "Score": 10}
                     ],
                     "Atmosphere": [
@@ -4526,7 +4526,7 @@
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
                         {"index": "청년", "Score": 10},
-                        {"index": "중년", "Score": 10},
+                        {"index": "중년", "Score": 7},
                         {"index": "장년", "Score": 1},
                         {"index": "노년", "Score": 1}
                     ],
@@ -4592,7 +4592,7 @@
                     ],
                     "Personality": [
                         {"index": "외향적", "Score": 4},
-                        {"index": "중립적", "Score": 10},
+                        {"index": "중립적", "Score": 6},
                         {"index": "내향적", "Score": 10}
                     ],
                     "Atmosphere": [
@@ -4613,7 +4613,7 @@
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
                         {"index": "청년", "Score": 10},
-                        {"index": "중년", "Score": 10},
+                        {"index": "중년", "Score": 8},
                         {"index": "장년", "Score": 6},
                         {"index": "노년", "Score": 2}
                     ],
@@ -4623,8 +4623,8 @@
                     ],
                     "Emotion": [
                         {"index": "즐거움", "Score": 0},
-                        {"index": "침착함", "Score": 5},
-                        {"index": "중립", "Score": 6},
+                        {"index": "침착함", "Score": 2},
+                        {"index": "중립", "Score": 2},
                         {"index": "슬픔", "Score": 3},
                         {"index": "화남", "Score": 10}
                     ],

@@ -47,7 +47,7 @@ def TypeCastAPILogin(driver, email, password):
     print(f"[ User: {email} | TypeCastAPILogin 완료 ]\n")
 
 ## TypeCastAPICharacter 변경
-def TypeCastAPICharacter(driver, name):
+def TypeCastAPICharacter(driver, email, name):
     wait = WebDriverWait(driver, 25)
     time.sleep(random.randint(9, 11))
     
@@ -77,7 +77,7 @@ def TypeCastAPICharacter(driver, name):
     change_character_button.click()
 
     time.sleep(random.randint(3, 5))
-    driver.save_screenshot("/yaas/TypeCastAPICharacter_" + name + ".png")
+    # driver.save_screenshot("/yaas/TypeCastAPICharacter_" + name + ".png")
     print(f"[ User: {email} | Character: {name} | TypeCastAPICharacter 완료 ]\n")
 
 ## TypeCastAPI 로그아웃
@@ -88,7 +88,7 @@ def TypeCastAPILogout(email, driver):
     print(f"[ User: {email} | TypeCastAPILogout 완료 ]\n")
     
 ## TypeCastAPICharacter 통합 함수
-def TypeCastAPICharacter(name):
+def TypeCastMacro(name):
     ############################ 하이퍼 파라미터 설정 ############################
     email = "lucidsun0128@naver.com"
     password = "Dhvmsdufma1!"
@@ -100,7 +100,7 @@ def TypeCastAPICharacter(name):
     TypeCastAPILogin(driver, email, password)
     
     ## TypeCastAPI 로그아웃
-    TypeCastAPICharacter(driver, name)
+    TypeCastAPICharacter(driver, email, name)
     
     ## TypeCastAPICharacter 변경
     TypeCastAPILogout(email, driver)
@@ -111,4 +111,4 @@ if __name__ == "__main__":
     names = ["연우", "김건", "만년대리"]
     #########################################################################
     for name in names:
-        TypeCastAPICharacter(name)
+        TypeCastMacro(name)

@@ -220,7 +220,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
                         highestScoreVoices = [VoiceData]  # 새로운 최고 점수 데이터로 리스트를 초기화
                     elif score == highestScore:
                         highestScoreVoices.append(VoiceData)  # 현재 점수가 최고 점수와 같다면 리스트에 추가
-                        
+
         # 최고 점수 데이터들 중 랜덤으로 하나를 선택하여 'Choice'를 CharacterTag로 설정
         if highestScoreVoices:
             highestScoreVoice = random.choice(highestScoreVoices)

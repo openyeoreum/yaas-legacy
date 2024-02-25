@@ -612,6 +612,7 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
         with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
             MatchedActors = json.load(MatchedActorsJson)
 
+    ## MatchedActor 순서대로 Speech 생성
     for MatchedActor in MatchedActors:
         Actor = MatchedActor['ActorName']
 
@@ -811,3 +812,64 @@ if __name__ == "__main__":
     #     json.dump(ActorCharacterList, json_file, ensure_ascii = False, indent = 4)        
     # with open('CaptionCharacterList.json', 'w', encoding = 'utf-8') as json_file:
     #     json.dump(CaptionCharacterList, json_file, ensure_ascii = False, indent = 4)
+    
+    # 필요한 라이브러리를 설치합니다.
+    # !pip install google-cloud-speech pydub
+
+    from google.cloud import speech_v1p1beta1 as speech
+    from pydub import AudioSegment
+    import io
+
+    # Google Cloud 인증 정보 설정
+    # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/path/to/your/service-account-file.json"
+
+    def transcribe_file_with_word_time_offsets(speech_file, target_phrase="안녕하세요"):
+        """
+        Google Cloud Speech-to-Text API를 사용하여 음성 파일에서 단어의 시작과 끝 시간을 찾습니다.
+        """
+        client = speech.SpeechClient()
+
+        with io.open(speech_file, "rb") as audio_file:
+            content = audio_file.read()
+
+        audio = speech.RecognitionAudio(content=content)
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            sample_rate_hertz=44100,
+            language_code="ko-KR",
+            enable_word_time_offsets=True
+        )
+
+        response = client.recognize(config=config, audio=audio)
+
+        for result in response.results:
+            for word_info in result.alternatives[0].words:
+                word = word_info.word
+                if word == target_phrase:
+                    start_time = word_info.start_time.total_seconds() * 1000  # Convert to milliseconds
+                    end_time = word_info.end_time.total_seconds() * 1000  # Convert to milliseconds
+                    return start_time, end_time
+        return None, None
+
+    def cut_phrase_from_audio(audio_file_path, start_ms, end_ms, output_file_path):
+        """
+        pydub를 사용하여 주어진 시작 및 종료 시간에 따라 오디오를 잘라내고 저장합니다.
+        """
+        audio = AudioSegment.from_wav(audio_file_path)
+        extract = audio[start_ms:end_ms]
+        extract.export(output_file_path, format="wav")
+
+    # 음성 파일 경로
+    speech_file = "/path/to/your/audiofile.wav"
+    # 결과 오디오 파일 경로
+    output_file_path = "/path/to/your/output_audio.wav"
+
+    # 음성 인식을 통해 특정 단어의 시작 및 종료 시간을 찾습니다.
+    start_ms, end_ms = transcribe_file_with_word_time_offsets(speech_file, "안녕하세요")
+
+    if start_ms is not None and end_ms is not None:
+        # 해당 부분을 잘라내어 새 파일로 저장합니다.
+        cut_phrase_from_audio(speech_file, start_ms, end_ms, output_file_path)
+        print(f"Extracted audio segment saved to {output_file_path}")
+    else:
+        print("Phrase not found in the audio file.")

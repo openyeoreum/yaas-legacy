@@ -1,11 +1,11 @@
 {
     "TaskName": "CharacterDefine",
     "BaseModel": {
-        "ShortTokensModel": "gpt-3.5-turbo-1106",
+        "ShortTokensModel": "gpt-3.5-turbo-0125",
         "LongTokensModel": "gpt-4-turbo-preview"
     },
     "ExampleFineTunedModel": {
-        "ShortTokensModel": [{"Date": "CharacterDefine-231022073805", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS"}, {"Date": "CharacterDefine-231102055753", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8GJjYaiZ"}, {"Date": "CharacterDefine-231108032841", "Model": "ft:gpt-3.5-turbo-1106:yeoreum::8ILpWsR7"}],
+        "ShortTokensModel": [{"Date": "CharacterDefine-231022073805", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS"}, {"Date": "CharacterDefine-231102055753", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8GJjYaiZ"}, {"Date": "CharacterDefine-231108032841", "Model": "ft:gpt-3.5-turbo-0125:yeoreum::8ILpWsR7"}],
         "LongTokensModel": []
     },
     "MemoryFineTunedModel": {

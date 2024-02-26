@@ -43,6 +43,7 @@ def AddPromptToDB():
         # translationEn = LoadJsonFrame(PromptDataPath + "/b547_TranslationPrompt/b547-02_TranslationEn.json")
         correctionKo = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-01_CorrectionKo.json")
         # correctionEn = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-02_CorrectionEn.json")
+        voiceSplit = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-02_VoiceSplit.json")
         ### 아래로 추가되는 프롬프트 작성 ###
 
         ExistingPrompt = db.query(Prompt).first()
@@ -70,6 +71,7 @@ def AddPromptToDB():
                 # ExistingPrompt.TranslationEn = translationEn
                 ExistingPrompt.CorrectionKo = correctionKo
                 # ExistingPrompt.CorrectionEn = correctionEn
+                ExistingPrompt.VoiceSplit = voiceSplit
                 ### 아래로 추가되는 프롬프트 작성 ###
                 
                 print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
@@ -94,8 +96,9 @@ def AddPromptToDB():
                 SFXMultiQuery = sFXMultiQuery,
                 TranslationKo = translationKo,
                 # TranslationEn = translationEn,
-                CorrectionKo = correctionKo
-                # CorrectionEn = correctionEn
+                CorrectionKo = correctionKo,
+                # CorrectionEn = correctionEn,
+                VoiceSplit = voiceSplit
                 ### 아래로 추가되는 프롬프트 작성 ###
                 )
             db.add(prompt)

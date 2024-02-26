@@ -435,7 +435,9 @@ class Prompt(Base):
     # SelectionGenerationZh = Column(JSON)
     # SelectionGenerationEs = Column(JSON)
     
-    # # MixingMasteringPrompt
+    # MixingMasteringPrompt
+    ChunkPostCorrection = Column(JSON)
+    VoiceSplit = Column(JSON)
     # MixingMasteringKo = Column(JSON)
     # MixingMasteringEn = Column(JSON)
     # MixingMasteringJa = Column(JSON)

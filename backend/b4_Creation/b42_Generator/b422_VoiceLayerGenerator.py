@@ -477,7 +477,7 @@ def TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTP
                     f.write(r.content)
                 break
             else:
-                print(f"status: {ret['status']}, waiting 1 second")
+                print(f"VoiceGen: {ret['status']}, {name} waiting 1 second")
                 time.sleep(1)
         return "Continue"
     else:
@@ -812,9 +812,40 @@ if __name__ == "__main__":
     #     json.dump(ActorCharacterList, json_file, ensure_ascii = False, indent = 4)        
     # with open('CaptionCharacterList.json', 'w', encoding = 'utf-8') as json_file:
     #     json.dump(CaptionCharacterList, json_file, ensure_ascii = False, indent = 4)
-    
-    # 필요한 라이브러리를 설치합니다.
-    # !pip install google-cloud-speech pydub
+
+
+
+    from google.cloud import speech
+    from google.oauth2 import service_account
+    from pydub import AudioSegment
+    import io
+
+    # API 키를 변수에 저장합니다.
+    API_KEY = 'AIzaSyBiSs77w1ajyaVtvhbaf-65RWQpmCk71k'
+
+    # 인증 정보를 생성합니다.
+    credentials = service_account.Credentials.from_service_account_info(
+        {
+            "type": "service_account",
+            "project_id": "your-project-id",
+            "private_key_id": "your-private-key-id",
+            "private_key": "your-private-key",
+            "client_email": "your-service-account-email",
+            "client_id": "your-client-id",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": "your-cert-url"
+        },
+        # API 키를 인증 정보에 포함합니다.
+        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+        # API 키를 인증 정보에 포함합니다.
+        quota_project_id='your-project-id'
+    )
+
+    # Speech-to-Text 클라이언트를 생성하고 인증 정보를 사용합니다.
+    client = speech.SpeechClient(credentials=credentials)
+
 
     from google.cloud import speech_v1p1beta1 as speech
     from pydub import AudioSegment
@@ -823,7 +854,7 @@ if __name__ == "__main__":
     # Google Cloud 인증 정보 설정
     # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/path/to/your/service-account-file.json"
 
-    def transcribe_file_with_word_time_offsets(speech_file, target_phrase="안녕하세요"):
+    def transcribe_file_with_word_time_offsets(speech_file, target_phrase):
         """
         Google Cloud Speech-to-Text API를 사용하여 음성 파일에서 단어의 시작과 끝 시간을 찾습니다.
         """
@@ -860,12 +891,12 @@ if __name__ == "__main__":
         extract.export(output_file_path, format="wav")
 
     # 음성 파일 경로
-    speech_file = "/path/to/your/audiofile.wav"
+    speech_file = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/5_연우(톤다운, 피치다운).wav"
     # 결과 오디오 파일 경로
-    output_file_path = "/path/to/your/output_audio.wav"
+    output_file_path = "/연우(톤다운, 피치다운).wav"
 
     # 음성 인식을 통해 특정 단어의 시작 및 종료 시간을 찾습니다.
-    start_ms, end_ms = transcribe_file_with_word_time_offsets(speech_file, "안녕하세요")
+    start_ms, end_ms = transcribe_file_with_word_time_offsets(speech_file, "지구인들은 메타버스에서 살고 있는 셈입니다.")
 
     if start_ms is not None and end_ms is not None:
         # 해당 부분을 잘라내어 새 파일로 저장합니다.

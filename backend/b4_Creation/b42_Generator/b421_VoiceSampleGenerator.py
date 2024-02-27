@@ -67,7 +67,8 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
         
     filename = name + '(' + emotion + pitchname + ')'
     ChunkId = 0
-    Chunk = f'지구인들은. {{{{메타버스}}}}에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다. {{{{무브 패스트, 앤드 브레이크 띵스}}}}, 빠르게 움직이고 깨뜨려라. 그 아저씨들 기억나죠요고, 응돈 던지고, 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀린거지?, 그런거지?, 야 너 잠시만 이리로 와봐, 나는 그 사실이 너무 슬픈걸 어떡하니?'
+    Chunk = '뿐만 아니라, 여름은 최근 창업진흥원에서 주관하는 대회에서 대상을 수상하며, 그들의 혁신적인 기술과 사회적 기여를 인정받았다. 이준영 대표는 수상 소감에서 "이 상은 단지 우리의 기술적 성과만을 인정하는 것이 아니라, 우리가 추구하는 가치와 비전에 대한 공감을 의미합니다. 우리는 앞으로도 지식의 접근성을 높이고, 누구나 쉽게 지식을 소비할 수 있는 환경을 만드는 것을 목표로 삼고 있습니다.라고 전했다.'
+    # Chunk = f'지구인들은. {{{{메타버스}}}}에서 살고 있는 셈입니다. 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀렸습니다. 생태계의 현실을 고려해야 한다는 주장이 맞붙었지요. 일론머스크 말대로 웹삼쩜영은 본 사람이 없습니다. 시각적으로 보이게 하려면. 웹삼쩜영에 형체를 만들어 씌워야 하겠지요. 일반인들에게는 그리 필요한 물건도 아니었고. 집에 사놔 봤자. 쓸 수 있는 애플리케이션도 없었기 때문이다. 그러나 트렌드 리더들의 눈은 매섭다. {{{{무브 패스트, 앤드 브레이크 띵스}}}}, 빠르게 움직이고 깨뜨려라. 그 아저씨들 기억나죠요고, 응돈 던지고, 그렇다면 메타버스가 오고 있다는 젠슨 황의 말은 틀린거지?, 그런거지?, 야 너 잠시만 이리로 와봐, 나는 그 사실이 너무 슬픈걸 어떡하니?'
     # Chunk = f"Humans are essentially living in the metaverse. Thus, Jensen Huang's statement that the metaverse is coming is incorrect. The argument that we must consider the reality of the ecosystem has clashed with this. According to Elon Musk, no one has seen Web 3.0. To make it visually apparent, we need to create a form for Web 3.0. It wasn't even necessary for the general public."
     SPEED = [1.05]
     
@@ -111,8 +112,8 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     testerName = "테스트(가)"
-    name = '지훈'
-    emotionlist = ['일반']
+    name = '연우'
+    emotionlist = ['중간톤']
     pitch = '다운'
     lastpitch = [-1, -2]
     #########################################################################

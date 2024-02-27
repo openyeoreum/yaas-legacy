@@ -2,14 +2,13 @@ import os
 import io
 import json
 import math
+import numpy as np
 import sys
 sys.path.append("/yaas")
 
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
 from google.cloud import speech
 from pydub import AudioSegment
-from pydub.silence import detect_nonsilent
-
 
 #########################
 ##### InputList 생성 #####
@@ -88,8 +87,6 @@ def VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process 
     for _ in range(10):
         # Response 생성
         Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0)
-        print(Model)
-        print(Response)
         Filter = VoiceTimeStempsProcessFilter(Response, RecordIdList)
         
         if isinstance(Filter, str):
@@ -104,94 +101,104 @@ def VoiceTimeStempsClassification(VoiceTimeStemps, Filter):
     SplitTimeList = []
     for Response in Filter:
         CurrentTime = Response['낭독기록번호리스트'][0]
-        EndTime = Response['낭독기록번호리스트'][-1]
-        
+        # EndTime = Response['낭독기록번호리스트'][-1]
         CurrentSplitTime = VoiceTimeStemps[CurrentTime - 1]['시작']
-        
         SplitTimeList.append(CurrentSplitTime)
-        
     SplitTimeList = SplitTimeList[1:]
         
     return SplitTimeList
 
 ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-def find_nearest_silence(audio, target_time, min_silence_len=100, silence_thresh=-40):
-    """
-    주어진 시간 근처에서 가장 가까운 무음 구간을 찾아 그 중앙을 반환합니다.
-    
-    Parameters:
-    - audio: AudioSegment 객체
-    - target_time: 타겟 시간 (초)
-    - min_silence_len: 감지할 최소 무음 길이 (밀리초)
-    - silence_thresh: 무음으로 간주할 최소 데시벨 수준
-    
-    Returns:
-    - 중앙 무음 시간 (밀리초)
-    """
-    nonsilent_parts = detect_nonsilent(
-        audio, 
-        min_silence_len=min_silence_len, 
-        silence_thresh=silence_thresh
-    )
-    
-    # 타겟 시간을 밀리초로 변환
-    target_time_ms = target_time * 1000
-    nearest_silence_center = None
-    smallest_diff = float('inf')
-    
-    # 가장 가까운 무음 구간 찾기
-    for nonsilent in nonsilent_parts:
-        start, end = nonsilent
-        if start <= target_time_ms <= end:
-            # 타겟 시간이 무음 구간 내부에 있는 경우
-            nearest_silence_center = (start + end) / 2
-            break
-        else:
-            # 가장 가까운 무음 구간 찾기
-            diff = min(abs(target_time_ms - start), abs(target_time_ms - end))
-            if diff < smallest_diff:
-                smallest_diff = diff
-                nearest_silence_center = (start + end) / 2
-    
-    return nearest_silence_center
-
-def VoiceFileSplit(VoiceLayerPath, SplitTimeList, base_export_path="/yaas/", min_silence_len=100, silence_thresh=-40):
+def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
     # 오디오 파일 로드
     audio = AudioSegment.from_wav(VoiceLayerPath)
     
-    split_points = [0]  # 첫 번째 분할 지점 추가
-    for split_time in SplitTimeList:
-        # 가장 가까운 무음 구간 중앙 찾기
-        nearest_silence_center = find_nearest_silence(audio, split_time, min_silence_len, silence_thresh)
-        if nearest_silence_center is not None:
-            split_points.append(nearest_silence_center)
+    # 분할된 파일 저장할 기본 경로
+    base_export_path = "/yaas/"
     
-    split_points.append(len(audio))  # 마지막 분할 지점 추가
-
-    # 오디오 분할 및 파일로 저장
-    for i in range(len(split_points)-1):
-        start_ms, end_ms = split_points[i], split_points[i+1]
-        segment = audio[start_ms:end_ms]
-        export_path = os.path.join(base_export_path, f"segment_{i+1}.wav")
+    # 최종 분할 지점을 저장할 리스트
+    split_points = []
+    
+    for split_time in SplitTimeList:
+        # 주변 평균값 탐색을 위한 초기화
+        averages = []
+        
+        for delta in np.arange(-0.5, 0.5, 0.05):
+            start = int((split_time + delta) * 1000)  # milliseconds
+            end = int((split_time + delta + 0.1) * 1000)  # milliseconds
+            segment = audio[start:end]
+            average = np.mean(np.abs(segment.get_array_of_samples()))
+            averages.append((start / 1000, average))
+        
+        # 가장 낮은 평균값 찾기
+        averages.sort(key=lambda x: x[1])
+        min_avg_time, _ = averages[0]
+        
+        # 최적 분할 지점 계산
+        optimal_split_point = min_avg_time
+        split_points.append(optimal_split_point)
+    
+    # 파일 분할 및 저장
+    start_point = 0
+    split_points.append(audio.duration_seconds)  # 마지막 부분 포함하기 위해 추가
+    for i, split_point in enumerate(split_points):
+        end_point = int(split_point * 1000)  # milliseconds로 변환
+        segment = audio[start_point:end_point]
+        # 페이드인/아웃 적용
+        segment = segment.fade_in(duration = 50).fade_out(duration = 50)  # 0.5초 페이드인, 0.05초 페이드아웃
+        # 무음 추가
+        silence = AudioSegment.silent(duration = 50)  # 0.05초 무음
+        segment = silence + segment + silence  # 무음 - 세그먼트 - 무음
+        
+        export_path = base_export_path + f"split_{i}.wav"
         segment.export(export_path, format="wav")
-        print(f"Exported: {export_path}")
+        print(f"Segment {i} exported: Start at {start_point / 1000:.5f}, end at {split_point:.5f} with fades and silence")
+        start_point = end_point
+
+## VoiceSplit 최종 함수
+def VoiceSplit(projectName, email, VoiceLayerPath, Input, LanguageCode):
+
+    voiceTimeStemps, Input2, RecordIdList = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
+    Filter = VoiceSplitProcess(projectName, email, Input, Input2, RecordIdList, Process = "VoiceSplit")
+    SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, Filter)
+    VoiceFileSplit(VoiceLayerPath, SplitTimeList)
 
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "웹3.0메타버스"
-    voiceDataSet = "TypeCastVoiceDataSet"
-    mainLang = 'Ko'
-    mode = "Manual"
-    macro = "Manual"
-    VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/테스트(가)_0_지훈(일반, 피치다운).wav"
+    VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/테스트(가)_0_연우(중간톤, 피치다운).wav"
     LanguageCode = "ko-KR"
     #########################################################################
-    voiceTimeStemps, Input2, RecordIdList = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
-    Input1 = [{'낭독문장번호': 1, '낭독문장': '뿐만 아니라, 여름은 최근 창업진흥원에서 주관하는 대회에서 대상을 수상하며, 그들의 혁신적인 기술과 사회적 기여를 인정받았다.'}, {'낭독문장번호': 2, '낭독문장': '이준영 대표는 수상 소감에서 "이 상은 단지 우리의 기술적 성과만을 인정하는 것이 아니라, 우리가 추구하는 가치와 비전에 대한 공감을 의미합니다.'}, {'낭독문장번호': 3, '낭독문장': '우리는 앞으로도 지식의 접근성을 높이고, 누구나 쉽게 지식을 소비할 수 있는 환경을 만드는 것을 목표로 삼고 있습니다.'}, {'낭독문장번호': 4, '낭독문장': '라고 전했다.'}]
-    Filter = VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process = "VoiceSplit")
-    print(Filter)
-    SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, Filter)
-    print(SplitTimeList)
-    VoiceFileSplit(VoiceLayerPath, SplitTimeList)
+    Input = [{'낭독문장번호': 1, '낭독문장': '뿐만 아니라, 여름은 최근 창업진흥원에서 주관하는 대회에서 대상을 수상하며'}, {'낭독문장번호': 2, '낭독문장': '그들의 혁신적인 기술과 사회적 기여를 인정받았다.'}, {'낭독문장번호': 3, '낭독문장': '이준영 대표는 수상 소감에서 "이 상은 단지 우리의 기술적 성과만을 인정하는 것이 아니라, 우리가 추구하는 가치와 비전에 대한 공감을 의미합니다.'}, {'낭독문장번호': 4, '낭독문장': '우리는 앞으로도 지식의 접근성을 높이고, 누구나 쉽게 지식을 소비할 수 있는 환경을 만드는 것을 목표로 삼고 있습니다.'}, {'낭독문장번호': 5, '낭독문장': '라고 전했다.'}]
+
+    VoiceSplit(projectName, email, VoiceLayerPath, Input, LanguageCode)
+    
+    # 파일 경로 설정
+    files = [
+        "/yaas/split_0.wav",
+        "/yaas/split_1.wav",
+        "/yaas/split_2.wav",
+        "/yaas/split_3.wav",
+        "/yaas/split_4.wav"
+    ]
+
+    # 무음 추가를 위한 오디오 세그먼트 생성
+    silence_short = AudioSegment.silent(duration = 200)  # 0.2초의 무음
+    silence_long = AudioSegment.silent(duration = 800)  # 0.7초의 무음
+
+    # 첫 번째 오디오 파일 로드
+    combined = AudioSegment.from_wav(files[0])
+
+    # 나머지 오디오 파일들을 순회하며 조건에 맞는 무음 추가 후 합치기
+    for index, file in enumerate(files[1:], start=1):
+        audio = AudioSegment.from_wav(file)
+        # 0과 1, 3과 4 사이는 0.2초 무음, 1과 2, 2와 3 사이는 0.7초 무음
+        if index == 1 or index == 4:  # 조건에 따라 무음 길이 변경
+            combined += silence_short + audio
+        else:
+            combined += silence_long + audio
+
+    # 합친 오디오 파일 저장
+    combined.export("/yaas/combined_file.wav", format="wav")

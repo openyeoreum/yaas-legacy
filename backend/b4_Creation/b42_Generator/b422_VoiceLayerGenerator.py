@@ -743,11 +743,9 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                     if Modify == "Yes":
                         FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + 'M.wav'
                         voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-                        
+                        ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
                         with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
                             json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                        
-                        ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
                         if ChangedName != 'Continue':
                             if Macro == "Auto":
                                 TypeCastMacro(ChangedName)

@@ -15,6 +15,7 @@ from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoiceDataSet
 from backend.b4_Creation.b42_Generator.b423_TypeCastWebMacro import TypeCastMacro
+from backend.b4_Creation.b42_Generator.b424_VoiceSplit import VoiceSplit
 
 ###########################################
 ##### SelectionGenerationKoChunks 생성 #####
@@ -426,7 +427,7 @@ def VoiceLayerPathGen(projectName, email, FileName):
 ##### VoiceLayerGenerator 파일 생성 #####
 #######################################
 ## TypecastVoice 생성 ##
-def TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath):
+def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks):
     api_token = os.getenv("TYPECAST_API_TOKEN")
     HEADERS = {'Authorization': f'Bearer {api_token}'}
 
@@ -473,12 +474,21 @@ def TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTP
             if ret['status'] == 'done':
                 # download audio file
                 r = requests.get(ret['audio_download_url'])
-                with open(voiceLayerPath, 'wb') as f:
+                if len(SplitChunks) == 1:
+                    fileName = voiceLayerPath.replace(".wav", "") + f"_(0).wav"
+                else:
+                    fileName = voiceLayerPath
+                with open(fileName, 'wb') as f:
                     f.write(r.content)
                 break
             else:
                 print(f"VoiceGen: {ret['status']}, {name} waiting 1 second")
                 time.sleep(1)
+
+        if len(SplitChunks) > 1:
+            ### 음성파일을 분할하는 코드 ###
+            VoiceSplit(projectName, email, voiceLayerPath, SplitChunks)
+
         return "Continue"
     else:
         return name
@@ -573,31 +583,31 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
         if VoiceFileMatch:
             chunkid, actorname = VoiceFileMatch.groups()
         for j in range(len(EditGenerationKoChunks)):
-            if int(chunkid) == EditGenerationKoChunks[j]['ChunkId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
+            if int(chunkid) == EditGenerationKoChunks[j]['EditId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
                 Files.append(RawFiles[i])
                 break
-    
+
     # 폴더 내의 모든 .wav 파일 목록 정렬/필터
     FilteredFiles = SortAndRemoveDuplicates(Files)
-    
     CombinedSound = AudioSegment.empty()
 
     FilesCount = 0
     for i in range(len(EditGenerationKoChunks)):
         for j in range(len(EditGenerationKoChunks[i]['Pause'])):
+            print(EditGenerationKoChunks[i])
+            print(FilesCount)
             sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
             PauseDuration_ms = EditGenerationKoChunks[i]['Pause'][j] * 1000  # 초를 밀리초로 변환
-            silence = AudioSegment.silent(duration=PauseDuration_ms)
+            silence = AudioSegment.silent(duration = PauseDuration_ms)
             CombinedSound += sound_file + silence
             FilesCount += 1
-    
+
     # 여기에 5초간의 공백 추가
     FinalSilence = AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
     CombinedSound += FinalSilence 
 
     # 최종적으로 합쳐진 음성 파일 저장
     CombinedSound.export(os.path.join(voiceLayerPath, projectName + "_VoiceLayer.wav"), format = "wav")
-
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto"):
@@ -627,24 +637,79 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
         if not os.path.exists(MatchedChunksPath):
             # SelectionGenerationKoChunks의 EditGenerationKoChunks화
             EditGenerationKoChunks = []
+            tempChunk = None
+
+            #### Split을 위한 문장을 합치는 코드 ####
+            def appendAndResetTemp(tempChunk, newChunk):
+                if tempChunk:
+                    EditGenerationKoChunks.append(tempChunk)
+                return newChunk
+
+            def splitChunksAndPauses(chunks, pauses, max_length = 350):
+                split_chunks = []
+                split_pauses = []
+                current_chunk = []
+                current_pause = []
+                current_length = 0
+
+                for chunk, pause in zip(chunks, pauses):
+                    if current_length + len(chunk) > max_length:
+                        split_chunks.append(current_chunk)
+                        split_pauses.append(current_pause)
+                        current_chunk = [chunk]
+                        current_pause = [pause]
+                        current_length = len(chunk)
+                    else:
+                        current_chunk.append(chunk)
+                        current_pause.append(pause)
+                        current_length += len(chunk)
+
+                if current_chunk:  # Add remaining chunks and pauses
+                    split_chunks.append(current_chunk)
+                    split_pauses.append(current_pause)
+
+                Split_chunks = [chunk + "," for chunk in split_chunks]
+
+                return split_chunks, Split_chunks
+
             for GenerationKoChunk in SelectionGenerationKoChunks:
                 chunkid = GenerationKoChunk['ChunkId']
                 tag = GenerationKoChunk['Tag']
                 actorname = GenerationKoChunk['ActorName']
-                actorchunks = GenerationKoChunk['ActorChunk']
-                
-                # Pause 추출
+                actorchunks = [chunk + "," for chunk in GenerationKoChunk['ActorChunk']]
+
                 if isinstance(GenerationKoChunk['Chunk'], list):
                     chunks = GenerationKoChunk['Chunk']
                 else:
                     chunks = [GenerationKoChunk['Chunk']]
-                pauses = []
-                for chunk in chunks:
-                    pause = ExtractPause(chunk)
-                    pauses.append(pause)
-                    
-                EditGenerationKoChunk = {"ChunkId": chunkid, "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses}
-                EditGenerationKoChunks.append(EditGenerationKoChunk)
+                pauses = [ExtractPause(chunk) for chunk in chunks]
+
+                newChunk = {"EditId": None, "ChunkId": [chunkid], "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses}
+
+                if tempChunk and len(' '.join(tempChunk['ActorChunk'] + actorchunks)) <= 350 and (tempChunk['Tag'] == tag and tempChunk['ActorName'] == actorname):
+                    tempChunk['ActorChunk'] += actorchunks
+                    tempChunk['Pause'] += pauses
+                    tempChunk['ChunkId'] += [chunkid]
+                else:
+                    if tempChunk:  # Check and split before resetting if needed
+                        combined_text = ' '.join(tempChunk['ActorChunk'])
+                        if len(combined_text) > 350:
+                            split_chunks, split_pauses = splitChunksAndPauses(tempChunk['ActorChunk'], tempChunk['Pause'])
+                            for sc, sp in zip(split_chunks, split_pauses):
+                                split_chunk = {"EditId": None, "ChunkId": tempChunk['ChunkId'], "Tag": tempChunk['Tag'], "ActorName": tempChunk['ActorName'], "ActorChunk": sc, "Pause": sp}
+                                EditGenerationKoChunks.append(split_chunk)
+                            tempChunk = None  # Reset after splitting
+                    tempChunk = appendAndResetTemp(tempChunk, newChunk)
+
+            if tempChunk:
+                EditGenerationKoChunks.append(tempChunk)
+            
+            EditId = 1
+            for NewGenerationKoChunk in EditGenerationKoChunks:
+                NewGenerationKoChunk['EditId'] = EditId
+                EditId += 1
+            #### Split을 위한 문장을 합치는 코드 ####
+
             # MatchedActors, MatchedChunks 저장
             fileName = projectName + '_' + 'MatchedVoices.json'
             MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
@@ -658,9 +723,6 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
             with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
                 EditGenerationKoChunks = json.load(MatchedChunksJson)
 
-        ## (Split) EditGenerationKoChunks를 랜덤으로 섞기
-        random.shuffle(EditGenerationKoChunks)
-        
         ## 일부만 생성하는지, 전체를 생성하는지의 옵션
         if Mode == 'Manual':
             GenerationKoChunks = []
@@ -689,20 +751,29 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
 
         ### 생성시작 ###
         for Update in UpdateTQDM:
-            UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['ChunkId']}: {Update['ActorChunk']}")
-            ChunkId = Update['ChunkId']
+            UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['EditId']}: {Update['ActorChunk']}")
+            EditId = Update['EditId']
             Name = Update['ActorName']
-            Chunks = Update['ActorChunk']
-            
+            Chunk = " ".join(Update['ActorChunk'])
+            ChunkCount = len(Update['ActorChunk']) - 1 # 파일의 마지막 순번을 표기
+
+            #### Split을 위한 딕셔너리 리스트 생성 ####
+            rawSplitChunks = [chunk.replace('~.', '').replace('.,', '.') for chunk in Update['ActorChunk']]
+            SplitChunks = []
+            for i in range(len(rawSplitChunks)):
+                SplitChunk = {'낭독문장번호': i + 1, '낭독문장': rawSplitChunks[i]}
+                SplitChunks.append(SplitChunk)
+            #### Split을 위한 딕셔너리 리스트 생성 ####
+
             ## 수정생성(Modify) 여부확인 ##
             Modify = "No"
             for History in GenerationKoChunkHistorys:
-                if History['ChunkId'] == ChunkId:
+                if History['EditId'] == EditId:
                     if History['ActorName'] != Name:
                         History['ActorName'] = Name
                         Modify = "Yes"
-                    if History['ActorChunk'] != Chunks:
-                        History['ActorChunk'] = Chunks
+                    if History['ActorChunk'] != Chunk:
+                        History['ActorChunk'] = Chunk
                         Modify = "Yes"
 
             ## 보이스 선정 ##                
@@ -724,34 +795,50 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
             ## TypeCastMacro에 따른 restart 코드 ##
             restart = True
             while restart:
-                restart = False  # 반복 시작 시 재시작 플래그를 초기화
-                for i in range(len(Chunks)):
-                    Chunk = Chunks[i]
-                    
-                    # 단어로 끝나는 경우 끝음 조절하기
-                    if '?' not in Chunk[-2:]:
-                        if '.' not in Chunk[-2:]:
-                            lastpitch = [-2]
-                        elif '다' not in Chunk[-2:]:
-                            lastpitch = [-2]
-                        else:
-                            lastpitch = LASTPITCH
+                restart = False  # 반복 시작 시 재시작 플래그를 초기화                   
+                # 단어로 끝나는 경우 끝음 조절하기
+                if '?' not in Chunk[-2:]:
+                    if '.' not in Chunk[-2:]:
+                        lastpitch = [-2]
+                    elif '다' not in Chunk[-2:]:
+                        lastpitch = [-2]
                     else:
                         lastpitch = LASTPITCH
-                    RandomEMOTION = random.choice(EMOTION)
-                    RandomSPEED = random.choice(SPEED)
-                    RandomLASTPITCH = random.choice(lastpitch)
-                    
-                    ## 수정 여부에 따라 파일명 변경 ##
-                    if Modify == "Yes":
-                        FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + 'M.wav'
-                        voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-                        
-                        with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                            json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                        
-                        ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
-                        if ChangedName != 'Continue':
+                else:
+                    lastpitch = LASTPITCH
+                RandomEMOTION = random.choice(EMOTION)
+                RandomSPEED = random.choice(SPEED)
+                RandomLASTPITCH = random.choice(lastpitch)
+
+                ## 수정 여부에 따라 파일명 변경 ##
+                if Modify == "Yes":
+                    FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
+                    voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+                    ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks)
+                    with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                        json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                    if ChangedName != 'Continue':
+                        if Macro == "Auto":
+                            TypeCastMacro(ChangedName)
+                            time.sleep(random.randint(3, 5))
+                            restart = True
+                            break
+                        else:
+                            print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                            sys.exit()
+                else:
+                    FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
+                    voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+                    if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav'):
+                        ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks)
+
+                        if ChangedName == 'Continue':
+                            ## 히스토리 저장 ##
+                            GenerationKoChunkHistory = {"EditId": EditId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunk}
+                            GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
+                            with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                                json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                        else:
                             if Macro == "Auto":
                                 TypeCastMacro(ChangedName)
                                 time.sleep(random.randint(3, 5))
@@ -760,28 +847,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                             else:
                                 print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
                                 sys.exit()
-                    else:
-                        FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
-                        voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-                        if not os.path.exists(voiceLayerPath):
-                            ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
 
-                            if ChangedName == 'Continue':
-                                ## 히스토리 저장 ##
-                                GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunks}
-                                GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
-                                with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                                    json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                            else:
-                                if Macro == "Auto":
-                                    TypeCastMacro(ChangedName)
-                                    time.sleep(random.randint(3, 5))
-                                    restart = True
-                                    break
-                                else:
-                                    print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
-                                    sys.exit()
-                
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)
     VoiceGenerator(projectName, email, EditGenerationKoChunks)

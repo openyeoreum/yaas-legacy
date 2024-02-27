@@ -70,10 +70,20 @@ def VoiceTimeStempsProcessFilter(Response, RecordIdList):
     if not isinstance(outputJson, list):
         return "JSONType에서 오류 발생: JSONTypeError"
     # Error3: outputJson와 Input의 수가 다를때 예외 처리
-    outputJsonList = []
-    for output in outputJson:
-        outputJsonList += output['낭독기록번호리스트']
-    if outputJsonList != RecordIdList:
+    try:
+        outputJsonList = []
+        for output in outputJson:
+            # 낭독기록번호리스트에서 최소값과 최대값을 찾음
+            min_val = min(output['낭독기록번호리스트'])
+            max_val = max(output['낭독기록번호리스트'])
+            # 최소값과 최대값 사이의 모든 숫자로 이루어진 리스트를 생성
+            CompleteList = list(range(min_val, max_val + 1))
+            # 수정된 리스트를 outputJsonList에 추가
+            outputJsonList += CompleteList
+        # 결과 비교
+        if outputJsonList != RecordIdList:
+            return "JSON 수가 다름: JSONCountError"
+    except ValueError:
         return "JSON 수가 다름: JSONCountError"
 
     return outputJson
@@ -83,9 +93,9 @@ def VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process 
     # Input 생성
     Input = "<낭독문>\n" + str(Input1) + "\n\n" + "<낭독기록>\n" + str(Input2)
 
-    for _ in range(10):
+    for _ in range(20):
         # Response 생성
-        Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0)
+        Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, messagesReview = "on")
         Filter = VoiceTimeStempsProcessFilter(Response, RecordIdList)
         
         if isinstance(Filter, str):
@@ -111,9 +121,6 @@ def VoiceTimeStempsClassification(VoiceTimeStemps, Filter):
 def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
     # 오디오 파일 로드
     audio = AudioSegment.from_wav(VoiceLayerPath)
-    
-    # 분할된 파일 저장할 기본 경로
-    base_export_path = "/yaas/"
     
     # 최종 분할 지점을 저장할 리스트
     split_points = []
@@ -149,13 +156,21 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         silence = AudioSegment.silent(duration = 50)  # 0.05초 무음
         segment = silence + segment + silence  # 무음 - 세그먼트 - 무음
         
-        export_path = base_export_path + f"split_{i}.wav"
-        segment.export(export_path, format="wav")
+        ExportPathText = VoiceLayerPath.replace(".wav", "")
+        if ExportPathText[-1] == 'M':
+            ExportPathText = ExportPathText.replace("M", "")
+            ExportPath = ExportPathText + f"_({i})M.wav"
+        else:
+            ExportPath = ExportPathText + f"_({i}).wav"
+        segment.export(ExportPath, format = "wav")
         print(f"Segment {i} exported: Start at {start_point / 1000:.5f}, end at {split_point:.5f} with fades and silence")
         start_point = end_point
+        
+    # 파일 분할이 완료된 후 원본 오디오 파일 삭제
+    os.remove(VoiceLayerPath)
 
 ## VoiceSplit 최종 함수
-def VoiceSplit(projectName, email, VoiceLayerPath, Input, LanguageCode):
+def VoiceSplit(projectName, email, VoiceLayerPath, Input, LanguageCode = "ko-KR"):
 
     voiceTimeStemps, Input2, RecordIdList = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
     Filter = VoiceSplitProcess(projectName, email, Input, Input2, RecordIdList, Process = "VoiceSplit")
@@ -172,7 +187,7 @@ if __name__ == "__main__":
     #########################################################################
     Input = [{'낭독문장번호': 1, '낭독문장': '뿐만 아니라, 여름은 최근 창업진흥원에서 주관하는 대회에서 대상을 수상하며'}, {'낭독문장번호': 2, '낭독문장': '그들의 혁신적인 기술과 사회적 기여를 인정받았다.'}, {'낭독문장번호': 3, '낭독문장': '이준영 대표는 수상 소감에서 "이 상은 단지 우리의 기술적 성과만을 인정하는 것이 아니라, 우리가 추구하는 가치와 비전에 대한 공감을 의미합니다.'}, {'낭독문장번호': 4, '낭독문장': '우리는 앞으로도 지식의 접근성을 높이고, 누구나 쉽게 지식을 소비할 수 있는 환경을 만드는 것을 목표로 삼고 있습니다.'}, {'낭독문장번호': 5, '낭독문장': '라고 전했다.'}]
 
-    VoiceSplit(projectName, email, VoiceLayerPath, Input, LanguageCode)
+    VoiceSplit(projectName, email, VoiceLayerPath, Input)
     
     # 파일 경로 설정
     files = [

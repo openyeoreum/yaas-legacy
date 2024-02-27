@@ -115,7 +115,6 @@ def VoiceTimeStempsClassification(VoiceTimeStemps, Filter):
     return SplitTimeList
 
 ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-
 def find_nearest_silence(audio, target_time, min_silence_len=100, silence_thresh=-40):
     """
     주어진 시간 근처에서 가장 가까운 무음 구간을 찾아 그 중앙을 반환합니다.

@@ -385,9 +385,9 @@ def LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPat
 
       # 토큰수별 모델 선정
       if ModelTokens == "Short":
-        BaseModel = "gpt-3.5-turbo"
+        BaseModel = "gpt-3.5-turbo-0125"
       elif ModelTokens == "Long":
-        BaseModel = "gpt-3.5-turbo-16k"
+        BaseModel = "gpt-3.5-turbo-0125"
       
       # FineTuning 요청
       FineTuningJob = client.fine_tuning.jobs.create(

@@ -2,6 +2,7 @@ import sys
 sys.path.append("/yaas")
 
 from backend.b4_Creation.b42_Generator.b422_VoiceLayerGenerator import VoiceLayerGenerator
+from backend.b4_Creation.b42_Generator.b422_VoiceLayerSplitGenerator import VoiceLayerSplitGenerator
 
 ###########################
 ###########################
@@ -10,12 +11,15 @@ from backend.b4_Creation.b42_Generator.b422_VoiceLayerGenerator import VoiceLaye
 ###########################
 
 ### Creation에 오디오북 제작 및 업데이트 ###
-def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, mode = "Manual", macro = "Manual"):
+def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, mode = "Manual", macro = "Manual", split = "Manual"):
     
     #####################
     ### 01_VoiceLayer ###
     #####################
-    VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro)
+    if split == "Manual":
+        VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro)
+    else:
+        VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro)
 
 if __name__ == "__main__":
 
@@ -25,7 +29,8 @@ if __name__ == "__main__":
     voiceDataSet = "TypeCastVoiceDataSet"
     mainLang = "Ko"
     macro = "Manual"
+    split = "Manual"
     #########################################################################
     
     ### Step6 : 크리에이션이 오디오북 제작 ###
-    CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, macro = macro)
+    CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, macro = macro, split = split)

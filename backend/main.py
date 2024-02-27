@@ -37,18 +37,18 @@ def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
         
 ### Main2 : 콘텐츠 제작 ###
 
-def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Macro):
+def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Macro, Split):
 
     if isinstance(projectNameList, list):
         for projectName in projectNameList:
             projectName = unicodedata.normalize('NFC', projectName)
             
             ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang, macro = Macro)
+            CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang, macro = Macro, split = Split)
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, MainProcess, Macro):
+def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, MainProcess, Macro, Split):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
@@ -57,7 +57,7 @@ def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, Voic
     elif MainProcess == 'Creation':
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, MessagesReview, BookGenre)
-        CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Macro)
+        CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Macro, Split)
 
 if __name__ == "__main__":
 
@@ -71,7 +71,8 @@ if __name__ == "__main__":
     VoiceDataSet = "TypeCastVoiceDataSet"
     MainLang = "Ko" # 'Ko', 'En'
     MainProcess = "Creation" # 'Solution', 'Creation'
-    Macro = "Manual" # 'Auto', 'Manual'
+    Macro = "Manual" # 'Auto', 'Manual' : Auto는 API 캐릭터 변겅 자동, Manual은 API 캐릭터 변경 수동
+    Split = "Auto" # 'Auto', 'Manual' : Auto는 긴 음성 생성 후 분할(비용이 작음), Manual은 짧은 음성 분할 생성(비용이 큼)
     #########################################################################
 
-    YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, MainProcess, Macro)
+    YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, MainProcess, Macro, Split)

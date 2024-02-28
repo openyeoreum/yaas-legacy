@@ -497,9 +497,9 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
             else:
                 return name
             ########## API 요청 ##########
-        except KeyError as e:
+        except KeyError:
             attempt += 1
-            print(f"[ KeyError 발생, 재시도 {attempt}/60: {e} ]")
+            print(f"[ KeyError 발생, 재시도 {attempt}/60 ]")
             time.sleep(60)  # 1분 대기 후 재시도
 
         except Exception as e:
@@ -604,13 +604,15 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
     FilteredFiles = SortAndRemoveDuplicates(Files)
     CombinedSound = AudioSegment.empty()
 
+    # VoiceLayer의 모든 음성 합치기
+    UpdateTQDM = tqdm(EditGenerationKoChunks,
+                    total = len(EditGenerationKoChunks),
+                    desc = 'VoiceGenerator')
     FilesCount = 0
-    for i in range(len(EditGenerationKoChunks)):
-        for j in range(len(EditGenerationKoChunks[i]['Pause'])):
-            print(EditGenerationKoChunks[i])
-            print(FilesCount)
+    for Update in UpdateTQDM:
+        for j in range(len(Update['Pause'])):
             sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
-            PauseDuration_ms = EditGenerationKoChunks[i]['Pause'][j] * 1000  # 초를 밀리초로 변환
+            PauseDuration_ms = Update['Pause'][j] * 1000  # 초를 밀리초로 변환
             silence = AudioSegment.silent(duration = PauseDuration_ms)
             CombinedSound += sound_file + silence
             FilesCount += 1

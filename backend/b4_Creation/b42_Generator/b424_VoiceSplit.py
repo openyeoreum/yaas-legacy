@@ -75,10 +75,13 @@ def VoiceTimeStempsProcessFilter(Response, Input, RecordIdList):
     # Error4: outputJson와 Input의 수가 다를때 예외 처리
     try:
         outputJsonList = []
-        for output in outputJson:
+        for i in range(len(outputJson)):
             # 낭독기록번호리스트에서 최소값과 최대값을 찾음
-            min_val = min(output['낭독기록번호리스트'])
-            max_val = max(output['낭독기록번호리스트'])
+            if i == 0:
+                min_val = 1
+            else:
+                min_val = min(outputJson[i]['낭독기록번호리스트'])
+            max_val = max(outputJson[i]['낭독기록번호리스트'])
             # 최소값과 최대값 사이의 모든 숫자로 이루어진 리스트를 생성
             CompleteList = list(range(min_val, max_val + 1))
             # 수정된 리스트를 outputJsonList에 추가
@@ -97,13 +100,21 @@ def VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process 
     Input = "<낭독문>\n" + str(Input1) + "\n\n" + "<낭독기록>\n" + str(Input2)
     memoryCounter = f"\n중요1. 지금 작성할 <낭독.json> '낭독'의 문장수는 {len(Input1)}이며, '낭독기록번호리스트'의 총합은 0 - {len(Input2)}이 되어야 합니다.\n중요2. '낭독기록번호리스트' 기록시 '낭독기록번호'를 누락하거나 중복하거나 빼거나 더하지 않습니다.\n중요3. <낭독기록>은 발음이 헷갈려서 잘못 작성된 경우가 많기에 <낭독문>과 <낭독기록>의 순서가 같은 점과, 작성이 잘못된 '낭독기록'은 '낭독문장'와의 비교를 통해 옳은 '낭독기록'을 유추하여 '낭독기록번호리스트'를 기록합니다.\n\n"
 
+    error_count = 0  # 오류 발생 횟수를 추적하는 변수
+    mode = "Example"  # 기본 Mode 설정
+
     for _ in range(20):
         # Response 생성
-        Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, MemoryCounter = memoryCounter, messagesReview = "on")
+        Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = mode, MemoryCounter = memoryCounter, messagesReview = "off")
         Filter = VoiceTimeStempsProcessFilter(Response, Input1, RecordIdList)
         
         if isinstance(Filter, str):
             print(f"Project: {projectName} | Process: {Process} | {Filter}")
+            error_count += 1  # 오류 발생시 카운트 증가
+            
+            if error_count == 5:  # 오류가 10번 발생하면 Mode 변경
+                mode = "Master"  # Mode를 Master로 변경
+                print(f"Project: {projectName} | Process: {Process} | 오류가 10번 발생했습니다. Mode를 Master로 변경합니다.")
         else:
             break
         

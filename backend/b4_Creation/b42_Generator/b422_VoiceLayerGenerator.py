@@ -487,9 +487,9 @@ def TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTP
             else:
                 return name
             ########## API 요청 ##########
-        except KeyError as e:
+        except KeyError:
             attempt += 1
-            print(f"[ KeyError 발생, 재시도 {attempt}/60: {e} ]")
+            print(f"[ KeyError 발생, 재시도 {attempt}/60 ]")
             time.sleep(60)  # 1분 대기 후 재시도
 
         except Exception as e:

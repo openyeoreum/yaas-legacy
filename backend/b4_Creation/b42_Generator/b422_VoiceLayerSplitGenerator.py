@@ -758,7 +758,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
             ChunkCount = len(Update['ActorChunk']) - 1 # 파일의 마지막 순번을 표기
 
             #### Split을 위한 딕셔너리 리스트 생성 ####
-            rawSplitChunks = [chunk.replace('~.', '').replace('.,', '.') for chunk in Update['ActorChunk']]
+            rawSplitChunks = [chunk.replace('~.', '').replace('.,', '').replace('.,', '') for chunk in Update['ActorChunk']]
             SplitChunks = []
             for i in range(len(rawSplitChunks)):
                 SplitChunk = {'낭독문장번호': i + 1, '낭독문장': rawSplitChunks[i]}

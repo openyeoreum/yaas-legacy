@@ -120,7 +120,7 @@ def VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process 
         
     return Filter
 
-## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
+## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
 def VoiceTimeStempsClassification(VoiceTimeStemps, Filter):
     SplitTimeList = []
     for Response in Filter:

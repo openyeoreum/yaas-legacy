@@ -59,7 +59,7 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
 ##### Filter 조건 #####
 ######################
 ## 음성파일을 STT로 단어별 시간 계산하기
-def VoiceTimeStempsProcessFilter(Response, RecordIdList):
+def VoiceTimeStempsProcessFilter(Response, Input, RecordIdList):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         Json = json.loads(Response)
@@ -69,7 +69,10 @@ def VoiceTimeStempsProcessFilter(Response, RecordIdList):
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(outputJson, list):
         return "JSONType에서 오류 발생: JSONTypeError"
-    # Error3: outputJson와 Input의 수가 다를때 예외 처리
+    # Error3: 결과가 list가 아닐 때의 예외 처리
+    if len(Input) != len(outputJson):
+        return "Input과 Response의 문장(분할) 수가 다름: JSONCountError"
+    # Error4: outputJson와 Input의 수가 다를때 예외 처리
     try:
         outputJsonList = []
         for output in outputJson:
@@ -82,9 +85,9 @@ def VoiceTimeStempsProcessFilter(Response, RecordIdList):
             outputJsonList += CompleteList
         # 결과 비교
         if outputJsonList != RecordIdList:
-            return "JSON 수가 다름: JSONCountError"
+            return "Input과 Response의 단어 수가 다름: JSONCountError"
     except ValueError:
-        return "JSON 수가 다름: JSONCountError"
+        return "Input과 Response의 단어 수가 다름: JSONCountError"
 
     return outputJson
 
@@ -96,7 +99,7 @@ def VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process 
     for _ in range(20):
         # Response 생성
         Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, messagesReview = "on")
-        Filter = VoiceTimeStempsProcessFilter(Response, RecordIdList)
+        Filter = VoiceTimeStempsProcessFilter(Response, Input1, RecordIdList)
         
         if isinstance(Filter, str):
             print(f"Project: {projectName} | Process: {Process} | {Filter}")
@@ -151,9 +154,9 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         end_point = int(split_point * 1000)  # milliseconds로 변환
         segment = audio[start_point:end_point]
         # 페이드인/아웃 적용
-        segment = segment.fade_in(duration = 50).fade_out(duration = 50)  # 0.5초 페이드인, 0.05초 페이드아웃
+        segment = segment.fade_in(duration = 30).fade_out(duration = 30)  # 0.05초 페이드인, 0.05초 페이드아웃
         # 무음 추가
-        silence = AudioSegment.silent(duration = 50)  # 0.05초 무음
+        silence = AudioSegment.silent(duration = 30)  # 0.05초 무음
         segment = silence + segment + silence  # 무음 - 세그먼트 - 무음
         
         ExportPathText = VoiceLayerPath.replace(".wav", "")

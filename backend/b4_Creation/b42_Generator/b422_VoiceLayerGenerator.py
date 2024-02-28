@@ -427,61 +427,74 @@ def VoiceLayerPathGen(projectName, email, FileName):
 #######################################
 ## TypecastVoice 생성 ##
 def TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath):
-    api_token = os.getenv("TYPECAST_API_TOKEN")
-    HEADERS = {'Authorization': f'Bearer {api_token}'}
+    attempt = 0
+    while attempt < 60:
+        try:
+            ########## API 요청 ##########
+            api_token = os.getenv("TYPECAST_API_TOKEN")
+            HEADERS = {'Authorization': f'Bearer {api_token}'}
 
-    # get my actor
-    r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
-    my_actors = r.json()['result']
-    
-    if my_actors[0]['name']['ko'] == name:
-        # print(Chunk)
-        # print(RandomEMOTION)
-        # print(RandomSPEED)
-        # print(Pitch)
-        # print(RandomLASTPITCH)
-        # print(voiceLayerPath)
-        # print(my_actors)
-        my_first_actor = my_actors[0]
-        my_first_actor_id = my_first_actor['actor_id']
+            # get my actor
+            r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
+            my_actors = r.json()['result']
+            
+            if my_actors[0]['name']['ko'] == name:
+                # print(Chunk)
+                # print(RandomEMOTION)
+                # print(RandomSPEED)
+                # print(Pitch)
+                # print(RandomLASTPITCH)
+                # print(voiceLayerPath)
+                # print(my_actors)
+                my_first_actor = my_actors[0]
+                my_first_actor_id = my_first_actor['actor_id']
 
-        # request speech synthesis
-        r = requests.post('https://typecast.ai/api/speak', headers = HEADERS, json = {
-            'text': Chunk, # 음성을 합성하는 문장
-            'actor_id': my_first_actor_id, # 캐릭터 아이디로 Actor API에서 캐릭터를 검색
-            'lang': 'auto', # text의 언어 코드['en-us', 'ko-kr', 'ja-jp', 'es-es', 'auto'], auto는 자동 언어 감지
-            'xapi_hd': True, # 샘플레이트로 True는 고품질(44.1KHz), False는 저품질(16KHz)
-            'xapi_audio_format': 'wav', # 오디오 포멧으로 기본값은 'wav', 'mp3'
-            'model_version': 'latest', # 모델(캐릭터) 버전으로 API를 참고, 최신 모델은 "latest"
-            'emotion_tone_preset': RandomEMOTION, # 감정으로, actor_id를 사용하여 Actor API 에서 캐릭터에 사용 가능한 감정을 검색
-            'emotion_prompt': None, # 감정 프롬프트(한/영)를 입력, 입력시 'emotion_tone_preset'는 'emotion_prompt'로 설정
-            'volume': 120, # 오디오 볼륨으로 기본값은 100, 범위: 0.5배는 50 - 2배는 200, 
-            'speed_x': RandomSPEED, # 말하는 속도로 기본값은 1, 범위: 0.5(빠름) - 1.5(느림)
-            'tempo': 1.0, # 음성 재생속도로 기본값은 1, 범위: 0.5(0.5배 느림) - 2.0(2배 빠름)
-            'pitch': Pitch, # 음성 피치로 기본값은 0, 범위: -12 - 12
-            'max_seconds': 60, # 음성의 최대 길이로 기본값은 30, 범위: 1 - 60
-            'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
-            'last_pitch': RandomLASTPITCH, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
-        })
-        speak_url = r.json()['result']['speak_v2_url']
+                # request speech synthesis
+                r = requests.post('https://typecast.ai/api/speak', headers = HEADERS, json = {
+                    'text': Chunk, # 음성을 합성하는 문장
+                    'actor_id': my_first_actor_id, # 캐릭터 아이디로 Actor API에서 캐릭터를 검색
+                    'lang': 'auto', # text의 언어 코드['en-us', 'ko-kr', 'ja-jp', 'es-es', 'auto'], auto는 자동 언어 감지
+                    'xapi_hd': True, # 샘플레이트로 True는 고품질(44.1KHz), False는 저품질(16KHz)
+                    'xapi_audio_format': 'wav', # 오디오 포멧으로 기본값은 'wav', 'mp3'
+                    'model_version': 'latest', # 모델(캐릭터) 버전으로 API를 참고, 최신 모델은 "latest"
+                    'emotion_tone_preset': RandomEMOTION, # 감정으로, actor_id를 사용하여 Actor API 에서 캐릭터에 사용 가능한 감정을 검색
+                    'emotion_prompt': None, # 감정 프롬프트(한/영)를 입력, 입력시 'emotion_tone_preset'는 'emotion_prompt'로 설정
+                    'volume': 120, # 오디오 볼륨으로 기본값은 100, 범위: 0.5배는 50 - 2배는 200, 
+                    'speed_x': RandomSPEED, # 말하는 속도로 기본값은 1, 범위: 0.5(빠름) - 1.5(느림)
+                    'tempo': 1.0, # 음성 재생속도로 기본값은 1, 범위: 0.5(0.5배 느림) - 2.0(2배 빠름)
+                    'pitch': Pitch, # 음성 피치로 기본값은 0, 범위: -12 - 12
+                    'max_seconds': 60, # 음성의 최대 길이로 기본값은 30, 범위: 1 - 60
+                    'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
+                    'last_pitch': RandomLASTPITCH, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
+                })
+                speak_url = r.json()['result']['speak_v2_url']
 
-        # polling the speech synthesis result
-        for _ in range(120):
-            r = requests.get(speak_url, headers=HEADERS)
-            ret = r.json()['result']
-            # audio is ready
-            if ret['status'] == 'done':
-                # download audio file
-                r = requests.get(ret['audio_download_url'])
-                with open(voiceLayerPath, 'wb') as f:
-                    f.write(r.content)
-                break
+                # polling the speech synthesis result
+                for _ in range(120):
+                    r = requests.get(speak_url, headers=HEADERS)
+                    ret = r.json()['result']
+                    # audio is ready
+                    if ret['status'] == 'done':
+                        # download audio file
+                        r = requests.get(ret['audio_download_url'])
+                        with open(voiceLayerPath, 'wb') as f:
+                            f.write(r.content)
+                        break
+                    else:
+                        print(f"VoiceGen: {ret['status']}, {name} waiting 1 second")
+                        time.sleep(1)
+                return "Continue"
             else:
-                print(f"VoiceGen: {ret['status']}, {name} waiting 1 second")
-                time.sleep(1)
-        return "Continue"
-    else:
-        return name
+                return name
+            ########## API 요청 ##########
+        except KeyError as e:
+            attempt += 1
+            print(f"[ KeyError 발생, 재시도 {attempt}/60: {e} ]")
+            time.sleep(60)  # 1분 대기 후 재시도
+
+        except Exception as e:
+            print(f"[ 예상치 못한 에러 발생: {e} ]")
+            sys.exit("[ Unexpected Error, exiting program. ]")
 
 ## 생성된 음성 합치기 ##
 ## Pause 추출

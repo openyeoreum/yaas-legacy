@@ -95,7 +95,7 @@ def VoiceTimeStempsProcessFilter(Response, Input, RecordIdList):
 def VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process = "VoiceSplit"):
     # Input 생성
     Input = "<낭독문>\n" + str(Input1) + "\n\n" + "<낭독기록>\n" + str(Input2)
-    memoryCounter = f"중요1. <낭독기록>의 '낭독기록번호'는 0 - {len(Input2)} 입니다. '낭독기록번호리스트' 기록시 '낭독기록번호'를 누락하거나 중복하거나 빼거나 더하지 않습니다.\n중요2. <낭독기록>은 발음이 헷갈려서 잘못 작성된 경우가 많기에 <낭독문>과 <낭독기록>의 순서가 같은 점과, 작성이 잘못된 '낭독기록'은 '낭독문장'와의 비교를 통해 옳은 '낭독기록'을 유추하여 '낭독기록번호리스트'를 기록합니다.\n\n"
+    memoryCounter = f"\n중요1. 지금 작성할 <낭독.json> '낭독'의 문장수는 {len(Input1)}이며, '낭독기록번호리스트'의 총합은 0 - {len(Input2)}이 되어야 합니다.\n중요2. '낭독기록번호리스트' 기록시 '낭독기록번호'를 누락하거나 중복하거나 빼거나 더하지 않습니다.\n중요3. <낭독기록>은 발음이 헷갈려서 잘못 작성된 경우가 많기에 <낭독문>과 <낭독기록>의 순서가 같은 점과, 작성이 잘못된 '낭독기록'은 '낭독문장'와의 비교를 통해 옳은 '낭독기록'을 유추하여 '낭독기록번호리스트'를 기록합니다.\n\n"
 
     for _ in range(20):
         # Response 생성

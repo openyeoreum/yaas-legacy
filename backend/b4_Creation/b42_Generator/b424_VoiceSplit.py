@@ -86,6 +86,9 @@ def InputText(Input1, Input2):
             AlphabetList.append(Alphabet)
             Alphabet = chr(ord(Alphabet) + 1)  # 다음 알파벳으로 업데이트
         InputText1 += Input1[i]['낭독문장']
+    
+    AlphabetList.append(Alphabet) # 마지막 알파벳 추가
+    InputText1 += f" [{Alphabet}]" # 마지막 알파벳 추가
         
     # InputText2 생성
     InputText2 = ""
@@ -93,6 +96,8 @@ def InputText(Input1, Input2):
         if i > 0:  # 첫 번째 기록이 아니라면 앞에 숫자를 추가한다
             InputText2 += f" [{i}] "
         InputText2 += record['낭독기록']
+    
+    InputText2 += f" [{i + 1}] " # 마지막 숫자 추가
     
     # 최종 Input 생성
     Input = "<낭독원문>\n" + str(InputText1) + "\n\n" + "<낭독STT단어문>\n" + str(InputText2)
@@ -104,7 +109,7 @@ def VoiceSplitProcess(projectName, email, Input1, Input2, Process = "VoiceSplit"
     ## Input1과 Input2를 입력으로 받아 최종 Input 생성
     Input, AlphabetList = InputText(Input1, Input2)
     ## memoryCounter 생성
-    memoryCounter = f"\n주의1. 알파벳 [{'], ['.join(AlphabetList)}] 모두 정확하게 매칭\n주의2. <낭독원문>의 문장과 <낭독STT단어문>의 단어가 자주 다르게 작성, 이 경우 <낭독STT단어문>의 앞 뒤 기록으로 유추하여 <낭독원문>의 [알파벳]과 [숫자]를 매칭\n주의3. 매칭 작업은 매우 중요한 작업임에 신중하게 진행할 것!\n\n"
+    memoryCounter = f"\n\n최종주의사항\n1) 매우 중요한 작업임으로, 알파벳 [{'], ['.join(AlphabetList)}] 모두 신중하게 매칭!\n2) <낭독원문>의 문장과 <낭독STT단어문>의 단어가 자주 다르게 작성, 이 경우 <낭독STT단어문>의 앞 뒤 기록으로 유추하여 <낭독원문>의 [알파벳]과 [숫자]를 매칭!\n3) 매칭 순서가 앞으로 당겨지거나 뒤로 밀리지거나 누락되지 않도록 하나씩 하나씩, 차근 차근 매칭!\n\n"
 
     for _ in range(10):
         # Response 생성
@@ -116,7 +121,7 @@ def VoiceSplitProcess(projectName, email, Input1, Input2, Process = "VoiceSplit"
         else:
             break
         
-    return ResponseJson
+    return ResponseJson[:-1]
 
 ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
 def VoiceTimeStempsClassification(VoiceTimeStemps, ResponseJson):
@@ -139,7 +144,7 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         step = 0.05 if not detail else 0.01  # 세밀한 분석을 위한 단계 조정
         range_end = 0.3 if not detail else 0.05  # 세밀한 분석을 위한 범위 조정
 
-        for delta in np.arange(-range_end, range_end, step):
+        for delta in np.arange(-range_end, range_end + step, step):
             start = int((split_time + delta) * 1000)  # milliseconds
             end = int((split_time + delta + (0.1 if not detail else 0.02)) * 1000)  # milliseconds
             segment = audio[start:end]
@@ -152,25 +157,38 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         
         # 평균값을 고려하여 가장 적합한 분할 지점 찾기
         metrics.sort(key=lambda x: x[1])  # 평균값이 낮은 순으로 정렬
-        optimal_split_point, min_value = metrics[0]
+        optimal_split_point, min_value = metrics[0][0], metrics[0][1]
 
-        return optimal_split_point, min_value, metrics
+        # 연속적인 0값들의 구간 찾기 및 처리
+        if min_value == 0:
+            zero_intervals = []
+            current_interval = []
+            for time, value in metrics:
+                if value == 0:
+                    if not current_interval:
+                        current_interval = [time, time]
+                    else:
+                        current_interval[1] = time
+                else:
+                    if current_interval:
+                        zero_intervals.append(tuple(current_interval))
+                        current_interval = []
+            if current_interval:
+                zero_intervals.append(tuple(current_interval))
+
+            if zero_intervals:
+                longest_interval = max(zero_intervals, key=lambda x: x[1] - x[0])
+                optimal_split_point = sum(longest_interval) / 2
+        elif min_value != 0 and not detail:
+            # 세밀한 분석을 위해 다시 호출
+            return find_optimal_split_point(audio, optimal_split_point, detail = True)
+
+        return optimal_split_point
 
     # 최종 분할 지점을 저장할 리스트
     split_points = []
-    for split_time in SplitTimeList:        
-        optimal_split_point, min_value, metrics = find_optimal_split_point(audio, split_time)
-        # 최소값이 0이 아니면 세밀한 분석
-        if min_value != 0:
-            optimal_split_point, _, _ = find_optimal_split_point(audio, optimal_split_point, detail=True)
-        # 최소값이 0인 경우 연속적인 0값들의 중앙값 찾기
-        elif min_value == 0:
-            zeros = [m[0] for m in metrics if m[1] == 0]
-            if zeros:
-                start_zero = zeros[0]
-                end_zero = zeros[-1]
-                optimal_split_point = (start_zero + end_zero) / 2
-
+    for split_time in SplitTimeList:
+        optimal_split_point = find_optimal_split_point(audio, split_time)
         split_points.append(optimal_split_point)
 
     # 파일 분할 및 저장

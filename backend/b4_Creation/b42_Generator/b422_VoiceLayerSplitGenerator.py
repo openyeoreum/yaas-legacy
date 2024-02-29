@@ -659,9 +659,10 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
         if not os.path.exists(MatchedChunksPath):
             # SelectionGenerationKoChunks의 EditGenerationKoChunks화
             EditGenerationKoChunks = []
+            
+            #### Split을 위한 문장을 합치는 코드 ####
             tempChunk = None
 
-            #### Split을 위한 문장을 합치는 코드 ####
             def appendAndResetTemp(tempChunk, newChunk):
                 if tempChunk:
                     EditGenerationKoChunks.append(tempChunk)
@@ -830,7 +831,11 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                         lastpitch = LASTPITCH
                 else:
                     lastpitch = LASTPITCH
-                RandomEMOTION = random.choice(EMOTION)
+                ## 'Narrator', 'Character' 태그가 아닌 경우 감정은 가장 평범한 1번 감정으로 하기 ##
+                if Update['Tag'] in ['Narrator', 'Character']:
+                    RandomEMOTION = random.choice(EMOTION)
+                else:
+                    RandomEMOTION = EMOTION[0]
                 RandomSPEED = random.choice(SPEED)
                 RandomLASTPITCH = random.choice(lastpitch)
 

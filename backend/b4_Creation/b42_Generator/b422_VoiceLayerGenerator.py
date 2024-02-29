@@ -759,7 +759,11 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                             lastpitch = LASTPITCH
                     else:
                         lastpitch = LASTPITCH
-                    RandomEMOTION = random.choice(EMOTION)
+                    ## 'Narrator', 'Character' 태그가 아닌 경우 감정은 가장 평범한 1번 감정으로 하기 ##
+                    if Update['Tag'] in ['Narrator', 'Character']:
+                        RandomEMOTION = random.choice(EMOTION)
+                    else:
+                        RandomEMOTION = EMOTION[0]
                     RandomSPEED = random.choice(SPEED)
                     RandomLASTPITCH = random.choice(lastpitch)
                     

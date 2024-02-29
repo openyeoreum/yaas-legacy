@@ -187,6 +187,7 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
                 RoleScore = 0
                 if Character['CharacterTag'] == "Narrator":
                     RoleScore = VoiceRole[0]['Score']
+                    NARoleScore = VoiceRole[1]['Score']
                 else:
                     RoleScore = VoiceRole[1]['Score']
                 RoleScore = RoleScore / 10
@@ -201,6 +202,9 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
                 VoiceScore = (GenderScore * AgeScore * RoleScore * EmotionScore)
                 
                 Voice['Score'][CharacterTag] = Voice['Score']['ContextScore'] * VoiceScore
+                if CharacterTag == "Narrator":
+                    NAVoiceScore = (GenderScore * AgeScore * NARoleScore * EmotionScore)
+                    Voice['Score']['NarratorActor'] = Voice['Score']['ContextScore'] * NAVoiceScore
                 
     return VoiceDataSetCharacters
 
@@ -238,8 +242,8 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
     if CharacterTag == "Narrator":
         HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Main")
         CaptionVoice = _highestScoreVoice(VoiceDataSetCharacters, 'Caption', CharacterTag, CharacterGender, "Caption")
-        SecondaryVoice = _highestScoreVoice(VoiceDataSetCharacters, 'SecondaryNarrator', CharacterTag, CharacterGender, "Actor")
-        TertiaryVoice = _highestScoreVoice(VoiceDataSetCharacters, 'TertiaryNarrator', CharacterTag, CharacterGender, "Actor")
+        SecondaryVoice = _highestScoreVoice(VoiceDataSetCharacters, 'SecondaryNarrator', 'NarratorActor', CharacterGender, "Actor")
+        TertiaryVoice = _highestScoreVoice(VoiceDataSetCharacters, 'TertiaryNarrator', 'NarratorActor', CharacterGender, "Actor")
     
     # CharacterTag가 "CharacterN"일 경우
     else:

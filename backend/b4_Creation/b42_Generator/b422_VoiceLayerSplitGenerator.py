@@ -290,6 +290,7 @@ def ActorChunkSetting(RawChunk):
     ActorChunk = ActorChunk.replace('(0.30)', '')
     ActorChunk = ActorChunk.replace('(0.40)', '')
     ActorChunk = ActorChunk.replace('(0.60)', '곬갌끚')
+    ActorChunk = ActorChunk.replace('(0.62)', '')
     ActorChunk = ActorChunk.replace('(0.65)', '')
     ActorChunk = ActorChunk.replace('(0.70)', '')
     ActorChunk = ActorChunk.replace('(0.75)', '')
@@ -427,7 +428,7 @@ def VoiceLayerPathGen(projectName, email, FileName):
 ##### VoiceLayerGenerator 파일 생성 #####
 #######################################
 ## TypecastVoice 생성 ##
-def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks):
+def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
     attempt = 0
     while attempt < 60:
         try:
@@ -491,7 +492,7 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
 
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
-                    VoiceSplit(projectName, email, voiceLayerPath, SplitChunks)
+                    VoiceSplit(projectName, email, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
 
                 return "Continue"
             else:
@@ -625,7 +626,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
     CombinedSound.export(os.path.join(voiceLayerPath, projectName + "_VoiceLayer.wav"), format = "wav")
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto"):
+def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
     
@@ -829,7 +830,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-                    ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks)
+                    ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
                     with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
                         json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
                     if ChangedName != 'Continue':
@@ -845,7 +846,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
                     if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav'):
-                        ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks)
+                        ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 
                         if ChangedName == 'Continue':
                             ## 히스토리 저장 ##

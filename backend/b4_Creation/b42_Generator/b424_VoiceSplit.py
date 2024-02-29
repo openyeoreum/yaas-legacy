@@ -94,8 +94,8 @@ def VoiceTimeStempsProcessFilter(Response, Input, RecordIdList):
 
     return outputJson
 
-## VoiceSplit 프롬프트 요청 및 결과물 Json화
-def VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process = "VoiceSplit"):
+## VoiceSplit 프롬프트 요청
+def VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process = "VoiceSplit", MessagesReview = "off"):
     # Input 생성
     Input = "<낭독문>\n" + str(Input1) + "\n\n" + "<낭독기록>\n" + str(Input2)
     memoryCounter = f"\n중요1. 지금 작성할 <낭독.json> '낭독'의 문장수는 {len(Input1)}이며, '낭독기록번호리스트'의 총합은 0 - {len(Input2)}이 되어야 합니다.\n중요2. '낭독기록번호리스트' 기록시 '낭독기록번호'를 누락하거나 중복하거나 빼거나 더하지 않습니다.\n중요3. <낭독기록>은 발음이 헷갈려서 잘못 작성된 경우가 많기에 <낭독문>과 <낭독기록>의 순서가 같은 점과, 작성이 잘못된 '낭독기록'은 '낭독문장'와의 비교를 통해 옳은 '낭독기록'을 유추하여 '낭독기록번호리스트'를 기록합니다.\n\n"
@@ -105,7 +105,7 @@ def VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process 
 
     for _ in range(20):
         # Response 생성
-        Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = mode, MemoryCounter = memoryCounter, messagesReview = "off")
+        Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = mode, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
         Filter = VoiceTimeStempsProcessFilter(Response, Input1, RecordIdList)
         
         if isinstance(Filter, str):
@@ -144,7 +144,7 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         # 주변 평균값 탐색을 위한 초기화
         averages = []
         
-        for delta in np.arange(-0.5, 0.5, 0.05):
+        for delta in np.arange(-0.4, 0.4, 0.05):
             start = int((split_time + delta) * 1000)  # milliseconds
             end = int((split_time + delta + 0.1) * 1000)  # milliseconds
             segment = audio[start:end]
@@ -166,9 +166,9 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         end_point = int(split_point * 1000)  # milliseconds로 변환
         segment = audio[start_point:end_point]
         # 페이드인/아웃 적용
-        segment = segment.fade_in(duration = 30).fade_out(duration = 30)  # 0.05초 페이드인, 0.05초 페이드아웃
+        segment = segment.fade_in(duration = 30).fade_out(duration = 30)  # 0.03초 페이드인, 0.03초 페이드아웃
         # 무음 추가
-        silence = AudioSegment.silent(duration = 30)  # 0.05초 무음
+        silence = AudioSegment.silent(duration = 30)  # 0.03초 무음
         segment = silence + segment + silence  # 무음 - 세그먼트 - 무음
         
         ExportPathText = VoiceLayerPath.replace(".wav", "")
@@ -185,11 +185,15 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
     os.remove(VoiceLayerPath)
 
 ## VoiceSplit 최종 함수
-def VoiceSplit(projectName, email, VoiceLayerPath, Input, LanguageCode = "ko-KR"):
+def VoiceSplit(projectName, email, VoiceLayerPath, Input, LanguageCode = "ko-KR", MessagesReview = "off"):
 
+    ## 음성파일을 STT로 단어별 시간 계산하기
     voiceTimeStemps, Input2, RecordIdList = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
-    Filter = VoiceSplitProcess(projectName, email, Input, Input2, RecordIdList, Process = "VoiceSplit")
+    ## VoiceSplit 프롬프트 요청
+    Filter = VoiceSplitProcess(projectName, email, Input, Input2, RecordIdList, Process = "VoiceSplit", MessagesReview = MessagesReview)
+    ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
     SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, Filter)
+    ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
     VoiceFileSplit(VoiceLayerPath, SplitTimeList)
 
 if __name__ == "__main__":

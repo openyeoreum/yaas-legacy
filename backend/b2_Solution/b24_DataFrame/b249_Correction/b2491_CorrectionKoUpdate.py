@@ -727,7 +727,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                 BeforeEndtoken = tokens[-2]
                 Endtoken = tokens[-1]
                 if ('Ko' in BeforeEndtoken and 'Period' in Endtoken) or ('En' in BeforeEndtoken and 'Period' in Endtoken) or ('SFXEnd' in BeforeEndtoken and 'Period' in Endtoken):
-                    tokens.append({"Pause": random.choice(["(0.62)", "(0.65)", "(0.70)"])})
+                    tokens.append({"Pause": random.choice(["(0.51)", "(0.55)", "(0.59)"])})
                     tokens.append({"Enter": "\n"})
                 if len(tokens) >= 5:
                     for k in range(len(tokens) - 5):

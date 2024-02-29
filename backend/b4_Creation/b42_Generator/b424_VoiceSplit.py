@@ -2,6 +2,7 @@ import os
 import io
 import json
 import numpy as np
+import webrtcvad
 import sys
 sys.path.append("/yaas")
 
@@ -39,7 +40,6 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
     # 각 단어의 시작 및 종료 타임스탬프 출력
     voiceTimeStemps = []
     Voices = []
-    RecordIdList = []
     Id = 1
     for result in response.results:
         for alternative in result.alternatives:
@@ -50,85 +50,81 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
                 end_time = wordInfo.end_time.total_seconds() if wordInfo.end_time else 0
                 voiceTimeStemps.append({"낭독기록번호": Id, "낭독기록": word, "시작": start_time, "끝": end_time})
                 Voices.append({"낭독기록번호": Id, "낭독기록": word})
-                RecordIdList.append(Id)
                 Id += 1
                 
-    return voiceTimeStemps, Voices, RecordIdList
+    return voiceTimeStemps, Voices
 
 ######################
 ##### Filter 조건 #####
 ######################
 ## 음성파일을 STT로 단어별 시간 계산하기
-def VoiceTimeStempsProcessFilter(Response, Input, RecordIdList):
+def VoiceTimeStempsProcessFilter(Response, AlphabetList):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         Json = json.loads(Response)
-        outputJson = Json['낭독']
+        outputJson = Json['매칭']
     except json.JSONDecodeError:
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(outputJson, list):
         return "JSONType에서 오류 발생: JSONTypeError"
     # Error3: 결과가 list가 아닐 때의 예외 처리
-    if len(Input) != len(outputJson):
-        return "Input과 Response의 문장(분할) 수가 다름: JSONCountError"
-    # Error4: outputJson와 Input의 수가 다를때 예외 처리
-    try:
-        outputJsonList = []
-        for i in range(len(outputJson)):
-            # 낭독기록번호리스트에서 최소값과 최대값을 찾음
-            if i == 0:
-                min_val = 1
-            else:
-                min_val = min(outputJson[i]['낭독기록번호리스트'])
-            max_val = max(outputJson[i]['낭독기록번호리스트'])
-            # 최소값과 최대값 사이의 모든 숫자로 이루어진 리스트를 생성
-            CompleteList = list(range(min_val, max_val + 1))
-            # 수정된 리스트를 outputJsonList에 추가
-            outputJsonList += CompleteList
-        # 결과 비교
-        if outputJsonList != RecordIdList:
-            return "Input과 Response의 단어 수가 다름: JSONCountError"
-    except ValueError:
-        return "Input과 Response의 단어 수가 다름: JSONCountError"
+    if len(AlphabetList) != len(outputJson):
+        return "Response의 리스트 개수와 문장(분할) 수가 다름: JSONCountError"
 
     return outputJson
 
-## VoiceSplit 프롬프트 요청
-def VoiceSplitProcess(projectName, email, Input1, Input2, RecordIdList, Process = "VoiceSplit", MessagesReview = "off"):
-    # Input 생성
-    Input = "<낭독문>\n" + str(Input1) + "\n\n" + "<낭독기록>\n" + str(Input2)
-    memoryCounter = f"\n중요1. 지금 작성할 <낭독.json> '낭독'의 문장수는 {len(Input1)}이며, '낭독기록번호리스트'의 총합은 0 - {len(Input2)}이 되어야 합니다.\n중요2. '낭독기록번호리스트' 기록시 '낭독기록번호'를 누락하거나 중복하거나 빼거나 더하지 않습니다.\n중요3. <낭독기록>은 발음이 헷갈려서 잘못 작성된 경우가 많기에 <낭독문>과 <낭독기록>의 순서가 같은 점과, 작성이 잘못된 '낭독기록'은 '낭독문장'와의 비교를 통해 옳은 '낭독기록'을 유추하여 '낭독기록번호리스트'를 기록합니다.\n\n"
-
-    error_count = 0  # 오류 발생 횟수를 추적하는 변수
-    mode = "Example"  # 기본 Mode 설정
-
-    for _ in range(20):
-        # Response 생성
-        Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = mode, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
-        Filter = VoiceTimeStempsProcessFilter(Response, Input1, RecordIdList)
+## Input1과 Input2를 입력으로 받아 최종 Input 생성
+def InputText(Input1, Input2):
+    # InputText1 생성
+    InputText1 = ""
+    Alphabet = "A"  # 시작 알파벳
+    AlphabetList = []
+    for i in range(len(Input1)):
+        if i > 0:  # 첫 번째 문장이 아니라면 앞에 알파벳을 추가한다
+            InputText1 += f" [{Alphabet}] "
+            AlphabetList.append(Alphabet)
+            Alphabet = chr(ord(Alphabet) + 1)  # 다음 알파벳으로 업데이트
+        InputText1 += Input1[i]['낭독문장']
         
-        if isinstance(Filter, str):
-            print(f"Project: {projectName} | Process: {Process} | {Filter}")
-            error_count += 1  # 오류 발생시 카운트 증가
-            
-            if error_count == 5:  # 오류가 10번 발생하면 Mode 변경
-                mode = "Master"  # Mode를 Master로 변경
-                print(f"Project: {projectName} | Process: {Process} | 오류가 10번 발생했습니다. Mode를 Master로 변경합니다.")
+    # InputText2 생성
+    InputText2 = ""
+    for i, record in enumerate(Input2):
+        if i > 0:  # 첫 번째 기록이 아니라면 앞에 숫자를 추가한다
+            InputText2 += f" [{i}] "
+        InputText2 += record['낭독기록']
+    
+    # 최종 Input 생성
+    Input = "<낭독원문>\n" + str(InputText1) + "\n\n" + "<낭독STT단어문>\n" + str(InputText2)
+    
+    return Input, AlphabetList
+
+## VoiceSplit 프롬프트 요청
+def VoiceSplitProcess(projectName, email, Input1, Input2, Process = "VoiceSplit", MessagesReview = "off"):
+    ## Input1과 Input2를 입력으로 받아 최종 Input 생성
+    Input, AlphabetList = InputText(Input1, Input2)
+    ## memoryCounter 생성
+    memoryCounter = f"\n주의1. 알파벳 [{'], ['.join(AlphabetList)}] 모두 정확하게 매칭\n주의2. <낭독원문>의 문장과 <낭독STT단어문>의 단어가 자주 다르게 작성, 이 경우 <낭독STT단어문>의 앞 뒤 기록으로 유추하여 <낭독원문>의 [알파벳]과 [숫자]를 매칭\n주의3. 매칭 작업은 매우 중요한 작업임에 신중하게 진행할 것!\n\n"
+
+    for _ in range(10):
+        # Response 생성
+        Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
+        ResponseJson = VoiceTimeStempsProcessFilter(Response, AlphabetList)
+        
+        if isinstance(ResponseJson, str):
+            print(f"Project: {projectName} | Process: {Process} | {ResponseJson}")
         else:
             break
         
-    return Filter
+    return ResponseJson
 
 ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
-def VoiceTimeStempsClassification(VoiceTimeStemps, Filter):
+def VoiceTimeStempsClassification(VoiceTimeStemps, ResponseJson):
     SplitTimeList = []
-    for Response in Filter:
-        CurrentTime = Response['낭독기록번호리스트'][0]
-        # EndTime = Response['낭독기록번호리스트'][-1]
-        CurrentSplitTime = VoiceTimeStemps[CurrentTime - 1]['시작']
+    for Response in ResponseJson:
+        CurrentTime = int(Response['숫자'])
+        CurrentSplitTime = VoiceTimeStemps[CurrentTime]['시작']
         SplitTimeList.append(CurrentSplitTime)
-    SplitTimeList = SplitTimeList[1:]
         
     return SplitTimeList
 
@@ -137,28 +133,46 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
     # 오디오 파일 로드
     audio = AudioSegment.from_wav(VoiceLayerPath)
     
+    def find_optimal_split_point(audio, split_time, detail = False):
+        # 주변 평균값 탐색을 위한 초기화
+        metrics = []
+        step = 0.05 if not detail else 0.01  # 세밀한 분석을 위한 단계 조정
+        range_end = 0.3 if not detail else 0.05  # 세밀한 분석을 위한 범위 조정
+
+        for delta in np.arange(-range_end, range_end, step):
+            start = int((split_time + delta) * 1000)  # milliseconds
+            end = int((split_time + delta + (0.1 if not detail else 0.02)) * 1000)  # milliseconds
+            segment = audio[start:end]
+            
+            # segment 데이터를 처리할 수 있는 형태로 변환
+            segment_samples = np.abs(np.array(segment.get_array_of_samples()))
+            average = np.mean(segment_samples)
+            
+            metrics.append((start / 1000, average))
+        
+        # 평균값을 고려하여 가장 적합한 분할 지점 찾기
+        metrics.sort(key=lambda x: x[1])  # 평균값이 낮은 순으로 정렬
+        optimal_split_point, min_value = metrics[0]
+
+        return optimal_split_point, min_value, metrics
+
     # 최종 분할 지점을 저장할 리스트
     split_points = []
-    
-    for split_time in SplitTimeList:
-        # 주변 평균값 탐색을 위한 초기화
-        averages = []
-        
-        for delta in np.arange(-0.4, 0.4, 0.05):
-            start = int((split_time + delta) * 1000)  # milliseconds
-            end = int((split_time + delta + 0.1) * 1000)  # milliseconds
-            segment = audio[start:end]
-            average = np.mean(np.abs(segment.get_array_of_samples()))
-            averages.append((start / 1000, average))
-        
-        # 가장 낮은 평균값 찾기
-        averages.sort(key=lambda x: x[1])
-        min_avg_time, _ = averages[0]
-        
-        # 최적 분할 지점 계산
-        optimal_split_point = min_avg_time
+    for split_time in SplitTimeList:        
+        optimal_split_point, min_value, metrics = find_optimal_split_point(audio, split_time)
+        # 최소값이 0이 아니면 세밀한 분석
+        if min_value != 0:
+            optimal_split_point, _, _ = find_optimal_split_point(audio, optimal_split_point, detail=True)
+        # 최소값이 0인 경우 연속적인 0값들의 중앙값 찾기
+        elif min_value == 0:
+            zeros = [m[0] for m in metrics if m[1] == 0]
+            if zeros:
+                start_zero = zeros[0]
+                end_zero = zeros[-1]
+                optimal_split_point = (start_zero + end_zero) / 2
+
         split_points.append(optimal_split_point)
-    
+
     # 파일 분할 및 저장
     start_point = 0
     split_points.append(audio.duration_seconds)  # 마지막 부분 포함하기 위해 추가
@@ -188,11 +202,11 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
 def VoiceSplit(projectName, email, VoiceLayerPath, Input, LanguageCode = "ko-KR", MessagesReview = "off"):
 
     ## 음성파일을 STT로 단어별 시간 계산하기
-    voiceTimeStemps, Input2, RecordIdList = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
+    voiceTimeStemps, Input2 = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
     ## VoiceSplit 프롬프트 요청
-    Filter = VoiceSplitProcess(projectName, email, Input, Input2, RecordIdList, Process = "VoiceSplit", MessagesReview = MessagesReview)
+    ResponseJson = VoiceSplitProcess(projectName, email, Input, Input2, Process = "VoiceSplit", MessagesReview = MessagesReview)
     ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
-    SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, Filter)
+    SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
     ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
     VoiceFileSplit(VoiceLayerPath, SplitTimeList)
 
@@ -204,34 +218,3 @@ if __name__ == "__main__":
     VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/테스트(가)_0_연우(중간톤, 피치다운).wav"
     LanguageCode = "ko-KR"
     #########################################################################
-    Input = [{'낭독문장번호': 1, '낭독문장': '뿐만 아니라, 여름은 최근 창업진흥원에서 주관하는 대회에서 대상을 수상하며'}, {'낭독문장번호': 2, '낭독문장': '그들의 혁신적인 기술과 사회적 기여를 인정받았다.'}, {'낭독문장번호': 3, '낭독문장': '이준영 대표는 수상 소감에서 "이 상은 단지 우리의 기술적 성과만을 인정하는 것이 아니라, 우리가 추구하는 가치와 비전에 대한 공감을 의미합니다.'}, {'낭독문장번호': 4, '낭독문장': '우리는 앞으로도 지식의 접근성을 높이고, 누구나 쉽게 지식을 소비할 수 있는 환경을 만드는 것을 목표로 삼고 있습니다.'}, {'낭독문장번호': 5, '낭독문장': '라고 전했다.'}]
-
-    VoiceSplit(projectName, email, VoiceLayerPath, Input)
-    
-    # 파일 경로 설정
-    files = [
-        "/yaas/split_0.wav",
-        "/yaas/split_1.wav",
-        "/yaas/split_2.wav",
-        "/yaas/split_3.wav",
-        "/yaas/split_4.wav"
-    ]
-
-    # 무음 추가를 위한 오디오 세그먼트 생성
-    silence_short = AudioSegment.silent(duration = 200)  # 0.2초의 무음
-    silence_long = AudioSegment.silent(duration = 800)  # 0.7초의 무음
-
-    # 첫 번째 오디오 파일 로드
-    combined = AudioSegment.from_wav(files[0])
-
-    # 나머지 오디오 파일들을 순회하며 조건에 맞는 무음 추가 후 합치기
-    for index, file in enumerate(files[1:], start=1):
-        audio = AudioSegment.from_wav(file)
-        # 0과 1, 3과 4 사이는 0.2초 무음, 1과 2, 2와 3 사이는 0.7초 무음
-        if index == 1 or index == 4:  # 조건에 따라 무음 길이 변경
-            combined += silence_short + audio
-        else:
-            combined += silence_long + audio
-
-    # 합친 오디오 파일 저장
-    combined.export("/yaas/combined_file.wav", format="wav")

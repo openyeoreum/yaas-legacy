@@ -289,6 +289,9 @@ def ActorChunkSetting(RawChunk):
     ActorChunk = ActorChunk.replace('(0.30)', '')
     ActorChunk = ActorChunk.replace('(0.40)', '')
     ActorChunk = ActorChunk.replace('(0.60)', '곬갌끚')
+    ActorChunk = ActorChunk.replace('(0.51)', '')
+    ActorChunk = ActorChunk.replace('(0.55)', '')
+    ActorChunk = ActorChunk.replace('(0.59)', '')
     ActorChunk = ActorChunk.replace('(0.65)', '')
     ActorChunk = ActorChunk.replace('(0.70)', '')
     ActorChunk = ActorChunk.replace('(0.75)', '')
@@ -776,10 +779,20 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
 
                             if ChangedName == 'Continue':
                                 ## 히스토리 저장 ##
-                                GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunks}
-                                GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
-                                with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                                    json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                                # 동일한 ChunkId ActorName을 가진 항목이 있는지 확인
+                                AddSwitch = True  # 새 항목을 추가해야 하는지 여부를 나타내는 플래그
+                                for history in GenerationKoChunkHistorys:
+                                    if history["ChunkId"] == ChunkId and history["ActorName"] == Name:
+                                        AddSwitch = False
+                                        break
+
+                                # 동일한 ChunkId와 ActorName을 가진 항목이 없을 경우 새 항목 추가
+                                if AddSwitch:
+                                    GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunk}
+                                    GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
+                                    with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                                        json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                                ## 히스토리 저장 ##
                             else:
                                 if Macro == "Auto":
                                     TypeCastMacro(ChangedName)

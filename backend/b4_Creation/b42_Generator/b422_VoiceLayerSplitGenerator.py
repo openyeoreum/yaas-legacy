@@ -290,7 +290,9 @@ def ActorChunkSetting(RawChunk):
     ActorChunk = ActorChunk.replace('(0.30)', '')
     ActorChunk = ActorChunk.replace('(0.40)', '')
     ActorChunk = ActorChunk.replace('(0.60)', '곬갌끚')
-    ActorChunk = ActorChunk.replace('(0.62)', '')
+    ActorChunk = ActorChunk.replace('(0.51)', '')
+    ActorChunk = ActorChunk.replace('(0.55)', '')
+    ActorChunk = ActorChunk.replace('(0.59)', '')
     ActorChunk = ActorChunk.replace('(0.65)', '')
     ActorChunk = ActorChunk.replace('(0.70)', '')
     ActorChunk = ActorChunk.replace('(0.75)', '')
@@ -503,9 +505,9 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
             print(f"[ KeyError 발생, 재시도 {attempt}/60 ]")
             time.sleep(60)  # 1분 대기 후 재시도
 
-        except Exception as e:
-            print(f"[ 예상치 못한 에러 발생: {e} ]")
-            sys.exit("[ Unexpected Error, exiting program. ]")
+        # except Exception as e:
+        #     print(f"[ 예상치 못한 에러 발생: {e} ]")
+        #     sys.exit("[ Unexpected Error, exiting program. ]")
 
 ## 생성된 음성 합치기 ##
 ## Pause 추출
@@ -684,9 +686,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                     split_chunks.append(current_chunk)
                     split_pauses.append(current_pause)
 
-                Split_chunks = [chunk + "," for chunk in split_chunks]
-
-                return split_chunks, Split_chunks
+                return split_chunks, split_pauses
 
             for GenerationKoChunk in SelectionGenerationKoChunks:
                 chunkid = GenerationKoChunk['ChunkId']
@@ -850,10 +850,20 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
 
                         if ChangedName == 'Continue':
                             ## 히스토리 저장 ##
-                            GenerationKoChunkHistory = {"EditId": EditId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunk}
-                            GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
-                            with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                                json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                            # 동일한 EditId와 ActorName을 가진 항목이 있는지 확인
+                            AddSwitch = True  # 새 항목을 추가해야 하는지 여부를 나타내는 플래그
+                            for history in GenerationKoChunkHistorys:
+                                if history["EditId"] == EditId and history["ActorName"] == Name:
+                                    AddSwitch = False
+                                    break
+
+                            # 동일한 EditId와 ActorName을 가진 항목이 없을 경우 새 항목 추가
+                            if AddSwitch:
+                                GenerationKoChunkHistory = {"EditId": EditId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunk}
+                                GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
+                                with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                                    json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                            ## 히스토리 저장 ##
                         else:
                             if Macro == "Auto":
                                 TypeCastMacro(ChangedName)

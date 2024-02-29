@@ -770,6 +770,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
             UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['EditId']}: {Update['ActorChunk']}")
             EditId = Update['EditId']
             Name = Update['ActorName']
+            Pause = Update['Pause']
             Chunk = " ".join(Update['ActorChunk'])
             ChunkCount = len(Update['ActorChunk']) - 1 # 파일의 마지막 순번을 표기
 
@@ -790,6 +791,9 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                         Modify = "Yes"
                     if History['ActorChunk'] != Chunk:
                         History['ActorChunk'] = Chunk
+                        Modify = "Yes"
+                    if History['Pause'] != Pause:
+                        History['Pause'] = Pause
                         Modify = "Yes"
 
             ## 보이스 선정 ##                
@@ -859,7 +863,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
 
                             # 동일한 EditId와 ActorName을 가진 항목이 없을 경우 새 항목 추가
                             if AddSwitch:
-                                GenerationKoChunkHistory = {"EditId": EditId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunk}
+                                GenerationKoChunkHistory = {"EditId": EditId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunk, "Pause": Pause}
                                 GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
                                 with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
                                     json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)

@@ -705,6 +705,7 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
             UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['ChunkId']}: {Update['ActorChunk']}")
             ChunkId = Update['ChunkId']
             Name = Update['ActorName']
+            Pause = Update['Pause']
             Chunks = Update['ActorChunk']
             
             ## 수정생성(Modify) 여부확인 ##
@@ -716,6 +717,9 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                         Modify = "Yes"
                     if History['ActorChunk'] != Chunks:
                         History['ActorChunk'] = Chunks
+                        Modify = "Yes"
+                    if History['Pause'] != Pause:
+                        History['Pause'] = Pause
                         Modify = "Yes"
 
             ## 보이스 선정 ##                
@@ -788,7 +792,7 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
 
                                 # 동일한 ChunkId와 ActorName을 가진 항목이 없을 경우 새 항목 추가
                                 if AddSwitch:
-                                    GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunk}
+                                    GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunk, "Pause": Pause}
                                     GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
                                     with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
                                         json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)

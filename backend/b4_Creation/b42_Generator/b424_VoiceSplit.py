@@ -58,7 +58,7 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
 ##### Filter 조건 #####
 ######################
 ## 음성파일을 STT로 단어별 시간 계산하기
-def VoiceTimeStempsProcessFilter(Response, AlphabetList):
+def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         Json = json.loads(Response)
@@ -71,6 +71,9 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList):
     # Error3: 결과가 list가 아닐 때의 예외 처리
     if len(AlphabetList) != len(outputJson):
         return "Response의 리스트 개수와 문장(분할) 수가 다름: JSONCountError"
+    # Error4: 결과에 마지막 문장이 포함될 때의 예외 처리
+    if int(outputJson[-1]['숫자']) == LastNumber:
+        return "Response에 LastNumber가 포함됨: JSONCountError"
 
     return outputJson
 
@@ -86,9 +89,6 @@ def InputText(Input1, Input2):
             AlphabetList.append(Alphabet)
             Alphabet = chr(ord(Alphabet) + 1)  # 다음 알파벳으로 업데이트
         InputText1 += Input1[i]['낭독문장']
-    
-    AlphabetList.append(Alphabet) # 마지막 알파벳 추가
-    InputText1 += f" [{Alphabet}]" # 마지막 알파벳 추가
         
     # InputText2 생성
     InputText2 = ""
@@ -96,32 +96,31 @@ def InputText(Input1, Input2):
         if i > 0:  # 첫 번째 기록이 아니라면 앞에 숫자를 추가한다
             InputText2 += f" [{i}] "
         InputText2 += record['낭독기록']
-    
-    InputText2 += f" [{i + 1}] " # 마지막 숫자 추가
+    LastNumber = i
     
     # 최종 Input 생성
     Input = "<낭독원문>\n" + str(InputText1) + "\n\n" + "<낭독STT단어문>\n" + str(InputText2)
     
-    return Input, AlphabetList
+    return Input, AlphabetList, LastNumber
 
 ## VoiceSplit 프롬프트 요청
 def VoiceSplitProcess(projectName, email, Input1, Input2, Process = "VoiceSplit", MessagesReview = "off"):
     ## Input1과 Input2를 입력으로 받아 최종 Input 생성
-    Input, AlphabetList = InputText(Input1, Input2)
+    Input, AlphabetList, LastNumber = InputText(Input1, Input2)
     ## memoryCounter 생성
-    memoryCounter = f"\n\n최종주의사항\n1) 매우 중요한 작업임으로, 알파벳 [{'], ['.join(AlphabetList)}] 모두 신중하게 매칭!\n2) <낭독원문>의 문장과 <낭독STT단어문>의 단어가 자주 다르게 작성, 이 경우 <낭독STT단어문>의 앞 뒤 기록으로 유추하여 <낭독원문>의 [알파벳]과 [숫자]를 매칭!\n3) 매칭 순서가 앞으로 당겨지거나 뒤로 밀리지거나 누락되지 않도록 하나씩 하나씩, 차근 차근 매칭!\n\n"
+    memoryCounter = f"\n\n최종주의사항\n1) 매우 중요한 작업임으로, 알파벳 [{'], ['.join(AlphabetList)}] 모두 신중하게 매칭!\n2) <낭독원문>의 문장과 <낭독STT단어문>의 단어가 자주 다르게 작성, 이 경우 <낭독STT단어문>의 앞 뒤 기록으로 유추하여 <낭독원문>의 [알파벳]과 [숫자]를 매칭!\n3) 매칭 순서가 밀리거나 누락되지 않도록 하나씩 하나씩, 신중하게 매칭!\n\n"
 
     for _ in range(10):
         # Response 생성
         Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
-        ResponseJson = VoiceTimeStempsProcessFilter(Response, AlphabetList)
+        ResponseJson = VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber)
         
         if isinstance(ResponseJson, str):
             print(f"Project: {projectName} | Process: {Process} | {ResponseJson}")
         else:
             break
         
-    return ResponseJson[:-1]
+    return ResponseJson
 
 ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
 def VoiceTimeStempsClassification(VoiceTimeStemps, ResponseJson):
@@ -217,8 +216,9 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
     os.remove(VoiceLayerPath)
 
 ## VoiceSplit 최종 함수
-def VoiceSplit(projectName, email, VoiceLayerPath, Input, LanguageCode = "ko-KR", MessagesReview = "off"):
+def VoiceSplit(projectName, email, name, VoiceLayerPath, Input, LanguageCode = "ko-KR", MessagesReview = "off"):
 
+    print(f"VoiceSplit: progress, {name} waiting 15 second")
     ## 음성파일을 STT로 단어별 시간 계산하기
     voiceTimeStemps, Input2 = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
     ## VoiceSplit 프롬프트 요청

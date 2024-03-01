@@ -72,7 +72,7 @@ if __name__ == "__main__":
     MainLang = "Ko" # 'Ko', 'En'
     MainProcess = "Creation" # 'Solution', 'Creation'
     Macro = "Manual" # 'Auto', 'Manual' : Auto는 API 캐릭터 변겅 자동, Manual은 API 캐릭터 변경 수동
-    Split = "Auto" # 'Auto', 'Manual' : Auto는 긴 음성 생성 후 분할(비용이 작음), Manual은 짧은 음성 분할 생성(비용이 큼)
+    Split = "Manual" # 'Auto', 'Manual' : Auto는 긴 음성 생성 후 분할(비용이 작음), Manual은 짧은 음성 분할 생성(비용이 큼)
     #########################################################################
 
     YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, MainProcess, Macro, Split)

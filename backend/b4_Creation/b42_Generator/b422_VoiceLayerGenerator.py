@@ -599,15 +599,18 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
     
     # 폴더 내의 모든 .wav 파일 목록 정렬/필터
     FilteredFiles = SortAndRemoveDuplicates(Files)
-    
     CombinedSound = AudioSegment.empty()
 
+    # VoiceLayer의 모든 음성 합치기
+    UpdateTQDM = tqdm(EditGenerationKoChunks,
+                    total = len(EditGenerationKoChunks),
+                    desc = 'VoiceGenerator')
     FilesCount = 0
-    for i in range(len(EditGenerationKoChunks)):
-        for j in range(len(EditGenerationKoChunks[i]['Pause'])):
+    for Update in UpdateTQDM:
+        for j in range(len(Update['Pause'])):
             sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
-            PauseDuration_ms = EditGenerationKoChunks[i]['Pause'][j] * 1000  # 초를 밀리초로 변환
-            silence = AudioSegment.silent(duration=PauseDuration_ms)
+            PauseDuration_ms = Update['Pause'][j] * 1000  # 초를 밀리초로 변환
+            silence = AudioSegment.silent(duration = PauseDuration_ms)
             CombinedSound += sound_file + silence
             FilesCount += 1
     
@@ -716,6 +719,8 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
             Modify = "No"
             for History in GenerationKoChunkHistorys:
                 if History['ChunkId'] == ChunkId:
+                    ## historyChunks 생성(historyChunks 중복여부 확인용도)
+                    historyChunks = History["ActorChunk"]
                     if History['ActorName'] != Name:
                         History['ActorName'] = Name
                         Modify = "Yes"
@@ -748,64 +753,34 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                 restart = False  # 반복 시작 시 재시작 플래그를 초기화
                 for i in range(len(Chunks)):
                     Chunk = Chunks[i]
-                    
-                    # 단어로 끝나는 경우 끝음 조절하기
-                    if '?' not in Chunk[-2:]:
-                        if '.' not in Chunk[-2:]:
-                            lastpitch = [-2]
-                        elif '다' not in Chunk[-2:]:
-                            lastpitch = [-2]
+                    ## historyChunks 중복여부 확인(중복이 없을 경우에만 실행)
+                    if Chunk not in historyChunks:
+                        # 단어로 끝나는 경우 끝음 조절하기
+                        if '?' not in Chunk[-2:]:
+                            if '.' not in Chunk[-2:]:
+                                lastpitch = [-2]
+                            elif '다' not in Chunk[-2:]:
+                                lastpitch = [-2]
+                            else:
+                                lastpitch = LASTPITCH
                         else:
                             lastpitch = LASTPITCH
-                    else:
-                        lastpitch = LASTPITCH
-                    ## 'Narrator', 'Character' 태그가 아닌 경우 감정은 가장 평범한 1번 감정으로 하기 ##
-                    if Update['Tag'] in ['Narrator', 'Character']:
-                        RandomEMOTION = random.choice(EMOTION)
-                    else:
-                        RandomEMOTION = EMOTION[0]
-                    RandomSPEED = random.choice(SPEED)
-                    RandomLASTPITCH = random.choice(lastpitch)
-                    
-                    ## 수정 여부에 따라 파일명 변경 ##
-                    if Modify == "Yes":
-                        FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + 'M.wav'
-                        voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-                        ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
-                        with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                            json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                        if ChangedName != 'Continue':
-                            if Macro == "Auto":
-                                TypeCastMacro(ChangedName)
-                                time.sleep(random.randint(3, 5))
-                                restart = True
-                                break
-                            else:
-                                print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
-                                sys.exit()
-                    else:
-                        FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
-                        voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-                        if not os.path.exists(voiceLayerPath):
+                        ## 'Narrator', 'Character' 태그가 아닌 경우 감정은 가장 평범한 1번 감정으로 하기 ##
+                        if Update['Tag'] in ['Narrator', 'Character']:
+                            RandomEMOTION = random.choice(EMOTION)
+                        else:
+                            RandomEMOTION = EMOTION[0]
+                        RandomSPEED = random.choice(SPEED)
+                        RandomLASTPITCH = random.choice(lastpitch)
+                        
+                        ## 수정 여부에 따라 파일명 변경 ##
+                        if Modify == "Yes":
+                            FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + 'M.wav'
+                            voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
                             ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
-
-                            if ChangedName == 'Continue':
-                                ## 히스토리 저장 ##
-                                # 동일한 ChunkId ActorName을 가진 항목이 있는지 확인
-                                AddSwitch = True  # 새 항목을 추가해야 하는지 여부를 나타내는 플래그
-                                for history in GenerationKoChunkHistorys:
-                                    if history["ChunkId"] == ChunkId and history["ActorName"] == Name:
-                                        AddSwitch = False
-                                        break
-
-                                # 동일한 ChunkId와 ActorName을 가진 항목이 없을 경우 새 항목 추가
-                                if AddSwitch:
-                                    GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunk, "Pause": Pause}
-                                    GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
-                                    with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                                        json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
-                                ## 히스토리 저장 ##
-                            else:
+                            with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                                json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                            if ChangedName != 'Continue':
                                 if Macro == "Auto":
                                     TypeCastMacro(ChangedName)
                                     time.sleep(random.randint(3, 5))
@@ -814,6 +789,38 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                                 else:
                                     print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
                                     sys.exit()
+                        else:
+                            FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
+                            voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+                            if not os.path.exists(voiceLayerPath):
+                                ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
+
+                                if ChangedName == 'Continue':
+                                    ## 히스토리 저장 ##
+                                    # 동일한 ChunkId ActorName을 가진 항목이 있는지 확인
+                                    AddSwitch = True  # 새 항목을 추가해야 하는지 여부를 나타내는 플래그
+                                    for history in GenerationKoChunkHistorys:
+                                        if history["ChunkId"] == ChunkId and history["ActorName"] == Name:
+                                            history = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunks, "Pause": Pause}
+                                            AddSwitch = False
+                                            break
+
+                                    # 동일한 ChunkId와 ActorName을 가진 항목이 없을 경우 새 항목 추가
+                                    if AddSwitch:
+                                        GenerationKoChunkHistory = {"ChunkId": ChunkId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": Chunks, "Pause": Pause}
+                                        GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
+                                        with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                                            json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
+                                    ## 히스토리 저장 ##
+                                else:
+                                    if Macro == "Auto":
+                                        TypeCastMacro(ChangedName)
+                                        time.sleep(random.randint(3, 5))
+                                        restart = True
+                                        break
+                                    else:
+                                        print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                                        sys.exit()
                 
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)

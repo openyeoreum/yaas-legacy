@@ -58,7 +58,7 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
 ##### Filter 조건 #####
 ######################
 ## 음성파일을 STT로 단어별 시간 계산하기
-def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber):
+def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, mergedList):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         Json = json.loads(Response)
@@ -74,6 +74,11 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber):
     # Error4: 결과에 마지막 문장이 포함될 때의 예외 처리
     if int(outputJson[-1]['숫자']) == LastNumber:
         return "Response에 LastNumber가 포함됨: JSONCountError"
+    # Error5: 앞단어 - 숫자 - 뒷단어 순서가 잘못 되었을때의 예외 처리
+    for output in outputJson:
+        outputText = output['앞단어'] + output['숫자'] + output['뒷단어']
+        if outputText not in mergedList:
+            return "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError"
 
     return outputJson
 
@@ -92,28 +97,37 @@ def InputText(Input1, Input2):
         
     # InputText2 생성
     InputText2 = ""
+    InputText2_List = []
     for i, record in enumerate(Input2):
         if i > 0:  # 첫 번째 기록이 아니라면 앞에 숫자를 추가한다
             InputText2 += f" [{i}] "
+            InputText2_List.append(f"{i}")
         InputText2 += record['낭독기록']
+        InputText2_List.append(record['낭독기록'])
     LastNumber = i
+    
+    mergedList = []
+    for i, item in enumerate(InputText2_List):
+        if item.isdigit():  # Check if the item is a digit
+            merged_item = InputText2_List[i-1] + item + InputText2_List[i+1]  # Merge with the previous and next items
+            mergedList.append(merged_item)
     
     # 최종 Input 생성
     Input = "<낭독원문>\n" + str(InputText1) + "\n\n" + "<낭독STT단어문>\n" + str(InputText2)
     
-    return Input, AlphabetList, LastNumber
+    return Input, AlphabetList, LastNumber, mergedList
 
 ## VoiceSplit 프롬프트 요청
 def VoiceSplitProcess(projectName, email, Input1, Input2, Process = "VoiceSplit", MessagesReview = "off"):
     ## Input1과 Input2를 입력으로 받아 최종 Input 생성
-    Input, AlphabetList, LastNumber = InputText(Input1, Input2)
+    Input, AlphabetList, LastNumber, mergedList = InputText(Input1, Input2)
     ## memoryCounter 생성
     memoryCounter = f"\n\n최종주의사항\n1) 매우 중요한 작업임으로, 알파벳 [{'], ['.join(AlphabetList)}] 모두 신중하게 매칭!\n2) <낭독원문>의 문장과 <낭독STT단어문>의 단어가 자주 다르게 작성, 이 경우 <낭독STT단어문>의 앞 뒤 기록으로 유추하여 <낭독원문>의 [알파벳]과 [숫자]를 매칭!\n3) 매칭 순서가 밀리거나 누락되지 않도록 하나씩 하나씩, 신중하게 매칭!\n\n"
 
     for _ in range(10):
         # Response 생성
         Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
-        ResponseJson = VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber)
+        ResponseJson = VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, mergedList)
         
         if isinstance(ResponseJson, str):
             print(f"Project: {projectName} | Process: {Process} | {ResponseJson}")

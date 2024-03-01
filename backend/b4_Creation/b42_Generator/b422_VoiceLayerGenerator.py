@@ -11,6 +11,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from pydub import AudioSegment
+from collections import defaultdict
 from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoiceDataSet
@@ -401,12 +402,22 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
                     GenerationKoChunks['Chunk'] = [part + "(0.60)" for part in parts[:-1]] + [parts[-1]]
                 GenerationKoChunks['ApiSetting'] = MatchedActor['ApiSetting']
                 
+        # name 값을 기준으로 그룹화(API 변경 횟수 절감)
+        GroupedData = defaultdict(list)
+        for Actor in MatchedActors:
+            name = Actor["ApiSetting"]["name"]
+            GroupedData[name].append(Actor)
+        # 정렬된 그룹을 기반으로 최종 리스트 재구성
+        SortedMatchedActors = []
+        for name in sorted(GroupedData.keys()):
+            SortedMatchedActors.extend(GroupedData[name])
+                
     # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
     #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
     # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
-    return MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters
+    return SortedMatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters
     
 ## VoiceLayerPath(TTS 저장) 경로 생성
 def VoiceLayerPathGen(projectName, email, FileName):
@@ -778,8 +789,6 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                             FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + 'M.wav'
                             voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
                             ChangedName = TypecastVoiceGen(name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
-                            with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
-                                json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
                             if ChangedName != 'Continue':
                                 if Macro == "Auto":
                                     TypeCastMacro(ChangedName)
@@ -789,6 +798,9 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
                                 else:
                                     print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
                                     sys.exit()
+                            else:
+                                with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
+                                    json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
                         else:
                             FileName = projectName + '_' + str(ChunkId) + '_' + Name + '_' + f'({str(i)})' + '.wav'
                             voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)

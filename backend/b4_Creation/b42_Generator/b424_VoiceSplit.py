@@ -141,7 +141,7 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         # 주변 평균값 탐색을 위한 초기화
         metrics = []
         step = 0.05 if not detail else 0.01  # 세밀한 분석을 위한 단계 조정
-        range_end = 0.3 if not detail else 0.05  # 세밀한 분석을 위한 범위 조정
+        range_end = 0.35 if not detail else 0.05  # 세밀한 분석을 위한 범위 조정
 
         for delta in np.arange(-range_end, range_end + step, step):
             start = int((split_time + delta) * 1000)  # milliseconds

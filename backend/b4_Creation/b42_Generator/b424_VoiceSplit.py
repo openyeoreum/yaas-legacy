@@ -120,9 +120,11 @@ def InputText(Input1, Input2):
         if i > 0:  # 첫 번째 기록이 아니라면 앞에 숫자를 추가한다
             NumberABSentList.append(i)
             # 리스트의 시작과 끝을 연결하기 위해 인덱스 계산
-            Before2Index = (i-1) % len(Input2)
-            After2Index = (i+1) % len(Input2)
-            NumberABWordList.append([Input2[BeforeIndex]['낭독기록'], Input2[i]['낭독기록'], Input2[AfterIndex]['낭독기록']])
+            Before2Index = (i-2) % len(Input2)
+            Before1Index = (i-1) % len(Input2)
+            After1Index = (i+1) % len(Input2)
+            After2Index = (i+2) % len(Input2)
+            NumberABWordList.append([Input2[Before2Index]['낭독기록'], Input2[Before1Index]['낭독기록'], Input2[i]['낭독기록'], Input2[After1Index]['낭독기록'], Input2[After2Index]['낭독기록']])
         NumberABSentList.append(Input2[i]['낭독기록'])
     LastNumber = i
 

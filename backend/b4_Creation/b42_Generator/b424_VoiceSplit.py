@@ -58,7 +58,7 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
 ##### Filter 조건 #####
 ######################
 ## 음성파일을 STT로 단어별 시간 계산하기
-def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, mergedList):
+def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordList):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         Json = json.loads(Response)
@@ -77,57 +77,72 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, mergedList)
     # Error5: 앞단어 - 숫자 - 뒷단어 순서가 잘못 되었을때의 예외 처리
     for output in outputJson:
         outputText = output['앞단어'] + output['숫자'] + output['뒷단어']
-        if outputText not in mergedList:
+        if outputText not in NumberWordList:
             return "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError"
 
     return outputJson
 
 ## Input1과 Input2를 입력으로 받아 최종 Input 생성
 def InputText(Input1, Input2):
-    # InputText1 생성
-    InputText1 = ""
+    # AlphabetList 생성
     Alphabet = "A"  # 시작 알파벳
     AlphabetList = []
+    AlphabetABSentList = []
+    AlphabetABWordList = []
     for i in range(len(Input1)):
         if i > 0:  # 첫 번째 문장이 아니라면 앞에 알파벳을 추가한다
-            InputText1 += f" [{Alphabet}] "
+            AlphabetABSentList.append(Alphabet)
+            BeforeWord = Input1[i-1]['낭독문장'].strip().split()
+            AfterWord = Input1[i]['낭독문장'].strip().split()
+            AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
             AlphabetList.append(Alphabet)
             Alphabet = chr(ord(Alphabet) + 1)  # 다음 알파벳으로 업데이트
-        InputText1 += Input1[i]['낭독문장']
-        
-    # InputText2 생성
-    InputText2 = ""
-    InputText2_List = []
-    for i, record in enumerate(Input2):
+        AlphabetABSentList.append(Input1[i]['낭독문장'])
+
+    print(f'AlphabetList: {AlphabetList}\n\n')
+    print(f'AlphabetABSentList: {AlphabetABSentList}\n\n')
+    print(f'AlphabetABWordList: {AlphabetABWordList}\n\n')
+
+    # NumberList 생성
+    NumberABSentList = []
+    NumberABWordList = []
+    for i in range(len(Input2)):
         if i > 0:  # 첫 번째 기록이 아니라면 앞에 숫자를 추가한다
-            InputText2 += f" [{i}] "
-            InputText2_List.append(f"{i}")
-        InputText2 += record['낭독기록']
-        InputText2_List.append(record['낭독기록'])
+            NumberABSentList.append(i)
+            NumberABWordList.append([Input2[i-2]['낭독기록'], Input2[i-1]['낭독기록'], i, Input2[i]['낭독기록'], Input2[i+1]['낭독기록']])
+        NumberABSentList.append(Input2[i]['낭독기록'])
     LastNumber = i
+
+    print(f'NumberABSentList: {NumberABSentList}\n\n')
+    print(f'NumberABWordList: {NumberABWordList}\n\n')
+
+    # AlphabetList와 NumberList 일치요소 찾기
+    SameAlphabet = []
+    SameNumber = []
+    for AlphabetABWord in AlphabetABWordList:
+        for NumberABWord in NumberABWordList:
+            if (AlphabetABWord[0] == NumberABWord[0]) and (AlphabetABWord[2] == NumberABWord[2]):
+                SameAlphabet.append(AlphabetABWord[1])
+                SameNumber.append(NumberABWord[1])
+                
+    print(f'SameAlphabet: {SameAlphabet}\n\n')
+    print(f'SameNumber: {SameNumber}\n\n')
+    # # 최종 Input 생성
+    # Input = "<낭독원문>\n" + str(AlphabetText) + "\n\n" + "<낭독STT단어문>\n" + str(NumberText)
     
-    mergedList = []
-    for i, item in enumerate(InputText2_List):
-        if item.isdigit():  # Check if the item is a digit
-            merged_item = InputText2_List[i-1] + item + InputText2_List[i+1]  # Merge with the previous and next items
-            mergedList.append(merged_item)
-    
-    # 최종 Input 생성
-    Input = "<낭독원문>\n" + str(InputText1) + "\n\n" + "<낭독STT단어문>\n" + str(InputText2)
-    
-    return Input, AlphabetList, LastNumber, mergedList
+    return Input, AlphabetList, LastNumber
 
 ## VoiceSplit 프롬프트 요청
 def VoiceSplitProcess(projectName, email, Input1, Input2, Process = "VoiceSplit", MessagesReview = "off"):
     ## Input1과 Input2를 입력으로 받아 최종 Input 생성
-    Input, AlphabetList, LastNumber, mergedList = InputText(Input1, Input2)
+    Input, AlphabetList, LastNumber, NumberWordList = InputText(Input1, Input2)
     ## memoryCounter 생성
     memoryCounter = f"\n\n최종주의사항\n1) 매우 중요한 작업임으로, 알파벳 [{'], ['.join(AlphabetList)}] 모두 신중하게 매칭!\n2) <낭독원문>의 문장과 <낭독STT단어문>의 단어가 자주 다르게 작성, 이 경우 <낭독STT단어문>의 앞 뒤 기록으로 유추하여 <낭독원문>의 [알파벳]과 [숫자]를 매칭!\n3) 매칭 순서가 밀리거나 누락되지 않도록 하나씩 하나씩, 신중하게 매칭!\n\n"
 
     for _ in range(10):
         # Response 생성
         Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
-        ResponseJson = VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, mergedList)
+        ResponseJson = VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordList)
         
         if isinstance(ResponseJson, str):
             print(f"Project: {projectName} | Process: {Process} | {ResponseJson}")
@@ -250,3 +265,7 @@ if __name__ == "__main__":
     VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/테스트(가)_0_연우(중간톤, 피치다운).wav"
     LanguageCode = "ko-KR"
     #########################################################################
+    Input1 = [{'낭독문장번호': 1, '낭독문장': '사람들은 장관을 지낸 고위급 인사가 동네 대중 사우나에 들러 머리도 다듬고 때를 미는 모습을 희한하다는 표정으로 쳐다보기도 했다'}, {'낭독문장번호': 2, '낭독문장': '그럴 때마다 한섭 씨는 아무렇지도 않다는 듯 보세요, 이 김한섭이는 여러분과 똑같은 사람입니다'}, {'낭독문장번호': 3, '낭독문장': '라며 웃고 다가가 먼저 악수를 청하기도 했다'}, {'낭독문장번호': 4, '낭독문장': '유세 기간이 시작되면 한섭 씨는 아침저녁으로 자신의 지역구에 있는 대중 사우나를 한 곳도 빠짐없이 순회하며, 유권자들을 만났다'}, {'낭독문장번호': 5, '낭독문장': '함께 벗었다는 것 이상의 스킨십은 없었다'}]
+    Input2 = [{'낭독기록번호': 1, '낭독기록': '사람들은'}, {'낭독기록번호': 2, '낭독기록': '장관을'}, {'낭독기록번호': 3, '낭독기록': '지낸'}, {'낭독기록번호': 4, '낭독기록': '고위급'}, {'낭독기록번호': 5, '낭독기록': '인사'}, {'낭독기록번호': 6, '낭독기록': '가'}, {'낭독기록번호': 7, '낭독기록': '동네'}, {'낭독기록번호': 8, '낭독기록': '대중'}, {'낭독기록번호': 9, '낭독기록': '사우나'}, {'낭독기록번호': 10, '낭독기록': '애들러'}, {'낭독기록번호': 11, '낭독기록': '머리도'}, {'낭독기록번호': 12, '낭독기록': '다듬고'}, {'낭독기록번호': 13, '낭독기록': '때를'}, {'낭독기록번호': 14, '낭독기록': '미는'}, {'낭독기록번호': 15, '낭독기록': '모습을'}, {'낭독기록번호': 16, '낭독기록': '시원하다는'}, {'낭독기록번호': 17, '낭독기록': '표정으로'}, {'낭독기록번호': 18, '낭독기록': '쳐다보기도'}, {'낭독기록번호': 19, '낭독기록': '했다'}, {'낭독기록번호': 20, '낭독기록': '그럴'}, {'낭독기록번호': 21, '낭독기록': '때마다'}, {'낭독기록번호': 22, '낭독기록': '한'}, {'낭독기록번호': 23, '낭독기록': '섭씨는'}, {'낭독기록번호': 24, '낭독기록': '아무렇지도'}, {'낭독기록번호': 25, '낭독기록': '않다는'}, {'낭독기록번호': 26, '낭독기록': '듯'}, {'낭독기록번호': 27, '낭독기록': '보세요'}, {'낭독기록번호': 28, '낭독기록': '이기만'}, {'낭독기록번호': 29, '낭독기록': '섭이는'}, {'낭독기록번호': 30, '낭독기록': '여러분과'}, {'낭독기록번호': 31, '낭독기록': '똑같은'}, {'낭독기록번호': 32, '낭독기록': '사람입니다'}, {'낭독기록번호': 33, '낭독기록': '라며'}, {'낭독기록번호': 34, '낭독기록': '웃고'}, {'낭독기록번호': 35, '낭독기록': '다가가'}, {'낭독기록번호': 36, '낭독기록': '먼저'}, {'낭독기록번호': 37, '낭독기록': '악수를'}, {'낭독기록번호': 38, '낭독기록': '청하기도'}, {'낭독기록번호': 39, '낭독기록': '했다'}, {'낭독기록번호': 40, '낭독기록': '요새'}, {'낭독기록번호': 41, '낭독기록': '기간이'}, {'낭독기록번호': 42, '낭독기록': '시작되면'}, {'낭독기록번호': 43, '낭독기록': '한'}, {'낭독기록번호': 44, '낭독기록': '섭씨는'}, {'낭독기록번호': 45, '낭독기록': '아침저녁으로'}, {'낭독기록번호': 46, '낭독기록': '잘'}, {'낭독기록번호': 47, '낭독기록': '지내'}, {'낭독기록번호': 48, '낭독기록': '지역구에'}, {'낭독기록번호': 49, '낭독기록': '있는'}, {'낭독기록번호': 50, '낭독기록': '대중사우나'}, {'낭독기록번호': 51, '낭독기록': '를'}, {'낭독기록번호': 52, '낭독기록': '한'}, {'낭독기록번호': 53, '낭독기록': '곳도'}, {'낭독기록번호': 54, '낭독기록': '빠짐없이'}, {'낭독기록번호': 55, '낭독기록': '순회하며'}, {'낭독기록번호': 56, '낭독기록': '유권자들을'}, {'낭독기록번호': 57, '낭독기록': '만났다'}, {'낭독기록번호': 58, '낭독기록': '함께'}, {'낭독기록번호': 59, '낭독기록': '버섯'}, {'낭독기록번호': 60, '낭독기록': '다른'}, {'낭독기록번호': 61, '낭독기록': '것'}, {'낭독기록번호': 62, '낭독기록': '이상의'}, {'낭독기록번호': 63, '낭독기록': '스킨십은'}, {'낭독기록번호': 64, '낭독기록': '없었다'}]
+    
+    Input, AlphabetList, LastNumber = InputText(Input1, Input2)

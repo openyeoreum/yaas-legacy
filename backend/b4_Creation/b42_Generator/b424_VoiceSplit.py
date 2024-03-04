@@ -1,6 +1,7 @@
 import os
 import io
 import json
+import re
 import numpy as np
 import webrtcvad
 import sys
@@ -76,93 +77,219 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
         return "Response에 LastNumber가 포함됨: JSONCountError"
     # Error5: 앞단어 - 숫자 - 뒷단어 순서가 잘못 되었을때의 예외 처리
     for output in outputJson:
-        outputText = output['앞단어'] + output['숫자'] + output['뒷단어']
-        if outputText not in NumberWordList:
+        outputText = output['증거부분']
+        # 정규 표현식을 사용하여 대괄호 안의 숫자 추출
+        number = int(re.findall(r'\[(\d+)\]', outputText)[0]) if re.findall(r'\[(\d+)\]', outputText) else -99
+        # 대괄호와 숫자를 제거하고 나머지 문자열 분할
+        parts = re.split(r'\[\d+\]', outputText)
+        # 결과 리스트 구성
+        outputList = [parts[0].strip()] + [number] + [parts[1].strip()]
+        outputListPlus = [parts[0].strip()] + [number + 1] + [parts[1].strip()]
+        outputListMinus = [parts[0].strip()] + [number - 1] + [parts[1].strip()]
+        print(outputList)
+        if outputList not in NumberWordList:
+            output['숫자'] = number
+        elif outputListPlus not in NumberWordList:
+            output['숫자'] = number + 1
+        elif outputListMinus not in NumberWordList:
+            output['숫자'] = number - 1
+        else:
             return "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError"
 
     return outputJson
 
 ## Input1과 Input2를 입력으로 받아 최종 Input 생성
-def InputText(Input1, Input2):
+def InputText(SplitSents, SplitWords, SameNum):
     # AlphabetList 생성
-    Alphabet = "A"  # 시작 알파벳
+    Alphabet = "A"
     AlphabetList = []
     AlphabetABSentList = []
     AlphabetABWordList = []
-    for i in range(len(Input1)):
-        if i > 0:  # 첫 번째 문장이 아니라면 앞에 알파벳을 추가한다
+
+    # 분석 및 리스트 생성
+    for i in range(len(SplitSents)):
+        if i > 0:
+            # 알파벳 추가 및 인덱스 계산
             AlphabetABSentList.append(Alphabet)
-            BeforeWord = Input1[i-1]['낭독문장'].strip().split()
-            AfterWord = Input1[i]['낭독문장'].strip().split()
+            BeforeWord = SplitSents[i-1]['낭독문장'].strip().split()
+            AfterWord = SplitSents[i]['낭독문장'].strip().split()
             AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
             AlphabetList.append(Alphabet)
-            Alphabet = chr(ord(Alphabet) + 1)  # 다음 알파벳으로 업데이트
-        AlphabetABSentList.append(Input1[i]['낭독문장'])
+            if i < len(SplitSents) - 1:
+                Alphabet = chr(ord(Alphabet) + 1)
+        AlphabetABSentList.append(SplitSents[i]['낭독문장'])
+    
+    # SEAlphabetList 생성
+    SEAlphabetList = ['Start'] + AlphabetList + ['End']
 
-    print(f'AlphabetList: {AlphabetList}\n\n')
-    print(f'AlphabetABSentList: {AlphabetABSentList}\n\n')
-    print(f'AlphabetABWordList: {AlphabetABWordList}\n\n')
-
-    # NumberList 생성
-    NumberABSentList = []
-    NumberABWordList = []
-    for i in range(len(Input2)):
-        if i > 0:  # 첫 번째 기록이 아니라면 앞에 숫자를 추가한다
-            NumberABSentList.append(i)
-            NumberABWordList.append([Input2[i-2]['낭독기록'], Input2[i-1]['낭독기록'], i, Input2[i]['낭독기록'], Input2[i+1]['낭독기록']])
-        NumberABSentList.append(Input2[i]['낭독기록'])
-    LastNumber = i
+    print(f'AlphabetList: {AlphabetList}\n')
+    print(f'AlphabetABSentList: {AlphabetABSentList}\n')
+    print(f'AlphabetABWordList: {AlphabetABWordList}\n')
 
     # NumberList 생성
     NumberABSentList = []
     NumberABWordList = []
-    for i in range(len(Input2)):
+    NumberWordList = []
+    for i in range(len(SplitWords)):
         if i > 0:  # 첫 번째 기록이 아니라면 앞에 숫자를 추가한다
             NumberABSentList.append(i)
             # 리스트의 시작과 끝을 연결하기 위해 인덱스 계산
-            Before2Index = (i-2) % len(Input2)
-            Before1Index = (i-1) % len(Input2)
-            After1Index = (i+1) % len(Input2)
-            After2Index = (i+2) % len(Input2)
-            NumberABWordList.append([Input2[Before2Index]['낭독기록'], Input2[Before1Index]['낭독기록'], Input2[i]['낭독기록'], Input2[After1Index]['낭독기록'], Input2[After2Index]['낭독기록']])
-        NumberABSentList.append(Input2[i]['낭독기록'])
+            Before2Index = (i-2) % len(SplitWords)
+            Before1Index = (i-1) % len(SplitWords)
+            After1Index = (i+1) % len(SplitWords)
+            NumberABWordList.append([SplitWords[Before2Index]['낭독기록'], SplitWords[Before1Index]['낭독기록'], i, SplitWords[i]['낭독기록'], SplitWords[After1Index]['낭독기록']])
+            NumberWordList.append([SplitWords[Before1Index]['낭독기록'], i, SplitWords[i]['낭독기록']])
+        NumberABSentList.append(SplitWords[i]['낭독기록'])
     LastNumber = i
 
     print(f'NumberABSentList: {NumberABSentList}\n\n')
     print(f'NumberABWordList: {NumberABWordList}\n\n')
 
-    # AlphabetList와 NumberList 일치요소 찾기
+    ## AlphabetList와 NumberList 일치요소 찾기 ##
     SameAlphabet = []
-    SameNumber = []
+    NotSameAlphabet = AlphabetList.copy()
+    SameDic = {} # 빈 딕셔너리로 초기화
+    MatchingCount = 0
     for AlphabetABWord in AlphabetABWordList:
         for NumberABWord in NumberABWordList:
-            if (AlphabetABWord[0] == NumberABWord[0]) and (AlphabetABWord[2] == NumberABWord[2]):
-                SameAlphabet.append(AlphabetABWord[1])
-                SameNumber.append(NumberABWord[1])
+            for i in [0, 1, 3, 4]:
+                if AlphabetABWord[i] == NumberABWord[i]:
+                    MatchingCount += 1
+            if MatchingCount >= SameNum: # 테스트 후 3으로 변경
+                SameAlphabet.append(AlphabetABWord[2])
+                NotSameAlphabet.remove(AlphabetABWord[2])
+                # 딕셔너리에 키와 값을 추가
+                SameDic[AlphabetABWord[2]] = NumberABWord[2]
+            MatchingCount = 0
+
+    # SameAlphabet에 Start, End 붙히기
+    SESameDic = SameDic.copy()
+    if AlphabetList[0] in SameAlphabet:
+        # 딕셔너리의 시작 부분에 'Start' 추가
+        SESameDic = {'Start': 0, **SameDic}
+        SameAlphabet = ['Start'] + SameAlphabet
+    if AlphabetList[-1] in SameAlphabet:
+        SameAlphabet = SameAlphabet + ['End']
+        # 딕셔너리의 끝 부분에 'End' 추가
+        SESameDic['End'] = LastNumber + 1
+        
+    # SameAlphabet과 SameNumber에 RangeList 만들기
+    SameAlphabetRange = []
+    SameNumberRange = []
+    for i in range(len(SameAlphabet)):
+        if i > 0:
+            for j in range(len(SEAlphabetList)):
+                if SameAlphabet[i] == SEAlphabetList[j]:
+                    if SameAlphabet[i-1] == SEAlphabetList[j-1]:
+                        SameAlphabetRange.append(SameAlphabet[i-1] + '-' + SameAlphabet[i])
+                        SameNumberRange.append([SESameDic[SameAlphabet[i-1]], SESameDic[SameAlphabet[i]]])
+    if SameNumberRange == []:
+        SameNumberRange = [[None, None]]
+    # SameNumberRange 앞 뒤 데이터의 마지막 값과 첫 값이 같으면 합치는 로직
+    MergedSameNumberRange = []
+    for currentRange in SameNumberRange:
+        if not MergedSameNumberRange:
+            MergedSameNumberRange.append(currentRange)
+        else:
+            lastRange = MergedSameNumberRange[-1]
+            # 현재 범위의 시작 값이 이전 범위의 끝 값과 같다면 합침
+            if lastRange[1] == currentRange[0]:
+                MergedSameNumberRange[-1] = [lastRange[0], currentRange[1]]
+            else:
+                MergedSameNumberRange.append(currentRange)
                 
     print(f'SameAlphabet: {SameAlphabet}\n\n')
-    print(f'SameNumber: {SameNumber}\n\n')
-    # # 최종 Input 생성
-    # Input = "<낭독원문>\n" + str(AlphabetText) + "\n\n" + "<낭독STT단어문>\n" + str(NumberText)
+    print(f'SameAlphabetRange: {SameAlphabetRange}\n\n')
+    print(f'MergedSameNumberRange: {MergedSameNumberRange}\n\n')
+    print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')
+    print(f'SameDic: {SameDic}\n\n')
+    print(f'SESameDic: {SESameDic}\n\n')
     
-    return Input, AlphabetList, LastNumber
+    # NotSameAlphabetSentList 생성 (Input으로 들어갈 문장)
+    NotSameAlphabetSentList = []
+    SeenSentences = {}
+    for i, item in enumerate(AlphabetABSentList):
+        if item in NotSameAlphabet:
+            # Add the sentence before the alphabet if it hasn't been added already
+            if AlphabetABSentList[i-1] not in SeenSentences:
+                NotSameAlphabetSentList.append(AlphabetABSentList[i-1])
+                SeenSentences[AlphabetABSentList[i-1]] = True
+            # Add the alphabet
+            NotSameAlphabetSentList.append(item.replace(item, f' [{item}] '))
+            # Add the sentence after the alphabet if it exists and hasn't been added already
+            if i+1 < len(AlphabetABSentList) and AlphabetABSentList[i+1] not in SeenSentences:
+                NotSameAlphabetSentList.append(AlphabetABSentList[i+1])
+                SeenSentences[AlphabetABSentList[i+1]] = True
+                
+    print(f'NotSameAlphabetSentList: {NotSameAlphabetSentList}\n\n')
+
+    # NotSameNumberWordList 생성 (Input으로 들어갈 문장)
+    NotSameNumberWordList = []
+    NumberABSentList = [0] + NumberABSentList + [LastNumber + 1]
+    RemoveSwitch = 0
+    RemoveRangeCount = 0
+    RemoveRange = MergedSameNumberRange[RemoveRangeCount]
+    for ABWord in NumberABSentList:
+        if ABWord == RemoveRange[0]:
+            RemoveSwitch = 1
+        if ABWord == RemoveRange[1]:
+            RemoveSwitch = 0
+            RemoveRangeCount += 1
+            if RemoveRangeCount < len(MergedSameNumberRange):
+                RemoveRange = MergedSameNumberRange[RemoveRangeCount]
+        if RemoveSwitch == 0:
+            if isinstance(ABWord, int):
+                ABWord = f' [{ABWord}] '
+                lastNumber = ABWord
+            NotSameNumberWordList.append(ABWord)
+    for alphabet in SameAlphabet:
+        if f' [{SESameDic[alphabet]}] ' in NotSameNumberWordList:
+            NotSameNumberWordList.remove(f' [{SESameDic[alphabet]}] ')
+    if f' [{LastNumber + 1}] ' in NotSameNumberWordList:
+        NotSameNumberWordList.remove(f' [{LastNumber + 1}] ')
+
+    print(f'NotSameNumberWordList: {NotSameNumberWordList}\n\n')
+    
+    # 최종 Input 생성
+    Input = "<낭독원문>\n" + ''.join(NotSameAlphabetSentList) + "\n\n" + "<낭독STT단어문>\n" + ''.join(NotSameNumberWordList)
+    
+    # 최종 RawResponse 생성
+    RawResponse = [{'알파벳': key, '숫자': value} for key, value in SameDic.items()]
+    
+    return Input, NotSameAlphabet, lastNumber, NumberWordList, AlphabetList, RawResponse
 
 ## VoiceSplit 프롬프트 요청
-def VoiceSplitProcess(projectName, email, Input1, Input2, Process = "VoiceSplit", MessagesReview = "off"):
+def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = "off"):
     ## Input1과 Input2를 입력으로 받아 최종 Input 생성
-    Input, AlphabetList, LastNumber, NumberWordList = InputText(Input1, Input2)
+    Input, NotSameAlphabet, lastNumber, NumberWordList, AlphabetList, RawResponse = InputText(SplitSents, SplitWords, 3)
     ## memoryCounter 생성
-    memoryCounter = f"\n\n최종주의사항\n1) 매우 중요한 작업임으로, 알파벳 [{'], ['.join(AlphabetList)}] 모두 신중하게 매칭!\n2) <낭독원문>의 문장과 <낭독STT단어문>의 단어가 자주 다르게 작성, 이 경우 <낭독STT단어문>의 앞 뒤 기록으로 유추하여 <낭독원문>의 [알파벳]과 [숫자]를 매칭!\n3) 매칭 순서가 밀리거나 누락되지 않도록 하나씩 하나씩, 신중하게 매칭!\n\n"
+    memoryCounter = f"\n\n최종주의사항\n1) 매우 중요한 작업임으로, 알파벳 [{'], ['.join(NotSameAlphabet)}] 을 신중하게 매칭!\n2) <낭독원문>의 문장과 <낭독STT단어문>의 단어가 자주 다르게 작성, 이 경우 <낭독STT단어문>의 앞 뒤 기록으로 유추하여 <낭독원문>의 [알파벳]과 [숫자]를 매칭!\n\n"
 
-    for _ in range(10):
-        # Response 생성
-        Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
-        ResponseJson = VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordList)
+    # print(f'Input: {Input}\n\n')
+    # print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')
+    # print(f'lastNumber: {lastNumber}\n\n')
+    # print(f'NumberWordList: {NumberWordList}\n\n')
+    # print(f'AlphabetList: {AlphabetList}\n\n')
+    # print(f'RawResponse: {RawResponse}\n\n')
+    
+    if NotSameAlphabet != []:
+        for _ in range(10):
+            # Response 생성
+            Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
+            ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
+            print(RawResponse)
+            print(ResponseJson)
+            
+            if isinstance(ResponseJson, str):
+                print(f"Project: {projectName} | Process: {Process} | {ResponseJson}")
+            else:
+                ResponseJson += RawResponse
+                ResponseJson = sorted(ResponseJson, key = lambda x: x['알파벳'])
+                break
+    else:
+        ResponseJson = RawResponse
         
-        if isinstance(ResponseJson, str):
-            print(f"Project: {projectName} | Process: {Process} | {ResponseJson}")
-        else:
-            break
+    print(ResponseJson)
         
     return ResponseJson
 
@@ -260,13 +387,13 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
     os.remove(VoiceLayerPath)
 
 ## VoiceSplit 최종 함수
-def VoiceSplit(projectName, email, name, VoiceLayerPath, Input, LanguageCode = "ko-KR", MessagesReview = "off"):
+def VoiceSplit(projectName, email, name, VoiceLayerPath, SplitSents, LanguageCode = "ko-KR", MessagesReview = "off"):
 
     print(f"VoiceSplit: progress, {name} waiting 15 second")
     ## 음성파일을 STT로 단어별 시간 계산하기
-    voiceTimeStemps, Input2 = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
+    voiceTimeStemps, SplitWords = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
     ## VoiceSplit 프롬프트 요청
-    ResponseJson = VoiceSplitProcess(projectName, email, Input, Input2, Process = "VoiceSplit", MessagesReview = MessagesReview)
+    ResponseJson = VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = MessagesReview)
     ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
     SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
     ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
@@ -280,7 +407,7 @@ if __name__ == "__main__":
     VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/테스트(가)_0_연우(중간톤, 피치다운).wav"
     LanguageCode = "ko-KR"
     #########################################################################
-    Input1 = [{'낭독문장번호': 1, '낭독문장': '사람들은 장관을 지낸 고위급 인사가 동네 대중 사우나에 들러 머리도 다듬고 때를 미는 모습을 희한하다는 표정으로 쳐다보기도 했다'}, {'낭독문장번호': 2, '낭독문장': '그럴 때마다 한섭 씨는 아무렇지도 않다는 듯 보세요, 이 김한섭이는 여러분과 똑같은 사람입니다'}, {'낭독문장번호': 3, '낭독문장': '라며 웃고 다가가 먼저 악수를 청하기도 했다'}, {'낭독문장번호': 4, '낭독문장': '유세 기간이 시작되면 한섭 씨는 아침저녁으로 자신의 지역구에 있는 대중 사우나를 한 곳도 빠짐없이 순회하며, 유권자들을 만났다'}, {'낭독문장번호': 5, '낭독문장': '함께 벗었다는 것 이상의 스킨십은 없었다'}]
-    Input2 = [{'낭독기록번호': 1, '낭독기록': '사람들은'}, {'낭독기록번호': 2, '낭독기록': '장관을'}, {'낭독기록번호': 3, '낭독기록': '지낸'}, {'낭독기록번호': 4, '낭독기록': '고위급'}, {'낭독기록번호': 5, '낭독기록': '인사'}, {'낭독기록번호': 6, '낭독기록': '가'}, {'낭독기록번호': 7, '낭독기록': '동네'}, {'낭독기록번호': 8, '낭독기록': '대중'}, {'낭독기록번호': 9, '낭독기록': '사우나'}, {'낭독기록번호': 10, '낭독기록': '애들러'}, {'낭독기록번호': 11, '낭독기록': '머리도'}, {'낭독기록번호': 12, '낭독기록': '다듬고'}, {'낭독기록번호': 13, '낭독기록': '때를'}, {'낭독기록번호': 14, '낭독기록': '미는'}, {'낭독기록번호': 15, '낭독기록': '모습을'}, {'낭독기록번호': 16, '낭독기록': '시원하다는'}, {'낭독기록번호': 17, '낭독기록': '표정으로'}, {'낭독기록번호': 18, '낭독기록': '쳐다보기도'}, {'낭독기록번호': 19, '낭독기록': '했다'}, {'낭독기록번호': 20, '낭독기록': '그럴'}, {'낭독기록번호': 21, '낭독기록': '때마다'}, {'낭독기록번호': 22, '낭독기록': '한'}, {'낭독기록번호': 23, '낭독기록': '섭씨는'}, {'낭독기록번호': 24, '낭독기록': '아무렇지도'}, {'낭독기록번호': 25, '낭독기록': '않다는'}, {'낭독기록번호': 26, '낭독기록': '듯'}, {'낭독기록번호': 27, '낭독기록': '보세요'}, {'낭독기록번호': 28, '낭독기록': '이기만'}, {'낭독기록번호': 29, '낭독기록': '섭이는'}, {'낭독기록번호': 30, '낭독기록': '여러분과'}, {'낭독기록번호': 31, '낭독기록': '똑같은'}, {'낭독기록번호': 32, '낭독기록': '사람입니다'}, {'낭독기록번호': 33, '낭독기록': '라며'}, {'낭독기록번호': 34, '낭독기록': '웃고'}, {'낭독기록번호': 35, '낭독기록': '다가가'}, {'낭독기록번호': 36, '낭독기록': '먼저'}, {'낭독기록번호': 37, '낭독기록': '악수를'}, {'낭독기록번호': 38, '낭독기록': '청하기도'}, {'낭독기록번호': 39, '낭독기록': '했다'}, {'낭독기록번호': 40, '낭독기록': '요새'}, {'낭독기록번호': 41, '낭독기록': '기간이'}, {'낭독기록번호': 42, '낭독기록': '시작되면'}, {'낭독기록번호': 43, '낭독기록': '한'}, {'낭독기록번호': 44, '낭독기록': '섭씨는'}, {'낭독기록번호': 45, '낭독기록': '아침저녁으로'}, {'낭독기록번호': 46, '낭독기록': '잘'}, {'낭독기록번호': 47, '낭독기록': '지내'}, {'낭독기록번호': 48, '낭독기록': '지역구에'}, {'낭독기록번호': 49, '낭독기록': '있는'}, {'낭독기록번호': 50, '낭독기록': '대중사우나'}, {'낭독기록번호': 51, '낭독기록': '를'}, {'낭독기록번호': 52, '낭독기록': '한'}, {'낭독기록번호': 53, '낭독기록': '곳도'}, {'낭독기록번호': 54, '낭독기록': '빠짐없이'}, {'낭독기록번호': 55, '낭독기록': '순회하며'}, {'낭독기록번호': 56, '낭독기록': '유권자들을'}, {'낭독기록번호': 57, '낭독기록': '만났다'}, {'낭독기록번호': 58, '낭독기록': '함께'}, {'낭독기록번호': 59, '낭독기록': '버섯'}, {'낭독기록번호': 60, '낭독기록': '다른'}, {'낭독기록번호': 61, '낭독기록': '것'}, {'낭독기록번호': 62, '낭독기록': '이상의'}, {'낭독기록번호': 63, '낭독기록': '스킨십은'}, {'낭독기록번호': 64, '낭독기록': '없었다'}]
+    SplitSents = [{'낭독문장번호': 1, '낭독문장': '사람들은 장관을 지낸 고위급 인사가 동네 대중 사우나에 들러 머리도 다듬고 때를 미는 모습을 희한하다는 표정으로 쳐다보기도 했다'}, {'낭독문장번호': 2, '낭독문장': '그럴 때마다 한섭 씨는 아무렇지도 않다는 듯 보세요'}, {'낭독문장번호': 3, '낭독문장': '이 김한섭이는 여러분과 똑같은 사람입니다'}, {'낭독문장번호': 4, '낭독문장': '라며 웃고 다가가 먼저 악수를 청하기도 했다'}, {'낭독문장번호': 5, '낭독문장': '유세 기간이 시작되면 한섭 씨는 아침저녁으로 자신의 지역구에 있는 대중 사우나를 한 곳도 빠짐없이 순회하며, 유권자들을 만났다'}, {'낭독문장번호': 6, '낭독문장': '함께 벗었다는 것 이상의 스킨십은 없었다'}]
+    SplitWords = [{'낭독기록번호': 1, '낭독기록': '사람들은'}, {'낭독기록번호': 2, '낭독기록': '장관을'}, {'낭독기록번호': 3, '낭독기록': '지낸'}, {'낭독기록번호': 4, '낭독기록': '고위급'}, {'낭독기록번호': 5, '낭독기록': '인사'}, {'낭독기록번호': 6, '낭독기록': '가'}, {'낭독기록번호': 7, '낭독기록': '동네'}, {'낭독기록번호': 8, '낭독기록': '대중'}, {'낭독기록번호': 9, '낭독기록': '사우나'}, {'낭독기록번호': 10, '낭독기록': '애들러'}, {'낭독기록번호': 11, '낭독기록': '머리도'}, {'낭독기록번호': 12, '낭독기록': '다듬고'}, {'낭독기록번호': 13, '낭독기록': '때를'}, {'낭독기록번호': 14, '낭독기록': '미는'}, {'낭독기록번호': 15, '낭독기록': '모습을'}, {'낭독기록번호': 16, '낭독기록': '시원하다는'}, {'낭독기록번호': 17, '낭독기록': '표정으로'}, {'낭독기록번호': 18, '낭독기록': '쳐다보기도'}, {'낭독기록번호': 19, '낭독기록': '했다'}, {'낭독기록번호': 20, '낭독기록': '그럴'}, {'낭독기록번호': 21, '낭독기록': '때마다'}, {'낭독기록번호': 22, '낭독기록': '한'}, {'낭독기록번호': 23, '낭독기록': '섭씨는'}, {'낭독기록번호': 24, '낭독기록': '아무렇지도'}, {'낭독기록번호': 25, '낭독기록': '않다는'}, {'낭독기록번호': 26, '낭독기록': '듯'}, {'낭독기록번호': 27, '낭독기록': '보세요'}, {'낭독기록번호': 28, '낭독기록': '이기만'}, {'낭독기록번호': 29, '낭독기록': '섭이는'}, {'낭독기록번호': 30, '낭독기록': '여러분과'}, {'낭독기록번호': 31, '낭독기록': '똑같은'}, {'낭독기록번호': 32, '낭독기록': '사람입니다'}, {'낭독기록번호': 33, '낭독기록': '라며'}, {'낭독기록번호': 34, '낭독기록': '웃고'}, {'낭독기록번호': 35, '낭독기록': '다가가'}, {'낭독기록번호': 36, '낭독기록': '먼저'}, {'낭독기록번호': 37, '낭독기록': '악수를'}, {'낭독기록번호': 38, '낭독기록': '청하기도'}, {'낭독기록번호': 39, '낭독기록': '했다'}, {'낭독기록번호': 40, '낭독기록': '요새'}, {'낭독기록번호': 41, '낭독기록': '기간이'}, {'낭독기록번호': 42, '낭독기록': '시작되면'}, {'낭독기록번호': 43, '낭독기록': '한'}, {'낭독기록번호': 44, '낭독기록': '섭씨는'}, {'낭독기록번호': 45, '낭독기록': '아침저녁으로'}, {'낭독기록번호': 46, '낭독기록': '잘'}, {'낭독기록번호': 47, '낭독기록': '지내'}, {'낭독기록번호': 48, '낭독기록': '지역구에'}, {'낭독기록번호': 49, '낭독기록': '있는'}, {'낭독기록번호': 50, '낭독기록': '대중사우나'}, {'낭독기록번호': 51, '낭독기록': '를'}, {'낭독기록번호': 52, '낭독기록': '한'}, {'낭독기록번호': 53, '낭독기록': '곳도'}, {'낭독기록번호': 54, '낭독기록': '빠짐없이'}, {'낭독기록번호': 55, '낭독기록': '순회하며'}, {'낭독기록번호': 56, '낭독기록': '유권자들을'}, {'낭독기록번호': 57, '낭독기록': '만났다'}, {'낭독기록번호': 58, '낭독기록': '함께'}, {'낭독기록번호': 59, '낭독기록': '버섯'}, {'낭독기록번호': 60, '낭독기록': '다른'}, {'낭독기록번호': 61, '낭독기록': '것'}, {'낭독기록번호': 62, '낭독기록': '이상의'}, {'낭독기록번호': 63, '낭독기록': '스킨십은'}, {'낭독기록번호': 64, '낭독기록': '없었다'}]
     
-    Input, AlphabetList, LastNumber = InputText(Input1, Input2)
+    Input, NotSameAlphabet, lastNumber, NumberWordList, AlphabetList, RawResponse = InputText(SplitSents, SplitWords, 3)

@@ -82,16 +82,12 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
         number = int(re.findall(r'\[(\d+)\]', outputText)[0]) if re.findall(r'\[(\d+)\]', outputText) else -99
         # 대괄호와 숫자를 제거하고 나머지 문자열 분할
         parts = re.split(r'\[\d+\]', outputText)
-        # 결과 리스트 구성
-        outputList = [parts[0].strip()] + [number] + [parts[1].strip()]
-        outputListPlus = [parts[0].strip()] + [number + 1] + [parts[1].strip()]
-        outputListMinus = [parts[0].strip()] + [number - 1] + [parts[1].strip()]
-        print(outputList)
-        if outputList not in NumberWordList:
+
+        if [parts[0].strip()] + [number] + [parts[1].strip()] not in NumberWordList:
             output['숫자'] = number
-        elif outputListPlus not in NumberWordList:
+        elif [parts[0].strip()] + [number + 1] + [parts[1].strip()] not in NumberWordList:
             output['숫자'] = number + 1
-        elif outputListMinus not in NumberWordList:
+        elif [parts[0].strip()] + [number - 1] + [parts[1].strip()] not in NumberWordList:
             output['숫자'] = number - 1
         else:
             return "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError"
@@ -122,9 +118,9 @@ def InputText(SplitSents, SplitWords, SameNum):
     # SEAlphabetList 생성
     SEAlphabetList = ['Start'] + AlphabetList + ['End']
 
-    print(f'AlphabetList: {AlphabetList}\n')
-    print(f'AlphabetABSentList: {AlphabetABSentList}\n')
-    print(f'AlphabetABWordList: {AlphabetABWordList}\n')
+    # print(f'AlphabetList: {AlphabetList}\n')
+    # print(f'AlphabetABSentList: {AlphabetABSentList}\n')
+    # print(f'AlphabetABWordList: {AlphabetABWordList}\n')
 
     # NumberList 생성
     NumberABSentList = []

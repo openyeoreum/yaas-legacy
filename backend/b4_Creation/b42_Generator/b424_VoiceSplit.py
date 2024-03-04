@@ -83,12 +83,12 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
         # 대괄호와 숫자를 제거하고 나머지 문자열 분할
         parts = re.split(r'\[\d+\]', outputText)
 
-        if [parts[0].strip()] + [number] + [parts[1].strip()] not in NumberWordList:
+        if [parts[0].strip()] + [number] + [parts[1].strip()] in NumberWordList:
             output['숫자'] = number
-        elif [parts[0].strip()] + [number + 1] + [parts[1].strip()] not in NumberWordList:
-            output['숫자'] = number + 1
-        elif [parts[0].strip()] + [number - 1] + [parts[1].strip()] not in NumberWordList:
-            output['숫자'] = number - 1
+        # elif [parts[0].strip()] + [number + 1] + [parts[1].strip()] in NumberWordList:
+        #     output['숫자'] = number + 1
+        # elif [parts[0].strip()] + [number - 1] + [parts[1].strip()] in NumberWordList:
+        #     output['숫자'] = number - 1
         else:
             return "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError"
 
@@ -109,7 +109,10 @@ def InputText(SplitSents, SplitWords, SameNum):
             AlphabetABSentList.append(Alphabet)
             BeforeWord = SplitSents[i-1]['낭독문장'].strip().split()
             AfterWord = SplitSents[i]['낭독문장'].strip().split()
-            AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
+            try:
+                AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
+            except IndexError:
+                AlphabetABWordList.append([None, BeforeWord[-1], Alphabet, AfterWord[0], None])
             AlphabetList.append(Alphabet)
             if i < len(SplitSents) - 1:
                 Alphabet = chr(ord(Alphabet) + 1)
@@ -259,7 +262,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
     ## Input1과 Input2를 입력으로 받아 최종 Input 생성
     Input, NotSameAlphabet, lastNumber, NumberWordList, AlphabetList, RawResponse = InputText(SplitSents, SplitWords, 3)
     ## memoryCounter 생성
-    memoryCounter = f"\n\n최종주의사항\n1) 매우 중요한 작업임으로, 알파벳 [{'], ['.join(NotSameAlphabet)}] 을 신중하게 매칭!\n2) <낭독원문>의 문장과 <낭독STT단어문>의 단어가 자주 다르게 작성, 이 경우 <낭독STT단어문>의 앞 뒤 기록으로 유추하여 <낭독원문>의 [알파벳]과 [숫자]를 매칭!\n\n"
+    memoryCounter = f"\n\n최종주의사항: 매우 중요한 작업임으로, 알파벳 [{'], ['.join(NotSameAlphabet)}] 을 신중하게 매칭!\n\n"
 
     # print(f'Input: {Input}\n\n')
     # print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')
@@ -269,7 +272,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
     # print(f'RawResponse: {RawResponse}\n\n')
     
     if NotSameAlphabet != []:
-        for _ in range(10):
+        for _ in range(5):
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)

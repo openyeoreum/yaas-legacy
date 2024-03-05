@@ -509,7 +509,7 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
 
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
-                    VoiceSplit(projectName, email, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                    segment_durations = VoiceSplit(projectName, email, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
 
                 return "Continue"
             else:

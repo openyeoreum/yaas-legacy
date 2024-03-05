@@ -64,6 +64,8 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
     try:
         Json = json.loads(Response)
         outputJson = Json['매칭']
+        for i in range(len(outputJson)):
+            outputJson[i]['알파벳'] = outputJson[i]['알파벳부분'].split('[')[1].split(']')[0]
     except json.JSONDecodeError:
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
@@ -74,11 +76,11 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
         if AlphabetList[i] != outputJson[i]['알파벳']:
             return "Response의 리스트와 본문의 알파벳이 일치하지 않음: JSONMatchingError"
     # Error4: 결과에 마지막 문장이 포함될 때의 예외 처리
-    if int(outputJson[-1]['숫자']) == LastNumber:
+    if int(outputJson[-1]['매칭숫자']) == LastNumber:
         return "Response에 LastNumber가 포함됨: JSONCountError"
     # Error5: 앞단어 - 숫자 - 뒷단어 순서가 잘못 되었을때의 예외 처리
     for output in outputJson:
-        outputText = output['매칭확인']
+        outputText = output['숫자부분']
         # 정규 표현식을 사용하여 대괄호 안의 숫자 추출
         number = int(re.findall(r'\[(\d+)\]', outputText)[0]) if re.findall(r'\[(\d+)\]', outputText) else -99
         # 대괄호와 숫자를 제거하고 나머지 문자열 분할
@@ -113,7 +115,7 @@ def InputText(SplitSents, SplitWords, SameNum):
             try:
                 AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
             except IndexError:
-                AlphabetABWordList.append([None, BeforeWord[-1], Alphabet, AfterWord[0], None])
+                AlphabetABWordList.append(["None", BeforeWord[-1], Alphabet, AfterWord[0], "None"])
             AlphabetList.append(Alphabet)
             if i < len(SplitSents) - 1:
                 Alphabet = chr(ord(Alphabet) + 1)
@@ -122,9 +124,9 @@ def InputText(SplitSents, SplitWords, SameNum):
     # SEAlphabetList 생성
     SEAlphabetList = ['Start'] + AlphabetList + ['End']
 
-    # print(f'AlphabetList: {AlphabetList}\n')
-    # print(f'AlphabetABSentList: {AlphabetABSentList}\n')
-    # print(f'AlphabetABWordList: {AlphabetABWordList}\n')
+    print(f'AlphabetList: {AlphabetList}\n')
+    print(f'AlphabetABSentList: {AlphabetABSentList}\n')
+    print(f'AlphabetABWordList: {AlphabetABWordList}\n')
 
     # NumberList 생성
     NumberABSentList = []
@@ -142,8 +144,8 @@ def InputText(SplitSents, SplitWords, SameNum):
         NumberABSentList.append(SplitWords[i]['낭독기록'])
     LastNumber = i
 
-    # print(f'NumberABSentList: {NumberABSentList}\n\n')
-    # print(f'NumberABWordList: {NumberABWordList}\n\n')
+    print(f'NumberABSentList: {NumberABSentList}\n\n')
+    print(f'NumberABWordList: {NumberABWordList}\n\n')
 
     ## AlphabetList와 NumberList 일치요소 찾기 ##
     SameAlphabet = []
@@ -161,13 +163,13 @@ def InputText(SplitSents, SplitWords, SameNum):
                     if NumberABWord[i] == AlphabetABWord[i]:
                         ShortMatchingCount += 1
                 for i in [0, 1, 3]:
-                    if NumberABWord[i] in AlphabetABWord[i]:
+                    if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                         MiddleMatchingCount += 1
                 for i in [1, 3, 4]:
-                    if NumberABWord[i] in AlphabetABWord[i]:
+                    if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                         _MiddleMatchingCount += 1
                 for i in [0, 1, 3, 4]:
-                    if NumberABWord[i] in AlphabetABWord[i]:
+                    if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                         LongMatchingCount += 1
                 if ShortMatchingCount == 2:
                     SameAlphabet.append(AlphabetABWord[2])
@@ -201,13 +203,13 @@ def InputText(SplitSents, SplitWords, SameNum):
                         if NumberABWord[i] == AlphabetABWord[i]:
                             ShortMatchingCount += 1
                     for i in [0, 1, 3]:
-                        if NumberABWord[i] in AlphabetABWord[i]:
+                        if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                             MiddleMatchingCount += 1
                     for i in [1, 3, 4]:
-                        if NumberABWord[i] in AlphabetABWord[i]:
+                        if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                             _MiddleMatchingCount += 1
                     for i in [0, 1, 3, 4]:
-                        if NumberABWord[i] in AlphabetABWord[i]:
+                        if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                             LongMatchingCount += 1
                     if ShortMatchingCount == 2:
                         SameAlphabet.append(AlphabetABWord[2])
@@ -271,12 +273,12 @@ def InputText(SplitSents, SplitWords, SameNum):
             else:
                 MergedSameNumberRange.append(currentRange)
                 
-    # print(f'SameAlphabet: {SameAlphabet}\n\n')
-    # print(f'SameAlphabetRange: {SameAlphabetRange}\n\n')
-    # print(f'MergedSameNumberRange: {MergedSameNumberRange}\n\n')
-    # print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')
-    # print(f'SameDic: {SameDic}\n\n')
-    # print(f'SESameDic: {SESameDic}\n\n')
+    print(f'SameAlphabet: {SameAlphabet}\n\n')
+    print(f'SameAlphabetRange: {SameAlphabetRange}\n\n')
+    print(f'MergedSameNumberRange: {MergedSameNumberRange}\n\n')
+    print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')
+    print(f'SameDic: {SameDic}\n\n')
+    print(f'SESameDic: {SESameDic}\n\n')
     
     # NotSameAlphabetSentList 생성 (Input으로 들어갈 문장)
     NotSameAlphabetSentList = []
@@ -294,7 +296,7 @@ def InputText(SplitSents, SplitWords, SameNum):
                 NotSameAlphabetSentList.append(AlphabetABSentList[i+1])
                 SeenSentences[AlphabetABSentList[i+1]] = True
                 
-    # print(f'NotSameAlphabetSentList: {NotSameAlphabetSentList}\n\n')
+    print(f'NotSameAlphabetSentList: {NotSameAlphabetSentList}\n\n')
 
     # NotSameNumberWordList 생성 (Input으로 들어갈 문장)
     NotSameNumberWordList = []
@@ -321,7 +323,7 @@ def InputText(SplitSents, SplitWords, SameNum):
     if f' [{LastNumber + 1}] ' in NotSameNumberWordList:
         NotSameNumberWordList.remove(f' [{LastNumber + 1}] ')
 
-    # print(f'NotSameNumberWordList: {NotSameNumberWordList}\n\n')
+    print(f'NotSameNumberWordList: {NotSameNumberWordList}\n\n')
     
     # 최종 Input 생성
     Input = "<낭독원문>\n" + ''.join(NotSameAlphabetSentList) + "\n\n" + "<낭독STT단어문>\n" + ''.join(NotSameNumberWordList)
@@ -329,14 +331,21 @@ def InputText(SplitSents, SplitWords, SameNum):
     # 최종 RawResponse 생성
     RawResponse = [{'알파벳': key, '숫자': value} for key, value in SameDic.items()]
     
-    return Input, NotSameAlphabet, lastNumber, NumberWordList, AlphabetList, RawResponse
+    # 최종 memoryCounter 생성
+    MemoryCounter = []
+    for ABWordList in AlphabetABWordList:
+        for NSA in NotSameAlphabet:
+            if ABWordList[2] == NSA:
+                MemoryCounter.append(f'{ABWordList[1]} [{ABWordList[2]}] {ABWordList[3]}')
+    
+    return Input, NotSameAlphabet, lastNumber, NumberWordList, MemoryCounter, RawResponse
 
 ## VoiceSplit 프롬프트 요청
 def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = "off"):
     ## Input1과 Input2를 입력으로 받아 최종 Input 생성
-    Input, NotSameAlphabet, lastNumber, NumberWordList, AlphabetList, RawResponse = InputText(SplitSents, SplitWords, 3)
+    Input, NotSameAlphabet, lastNumber, NumberWordList, MemoryCounter, RawResponse = InputText(SplitSents, SplitWords, 3)
     ## memoryCounter 생성
-    memoryCounter = f"\n\n최종주의사항: [알파벳]과 [숫자]를 매칭할때 [알파벳]의 앞뒤 부분과 [숫자]의 앞뒤 부분을 통해서 자세히 살펴보고 매칭!, 알파벳 [{'], ['.join(NotSameAlphabet)}] 신중하게 매칭!\n\n"
+    memoryCounter = f"\n\n최종주의사항: 매칭 '알파벳부분'은 |{', '.join(MemoryCounter)}|, '숫자부분'과 '매칭숫자'는 [숫자]의 앞뒤 부분을 자세히 살펴보고 작성!\n\n"
 
     # print(f'Input: {Input}\n\n')
     # print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')
@@ -431,6 +440,7 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         split_points.append(optimal_split_point)
 
     # 파일 분할 및 저장
+    segment_durations = []
     start_point = 0
     split_points.append(audio.duration_seconds)  # 마지막 부분 포함하기 위해 추가
     for i, split_point in enumerate(split_points):
@@ -441,6 +451,10 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         # 무음 추가
         silence = AudioSegment.silent(duration = 30)  # 0.03초 무음
         segment = silence + segment + silence  # 무음 - 세그먼트 - 무음
+        
+        # 세그먼트 재생 시간 저장
+        segment_duration = segment.duration_seconds
+        segment_durations.append(segment_duration)
         
         ExportPathText = VoiceLayerPath.replace(".wav", "")
         if ExportPathText[-1] == 'M':
@@ -454,6 +468,8 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         
     # 파일 분할이 완료된 후 원본 오디오 파일 삭제
     os.remove(VoiceLayerPath)
+    
+    return segment_durations
 
 ## VoiceSplit 최종 함수
 def VoiceSplit(projectName, email, name, VoiceLayerPath, SplitSents, LanguageCode = "ko-KR", MessagesReview = "off"):
@@ -466,7 +482,9 @@ def VoiceSplit(projectName, email, name, VoiceLayerPath, SplitSents, LanguageCod
     ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
     SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
     ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-    VoiceFileSplit(VoiceLayerPath, SplitTimeList)
+    segment_durations = VoiceFileSplit(VoiceLayerPath, SplitTimeList)
+    
+    return segment_durations
 
 if __name__ == "__main__":
 

@@ -500,10 +500,10 @@ def VoiceSplit(projectName, email, name, VoiceLayerPath, SplitSents, LanguageCod
             SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
             ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
             segment_durations = VoiceFileSplit(VoiceLayerPath, SplitTimeList)
+            
+            return segment_durations
         except TypeError:
             time.sleep(5)  # 5초 대기 후 재시도
-    
-    return segment_durations
 
 if __name__ == "__main__":
 

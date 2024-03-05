@@ -81,6 +81,8 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
     # Error5: 앞단어 - 숫자 - 뒷단어 순서가 잘못 되었을때의 예외 처리
     for output in outputJson:
         outputText = output['숫자부분']
+        if outputText.count('[') != 1:
+            return "Response에 [숫자]가 아나가 아님: JSONCountError"
         # 정규 표현식을 사용하여 대괄호 안의 숫자 추출
         number = int(re.findall(r'\[(\d+)\]', outputText)[0]) if re.findall(r'\[(\d+)\]', outputText) else -99
         # 대괄호와 숫자를 제거하고 나머지 문자열 분할
@@ -124,9 +126,9 @@ def InputText(SplitSents, SplitWords, SameNum):
     # SEAlphabetList 생성
     SEAlphabetList = ['Start'] + AlphabetList + ['End']
 
-    print(f'AlphabetList: {AlphabetList}\n')
-    print(f'AlphabetABSentList: {AlphabetABSentList}\n')
-    print(f'AlphabetABWordList: {AlphabetABWordList}\n')
+    # print(f'AlphabetList: {AlphabetList}\n')
+    # print(f'AlphabetABSentList: {AlphabetABSentList}\n')
+    # print(f'AlphabetABWordList: {AlphabetABWordList}\n')
 
     # NumberList 생성
     NumberABSentList = []
@@ -144,8 +146,8 @@ def InputText(SplitSents, SplitWords, SameNum):
         NumberABSentList.append(SplitWords[i]['낭독기록'])
     LastNumber = i
 
-    print(f'NumberABSentList: {NumberABSentList}\n\n')
-    print(f'NumberABWordList: {NumberABWordList}\n\n')
+    # print(f'NumberABSentList: {NumberABSentList}\n\n')
+    # print(f'NumberABWordList: {NumberABWordList}\n\n')
 
     ## AlphabetList와 NumberList 일치요소 찾기 ##
     SameAlphabet = []
@@ -273,12 +275,12 @@ def InputText(SplitSents, SplitWords, SameNum):
             else:
                 MergedSameNumberRange.append(currentRange)
                 
-    print(f'SameAlphabet: {SameAlphabet}\n\n')
-    print(f'SameAlphabetRange: {SameAlphabetRange}\n\n')
-    print(f'MergedSameNumberRange: {MergedSameNumberRange}\n\n')
-    print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')
-    print(f'SameDic: {SameDic}\n\n')
-    print(f'SESameDic: {SESameDic}\n\n')
+    # print(f'SameAlphabet: {SameAlphabet}\n\n')
+    # print(f'SameAlphabetRange: {SameAlphabetRange}\n\n')
+    # print(f'MergedSameNumberRange: {MergedSameNumberRange}\n\n')
+    # print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')
+    # print(f'SameDic: {SameDic}\n\n')
+    # print(f'SESameDic: {SESameDic}\n\n')
     
     # NotSameAlphabetSentList 생성 (Input으로 들어갈 문장)
     NotSameAlphabetSentList = []
@@ -296,7 +298,7 @@ def InputText(SplitSents, SplitWords, SameNum):
                 NotSameAlphabetSentList.append(AlphabetABSentList[i+1])
                 SeenSentences[AlphabetABSentList[i+1]] = True
                 
-    print(f'NotSameAlphabetSentList: {NotSameAlphabetSentList}\n\n')
+    # print(f'NotSameAlphabetSentList: {NotSameAlphabetSentList}\n\n')
 
     # NotSameNumberWordList 생성 (Input으로 들어갈 문장)
     NotSameNumberWordList = []
@@ -323,7 +325,7 @@ def InputText(SplitSents, SplitWords, SameNum):
     if f' [{LastNumber + 1}] ' in NotSameNumberWordList:
         NotSameNumberWordList.remove(f' [{LastNumber + 1}] ')
 
-    print(f'NotSameNumberWordList: {NotSameNumberWordList}\n\n')
+    # print(f'NotSameNumberWordList: {NotSameNumberWordList}\n\n')
     
     # 최종 Input 생성
     Input = "<낭독원문>\n" + ''.join(NotSameAlphabetSentList) + "\n\n" + "<낭독STT단어문>\n" + ''.join(NotSameNumberWordList)
@@ -345,7 +347,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
     ## Input1과 Input2를 입력으로 받아 최종 Input 생성
     Input, NotSameAlphabet, lastNumber, NumberWordList, MemoryCounter, RawResponse = InputText(SplitSents, SplitWords, 3)
     ## memoryCounter 생성
-    memoryCounter = f"\n\n최종주의사항: 매칭 '알파벳부분'은 |{', '.join(MemoryCounter)}|, '숫자부분'과 '매칭숫자'는 [숫자]의 앞뒤 부분을 자세히 살펴보고 작성!\n\n"
+    memoryCounter = f"\n\n최종주의사항: 매칭 '알파벳부분'은 | {' | '.join(MemoryCounter)} |, '숫자부분'과 '매칭숫자'는 [숫자]의 앞뒤 부분을 자세히 살펴보고, 숫자는 꼭 1개만 작성!\n\n"
 
     # print(f'Input: {Input}\n\n')
     # print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')

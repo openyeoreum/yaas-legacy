@@ -69,28 +69,29 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(outputJson, list):
         return "JSONType에서 오류 발생: JSONTypeError"
-    # Error3: 결과와 시작의 개수가 다를 때의 예외 처리
-    if len(AlphabetList) != len(outputJson):
-        return "Response의 리스트 개수와 문장(분할) 수가 다름: JSONCountError"
+    # Error3: 결과와 시작의 알파벳이 다를 때의 예외 처리
+    for i in range(len(AlphabetList)):
+        if AlphabetList[i] != outputJson[i]['알파벳']:
+            return "Response의 리스트와 본문의 알파벳이 일치하지 않음: JSONMatchingError"
     # Error4: 결과에 마지막 문장이 포함될 때의 예외 처리
     if int(outputJson[-1]['숫자']) == LastNumber:
         return "Response에 LastNumber가 포함됨: JSONCountError"
-    # # Error5: 앞단어 - 숫자 - 뒷단어 순서가 잘못 되었을때의 예외 처리
-    # for output in outputJson:
-    #     outputText = output['증거부분']
-    #     # 정규 표현식을 사용하여 대괄호 안의 숫자 추출
-    #     number = int(re.findall(r'\[(\d+)\]', outputText)[0]) if re.findall(r'\[(\d+)\]', outputText) else -99
-    #     # 대괄호와 숫자를 제거하고 나머지 문자열 분할
-    #     parts = re.split(r'\[\d+\]', outputText)
+    # Error5: 앞단어 - 숫자 - 뒷단어 순서가 잘못 되었을때의 예외 처리
+    for output in outputJson:
+        outputText = output['매칭확인']
+        # 정규 표현식을 사용하여 대괄호 안의 숫자 추출
+        number = int(re.findall(r'\[(\d+)\]', outputText)[0]) if re.findall(r'\[(\d+)\]', outputText) else -99
+        # 대괄호와 숫자를 제거하고 나머지 문자열 분할
+        parts = re.split(r'\[\d+\]', outputText)
 
-    #     if [parts[0].strip()] + [number] + [parts[1].strip()] in NumberWordList:
-    #         output['숫자'] = number
-    #     # elif [parts[0].strip()] + [number + 1] + [parts[1].strip()] in NumberWordList:
-    #     #     output['숫자'] = number + 1
-    #     # elif [parts[0].strip()] + [number - 1] + [parts[1].strip()] in NumberWordList:
-    #     #     output['숫자'] = number - 1
-    #     else:
-    #         return "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError"
+        if [parts[0].strip()] + [number] + [parts[1].strip()] in NumberWordList:
+            output['숫자'] = number
+        # elif [parts[0].strip()] + [number + 1] + [parts[1].strip()] in NumberWordList:
+        #     output['숫자'] = number + 1
+        # elif [parts[0].strip()] + [number - 1] + [parts[1].strip()] in NumberWordList:
+        #     output['숫자'] = number - 1
+        else:
+            return "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError"
 
     return outputJson
 
@@ -153,10 +154,10 @@ def InputText(SplitSents, SplitWords, SameNum):
     for AlphabetABWord in AlphabetABWordList:
         for NumberABWord in NumberABWordList:
             for i in [1, 3]:
-                if AlphabetABWord[i] == NumberABWord[i]:
+                if AlphabetABWord[i] == NumberABWord[i] and AlphabetABWord[2] not in SameDic:
                     ShortMatchingCount += 1
             for i in [0, 1, 3, 4]:
-                if AlphabetABWord[i] == NumberABWord[i]:
+                if AlphabetABWord[i] == NumberABWord[i] and AlphabetABWord[2] not in SameDic:
                     LongMatchingCount += 1
             if ShortMatchingCount == 2:
                 SameAlphabet.append(AlphabetABWord[2])
@@ -271,7 +272,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
     ## Input1과 Input2를 입력으로 받아 최종 Input 생성
     Input, NotSameAlphabet, lastNumber, NumberWordList, AlphabetList, RawResponse = InputText(SplitSents, SplitWords, 3)
     ## memoryCounter 생성
-    memoryCounter = f"\n\n최종주의사항: 매우 중요한 작업임으로, 알파벳 [{'], ['.join(NotSameAlphabet)}] 을 신중하게 매칭!\n\n"
+    memoryCounter = f"\n\n최종주의사항: [알파벳]과 [숫자]를 매칭할때 [알파벳]의 앞뒤 부분과 [숫자]의 앞뒤 부분을 통해서 자세히 살펴보고, 알파벳 [{'], ['.join(NotSameAlphabet)}] 신중하게 매칭!\n\n"
 
     # print(f'Input: {Input}\n\n')
     # print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')

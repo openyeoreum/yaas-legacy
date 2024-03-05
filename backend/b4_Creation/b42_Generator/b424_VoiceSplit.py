@@ -151,25 +151,51 @@ def InputText(SplitSents, SplitWords, SameNum):
     SameDic = {} # 빈 딕셔너리로 초기화
     ShortMatchingCount = 0
     LongMatchingCount = 0
+    BeforeAlphabet = None
     for AlphabetABWord in AlphabetABWordList:
         for NumberABWord in NumberABWordList:
-            for i in [1, 3]:
-                if AlphabetABWord[i] == NumberABWord[i] and AlphabetABWord[2] not in SameDic:
-                    ShortMatchingCount += 1
-            for i in [0, 1, 3, 4]:
-                if AlphabetABWord[i] == NumberABWord[i] and AlphabetABWord[2] not in SameDic:
-                    LongMatchingCount += 1
-            if ShortMatchingCount == 2:
-                SameAlphabet.append(AlphabetABWord[2])
-                NotSameAlphabet.remove(AlphabetABWord[2])
-                # 딕셔너리에 키와 값을 추가
-                SameDic[AlphabetABWord[2]] = NumberABWord[2]
-            elif LongMatchingCount >= SameNum: # 테스트 후 3으로 변경
-                SameAlphabet.append(AlphabetABWord[2])
-                NotSameAlphabet.remove(AlphabetABWord[2])
-                SameDic[AlphabetABWord[2]] = NumberABWord[2]
-            ShortMatchingCount = 0
-            LongMatchingCount = 0
+            if SameDic == {}:
+                for i in [1, 3]:
+                    if AlphabetABWord[i] == NumberABWord[i]:
+                        ShortMatchingCount += 1
+                for i in [0, 1, 3, 4]:
+                    if AlphabetABWord[i] == NumberABWord[i]:
+                        LongMatchingCount += 1
+                if ShortMatchingCount == 2:
+                    SameAlphabet.append(AlphabetABWord[2])
+                    NotSameAlphabet.remove(AlphabetABWord[2])
+                    # 딕셔너리에 키와 값을 추가
+                    SameDic[AlphabetABWord[2]] = NumberABWord[2]
+                    BeforeAlphabet = AlphabetABWord[2]
+                elif LongMatchingCount >= SameNum: # 테스트 후 3으로 변경
+                    SameAlphabet.append(AlphabetABWord[2])
+                    NotSameAlphabet.remove(AlphabetABWord[2])
+                    SameDic[AlphabetABWord[2]] = NumberABWord[2]
+                    BeforeAlphabet = AlphabetABWord[2]
+                ShortMatchingCount = 0
+                LongMatchingCount = 0
+                
+            elif SameDic != {}:
+                if SameDic[BeforeAlphabet] <= NumberABWord[2]:
+                    for i in [1, 3]:
+                        if AlphabetABWord[i] == NumberABWord[i]:
+                            ShortMatchingCount += 1
+                    for i in [0, 1, 3, 4]:
+                        if AlphabetABWord[i] == NumberABWord[i]:
+                            LongMatchingCount += 1
+                    if ShortMatchingCount == 2:
+                        SameAlphabet.append(AlphabetABWord[2])
+                        NotSameAlphabet.remove(AlphabetABWord[2])
+                        # 딕셔너리에 키와 값을 추가
+                        SameDic[AlphabetABWord[2]] = NumberABWord[2]
+                        BeforeAlphabet = AlphabetABWord[2]
+                    elif LongMatchingCount >= SameNum: # 테스트 후 3으로 변경
+                        SameAlphabet.append(AlphabetABWord[2])
+                        NotSameAlphabet.remove(AlphabetABWord[2])
+                        SameDic[AlphabetABWord[2]] = NumberABWord[2]
+                        BeforeAlphabet = AlphabetABWord[2]
+                    ShortMatchingCount = 0
+                    LongMatchingCount = 0
 
     # SameAlphabet에 Start, End 붙히기
     SESameDic = SameDic.copy()

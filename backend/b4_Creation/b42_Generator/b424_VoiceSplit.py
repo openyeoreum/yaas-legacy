@@ -476,7 +476,7 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
 ## VoiceSplit 최종 함수
 def VoiceSplit(projectName, email, name, VoiceLayerPath, SplitSents, LanguageCode = "ko-KR", MessagesReview = "off"):
 
-    print(f"VoiceSplit: progress, {name} waiting 15 second")
+    print(f"VoiceSplit: progress, {name} waiting 5-15 second")
     ## 음성파일을 STT로 단어별 시간 계산하기
     voiceTimeStemps, SplitWords = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
     ## VoiceSplit 프롬프트 요청

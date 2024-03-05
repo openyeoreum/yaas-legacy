@@ -719,6 +719,7 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
             GenerationKoChunkHistorys = []
 
         ### 생성시작 ###
+        _LastPitchSwitch = 0
         for Update in UpdateTQDM:
             UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['ChunkId']}: {Update['ActorChunk']}")
             ChunkId = Update['ChunkId']
@@ -755,6 +756,10 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
             ## 'Narrator', 'Character' 태그가 아닌 경우 끝음 조절하기 ##
             if Update['Tag'] not in ['Narrator', 'Character']:
                 LASTPITCH = [-2]
+                _LastPitchSwitch = 1
+            elif _LastPitchSwitch == 1:
+                LASTPITCH = [-2]
+                _LastPitchSwitch = 0
             else:
                 LASTPITCH = ApiSetting['last_pitch']
             

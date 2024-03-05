@@ -336,7 +336,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
     ## Input1과 Input2를 입력으로 받아 최종 Input 생성
     Input, NotSameAlphabet, lastNumber, NumberWordList, AlphabetList, RawResponse = InputText(SplitSents, SplitWords, 3)
     ## memoryCounter 생성
-    memoryCounter = f"\n\n최종주의사항: [알파벳]과 [숫자]를 매칭할때 [알파벳]의 앞뒤 부분과 [숫자]의 앞뒤 부분을 통해서 자세히 살펴보고, 알파벳 [{'], ['.join(NotSameAlphabet)}] 신중하게 매칭!\n\n"
+    memoryCounter = f"\n\n최종주의사항: [알파벳]과 [숫자]를 매칭할때 [알파벳]의 앞뒤 부분과 [숫자]의 앞뒤 부분을 통해서 자세히 살펴보고 매칭!, 알파벳 [{'], ['.join(NotSameAlphabet)}] 신중하게 매칭!\n\n"
 
     # print(f'Input: {Input}\n\n')
     # print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')

@@ -520,9 +520,9 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
             print(f"[ KeyError 발생, 재시도 {attempt}/60 ]")
             time.sleep(60)  # 1분 대기 후 재시도
 
-        # except Exception as e:
-        #     print(f"[ 예상치 못한 에러 발생: {e} ]")
-        #     sys.exit("[ Unexpected Error, exiting program. ]")
+        except Exception as e:
+            print(f"[ 예상치 못한 에러 발생: {e} ]")
+            sys.exit("[ Unexpected Error, exiting program. ]")
 
 ## 생성된 음성 합치기 ##
 ## Pause 추출

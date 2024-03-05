@@ -3,7 +3,7 @@ import io
 import json
 import re
 import numpy as np
-import webrtcvad
+import time
 import sys
 sys.path.append("/yaas")
 
@@ -88,13 +88,24 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
         # 대괄호와 숫자를 제거하고 나머지 문자열 분할
         parts = re.split(r'\[\d+\]', outputText)
 
-        if [parts[0].strip()] + [number] + [parts[1].strip()] in NumberWordList:
-            output['숫자'] = number
-        elif [parts[0].strip()] + [number + 1] + [parts[1].strip()] in NumberWordList:
-            output['숫자'] = number + 1
-        elif [parts[0].strip()] + [number - 1] + [parts[1].strip()] in NumberWordList:
-            output['숫자'] = number - 1
-        else:
+        # if [parts[0].strip()] + [number] + [parts[1].strip()] in NumberWordList:
+        #     output['숫자'] = number
+        # elif [parts[0].strip()] + [number + 1] + [parts[1].strip()] in NumberWordList:
+        #     output['숫자'] = number + 1
+        # elif [parts[0].strip()] + [number - 1] + [parts[1].strip()] in NumberWordList:
+        #     output['숫자'] = number - 1
+        NotError = 0
+        for NumberWord in NumberWordList:
+            if (parts[0].strip() in NumberWord[0] and number == NumberWord[1] and parts[1].strip() in NumberWord[2]) or (NumberWord[0] in parts[0].strip() and number == NumberWord[1] and NumberWord[2] in parts[1].strip()):
+                output['숫자'] = number
+                NotError += 1
+            elif (parts[0].strip() in NumberWord[0] and number+1 == NumberWord[1] and parts[1].strip() in NumberWord[2]) or (NumberWord[0] in parts[0].strip() and number+1 == NumberWord[1] and NumberWord[2] in parts[1].strip()):
+                output['숫자'] = number + 1
+                NotError += 1
+            elif (parts[0].strip() in NumberWord[0] and number-1 == NumberWord[1] and parts[1].strip() in NumberWord[2]) or (NumberWord[0] in parts[0].strip() and number-1 == NumberWord[1] and NumberWord[2] in parts[1].strip()):
+                output['숫자'] = number - 1
+                NotError += 1
+        if NotError == 0:
             return "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError"
 
     return outputJson
@@ -162,7 +173,7 @@ def InputText(SplitSents, SplitWords, SameNum):
         for NumberABWord in NumberABWordList:
             if SameDic == {}:
                 for i in [1, 3]:
-                    if NumberABWord[i] == AlphabetABWord[i]:
+                    if NumberABWord[i] in AlphabetABWord[i]:
                         ShortMatchingCount += 1
                 for i in [0, 1, 3]:
                     if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
@@ -202,7 +213,7 @@ def InputText(SplitSents, SplitWords, SameNum):
             elif SameDic != {}:
                 if SameDic[BeforeAlphabet] <= NumberABWord[2]:
                     for i in [1, 3]:
-                        if NumberABWord[i] == AlphabetABWord[i]:
+                        if NumberABWord[i] in AlphabetABWord[i]:
                             ShortMatchingCount += 1
                     for i in [0, 1, 3]:
                         if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
@@ -324,6 +335,8 @@ def InputText(SplitSents, SplitWords, SameNum):
             NotSameNumberWordList.remove(f' [{SESameDic[alphabet]}] ')
     if f' [{LastNumber + 1}] ' in NotSameNumberWordList:
         NotSameNumberWordList.remove(f' [{LastNumber + 1}] ')
+    if f' [0] ' in NotSameNumberWordList:
+        NotSameNumberWordList.remove(' [0] ')
 
     # print(f'NotSameNumberWordList: {NotSameNumberWordList}\n\n')
     
@@ -357,7 +370,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
     # print(f'RawResponse: {RawResponse}\n\n')
     
     if NotSameAlphabet != []:
-        for _ in range(5):
+        for _ in range(3):
             # Response 생성
             Response, Usage, Model = LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
@@ -477,14 +490,18 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
 def VoiceSplit(projectName, email, name, VoiceLayerPath, SplitSents, LanguageCode = "ko-KR", MessagesReview = "off"):
 
     print(f"VoiceSplit: progress, {name} waiting 5-15 second")
-    ## 음성파일을 STT로 단어별 시간 계산하기
-    voiceTimeStemps, SplitWords = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
-    ## VoiceSplit 프롬프트 요청
-    ResponseJson = VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = MessagesReview)
-    ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
-    SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
-    ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-    segment_durations = VoiceFileSplit(VoiceLayerPath, SplitTimeList)
+    for _ in range(3):
+        try:
+            ## 음성파일을 STT로 단어별 시간 계산하기
+            voiceTimeStemps, SplitWords = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
+            ## VoiceSplit 프롬프트 요청
+            ResponseJson = VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = MessagesReview)
+            ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
+            SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
+            ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
+            segment_durations = VoiceFileSplit(VoiceLayerPath, SplitTimeList)
+        except TypeError:
+            time.sleep(5)  # 5초 대기 후 재시도
     
     return segment_durations
 

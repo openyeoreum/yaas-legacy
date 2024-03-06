@@ -648,8 +648,11 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
     final_combined = AudioSegment.empty()
     for i in range(1, current_file_index):
         part_name = f"{projectName}_VoiceLayer_{i*file_limit-file_limit+1}-{min(i*file_limit, len(FilteredFiles))}.wav"
-        part = AudioSegment.from_wav(os.path.join(voiceLayerPath, part_name))
+        part_path = os.path.join(voiceLayerPath, part_name)
+        part = AudioSegment.from_wav(part_path)
         final_combined += part
+        # 파일 묶음 삭제
+        os.remove(part_path)
 
     # 마지막 5초 공백 추가
     final_combined += AudioSegment.silent(duration=5000)  # 5초간의 공백 생성

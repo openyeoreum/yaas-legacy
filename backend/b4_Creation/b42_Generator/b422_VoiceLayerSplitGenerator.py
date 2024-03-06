@@ -620,27 +620,42 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
 
     # 폴더 내의 모든 .wav 파일 목록 정렬/필터
     FilteredFiles = SortAndRemoveDuplicates(Files)
+    FilesCount = 0
+    file_limit = 100  # 파일 분할 기준
+    current_file_index = 1
     CombinedSound = AudioSegment.empty()
 
-    # VoiceLayer의 모든 음성 합치기
     UpdateTQDM = tqdm(EditGenerationKoChunks,
-                    total = len(EditGenerationKoChunks),
-                    desc = 'VoiceGenerator')
-    FilesCount = 0
+                    total=len(EditGenerationKoChunks),
+                    desc='VoiceGenerator')
+
     for Update in UpdateTQDM:
         for j in range(len(Update['Pause'])):
             sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
             PauseDuration_ms = Update['Pause'][j] * 1000  # 초를 밀리초로 변환
-            silence = AudioSegment.silent(duration = PauseDuration_ms)
+            silence = AudioSegment.silent(duration=PauseDuration_ms)
             CombinedSound += sound_file + silence
             FilesCount += 1
 
-    # 여기에 5초간의 공백 추가
-    FinalSilence = AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
-    CombinedSound += FinalSilence 
+            # 파일 단위로 저장 및 CombinedSound 초기화
+            if FilesCount % file_limit == 0 or FilesCount == len(FilteredFiles):
+                file_name = f"{projectName}_VoiceLayer_{current_file_index*file_limit-file_limit+1}-{min(current_file_index*file_limit, len(FilteredFiles))}.wav"
+                CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
+                CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
+                current_file_index += 1
+
+    # 최종 파일 합치기
+    final_combined = AudioSegment.empty()
+    for i in range(1, current_file_index):
+        part_name = f"{projectName}_VoiceLayer_{i*file_limit-file_limit+1}-{min(i*file_limit, len(FilteredFiles))}.wav"
+        part = AudioSegment.from_wav(os.path.join(voiceLayerPath, part_name))
+        final_combined += part
+
+    # 마지막 5초 공백 추가
+    final_combined += AudioSegment.silent(duration=5000)  # 5초간의 공백 생성
 
     # 최종적으로 합쳐진 음성 파일 저장
-    CombinedSound.export(os.path.join(voiceLayerPath, projectName + "_VoiceLayer.wav"), format = "wav")
+    final_combined.export(os.path.join(voiceLayerPath, projectName + "_VoiceLayer.wav"), format="wav")
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", MessagesReview = "off"):
@@ -865,7 +880,6 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                             TypeCastMacro(ChangedName)
                             time.sleep(random.randint(3, 5))
                             restart = True
-                            break
                         else:
                             print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
                             sys.exit()
@@ -899,7 +913,6 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                                 TypeCastMacro(ChangedName)
                                 time.sleep(random.randint(3, 5))
                                 restart = True
-                                break
                             else:
                                 print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
                                 sys.exit()

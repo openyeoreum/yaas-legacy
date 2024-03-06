@@ -123,8 +123,10 @@ def InputText(SplitSents, SplitWords, SameNum):
         if i > 0:
             # 알파벳 추가 및 인덱스 계산
             AlphabetABSentList.append(Alphabet)
-            BeforeWord = SplitSents[i-1]['낭독문장'].strip().split()
-            AfterWord = SplitSents[i]['낭독문장'].strip().split()
+            CleanSplitBeforeSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i-1]['낭독문장'].strip())
+            BeforeWord = CleanSplitBeforeSent.split()
+            CleanSplitAfterSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i]['낭독문장'].strip())
+            AfterWord = CleanSplitAfterSent.split()
             try:
                 AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
             except IndexError:
@@ -164,14 +166,16 @@ def InputText(SplitSents, SplitWords, SameNum):
     SameAlphabet = []
     NotSameAlphabet = AlphabetList.copy()
     SameDic = {} # 빈 딕셔너리로 초기화
-    ShortMatchingCount = 0
-    MiddleMatchingCount = 0
-    _MiddleMatchingCount = 0
-    LongMatchingCount = 0
     BeforeAlphabet = None
     for AlphabetABWord in AlphabetABWordList:
         for NumberABWord in NumberABWordList:
+            ## MatchingCount 초기화
+            ShortMatchingCount = 0
+            MiddleMatchingCount = 0
+            _MiddleMatchingCount = 0
+            LongMatchingCount = 0
             if SameDic == {}:
+                ## MatchingCount 계산
                 for i in [1, 3]:
                     if NumberABWord[i] in AlphabetABWord[i]:
                         ShortMatchingCount += 1
@@ -184,34 +188,37 @@ def InputText(SplitSents, SplitWords, SameNum):
                 for i in [0, 1, 3, 4]:
                     if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                         LongMatchingCount += 1
+                ## MatchingCount에 따른 SameDic 저장
                 if ShortMatchingCount == 2:
                     SameAlphabet.append(AlphabetABWord[2])
                     NotSameAlphabet.remove(AlphabetABWord[2])
-                    # 딕셔너리에 키와 값을 추가
                     SameDic[AlphabetABWord[2]] = NumberABWord[2]
                     BeforeAlphabet = AlphabetABWord[2]
+                    break
                 elif MiddleMatchingCount == 3:
                     SameAlphabet.append(AlphabetABWord[2])
                     NotSameAlphabet.remove(AlphabetABWord[2])
                     SameDic[AlphabetABWord[2]] = NumberABWord[2]
                     BeforeAlphabet = AlphabetABWord[2]
+                    break
                 elif _MiddleMatchingCount == 3:
                     SameAlphabet.append(AlphabetABWord[2])
                     NotSameAlphabet.remove(AlphabetABWord[2])
                     SameDic[AlphabetABWord[2]] = NumberABWord[2]
                     BeforeAlphabet = AlphabetABWord[2]
+                    break
                 elif LongMatchingCount >= SameNum: # 테스트 후 3으로 변경
                     SameAlphabet.append(AlphabetABWord[2])
                     NotSameAlphabet.remove(AlphabetABWord[2])
                     SameDic[AlphabetABWord[2]] = NumberABWord[2]
                     BeforeAlphabet = AlphabetABWord[2]
-                ShortMatchingCount = 0
-                MiddleMatchingCount = 0
-                _MiddleMatchingCount = 0
-                LongMatchingCount = 0
+                    break
                 
             elif SameDic != {}:
-                if SameDic[BeforeAlphabet] <= NumberABWord[2]:
+                if SameDic[BeforeAlphabet] < NumberABWord[2]:
+                    # print(f'SameDic[BeforeAlphabet]: {SameDic[BeforeAlphabet]}')
+                    # print(f'AlphabetABWord[2]: {AlphabetABWord[2]}')
+                    ## MatchingCount 계산
                     for i in [1, 3]:
                         if NumberABWord[i] in AlphabetABWord[i]:
                             ShortMatchingCount += 1
@@ -227,28 +234,29 @@ def InputText(SplitSents, SplitWords, SameNum):
                     if ShortMatchingCount == 2:
                         SameAlphabet.append(AlphabetABWord[2])
                         NotSameAlphabet.remove(AlphabetABWord[2])
-                        # 딕셔너리에 키와 값을 추가
                         SameDic[AlphabetABWord[2]] = NumberABWord[2]
                         BeforeAlphabet = AlphabetABWord[2]
+                        break
+                    ## MatchingCount에 따른 SameDic 저장
                     elif MiddleMatchingCount == 3:
                         SameAlphabet.append(AlphabetABWord[2])
                         NotSameAlphabet.remove(AlphabetABWord[2])
                         SameDic[AlphabetABWord[2]] = NumberABWord[2]
                         BeforeAlphabet = AlphabetABWord[2]
+                        break
                     elif _MiddleMatchingCount == 3:
                         SameAlphabet.append(AlphabetABWord[2])
                         NotSameAlphabet.remove(AlphabetABWord[2])
                         SameDic[AlphabetABWord[2]] = NumberABWord[2]
                         BeforeAlphabet = AlphabetABWord[2]
+                        break
                     elif LongMatchingCount >= SameNum: # 테스트 후 3으로 변경
                         SameAlphabet.append(AlphabetABWord[2])
                         NotSameAlphabet.remove(AlphabetABWord[2])
                         SameDic[AlphabetABWord[2]] = NumberABWord[2]
                         BeforeAlphabet = AlphabetABWord[2]
-                    ShortMatchingCount = 0
-                    MiddleMatchingCount = 0
-                    _MiddleMatchingCount = 0
-                    LongMatchingCount = 0
+                        break
+                    # print(f'NumberABWord[2]: {NumberABWord[2]}\n\n')
 
     # SameAlphabet에 Start, End 붙히기
     SESameDic = SameDic.copy()
@@ -366,7 +374,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
     # print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')
     # print(f'lastNumber: {lastNumber}\n\n')
     # print(f'NumberWordList: {NumberWordList}\n\n')
-    # print(f'AlphabetList: {AlphabetList}\n\n')
+    # print(f'MemoryCounter: {MemoryCounter}\n\n')
     # print(f'RawResponse: {RawResponse}\n\n')
     
     if NotSameAlphabet != []:

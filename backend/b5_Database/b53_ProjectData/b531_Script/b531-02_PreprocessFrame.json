@@ -4,18 +4,34 @@
         "ProjectsStorageID": "None",
         "ProjectId": "None",
         "ProjectName": "None",
-        "Content": "Character",
+        "Content": "Script",
         "Language": "Ko",
-        "TaskName": "Character",
-        "CharacterCount": 0,
+        "TaskName": "Preprocess",
+        "IndexCount": 0,
+        "BodyCount": 0,
+        "ChunkCount": 0,
         "Completion": "No"
     },
     {
-        "CharacterTags": [
+        "PreprocessScripts": [
             {
-                "CharacterId": 0,
-                "CharacterTag": "None",
-                "Character": "None"
+                "IndexId": 0,
+                "IndexTag": "None",
+                "Index": "None",
+                "PreprocessId": 0,
+                "Duplication": [
+                    {
+                        "Before": "None",
+                        "After": "None"
+                    }
+                ],
+                "Pronunciation": [
+                    {
+                        "Before": "None",
+                        "After": "None"
+                    }
+                ],
+                "Script": "None"
             }
         ]
     }

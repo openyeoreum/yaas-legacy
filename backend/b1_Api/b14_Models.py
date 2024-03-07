@@ -388,7 +388,8 @@ class Prompt(Base):
     IndexDefinePreprocess = Column(JSON)
     IndexDefineDivisionPreprocess = Column(JSON)
     IndexDefine = Column(JSON)
-    # PreprocessBody = Column(JSON)
+    DuplicationPreprocess = Column(JSON)
+    PronunciationPreprocess = Column(JSON)
     CaptionCompletion = Column(JSON)
     TransitionPhargraph = Column(JSON)
     
@@ -463,7 +464,8 @@ class TrainingDataset(Base):
     IndexDefinePreprocess = Column(JSON)
     IndexDefineDivisionPreprocess = Column(JSON)
     IndexDefine = Column(JSON)
-    PreprocessBody = Column(JSON)
+    DuplicationPreprocess = Column(JSON)
+    PronunciationPreprocess = Column(JSON)
     CaptionCompletion = Column(JSON)
     TransitionPhargraph = Column(JSON)
     

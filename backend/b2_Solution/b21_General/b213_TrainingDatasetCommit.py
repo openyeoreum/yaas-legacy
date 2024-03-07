@@ -39,7 +39,8 @@ def AddTrainingDatasetToDB(projectName, email):
             ExistingDataset.IndexDefinePreprocess = trainingDataset
             ExistingDataset.IndexDefineDivisionPreprocess = trainingDataset
             ExistingDataset.IndexDefine = trainingDataset
-            # ExistingDataset.PreprocessBody = trainingDataset
+            ExistingDataset.DuplicationPreprocess = trainingDataset
+            ExistingDataset.PronunciationPreprocess = trainingDataset
             ExistingDataset.CaptionCompletion = trainingDataset
             # ExistingDataset.TransitionPhargraph = trainingDataset
             ExistingDataset.ContextDefine = trainingDataset
@@ -70,7 +71,8 @@ def AddTrainingDatasetToDB(projectName, email):
                 IndexDefinePreprocess = trainingDataset,
                 IndexDefineDivisionPreprocess = trainingDataset,
                 IndexDefine = trainingDataset,
-                # PreprocessBody = trainingDataset,
+                DuplicationPreprocess = trainingDataset,
+                PronunciationPreprocess = trainingDataset,
                 CaptionCompletion = trainingDataset,
                 # TransitionPhargraph = trainingDataset,
                 ContextDefine = trainingDataset,

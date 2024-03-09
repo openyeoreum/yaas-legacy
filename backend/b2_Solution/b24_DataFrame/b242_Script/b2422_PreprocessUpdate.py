@@ -1,5 +1,4 @@
 import re
-import tiktoken
 import time
 import sys
 sys.path.append("/yaas")
@@ -8,639 +7,440 @@ from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddExistedBodyFrameToDB, AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, InitBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
 
-# BodyText 로드
-def LoadBodyText(projectName, email):
+#########################
+##### InputList 생성 #####
+#########################
+# bodyText를 Sentences로 분할
+def bodyTextToSentences(bodyText):
+    # 텍스트를 문장으로 분리하여 토큰화하는 함수
+    Sentences = re.split(r"(?<=[.!?])\s+", bodyText)
+    return Sentences
+
+def SplitBodyTextByTokenLimit(text, token_limit):
+    # 문장을 토큰 제한에 따라 분할하는 함수
+    tokens = text.split()
+    token_count = 0
+    result = []
+    current_segment = []
+
+    for token in tokens:
+        token_count += len(token.split()) # 공백 기준으로 토큰화하여 토큰 수 측정
+
+        if token_count <= token_limit:
+            current_segment.append(token)
+        else:
+            result.append(' '.join(current_segment))
+            current_segment = [token]
+            token_count = len(token.split())
+
+    if current_segment:
+        result.append(' '.join(current_segment))
+
+    return result
+
+# IndexBodyText 로드
+def LoadIndexBody(projectName, email):
     project = GetProject(projectName, email)
+    indexFrame = project.IndexFrame[1]['IndexTags'][1:]
     bodyText = project.BodyText
     
-    return bodyText
+    # 목차별로 bodyText를 분할하고 토큰 수가 500 이하가 되도록 나눔
+    chapterContents = {}
+    currentChapter = None
+    for line in bodyText.split('\n'):
+        if not line.strip():  # 빈 줄은 넘김
+            continue
+        for indexDic in indexFrame:
+            if indexDic['Index'] in line:
+                currentChapter = indexDic['Index']
+                chapterContents[currentChapter] = []
+                break
+        else:
+            if currentChapter:
+                chapterContents[currentChapter].extend(bodyTextToSentences(line))
 
-## Body최초 전처리
-def BodyReplace(chunk):
-    # /내용/ 부분에 잘못된 표현을 치환
-    ReplaceTermElements = [
-        (' 다/.', '다./'), ('다 /.', '다./'), ('다/.', '다./'),
-        (' 나/.', '나./'), ('나 /.', '나./'), ('나/.', '나./'),
-        (' 까/.', '까./'), ('까 /.', '까./'), ('까/.', '까./'),
-        (' 요/.', '요./'), ('요 /.', '요./'), ('요/.', '요./'),
-        (' 죠/.', '죠./'), ('죠 /.', '죠./'), ('죠/.', '죠./'),
-        (' 듯/.', '듯./'), ('듯 /.', '듯./'), ('듯/.', '듯./'),
-        (' 것/.', '것./'), ('것 /.', '것./'), ('것/.', '것./'),
-        (' 라/.', '라./'), ('라 /.', '라./'), ('라/.', '라./'),
-        (' 가/.', '가./'), ('가 /.', '가./'), ('가/.', '가./')
-    ]
-    original_chunk = chunk[:]
-    start_index = 0
-    is_odd = True
+    # 500 토큰 기준으로 분할
+    segmentedText = {}
+    for chapter, contents in chapterContents.items():
+        segmentedText[chapter] = []
+        for content in contents:
+            segmentedText[chapter].extend(SplitBodyTextByTokenLimit(content, 500))
+    
+    return indexFrame, segmentedText
 
-    while True:
-        index_slash = original_chunk.find("/", start_index)
-        if index_slash == -1:
-            break
+## BodyFrameBodys의 inputList 치환
+def IndexBodyToInputList(projectName, email):
+    indexFrame, bodyText = GetProject(projectName, email)
 
-        if is_odd:
-            for old, new in ReplaceTermElements:
-                if old in chunk[index_slash-3:index_slash+4]:
-                    chunk = chunk[:index_slash-3] + chunk[index_slash-3:index_slash+4].replace(old, new) + chunk[index_slash+4:]
+    PreprocessScripts = []
+    for index in indexFrame:
+        SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
+        for j in range(len(SplitedBodyChunks)):
+            SplitedBodyChunkList.append(SplitedBodyChunks[j])
+
+    InputList = []
+    CaptionIdList = []
+    id_counter = 1  # Id를 1부터 시작하기 위한 카운터
+
+    j = 0
+    while j < len(SplitedBodyChunkList):
+        if SplitedBodyChunkList[j]['Tag'] in ['Caption', 'CaptionComment']:
+            # 연속된 Caption 또는 CaptionComment 찾기
+            combined_caption = SplitedBodyChunkList[j]['Chunk']
+            temp_caption_ids = [SplitedBodyChunkList[j]['ChunkId']]  # 현재 ChunkId를 추가
+            j += 1
+            while j < len(SplitedBodyChunkList) and SplitedBodyChunkList[j]['Tag'] in ['Caption', 'CaptionComment']:
+                combined_caption += SplitedBodyChunkList[j]['Chunk'] + ' '
+                temp_caption_ids.append(SplitedBodyChunkList[j]['ChunkId'])  # 추가적인 ChunkId들을 추가
+                j += 1
+
+            # 앞뒤 7개 요소 포함하고 CaptionStart, CaptionEnd 추가
+            start_idx = max(j - 8, 0)  # 이전에는 max(j - 6, 0) 이었음
+            combined_chunks = ""
+            for k in range(start_idx, j - len(temp_caption_ids)):
+                combined_chunks += SplitedBodyChunkList[k]['Chunk'] + ' '
+            combined_chunks += '\n\n[캡션시작]\n' + combined_caption + '\n[캡션끝]\n\n'
+            end_idx = min(j + 7, len(SplitedBodyChunkList))  # 이전에는 min(j + 5, len(SplitedBodyChunkList)) 이었음
+            for k in range(j, end_idx):
+                combined_chunks += SplitedBodyChunkList[k]['Chunk'] + ' '
+
+            InputList.append({'Id': id_counter, 'Continue': combined_chunks})
+            CaptionIdList.append(temp_caption_ids)
+            id_counter += 1  # 다음 아이템에 대해 Id 증가
+        else:
+            j += 1
+        
+    return InputList, CaptionIdList, SplitedBodyChunkList
+
+######################
+##### Filter 조건 #####
+######################
+## CaptionCompletion의 Filter(Error 예외처리)
+def CaptionCompletionFilter(responseData, memoryCounter):
+    # Error1: json 형식이 아닐 때의 예외 처리
+    try:
+        OutputDic = json.loads(responseData)
+    except json.JSONDecodeError:
+        return "JSONDecode에서 오류 발생: JSONDecodeError"
+    try:
+        if not ('유형' in OutputDic and '맞는이유' in OutputDic and '아닌이유' in OutputDic and '최종캡션판단여부' in OutputDic and '정확도' in OutputDic) and (OutputDic['최종캡션판단여부'] == '맞다' or OutputDic['최종캡션판단여부'] == '아니다' or OutputDic['최종캡션판단여부'] == '알수없다'):
+            return "JSON에서 오류 발생: JSONKeyError"
+    # Error5: 자료의 형태가 Str일 때의 예외처리
+    except AttributeError:
+        return "JSON에서 오류 발생: strJSONError"
+
+    return {'json': OutputDic, 'filter': OutputDic}
+
+######################
+##### Memory 생성 #####
+######################
+## inputMemory 형성
+def CaptionCompletionInputMemory(inputMemoryDics, MemoryLength):
+    inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
+    
+    inputMemoryList = []
+    for inputmeMory in inputMemoryDic:
+        key = list(inputmeMory.keys())[1]  # 두 번째 키값
+        if key == "Continue":
+            inputMemoryList.append(inputmeMory['Continue'])
+        else:
+            inputMemoryList.append(inputmeMory['Pass'])
+    inputMemory = "".join(inputMemoryList)
+    # print(f"@@@@@@@@@@\ninputMemory :{inputMemory}\n@@@@@@@@@@")
+    
+    return inputMemory
+
+## outputMemory 형성
+def CaptionCompletionOutputMemory(outputMemoryDics, MemoryLength):
+    outputMemoryDic = outputMemoryDics[-MemoryLength:]
+    
+    OUTPUTmemoryDic = []
+    for item in outputMemoryDic:
+        if isinstance(item, list):
+            OUTPUTmemoryDic.extend(item)
+        else:
+            OUTPUTmemoryDic.append(item)
+    OUTPUTmemoryDic = [entry for entry in OUTPUTmemoryDic if entry != "Pass"]
+    outputMemory = str(OUTPUTmemoryDic)
+    outputMemory = outputMemory[:-1] + ", "
+    outputMemory = outputMemory.replace("[, ", "[")
+    # print(f"@@@@@@@@@@\noutputMemory :{outputMemory}\n@@@@@@@@@@")
+    
+    return outputMemory
+
+#######################
+##### Process 진행 #####
+#######################
+## CaptionCompletion 프롬프트 요청 및 결과물 Json화
+def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "CaptionCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+    # DataSetsContext 업데이트
+    AddProjectContextToDB(projectName, email, Process)
+
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '06', DataFramePath)
+    inputList, CaptionIdList, SplitedBodyChunkList = BodyFrameCaptionsToInputList(projectName, email)
+    InputList = inputList[OutputMemoryCount:]
+    if InputList == []:
+        return OutputMemoryDicsFile, CaptionIdList, SplitedBodyChunkList
+
+    TotalCount = 0
+    ProcessCount = 1
+    ContinueCount = 0
+    inputMemoryDics = []
+    inputMemory = []
+    InputDic = InputList[0]
+    inputMemoryDics.append(InputDic)
+    outputMemoryDics = OutputMemoryDicsFile
+    outputMemory = []
+    ErrorCount = 0
+        
+    # CaptionCompletionProcess
+    while TotalCount < len(InputList):
+        # Momory 계열 모드의 순서
+        if Mode == "Memory":
+            if "Continue" in InputDic:
+                ContinueCount += 1
+            if ContinueCount == 1:
+                mode = "Example"
+            else:
+                mode = "Memory"
+        elif Mode == "MemoryFineTuning":
+            if "Continue" in InputDic:
+                ContinueCount += 1
+            if ContinueCount == 1:
+                mode = "ExampleFineTuning"
+            else:
+                mode = "MemoryFineTuning"
+        # Example 계열 모드의 순서
+        elif Mode == "Master":
+            mode = "Master"
+        elif Mode == "ExampleFineTuning":
+            mode = "ExampleFineTuning"
+        elif Mode == "Example":
+            mode = "Example"
+            
+        if "Continue" in InputDic:
+            Input = InputDic['Continue']
+            memoryCounter = "\n"
+            outputEnder = ""
+
+            # Response 생성
+            Response, Usage, Model = LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            
+            # OutputStarter, OutputEnder에 따른 Response 전처리
+            promptFrame = GetPromptFrame(Process)
+            if mode in ["Example", "ExampleFineTuning", "Master"]:
+                Example = promptFrame[0]["Example"]
+                if Response.startswith(Example[2]["OutputStarter"]):
+                    Response = Response.replace(Example[2]["OutputStarter"], "", 1)
+                responseData = Example[2]["OutputStarter"] + Response
+            elif mode in ["Memory", "MemoryFineTuning"]:
+                if Response.startswith("[" + outputEnder):
+                    responseData = Response
+                else:
+                    if Response.startswith(outputEnder):
+                        Response = Response.replace(outputEnder, "", 1)
+                    responseData = outputEnder + Response
+                    
+            Filter = CaptionCompletionFilter(responseData, memoryCounter)
+            
+            if isinstance(Filter, str):
+                if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
+                    ContinueCount = 0 # Example에서 오류가 발생하면 Memory로 넘어가는걸 방지하기 위해 ContinueCount 초기화
+                if Mode == "MemoryFineTuning" and mode == "ExampleFineTuning" and ContinueCount == 1:
+                    ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
+                
+                ErrorCount += 1
+                if ErrorCount == 7:
+                    print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+                    sys.exit(1)  # 오류 상태와 함께 프로그램을 종료합니다.
+                    
+                continue
+            else:
+                OutputDic = Filter['filter']
+                outputJson = Filter['json']
+                print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | JSONDecode 완료")
+                ErrorCount = 0
+                
+                # DataSets 업데이트
+                if mode in ["Example", "ExampleFineTuning", "Master"]:
+                    # mode가 ["Example", "ExampleFineTuning", "Master"]중 하나인 경우 Memory 초기화
+                    INPUTMemory = "None"
+                elif mode in ["Memory", "MemoryFineTuning"]:
+                    INPUTMemory = inputMemory
+                    
+                AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, InputDic, outputJson, INPUTMEMORY = INPUTMemory)
+                AddProjectFeedbackDataSetsToDB(projectName, email, Process, InputDic, outputJson, INPUTMEMORY = INPUTMemory)
+
+        else:
+            OutputDic = "Pass"
+        
+        TotalCount += 1
+        ProcessCount = TotalCount + 1
+        
+        # Memory 형성
+        MemoryLength = memoryLength
+        # inputMemory 형성
+        try:
+            InputDic = InputList[TotalCount]
+            inputMemoryDics.append(InputDic)
+            inputMemory = CaptionCompletionInputMemory(inputMemoryDics, MemoryLength)
+        except IndexError:
+            pass
+        
+        # outputMemory 형성
+        outputMemoryDics.append(OutputDic)
+        outputMemory = CaptionCompletionOutputMemory(outputMemoryDics, MemoryLength)
+        
+        SaveOutputMemory(projectName, email, outputMemoryDics, '06', DataFramePath)
+    
+    return outputMemoryDics, CaptionIdList, SplitedBodyChunkList
+################################
+##### 데이터 치환 및 DB 업데이트 #####
+################################
+# ## BodyFrame CaptionTag 업데이트
+# def CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame):
+#     ## BodyFrame CaptionTag 업데이트
+#     for i in range(len(BodyFrame)):
+#         SplitedBodyChunks = BodyFrame[i]['SplitedBodyChunks']
+#         for j in range(len(SplitedBodyChunks)):
+#             for k in range(len(CaptionFrame)):
+#                 CaptionTag = CaptionFrame[k]['CaptionTag']
+#                 ChunkIds = CaptionFrame[k]['ChunkIds']
+#                 SplitedCaptionChunks = CaptionFrame[k]['SplitedCaptionChunks']
+#                 for l in range(len(SplitedCaptionChunks)):
+#                     if SplitedBodyChunks[j]['ChunkId'] == SplitedCaptionChunks[l]['ChunkId']:
+#                         SplitedBodyChunks[j]['NewTag'] = SplitedCaptionChunks[l]['Tag']
+#                     if SplitedBodyChunks[j]['ChunkId'] == ChunkIds[0] and CaptionTag == 'Caption':
+#                         SplitedBodyChunks[j]['CaptionMusicStart'] = "None"
+#                     if SplitedBodyChunks[j]['ChunkId'] == ChunkIds[-1] and CaptionTag == 'Caption':
+#                         SplitedBodyChunks[j]['CaptionMusicEnd'] = "None"
+
+#     return BodyFrame
+
+# ## CaptionCompletion의 BodyFrame전환
+# def CaptionCompletionToBodyFrame(projectName, email):
+#     # BodyFrame CaptionTag 업데이트
+#     with get_db() as db:
+#         project = GetProject(projectName, email)
+#         BodyFrame = project.BodyFrame[1]["SplitedBodyScripts"][1:]
+#         CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
+
+#         BodyFrame = CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame)
+#     flag_modified(project, "BodyFrame")
+#     db.add(project)
+#     db.commit()
+    
+#     # HalfBodyFrame CaptionTag 업데이트
+#     with get_db() as db:
+#         project = GetProject(projectName, email)
+#         HalfBodyFrame = project.HalfBodyFrame[1]["SplitedBodyScripts"][1:]
+#         CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
+        
+#         HalfBodyFrame = CaptionTagUpdateToBodyFrame(HalfBodyFrame, CaptionFrame)
+#     flag_modified(project, "HalfBodyFrame")
+#     db.add(project)
+#     db.commit()
+
+## 데이터 치환
+def CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   
+    # 데이터 치환
+    outputMemoryDics, CaptionIdList, SplitedBodyChunkList = CaptionCompletionProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    
+    responseJson = []
+    for i, response in enumerate(outputMemoryDics):
+        CaptionId = i + 1
+        CaptionType = response['유형']
+        Importance = response['정확도']
+        if response['최종캡션판단여부'] == '맞다' and int(Importance) >= 80:
+            CaptionTag = 'Caption'
+            Reason = response['맞는이유']
+        else:
+            CaptionTag = 'Narrator'
+            Reason = response['아닌이유']
+        ChunkIds = CaptionIdList[i]
+        CaptionCompletion = {"CaptionId": CaptionId, "CaptionTag": CaptionTag, "CaptionType": CaptionType, "Reason": Reason, "Importance": Importance, "ChunkIds": ChunkIds, "SplitedCaptionChunks": []}
+        for Chunkid in ChunkIds:
+            ChunkId = Chunkid
+            for j in range(len(SplitedBodyChunkList)):
+                if ChunkId == SplitedBodyChunkList[j]['ChunkId']:
+                    Tag = SplitedBodyChunkList[j]['Tag']
+                    Chunk = SplitedBodyChunkList[j]['Chunk']
                     break
-
-        start_index = index_slash + 1
-        is_odd = not is_odd
-
-    # 특정 문자열을 다른 문자열로 치환
-    ReplaceElements = [
-        ('.....', '.'), ('....', '.'),
-        ('...', '.'), ('..', '.'), 
-        ('"', '∥'), ('“', '∥'), ('”', '∥'),
-        ('*', '○'),
-        # ('’', '∥'), ('‘', '∥'), ('’', '∥'),
-        ('. \n', '&&\n'), ('.\n', '&&\n'),
-        (' /.', '/@@'), ('/.', '/@@'),
-        (' 다.', '다@@'), ('다.', '다@@'),
-        (' 다.', '다@@'), ('다.', '다@@'),
-        (' 나.', '나@@'), ('나.', '나@@'),
-        (' 까.', '까@@'), ('까.', '까@@'),
-        (' 요.', '요@@'), ('요.', '요@@'),
-        (' 죠.', '죠@@'), ('죠.', '죠@@'),
-        (' 듯.', '듯@@'), ('듯.', '듯@@'),
-        (' 것.', '것@@'), ('것.', '것@@'),
-        (' 라.', '라@@'), ('라.', '라@@'),
-        (' 가.', '가@@'), ('가.', '가@@')
-    ]
-    for old, new in ReplaceElements:
-        chunk = chunk.replace(old, new)
-    
-    # 숫자 뒤에 점, 영어 뒤에 점을 ●으로 치환
-    chunk = re.sub(r'(\d)\.(\d|\s|$)', r'\1●\2', chunk)
-    chunk = re.sub(r'([a-zA-Z])\.(\s|$)', r'\1●\2', chunk)
-
-    # 치환된 문자열을 복구
-    RestoreElements = [
-        ('.', ''),
-        ('@@', '.'), ('.', '. '), ('&&', '.'),
-        ('      ', ' '), ('     ', ' '), ('    ', ' '),
-        ('   ', ' '), ('  ', ' '),
-        ('\n\n\n\n\n', '\n\n'), ('\n\n\n\n', '\n\n'), ('\n\n\n', '\n\n'),
-    ]
-    for old, new in RestoreElements:
-        chunk = chunk.replace(old, new)
-
-    return chunk
-
-## BodySplit
-def BodySplitPreprocess(projectName, email):
-    # BodyText 로드
-    BodyText = LoadBodyText(projectName, email)
-    splitedBody = BodyText.splitlines(keepends=True)
-    
-    # splitedBody 다중표현 방지 전처리
-    SplitedBodyReplace = [BodyReplace(chunk) for chunk in splitedBody]
-    
-    # preprocessSplitedBody 문단 단위 전처리
-    BodyChunks = []
-    bufferChunk = ""
-
-    for chunk in SplitedBodyReplace:
-        # bufferChunk에 새로운 chunk를 추가
-        bufferChunk += chunk
-        
-        if bufferChunk.count('∥') % 2 == 0:  # 짝수인 경우
-            BodyChunks.append(bufferChunk)
-            bufferChunk = ""
-
-    # BodySplitPreprocess 오류체크
-    for chunk in BodyChunks:
-        if chunk.count('∥')%2 != 0:
-            print(f"Body의 따옴표 숫자 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | BodySplitPreprocessError, 문제 따옴표수: {chunk.count('∥')}")
-    print(f"Project: {projectName} | Process: BodyFrameUpdate | BodySplitPreprocess 완료")
-      
-    return BodyChunks
-
-## Comment 태깅
-def CommentTagging(projectName, email):
-    # 전처리된 SplitedBodyText 로드
-    BodyChunks = BodySplitPreprocess(projectName, email)
-
-    # Comment, CaptionComment 태깅
-    CommentTaggedChunks = []
-    CommentPattern = re.compile(r'/(.*?)/')
-    CaptionCommentPattern = re.compile(r'<(.*?)>')
-
-    for BodyChunk in BodyChunks:
-        # Find and split by CaptionCommentPattern
-        captionParts = CaptionCommentPattern.split(BodyChunk)
-        
-        for j, captionPart in enumerate(captionParts):
-            if j % 2 == 0:
-                # Find and split by CommentPattern within the captionPart
-                parts = CommentPattern.split(captionPart)
-                for i, part in enumerate(parts):
-                    if i % 2 == 0:
-                        partStrip = str(i) + '@' + part.strip()  # 이상한 오류 방지...
-                        CommentTaggedChunks.append({"Tag": "None", "TagChunks": re.sub(r'^\d+@', '', partStrip)})
-                    else:
-                        partStrip = str(i) + '@' + part.strip()  # 이상한 오류 방지...
-                        CommentTaggedChunks.append({"Tag": "Comment", "TagChunks": re.sub(r'^\d+@', '', partStrip)})
+            if CaptionTag == 'Caption' and Tag == 'Caption':
+                NewTag = 'Caption'
+            elif CaptionTag == 'Caption' and Tag == 'CaptionComment':
+                NewTag = 'CaptionComment'
             else:
-                # Add the CaptionComment part as a separate chunk
-                captionPart_strip = str(j) + '@' + captionPart.strip()  # 이상한 오류 방지...
-                CommentTaggedChunks.append({"Tag": "CaptionComment", "TagChunks": re.sub(r'^\d+@', '', captionPart_strip)})
-
-    # Comment 태깅 후처리(* 표시)
-    for i, chunk in enumerate(CommentTaggedChunks):
-        if chunk["Tag"] == "Comment":
-            # 앞쪽 None에 * 추가
-            if i > 0 and CommentTaggedChunks[i-1]["Tag"] == "None":
-                CommentTaggedChunks[i-1]["TagChunks"] = CommentTaggedChunks[i-1]["TagChunks"].rstrip() + "*"
-            # 뒤쪽 None에 * 추가
-            if i < len(CommentTaggedChunks) - 1 and CommentTaggedChunks[i+1]["Tag"] == "None":
-                CommentTaggedChunks[i+1]["TagChunks"] = CommentTaggedChunks[i+1]["TagChunks"].rstrip() + "*"
-    
-    # Comment, CaptionComment 태깅 후처리(구두점 위치 변경)
-    indicesToRemove = []
-    
-    for i in range(len(CommentTaggedChunks) - 2):
-        if (
-            CommentTaggedChunks[i]["Tag"] == "None" and 
-            CommentTaggedChunks[i+1]["Tag"] in ["Comment", "CaptionComment"] and 
-            CommentTaggedChunks[i+2]["Tag"] == "None"
-        ):
-            prefixes = [
-                " .", " ,", " '", " ’", " ∥", " 》", " )", " ]",
-                ".", ",", "'", "’", "∥", "》", ")", "]"
-            ]
-            for prefix in prefixes:
-                if CommentTaggedChunks[i+2]["TagChunks"].startswith(prefix):
-                    CommentTaggedChunks[i]["TagChunks"] += prefix.strip(' ')
-                    CommentTaggedChunks[i+2]["TagChunks"] = CommentTaggedChunks[i+2]["TagChunks"][len(prefix):]
-                    if CommentTaggedChunks[i+2]["TagChunks"] == "":
-                        indicesToRemove.append(i+2)
-    
-    for idx in reversed(indicesToRemove):
-        del CommentTaggedChunks[idx]
+                NewTag = 'Narrator'
+                
+            CaptionCompletion['SplitedCaptionChunks'].append({"ChunkId": ChunkId, "Tag": NewTag, "Chunk": Chunk})
         
-    for TaggedChunk in CommentTaggedChunks:
-        TaggedChunk["TagChunks"] = TaggedChunk["TagChunks"].lstrip()
+        responseJson.append(CaptionCompletion)
     
-    # CommentTagging 오류체크
-    INPUT = re.sub("[^가-힣]", "", LoadBodyText(projectName, email))
-    OUTPUT = re.sub("[^가-힣]", "", str(CommentTaggedChunks))
-    if INPUT == OUTPUT:
-        print(f"Project: {projectName} | Process: BodyFrameUpdate | CommentTagging 완료")
-    else:
-        print(f"BodyText와 CommentTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CommentTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
+    return responseJson
 
-    return CommentTaggedChunks
-
-## Caption 태깅
-def CaptionTagging(projectName, email):
-    # 전처리된 CommentTaggedChunks 로드
-    CommentTaggedChunks = CommentTagging(projectName, email)
-    CaptionTaggedChunks = CommentTaggedChunks.copy()
-    
-    for chunk in CaptionTaggedChunks:
-        # _, |가 포함될 때
-        if (
-            chunk["Tag"] == "None" and
-            chunk["TagChunks"] != "" and
-            re.search(r'[_|]', chunk["TagChunks"])
-        ):
-            chunk["Tag"] = "Caption"
-        #Option 문장에 ?, !, ., *가 포함되나, 끝부분에 ?, !, ., *가 포함 안될 때
-        elif (
-            chunk["Tag"] == "None" and
-            chunk["TagChunks"] != "" and
-            len(chunk["TagChunks"]) < 120 and
-            not re.search(r'[∥]', chunk["TagChunks"]) and
-            not re.search(r'[?!.*]', chunk["TagChunks"][-2:])
-        ):
-            chunk["Tag"] = "Caption"
-        # ?, !, ., ∥, *가 포함 안될 때
-        elif (
-            chunk["Tag"] == "None" and
-            chunk["TagChunks"] != "" and
-            not re.search(r'[?!.∥*]', chunk["TagChunks"])
-        ):
-            chunk["Tag"] = "Caption"
-    
-    # 만약 Text에 '*'이면, 모든 '*' 삭제
-    for chunk in CaptionTaggedChunks:
-        chunk["TagChunks"] = chunk["TagChunks"][:-4] + chunk["TagChunks"][-4:].replace('*', '')
-
-    # 빈 Text 삭제
-    CaptionTaggedChunks = [chunk for chunk in CaptionTaggedChunks if chunk["TagChunks"].strip() != ""]
-
-    # CaptionTagging 오류체크
-    INPUT = re.sub("[^가-힣]", "", LoadBodyText(projectName, email))
-    OUTPUT = re.sub("[^가-힣]", "", str(CaptionTaggedChunks))
-    if INPUT == OUTPUT:
-        print(f"Project: {projectName} | Process: BodyFrameUpdate | CaptionTagging 완료")
-    else:
-        print(f"BodyText와 CaptionTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CaptionTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
-
-    return CaptionTaggedChunks
-    
-## Character 태깅
-def CharacterTagging(projectName, email):
-    # 전처리된 CaptionTaggedChunks 로드
-    CaptionTaggedChunks = CaptionTagging(projectName, email)
-    
-    # Character 태그 안에 다른 태그가 포함된 문제 해결
-    MergedTaggedChunks = []
-    nonMergedTaggedChunks = []
-    tempChunkText = None
-    
-    for chunk in CaptionTaggedChunks:
-        if chunk['Tag'] == 'None':
-            if tempChunkText is None:
-                tempChunkText = chunk["TagChunks"]
-            else:
-                tempChunkText += chunk["TagChunks"]
-            
-            if tempChunkText.count('∥') % 2 == 0:
-                MergedTaggedChunks.append({"Tag": "None", "TagChunks": tempChunkText})
-                tempChunkText = None
-        elif tempChunkText is None:
-            MergedTaggedChunks.append(chunk)
-        else:
-            nonMergedTaggedChunks.append(chunk["TagChunks"]) # 삭제되는 부분들 저장
-
-    # Character, Narrator 태깅
-    CharacterTaggedChunks = []
-    for chunk in MergedTaggedChunks:
-        if chunk['Tag'] == "None":
-            # ∥ 기호를 기준으로 텍스트 분리
-            parts = chunk["TagChunks"].split('∥')
-            for i, part in enumerate(parts):
-                # 홀수 인덱스는 Character 태그, 짝수 인덱스는 Narrator 태그
-                if i % 2 == 0:  # 짝수 인덱스
-                    newTag = "Narrator"
-                    # 문장별로 나누기
-                    sentences = re.split('(?<=[.!?])\s+', part.strip())
-                    for sentence in sentences:
-                        if sentence:  # 텍스트가 비어있지 않은 경우만 추가
-                            CharacterTaggedChunks.append({"Tag": newTag, "TagChunks": sentence})
-                else:  # 홀수 인덱스
-                    newTag = "Character"
-                    part = "∥" + part + "∥"  # 텍스트에 ∥ 추가
-                    if part.strip():  # 텍스트가 비어있지 않은 경우만 추가
-                        CharacterTaggedChunks.append({"Tag": newTag, "TagChunks": part})
-        else:
-            # 다른 태그는 그대로 유지
-            CharacterTaggedChunks.append(chunk)
-            
-    # CharacterTagging 오류체크
-    INPUT = re.sub("[^가-힣]", "", LoadBodyText(projectName, email))
-    OUTPUT = re.sub("[^가-힣]", "", str(CharacterTaggedChunks)) + re.sub("[^가-힣]", "", str(nonMergedTaggedChunks))
-    if len(INPUT) == len(OUTPUT):
-        print(f"Project: {projectName} | Process: BodyFrameUpdate | CharacterTagging 완료, 삭제된 데이터: {nonMergedTaggedChunks}")
-    else:
-        print(f"BodyText와 CharacterTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CharacterTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
-
-    return CharacterTaggedChunks
-
-## Index 매칭
-def IndexMatching(projectName, email):
-    CharacterTaggedChunks = CharacterTagging(projectName, email)
-    IndexMatchedChunks = CharacterTaggedChunks.copy()
-    
-    project = GetProject(projectName, email)
-    IndexFrame = project.IndexFrame[1]["IndexTags"][1:]
-
-    # nonMatchingIndexList 구성
-    nonMatchingIndexList = []
-    for index in IndexFrame:
-        nonMatchingIndexList.append(index["Index"])
-    BigIndexList = ["Chapter", "Part"]
-    # Index 매칭
-    indexid = 0
-    for i, chunk in enumerate(IndexMatchedChunks):
-        if chunk["Tag"] == "Caption":
-            Cleanchunk = re.sub("[^가-힣]", "", chunk["TagChunks"])
-            CleanIndex = re.sub("[^가-힣]", "", IndexFrame[indexid]["Index"])
-            if Cleanchunk == CleanIndex:
-                indexTag = IndexFrame[indexid]["IndexTag"]
-                tagChunk = chunk["TagChunks"]
-                if indexTag in BigIndexList:
-                    if re.search(r'(\d)부', chunk["TagChunks"]) or re.search(r'(\d) 부', chunk["TagChunks"]):
-                        tagChunk = re.sub(r'(\d)부', r'\1부,', tagChunk)
-                        tagChunk = re.sub(r'(\d)부,.', r'\1부,', tagChunk)
-                        tagChunk = re.sub(r'(\d)부.,', r'\1부,', tagChunk)
-                        tagChunk = re.sub(r'(\d) 부', r'\1 부,', tagChunk)
-                        tagChunk = re.sub(r'(\d) 부,.', r'\1 부,', tagChunk)
-                        tagChunk = re.sub(r'(\d) 부.,', r'\1 부,', tagChunk)
-                        indexTag = "Part"
-                    if re.search(r'(\d)장', chunk["TagChunks"]) or re.search(r'(\d) 장', chunk["TagChunks"]):
-                        tagChunk = re.sub(r'(\d)장', r'\1장,', tagChunk)
-                        tagChunk = re.sub(r'(\d)장,', r'\1장,', tagChunk)
-                        tagChunk = re.sub(r'(\d)장.,', r'\1장,', tagChunk)
-                        tagChunk = re.sub(r'(\d) 장', r'\1 장,', tagChunk)
-                        tagChunk = re.sub(r'(\d) 장,', r'\1 장,', tagChunk)
-                        tagChunk = re.sub(r'(\d) 장.,', r'\1 장,', tagChunk)
-                        indexTag = "Chapter"
-
-                IndexMatchedChunks[i] = {"IndexTag": indexTag, "TagChunks": tagChunk}
-                nonMatchingIndexList.remove(IndexFrame[indexid]["Index"])
-                # print(indexid)
-                # print(IndexFrame[indexid]["Index"])
-                if indexid < len(IndexFrame) - 1:
-                    indexid += 1
-
-    # 아주 가끔 빈 인덱스가 생성되는 경우 제거
-    if '' in nonMatchingIndexList:
-        nonMatchingIndexList.remove('')
-
-    # 치환된 표현들 복구
-    RestoreElements = [
-        ('|', '"'), ('_', '.'),
-        ('∥', '"'), ('○', '*'), ('●', '.')
-        ]
-
-    for i, chunk in enumerate(IndexMatchedChunks):
-        tagChunks = chunk["TagChunks"]
-        for old, new in RestoreElements:
-            tagChunks = tagChunks.replace(old, new)
-            IndexMatchedChunks[i]["TagChunks"] = tagChunks
-    
-    # IndexMatching 오류체크
-    if nonMatchingIndexList != []:
-        print(f"Index 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | IndexMatchingError\n{nonMatchingIndexList}")
-        
-    INPUT = re.sub("[^가-힣]", "", str(CharacterTaggedChunks))
-    OUTPUT = re.sub("[^가-힣]", "", str(IndexMatchedChunks))
-    if INPUT != OUTPUT:
-        print(f"CharacterTaggedChunks와 IndexMatchedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | IndexMatchedChunksError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
-    else:
-        print(f"Project: {projectName} | Process: BodyFrameUpdate | IndexMatching 완료")
-        
-    return IndexMatchedChunks
-
-## 데이터 리스트 유닛화
-def TaggedChunksToUnitedChunks(projectName, email, tokensCount):
-    IndexMatchedChunks = IndexMatching(projectName, email)
-    
-    IndexUnitList = []
-    IndexUnit = []
-    
-    # Index 단위 묶음 리스트 형성
-    for Dic in IndexMatchedChunks:
-        if "IndexTag" in Dic:
-            # temp_list에 데이터가 있는 경우 IndexBodyUnitChunksUnit 리스트에 추가
-            if IndexUnit:
-                IndexUnitList.append(IndexUnit)
-                IndexUnit = []
-        IndexUnit.append(Dic)
-
-    # 마지막 Unit 추가
-    if IndexUnit:
-        IndexUnitList.append(IndexUnit)
-        
-    # Tagged Sentences를 Chunk단위로 나누기
-    encoding = tiktoken.get_encoding("cl100k_base")
-
-    IndexBodyUnitChunksList = []
-    for IndexUnitChunksUnit in IndexUnitList:
-        IndexBodyUnitChunksUnit = []
-        currentList = []
-        currentTokensCount = 0
-        IndexBodyUnitChunksUnit.append([IndexUnitChunksUnit[0]])
-
-        for Unit in IndexUnitChunksUnit[1:]:
-            UnitTokensCount = len(encoding.encode(Unit["TagChunks"]))
-            currentList.append(Unit)
-            currentTokensCount += UnitTokensCount
-            
-            # 만약 현재 항목을 추가했을 때 토큰 수가 tokensCount를 초과한다면
-            # 현재까지의 항목들을 결과 리스트에 추가하고 마지막 항목은 다음 리스트의 시작으로 합니다.
-            if currentTokensCount > tokensCount: #####
-                lastUnit = currentList.pop()  # 마지막 항목을 제거
-                if currentList:
-                    IndexBodyUnitChunksUnit.append(currentList)
-                currentList = [lastUnit]
-                currentTokensCount = len(encoding.encode(lastUnit["TagChunks"]))
-
-        # 남은 항목들을 결과 리스트에 추가합니다.
-        if currentList:
-            IndexBodyUnitChunksUnit.append(currentList)
-        
-        IndexBodyUnitChunksList.append(IndexBodyUnitChunksUnit)
-    
-    # TaggedChunksToUnitedChunks 오류체크
-    INPUT = re.sub("[^가-힣]", "", str(IndexMatchedChunks))
-    OUTPUT = re.sub("[^가-힣]", "", str(IndexBodyUnitChunksList))
-    if INPUT != OUTPUT:
-        print(f"IndexMatchedChunks와 IndexMatchedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | TaggedChunksToUnitedChunksError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
-    else:
-        print(f"Project: {projectName} | Process: BodyFrameUpdate | TaggedChunksToUnitedChunks 완료")
-
-    return IndexBodyUnitChunksList
-
-####################################
-### SplitedBodyScripts의 Bodys전환 ###
-####################################
-
-def SplitedBodyScriptsToBodys(projectName, email):
-    project = GetProject(projectName, email)
-    bodyFrame = project.BodyFrame
-    SplitedBodyScripts = bodyFrame[1]["SplitedBodyScripts"][1:]
-
-    IndexTags = [{"Title"}, {"Logue"}, {"Chapter"}, {"Part"}, {"Index"}]
-    CaptionTags = [{"Caption"}, {'CaptionComment', 'Caption'}]
-    BodyTags = ["Narrator", "Character", "Caption", "Comment"]
-    Tags = []
-    ChunkIds = []
-    Bodys = []
-    bodys = [] # 에러 테스트용도
-    BodyChunks = []
-    CharacterChunks = []
-    TalkCount = 0
-
-    for idx, SplitedBody in enumerate(SplitedBodyScripts):
-        SplitedBodyChunks = SplitedBody["SplitedBodyChunks"]
-        for i, SplitedBodyChunk in enumerate(SplitedBodyChunks):
-            Tags.append(SplitedBodyChunk['Tag'])
-            ChunkIds.append(SplitedBodyChunk['ChunkId'])
-            if SplitedBodyChunk['Tag'] == "Title":
-                BodyChunks.append(SplitedBodyChunk['Chunk'])
-                CharacterChunks.append(SplitedBodyChunk['Chunk'])
-            elif SplitedBodyChunk['Tag'] in ["Logue", "Chapter", "Part", "Index"]:
-                BodyChunks.append('\n\n' + SplitedBodyChunk['Chunk'] + '\n')
-                CharacterChunks.append('\n\n' + SplitedBodyChunk['Chunk'] + '\n')
-            elif SplitedBodyChunk['Tag'] == "Character":
-                TalkCount += 1
-                BodyChunks.append(SplitedBodyChunk['Chunk'] + ' ')
-                CharacterChunks.append('\n\n[말' + str(TalkCount) + ']' + SplitedBodyChunk['Chunk'] + '\n\n')
-            elif SplitedBodyChunk['Tag'] in ["Caption", "CaptionComment"]:
-                try:
-                    if SplitedBodyChunks[i+1]['Tag'] not in ["Caption", "CaptionComment"]:
-                        BodyChunks.append('\n' + SplitedBodyChunk['Chunk'] + '\n')
-                        CharacterChunks.append('\n' + SplitedBodyChunk['Chunk'] + '\n')
-                    else:
-                        BodyChunks.append('\n' + SplitedBodyChunk['Chunk'])
-                        CharacterChunks.append('\n' + SplitedBodyChunk['Chunk'])
-                except IndexError:
-                    if idx + 1 < len(SplitedBodyScripts) and SplitedBodyScripts[idx + 1]["SplitedBodyChunks"][0]['Tag'] in ["Caption", "CaptionComment"]:
-                        BodyChunks.append('\n' + SplitedBodyChunk['Chunk'])
-                        CharacterChunks.append('\n' + SplitedBodyChunk['Chunk'])
-                    else:
-                        BodyChunks.append('\n' + SplitedBodyChunk['Chunk'] + '\n')
-                        CharacterChunks.append('\n' + SplitedBodyChunk['Chunk'] + '\n')
-            else:
-                BodyChunks.append(SplitedBodyChunk['Chunk'] + ' ')
-                CharacterChunks.append(SplitedBodyChunk['Chunk'] + ' ')
-
-        task = []
-        if set(Tags) in IndexTags:
-            task.append("Index")
-        elif set(Tags) in CaptionTags:
-            task.append("Caption")
-        elif all(tag in BodyTags for tag in Tags):
-            task.append("Body")
-            if "Character" in Tags:
-                task.append("Character")
-        
-        # Body, Correction 추출
-        BODY = "".join(BodyChunks)
-        CORRECTION = "●".join(BodyChunks) + "●"
-        
-        Bodys.append({'BodyId': idx + 1, 'ChunkId': ChunkIds, 'Task': task, 'Body': BODY, 'Correction': CORRECTION,
-                      'Character': "".join(CharacterChunks).replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')})
-        bodys.append({'BodyId': idx + 1, 'ChunkId': ChunkIds, 'Task': task, 'Body': "".join(BodyChunks)}) # 에러 테스트용도
-        Tags = []
-        ChunkIds = []
-        BodyChunks = []
-        CharacterChunks = []
-
-    # BodyText와 텍스트 매칭 체크
-    BodyFrameList = []
-    BodyFrame = UpdatedBodyFrame(projectName, email)[1]["SplitedBodyScripts"]
-    for i in range(len(BodyFrame)):
-        for j in range(len(BodyFrame[i]["SplitedBodyChunks"])):
-            BodyFrameList.append(BodyFrame[i]["SplitedBodyChunks"][j]["Chunk"])
-    CleanBodys = re.sub(r'\[말\d{1,5}\]', '', str(bodys))
-    
-    # BodyFrameBodysUpdate 오류체크
-    INPUT = re.sub("[^가-힣]", "", str(BodyFrameList))
-    OUTPUT = re.sub("[^가-힣]", "", CleanBodys)
-    if INPUT != OUTPUT:
-        print(f"SplitedBodyScripts와 Bodys 불일치 오류 발생: Project: {projectName} | Process: BodyFrameBodysUpdate | BodyFrameBodysUpdateError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
-    else:
-        print(f"[ Project: {projectName} | BodyFrameBodysUpdate 완료 ]\n")     
-    
-    return Bodys
-
-## Bodys를 BodyFrame에 업데이트
-def BodyFrameBodysUpdate(projectName, email):
-    Bodys = SplitedBodyScriptsToBodys(projectName, email)
-    BodysCount = len(Bodys)
-    
-    # TQDM 셋팅
-    UpdateTQDM = tqdm(Bodys,
-                    total = BodysCount,
-                    desc = 'BodyFrameBodysUpdate')
-    # i값 수동 생성
-    i = 0
-    for Update in UpdateTQDM:
-        UpdateTQDM.set_description(f'BodyFrameBodysUpdate: {Update} ...')
-        time.sleep(0.0001)
-        ChunkIds = Bodys[i]['ChunkId']
-        Task = Bodys[i]['Task']
-        Body = Bodys[i]['Body']
-        Correction = Bodys[i]['Correction']
-        Character = Bodys[i]['Character']
-        
-        AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character)
-        # i값 수동 업데이트
-        i += 1
-
-    UpdateTQDM.close()
-
-###################################################
-### IndexBodyUnitChunksList을 BodyFrame에 업데이트 ###
-###################################################
-
-def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = None):
-    print(f"< User: {email} | Project: {projectName} | 03_BodyFrameUpdate 시작 >")
-    # BodyFrame의 Count값 가져오기
-    IndexCount, BodyCount, ChunkCount, Completion = BodyFrameCountLoad(projectName, email)
+## 프롬프트 요청 및 결과물 Json을 CaptionCompletion에 업데이트
+def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+    print(f"< User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate 시작 >")
+    # CaptionCompletion의 Count값 가져오기
+    ContinueCount, Completion = CaptionCompletionCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame)
-            print(f"[ User: {email} | Project: {projectName} | 03_BodyFrameUpdate는 ExistedBodyFrame으로 대처됨 ]\n")
+            AddExistedCaptionCompletionToDB(projectName, email, ExistedDataFrame)
+            AddExistedDataSetToDB(projectName, email, "CaptionCompletion", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate는 ExistedCaptionCompletion으로 대처됨 ]\n")
         else:
-            indexBodyUnitChunksList = TaggedChunksToUnitedChunks(projectName, email, tokensCount)
+            responseJson = CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
-            # IndexBodyUnitChunksList를 IndexCount로 슬라이스
-            IndexBodyUnitChunksList = indexBodyUnitChunksList[IndexCount:]
-            IndexBodyUnitChunksListCount = len(IndexBodyUnitChunksList)
-
-            IndexId = IndexCount
-            ChunkId = ChunkCount
-
+            # ResponseJson을 ContinueCount로 슬라이스
+            ResponseJson = responseJson[ContinueCount:]
+            ResponseJsonCount = len(ResponseJson)
+            
             # TQDM 셋팅
-            UpdateTQDM = tqdm(IndexBodyUnitChunksList,
-                            total = IndexBodyUnitChunksListCount,
-                            desc = 'BodyFrameUpdate')
+            UpdateTQDM = tqdm(ResponseJson,
+                            total = ResponseJsonCount,
+                            desc = 'CaptionCompletionUpdate')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'BodyFrameUpdate: {Update[0]} ...')
+                UpdateTQDM.set_description(f'CaptionCompletionUpdate: {Update["CaptionType"]}')
                 time.sleep(0.0001)
+                CaptionId = Update["CaptionId"]
+                CaptionTag = Update["CaptionTag"]
+                CaptionType = Update["CaptionType"]
+                Reason = Update["Reason"]
+                Importance = Update["Importance"]
+                ChunkIds = Update["ChunkIds"]
+                SplitedCaptionChunks = Update["SplitedCaptionChunks"]
                 
-                IndexId += 1
-                IndexTag = IndexBodyUnitChunksList[i][0][0]['IndexTag']
-                IndexChunk = IndexBodyUnitChunksList[i][0][0]['TagChunks']
-
-                for j in range(len(IndexBodyUnitChunksList[i])):
-                    AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, IndexChunk)
-                    
-                    for k in range(len(IndexBodyUnitChunksList[i][j])):
-                        ChunkId += 1
-                        
-                        if "IndexTag" in IndexBodyUnitChunksList[i][j][k].keys():
-                            Tag = IndexBodyUnitChunksList[i][j][k]["IndexTag"]
-                        else:
-                            Tag = IndexBodyUnitChunksList[i][j][k]["Tag"]
-                        Chunk = IndexBodyUnitChunksList[i][j][k]["TagChunks"]
-                        
-                        AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk)
+                AddCaptionCompletionChunksToDB(projectName, email, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
-            ##### Bodys 업데이트
-            BodyFrameBodysUpdate(projectName, email)
-            #####
+            # # BodyFrame CaptionTag 업데이트
+            # CaptionCompletionToBodyFrame(projectName, email)
             # Completion "Yes" 업데이트
-            BodyFrameCompletionUpdate(projectName, email)
-            
-            # BodyText와 텍스트 매칭 체크
-            BodyFrameList = []
-            BodyFrame = UpdatedBodyFrame(projectName, email)[1]["SplitedBodyScripts"]
-            for i in range(len(BodyFrame)):
-                for j in range(len(BodyFrame[i]["SplitedBodyChunks"])):
-                    BodyFrameList.append(BodyFrame[i]["SplitedBodyChunks"][j]["Chunk"])
-            
-            # BodyFrameUpdate 오류체크
-            INPUT = re.sub("[^가-힣]", "", str(IndexBodyUnitChunksList))
-            OUTPUT = re.sub("[^가-힣]", "", str(BodyFrameList))
-            if INPUT != OUTPUT:
-                print(f"IndexBodyUnitChunksList와 BodyFrameList 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | BodyFrameUpdateError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
-            else:
-                print(f"[ User: {email} | Project: {projectName} | 03_BodyFrameUpdate 완료 ]\n")
+            CaptionCompletionCompletionUpdate(projectName, email)
+            print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate 완료 ]\n")
+        
     else:
-        print(f"[ User: {email} | Project: {projectName} | 03_BodyFrameUpdate는 이미 완료됨 ]\n")
-    
+        print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate는 이미 완료됨 ]\n")
+        
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "노인을위한나라는있다"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    
+    indexFrame, segmentedText = LoadIndexBody(projectName, email)
+    print(segmentedText[0])

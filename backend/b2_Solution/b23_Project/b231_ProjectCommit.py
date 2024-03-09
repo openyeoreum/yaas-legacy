@@ -89,7 +89,8 @@ def AddProjectToDB(projectName, email):
         ProjectDataPath = GetProjectDataPath()
         
         indexFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-01_IndexFrame.json")
-        preprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_PreprocessFrame.json")
+        duplicationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_DuplicationPreprocessFrame.json")
+        pronunciationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_PronunciationPreprocessFrame.json")
         bodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")
         halfBodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")
         captionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_CaptionFrame.json")
@@ -147,7 +148,8 @@ def AddProjectToDB(projectName, email):
             ExistingProject.Music2FolderPath = music2FolderPath
             ExistingProject.MasterAudioBookPath = masterAudioBookPath
             ExistingProject.IndexFrame = indexFrame
-            ExistingProject.PreprocessFrame = preprocessFrame
+            ExistingProject.DuplicationPreprocessFrame = duplicationPreprocessFrame
+            ExistingProject.PronunciationPreprocessFrame = pronunciationPreprocessFrame
             ExistingProject.BodyFrame = bodyFrame
             ExistingProject.HalfBodyFrame = halfBodyFrame
             ExistingProject.CaptionFrame = captionFrame
@@ -204,7 +206,8 @@ def AddProjectToDB(projectName, email):
                 Music2FolderPath = music2FolderPath,
                 MasterAudioBookPath = masterAudioBookPath,
                 IndexFrame = indexFrame,
-                PreprocessFrame = preprocessFrame,
+                DuplicationPreprocessFrame = duplicationPreprocessFrame,
+                PronunciationPreprocessFrame = pronunciationPreprocessFrame,
                 BodyFrame = bodyFrame,
                 HalfBodyFrame = halfBodyFrame,
                 CaptionFrame = captionFrame,

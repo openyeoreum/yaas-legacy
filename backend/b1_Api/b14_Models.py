@@ -199,7 +199,8 @@ class Project(Base):
     
     # Script
     IndexFrame = Column(JSON)
-    PreprocessFrame = Column(JSON)
+    DuplicationPreprocessFrame = Column(JSON)
+    PronunciationPreprocessFrame = Column(JSON)
     BodyFrame = Column(JSON)
     HalfBodyFrame = Column(JSON)
     CaptionFrame = Column(JSON)
@@ -316,7 +317,8 @@ class ProjectHistory(Base):
     ## Process
     # Script
     IndexFrameStatus = Column(String(64))
-    PreprocessFrameStatus = Column(String(64))
+    DuplicationPreprocessFrameStatus = Column(String(64))
+    PronunciationPreprocessFrameStatus = Column(String(64))
     BodyFrameStatus = Column(String(64))
     HalfBodyFrameStatus = Column(String(64))
     CaptionFrameStatus = Column(String(64))

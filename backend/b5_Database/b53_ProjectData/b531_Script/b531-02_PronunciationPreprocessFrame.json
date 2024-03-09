@@ -6,32 +6,21 @@
         "ProjectName": "None",
         "Content": "Script",
         "Language": "Ko",
-        "TaskName": "Preprocess",
-        "IndexCount": 0,
-        "BodyCount": 0,
-        "ChunkCount": 0,
+        "TaskName": "PronunciationPreprocess",
+        "PreprocessCount": 0,
         "Completion": "No"
     },
     {
         "PreprocessScripts": [
             {
-                "IndexId": 0,
-                "IndexTag": "None",
-                "Index": "None",
                 "PreprocessId": 0,
-                "Duplication": [
-                    {
-                        "Before": "None",
-                        "After": "None"
-                    }
-                ],
                 "Pronunciation": [
                     {
                         "Before": "None",
                         "After": "None"
                     }
                 ],
-                "Script": "None"
+                "PronunciationScript": "None"
             }
         ]
     }

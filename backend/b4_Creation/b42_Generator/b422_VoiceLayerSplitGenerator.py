@@ -544,17 +544,17 @@ def ExtractPause(chunk):
 def SortAndRemoveDuplicates(files):
     # 파일명에서 필요한 정보를 추출하는 함수
     def ExtractFileInfo(FileName):
-        match = re.match(r"(.+)_(\d+)_(.+?)\((.+?)\)_\((\d+)\)(M?)\.wav", FileName)
+        match = re.match(r"(.+)_(\d+(\.\d+)?)_(.+?)\((.+?)\)_\((\d+)\)(M?)\.wav", FileName)
         if match == None:
             normalizeFileName = unicodedata.normalize('NFC', FileName)
-            match = re.match(r"(.+)_(\d+)_(.+?)\((.+?)\)_\((\d+)\)(M?)\.wav", normalizeFileName)
+            match = re.match(r"(.+)_(\d+(\.\d+)?)_(.+?)\((.+?)\)_\((\d+)\)(M?)\.wav", normalizeFileName)
         if match:
             # 생성넘버, 세부생성넘버, M의 유무를 반환
             return {
                 'base_name': match.group(1),
-                'gen_num': int(match.group(2)),
-                'detail_gen_num': int(match.group(5)),
-                'has_M': match.group(6) == 'M'
+                'gen_num': match.group(2),
+                'detail_gen_num': int(match.group(6)),
+                'has_M': match.group(7) == 'M'
             }
         return None
 

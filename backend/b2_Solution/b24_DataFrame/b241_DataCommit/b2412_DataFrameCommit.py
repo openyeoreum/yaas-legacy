@@ -113,12 +113,20 @@ def FindDataframeFilePaths(email, projectName, userStoragePath):
 
 ## 업데이트된 OutputMemoryDics 파일 저장하기
 def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFramePath):
+    # 문자열 정규화
+    DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
     # 정규 표현식 패턴 정의
     pattern = re.compile(rf"{re.escape(email + '_' + projectName + '_' + ProcessNum + '_outputMemoryDics_')}.*\.json")
 
+    ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
+    try:
+        DataFramePathList = os.listdir(DataFramePath)
+    except:
+        DataFramePathList = os.listdir(DataFramePathNormalized)
+
     # 일치하는 파일 검색
     matched_file = None
-    for filename in os.listdir(DataFramePath):
+    for filename in DataFramePathList:
         if pattern.match(filename):
             matched_file = filename
             break
@@ -263,6 +271,89 @@ def IndexFrameCompletionUpdate(projectName, email):
         project.IndexFrame[0]["Completion"] = "Yes"
 
         flag_modified(project, "IndexFrame")
+
+        db.add(project)
+        db.commit()
+
+
+####################################
+##### 02-1_DuplicationPreprocess Process #####
+####################################
+## 2-1. 1-0 DuplicationPreprocess이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedDuplicationPreprocessToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.DuplicationPreprocessFrame[1] = ExistedDataFrame[1]
+        
+        flag_modified(project, "DuplicationPreprocessFrame")
+        
+        db.add(project)
+        db.commit()
+
+## 2-1. 1-1 DuplicationPreprocess의 Body(본문) updateContextChunks 업데이트 형식
+def UpdatePreprocessScripts(project, PreprocessId, Duplication, DuplicationScript):    
+    updatePreprocessScripts = {
+        "PreprocessId": PreprocessId,
+        "Duplication": Duplication,
+        "DuplicationScript": DuplicationScript
+    }
+    
+    project.DuplicationPreprocessFrame[1]["PreprocessScripts"].append(updatePreprocessScripts)
+    project.DuplicationPreprocessFrame[0]["PreprocessCount"] = PreprocessId
+    
+## 2-1. 1-2 DuplicationPreprocess의 Body(본문) updateContextChunks 업데이트
+def AddPreprocessScriptsToDB(projectName, email, PreprocessId, Duplication, DuplicationScript):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdatePreprocessScripts(project, PreprocessId, Duplication, DuplicationScript)
+        
+        flag_modified(project, "DuplicationPreprocessFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 2-1. DuplicationPreprocess의Count의 가져오기
+def DuplicationPreprocessCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    PreprocessCount = project.DuplicationPreprocessFrame[0]["PreprocessCount"]
+    Completion = project.DuplicationPreprocessFrame[0]["Completion"]
+    
+    return PreprocessCount, Completion
+
+## 2-1. DuplicationPreprocess의 초기화
+def InitDuplicationPreprocess(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.DuplicationPreprocessFrame[0]["PreprocessCount"] = 0
+        project.DuplicationPreprocessFrame[0]["Completion"] = "No"
+        project.DuplicationPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_DuplicationPreprocessFrame.json")[1]
+
+        flag_modified(project, "DuplicationPreprocessFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 2-1. 업데이트된 DuplicationPreprocess 출력
+def UpdatedDuplicationPreprocess(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+
+    return project.DuplicationPreprocessFrame
+
+## 2-1. DuplicationPreprocessCompletion 업데이트
+def DuplicationPreprocessCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.DuplicationPreprocessFrame[0]["Completion"] = "Yes"
+
+        flag_modified(project, "DuplicationPreprocessFrame")
 
         db.add(project)
         db.commit()

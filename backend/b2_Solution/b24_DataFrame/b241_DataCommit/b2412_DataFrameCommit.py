@@ -483,8 +483,8 @@ def InitBodyFrame(projectName, email):
         project.BodyFrame[0]["BodyCount"] = 0
         project.BodyFrame[0]["ChunkCount"] = 0
         project.BodyFrame[0]["Completion"] = "No"
-        project.BodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")[1]
-        project.BodyFrame[2] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")[2]
+        project.BodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_BodyFrame.json")[1]
+        project.BodyFrame[2] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_BodyFrame.json")[2]
         
         flag_modified(project, "BodyFrame")
         
@@ -636,8 +636,8 @@ def InitHalfBodyFrame(projectName, email):
         project.HalfBodyFrame[0]["BodyCount"] = 0
         project.HalfBodyFrame[0]["ChunkCount"] = 0
         project.HalfBodyFrame[0]["Completion"] = "No"
-        project.HalfBodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")[1]
-        project.HalfBodyFrame[2] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_BodyFrame.json")[2]
+        project.HalfBodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_BodyFrame.json")[1]
+        project.HalfBodyFrame[2] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_BodyFrame.json")[2]
         
         flag_modified(project, "HalfBodyFrame")
         
@@ -724,7 +724,7 @@ def InitCaptionCompletion(projectName, email):
         project = GetProject(projectName, email)
         project.CaptionFrame[0]["CaptionCount"] = 0
         project.CaptionFrame[0]["Completion"] = "No"
-        project.CaptionFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_CaptionFrame.json")[1]
+        project.CaptionFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-05_CaptionFrame.json")[1]
 
         flag_modified(project, "CaptionFrame")
         

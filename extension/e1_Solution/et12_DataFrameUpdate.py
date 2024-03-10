@@ -46,7 +46,7 @@ def LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, Process, D
     ProcessNormalized = unicodedata.normalize('NFC', Process)
     
     # 정규 표현식으로 파일명에서 생성날짜와 프로세스 이름 추출
-    patternSTR = rf"{re.escape(latestUpdateDateNormalized)}_{re.escape(lifeGraphSetNameNormalized)}_\d+_{re.escape(ProcessNormalized)}DataFrame_(\d+).json"
+    patternSTR = rf"{re.escape(latestUpdateDateNormalized)}_{re.escape(lifeGraphSetNameNormalized)}_\d+(-\d+)?_{re.escape(ProcessNormalized)}DataFrame_(\d+).json"
     pattern = re.compile(patternSTR)
     
     MaxDate = 0
@@ -56,7 +56,7 @@ def LoadexistedExtensionDataFrame(lifeGraphSetName, latestUpdateDate, Process, D
         FileNameNormalized = unicodedata.normalize('NFC', FileName)
         match = pattern.match(FileNameNormalized)
         if match:
-            date = int(match.group(1))
+            date = int(match.group(2))
             if date > MaxDate:
                 MaxDate = date
                 RecentFile = FileName

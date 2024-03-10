@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedPronunciationPreprocessToDB, AddPreprocessScriptsToDB, PronunciationPreprocessCountLoad, PronunciationPreprocessCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedPronunciationPreprocessToDB, AddPronunciationPreprocessScriptsToDB, PronunciationPreprocessCountLoad, PronunciationPreprocessCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -37,7 +37,7 @@ def PronunciationPreprocessFilter(responseData, Input):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputDic = json.loads(responseData)
-        OutputDic = outputDic['발음']
+        OutputDic = outputDic['발음수정']
         if OutputDic == []:
             Output = {"Pronunciation": OutputDic, "PronunciationScript": Input}
             return {'json': Output, 'filter': Output}
@@ -48,7 +48,7 @@ def PronunciationPreprocessFilter(responseData, Input):
         try:
             if not ('발음수정전' in Output and '발음수정후' in Output):
                 return "JSON에서 오류 발생: JSONKeyError"
-            elif not Output['종류'] in ['숫자', '외국어', '기호', '특수문자', '기타']:
+            elif not Output['종류'] in ['숫자', '외국어', '영어', '일본어', '중국어', '프랑스어', '독일어', '기호', '특수문자', '기타']:
                 return f"JSON에서 오류 발생 ({Output['종류']}): JSONKeyError"
             else:
                 Input = Input.replace(Output['발음수정전'], Output['발음수정후'])
@@ -278,7 +278,7 @@ def PronunciationPreprocessUpdate(projectName, email, DataFramePath, MessagesRev
                 Pronunciation = Update["Pronunciation"]
                 PronunciationScript = Update["PronunciationScript"]
                 
-                AddPreprocessScriptsToDB(projectName, email, PreprocessId, Pronunciation, PronunciationScript)
+                AddPronunciationPreprocessScriptsToDB(projectName, email, PreprocessId, Pronunciation, PronunciationScript)
                 # i값 수동 업데이트
                 i += 1
             

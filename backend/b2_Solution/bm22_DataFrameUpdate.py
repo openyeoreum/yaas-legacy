@@ -59,7 +59,7 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
     DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
     
     # 정규 표현식으로 파일명에서 생성날짜와 프로세스 이름 추출
-    patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+_{re.escape(ProcessNormalized)}DataFrame_(\d+).json"
+    patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+(-\d+)?_{re.escape(ProcessNormalized)}DataFrame_(\d+).json"
     pattern = re.compile(patternSTR)
 
     MaxDate = 0
@@ -77,7 +77,7 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
         FileNameNormalized = unicodedata.normalize('NFC', FileName)
         match = pattern.match(FileNameNormalized)
         if match:
-            date = int(match.group(1))
+            date = int(match.group(2))
             if date > MaxDate:
                 MaxDate = date
                 RecentFile = FileName
@@ -111,7 +111,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
     DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
 
     # 정규 표현식으로 파일명에서 생성날짜와 프로세스 이름 추출
-    patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+_{re.escape(ProcessNormalized)}DataFrame_(\d+).json"
+    patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+(-\d+)?_{re.escape(ProcessNormalized)}DataFrame_(\d+).json"
     pattern = re.compile(patternSTR)
 
     MaxDate = 0
@@ -129,7 +129,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
         FileNameNormalized = unicodedata.normalize('NFC', FileName)
         match = pattern.match(FileNameNormalized)
         if match:
-            date = int(match.group(1))
+            date = int(match.group(2))
             if date > MaxDate:
                 MaxDate = date
                 RecentFile = FileName
@@ -217,7 +217,7 @@ def SolutionDataFrameUpdate(email, projectName, messagesReview = "on", bookGenre
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "DuplicationPreprocess", RawDataSetPath)
     mode = "Master"
     DuplicationPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
-    
+
     if existedDataFrame == None:
         updatedDuplicationPreprocess = UpdatedDuplicationPreprocess(projectName, email)
         SaveDataFrame(projectName, email, "02-1_DuplicationPreprocess", updatedDuplicationPreprocess, DataFramePath)
@@ -237,12 +237,12 @@ def SolutionDataFrameUpdate(email, projectName, messagesReview = "on", bookGenre
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "PronunciationPreprocess", RawDataSetPath)
     mode = "Master"
     PronunciationPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
-    
+
     if existedDataFrame == None:
         updatedPronunciationPreprocess = UpdatedPronunciationPreprocess(projectName, email)
-        SaveDataFrame(projectName, email, "02-1_PronunciationPreprocess", updatedPronunciationPreprocess, DataFramePath)
+        SaveDataFrame(projectName, email, "02-2_PronunciationPreprocess", updatedPronunciationPreprocess, DataFramePath)
     if existedDataSet == None:
-        SaveDataSet(projectName, email, "02-1", "PronunciationPreprocess", RawDataSetPath)
+        SaveDataSet(projectName, email, "02-2", "PronunciationPreprocess", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
 

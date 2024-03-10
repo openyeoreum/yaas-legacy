@@ -305,7 +305,7 @@ def LoadExistedDataSets(projectName, email, Process, FeedbackDataSetPath):
     ProcessNormalized = unicodedata.normalize('NFC', Process)
     
     # 정규 표현식으로 파일명에서 생성날짜와 프로세스 이름 추출
-    patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+_{re.escape(ProcessNormalized)}DataSet_(\d+).json"
+    patternSTR = rf"{re.escape(EmailNormalized)}_{re.escape(ProjectNameNormalized)}_\d+(-\d+)?_{re.escape(ProcessNormalized)}DataSet_(\d+).json"
     pattern = re.compile(patternSTR)
     
     MaxDate = 0
@@ -315,7 +315,7 @@ def LoadExistedDataSets(projectName, email, Process, FeedbackDataSetPath):
         FileNameNormalized = unicodedata.normalize('NFC', FileName)
         match = pattern.match(FileNameNormalized)       
         if match:
-            date = int(match.group(1))
+            date = int(match.group(2))
             if date > MaxDate:
                 MaxDate = date
                 RecentFile = FileName

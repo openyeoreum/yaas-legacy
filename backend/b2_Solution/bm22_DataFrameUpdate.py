@@ -7,10 +7,11 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitDuplicationPreprocess, UpdatedDuplicationPreprocess, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitDuplicationPreprocess, UpdatedDuplicationPreprocess, InitPronunciationPreprocess, UpdatedPronunciationPreprocess, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_DuplicationPreprocessUpdate import DuplicationPreprocessUpdate
+from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_PronunciationPreprocessUpdate import PronunciationPreprocessUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2424_BodyFrameUpdate import BodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2425_HalfBodyFrameUpdate import HalfBodyFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2426_CaptionCompletionUpdate import CaptionCompletionUpdate
@@ -206,9 +207,9 @@ def SolutionDataFrameUpdate(email, projectName, messagesReview = "on", bookGenre
     existedDataSet2 = None
     
     
-    ################################
-    ### 02_DuplicationPreprocess ###
-    ################################
+    ##################################
+    ### 02-1_DuplicationPreprocess ###
+    ##################################
     InitDuplicationPreprocess(projectName, email)
     InitRawDataSet(projectName, email, "DuplicationPreprocess")
     if existedDataFrameMode == "on":
@@ -222,6 +223,26 @@ def SolutionDataFrameUpdate(email, projectName, messagesReview = "on", bookGenre
         SaveDataFrame(projectName, email, "02-1_DuplicationPreprocess", updatedDuplicationPreprocess, DataFramePath)
     if existedDataSet == None:
         SaveDataSet(projectName, email, "02-1", "DuplicationPreprocess", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet = None
+
+
+    ##################################
+    ### 02-2_PronunciationPreprocess ###
+    ##################################
+    InitPronunciationPreprocess(projectName, email)
+    InitRawDataSet(projectName, email, "PronunciationPreprocess")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "PronunciationPreprocess", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "PronunciationPreprocess", RawDataSetPath)
+    mode = "Master"
+    PronunciationPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    
+    if existedDataFrame == None:
+        updatedPronunciationPreprocess = UpdatedPronunciationPreprocess(projectName, email)
+        SaveDataFrame(projectName, email, "02-1_PronunciationPreprocess", updatedPronunciationPreprocess, DataFramePath)
+    if existedDataSet == None:
+        SaveDataSet(projectName, email, "02-1", "PronunciationPreprocess", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
 

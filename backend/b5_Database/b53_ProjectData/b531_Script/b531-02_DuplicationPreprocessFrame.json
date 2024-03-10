@@ -17,7 +17,8 @@
                 "Duplication": [
                     {
                         "Before": "None",
-                        "After": "None"
+                        "After": "None",
+                        "Type": "None"
                     }
                 ],
                 "DuplicationScript": "None"

@@ -276,9 +276,9 @@ def IndexFrameCompletionUpdate(projectName, email):
         db.commit()
 
 
-####################################
+##############################################
 ##### 02-1_DuplicationPreprocess Process #####
-####################################
+##############################################
 ## 2-1. 1-0 DuplicationPreprocess이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedDuplicationPreprocessToDB(projectName, email, ExistedDataFrame):
     with get_db() as db:
@@ -354,6 +354,89 @@ def DuplicationPreprocessCompletionUpdate(projectName, email):
         project.DuplicationPreprocessFrame[0]["Completion"] = "Yes"
 
         flag_modified(project, "DuplicationPreprocessFrame")
+
+        db.add(project)
+        db.commit()
+
+
+################################################
+##### 02-2_PronunciationPreprocess Process #####
+################################################
+## 2-2. 1-0 PronunciationPreprocess이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedPronunciationPreprocessToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.PronunciationPreprocessFrame[1] = ExistedDataFrame[1]
+        
+        flag_modified(project, "PronunciationPreprocessFrame")
+        
+        db.add(project)
+        db.commit()
+
+## 2-2. 1-1 PronunciationPreprocess의 Body(본문) updateContextChunks 업데이트 형식
+def UpdatePreprocessScripts(project, PreprocessId, Pronunciation, PronunciationScript):    
+    updatePreprocessScripts = {
+        "PreprocessId": PreprocessId,
+        "Pronunciation": Pronunciation,
+        "PronunciationScript": PronunciationScript
+    }
+    
+    project.PronunciationPreprocessFrame[1]["PreprocessScripts"].append(updatePreprocessScripts)
+    project.PronunciationPreprocessFrame[0]["PreprocessCount"] = PreprocessId
+    
+## 2-2. 1-2 PronunciationPreprocess의 Body(본문) updateContextChunks 업데이트
+def AddPreprocessScriptsToDB(projectName, email, PreprocessId, Pronunciation, PronunciationScript):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdatePreprocessScripts(project, PreprocessId, Pronunciation, PronunciationScript)
+        
+        flag_modified(project, "PronunciationPreprocessFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 2-2. PronunciationPreprocess의Count의 가져오기
+def PronunciationPreprocessCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    PreprocessCount = project.PronunciationPreprocessFrame[0]["PreprocessCount"]
+    Completion = project.PronunciationPreprocessFrame[0]["Completion"]
+    
+    return PreprocessCount, Completion
+
+## 2-2. PronunciationPreprocess의 초기화
+def InitPronunciationPreprocess(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.PronunciationPreprocessFrame[0]["PreprocessCount"] = 0
+        project.PronunciationPreprocessFrame[0]["Completion"] = "No"
+        project.PronunciationPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_PronunciationPreprocessFrame.json")[1]
+
+        flag_modified(project, "PronunciationPreprocessFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 2-2. 업데이트된 PronunciationPreprocess 출력
+def UpdatedPronunciationPreprocess(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+
+    return project.PronunciationPreprocessFrame
+
+## 2-2. PronunciationPreprocessCompletion 업데이트
+def PronunciationPreprocessCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.PronunciationPreprocessFrame[0]["Completion"] = "Yes"
+
+        flag_modified(project, "PronunciationPreprocessFrame")
 
         db.add(project)
         db.commit()

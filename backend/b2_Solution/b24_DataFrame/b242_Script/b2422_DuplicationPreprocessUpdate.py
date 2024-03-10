@@ -364,7 +364,7 @@ def DuplicationPreprocessResponseJson(projectName, email, DataFramePath, message
     for i, response in enumerate(outputMemoryDics):
         if response['Duplication'] != []:
             for Duplication in response['Duplication']:
-                DuplicationDic = {"Before": Duplication['중복수정전'], "After": Duplication['중복수정후']}
+                DuplicationDic = {"Before": Duplication['중복수정전'], "After": Duplication['중복수정후'], "Type": Duplication['종류']}
                 DuplicationDicList.append(DuplicationDic)
         else:
             DuplicationDic = []

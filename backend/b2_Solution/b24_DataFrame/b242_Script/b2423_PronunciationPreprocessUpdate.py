@@ -16,7 +16,7 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 # duplicationPreprocessFrame 로드
 def LoadduplicationPreprocessFrame(projectName, email):
     project = GetProject(projectName, email)
-    duplicationPreprocessFrame = project.IndexFrame[1]['PreprocessScripts'][1:]
+    duplicationPreprocessFrame = project.DuplicationPreprocessFrame[1]['PreprocessScripts'][1:]
     
     return duplicationPreprocessFrame
 
@@ -32,28 +32,12 @@ def DuplicationPreprocessFrameToInputList(projectName, email):
 ######################
 ##### Filter 조건 #####
 ######################
-def CheckCorrectness(before, after):
-    # "After"가 "Before"에 포함되는지 확인
-    if after in before:
-        # "After"가 "Before"의 시작 부분에 있는지 확인
-        if before.startswith(after):
-            return True
-        # "After"가 "Before"의 끝 부분에 있는지 확인
-        elif before.endswith(after):
-            return True
-        else:
-            # "After"가 "Before"의 중간에 있지만, 중복 발음이 아니라면 올바르지 않음
-            return False
-    else:
-        # "After"가 "Before"에 포함되지 않으면 올바르지 않음
-        return False
-
 ## PronunciationPreprocess의 Filter(Error 예외처리)
 def PronunciationPreprocessFilter(responseData, Input):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputDic = json.loads(responseData)
-        OutputDic = outputDic['중복수정']
+        OutputDic = outputDic['발음']
         if OutputDic == []:
             Output = {"Pronunciation": OutputDic, "PronunciationScript": Input}
             return {'json': Output, 'filter': Output}
@@ -62,13 +46,13 @@ def PronunciationPreprocessFilter(responseData, Input):
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     for Output in OutputDic:
         try:
-            if not ('중복수정전' in Output and '중복수정후' in Output):
+            if not ('발음수정전' in Output and '발음수정후' in Output):
                 return "JSON에서 오류 발생: JSONKeyError"
+            elif not Output['종류'] in ['숫자', '외국어', '기호', '특수문자', '기타']:
+                return f"JSON에서 오류 발생 ({Output['종류']}): JSONKeyError"
             else:
-                Check = CheckCorrectness(Output['중복수정전'], Output['중복수정후'])
-                if Check == True:
-                    Input = Input.replace(Output['중복수정전'], Output['중복수정후'])
-        # Error5: 자료의 형태가 Str일 때의 예외처리
+                Input = Input.replace(Output['발음수정전'], Output['발음수정후'])
+        # Error2: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
 
@@ -164,7 +148,7 @@ def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = 
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = " - 중요사항 | '중복수정전'과 '중복수정후'는 내용과 서술을 변경하여 글을 바꾸는 것이 절대로 아니며, 단순히 이어서 2번 낭독되는 번역, 약어, 발음을 찾아서 작성하는 것 | 중복수정이 없을 경우는 {'중복수정': []}로 작성 -\n"
+            memoryCounter = " - 중요사항 | '발음수정전'과 '발음수정후'는 내용과 서술을 변경하여 글을 바꾸는 것이 절대로 아니며, 단순히 이어서 2번 낭독되는 번역, 약어, 발음을 찾아서 작성하는 것 | 발음수정이 없을 경우는 {'발음수정': []}로 작성 -\n"
             outputEnder = ""
 
             # Response 생성
@@ -252,7 +236,7 @@ def PronunciationPreprocessResponseJson(projectName, email, DataFramePath, messa
     for i, response in enumerate(outputMemoryDics):
         if response['Pronunciation'] != []:
             for Pronunciation in response['Pronunciation']:
-                PronunciationDic = {"Before": Pronunciation['중복수정전'], "After": Pronunciation['중복수정후']}
+                PronunciationDic = {"Before": Pronunciation['발음수정전'], "After": Pronunciation['발음수정후'], "Type": Pronunciation['종류']}
                 PronunciationDicList.append(PronunciationDic)
         else:
             PronunciationDic = []
@@ -319,5 +303,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    
-    PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = "PronunciationPreprocess",  memoryLength = 2, MessagesReview = "on", Mode = mode)

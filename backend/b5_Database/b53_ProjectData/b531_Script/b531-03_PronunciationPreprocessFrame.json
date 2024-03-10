@@ -17,7 +17,8 @@
                 "Pronunciation": [
                     {
                         "Before": "None",
-                        "After": "None"
+                        "After": "None",
+                        "Type": "None"
                     }
                 ],
                 "PronunciationScript": "None"

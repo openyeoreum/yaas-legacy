@@ -144,6 +144,22 @@ def ScriptsDicListToInputList(projectName, email):
 ######################
 ##### Filter 조건 #####
 ######################
+def CheckCorrectness(before, after):
+    # "After"가 "Before"에 포함되는지 확인
+    if after in before:
+        # "After"가 "Before"의 시작 부분에 있는지 확인
+        if before.startswith(after):
+            return True
+        # "After"가 "Before"의 끝 부분에 있는지 확인
+        elif before.endswith(after):
+            return True
+        else:
+            # "After"가 "Before"의 중간에 있지만, 중복 발음이 아니라면 올바르지 않음
+            return False
+    else:
+        # "After"가 "Before"에 포함되지 않으면 올바르지 않음
+        return False
+
 ## DuplicationPreprocess의 Filter(Error 예외처리)
 def DuplicationPreprocessFilter(responseData, Input):
     # Error1: json 형식이 아닐 때의 예외 처리
@@ -161,7 +177,9 @@ def DuplicationPreprocessFilter(responseData, Input):
             if not ('중복수정전' in Output and '중복수정후' in Output):
                 return "JSON에서 오류 발생: JSONKeyError"
             else:
-                Input = Input.replace(Output['중복수정전'], Output['중복수정후'])
+                Check = CheckCorrectness(Output['중복수정전'], Output['중복수정후'])
+                if Check == True:
+                    Input = Input.replace(Output['중복수정전'], Output['중복수정후'])
         # Error5: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
@@ -258,7 +276,7 @@ def DuplicationPreprocessProcess(projectName, email, DataFramePath, Process = "D
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = " - 낭독에 불필요한 *한글-외국어번역으로 중복된 요소, *약어-풀네임으로 중복된 요소들은 '중복수정전'과 '중복수정후'를 <수정.json>에 작성, 중복수정이 없을 경우는 {'중복수정': []}로 작성 -\n"
+            memoryCounter = " - 중요사항 | '중복수정전'과 '중복수정후'는 내용과 서술을 변경하여 글을 바꾸는 것이 절대로 아니며, 단순히 이어서 2번 낭독되는 번역, 약어, 발음을 찾아서 작성하는 것 | 중복수정이 없을 경우는 {'중복수정': []}로 작성 -\n"
             outputEnder = ""
 
             # Response 생성
@@ -342,14 +360,17 @@ def DuplicationPreprocessResponseJson(projectName, email, DataFramePath, message
     outputMemoryDics = DuplicationPreprocessProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
+    DuplicationDicList = []
     for i, response in enumerate(outputMemoryDics):
         if response['Duplication'] != []:
             for Duplication in response['Duplication']:
                 DuplicationDic = {"Before": Duplication['중복수정전'], "After": Duplication['중복수정후']}
+                DuplicationDicList.append(DuplicationDic)
         else:
             DuplicationDic = []
-        DuplicationPreprocess = {"PreprocessId": i+1, "Duplication": DuplicationDic, "DuplicationScript": response['DuplicationScript']}
+        DuplicationPreprocess = {"PreprocessId": i + 1, "Duplication": DuplicationDicList, "DuplicationScript": response['DuplicationScript']}
         responseJson.append(DuplicationPreprocess)
+        DuplicationDicList = []
     
     return responseJson
 
@@ -379,7 +400,7 @@ def DuplicationPreprocessUpdate(projectName, email, DataFramePath, MessagesRevie
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'DuplicationPreprocessUpdate: {Update["DuplicationPreprocessType"]}')
+                UpdateTQDM.set_description(f'DuplicationPreprocessUpdate: {Update["Duplication"]}')
                 time.sleep(0.0001)
                 PreprocessId = Update["PreprocessId"]
                 Duplication = Update["Duplication"]

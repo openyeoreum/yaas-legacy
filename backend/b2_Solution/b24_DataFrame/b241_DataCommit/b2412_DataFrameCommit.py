@@ -331,7 +331,7 @@ def InitDuplicationPreprocess(projectName, email):
         project = GetProject(projectName, email)
         project.DuplicationPreprocessFrame[0]["PreprocessCount"] = 0
         project.DuplicationPreprocessFrame[0]["Completion"] = "No"
-        project.DuplicationPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_DuplicationPreprocessFrame.json")[1]
+        project.DuplicationPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_DuplicationPreprocessFrame.json")[1]
 
         flag_modified(project, "DuplicationPreprocessFrame")
         

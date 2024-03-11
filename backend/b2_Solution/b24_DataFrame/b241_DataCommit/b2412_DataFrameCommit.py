@@ -292,10 +292,10 @@ def AddExistedDuplicationPreprocessToDB(projectName, email, ExistedDataFrame):
         db.commit()
 
 ## 2-1. 1-1 DuplicationPreprocess의 Body(본문) updateContextChunks 업데이트 형식
-def UpdateDuplicationPreprocessScripts(project, Index, PreprocessId, Duplication, DuplicationScript):    
+def UpdateDuplicationPreprocessScripts(project, PreprocessId, Index, Duplication, DuplicationScript):    
     updatePreprocessScripts = {
-        "Index": Index,
         "PreprocessId": PreprocessId,
+        "Index": Index,
         "Duplication": Duplication,
         "DuplicationScript": DuplicationScript
     }
@@ -304,11 +304,11 @@ def UpdateDuplicationPreprocessScripts(project, Index, PreprocessId, Duplication
     project.DuplicationPreprocessFrame[0]["PreprocessCount"] = PreprocessId
     
 ## 2-1. 1-2 DuplicationPreprocess의 Body(본문) updateContextChunks 업데이트
-def AddDuplicationPreprocessScriptsToDB(projectName, email, Index, PreprocessId, Duplication, DuplicationScript):
+def AddDuplicationPreprocessScriptsToDB(projectName, email, PreprocessId, Index, Duplication, DuplicationScript):
     with get_db() as db:
         
         project = GetProject(projectName, email)
-        UpdateDuplicationPreprocessScripts(project, Index, PreprocessId, Duplication, DuplicationScript)
+        UpdateDuplicationPreprocessScripts(project, PreprocessId, Index, Duplication, DuplicationScript)
         
         flag_modified(project, "DuplicationPreprocessFrame")
         
@@ -378,8 +378,8 @@ def AddExistedPronunciationPreprocessToDB(projectName, email, ExistedDataFrame):
 ## 2-2. 1-1 PronunciationPreprocess의 Body(본문) updateContextChunks 업데이트 형식
 def UpdatePronunciationPreprocessScripts(project, PreprocessId, Index, Pronunciation, PronunciationScript):    
     updatePreprocessScripts = {
-        "Index": Index,
         "PreprocessId": PreprocessId,
+        "Index": Index,
         "Pronunciation": Pronunciation,
         "PronunciationScript": PronunciationScript
     }

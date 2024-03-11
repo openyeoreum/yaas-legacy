@@ -128,12 +128,12 @@ def ScriptsDicListToInputList(projectName, email):
         CleanScripts += CleanText(SplitedScripts[i][1])
         Clean_Scripts += CleanText(SplitedScripts[i][1])
     if CleanText(bodyText) != CleanScripts:
-        print(f"[ 인덱스 누락: 전체 문장수 ({len(SplitedScripts)}) ]")
+        print(f"[ 분할 전후 텍스트가 다름 ({CleanText(bodyText)} != {CleanScripts}) ]")
     clean_scripts = ''
     for i in range(len(ScriptsDicList)):
         clean_scripts += CleanText(' '.join(ScriptsDicList[i]['Script']))
     if Clean_Scripts != clean_scripts:
-        print(f"[ 인덱스 누락: 전체 문장수 ({len(ScriptsDicList)}) ]")
+        print(f"[ 분할 전후 텍스트가 다름 ({Clean_Scripts} != {clean_scripts}) ]")
 
     InputList = []
     for i in range(len(ScriptsDicList)):
@@ -196,7 +196,7 @@ def DuplicationPreprocessInputMemory(inputMemoryDics, MemoryLength):
     
     inputMemoryList = []
     for inputmeMory in inputMemoryDic:
-        key = list(inputmeMory.keys())[1]  # 두 번째 키값
+        key = list(inputmeMory.keys())[2]  # 두 번째 키값
         if key == "Continue":
             inputMemoryList.append(inputmeMory['Continue'])
         else:

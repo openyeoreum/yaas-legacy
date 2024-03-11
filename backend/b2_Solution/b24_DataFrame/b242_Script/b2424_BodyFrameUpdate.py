@@ -13,8 +13,20 @@ def LoadBodyText(projectName, email):
     project = GetProject(projectName, email)
     PronunciationPreprocessFrame = project.PronunciationPreprocessFrame[1]['PreprocessScripts'][1:]
     
-    for PronunciationPreprocessFrame
-    bodyText = project.BodyText
+    bodyText = ""
+    BeforeIndex = None
+    for i, Dic in enumerate(PronunciationPreprocessFrame):
+        Index = Dic['Index']
+        Script = Dic['PronunciationScript']
+        if BeforeIndex != Index and i == 0:
+            bodyText += f'{Index}\n\n'
+            bodyText += Script
+        elif BeforeIndex != Index and i != 0:
+            bodyText += f'\n\n{Index}\n\n'
+            bodyText += Script
+        else:
+            bodyText += f' {Script}'
+        BeforeIndex = Index
     
     return bodyText
 
@@ -640,7 +652,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "노인을위한나라는있다"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"

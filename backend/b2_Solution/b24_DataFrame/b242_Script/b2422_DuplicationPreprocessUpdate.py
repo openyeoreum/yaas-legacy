@@ -16,7 +16,7 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 # IndexBodyText 로드
 def LoadIndexBody(projectName, email):
     project = GetProject(projectName, email)
-    indexFrame = project.IndexFrame[1]['IndexTags'][1:]
+    indexFrame = project.IndexFrame[1]['IndexTags'][1:]   
     bodyText = project.BodyText
     
     return indexFrame, bodyText
@@ -137,7 +137,13 @@ def ScriptsDicListToInputList(projectName, email):
 
     InputList = []
     for i in range(len(ScriptsDicList)):
-        InputList.append({'Id': i+1, 'Index': ScriptsDicList[i]['Index'], 'Continue': ScriptsDicList[i]['Script']})
+        Input = ScriptsDicList[i]['Script'].replace('○', '-')
+        Input = Input.replace('_', '◆')
+        Input = Input.replace('|', '◇')
+        Input = Input.replace('/', '*')
+        Input = Input.replace('<', '(')
+        Input = Input.replace('>', ')')
+        InputList.append({'Id': i+1, 'Index': ScriptsDicList[i]['Index'], 'Continue': Input})
         
     return InputList
 
@@ -167,6 +173,7 @@ def DuplicationPreprocessFilter(responseData, Input, Index):
         outputDic = json.loads(responseData)
         OutputDic = outputDic['중복수정']
         if OutputDic == []:
+            
             Output = {"Index": Index, "Duplication": OutputDic, "DuplicationScript": Input}
             return {'json': Output, 'filter': Output}
     
@@ -183,7 +190,7 @@ def DuplicationPreprocessFilter(responseData, Input, Index):
         # Error5: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
-
+        
     Output = {"Index": Index, "Duplication": OutputDic, "DuplicationScript": Input}
     return {"json": Output, "filter": Output}
 

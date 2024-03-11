@@ -15,6 +15,11 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 def LoadIndexText(projectName, email):
     project = GetProject(projectName, email)
     indexText = project.IndexText
+    IndexText = indexText.replace('.', '_')
+    IndexText = IndexText.replace('!', '_')
+    IndexText = IndexText.replace('?', '_')
+    IndexText = IndexText.replace("'", '|').replace('’', '|').replace('‘', '|')
+    IndexText = IndexText.replace('"', '|').replace('“', '|').replace('”', '|')
     
     return indexText
 

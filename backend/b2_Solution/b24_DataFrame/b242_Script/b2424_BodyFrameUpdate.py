@@ -11,6 +11,9 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit imp
 # BodyText 로드
 def LoadBodyText(projectName, email):
     project = GetProject(projectName, email)
+    PronunciationPreprocessFrame = project.PronunciationPreprocessFrame[1]['PreprocessScripts'][1:]
+    
+    for PronunciationPreprocessFrame
     bodyText = project.BodyText
     
     return bodyText

@@ -25,7 +25,7 @@ def DuplicationPreprocessFrameToInputList(projectName, email):
     duplicationPreprocessFrame = LoadduplicationPreprocessFrame(projectName, email)
     InputList = []
     for i in range(len(duplicationPreprocessFrame)):
-        InputList.append({'Id': i+1, 'Continue': duplicationPreprocessFrame[i]['DuplicationScript']})
+        InputList.append({'Id': i+1, 'Index': duplicationPreprocessFrame[i]['Index'], 'Continue': duplicationPreprocessFrame[i]['DuplicationScript']})
         
     return InputList
 
@@ -33,13 +33,13 @@ def DuplicationPreprocessFrameToInputList(projectName, email):
 ##### Filter 조건 #####
 ######################
 ## PronunciationPreprocess의 Filter(Error 예외처리)
-def PronunciationPreprocessFilter(responseData, Input):
+def PronunciationPreprocessFilter(responseData, Input, Index):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputDic = json.loads(responseData)
         OutputDic = outputDic['발음수정']
         if OutputDic == []:
-            Output = {"Pronunciation": OutputDic, "PronunciationScript": Input}
+            Output = {"Index": Index, "Pronunciation": OutputDic, "PronunciationScript": Input}
             return {'json': Output, 'filter': Output}
     
     except json.JSONDecodeError:
@@ -56,7 +56,7 @@ def PronunciationPreprocessFilter(responseData, Input):
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
 
-    Output = {"Pronunciation": OutputDic, "PronunciationScript": Input}
+    Output = {"Index": Index, "Pronunciation": OutputDic, "PronunciationScript": Input}
     return {"json": Output, "filter": Output}
 
 ######################
@@ -147,8 +147,9 @@ def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = 
             mode = "Example"
             
         if "Continue" in InputDic:
+            Index = InputDic['Index']
             Input = InputDic['Continue']
-            memoryCounter = " - 중요사항 | '발음수정전'과 '발음수정후'는 내용과 서술을 변경하여 글을 바꾸는 것이 절대로 아니며, 단순히 이어서 2번 낭독되는 번역, 약어, 발음을 찾아서 작성하는 것 | 발음수정이 없을 경우는 {'발음수정': []}로 작성 -\n"
+            memoryCounter = " - 중요사항 | '발음수정전'과 '발음수정후'는 *숫자, *외국어, *기호, *특수문자 등의 요소들을 한글발음으로 수정하는 것 | 발음수정이 없을 경우는 {'발음수정': []}로 작성 -\n"
             outputEnder = ""
 
             # Response 생성
@@ -169,7 +170,7 @@ def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = 
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                     
-            Filter = PronunciationPreprocessFilter(responseData, Input)
+            Filter = PronunciationPreprocessFilter(responseData, Input, Index)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -240,7 +241,7 @@ def PronunciationPreprocessResponseJson(projectName, email, DataFramePath, messa
                 PronunciationDicList.append(PronunciationDic)
         else:
             PronunciationDic = []
-        PronunciationPreprocess = {"PreprocessId": i + 1, "Pronunciation": PronunciationDicList, "PronunciationScript": response['PronunciationScript']}
+        PronunciationPreprocess = {"PreprocessId": i + 1, "Index": response['Index'], "Pronunciation": PronunciationDicList, "PronunciationScript": response['PronunciationScript']}
         responseJson.append(PronunciationPreprocess)
         PronunciationDicList = []
     
@@ -275,10 +276,11 @@ def PronunciationPreprocessUpdate(projectName, email, DataFramePath, MessagesRev
                 UpdateTQDM.set_description(f'PronunciationPreprocessUpdate: {Update["Pronunciation"]}')
                 time.sleep(0.0001)
                 PreprocessId = Update["PreprocessId"]
+                Index = Update["Index"]
                 Pronunciation = Update["Pronunciation"]
                 PronunciationScript = Update["PronunciationScript"]
                 
-                AddPronunciationPreprocessScriptsToDB(projectName, email, PreprocessId, Pronunciation, PronunciationScript)
+                AddPronunciationPreprocessScriptsToDB(projectName, email, PreprocessId, Index, Pronunciation, PronunciationScript)
                 # i값 수동 업데이트
                 i += 1
             

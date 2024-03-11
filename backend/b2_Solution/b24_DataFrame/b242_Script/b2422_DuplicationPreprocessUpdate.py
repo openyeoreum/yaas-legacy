@@ -137,7 +137,7 @@ def ScriptsDicListToInputList(projectName, email):
 
     InputList = []
     for i in range(len(ScriptsDicList)):
-        InputList.append({'Id': i+1, 'Continue': ScriptsDicList[i]['Script']})
+        InputList.append({'Id': i+1, 'Index': ScriptsDicList[i]['Index'], 'Continue': ScriptsDicList[i]['Script']})
         
     return InputList
 
@@ -161,13 +161,13 @@ def CheckCorrectness(before, after):
         return False
 
 ## DuplicationPreprocess의 Filter(Error 예외처리)
-def DuplicationPreprocessFilter(responseData, Input):
+def DuplicationPreprocessFilter(responseData, Input, Index):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputDic = json.loads(responseData)
         OutputDic = outputDic['중복수정']
         if OutputDic == []:
-            Output = {"Duplication": OutputDic, "DuplicationScript": Input}
+            Output = {"Index": Index, "Duplication": OutputDic, "DuplicationScript": Input}
             return {'json': Output, 'filter': Output}
     
     except json.JSONDecodeError:
@@ -184,7 +184,7 @@ def DuplicationPreprocessFilter(responseData, Input):
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
 
-    Output = {"Duplication": OutputDic, "DuplicationScript": Input}
+    Output = {"Index": Index, "Duplication": OutputDic, "DuplicationScript": Input}
     return {"json": Output, "filter": Output}
 
 ######################
@@ -276,6 +276,7 @@ def DuplicationPreprocessProcess(projectName, email, DataFramePath, Process = "D
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
+            Index = InputDic['Index']
             memoryCounter = " - 중요사항 | '중복수정전'과 '중복수정후'는 내용과 서술을 변경하여 글을 바꾸는 것이 절대로 아니며, 단순히 이어서 2번 이상 낭독되는 번역, 약어, 발음, 기타를 찾아서 작성하는 것 | 중복수정이 없을 경우는 {'중복수정': []}로 작성 -\n"
             outputEnder = ""
 
@@ -297,7 +298,7 @@ def DuplicationPreprocessProcess(projectName, email, DataFramePath, Process = "D
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                     
-            Filter = DuplicationPreprocessFilter(responseData, Input)
+            Filter = DuplicationPreprocessFilter(responseData, Input, Index)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -368,7 +369,7 @@ def DuplicationPreprocessResponseJson(projectName, email, DataFramePath, message
                 DuplicationDicList.append(DuplicationDic)
         else:
             DuplicationDic = []
-        DuplicationPreprocess = {"PreprocessId": i + 1, "Duplication": DuplicationDicList, "DuplicationScript": response['DuplicationScript']}
+        DuplicationPreprocess = {"PreprocessId": i + 1, "Index": response['Index'], "Duplication": DuplicationDicList, "DuplicationScript": response['DuplicationScript']}
         responseJson.append(DuplicationPreprocess)
         DuplicationDicList = []
     
@@ -403,10 +404,11 @@ def DuplicationPreprocessUpdate(projectName, email, DataFramePath, MessagesRevie
                 UpdateTQDM.set_description(f'DuplicationPreprocessUpdate: {Update["Duplication"]}')
                 time.sleep(0.0001)
                 PreprocessId = Update["PreprocessId"]
+                Index = Update["Index"]
                 Duplication = Update["Duplication"]
                 DuplicationScript = Update["DuplicationScript"]
                 
-                AddDuplicationPreprocessScriptsToDB(projectName, email, PreprocessId, Duplication, DuplicationScript)
+                AddDuplicationPreprocessScriptsToDB(projectName, email, PreprocessId, Index, Duplication, DuplicationScript)
                 # i값 수동 업데이트
                 i += 1
             

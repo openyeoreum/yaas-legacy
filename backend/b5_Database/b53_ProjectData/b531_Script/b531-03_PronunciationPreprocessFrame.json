@@ -13,6 +13,7 @@
     {
         "PreprocessScripts": [
             {
+                "Index": "None",
                 "PreprocessId": 0,
                 "Pronunciation": [
                     {

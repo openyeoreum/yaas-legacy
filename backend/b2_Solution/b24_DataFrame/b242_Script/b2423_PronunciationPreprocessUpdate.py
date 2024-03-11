@@ -51,7 +51,8 @@ def PronunciationPreprocessFilter(responseData, Input, Index):
             elif not Output['종류'] in ['숫자', '외국어', '영어', '일본어', '중국어', '프랑스어', '독일어', '기호', '특수문자', '기타']:
                 return f"JSON에서 오류 발생 ({Output['종류']}): JSONKeyError"
             else:
-                Input = Input.replace(Output['발음수정전'], Output['발음수정후'])
+                if not Output['발음수정전'] in ['◆', '◇', '◎']:
+                    Input = Input.replace(Output['발음수정전'], Output['발음수정후'])
         # Error2: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"

@@ -11,6 +11,7 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit imp
 # BodyText 로드
 def LoadBodyText(projectName, email):
     project = GetProject(projectName, email)
+    _bodyText = project.BodyText
     PronunciationPreprocessFrame = project.PronunciationPreprocessFrame[1]['PreprocessScripts'][1:]
     
     bodyText = ""
@@ -27,6 +28,14 @@ def LoadBodyText(projectName, email):
         else:
             bodyText += f' {Script}'
         BeforeIndex = Index
+    
+    # 두 파일의 텍스트 수 확인
+    Len_bodyText = len(_bodyText)
+    LenbodyText = len(bodyText)
+    AbsDiff = abs(Len_bodyText - LenbodyText)
+    RelativeDiff = AbsDiff / LenbodyText
+    if RelativeDiff >= 0.03:
+        sys.exit(f"[ 분할 전후 텍스트 {RelativeDiff}% 만큼 다름 (_bodyText: {Len_bodyText} != bodyText: {LenbodyText}) ]")
     
     return bodyText
 

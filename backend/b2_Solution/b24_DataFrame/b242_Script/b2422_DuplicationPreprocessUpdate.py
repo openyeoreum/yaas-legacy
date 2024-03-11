@@ -35,13 +35,13 @@ def PreprocessAndSplitScripts(bodyText, indexFrame):
     
     # 따옴표의 개수가 짝수인지 확인
     if len(singleQuotesScripts) % 2 != 0 or len(doubleQuotesScripts) % 2 != 0:
-        print("[ 전체 따옴표 개수가 홀수입니다. ]")
+        sys.exit("[ 전체 따옴표 개수가 홀수입니다. ]")
     
     # 따옴표 내부 문장의 길이 검토
     for ScriptInQuotes in singleQuotesScripts + doubleQuotesScripts:
         ScriptInQuotesTokens = re.sub(r'\s+', ' ', ScriptInQuotes).strip().split()
         if len(ScriptInQuotesTokens) > 100:
-            print(f"[ 따옴표 내부의 문장이 너무 길어(단어수, {len(ScriptInQuotesTokens)}) 확인 필요: {' '.join(ScriptInQuotesTokens[:6])} ... {' '.join(ScriptInQuotesTokens[6:])}]\n")
+            sys.exit(f"[ 따옴표 내부의 문장이 너무 길어(단어수, {len(ScriptInQuotesTokens)}) 확인 필요: {' '.join(ScriptInQuotesTokens[:6])} ... {' '.join(ScriptInQuotesTokens[6:])}]\n")
     
     ## 2. 인덱스 단위로 문장 분할
     lines = bodyText.split('\n')
@@ -80,7 +80,7 @@ def PreprocessAndSplitScripts(bodyText, indexFrame):
     foundIndexes = set([index for index, _ in SplitedScripts])
     MissingIndexes = list(presentIndexes - foundIndexes)
     if MissingIndexes:
-        print(f"[ 인덱스 누락: {MissingIndexes} ]")
+        sys.exit(f"[ 인덱스 누락: {MissingIndexes} ]")
 
     return SplitedScripts
 
@@ -128,19 +128,19 @@ def ScriptsDicListToInputList(projectName, email):
         CleanScripts += CleanText(SplitedScripts[i][1])
         Clean_Scripts += CleanText(SplitedScripts[i][1])
     if CleanText(bodyText) != CleanScripts:
-        print(f"[ 분할 전후 텍스트가 다름 ({CleanText(bodyText)} != {CleanScripts}) ]")
+        sys.exit(f"[ 분할 전후 텍스트가 다름 ({CleanText(bodyText)} != {CleanScripts}) ]")
     clean_scripts = ''
     for i in range(len(ScriptsDicList)):
         clean_scripts += CleanText(' '.join(ScriptsDicList[i]['Script']))
     if Clean_Scripts != clean_scripts:
-        print(f"[ 분할 전후 텍스트가 다름 ({Clean_Scripts} != {clean_scripts}) ]")
+        sys.exit(f"[ 분할 전후 텍스트가 다름 ({Clean_Scripts} != {clean_scripts}) ]")
 
     InputList = []
     for i in range(len(ScriptsDicList)):
         Input = ScriptsDicList[i]['Script'].replace('○', '-')
         Input = Input.replace('_', '◆')
         Input = Input.replace('|', '◇')
-        Input = Input.replace('/', '*')
+        Input = Input.replace('/', '◎')
         Input = Input.replace('<', '(')
         Input = Input.replace('>', ')')
         InputList.append({'Id': i+1, 'Index': ScriptsDicList[i]['Index'], 'Continue': Input})

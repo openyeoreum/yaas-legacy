@@ -114,7 +114,7 @@ def ContextCompletionFilter(MemoTag, responseData, memoryCounter):
                 return "JSON에서 오류 발생: JSONKeyError"
             else:
                 if not ('성별' in dic[key] and '연령' in dic[key] and '장르' in dic[key] and '성격' in dic[key] and '감성' in dic[key] and '정확도' in dic[key]):
-                    return "JSON에서 오류 발생: JSONKeyError"
+                    return "JSON에서 오류 발생: JSONUnderKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"

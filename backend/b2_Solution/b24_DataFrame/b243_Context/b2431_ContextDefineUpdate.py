@@ -7,6 +7,7 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
+from nltk.metrics.distance import edit_distance
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
@@ -90,6 +91,13 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
 ######################
 ##### Filter 조건 #####
 ######################
+## 거리측정을 통해 핵심문구에서 문자 1개만 틀린 경우도 허용하기
+def IsSimilar(inputText, outputText, threshold = 1):
+    # 두 문자열 간의 편집 거리 계산
+    distance = edit_distance(inputText, outputText)
+    # 편집 거리가 threshold 이하인지 판단
+    return distance <= threshold
+
 ## ContextDefine의 Filter(Error 예외처리)
 def ContextDefineFilter(Input, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
@@ -102,6 +110,13 @@ def ContextDefineFilter(Input, responseData, memoryCounter):
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"  
     # Error3: 자료의 구조가 다를 때의 예외 처리
+    # InputList(문장단위로 나누어서 Clean 처리)
+    InputList = str(Input).split(". ")
+    CleanInputList = []
+    for _input in InputList:
+        input = re.sub("[^가-힣]", "", str(_input))
+        CleanInputList.append(input)
+    # Input(전체를 통으로 Clean 처리)
     INPUT = re.sub("[^가-힣]", "", str(Input))
     for dic in OutputDic:
         try:
@@ -116,7 +131,12 @@ def ContextDefineFilter(Input, responseData, memoryCounter):
             if not '메모' in key:
                 return "JSON에서 오류 발생: JSONKeyError"
             elif not OUTPUT in INPUT:
-                return f"JSON에서 오류 발생: JSON '핵심문구'가 Input에 포함되지 않음 Error\n문구: {dic[key]['핵심문구']}"
+                TrueSwitch = 0
+                for CleanInput in CleanInputList:
+                    if IsSimilar(CleanInput, OUTPUT, threshold = 1):
+                        TrueSwitch += 1
+                if TrueSwitch == 0:
+                    return f"JSON에서 오류 발생: JSON '핵심문구'가 Input에 포함되지 않음 Error\n문구: {dic[key]['핵심문구']}"
             elif not ('목적' in dic[key] and '원인' in dic[key] and '핵심문구' in dic[key] and '예상질문' in dic[key] and '매칭독자' in dic[key] and '주제' in dic[key] and '중요도' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
         # Error4: 자료의 형태가 Str일 때의 예외처리

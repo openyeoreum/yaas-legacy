@@ -235,7 +235,7 @@ def ContextCompletionProcess(projectName, email, DataFramePath, Process = "Conte
                 memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(InputDic))
             
             MemoTag = ["핵심문구" + match for match in memoTag]
-            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + f', <태그.json>는 {{"{MemoTag[0]}": 으로 시작  -\n'
+            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + f', 작업의 시작은 {{"{MemoTag[0]}": 으로 시작  -\n'
             outputEnder = f"{{'핵심문구"
 
             # Response 생성

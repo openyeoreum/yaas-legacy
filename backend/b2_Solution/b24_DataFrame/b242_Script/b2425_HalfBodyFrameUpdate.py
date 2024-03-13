@@ -343,6 +343,7 @@ def IndexMatching(projectName, email):
             Cleanchunk = re.sub("[^가-힣]", "", chunk["TagChunks"])
             CleanIndex = re.sub("[^가-힣]", "", IndexFrame[indexid]["Index"])
             if Cleanchunk == CleanIndex:
+                # print(f'Cleanchunk: {Cleanchunk}')
                 indexTag = IndexFrame[indexid]["IndexTag"]
                 tagChunk = chunk["TagChunks"]
                 if indexTag in BigIndexList:

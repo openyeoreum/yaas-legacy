@@ -28,70 +28,35 @@ def LoadBodyFrameBodys(projectName, email):
 def BodyFrameBodysToInputList(projectName, email):
     BodyFrameSplitedBodyScripts = LoadBodyFrameBodys(projectName, email)
 
+    LastIndexId = BodyFrameSplitedBodyScripts[-1]['IndexId']
+    IndexIdList = list(range(1, LastIndexId + 1))
     InputList = []
-    IndexId = 1
     CorrectionTexts = []
-    for i in range(len(BodyFrameSplitedBodyScripts)):
-        BodyFrameIndexId = BodyFrameSplitedBodyScripts[i]['IndexId']
-        SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
-        SplitedBodyChunksTag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][0]['Tag']
-        if BodyFrameIndexId == IndexId:
-            if SplitedBodyChunksTag in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
-                Tag = 'Pass'
-                ChunkId = SplitedBodyChunks[0]['ChunkId']
-                Chunk = SplitedBodyChunks[0]['Chunk']
-                CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
-                CorrectionText = ' '.join(CorrectionTexts)
-                InputDic = {'Id': IndexId, Tag: CorrectionText}
-                InputList.append(InputDic)
-                CorrectionTexts = []
-            else:
-                for j in range(len(SplitedBodyChunks)):
-                    ChunkId = SplitedBodyChunks[j]['ChunkId']
-                    Chunk = SplitedBodyChunks[j]['Chunk']
+    for IndexId in IndexIdList:
+        for i in range(len(BodyFrameSplitedBodyScripts)):
+            BodyFrameIndexId = BodyFrameSplitedBodyScripts[i]['IndexId']
+            SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
+            SplitedBodyChunksTag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][0]['Tag']
+            if BodyFrameIndexId == IndexId:
+                if SplitedBodyChunksTag in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
+                    Tag = 'Pass'
+                    ChunkId = SplitedBodyChunks[0]['ChunkId']
+                    Chunk = SplitedBodyChunks[0]['Chunk']
                     CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
-                CorrectionText = ' '.join(CorrectionTexts)
-                InputDic = {'Id': IndexId, Tag: CorrectionText}
-                InputList.append(InputDic)
-                CorrectionTexts = []
-        else:
-            # if CorrectionTexts != []:
-            #     if len(CorrectionTexts) == 1:
-            #         Tag = 'Pass'
-            #     else:
-            #         Tag = 'Continue'
-            #     CorrectionText = ' '.join(CorrectionTexts)
-            #     InputDic = {'Id': IndexId, Tag: CorrectionText}
-            #     InputList.append(InputDic)
-            #     CorrectionTexts = []
-
-            # if len(SplitedBodyChunks) == 1:
-            #     Tag = 'Pass'
-            #     ChunkId = SplitedBodyChunks[0]['ChunkId']
-            #     Chunk = SplitedBodyChunks[0]['Chunk']
-            #     CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
-            #     CorrectionText = ' '.join(CorrectionTexts)
-            #     InputDic = {'Id': IndexId, Tag: CorrectionText}
-            #     InputList.append(InputDic)
-            #     CorrectionTexts = []
-            # else:
-            #     for j in range(len(SplitedBodyChunks)):
-            #         ChunkId = SplitedBodyChunks[j]['ChunkId']
-            #         Chunk = SplitedBodyChunks[j]['Chunk']
-            #         CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
-            IndexId += 1
-
-    # if CorrectionTexts != []:
-    #     if len(CorrectionTexts) <= 1:
-    #         Tag = 'Pass'
-    #     else:
-    #         Tag = 'Continue'
-    #     CorrectionText = ' '.join(CorrectionTexts)
-    #     InputDic = {'Id': IndexId, Tag: CorrectionText}
-    #     InputList.append(InputDic)
-    #     CorrectionTexts = []
-    with open('/yaas/InputList.json', 'w', encoding = 'utf-8') as f:
-        json.dump(InputList, f, ensure_ascii = False, indent = 4)
+                    CorrectionText = ' '.join(CorrectionTexts)
+                    InputDic = {'Id': IndexId, Tag: CorrectionText}
+                    InputList.append(InputDic)
+                    CorrectionTexts = []
+                else:
+                    Tag = 'Continue'
+                    for j in range(len(SplitedBodyChunks)):
+                        ChunkId = SplitedBodyChunks[j]['ChunkId']
+                        Chunk = SplitedBodyChunks[j]['Chunk']
+                        CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
+                    CorrectionText = ' '.join(CorrectionTexts)
+                    InputDic = {'Id': IndexId, Tag: CorrectionText}
+                    InputList.append(InputDic)
+                    CorrectionTexts = []
 
     return InputList
 

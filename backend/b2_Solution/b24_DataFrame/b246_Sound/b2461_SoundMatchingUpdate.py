@@ -21,13 +21,12 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
     BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    BodyFrameBodys = project.BodyFrame[2]['Bodys'][1:]
     
-    return BodyFrameSplitedBodyScripts, BodyFrameBodys
+    return BodyFrameSplitedBodyScripts
 
 ## BodyFrameBodys의 inputList 치환
-def BodyFrameBodysToInputList(projectName, email, Task = "Correction"):
-    BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
+def BodyFrameBodysToInputList(projectName, email):
+    BodyFrameSplitedBodyScripts = LoadBodyFrameBodys(projectName, email)
 
     InputList = []
     IndexId = 1
@@ -86,6 +85,8 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Correction"):
         InputDic = {'Id': IndexId, Tag: CorrectionText}
         InputList.append(InputDic)
         CorrectionTexts = []
+    with open('/yaas/InputList.json', 'w', encoding = 'utf-8') as f:
+        json.dump(InputList, f, ensure_ascii = False, indent = 4)
 
     return InputList
 
@@ -205,7 +206,7 @@ def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatc
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            
+            print(Input)
             # Filter, MemoryCounter, OutputEnder 처리
             memoryCounter = " - '배경소리'와 '전환소리'는 추상적으로 않고 구체적이고 물리적으로 작성 -\n"
             outputEnder = ""

@@ -420,26 +420,26 @@ def SolutionDataFrameUpdate(email, projectName, messagesReview = "on", bookGenre
     existedDataSet = None
 
 
-    ########################
-    ### 14_SoundMatching ###
-    ########################
-    InitSoundMatching(projectName, email)
-    InitRawDataSet(projectName, email, "SoundMatching")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "SoundMatching", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "SoundMatching", RawDataSetPath)
-    mode = "Master"
-    SoundMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet, transitionImportance = 0, backgroundImportance = 0)
+    # ########################
+    # ### 14_SoundMatching ###
+    # ########################
+    # InitSoundMatching(projectName, email)
+    # InitRawDataSet(projectName, email, "SoundMatching")
+    # if existedDataFrameMode == "on":
+    #     existedDataFrame = LoadexistedDataFrame(projectName, email, "SoundMatching", DataFramePath)
+    #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "SoundMatching", RawDataSetPath)
+    # mode = "Master"
+    # SoundMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet, transitionImportance = 0, backgroundImportance = 0)
     
-    if existedDataFrame == None:
-        updatedSoundMatching = UpdatedSoundMatching(projectName, email)
-        SaveDataFrame(projectName, email, "14_SoundMatching", updatedSoundMatching, DataFramePath)
-        # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
-        LoadAndUpdateBodyFrameBodys(projectName, email, "HalfBodyFrame", "Bodys", DataFramePath)
-    if existedDataSet == None:     
-        SaveDataSet(projectName, email, "14", "SoundMatching", RawDataSetPath)
-    existedDataFrame = None
-    existedDataSet = None
+    # if existedDataFrame == None:
+    #     updatedSoundMatching = UpdatedSoundMatching(projectName, email)
+    #     SaveDataFrame(projectName, email, "14_SoundMatching", updatedSoundMatching, DataFramePath)
+    #     # 기존 최신 json 파일의 BodyFrameBodys Context 부분 업데이트
+    #     LoadAndUpdateBodyFrameBodys(projectName, email, "HalfBodyFrame", "Bodys", DataFramePath)
+    # if existedDataSet == None:     
+    #     SaveDataSet(projectName, email, "14", "SoundMatching", RawDataSetPath)
+    # existedDataFrame = None
+    # existedDataSet = None
 
 
     #######################

@@ -34,8 +34,9 @@ def BodyFrameBodysToInputList(projectName, email):
     for i in range(len(BodyFrameSplitedBodyScripts)):
         BodyFrameIndexId = BodyFrameSplitedBodyScripts[i]['IndexId']
         SplitedBodyChunks = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks']
+        SplitedBodyChunksTag = BodyFrameSplitedBodyScripts[i]['SplitedBodyChunks'][0]['Tag']
         if BodyFrameIndexId == IndexId:
-            if len(SplitedBodyChunks) == 1:
+            if SplitedBodyChunksTag in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
                 Tag = 'Pass'
                 ChunkId = SplitedBodyChunks[0]['ChunkId']
                 Chunk = SplitedBodyChunks[0]['Chunk']
@@ -49,42 +50,46 @@ def BodyFrameBodysToInputList(projectName, email):
                     ChunkId = SplitedBodyChunks[j]['ChunkId']
                     Chunk = SplitedBodyChunks[j]['Chunk']
                     CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
+                CorrectionText = ' '.join(CorrectionTexts)
+                InputDic = {'Id': IndexId, Tag: CorrectionText}
+                InputList.append(InputDic)
+                CorrectionTexts = []
         else:
-            if len(CorrectionTexts) != 0:
-                if len(CorrectionTexts) == 1:
-                    Tag = 'Pass'
-                else:
-                    Tag = 'Continue'
-                CorrectionText = ' '.join(CorrectionTexts)
-                InputDic = {'Id': IndexId, Tag: CorrectionText}
-                InputList.append(InputDic)
-                CorrectionTexts = []
+            # if CorrectionTexts != []:
+            #     if len(CorrectionTexts) == 1:
+            #         Tag = 'Pass'
+            #     else:
+            #         Tag = 'Continue'
+            #     CorrectionText = ' '.join(CorrectionTexts)
+            #     InputDic = {'Id': IndexId, Tag: CorrectionText}
+            #     InputList.append(InputDic)
+            #     CorrectionTexts = []
 
-            if len(SplitedBodyChunks) == 1:
-                Tag = 'Pass'
-                ChunkId = SplitedBodyChunks[0]['ChunkId']
-                Chunk = SplitedBodyChunks[0]['Chunk']
-                CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
-                CorrectionText = ' '.join(CorrectionTexts)
-                InputDic = {'Id': IndexId, Tag: CorrectionText}
-                InputList.append(InputDic)
-                CorrectionTexts = []
-            else:
-                for j in range(len(SplitedBodyChunks)):
-                    ChunkId = SplitedBodyChunks[j]['ChunkId']
-                    Chunk = SplitedBodyChunks[j]['Chunk']
-                    CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
+            # if len(SplitedBodyChunks) == 1:
+            #     Tag = 'Pass'
+            #     ChunkId = SplitedBodyChunks[0]['ChunkId']
+            #     Chunk = SplitedBodyChunks[0]['Chunk']
+            #     CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
+            #     CorrectionText = ' '.join(CorrectionTexts)
+            #     InputDic = {'Id': IndexId, Tag: CorrectionText}
+            #     InputList.append(InputDic)
+            #     CorrectionTexts = []
+            # else:
+            #     for j in range(len(SplitedBodyChunks)):
+            #         ChunkId = SplitedBodyChunks[j]['ChunkId']
+            #         Chunk = SplitedBodyChunks[j]['Chunk']
+            #         CorrectionTexts.append(f'[{ChunkId}]' + Chunk)
             IndexId += 1
 
-    if CorrectionTexts != []:
-        if len(CorrectionTexts) <= 1:
-            Tag = 'Pass'
-        else:
-            Tag = 'Continue'
-        CorrectionText = ' '.join(CorrectionTexts)
-        InputDic = {'Id': IndexId, Tag: CorrectionText}
-        InputList.append(InputDic)
-        CorrectionTexts = []
+    # if CorrectionTexts != []:
+    #     if len(CorrectionTexts) <= 1:
+    #         Tag = 'Pass'
+    #     else:
+    #         Tag = 'Continue'
+    #     CorrectionText = ' '.join(CorrectionTexts)
+    #     InputDic = {'Id': IndexId, Tag: CorrectionText}
+    #     InputList.append(InputDic)
+    #     CorrectionTexts = []
     with open('/yaas/InputList.json', 'w', encoding = 'utf-8') as f:
         json.dump(InputList, f, ensure_ascii = False, indent = 4)
 
@@ -240,8 +245,8 @@ def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatc
                 
                 ErrorCount += 1
                 if ErrorCount == 7:
-                    print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
-                    sys.exit(1)  # 오류 상태와 함께 프로그램을 종료합니다.
+                    sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+
                     
                 continue
             else:
@@ -405,10 +410,12 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "마케터의무기들"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    
+    BodyFrameBodysToInputList(projectName, email)

@@ -20,6 +20,7 @@ def LoadIndexText(projectName, email):
     IndexText = IndexText.replace('?', '_')
     IndexText = IndexText.replace("'", '|').replace('’', '|').replace('‘', '|')
     IndexText = IndexText.replace('"', '|').replace('“', '|').replace('”', '|')
+    IndexText = IndexText.replace('/', '&')
     
     return indexText
 

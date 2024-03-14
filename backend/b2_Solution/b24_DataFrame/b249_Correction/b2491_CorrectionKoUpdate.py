@@ -234,6 +234,37 @@ def FindUnmatchedChunkAndSpot(InputText, CorrectionText):
 
     return UnmatchedText, UnmatchedSpotsText
 
+## Response결과에 SFX 중복 발생시 이를 여러개의 리스트로 나누는 작업
+def generateOutputDicList(output_dic, sfx_tag):
+    # Finding all instances of the tag
+    instances = []
+    for i, text in enumerate(output_dic):
+        start = 0
+        while start != -1:
+            start = text.find(sfx_tag, start)
+            if start != -1:
+                instances.append((i, start))
+                start += len(sfx_tag)
+    
+    # Creating a list for each instance where it's the only one present
+    output_dic_list = []
+    for instance_index, _ in enumerate(instances):
+        new_version = []
+        for i, text in enumerate(output_dic):
+            if any(instance[0] == i for instance in instances):
+                # Removing all instances of the tag in this text
+                new_text = text.replace(sfx_tag, "")
+                # Re-adding the tag only for the current instance
+                if instances[instance_index][0] == i:
+                    tag_position = instances[instance_index][1]
+                    new_text = new_text[:tag_position] + sfx_tag + new_text[tag_position:]
+                new_version.append(new_text)
+            else:
+                new_version.append(text)
+        output_dic_list.append(new_version)
+
+    return output_dic_list
+
 ## CorrectionKo의 Filter(Error 예외처리)
 def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId):
     # [n] 불일치 오류시 이를 찾을 수 있도록 CorrectionText를 미리 저장
@@ -272,7 +303,7 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"
     # Error2: INPUT, OUTPUT .(Periods) 불일치시 예외 처리
-    if InPutPeriods != 1:
+    if InPutPeriods > 1:
         PeriodsPattern = r"(?<!\d)\.(?!\d)"
         OutPutPeriods = len(re.findall(PeriodsPattern, responseData))
         Difference = abs(OutPutPeriods - InPutPeriods) / InPutPeriods * 100
@@ -285,67 +316,87 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
             return f"INPUT, OUTPUT 불일치율 2.5% 이상 오류 발생: 불일치율({nonCommonPartRatio}), 불일치요소({len(nonCommonParts)})"
     except ValueError as e:
         return f"INPUT, OUTPUT 매우 높은 불일치율 발생: {e}"
-    # Error4: OUTPUT 내에 SFXTag 불일치시 예외 처리
-    for SFXTag in InputSFXTags:
-        if SFXTag not in responseData:
-            return f"OUTPUT 내에 SFXTag 불일치 오류 발생: INPUT({SFXTag})"
     # Error5: InputDots, responseDataDots 불일치시 예외 처리
     if len(InputDic) != len(OutputDic) != InputDots:
         print(f'@@@@@@@@@@\nInputDic: {InputDic}\nOutputDic: {OutputDic}\n@@@@@@@@@@')
         UnmatchedText, UnmatchedSpotsText = FindUnmatchedChunkAndSpot(Input, CorrectionText)
         return {"Error": f"INPUT, OUTPUT [n] 갯수 불일치 오류 발생: INPUT({len(InputDic)}), OUTPUT({len(OutputDic)}), InputDots({InputDots})", "Unmatched": UnmatchedText, "UnmatchedSpot": UnmatchedSpotsText}
+    # Error5: OUTPUT 내에 SFXTag 불일치시 예외 처리
+    OutputDicList = [OutputDic]
+    for SFXTag in InputSFXTags:
+        if SFXTag not in responseData:
+            return f"OUTPUT 내에 SFXTag 불일치 오류 발생: INPUT({SFXTag})"
+        elif responseData.count(SFXTag) > 1:
+            ReplaceSFXTag = SFXTag.replace('<S', '<효과음시작').replace('<E', '<효과음끝')
+            OutputDics = generateOutputDicList(OutputDic, ReplaceSFXTag)
+            OutputDicList += OutputDics
     # Error6: Input, responseData 불일치시 예외 처리
-    nonCommonPartsNum = 0
-    for i in range(len(InputDic)):
-        CleanInput = re.sub("[^가-힣]", "", InputDic[i])
-        CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
-        
-        if CleanInput != CleanOutput:
-            try:
-                nonCommonPart = nonCommonParts[nonCommonPartsNum]
-                DiffINPUT = nonCommonPart['DiffINPUT']
-                print(f'\n\n\n({i}, {nonCommonPartsNum})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
-                DiffOUTPUT = nonCommonPart['DiffOUTPUT']
-                print(f'DiffOUTPUT: {DiffOUTPUT}')
-                longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
-                longCommonSubstring = longCommonSubstring.replace('콼', '')
-                print(f'longCommonSubstring: {longCommonSubstring}')
-                NonINPUT = nonCommonPart['NonINPUT']
-                print(f'NonINPUT: {NonINPUT}')
-                NonOUTPUT = nonCommonPart['NonOUTPUT']
-                print(f'NonOUTPUT: {NonOUTPUT}')
-                if longCommonSubstring in CleanInput:
-                    ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
-                    ReplaceCleanOutput = CleanOutput
-                else:
-                    ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
-                    ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
-                print(f'replace1: {NonINPUT + longCommonSubstring}')
-                print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')
-                print(f'CleanInput: {CleanInput}')
-                print(f'CleanOutput: {CleanOutput}')
-                print(f'ReplaceCleanInput: {ReplaceCleanInput}')
-                print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-                    
-                if ReplaceCleanInput == ReplaceCleanOutput:
-                    nonCommonPartsNum += 1
-                else:
-                    for i in range(len(CleanInput) + 1):
-                        ReplaceCleanInput = CleanInput[:i] + NonOUTPUT + CleanInput[i:]
-                        ReplaceCleanOutput = CleanOutput[:i] + NonINPUT + CleanOutput[i:]
-                        print(f'1) ReplaceCleanInput: {ReplaceCleanInput}')
-                        print(f'1) CleanOutput: {CleanOutput}\n')
-                        print(f'2) CleanInput: {CleanInput}')
-                        print(f'2) ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-                        if ReplaceCleanInput == CleanOutput or CleanInput == ReplaceCleanOutput:
-                            nonCommonPartsNum += 1
-                            continue
-                        else:
-                            return f"INPUT, OUTPUT [n] 불일치 오류 발생: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})"
-            except IndexError as e:
-                return f"INPUT, OUTPUT [n] 불일치 오류 발생: IndexError({e})"
-
-    return {'json': OutputDic, 'filter': OutputDic, 'nonCommonParts': nonCommonParts}
+    OutputDicErrorList = []
+    for OutputDic in OutputDicList:  # OutputDicList를 순회
+        OutputDicError = 0
+        nonCommonPartsNum = 0
+        for i in range(len(InputDic)):
+            CleanInput = re.sub("[^가-힣]", "", InputDic[i])
+            CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
+            if CleanInput != CleanOutput:
+                try:
+                    nonCommonPart = nonCommonParts[nonCommonPartsNum]
+                    DiffINPUT = nonCommonPart['DiffINPUT']
+                    print(f'\n\n\n({i}, {nonCommonPartsNum})@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\nDiffINPUT: {DiffINPUT}')
+                    DiffOUTPUT = nonCommonPart['DiffOUTPUT']
+                    print(f'DiffOUTPUT: {DiffOUTPUT}')
+                    longCommonSubstring = LongCommonSubstring(DiffINPUT, DiffOUTPUT)
+                    longCommonSubstring = longCommonSubstring.replace('콼', '')
+                    print(f'longCommonSubstring: {longCommonSubstring}')
+                    NonINPUT = nonCommonPart['NonINPUT']
+                    print(f'NonINPUT: {NonINPUT}')
+                    NonOUTPUT = nonCommonPart['NonOUTPUT']
+                    print(f'NonOUTPUT: {NonOUTPUT}')
+                    if longCommonSubstring in CleanInput:
+                        ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
+                        ReplaceCleanOutput = CleanOutput
+                    else:
+                        ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
+                        ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
+                    print(f'replace1: {NonINPUT + longCommonSubstring}')
+                    print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')
+                    print(f'CleanInput: {CleanInput}')
+                    print(f'CleanOutput: {CleanOutput}')
+                    print(f'ReplaceCleanInput: {ReplaceCleanInput}')
+                    print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                        
+                    if ReplaceCleanInput == ReplaceCleanOutput:
+                        nonCommonPartsNum += 1
+                    else:
+                        for i in range(len(CleanInput) + 1):
+                            ReplaceCleanInput = CleanInput[:i] + NonOUTPUT + CleanInput[i:]
+                            ReplaceCleanOutput = CleanOutput[:i] + NonINPUT + CleanOutput[i:]
+                            print(f'1) ReplaceCleanInput: {ReplaceCleanInput}')
+                            print(f'1) CleanOutput: {CleanOutput}\n')
+                            print(f'2) CleanInput: {CleanInput}')
+                            print(f'2) ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                            if ReplaceCleanInput == CleanOutput or CleanInput == ReplaceCleanOutput:
+                                nonCommonPartsNum += 1
+                                continue
+                            else:
+                                OutputDicError += 1
+                                print(f"INPUT, OUTPUT [n] 일부분 불일치 부분: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})\n")
+                except IndexError as e:
+                    OutputDicError += 1
+                    print(f"INPUT, OUTPUT [n] 일부분 불일치 부분: ({e})")
+        # OutputDicList의 Error 수치 리스트 형성
+        OutputDicErrorList.append(OutputDicError)
+    
+    # OutputDicErrorList중 에러(OutputDicError가 0)가 없었던 OutputDic 찾기, 존재할 경우 해당 OutputDic(OutputDicList[i])값을 리턴
+    NonErrorNum = None
+    for i in range(len(OutputDicErrorList)):
+        if OutputDicErrorList[i] == 0:
+            NonErrorNum = i
+    
+    if NonErrorNum == None:
+        return "INPUT, OUTPUT [n]의 최종 불일치 오류 발생"
+    else:
+        return {'json': OutputDicList[i], 'filter': OutputDicList[i], 'nonCommonParts': nonCommonParts}
 
 ######################
 ##### Memory 생성 #####

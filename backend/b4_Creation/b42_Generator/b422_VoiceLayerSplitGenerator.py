@@ -456,6 +456,12 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
             # get my actor
             r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
             my_actors = r.json()['result']
+            print(f'Chunk: {Chunk}')
+            print(f'RandomEMOTION: {RandomEMOTION}')
+            print(f'RandomSPEED: {RandomSPEED}')
+            print(f'Pitch: {Pitch}')
+            print(f'RandomLASTPITCH: {RandomLASTPITCH}')
+            print(f'voiceLayerPath: {voiceLayerPath}')
             
             if my_actors[0]['name']['ko'] == name:
                 # print(Chunk)
@@ -497,7 +503,7 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
                         # download audio file
                         r = requests.get(ret['audio_download_url'])
                         if len(SplitChunks) == 1:
-                            fileName = voiceLayerPath.replace(".wav", "") + f"_(0).wav"
+                            fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav").replace(".wav", "_(0).wav")
                         else:
                             fileName = voiceLayerPath
                         with open(fileName, 'wb') as f:
@@ -755,9 +761,12 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                 EditGenerationKoChunks.append(tempChunk)
             
             EditId = 1
-            for NewGenerationKoChunk in EditGenerationKoChunks:
-                NewGenerationKoChunk['EditId'] = EditId
-                EditId += 1
+            for NewGenerationKoChunk in EditGenerationKoChunks[:]:
+                if NewGenerationKoChunk['ActorChunk']:
+                    NewGenerationKoChunk['EditId'] = EditId
+                    EditId += 1
+                else:
+                    EditGenerationKoChunks.remove(NewGenerationKoChunk)
             #### Split을 위한 문장을 합치는 코드 ####
 
             # MatchedActors, MatchedChunks 저장

@@ -729,6 +729,7 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
             
             ## 수정생성(Modify) 여부확인 ##
             Modify = "No"
+            historyChunks = []
             for History in GenerationKoChunkHistorys:
                 if History['ChunkId'] == ChunkId:
                     ## historyChunks 생성(historyChunks 중복여부 확인용도)

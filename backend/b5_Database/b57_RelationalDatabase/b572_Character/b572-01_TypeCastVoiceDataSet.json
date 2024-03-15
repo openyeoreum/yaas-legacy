@@ -4132,7 +4132,8 @@
                 "CharacterId": 47,
                 "Name": "김경화앵커(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/47_김경화앵커(일반).wav",
-                "Quilty": 9,
+                "Quilty": 0,
+                "_Quilty": 9,
                 "Grade": ["Caption"],
                 "Context": {
                     "Genre": [
@@ -4219,7 +4220,8 @@
                 "CharacterId": 48,
                 "Name": "김경화앵커(일반, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/48_김경화앵커(일반, 피치다운).wav",
-                "Quilty": 9,
+                "Quilty": 0,
+                "_Quilty": 9,
                 "Grade": ["Caption"],
                 "Context": {
                     "Genre": [
@@ -18673,7 +18675,8 @@
                 "CharacterId": 213,
                 "Name": "손석구(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/213_손석구(일반).wav",
-                "Quilty": 10,
+                "Quilty": 0,
+                "_Quilty": 10,
                 "Grade": ["Actor"],
                 "Context": {
                     "Genre": [
@@ -18760,7 +18763,8 @@
                 "CharacterId": 214,
                 "Name": "손석구(일반, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/214_손석구(일반, 피치다운).wav",
-                "Quilty": 8,
+                "Quilty": 0,
+                "_Quilty": 10,
                 "Grade": ["Actor"],
                 "Context": {
                     "Genre": [

@@ -672,6 +672,8 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
 
     # 데이터 치환
     outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    
+    # outputMemoryDics에 간혹 발생하는 불필요 데이터 삭제
 
     # 기본 Chunks 생성
     InputList = []
@@ -789,13 +791,19 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         
         # 앞, 뒤Chunk를 통한 처리
         if Aftertag in ["Logue", "Part", "Chapter"]:
-            if "Pause" in tokens[-2]:
-                tokens[-2]['Pause'] = "(2.00)"
+            if len(tokens) >= 2:
+                if "Pause" in tokens[-2]:
+                    tokens[-2]['Pause'] = "(2.00)"
+                else:
+                    tokens.append({"Pause": "(2.00)"})
             else:
-                tokens.append({"Pause": "(1.50)"})
+                tokens.append({"Pause": "(2.00)"})
         elif Aftertag == "Index":
-            if "Pause" in tokens[-2]:
-                tokens[-2]['Pause'] = "(1.30)"
+            if len(tokens) >= 2:
+                if "Pause" in tokens[-2]:
+                    tokens[-2]['Pause'] = "(1.30)"
+                else:
+                    tokens.append({"Pause": "(1.30)"})
             else:
                 tokens.append({"Pause": "(1.30)"})
         elif tag == "Character" and Aftertag == "Character":

@@ -51,7 +51,8 @@ def PreprocessAndSplitScripts(bodyText, indexFrame):
     
     ## 2. 인덱스 단위로 문장 분할
     lines = bodyText.split('\n')
-    preprocessedLines = [CleanText(line) for line in lines]
+    Lines = [line + '\n' for line in lines]
+    preprocessedLines = [CleanText(line) for line in Lines]
 
     MissingIndexes = []
     SplitedScripts = []
@@ -59,7 +60,7 @@ def PreprocessAndSplitScripts(bodyText, indexFrame):
     content = ""
     start_search_from_index = 0  # 다음 인덱스 검사를 시작할 위치
 
-    for i, (preprocessedLine, originalLine) in enumerate(zip(preprocessedLines, lines)):
+    for i, (preprocessedLine, originalLine) in enumerate(zip(preprocessedLines, Lines)):
         if i < start_search_from_index:
             continue  # 이미 찾은 인덱스 다음부터 검사 시작
 
@@ -69,7 +70,7 @@ def PreprocessAndSplitScripts(bodyText, indexFrame):
             if preprocessedIndex == preprocessedLine:
                 if current_index is not None:
                     # 이전 인덱스에 대한 내용 저장
-                    SplitedScripts.append((current_index, content.strip()))
+                    SplitedScripts.append((current_index, content))
                     content = ""
                 current_index = index["Index"]
                 start_search_from_index = i + 1  # 다음 인덱스 검사는 이 줄 다음부터
@@ -77,10 +78,10 @@ def PreprocessAndSplitScripts(bodyText, indexFrame):
 
         if current_index is not None and i >= start_search_from_index:
             # 현재 인덱스에 대한 내용 누적
-            content += originalLine + '\n'
+            content += originalLine
 
     if current_index is not None:
-        SplitedScripts.append((current_index, content.strip()))
+        SplitedScripts.append((current_index, content))
 
     presentIndexes = set([index["Index"] for index in indexFrame])
     foundIndexes = set([index for index, _ in SplitedScripts])
@@ -104,7 +105,7 @@ def SplitIntoSentencesAndTokens(SplitedScripts):
         for sentence in sentences:
             # 따옴표 내부의 문장은 하나의 문장으로 취급
             if '"' in sentence or "'" in sentence:
-                sentence = re.sub(r'\s+', ' ', sentence).strip()
+                sentence = re.sub(r'[^\S\n]+', ' ', sentence)
             token_count += len(sentence.split())
             if token_count <= 3000:
                 chunk.append(sentence)
@@ -439,10 +440,44 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "노인을위한나라는있다"
+    projectName = "마케터의무기들"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    
+    ## ScriptsDicList inputList 치환
+    def ScriptsDicListToInputList(projectName, email):
+        indexFrame, bodyText = LoadIndexBody(projectName, email)
+
+        # Raw Text를 ScriptsDicList로 치환
+        SplitedScripts = PreprocessAndSplitScripts(bodyText, indexFrame)
+        ScriptsDicList = SplitIntoSentencesAndTokens(SplitedScripts)
+    
+        return SplitedScripts, ScriptsDicList
+        
+    SplitedScripts, ScriptsDicList = ScriptsDicListToInputList(projectName, email)
+    
+    # ScriptsDicList를 JSON 형식으로 저장
+    import json
+    import datetime
+
+    # 현재 시간을 파일명에 포함
+    now = datetime.datetime.now()
+    timestamp = now.strftime("%Y%m%d_%H%M%S")
+
+    # JSON 파일 경로 설정
+    json_file_path = f"/yaas/ScriptsDicList_{timestamp}.json"
+
+    # JSON 파일로 저장
+    with open(json_file_path, "w", encoding="utf-8") as json_file:
+        json.dump(ScriptsDicList, json_file, ensure_ascii=False, indent=4)
+
+    # JSON 파일 경로 설정
+    json_file_path = f"/yaas/SplitedScripts_{timestamp}.json"
+
+    # JSON 파일로 저장
+    with open(json_file_path, "w", encoding="utf-8") as json_file:
+        json.dump(SplitedScripts, json_file, ensure_ascii=False, indent=4)

@@ -456,12 +456,6 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
             # get my actor
             r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
             my_actors = r.json()['result']
-            print(f'Chunk: {Chunk}')
-            print(f'RandomEMOTION: {RandomEMOTION}')
-            print(f'RandomSPEED: {RandomSPEED}')
-            print(f'Pitch: {Pitch}')
-            print(f'RandomLASTPITCH: {RandomLASTPITCH}')
-            print(f'voiceLayerPath: {voiceLayerPath}')
             
             if my_actors[0]['name']['ko'] == name:
                 # print(Chunk)

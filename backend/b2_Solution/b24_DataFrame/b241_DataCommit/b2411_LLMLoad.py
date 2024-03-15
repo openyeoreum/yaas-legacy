@@ -3,7 +3,7 @@ import json
 import time
 import random
 import tiktoken
-import openai
+import anthropic
 import sys
 sys.path.append("/yaas")
 

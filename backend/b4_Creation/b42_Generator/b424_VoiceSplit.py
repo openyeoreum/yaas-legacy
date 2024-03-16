@@ -58,6 +58,41 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
 ######################
 ##### Filter 조건 #####
 ######################
+## 이 함수는 두 문자열 간의 최대 일치 부분 문자열의 길이를 찾고,이 일치도가 짧은 문자열 길이의 특정 비율(기본값 50%)을 초과하는지 확인
+def MatchExceedThreshold(ShortStr, LongStr, threshold=0.5):
+    # 동적 프로그래밍을 위한 2차원 배열 초기화
+    dp = [[0] * (len(LongStr) + 1) for _ in range(len(ShortStr) + 1)]
+    
+    # 최대 일치 길이를 저장할 변수
+    max_length = 0
+    
+    # 두 문자열 간의 최대 일치 부분 문자열 길이 계산
+    for i in range(1, len(ShortStr) + 1):
+        for j in range(1, len(LongStr) + 1):
+            if ShortStr[i-1] == LongStr[j-1]:
+                dp[i][j] = dp[i-1][j-1] + 1
+                max_length = max(max_length, dp[i][j])
+    
+    # 짧은 문자열에 대한 일치도 계산
+    if len(ShortStr) == 0:
+        return False
+    
+    match_rate = max_length / len(ShortStr)
+    # 일치도가 threshold를 초과하는지 확인
+    return match_rate > threshold
+
+## 주어진 두 문자열(part.strip()와 number_word)의 일치도를 확인하고, 일치도가 50% 이상일 경우 not_error를 1 증가
+def MatchIncreaseNotError(part, number_word, _NotError):
+    part_stripped = part.strip()
+    # 짧은 문자열과 긴 문자열을 결정
+    ShortStr, LongStr = sorted([part_stripped, number_word], key=len)
+    
+    # 일치도가 50%를 초과하는지 확인
+    if MatchExceedThreshold(ShortStr, LongStr):
+        _NotError += 1
+    
+    return _NotError
+
 ## 음성파일을 STT로 단어별 시간 계산하기
 def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordList):
     # Error1: json 형식이 아닐 때의 예외 처리
@@ -96,6 +131,7 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
         #     output['숫자'] = number - 1
         NotError = 0
         for NumberWord in NumberWordList:
+            ## 일치 검사 (앞뒤 둘다 in 100%)
             if (parts[0].strip() in NumberWord[0] and number == NumberWord[1] and parts[1].strip() in NumberWord[2]) or (NumberWord[0] in parts[0].strip() and number == NumberWord[1] and NumberWord[2] in parts[1].strip()):
                 output['숫자'] = number
                 NotError += 1
@@ -105,6 +141,25 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
             elif (parts[0].strip() in NumberWord[0] and number-1 == NumberWord[1] and parts[1].strip() in NumberWord[2]) or (NumberWord[0] in parts[0].strip() and number-1 == NumberWord[1] and NumberWord[2] in parts[1].strip()):
                 output['숫자'] = number - 1
                 NotError += 1
+            else:
+                ## 일치율 검사 (앞뒤 둘다 50% 이상)
+                # print(f'parts[0].strip(): {parts[0].strip()}')
+                # print(f'NumberWord[0]: {NumberWord[0]}\n\n')
+                # print(f'parts[1].strip(): {parts[1].strip()}')
+                # print(f'NumberWord[2]: {NumberWord[2]}\n\n')
+                _NotError = 0
+                _NotError = MatchIncreaseNotError(parts[0].strip(), NumberWord[0], _NotError)
+                _NotError = MatchIncreaseNotError(parts[1].strip(), NumberWord[2], _NotError)
+                # print(f'_NotError: {_NotError}\n\n')
+                if _NotError <= 2 and number == NumberWord[1]:
+                    output['숫자'] = number
+                    NotError += 1
+                elif _NotError <= 2 and number + 1 == NumberWord[1]:
+                    output['숫자'] = number + 1
+                    NotError += 1
+                elif _NotError <= 2 and number - 1 == NumberWord[1]:
+                    output['숫자'] = number - 1
+                    NotError += 1
         if NotError == 0:
             return "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError"
 
@@ -522,3 +577,46 @@ if __name__ == "__main__":
     VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/테스트(가)_0_연우(중간톤, 피치다운).wav"
     LanguageCode = "ko-KR"
     #########################################################################
+    ## 이 함수는 두 문자열 간의 최대 일치 부분 문자열의 길이를 찾고,이 일치도가 짧은 문자열 길이의 특정 비율(기본값 50%)을 초과하는지 확인
+    def MatchExceedThreshold(ShortStr, LongStr, threshold = 0.5):
+        # 동적 프로그래밍을 위한 2차원 배열 초기화
+        dp = [[0] * (len(LongStr) + 1) for _ in range(len(ShortStr) + 1)]
+        
+        # 최대 일치 길이를 저장할 변수
+        max_length = 0
+        
+        # 두 문자열 간의 최대 일치 부분 문자열 길이 계산
+        for i in range(1, len(ShortStr) + 1):
+            for j in range(1, len(LongStr) + 1):
+                if ShortStr[i-1] == LongStr[j-1]:
+                    dp[i][j] = dp[i-1][j-1] + 1
+                    max_length = max(max_length, dp[i][j])
+        
+        # 짧은 문자열에 대한 일치도 계산
+        match_rate = max_length / len(ShortStr)
+        
+        # 일치도가 threshold를 초과하는지 확인
+        return match_rate > threshold
+    
+    ## 주어진 두 문자열(part.strip()와 number_word)의 일치도를 확인하고, 일치도가 50% 이상일 경우 not_error를 1 증가
+    def MatchIncreaseNotError(part, number_word, not_error):
+        part_stripped = part.strip()
+        # 짧은 문자열과 긴 문자열을 결정
+        ShortStr, LongStr = sorted([part_stripped, number_word], key=len)
+        
+        # 일치도가 50%를 초과하는지 확인
+        if MatchExceedThreshold(ShortStr, LongStr):
+            not_error += 1
+        
+        return not_error
+
+    # 초기 NotError 값
+    NotError = 0
+
+    # 예시1과 예시2를 테스트
+    NotError = MatchIncreaseNotError("납니다", "합니다", NotError)
+    print(NotError)
+    NotError = MatchIncreaseNotError("콘셉트의", "콘셉트의", NotError)
+    print(NotError)
+    NotError = MatchIncreaseNotError("합니다", "조금합니다", NotError)
+    print(NotError)

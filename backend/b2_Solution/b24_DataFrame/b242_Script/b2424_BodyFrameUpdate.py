@@ -432,8 +432,11 @@ def TaggedChunksToUnitedChunks(projectName, email, tokensCount):
 
         for Unit in IndexUnitChunksUnit[1:]:
             UnitTokensCount = len(encoding.encode(Unit["TagChunks"]))
-            currentList.append(Unit)
-            currentTokensCount += UnitTokensCount
+            
+            # TagChunks 내에 한글 또는 영어가 있는지 확인
+            if re.search(r'[가-힣a-zA-Z]', Unit["TagChunks"]):
+                currentList.append(Unit)
+                currentTokensCount += UnitTokensCount
             
             # 만약 현재 항목을 추가했을 때 토큰 수가 tokensCount를 초과한다면
             # 현재까지의 항목들을 결과 리스트에 추가하고 마지막 항목은 다음 리스트의 시작으로 합니다.
@@ -662,7 +665,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "노인을위한나라는있다"
+    projectName = "마케터의무기들"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"

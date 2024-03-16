@@ -447,37 +447,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    
-    ## ScriptsDicList inputList 치환
-    def ScriptsDicListToInputList(projectName, email):
-        indexFrame, bodyText = LoadIndexBody(projectName, email)
-
-        # Raw Text를 ScriptsDicList로 치환
-        SplitedScripts = PreprocessAndSplitScripts(bodyText, indexFrame)
-        ScriptsDicList = SplitIntoSentencesAndTokens(SplitedScripts)
-    
-        return SplitedScripts, ScriptsDicList
-        
-    SplitedScripts, ScriptsDicList = ScriptsDicListToInputList(projectName, email)
-    
-    # ScriptsDicList를 JSON 형식으로 저장
-    import json
-    import datetime
-
-    # 현재 시간을 파일명에 포함
-    now = datetime.datetime.now()
-    timestamp = now.strftime("%Y%m%d_%H%M%S")
-
-    # JSON 파일 경로 설정
-    json_file_path = f"/yaas/ScriptsDicList_{timestamp}.json"
-
-    # JSON 파일로 저장
-    with open(json_file_path, "w", encoding="utf-8") as json_file:
-        json.dump(ScriptsDicList, json_file, ensure_ascii=False, indent=4)
-
-    # JSON 파일 경로 설정
-    json_file_path = f"/yaas/SplitedScripts_{timestamp}.json"
-
-    # JSON 파일로 저장
-    with open(json_file_path, "w", encoding="utf-8") as json_file:
-        json.dump(SplitedScripts, json_file, ensure_ascii=False, indent=4)

@@ -432,8 +432,11 @@ def TaggedChunksToUnitedChunks(projectName, email, tokensCount):
 
         for Unit in IndexUnitChunksUnit[1:]:
             UnitTokensCount = len(encoding.encode(Unit["TagChunks"]))
-            currentList.append(Unit)
-            currentTokensCount += UnitTokensCount
+            
+            # TagChunks 내에 한글 또는 영어가 있는지 확인
+            if re.search(r'[가-힣a-zA-Z]', Unit["TagChunks"]):
+                currentList.append(Unit)
+                currentTokensCount += UnitTokensCount
             
             # 만약 현재 항목을 추가했을 때 토큰 수가 tokensCount를 초과한다면
             # 현재까지의 항목들을 결과 리스트에 추가하고 마지막 항목은 다음 리스트의 시작으로 합니다.

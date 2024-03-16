@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddExistedIndexFrameToDB, AddIndexFrameBodyToDB, IndexFrameCountLoad, InitIndexFrame, IndexFrameCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
@@ -35,7 +35,7 @@ def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess",
     
     while TotalCount < MaxRetries:
       
-      Response, Usage, Model = LLMresponse(projectName, email, Process, Input, TotalCount + 1, Mode = mode, messagesReview = MESSAGESREVIEW)
+      Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, TotalCount + 1, Mode = mode, messagesReview = MESSAGESREVIEW)
 
       cleanInput = re.sub("[^가-힣]", "", Input)
       cleanResponse = re.sub("[^가-힣]", "", Response)
@@ -68,7 +68,7 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
     
     while TotalCount < MaxRetries:
       
-      Response, Usage, Model = LLMresponse(projectName, email, Process, Input, TotalCount + 1, Mode = Mode, messagesReview = MessagesReview)
+      Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, TotalCount + 1, Mode = Mode, messagesReview = MessagesReview)
 
       cleanInput = re.sub("[^가-힣]", "", Input)
       cleanResponse = re.sub("[^가-힣]", "", Response)

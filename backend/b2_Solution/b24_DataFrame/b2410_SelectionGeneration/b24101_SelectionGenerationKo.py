@@ -11,7 +11,7 @@ from langdetect.lang_detect_exception import LangDetectException
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddExistedSelectionGenerationKoToDB, AddSelectionGenerationKoBookContextToDB, AddSelectionGenerationKoSplitedIndexsToDB, SelectionGenerationKoCountLoad, SelectionGenerationKoCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB
 

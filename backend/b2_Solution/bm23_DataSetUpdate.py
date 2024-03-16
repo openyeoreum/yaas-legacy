@@ -2,7 +2,7 @@ import sys
 sys.path.append("/yaas")
 
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddProjectFeedbackDataSets
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LLMFineTuning
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import OpenAI_LLMFineTuning
 
 #################################
 #################################
@@ -24,14 +24,14 @@ def SolutionDataSetUpdate(email, projectName):
     ### 11_CharacterDefine Feedback 데이터셋 파인튜닝 ###
     ####################################################
     AddProjectFeedbackDataSets(projectName, email, "CharacterDefine", FeedbackDataSetPath, CompleteDataSetPath)
-    LLMFineTuning(projectName, email, "11", "CharacterDefine", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
+    OpenAI_LLMFineTuning(projectName, email, "11", "CharacterDefine", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
 
 
     # ########################################################
     # ### 12_CharacterCompletion Feedback 데이터셋 파인튜닝 ###
     # ########################################################
     # AddProjectFeedbackDataSets(projectName, email, "CharacterCompletion", FeedbackDataSetPath, CompleteDataSetPath)
-    # LLMFineTuning(projectName, email, "05", "CharacterCompletion", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
+    # OpenAI_LLMFineTuning(projectName, email, "05", "CharacterCompletion", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)
 
 if __name__ == "__main__":
     

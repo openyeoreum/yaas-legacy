@@ -434,7 +434,7 @@ def TaggedChunksToUnitedChunks(projectName, email, tokensCount):
             UnitTokensCount = len(encoding.encode(Unit["TagChunks"]))
             
             # TagChunks 내에 한글 또는 영어가 있는지 확인
-            if re.search(r'[가-힣a-zA-Z]', Unit["TagChunks"]):
+            if re.search(r'[\p{L}]', Unit["TagChunks"]):
                 currentList.append(Unit)
                 currentTokensCount += UnitTokensCount
             

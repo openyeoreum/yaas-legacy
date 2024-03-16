@@ -6,7 +6,7 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, LLMresponse
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
 from extension.e1_Solution.e11_General.e111_GetDBtable import GetLifeGraph
 from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311_ExtensionDataFrameCommit import LoadExtensionOutputMemory, SaveExtensionOutputMemory, AddExistedLifeGraphTranslationEnToDB, AddLifeGraphTranslationEnLifeGraphsToDB, AddLifeGraphTranslationEnLifeDataTextsToDB, LifeGraphTranslationEnCountLoad, InitLifeGraphTranslationEn, LifeGraphTranslationEnCompletionUpdate, UpdatedLifeGraphTranslationEn
@@ -168,7 +168,7 @@ def LifeGraphTranslationEnProcess(lifeGraphSetName, latestUpdateDate, LifeGraphD
             outputEnder = f"{{'LifeData': [{{'Period': '"
             
             # Response 생성
-            Response, Usage, Model = LLMresponse(lifeGraphSetName, latestUpdateDate, Process, Input, ProcessCount, root = "extension", Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(lifeGraphSetName, latestUpdateDate, Process, Input, ProcessCount, root = "extension", Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetExtensionPromptFrame(Process)

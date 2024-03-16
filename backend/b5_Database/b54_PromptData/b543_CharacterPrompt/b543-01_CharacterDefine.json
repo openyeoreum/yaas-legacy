@@ -1,18 +1,35 @@
 {
     "TaskName": "CharacterDefine",
-    "BaseModel": {
-        "ShortTokensModel": "gpt-3.5-turbo-0125",
-        "LongTokensModel": "gpt-4-turbo-preview"
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-3.5-turbo-0125",
+            "LongTokensModel": "gpt-4-turbo-preview"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [{"Date": "CharacterDefine-231022073805", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS"}, {"Date": "CharacterDefine-231102055753", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8GJjYaiZ"}, {"Date": "CharacterDefine-231108032841", "Model": "ft:gpt-3.5-turbo:yeoreum::8ILpWsR7"}],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "gpt-4-turbo-preview"
     },
-    "ExampleFineTunedModel": {
-        "ShortTokensModel": [{"Date": "CharacterDefine-231022073805", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8CTTEzmS"}, {"Date": "CharacterDefine-231102055753", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8GJjYaiZ"}, {"Date": "CharacterDefine-231108032841", "Model": "ft:gpt-3.5-turbo:yeoreum::8ILpWsR7"}],
-        "LongTokensModel": []
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-haiku-20240307",
+            "LongTokensModel": "claude-3-haiku-20240307"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-opus-20240229"
     },
-    "MemoryFineTunedModel": {
-        "ShortTokensModel": [],
-        "LongTokensModel": []
-    },
-    "MasterModel": "gpt-4-turbo-preview",
     "Temperature": 0.4,
     "OutputTokensRatio": 0.5,
     "OutputFormat": "json",

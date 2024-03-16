@@ -93,7 +93,7 @@ def TypeCastAPILogout(email, driver):
 ## TypeCastAPICharacter 통합 함수
 def TypeCastMacro(name):
     ############################ 하이퍼 파라미터 설정 ############################
-    email = "lucidsun0128@naver.com"
+    email = "ahyeon00128@naver.com"
     password = "Dhvmsdufma1!"
     ## TypeCastAPI 드라이브
     driver = TypeCastAPIDrive(email)

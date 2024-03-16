@@ -525,14 +525,31 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
                    'Output': response.usage.output_tokens,
                    'Total': response.usage.input_tokens + response.usage.output_tokens}
           
-          # Response Mode 전처리
+          # Response Mode 전처리 ([...]와 {...}중 하나로 전처리)
           if promptFrame[0]["OutputFormat"] == 'json':
-            StartIndex = Response.find('{')
-            EndIndex = Response.rfind('}')
-            if StartIndex != -1 and EndIndex != -1:
-              JsonResponse = Response[StartIndex:EndIndex + 1]
+              start_index_bracket = Response.find('[')
+              start_index_brace = Response.find('{')
+              if start_index_bracket != -1 and start_index_brace != -1:
+                  start_index = min(start_index_bracket, start_index_brace)
+              elif start_index_bracket != -1:
+                  start_index = start_index_bracket
+              elif start_index_brace != -1:
+                  start_index = start_index_brace
+              else:
+                  start_index = -1
+              if start_index != -1:
+                  if Response[start_index] == '[':
+                      end_index = Response.rfind(']')
+                  else:
+                      end_index = Response.rfind('}')
+                  if end_index != -1:
+                      JsonResponse = Response[start_index:end_index+1]
+                  else:
+                      JsonResponse = Response
+              else:
+                  JsonResponse = Response
           else:
-            JsonResponse = Response
+              JsonResponse = Response
           
           if isinstance(email, str):
             print(f"Project: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 완료")

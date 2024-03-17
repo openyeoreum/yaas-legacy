@@ -655,7 +655,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks):
         os.remove(part_path)
 
     # 마지막 5초 공백 추가
-    final_combined += AudioSegment.silent(duration=5000)  # 5초간의 공백 생성
+    final_combined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
 
     # 최종적으로 합쳐진 음성 파일 저장
     final_combined.export(os.path.join(voiceLayerPath, projectName + "_VoiceLayer.wav"), format="wav")
@@ -721,6 +721,10 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                     split_pauses.append(current_pause)
 
                 return split_chunks, split_pauses
+            
+            # 언어만 남기는 함수 추가
+            def extract_text(text):
+                return re.sub(r'[^가-힣a-zA-Z0-9]', '', text)
 
             for GenerationKoChunk in SelectionGenerationKoChunks:
                 chunkid = GenerationKoChunk['ChunkId']
@@ -737,9 +741,15 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                 newChunk = {"EditId": None, "ChunkId": [chunkid], "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses}
 
                 if tempChunk and len(' '.join(tempChunk['ActorChunk'] + actorchunks)) <= 350 and (tempChunk['Tag'] == tag and tempChunk['ActorName'] == actorname):
-                    tempChunk['ActorChunk'] += actorchunks
-                    tempChunk['Pause'] += pauses
-                    tempChunk['ChunkId'] += [chunkid]
+                    # 기존 문장과 새로운 문장을 언어만 남긴 상태로 비교
+                    combined_text = extract_text(' '.join(tempChunk['ActorChunk']))
+                    new_text = extract_text(' '.join(actorchunks))
+                    if new_text not in combined_text:  # 새로운 문장이 기존 문장에 포함되어 있지 않은 경우에만 합침
+                        tempChunk['ActorChunk'] += actorchunks
+                        tempChunk['Pause'] += pauses
+                        tempChunk['ChunkId'] += [chunkid]
+                    else:  # 새로운 문장이 기존 문장에 포함되어 있는 경우, 새로운 딕셔너리로 시작
+                        tempChunk = appendAndResetTemp(tempChunk, newChunk)
                 else:
                     if tempChunk:  # Check and split before resetting if needed
                         combined_text = ' '.join(tempChunk['ActorChunk'])
@@ -753,7 +763,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
 
             if tempChunk:
                 EditGenerationKoChunks.append(tempChunk)
-            
+                
             EditId = 1
             for NewGenerationKoChunk in EditGenerationKoChunks[:]:
                 if NewGenerationKoChunk['ActorChunk']:

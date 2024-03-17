@@ -806,6 +806,14 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                     tokens.append({"Pause": "(1.30)"})
             else:
                 tokens.append({"Pause": "(1.30)"})
+        elif (tag not in ["Caption", "CaptionComment"]) and (Aftertag in ["Caption", "CaptionComment"]):
+            if len(tokens) >= 2:
+                if "Pause" in tokens[-2]:
+                    tokens[-2]['Pause'] = "(1.10)"
+                else:
+                    tokens.append({"Pause": "(1.10)"})
+            else:
+                tokens.append({"Pause": "(1.20)"})
         elif tag == "Character" and Aftertag == "Character":
             tokens.append({"Pause": "(0.75)"})
             tokens.append({"Enter": "\n"})
@@ -828,6 +836,14 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
                 Endtoken = RemoveSFXtokens[-1]
                 if 'Pause' not in BeforeEndtoken and 'Pause' not in Endtoken and 'Comma' not in BeforeEndtoken and 'Comma' not in Endtoken:
                     tokens.append({"Pause": "(0.20)"})
+
+        # 마지막으로 Pause가 없는 경우의 처리
+        PauseCount = 0
+        for token in tokens[-3:]:
+            if 'Pause' in token:
+                PauseCount += 1
+        if PauseCount == 0:
+            tokens.append({"Pause": random.choice(["(0.51)", "(0.55)", "(0.59)"])})
 
     # responseJson 구조 형성###
     responseJson = []
@@ -908,7 +924,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "우리는행복을진단한다"
+    projectName = "마케터의무기들"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"

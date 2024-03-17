@@ -142,15 +142,76 @@ def ScriptsDicListToInputList(projectName, email):
     if Clean_Scripts != clean_scripts:
         sys.exit(f"[ 분할 전후 텍스트가 다름 ({Clean_Scripts} != {clean_scripts}) ]")
 
+    ## Caption 전처리 유지 및 나머지 기호 치환
+    nonClosingToken = ['다', '나', '까', '요', '죠', '듯', '것', '라', '가', '니', '군', '오', '자', '네', '소', '지', '어']
+    nonSign = ['_', '|']
+    ReplaceSign = ['@@@', '###', '$$$']
+    
+    nonEndingElements = []
+    _nonEndingElements = []
+    nonClosingElements = []
+    _nonClosingElements = []
+    nonEndingClosingElements = []
+    
+    replaceEndingElements = []
+    _replaceEndingElements = []
+    replaceClosingElements = []
+    _replaceClosingElements = []
+    replaceEndingClosingElements = []
+    
+    for Token in nonClosingToken:
+        nonEndingElements.append(Token + nonSign[0] + ' ')
+        _nonEndingElements.append(Token + nonSign[0] + '\n')
+        nonClosingElements.append(Token + nonSign[1] + ' ')
+        _nonClosingElements.append(Token + nonSign[1] + '\n')
+        nonEndingClosingElements.append(Token + nonSign[0] + nonSign[1])
+        
+        replaceEndingElements.append(Token + ReplaceSign[0] + ' ')
+        _replaceEndingElements.append(Token + ReplaceSign[0] + '\n')
+        replaceClosingElements.append(Token + ReplaceSign[1] + ' ')
+        _replaceClosingElements.append(Token + ReplaceSign[1] + '\n')
+        replaceEndingClosingElements.append(Token + ReplaceSign[2])
+        
+    # 조건별 기호 치환
     InputList = []
     for i in range(len(ScriptsDicList)):
-        Input = ScriptsDicList[i]['Script'].replace('○', '-')
+        Input = ScriptsDicList[i]['Script']
+        ReplaceSwitch = True
+        
+        ## | 치환 조건 확인
+        if Input.count('|') % 2 == 0:
+            for element in nonClosingElements + _nonClosingElements + nonEndingClosingElements:
+                if element in Input:
+                    ReplaceSwitch = False
+                    break
+        
+        ## 임시치환
+        for j in range(len(nonClosingToken)):
+            Input = Input.replace(nonEndingElements[j], replaceEndingElements[j])
+            Input = Input.replace(_nonEndingElements[j], _replaceEndingElements[j])
+            Input = Input.replace(nonClosingElements[j], replaceClosingElements[j])
+            Input = Input.replace(_nonClosingElements[j], _replaceClosingElements[j])
+            Input = Input.replace(nonEndingClosingElements[j], replaceEndingClosingElements[j])
+        
+        if ReplaceSwitch:
+            Input = Input.replace('|', '◇')
         Input = Input.replace('_', '◆')
-        Input = Input.replace('|', '◇')
+        
+        ## 임시치환 요소 복구
+        for j in range(len(nonClosingToken)):
+            Input = Input.replace(replaceEndingElements[j], nonEndingElements[j])
+            Input = Input.replace(_replaceEndingElements[j], _nonEndingElements[j])
+            Input = Input.replace(replaceClosingElements[j], nonClosingElements[j])
+            Input = Input.replace(_replaceClosingElements[j], _nonClosingElements[j])
+            Input = Input.replace(replaceEndingClosingElements[j], nonEndingClosingElements[j])
+
+        ## 나머지 요소 치환
+        Input = Input.replace('○', '-')
         Input = Input.replace('/', '◎')
         Input = Input.replace('<', '(')
         Input = Input.replace('>', ')')
-        InputList.append({'Id': i+1, 'Index': ScriptsDicList[i]['Index'], 'Continue': Input})
+
+        InputList.append({'Id': i + 1, 'Index': ScriptsDicList[i]['Index'], 'Continue': Input})
         
     return InputList
 
@@ -447,3 +508,9 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    
+    InputList = ScriptsDicListToInputList(projectName, email)
+    
+    # JSON 파일로 저장
+    with open('/yaas/InputList.json', 'w', encoding='utf-8') as f:
+        json.dump(InputList, f, ensure_ascii=False, indent=4)

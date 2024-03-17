@@ -542,9 +542,9 @@ def SortAndRemoveDuplicates(files):
             # 생성넘버, 세부생성넘버, M의 유무를 반환
             return {
                 'base_name': match.group(1),
-                'gen_num': int(match.group(2)),
-                'detail_gen_num': int(match.group(5)),
-                'has_M': match.group(6) == 'M'
+                'gen_num': float(match.group(2)),
+                'detail_gen_num': int(match.group(6)),
+                'has_M': match.group(7) == 'M'
             }
         return None
 

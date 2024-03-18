@@ -15,14 +15,14 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 def LoadIndexText(projectName, email):
     project = GetProject(projectName, email)
     indexText = project.IndexText
-    IndexText = indexText.replace('.', '_')
-    IndexText = IndexText.replace('!', '_')
-    IndexText = IndexText.replace('?', '_')
-    IndexText = IndexText.replace("'", '|').replace('’', '|').replace('‘', '|')
-    IndexText = IndexText.replace('"', '|').replace('“', '|').replace('”', '|')
-    IndexText = IndexText.replace('/', '&')
+    _IndexText = indexText.replace('.', '_')
+    _IndexText = _IndexText.replace('!', '_')
+    _IndexText = _IndexText.replace('?', '_')
+    _IndexText = _IndexText.replace("'", '|').replace('’', '|').replace('‘', '|')
+    _IndexText = _IndexText.replace('"', '|').replace('“', '|').replace('”', '|')
+    _IndexText = _IndexText.replace('/', '&')
     
-    return indexText
+    return _IndexText
 
 # IndexPreprocess 프롬프트 요청 및 결과물 Text화
 def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess", MaxRetries = 100, mode = "Example", MESSAGESREVIEW = "off"):

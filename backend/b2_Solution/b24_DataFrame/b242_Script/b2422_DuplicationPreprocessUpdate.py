@@ -16,7 +16,7 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 # IndexBodyText 로드
 def LoadIndexBody(projectName, email):
     project = GetProject(projectName, email)
-    indexFrame = project.IndexFrame[1]['IndexTags'][1:]   
+    indexFrame = project.IndexFrame[1]['IndexTags'][1:]
     bodyText = project.BodyText
     
     return indexFrame, bodyText

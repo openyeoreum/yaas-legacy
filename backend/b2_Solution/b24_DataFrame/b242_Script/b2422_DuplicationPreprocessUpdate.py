@@ -214,7 +214,7 @@ def ScriptsDicListToInputList(projectName, email):
 
         InputList.append({'Id': i + 1, 'Index': ScriptsDicList[i]['Index'], 'Continue': Input})
         
-    return InputList, SplitedScripts
+    return InputList
 
 ######################
 ##### Filter 조건 #####

@@ -100,6 +100,14 @@ def PronunciationPreprocessOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
+## 수와 관련된 기호(+, -, /, 를 제외한
+def RemoveSpecialCharacters(Input):
+    # 수와 관련된 기호를 제외한 특수문자를 정의하는 정규식 패턴
+    pattern = r'[^0-9a-zA-Z+\-*/.\=\(\)\[\]\{\}\|\%\^\&\~\<\>\'\"\:\＋\－\＜\＝\＞\±\×\÷\≠\≤\≥\∞\∴\♂\♀\∠\⊥\⌒\∂\∇\≡\≒\≪\≫\√\∽\∝\∵\∫\∬\∈\∋\⊆\⊇\⊂\⊃\∪\∩\∧\∨\￢\⇒\⇔\∀\∃\∮\∑\∏\＄\％\￦\Ｆ\′\″\℃\Å\￠\￡\￥\¤\℉\‰\€\㎕\㎖\㎗\ℓ\㎘\㏄\㎣\㎤\㎥\㎦\㎙\㎚\㎛\㎜\㎝\㎞\㎟\㎠\㎡\㎢\㏊\㎍\㎎\㎏\㏏\㎈\㎉\㏈\㎧\㎨\㎰\㎱\㎲\㎳\㎴\㎵\㎶\㎷\㎸\㎹\㎀\㎁\㎂\㎃\㎄\㎺\㎻\㎼\㎽\㎾\㎿\㎐\㎑\㎒\㎓\㎔\Ω\㏀\㏁\㎊\㎋\㎌\㏖\㏅\㎭\㎮\㎯\㏛\㎩\㎪\㎫\㎬\㏝\㏐\㏓\㏃\㏉\㏜\㏆]'
+    # 입력 문자열에서 특수문자를 제거
+    CleanInput = re.sub(pattern, '', Input)
+    return CleanInput
+
 ## PronunciationPreprocess 프롬프트 요청 및 결과물 Json화
 def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = "PronunciationPreprocess",  memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
@@ -150,11 +158,12 @@ def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = 
         if "Continue" in InputDic:
             Index = InputDic['Index']
             Input = InputDic['Continue']
+            CleanInput = RemoveSpecialCharacters(Input)
             memoryCounter = " - 중요사항 | '발음수정전'과 '발음수정후'는 *숫자, *외국어, *기호, *특수문자 등의 요소들을 한글발음으로 수정하는 것 | 발음수정이 없을 경우는 {'발음수정': []}로 작성 -\n"
             outputEnder = ""
 
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, CleanInput, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)

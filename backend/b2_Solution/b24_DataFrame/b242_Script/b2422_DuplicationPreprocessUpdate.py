@@ -269,7 +269,6 @@ def DuplicationPreprocessFilter(responseData, Input, Index):
 ## inputMemory 형성
 def DuplicationPreprocessInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
-    
     inputMemoryList = []
     for inputmeMory in inputMemoryDic:
         key = list(inputmeMory.keys())[2]  # 두 번째 키값
@@ -387,7 +386,6 @@ def DuplicationPreprocessProcess(projectName, email, DataFramePath, Process = "D
                 if ErrorCount == 7:
                     sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
 
-                    
                 continue
             else:
                 OutputDic = Filter['filter']
@@ -509,13 +507,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    
-    InputList, SplitedScripts = ScriptsDicListToInputList(projectName, email)
-    
-    # JSON 파일로 저장
-    with open('/yaas/InputList.json', 'w', encoding='utf-8') as f:
-        json.dump(InputList, f, ensure_ascii=False, indent=4)
-        
-    # JSON 파일로 저장
-    with open('/yaas/SplitedScripts.json', 'w', encoding='utf-8') as f:
-        json.dump(SplitedScripts, f, ensure_ascii=False, indent=4)

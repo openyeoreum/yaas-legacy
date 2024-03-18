@@ -103,11 +103,16 @@ def PronunciationPreprocessOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ## 수와 관련된 기호(+, -, /, 를 제외한
 def RemoveSpecialCharacters(Input):
-    # 수와 관련된 기호를 제외한 특수문자를 정의하는 정규식 패턴
-    pattern = r'[^0-9a-zA-Z+\-*/.\=\(\)\[\]\{\}\|\%\^\&\~\<\>\'\"\:\＋\－\＜\＝\＞\±\×\÷\≠\≤\≥\∞\∴\♂\♀\∠\⊥\⌒\∂\∇\≡\≒\≪\≫\√\∽\∝\∵\∫\∬\∈\∋\⊆\⊇\⊂\⊃\∪\∩\∧\∨\￢\⇒\⇔\∀\∃\∮\∑\∏\＄\％\￦\Ｆ\′\″\℃\Å\￠\￡\￥\¤\℉\‰\€\㎕\㎖\㎗\ℓ\㎘\㏄\㎣\㎤\㎥\㎦\㎙\㎚\㎛\㎜\㎝\㎞\㎟\㎠\㎡\㎢\㏊\㎍\㎎\㎏\㏏\㎈\㎉\㏈\㎧\㎨\㎰\㎱\㎲\㎳\㎴\㎵\㎶\㎷\㎸\㎹\㎀\㎁\㎂\㎃\㎄\㎺\㎻\㎼\㎽\㎾\㎿\㎐\㎑\㎒\㎓\㎔\Ω\㏀\㏁\㎊\㎋\㎌\㏖\㏅\㎭\㎮\㎯\㏛\㎩\㎪\㎫\㎬\㏝\㏐\㏓\㏃\㏉\㏜\㏆]'
-    # 입력 문자열에서 특수문자를 제거
-    CleanInput = re.sub(pattern, '', Input)
-    return CleanInput
+    # 수학 기호를 한글 발음으로 변환하는 딕셔너리 (마침표 제외)
+    mathSymbols = {
+        r'\+': '플러스', r'\-': '마이너스', r'=': '는', r'\%': '퍼센트', r'\^': '제곱', r'±': '플러스마이너스', r'×': '곱하기', r'÷': '나누기', r'≠': '같지않다', r'≤': '작거나같다', r'≥': '크거나같다', r'∞': '무한대', r'∴': '그러므로', r'♂': '수컷', r'♀': '암컷', r'∠': '각', r'⊥': '수직', r'⌒': '호', r'∂': '편미분', r'∇': '델', r'≡': '항등', r'≒': '근사', r'≪': '매우작다', r'≫': '매우크다', r'√': '제곱근', r'∝': '비례', r'∵': '왜냐하면', r'∫': '적분', r'∬': '이중적분', r'∈': '원소', r'∋': '원소포함', r'⊆': '부분집합', r'⊇': '부분집합포함', r'⊂': '진부분집합', r'⊃': '초집합', r'∪': '합집합', r'∩': '교집합', r'∧': '논리곱', r'∨': '논리합', r'￢': '부정', r'⇒': '함의', r'⇔': '동치', r'∀': '모든', r'∃': '존재한다', r'∮': '선적분', r'∑': '시그마', r'∏': '파이', r'\＄': '달러', r'％': '퍼센트', r'￦': '원화', r'°': '도씨', r'℃': '섭씨', r'Å': '옹스트롬', r'￠': '센트', r'￡': '파운드', r'￥': '엔화', r'¤': '통화', r'℉': '화씨', r'‰': '퍼밀', r'€': '유로', r'Ω': '옴'
+    }
+
+    # 수학 기호를 한글 발음으로 변환
+    for symbol, hangul in mathSymbols.items():
+        Input = re.sub(symbol, hangul, Input)
+
+    return Input
 
 ## PronunciationPreprocess 프롬프트 요청 및 결과물 Json화
 def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = "PronunciationPreprocess",  memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
@@ -159,12 +164,12 @@ def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = 
         if "Continue" in InputDic:
             Index = InputDic['Index']
             Input = InputDic['Continue']
-            CleanInput = RemoveSpecialCharacters(Input)
+            Input = RemoveSpecialCharacters(Input)
             memoryCounter = " - 중요사항 | '발음수정전'과 '발음수정후'는 *숫자, *외국어, *기호, *특수문자 등의 요소들을 한글발음으로 수정하는 것 | 발음수정이 없을 경우는 {'발음수정': []}로 작성 -\n"
             outputEnder = ""
 
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, CleanInput, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)

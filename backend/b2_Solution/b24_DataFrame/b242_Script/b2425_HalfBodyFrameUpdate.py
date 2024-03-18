@@ -151,7 +151,7 @@ def BodySplitPreprocess(projectName, email):
     # BodySplitPreprocess 오류체크
     for chunk in BodyChunks:
         if chunk.count('∥')%2 != 0:
-            sys.exit(f"Body의 따옴표 숫자 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | BodySplitPreprocessError, 문제 따옴표수: {chunk.count('∥')}")
+            sys.exit(f"Body의 따옴표 숫자 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | BodySplitPreprocessError\n\n[ {projectName}의 PronunciationPreprocess에서 따옴표 수를 체크하세요! ]\n\n문제 따옴표수: {chunk.count('∥')}")
     print(f"Project: {projectName} | Process: HalfBodyFrameUpdate | BodySplitPreprocess 완료")
       
     return BodyChunks
@@ -405,7 +405,7 @@ def IndexMatching(projectName, email):
     
     # IndexMatching 오류체크
     if nonMatchingIndexList != []:
-        sys.exit(f"Index 불일치 오류 발생: Project: {projectName} | Process: HalfBodyFrameUpdate | IndexMatchingError\n{nonMatchingIndexList}")
+        sys.exit(f"Index 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | IndexMatchingError\n\n[ {projectName}의 IndexFrame과 PronunciationPreprocess를 비교 후 수정하세요! ]\n\n{nonMatchingIndexList}")
         
     INPUT = re.sub("[^가-힣]", "", str(CharacterTaggedChunks))
     OUTPUT = re.sub("[^가-힣]", "", str(IndexMatchedChunks))

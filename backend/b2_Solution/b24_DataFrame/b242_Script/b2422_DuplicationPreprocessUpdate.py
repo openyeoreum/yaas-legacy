@@ -59,21 +59,22 @@ def PreprocessAndSplitScripts(bodyText, indexFrame):
     current_index = None
     content = ""
     start_search_from_index = 0  # 다음 인덱스 검사를 시작할 위치
+    index_search_start = 0  # indexFrame에서 검사를 시작할 인덱스의 위치
 
     for i, (preprocessedLine, originalLine) in enumerate(zip(preprocessedLines, Lines)):
         if i < start_search_from_index:
             continue  # 이미 찾은 인덱스 다음부터 검사 시작
 
-        for index in indexFrame:
+        for j in range(index_search_start, len(indexFrame)):
+            index = indexFrame[j]
             preprocessedIndex = CleanText(index["Index"])
-            # 인덱스가 현재 줄에 정확하게 일치하는지 확인
             if preprocessedIndex == preprocessedLine:
                 if current_index is not None:
-                    # 이전 인덱스에 대한 내용 저장
                     SplitedScripts.append((current_index, content))
                     content = ""
                 current_index = index["Index"]
-                start_search_from_index = i + 1  # 다음 인덱스 검사는 이 줄 다음부터
+                start_search_from_index = i + 1
+                index_search_start = j + 1  # 다음 인덱스 검사는 현재 인덱스 다음부터
                 break
 
         if current_index is not None and i >= start_search_from_index:
@@ -213,7 +214,7 @@ def ScriptsDicListToInputList(projectName, email):
 
         InputList.append({'Id': i + 1, 'Index': ScriptsDicList[i]['Index'], 'Continue': Input})
         
-    return InputList
+    return InputList, SplitedScripts
 
 ######################
 ##### Filter 조건 #####
@@ -509,8 +510,12 @@ if __name__ == "__main__":
     mode = "Master"
     #########################################################################
     
-    InputList = ScriptsDicListToInputList(projectName, email)
+    InputList, SplitedScripts = ScriptsDicListToInputList(projectName, email)
     
     # JSON 파일로 저장
     with open('/yaas/InputList.json', 'w', encoding='utf-8') as f:
         json.dump(InputList, f, ensure_ascii=False, indent=4)
+        
+    # JSON 파일로 저장
+    with open('/yaas/SplitedScripts.json', 'w', encoding='utf-8') as f:
+        json.dump(SplitedScripts, f, ensure_ascii=False, indent=4)

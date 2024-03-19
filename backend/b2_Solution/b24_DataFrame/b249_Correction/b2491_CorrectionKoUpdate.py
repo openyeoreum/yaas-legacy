@@ -4,6 +4,7 @@ import json
 import random
 import time
 import difflib
+import tiktoken
 import sys
 sys.path.append("/yaas")
 
@@ -67,25 +68,49 @@ def MergeInputList(inputList):
     return InputList
 
 ## BodyFrameBodys의 inputList 치환
-def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
+def BodyFrameBodysToInputList(projectName, email):
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     
+    # 토큰 계산을 위한 encoder 초기화
+    encoder = tiktoken.get_encoding("cl100k_base")
+    
     inputList = []
+    prev_task = None
+    accumulatedTokens = 0  # 연속되는 'Caption' 작업의 토큰 수를 누적합니다.
+
     for i in range(len(BodyFrameBodys)):
         Id = BodyFrameBodys[i]['BodyId']
         task = BodyFrameBodys[i]['Task']
         TaskBody = BodyFrameBodys[i]['SFX']
+        taskTokens = len(encoder.encode(TaskBody))  # 현재 작업의 토큰 수를 계산합니다.
 
-        if Task in task:
+        if 'Body' in task:
             Tag = 'Continue'
+            accumulatedTokens = 0  # 'Caption' 외의 작업에서는 누적 토큰 수를 초기화합니다.
+        elif 'Caption' in task:
+            # 'Caption' 작업이 연속되는 경우 토큰 수를 누적하고, 750을 초과하는지 확인합니다.
+            if 'Caption' in prevTask and (accumulatedTokens + taskTokens) > 750:
+                Tag = 'Continue'  # 누적 토큰 수가 750을 초과하면 Tag를 'Continue'로 설정합니다.
+                accumulatedTokens = taskTokens  # 토큰 수를 현재 작업의 토큰 수로 재설정합니다.
+            else:
+                Tag = 'Merge'
+                accumulatedTokens += taskTokens  # 토큰 수를 누적합니다.
         elif 'Body' not in task:
             Tag = 'Merge'
+            accumulatedTokens = 0
         else:
             Tag = 'Pass'
-            
+            accumulatedTokens = 0
+
+        # 단일 작업의 토큰 수가 750을 초과하는 경우 처리
+        if taskTokens > 750:
+            Tag = 'Continue'
+        
         InputDic = {'Id': Id, Tag: TaskBody}
         inputList.append(InputDic)
         
+        prevTask = task  # 이전 작업을 현재 작업으로 업데이트합니다.
+
     InputList = MergeInputList(inputList)
     
     # ChunkIdList 형성
@@ -924,7 +949,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "마케터의무기들"
+    projectName = "나는외식창업에적합한사람인가"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"

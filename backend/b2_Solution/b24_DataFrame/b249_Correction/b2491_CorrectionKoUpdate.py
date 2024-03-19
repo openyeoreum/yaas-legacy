@@ -290,6 +290,16 @@ def generateOutputDicList(output_dic, sfx_tag):
 
     return output_dic_list
 
+## CleanInput과 CleanOutput내에 replace해야 하는 대상 문자가 여러개일(1글자인 경우 그런 유행이 많음) 경우 하나씩 replace 하여 모두를 비교확인
+def ReplaceNthOccurrence(CleanText, NonINPUT, NonOUTPUT, n):
+    pos = -1
+    for _ in range(n):
+        pos = CleanText.find(NonINPUT, pos + 1)
+        if pos == -1:  # 찾고자 하는 대상이 더 이상 없으면 종료
+            return CleanText
+    # 찾은 위치에서 교체를 수행
+    return CleanText[:pos] + NonOUTPUT + CleanText[pos+len(NonINPUT):]
+
 ## CorrectionKo의 Filter(Error 예외처리)
 def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId):
     # [n] 불일치 오류시 이를 찾을 수 있도록 CorrectionText를 미리 저장
@@ -381,31 +391,35 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
                         ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
                         ReplaceCleanOutput = CleanOutput
                     else:
-                        ReplaceCleanInput = CleanInput.replace(NonINPUT, NonOUTPUT)
-                        ReplaceCleanOutput = CleanOutput.replace(NonINPUT, NonOUTPUT)
-                    print(f'replace1: {NonINPUT + longCommonSubstring}')
-                    print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')
-                    print(f'CleanInput: {CleanInput}')
-                    print(f'CleanOutput: {CleanOutput}')
-                    print(f'ReplaceCleanInput: {ReplaceCleanInput}')
-                    print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
-                        
-                    if ReplaceCleanInput == ReplaceCleanOutput:
-                        nonCommonPartsNum += 1
-                    else:
-                        for i in range(len(CleanInput) + 1):
-                            ReplaceCleanInput = CleanInput[:i] + NonOUTPUT + CleanInput[i:]
-                            ReplaceCleanOutput = CleanOutput[:i] + NonINPUT + CleanOutput[i:]
-                            print(f'1) ReplaceCleanInput: {ReplaceCleanInput}')
-                            print(f'1) CleanOutput: {CleanOutput}\n')
-                            print(f'2) CleanInput: {CleanInput}')
-                            print(f'2) ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
-                            if ReplaceCleanInput == CleanOutput or CleanInput == ReplaceCleanOutput:
-                                nonCommonPartsNum += 1
-                                continue
-                            else:
-                                OutputDicError += 1
-                                print(f"INPUT, OUTPUT [n] 일부분 불일치 부분: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})\n")
+                        # CleanInput과 CleanOutput내에 동일한 문자가 여러개일 경우 하나씩 replace 하여 비교확인
+                        for n in 10:
+                            ReplaceCleanInput = ReplaceNthOccurrence(CleanInput, NonINPUT, NonOUTPUT, n)
+                            for N in 10:
+                                ReplaceCleanOutput = ReplaceNthOccurrence(CleanOutput, NonINPUT, NonOUTPUT, N)
+                                print(f'replace1: {NonINPUT + longCommonSubstring}')
+                                print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')
+                                print(f'CleanInput: {CleanInput}')
+                                print(f'CleanOutput: {CleanOutput}')
+                                print(f'ReplaceCleanInput: {ReplaceCleanInput}')
+                                print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                                # ReplaceCleanInput과 ReplaceCleanOutput를 비교하여 동일한 문자 발견시 바로 코드 종료
+                                if ReplaceCleanInput == ReplaceCleanOutput:
+                                    nonCommonPartsNum += 1
+                                    continue
+                                else:
+                                    for i in range(len(CleanInput) + 1):
+                                        ReplaceCleanInput = CleanInput[:i] + NonOUTPUT + CleanInput[i:]
+                                        ReplaceCleanOutput = CleanOutput[:i] + NonINPUT + CleanOutput[i:]
+                                        print(f'1) ReplaceCleanInput: {ReplaceCleanInput}')
+                                        print(f'1) CleanOutput: {CleanOutput}\n')
+                                        print(f'2) CleanInput: {CleanInput}')
+                                        print(f'2) ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                                        if ReplaceCleanInput == CleanOutput or CleanInput == ReplaceCleanOutput:
+                                            nonCommonPartsNum += 1
+                                            continue
+                                        else:
+                                            OutputDicError += 1
+                                            print(f"INPUT, OUTPUT [n] 일부분 불일치 부분: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})\n")
                 except IndexError as e:
                     OutputDicError += 1
                     print(f"INPUT, OUTPUT [n] 일부분 불일치 부분: ({e})")
@@ -794,9 +808,6 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         elif tag == "Index":
             tokens.append({"Pause": "(1.30)"})
             tokens.append({"Enter": "\n"})
-        elif tag == "Caption" and Aftertag != "Caption" or tag == "Caption" and Aftertag != "CaptionComment":
-            tokens.append({"Pause": "(1.20)"})
-            tokens.append({"Enter": "\n"})
         # elif tag == "Comment":
         #     tokens.append({"Pause": "(0.40)"})
         #     tokens.append({"Enter": "\n"})
@@ -834,11 +845,17 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
         elif (tag not in ["Caption", "CaptionComment"]) and (Aftertag in ["Caption", "CaptionComment"]):
             if len(tokens) >= 2:
                 if "Pause" in tokens[-2]:
-                    tokens[-2]['Pause'] = "(1.10)"
+                    if tokens[-2]['Pause'] not in ['(3.00)', '(2.00)', '(1.50)', '(1.30)']:
+                        tokens[-2]['Pause'] = "(1.10)"
                 else:
                     tokens.append({"Pause": "(1.10)"})
+                    tokens.append({"Enter": "\n"})
             else:
                 tokens.append({"Pause": "(1.20)"})
+                tokens.append({"Enter": "\n"})
+        elif (tag in ["Caption", "CaptionComment"]) and (Aftertag not in ["Caption", "CaptionComment"]):
+            tokens.append({"Pause": "(1.10)"})
+            tokens.append({"Enter": "\n"})
         elif tag == "Character" and Aftertag == "Character":
             tokens.append({"Pause": "(0.75)"})
             tokens.append({"Enter": "\n"})

@@ -4,6 +4,7 @@ import json
 import re
 import numpy as np
 import time
+import copy
 import sys
 sys.path.append("/yaas")
 
@@ -93,14 +94,33 @@ def MatchIncreaseNotError(part, number_word, _NotError):
     
     return _NotError
 
+# outputJson 전처리 코드 ("462 [15] 만원 [16] 기타비용"와 같이 중복작성된 경우 매칭숫자 기준으로 남기기)
+def preprocessOutputJson(outputJson):
+    for item in outputJson:
+        # 매칭 숫자를 기준으로 '단어 [숫자] 단어' 형태를 만듦
+        match_number = item['매칭숫자']
+        number_part = item['숫자부분']
+        # 매칭 숫자 앞뒤로 분할하여 검사 및 재구성
+        parts = number_part.split(f' [{match_number}] ')
+        if len(parts) > 1:
+            item['숫자부분'] = f'{parts[0].split()[-1]} [{match_number}] {parts[1].split()[0]}'
+        else:
+            # 만약 매칭 숫자가 없으면 원본 유지 (예외 처리)
+            pass
+    return outputJson
+
 ## 음성파일을 STT로 단어별 시간 계산하기
 def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordList):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         Json = json.loads(Response)
         outputJson = Json['매칭']
-        for i in range(len(outputJson)):
-            outputJson[i]['알파벳'] = outputJson[i]['알파벳부분'].split('[')[1].split(']')[0]
+        if outputJson != []:
+            outputJson = preprocessOutputJson(outputJson)
+            for i in range(len(outputJson)):
+                outputJson[i]['알파벳'] = outputJson[i]['알파벳부분'].split('[')[1].split(']')[0]
+        else:
+            return "Error"
     except json.JSONDecodeError:
         return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 결과가 list가 아닐 때의 예외 처리
@@ -151,13 +171,13 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
                 _NotError = MatchIncreaseNotError(parts[0].strip(), NumberWord[0], _NotError)
                 _NotError = MatchIncreaseNotError(parts[1].strip(), NumberWord[2], _NotError)
                 # print(f'_NotError: {_NotError}\n\n')
-                if _NotError <= 2 and number == NumberWord[1]:
+                if _NotError == 2 and number == NumberWord[1]:
                     output['숫자'] = number
                     NotError += 1
-                elif _NotError <= 2 and number + 1 == NumberWord[1]:
+                elif _NotError == 2 and number + 1 == NumberWord[1]:
                     output['숫자'] = number + 1
                     NotError += 1
-                elif _NotError <= 2 and number - 1 == NumberWord[1]:
+                elif _NotError == 2 and number - 1 == NumberWord[1]:
                     output['숫자'] = number - 1
                     NotError += 1
         if NotError == 0:
@@ -213,7 +233,9 @@ def InputText(SplitSents, SplitWords, SameNum):
             NumberWordList.append([SplitWords[Before1Index]['낭독기록'], i, SplitWords[i]['낭독기록']])
         NumberABSentList.append(SplitWords[i]['낭독기록'])
     LastNumber = i
-
+    ## ErrorInput 생성을 위한 copy
+    _NumberABSentList = copy.deepcopy(NumberABSentList)
+    
     # print(f'NumberABSentList: {NumberABSentList}\n\n')
     # print(f'NumberABWordList: {NumberABWordList}\n\n')
 
@@ -406,47 +428,76 @@ def InputText(SplitSents, SplitWords, SameNum):
     # 최종 Input 생성
     Input = "<낭독원문>\n" + ''.join(NotSameAlphabetSentList) + "\n\n" + "<낭독STT단어문>\n" + ''.join(NotSameNumberWordList)
     
-    # 최종 RawResponse 생성
+    # 최종 ErrorInput 생성    
+    ErrorInput = "<낭독원문>\n" + ' '.join([f"[{item}]" if len(item) == 1 and item.isalpha() else item for item in AlphabetABSentList]) + "\n\n" + "<낭독STT단어문>\n" + ' '.join([f"[{item}]" if isinstance(item, int) else item for item in _NumberABSentList])
+
+    # 최종 RawResponse, ErrorRawResponse 생성
     RawResponse = [{'알파벳': key, '숫자': value} for key, value in SameDic.items()]
-    
-    # 최종 memoryCounter 생성
+    ErrorRawResponse = []
+
+    # 최종 memoryCounter, ErrorMemoryCounter 생성
     MemoryCounter = []
+    ErrorMemoryCounter = []
     for ABWordList in AlphabetABWordList:
+        ErrorMemoryCounter.append(f'{ABWordList[1]} [{ABWordList[2]}] {ABWordList[3]}')
         for NSA in NotSameAlphabet:
             if ABWordList[2] == NSA:
                 MemoryCounter.append(f'{ABWordList[1]} [{ABWordList[2]}] {ABWordList[3]}')
-    
-    return Input, NotSameAlphabet, lastNumber, NumberWordList, MemoryCounter, RawResponse
+                
+    return {"Normal": {"Input": Input, "NotSameAlphabet": NotSameAlphabet, "lastNumber": lastNumber, "NumberWordList": NumberWordList, "MemoryCounter": MemoryCounter, "RawResponse": RawResponse},
+            "Error": {"Input": ErrorInput, "NotSameAlphabet": AlphabetList, "lastNumber": lastNumber, "NumberWordList": NumberWordList, "MemoryCounter": ErrorMemoryCounter, "RawResponse": ErrorRawResponse}}
 
 ## VoiceSplit 프롬프트 요청
 def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = "off"):
-    ## Input1과 Input2를 입력으로 받아 최종 Input 생성
-    Input, NotSameAlphabet, lastNumber, NumberWordList, MemoryCounter, RawResponse = InputText(SplitSents, SplitWords, 3)
-    ## memoryCounter 생성
-    memoryCounter = f"\n\n최종주의사항: 매칭 '알파벳부분'은 | {' | '.join(MemoryCounter)} |, '숫자부분'과 '매칭숫자'는 [숫자]의 앞뒤 부분을 자세히 살펴보고, 숫자는 꼭 1개만 작성!\n\n"
-
-    # print(f'Input: {Input}\n\n')
-    # print(f'NotSameAlphabet: {NotSameAlphabet}\n\n')
-    # print(f'lastNumber: {lastNumber}\n\n')
-    # print(f'NumberWordList: {NumberWordList}\n\n')
-    # print(f'MemoryCounter: {MemoryCounter}\n\n')
-    # print(f'RawResponse: {RawResponse}\n\n')
+    ## Input1과 Input2를 입력으로 받아 최종 InputSet 생성
+    InputSet = InputText(SplitSents, SplitWords, 3)
+    # print(f"Input: {InputSet['Normal']['Input']}\n\n")
+    # print(f"ErrorInput: {InputSet['Error']['Input']}\n\n")
+    # print(f"NotSameAlphabet: {InputSet['Normal']['NotSameAlphabet']}\n\n")
+    # print(f"lastNumber: {InputSet['Normal']['lastNumber']}\n\n")
+    # print(f"NumberWordList: {InputSet['Normal']['NumberWordList']}\n\n")
+    # print(f"MemoryCounter: {InputSet['Normal']['MemoryCounter']}\n\n")
+    # print(f"RawResponse: {InputSet['Normal']['RawResponse']}\n\n")
     
-    if NotSameAlphabet != []:
+    if InputSet['Normal']['NotSameAlphabet'] != []:
+        _Mode = "Normal"
         for _ in range(3):
+            ### Normal 모드인 경우 (일반적인 프롬프트), Error 모드인 경우 (프롬프트에서 에러 발생시) ###
+            if _Mode == "Normal":
+                Input = InputSet['Normal']['Input']
+                NotSameAlphabet = InputSet['Normal']['NotSameAlphabet']
+                lastNumber = InputSet['Normal']['lastNumber']
+                NumberWordList = InputSet['Normal']['NumberWordList']
+                _MemoryCounter = InputSet['Normal']['MemoryCounter']
+                RawResponse = InputSet['Normal']['RawResponse']
+            else:
+                Input = InputSet['Error']['Input']
+                NotSameAlphabet = InputSet['Error']['NotSameAlphabet']
+                lastNumber = InputSet['Error']['lastNumber']
+                NumberWordList = InputSet['Error']['NumberWordList']
+                _MemoryCounter = InputSet['Error']['MemoryCounter']
+                RawResponse =InputSet['Error']['RawResponse']
+            
+            ## memoryCounter 생성
+            memoryCounter = f"\n\n최종주의사항: 매칭 '알파벳부분'은 | {' | '.join(_MemoryCounter)} |, '숫자부분'과 '매칭숫자'는 [숫자]의 앞뒤 부분을 자세히 살펴보고, 숫자는 꼭 1개만 작성!\n\n"
             # Response 생성
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
             # Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, 0, Mode = "Example", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
             
             if isinstance(ResponseJson, str):
-                print(f"Project: {projectName} | Process: {Process} | {ResponseJson}")
+                ### Error 모드 전환
+                if ResponseJson == "Error":
+                    print(f"Project: {projectName} | Process: {Process} | 프롬프트 문제 발생, {ResponseJson} 모드 전환")
+                    _Mode = "Error"
+                else:
+                    print(f"Project: {projectName} | Process: {Process} | {ResponseJson}")
             else:
                 ResponseJson += RawResponse
                 ResponseJson = sorted(ResponseJson, key = lambda x: x['알파벳'])
                 break
     else:
-        ResponseJson = RawResponse
+        ResponseJson = InputSet['Normal']['RawResponse']
         
     return ResponseJson
 
@@ -566,7 +617,8 @@ def VoiceSplit(projectName, email, name, VoiceLayerPath, SplitSents, LanguageCod
             segment_durations = VoiceFileSplit(VoiceLayerPath, SplitTimeList)
             
             return segment_durations
-        except TypeError:
+        except TypeError as e:
+            print(f"VoiceSplit: retry, {name} waiting 10-20 second | {e}")
             time.sleep(5)  # 5초 대기 후 재시도
 
 if __name__ == "__main__":
@@ -577,46 +629,46 @@ if __name__ == "__main__":
     VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/테스트(가)_0_연우(중간톤, 피치다운).wav"
     LanguageCode = "ko-KR"
     #########################################################################
-    ## 이 함수는 두 문자열 간의 최대 일치 부분 문자열의 길이를 찾고,이 일치도가 짧은 문자열 길이의 특정 비율(기본값 50%)을 초과하는지 확인
-    def MatchExceedThreshold(ShortStr, LongStr, threshold = 0.5):
-        # 동적 프로그래밍을 위한 2차원 배열 초기화
-        dp = [[0] * (len(LongStr) + 1) for _ in range(len(ShortStr) + 1)]
+    # ## 이 함수는 두 문자열 간의 최대 일치 부분 문자열의 길이를 찾고,이 일치도가 짧은 문자열 길이의 특정 비율(기본값 50%)을 초과하는지 확인
+    # def MatchExceedThreshold(ShortStr, LongStr, threshold = 0.5):
+    #     # 동적 프로그래밍을 위한 2차원 배열 초기화
+    #     dp = [[0] * (len(LongStr) + 1) for _ in range(len(ShortStr) + 1)]
         
-        # 최대 일치 길이를 저장할 변수
-        max_length = 0
+    #     # 최대 일치 길이를 저장할 변수
+    #     max_length = 0
         
-        # 두 문자열 간의 최대 일치 부분 문자열 길이 계산
-        for i in range(1, len(ShortStr) + 1):
-            for j in range(1, len(LongStr) + 1):
-                if ShortStr[i-1] == LongStr[j-1]:
-                    dp[i][j] = dp[i-1][j-1] + 1
-                    max_length = max(max_length, dp[i][j])
+    #     # 두 문자열 간의 최대 일치 부분 문자열 길이 계산
+    #     for i in range(1, len(ShortStr) + 1):
+    #         for j in range(1, len(LongStr) + 1):
+    #             if ShortStr[i-1] == LongStr[j-1]:
+    #                 dp[i][j] = dp[i-1][j-1] + 1
+    #                 max_length = max(max_length, dp[i][j])
         
-        # 짧은 문자열에 대한 일치도 계산
-        match_rate = max_length / len(ShortStr)
+    #     # 짧은 문자열에 대한 일치도 계산
+    #     match_rate = max_length / len(ShortStr)
         
-        # 일치도가 threshold를 초과하는지 확인
-        return match_rate > threshold
+    #     # 일치도가 threshold를 초과하는지 확인
+    #     return match_rate > threshold
     
-    ## 주어진 두 문자열(part.strip()와 number_word)의 일치도를 확인하고, 일치도가 50% 이상일 경우 not_error를 1 증가
-    def MatchIncreaseNotError(part, number_word, not_error):
-        part_stripped = part.strip()
-        # 짧은 문자열과 긴 문자열을 결정
-        ShortStr, LongStr = sorted([part_stripped, number_word], key=len)
+    # ## 주어진 두 문자열(part.strip()와 number_word)의 일치도를 확인하고, 일치도가 50% 이상일 경우 not_error를 1 증가
+    # def MatchIncreaseNotError(part, number_word, not_error):
+    #     part_stripped = part.strip()
+    #     # 짧은 문자열과 긴 문자열을 결정
+    #     ShortStr, LongStr = sorted([part_stripped, number_word], key=len)
         
-        # 일치도가 50%를 초과하는지 확인
-        if MatchExceedThreshold(ShortStr, LongStr):
-            not_error += 1
+    #     # 일치도가 50%를 초과하는지 확인
+    #     if MatchExceedThreshold(ShortStr, LongStr):
+    #         not_error += 1
         
-        return not_error
+    #     return not_error
 
-    # 초기 NotError 값
-    NotError = 0
+    # # 초기 NotError 값
+    # NotError = 0
 
-    # 예시1과 예시2를 테스트
-    NotError = MatchIncreaseNotError("납니다", "합니다", NotError)
-    print(NotError)
-    NotError = MatchIncreaseNotError("콘셉트의", "콘셉트의", NotError)
-    print(NotError)
-    NotError = MatchIncreaseNotError("합니다", "조금합니다", NotError)
-    print(NotError)
+    # # 예시1과 예시2를 테스트
+    # NotError = MatchIncreaseNotError("납니다", "합니다", NotError)
+    # print(NotError)
+    # NotError = MatchIncreaseNotError("콘셉트의", "콘셉트의", NotError)
+    # print(NotError)
+    # NotError = MatchIncreaseNotError("합니다", "조금합니다", NotError)
+    # print(NotError)

@@ -60,7 +60,7 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
 ##### Filter 조건 #####
 ######################
 ## 이 함수는 두 문자열 간의 최대 일치 부분 문자열의 길이를 찾고,이 일치도가 짧은 문자열 길이의 특정 비율(기본값 50%)을 초과하는지 확인
-def MatchExceedThreshold(ShortStr, LongStr, threshold=0.5):
+def MatchExceedThreshold(ShortStr, LongStr, threshold = 0.5):
     # 동적 프로그래밍을 위한 2차원 배열 초기화
     dp = [[0] * (len(LongStr) + 1) for _ in range(len(ShortStr) + 1)]
     
@@ -82,7 +82,7 @@ def MatchExceedThreshold(ShortStr, LongStr, threshold=0.5):
     # 일치도가 threshold를 초과하는지 확인
     return match_rate > threshold
 
-## 주어진 두 문자열(part.strip()와 number_word)의 일치도를 확인하고, 일치도가 50% 이상일 경우 not_error를 1 증가
+## 주어진 두 문자열(part.strip()와 number_word)의 길이가 작은 문자 기준으로 일치도를 확인하고, 일치도가 50% 이상일 경우 not_error를 1 증가
 def MatchIncreaseNotError(part, number_word, _NotError):
     part_stripped = part.strip()
     # 짧은 문자열과 긴 문자열을 결정
@@ -93,6 +93,27 @@ def MatchIncreaseNotError(part, number_word, _NotError):
         _NotError += 1
     
     return _NotError
+
+## 주어진 두 문자열(part.strip()와 number_word)의 내부 문자를 2글자씩 분리한 뒤 일치도를 확인하고, 일치도가 50% 이상일 경우 not_error를 1 증가
+def CompareNotError(part, number_word):
+    # 더 긴 문자열의 길이 찾기
+    max_length = max(len(part), len(number_word))
+    
+    # 공유하는 글자 수 카운트
+    shared_chars = set()
+    for i in range(len(part)-1):
+        for j in range(len(number_word)-1):
+            if part[i:i+2] == number_word[j:j+2]:
+                shared_chars.update(part[i:i+2])
+    
+    # 공유하는 글자의 비율 계산
+    shared_ratio = len(shared_chars) / max_length
+    
+    # 공유 비율이 50% 이상인 경우 NotError에 1 더하기
+    if shared_ratio >= 0.5:
+        return True
+    else:
+        return False
 
 # outputJson 전처리 코드 ("462 [15] 만원 [16] 기타비용"와 같이 중복작성된 경우 매칭숫자 기준으로 남기기)
 def preprocessOutputJson(outputJson):
@@ -167,21 +188,28 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
                 # print(f'NumberWord[0]: {NumberWord[0]}\n\n')
                 # print(f'parts[1].strip(): {parts[1].strip()}')
                 # print(f'NumberWord[2]: {NumberWord[2]}\n\n')
+                ## 길이가 작은 문자로 일치도 계산, 일치기준 50%
                 _NotError = 0
                 _NotError = MatchIncreaseNotError(parts[0].strip(), NumberWord[0], _NotError)
                 _NotError = MatchIncreaseNotError(parts[1].strip(), NumberWord[2], _NotError)
+                ## 내부에 포함된 동일 문자로 일치도 계산, 일치기준 50%
+                _notError = 0
+                if CompareNotError(parts[0].strip(), NumberWord[0]) and (parts[1].strip() == NumberWord[2]):
+                    _notError = 1
+                if CompareNotError(parts[1].strip(), NumberWord[2]) and (parts[0].strip() == NumberWord[0]):
+                    _notError = 1
                 # print(f'_NotError: {_NotError}\n\n')
-                if _NotError == 2 and number == NumberWord[1]:
+                if (_NotError == 2 or _notError == 1) and (number == NumberWord[1]):
                     output['숫자'] = number
                     NotError += 1
-                elif _NotError == 2 and number + 1 == NumberWord[1]:
+                elif (_NotError == 2 or _notError == 1) and (number + 1 == NumberWord[1]):
                     output['숫자'] = number + 1
                     NotError += 1
-                elif _NotError == 2 and number - 1 == NumberWord[1]:
+                elif (_NotError == 2 or _notError == 1) and (number - 1 == NumberWord[1]):
                     output['숫자'] = number - 1
                     NotError += 1
         if NotError == 0:
-            return "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError"
+            return {"ErrorMessage": "Response에 앞단어 - 숫자 - 뒷단어 표기가 틀림: JSONOutputError", "ErrorOutput": output['숫자부분']}
 
     return outputJson
 
@@ -459,6 +487,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
     # print(f"MemoryCounter: {InputSet['Normal']['MemoryCounter']}\n\n")
     # print(f"RawResponse: {InputSet['Normal']['RawResponse']}\n\n")
     
+    ErrorOutput = ''
     if InputSet['Normal']['NotSameAlphabet'] != []:
         _Mode = "Normal"
         for _ in range(3):
@@ -480,6 +509,12 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
             
             ## memoryCounter 생성
             memoryCounter = f"\n\n최종주의사항: 매칭 '알파벳부분'은 | {' | '.join(_MemoryCounter)} |, '숫자부분'과 '매칭숫자'는 [숫자]의 앞뒤 부분을 자세히 살펴보고, 숫자는 꼭 1개만 작성!\n\n"
+            ## memoryCounter에 ErrorOutput 포함
+            if ErrorOutput == '':
+                memoryCounter = memoryCounter + "\n\n"
+            else:
+                memoryCounter = memoryCounter + f"\"\n{ErrorOutput}\"은 정답이 아님. 실수하지 말것!\n\n"
+                ErrorOutput = ''
             # Response 생성
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
             # Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, 0, Mode = "Example", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
@@ -492,6 +527,9 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
                     _Mode = "Error"
                 else:
                     print(f"Project: {projectName} | Process: {Process} | {ResponseJson}")
+            elif isinstance(ResponseJson, dict):
+                print(f"Project: {projectName} | Process: {Process} | {ResponseJson['ErrorMessage']}")
+                ErrorOutput = str(ResponseJson['ErrorOutput'])
             else:
                 ResponseJson += RawResponse
                 ResponseJson = sorted(ResponseJson, key = lambda x: x['알파벳'])
@@ -668,7 +706,34 @@ if __name__ == "__main__":
     # # 예시1과 예시2를 테스트
     # NotError = MatchIncreaseNotError("납니다", "합니다", NotError)
     # print(NotError)
-    # NotError = MatchIncreaseNotError("콘셉트의", "콘셉트의", NotError)
+    # NotError = MatchIncreaseNotError("조리가능", "가능한가", NotError)
     # print(NotError)
     # NotError = MatchIncreaseNotError("합니다", "조금합니다", NotError)
+    # print(NotError)
+    
+    # def CompareNotError(part, number_word, _NotError):
+    #     # 더 긴 문자열의 길이 찾기
+    #     max_length = max(len(part), len(number_word))
+        
+    #     # 공유하는 글자 수 카운트
+    #     shared_chars = set()
+    #     for i in range(len(part)-1):
+    #         for j in range(len(number_word)-1):
+    #             if part[i:i+2] == number_word[j:j+2]:
+    #                 shared_chars.update(part[i:i+2])
+        
+    #     # 공유하는 글자의 비율 계산
+    #     shared_ratio = len(shared_chars) / max_length
+    #     print(shared_ratio)
+        
+    #     # 공유 비율이 50% 이상인 경우 NotError에 1 더하기
+    #     if shared_ratio >= 0.5:
+    #         _NotError += 1
+        
+    #     return _NotError
+
+    # # 초기 NotError 값
+    # NotError = 0
+
+    # NotError = CompareNotError("조리가능", "가능한가", NotError)
     # print(NotError)

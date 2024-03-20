@@ -48,7 +48,7 @@ def PronunciationPreprocessFilter(responseData, Input, Index):
         try:
             if not ('발음수정전' in Output and '발음수정후' in Output):
                 return "JSON에서 오류 발생: JSONKeyError"
-            elif not Output['종류'] in ['숫자', '외국어', '영어', '일본어', '중국어', '프랑스어', '독일어', '기호', '특수문자', '기타']:
+            elif not Output['종류'] in ['숫자', '외국어', '영어', '일본어', '중국어', '한자', '프랑스어', '독일어', '기호', '특수문자', '기타']:
                 return f"JSON에서 오류 발생 ({Output['종류']}): JSONKeyError"
             else:
                 if not Output['발음수정전'] in ['◆', '◇', '◎']:

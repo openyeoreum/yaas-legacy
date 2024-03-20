@@ -444,45 +444,6 @@ def VoiceLayerPathGen(projectName, email, FileName):
 #######################################
 ##### VoiceLayerGenerator 파일 생성 #####
 #######################################
-## List -> Dic, EditGenerationKoChunks의 각 요소를 가독성이 좋은 딕셔너리로 변경하는 코드 (검수용도)
-def EditGenerationKoChunksToDic(EditGenerationKoChunks):
-    EditGenerationKoDicChunks = []
-    for Chunks in EditGenerationKoChunks:
-        EditId = Chunks['EditId']
-        ChunkId = Chunks['ChunkId']
-        Tag = Chunks['Tag']
-        ActorName = Chunks['ActorName']
-        ActorChunk = Chunks['ActorChunk']
-        Pause = Chunks['Pause']
-        EndTime = Chunks['EndTime']
-        Audio = []
-        for i in range(len(ActorChunk)):
-            AudioDic = {"Chunk": ActorChunk[i], "Pause": Pause[i], "EndTime": EndTime[i]}
-            Audio.append(AudioDic)
-        EditGenerationKoDicChunks.append({"EditId": EditId, "ChunkId": ChunkId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": Audio})
-    
-    return EditGenerationKoDicChunks
-
-## Dic -> List, EditGenerationKoChunks의 각 요소를 가독성이 좋은 리스트로 변경하는 코드 (프로세스용도)
-def EditGenerationKoChunksToList(EditGenerationKoChunks):
-    EditGenerationKoListChunks = []
-    for Chunks in EditGenerationKoChunks:
-        EditId = Chunks['EditId']
-        ChunkId = Chunks['ChunkId']
-        Tag = Chunks['Tag']
-        ActorName = Chunks['ActorName']
-        ActorChunk = Chunks['ActorChunk']
-        _ActorChunk = []
-        Pause = []
-        EndTime = []
-        for i in range(len(ActorChunk)):
-            _ActorChunk.append(ActorChunk[i]['Chunk'])
-            Pause.append(ActorChunk[i]['Pause'])
-            EndTime.append(ActorChunk[i]['EndTime'])
-        EditGenerationKoListChunks.append({"EditId": EditId, "ChunkId": ChunkId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": _ActorChunk, "Pause": Pause, "EndTime": EndTime})
-    
-    return EditGenerationKoListChunks
-
 ## TypecastVoice 생성 ##
 def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
     attempt = 0
@@ -549,6 +510,7 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
                     segment_durations = VoiceSplit(projectName, email, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                    print(segment_durations)
 
                 return "Continue"
             else:
@@ -622,7 +584,7 @@ def SortAndRemoveDuplicates(files):
     return UniqueFiles
 
 ## 생성된 음성파일 합치기
-def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath):
+def VoiceGenerator(projectName, email, EditGenerationKoChunks):
     VoiceLayerFileName = projectName + "_VoiceLayer.wav"
     normalizeVoiceLayerFileName = unicodedata.normalize('NFC', VoiceLayerFileName)
     voiceLayerPath = VoiceLayerPathGen(projectName, email, '')
@@ -657,14 +619,6 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                 Files.append(RawFiles[i])
                 break
 
-    # 시간, 분, 초로 변환
-    def SecondsToHMS(seconds):
-        hours = seconds // 3600
-        minutes = (seconds % 3600) // 60
-        seconds = seconds % 60
-        
-        return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
-
     # 폴더 내의 모든 .wav 파일 목록 정렬/필터
     FilteredFiles = SortAndRemoveDuplicates(Files)
     FilesCount = 0
@@ -675,22 +629,14 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     UpdateTQDM = tqdm(EditGenerationKoChunks,
                     total=len(EditGenerationKoChunks),
                     desc='VoiceGenerator')
-    
-    # 전체 오디오 클립의 누적 길이를 추적하는 변수 추가
-    total_duration_seconds = 0
+
     for Update in UpdateTQDM:
-        Update['EndTime'] = []
         for j in range(len(Update['Pause'])):
             sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
-            PauseDuration_ms = Update['Pause'][j] * 1000
+            PauseDuration_ms = Update['Pause'][j] * 1000  # 초를 밀리초로 변환
             silence = AudioSegment.silent(duration=PauseDuration_ms)
             CombinedSound += sound_file + silence
             FilesCount += 1
-
-            # 누적된 CombinedSound의 길이를 전체 길이 추적 변수에 추가
-            total_duration_seconds += sound_file.duration_seconds + PauseDuration_ms / 1000.0
-            # EndTime에는 누적된 전체 길이를 저장
-            Update['EndTime'].append(total_duration_seconds)
 
             # 파일 단위로 저장 및 CombinedSound 초기화
             if FilesCount % file_limit == 0 or FilesCount == len(FilteredFiles):
@@ -698,15 +644,10 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                 CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
                 CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
                 current_file_index += 1
-                
-    # for 루프 종료 후 남은 CombinedSound 처리
-    if not CombinedSound.empty():
-        file_name = f"{projectName}_VoiceLayer_{current_file_index*file_limit-file_limit+1}-{FilesCount + 1}.wav"
-        CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
 
     # 최종 파일 합치기
     final_combined = AudioSegment.empty()
-    for i in range(1, current_file_index + 1):
+    for i in range(1, current_file_index):
         part_name = f"{projectName}_VoiceLayer_{i*file_limit-file_limit+1}-{min(i*file_limit, len(FilteredFiles))}.wav"
         part_path = os.path.join(voiceLayerPath, part_name)
         part = AudioSegment.from_wav(part_path)
@@ -714,28 +655,11 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         # 파일 묶음 삭제
         os.remove(part_path)
 
-    # # wav파일과 Edit의 시간 오차율 교정
-    # final_combined_seconds = final_combined.duration_seconds
-    # seconds_error_rate = final_combined_seconds/total_duration_seconds
-    # for Chunks in EditGenerationKoChunks:
-    #     EndTime = Chunks['EndTime']
-    #     for i in range(len(EndTime)):
-    #         RawSecond = copy.deepcopy(EndTime[i])
-    #         Second = RawSecond * seconds_error_rate
-    #         Time = SecondsToHMS(Second)
-    #         EndTime[i] = {"Time": Time, "Second": Second}
-    
     # 마지막 5초 공백 추가
-    final_combined += AudioSegment.silent(duration=5000)  # 5초간의 공백 생성
+    final_combined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
 
     # 최종적으로 합쳐진 음성 파일 저장
     final_combined.export(os.path.join(voiceLayerPath, projectName + "_VoiceLayer.wav"), format="wav")
-    
-    ## EditGenerationKoChunks의 Dic(검수)
-    EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
-    ## EndTime이 업데이트 된 EditGenerationKoChunks 저장
-    with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
-        json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", MessagesReview = "off"):
@@ -815,7 +739,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                     chunks = [GenerationKoChunk['Chunk']]
                 pauses = [ExtractPause(chunk) for chunk in chunks]
 
-                newChunk = {"EditId": None, "ChunkId": [chunkid], "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses, "EndTime": [None] * len(pauses)}
+                newChunk = {"EditId": None, "ChunkId": [chunkid], "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses}
 
                 if tempChunk and len(' '.join(tempChunk['ActorChunk'] + actorchunks)) <= 350 and (tempChunk['Tag'] == tag and tempChunk['ActorName'] == actorname):
                     # 기존 문장과 새로운 문장을 언어만 남긴 상태로 비교
@@ -833,7 +757,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                         if len(combined_text) > 350:
                             split_chunks, split_pauses = splitChunksAndPauses(tempChunk['ActorChunk'], tempChunk['Pause'])
                             for sc, sp in zip(split_chunks, split_pauses):
-                                split_chunk = {"EditId": None, "ChunkId": tempChunk['ChunkId'], "Tag": tempChunk['Tag'], "ActorName": tempChunk['ActorName'], "ActorChunk": sc, "Pause": sp, "EndTime": [None] * len(pauses)}
+                                split_chunk = {"EditId": None, "ChunkId": tempChunk['ChunkId'], "Tag": tempChunk['Tag'], "ActorName": tempChunk['ActorName'], "ActorChunk": sc, "Pause": sp}
                                 EditGenerationKoChunks.append(split_chunk)
                             tempChunk = None  # Reset after splitting
                     tempChunk = appendAndResetTemp(tempChunk, newChunk)
@@ -848,9 +772,6 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                     EditId += 1
                 else:
                     EditGenerationKoChunks.remove(NewGenerationKoChunk)
-            
-            ## EditGenerationKoChunks의 Dic(검수)
-            EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
             #### Split을 위한 문장을 합치는 코드 ####
 
             # MatchedActors, MatchedChunks 저장
@@ -865,9 +786,6 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
         else:
             with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
                 EditGenerationKoChunks = json.load(MatchedChunksJson)
-                
-                ## EditGenerationKoChunks의 Dic(프로세스)
-                EditGenerationKoChunks = EditGenerationKoChunksToList(EditGenerationKoChunks)
 
         ## 일부만 생성하는지, 전체를 생성하는지의 옵션
         if Mode == 'Manual':
@@ -1018,7 +936,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
 
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)
-    VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath)
+    VoiceGenerator(projectName, email, EditGenerationKoChunks)
 
     print(f"[ User: {email} | Project: {projectName} | VoiceLayerGenerator 완료 ]\n")
 
@@ -1032,23 +950,3 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    MatchedChunksPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/나는외식창업에적합한사람인가/나는외식창업에적합한사람인가_mixed_audiobook_file/VoiceLayers/[나는외식창업에적합한사람인가_VoiceLayer_Edit].json"
-    
-    with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
-        EditGenerationKoChunks = json.load(MatchedChunksJson)
-        
-    for Chunks in EditGenerationKoChunks:
-        pauses = Chunks['Pause']
-        Chunks['EndTime'] = [None] * len(pauses)
-    
-    EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
-    
-    with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
-        json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-        
-    # MatchedChunksPath2 = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/나는외식창업에적합한사람인가/나는외식창업에적합한사람인가_mixed_audiobook_file/VoiceLayers/[나는외식창업에적합한사람인가_VoiceLayer_Edit]Test.json"    
-    
-    # EditGenerationKoChunks = EditGenerationKoChunksToList(EditGenerationKoChunks)
-    
-    # with open(MatchedChunksPath2, 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)

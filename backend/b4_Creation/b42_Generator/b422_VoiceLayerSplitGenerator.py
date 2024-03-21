@@ -714,17 +714,16 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         # 파일 묶음 삭제
         os.remove(part_path)
 
-    # wav파일과 Edit의 시간 오차가 0.5초 이상일 경우 오차율 교정
-    if abs(final_combined_seconds - total_duration_seconds) > 0.5:
-        final_combined_seconds = final_combined.duration_seconds
-        seconds_error_rate = final_combined_seconds/total_duration_seconds
-        for Chunks in EditGenerationKoChunks:
-            EndTime = Chunks['EndTime']
-            for i in range(len(EndTime)):
-                RawSecond = copy.deepcopy(EndTime[i])
-                Second = RawSecond * seconds_error_rate
-                Time = SecondsToHMS(Second)
-                EndTime[i] = {"Time": Time, "Second": Second}
+    # wav파일과 Edit의 시간 오차율 교정
+    final_combined_seconds = final_combined.duration_seconds
+    seconds_error_rate = final_combined_seconds/total_duration_seconds
+    for Chunks in EditGenerationKoChunks:
+        EndTime = Chunks['EndTime']
+        for i in range(len(EndTime)):
+            RawSecond = copy.deepcopy(EndTime[i])
+            Second = RawSecond * seconds_error_rate
+            Time = SecondsToHMS(Second)
+            EndTime[i] = {"Time": Time, "Second": Second}
     
     # 마지막 5초 공백 추가
     final_combined += AudioSegment.silent(duration=5000)  # 5초간의 공백 생성
@@ -1033,7 +1032,7 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    MatchedChunksPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/나는외식창업에적합한사람인가/나는외식창업에적합한사람인가_mixed_audiobook_file/VoiceLayers/[나는외식창업에적합한사람인가_VoiceLayer_Edit].json"
+    MatchedChunksPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/노인을위한나라는있다/노인을위한나라는있다_mixed_audiobook_file/VoiceLayers/[노인을위한나라는있다_VoiceLayer_Edit].json"
     
     with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
         EditGenerationKoChunks = json.load(MatchedChunksJson)

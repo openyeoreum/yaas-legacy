@@ -681,7 +681,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     UpdateTQDM = tqdm(EditGenerationKoChunks,
                     total=len(EditGenerationKoChunks),
                     desc='VoiceGenerator')
-    
+
     # 전체 오디오 클립의 누적 길이를 추적하는 변수 추가
     total_duration_seconds = 0
     for Update in UpdateTQDM:
@@ -700,16 +700,26 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
 
             # 파일 단위로 저장 및 CombinedSound 초기화
             if FilesCount % file_limit == 0 or FilesCount == len(FilteredFiles):
-                file_name = f"{projectName}_VoiceLayer_{current_file_index*file_limit-file_limit+1}-{min(current_file_index*file_limit, len(FilteredFiles))}.wav"
+                MinNumber = current_file_index*file_limit-file_limit+1
+                MaxNumber = min(current_file_index*file_limit, len(FilteredFiles))
+                file_name = f"{projectName}_VoiceLayer_{MinNumber}-{MaxNumber}.wav"
                 CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
                 CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
                 current_file_index += 1
-                
-    # # for 루프 종료 후 남은 CombinedSound 처리
-    # if not CombinedSound.empty():
-    #     file_name = f"{projectName}_VoiceLayer_{current_file_index*file_limit-file_limit+1}-{FilesCount + 1}.wav"
-    #     print(file_name)
-    #     CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
+
+    # for 루프 종료 후 남은 CombinedSound 처리
+    if not CombinedSound.empty():
+        minNumber = current_file_index*file_limit-file_limit+1
+        _maxNumber = FilesCount
+        maxNumber = FilesCount + 1
+        
+        if minNumber < maxNumber and len(FilteredFiles) == maxNumber:
+            file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
+        elif minNumber < _maxNumber and len(FilteredFiles) == _maxNumber:
+            file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
+            
+        CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
+        current_file_index += 1
 
     # 최종 파일 합치기
     final_combined = AudioSegment.empty()

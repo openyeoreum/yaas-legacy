@@ -1,3 +1,4 @@
+import os
 import random
 import time
 import sys
@@ -91,10 +92,10 @@ def TypeCastAPILogout(email, driver):
     print(f"[ User: {email} | TypeCastAPILogout 완료 ]\n")
     
 ## TypeCastAPICharacter 통합 함수
-def TypeCastMacro(name):
+def TypeCastMacro(name, account):
     ############################ 하이퍼 파라미터 설정 ############################
-    email = "ahyeon00128@naver.com"
-    password = "Dhvmsdufma1!"
+    email = account
+    password = os.getenv("TYPECAST_PASSWORD")
     ## TypeCastAPI 드라이브
     driver = TypeCastAPIDrive(email)
     #########################################################################

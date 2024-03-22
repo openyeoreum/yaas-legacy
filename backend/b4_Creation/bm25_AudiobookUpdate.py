@@ -11,7 +11,7 @@ from backend.b4_Creation.b42_Generator.b422_VoiceLayerSplitGenerator import Voic
 ###########################
 
 ### Creation에 오디오북 제작 및 업데이트 ###
-def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, mode = "Manual", macro = "Manual", split = "Manual", messagesReview = "off"):
+def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, mode = "Manual", macro = "Manual", account = "None", split = "Manual", messagesReview = "off"):
     
     #####################
     ### 01_VoiceLayer ###
@@ -19,7 +19,7 @@ def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, mode = "
     if split == "Manual":
         VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro)
     else:
-        VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro, MessagesReview = messagesReview)
+        VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, MessagesReview = messagesReview)
 
 if __name__ == "__main__":
 
@@ -29,9 +29,10 @@ if __name__ == "__main__":
     voiceDataSet = "TypeCastVoiceDataSet"
     mainLang = "Ko"
     macro = "Manual"
+    account = "None"
     split = "Manual"
     messagesReview = "off"
     #########################################################################
     
     ### Step6 : 크리에이션이 오디오북 제작 ###
-    CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, macro = macro, split = split, messagesReview = messagesReview)
+    CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, macro = macro, account = account, split = split, messagesReview = messagesReview)

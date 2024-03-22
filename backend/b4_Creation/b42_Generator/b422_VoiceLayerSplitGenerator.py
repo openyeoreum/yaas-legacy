@@ -756,7 +756,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", MessagesReview = "off"):
+def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
     
@@ -999,7 +999,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                     ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
                     if ChangedName != 'Continue':
                         if Macro == "Auto":
-                            TypeCastMacro(ChangedName)
+                            TypeCastMacro(ChangedName, Account)
                             time.sleep(random.randint(3, 5))
                             restart = True
                         else:
@@ -1032,7 +1032,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                             ## 히스토리 저장 ##
                         else:
                             if Macro == "Auto":
-                                TypeCastMacro(ChangedName)
+                                TypeCastMacro(ChangedName, Account)
                                 time.sleep(random.randint(3, 5))
                                 restart = True
                             else:

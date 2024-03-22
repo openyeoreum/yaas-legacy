@@ -705,14 +705,15 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                 CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
                 current_file_index += 1
                 
-    # for 루프 종료 후 남은 CombinedSound 처리
-    if not CombinedSound.empty():
-        file_name = f"{projectName}_VoiceLayer_{current_file_index*file_limit-file_limit+1}-{FilesCount + 1}.wav"
-        CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
+    # # for 루프 종료 후 남은 CombinedSound 처리
+    # if not CombinedSound.empty():
+    #     file_name = f"{projectName}_VoiceLayer_{current_file_index*file_limit-file_limit+1}-{FilesCount + 1}.wav"
+    #     print(file_name)
+    #     CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
 
     # 최종 파일 합치기
     final_combined = AudioSegment.empty()
-    for i in range(1, current_file_index + 1):
+    for i in range(1, current_file_index):
         part_name = f"{projectName}_VoiceLayer_{i*file_limit-file_limit+1}-{min(i*file_limit, len(FilteredFiles))}.wav"
         part_path = os.path.join(voiceLayerPath, part_name)
         part = AudioSegment.from_wav(part_path)

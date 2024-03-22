@@ -38,7 +38,6 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
 
     # 음성 인식 요청 및 응답 처리
     response = client.recognize(config = config, audio = audio)
-
     # 각 단어의 시작 및 종료 타임스탬프 출력
     voiceTimeStemps = []
     Voices = []
@@ -53,6 +52,13 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
                 voiceTimeStemps.append({"낭독기록번호": Id, "낭독기록": word, "시작": start_time, "끝": end_time})
                 Voices.append({"낭독기록번호": Id, "낭독기록": word})
                 Id += 1
+    
+    # 마지막 문장이 누락시, 해당 부분 추가
+    result_end_time = result.result_end_time.total_seconds() if wordInfo.start_time else 0
+    
+    if result_end_time - end_time >= 0.5:
+        voiceTimeStemps.append({"낭독기록번호": Id, "낭독기록": '~', "시작": end_time, "끝": result_end_time})
+        Voices.append({"낭독기록번호": Id, "낭독기록": '~'})
                 
     return voiceTimeStemps, Voices
 
@@ -578,7 +584,13 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
             if InputSet['Normal']['NotSameAlphabet'] == []:
                 ResponseJson = InputSet['Normal']['RawResponse']
             else:
-                sys.exit(f"[ {InputSet['Normal']['NotSameAlphabet']} 부분 분할에 오류 발생 확인필요 ]\n{SplitSents}")
+                ## 3회 에러 발생시 및 매칭율 2 에러시, InputText의 매칭율을 1로 낮추어 ResponseJson 리턴
+                InputSet = InputText(SplitSents, SplitWords, 1)
+                if InputSet['Normal']['NotSameAlphabet'] == []:
+                    ResponseJson = InputSet['Normal']['RawResponse']
+                    print(InputSet['Normal']['RawResponse'])
+                else:
+                    sys.exit(f"[ {InputSet['Normal']['NotSameAlphabet']} 부분 분할에 오류 발생 확인필요 ]\n{SplitSents}")
     else:
         ResponseJson = InputSet['Normal']['RawResponse']
         

@@ -139,7 +139,13 @@ def ContextScoreCal(VoiceDataSetCharacters, SelectionGenerationKoBookContext):
         AtmosphereScore = 0
         for NAtmosphere in CharacterAtmosphere:
             if NAtmosphere['index'] in BookAtmosphere['Emotion']:
-                AtmosphereScore += (BookAtmosphere['EmotionRatio'][NAtmosphere['index']] * NAtmosphere['Score'])
+                # KeyError에 대한 대처 (프롬프트 실수 또는 기타의 비중이 커서 EmotionRatio에 index 항목이 없는 경우)
+                if NAtmosphere['index'] in BookAtmosphere['EmotionRatio']:
+                    AtmosphereScore += (BookAtmosphere['EmotionRatio'][NAtmosphere['index']] * NAtmosphere['Score'])
+                elif '기타' in BookAtmosphere['EmotionRatio']:
+                    AtmosphereScore += (BookAtmosphere['EmotionRatio']['기타'] * NAtmosphere['Score'] * 0.5)
+                else:
+                    AtmosphereScore += 0
         AtmosphereScore = AtmosphereScore / 1000
         
         ContextScore = (QuiltyScore * GenreScore * GenderScore * AgeScore * PersonalityScore * AtmosphereScore)
@@ -815,7 +821,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                     chunks = [GenerationKoChunk['Chunk']]
                 pauses = [ExtractPause(chunk) for chunk in chunks]
 
-                newChunk = {"EditId": None, "ChunkId": [chunkid], "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses, "EndTime": [None] * len(pauses)}
+                newChunk = {"EditId": None, "ChunkId": [chunkid], "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses, "Endtime": None}
 
                 if tempChunk and len(' '.join(tempChunk['ActorChunk'] + actorchunks)) <= 350 and (tempChunk['Tag'] == tag and tempChunk['ActorName'] == actorname):
                     # 기존 문장과 새로운 문장을 언어만 남긴 상태로 비교
@@ -833,27 +839,29 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                         if len(combined_text) > 350:
                             split_chunks, split_pauses = splitChunksAndPauses(tempChunk['ActorChunk'], tempChunk['Pause'])
                             for sc, sp in zip(split_chunks, split_pauses):
-                                split_chunk = {"EditId": None, "ChunkId": tempChunk['ChunkId'], "Tag": tempChunk['Tag'], "ActorName": tempChunk['ActorName'], "ActorChunk": sc, "Pause": sp, "EndTime": [None] * len(pauses)}
+                                split_chunk = {"EditId": None, "ChunkId": tempChunk['ChunkId'], "Tag": tempChunk['Tag'], "ActorName": tempChunk['ActorName'], "ActorChunk": sc, "Pause": sp, "Endtime": None}
                                 EditGenerationKoChunks.append(split_chunk)
                             tempChunk = None  # Reset after splitting
                     tempChunk = appendAndResetTemp(tempChunk, newChunk)
 
             if tempChunk:
                 EditGenerationKoChunks.append(tempChunk)
-                
+            
+            ## EditId 선정 및 EndTime을 Pause개수대로 None으로 초기화
             EditId = 1
             for NewGenerationKoChunk in EditGenerationKoChunks[:]:
                 if NewGenerationKoChunk['ActorChunk']:
                     NewGenerationKoChunk['EditId'] = EditId
+                    NewGenerationKoChunk['EndTime'] = [None] * len(NewGenerationKoChunk['Pause'])
                     EditId += 1
                 else:
                     EditGenerationKoChunks.remove(NewGenerationKoChunk)
+            #### Split을 위한 문장을 합치는 코드 ####
             
             ## EditGenerationKoChunks의 Dic(검수)
             EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
-            #### Split을 위한 문장을 합치는 코드 ####
-
-            # MatchedActors, MatchedChunks 저장
+            
+            # MatchedActors, MatchedChunks 저장 (Dic 저장 후 다시 List로 변환)
             fileName = projectName + '_' + 'MatchedVoices.json'
             MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
             with open(MatchedActorsPath, 'w', encoding = 'utf-8') as json_file:
@@ -862,6 +870,9 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                 json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
             with open(MatchedChunksOriginPath, 'w', encoding = 'utf-8') as json_file:
                 json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+            
+            ## EditGenerationKoChunks의 Dic(프로세스)
+            EditGenerationKoChunks = EditGenerationKoChunksToList(EditGenerationKoChunks)
         else:
             with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
                 EditGenerationKoChunks = json.load(MatchedChunksJson)
@@ -899,6 +910,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
         _LastPitchSwitch = 0
         for Update in UpdateTQDM:
             UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['EditId']}: {Update['ActorChunk']}")
+            print(f'@Update: {Update}\n\n')
             EditId = Update['EditId']
             Name = Update['ActorName']
             Pause = Update['Pause']

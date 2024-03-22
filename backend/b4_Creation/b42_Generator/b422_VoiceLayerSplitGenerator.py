@@ -707,7 +707,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                 CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
                 current_file_index += 1
 
-    # for 루프 종료 후 남은 CombinedSound 처리
+    # for 루프 종료 후 남은 CombinedSound 처리 (특수경우)
     if not CombinedSound.empty():
         minNumber = current_file_index*file_limit-file_limit+1
         _maxNumber = FilesCount

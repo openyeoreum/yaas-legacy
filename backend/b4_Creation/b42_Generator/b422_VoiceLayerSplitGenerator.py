@@ -910,7 +910,6 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
         _LastPitchSwitch = 0
         for Update in UpdateTQDM:
             UpdateTQDM.set_description(f"ChunkToSpeech: ({Update['ActorName']}), {Update['EditId']}: {Update['ActorChunk']}")
-            print(f'@Update: {Update}\n\n')
             EditId = Update['EditId']
             Name = Update['ActorName']
             Pause = Update['Pause']

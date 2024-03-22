@@ -278,6 +278,8 @@ def InputText(SplitSents, SplitWords, SameNum):
             ShortMatchingCount = 0
             MiddleMatchingCount = 0
             _MiddleMatchingCount = 0
+            middleMatchingCount = 0
+            _middleMatchingCount = 0
             LongMatchingCount = 0
             if SameDic == {}:
                 ## MatchingCount 계산
@@ -290,6 +292,12 @@ def InputText(SplitSents, SplitWords, SameNum):
                 for i in [1, 3, 4]:
                     if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                         _MiddleMatchingCount += 1
+                for i in [0, 1, 4]:
+                    if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
+                        middleMatchingCount += 1
+                for i in [0, 3, 4]:
+                    if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
+                        _middleMatchingCount += 1
                 for i in [0, 1, 3, 4]:
                     if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                         LongMatchingCount += 1
@@ -307,6 +315,18 @@ def InputText(SplitSents, SplitWords, SameNum):
                     BeforeAlphabet = AlphabetABWord[2]
                     break
                 elif _MiddleMatchingCount == 3:
+                    SameAlphabet.append(AlphabetABWord[2])
+                    NotSameAlphabet.remove(AlphabetABWord[2])
+                    SameDic[AlphabetABWord[2]] = NumberABWord[2]
+                    BeforeAlphabet = AlphabetABWord[2]
+                    break
+                elif middleMatchingCount == 3:
+                    SameAlphabet.append(AlphabetABWord[2])
+                    NotSameAlphabet.remove(AlphabetABWord[2])
+                    SameDic[AlphabetABWord[2]] = NumberABWord[2]
+                    BeforeAlphabet = AlphabetABWord[2]
+                    break
+                elif _middleMatchingCount == 3:
                     SameAlphabet.append(AlphabetABWord[2])
                     NotSameAlphabet.remove(AlphabetABWord[2])
                     SameDic[AlphabetABWord[2]] = NumberABWord[2]
@@ -333,16 +353,34 @@ def InputText(SplitSents, SplitWords, SameNum):
                     for i in [1, 3, 4]:
                         if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                             _MiddleMatchingCount += 1
+                    for i in [0, 1, 4]:
+                        if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
+                            middleMatchingCount += 1
+                    for i in [0, 3, 4]:
+                        if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
+                            _middleMatchingCount += 1
                     for i in [0, 1, 3, 4]:
                         if (NumberABWord[i] in AlphabetABWord[i]) and ("None" != AlphabetABWord[i]):
                             LongMatchingCount += 1
+                    ## MatchingCount에 따른 SameDic 저장
                     if ShortMatchingCount == 2:
                         SameAlphabet.append(AlphabetABWord[2])
                         NotSameAlphabet.remove(AlphabetABWord[2])
                         SameDic[AlphabetABWord[2]] = NumberABWord[2]
                         BeforeAlphabet = AlphabetABWord[2]
                         break
-                    ## MatchingCount에 따른 SameDic 저장
+                    elif middleMatchingCount == 3:
+                        SameAlphabet.append(AlphabetABWord[2])
+                        NotSameAlphabet.remove(AlphabetABWord[2])
+                        SameDic[AlphabetABWord[2]] = NumberABWord[2]
+                        BeforeAlphabet = AlphabetABWord[2]
+                        break
+                    elif _middleMatchingCount == 3:
+                        SameAlphabet.append(AlphabetABWord[2])
+                        NotSameAlphabet.remove(AlphabetABWord[2])
+                        SameDic[AlphabetABWord[2]] = NumberABWord[2]
+                        BeforeAlphabet = AlphabetABWord[2]
+                        break
                     elif MiddleMatchingCount == 3:
                         SameAlphabet.append(AlphabetABWord[2])
                         NotSameAlphabet.remove(AlphabetABWord[2])
@@ -513,7 +551,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
             if ErrorOutput == '':
                 memoryCounter = memoryCounter + "\n\n"
             else:
-                memoryCounter = memoryCounter + f"\"\n{ErrorOutput}\"은 정답이 아님. 실수하지 말것!\n\n"
+                memoryCounter = memoryCounter + f"\"숫자부분\": \"{ErrorOutput}\"은 정답이 아님. 실수하지 말것!\n\n"
                 ErrorOutput = ''
             # Response 생성
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
@@ -534,6 +572,13 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
                 ResponseJson += RawResponse
                 ResponseJson = sorted(ResponseJson, key = lambda x: x['알파벳'])
                 break
+        else:
+            ## 3회 에러 발생시, InputText의 매칭율을 2로 낮추어 ResponseJson 리턴
+            InputSet = InputText(SplitSents, SplitWords, 2)
+            if InputSet['Normal']['NotSameAlphabet'] == []:
+                ResponseJson = InputSet['Normal']['RawResponse']
+            else:
+                sys.exit(f"[ {InputSet['Normal']['NotSameAlphabet']} 부분 분할에 오류 발생 확인필요 ]\n{SplitSents}")
     else:
         ResponseJson = InputSet['Normal']['RawResponse']
         

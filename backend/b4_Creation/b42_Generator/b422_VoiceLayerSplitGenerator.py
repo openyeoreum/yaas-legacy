@@ -715,11 +715,12 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         
         if minNumber < maxNumber and len(FilteredFiles) == maxNumber:
             file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
+            current_file_index += 1
         elif minNumber < _maxNumber and len(FilteredFiles) == _maxNumber:
             file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
+            current_file_index += 1
             
         CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
-        current_file_index += 1
 
     # 최종 파일 합치기
     final_combined = AudioSegment.empty()

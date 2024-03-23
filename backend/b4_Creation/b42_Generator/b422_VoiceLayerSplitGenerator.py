@@ -667,7 +667,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
     # editInfos에 남은 파일이 있는지 확인 (생성되지 못한 파일)
     if editInfos != []:
         for editInfo in editInfos:
-            print(f"[ 파일 생성 필요: {editInfo} ]")
+            print(f"[ 파일 생성 또는 EditId 확인 필요: {editInfo} ]")
         sys.exit()
 
     # 중복 제거

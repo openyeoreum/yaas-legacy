@@ -641,29 +641,23 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
     # None 부분, editInfos에 존재하지 않는 파일명 제거
     FilteredSortedFiles = []
     CheckedEditInfos = copy.deepcopy(editInfos)
-    ToRemove = []  # 삭제할 요소의 인덱스를 저장할 리스트
-
     for file in SortedFiles:
         fileInfos = ExtractFileInfo(file)  # 파일 정보 추출
-        for idx, editInfo in enumerate(CheckedEditInfos):  # editInfos의 모든 항목에 대해 검사
+        for editInfo in editInfos:  # editInfos의 모든 항목에 대해 검사
             if (editInfo['EditId'] == fileInfos['gen_num']) and \
             (editInfo['ActorName'] == fileInfos['name_with_info']) and \
             (editInfo['DetailEditNum'] == fileInfos['detail_gen_num']):
                 FilteredSortedFiles.append(file)
-                if idx not in ToRemove:  # 아직 삭제 리스트에 없으면 추가
-                    ToRemove.append(idx)
-
-    # 역순으로 삭제해야 인덱스 문제가 발생하지 않음
-    for idx in sorted(ToRemove, reverse = True):
-        del CheckedEditInfos[idx]
-
-    print(CheckedEditInfos)
+            else:
+                print(f'editInfo: {editInfo}')
+                print(f'fileInfos: {fileInfos}')
+    
     sys.exit()
 
     # 중복 제거
     UniqueFiles = []
     seen = set()
-    for file in FilteredSortedFiles:
+    for file in SortedFiles:
         info = ExtractFileInfo(file)
         if info['base_name'] != None:
             identifier = (info['base_name'], info['name_with_info'], info['gen_num'], info['detail_gen_num'])

@@ -542,7 +542,10 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
                         # download audio file
                         r = requests.get(ret['audio_download_url'])
                         if len(SplitChunks) == 1:
-                            fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav").replace(".wav", "_(0).wav")
+                            if "M.wav" in voiceLayerPath:
+                                fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
+                            else:
+                                fileName = voiceLayerPath.replace(".wav", "_(0).wav")
                         else:
                             fileName = voiceLayerPath
                         with open(fileName, 'wb') as f:
@@ -586,44 +589,92 @@ def ExtractPause(chunk):
         return 0
 
 ## 생성된 음성파일 정렬/필터
-def SortAndRemoveDuplicates(files):
+def SortAndRemoveDuplicates(editGenerationKoChunks, files):
     # 파일명에서 필요한 정보를 추출하는 함수
     def ExtractFileInfo(FileName):
-        match = re.match(r"(.+)_(\d+(\.\d+)?)_(.+?)\((.+?)\)_\((\d+)\)(M?)\.wav", FileName)
+        match = re.match(r"(.+)\_(\d+(\.\d+)?)\_(.+?\(.+?\))\_\((\d+)\)(M?)\.wav", FileName)
         if match == None:
             normalizeFileName = unicodedata.normalize('NFC', FileName)
-            match = re.match(r"(.+)_(\d+(\.\d+)?)_(.+?)\((.+?)\)_\((\d+)\)(M?)\.wav", normalizeFileName)
+            match = re.match(r"(.+)\_(\d+(\.\d+)?)\_(.+?\(.+?\))\_\((\d+)\)(M?)\.wav", normalizeFileName)
         if match:
-            # 생성넘버, 세부생성넘버, M의 유무를 반환
+            # 생성넘버, 세부생성넘버, M의 유무, 이름(괄호 포함)을 반환
             return {
                 'base_name': match.group(1),
                 'gen_num': float(match.group(2)),
-                'detail_gen_num': int(match.group(6)),
-                'has_M': match.group(7) == 'M'
+                'name_with_info': match.group(4),
+                'detail_gen_num': int(match.group(5)),
+                'has_M': match.group(6) == 'M'
             }
-        return None
+        else:
+            print(f"[ 파일 삭제 필요: {FileName} ]")  # 파일 정보 추출 실패 시 출력
+            return {
+                'base_name': '',
+                'gen_num': float('inf'),
+                'name_with_info': '',
+                'detail_gen_num': float('inf'),
+                'has_M': False
+            }
 
-    # 파일 정보를 기반으로 정렬 및 중복 제거
-    SortedFiles = sorted(files, key = lambda File: (
-        ExtractFileInfo(File)['gen_num'],
-        ExtractFileInfo(File)['detail_gen_num'],
-        not ExtractFileInfo(File)['has_M']  # 'M'이 없는 파일을 우선 정렬
+    # 파일 정보 추출
+    file_infos = [ExtractFileInfo(File) for File in files]
+
+    # 추출된 파일 정보를 기반으로 정렬 및 중복 제거
+    SortedFiles = sorted(files, key=lambda File: (
+        file_infos[files.index(File)]['gen_num'],
+        file_infos[files.index(File)]['name_with_info'],
+        file_infos[files.index(File)]['detail_gen_num'],
+        not file_infos[files.index(File)]['has_M']  # 'M'이 없는 파일을 우선 정렬
     ))
+
+    ## None 부분과, EditGenerationKoChunks에 존재하지 않는 부분은 제거
+    # editGenerationKoChunks의 데이터 리스트 추출
+    editInfos = []
+    for editChunks in editGenerationKoChunks:
+        EditId = editChunks['EditId']
+        ActorName = editChunks['ActorName']
+        ActorChunk = editChunks['ActorChunk']
+        editInfo = {'EditId': EditId, 'ActorName': ActorName, 'DetailEditNum': None}
+        for i in range(len(ActorChunk)):
+            editInfo['DetailEditNum'] = i
+            editInfos.append(editInfo)
+    
+    # None 부분, editInfos에 존재하지 않는 파일명 제거
+    FilteredSortedFiles = []
+    CheckedEditInfos = copy.deepcopy(editInfos)
+    ToRemove = []  # 삭제할 요소의 인덱스를 저장할 리스트
+
+    for file in SortedFiles:
+        fileInfos = ExtractFileInfo(file)  # 파일 정보 추출
+        for idx, editInfo in enumerate(CheckedEditInfos):  # editInfos의 모든 항목에 대해 검사
+            if (editInfo['EditId'] == fileInfos['gen_num']) and \
+            (editInfo['ActorName'] == fileInfos['name_with_info']) and \
+            (editInfo['DetailEditNum'] == fileInfos['detail_gen_num']):
+                FilteredSortedFiles.append(file)
+                if idx not in ToRemove:  # 아직 삭제 리스트에 없으면 추가
+                    ToRemove.append(idx)
+
+    # 역순으로 삭제해야 인덱스 문제가 발생하지 않음
+    for idx in sorted(ToRemove, reverse = True):
+        del CheckedEditInfos[idx]
+
+    print(CheckedEditInfos)
+    sys.exit()
 
     # 중복 제거
     UniqueFiles = []
     seen = set()
-    for file in SortedFiles:
+    for file in FilteredSortedFiles:
         info = ExtractFileInfo(file)
-        identifier = (info['base_name'], info['gen_num'], info['detail_gen_num'])
-        if identifier not in seen:
-            UniqueFiles.append(file)
-            seen.add(identifier)
-        elif info['has_M']:  # 'M'이 포함된 파일이면 이전 'M'이 없는 파일을 대체
-            # 마지막으로 추가된 파일이 'M'이 없는 파일인지 확인하고, 맞다면 제거
-            if UniqueFiles and ExtractFileInfo(UniqueFiles[-1])['has_M'] == False and ExtractFileInfo(UniqueFiles[-1])['gen_num'] == info['gen_num'] and ExtractFileInfo(UniqueFiles[-1])['detail_gen_num'] == info['detail_gen_num']:
-                UniqueFiles.pop()  # 'M'이 없는 파일 제거
-            UniqueFiles.append(file)
+        if info['base_name'] != None:
+            identifier = (info['base_name'], info['name_with_info'], info['gen_num'], info['detail_gen_num'])
+            if identifier not in seen:
+                UniqueFiles.append(file)
+                seen.add(identifier)
+            elif info['has_M']:  # 'M'이 포함된 파일이면 이전 'M'이 없는 파일을 대체
+                # 마지막으로 추가된 파일이 'M'이 없는 파일인지 확인하고, 맞다면 제거
+                if UniqueFiles and ExtractFileInfo(UniqueFiles[-1])['has_M'] == False and ExtractFileInfo(UniqueFiles[-1])['gen_num'] == info['gen_num'] and ExtractFileInfo(UniqueFiles[-1])['detail_gen_num'] == info['detail_gen_num']:
+                    UniqueFiles.pop()  # 'M'이 없는 파일 제거
+                UniqueFiles.append(file)
 
     return UniqueFiles
 
@@ -672,7 +723,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
 
     # 폴더 내의 모든 .wav 파일 목록 정렬/필터
-    FilteredFiles = SortAndRemoveDuplicates(Files)
+    FilteredFiles = SortAndRemoveDuplicates(EditGenerationKoChunks, Files)
     FilesCount = 0
     file_limit = 100  # 파일 분할 기준
     current_file_index = 1
@@ -1011,7 +1062,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                 else:
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-                    if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav'):
+                    if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') and not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav'):
                         ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 
                         if ChangedName == 'Continue':
@@ -1075,3 +1126,4 @@ if __name__ == "__main__":
     
     # with open(MatchedChunksPath2, 'w', encoding = 'utf-8') as json_file:
     #     json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    

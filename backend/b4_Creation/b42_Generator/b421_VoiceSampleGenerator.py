@@ -105,7 +105,7 @@ def VoiceSampleGen(testerName, name, emotion, pitch, lastpitch):
         
     RandomEMOTION = random.choice(EMOTION)
     RandomLASTPITCH = random.choice(lastpitch)
-    voiceLayerPath = '/yaas/storage/s1_Yeoreum/s14_VoiceStorage/'
+    voiceLayerPath = '/yaas/storage/s1_Yeoreum/s13_VoiceStorage/'
     TypecastVoiceGeneratorTest(testerName, filename, ChunkId, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath)
 
 if __name__ == "__main__":

@@ -10,7 +10,7 @@
             {
                 "CharacterId": 0,
                 "Name": "None",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/.wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -97,7 +97,7 @@
             {
                 "CharacterId": 1,
                 "Name": "연우(일반, 피치다운)",
-                "SamplePath": "/Users/yeoreum/yaas/storage/s1_Yeoreum/s14_VoiceStorage/1_연우(일반, 피치다운).wav",
+                "SamplePath": "/Users/yeoreum/yaas/storage/s1_Yeoreum/s13_VoiceStorage/1_연우(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["Sub"],
                 "Context": {
@@ -184,7 +184,7 @@
             {
                 "CharacterId": 2,
                 "Name": "연우(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/2_연우(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/2_연우(중간톤).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -273,7 +273,7 @@
             {
                 "CharacterId": 3,
                 "Name": "연우(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/3_연우(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/3_연우(중간톤, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
                 "Context": {
@@ -360,7 +360,7 @@
             {
                 "CharacterId": 4,
                 "Name": "연우(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/4_연우(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/4_연우(톤다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -449,7 +449,7 @@
             {
                 "CharacterId": 5,
                 "Name": "연우(톤다운, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/5_연우(톤다운, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/5_연우(톤다운, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
                 "Context": {
@@ -536,7 +536,7 @@
             {
                 "CharacterId": 6,
                 "Name": "유라(톤업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/6_유라(톤업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/6_유라(톤업).wav",
                 "Quilty": 8,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -623,7 +623,7 @@
             {
                 "CharacterId": 7,
                 "Name": "유라(톤업, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/7_유라(톤업, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/7_유라(톤업, 피치다운).wav",
                 "Quilty": 6,
                 "Grade": ["Sub"],
                 "Context": {
@@ -710,7 +710,7 @@
             {
                 "CharacterId": 8,
                 "Name": "유라(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/8_유라(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/8_유라(중간톤).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -799,7 +799,7 @@
             {
                 "CharacterId": 9,
                 "Name": "유라(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/9_유라(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/9_유라(중간톤, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -888,7 +888,7 @@
             {
                 "CharacterId": 10,
                 "Name": "유라(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/10_유라(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/10_유라(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -975,7 +975,7 @@
             {
                 "CharacterId": 11,
                 "Name": "김건(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/11_김건(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/11_김건(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -1062,7 +1062,7 @@
             {
                 "CharacterId": 12,
                 "Name": "김건(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/12_김건(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/12_김건(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -1149,7 +1149,7 @@
             {
                 "CharacterId": 13,
                 "Name": "김건(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/13_김건(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/13_김건(중간톤).wav",
                 "Quilty": 4,
                 "Grade": ["None"],
                 "Context": {
@@ -1236,7 +1236,7 @@
             {
                 "CharacterId": 14,
                 "Name": "김건(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/14_김건(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/14_김건(중간톤, 피치다운).wav",
                 "Quilty": 4,
                 "Grade": ["None"],
                 "Context": {
@@ -1323,7 +1323,7 @@
             {
                 "CharacterId": 15,
                 "Name": "김건(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/15_김건(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/15_김건(슬픔).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -1412,7 +1412,7 @@
             {
                 "CharacterId": 16,
                 "Name": "김건(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/16_김건(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/16_김건(슬픔, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -1501,7 +1501,7 @@
             {
                 "CharacterId": 17,
                 "Name": "김건(기쁨)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/17_김건(기쁨).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/17_김건(기쁨).wav",
                 "Quilty": 4,
                 "Grade": ["None"],
                 "Context": {
@@ -1588,7 +1588,7 @@
             {
                 "CharacterId": 18,
                 "Name": "김건(기쁨, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/18_김건(기쁨, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/18_김건(기쁨, 피치다운).wav",
                 "Quilty": 4,
                 "Grade": ["None"],
                 "Context": {
@@ -1675,7 +1675,7 @@
             {
                 "CharacterId": 19,
                 "Name": "김건(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/19_김건(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/19_김건(화남).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -1762,7 +1762,7 @@
             {
                 "CharacterId": 20,
                 "Name": "김건(화남, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/20_김건(화남, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/20_김건(화남, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -1849,7 +1849,7 @@
             {
                 "CharacterId": 21,
                 "Name": "준상(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/21_준상(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/21_준상(중간톤).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -1938,7 +1938,7 @@
             {
                 "CharacterId": 22,
                 "Name": "준상(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/22_준상(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/22_준상(톤다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -2027,7 +2027,7 @@
             {
                 "CharacterId": 23,
                 "Name": "준상(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/23_준상(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/23_준상(슬픔).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
                 "Context": {
@@ -2114,7 +2114,7 @@
             {
                 "CharacterId": 24,
                 "Name": "한준(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/24_한준(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/24_한준(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -2201,7 +2201,7 @@
             {
                 "CharacterId": 25,
                 "Name": "한준(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/25_한준(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/25_한준(중간톤).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -2290,7 +2290,7 @@
             {
                 "CharacterId": 26,
                 "Name": "한준(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/26_한준(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/26_한준(중간톤, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -2379,7 +2379,7 @@
             {
                 "CharacterId": 27,
                 "Name": "한준(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/27_한준(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/27_한준(톤다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -2468,7 +2468,7 @@
             {
                 "CharacterId": 28,
                 "Name": "한준(톤다운, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/28_한준(톤다운, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/28_한준(톤다운, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -2557,7 +2557,7 @@
             {
                 "CharacterId": 29,
                 "Name": "한준(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/29_한준(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/29_한준(슬픔).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -2646,7 +2646,7 @@
             {
                 "CharacterId": 30,
                 "Name": "한준(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/30_한준(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/30_한준(슬픔, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -2735,7 +2735,7 @@
             {
                 "CharacterId": 31,
                 "Name": "미선(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/31_미선(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/31_미선(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
                 "Context": {
@@ -2822,7 +2822,7 @@
             {
                 "CharacterId": 32,
                 "Name": "미선(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/32_미선(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/32_미선(일반, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
                 "Context": {
@@ -2909,7 +2909,7 @@
             {
                 "CharacterId": 33,
                 "Name": "주호(일반톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/33_주호(일반톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/33_주호(일반톤).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
                 "Context": {
@@ -2996,7 +2996,7 @@
             {
                 "CharacterId": 34,
                 "Name": "주호(일반톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/34_주호(일반톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/34_주호(일반톤, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -3085,7 +3085,7 @@
             {
                 "CharacterId": 35,
                 "Name": "지훈(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/35_지훈(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/35_지훈(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -3172,7 +3172,7 @@
             {
                 "CharacterId": 36,
                 "Name": "지훈(톤업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/36_지훈(톤업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/36_지훈(톤업).wav",
                 "Quilty": 8,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -3259,7 +3259,7 @@
             {
                 "CharacterId": 37,
                 "Name": "지훈(톤업, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/37_지훈(톤업, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/37_지훈(톤업, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -3346,7 +3346,7 @@
             {
                 "CharacterId": 38,
                 "Name": "지훈(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/38_지훈(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/38_지훈(중간톤).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -3435,7 +3435,7 @@
             {
                 "CharacterId": 39,
                 "Name": "지훈(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/39_지훈(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/39_지훈(중간톤, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -3522,7 +3522,7 @@
             {
                 "CharacterId": 40,
                 "Name": "지훈(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/40_지훈(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/40_지훈(슬픔).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
                 "Context": {
@@ -3609,7 +3609,7 @@
             {
                 "CharacterId": 41,
                 "Name": "지훈(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/41_지훈(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/41_지훈(슬픔, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
                 "Context": {
@@ -3696,7 +3696,7 @@
             {
                 "CharacterId": 42,
                 "Name": "가희(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/42_가희(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/42_가희(일반).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
                 "Context": {
@@ -3783,7 +3783,7 @@
             {
                 "CharacterId": 43,
                 "Name": "가희(절규)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/43_가희(절규).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/43_가희(절규).wav",
                 "Quilty": 10,
                 "Grade": ["Actor"],
                 "Context": {
@@ -3870,7 +3870,7 @@
             {
                 "CharacterId": 44,
                 "Name": "건우(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/44_건우(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/44_건우(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -3957,7 +3957,7 @@
             {
                 "CharacterId": 45,
                 "Name": "경호(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/45_경호(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/45_경호(화남).wav",
                 "Quilty": 6,
                 "Grade": ["Actor"],
                 "Context": {
@@ -4044,7 +4044,7 @@
             {
                 "CharacterId": 46,
                 "Name": "경호(차가움)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/46_경호(차가움).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/46_경호(차가움).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -4131,7 +4131,7 @@
             {
                 "CharacterId": 47,
                 "Name": "김경화앵커(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/47_김경화앵커(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/47_김경화앵커(일반).wav",
                 "Quilty": 0,
                 "_Quilty": 9,
                 "Grade": ["Caption"],
@@ -4219,7 +4219,7 @@
             {
                 "CharacterId": 48,
                 "Name": "김경화앵커(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/48_김경화앵커(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/48_김경화앵커(일반, 피치다운).wav",
                 "Quilty": 0,
                 "_Quilty": 9,
                 "Grade": ["Caption"],
@@ -4307,7 +4307,7 @@
             {
                 "CharacterId": 49,
                 "Name": "남준(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/49_남준(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/49_남준(톤다운).wav",
                 "Quilty": 7,
                 "Grade": ["Caption"],
                 "Context": {
@@ -4394,7 +4394,7 @@
             {
                 "CharacterId": 50,
                 "Name": "노을(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/50_노을(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/50_노을(슬픔).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -4481,7 +4481,7 @@
             {
                 "CharacterId": 51,
                 "Name": "노을(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/51_노을(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/51_노을(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -4568,7 +4568,7 @@
             {
                 "CharacterId": 52,
                 "Name": "노을(설득)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/52_노을(설득).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/52_노을(설득).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
                 "Context": {
@@ -4655,7 +4655,7 @@
             {
                 "CharacterId": 53,
                 "Name": "도희(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/53_도희(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/53_도희(일반).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -4742,7 +4742,7 @@
             {
                 "CharacterId": 54,
                 "Name": "도희(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/54_도희(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/54_도희(일반, 피치다운).wav",
                 "Quilty": 8.8,
                 "Grade": ["Caption"],
                 "Context": {
@@ -4829,7 +4829,7 @@
             {
                 "CharacterId": 55,
                 "Name": "류은(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/55_류은(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/55_류은(일반).wav",
                 "Quilty": 0,
                 "Grade": ["Actor"],
                 "Context": {
@@ -4916,7 +4916,7 @@
             {
                 "CharacterId": 56,
                 "Name": "류은(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/56_류은(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/56_류은(일반, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -5005,7 +5005,7 @@
             {
                 "CharacterId": 57,
                 "Name": "류은(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/57_류은(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/57_류은(중간톤).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -5092,7 +5092,7 @@
             {
                 "CharacterId": 58,
                 "Name": "류은(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/58_류은(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/58_류은(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -5179,7 +5179,7 @@
             {
                 "CharacterId": 59,
                 "Name": "류은(기쁨)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/59_류은(기쁨).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/59_류은(기쁨).wav",
                 "Quilty": 7,
                 "Grade": ["Actor"],
                 "Context": {
@@ -5266,7 +5266,7 @@
             {
                 "CharacterId": 60,
                 "Name": "류은(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/60_류은(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/60_류은(화남).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -5353,7 +5353,7 @@
             {
                 "CharacterId": 61,
                 "Name": "류은(화남, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/61_류은(화남, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/61_류은(화남, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -5440,7 +5440,7 @@
             {
                 "CharacterId": 62,
                 "Name": "명주(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/62_명주(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/62_명주(일반).wav",
                 "Quilty": 6,
                 "Grade": ["None"],
                 "Context": {
@@ -5527,7 +5527,7 @@
             {
                 "CharacterId": 63,
                 "Name": "명주(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/62_명주(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/62_명주(일반, 피치다운).wav",
                 "Quilty": 6.5,
                 "Grade": ["None"],
                 "Context": {
@@ -5614,7 +5614,7 @@
             {
                 "CharacterId": 64,
                 "Name": "모건(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/64_모건(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/64_모건(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -5701,7 +5701,7 @@
             {
                 "CharacterId": 65,
                 "Name": "모건(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/65_모건(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/65_모건(중간톤).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -5788,7 +5788,7 @@
             {
                 "CharacterId": 66,
                 "Name": "모건(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/66_모건(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/66_모건(톤다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -5875,7 +5875,7 @@
             {
                 "CharacterId": 67,
                 "Name": "모건(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/67_모건(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/67_모건(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -5962,7 +5962,7 @@
             {
                 "CharacterId": 68,
                 "Name": "민준(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/68_민준(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/68_민준(중간톤).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
                 "Context": {
@@ -6049,7 +6049,7 @@
             {
                 "CharacterId": 69,
                 "Name": "민지(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/69_민지(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/69_민지(톤다운).wav",
                 "Quilty": 9.5,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -6136,7 +6136,7 @@
             {
                 "CharacterId": 70,
                 "Name": "민지(톤다운, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/70_민지(톤다운, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/70_민지(톤다운, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -6225,7 +6225,7 @@
             {
                 "CharacterId": 71,
                 "Name": "민지(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/71_민지(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/71_민지(슬픔).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -6312,7 +6312,7 @@
             {
                 "CharacterId": 72,
                 "Name": "민지(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/72_민지(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/72_민지(슬픔, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -6399,7 +6399,7 @@
             {
                 "CharacterId": 73,
                 "Name": "민지(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/73_민지(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/73_민지(화남).wav",
                 "Quilty": 6,
                 "Grade": ["Actor"],
                 "Context": {
@@ -6486,7 +6486,7 @@
             {
                 "CharacterId": 74,
                 "Name": "민지(화남, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/74_민지(화남, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/74_민지(화남, 피치다운).wav",
                 "Quilty": 5.8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -6573,7 +6573,7 @@
             {
                 "CharacterId": 75,
                 "Name": "범수(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/75_범수(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/75_범수(일반).wav",
                 "Quilty": 9.5,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -6662,7 +6662,7 @@
             {
                 "CharacterId": 76,
                 "Name": "범수(톤업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/76_범수(톤업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/76_범수(톤업).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -6749,7 +6749,7 @@
             {
                 "CharacterId": 77,
                 "Name": "범수(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/77_범수(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/77_범수(중간톤).wav",
                 "Quilty": 9,
                 "Grade": ["Main", "Caption"],
                 "Context": {
@@ -6838,7 +6838,7 @@
             {
                 "CharacterId": 78,
                 "Name": "범수(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/78_범수(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/78_범수(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -6925,7 +6925,7 @@
             {
                 "CharacterId": 79,
                 "Name": "범수(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/79_범수(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/79_범수(슬픔, 피치다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -7012,7 +7012,7 @@
             {
                 "CharacterId": 80,
                 "Name": "범수(기쁨)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/80_범수(기쁨).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/80_범수(기쁨).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -7099,7 +7099,7 @@
             {
                 "CharacterId": 81,
                 "Name": "범수(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/81_범수(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/81_범수(화남).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -7186,7 +7186,7 @@
             {
                 "CharacterId": 82,
                 "Name": "범수(화남, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/82_범수(화남, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/82_범수(화남, 피치다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -7273,7 +7273,7 @@
             {
                 "CharacterId": 83,
                 "Name": "상우(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/83_상우(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/83_상우(슬픔).wav",
                 "Quilty": 7.9,
                 "Grade": ["Actor"],
                 "Context": {
@@ -7360,7 +7360,7 @@
             {
                 "CharacterId": 84,
                 "Name": "서준(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/84_서준(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/84_서준(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -7447,7 +7447,7 @@
             {
                 "CharacterId": 85,
                 "Name": "서준(톤업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/85_서준(톤업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/85_서준(톤업).wav",
                 "Quilty": 6,
                 "Grade": ["Sub"],
                 "Context": {
@@ -7534,7 +7534,7 @@
             {
                 "CharacterId": 86,
                 "Name": "서준(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/86_서준(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/86_서준(중간톤).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -7621,7 +7621,7 @@
             {
                 "CharacterId": 87,
                 "Name": "서준(기쁨)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/87_서준(기쁨).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/87_서준(기쁨).wav",
                 "Quilty": 7.5,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -7708,7 +7708,7 @@
             {
                 "CharacterId": 88,
                 "Name": "석표(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/88_석표(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/88_석표(중간톤, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
                 "Context": {
@@ -7795,7 +7795,7 @@
             {
                 "CharacterId": 89,
                 "Name": "성호(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/89_성호(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/89_성호(일반).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -7882,7 +7882,7 @@
             {
                 "CharacterId": 90,
                 "Name": "성호(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/90_성호(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/90_성호(중간톤).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -7969,7 +7969,7 @@
             {
                 "CharacterId": 91,
                 "Name": "세나(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/91_세나(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/91_세나(일반).wav",
                 "Quilty": 7.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -8056,7 +8056,7 @@
             {
                 "CharacterId": 92,
                 "Name": "세진(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/92_세진(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/92_세진(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -8143,7 +8143,7 @@
             {
                 "CharacterId": 93,
                 "Name": "세진(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/93_세진(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/93_세진(일반, 피치다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -8230,7 +8230,7 @@
             {
                 "CharacterId": 94,
                 "Name": "세진(톤업, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/94_세진(톤업, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/94_세진(톤업, 피치다운).wav",
                 "Quilty": 7.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -8317,7 +8317,7 @@
             {
                 "CharacterId": 95,
                 "Name": "세진(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/95_세진(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/95_세진(중간톤).wav",
                 "Quilty": 6,
                 "Grade": ["Sub"],
                 "Context": {
@@ -8404,7 +8404,7 @@
             {
                 "CharacterId": 96,
                 "Name": "세진(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/96_세진(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/96_세진(중간톤, 피치다운).wav",
                 "Quilty": 7,
                 "Grade": ["Actor"],
                 "Context": {
@@ -8491,7 +8491,7 @@
             {
                 "CharacterId": 97,
                 "Name": "세진(톤다운, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/97_세진(톤다운, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/97_세진(톤다운, 피치다운).wav",
                 "Quilty": 7,
                 "Grade": ["Sub"],
                 "Context": {
@@ -8578,7 +8578,7 @@
             {
                 "CharacterId": 98,
                 "Name": "세진(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/98_세진(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/98_세진(슬픔, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -8665,7 +8665,7 @@
             {
                 "CharacterId": 99,
                 "Name": "세진(화남, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/99_세진(화남, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/99_세진(화남, 피치다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -8752,7 +8752,7 @@
             {
                 "CharacterId": 100,
                 "Name": "세진(속삭임)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/100_세진(속삭임).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/100_세진(속삭임).wav",
                 "Quilty": 1,
                 "Grade": ["ETC"],
                 "Context": {
@@ -8839,7 +8839,7 @@
             {
                 "CharacterId": 101,
                 "Name": "세진(속삭임, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/101_세진(속삭임, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/101_세진(속삭임, 피치다운).wav",
                 "Quilty": 1,
                 "Grade": ["ETC"],
                 "Context": {
@@ -8926,7 +8926,7 @@
             {
                 "CharacterId": 102,
                 "Name": "세진(응원, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/102_세진(응원, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/102_세진(응원, 피치다운).wav",
                 "Quilty": 7.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -9013,7 +9013,7 @@
             {
                 "CharacterId": 103,
                 "Name": "세희(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/103_세희(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/103_세희(일반).wav",
                 "Quilty": 9,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -9100,7 +9100,7 @@
             {
                 "CharacterId": 104,
                 "Name": "세희(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/104_세희(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/104_세희(중간톤).wav",
                 "Quilty": 9,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -9187,7 +9187,7 @@
             {
                 "CharacterId": 105,
                 "Name": "세희(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/105_세희(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/105_세희(중간톤, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -9276,7 +9276,7 @@
             {
                 "CharacterId": 106,
                 "Name": "송진섭스토리텔러(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/106_송진섭스토리텔러(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/106_송진섭스토리텔러(일반).wav",
                 "Quilty": 7,
                 "Grade": ["Caption"],
                 "Context": {
@@ -9363,7 +9363,7 @@
             {
                 "CharacterId": 107,
                 "Name": "송진섭스토리텔러(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/107_송진섭스토리텔러(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/107_송진섭스토리텔러(일반, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
                 "Context": {
@@ -9450,7 +9450,7 @@
             {
                 "CharacterId": 108,
                 "Name": "수호(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/108_수호(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/108_수호(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -9537,7 +9537,7 @@
             {
                 "CharacterId": 109,
                 "Name": "수호(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/109_수호(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/109_수호(중간톤).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -9624,7 +9624,7 @@
             {
                 "CharacterId": 110,
                 "Name": "수호(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/110_수호(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/110_수호(슬픔).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
                 "Context": {
@@ -9711,7 +9711,7 @@
             {
                 "CharacterId": 111,
                 "Name": "순이(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/111_순이(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/111_순이(일반).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -9798,7 +9798,7 @@
             {
                 "CharacterId": 112,
                 "Name": "순이(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/112_순이(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/112_순이(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -9885,7 +9885,7 @@
             {
                 "CharacterId": 113,
                 "Name": "시연(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/113_시연(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/113_시연(일반, 피치다운).wav",
                 "Quilty": 9.5,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -9972,7 +9972,7 @@
             {
                 "CharacterId": 114,
                 "Name": "시연(톤다운, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/114_시연(톤다운, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/114_시연(톤다운, 피치다운).wav",
                 "Quilty": 9.5,
                 "Grade": ["Main", "Caption", "Actor"],
                 "Context": {
@@ -10061,7 +10061,7 @@
             {
                 "CharacterId": 115,
                 "Name": "시원(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/115_시원(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/115_시원(중간톤, 피치다운).wav",
                 "Quilty": 7,
                 "Grade": ["Caption"],
                 "Context": {
@@ -10148,7 +10148,7 @@
             {
                 "CharacterId": 116,
                 "Name": "신혜(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/116_신혜(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/116_신혜(중간톤, 피치다운).wav",
                 "Quilty": 6,
                 "Grade": ["Caption"],
                 "Context": {
@@ -10235,7 +10235,7 @@
             {
                 "CharacterId": 117,
                 "Name": "아리(속삭임)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/117_아리(속삭임).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/117_아리(속삭임).wav",
                 "Quilty": 1,
                 "Grade": ["ETC"],
                 "Context": {
@@ -10322,7 +10322,7 @@
             {
                 "CharacterId": 118,
                 "Name": "애란(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/118_애란(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/118_애란(일반).wav",
                 "Quilty": 7.5,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -10409,7 +10409,7 @@
             {
                 "CharacterId": 119,
                 "Name": "애란(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/119_애란(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/119_애란(일반, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -10496,7 +10496,7 @@
             {
                 "CharacterId": 120,
                 "Name": "애란(톤업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/120_애란(톤업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/120_애란(톤업).wav",
                 "Quilty": 6.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -10583,7 +10583,7 @@
             {
                 "CharacterId": 121,
                 "Name": "애란(톤업, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/121_애란(톤업, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/121_애란(톤업, 피치다운).wav",
                 "Quilty": 7,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -10670,7 +10670,7 @@
             {
                 "CharacterId": 122,
                 "Name": "애란(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/122_애란(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/122_애란(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["Caption"],
                 "Context": {
@@ -10757,7 +10757,7 @@
             {
                 "CharacterId": 123,
                 "Name": "애란(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/123_애란(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/123_애란(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["Caption"],
                 "Context": {
@@ -10844,7 +10844,7 @@
             {
                 "CharacterId": 124,
                 "Name": "애란(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/124_애란(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/124_애란(톤다운).wav",
                 "Quilty": 6,
                 "Grade": ["Caption"],
                 "Context": {
@@ -10931,7 +10931,7 @@
             {
                 "CharacterId": 125,
                 "Name": "애란(톤다운, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/125_애란(톤다운, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/125_애란(톤다운, 피치다운).wav",
                 "Quilty": 6,
                 "Grade": ["Caption"],
                 "Context": {
@@ -11018,7 +11018,7 @@
             {
                 "CharacterId": 126,
                 "Name": "애란(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/126_애란(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/126_애란(슬픔).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -11105,7 +11105,7 @@
             {
                 "CharacterId": 127,
                 "Name": "애란(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/127_애란(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/127_애란(슬픔, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -11192,7 +11192,7 @@
             {
                 "CharacterId": 128,
                 "Name": "애란(기쁨)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/128_애란(기쁨).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/128_애란(기쁨).wav",
                 "Quilty": 0,
                 "Grade": ["Actor"],
                 "Context": {
@@ -11279,7 +11279,7 @@
             {
                 "CharacterId": 129,
                 "Name": "애란(기쁨, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/129_애란(기쁨, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/129_애란(기쁨, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["Actor"],
                 "Context": {
@@ -11366,7 +11366,7 @@
             {
                 "CharacterId": 130,
                 "Name": "애란(화남, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/130_애란(화남, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/130_애란(화남, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -11453,7 +11453,7 @@
             {
                 "CharacterId": 131,
                 "Name": "영규(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/131_영규(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/131_영규(일반).wav",
                 "Quilty": 6,
                 "Grade": ["Actor"],
                 "Context": {
@@ -11540,7 +11540,7 @@
             {
                 "CharacterId": 132,
                 "Name": "영규(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/132_영규(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/132_영규(중간톤).wav",
                 "Quilty": 6,
                 "Grade": ["Caption"],
                 "Context": {
@@ -11627,7 +11627,7 @@
             {
                 "CharacterId": 133,
                 "Name": "영규(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/133_영규(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/133_영규(슬픔).wav",
                 "Quilty": 5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -11714,7 +11714,7 @@
             {
                 "CharacterId": 134,
                 "Name": "영규(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/134_영규(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/134_영규(화남).wav",
                 "Quilty": 6.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -11801,7 +11801,7 @@
             {
                 "CharacterId": 135,
                 "Name": "예린(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/135_예린(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/135_예린(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -11888,7 +11888,7 @@
             {
                 "CharacterId": 136,
                 "Name": "예린(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/136_예린(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/136_예린(일반, 피치다운).wav",
                 "Quilty": 8.5,
                 "Grade": ["Caption", "Actor"],
                 "Context": {
@@ -11975,7 +11975,7 @@
             {
                 "CharacterId": 137,
                 "Name": "예린(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/137_예린(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/137_예린(슬픔).wav",
                 "Quilty": 9,
                 "Grade": ["Actor"],
                 "Context": {
@@ -12062,7 +12062,7 @@
             {
                 "CharacterId": 138,
                 "Name": "예린(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/138_예린(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/138_예린(슬픔, 피치다운).wav",
                 "Quilty": 10,
                 "Grade": ["Actor"],
                 "Context": {
@@ -12149,7 +12149,7 @@
             {
                 "CharacterId": 139,
                 "Name": "재준(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/139_재준(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/139_재준(중간톤, 피치다운).wav",
                 "Quilty": 9,
                 "Grade": ["Caption"],
                 "Context": {
@@ -12236,7 +12236,7 @@
             {
                 "CharacterId": 140,
                 "Name": "재호(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/140_재호(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/140_재호(일반).wav",
                 "Quilty": 6.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -12323,7 +12323,7 @@
             {
                 "CharacterId": 141,
                 "Name": "재호(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/141_재호(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/141_재호(일반, 피치다운).wav",
                 "Quilty": 6,
                 "Grade": ["Caption"],
                 "Context": {
@@ -12410,7 +12410,7 @@
             {
                 "CharacterId": 142,
                 "Name": "정민(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/142_정민(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/142_정민(일반, 피치다운).wav",
                 "Quilty": 5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -12497,7 +12497,7 @@
             {
                 "CharacterId": 143,
                 "Name": "정원(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/143_정원(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/143_정원(일반).wav",
                 "Quilty": 4,
                 "Grade": ["Actor"],
                 "Context": {
@@ -12584,7 +12584,7 @@
             {
                 "CharacterId": 144,
                 "Name": "정원(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/144_정원(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/144_정원(일반, 피치다운).wav",
                 "Quilty": 5.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -12671,7 +12671,7 @@
             {
                 "CharacterId": 145,
                 "Name": "정원(톤업, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/145_정원(톤업, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/145_정원(톤업, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
                 "Context": {
@@ -12758,7 +12758,7 @@
             {
                 "CharacterId": 146,
                 "Name": "정원(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/146_정원(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/146_정원(중간톤).wav",
                 "Quilty": 8,
                 "Grade": ["Caption"],
                 "Context": {
@@ -12845,7 +12845,7 @@
             {
                 "CharacterId": 147,
                 "Name": "정원(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/147_정원(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/147_정원(중간톤, 피치다운).wav",
                 "Quilty": 7,
                 "Grade": ["Caption"],
                 "Context": {
@@ -12932,7 +12932,7 @@
             {
                 "CharacterId": 148,
                 "Name": "정원(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/148_정원(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/148_정원(톤다운).wav",
                 "Quilty": 7.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -13019,7 +13019,7 @@
             {
                 "CharacterId": 149,
                 "Name": "정원(톤다운, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/149_정원(톤다운, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/149_정원(톤다운, 피치다운).wav",
                 "Quilty": 7,
                 "Grade": ["Caption"],
                 "Context": {
@@ -13106,7 +13106,7 @@
             {
                 "CharacterId": 150,
                 "Name": "정원(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/150_정원(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/150_정원(슬픔).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -13193,7 +13193,7 @@
             {
                 "CharacterId": 151,
                 "Name": "정원(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/151_정원(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/151_정원(슬픔, 피치다운).wav",
                 "Quilty": 6.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -13280,7 +13280,7 @@
             {
                 "CharacterId": 152,
                 "Name": "정원(기쁨, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/152_정원(기쁨, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/152_정원(기쁨, 피치다운).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -13367,7 +13367,7 @@
             {
                 "CharacterId": 153,
                 "Name": "정재(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/153_정재(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/153_정재(일반).wav",
                 "Quilty": 7,
                 "Grade": ["Caption"],
                 "Context": {
@@ -13454,7 +13454,7 @@
             {
                 "CharacterId": 154,
                 "Name": "준호(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/154_준호(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/154_준호(일반, 피치다운).wav",
                 "Quilty": 6,
                 "Grade": ["Actor"],
                 "Context": {
@@ -13541,7 +13541,7 @@
             {
                 "CharacterId": 155,
                 "Name": "준호(톤업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/155_준호(톤업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/155_준호(톤업).wav",
                 "Quilty": 6,
                 "Grade": ["Caption"],
                 "Context": {
@@ -13628,7 +13628,7 @@
             {
                 "CharacterId": 156,
                 "Name": "준호(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/156_준호(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/156_준호(중간톤).wav",
                 "Quilty": 6.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -13715,7 +13715,7 @@
             {
                 "CharacterId": 157,
                 "Name": "준호(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/157_준호(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/157_준호(화남).wav",
                 "Quilty": 5.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -13802,7 +13802,7 @@
             {
                 "CharacterId": 158,
                 "Name": "준호(부드러운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/158_준호(부드러운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/158_준호(부드러운).wav",
                 "Quilty": 5.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -13889,7 +13889,7 @@
             {
                 "CharacterId": 159,
                 "Name": "지안(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/159_지안(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/159_지안(일반).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -13976,7 +13976,7 @@
             {
                 "CharacterId": 160,
                 "Name": "지안(톤업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/160_지안(톤업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/160_지안(톤업).wav",
                 "Quilty": 7.9,
                 "Grade": ["Actor"],
                 "Context": {
@@ -14063,7 +14063,7 @@
             {
                 "CharacterId": 161,
                 "Name": "지안(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/161_지안(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/161_지안(중간톤).wav",
                 "Quilty": 4.9,
                 "Grade": ["Actor"],
                 "Context": {
@@ -14150,7 +14150,7 @@
             {
                 "CharacterId": 162,
                 "Name": "지안(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/162_지안(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/162_지안(슬픔).wav",
                 "Quilty": 8.1,
                 "Grade": ["Actor"],
                 "Context": {
@@ -14237,7 +14237,7 @@
             {
                 "CharacterId": 163,
                 "Name": "지안(기쁨)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/163_지안(기쁨).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/163_지안(기쁨).wav",
                 "Quilty": 7.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -14324,7 +14324,7 @@
             {
                 "CharacterId": 164,
                 "Name": "지안(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/164_지안(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/164_지안(화남).wav",
                 "Quilty": 8.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -14411,7 +14411,7 @@
             {
                 "CharacterId": 165,
                 "Name": "지우(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/165_지우(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/165_지우(일반).wav",
                 "Quilty": 5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -14498,7 +14498,7 @@
             {
                 "CharacterId": 166,
                 "Name": "지우(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/166_지우(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/166_지우(슬픔).wav",
                 "Quilty": 7,
                 "Grade": ["Actor"],
                 "Context": {
@@ -14585,7 +14585,7 @@
             {
                 "CharacterId": 167,
                 "Name": "지우(기쁨)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/167_지우(기쁨).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/167_지우(기쁨).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -14672,7 +14672,7 @@
             {
                 "CharacterId": 168,
                 "Name": "지우(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/168_지우(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/168_지우(화남).wav",
                 "Quilty": 8,
                 "Grade": ["Actor"],
                 "Context": {
@@ -14759,7 +14759,7 @@
             {
                 "CharacterId": 169,
                 "Name": "진우(톤업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/169_진우(톤업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/169_진우(톤업).wav",
                 "Quilty": 7.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -14846,7 +14846,7 @@
             {
                 "CharacterId": 170,
                 "Name": "진우(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/170_진우(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/170_진우(중간톤).wav",
                 "Quilty": 6.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -14933,7 +14933,7 @@
             {
                 "CharacterId": 171,
                 "Name": "진우(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/171_진우(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/171_진우(중간톤, 피치다운).wav",
                 "Quilty": 7.6,
                 "Grade": ["Actor"],
                 "Context": {
@@ -15020,7 +15020,7 @@
             {
                 "CharacterId": 172,
                 "Name": "진우(기쁨)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/172_진우(기쁨).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/172_진우(기쁨).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -15107,7 +15107,7 @@
             {
                 "CharacterId": 173,
                 "Name": "진우(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/173_진우(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/173_진우(화남).wav",
                 "Quilty": 7,
                 "Grade": ["Actor"],
                 "Context": {
@@ -15194,7 +15194,7 @@
             {
                 "CharacterId": 174,
                 "Name": "최석(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/174_최석(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/174_최석(톤다운).wav",
                 "Quilty": 6,
                 "Grade": ["Caption"],
                 "Context": {
@@ -15281,7 +15281,7 @@
             {
                 "CharacterId": 175,
                 "Name": "현민(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/175_현민(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/175_현민(톤다운).wav",
                 "Quilty": 6.5,
                 "Grade": ["Caption"],
                 "Context": {
@@ -15368,7 +15368,7 @@
             {
                 "CharacterId": 176,
                 "Name": "현승(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/176_현승(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/176_현승(중간톤).wav",
                 "Quilty": 5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -15455,7 +15455,7 @@
             {
                 "CharacterId": 177,
                 "Name": "현승(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/177_현승(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/177_현승(톤다운).wav",
                 "Quilty": 6,
                 "Grade": ["Actor"],
                 "Context": {
@@ -15542,7 +15542,7 @@
             {
                 "CharacterId": 178,
                 "Name": "현승(귀여움)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/178_현승(귀여움).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/178_현승(귀여움).wav",
                 "Quilty": 6.5,
                 "Grade": ["Actor"],
                 "Context": {
@@ -15629,7 +15629,7 @@
             {
                 "CharacterId": 179,
                 "Name": "현승(속삭임)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/179_현승(속삭임).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/179_현승(속삭임).wav",
                 "Quilty": 1,
                 "Grade": ["ETC"],
                 "Context": {
@@ -15716,7 +15716,7 @@
             {
                 "CharacterId": 180,
                 "Name": "현우(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/180_현우(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/180_현우(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -15803,7 +15803,7 @@
             {
                 "CharacterId": 181,
                 "Name": "현우(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/181_현우(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/181_현우(슬픔, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -15890,7 +15890,7 @@
             {
                 "CharacterId": 182,
                 "Name": "현주(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/182_현주(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/182_현주(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -15977,7 +15977,7 @@
             {
                 "CharacterId": 183,
                 "Name": "현주(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/183_현주(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/183_현주(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16064,7 +16064,7 @@
             {
                 "CharacterId": 184,
                 "Name": "현주(톤다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/184_현주(톤다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/184_현주(톤다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16151,7 +16151,7 @@
             {
                 "CharacterId": 185,
                 "Name": "현주(톤다운, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/185_현주(톤다운, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/185_현주(톤다운, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16238,7 +16238,7 @@
             {
                 "CharacterId": 186,
                 "Name": "현주(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/186_현주(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/186_현주(슬픔, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16325,7 +16325,7 @@
             {
                 "CharacterId": 187,
                 "Name": "현주(화남, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/187_현주(화남, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/187_현주(화남, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16412,7 +16412,7 @@
             {
                 "CharacterId": 188,
                 "Name": "민지(톤업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/188_민지(톤업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/188_민지(톤업).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16499,7 +16499,7 @@
             {
                 "CharacterId": 189,
                 "Name": "민지(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/189_민지(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/189_민지(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16586,7 +16586,7 @@
             {
                 "CharacterId": 190,
                 "Name": "머루(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/190_머루(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/190_머루(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16673,7 +16673,7 @@
             {
                 "CharacterId": 191,
                 "Name": "샷건(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/191_샷건(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/191_샷건(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16760,7 +16760,7 @@
             {
                 "CharacterId": 192,
                 "Name": "샷건(일반, 피치업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/192_샷건(일반, 피치업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/192_샷건(일반, 피치업).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16847,7 +16847,7 @@
             {
                 "CharacterId": 193,
                 "Name": "이승주기자(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/193_이승주기자(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/193_이승주기자(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -16934,7 +16934,7 @@
             {
                 "CharacterId": 194,
                 "Name": "정순(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/194_정순(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/194_정순(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17021,7 +17021,7 @@
             {
                 "CharacterId": 195,
                 "Name": "주하(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/195_주하(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/195_주하(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17108,7 +17108,7 @@
             {
                 "CharacterId": 196,
                 "Name": "주하(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/196_주하(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/196_주하(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17195,7 +17195,7 @@
             {
                 "CharacterId": 197,
                 "Name": "중현(중간톤)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/197_중현(중간톤).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/197_중현(중간톤).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17282,7 +17282,7 @@
             {
                 "CharacterId": 198,
                 "Name": "지영(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/198_지영(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/198_지영(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17369,7 +17369,7 @@
             {
                 "CharacterId": 199,
                 "Name": "지철(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/199_지철(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/199_지철(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17456,7 +17456,7 @@
             {
                 "CharacterId": 200,
                 "Name": "진(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/200_진(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/200_진(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17543,7 +17543,7 @@
             {
                 "CharacterId": 201,
                 "Name": "창배(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/201_창배(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/201_창배(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17630,7 +17630,7 @@
             {
                 "CharacterId": 202,
                 "Name": "채린아(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/202_채린아(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/202_채린아(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17717,7 +17717,7 @@
             {
                 "CharacterId": 203,
                 "Name": "최석(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/203_최석(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/203_최석(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17804,7 +17804,7 @@
             {
                 "CharacterId": 204,
                 "Name": "최석(톤업)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/204_최석(톤업).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/204_최석(톤업).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17891,7 +17891,7 @@
             {
                 "CharacterId": 205,
                 "Name": "파캉(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/205_파캉(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/205_파캉(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -17978,7 +17978,7 @@
             {
                 "CharacterId": 206,
                 "Name": "오언(중간톤, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/206_오언(중간톤, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/206_오언(중간톤, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -18065,7 +18065,7 @@
             {
                 "CharacterId": 207,
                 "Name": "케일럽(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/207_케일럽(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/207_케일럽(일반).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -18152,7 +18152,7 @@
             {
                 "CharacterId": 208,
                 "Name": "올리비아(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/208_올리비아(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/208_올리비아(일반, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -18239,7 +18239,7 @@
             {
                 "CharacterId": 209,
                 "Name": "올리비아(톤업, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/209_올리비아(톤업, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/209_올리비아(톤업, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -18326,7 +18326,7 @@
             {
                 "CharacterId": 210,
                 "Name": "올리비아(슬픔, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/210_올리비아(슬픔, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/210_올리비아(슬픔, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -18413,7 +18413,7 @@
             {
                 "CharacterId": 211,
                 "Name": "올리비아(기쁨, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/211_올리비아(기쁨, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/211_올리비아(기쁨, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -18500,7 +18500,7 @@
             {
                 "CharacterId": 212,
                 "Name": "올리비아(화남, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/212_올리비아(화남, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/212_올리비아(화남, 피치다운).wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {
@@ -18587,7 +18587,7 @@
             {
                 "CharacterId": 213,
                 "Name": "손석구(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/213_손석구(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/213_손석구(일반).wav",
                 "Quilty": 0,
                 "_Quilty": 10,
                 "Grade": ["Actor"],
@@ -18675,7 +18675,7 @@
             {
                 "CharacterId": 214,
                 "Name": "손석구(일반, 피치다운)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/214_손석구(일반, 피치다운).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/214_손석구(일반, 피치다운).wav",
                 "Quilty": 0,
                 "_Quilty": 10,
                 "Grade": ["Actor"],
@@ -18765,7 +18765,7 @@
             {
                 "CharacterId": 0,
                 "Name": "None",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/.wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
                 "Grade": ["None"],
                 "Context": {

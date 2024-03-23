@@ -721,7 +721,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "웹3.0메타버스"
-    VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s14_VoiceStorage/테스트(가)_0_연우(중간톤, 피치다운).wav"
+    VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/테스트(가)_0_연우(중간톤, 피치다운).wav"
     LanguageCode = "ko-KR"
     #########################################################################
     # ## 이 함수는 두 문자열 간의 최대 일치 부분 문자열의 길이를 찾고,이 일치도가 짧은 문자열 길이의 특정 비율(기본값 50%)을 초과하는지 확인

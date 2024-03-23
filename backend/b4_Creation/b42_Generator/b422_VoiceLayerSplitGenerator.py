@@ -635,24 +635,40 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
         ActorChunk = editChunks['ActorChunk']
         editInfo = {'EditId': EditId, 'ActorName': ActorName, 'DetailEditNum': None}
         for i in range(len(ActorChunk)):
-            editInfo['DetailEditNum'] = i
+            editInfo = {'EditId': EditId, 'ActorName': ActorName, 'DetailEditNum': i}
             editInfos.append(editInfo)
-    
+               
     # None 부분, editInfos에 존재하지 않는 파일명 제거
     FilteredSortedFiles = []
-    CheckedEditInfos = copy.deepcopy(editInfos)
+    CheckedEditInfos = []
+    i = 0
     for file in SortedFiles:
         fileInfos = ExtractFileInfo(file)  # 파일 정보 추출
-        for editInfo in editInfos:  # editInfos의 모든 항목에 대해 검사
+        for editInfo in editInfos:
             if (editInfo['EditId'] == fileInfos['gen_num']) and \
-            (editInfo['ActorName'] == fileInfos['name_with_info']) and \
-            (editInfo['DetailEditNum'] == fileInfos['detail_gen_num']):
+                (editInfo['ActorName'] == fileInfos['name_with_info']) and \
+                (editInfo['DetailEditNum'] == fileInfos['detail_gen_num']):
                 FilteredSortedFiles.append(file)
-            else:
-                print(f'editInfo: {editInfo}')
-                print(f'fileInfos: {fileInfos}')
+                CheckedEditInfos.append(editInfo)
+                
+    # CheckedEditInfos의 중복 제거
+    _CheckedEditInfos = []
+    if CheckedEditInfos:
+        _CheckedEditInfos.append(CheckedEditInfos[0])
+        for CheckedEditInfo in CheckedEditInfos[1:]:
+            if CheckedEditInfo != _CheckedEditInfos[-1]:
+                _CheckedEditInfos.append(CheckedEditInfo)
+                
+    # editInfos(검수데이터)와 중복제거된 _CheckedEditInfos(생성파일)의 비교
+    for checkedEditInfo in _CheckedEditInfos:
+        if checkedEditInfo in editInfos:
+            editInfos.remove(checkedEditInfo)
     
-    sys.exit()
+    # editInfos에 남은 파일이 있는지 확인 (생성되지 못한 파일)
+    if editInfos != []:
+        for editInfo in editInfos:
+            print(f"[ 파일 생성 필요: {editInfo} ]")
+        sys.exit()
 
     # 중복 제거
     UniqueFiles = []
@@ -694,7 +710,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             pass
     # 성우 변경 파일이 생성되었을 경우 이전 성우 파일명으로 새로운 RawFiles 리스트에서 생성
     Files = []
-    VoiceFilePattern = r".*?_(\d+)_([가-힣]+\(.*?\))_\(\d+\)M?\.wav"
+    VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"
     for i in range(len(RawFiles)):
         VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
         if VoiceFileMatch == None:
@@ -702,9 +718,9 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             VoiceFileMatch = re.match(VoiceFilePattern, normalizeRawFile)
         
         if VoiceFileMatch:
-            chunkid, actorname = VoiceFileMatch.groups()
+            chunkid, actorname, _ = VoiceFileMatch.groups()
         for j in range(len(EditGenerationKoChunks)):
-            if int(chunkid) == EditGenerationKoChunks[j]['EditId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
+            if float(chunkid) == EditGenerationKoChunks[j]['EditId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
                 Files.append(RawFiles[i])
                 break
 

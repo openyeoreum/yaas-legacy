@@ -591,7 +591,7 @@ def ExtractPause(chunk):
 ## 생성된 음성파일 정렬/필터
 def SortAndRemoveDuplicates(editGenerationKoChunks, files):
     # 파일명에서 필요한 정보를 추출하는 함수
-    def ExtractFileInfo(FileName):
+    def ExtractFileInfo(FileName, removeList):
         match = re.match(r"(.+)\_(\d+(\.\d+)?)\_(.+?\(.+?\))\_\((\d+)\)(M?)\.wav", FileName)
         if match == None:
             normalizeFileName = unicodedata.normalize('NFC', FileName)
@@ -606,7 +606,10 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
                 'has_M': match.group(6) == 'M'
             }
         else:
-            print(f"[ 파일 삭제 필요: {FileName} ]")  # 파일 정보 추출 실패 시 출력
+            # [ 파일 삭제 필요: FileName ]이 한번만 출력되도록 하는 장치
+            if FileName not in removeList:
+                print(f"[ 파일 삭제 필요: {FileName} ]")  # 파일 정보 추출 실패 시 출력
+                removeList.append(FileName)
             return {
                 'base_name': '',
                 'gen_num': float('inf'),
@@ -616,7 +619,8 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
             }
 
     # 파일 정보 추출
-    file_infos = [ExtractFileInfo(File) for File in files]
+    RemoveList = []
+    file_infos = [ExtractFileInfo(File, RemoveList) for File in files]
 
     # 추출된 파일 정보를 기반으로 정렬 및 중복 제거
     SortedFiles = sorted(files, key=lambda File: (
@@ -643,7 +647,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
     CheckedEditInfos = []
     i = 0
     for file in SortedFiles:
-        fileInfos = ExtractFileInfo(file)  # 파일 정보 추출
+        fileInfos = ExtractFileInfo(file, RemoveList)  # 파일 정보 추출
         for editInfo in editInfos:
             if (editInfo['EditId'] == fileInfos['gen_num']) and \
                 (editInfo['ActorName'] == fileInfos['name_with_info']) and \
@@ -674,7 +678,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
     UniqueFiles = []
     seen = set()
     for file in SortedFiles:
-        info = ExtractFileInfo(file)
+        info = ExtractFileInfo(file, RemoveList)
         if info['base_name'] != None:
             identifier = (info['base_name'], info['name_with_info'], info['gen_num'], info['detail_gen_num'])
             if identifier not in seen:
@@ -682,7 +686,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
                 seen.add(identifier)
             elif info['has_M']:  # 'M'이 포함된 파일이면 이전 'M'이 없는 파일을 대체
                 # 마지막으로 추가된 파일이 'M'이 없는 파일인지 확인하고, 맞다면 제거
-                if UniqueFiles and ExtractFileInfo(UniqueFiles[-1])['has_M'] == False and ExtractFileInfo(UniqueFiles[-1])['gen_num'] == info['gen_num'] and ExtractFileInfo(UniqueFiles[-1])['detail_gen_num'] == info['detail_gen_num']:
+                if UniqueFiles and ExtractFileInfo(UniqueFiles[-1], RemoveList)['has_M'] == False and ExtractFileInfo(UniqueFiles[-1], RemoveList)['gen_num'] == info['gen_num'] and ExtractFileInfo(UniqueFiles[-1], RemoveList)['detail_gen_num'] == info['detail_gen_num']:
                     UniqueFiles.pop()  # 'M'이 없는 파일 제거
                 UniqueFiles.append(file)
 

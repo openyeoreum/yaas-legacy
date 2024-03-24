@@ -1,0 +1,54 @@
+[
+    {
+        "DataBaseId": "None",
+        "DataBaseName": "None",
+        "DB": "Relational",
+        "Type": "TitleMusic"
+    },
+    {
+        "Musics": [
+            {
+                "MusicId": 0,
+                "Name": "None",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_MusicStorage/.wav",
+                "Music": {
+                    "Language": ["ko"],
+                    "Gender": [
+                        {"index": "남성", "Score": 0},
+                        {"index": "여성", "Score": 0},
+                        {"index": "중성", "Score": 0}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 0}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 0},
+                        {"index": "중립", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "화남", "Score": 0}
+                    ],
+                    "TypeCastContext": {}
+                },
+                "Setting": {
+                    "1st_Spot": 0.00,
+                    "2nd_Spot": 0.00,
+                    "3rd_Spot": 0.00,
+                    "4th_Spot": 0.00,
+                    "Stop": 0.00,
+                    "Volume": 100,
+                    "Direction": "None"
+                }
+            }
+        ]
+    }
+]

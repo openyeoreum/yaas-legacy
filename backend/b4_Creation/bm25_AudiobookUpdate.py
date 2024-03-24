@@ -2,7 +2,7 @@ import sys
 sys.path.append("/yaas")
 
 from backend.b4_Creation.b42_Generator.b422_VoiceLayerGenerator import VoiceLayerGenerator
-from backend.b4_Creation.b42_Generator.b422_VoiceLayerSplitGenerator import VoiceLayerSplitGenerator
+from backend.b4_Creation.b42_Generator.b422_VoiceLayerSplitGenerator import VoiceLayerUpdate
 
 ###########################
 ###########################
@@ -19,8 +19,7 @@ def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, mode = "
     if split == "Manual":
         VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro)
     else:
-        VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, MessagesReview = messagesReview)
-
+        VoiceLayerUpdate(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, MessagesReview = messagesReview)
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################

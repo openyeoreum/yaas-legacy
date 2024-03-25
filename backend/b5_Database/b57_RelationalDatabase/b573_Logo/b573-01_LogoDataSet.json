@@ -10,7 +10,7 @@
             {
                 "IntroId": 0,
                 "Name": "None",
-                "FilePath": "/yaas/storage/s1_Yeoreum/s15_IntroStorage/.wav",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/.mp3",
                 "Logo": {
                     "Language": ["gb"],
                     "Genre": [
@@ -19,6 +19,106 @@
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
+                    ],
+                "Setting": {
+                    "Length": 0.00,
+                    "Volume": 100,
+                    "Direction": "None"
+                    }
+                }
+            },
+            {
+                "IntroId": 1,
+                "Name": "Logo(문학)",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/1_Logo(문학).mp3",
+                "Logo": {
+                    "Language": ["gb"],
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                "Setting": {
+                    "Length": 0.00,
+                    "Volume": 100,
+                    "Direction": "None"
+                    }
+                }
+            },
+            {
+                "IntroId": 2,
+                "Name": "Logo(비문학)",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/2_Logo(비문학).mp3",
+                "Logo": {
+                    "Language": ["gb"],
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                "Setting": {
+                    "Length": 0.00,
+                    "Volume": 100,
+                    "Direction": "None"
+                    }
+                }
+            },
+            {
+                "IntroId": 3,
+                "Name": "Logo(아동)",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/3_Logo(아동).mp3",
+                "Logo": {
+                    "Language": ["gb"],
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 10},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                "Setting": {
+                    "Length": 0.00,
+                    "Volume": 100,
+                    "Direction": "None"
+                    }
+                }
+            },
+            {
+                "IntroId": 4,
+                "Name": "Logo(시)",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/4_Logo(시).mp3",
+                "Logo": {
+                    "Language": ["gb"],
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 10},
+                        {"index": "학술", "Score": 0}
+                    ],
+                "Setting": {
+                    "Length": 0.00,
+                    "Volume": 100,
+                    "Direction": "None"
+                    }
+                }
+            },
+            {
+                "IntroId": 5,
+                "Name": "Logo(학술)",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/5_Logo(학술).mp3",
+                "Logo": {
+                    "Language": ["gb"],
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 10}
                     ],
                 "Setting": {
                     "Length": 0.00,

@@ -80,7 +80,8 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
     SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, PartMusicDataSet, IndexMusicDataSet = LoadMusicDataSet(projectName, email, MainLang = MainLang)
     
     # EditGeneration Title, Part, Index Music 추출
-    for EditGeneration
+    EditGeneration[0]
+        
     
     # 도서 SelectionGenerationKoBookContext 로드
     Genre = SelectionGeneration[1]['SelectionGenerationKoBookContext']['Vector']['ContextCompletion']['Genre']['Genre']

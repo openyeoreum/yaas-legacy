@@ -816,7 +816,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     final_combined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
 
     # 최종적으로 합쳐진 음성 파일 저장
-    voiceLayerPath = VoiceLayerPathGen(projectName, email, projectName + '_VoiceLayer.wav', 'Master')
+    voiceLayerPath = VoiceLayerPathGen(projectName, email, projectName + '_AudioBook.wav', 'Master')
     final_combined.export(os.path.join(voiceLayerPath), format = "wav")
     final_combined = AudioSegment.empty()
     
@@ -844,7 +844,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
 
         print(f"< Project: {projectName} | Actor: {Actor} | VoiceLayerGenerator 시작 >")
         # MatchedChunksEdit 경로 생성
-        fileName = '[' + projectName + '_' + 'VoiceLayer_Edit].json'
+        fileName = '[' + projectName + '_' + 'AudioBook_Edit].json'
         MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName, 'Master')
         OriginFileName = '' + projectName + '_' + 'VoiceLayer_Origin.json'
         MatchedChunksOriginPath = VoiceLayerPathGen(projectName, email, OriginFileName, 'Mixed')
@@ -1151,7 +1151,7 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    MatchedChunksPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/노인을위한나라는있다/노인을위한나라는있다_mixed_audiobook_file/VoiceLayers/[노인을위한나라는있다_VoiceLayer_Edit].json"
+    MatchedChunksPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/노인을위한나라는있다/노인을위한나라는있다_mixed_audiobook_file/VoiceLayers/[노인을위한나라는있다_AudioBook_Edit].json"
     
     with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
         EditGenerationKoChunks = json.load(MatchedChunksJson)
@@ -1165,7 +1165,7 @@ if __name__ == "__main__":
     with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
         json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
         
-    # MatchedChunksPath2 = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/나는외식창업에적합한사람인가/나는외식창업에적합한사람인가_mixed_audiobook_file/VoiceLayers/[나는외식창업에적합한사람인가_VoiceLayer_Edit]Test.json"    
+    # MatchedChunksPath2 = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/나는외식창업에적합한사람인가/나는외식창업에적합한사람인가_mixed_audiobook_file/VoiceLayers/[나는외식창업에적합한사람인가_AudioBook_Edit]Test.json"    
     
     # EditGenerationKoChunks = EditGenerationKoChunksToList(EditGenerationKoChunks)
     

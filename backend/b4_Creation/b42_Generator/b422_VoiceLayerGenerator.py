@@ -652,7 +652,7 @@ def VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode 
 
         print(f"< Project: {projectName} | Actor: {Actor} | VoiceLayerGenerator 시작 >")
         # MatchedChunksEdit 경로 생성
-        fileName = '[' + projectName + '_' + 'VoiceLayer_Edit].json'
+        fileName = '[' + projectName + '_' + 'AudioBook_Edit].json'
         MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName)
         OriginFileName = '' + projectName + '_' + 'VoiceLayer_Origin.json'
         MatchedChunksOriginPath = VoiceLayerPathGen(projectName, email, OriginFileName)

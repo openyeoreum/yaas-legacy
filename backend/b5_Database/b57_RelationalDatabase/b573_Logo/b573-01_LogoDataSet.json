@@ -12,14 +12,8 @@
                 "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/.mp3",
                 "Logo": {
-                    "Language": ["ko"],
-                    "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
-                        {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 0}
-                    ],
+                    "Language": "Ko",
+                    "Genre": "None",
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
@@ -32,14 +26,8 @@
                 "Name": "Logo(문학)",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/1_Logo_문학(세희).mp3",
                 "Logo": {
-                    "Language": ["ko"],
-                    "Genre": [
-                        {"index": "문학", "Score": 10},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
-                        {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 0}
-                    ],
+                    "Language": "Ko",
+                    "Genre": "문학",
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
@@ -52,14 +40,8 @@
                 "Name": "Logo(비문학)",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/2_Logo_비문학(유라).mp3",
                 "Logo": {
-                    "Language": ["ko"],
-                    "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 10},
-                        {"index": "아동", "Score": 0},
-                        {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 0}
-                    ],
+                    "Language": "Ko",
+                    "Genre": "비문학",
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
@@ -72,14 +54,8 @@
                 "Name": "Logo(아동)",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/3_Logo_아동(류은).mp3",
                 "Logo": {
-                    "Language": ["ko"],
-                    "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 10},
-                        {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 0}
-                    ],
+                    "Language": "Ko",
+                    "Genre": "아동",
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
@@ -92,14 +68,8 @@
                 "Name": "Logo(시)",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/4_Logo_시(연우).mp3",
                 "Logo": {
-                    "Language": ["ko"],
-                    "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
-                        {"index": "시", "Score": 10},
-                        {"index": "학술", "Score": 0}
-                    ],
+                    "Language": "Ko",
+                    "Genre": "시",
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
@@ -112,14 +82,8 @@
                 "Name": "Logo(학술)",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/5_Logo_학술(수호).mp3",
                 "Logo": {
-                    "Language": ["ko"],
-                    "Genre": [
-                        {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
-                        {"index": "아동", "Score": 0},
-                        {"index": "시", "Score": 0},
-                        {"index": "학술", "Score": 10}
-                    ],
+                    "Language": "Ko",
+                    "Genre": "학술",
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,

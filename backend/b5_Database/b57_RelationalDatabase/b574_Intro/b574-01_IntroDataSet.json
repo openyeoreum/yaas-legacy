@@ -12,10 +12,8 @@
                 "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s15_IntroStorage/.wav",
                 "Intro": {
-                    "Language": ["gb"],
-                    "Genre": [
-                        {"index": "한국출판문화산업진흥원", "Score": 0}
-                    ],
+                    "Language": "Ko",
+                    "Type": "한국출판문화산업진흥원",
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,

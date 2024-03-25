@@ -428,7 +428,7 @@ def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, Ma
     return SortedMatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters
     
 ## VoiceLayerPath(TTS 저장) 경로 생성
-def VoiceLayerPathGen(projectName, email, FileName):
+def VoiceLayerPathGen(projectName, email, FileName, Folder):
     # 데이터베이스에서 사용자 이름 찾기
     with get_db() as db:
         user = db.query(User).filter(User.Email == email).first()
@@ -443,10 +443,13 @@ def VoiceLayerPathGen(projectName, email, FileName):
     BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage'
 
     # 최종 경로 생성
-    voiceLayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", FileName)
+    if Folder == "Mixed":
+        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", FileName)
+    if Folder == "Master":
+        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_master_audiobook_file", FileName)
     # print(voiceLayerPath)
 
-    return voiceLayerPath
+    return LayerPath
 
 #######################################
 ##### VoiceLayerGenerator 파일 생성 #####
@@ -697,7 +700,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
 def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath):
     VoiceLayerFileName = projectName + "_VoiceLayer.wav"
     normalizeVoiceLayerFileName = unicodedata.normalize('NFC', VoiceLayerFileName)
-    voiceLayerPath = VoiceLayerPathGen(projectName, email, '')
+    voiceLayerPath = VoiceLayerPathGen(projectName, email, '', 'Mixed')
 
     # 폴더 내의 모든 .wav 파일 목록 추출
     RawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav')]
@@ -755,7 +758,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         for j in range(len(Update['Pause'])):
             sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
             PauseDuration_ms = Update['Pause'][j] * 1000
-            silence = AudioSegment.silent(duration=PauseDuration_ms)
+            silence = AudioSegment.silent(duration = PauseDuration_ms)
             CombinedSound += sound_file + silence
             FilesCount += 1
 
@@ -769,7 +772,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                 MinNumber = current_file_index*file_limit-file_limit+1
                 MaxNumber = min(current_file_index*file_limit, len(FilteredFiles))
                 file_name = f"{projectName}_VoiceLayer_{MinNumber}-{MaxNumber}.wav"
-                CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
+                CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
                 CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
                 current_file_index += 1
 
@@ -786,7 +789,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
             current_file_index += 1
             
-        CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
+        CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
 
     # 최종 파일 합치기
     final_combined = AudioSegment.empty()
@@ -810,10 +813,12 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             EndTime[i] = {"Time": Time, "Second": Second}
     
     # 마지막 5초 공백 추가
-    final_combined += AudioSegment.silent(duration=5000)  # 5초간의 공백 생성
+    final_combined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
 
     # 최종적으로 합쳐진 음성 파일 저장
-    final_combined.export(os.path.join(voiceLayerPath, projectName + "_VoiceLayer.wav"), format="wav")
+    voiceLayerPath = VoiceLayerPathGen(projectName, email, projectName + '_VoiceLayer.wav', 'Master')
+    final_combined.export(os.path.join(voiceLayerPath), format = "wav")
+    final_combined = AudioSegment.empty()
     
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
@@ -828,7 +833,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
     # MatchedActors 경로 생성
     fileName = projectName + '_' + 'MatchedVoices.json'
-    MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
+    MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName, 'Mixed')
     if os.path.exists(MatchedActorsPath):
         with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
             MatchedActors = json.load(MatchedActorsJson)
@@ -840,15 +845,14 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
         print(f"< Project: {projectName} | Actor: {Actor} | VoiceLayerGenerator 시작 >")
         # MatchedChunksEdit 경로 생성
         fileName = '[' + projectName + '_' + 'VoiceLayer_Edit].json'
-        MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName)
+        MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName, 'Master')
         OriginFileName = '' + projectName + '_' + 'VoiceLayer_Origin.json'
-        MatchedChunksOriginPath = VoiceLayerPathGen(projectName, email, OriginFileName)
+        MatchedChunksOriginPath = VoiceLayerPathGen(projectName, email, OriginFileName, 'Mixed')
         
         ## MatchedChunksPath.json이 존재하면 해당 파일로 VoiceLayerGenerator 진행, 아닐경우 새롭게 생성
-        if not os.path.exists(MatchedChunksPath):
+        if (not os.path.exists(MatchedChunksPath)) and (not os.path.exists(unicodedata.normalize('NFC', MatchedChunksPath))):
             # SelectionGenerationKoChunks의 EditGenerationKoChunks화
             EditGenerationKoChunks = []
-            
             #### Split을 위한 문장을 합치는 코드 ####
             tempChunk = None
 
@@ -940,7 +944,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
             
             # MatchedActors, MatchedChunks 저장 (Dic 저장 후 다시 List로 변환)
             fileName = projectName + '_' + 'MatchedVoices.json'
-            MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName)
+            MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName, 'Mixed')
             with open(MatchedActorsPath, 'w', encoding = 'utf-8') as json_file:
                 json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
             with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
@@ -976,7 +980,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
 
         ## 히스토리 불러오기
         fileName = projectName + '_' + 'VoiceLayer_History_' + Actor + '.json'
-        MatchedChunkHistorysPath = VoiceLayerPathGen(projectName, email, fileName)
+        MatchedChunkHistorysPath = VoiceLayerPathGen(projectName, email, fileName, 'Mixed')
         if os.path.exists(MatchedChunkHistorysPath):
             with open(MatchedChunkHistorysPath, 'r', encoding = 'utf-8') as MatchedChunkHistorysJson:
                 GenerationKoChunkHistorys = json.load(MatchedChunkHistorysJson)
@@ -1060,7 +1064,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                 ## 수정 여부에 따라 파일명 변경 ##
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
-                    voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+                    voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
                     ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
                     if ChangedName != 'Continue':
                         if Macro == "Auto":
@@ -1075,7 +1079,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                             json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
                 else:
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
-                    voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+                    voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
                     if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') and not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav'):
                         ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 

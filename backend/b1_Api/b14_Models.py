@@ -534,6 +534,18 @@ class VoiceDataSet(Base):
     # VoiceDataSet
     TypeCastVoiceDataSet = Column(JSON)
     
+    # LogoDataSet
+    LogoDataSet = Column(JSON)
+    
+    # IntroDataSet
+    IntroDataSet = Column(JSON)
+    
+    # MusicDataSet
+    TitleMusicDataSet = Column(JSON)
+    PartMusicDataSet = Column(JSON)
+    IndexMusicDataSet = Column(JSON)
+
+##### 아래 삭제예정 #####
 
 #####################
 ### MusicDatabase ###

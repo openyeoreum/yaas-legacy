@@ -24,11 +24,29 @@ from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoice
 ## LoadVoiceLayer 로드
 def LoadVoiceLayer(projectName, email, MainLang = 'Ko'):
     project = GetProject(projectName, email)
+    
+    ## MainLang의 언어별 SelectionGenerationKoChunks 불러오기
+    if MainLang == 'Ko':
+        SelectionGenerationBookContext = project.SelectionGenerationKo[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+    if MainLang == 'En':
+        SelectionGenerationBookContext = project.SelectionGenerationEn[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+    # if MainLang == 'Ja':
+        # SelectionGenerationBookContext = project.SelectionGenerationJa[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+    # if MainLang == 'Zh':
+        # SelectionGenerationBookContext = project.SelectionGenerationZh[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+    # if MainLang == 'Es':
+        # SelectionGenerationBookContext = project.SelectionGenerationEs[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+    
+    ## MainLang의 언어별 VoiceLayer 불러오기
     VoiceLayer = project.MixingMasteringKo[1]['AudioBookLayers' + MainLang]
     
-    return VoiceLayer
+    return SelectionGenerationBookContext, VoiceLayer
 
-
+def LogoIntroSelector(projectName, email, MainLang = 'Ko'):
+    
+    SelectionGenerationBookContext, VoiceLayer = LoadVoiceLayer(projectName, email, MainLang = MainLang)
+    
+    print(SelectionGenerationBookContext['Vector']['ContextCompletion']['Genre']['Genre'])
 
 if __name__ == "__main__":
 
@@ -38,6 +56,4 @@ if __name__ == "__main__":
     mainLang = 'Ko'
     #########################################################################
     
-    VoiceLayer = LoadVoiceLayer(projectName, email, MainLang = mainLang)
-    
-    print(VoiceLayer[0])
+    LogoIntroSelector(projectName, email, MainLang = mainLang)

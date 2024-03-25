@@ -1,7 +1,7 @@
 [
     {
-        "DataBaseId": "None",
-        "DataBaseName": "None",
+        "DataSetId": "None",
+        "DataSetName": "None",
         "DB": "Relational",
         "Type": "Logo"
     },
@@ -12,7 +12,7 @@
                 "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/.mp3",
                 "Logo": {
-                    "Language": ["gb"],
+                    "Language": ["ko"],
                     "Genre": [
                         {"index": "문학", "Score": 0},
                         {"index": "비문학", "Score": 0},
@@ -30,9 +30,9 @@
             {
                 "IntroId": 1,
                 "Name": "Logo(문학)",
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/1_Logo(문학).mp3",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/1_Logo_문학(세희).mp3",
                 "Logo": {
-                    "Language": ["gb"],
+                    "Language": ["ko"],
                     "Genre": [
                         {"index": "문학", "Score": 10},
                         {"index": "비문학", "Score": 0},
@@ -50,9 +50,9 @@
             {
                 "IntroId": 2,
                 "Name": "Logo(비문학)",
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/2_Logo(비문학).mp3",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/2_Logo_비문학(유라).mp3",
                 "Logo": {
-                    "Language": ["gb"],
+                    "Language": ["ko"],
                     "Genre": [
                         {"index": "문학", "Score": 0},
                         {"index": "비문학", "Score": 10},
@@ -70,9 +70,9 @@
             {
                 "IntroId": 3,
                 "Name": "Logo(아동)",
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/3_Logo(아동).mp3",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/3_Logo_아동(류은).mp3",
                 "Logo": {
-                    "Language": ["gb"],
+                    "Language": ["ko"],
                     "Genre": [
                         {"index": "문학", "Score": 0},
                         {"index": "비문학", "Score": 0},
@@ -90,9 +90,9 @@
             {
                 "IntroId": 4,
                 "Name": "Logo(시)",
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/4_Logo(시).mp3",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/4_Logo_시(연우).mp3",
                 "Logo": {
-                    "Language": ["gb"],
+                    "Language": ["ko"],
                     "Genre": [
                         {"index": "문학", "Score": 0},
                         {"index": "비문학", "Score": 0},
@@ -110,9 +110,9 @@
             {
                 "IntroId": 5,
                 "Name": "Logo(학술)",
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/5_Logo(학술).mp3",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/5_Logo_학술(수호).mp3",
                 "Logo": {
-                    "Language": ["gb"],
+                    "Language": ["ko"],
                     "Genre": [
                         {"index": "문학", "Score": 0},
                         {"index": "비문학", "Score": 0},

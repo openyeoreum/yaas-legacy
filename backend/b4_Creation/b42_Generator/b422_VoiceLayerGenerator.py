@@ -14,7 +14,7 @@ from pydub import AudioSegment
 from collections import defaultdict
 from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
-from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoiceDataSet
+from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetSoundDataSet
 from backend.b4_Creation.b42_Generator.b423_TypeCastWebMacro import TypeCastMacro
 
 ###########################################
@@ -24,7 +24,7 @@ from backend.b4_Creation.b42_Generator.b423_TypeCastWebMacro import TypeCastMacr
 def LoadVoiceDataSetCharacters(voicedataset, MainLang):
     
     # MainLang의 언어별 보이스 데이터셋 불러오기
-    voiceDataSet = GetVoiceDataSet(voicedataset)
+    voiceDataSet = GetSoundDataSet(voicedataset)
     VoiceDataSet = voiceDataSet[0][1]
     
     if MainLang == 'Ko':

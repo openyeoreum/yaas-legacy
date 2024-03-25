@@ -15,7 +15,7 @@ from collections import defaultdict
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
-from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoiceDataSet
+from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetSoundDataSet
 
 
 ##########################
@@ -36,6 +36,9 @@ def LoadVoiceLayer(projectName, email, MainLang = 'Ko'):
         # SelectionGenerationBookContext = project.SelectionGenerationZh[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
     # if MainLang == 'Es':
         # SelectionGenerationBookContext = project.SelectionGenerationEs[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+    
+    ## MainLang의 언어별 VoiceLayer 불러오기
+    VoiceLayer = project.MixingMasteringKo[1]['AudioBookLayers' + MainLang]
     
     ## MainLang의 언어별 VoiceLayer 불러오기
     VoiceLayer = project.MixingMasteringKo[1]['AudioBookLayers' + MainLang]

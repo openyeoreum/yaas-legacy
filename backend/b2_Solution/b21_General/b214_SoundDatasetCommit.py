@@ -3,7 +3,7 @@ import sys
 import json
 sys.path.append("/yaas")
 
-from backend.b1_Api.b14_Models import VoiceDataSet
+from backend.b1_Api.b14_Models import SoundDataSet
 from backend.b1_Api.b13_Database import get_db
 
 def GetRelationalDataPath():
@@ -30,21 +30,21 @@ def AddSoundDataSetToDB():
         indexMusicDataSet = LoadJsonFrame(RelationalDataPath + "/b575_Music/b575-03_IndexMusicDataSet.json")
         ### 아래로 추가되는 데이터셋 작성 ###
 
-        ExistingVoiceDataSet = db.query(VoiceDataSet).first()
+        ExistingSoundDataSet = db.query(SoundDataSet).first()
 
         # DB Commit
-        if ExistingVoiceDataSet:
-                ExistingVoiceDataSet.TypeCastVoiceDataSet = typeCastVoiceDataSet
-                ExistingVoiceDataSet.LogoDataSet = logoDataSet
-                ExistingVoiceDataSet.IntroDataSet = introDataSet
-                ExistingVoiceDataSet.TitleMusicDataSet = titleMusicDataSet
-                ExistingVoiceDataSet.PartMusicDataSet = partMusicDataSet
-                ExistingVoiceDataSet.IndexMusicDataSet = indexMusicDataSet
+        if ExistingSoundDataSet:
+                ExistingSoundDataSet.TypeCastVoiceDataSet = typeCastVoiceDataSet
+                ExistingSoundDataSet.LogoDataSet = logoDataSet
+                ExistingSoundDataSet.IntroDataSet = introDataSet
+                ExistingSoundDataSet.TitleMusicDataSet = titleMusicDataSet
+                ExistingSoundDataSet.PartMusicDataSet = partMusicDataSet
+                ExistingSoundDataSet.IndexMusicDataSet = indexMusicDataSet
                 ### 아래로 추가되는 데이터셋 작성 ###
                 
                 print(f"[ General | AddExistingSoundDataSetToDB 변경사항 업데이트 ]")
         else:
-            voiceDataSet = VoiceDataSet(
+            soundDataSet = SoundDataSet(
                 TypeCastVoiceDataSet = typeCastVoiceDataSet,
                 LogoDataSet = logoDataSet,
                 IntroDataSet = introDataSet,
@@ -52,7 +52,7 @@ def AddSoundDataSetToDB():
                 PartMusicDataSet = partMusicDataSet,
                 IndexMusicDataSet = indexMusicDataSet
                 )
-            db.add(voiceDataSet)
+            db.add(soundDataSet)
             print(f"[ General | AddSoundDataSetToDB 완료 ]")
         db.commit()
 

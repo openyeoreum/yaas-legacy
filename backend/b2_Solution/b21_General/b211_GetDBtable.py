@@ -1,7 +1,7 @@
 import sys
 sys.path.append("/yaas")
 
-from backend.b1_Api.b14_Models import VoiceDataSet, TrainingDataset, Prompt, Project, ProjectsStorage, User
+from backend.b1_Api.b14_Models import SoundDataSet, TrainingDataset, Prompt, Project, ProjectsStorage, User
 from backend.b1_Api.b13_Database import get_db
 
 def GetProjectsStorage(email):
@@ -50,15 +50,15 @@ def GetTrainingDataset(projectName, email):
             print(f"No Project found for email: {email}")
             return None
         
-def GetVoiceDataSet(voiceDataSet):
+def GetSoundDataSet(soundDataSet):
     with get_db() as db:
-        column = getattr(VoiceDataSet, voiceDataSet, None)
+        column = getattr(SoundDataSet, soundDataSet, None)
         if column is None:
-            raise ValueError(f"No such column: {voiceDataSet}")
+            raise ValueError(f"No such column: {soundDataSet}")
         
         # order_by를 사용해 PromptId 기준으로 내림차순 정렬 후 첫 번째 행을 가져옵니다.
-        voiceDataSet = db.query(column).first()
-    return voiceDataSet
+        soundDataSet = db.query(column).first()
+    return soundDataSet
         
 if __name__ == "__main__":
     

@@ -525,11 +525,11 @@ class TrainingDataset(Base):
 #####################
 ### VoiceDatabase ###
 #####################
-class VoiceDataSet(Base):
-    __tablename__ = "VoiceDataSets"
+class SoundDataSet(Base):
+    __tablename__ = "SoundDataSets"
 
-    VoiceSetId = Column(Integer, primary_key=True, autoincrement=True)
-    VoiceSetDate = Column(DateTime, default=SeoulNow)
+    SoundDataSetId = Column(Integer, primary_key=True, autoincrement=True)
+    SoundDataSetDate = Column(DateTime, default=SeoulNow)
     
     # VoiceDataSet
     TypeCastVoiceDataSet = Column(JSON)

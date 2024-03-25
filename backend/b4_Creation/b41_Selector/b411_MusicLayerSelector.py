@@ -33,23 +33,23 @@ def LoadMusicDataSet(projectName, email, MainLang = 'Ko'):
 
     ## LogoDataSet 불러오기
     soundDataSet = GetSoundDataSet("LogoDataSet")
-    LogoDataSet = soundDataSet[0][1]['Logos']
+    LogoDataSet = soundDataSet[0][1]['Logos'][1:]
     
     ## IntroDataSet 불러오기
     soundDataSet = GetSoundDataSet("IntroDataSet")
-    IntroDataSet = soundDataSet[0][1]['Intros']
+    IntroDataSet = soundDataSet[0][1]['Intros'][1:]
     
     ## TitleMusicDataSet 불러오기
     soundDataSet = GetSoundDataSet("TitleMusicDataSet")
-    TitleMusicDataSet = soundDataSet[0][1]['TitleMusics']
+    TitleMusicDataSet = soundDataSet[0][1]['TitleMusics'][1:]
     
     ## PartMusicDataSet 불러오기
     soundDataSet = GetSoundDataSet("PartMusicDataSet")
-    PartMusicDataSet = soundDataSet[0][1]['PartMusics']
+    PartMusicDataSet = soundDataSet[0][1]['PartMusics'][1:]
     
     ## IndexMusicDataSet 불러오기
     soundDataSet = GetSoundDataSet("IndexMusicDataSet")
-    IndexMusicDataSet = soundDataSet[0][1]['IndexMusics']
+    IndexMusicDataSet = soundDataSet[0][1]['IndexMusics'][1:]
     
     return SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, PartMusicDataSet, IndexMusicDataSet
 
@@ -74,22 +74,21 @@ def VoiceLayerPathGen(projectName, email, FileName):
 
     return voiceLayerPath
 
+###################################################
+##### VoiceLayer에 Logo, Intro, Music Path 찾기 #####
+###################################################
 ## VoiceLayer에 Logo 선택 후 경로 생성
 def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
     
     SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, PartMusicDataSet, IndexMusicDataSet = LoadMusicDataSet(projectName, email, MainLang = MainLang)
-    
-    # EditGeneration Title, Part, Index Music 추출
-    EditGeneration[0]
-        
-    
+       
     # 도서 SelectionGenerationKoBookContext 로드
-    Genre = SelectionGeneration[1]['SelectionGenerationKoBookContext']['Vector']['ContextCompletion']['Genre']['Genre']
-    GenreRatio = SelectionGeneration[1]['SelectionGenerationKoBookContext']['Vector']['ContextCompletion']['Genre']['GenreRatio']
-    GenderRatio = SelectionGeneration[1]['SelectionGenerationKoBookContext']['Vector']['ContextCompletion']['Gender']['GenderRatio']
-    AgeRatio = SelectionGeneration[1]['SelectionGenerationKoBookContext']['Vector']['ContextCompletion']['Age']['AgeRatio']
-    PersonalityRatio = SelectionGeneration[1]['SelectionGenerationKoBookContext']['Vector']['ContextCompletion']['Personality']['PersonalityRatio']
-    EmotionRatio = SelectionGeneration[1]['SelectionGenerationKoBookContext']['Vector']['ContextCompletion']['Emotion']['EmotionRatio']
+    Genre = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['Genre']
+    GenreRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['GenreRatio']
+    GenderRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Gender']['GenderRatio']
+    AgeRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Age']['AgeRatio']
+    PersonalityRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Personality']['PersonalityRatio']
+    EmotionRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Emotion']['EmotionRatio']
     
     # VoiceLayerPath 찾기
     FileName = f'{projectName}_VoiceLayer_Logo.wav'
@@ -112,58 +111,90 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
     # TitleMusicDataSet에서 TitleMusicPath 찾기
     TitleMusicScoreList = []
     for TitleMusic in TitleMusicDataSet:
-        TitleMusic['TitleMusic']
-    
+        # GenreScore 계산
+        GenreScores = TitleMusic['TitleMusic']['Genre']
+        MergedGenreScore = 0
+        for GenreScore in GenreScores:
+            if GenreScore['index'] in GenreRatio:
+                MergedGenreScore += (GenreScore['Score'] * GenreRatio[GenreScore['index']])
+        # GenderScore 계산
+        GenderScores = TitleMusic['TitleMusic']['Gender']
+        MergedGenderScore = 0
+        for GenderScore in GenderScores:
+            if GenderScore['index'] in GenderRatio:
+                MergedGenderScore += (GenderScore['Score'] * GenderRatio[GenderScore['index']])
+        # AgeScore 계산
+        AgeScores = TitleMusic['TitleMusic']['Age']
+        MergedAgeScore = 0
+        for AgeScore in AgeScores:
+            if AgeScore['index'] in AgeRatio:
+                MergedAgeScore += (AgeScore['Score'] * AgeRatio[AgeScore['index']])
+        # PersonalityScore 계산
+        PersonalityScores = TitleMusic['TitleMusic']['Personality']
+        MergedPersonalityScore = 0
+        for PersonalityScore in PersonalityScores:
+            if PersonalityScore['index'] in PersonalityRatio:
+                MergedPersonalityScore += (PersonalityScore['Score'] * PersonalityRatio[PersonalityScore['index']])
+        # EmotionScore 계산
+        EmotionScores = TitleMusic['TitleMusic']['Emotion']
+        MergedEmotionScore = 0
+        for EmotionScore in EmotionScores:
+            if EmotionScore['index'] in EmotionRatio:
+                MergedEmotionScore += (EmotionScore['Score'] * EmotionRatio[EmotionScore['index']])
+        # TitleMusic Score 합산
+        TitleMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
+    # TitleMusic FilePath 도출
+    TitleMusicPath = TitleMusicDataSet[TitleMusicScoreList.index(max(TitleMusicScoreList))]['FilePath']
+    print(TitleMusicPath)
 
-        
-    return VoiceLayerPath, LogoPath, IntroPath
+    return VoiceLayerPath, LogoPath, IntroPath, TitleMusicPath
 
-#########################################
-##### VoiceLayer에 Logo, Intro 합치기 #####
-#########################################
-## VoiceLayer에 Intro, Logo 믹싱
-def LogoIntroMixing(projectName, email, MainLang = 'Ko', Intro = "off"):
+# ################################################
+# ##### VoiceLayer에 Logo, Intro, Music 합치기 #####
+# ################################################
+# ## VoiceLayer에 Intro, Logo 믹싱
+# def LogoIntroMixing(projectName, email, MainLang = 'Ko', Intro = "off"):
     
-    VoiceLayer, LogoPath, IntroPath, VoiceLayerLogoPath = MusicPathGen(projectName, email, MainLang = MainLang, Intro = Intro)
+#     VoiceLayer, LogoPath, IntroPath, VoiceLayerLogoPath = MusicPathGen(projectName, email, MainLang = MainLang, Intro = Intro)
     
-    ## SoundMixing
-    # Load LogoSound
-    LogoSound = AudioSegment.from_file(LogoPath, format = "mp3")
-    # Logo Silence
-    Silence = AudioSegment.silent(duration = 2000)
-    # Logo Mixing, LogoSound와 공백음 4초 추가
-    LIMixingSound = LogoSound + Silence
+#     ## SoundMixing
+#     # Load LogoSound
+#     LogoSound = AudioSegment.from_file(LogoPath, format = "mp3")
+#     # Logo Silence
+#     Silence = AudioSegment.silent(duration = 2000)
+#     # Logo Mixing, LogoSound와 공백음 4초 추가
+#     LIMixingSound = LogoSound + Silence
     
-    LogoTag = ['Logo']
-    ## IntroSound
-    if IntroPath is not None:
-        IntroSound = AudioSegment.from_file(IntroPath, format = "mp3")
-        LIMixingSound += IntroSound + Silence
-        LogoTag.append('Intro')
+#     LogoTag = ['Logo']
+#     ## IntroSound
+#     if IntroPath is not None:
+#         IntroSound = AudioSegment.from_file(IntroPath, format = "mp3")
+#         LIMixingSound += IntroSound + Silence
+#         LogoTag.append('Intro')
         
-    ## Load VoiceLayer_Logo 및 최종저장
-    # VoiceLayerSound = AudioSegment.from_file(VoiceLayerPath, format = "wav")
-    # LIMixingSound += VoiceLayerSound
-    LIMixingSound.export(VoiceLayerLogoPath, format = "wav")
+#     ## Load VoiceLayer_Logo 및 최종저장
+#     # VoiceLayerSound = AudioSegment.from_file(VoiceLayerPath, format = "wav")
+#     # LIMixingSound += VoiceLayerSound
+#     LIMixingSound.export(VoiceLayerLogoPath, format = "wav")
     
-    ## VoiceLayer에 업데이트
-    # 시간, 분, 초로 변환
-    def SecondsToHMS(seconds):
-        hours = seconds // 3600
-        minutes = (seconds % 3600) // 60
-        seconds = seconds % 60
+#     ## VoiceLayer에 업데이트
+#     # 시간, 분, 초로 변환
+#     def SecondsToHMS(seconds):
+#         hours = seconds // 3600
+#         minutes = (seconds % 3600) // 60
+#         seconds = seconds % 60
         
-        return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+#         return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
     
-    # 시간측정
-    LogoSecond = AudioSegment.from_file(VoiceLayerLogoPath)
-    LogoTime = SecondsToHMS(LogoSecond)
-    # LogoDic 생성
-    LogoEndTime = {"Time": LogoTime, "Second": LogoSecond}
-    LogoDic = [{'Tag': 'Logo', 'Logo': 'EndTime': [LogoEndTime]}]
-    # VoiceLayer EndTime 업데이트
-    for Voice in VoiceLayer:
-        Voice['EndTime']
+#     # 시간측정
+#     LogoSecond = AudioSegment.from_file(VoiceLayerLogoPath)
+#     LogoTime = SecondsToHMS(LogoSecond)
+#     # LogoDic 생성
+#     LogoEndTime = {"Time": LogoTime, "Second": LogoSecond}
+#     LogoDic = [{'Tag': 'Logo', 'Logo': 'EndTime': [LogoEndTime]}]
+#     # VoiceLayer EndTime 업데이트
+#     for Voice in VoiceLayer:
+#         Voice['EndTime']
     
     
 
@@ -176,6 +207,4 @@ if __name__ == "__main__":
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     #########################################################################
     
-    VoiceLayer, Genre, LogoDataSet, IntroDataSet = LoadMusicDataSet(projectName, email, MainLang = mainLang)
-    
-    print(VoiceLayer[0])
+    VoiceLayerPath, LogoPath, IntroPath = MusicPathGen(projectName, email, MainLang = mainLang, Intro = intro)

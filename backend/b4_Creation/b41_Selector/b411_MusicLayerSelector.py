@@ -21,12 +21,14 @@ from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetVoice
 ##########################
 ##### VoiceLayer 생성 #####
 ##########################
-## BodyFrameBodys 로드
+## LoadVoiceLayer 로드
 def LoadVoiceLayer(projectName, email, MainLang = 'Ko'):
     project = GetProject(projectName, email)
     VoiceLayer = project.MixingMasteringKo[1]['AudioBookLayers' + MainLang]
     
     return VoiceLayer
+
+
 
 if __name__ == "__main__":
 

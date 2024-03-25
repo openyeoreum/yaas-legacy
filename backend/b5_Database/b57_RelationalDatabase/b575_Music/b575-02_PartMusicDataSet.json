@@ -3,15 +3,15 @@
         "DataBaseId": "None",
         "DataBaseName": "None",
         "DB": "Relational",
-        "Type": "TitleMusic"
+        "Type": "PartMusic"
     },
     {
-        "TitleMusics": [
+        "PartMusics": [
             {
-                "TitleMusicId": 0,
+                "PartMusicId": 0,
                 "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/.wav",
-                "TitleMusic": {
+                "PartMusic": {
                     "Language": ["gb"],
                     "Genre": [
                         {"index": "문학", "Score": 0},

@@ -82,7 +82,7 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
     
     SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, PartMusicDataSet, IndexMusicDataSet = LoadMusicDataSet(projectName, email, MainLang = MainLang)
        
-    # 도서 SelectionGenerationKoBookContext 로드
+    ## 도서 SelectionGenerationKoBookContext 로드
     Genre = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['Genre']
     GenreRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['GenreRatio']
     GenderRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Gender']['GenderRatio']
@@ -90,17 +90,17 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
     PersonalityRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Personality']['PersonalityRatio']
     EmotionRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Emotion']['EmotionRatio']
     
-    # VoiceLayerPath 찾기
+    ## VoiceLayerPath 찾기
     FileName = f'{projectName}_VoiceLayer_Logo.wav'
     VoiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
     
-    # LogoDataSet에서 LogoPath 찾기
+    ## LogoDataSet에서 LogoPath 찾기
     for Logo in LogoDataSet:
         if (Logo['Logo']['Genre'] == Genre) and (Logo['Logo']['Language'] == MainLang):
             LogoPath = Logo['FilePath']
             break
     
-    # IntroDataSet에서 IntroPath 찾기
+    ## IntroDataSet에서 IntroPath 찾기
     IntroPath = None
     if Intro != "off":
         for Intro in IntroDataSet:
@@ -108,7 +108,7 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
                 IntroPath = Intro['FilePath']
                 break
     
-    # TitleMusicDataSet에서 TitleMusicPath 찾기
+    ## TitleMusicDataSet에서 TitleMusicPath 찾기
     TitleMusicScoreList = []
     for TitleMusic in TitleMusicDataSet:
         # GenreScore 계산
@@ -145,9 +145,84 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
         TitleMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
     # TitleMusic FilePath 도출
     TitleMusicPath = TitleMusicDataSet[TitleMusicScoreList.index(max(TitleMusicScoreList))]['FilePath']
-    print(TitleMusicPath)
 
-    return VoiceLayerPath, LogoPath, IntroPath, TitleMusicPath
+    ## PartMusicDataSet에서 PartMusicPath 찾기
+    PartMusicScoreList = []
+    for PartMusic in PartMusicDataSet:
+        # GenreScore 계산
+        GenreScores = PartMusic['PartMusic']['Genre']
+        MergedGenreScore = 0
+        for GenreScore in GenreScores:
+            if GenreScore['index'] in GenreRatio:
+                MergedGenreScore += (GenreScore['Score'] * GenreRatio[GenreScore['index']])
+        # GenderScore 계산
+        GenderScores = PartMusic['PartMusic']['Gender']
+        MergedGenderScore = 0
+        for GenderScore in GenderScores:
+            if GenderScore['index'] in GenderRatio:
+                MergedGenderScore += (GenderScore['Score'] * GenderRatio[GenderScore['index']])
+        # AgeScore 계산
+        AgeScores = PartMusic['PartMusic']['Age']
+        MergedAgeScore = 0
+        for AgeScore in AgeScores:
+            if AgeScore['index'] in AgeRatio:
+                MergedAgeScore += (AgeScore['Score'] * AgeRatio[AgeScore['index']])
+        # PersonalityScore 계산
+        PersonalityScores = PartMusic['PartMusic']['Personality']
+        MergedPersonalityScore = 0
+        for PersonalityScore in PersonalityScores:
+            if PersonalityScore['index'] in PersonalityRatio:
+                MergedPersonalityScore += (PersonalityScore['Score'] * PersonalityRatio[PersonalityScore['index']])
+        # EmotionScore 계산
+        EmotionScores = PartMusic['PartMusic']['Emotion']
+        MergedEmotionScore = 0
+        for EmotionScore in EmotionScores:
+            if EmotionScore['index'] in EmotionRatio:
+                MergedEmotionScore += (EmotionScore['Score'] * EmotionRatio[EmotionScore['index']])
+        # PartMusic Score 합산
+        PartMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
+    # PartMusic FilePath 도출
+    PartMusicPath = PartMusicDataSet[PartMusicScoreList.index(max(PartMusicScoreList))]['FilePath']
+    
+    ## IndexMusicDataSet에서 IndexMusicPath 찾기
+    IndexMusicScoreList = []
+    for IndexMusic in IndexMusicDataSet:
+        # GenreScore 계산
+        GenreScores = IndexMusic['IndexMusic']['Genre']
+        MergedGenreScore = 0
+        for GenreScore in GenreScores:
+            if GenreScore['index'] in GenreRatio:
+                MergedGenreScore += (GenreScore['Score'] * GenreRatio[GenreScore['index']])
+        # GenderScore 계산
+        GenderScores = IndexMusic['IndexMusic']['Gender']
+        MergedGenderScore = 0
+        for GenderScore in GenderScores:
+            if GenderScore['index'] in GenderRatio:
+                MergedGenderScore += (GenderScore['Score'] * GenderRatio[GenderScore['index']])
+        # AgeScore 계산
+        AgeScores = IndexMusic['IndexMusic']['Age']
+        MergedAgeScore = 0
+        for AgeScore in AgeScores:
+            if AgeScore['index'] in AgeRatio:
+                MergedAgeScore += (AgeScore['Score'] * AgeRatio[AgeScore['index']])
+        # PersonalityScore 계산
+        PersonalityScores = IndexMusic['IndexMusic']['Personality']
+        MergedPersonalityScore = 0
+        for PersonalityScore in PersonalityScores:
+            if PersonalityScore['index'] in PersonalityRatio:
+                MergedPersonalityScore += (PersonalityScore['Score'] * PersonalityRatio[PersonalityScore['index']])
+        # EmotionScore 계산
+        EmotionScores = IndexMusic['IndexMusic']['Emotion']
+        MergedEmotionScore = 0
+        for EmotionScore in EmotionScores:
+            if EmotionScore['index'] in EmotionRatio:
+                MergedEmotionScore += (EmotionScore['Score'] * EmotionRatio[EmotionScore['index']])
+        # IndexMusic Score 합산
+        IndexMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
+    # IndexMusic FilePath 도출
+    IndexMusicPath = IndexMusicDataSet[IndexMusicScoreList.index(max(IndexMusicScoreList))]['FilePath']
+
+    return VoiceLayerPath, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, IndexMusicPath
 
 # ################################################
 # ##### VoiceLayer에 Logo, Intro, Music 합치기 #####
@@ -207,4 +282,8 @@ if __name__ == "__main__":
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     #########################################################################
     
-    VoiceLayerPath, LogoPath, IntroPath = MusicPathGen(projectName, email, MainLang = mainLang, Intro = intro)
+    VoiceLayerPath, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, IndexMusicPath = MusicPathGen(projectName, email, MainLang = mainLang, Intro = intro)
+    
+    print(TitleMusicPath)
+    print(PartMusicPath)
+    print(IndexMusicPath)

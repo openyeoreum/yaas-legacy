@@ -109,8 +109,10 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
     fileName = '[' + projectName + '_' + 'MatchedMusics.json'
     MatchedMusicLayerPath = MusicLayerPathGen(projectName, email, fileName)
     
+    ## MusicDataSet 불러오기
+    SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, PartMusicDataSet, IndexMusicDataSet = LoadMusicDataSet(projectName, email, MainLang = MainLang)
+    
     if not os.path.exists(MatchedMusicLayerPath):
-        SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, PartMusicDataSet, IndexMusicDataSet = LoadMusicDataSet(projectName, email, MainLang = MainLang)
         
         ## 도서 SelectionGenerationKoBookContext 로드
         Genre = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['Genre']
@@ -126,16 +128,16 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
         ## LogoDataSet에서 LogoPath 찾기
         for Logo in LogoDataSet:
             if (Logo['Logo']['Genre'] == Genre) and (Logo['Logo']['Language'] == MainLang):
-                MatchedLogoDic = {'Type': 'Logo', 'FilePath': Logo['FilePath'], 'Setting': Logo['Setting']}
+                MatchedLogoDic = {'Tag': 'Logo', 'FilePath': Logo['FilePath'], 'Setting': Logo['Setting']}
                 break
         MatchedMusics.append(MatchedLogoDic)
         
         ## IntroDataSet에서 IntroPath 찾기
-        MatchedIntroDic = {'Type': None, 'FilePath': None, 'Setting': None}
+        MatchedIntroDic = {'Tag': None, 'FilePath': None, 'Setting': None}
         if Intro != "off":
             for Intro in IntroDataSet:
                 if (Intro['Intro']['Type'] == Intro) and (Intro['Intro']['Language'] == MainLang):
-                    MatchedIntroDic = {'Type': 'Intro', 'FilePath': Intro['FilePath'], 'Setting': Intro['Setting']}
+                    MatchedIntroDic = {'Tag': 'Intro', 'FilePath': Intro['FilePath'], 'Setting': Intro['Setting']}
                     break
         MatchedMusics.append(MatchedIntroDic)
         
@@ -176,7 +178,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
             TitleMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
         # TitleMusic FilePath 도출
         MatchedTitleMusic = TitleMusicDataSet[TitleMusicScoreList.index(max(TitleMusicScoreList))]
-        MatchedTitleMusicDic = {'Type': 'TitleMusic', 'FilePath': MatchedTitleMusic['FilePath'], 'Setting': MatchedTitleMusic['Setting']}
+        MatchedTitleMusicDic = {'Tag': 'Title', 'FilePath': MatchedTitleMusic['FilePath'], 'Setting': MatchedTitleMusic['Setting']}
         MatchedMusics.append(MatchedTitleMusicDic)
 
         ## PartMusicDataSet에서 PartMusicPath 찾기
@@ -213,11 +215,17 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
                 if EmotionScore['index'] in EmotionRatio:
                     MergedEmotionScore += (EmotionScore['Score'] * EmotionRatio[EmotionScore['index']])
             # PartMusic Score 합산
-            PartMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
-        # PartMusic FilePath 도출
-        MatchedPartMusic = PartMusicDataSet[PartMusicScoreList.index(max(PartMusicScoreList))]
-        MatchedPartMusicDic = {'Type': 'PartMusic', 'FilePath': MatchedPartMusic['FilePath'], 'Setting': MatchedPartMusic['Setting']}
+            PartMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))       
+        # PartMusic, ChapterMusic FilePath 도출
+        SortedMatchedPartScores = sorted(PartMusicScoreList, reverse = True)
+        # PartMusic
+        MatchedPartMusic = PartMusicDataSet[PartMusicScoreList.index(SortedMatchedPartScores[0])]
+        MatchedPartMusicDic = {'Tag': 'Part', 'FilePath': MatchedPartMusic['FilePath'], 'Setting': MatchedPartMusic['Setting']}
         MatchedMusics.append(MatchedPartMusicDic)
+        # ChapterMusic
+        MatchedChapterMusic = PartMusicDataSet[PartMusicScoreList.index(SortedMatchedPartScores[1])]
+        MatchedChapterMusicDic = {'Tag': 'Chapter', 'FilePath': MatchedChapterMusic['FilePath'], 'Setting': MatchedChapterMusic['Setting']}
+        MatchedMusics.append(MatchedChapterMusicDic)
         
         ## IndexMusicDataSet에서 IndexMusicPath 찾기
         IndexMusicScoreList = []
@@ -258,11 +266,11 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
         SortedMatchedIndexScores = sorted(IndexMusicScoreList, reverse = True)
         # IndexMusic
         MatchedIndexMusic = IndexMusicDataSet[IndexMusicScoreList.index(SortedMatchedIndexScores[0])]
-        MatchedIndexMusicDic = {'Type': 'IndexMusic', 'FilePath': MatchedIndexMusic['FilePath'], 'Setting': MatchedIndexMusic['Setting']}
+        MatchedIndexMusicDic = {'Tag': 'Index', 'FilePath': MatchedIndexMusic['FilePath'], 'Setting': MatchedIndexMusic['Setting']}
         MatchedMusics.append(MatchedIndexMusicDic)
         # CaptionMusic
         MatchedCaptionMusic = IndexMusicDataSet[IndexMusicScoreList.index(SortedMatchedIndexScores[1])]
-        MatchedCaptionMusicDic = {'Type': 'CaptionMusic', 'FilePath': MatchedCaptionMusic['FilePath'], 'Setting': MatchedCaptionMusic['Setting']}
+        MatchedCaptionMusicDic = {'Tag': 'Caption', 'FilePath': MatchedCaptionMusic['FilePath'], 'Setting': MatchedCaptionMusic['Setting']}
         MatchedMusics.append(MatchedCaptionMusicDic)
         
         ## MatchedMusics 파일 생성
@@ -272,54 +280,54 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
         with open(MatchedMusicLayerPath, 'r', encoding = 'utf-8') as MatchedMusicsJson:
             MatchedMusics = json.load(MatchedMusicsJson)
         
-    return VoiceLayerPath, MatchedMusics
+    return EditGeneration, VoiceLayerPath, MatchedMusics
 
-# ################################################
-# ##### VoiceLayer에 Logo, Intro, Music 합치기 #####
-# ################################################
-# ## VoiceLayer에 Intro, Logo 믹싱
-# def LogoIntroMixing(projectName, email, MainLang = 'Ko', Intro = "off"):
+################################################
+##### VoiceLayer에 Logo, Intro, Music 합치기 #####
+################################################
+## VoiceLayer에 Intro, Logo 믹싱
+def MusicMixing(projectName, email, MainLang = 'Ko', Intro = "off"):
     
-#     VoiceLayer, LogoPath, IntroPath, VoiceLayerLogoPath = MusicPathGen(projectName, email, MainLang = MainLang, Intro = Intro)
+    EditGeneration, VoiceLayerPath, MatchedMusics = MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = "off")
     
-#     ## SoundMixing
-#     # Load LogoSound
-#     LogoSound = AudioSegment.from_file(LogoPath, format = "mp3")
-#     # Logo Silence
-#     Silence = AudioSegment.silent(duration = 2000)
-#     # Logo Mixing, LogoSound와 공백음 4초 추가
-#     LIMixingSound = LogoSound + Silence
+    # ## SoundMixing
+    # # Load LogoSound
+    # LogoSound = AudioSegment.from_file(LogoPath, format = "mp3")
+    # # Logo Silence
+    # Silence = AudioSegment.silent(duration = 2000)
+    # # Logo Mixing, LogoSound와 공백음 4초 추가
+    # LIMixingSound = LogoSound + Silence
     
-#     LogoTag = ['Logo']
-#     ## IntroSound
-#     if IntroPath is not None:
-#         IntroSound = AudioSegment.from_file(IntroPath, format = "mp3")
-#         LIMixingSound += IntroSound + Silence
-#         LogoTag.append('Intro')
+    # LogoTag = ['Logo']
+    # ## IntroSound
+    # if IntroPath is not None:
+    #     IntroSound = AudioSegment.from_file(IntroPath, format = "mp3")
+    #     LIMixingSound += IntroSound + Silence
+    #     LogoTag.append('Intro')
         
-#     ## Load VoiceLayer_Logo 및 최종저장
-#     # VoiceLayerSound = AudioSegment.from_file(VoiceLayerPath, format = "wav")
-#     # LIMixingSound += VoiceLayerSound
-#     LIMixingSound.export(VoiceLayerLogoPath, format = "wav")
+    # ## Load VoiceLayer_Logo 및 최종저장
+    # # VoiceLayerSound = AudioSegment.from_file(VoiceLayerPath, format = "wav")
+    # # LIMixingSound += VoiceLayerSound
+    # LIMixingSound.export(VoiceLayerLogoPath, format = "wav")
     
-#     ## VoiceLayer에 업데이트
-#     # 시간, 분, 초로 변환
-#     def SecondsToHMS(seconds):
-#         hours = seconds // 3600
-#         minutes = (seconds % 3600) // 60
-#         seconds = seconds % 60
+    # ## VoiceLayer에 업데이트
+    # # 시간, 분, 초로 변환
+    # def SecondsToHMS(seconds):
+    #     hours = seconds // 3600
+    #     minutes = (seconds % 3600) // 60
+    #     seconds = seconds % 60
         
-#         return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+    #     return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
     
-#     # 시간측정
-#     LogoSecond = AudioSegment.from_file(VoiceLayerLogoPath)
-#     LogoTime = SecondsToHMS(LogoSecond)
-#     # LogoDic 생성
-#     LogoEndTime = {"Time": LogoTime, "Second": LogoSecond}
-#     LogoDic = [{'Tag': 'Logo', 'Logo': 'EndTime': [LogoEndTime]}]
-#     # VoiceLayer EndTime 업데이트
-#     for Voice in VoiceLayer:
-#         Voice['EndTime']
+    # # 시간측정
+    # LogoSecond = AudioSegment.from_file(VoiceLayerLogoPath)
+    # LogoTime = SecondsToHMS(LogoSecond)
+    # # LogoDic 생성
+    # LogoEndTime = {"Time": LogoTime, "Second": LogoSecond}
+    # LogoDic = [{'Tag': 'Logo', 'Logo': 'EndTime': [LogoEndTime]}]
+    # # VoiceLayer EndTime 업데이트
+    # for Voice in VoiceLayer:
+    #     Voice['EndTime']
     
     
 
@@ -332,7 +340,7 @@ if __name__ == "__main__":
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     #########################################################################
     
-    VoiceLayerPath, MatchedMusics = MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = mainLang, Intro = intro)
+    EditGeneration, VoiceLayerPath, MatchedMusics = MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = mainLang, Intro = intro)
     
     print(f'1: {MatchedMusics[0]}\n\n')
     print(f'2: {MatchedMusics[1]}\n\n')
@@ -340,3 +348,4 @@ if __name__ == "__main__":
     print(f'4: {MatchedMusics[3]}\n\n')
     print(f'5: {MatchedMusics[4]}\n\n')
     print(f'6: {MatchedMusics[5]}\n\n')
+    print(f'7: {MatchedMusics[6]}\n\n')

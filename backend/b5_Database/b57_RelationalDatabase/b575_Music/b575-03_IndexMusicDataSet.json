@@ -53,7 +53,7 @@
                     "1st_Length": 0.00,
                     "2nd_Length": 0.00,
                     "Volume": 100,
-                    "Direction": "None"
+                    "Direction": "뒤"
                 }
             },
             {
@@ -102,7 +102,7 @@
                     "1st_Length": 1.00,
                     "2nd_Length": 4.70,
                     "Volume": 100,
-                    "Direction": "None"
+                    "Direction": "뒤"
                 }
             },
             {
@@ -151,7 +151,7 @@
                     "1st_Length": 0.75,
                     "2nd_Length": 3.30,
                     "Volume": 100,
-                    "Direction": "None"
+                    "Direction": "뒤"
                 }
             }
         ]

@@ -131,7 +131,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
         MatchedMusics.append(MatchedLogoDic)
         
         ## IntroDataSet에서 IntroPath 찾기
-        MatchedLogoDic = {'Id': None, 'Type': None, 'FilePath': None, 'Setting': None}
+        MatchedIntroDic = {'Type': None, 'FilePath': None, 'Setting': None}
         if Intro != "off":
             for Intro in IntroDataSet:
                 if (Intro['Intro']['Type'] == Intro) and (Intro['Intro']['Language'] == MainLang):

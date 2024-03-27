@@ -50,8 +50,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
+                    "Length": [0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -99,8 +98,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
+                    "Length": [0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -148,8 +146,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
+                    "Length": [0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -197,8 +194,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
+                    "Length": [0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -246,8 +242,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
+                    "Length": [0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -295,8 +290,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
+                    "Length": [0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -344,8 +338,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
+                    "Length": [0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -393,8 +386,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
+                    "Length": [0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -442,8 +434,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
+                    "Length": [0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -491,8 +482,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
+                    "Length": [0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -540,8 +530,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 2.00,
-                    "2nd_Length": 6.50,
+                    "Length": [2.00, 6.50],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -589,8 +578,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 2.00,
-                    "2nd_Length": 6.50,
+                    "Length": [1.25, 4.60],
                     "Volume": 100,
                     "Direction": "뒤"
                 }

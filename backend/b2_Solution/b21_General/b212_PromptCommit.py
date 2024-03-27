@@ -51,32 +51,32 @@ def AddPromptToDB():
 
         # DB Commit
         if ExistingPrompt:
-                ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
-                ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
-                ExistingPrompt.IndexDefine = indexDefine
-                ExistingPrompt.DuplicationPreprocess = duplicationPreprocess
-                ExistingPrompt.PronunciationPreprocess = pronunciationPreprocess
-                ExistingPrompt.CaptionCompletion = captionCompletion
-                # ExistingPrompt.TransitionPhargraph = transitionPhargraph
-                ExistingPrompt.ContextDefine = contextDefine
-                ExistingPrompt.ContextCompletion = contextCompletion
-                ExistingPrompt.WMWMDefine = wMWMDefine
-                ExistingPrompt.WMWMMatching = wMWMMatching
-                ExistingPrompt.CharacterDefine = characterDefine
-                ExistingPrompt.CharacterCompletion = characterCompletion
-                ExistingPrompt.CharacterPostCompletion = characterPostCompletion
-                ExistingPrompt.CharacterPostCompletionLiterary = characterPostCompletionLiterary
-                ExistingPrompt.SoundMatching = soundMatching
-                ExistingPrompt.SFXMatching = sFXMatching
-                ExistingPrompt.SFXMultiQuery = sFXMultiQuery
-                ExistingPrompt.TranslationKo = translationKo
-                # ExistingPrompt.TranslationEn = translationEn
-                ExistingPrompt.CorrectionKo = correctionKo
-                # ExistingPrompt.CorrectionEn = correctionEn
-                ExistingPrompt.VoiceSplit = voiceSplit
-                ### 아래로 추가되는 프롬프트 작성 ###
-                
-                print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
+            ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
+            ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
+            ExistingPrompt.IndexDefine = indexDefine
+            ExistingPrompt.DuplicationPreprocess = duplicationPreprocess
+            ExistingPrompt.PronunciationPreprocess = pronunciationPreprocess
+            ExistingPrompt.CaptionCompletion = captionCompletion
+            # ExistingPrompt.TransitionPhargraph = transitionPhargraph
+            ExistingPrompt.ContextDefine = contextDefine
+            ExistingPrompt.ContextCompletion = contextCompletion
+            ExistingPrompt.WMWMDefine = wMWMDefine
+            ExistingPrompt.WMWMMatching = wMWMMatching
+            ExistingPrompt.CharacterDefine = characterDefine
+            ExistingPrompt.CharacterCompletion = characterCompletion
+            ExistingPrompt.CharacterPostCompletion = characterPostCompletion
+            ExistingPrompt.CharacterPostCompletionLiterary = characterPostCompletionLiterary
+            ExistingPrompt.SoundMatching = soundMatching
+            ExistingPrompt.SFXMatching = sFXMatching
+            ExistingPrompt.SFXMultiQuery = sFXMultiQuery
+            ExistingPrompt.TranslationKo = translationKo
+            # ExistingPrompt.TranslationEn = translationEn
+            ExistingPrompt.CorrectionKo = correctionKo
+            # ExistingPrompt.CorrectionEn = correctionEn
+            ExistingPrompt.VoiceSplit = voiceSplit
+            ### 아래로 추가되는 프롬프트 작성 ###
+            
+            print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
         else:
             prompt = Prompt(
                 IndexDefinePreprocess = indexDefinePreprocess,

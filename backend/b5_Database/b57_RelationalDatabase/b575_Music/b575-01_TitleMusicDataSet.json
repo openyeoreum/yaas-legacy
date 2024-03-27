@@ -50,18 +50,14 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
-                    "3rd_Length": 0.00,
-                    "4th_Length": 0.00,
-                    "5th_Length": 0.00,
+                    "Length": [0.00, 0.00, 0.00, 0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
             },
             {
                 "TitleMusicId": 1,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/1_TitleMusic.mp3",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/1_TitleMusic.wav",
                 "TitleMusic": {
                     "Language": ["gb"],
                     "Genre": [
@@ -102,18 +98,14 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 4.55,
-                    "2nd_Length": 9.05,
-                    "3rd_Length": 13.61,
-                    "4th_Length": 18.04,
-                    "5th_Length": 22.67,
+                    "Length": [4.55, 9.05, 13.61, 18.04, 22.67],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
             },
             {
                 "TitleMusicId": 2,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/2_TitleMusic.mp3",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/2_TitleMusic.wav",
                 "TitleMusic": {
                     "Language": ["gb"],
                     "Genre": [
@@ -154,18 +146,14 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
-                    "3rd_Length": 0.00,
-                    "4th_Length": 0.00,
-                    "5th_Length": 0.00,
+                    "Length": [0.00, 0.00, 0.00, 0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
             },
             {
                 "TitleMusicId": 3,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/3_TitleMusic.mp3",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/3_TitleMusic.wav",
                 "TitleMusic": {
                     "Language": ["gb"],
                     "Genre": [
@@ -206,11 +194,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
-                    "3rd_Length": 0.00,
-                    "4th_Length": 0.00,
-                    "5th_Length": 0.00,
+                    "Length": [0.00, 0.00, 0.00, 0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -258,18 +242,14 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
-                    "3rd_Length": 0.00,
-                    "4th_Length": 0.00,
-                    "5th_Length": 0.00,
+                    "Length": [0.00, 0.00, 0.00, 0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
             },
             {
                 "TitleMusicId": 5,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/5_TitleMusic.mp3",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/5_TitleMusic.wav",
                 "TitleMusic": {
                     "Language": ["gb"],
                     "Genre": [
@@ -310,11 +290,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
-                    "3rd_Length": 0.00,
-                    "4th_Length": 0.00,
-                    "5th_Length": 0.00,
+                    "Length": [0.00, 0.00, 0.00, 0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -362,11 +338,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 0.00,
-                    "2nd_Length": 0.00,
-                    "3rd_Length": 0.00,
-                    "4th_Length": 0.00,
-                    "5th_Length": 0.00,
+                    "Length": [0.00, 0.00, 0.00, 0.00, 0.00],
                     "Volume": 100,
                     "Direction": "뒤"
                 }
@@ -414,11 +386,7 @@
                     ]
                 },
                 "Setting": {
-                    "1st_Length": 4.00,
-                    "2nd_Length": 10.00,
-                    "3rd_Length": 16.00,
-                    "4th_Length": 22.00,
-                    "5th_Length": 25.00,
+                    "Length": [4.00, 10.00, 16.00, 22.00, 25.00],
                     "Volume": 130,
                     "Direction": "뒤"
                 }

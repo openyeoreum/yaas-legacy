@@ -70,7 +70,7 @@ def VoiceLayerPathGen(projectName, email, FileName):
     BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage'
 
     # 최종 경로 생성
-    voiceLayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", FileName)
+    voiceLayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_master_audiobook_file", FileName)
     # print(voiceLayerPath)
 
     return voiceLayerPath
@@ -102,7 +102,7 @@ def MusicLayerPathGen(projectName, email, FileName):
 ## VoiceLayer에 Logo 선택 후 경로 생성
 def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = "off"):
     ## VoiceLayerPath 찾기
-    FileName = f'{projectName}_VoiceLayer_Logo.wav'
+    FileName = f'{projectName}_AudioBook.wav'
     VoiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
 
     ## MatchedMusics 파일 경로 생성
@@ -285,11 +285,120 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
 ################################################
 ##### VoiceLayer에 Logo, Intro, Music 합치기 #####
 ################################################
-## VoiceLayer에 Intro, Logo 믹싱
-def MusicMixing(projectName, email, MainLang = 'Ko', Intro = "off"):
+## VoiceLayer에 Musics 믹싱
+def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = "off"):
     
     EditGeneration, VoiceLayerPath, MatchedMusics = MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = "off")
     
+    ## EditGeneration에서 Tag 추출하기
+    # TagMusic 선정
+    Intro = None
+    for matchedMusic in MatchedMusics:
+        if matchedMusic['Tag'] != None:
+            if 'Logo' in matchedMusic['Tag']:
+                Logo = matchedMusic
+            elif 'Intro' in matchedMusic['Tag']:
+                Intro = matchedMusic
+            elif 'Title' in matchedMusic['Tag']:
+                TitleMusic = matchedMusic
+            elif 'Part' in matchedMusic['Tag']:
+                PartMusic = matchedMusic
+            elif 'Chapter' in matchedMusic['Tag']:
+                ChapterMusic = matchedMusic
+            elif 'Index' in matchedMusic['Tag']:
+                IndexMusic = matchedMusic
+            elif 'Caption' in matchedMusic['Tag']:
+                CaptionMusic = matchedMusic
+
+    # TagMusic 위치 매칭
+    MusicMixingDatas = []
+    MusicMixingDataDic = None
+    StartTime = 0
+    for i in range(len(EditGeneration)):
+        if i > 0:
+            BeforeTag = EditGeneration[i-1]['Tag']
+            StartTime = EditGeneration[i-1]['ActorChunk'][-1]['EndTime']['Second']
+        
+        EditId = EditGeneration[i]['EditId']
+        Tag = EditGeneration[i]['Tag']
+        EndTime = EditGeneration[i]['ActorChunk'][-1]['EndTime']['Second']
+        
+        if Tag == 'Title':
+            TitleMusicMixingDataDics = [{'EditId': EditId, 'Tag': Tag, 'StartTime': StartTime, 'EndTime': EndTime - 2, 'Music': TitleMusic}]
+            EditGeneration[i]['Logo'] = Logo
+            EditGeneration[i]['Intro'] = Intro
+            EditGeneration[i]['Music'] = TitleMusic
+            if EditGeneration[i+1]['Tag'] == 'Narrator' and EditGeneration[i+2]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']:
+                TitleActorChunks = EditGeneration[i+1]['ActorChunk']
+                StartTime = EndTime
+                AddId = 1
+                for j in range(min(len(TitleActorChunks), 2)):
+                    EndTime = TitleActorChunks[j]['EndTime']['Second']
+                    TitleMusicMixingDataDic = {'EditId': EditId + AddId, 'Tag': Tag, 'StartTime': StartTime, 'EndTime': EndTime, 'Music': TitleMusic}
+                    TitleMusicMixingDataDics.append(TitleMusicMixingDataDic)
+                    AddId += 1
+                    StartTime = EndTime
+                MusicMixingDatas += TitleMusicMixingDataDics
+                TitleMusicMixingDataDics = []
+                continue
+
+        elif Tag == 'Part':
+            MusicMixingDataDic = {'EditId': EditId, 'Tag': Tag, 'StartTime': StartTime, 'EndTime': EndTime, 'Music': PartMusic}
+            EditGeneration[i]['Music'] = PartMusic
+        elif Tag == 'Chapter':
+            MusicMixingDataDic = {'EditId': EditId, 'Tag': Tag, 'StartTime': StartTime, 'EndTime': EndTime, 'Music': ChapterMusic}
+            EditGeneration[i]['Music'] = ChapterMusic
+        elif Tag == 'Chapter':
+            MusicMixingDataDic = {'EditId': EditId, 'Tag': Tag, 'StartTime': StartTime, 'EndTime': EndTime, 'Music': IndexMusic}
+            EditGeneration[i]['Music'] = IndexMusic
+        elif (BeforeTag not in ['Caption', 'CaptionComment']) and (Tag == 'Caption'):
+            MusicMixingDataDic = {'EditId': EditId, 'Tag': Tag, 'StartTime': StartTime, 'EndTime': EndTime, 'Music': CaptionMusic}
+            EditGeneration[i]['Music'] = CaptionMusic
+        
+        if MusicMixingDataDic != None:
+            MusicMixingDatas.append(MusicMixingDataDic)
+        MusicMixingDataDic = None
+        
+    for data in MusicMixingDatas:
+        print(f'{data}\n\n')
+    ## matchedMusic 경로
+    LogoPath = Logo['FilePath']
+    IntroPath = None
+    if Intro != None:
+        IntroPath = Intro['FilePath']
+    TitleMusicPath = TitleMusic['FilePath']
+    PartMusicPath = PartMusic['FilePath']
+    ChapterMusicPath = ChapterMusic['FilePath']
+    IndexMusicPath = IndexMusic['FilePath']
+    CaptionMusicPath = CaptionMusic['FilePath']
+    
+    ## 각 사운드 생성
+    VoiceLayer = AudioSegment.from_wav(VoiceLayerPath)
+    Logo_Sound = AudioSegment.from_wav(LogoPath) + AudioSegment.silent(duration = 2000)
+    Intro_Sound = AudioSegment.empty()
+    if IntroPath != None:
+        Intro_Sound = AudioSegment.from_wav(IntroPath) + AudioSegment.silent(duration = 2000)
+    TitleMusic_Sound = AudioSegment.from_wav(TitleMusicPath)
+    PartMusic_Sound = AudioSegment.from_wav(PartMusicPath)
+    ChapterMusic_Sound = AudioSegment.from_wav(ChapterMusicPath)
+    IndexMusic_Sound = AudioSegment.from_wav(IndexMusicPath)
+    CaptionMusic_Sound = AudioSegment.from_wav(CaptionMusicPath)
+    
+    ## 누적 추가 시간 생성
+    AccumulatedTimesList = []
+    
+    ## Title 믹싱
+    # TitleVoices 및 Setting
+    TitleVoices = []
+    for MusicMixingData in MusicMixingDatas:
+        if MusicMixingData['Tag'] == 'Title':
+            TitleVoices.append(VoiceLayer[MusicMixingData['StartTime'] * 1000:MusicMixingData['EndTime'] * 1000])
+            print(MusicMixingData['Music']['Setting'])
+            Length = MusicMixingData['Music']['Setting']['Length']
+    # Mixing
+    for i in range(len(TitleVoices)):
+        print(TitleVoices[i])
+        print(Length[i])
     # ## SoundMixing
     # # Load LogoSound
     # LogoSound = AudioSegment.from_file(LogoPath, format = "mp3")
@@ -340,12 +449,4 @@ if __name__ == "__main__":
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     #########################################################################
     
-    EditGeneration, VoiceLayerPath, MatchedMusics = MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = mainLang, Intro = intro)
-    
-    print(f'1: {MatchedMusics[0]}\n\n')
-    print(f'2: {MatchedMusics[1]}\n\n')
-    print(f'3: {MatchedMusics[2]}\n\n')
-    print(f'4: {MatchedMusics[3]}\n\n')
-    print(f'5: {MatchedMusics[4]}\n\n')
-    print(f'6: {MatchedMusics[5]}\n\n')
-    print(f'7: {MatchedMusics[6]}\n\n')
+    MusicsMixing(projectName, email, MainLang = mainLang, Intro = intro)

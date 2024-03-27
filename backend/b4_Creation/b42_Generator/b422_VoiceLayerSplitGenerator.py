@@ -825,6 +825,8 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     ## EndTime이 업데이트 된 EditGenerationKoChunks 저장
     with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
         json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+        
+    return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", MessagesReview = "off"):
@@ -1110,7 +1112,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
 
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)
-    VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath)
+    EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath)
     
     return EditGenerationKoChunks
 

@@ -34,15 +34,15 @@ def AddSoundDataSetToDB():
 
         # DB Commit
         if ExistingSoundDataSet:
-                ExistingSoundDataSet.TypeCastVoiceDataSet = typeCastVoiceDataSet
-                ExistingSoundDataSet.LogoDataSet = logoDataSet
-                ExistingSoundDataSet.IntroDataSet = introDataSet
-                ExistingSoundDataSet.TitleMusicDataSet = titleMusicDataSet
-                ExistingSoundDataSet.PartMusicDataSet = partMusicDataSet
-                ExistingSoundDataSet.IndexMusicDataSet = indexMusicDataSet
-                ### 아래로 추가되는 데이터셋 작성 ###
-                
-                print(f"[ General | AddExistingSoundDataSetToDB 변경사항 업데이트 ]")
+            ExistingSoundDataSet.TypeCastVoiceDataSet = typeCastVoiceDataSet
+            ExistingSoundDataSet.LogoDataSet = logoDataSet
+            ExistingSoundDataSet.IntroDataSet = introDataSet
+            ExistingSoundDataSet.TitleMusicDataSet = titleMusicDataSet
+            ExistingSoundDataSet.PartMusicDataSet = partMusicDataSet
+            ExistingSoundDataSet.IndexMusicDataSet = indexMusicDataSet
+            ### 아래로 추가되는 데이터셋 작성 ###
+            
+            print(f"[ General | AddExistingSoundDataSetToDB 변경사항 업데이트 ]")
         else:
             soundDataSet = SoundDataSet(
                 TypeCastVoiceDataSet = typeCastVoiceDataSet,
@@ -51,6 +51,7 @@ def AddSoundDataSetToDB():
                 TitleMusicDataSet = titleMusicDataSet,
                 PartMusicDataSet = partMusicDataSet,
                 IndexMusicDataSet = indexMusicDataSet
+                ### 아래로 추가되는 데이터셋 작성 ###
                 )
             db.add(soundDataSet)
             print(f"[ General | AddSoundDataSetToDB 완료 ]")

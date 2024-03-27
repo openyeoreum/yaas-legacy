@@ -21,7 +21,7 @@ def AccountUpdate(email, name, password):
     ### b212_PromptCommit ###
     AddPromptToDB()
     
-    ### b214_PromptCommit ###
+    ### b214_SoundDataSetCommit ###
     AddSoundDataSetToDB()
 
     ### b221_UserCommit ###

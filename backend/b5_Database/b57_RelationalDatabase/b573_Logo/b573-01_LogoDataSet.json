@@ -8,87 +8,81 @@
     {
         "Logos": [
             {
-                "IntroId": 0,
-                "Name": "None",
+                "LogoId": 0,
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/.mp3",
                 "Logo": {
                     "Language": "Ko",
-                    "Genre": "None",
+                    "Genre": "None"
+                },
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
                     "Direction": "None"
-                    }
                 }
             },
             {
-                "IntroId": 1,
-                "Name": "Logo(문학)",
+                "LogoId": 1,
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/1_Logo_문학(세희).mp3",
                 "Logo": {
                     "Language": "Ko",
-                    "Genre": "문학",
+                    "Genre": "문학"
+                },
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
                     "Direction": "None"
-                    }
                 }
             },
             {
-                "IntroId": 2,
-                "Name": "Logo(비문학)",
+                "LogoId": 2,
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/2_Logo_비문학(유라).mp3",
                 "Logo": {
                     "Language": "Ko",
-                    "Genre": "비문학",
+                    "Genre": "비문학"
+                },
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
                     "Direction": "None"
-                    }
                 }
             },
             {
-                "IntroId": 3,
-                "Name": "Logo(아동)",
+                "LogoId": 3,
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/3_Logo_아동(류은).mp3",
                 "Logo": {
                     "Language": "Ko",
-                    "Genre": "아동",
+                    "Genre": "아동"
+                },
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
                     "Direction": "None"
-                    }
                 }
             },
             {
-                "IntroId": 4,
-                "Name": "Logo(시)",
+                "LogoId": 4,
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/4_Logo_시(연우).mp3",
                 "Logo": {
                     "Language": "Ko",
-                    "Genre": "시",
+                    "Genre": "시"
+                },
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
                     "Direction": "None"
-                    }
                 }
             },
             {
-                "IntroId": 5,
-                "Name": "Logo(학술)",
+                "LogoId": 5,
                 "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/5_Logo_학술(수호).mp3",
                 "Logo": {
                     "Language": "Ko",
-                    "Genre": "학술",
+                    "Genre": "학술"
+                },
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
                     "Direction": "None"
-                    }
                 }
             }
         ]

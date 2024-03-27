@@ -54,8 +54,8 @@ def AddProjectToDB(projectName, email):
         captionSoundPath = os.path.join(soundLayersPath, 'CaptionSound')
         
         musicLayersPath = os.path.join(mixedAudioBookPath, 'MusicLayers')
-        music1FolderPath = os.path.join(musicLayersPath, 'Music1Folder')
-        music2FolderPath = os.path.join(musicLayersPath, 'Music2Folder')
+        music1FolderPath = os.path.join(musicLayersPath, 'Music1')
+        music2FolderPath = os.path.join(musicLayersPath, 'Music2')
         
         masterAudioBookPath = os.path.join(projectPath, f"{projectName}_master_audiobook_file")
         # 디렉토리 생성
@@ -144,8 +144,8 @@ def AddProjectToDB(projectName, email):
             ExistingProject.BackgoundSoundPath = backgoundSoundPath
             ExistingProject.CaptionSoundPath = captionSoundPath
             ExistingProject.MusicLayersPath = musicLayersPath
-            ExistingProject.Music1FolderPath = music1FolderPath
-            ExistingProject.Music2FolderPath = music2FolderPath
+            ExistingProject.Music1Path = music1FolderPath
+            ExistingProject.Music2Path = music2FolderPath
             ExistingProject.MasterAudioBookPath = masterAudioBookPath
             ExistingProject.IndexFrame = indexFrame
             ExistingProject.DuplicationPreprocessFrame = duplicationPreprocessFrame
@@ -202,8 +202,8 @@ def AddProjectToDB(projectName, email):
                 BackgoundSoundPath = backgoundSoundPath,
                 CaptionSoundPath = captionSoundPath,
                 MusicLayersPath = musicLayersPath,
-                Music1FolderPath = music1FolderPath,
-                Music2FolderPath = music2FolderPath,
+                Music1Path = music1FolderPath,
+                Music2Path = music2FolderPath,
                 MasterAudioBookPath = masterAudioBookPath,
                 IndexFrame = indexFrame,
                 DuplicationPreprocessFrame = duplicationPreprocessFrame,

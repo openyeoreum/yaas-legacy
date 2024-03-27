@@ -9,7 +9,6 @@
         "PartMusics": [
             {
                 "PartMusicId": 0,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/0_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],
@@ -59,7 +58,6 @@
             },
             {
                 "PartMusicId": 1,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/1_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],
@@ -109,7 +107,6 @@
             },
             {
                 "PartMusicId": 2,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/2_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],
@@ -159,7 +156,6 @@
             },
             {
                 "PartMusicId": 3,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/3_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],
@@ -209,7 +205,6 @@
             },
             {
                 "PartMusicId": 4,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/4_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],
@@ -259,7 +254,6 @@
             },
             {
                 "PartMusicId": 5,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/5_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],
@@ -309,7 +303,6 @@
             },
             {
                 "PartMusicId": 6,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/6_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],
@@ -359,7 +352,6 @@
             },
             {
                 "PartMusicId": 7,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/7_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],
@@ -409,7 +401,6 @@
             },
             {
                 "PartMusicId": 8,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/8_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],
@@ -459,7 +450,6 @@
             },
             {
                 "PartMusicId": 8,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/9_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],
@@ -509,7 +499,6 @@
             },
             {
                 "PartMusicId": 10,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s162_PartMusic/10_PartMusic.wav",
                 "PartMusic": {
                     "Language": ["gb"],

@@ -9,16 +9,15 @@
         "Intros": [
             {
                 "IntroId": 0,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s15_IntroStorage/.wav",
                 "Intro": {
                     "Language": "Ko",
-                    "Type": "한국출판문화산업진흥원",
+                    "Type": "한국출판문화산업진흥원"
+                },
                 "Setting": {
                     "Length": 0.00,
                     "Volume": 100,
                     "Direction": "None"
-                    }
                 }
             }
         ]

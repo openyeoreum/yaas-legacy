@@ -183,8 +183,8 @@ class Project(Base):
     CaptionSoundPath = Column(Text)
     
     MusicLayersPath = Column(Text)
-    Music1FolderPath = Column(Text)
-    Music2FolderPath = Column(Text)
+    Music1Path = Column(Text)
+    Music2Path = Column(Text)
     
     # MasterAudioBookFile
     MasterAudioBookPath = Column(Text)
@@ -306,8 +306,8 @@ class ProjectHistory(Base):
     CaptionSoundPath = Column(Text)
     
     MusicLayersFolderPath = Column(Text)
-    Music1FolderPath = Column(Text)
-    Music2FolderPath = Column(Text)
+    Music1Path = Column(Text)
+    Music2Path = Column(Text)
     
     # MasterAudioBookFile
     MasterAudioBookPath = Column(Text)

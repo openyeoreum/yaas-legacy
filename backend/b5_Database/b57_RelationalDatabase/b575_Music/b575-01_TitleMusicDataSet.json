@@ -9,7 +9,6 @@
         "TitleMusics": [
             {
                 "TitleMusicId": 0,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/0_TitleMusic.wav",
                 "TitleMusic": {
                     "Language": ["gb"],
@@ -62,7 +61,6 @@
             },
             {
                 "TitleMusicId": 1,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/1_TitleMusic.mp3",
                 "TitleMusic": {
                     "Language": ["gb"],
@@ -115,7 +113,6 @@
             },
             {
                 "TitleMusicId": 2,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/2_TitleMusic.mp3",
                 "TitleMusic": {
                     "Language": ["gb"],
@@ -168,7 +165,6 @@
             },
             {
                 "TitleMusicId": 3,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/3_TitleMusic.mp3",
                 "TitleMusic": {
                     "Language": ["gb"],
@@ -221,7 +217,6 @@
             },
             {
                 "TitleMusicId": 4,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/4_TitleMusic.wav",
                 "TitleMusic": {
                     "Language": ["gb"],
@@ -274,7 +269,6 @@
             },
             {
                 "TitleMusicId": 5,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/5_TitleMusic.mp3",
                 "TitleMusic": {
                     "Language": ["gb"],
@@ -327,7 +321,6 @@
             },
             {
                 "TitleMusicId": 6,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/6_TitleMusic.wav",
                 "TitleMusic": {
                     "Language": ["gb"],
@@ -380,7 +373,6 @@
             },
             {
                 "TitleMusicId": 7,
-                "Name": "None",
                 "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/7_TitleMusic.wav",
                 "TitleMusic": {
                     "Language": ["gb"],

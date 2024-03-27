@@ -94,13 +94,17 @@ def MusicLayerPathGen(projectName, email, FileName):
     BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage'
 
     # 최종 경로 생성
-    LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "MusicLayers", "Music1Folder", FileName)
+    LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "MusicLayers", "Music1", FileName)
     # print(voiceLayerPath)
 
     return LayerPath
 
 ## VoiceLayer에 Logo 선택 후 경로 생성
 def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = "off"):
+    ## VoiceLayerPath 찾기
+    FileName = f'{projectName}_VoiceLayer_Logo.wav'
+    VoiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
+
     ## MatchedMusics 파일 경로 생성
     fileName = '[' + projectName + '_' + 'MatchedMusics.json'
     MatchedMusicLayerPath = MusicLayerPathGen(projectName, email, fileName)
@@ -119,23 +123,21 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
         ## MatchedMusics 생성
         MatchedMusics = []
         
-        ## VoiceLayerPath 찾기
-        FileName = f'{projectName}_VoiceLayer_Logo.wav'
-        VoiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
-        
         ## LogoDataSet에서 LogoPath 찾기
         for Logo in LogoDataSet:
             if (Logo['Logo']['Genre'] == Genre) and (Logo['Logo']['Language'] == MainLang):
-                MatchedMusics.append(Logo)
+                MatchedLogoDic = {'Type': 'Logo', 'FilePath': Logo['FilePath'], 'Setting': Logo['Setting']}
                 break
+        MatchedMusics.append(MatchedLogoDic)
         
         ## IntroDataSet에서 IntroPath 찾기
-        IntroPath = None
+        MatchedLogoDic = {'Id': None, 'Type': None, 'FilePath': None, 'Setting': None}
         if Intro != "off":
             for Intro in IntroDataSet:
                 if (Intro['Intro']['Type'] == Intro) and (Intro['Intro']['Language'] == MainLang):
-                    MatchedMusics.append(Intro)
+                    MatchedIntroDic = {'Type': 'Intro', 'FilePath': Intro['FilePath'], 'Setting': Intro['Setting']}
                     break
+        MatchedMusics.append(MatchedIntroDic)
         
         ## TitleMusicDataSet에서 TitleMusicPath 찾기
         TitleMusicScoreList = []
@@ -174,7 +176,8 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
             TitleMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
         # TitleMusic FilePath 도출
         MatchedTitleMusic = TitleMusicDataSet[TitleMusicScoreList.index(max(TitleMusicScoreList))]
-        MatchedMusics.append(MatchedTitleMusic)
+        MatchedTitleMusicDic = {'Type': 'TitleMusic', 'FilePath': MatchedTitleMusic['FilePath'], 'Setting': MatchedTitleMusic['Setting']}
+        MatchedMusics.append(MatchedTitleMusicDic)
 
         ## PartMusicDataSet에서 PartMusicPath 찾기
         PartMusicScoreList = []
@@ -213,7 +216,8 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
             PartMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
         # PartMusic FilePath 도출
         MatchedPartMusic = PartMusicDataSet[PartMusicScoreList.index(max(PartMusicScoreList))]
-        MatchedMusics.append(MatchedPartMusic)
+        MatchedPartMusicDic = {'Type': 'PartMusic', 'FilePath': MatchedPartMusic['FilePath'], 'Setting': MatchedPartMusic['Setting']}
+        MatchedMusics.append(MatchedPartMusicDic)
         
         ## IndexMusicDataSet에서 IndexMusicPath 찾기
         IndexMusicScoreList = []
@@ -250,18 +254,24 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
                     MergedEmotionScore += (EmotionScore['Score'] * EmotionRatio[EmotionScore['index']])
             # IndexMusic Score 합산
             IndexMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
-        # IndexMusic FilePath 도출
-        MatchedIndexMusic = IndexMusicDataSet[IndexMusicScoreList.index(max(IndexMusicScoreList))]
-        MatchedMusics.append(MatchedIndexMusic)
+        # IndexMusic, CaptionMusic FilePath 도출
+        SortedMatchedIndexScores = sorted(IndexMusicScoreList, reverse = True)
+        # IndexMusic
+        MatchedIndexMusic = IndexMusicDataSet[IndexMusicScoreList.index(SortedMatchedIndexScores[0])]
+        MatchedIndexMusicDic = {'Type': 'IndexMusic', 'FilePath': MatchedIndexMusic['FilePath'], 'Setting': MatchedIndexMusic['Setting']}
+        MatchedMusics.append(MatchedIndexMusicDic)
+        # CaptionMusic
+        MatchedCaptionMusic = IndexMusicDataSet[IndexMusicScoreList.index(SortedMatchedIndexScores[1])]
+        MatchedCaptionMusicDic = {'Type': 'CaptionMusic', 'FilePath': MatchedCaptionMusic['FilePath'], 'Setting': MatchedCaptionMusic['Setting']}
+        MatchedMusics.append(MatchedCaptionMusicDic)
         
         ## MatchedMusics 파일 생성
-        with open(MatchedMusicLayerPath, 'w', encoding = 'utf-8') as MatchedMusicsJson:
-            json.dump(MatchedMusics, MatchedMusicsJson)
+        with open(MatchedMusicLayerPath, 'w', encoding='utf-8') as MatchedMusicsJson:
+            json.dump(MatchedMusics, MatchedMusicsJson, ensure_ascii=False, indent=4)
     else:
         with open(MatchedMusicLayerPath, 'r', encoding = 'utf-8') as MatchedMusicsJson:
             MatchedMusics = json.load(MatchedMusicsJson)
         
-
     return VoiceLayerPath, MatchedMusics
 
 # ################################################
@@ -329,3 +339,4 @@ if __name__ == "__main__":
     print(f'3: {MatchedMusics[2]}\n\n')
     print(f'4: {MatchedMusics[3]}\n\n')
     print(f'5: {MatchedMusics[4]}\n\n')
+    print(f'6: {MatchedMusics[5]}\n\n')

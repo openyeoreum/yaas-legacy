@@ -90,6 +90,9 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
     PersonalityRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Personality']['PersonalityRatio']
     EmotionRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Emotion']['EmotionRatio']
     
+    ## MatchedMusics 생성
+    MatchedMusics = []
+    
     ## VoiceLayerPath 찾기
     FileName = f'{projectName}_VoiceLayer_Logo.wav'
     VoiceLayerPath = VoiceLayerPathGen(projectName, email, FileName)
@@ -97,7 +100,7 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
     ## LogoDataSet에서 LogoPath 찾기
     for Logo in LogoDataSet:
         if (Logo['Logo']['Genre'] == Genre) and (Logo['Logo']['Language'] == MainLang):
-            LogoPath = Logo['FilePath']
+            MatchedMusics.append(Logo)
             break
     
     ## IntroDataSet에서 IntroPath 찾기
@@ -105,7 +108,7 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
     if Intro != "off":
         for Intro in IntroDataSet:
             if (Intro['Intro']['Type'] == Intro) and (Intro['Intro']['Language'] == MainLang):
-                IntroPath = Intro['FilePath']
+                MatchedMusics.append(Intro)
                 break
     
     ## TitleMusicDataSet에서 TitleMusicPath 찾기
@@ -144,7 +147,8 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
         # TitleMusic Score 합산
         TitleMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
     # TitleMusic FilePath 도출
-    TitleMusicPath = TitleMusicDataSet[TitleMusicScoreList.index(max(TitleMusicScoreList))]['FilePath']
+    MatchedTitleMusic = TitleMusicDataSet[TitleMusicScoreList.index(max(TitleMusicScoreList))]
+    MatchedMusics.append(MatchedTitleMusic)
 
     ## PartMusicDataSet에서 PartMusicPath 찾기
     PartMusicScoreList = []
@@ -182,7 +186,8 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
         # PartMusic Score 합산
         PartMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
     # PartMusic FilePath 도출
-    PartMusicPath = PartMusicDataSet[PartMusicScoreList.index(max(PartMusicScoreList))]['FilePath']
+    MatchedPartMusic = PartMusicDataSet[PartMusicScoreList.index(max(PartMusicScoreList))]
+    MatchedMusics.append(MatchedPartMusic)
     
     ## IndexMusicDataSet에서 IndexMusicPath 찾기
     IndexMusicScoreList = []
@@ -220,9 +225,10 @@ def MusicPathGen(projectName, email, MainLang = 'Ko', Intro = "off"):
         # IndexMusic Score 합산
         IndexMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
     # IndexMusic FilePath 도출
-    IndexMusicPath = IndexMusicDataSet[IndexMusicScoreList.index(max(IndexMusicScoreList))]['FilePath']
+    MatchedIndexMusic = IndexMusicDataSet[IndexMusicScoreList.index(max(IndexMusicScoreList))]
+    MatchedMusics.append(MatchedIndexMusic)
 
-    return VoiceLayerPath, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, IndexMusicPath
+    return VoiceLayerPath, MatchedMusics
 
 # ################################################
 # ##### VoiceLayer에 Logo, Intro, Music 합치기 #####
@@ -282,8 +288,10 @@ if __name__ == "__main__":
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     #########################################################################
     
-    VoiceLayerPath, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, IndexMusicPath = MusicPathGen(projectName, email, MainLang = mainLang, Intro = intro)
+    VoiceLayerPath, MatchedMusics = MusicPathGen(projectName, email, MainLang = mainLang, Intro = intro)
     
-    print(TitleMusicPath)
-    print(PartMusicPath)
-    print(IndexMusicPath)
+    print(MatchedMusics[0])
+    print(MatchedMusics[1])
+    print(MatchedMusics[2])
+    print(MatchedMusics[3])
+    print(MatchedMusics[4])

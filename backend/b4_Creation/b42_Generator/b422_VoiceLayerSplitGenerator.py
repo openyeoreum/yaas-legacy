@@ -340,7 +340,7 @@ def ActorChunkSetting(RawChunk):
     return ActorChunk
 
 # 낭독 ActorMatching
-def ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang):
+def ActorMatchedSelectionGenerationChunks(projectName, email, voiceDataSet, MainLang):
     voiceDataSetCharacters, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
     
     # CharacterTags 구하기 (케릭터 태그와 성별 선정)
@@ -828,7 +828,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", MessagesReview = "off"):
-    MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
+    MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, voiceDataSet, MainLang)
     
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
     # MatchedActors 경로 생성

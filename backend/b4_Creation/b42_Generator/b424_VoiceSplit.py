@@ -664,6 +664,27 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         optimal_split_point = find_optimal_split_point(audio, split_time)
         split_points.append(optimal_split_point)
 
+    # 기존 파일 삭제 (수정 후 Chunk 수가 줄어드는 경우가 있기에 삭제 시행)
+    for i in range(100):
+        NFE = 0
+        Remove_ExportPathText = VoiceLayerPath.replace(".wav", "")
+        Remove_ExportPathText = Remove_ExportPathText.replace("M", "")
+        
+        Remove_ExportPath = Remove_ExportPathText + f"_({i})M.wav"
+        try:
+            os.remove(Remove_ExportPath)
+        except FileNotFoundError:
+            NFE += 1
+
+        Remove_ExportPath = Remove_ExportPathText + f"_({i}).wav"
+        try:
+            os.remove(Remove_ExportPath)
+        except FileNotFoundError:
+            NFE += 1
+        
+        if NFE == 2:
+            break
+
     # 파일 분할 및 저장
     segment_durations = []
     start_point = 0

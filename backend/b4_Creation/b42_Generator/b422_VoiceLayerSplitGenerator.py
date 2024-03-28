@@ -698,24 +698,24 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
 
 ## 생성된 음성파일 합치기
 def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath):
-    VoiceLayerFileName = projectName + "_VoiceLayer.wav"
-    normalizeVoiceLayerFileName = unicodedata.normalize('NFC', VoiceLayerFileName)
+    # VoiceLayerFileName = projectName + "_VoiceLayer.wav"
+    # normalizeVoiceLayerFileName = unicodedata.normalize('NFC', VoiceLayerFileName)
     voiceLayerPath = VoiceLayerPathGen(projectName, email, '', 'Mixed')
 
     # 폴더 내의 모든 .wav 파일 목록 추출
     RawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav')]
     # 모든 .wav 파일 목록의 노멀라이즈
     RawFiles = [unicodedata.normalize('NFC', s) for s in RawFiles]
-    # VoiceLayer 파일이 생성되었을 경우 해당 파일명을 RawFiles 리스트에서 삭제
-    if (VoiceLayerFileName in RawFiles) or (normalizeVoiceLayerFileName in RawFiles):
-        try:
-            RawFiles.remove(VoiceLayerFileName)
-        except ValueError:
-            pass
-        try:
-            RawFiles.remove(normalizeVoiceLayerFileName)
-        except ValueError:
-            pass
+    # # VoiceLayer 파일이 생성되었을 경우 해당 파일명을 RawFiles 리스트에서 삭제
+    # if (VoiceLayerFileName in RawFiles) or (normalizeVoiceLayerFileName in RawFiles):
+    #     try:
+    #         RawFiles.remove(VoiceLayerFileName)
+    #     except ValueError:
+    #         pass
+    #     try:
+    #         RawFiles.remove(normalizeVoiceLayerFileName)
+    #     except ValueError:
+    #         pass
     # 성우 변경 파일이 생성되었을 경우 이전 성우 파일명으로 새로운 RawFiles 리스트에서 생성
     Files = []
     VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"

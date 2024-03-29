@@ -670,6 +670,9 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         Remove_ExportPathText = VoiceLayerPath.replace(".wav", "")
         Remove_ExportPathText = Remove_ExportPathText.replace("M", "")
         
+        # '인물(톤)' 부분을 정규식을 사용하여 제거
+        Remove_ExportPathText = re.sub(r'_[^_]+\([^)]+\)_', '_', Remove_ExportPathText)
+        
         Remove_ExportPath = Remove_ExportPathText + f"_({i})M.wav"
         try:
             os.remove(Remove_ExportPath)

@@ -38,18 +38,18 @@ def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
         
 ### Main2 : 콘텐츠 제작 ###
 
-def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Macro, Account, Split, MessagesReview):
+def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro, Account, Split, MessagesReview):
 
     if isinstance(projectNameList, list):
         for projectName in projectNameList:
             projectName = unicodedata.normalize('NFC', projectName)
             
             ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang, macro = Macro, account = Account, split = Split, messagesReview = MessagesReview)
+            CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang, Intro, macro = Macro, account = Account, split = Split, messagesReview = MessagesReview)
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, MainProcess, Macro, Account, Split):
+def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, MainProcess, Macro, Account, Split):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
@@ -58,7 +58,7 @@ def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, Voic
     elif MainProcess == 'Creation':
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, MessagesReview, BookGenre)
-        CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Macro, Account, Split, MessagesReview)
+        CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro, Account, Split, MessagesReview)
 
 if __name__ == "__main__":
 
@@ -71,10 +71,11 @@ if __name__ == "__main__":
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
     VoiceDataSet = "TypeCastVoiceDataSet"
     MainLang = "Ko" # 'Ko', 'En'
+    Intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     MainProcess = "Creation" # 'Solution', 'Creation'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변겅 자동, Manual은 API 캐릭터 변경 수동
     Account = "yeoreum00128@naver.com" # 'lucidsun0128@naver.com', 'ahyeon00128@naver.com'
     Split = "Auto" # 'Auto', 'Manual' : Auto는 긴 음성 생성 후 분할(비용이 작음), Manual은 짧은 음성 분할 생성(비용이 큼)
     #########################################################################
 
-    YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, MainProcess, Macro, Account, Split)
+    YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, MainProcess, Macro, Account, Split)

@@ -919,6 +919,23 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
 
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
+    
+    ## EndTitleMusic 최종 시간 자리 수정
+    for i, EditGenerationKo in enumerate(EditGenerationKoChunks):
+        ActorChunk = EditGenerationKo['ActorChunk']
+        for j, chunk in enumerate(ActorChunk):
+            if chunk['EndTime'] is not None and chunk['EndTime']['Second'] is not None:
+                LastEditChunkId = i
+                LastActorChunkId = j
+                LastEndTime = chunk['EndTime']
+            else:
+                chunk['EndTime'] = {"Time": None, "Second": None}
+            _LastEditChunkId = i
+            _LastActorChunkId = j
+            
+    EditGenerationKoChunks[LastEditChunkId]['ActorChunk'][LastActorChunkId]['EndTime'] = {"Time": None, "Second": None}
+    EditGenerationKoChunks[_LastEditChunkId]['ActorChunk'][_LastActorChunkId]['EndTime'] = LastEndTime
+
     # MatchedChunksEdit 경로 생성
     fileName = '[' + projectName + '_' + 'AudioBook_Edit].json'
     MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName, Folder = 'Master')

@@ -701,125 +701,125 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath):
 def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath):
     # VoiceLayerFileName = projectName + "_VoiceLayer.wav"
     # normalizeVoiceLayerFileName = unicodedata.normalize('NFC', VoiceLayerFileName)
-    # voiceLayerPath = VoiceLayerPathGen(projectName, email, '', 'Mixed')
+    voiceLayerPath = VoiceLayerPathGen(projectName, email, '', 'Mixed')
 
-    # # 폴더 내의 모든 .wav 파일 목록 추출
-    # RawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav')]
-    # # 모든 .wav 파일 목록의 노멀라이즈
-    # RawFiles = [unicodedata.normalize('NFC', s) for s in RawFiles]
-    # # # VoiceLayer 파일이 생성되었을 경우 해당 파일명을 RawFiles 리스트에서 삭제
-    # # if (VoiceLayerFileName in RawFiles) or (normalizeVoiceLayerFileName in RawFiles):
-    # #     try:
-    # #         RawFiles.remove(VoiceLayerFileName)
-    # #     except ValueError:
-    # #         pass
-    # #     try:
-    # #         RawFiles.remove(normalizeVoiceLayerFileName)
-    # #     except ValueError:
-    # #         pass
-    # # 성우 변경 파일이 생성되었을 경우 이전 성우 파일명으로 새로운 RawFiles 리스트에서 생성
-    # Files = []
-    # VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"
-    # for i in range(len(RawFiles)):
-    #     VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
-    #     if VoiceFileMatch == None:
-    #         normalizeRawFile = unicodedata.normalize('NFC', RawFiles[i])
-    #         VoiceFileMatch = re.match(VoiceFilePattern, normalizeRawFile)
+    # 폴더 내의 모든 .wav 파일 목록 추출
+    RawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav')]
+    # 모든 .wav 파일 목록의 노멀라이즈
+    RawFiles = [unicodedata.normalize('NFC', s) for s in RawFiles]
+    # # VoiceLayer 파일이 생성되었을 경우 해당 파일명을 RawFiles 리스트에서 삭제
+    # if (VoiceLayerFileName in RawFiles) or (normalizeVoiceLayerFileName in RawFiles):
+    #     try:
+    #         RawFiles.remove(VoiceLayerFileName)
+    #     except ValueError:
+    #         pass
+    #     try:
+    #         RawFiles.remove(normalizeVoiceLayerFileName)
+    #     except ValueError:
+    #         pass
+    # 성우 변경 파일이 생성되었을 경우 이전 성우 파일명으로 새로운 RawFiles 리스트에서 생성
+    Files = []
+    VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"
+    for i in range(len(RawFiles)):
+        VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
+        if VoiceFileMatch == None:
+            normalizeRawFile = unicodedata.normalize('NFC', RawFiles[i])
+            VoiceFileMatch = re.match(VoiceFilePattern, normalizeRawFile)
         
-    #     if VoiceFileMatch:
-    #         chunkid, actorname, _ = VoiceFileMatch.groups()
-    #     for j in range(len(EditGenerationKoChunks)):
-    #         if float(chunkid) == EditGenerationKoChunks[j]['EditId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
-    #             Files.append(RawFiles[i])
-    #             break
+        if VoiceFileMatch:
+            chunkid, actorname, _ = VoiceFileMatch.groups()
+        for j in range(len(EditGenerationKoChunks)):
+            if float(chunkid) == EditGenerationKoChunks[j]['EditId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
+                Files.append(RawFiles[i])
+                break
 
-    # # 시간, 분, 초로 변환
-    # def SecondsToHMS(seconds):
-    #     hours = seconds // 3600
-    #     minutes = (seconds % 3600) // 60
-    #     seconds = seconds % 60
+    # 시간, 분, 초로 변환
+    def SecondsToHMS(seconds):
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = seconds % 60
         
-    #     return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+        return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
 
-    # # 폴더 내의 모든 .wav 파일 목록 정렬/필터
-    # FilteredFiles = SortAndRemoveDuplicates(EditGenerationKoChunks, Files, voiceLayerPath)
-    # FilesCount = 0
-    # file_limit = 100  # 파일 분할 기준
-    # current_file_index = 1
-    # CombinedSound = AudioSegment.empty()
+    # 폴더 내의 모든 .wav 파일 목록 정렬/필터
+    FilteredFiles = SortAndRemoveDuplicates(EditGenerationKoChunks, Files, voiceLayerPath)
+    FilesCount = 0
+    file_limit = 100  # 파일 분할 기준
+    current_file_index = 1
+    CombinedSound = AudioSegment.empty()
 
-    # UpdateTQDM = tqdm(EditGenerationKoChunks,
-    #                 total=len(EditGenerationKoChunks),
-    #                 desc='VoiceGenerator')
+    UpdateTQDM = tqdm(EditGenerationKoChunks,
+                    total=len(EditGenerationKoChunks),
+                    desc='VoiceGenerator')
 
-    # # 전체 오디오 클립의 누적 길이를 추적하는 변수 추가
-    # total_duration_seconds = 0
-    # for Update in UpdateTQDM:
-    #     Update['EndTime'] = []
-    #     for j in range(len(Update['Pause'])):
-    #         sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
-    #         PauseDuration_ms = Update['Pause'][j] * 1000
-    #         silence = AudioSegment.silent(duration = PauseDuration_ms)
-    #         CombinedSound += sound_file + silence
-    #         FilesCount += 1
+    # 전체 오디오 클립의 누적 길이를 추적하는 변수 추가
+    total_duration_seconds = 0
+    for Update in UpdateTQDM:
+        Update['EndTime'] = []
+        for j in range(len(Update['Pause'])):
+            sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
+            PauseDuration_ms = Update['Pause'][j] * 1000
+            silence = AudioSegment.silent(duration = PauseDuration_ms)
+            CombinedSound += sound_file + silence
+            FilesCount += 1
 
-    #         # 누적된 CombinedSound의 길이를 전체 길이 추적 변수에 추가
-    #         total_duration_seconds += sound_file.duration_seconds + PauseDuration_ms / 1000.0
-    #         # EndTime에는 누적된 전체 길이를 저장
-    #         Update['EndTime'].append(total_duration_seconds)
+            # 누적된 CombinedSound의 길이를 전체 길이 추적 변수에 추가
+            total_duration_seconds += sound_file.duration_seconds + PauseDuration_ms / 1000.0
+            # EndTime에는 누적된 전체 길이를 저장
+            Update['EndTime'].append(total_duration_seconds)
 
-    #         # 파일 단위로 저장 및 CombinedSound 초기화
-    #         if FilesCount % file_limit == 0 or FilesCount == len(FilteredFiles):
-    #             MinNumber = current_file_index*file_limit-file_limit+1
-    #             MaxNumber = min(current_file_index*file_limit, len(FilteredFiles))
-    #             file_name = f"{projectName}_VoiceLayer_{MinNumber}-{MaxNumber}.wav"
-    #             CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
-    #             CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
-    #             current_file_index += 1
+            # 파일 단위로 저장 및 CombinedSound 초기화
+            if FilesCount % file_limit == 0 or FilesCount == len(FilteredFiles):
+                MinNumber = current_file_index*file_limit-file_limit+1
+                MaxNumber = min(current_file_index*file_limit, len(FilteredFiles))
+                file_name = f"{projectName}_VoiceLayer_{MinNumber}-{MaxNumber}.wav"
+                CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
+                CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
+                current_file_index += 1
 
-    # # for 루프 종료 후 남은 CombinedSound 처리 (특수경우)
-    # if not CombinedSound.empty():
-    #     minNumber = current_file_index*file_limit-file_limit+1
-    #     _maxNumber = FilesCount
-    #     maxNumber = FilesCount + 1
+    # for 루프 종료 후 남은 CombinedSound 처리 (특수경우)
+    if (not CombinedSound.empty()) and (int(CombinedSound.duration_seconds) >= 1):
+        minNumber = current_file_index*file_limit-file_limit+1
+        _maxNumber = FilesCount
+        maxNumber = FilesCount + 1
         
-    #     if minNumber < maxNumber and len(FilteredFiles) == maxNumber:
-    #         file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
-    #         current_file_index += 1
-    #     elif minNumber < _maxNumber and len(FilteredFiles) == _maxNumber:
-    #         file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
-    #         current_file_index += 1
+        if minNumber < maxNumber and len(FilteredFiles) == maxNumber:
+            file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
+            current_file_index += 1
+        elif minNumber < _maxNumber and len(FilteredFiles) == _maxNumber:
+            file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
+            current_file_index += 1
             
-    #     CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
+        CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
 
-    # # 최종 파일 합치기
-    # final_combined = AudioSegment.empty()
-    # for i in range(1, current_file_index):
-    #     part_name = f"{projectName}_VoiceLayer_{i*file_limit-file_limit+1}-{min(i*file_limit, len(FilteredFiles))}.wav"
-    #     part_path = os.path.join(voiceLayerPath, part_name)
-    #     part = AudioSegment.from_wav(part_path)
-    #     final_combined += part
-    #     # 파일 묶음 삭제
-    #     os.remove(part_path)
+    # 최종 파일 합치기
+    final_combined = AudioSegment.empty()
+    for i in range(1, current_file_index):
+        part_name = f"{projectName}_VoiceLayer_{i*file_limit-file_limit+1}-{min(i*file_limit, len(FilteredFiles))}.wav"
+        part_path = os.path.join(voiceLayerPath, part_name)
+        part = AudioSegment.from_wav(part_path)
+        final_combined += part
+        # 파일 묶음 삭제
+        os.remove(part_path)
 
-    # # wav파일과 Edit의 시간 오차율 교정
-    # final_combined_seconds = final_combined.duration_seconds
-    # seconds_error_rate = final_combined_seconds/total_duration_seconds
-    # for Chunks in EditGenerationKoChunks:
-    #     EndTime = Chunks['EndTime']
-    #     for i in range(len(EndTime)):
-    #         RawSecond = copy.deepcopy(EndTime[i])
-    #         Second = RawSecond * seconds_error_rate
-    #         Time = SecondsToHMS(Second)
-    #         EndTime[i] = {"Time": Time, "Second": Second}
+    # wav파일과 Edit의 시간 오차율 교정
+    final_combined_seconds = final_combined.duration_seconds
+    seconds_error_rate = final_combined_seconds/total_duration_seconds
+    for Chunks in EditGenerationKoChunks:
+        EndTime = Chunks['EndTime']
+        for i in range(len(EndTime)):
+            RawSecond = copy.deepcopy(EndTime[i])
+            Second = RawSecond * seconds_error_rate
+            Time = SecondsToHMS(Second)
+            EndTime[i] = {"Time": Time, "Second": Second}
     
-    # # 마지막 5초 공백 추가
-    # final_combined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
+    # 마지막 5초 공백 추가
+    final_combined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
 
-    # # 최종적으로 합쳐진 음성 파일 저장
-    # voiceLayerPath = VoiceLayerPathGen(projectName, email, projectName + '_AudioBook.wav', 'Master')
-    # final_combined.export(os.path.join(voiceLayerPath), format = "wav")
-    # final_combined = AudioSegment.empty()
+    # 최종적으로 합쳐진 음성 파일 저장
+    voiceLayerPath = VoiceLayerPathGen(projectName, email, projectName + '_VoiceBook.wav', 'Master')
+    final_combined.export(os.path.join(voiceLayerPath), format = "wav")
+    final_combined = AudioSegment.empty()
     
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)

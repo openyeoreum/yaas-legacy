@@ -362,7 +362,7 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
         elif Tag == 'Chapter':
             MusicMixingDataDic = {'EditId': EditId, 'ActorChunkId': 0, 'Tag': Tag, 'Pause': Pause, 'StartTime': StartTime, 'EndTime': EndTime, 'VoiceFileName': VoiceFileName, 'Music': ChapterMusic}
             EditGeneration[i]['Music'] = ChapterMusic['FilePath'].split('/')[-1]
-        elif Tag == 'Chapter':
+        elif Tag == 'Index':
             MusicMixingDataDic = {'EditId': EditId, 'ActorChunkId': 0, 'Tag': Tag, 'Pause': Pause, 'StartTime': StartTime, 'EndTime': EndTime, 'VoiceFileName': VoiceFileName, 'Music': IndexMusic}
             EditGeneration[i]['Music'] = IndexMusic['FilePath'].split('/')[-1]
         elif (BeforeTag not in ['Caption', 'CaptionComment']) and (Tag == 'Caption'):

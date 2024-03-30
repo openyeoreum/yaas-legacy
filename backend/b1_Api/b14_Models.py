@@ -542,8 +542,6 @@ class SoundDataSet(Base):
     
     # MusicDataSet
     TitleMusicDataSet = Column(JSON)
-    PartMusicDataSet = Column(JSON)
-    IndexMusicDataSet = Column(JSON)
 
 ##### 아래 삭제예정 #####
 
@@ -574,7 +572,6 @@ class Music(Base):
     
     # MusicClassificationTag
     LoopMusic = Column(String(16))
-    TitleMusic = Column(String(16))
     TitleMusic = Column(String(16))
     PartMusic = Column(String(16))
     ChapterMusic = Column(String(16))

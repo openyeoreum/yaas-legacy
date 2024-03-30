@@ -2,6 +2,7 @@ import os
 import unicodedata
 import sys
 import re
+import random
 import copy
 import json
 sys.path.append("/yaas")
@@ -48,15 +49,7 @@ def LoadMusicDataSet(projectName, email, MainLang = 'Ko'):
     soundDataSet = GetSoundDataSet("TitleMusicDataSet")
     TitleMusicDataSet = soundDataSet[0][1]['TitleMusics'][1:]
     
-    ## PartMusicDataSet 불러오기
-    soundDataSet = GetSoundDataSet("PartMusicDataSet")
-    PartMusicDataSet = soundDataSet[0][1]['PartMusics'][1:]
-    
-    ## IndexMusicDataSet 불러오기
-    soundDataSet = GetSoundDataSet("IndexMusicDataSet")
-    IndexMusicDataSet = soundDataSet[0][1]['IndexMusics'][1:]
-    
-    return SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, PartMusicDataSet, IndexMusicDataSet
+    return SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet
 
 ############################
 ##### MusicMatched 생성 #####
@@ -114,7 +107,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
     MatchedMusicLayerPath = MusicLayerPathGen(projectName, email, fileName)
     
     ## MusicDataSet 불러오기
-    SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, PartMusicDataSet, IndexMusicDataSet = LoadMusicDataSet(projectName, email, MainLang = MainLang)
+    SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet = LoadMusicDataSet(projectName, email, MainLang = MainLang)
     
     if not os.path.exists(MatchedMusicLayerPath):
         
@@ -180,101 +173,29 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
                     MergedEmotionScore += (EmotionScore['Score'] * EmotionRatio[EmotionScore['index']])
             # TitleMusic Score 합산
             TitleMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
+            
         # TitleMusic FilePath 도출
         MatchedTitleMusic = TitleMusicDataSet[TitleMusicScoreList.index(max(TitleMusicScoreList))]
-        MatchedTitleMusicDic = {'Tag': 'Title', 'FilePath': MatchedTitleMusic['FilePath'], 'Setting': MatchedTitleMusic['Setting']}
+        
+        # TitleMusic 선택
+        RandomTitleMusicDic = random.choice(MatchedTitleMusic['MusicSet']['TitleMusic'])
+        MatchedTitleMusicDic = {'Tag': 'Title', 'FilePath': RandomTitleMusicDic['FilePath'], 'Setting': RandomTitleMusicDic['Setting']}
         MatchedMusics.append(MatchedTitleMusicDic)
-
-        ## PartMusicDataSet에서 PartMusicPath 찾기
-        PartMusicScoreList = []
-        for PartMusic in PartMusicDataSet:
-            # GenreScore 계산
-            GenreScores = PartMusic['PartMusic']['Genre']
-            MergedGenreScore = 0
-            for GenreScore in GenreScores:
-                if GenreScore['index'] in GenreRatio:
-                    MergedGenreScore += (GenreScore['Score'] * GenreRatio[GenreScore['index']])
-            # GenderScore 계산
-            GenderScores = PartMusic['PartMusic']['Gender']
-            MergedGenderScore = 0
-            for GenderScore in GenderScores:
-                if GenderScore['index'] in GenderRatio:
-                    MergedGenderScore += (GenderScore['Score'] * GenderRatio[GenderScore['index']])
-            # AgeScore 계산
-            AgeScores = PartMusic['PartMusic']['Age']
-            MergedAgeScore = 0
-            for AgeScore in AgeScores:
-                if AgeScore['index'] in AgeRatio:
-                    MergedAgeScore += (AgeScore['Score'] * AgeRatio[AgeScore['index']])
-            # PersonalityScore 계산
-            PersonalityScores = PartMusic['PartMusic']['Personality']
-            MergedPersonalityScore = 0
-            for PersonalityScore in PersonalityScores:
-                if PersonalityScore['index'] in PersonalityRatio:
-                    MergedPersonalityScore += (PersonalityScore['Score'] * PersonalityRatio[PersonalityScore['index']])
-            # EmotionScore 계산
-            EmotionScores = PartMusic['PartMusic']['Emotion']
-            MergedEmotionScore = 0
-            for EmotionScore in EmotionScores:
-                if EmotionScore['index'] in EmotionRatio:
-                    MergedEmotionScore += (EmotionScore['Score'] * EmotionRatio[EmotionScore['index']])
-            # PartMusic Score 합산
-            PartMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))       
-        # PartMusic, ChapterMusic FilePath 도출
-        SortedMatchedPartScores = sorted(PartMusicScoreList, reverse = True)
-        # PartMusic
-        MatchedPartMusic = PartMusicDataSet[PartMusicScoreList.index(SortedMatchedPartScores[0])]
-        MatchedPartMusicDic = {'Tag': 'Part', 'FilePath': MatchedPartMusic['FilePath'], 'Setting': MatchedPartMusic['Setting']}
+        
+        # PartMusic, ChapterMusic 선택
+        RandomPartMusicDic = random.sample(MatchedTitleMusic['MusicSet']['PartMusic'], 2)
+        MatchedPartMusicDic = {'Tag': 'Part', 'FilePath': RandomPartMusicDic[0]['FilePath'], 'Setting': RandomPartMusicDic[0]['Setting']}
         MatchedMusics.append(MatchedPartMusicDic)
-        # ChapterMusic
-        MatchedChapterMusic = PartMusicDataSet[PartMusicScoreList.index(SortedMatchedPartScores[1])]
-        MatchedChapterMusicDic = {'Tag': 'Chapter', 'FilePath': MatchedChapterMusic['FilePath'], 'Setting': MatchedChapterMusic['Setting']}
+        
+        MatchedChapterMusicDic = {'Tag': 'Chapter', 'FilePath': RandomPartMusicDic[1]['FilePath'], 'Setting': RandomPartMusicDic[1]['Setting']}
         MatchedMusics.append(MatchedChapterMusicDic)
         
-        ## IndexMusicDataSet에서 IndexMusicPath 찾기
-        IndexMusicScoreList = []
-        for IndexMusic in IndexMusicDataSet:
-            # GenreScore 계산
-            GenreScores = IndexMusic['IndexMusic']['Genre']
-            MergedGenreScore = 0
-            for GenreScore in GenreScores:
-                if GenreScore['index'] in GenreRatio:
-                    MergedGenreScore += (GenreScore['Score'] * GenreRatio[GenreScore['index']])
-            # GenderScore 계산
-            GenderScores = IndexMusic['IndexMusic']['Gender']
-            MergedGenderScore = 0
-            for GenderScore in GenderScores:
-                if GenderScore['index'] in GenderRatio:
-                    MergedGenderScore += (GenderScore['Score'] * GenderRatio[GenderScore['index']])
-            # AgeScore 계산
-            AgeScores = IndexMusic['IndexMusic']['Age']
-            MergedAgeScore = 0
-            for AgeScore in AgeScores:
-                if AgeScore['index'] in AgeRatio:
-                    MergedAgeScore += (AgeScore['Score'] * AgeRatio[AgeScore['index']])
-            # PersonalityScore 계산
-            PersonalityScores = IndexMusic['IndexMusic']['Personality']
-            MergedPersonalityScore = 0
-            for PersonalityScore in PersonalityScores:
-                if PersonalityScore['index'] in PersonalityRatio:
-                    MergedPersonalityScore += (PersonalityScore['Score'] * PersonalityRatio[PersonalityScore['index']])
-            # EmotionScore 계산
-            EmotionScores = IndexMusic['IndexMusic']['Emotion']
-            MergedEmotionScore = 0
-            for EmotionScore in EmotionScores:
-                if EmotionScore['index'] in EmotionRatio:
-                    MergedEmotionScore += (EmotionScore['Score'] * EmotionRatio[EmotionScore['index']])
-            # IndexMusic Score 합산
-            IndexMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
-        # IndexMusic, CaptionMusic FilePath 도출
-        SortedMatchedIndexScores = sorted(IndexMusicScoreList, reverse = True)
-        # IndexMusic
-        MatchedIndexMusic = IndexMusicDataSet[IndexMusicScoreList.index(SortedMatchedIndexScores[0])]
-        MatchedIndexMusicDic = {'Tag': 'Index', 'FilePath': MatchedIndexMusic['FilePath'], 'Setting': MatchedIndexMusic['Setting']}
+        # IndexMusic, CaptionMusic 선택
+        RandomIndexMusicDic = random.sample(MatchedTitleMusic['MusicSet']['IndexMusic'], 2)
+        MatchedIndexMusicDic = {'Tag': 'Index', 'FilePath': RandomIndexMusicDic[0]['FilePath'], 'Setting': RandomIndexMusicDic[0]['Setting']}
         MatchedMusics.append(MatchedIndexMusicDic)
-        # CaptionMusic
-        MatchedCaptionMusic = IndexMusicDataSet[IndexMusicScoreList.index(SortedMatchedIndexScores[1])]
-        MatchedCaptionMusicDic = {'Tag': 'Caption', 'FilePath': MatchedCaptionMusic['FilePath'], 'Setting': MatchedCaptionMusic['Setting']}
+        
+        MatchedCaptionMusicDic = {'Tag': 'Caption', 'FilePath': RandomIndexMusicDic[1]['FilePath'], 'Setting': RandomIndexMusicDic[1]['Setting']}
         MatchedMusics.append(MatchedCaptionMusicDic)
         
         ## MatchedMusics 파일 생성

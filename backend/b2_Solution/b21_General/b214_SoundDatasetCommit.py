@@ -26,8 +26,6 @@ def AddSoundDataSetToDB():
         logoDataSet = LoadJsonFrame(RelationalDataPath + "/b573_Logo/b573-01_LogoDataSet.json")
         introDataSet = LoadJsonFrame(RelationalDataPath + "/b574_Intro/b574-01_IntroDataSet.json")
         titleMusicDataSet = LoadJsonFrame(RelationalDataPath + "/b575_Music/b575-01_TitleMusicDataSet.json")
-        partMusicDataSet = LoadJsonFrame(RelationalDataPath + "/b575_Music/b575-02_PartMusicDataSet.json")
-        indexMusicDataSet = LoadJsonFrame(RelationalDataPath + "/b575_Music/b575-03_IndexMusicDataSet.json")
         ### 아래로 추가되는 데이터셋 작성 ###
 
         ExistingSoundDataSet = db.query(SoundDataSet).first()
@@ -38,8 +36,6 @@ def AddSoundDataSetToDB():
             ExistingSoundDataSet.LogoDataSet = logoDataSet
             ExistingSoundDataSet.IntroDataSet = introDataSet
             ExistingSoundDataSet.TitleMusicDataSet = titleMusicDataSet
-            ExistingSoundDataSet.PartMusicDataSet = partMusicDataSet
-            ExistingSoundDataSet.IndexMusicDataSet = indexMusicDataSet
             ### 아래로 추가되는 데이터셋 작성 ###
             
             print(f"[ General | AddExistingSoundDataSetToDB 변경사항 업데이트 ]")
@@ -48,9 +44,7 @@ def AddSoundDataSetToDB():
                 TypeCastVoiceDataSet = typeCastVoiceDataSet,
                 LogoDataSet = logoDataSet,
                 IntroDataSet = introDataSet,
-                TitleMusicDataSet = titleMusicDataSet,
-                PartMusicDataSet = partMusicDataSet,
-                IndexMusicDataSet = indexMusicDataSet
+                TitleMusicDataSet = titleMusicDataSet
                 ### 아래로 추가되는 데이터셋 작성 ###
                 )
             db.add(soundDataSet)

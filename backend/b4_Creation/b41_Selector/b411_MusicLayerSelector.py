@@ -182,20 +182,23 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
         MatchedTitleMusicDic = {'Tag': 'Title', 'FilePath': RandomTitleMusicDic['FilePath'], 'Setting': RandomTitleMusicDic['Setting']}
         MatchedMusics.append(MatchedTitleMusicDic)
         
-        # PartMusic, ChapterMusic 선택
-        RandomPartMusicDic = random.sample(MatchedTitleMusic['MusicSet']['PartMusic'], 2)
-        MatchedPartMusicDic = {'Tag': 'Part', 'FilePath': RandomPartMusicDic[0]['FilePath'], 'Setting': RandomPartMusicDic[0]['Setting']}
-        MatchedMusics.append(MatchedPartMusicDic)
+        # MainPartChapterMusic 선택
+        RandomMainPartChapterMusicDic = random.sample(MatchedTitleMusic['MusicSet']['PartMusic'], 2)
+        MatchedMainPartChapterMusicDic = {'Tag': 'MainChapterPart', 'FilePath': RandomMainPartChapterMusicDic[0]['FilePath'], 'Setting': RandomMainPartChapterMusicDic[0]['Setting']}
+        MatchedMusics.append(MatchedMainPartChapterMusicDic)
         
-        MatchedChapterMusicDic = {'Tag': 'Chapter', 'FilePath': RandomPartMusicDic[1]['FilePath'], 'Setting': RandomPartMusicDic[1]['Setting']}
-        MatchedMusics.append(MatchedChapterMusicDic)
+        # SubPartChapterMusic, IndexMusic, CaptionMusic 선택
+        RandomIndexMusicDic = random.sample(MatchedTitleMusic['MusicSet']['IndexMusic'], 3)
+        # 초가 가장 높은 값을 1순위로 정렬
+        SortedIndexMusicDic = sorted(RandomIndexMusicDic, key = lambda x : x["Setting"]["Length"][-1], reverse = True)
         
-        # IndexMusic, CaptionMusic 선택
-        RandomIndexMusicDic = random.sample(MatchedTitleMusic['MusicSet']['IndexMusic'], 2)
-        MatchedIndexMusicDic = {'Tag': 'Index', 'FilePath': RandomIndexMusicDic[0]['FilePath'], 'Setting': RandomIndexMusicDic[0]['Setting']}
+        MatchedSubPartChapterMusicDic = {'Tag': 'SubChapterPart', 'FilePath': SortedIndexMusicDic[0]['FilePath'], 'Setting': SortedIndexMusicDic[0]['Setting']}
+        MatchedMusics.append(MatchedSubPartChapterMusicDic)
+        
+        MatchedIndexMusicDic = {'Tag': 'Index', 'FilePath': SortedIndexMusicDic[1]['FilePath'], 'Setting': SortedIndexMusicDic[1]['Setting']}
         MatchedMusics.append(MatchedIndexMusicDic)
         
-        MatchedCaptionMusicDic = {'Tag': 'Caption', 'FilePath': RandomIndexMusicDic[1]['FilePath'], 'Setting': RandomIndexMusicDic[1]['Setting']}
+        MatchedCaptionMusicDic = {'Tag': 'Caption', 'FilePath': SortedIndexMusicDic[2]['FilePath'], 'Setting': SortedIndexMusicDic[2]['Setting']}
         MatchedMusics.append(MatchedCaptionMusicDic)
         
         ## MatchedMusics 파일 생성
@@ -215,6 +218,19 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
     
     EditGeneration, MatchedMusics = MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = 'off')
     
+    ## EditGeneration 내에 Part, Chapter 유무 확인
+    PartSwitch = False
+    ChapterSwitch = False
+    for Edit in EditGeneration:
+        if Edit['Tag'] == 'Part':
+            PartSwitch = True
+        elif Edit['Tag'] == 'Chapter':
+            ChapterSwitch = True
+            
+    PartChapterSwitch = False
+    if PartSwitch and ChapterSwitch:
+        PartChapterSwitch = True
+    
     ## EditGeneration에서 Tag 추출하기
     # TagMusic 선정
     Intro = None
@@ -222,17 +238,24 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
         if matchedMusic['Tag'] != None:
             if 'Logo' in matchedMusic['Tag']:
                 Logo = matchedMusic
-            elif 'Intro' in matchedMusic['Tag']:
+            if 'Intro' in matchedMusic['Tag']:
                 Intro = matchedMusic
-            elif 'Title' in matchedMusic['Tag']:
+            if 'Title' in matchedMusic['Tag']:
                 TitleMusic = matchedMusic
-            elif 'Part' in matchedMusic['Tag']:
-                PartMusic = matchedMusic
-            elif 'Chapter' in matchedMusic['Tag']:
-                ChapterMusic = matchedMusic
-            elif 'Index' in matchedMusic['Tag']:
+            if PartChapterSwitch:
+                if 'MainChapterPart' in matchedMusic['Tag']:
+                    PartMusic = matchedMusic
+                if 'SubChapterPart' in matchedMusic['Tag']:
+                    ChapterMusic = matchedMusic
+            else:
+                if 'MainChapterPart' in matchedMusic['Tag']:
+                    if PartSwitch:
+                        PartMusic = matchedMusic
+                    if ChapterSwitch:
+                        ChapterMusic = matchedMusic
+            if 'Index' in matchedMusic['Tag']:
                 IndexMusic = matchedMusic
-            elif 'Caption' in matchedMusic['Tag']:
+            if 'Caption' in matchedMusic['Tag']:
                 CaptionMusic = matchedMusic
 
     # TagMusic 위치 매칭
@@ -789,7 +812,11 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                             # 누적된 CombinedSound의 길이를 전체 길이 추적 변수에 추가
                             total_duration_seconds += sound_file.duration_seconds + PauseDuration_ms / 1000.0
                             # EndTime에는 누적된 전체 길이를 저장
-                            Update['EndTime'].append({"Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
+                            #######################################
+                            #######################################
+                            Update['EndTime'].append({"PauseId": j, "Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
+                            #######################################
+                            #######################################
 
                             # 파일 단위로 저장 및 CombinedSound 초기화
                             if FilesCount % file_limit == 0 or FilesCount == len(FilteredFiles):

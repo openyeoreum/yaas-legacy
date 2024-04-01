@@ -190,7 +190,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
         # SubPartChapterMusic, IndexMusic, CaptionMusic 선택
         RandomIndexMusicDic = random.sample(MatchedTitleMusic['MusicSet']['IndexMusic'], 3)
         # 초가 가장 높은 값을 1순위로 정렬
-        SortedIndexMusicDic = sorted(RandomIndexMusicDic, key = lambda x : x["Setting"]["Length"][-1], reverse = True)
+        SortedIndexMusicDic = sorted(RandomIndexMusicDic, key = lambda x: x["Setting"]["Length"][-1] * 0.3 + x["Setting"]["Length"][0], reverse=True)
         
         MatchedSubPartChapterMusicDic = {'Tag': 'SubChapterPart', 'FilePath': SortedIndexMusicDic[0]['FilePath'], 'Setting': SortedIndexMusicDic[0]['Setting']}
         MatchedMusics.append(MatchedSubPartChapterMusicDic)

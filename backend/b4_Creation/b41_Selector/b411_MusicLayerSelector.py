@@ -8,6 +8,7 @@ import json
 sys.path.append("/yaas")
 
 from tqdm import tqdm
+from math import log10
 from pydub import AudioSegment
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User
@@ -232,6 +233,12 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
         PartChapterSwitch = True
     
     ## EditGeneration에서 Tag 추출하기
+    # SubChapterPart 우선 선정
+    for matchedMusic in MatchedMusics:
+        if matchedMusic['Tag'] != None:
+            if 'SubChapterPart' in matchedMusic['Tag']:
+                matchedSubChapterPart = matchedMusic
+    
     # TagMusic 선정
     Intro = None
     for matchedMusic in MatchedMusics:
@@ -242,17 +249,20 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
                 Intro = matchedMusic
             if 'Title' in matchedMusic['Tag']:
                 TitleMusic = matchedMusic
+                
             if PartChapterSwitch:
                 if 'MainChapterPart' in matchedMusic['Tag']:
                     PartMusic = matchedMusic
-                if 'SubChapterPart' in matchedMusic['Tag']:
-                    ChapterMusic = matchedMusic
+                    ChapterMusic = matchedSubChapterPart
             else:
                 if 'MainChapterPart' in matchedMusic['Tag']:
                     if PartSwitch:
                         PartMusic = matchedMusic
+                        ChapterMusic = matchedSubChapterPart
                     if ChapterSwitch:
                         ChapterMusic = matchedMusic
+                        PartMusic = matchedSubChapterPart
+                        
             if 'Index' in matchedMusic['Tag']:
                 IndexMusic = matchedMusic
             if 'Caption' in matchedMusic['Tag']:
@@ -356,20 +366,32 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
     
     return EditGeneration, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath
 
+## Musics 파일 볼륨 값 일치시키기
+def MusicsVolume(MusicPath, Volume):
+    # 오디오 파일 로드
+    audio = AudioSegment.from_file(MusicPath)
+    # 현재 평균 볼륨 차이 계산
+    ChangeIndBFS = Volume - audio.dBFS
+    # 볼륨 조정
+    NormalizedAudio = audio.apply_gain(ChangeIndBFS)
+    
+    return NormalizedAudio
+
 ## Musics 믹싱
 def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
     
     EditGeneration, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro)
     ## 각 사운드 생성
+    Volume = -16.0 # 볼륨은 최대 값을 0으로 산정하기에 -값이 클수록 볼륨이 큰 것임
     Logo_Audio = AudioSegment.from_wav(LogoPath) + AudioSegment.silent(duration = 3000)
     Intro_Audio = AudioSegment.empty()
     if IntroPath != None:
         Intro_Audio = AudioSegment.from_wav(IntroPath) + AudioSegment.silent(duration = 3500)
-    TitleMusic_Audio = AudioSegment.from_wav(TitleMusicPath)
-    PartMusic_Audio = AudioSegment.from_wav(PartMusicPath)
-    ChapterMusic_Audio = AudioSegment.from_wav(ChapterMusicPath)
-    IndexMusic_Audio = AudioSegment.from_wav(IndexMusicPath)
-    CaptionMusic_Audio = AudioSegment.from_wav(CaptionMusicPath)
+    TitleMusic_Audio = MusicsVolume(TitleMusicPath, Volume)
+    PartMusic_Audio = MusicsVolume(PartMusicPath, Volume)
+    ChapterMusic_Audio = MusicsVolume(ChapterMusicPath, Volume)
+    IndexMusic_Audio = MusicsVolume(IndexMusicPath, Volume)
+    CaptionMusic_Audio = MusicsVolume(CaptionMusicPath, Volume)
     
     ### 초기화: Mixed Audio누적 추가 시간 생성 ###
     MixedMusicAudio = Logo_Audio + Intro_Audio

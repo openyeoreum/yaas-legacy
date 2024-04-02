@@ -382,7 +382,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
     
     EditGeneration, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro)
     ## 각 사운드 생성
-    Volume = -16.0 # 볼륨은 최대 값을 0으로 산정하기에 -값이 클수록 볼륨이 큰 것임
+    Volume = -15.0 # 볼륨은 최대 값을 0으로 산정하기에 -값이 클수록 볼륨이 큰 것임
     Logo_Audio = AudioSegment.from_wav(LogoPath) + AudioSegment.silent(duration = 3000)
     Intro_Audio = AudioSegment.empty()
     if IntroPath != None:
@@ -814,12 +814,19 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     total_duration_seconds = 0
     for Update in UpdateTQDM:
         ActorChunk = Update['ActorChunk']
-        for num in range(len(ActorChunk)):
+        for _chunknum in range(len(ActorChunk)):
             if len(FilteredFiles) > FilesCount:
-                ProcessFileName = f"{projectName}_{Update['EditId']}_{Update['ActorName']}_({num})"
+                ProcessFileName = f"{projectName}_{Update['EditId']}_{Update['ActorName']}_({_chunknum})"
                 if ProcessFileName in FilteredFiles[FilesCount]:
                     Update['EndTime'] = []
-                    for j in range(len(Update['Pause'])):
+                    # Index 구분 (EndTime 중복 방지)
+                    PauseCount = None
+                    if '_[' in FilteredFiles[FilesCount]:
+                        Pause = [Update['Pause'][-1]]
+                        PauseCount = len(Update['Pause'])
+                    else:
+                        Pause = Update['Pause']
+                    for _pausenum in range(len(Pause)):
                         if len(FilteredFiles) > FilesCount:
                             if '_[' in FilteredFiles[FilesCount]:
                                 sound_file = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[FilesCount]))
@@ -827,18 +834,19 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                                 sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
                                 
                             FilesCount += 1
-                            PauseDuration_ms = Update['Pause'][j] * 1000
+                            PauseDuration_ms = Pause[_pausenum] * 1000
                             silence = AudioSegment.silent(duration = PauseDuration_ms)
                             CombinedSound += sound_file + silence
 
                             # 누적된 CombinedSound의 길이를 전체 길이 추적 변수에 추가
                             total_duration_seconds += sound_file.duration_seconds + PauseDuration_ms / 1000.0
                             # EndTime에는 누적된 전체 길이를 저장
-                            #######################################
-                            #######################################
-                            Update['EndTime'].append({"PauseId": j, "Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
-                            #######################################
-                            #######################################
+                            
+                            ## EndTime 시간 저장(Index와 Non Index 구분)
+                            if PauseCount:
+                                for i in range(PauseCount - 1):
+                                    Update['EndTime'].append({"Time": None, "Second": None})
+                            Update['EndTime'].append({"PauseId": _pausenum, "Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
 
                             # 파일 단위로 저장 및 CombinedSound 초기화
                             if FilesCount % file_limit == 0 or FilesCount == len(FilteredFiles):

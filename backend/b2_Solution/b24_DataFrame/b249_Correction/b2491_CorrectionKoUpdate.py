@@ -584,8 +584,10 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                 else:
                     UnmatchedSpot = ""
                     
+                # 2분 대기 이후 다시 코드 실행
+                time.sleep(120)
                 ErrorCount += 1
-                if ErrorCount == 7:
+                if ErrorCount == 3:
                     sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
 
                     

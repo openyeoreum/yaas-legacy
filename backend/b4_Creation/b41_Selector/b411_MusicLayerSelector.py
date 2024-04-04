@@ -366,14 +366,19 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
     
     return EditGeneration, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath
 
-## Musics 파일 볼륨 값 일치시키기
+## Musics 파일 볼륨 값 일치시키기 (볼륨이 Volume값 보다 작을 경우에는 원본 볼륨을 유지)
 def MusicsVolume(MusicPath, Volume):
     # 오디오 파일 로드
     audio = AudioSegment.from_file(MusicPath)
     # 현재 평균 볼륨 차이 계산
     ChangeIndBFS = Volume - audio.dBFS
-    # 볼륨 조정
-    NormalizedAudio = audio.apply_gain(ChangeIndBFS)
+    
+    # 볼륨 조정 조건 추가: 현재 볼륨이 목표 볼륨보다 클 경우에만 볼륨을 조정
+    if audio.dBFS > Volume:
+        NormalizedAudio = audio.apply_gain(ChangeIndBFS)
+    else:
+        # 볼륨이 기준보다 낮거나 같으면 원본 오디오를 그대로 반환
+        NormalizedAudio = audio
     
     return NormalizedAudio
 
@@ -382,7 +387,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
     
     EditGeneration, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro)
     ## 각 사운드 생성
-    Volume = -15.0 # 볼륨은 최대 값을 0으로 산정하기에 -값이 클수록 볼륨이 큰 것임
+    Volume = -28 # 볼륨은 최대 값을 0으로 산정하기에 -값이 클수록 볼륨이 작음
     Logo_Audio = AudioSegment.from_wav(LogoPath) + AudioSegment.silent(duration = 3000)
     Intro_Audio = AudioSegment.empty()
     if IntroPath != None:

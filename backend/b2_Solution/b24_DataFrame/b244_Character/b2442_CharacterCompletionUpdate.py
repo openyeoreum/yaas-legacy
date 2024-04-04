@@ -392,8 +392,10 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | {Filter}")
                 
+                # 2분 대기 이후 다시 코드 실행
+                time.sleep(120)
                 ErrorCount += 1
-                if ErrorCount == 7:
+                if ErrorCount == 3:
                     sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
 
                     
@@ -526,8 +528,10 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
                     ContinueCount = 0 # ExampleFineTuning에서 오류가 발생하면 MemoryFineTuning로 넘어가는걸 방지하기 위해 ContinueCount 초기화
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
                 
+                # 2분 대기 이후 다시 코드 실행
+                time.sleep(120)
                 ErrorCount += 1
-                if ErrorCount == 7:
+                if ErrorCount == 3:
                     sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
 
                     

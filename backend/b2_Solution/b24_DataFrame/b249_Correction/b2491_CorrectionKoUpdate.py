@@ -422,10 +422,10 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
                                             print(f"INPUT, OUTPUT [n] 일부분 불일치 부분: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})\n")
                 except IndexError as e:
                     OutputDicError += 1
-                    print(f"INPUT, OUTPUT [n] 일부분 불일치 부분: ({e})")
+                    print(f"INPUT, OUTPUT [n] 일부분 불일치: (nonCommonPartsNum: {nonCommonPartsNum}, i: {i}, n: {n}, N: {N}, Error: {e})")
         # OutputDicList의 Error 수치 리스트 형성
         OutputDicErrorList.append(OutputDicError)
-    
+
     # OutputDicErrorList중 에러(OutputDicError가 0)가 없었던 OutputDic 찾기, 존재할 경우 해당 OutputDic(OutputDicList[i])값을 리턴
     NonErrorNum = None
     for i in range(len(OutputDicErrorList)):

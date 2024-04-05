@@ -392,9 +392,9 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
                         ReplaceCleanOutput = CleanOutput
                     else:
                         # CleanInput과 CleanOutput내에 동일한 문자가 여러개일 경우 하나씩 replace 하여 비교확인
-                        for n in 10:
+                        for n in range(10):
                             ReplaceCleanInput = ReplaceNthOccurrence(CleanInput, NonINPUT, NonOUTPUT, n)
-                            for N in 10:
+                            for N in range(10):
                                 ReplaceCleanOutput = ReplaceNthOccurrence(CleanOutput, NonINPUT, NonOUTPUT, N)
                                 print(f'replace1: {NonINPUT + longCommonSubstring}')
                                 print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')

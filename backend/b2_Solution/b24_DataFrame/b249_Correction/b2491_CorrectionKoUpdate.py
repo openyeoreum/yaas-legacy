@@ -301,7 +301,7 @@ def ReplaceNthOccurrence(CleanText, NonINPUT, NonOUTPUT, n):
     return CleanText[:pos] + NonOUTPUT + CleanText[pos+len(NonINPUT):]
 
 ## CorrectionKo의 Filter(Error 예외처리)
-def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId):
+def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount):
     # [n] 불일치 오류시 이를 찾을 수 있도록 CorrectionText를 미리 저장
     CorrectionText = responseData
     
@@ -373,6 +373,12 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
         for i in range(len(InputDic)):
             CleanInput = re.sub("[^가-힣]", "", InputDic[i])
             CleanOutput = re.sub("[^가-힣]", "", OutputDic[i])
+            ## ErrorCount가 2 이상일 경우에는 SFX는 오타 평가에서 무시
+            if ErrorCount >= 2:
+                CleanInput = CleanInput.replace("효과음시작", "")
+                CleanInput = CleanInput.replace("효과음끝", "")
+                CleanOutput = CleanOutput.replace("효과음시작", "")
+                CleanOutput = CleanOutput.replace("효과음끝", "")
             if CleanInput != CleanOutput:
                 try:
                     nonCommonPart = nonCommonParts[nonCommonPartsNum]
@@ -550,7 +556,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                 momoryCounterAttention = f", 특히 '{UnmatchedSpot}' 부분 주의해주세요. -"
             else:
                 momoryCounterAttention = " -"
-            memoryCounter = f" - 중요: 매우 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음!, 효과음 시작/끝 기호 <Sn> <En> 숫자 절대 그래도 유지!, 청크 기호 [1] ~ [{InputDots}]까지 숫자를 절대 하나도 빠트리지 않고 그대로 작성!" + momoryCounterAttention
+            memoryCounter = f" - 중요: 매우 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음!, 효과음 시작/끝 기호 <Sn> <En>와 [숫자]는 절대로 변경 말고 그대로 유지!, 청크 기호 [1] ~ [{InputDots}]까지 숫자를 절대 하나도 빠트리지 않고 그대로 작성!" + momoryCounterAttention
             outputEnder = ""
             
             # Response 생성
@@ -571,7 +577,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId)
+            Filter = CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount)
             
             if isinstance(Filter, str) or "UnmatchedSpot" in Filter:
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

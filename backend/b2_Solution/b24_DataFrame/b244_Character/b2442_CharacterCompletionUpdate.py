@@ -393,9 +393,10 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList) - 1} | {Filter}")
                 
                 # 2분 대기 이후 다시 코드 실행
-                time.sleep(120)
                 ErrorCount += 1
-                if ErrorCount == 3:
+                print((f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도"))
+                time.sleep(120)
+                if ErrorCount == 5:
                     sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
 
                     
@@ -529,9 +530,10 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
                 print(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(InputList)} | {Filter}")
                 
                 # 2분 대기 이후 다시 코드 실행
-                time.sleep(120)
                 ErrorCount += 1
-                if ErrorCount == 3:
+                print((f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도"))
+                time.sleep(120)
+                if ErrorCount == 5:
                     sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
 
                     

@@ -674,7 +674,7 @@
                         {
                             "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/4_TitleMusicSet/41_TitleMusic.wav",
                             "Setting": {
-                                "Length": [7.13, 14.18, 21.22, 27.09, 36.00],
+                                "Length": [13.00, 19.25, 25.62, 38.50, 50.00],
                                 "Volume": 90,
                                 "Direction": "뒤"
                             }
@@ -682,7 +682,7 @@
                         {
                             "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/4_TitleMusicSet/42_TitleMusic.wav",
                             "Setting": {
-                                "Length": [7.14, 16.10, 25.00, 33.24, 41.07],
+                                "Length": [9.50, 19.00, 25.50, 33.50, 46.87],
                                 "Volume": 90,
                                 "Direction": "뒤"
                             }
@@ -691,6 +691,22 @@
                             "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/4_TitleMusicSet/43_TitleMusic.wav",
                             "Setting": {
                                 "Length": [5.24, 10.19, 16.05, 21.09, 26.01],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/4_TitleMusicSet/44_TitleMusic.wav",
+                            "Setting": {
+                                "Length": [7.00, 17.50, 25.50, 35.00, 50.50],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/4_TitleMusicSet/45_TitleMusic.wav",
+                            "Setting": {
+                                "Length": [8.00, 18.50, 26.00, 33.50, 35.00],
                                 "Volume": 100,
                                 "Direction": "뒤"
                             }

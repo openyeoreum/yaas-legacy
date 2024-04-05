@@ -12,6 +12,8 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from pydub import AudioSegment
 from collections import defaultdict
+from elevenlabs import Voice, VoiceSettings, save
+from elevenlabs.client import ElevenLabs
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
@@ -1154,24 +1156,17 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    MatchedChunksPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/노인을위한나라는있다/노인을위한나라는있다_mixed_audiobook_file/VoiceLayers/[노인을위한나라는있다_AudioBook_Edit].json"
-    
-    with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
-        EditGenerationKoChunks = json.load(MatchedChunksJson)
-        
-    for Chunks in EditGenerationKoChunks:
-        pauses = Chunks['Pause']
-        Chunks['EndTime'] = [None] * len(pauses)
-    
-    EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
-    
-    with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
-        json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-        
-    # MatchedChunksPath2 = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/나는외식창업에적합한사람인가/나는외식창업에적합한사람인가_mixed_audiobook_file/VoiceLayers/[나는외식창업에적합한사람인가_AudioBook_Edit]Test.json"    
-    
-    # EditGenerationKoChunks = EditGenerationKoChunksToList(EditGenerationKoChunks)
-    
-    # with open(MatchedChunksPath2, 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    
+    client = ElevenLabs(
+    api_key="193e7ccf8948a7a5264de47004c60064" # Defaults to ELEVEN_API_KEY
+    )
+
+    audio = client.generate(
+        text = "카이스트 명상수업. 카이스트 학생들의 마음을 재건해준 명강이. 이덕주 지음. 드러가며. 다시 수업을 시작하는 이유. 카이스트는, 1988년에 부임해 30여 년을 몸담았던 학교다. 나는 정년을 준비하고 있었다. 이천십구년 칠월에 출판사로부터 메일을 받았다. ‘카이스트 명상 수업’에 관한 책을 냈으면 좋겠다는 것이다. 많이 망설여졌다. 학생들에게 명상을 가르치긴 했지만, 책을 낼 정도는 아니라고 생각했다.",
+        voice = Voice(
+            voice_id = 'vLoihgIKGtzyXeEI0Ix9',
+            settings = VoiceSettings(stability = 0.75, similarity_boost = 0.65, style = 0.05, use_speaker_boost = True)
+        ),
+        model = "eleven_multilingual_v2"
+    )
+
+    save(audio, "/yaas/my-file.mp3")

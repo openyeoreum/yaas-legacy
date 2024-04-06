@@ -75,10 +75,21 @@ def LoadAddOutputMemory(projectName, email, ProcessNum, DataFramePath):
     # 정규 표현식 패턴 정의
     pattern = re.compile(rf"{re.escape(DataFramePath + email + '_' + projectName + '_' + ProcessNum + '_')}addOutputMemoryDics_.*\.json")
 
+    # 문자열 정규화
+    DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
+    
+    ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
+    try:
+        DataFramePathList = os.listdir(DataFramePath)
+        dataFramePath = DataFramePath
+    except: 
+        DataFramePathList = os.listdir(DataFramePathNormalized)
+        dataFramePath = DataFramePathNormalized
+
     AddOutputMemoryDicsFile = []
-    for filename in os.listdir(DataFramePath):
+    for filename in DataFramePathList:
         normalizedFilename = unicodedata.normalize('NFC', filename)
-        FullPath = os.path.join(DataFramePath, normalizedFilename)
+        FullPath = os.path.join(dataFramePath, normalizedFilename)
         if pattern.match(FullPath):
             print(f"< User: {email} | Project: {projectName} | {FullPath} 로드 >")
             with open(FullPath, 'r', encoding='utf-8') as file:

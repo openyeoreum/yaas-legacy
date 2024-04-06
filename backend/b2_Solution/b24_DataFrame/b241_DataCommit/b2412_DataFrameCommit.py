@@ -40,15 +40,20 @@ def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
     OutputMemoryCount = 0
     
     # 문자열 정규화
-    DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
+    DataFramePathNFCNormalized = unicodedata.normalize('NFC', DataFramePath)
+    DataFramePathNFDNormalized = unicodedata.normalize('NFD', DataFramePath)
     
     ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
     try:
         DataFramePathList = os.listdir(DataFramePath)
         dataFramePath = DataFramePath
-    except: 
-        DataFramePathList = os.listdir(DataFramePathNormalized)
-        dataFramePath = DataFramePathNormalized
+    except:
+        try:
+            DataFramePathList = os.listdir(DataFramePathNFCNormalized)
+            dataFramePath = DataFramePathNFCNormalized
+        except:
+            DataFramePathList = os.listdir(DataFramePathNFDNormalized)
+            dataFramePath = DataFramePathNFDNormalized
         
     for filename in DataFramePathList:
         FullPath = os.path.join(dataFramePath, filename)
@@ -76,15 +81,20 @@ def LoadAddOutputMemory(projectName, email, ProcessNum, DataFramePath):
     pattern = re.compile(rf"{re.escape(DataFramePath + email + '_' + projectName + '_' + ProcessNum + '_')}addOutputMemoryDics_.*\.json")
 
     # 문자열 정규화
-    DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
+    DataFramePathNFCNormalized = unicodedata.normalize('NFC', DataFramePath)
+    DataFramePathNFDNormalized = unicodedata.normalize('NFD', DataFramePath)
     
     ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
     try:
         DataFramePathList = os.listdir(DataFramePath)
         dataFramePath = DataFramePath
-    except: 
-        DataFramePathList = os.listdir(DataFramePathNormalized)
-        dataFramePath = DataFramePathNormalized
+    except:
+        try:
+            DataFramePathList = os.listdir(DataFramePathNFCNormalized)
+            dataFramePath = DataFramePathNFCNormalized
+        except:
+            DataFramePathList = os.listdir(DataFramePathNFDNormalized)
+            dataFramePath = DataFramePathNFDNormalized
 
     AddOutputMemoryDicsFile = []
     for filename in DataFramePathList:
@@ -125,7 +135,8 @@ def FindDataframeFilePaths(email, projectName, userStoragePath):
 ## 업데이트된 OutputMemoryDics 파일 저장하기
 def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFramePath):
     # 문자열 정규화
-    DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
+    DataFramePathNFCNormalized = unicodedata.normalize('NFC', DataFramePath)
+    DataFramePathNFDNormalized = unicodedata.normalize('NFD', DataFramePath)
     # 정규 표현식 패턴 정의
     pattern = re.compile(rf"{re.escape(email + '_' + projectName + '_' + ProcessNum + '_outputMemoryDics_')}.*\.json")
 
@@ -133,7 +144,10 @@ def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFrame
     try:
         DataFramePathList = os.listdir(DataFramePath)
     except:
-        DataFramePathList = os.listdir(DataFramePathNormalized)
+        try:
+            DataFramePathList = os.listdir(DataFramePathNFCNormalized)
+        except:
+            DataFramePathList = os.listdir(DataFramePathNFDNormalized)
 
     # 일치하는 파일 검색
     matched_file = None
@@ -156,7 +170,8 @@ def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFrame
 ## 업데이트된 AddOutputMemoryDics 파일 저장하기
 def SaveAddOutputMemory(projectName, email, AddOutputMemoryDics, ProcessNum, DataFramePath):
     # 문자열 정규화
-    DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
+    DataFramePathNFCNormalized = unicodedata.normalize('NFC', DataFramePath)
+    DataFramePathNFDNormalized = unicodedata.normalize('NFD', DataFramePath)
     # 정규 표현식 패턴 정의
     pattern = re.compile(rf"{re.escape(email + '_' + projectName + '_' + ProcessNum + '_addOutputMemoryDics_')}.*\.json")
 
@@ -164,7 +179,10 @@ def SaveAddOutputMemory(projectName, email, AddOutputMemoryDics, ProcessNum, Dat
     try:
         DataFramePathList = os.listdir(DataFramePath)
     except:
-        DataFramePathList = os.listdir(DataFramePathNormalized)
+        try:
+            DataFramePathList = os.listdir(DataFramePathNFCNormalized)
+        except:
+            DataFramePathList = os.listdir(DataFramePathNFDNormalized)
 
     # 일치하는 파일 검색
     matched_file = None

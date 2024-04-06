@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import unicodedata
 import random
 import time
 import difflib
@@ -677,8 +678,26 @@ def ResponseJsonText(projectName, email, responseJson):
             raise ValueError("User not found with the provided email")
         
         username = user.UserName
-    baseFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{username}_user/{username}_storage/{projectName}/{projectName}_dataframe_file/{email}_{projectName}_21_responseJson"
-    fullFilePath = f"{baseFilePath}_{str(Date())}.txt"
+        
+    # 문자열 정규화
+    _baseFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{username}_user/{username}_storage/{projectName}/{projectName}_dataframe_file/{email}_{projectName}_21_responseJson"
+    baseFilePathNFCNormalized = unicodedata.normalize('NFC', _baseFilePath)
+    baseFilePathNFDNormalized = unicodedata.normalize('NFD', _baseFilePath)
+    
+    ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
+    try:
+        if os.listdir(os.path.dirname(_baseFilePath)):
+            baseFilePath = _baseFilePath
+        fullFilePath = f"{_baseFilePath}_{str(Date())}.txt"
+    except:
+        try:
+            if os.listdir(os.path.dirname(baseFilePathNFCNormalized)):
+                baseFilePath = baseFilePathNFCNormalized
+            fullFilePath = f"{baseFilePathNFCNormalized}_{str(Date())}.txt"
+        except:
+            if os.listdir(os.path.dirname(baseFilePathNFDNormalized)):
+                baseFilePath = baseFilePathNFDNormalized
+            fullFilePath = f"{baseFilePathNFDNormalized}_{str(Date())}.txt"
 
     # 파일이 존재하는지 확인
     if not any(re.match(f"{baseFilePath}_\d{{6}}\.txt", filename) for filename in os.listdir(os.path.dirname(baseFilePath))):

@@ -855,7 +855,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
         MatchedChunksOriginPath = VoiceLayerPathGen(projectName, email, OriginFileName, 'Mixed')
         
         ## MatchedChunksPath.json이 존재하면 해당 파일로 VoiceLayerGenerator 진행, 아닐경우 새롭게 생성
-        if (not os.path.exists(MatchedChunksPath)) and (not os.path.exists(unicodedata.normalize('NFC', MatchedChunksPath))):
+        if (not os.path.exists(MatchedChunksPath)) and (not os.path.exists(unicodedata.normalize('NFC', MatchedChunksPath))) and (not os.path.exists(unicodedata.normalize('NFD', MatchedChunksPath))):
             # SelectionGenerationKoChunks의 EditGenerationKoChunks화
             EditGenerationKoChunks = []
             #### Split을 위한 문장을 합치는 코드 ####
@@ -942,6 +942,14 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                     EditId += 1
                 else:
                     EditGenerationKoChunks.remove(NewGenerationKoChunk)
+            
+            ## 빈 ActorChunk 삭제
+            for i in range(len(EditGenerationKoChunks)):
+                for j in range(len(EditGenerationKoChunks[i]['ActorChunk'])):
+                    if extract_text(EditGenerationKoChunks[i]['ActorChunk'][j]) == '':
+                        del EditGenerationKoChunks[i]['ActorChunk'][j]
+                        del EditGenerationKoChunks[i]['Pause'][j]
+                        del EditGenerationKoChunks[i]['EndTime'][j]
             #### Split을 위한 문장을 합치는 코드 ####
             
             ## EditGenerationKoChunks의 Dic(검수)

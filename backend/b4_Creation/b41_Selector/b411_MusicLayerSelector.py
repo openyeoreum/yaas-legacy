@@ -865,11 +865,42 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
 
         return EditGenerationKoListChunks
 
+    # 목차 단위로 나누기 위한 FileLimitList 만들기
+    IndexsTags = ['Part', 'Chapter', 'Index']
+    FileLimitList = []
+    Second = 0
+    LastSplitSecond = 0
+    LastValidEditId = None  # 1시간을 초과하기 전의 마지막 유효한 EditId를 추적
+
+    for edit in EditGeneration:
+        EditId = edit['EditId']
+        Tag = edit['Tag']
+        if edit['ActorChunk'][-1]['EndTime']['Second'] is not None:
+            Second = edit['ActorChunk'][-1]['EndTime']['Second']
+        
+        # 'Part', 'Chapter', 'Index' 태그가 있는지 확인하고, 누적 시간을 추적합니다.
+        if Tag in IndexsTags:
+            if Second - LastSplitSecond < 3600:  # 1시간을 아직 초과하지 않은 경우
+                LastValidEditId = EditId  # 현재 EditId를 유효한 분할 후보로 업데이트
+            else:  # 1시간을 초과하는 경우
+                if LastValidEditId is not None:
+                    FileLimitList.append(LastValidEditId - 1)  # 마지막 유효한 분할 지점을 추가
+                    LastSplitSecond = Second  # 마지막 분할 지점을 현재 초과 지점으로 업데이트
+                    LastValidEditId = EditId  # 현재 EditId를 새로운 유효한 후보로 설정
+
+    # 마지막으로 남은 분할 후보가 10분 이상일 경우 추가
+    if (Second - LastSplitSecond > 600) and (LastValidEditId is not None and LastValidEditId not in FileLimitList):
+        FileLimitList.append(LastValidEditId - 1)
+
+    # 오디오북 생성
     EditGenerationKoChunks = EditGenerationKoChunksToList(EditGeneration)
     FilesCount = 0
-    file_limit = 100  # 파일 분할 기준
-    current_file_index = 1
+    SplitCount = 0
+    CombinedSize = 0
+    CombinedCount = 0
+    CombinedSoundFilePaths = []
     CombinedSound = AudioSegment.empty()
+    CombinedSounds = AudioSegment.empty()
 
     UpdateTQDM = tqdm(EditGenerationKoChunks,
                     total=len(EditGenerationKoChunks),
@@ -878,6 +909,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     # 전체 오디오 클립의 누적 길이를 추적하는 변수 추가
     total_duration_seconds = 0
     for Update in UpdateTQDM:
+        EditId = Update['EditId']
         ActorChunk = Update['ActorChunk']
         for _chunknum in range(len(ActorChunk)):
             if len(FilteredFiles) > FilesCount:
@@ -902,6 +934,17 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                             PauseDuration_ms = Pause[_pausenum] * 1000
                             silence = AudioSegment.silent(duration = PauseDuration_ms)
                             CombinedSound += sound_file + silence
+                            CombinedSize += 1
+                            
+                            # 100개 단위로 CombinedSound 분할 합성
+                            if CombinedSize == 100:
+                                CombinedSoundFileName = f"{projectName}_MusicLayer_({CombinedCount}).wav"
+                                CombinedCount += 1
+                                CombinedSoundFilePath = MusicLayerPathGen(projectName, email, CombinedSoundFileName)
+                                CombinedSoundFilePaths.append(CombinedSoundFilePath)
+                                CombinedSound.export(CombinedSoundFilePath, format = "wav")
+                                CombinedSound = AudioSegment.empty()
+                                CombinedSize = 0
 
                             # 누적된 CombinedSound의 길이를 전체 길이 추적 변수에 추가
                             total_duration_seconds += sound_file.duration_seconds + PauseDuration_ms / 1000.0
@@ -913,52 +956,87 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                                     Update['EndTime'].append({"Time": None, "Second": None})
                             Update['EndTime'].append({"PauseId": _pausenum, "Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
 
-                            # 파일 단위로 저장 및 CombinedSound 초기화
-                            if FilesCount % file_limit == 0 or FilesCount == len(FilteredFiles):
-                                MinNumber = current_file_index * file_limit-file_limit + 1
-                                MaxNumber = min(current_file_index * file_limit, len(FilteredFiles))
-                                file_name = f"{projectName}_MusicLayer_{MinNumber}-{MaxNumber}.mp3"
-                                CombinedSound.export(os.path.join(musicLayerPath, file_name), format = "mp3", bitrate = "320k")
-                                CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
-                                current_file_index += 1
-
+            # 파일 단위로 저장 및 CombinedSound 초기화
+            if (EditId == FileLimitList[SplitCount]) and (_chunknum == len(ActorChunk) - 1):
+                if CombinedSize > 0:
+                    CombinedSoundFileName = f"{projectName}_MusicLayer_({CombinedCount}).wav"
+                    CombinedCount += 1
+                    CombinedSoundFilePath = MusicLayerPathGen(projectName, email, CombinedSoundFileName)
+                    CombinedSoundFilePaths.append(CombinedSoundFilePath)
+                    CombinedSound.export(CombinedSoundFilePath, format = "wav")
+                    CombinedSound = AudioSegment.empty()
+                    CombinedSize = 0
+                
+                for FilePath in CombinedSoundFilePaths:
+                    TempSound = AudioSegment.from_mp3(FilePath)
+                    CombinedSounds += TempSound
+                    os.remove(FilePath)
+                
+                MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 1}).mp3", 'Master')
+                CombinedSounds.export(MasterLayerPath, format = "mp3", bitrate = "320k")
+                CombinedSounds = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
+                CombinedSoundFilePaths = []
+                if SplitCount < len(FileLimitList) - 1:
+                    SplitCount += 1
+                    
     # for 루프 종료 후 남은 CombinedSound 처리 (특수경우)
     if (not CombinedSound.empty()) and (int(CombinedSound.duration_seconds) >= 1):
-        minNumber = current_file_index * file_limit-file_limit + 1
-        _maxNumber = FilesCount
-        maxNumber = FilesCount + 1
+        if CombinedSize > 0:
+            CombinedSoundFileName = f"{projectName}_MusicLayer_({CombinedCount}).wav"
+            CombinedCount += 1
+            CombinedSoundFilePath = MusicLayerPathGen(projectName, email, CombinedSoundFileName)
+            CombinedSoundFilePaths.append(CombinedSoundFilePath)
+            CombinedSound.export(CombinedSoundFilePath, format = "wav")
+            CombinedSound = AudioSegment.empty()
+            CombinedSize = 0
+        
+        for FilePath in CombinedSoundFilePaths:
+            TempSound = AudioSegment.from_mp3(FilePath)
+            CombinedSounds += TempSound
+            os.remove(FilePath)
+            
+        MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 2}).mp3", 'Master')
+        CombinedSounds.export(MasterLayerPath, format = "mp3", bitrate = "320k")
+        CombinedSounds = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
+        CombinedSoundFilePaths = []
 
-        if minNumber < maxNumber and len(FilteredFiles) == maxNumber:
-            file_name = f"{projectName}_MusicLayer_{minNumber}-{maxNumber}.mp3"
-            current_file_index += 1
-        elif minNumber < _maxNumber and len(FilteredFiles) == _maxNumber:
-            file_name = f"{projectName}_MusicLayer_{minNumber}-{maxNumber}.mp3"
-            current_file_index += 1
+    # # for 루프 종료 후 남은 CombinedSound 처리 (특수경우)
+    # if (not CombinedSound.empty()) and (int(CombinedSound.duration_seconds) >= 1):
+    #     minNumber = current_file_index * FileLimitList-FileLimitList + 1
+    #     _maxNumber = FilesCount
+    #     maxNumber = FilesCount + 1
 
-        CombinedSound.export(os.path.join(musicLayerPath, file_name), format = "mp3", bitrate = "320k")
+    #     if minNumber < maxNumber and len(FilteredFiles) == maxNumber:
+    #         file_name = f"{projectName}_MusicLayer_{minNumber}-{maxNumber}.mp3"
+    #         current_file_index += 1
+    #     elif minNumber < _maxNumber and len(FilteredFiles) == _maxNumber:
+    #         file_name = f"{projectName}_MusicLayer_{minNumber}-{maxNumber}.mp3"
+    #         current_file_index += 1
 
-    # 100개 단위로 분할된 파일 합치기
-    UpdateTQDM = tqdm(range(1, current_file_index),
-                      desc='MusicCombine',
-                      total=current_file_index-1)
+    #     CombinedSound.export(os.path.join(musicLayerPath, file_name), format = "mp3", bitrate = "320k")
+
+    # # 100개 단위로 분할된 파일 합치기
+    # UpdateTQDM = tqdm(range(1, current_file_index),
+    #                   desc='MusicCombine',
+    #                   total = current_file_index - 1)
     
-    final_combined = AudioSegment.empty()
-    for i in UpdateTQDM:  # tqdm 루프를 사용하여 진행 상황 표시
-        part_name = f"{projectName}_MusicLayer_{i*file_limit-file_limit+1}-{min(i*file_limit, len(FilteredFiles))}.mp3"
-        part_path = os.path.join(musicLayerPath, part_name)
-        part = AudioSegment.from_file(part_path)
-        final_combined += part
-        # 파일 묶음 삭제
-        os.remove(part_path)
+    # final_combined = AudioSegment.empty()
+    # for i in UpdateTQDM:  # tqdm 루프를 사용하여 진행 상황 표시
+    #     part_name = f"{projectName}_MusicLayer_{i*FileLimitList-FileLimitList+1}-{min(i*FileLimitList, len(FilteredFiles))}.mp3"
+    #     part_path = os.path.join(musicLayerPath, part_name)
+    #     part = AudioSegment.from_file(part_path)
+    #     final_combined += part
+    #     # 파일 묶음 삭제
+    #     os.remove(part_path)
 
-    # 마지막 5초 공백 추가
-    final_combined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
+    # # 마지막 5초 공백 추가
+    # final_combined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
 
-    # 최종적으로 합쳐진 음성 파일 저장
-    print(f"[ 최종 {projectName + '_AudioBook.mp3'} 생성중 ... ]")
-    voiceLayerPath = VoiceLayerPathGen(projectName, email, projectName + '_AudioBook.mp3', 'Master')
-    final_combined.export(os.path.join(voiceLayerPath), format = "mp3", bitrate = "320k")
-    final_combined = AudioSegment.empty()
+    # # 최종적으로 합쳐진 음성 파일 저장
+    # print(f"[ 최종 {projectName + '_AudioBook.mp3'} 생성중 ... ]")
+    # voiceLayerPath = VoiceLayerPathGen(projectName, email, projectName + '_AudioBook.mp3', 'Master')
+    # final_combined.export(os.path.join(voiceLayerPath), format = "mp3", bitrate = "320k")
+    # final_combined = AudioSegment.empty()
 
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)

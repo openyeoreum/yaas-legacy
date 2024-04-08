@@ -526,9 +526,24 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
             # Mixing
             if PartMusic_Audio.duration_seconds >= PartVoice.duration_seconds:
                 MixedMusicAudio = PartMusic_Audio.overlay(PartVoice, position = Length[0] * 1000)
+                
+                # 목소리가 남는 경우 처리
+                ExtraSoundDuration = len(PartMusic_Audio) - Length[0] * 1000
+                if len(PartVoice) > ExtraSoundDuration:
+                    ExtraPartVoiceLength = len(PartVoice) - ExtraSoundDuration
+                    ExtraPartVoice = PartVoice[-ExtraPartVoiceLength:]
+                    MixedMusicAudio += ExtraPartVoice
+                    
             else:
                 _PartVoice = AudioSegment.silent(duration = Length[0] * 1000) + PartVoice
                 MixedMusicAudio = _PartVoice.overlay(PartMusic_Audio, position = 0)
+                
+                # 음악이 남는 경우 처리
+                if len(PartMusic_Audio) > len(_PartVoice):
+                    ExtraSoundDuration = len(PartMusic_Audio) - len(_PartVoice)
+                    ExtraPartMusic = PartMusic_Audio[-ExtraSoundDuration:]
+                    MixedMusicAudio += ExtraPartMusic
+                    
             AccumulatedTime = MixedMusicAudio.duration_seconds - PartVoice.duration_seconds
             
         elif MusicMixingData['Tag'] == 'Chapter':
@@ -554,9 +569,24 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
             # Mixing
             if ChapterMusic_Audio.duration_seconds >= ChapterVoice.duration_seconds:
                 MixedMusicAudio = ChapterMusic_Audio.overlay(ChapterVoice, position = Length[0] * 1000)
+                
+                # 목소리가 남는 경우 처리
+                ExtraSoundDuration = len(ChapterMusic_Audio) - Length[0] * 1000
+                if len(ChapterVoice) > ExtraSoundDuration:
+                    ExtraChapterVoiceLength = len(ChapterVoice) - ExtraSoundDuration
+                    ExtraChapterVoice = ChapterVoice[-ExtraChapterVoiceLength:]
+                    MixedMusicAudio += ExtraChapterVoice
+                    
             else:
                 _ChapterVoice = AudioSegment.silent(duration = Length[0] * 1000) + ChapterVoice
                 MixedMusicAudio = _ChapterVoice.overlay(ChapterMusic_Audio, position = 0)
+                
+                # 음악이 남는 경우 처리
+                if len(ChapterMusic_Audio) > len(_ChapterVoice):
+                    ExtraSoundDuration = len(ChapterMusic_Audio) - len(_ChapterVoice)
+                    ExtraChapterMusic = ChapterMusic_Audio[-ExtraSoundDuration:]
+                    MixedMusicAudio += ExtraChapterMusic
+                
             AccumulatedTime = MixedMusicAudio.duration_seconds - ChapterVoice.duration_seconds
             
         elif MusicMixingData['Tag'] == 'Index':
@@ -582,9 +612,24 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
             # Mixing
             if IndexMusic_Audio.duration_seconds >= IndexVoice.duration_seconds:
                 MixedMusicAudio = IndexMusic_Audio.overlay(IndexVoice, position = Length[0] * 1000)
+                
+                # 목소리가 남는 경우 처리
+                ExtraSoundDuration = len(IndexMusic_Audio) - Length[0] * 1000
+                if len(IndexVoice) > ExtraSoundDuration:
+                    ExtraIndexVoiceLength = len(IndexVoice) - ExtraSoundDuration
+                    ExtraIndexVoice = IndexVoice[-ExtraIndexVoiceLength:]
+                    MixedMusicAudio += ExtraIndexVoice
+                
             else:
                 _IndexVoice = AudioSegment.silent(duration = Length[0] * 1000) + IndexVoice
                 MixedMusicAudio = _IndexVoice.overlay(IndexMusic_Audio, position = 0)
+                
+                # 음악이 남는 경우 처리
+                if len(IndexMusic_Audio) > len(_IndexVoice):
+                    ExtraSoundDuration = len(IndexMusic_Audio) - len(_IndexVoice)
+                    ExtraIndexMusic = IndexMusic_Audio[-ExtraSoundDuration:]
+                    MixedMusicAudio += ExtraIndexMusic
+                
             AccumulatedTime = MixedMusicAudio.duration_seconds - IndexVoice.duration_seconds
             
         elif MusicMixingData['Tag'] == 'Caption':
@@ -610,9 +655,24 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
             # Mixing
             if CaptionMusic_Audio.duration_seconds >= CaptionVoice.duration_seconds:
                 MixedMusicAudio = CaptionMusic_Audio.overlay(CaptionVoice, position = Length[0] * 1000)
+                
+                # 목소리가 남는 경우 처리
+                ExtraSoundDuration = len(CaptionMusic_Audio) - Length[0] * 1000
+                if len(CaptionVoice) > ExtraSoundDuration:
+                    ExtraCaptionVoiceLength = len(CaptionVoice) - ExtraSoundDuration
+                    ExtraCaptionVoice = CaptionVoice[-ExtraCaptionVoiceLength:]
+                    MixedMusicAudio += ExtraCaptionVoice
+                
             else:
                 _CaptionVoice = AudioSegment.silent(duration = Length[0] * 1000) + CaptionVoice
                 MixedMusicAudio = _CaptionVoice.overlay(CaptionMusic_Audio, position = 0)
+                
+                # 음악이 남는 경우 처리
+                if len(CaptionMusic_Audio) > len(_CaptionVoice):
+                    ExtraSoundDuration = len(CaptionMusic_Audio) - len(_CaptionVoice)
+                    ExtraCaptionMusic = CaptionMusic_Audio[-ExtraSoundDuration:]
+                    MixedMusicAudio += ExtraCaptionMusic
+                
             AccumulatedTime = MixedMusicAudio.duration_seconds - CaptionVoice.duration_seconds
 
         else:

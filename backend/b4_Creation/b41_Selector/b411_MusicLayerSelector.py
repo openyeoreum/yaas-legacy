@@ -911,8 +911,8 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     total_duration_seconds = 0
     for Update in UpdateTQDM:
         EditId = Update['EditId']
-        if EditId in [1, 2, 3, 4, 5, 6]: ######
-            print(f'------------------\n------------------\nUpdate: {Update}') ######
+        # if EditId in [1, 2, 3, 4, 5, 6]: ######
+        #     print(f'------------------\n------------------\nUpdate: {Update}') ######
         ActorChunk = Update['ActorChunk']
         for _chunknum in range(len(ActorChunk)):
             if len(FilteredFiles) > FilesCount:
@@ -945,8 +945,8 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                                 sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
                                 
                             PauseDuration_ms = Pause[_pausenum] * 1000
-                            if EditId in [1, 2, 3, 4, 5, 6]: ######
-                                print(f'{EditId}, {FilteredFiles[FilesCount]}, {SlicePause}, {PauseNum}, {Pause}, {FilesCount} : {PauseDuration_ms}') ######
+                            # if EditId in [1, 2, 3, 4, 5, 6]: ######
+                            #     print(f'{EditId}, {FilteredFiles[FilesCount]}, {SlicePause}, {PauseNum}, {Pause}, {FilesCount} : {PauseDuration_ms}') ######
                             silence = AudioSegment.silent(duration = PauseDuration_ms)
                             CombinedSound += sound_file + silence
                             CombinedSize += 1
@@ -970,7 +970,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                             if PauseCount:
                                 for i in range(PauseCount - 1):
                                     Update['EndTime'].append({"Time": None, "Second": None})
-                            Update['EndTime'].append({"Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
+                            Update['EndTime'].append({"PauseId": _pausenum + 1, "Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
 
             # 파일 단위로 저장 및 CombinedSound 초기화
             if (EditId == FileLimitList[SplitCount]) and (_chunknum == len(ActorChunk) - 1):

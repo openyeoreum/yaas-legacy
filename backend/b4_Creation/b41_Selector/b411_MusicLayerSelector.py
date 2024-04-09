@@ -1000,44 +1000,6 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
         CombinedSounds = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
         CombinedSoundFilePaths = []
 
-    # # for 루프 종료 후 남은 CombinedSound 처리 (특수경우)
-    # if (not CombinedSound.empty()) and (int(CombinedSound.duration_seconds) >= 1):
-    #     minNumber = current_file_index * FileLimitList-FileLimitList + 1
-    #     _maxNumber = FilesCount
-    #     maxNumber = FilesCount + 1
-
-    #     if minNumber < maxNumber and len(FilteredFiles) == maxNumber:
-    #         file_name = f"{projectName}_MusicLayer_{minNumber}-{maxNumber}.mp3"
-    #         current_file_index += 1
-    #     elif minNumber < _maxNumber and len(FilteredFiles) == _maxNumber:
-    #         file_name = f"{projectName}_MusicLayer_{minNumber}-{maxNumber}.mp3"
-    #         current_file_index += 1
-
-    #     CombinedSound.export(os.path.join(musicLayerPath, file_name), format = "mp3", bitrate = "320k")
-
-    # # 100개 단위로 분할된 파일 합치기
-    # UpdateTQDM = tqdm(range(1, current_file_index),
-    #                   desc='MusicCombine',
-    #                   total = current_file_index - 1)
-    
-    # final_combined = AudioSegment.empty()
-    # for i in UpdateTQDM:  # tqdm 루프를 사용하여 진행 상황 표시
-    #     part_name = f"{projectName}_MusicLayer_{i*FileLimitList-FileLimitList+1}-{min(i*FileLimitList, len(FilteredFiles))}.mp3"
-    #     part_path = os.path.join(musicLayerPath, part_name)
-    #     part = AudioSegment.from_file(part_path)
-    #     final_combined += part
-    #     # 파일 묶음 삭제
-    #     os.remove(part_path)
-
-    # # 마지막 5초 공백 추가
-    # final_combined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
-
-    # # 최종적으로 합쳐진 음성 파일 저장
-    # print(f"[ 최종 {projectName + '_AudioBook.mp3'} 생성중 ... ]")
-    # voiceLayerPath = VoiceLayerPathGen(projectName, email, projectName + '_AudioBook.mp3', 'Master')
-    # final_combined.export(os.path.join(voiceLayerPath), format = "mp3", bitrate = "320k")
-    # final_combined = AudioSegment.empty()
-
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
     

@@ -104,7 +104,7 @@ def MusicLayerPathGen(projectName, email, FileName):
 def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = 'off'):
 
     ## MatchedMusics 파일 경로 생성
-    fileName = '[' + projectName + '_' + 'MatchedMusics.json'
+    fileName = '[' + projectName + '_' + 'MatchedMusics].json'
     MatchedMusicLayerPath = MusicLayerPathGen(projectName, email, fileName)
     
     ## MusicDataSet 불러오기
@@ -899,30 +899,44 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     CombinedSize = 0
     CombinedCount = 0
     CombinedSoundFilePaths = []
-    CombinedSound = AudioSegment.empty()
+    CombinedSound = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[0]))
+    FilteredFiles = FilteredFiles[1:]
     CombinedSounds = AudioSegment.empty()
 
-    UpdateTQDM = tqdm(EditGenerationKoChunks,
-                    total=len(EditGenerationKoChunks),
-                    desc='MusicGenerator')
+    UpdateTQDM = tqdm(EditGenerationKoChunks[1:],
+                    total = len(EditGenerationKoChunks[1:]),
+                    desc = 'MusicGenerator')
 
     # 전체 오디오 클립의 누적 길이를 추적하는 변수 추가
     total_duration_seconds = 0
     for Update in UpdateTQDM:
         EditId = Update['EditId']
+        if EditId in [1, 2, 3, 4, 5, 6]: ######
+            print(f'------------------\n------------------\nUpdate: {Update}') ######
         ActorChunk = Update['ActorChunk']
         for _chunknum in range(len(ActorChunk)):
             if len(FilteredFiles) > FilesCount:
+                # Pause의 개수 설정 (실제 파일개수와 Puase 개수를 일치화)
+                PauseSearchFileName = f"{projectName}_{Update['EditId']}_{Update['ActorName']}_("
+                PauseNum = 0
+                for FileName in FilteredFiles:
+                    if PauseSearchFileName in FileName:
+                        PauseNum += 1
+                    if (PauseNum > 0) and (PauseSearchFileName not in FileName):
+                        break
+                SlicePause = Update['Pause'][-PauseNum:]
+                
+                # 일치하는 파일이름으로 해당 파일 믹싱 (Pause 설정 및 EndTime 기록 등)
                 ProcessFileName = f"{projectName}_{Update['EditId']}_{Update['ActorName']}_({_chunknum})"
                 if ProcessFileName in FilteredFiles[FilesCount]:
                     Update['EndTime'] = []
                     # Index 구분 (EndTime 중복 방지)
                     PauseCount = None
                     if '_[' in FilteredFiles[FilesCount]:
-                        Pause = [Update['Pause'][-1]]
-                        PauseCount = len(Update['Pause'])
+                        Pause = [SlicePause[-1]]
+                        PauseCount = len(SlicePause)
                     else:
-                        Pause = Update['Pause']
+                        Pause = SlicePause
                     for _pausenum in range(len(Pause)):
                         if len(FilteredFiles) > FilesCount:
                             if '_[' in FilteredFiles[FilesCount]:
@@ -930,11 +944,13 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                             else:
                                 sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
                                 
-                            FilesCount += 1
                             PauseDuration_ms = Pause[_pausenum] * 1000
+                            if EditId in [1, 2, 3, 4, 5, 6]: ######
+                                print(f'{EditId}, {FilteredFiles[FilesCount]}, {SlicePause}, {PauseNum}, {Pause}, {FilesCount} : {PauseDuration_ms}') ######
                             silence = AudioSegment.silent(duration = PauseDuration_ms)
                             CombinedSound += sound_file + silence
                             CombinedSize += 1
+                            FilesCount += 1
                             
                             # 100개 단위로 CombinedSound 분할 합성
                             if CombinedSize == 100:
@@ -954,7 +970,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                             if PauseCount:
                                 for i in range(PauseCount - 1):
                                     Update['EndTime'].append({"Time": None, "Second": None})
-                            Update['EndTime'].append({"PauseId": _pausenum, "Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
+                            Update['EndTime'].append({"Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
 
             # 파일 단위로 저장 및 CombinedSound 초기화
             if (EditId == FileLimitList[SplitCount]) and (_chunknum == len(ActorChunk) - 1):

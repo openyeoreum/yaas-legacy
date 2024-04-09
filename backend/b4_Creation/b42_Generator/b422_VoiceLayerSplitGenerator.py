@@ -751,8 +751,8 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     CombinedSound = AudioSegment.empty()
 
     UpdateTQDM = tqdm(EditGenerationKoChunks,
-                    total=len(EditGenerationKoChunks),
-                    desc='VoiceGenerator')
+                    total = len(EditGenerationKoChunks),
+                    desc = 'VoiceGenerator')
 
     # 전체 오디오 클립의 누적 길이를 추적하는 변수 추가
     total_duration_seconds = 0

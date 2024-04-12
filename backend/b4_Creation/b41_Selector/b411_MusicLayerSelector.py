@@ -870,7 +870,8 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     FileLimitList = []
     Second = 0
     LastSplitSecond = 0
-    LastValidEditId = None  # 1시간을 초과하기 전의 마지막 유효한 EditId를 추적
+    LastValidEditId = None # 1시간을 초과하기 전의 마지막 유효한 EditId를 추적
+    EditEndTimes = [] # 각 파일 끝 시간을 기록하기 위한 리스트
 
     for edit in EditGeneration:
         EditId = edit['EditId']
@@ -885,12 +886,18 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
             else:  # 1시간을 초과하는 경우
                 if LastValidEditId is not None:
                     FileLimitList.append(LastValidEditId - 1)  # 마지막 유효한 분할 지점을 추가
+                    EditEndTimes.append(Second)  # 파일 끝 시간 기록
                     LastSplitSecond = Second  # 마지막 분할 지점을 현재 초과 지점으로 업데이트
                     LastValidEditId = EditId  # 현재 EditId를 새로운 유효한 후보로 설정
 
-    # 마지막으로 남은 분할 후보가 10분 이상일 경우 추가
+    # 마지막 파일 합성1: 마지막으로 남은 분할 후보가 10분 이상일 경우 추가
     if (Second - LastSplitSecond > 600) and (LastValidEditId is not None and LastValidEditId not in FileLimitList):
         FileLimitList.append(LastValidEditId - 1)
+        EditEndTimes.append(Second)  # 마지막 파일 끝 시간 추가
+        
+    # 마지막 파일 합성2: 뒷부분 2개의 파일의 시간 합이 70분 이하일 경우 두 파일
+    if len(EditEndTimes) > 1 and (EditEndTimes[-1] - EditEndTimes[-2] <= 4200):
+        FileLimitList.pop()
 
     # 오디오북 생성
     EditGenerationKoChunks = EditGenerationKoChunksToList(EditGeneration)

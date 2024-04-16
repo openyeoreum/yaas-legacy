@@ -1,6 +1,7 @@
 import re
 import regex as _re
 import tiktoken
+import json
 import time
 import sys
 sys.path.append("/yaas")
@@ -225,10 +226,11 @@ def CommentTagging(projectName, email):
     # CommentTagging 오류체크
     INPUT = re.sub("[^가-힣]", "", LoadBodyText(projectName, email))
     OUTPUT = re.sub("[^가-힣]", "", str(CommentTaggedChunks))
+
     if INPUT == OUTPUT:
         print(f"Project: {projectName} | Process: BodyFrameUpdate | CommentTagging 완료")
     else:
-        sys.exit(f"BodyText와 CommentTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CommentTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)})")
+        sys.exit(f"BodyText와 CommentTaggedChunks 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | CommentTaggingMatchingError, INPUT({len(INPUT)}), OUTPUT({len(OUTPUT)}), 해당부분 근처 따옴표 누락 검토{CommentTaggedChunks[-1:]}")
 
     return CommentTaggedChunks
 
@@ -353,7 +355,7 @@ def IndexMatching(projectName, email):
         nonMatchingIndexList.append(index["Index"])
     BigIndexList = ["Chapter", "Part"]
     # Index 매칭
-    indexid = 0
+    indexid = 0       
     for i, chunk in enumerate(IndexMatchedChunks):
         if chunk["Tag"] == "Caption":
             Cleanchunk = re.sub("[^가-힣]", "", chunk["TagChunks"])
@@ -586,7 +588,7 @@ def BodyFrameBodysUpdate(projectName, email):
         Body = Bodys[i]['Body']
         Correction = Bodys[i]['Correction']
         Character = Bodys[i]['Character']
-        
+
         AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character)
         # i값 수동 업데이트
         i += 1

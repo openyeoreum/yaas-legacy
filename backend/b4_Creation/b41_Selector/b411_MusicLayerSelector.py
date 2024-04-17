@@ -1033,6 +1033,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     ## TitleMusic 최종 시간 자리 수정
     TitleSectionEditGenerationKo = EditGenerationKoChunks[1]
     TitleSection = False
+    print(TitleSectionEditGenerationKo)
     if (TitleSectionEditGenerationKo['Tag'] in ['Narrator', 'Caption']):
         ActorChunk = TitleSectionEditGenerationKo['ActorChunk']
         for i, chunk in enumerate(ActorChunk):
@@ -1041,12 +1042,14 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                 TitleSection = True
         if TitleSection:
             # EndTime 값이 None인 요소와 그렇지 않은 요소로 분리
-            NoneEndTimes = [chunk for chunk in TitleSectionEditGenerationKo['ActorChunk'] if chunk['EndTime'] is None]
-            nonNoneEndTimes = [chunk for chunk in TitleSectionEditGenerationKo['ActorChunk'] if chunk['EndTime'] is not None]
+            NoneEndTimes = [chunk['EndTime'] for chunk in TitleSectionEditGenerationKo['ActorChunk'] if chunk['EndTime'] is None]
+            nonNoneEndTimes = [chunk['EndTime'] for chunk in TitleSectionEditGenerationKo['ActorChunk'] if chunk['EndTime'] is not None]
             # EndTime 값이 있는 요소들을 시간에 따라 정렬
             nonNoneEndTimes.sort(key = lambda x: x['EndTime']['Second'])
             # 결과 리스트 재구성
-            TitleSectionEditGenerationKo['ActorChunk'] = NoneEndTimes + nonNoneEndTimes
+            EndTimes = NoneEndTimes + nonNoneEndTimes
+            for j in range(TitleSectionEditGenerationKo):
+                TitleSectionEditGenerationKo[j]['ActorChunk']['EndTime'] = EndTimes[j]
             EditGenerationKoChunks[1] = TitleSectionEditGenerationKo
     
     ## EndTitleMusic 최종 시간 자리 수정

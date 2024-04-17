@@ -14,8 +14,24 @@ from b4_Creation.bm25_AudiobookUpdate import CreationAudioBookUpdate
 def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
 
     if isinstance(projectNameList, list):
-        for projectName in projectNameList:
-            projectName = unicodedata.normalize('NFC', projectName)
+        ## NFC, NFD 오류 문제 해결 (모두 적용)
+        for _projectName in projectNameList:
+            ScriptFilesPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_ScriptFiles"
+            if os.path.join(ScriptFilesPath, unicodedata.normalize('NFC', _projectName) + "_Index.txt"):
+                print('NFC')
+                projectName = unicodedata.normalize('NFC', _projectName)
+            elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFD', _projectName) + "_Index.txt"):
+                print('NFD')
+                projectName = unicodedata.normalize('NFD', _projectName)
+            elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFKC', _projectName) + "_Index.txt"):
+                print('NFKC')
+                projectName = unicodedata.normalize('NFKC', _projectName)
+            elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFKD', _projectName) + "_Index.txt"):
+                print('NFKD')
+                projectName = unicodedata.normalize('NFKD', _projectName)
+            else:
+                projectName = _projectName
+                print('Normal')
 
             ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
             SolutionProjectUpdate(email, projectName)
@@ -41,9 +57,25 @@ def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
 def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro, Account, Split, MessagesReview):
 
     if isinstance(projectNameList, list):
-        for projectName in projectNameList:
-            projectName = unicodedata.normalize('NFC', projectName)
-            
+        ## NFC, NFD 오류 문제 해결 (모두 적용)
+        for _projectName in projectNameList:
+            ScriptFilesPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_ScriptFiles"
+            if os.path.join(ScriptFilesPath, unicodedata.normalize('NFC', _projectName) + "_Index.txt"):
+                print('NFC')
+                projectName = unicodedata.normalize('NFC', _projectName)
+            elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFD', _projectName) + "_Index.txt"):
+                print('NFD')
+                projectName = unicodedata.normalize('NFD', _projectName)
+            elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFKC', _projectName) + "_Index.txt"):
+                print('NFKC')
+                projectName = unicodedata.normalize('NFKC', _projectName)
+            elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFKD', _projectName) + "_Index.txt"):
+                print('NFKD')
+                projectName = unicodedata.normalize('NFKD', _projectName)
+            else:
+                projectName = _projectName
+                print('Normal')
+
             ### Step6 : 크리에이션이 오디오북 제작 ###
             CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang, Intro, macro = Macro, account = Account, split = Split, messagesReview = MessagesReview)
             
@@ -66,7 +98,7 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
     password = "0128"
-    projectNameList = ['마케터의무기들'] # '빌리윌터스겜블러', '나는외식창업에적합한사람인가', '나무에서만난경영지혜', '마케터의무기들', '노인을위한나라는있다', '인공지능오디오북의새로운지평', '노인을위한나라는있다, '데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법', '빨간머리앤', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업'
+    projectNameList = ['빌리윌터스겜블러'] # '빌리윌터스겜블러', '나는외식창업에적합한사람인가', '나무에서만난경영지혜', '마케터의무기들', '노인을위한나라는있다', '인공지능오디오북의새로운지평', '노인을위한나라는있다, '데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법', '빨간머리앤', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업'
     MessagesReview = "on"
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
     VoiceDataSet = "TypeCastVoiceDataSet"

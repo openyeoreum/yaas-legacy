@@ -30,8 +30,8 @@ def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
                 print('NFKD')
                 projectName = unicodedata.normalize('NFKD', _projectName)
             else:
-                projectName = _projectName
                 print('Normal')
+                projectName = _projectName
 
             ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
             SolutionProjectUpdate(email, projectName)
@@ -73,8 +73,8 @@ def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro,
                 print('NFKD')
                 projectName = unicodedata.normalize('NFKD', _projectName)
             else:
-                projectName = _projectName
                 print('Normal')
+                projectName = _projectName
 
             ### Step6 : 크리에이션이 오디오북 제작 ###
             CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang, Intro, macro = Macro, account = Account, split = Split, messagesReview = MessagesReview)

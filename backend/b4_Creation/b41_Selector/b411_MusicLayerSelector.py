@@ -295,7 +295,7 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
             if Intro != None:
                 EditGeneration[i]['Intro'] = Intro['FilePath'].split('/')[-1]
             EditGeneration[i]['Music'] = TitleMusic['FilePath'].split('/')[-1]
-            if EditGeneration[i+1]['Tag'] == 'Narrator' and EditGeneration[i+2]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']:
+            if (EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+2]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']):
                 TitleActorChunks = EditGeneration[i+1]['ActorChunk']
                 EditId = EditGeneration[i+1]['EditId']
                 StartTime = EndTime
@@ -909,15 +909,16 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     CombinedSound = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[0]))
     FilteredFiles = FilteredFiles[1:]
     CombinedSounds = AudioSegment.empty()
+    total_duration_seconds = CombinedSound.duration_seconds
 
     UpdateTQDM = tqdm(EditGenerationKoChunks[1:],
                     total = len(EditGenerationKoChunks[1:]),
                     desc = 'MusicGenerator')
 
     # 전체 오디오 클립의 누적 길이를 추적하는 변수 추가
-    total_duration_seconds = 0
     for Update in UpdateTQDM:
         EditId = Update['EditId']
+        Tag = Update['Tag']
         # if EditId in [1, 2, 3, 4, 5, 6]: ######
         #     print(f'------------------\n------------------\nUpdate: {Update}') ######
         ActorChunk = Update['ActorChunk']
@@ -931,7 +932,10 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                         PauseNum += 1
                     if (PauseNum > 0) and (PauseSearchFileName not in FileName):
                         break
-                SlicePause = Update['Pause'][-PauseNum:]
+                if EditId == 2 and Tag in ['Narrator', 'Caption']:
+                    SlicePause = Update['Pause'][PauseNum:]
+                else:
+                    SlicePause = Update['Pause'][-PauseNum:]
                 
                 # 일치하는 파일이름으로 해당 파일 믹싱 (Pause 설정 및 EndTime 기록 등)
                 ProcessFileName = f"{projectName}_{Update['EditId']}_{Update['ActorName']}_({_chunknum})"
@@ -1025,6 +1029,25 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
 
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
+    
+    ## TitleMusic 최종 시간 자리 수정
+    TitleSectionEditGenerationKo = EditGenerationKoChunks[1]
+    TitleSection = False
+    if (TitleSectionEditGenerationKo['Tag'] in ['Narrator', 'Caption']):
+        ActorChunk = TitleSectionEditGenerationKo['ActorChunk']
+        for i, chunk in enumerate(ActorChunk):
+            # EndTime 객체가 None이 아니고, EndTime 내의 Time이 None인지 검사
+            if chunk['EndTime'] is None:
+                TitleSection = True
+        if TitleSection:
+            # EndTime 값이 None인 요소와 그렇지 않은 요소로 분리
+            NoneEndTimes = [chunk for chunk in TitleSectionEditGenerationKo['ActorChunk'] if chunk['EndTime'] is None]
+            nonNoneEndTimes = [chunk for chunk in TitleSectionEditGenerationKo['ActorChunk'] if chunk['EndTime'] is not None]
+            # EndTime 값이 있는 요소들을 시간에 따라 정렬
+            nonNoneEndTimes.sort(key = lambda x: x['EndTime']['Second'])
+            # 결과 리스트 재구성
+            TitleSectionEditGenerationKo['ActorChunk'] = NoneEndTimes + nonNoneEndTimes
+            EditGenerationKoChunks[1] = TitleSectionEditGenerationKo
     
     ## EndTitleMusic 최종 시간 자리 수정
     for i, EditGenerationKo in enumerate(EditGenerationKoChunks):

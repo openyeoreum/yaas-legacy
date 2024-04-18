@@ -13,7 +13,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-4-turbo-preview"
+        "MasterModel": "gpt-4-turbo"
     },
     "ANTHROPIC": {
         "BaseModel": {

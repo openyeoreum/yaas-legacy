@@ -124,6 +124,24 @@ def SFXMatchingFilter(Input, responseData, memoryCounter):
             key = list(dic.keys())[0]
             # '핵심문구' 키에 접근하는 부분에 예외 처리 추가
             try:
+                # '길이'에 <시작>과 <끝>이 존재하지 않을 경우, 문장의 가장 앞부분과 가장 뒷부분에 <시작>과 <끝>을 삽입
+                if ('<시작>' not in dic[key]['길이']) and ('<끝>' not in dic[key]['길이']):
+                    UpdatedText = "<시작>" + dic[key]['길이']
+                    if UpdatedText.endswith('.'):
+                        UpdatedText = UpdatedText[:-1] + '<끝>.'
+                    else:
+                        UpdatedText += '<끝>'
+                    dic[key]['길이'] = UpdatedText
+                elif '<시작>' not in dic[key]['길이']:
+                    UpdatedText = "<시작>" + dic[key]['길이']
+                    dic[key]['길이'] = UpdatedText
+                elif '<끝>' not in dic[key]['길이']:
+                    if UpdatedText.endswith('.'):
+                        UpdatedText = UpdatedText[:-1] + '<끝>.'
+                    else:
+                        UpdatedText += '<끝>'
+                    dic[key]['길이'] = UpdatedText
+                    
                 OUTPUT = str(dic[key]['길이']).replace('<시작>', '')
                 OUTPUT = OUTPUT.replace('<끝>', '')
                 OUTPUT = re.sub("[^가-힣]", "", OUTPUT)

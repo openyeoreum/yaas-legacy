@@ -380,6 +380,7 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
                 CleanInput = CleanInput.replace("효과음끝", "")
                 CleanOutput = CleanOutput.replace("효과음시작", "")
                 CleanOutput = CleanOutput.replace("효과음끝", "")
+            ## Test1 (단순 replace)
             if CleanInput != CleanOutput:
                 try:
                     nonCommonPart = nonCommonParts[nonCommonPartsNum]
@@ -394,39 +395,39 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
                     print(f'NonINPUT: {NonINPUT}')
                     NonOUTPUT = nonCommonPart['NonOUTPUT']
                     print(f'NonOUTPUT: {NonOUTPUT}')
-                    if longCommonSubstring in CleanInput:
-                        ReplaceCleanInput = CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring)
-                        ReplaceCleanOutput = CleanOutput
-                    else:
-                        # CleanInput과 CleanOutput내에 동일한 문자가 여러개일 경우 하나씩 replace 하여 비교확인
-                        for n in range(10):
-                            ReplaceCleanInput = ReplaceNthOccurrence(CleanInput, NonINPUT, NonOUTPUT, n)
-                            for N in range(10):
-                                ReplaceCleanOutput = ReplaceNthOccurrence(CleanOutput, NonINPUT, NonOUTPUT, N)
-                                print(f'replace1: {NonINPUT + longCommonSubstring}')
-                                print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')
-                                print(f'CleanInput: {CleanInput}')
-                                print(f'CleanOutput: {CleanOutput}')
-                                print(f'ReplaceCleanInput: {ReplaceCleanInput}')
-                                print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
-                                # ReplaceCleanInput과 ReplaceCleanOutput를 비교하여 동일한 문자 발견시 바로 코드 종료
-                                if ReplaceCleanInput == ReplaceCleanOutput:
-                                    nonCommonPartsNum += 1
-                                    continue
-                                else:
-                                    for i in range(len(CleanInput) + 1):
-                                        ReplaceCleanInput = CleanInput[:i] + NonOUTPUT + CleanInput[i:]
-                                        ReplaceCleanOutput = CleanOutput[:i] + NonINPUT + CleanOutput[i:]
-                                        print(f'1) ReplaceCleanInput: {ReplaceCleanInput}')
-                                        print(f'1) CleanOutput: {CleanOutput}\n')
-                                        print(f'2) CleanInput: {CleanInput}')
-                                        print(f'2) ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
-                                        if ReplaceCleanInput == CleanOutput or CleanInput == ReplaceCleanOutput:
-                                            nonCommonPartsNum += 1
-                                            continue
-                                        else:
-                                            OutputDicError += 1
-                                            print(f"INPUT, OUTPUT [n] 일부분 불일치 부분: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})\n")
+                    ## Test2 (단순 NonINPUT, NonOUTPUT을 replace)
+                    if CleanInput.replace(NonINPUT, NonOUTPUT) != CleanOutput:
+                        ## Test3 (longCommonSubstring을 더하여 특정부분의 NonINPUT, NonOUTPUT을 replace)
+                        if CleanInput.replace(NonINPUT + longCommonSubstring, NonOUTPUT + longCommonSubstring) != CleanOutput:
+                            ## Test4 CleanInput과 CleanOutput내에 동일한 문자가 여러개일 경우 하나씩 replace 하여 비교확인
+                            for n in range(10):
+                                ReplaceCleanInput = ReplaceNthOccurrence(CleanInput, NonINPUT, NonOUTPUT, n)
+                                for N in range(10):
+                                    ReplaceCleanOutput = ReplaceNthOccurrence(CleanOutput, NonINPUT, NonOUTPUT, N)
+                                    print(f'replace1: {NonINPUT + longCommonSubstring}')
+                                    print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')
+                                    print(f'CleanInput: {CleanInput}')
+                                    print(f'CleanOutput: {CleanOutput}')
+                                    print(f'ReplaceCleanInput: {ReplaceCleanInput}')
+                                    print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                                    # ReplaceCleanInput과 ReplaceCleanOutput를 비교하여 동일한 문자 발견시 바로 코드 종료
+                                    if ReplaceCleanInput == ReplaceCleanOutput:
+                                        nonCommonPartsNum += 1
+                                        continue
+                                    else:
+                                        for i in range(len(CleanInput) + 1):
+                                            ReplaceCleanInput = CleanInput[:i] + NonOUTPUT + CleanInput[i:]
+                                            ReplaceCleanOutput = CleanOutput[:i] + NonINPUT + CleanOutput[i:]
+                                            print(f'1) ReplaceCleanInput: {ReplaceCleanInput}')
+                                            print(f'1) CleanOutput: {CleanOutput}\n')
+                                            print(f'2) CleanInput: {CleanInput}')
+                                            print(f'2) ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                                            if ReplaceCleanInput == CleanOutput or CleanInput == ReplaceCleanOutput:
+                                                nonCommonPartsNum += 1
+                                                continue
+                                            else:
+                                                OutputDicError += 1
+                                                print(f"INPUT, OUTPUT [n] 일부분 불일치 부분: INPUT({InputDic[i]}), OUTPUT({OutputDic[i]})\n")
                 except IndexError as e:
                     OutputDicError += 1
                     print(f"INPUT, OUTPUT [n] 일부분 불일치: (nonCommonPartsNum: {nonCommonPartsNum}, i: {i}, n: {n}, N: {N}, Error: {e})")
@@ -644,7 +645,16 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
         nonCommonPartList.append(nonCommonParts)
         
         SaveOutputMemory(projectName, email, outputMemoryDics, '21', DataFramePath)
-        SaveAddOutputMemory(projectName, email, nonCommonPartList, '21', DataFramePath)
+        # 예상하지 못한 오류 (During handling of the above exception, another exception occurred)로 인해 3회 반복 구현
+        try:
+            SaveAddOutputMemory(projectName, email, nonCommonPartList, '21', DataFramePath)
+        except:
+            try:
+                time.sleep(1)
+                SaveAddOutputMemory(projectName, email, nonCommonPartList, '21', DataFramePath)
+            except:
+                time.sleep(1)
+                SaveAddOutputMemory(projectName, email, nonCommonPartList, '21', DataFramePath)
 
     return outputMemoryDics, nonCommonPartList
 

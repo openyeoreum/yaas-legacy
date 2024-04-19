@@ -83,7 +83,7 @@ def LoadAddOutputMemory(projectName, email, ProcessNum, DataFramePath):
     # 문자열 정규화
     DataFramePathNFCNormalized = unicodedata.normalize('NFC', DataFramePath)
     DataFramePathNFDNormalized = unicodedata.normalize('NFD', DataFramePath)
-    
+
     ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
     try:
         DataFramePathList = os.listdir(DataFramePath)
@@ -134,11 +134,12 @@ def FindDataframeFilePaths(email, projectName, userStoragePath):
 
 ## 업데이트된 OutputMemoryDics 파일 저장하기
 def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFramePath):
+    # 정규 표현식 패턴 정의
+    pattern = re.compile(rf"{re.escape(email + '_' + projectName + '_' + ProcessNum + '_outputMemoryDics_')}.*\.json")
+    
     # 문자열 정규화
     DataFramePathNFCNormalized = unicodedata.normalize('NFC', DataFramePath)
     DataFramePathNFDNormalized = unicodedata.normalize('NFD', DataFramePath)
-    # 정규 표현식 패턴 정의
-    pattern = re.compile(rf"{re.escape(email + '_' + projectName + '_' + ProcessNum + '_outputMemoryDics_')}.*\.json")
 
     ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
     try:
@@ -169,11 +170,12 @@ def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFrame
         
 ## 업데이트된 AddOutputMemoryDics 파일 저장하기
 def SaveAddOutputMemory(projectName, email, AddOutputMemoryDics, ProcessNum, DataFramePath):
+    # 정규 표현식 패턴 정의
+    pattern = re.compile(rf"{re.escape(email + '_' + projectName + '_' + ProcessNum + '_addOutputMemoryDics_')}.*\.json")
+    
     # 문자열 정규화
     DataFramePathNFCNormalized = unicodedata.normalize('NFC', DataFramePath)
     DataFramePathNFDNormalized = unicodedata.normalize('NFD', DataFramePath)
-    # 정규 표현식 패턴 정의
-    pattern = re.compile(rf"{re.escape(email + '_' + projectName + '_' + ProcessNum + '_addOutputMemoryDics_')}.*\.json")
 
     ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
     try:

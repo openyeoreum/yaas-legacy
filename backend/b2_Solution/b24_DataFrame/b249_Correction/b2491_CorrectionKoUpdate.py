@@ -369,7 +369,6 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
     # Error6: Input, responseData 불일치시 예외 처리
     OutputDicErrorList = []
     for OutputDic in OutputDicList:  # OutputDicList를 순회
-        nonOutputDicError = 0 # 반복 테스트에서 하나의 일치라도 발생하면 통과
         OutputDicError = 0 # 최종 에러 확인
         nonCommonPartsNum = 0
         for i in range(len(InputDic)):
@@ -381,6 +380,8 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
                 CleanInput = CleanInput.replace("효과음끝", "")
                 CleanOutput = CleanOutput.replace("효과음시작", "")
                 CleanOutput = CleanOutput.replace("효과음끝", "")
+                
+            nonOutputDicError = 0 # 반복 테스트에서 하나의 일치라도 발생하면 통과
             ## Test1 (단순 replace)
             if CleanInput != CleanOutput:
                 try:

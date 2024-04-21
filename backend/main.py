@@ -119,7 +119,7 @@ if __name__ == "__main__":
     Intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     MainProcess = "Creation" # 'Solution', 'Creation'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변겅 자동, Manual은 API 캐릭터 변경 수동
-    Account = "yeoreum00128@naver.com" # 'lucidsun0128@naver.com', 'ahyeon00128@naver.com'
+    Account = "lucidsun0128@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com'
     Split = "Auto" # 'Auto', 'Manual' : Auto는 긴 음성 생성 후 분할(비용이 작음), Manual은 짧은 음성 분할 생성(비용이 큼)
     #########################################################################
 

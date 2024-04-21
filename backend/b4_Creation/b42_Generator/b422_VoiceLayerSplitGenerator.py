@@ -759,7 +759,8 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     for Update in UpdateTQDM:
         Update['EndTime'] = []
         for j in range(len(Update['Pause'])):
-            sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
+            with open(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]), 'rb') as VoiceFile:
+                sound_file = AudioSegment.from_wav(VoiceFile)
             PauseDuration_ms = Update['Pause'][j] * 1000
             silence = AudioSegment.silent(duration = PauseDuration_ms)
             CombinedSound += sound_file + silence

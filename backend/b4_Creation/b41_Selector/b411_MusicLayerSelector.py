@@ -898,6 +898,10 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     # 마지막 파일 합성2: 뒷부분 2개의 파일의 시간 합이 70분 이하일 경우 두 파일
     if len(EditEndTimes) > 1 and (EditEndTimes[-1] - EditEndTimes[-2] <= 4200):
         FileLimitList.pop()
+    
+    # 마지막 파일 합성3: 파일의 길이가 짧아서 1시간이 안되는 경우
+    if FileLimitList == []:
+        FileLimitList.append(EditId)
 
     # 오디오북 생성
     EditGenerationKoChunks = EditGenerationKoChunksToList(EditGeneration)
@@ -951,9 +955,11 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                     for _pausenum in range(len(Pause)):
                         if len(FilteredFiles) > FilesCount:
                             if '_[' in FilteredFiles[FilesCount]:
-                                sound_file = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[FilesCount]))
+                                with open(os.path.join(musicLayerPath, FilteredFiles[FilesCount]), 'rb') as _mVoiceFile:
+                                    sound_file = AudioSegment.from_wav(_mVoiceFile)
                             else:
-                                sound_file = AudioSegment.from_wav(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]))
+                                with open(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]), 'rb') as mVoiceFile:
+                                    sound_file = AudioSegment.from_wav(mVoiceFile)
                                 
                             PauseDuration_ms = Pause[_pausenum] * 1000
                             # if EditId in [1, 2, 3, 4, 5, 6]: ######

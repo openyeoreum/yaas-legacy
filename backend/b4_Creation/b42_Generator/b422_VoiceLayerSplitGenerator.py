@@ -828,6 +828,8 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                 FinalCombined = AudioSegment.empty()
             # struct.error: 'L' format requires 0 <= number <= 4294967295 에러 방지 (4GB 용량 문제 방지)
         except:
+            os.remove(voiceLayerPath)
+            voiceLayerPathMp3 = voiceLayerPath.replace(".wav", ".mp3")
             # 오디오 파일을 10개의 파트로 나누기
             PartLength = len(FinalCombined) // 10
             parts = []
@@ -840,19 +842,37 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                 parts.append(part)
 
             # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
-            FinalCombined = AudioSegment.empty()
-            for i, part in enumerate(parts):
-                TempPath = voiceLayerPath.replace(".mp3", f"part{i+1}.mp3")
+            FinalCombinedPart1 = AudioSegment.empty()
+            for i, part in enumerate(parts[:5]):
+                TempPath = voiceLayerPathMp3.replace(".mp3", f"_Part{i+1}.mp3")
                 with open(TempPath, "wb") as file:
+                    print(f"[ 대용량 파일 분할 저장: {TempPath} ]")
                     part.export(file, format = "mp3", bitrate = "320k")
                     LoadedPart = AudioSegment.from_file(TempPath)
-                    FinalCombined += LoadedPart  # 파트 합치기
+                    FinalCombinedPart1 += LoadedPart  # 파트 합치기
+                os.remove(TempPath)  # 임시 파일 삭제
+            FinalCombined = AudioSegment.empty()  # 메모리 해제
+            
+            # 최종 파일 저장
+            with open(voiceLayerPathMp3.replace(".mp3", f"_(1).mp3"), "wb") as FinalCombined_file:
+                FinalCombinedPart1.export(FinalCombined_file, format = "mp3", bitrate = "320k")
+                FinalCombinedPart1 = AudioSegment.empty()  # 메모리 해제
+                
+            # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
+            FinalCombinedPart2 = AudioSegment.empty()
+            for i, part in enumerate(parts[5:]):
+                TempPath = voiceLayerPathMp3.replace(".mp3", f"_Part{i+1}.mp3")
+                with open(TempPath, "wb") as file:
+                    print(f"[ 대용량 파일 분할 저장: {TempPath} ]")
+                    part.export(file, format = "mp3", bitrate = "320k")
+                    LoadedPart = AudioSegment.from_file(TempPath)
+                    FinalCombinedPart2 += LoadedPart  # 파트 합치기
                 os.remove(TempPath)  # 임시 파일 삭제
 
             # 최종 파일 저장
-            with open(voiceLayerPath, "wb") as final_file:
-                FinalCombined.export(final_file, format = "mp3", bitrate = "320k")
-                FinalCombined = AudioSegment.empty()  # 메모리 해제
+            with open(voiceLayerPathMp3, "wb") as FinalCombined_file:
+                FinalCombinedPart2.export(FinalCombined_file, format = "mp3", bitrate = "320k")
+                FinalCombinedPart2 = AudioSegment.empty()  # 메모리 해제
     
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
@@ -1195,17 +1215,17 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    client = ElevenLabs(
-    api_key="193e7ccf8948a7a5264de47004c60064" # Defaults to ELEVEN_API_KEY
-    )
+    # client = ElevenLabs(
+    # api_key="193e7ccf8948a7a5264de47004c60064" # Defaults to ELEVEN_API_KEY
+    # )
 
-    audio = client.generate(
-        text = "카이스트 명상수업. 카이스트 학생들의 마음을 재건해준 명강이. 이덕주 지음. 드러가며. 다시 수업을 시작하는 이유. 카이스트는, 1988년에 부임해 30여 년을 몸담았던 학교다. 나는 정년을 준비하고 있었다. 이천십구년 칠월에 출판사로부터 메일을 받았다. ‘카이스트 명상 수업’에 관한 책을 냈으면 좋겠다는 것이다. 많이 망설여졌다. 학생들에게 명상을 가르치긴 했지만, 책을 낼 정도는 아니라고 생각했다.",
-        voice = Voice(
-            voice_id = 'vLoihgIKGtzyXeEI0Ix9',
-            settings = VoiceSettings(stability = 0.75, similarity_boost = 0.65, style = 0.05, use_speaker_boost = True)
-        ),
-        model = "eleven_multilingual_v2"
-    )
+    # audio = client.generate(
+    #     text = "카이스트 명상수업. 카이스트 학생들의 마음을 재건해준 명강이. 이덕주 지음. 드러가며. 다시 수업을 시작하는 이유. 카이스트는, 1988년에 부임해 30여 년을 몸담았던 학교다. 나는 정년을 준비하고 있었다. 이천십구년 칠월에 출판사로부터 메일을 받았다. ‘카이스트 명상 수업’에 관한 책을 냈으면 좋겠다는 것이다. 많이 망설여졌다. 학생들에게 명상을 가르치긴 했지만, 책을 낼 정도는 아니라고 생각했다.",
+    #     voice = Voice(
+    #         voice_id = 'vLoihgIKGtzyXeEI0Ix9',
+    #         settings = VoiceSettings(stability = 0.75, similarity_boost = 0.65, style = 0.05, use_speaker_boost = True)
+    #     ),
+    #     model = "eleven_multilingual_v2"
+    # )
 
-    save(audio, "/yaas/my-file.mp3")
+    # save(audio, "/yaas/my-file.mp3")

@@ -1021,6 +1021,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                     
                     CombinedSoundsPart1Path = MasterLayerPath.replace(".mp3", "part1.mp3")
                     with open(CombinedSoundsPart1Path, "wb") as P1MVoiceFile:
+                        print(f"[ 대용량 파일 분할 저장: {CombinedSoundsPart1Path} ]")
                         CombinedSoundsPart1.export(P1MVoiceFile, format = "mp3", bitrate = "320k")
                         CombinedSoundsPart1 = AudioSegment.from_file(CombinedSoundsPart1Path)
                         CombinedSounds += CombinedSoundsPart1
@@ -1029,6 +1030,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                     
                     CombinedSoundsPart2Path = MasterLayerPath.replace(".mp3", "part2.mp3")
                     with open(CombinedSoundsPart2Path, "wb") as P2MVoiceFile:
+                        print(f"[ 대용량 파일 분할 저장: {CombinedSoundsPart2Path} ]")
                         CombinedSoundsPart2.export(P2MVoiceFile, format = "mp3", bitrate = "320k")
                         CombinedSoundsPart2 = AudioSegment.from_file(CombinedSoundsPart2Path)
                         CombinedSounds += CombinedSoundsPart2
@@ -1070,16 +1072,18 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
             CombinedSoundsPart2 = CombinedSounds[len(CombinedSounds)//2:]
             CombinedSounds = AudioSegment.empty()
             
-            CombinedSoundsPart1Path = MasterLayerPath.replace(".mp3", "part1.mp3")
+            CombinedSoundsPart1Path = MasterLayerPath.replace(".mp3", "_Part1.mp3")
             with open(CombinedSoundsPart1Path, "wb") as P1MVoiceFile:
+                print(f"[ 대용량 파일 분할 저장: {CombinedSoundsPart1Path} ]")
                 CombinedSoundsPart1.export(P1MVoiceFile, format = "mp3", bitrate = "320k")
                 CombinedSoundsPart1 = AudioSegment.from_file(CombinedSoundsPart1Path)
                 CombinedSounds += CombinedSoundsPart1
                 CombinedSoundsPart1 = AudioSegment.empty()
             os.remove(CombinedSoundsPart1Path)
             
-            CombinedSoundsPart2Path = MasterLayerPath.replace(".mp3", "part2.mp3")
+            CombinedSoundsPart2Path = MasterLayerPath.replace(".mp3", "_Part2.mp3")
             with open(CombinedSoundsPart2Path, "wb") as P2MVoiceFile:
+                print(f"[ 대용량 파일 분할 저장: {CombinedSoundsPart2Path} ]")
                 CombinedSoundsPart2.export(P2MVoiceFile, format = "mp3", bitrate = "320k")
                 CombinedSoundsPart2 = AudioSegment.from_file(CombinedSoundsPart2Path)
                 CombinedSounds += CombinedSoundsPart2

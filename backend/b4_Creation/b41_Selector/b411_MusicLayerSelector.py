@@ -899,7 +899,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     if len(EditEndTimes) > 1 and (EditEndTimes[-1] - EditEndTimes[-2] <= 4200):
         FileLimitList.pop()
     
-    # 마지막 파일 합성3: 파일의 길이가 짧아서 1시간이 안되는 경우
+    # 마지막 파일 합성3: 파일의 길이가 짧아서 1시간이 안되는 경우 마지막 번호 추가
     if FileLimitList == []:
         FileLimitList.append(EditId)
 

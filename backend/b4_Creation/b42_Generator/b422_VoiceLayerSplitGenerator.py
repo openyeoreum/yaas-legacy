@@ -830,12 +830,12 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         except:
             os.remove(voiceLayerPath)
             voiceLayerPathMp3 = voiceLayerPath.replace(".wav", ".mp3")
-            # 오디오 파일을 10개의 파트로 나누기
-            PartLength = len(FinalCombined) // 10
+            # 오디오 파일을 12개의 파트로 나눈 후 3분할로 저장
+            PartLength = len(FinalCombined) // 12
             parts = []
-            for i in range(10):
+            for i in range(12):
                 start = i * PartLength
-                if i == 9:  # 마지막 파트에서는 나머지 모두를 포함
+                if i == 11:  # 마지막 파트에서는 나머지 모두를 포함
                     part = FinalCombined[start:]
                 else:
                     part = FinalCombined[start:start+PartLength]
@@ -843,7 +843,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
 
             # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
             FinalCombinedPart1 = AudioSegment.empty()
-            for i, part in enumerate(parts[:5]):
+            for i, part in enumerate(parts[:4]):
                 TempPath = voiceLayerPathMp3.replace(".mp3", f"_Part{i+1}.mp3")
                 with open(TempPath, "wb") as file:
                     print(f"[ 대용량 파일 분할 저장: {TempPath} ]")
@@ -860,8 +860,8 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                 
             # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
             FinalCombinedPart2 = AudioSegment.empty()
-            for i, part in enumerate(parts[5:]):
-                TempPath = voiceLayerPathMp3.replace(".mp3", f"_Part{i+1}.mp3")
+            for i, part in enumerate(parts[4:8]):
+                TempPath = voiceLayerPathMp3.replace(".mp3", f"_Part{i+5}.mp3")
                 with open(TempPath, "wb") as file:
                     print(f"[ 대용량 파일 분할 저장: {TempPath} ]")
                     part.export(file, format = "mp3", bitrate = "320k")
@@ -870,9 +870,25 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                 os.remove(TempPath)  # 임시 파일 삭제
 
             # 최종 파일 저장
-            with open(voiceLayerPathMp3, "wb") as FinalCombined_file:
+            with open(voiceLayerPathMp3.replace(".mp3", f"_(2).mp3"), "wb") as FinalCombined_file:
                 FinalCombinedPart2.export(FinalCombined_file, format = "mp3", bitrate = "320k")
                 FinalCombinedPart2 = AudioSegment.empty()  # 메모리 해제
+                
+            # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
+            FinalCombinedPart3 = AudioSegment.empty()
+            for i, part in enumerate(parts[8:]):
+                TempPath = voiceLayerPathMp3.replace(".mp3", f"_Part{i+9}.mp3")
+                with open(TempPath, "wb") as file:
+                    print(f"[ 대용량 파일 분할 저장: {TempPath} ]")
+                    part.export(file, format = "mp3", bitrate = "320k")
+                    LoadedPart = AudioSegment.from_file(TempPath)
+                    FinalCombinedPart3 += LoadedPart  # 파트 합치기
+                os.remove(TempPath)  # 임시 파일 삭제
+
+            # 최종 파일 저장
+            with open(voiceLayerPathMp3.replace(".mp3", f"_(3).mp3"), "wb") as FinalCombined_file:
+                FinalCombinedPart3.export(FinalCombined_file, format = "mp3", bitrate = "320k")
+                FinalCombinedPart3 = AudioSegment.empty()  # 메모리 해제
     
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)

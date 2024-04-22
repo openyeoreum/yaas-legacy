@@ -387,7 +387,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
     
     EditGeneration, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro)
     ## 각 사운드 생성
-    Volume = -28 # 볼륨은 최대 값을 0으로 산정하기에 -값이 클수록 볼륨이 작음
+    Volume = -30 # 볼륨은 최대 값을 0으로 산정 -값이 클수록 볼륨이 작음(-25 ~ -32)
     Logo_Audio = AudioSegment.from_wav(LogoPath) + AudioSegment.silent(duration = 3000)
     Intro_Audio = AudioSegment.empty()
     if IntroPath != None:
@@ -881,9 +881,9 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
         
         # 'Part', 'Chapter', 'Index' 태그가 있는지 확인하고, 누적 시간을 추적합니다.
         if Tag in IndexsTags:
-            if Second - LastSplitSecond < 3600:  # 1시간을 아직 초과하지 않은 경우
+            if Second - LastSplitSecond < 3600:  # 60분을 아직 초과하지 않은 경우
                 LastValidEditId = EditId  # 현재 EditId를 유효한 분할 후보로 업데이트
-            else:  # 1시간을 초과하는 경우
+            else:  # 60분을 초과하는 경우
                 if LastValidEditId is not None:
                     FileLimitList.append(LastValidEditId - 1)  # 마지막 유효한 분할 지점을 추가
                     EditEndTimes.append(Second)  # 파일 끝 시간 기록
@@ -902,6 +902,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     # 마지막 파일 합성3: 파일의 길이가 짧아서 1시간이 안되는 경우 마지막 번호 추가
     if FileLimitList == []:
         FileLimitList.append(EditId)
+    print(FileLimitList)
 
     # 오디오북 생성
     EditGenerationKoChunks = EditGenerationKoChunksToList(EditGeneration)
@@ -1006,7 +1007,8 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                     os.remove(FilePath)
                 
                 MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 1}).mp3", 'Master')
-                CombinedSounds.export(MasterLayerPath, format = "mp3", bitrate = "320k")
+                with open(MasterLayerPath, "wb") as MVoiceFile:
+                    CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
                 CombinedSounds = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
                 CombinedSoundFilePaths = []
                 if SplitCount < len(FileLimitList) - 1:
@@ -1029,7 +1031,8 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
             os.remove(FilePath)
             
         MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 2}).mp3", 'Master')
-        CombinedSounds.export(MasterLayerPath, format = "mp3", bitrate = "320k")
+        with open(MasterLayerPath, "wb") as MVoiceFile:
+            CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
         CombinedSounds = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
         CombinedSoundFilePaths = []
 

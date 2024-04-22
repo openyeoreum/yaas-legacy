@@ -71,7 +71,7 @@ def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
         
 ### Main2 : 콘텐츠 제작 ###
 
-def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro, Account, Split, MessagesReview):
+def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro, Account, Split, VoiceFileGen, MessagesReview):
 
     if isinstance(projectNameList, list):
         ## NFC, NFD 오류 문제 해결 (모두 적용)
@@ -90,11 +90,11 @@ def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro,
             #     projectName = _projectName
 
             ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang, Intro, macro = Macro, account = Account, split = Split, messagesReview = MessagesReview)
+            CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang, Intro, macro = Macro, account = Account, split = Split, voiceFileGen = VoiceFileGen, messagesReview = MessagesReview)
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, MainProcess, Macro, Account, Split):
+def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account, Split):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
@@ -103,7 +103,7 @@ def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, Voic
     elif MainProcess == 'Creation':
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, MessagesReview, BookGenre)
-        CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro, Account, Split, MessagesReview)
+        CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro, Account, Split, VoiceFileGen, MessagesReview)
 
 if __name__ == "__main__":
 
@@ -111,17 +111,18 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
     password = "0128"
-    projectNameList = ['부카출판사'] # '부카출판사', '빌리월터스겜블러', '나는외식창업에적합한사람인가', '나무에서만난경영지혜', '마케터의무기들', '노인을위한나라는있다', '인공지능오디오북의새로운지평', '노인을위한나라는있다, '데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법', '빨간머리앤', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업'
+    projectNameList = ['빌리월터스겜블러'] # '부카출판사', '빌리월터스겜블러', '나는외식창업에적합한사람인가', '나무에서만난경영지혜', '마케터의무기들', '노인을위한나라는있다', '인공지능오디오북의새로운지평', '노인을위한나라는있다, '데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법', '빨간머리앤', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업'
     MessagesReview = "on"
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
     VoiceDataSet = "TypeCastVoiceDataSet"
     MainLang = "Ko" # 'Ko', 'En'
     Intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
+    VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     MainProcess = "Creation" # 'Solution', 'Creation'
-    Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변겅 자동, Manual은 API 캐릭터 변경 수동
+    Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
     Account = "lucidsun0128@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com'
     Split = "Auto" # 'Auto', 'Manual' : Auto는 긴 음성 생성 후 분할(비용이 작음), Manual은 짧은 음성 분할 생성(비용이 큼)
     #########################################################################
 
     # NormalizeUnicode('NFD')
-    YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, MainProcess, Macro, Account, Split)
+    YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account, Split)

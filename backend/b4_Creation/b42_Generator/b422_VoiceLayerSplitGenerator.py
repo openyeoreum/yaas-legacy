@@ -700,7 +700,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath):
     return UniqueFiles
 
 ## 생성된 음성파일 합치기
-def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath):
+def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, VoiceFileGen = 'on'):
     # VoiceLayerFileName = projectName + "_VoiceLayer.wav"
     # normalizeVoiceLayerFileName = unicodedata.normalize('NFC', VoiceLayerFileName)
     voiceLayerPath = VoiceLayerPathGen(projectName, email, '', 'Mixed')
@@ -821,7 +821,9 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
 
     # 최종적으로 합쳐진 음성 파일 저장
     voiceLayerPath = VoiceLayerPathGen(projectName, email, projectName + '_VoiceBook.wav', 'Master')
-    final_combined.export(os.path.join(voiceLayerPath), format = "wav")
+    if VoiceFileGen == 'on':
+        with open(os.path.join(voiceLayerPath), "wb") as VoiceFile:
+            final_combined.export(VoiceFile, format = "wav")
     final_combined = AudioSegment.empty()
     
     ## EditGenerationKoChunks의 Dic(검수)
@@ -833,7 +835,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", MessagesReview = "off"):
+def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, voiceDataSet, MainLang)
     
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
@@ -1124,15 +1126,15 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
 
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)
-    EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath)
+    EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, VoiceFileGen = VoiceFileGen)
     
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
-def VoiceLayerUpdate(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", MessagesReview = "off"):
+def VoiceLayerUpdate(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     
-    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, MessagesReview = MessagesReview)
+    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
 
     with get_db() as db:
         

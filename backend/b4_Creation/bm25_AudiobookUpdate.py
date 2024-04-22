@@ -12,7 +12,7 @@ from backend.b4_Creation.b41_Selector.b411_MusicLayerSelector import MusicLayerU
 ###########################
 
 ### Creation에 오디오북 제작 및 업데이트 ###
-def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, intro, mode = "Manual", macro = "Manual", account = "None", split = "Manual", messagesReview = "off"):
+def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, intro, mode = "Manual", macro = "Manual", account = "None", voiceFileGen = "on", split = "Manual", messagesReview = "off"):
     
     #####################
     ### 01_VoiceLayer ###
@@ -21,7 +21,7 @@ def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, intro, m
         VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, MessagesReview = messagesReview)
         MusicLayerUpdate(projectName, email, MainLang = mainLang, Intro = intro)
     else:
-        VoiceLayerUpdate(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, MessagesReview = messagesReview)
+        VoiceLayerUpdate(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
         MusicLayerUpdate(projectName, email, MainLang = mainLang, Intro = intro)
 if __name__ == "__main__":
 
@@ -31,6 +31,7 @@ if __name__ == "__main__":
     voiceDataSet = "TypeCastVoiceDataSet"
     mainLang = "Ko"
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
+    voiceFileGen = "off" # 'on', 'off'
     macro = "Manual"
     account = "None"
     split = "Manual"
@@ -38,4 +39,4 @@ if __name__ == "__main__":
     #########################################################################
     
     ### Step6 : 크리에이션이 오디오북 제작 ###
-    CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, macro = macro, account = account, split = split, messagesReview = messagesReview)
+    CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, macro = macro, account = account, voiceFileGen = voiceFileGen, split = split, messagesReview = messagesReview)

@@ -796,18 +796,18 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
 
     # 최종 파일 합치기
-    final_combined = AudioSegment.empty()
+    FinalCombined = AudioSegment.empty()
     for i in range(1, current_file_index):
         part_name = f"{projectName}_VoiceLayer_{i*file_limit-file_limit+1}-{min(i*file_limit, len(FilteredFiles))}.wav"
         part_path = os.path.join(voiceLayerPath, part_name)
         part = AudioSegment.from_wav(part_path)
-        final_combined += part
+        FinalCombined += part
         # 파일 묶음 삭제
         os.remove(part_path)
 
     # wav파일과 Edit의 시간 오차율 교정
-    final_combined_seconds = final_combined.duration_seconds
-    seconds_error_rate = final_combined_seconds/total_duration_seconds
+    FinalCombined_seconds = FinalCombined.duration_seconds
+    seconds_error_rate = FinalCombined_seconds/total_duration_seconds
     for Chunks in EditGenerationKoChunks:
         EndTime = Chunks['EndTime']
         for i in range(len(EndTime)):
@@ -817,14 +817,42 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             EndTime[i] = {"Time": Time, "Second": Second}
     
     # 마지막 5초 공백 추가
-    final_combined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
+    FinalCombined += AudioSegment.silent(duration = 5000)  # 5초간의 공백 생성
 
     # 최종적으로 합쳐진 음성 파일 저장
     voiceLayerPath = VoiceLayerPathGen(projectName, email, projectName + '_VoiceBook.wav', 'Master')
     if VoiceFileGen == 'on':
-        with open(os.path.join(voiceLayerPath), "wb") as VoiceFile:
-            final_combined.export(VoiceFile, format = "wav")
-    final_combined = AudioSegment.empty()
+        try:
+            with open(voiceLayerPath, "wb") as VoiceFile:
+                FinalCombined.export(VoiceFile, format = "wav")
+                FinalCombined = AudioSegment.empty()
+            # struct.error: 'L' format requires 0 <= number <= 4294967295 에러 방지 (4GB 용량 문제 방지)
+        except:
+            # 오디오 파일을 10개의 파트로 나누기
+            PartLength = len(FinalCombined) // 10
+            parts = []
+            for i in range(10):
+                start = i * PartLength
+                if i == 9:  # 마지막 파트에서는 나머지 모두를 포함
+                    part = FinalCombined[start:]
+                else:
+                    part = FinalCombined[start:start+PartLength]
+                parts.append(part)
+
+            # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
+            FinalCombined = AudioSegment.empty()
+            for i, part in enumerate(parts):
+                TempPath = voiceLayerPath.replace(".mp3", f"part{i+1}.mp3")
+                with open(TempPath, "wb") as file:
+                    part.export(file, format = "mp3", bitrate = "320k")
+                    LoadedPart = AudioSegment.from_file(TempPath)
+                    FinalCombined += LoadedPart  # 파트 합치기
+                os.remove(TempPath)  # 임시 파일 삭제
+
+            # 최종 파일 저장
+            with open(voiceLayerPath, "wb") as final_file:
+                FinalCombined.export(final_file, format = "mp3", bitrate = "320k")
+                FinalCombined = AudioSegment.empty()  # 메모리 해제
     
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)

@@ -988,7 +988,9 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                             if PauseCount:
                                 for i in range(PauseCount - 1):
                                     Update['EndTime'].append({"Time": None, "Second": None})
-                            Update['EndTime'].append({"PauseId": _pausenum + 1, "Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
+                            # # 디버깅 모드
+                            # Update['EndTime'].append({"PauseId": _pausenum + 1, "Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
+                            Update['EndTime'].append({"Time": SecondsToHMS(total_duration_seconds), "Second": total_duration_seconds})
 
             # 파일 단위로 저장 및 CombinedSound 초기화
             if (EditId == FileLimitList[SplitCount]) and (_chunknum == len(ActorChunk) - 1):
@@ -1007,9 +1009,36 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                     os.remove(FilePath)
                 
                 MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 1}).mp3", 'Master')
-                with open(MasterLayerPath, "wb") as MVoiceFile:
-                    CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
-                CombinedSounds = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
+                try:
+                    with open(MasterLayerPath, "wb") as MVoiceFile:
+                        CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                        CombinedSounds = AudioSegment.empty()
+                    # struct.error: 'L' format requires 0 <= number <= 4294967295 에러 방지 (4GB 용량 문제 방지)
+                except:
+                    CombinedSoundsPart1 = CombinedSounds[:len(CombinedSounds)//2]
+                    CombinedSoundsPart2 = CombinedSounds[len(CombinedSounds)//2:]
+                    CombinedSounds = AudioSegment.empty()
+                    
+                    CombinedSoundsPart1Path = MasterLayerPath.replace(".mp3", "part1.mp3")
+                    with open(CombinedSoundsPart1Path, "wb") as P1MVoiceFile:
+                        CombinedSoundsPart1.export(P1MVoiceFile, format = "mp3", bitrate = "320k")
+                        CombinedSoundsPart1 = AudioSegment.from_file(CombinedSoundsPart1Path)
+                        CombinedSounds += CombinedSoundsPart1
+                        CombinedSoundsPart1 = AudioSegment.empty()
+                    os.remove(CombinedSoundsPart1Path)
+                    
+                    CombinedSoundsPart2Path = MasterLayerPath.replace(".mp3", "part2.mp3")
+                    with open(CombinedSoundsPart2Path, "wb") as P2MVoiceFile:
+                        CombinedSoundsPart2.export(P2MVoiceFile, format = "mp3", bitrate = "320k")
+                        CombinedSoundsPart2 = AudioSegment.from_file(CombinedSoundsPart2Path)
+                        CombinedSounds += CombinedSoundsPart2
+                        CombinedSoundsPart2 = AudioSegment.empty()
+                    os.remove(CombinedSoundsPart2Path)
+                    
+                    with open(MasterLayerPath, "wb") as MVoiceFile:
+                        CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                        CombinedSounds = AudioSegment.empty()
+
                 CombinedSoundFilePaths = []
                 if SplitCount < len(FileLimitList) - 1:
                     SplitCount += 1
@@ -1031,9 +1060,36 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
             os.remove(FilePath)
             
         MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 2}).mp3", 'Master')
-        with open(MasterLayerPath, "wb") as MVoiceFile:
-            CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
-        CombinedSounds = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
+        try:
+            with open(MasterLayerPath, "wb") as MVoiceFile:
+                CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                CombinedSounds = AudioSegment.empty()
+            # struct.error: 'L' format requires 0 <= number <= 4294967295 에러 방지 (4GB 용량 문제 방지)
+        except:
+            CombinedSoundsPart1 = CombinedSounds[:len(CombinedSounds)//2]
+            CombinedSoundsPart2 = CombinedSounds[len(CombinedSounds)//2:]
+            CombinedSounds = AudioSegment.empty()
+            
+            CombinedSoundsPart1Path = MasterLayerPath.replace(".mp3", "part1.mp3")
+            with open(CombinedSoundsPart1Path, "wb") as P1MVoiceFile:
+                CombinedSoundsPart1.export(P1MVoiceFile, format = "mp3", bitrate = "320k")
+                CombinedSoundsPart1 = AudioSegment.from_file(CombinedSoundsPart1Path)
+                CombinedSounds += CombinedSoundsPart1
+                CombinedSoundsPart1 = AudioSegment.empty()
+            os.remove(CombinedSoundsPart1Path)
+            
+            CombinedSoundsPart2Path = MasterLayerPath.replace(".mp3", "part2.mp3")
+            with open(CombinedSoundsPart2Path, "wb") as P2MVoiceFile:
+                CombinedSoundsPart2.export(P2MVoiceFile, format = "mp3", bitrate = "320k")
+                CombinedSoundsPart2 = AudioSegment.from_file(CombinedSoundsPart2Path)
+                CombinedSounds += CombinedSoundsPart2
+                CombinedSoundsPart2 = AudioSegment.empty()
+            os.remove(CombinedSoundsPart2Path)
+            
+            with open(MasterLayerPath, "wb") as MVoiceFile:
+                CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                CombinedSounds = AudioSegment.empty()
+
         CombinedSoundFilePaths = []
 
     ## EditGenerationKoChunks의 Dic(검수)

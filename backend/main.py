@@ -30,6 +30,35 @@ def NormalizeUnicode(Code = "NFC", StoragePath = "/yaas/storage"):
                 NewDirPath = os.path.join(DirPath, NormalizedDirname)
                 os.rename(OriginalDirPath, NewDirPath)
                 print(f"[ 디렉토리 이름 {Code} 변경: '{dirname}' -> {Code}: '({NormalizedDirname})' ]")
+                
+### Sub2 : 프로젝트명 변경 ###
+def ProjectRename(OriginalName, NewName, StoragePath = "/yaas/storage"):
+    NFCOriginalName = unicodedata.normalize("NFC", OriginalName)
+    NFDOriginalName = unicodedata.normalize("NFD", OriginalName)
+    Unicodes = [NFCOriginalName, NFDOriginalName]
+    for _OriginalName in Unicodes:
+        # 모든 디렉토리와 파일을 거꾸로 순회
+        for root, dirs, files in os.walk(StoragePath, topdown = False):
+            # 파일 이름 변경
+            for name in files:
+                if _OriginalName in name:
+                    OriginalFilePath = os.path.join(root, name)
+                    NewFileName = name.replace(_OriginalName, NewName)
+                    NewFilePath = os.path.join(root, NewFileName)
+                    os.rename(OriginalFilePath, NewFilePath)
+                    print(f"[ 파일 이름 변경: '{OriginalFilePath}' -> '({NewFilePath})' ]")
+            
+            # 디렉토리 이름 변경
+            for name in dirs:
+                if _OriginalName in name:
+                    OriginalDirPath = os.path.join(root, name)
+                    NewDirName = name.replace(_OriginalName, NewName)
+                    NewDirPath = os.path.join(root, NewDirName)
+                    os.rename(OriginalDirPath, NewDirPath)
+                    print(f"[ 디렉토리 이름 변경: '{OriginalDirPath}' -> '({NewDirPath})' ]")
+
+######################################################################################################################
+######################################################################################################################
 
 ### Main1 : 솔루션 업데이트 ###
 def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
@@ -111,7 +140,9 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
     password = "0128"
-    projectNameList = ['빌리월터스겜블러'] # '부카출판사', '빌리월터스겜블러', '나는외식창업에적합한사람인가', '나무에서만난경영지혜', '마케터의무기들', '노인을위한나라는있다', '인공지능오디오북의새로운지평', '노인을위한나라는있다, '데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법', '빨간머리앤', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업'
+    projectNameList = ['240405_빌리월터스겜블러'] # '240418_부카출판사', '240405_빌리월터스겜블러', '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_마케터의무기들', '240223_노인을위한나라는있다', '240301_인공지능오디오북의새로운지평', '220425_데미안', '230907_우리는행복을진단한다', '220718_웹3.0메타버스', '230925_살아서천국극락낙원에가는방법', '220504_빨간머리앤', '220719_나는선비로소이다', '220719_나는노비로소이다', '240416_카이스트명상수업'
+    OriginalName = '220301_인공지능오디오북의새로운지평'
+    NewName = '240301_인공지능오디오북의새로운지평'
     MessagesReview = "on"
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
     VoiceDataSet = "TypeCastVoiceDataSet"
@@ -125,4 +156,5 @@ if __name__ == "__main__":
     #########################################################################
 
     # NormalizeUnicode('NFD')
+    # ProjectRename(OriginalName, NewName)
     YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account, Split)

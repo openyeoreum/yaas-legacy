@@ -159,7 +159,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
 ###################################
 
 ### 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-def SolutionDataFrameUpdate(email, projectName, messagesReview = "on", bookGenre = "Auto"):
+def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesReview = "on", bookGenre = "Auto"):
     ############################ 하이퍼 파라미터 설정 ############################
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
@@ -194,7 +194,7 @@ def SolutionDataFrameUpdate(email, projectName, messagesReview = "on", bookGenre
         recentFile, existedDataSet1 = LoadExistedDataSets(projectName, email, "IndexDefinePreprocess", RawDataSetPath)
         recentFile, existedDataSet2 = LoadExistedDataSets(projectName, email, "IndexDefine", RawDataSetPath)
     mode = "Master" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning", "Master"
-    IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
+    IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, IndexMode = indexMode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
     
     if existedDataFrame == None:
         updatedIndexFrame = UpdatedIndexFrame(projectName, email)
@@ -501,10 +501,11 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectNameList = ['데미안', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법']
+    IndexMode = "Define"
     MessagesReview = "on"
     BookGenre = "Auto"
     ############################ 하이퍼 파라미터 설정 ############################
     
     ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
     for projectName in projectNameList:
-        SolutionDataFrameUpdate(email, projectName, messagesReview = MessagesReview, bookGenre = BookGenre)
+        SolutionDataFrameUpdate(email, projectName, indexMode = IndexMode, messagesReview = MessagesReview, bookGenre = BookGenre)

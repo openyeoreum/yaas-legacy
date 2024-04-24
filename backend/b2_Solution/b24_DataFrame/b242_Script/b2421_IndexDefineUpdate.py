@@ -25,39 +25,43 @@ def LoadIndexText(projectName, email):
     return _IndexText
 
 # IndexPreprocess 프롬프트 요청 및 결과물 Text화
-def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess", MaxRetries = 100, mode = "Example", MESSAGESREVIEW = "off"):
+def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess", MaxRetries = 100, mode = "Example", indexMode = "Define", MESSAGESREVIEW = "off"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
-
     Input = LoadIndexText(projectName, email)
-    TotalCount = 0
-    ProcessCount = TotalCount + 1
-    
-    while TotalCount < MaxRetries:
+
+    if indexMode == "Preprocess":
+      TotalCount = 0
+      ProcessCount = TotalCount + 1
       
-      Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, TotalCount + 1, Mode = mode, messagesReview = MESSAGESREVIEW)
-
-      cleanInput = re.sub("[^가-힣]", "", Input)
-      cleanResponse = re.sub("[^가-힣]", "", Response)
+      while TotalCount < MaxRetries:
         
-      if cleanInput == cleanResponse:
-        print(f"Project: {projectName} | Process: {Process} | CleanTextMatching 완료")
+        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, TotalCount + 1, Mode = mode, messagesReview = MESSAGESREVIEW)
 
-        # DataSets 업데이트
-        AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, Input, Response)
-        AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, Response)
+        cleanInput = re.sub("[^가-힣]", "", Input)
+        cleanResponse = re.sub("[^가-힣]", "", Response)
+          
+        if cleanInput == cleanResponse:
+          print(f"Project: {projectName} | Process: {Process} | CleanTextMatching 완료")
 
-        return Response
-      else:
-        print(f"Project: {projectName} | Process: {Process} | CleanTextMatching에서 오류 발생: InputTokens({len(cleanInput)}), OutputTokens({len(cleanResponse)})")
-        TotalCount += 1
+          # DataSets 업데이트
+          AddProjectRawDatasetToDB(projectName, email, Process, mode, Model, Usage, Input, Response)
+          AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, Response)
 
-    print(f"Project: {projectName} | Process: {Process}에서 오류 발생: 최대 재시도 횟수를 초과하였습니다.")
+          return Response
+        else:
+          print(f"Project: {projectName} | Process: {Process} | CleanTextMatching에서 오류 발생: InputTokens({len(cleanInput)}), OutputTokens({len(cleanResponse)})")
+          TotalCount += 1
+
+      print(f"Project: {projectName} | Process: {Process}에서 오류 발생: 최대 재시도 횟수를 초과하였습니다.")
+
+    elif indexMode == "Define":
+      return Input
 
 # IndexDefine 프롬프트 요청 및 결과물 Json화
-def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None, MaxRetries = 100, Mode = "Example", MessagesReview = "off"):
+def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None, MaxRetries = 100, IndexMode = "Define", Mode = "Example", MessagesReview = "off"):
     if Input == None:
-      Input = IndexDefinePreprocess(projectName, email, mode = Mode, MESSAGESREVIEW = MessagesReview)
+      Input = IndexDefinePreprocess(projectName, email, mode = Mode, indexMode = IndexMode, MESSAGESREVIEW = MessagesReview)
     Input = Input.replace("'", "")
     Input = Input.replace('"', '')
     
@@ -117,7 +121,7 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
         TotalCount += 1
 
 # IndexDefine 프롬프트 요청 및 결과물이 긴 경우 나누어 처리
-def IndexDefineDivision(projectName, email, maxTokens = 4000, mode = "Example", messagesReview = "off"):
+def IndexDefineDivision(projectName, email, maxTokens = 4000, mode = "Example", indexMode = "Define", messagesReview = "off"):
     indexText = LoadIndexText(projectName, email)
     encoding = tiktoken.get_encoding("cl100k_base")
     indexTokens = len(encoding.encode(indexText))
@@ -148,10 +152,10 @@ def IndexDefineDivision(projectName, email, maxTokens = 4000, mode = "Example", 
       
       # 분할된 InputText를 바탕으로 IndexDefineProcess프로세스를 분할하여 2번 실행
       print("--- FirstIndexDefineProcess 시작 ---")
-      FirstIndexDefineProcess = IndexDefineProcess(projectName, email, Input = firstIndexText, Mode = mode, MessagesReview = messagesReview)
+      FirstIndexDefineProcess = IndexDefineProcess(projectName, email, Input = firstIndexText, Mode = mode, IndexMode = indexMode, MessagesReview = messagesReview)
       print("--- FirstIndexDefineProcess 완료 ---")
       print("--- SecondIndexDefineProcess 시작 ---")
-      SecondIndexDefineProcess = IndexDefineProcess(projectName, email, Input = secondIndexText, Mode = mode, MessagesReview = messagesReview)
+      SecondIndexDefineProcess = IndexDefineProcess(projectName, email, Input = secondIndexText, Mode = mode, IndexMode = indexMode, MessagesReview = messagesReview)
       print("--- SecondIndexDefineProcess 완료 ---")
       
       # 분할된 출력의 결합 (SecondIndexDefineProcess의 경우 타이틀 제거)
@@ -162,12 +166,12 @@ def IndexDefineDivision(projectName, email, maxTokens = 4000, mode = "Example", 
       return combineResponseJson
     
     else:
-      responseJson = IndexDefineProcess(projectName, email, Mode = mode, MessagesReview = messagesReview)[1:]
+      responseJson = IndexDefineProcess(projectName, email, Mode = mode, IndexMode = indexMode, MessagesReview = messagesReview)[1:]
       
       return responseJson
 
 # 프롬프트 요청 및 결과물 Json을 IndexFrame에 업데이트
-def IndexFrameUpdate(projectName, email, MessagesReview = "off", Mode = "Example", ExistedDataFrame = None, ExistedDataSet1 = None, ExistedDataSet2 = None):
+def IndexFrameUpdate(projectName, email, MessagesReview = "off", Mode = "Example", IndexMode = "Define", ExistedDataFrame = None, ExistedDataSet1 = None, ExistedDataSet2 = None):
     print(f"< User: {email} | Project: {projectName} | 01_IndexFrameUpdate 시작 >")
     # IndexFrame의 Count값 가져오기
     IndexCount, Completion = IndexFrameCountLoad(projectName, email)
@@ -180,7 +184,7 @@ def IndexFrameUpdate(projectName, email, MessagesReview = "off", Mode = "Example
           AddExistedDataSetToDB(projectName, email, "IndexDefine", ExistedDataSet2)
           print(f"[ User: {email} | Project: {projectName} | 01_IndexFrameUpdate은 ExistedIndexFrame으로 대처됨 ]\n")
         else:
-          responseJson = IndexDefineDivision(projectName, email, mode = Mode, messagesReview = MessagesReview)
+          responseJson = IndexDefineDivision(projectName, email, mode = Mode, indexMode = IndexMode, messagesReview = MessagesReview)
           
           # ResponseJson을 IndexCount로 슬라이스
           ResponseJson = responseJson[IndexCount:]

@@ -61,7 +61,7 @@ def ProjectRename(OriginalName, NewName, StoragePath = "/yaas/storage"):
 ######################################################################################################################
 
 ### Main1 : 솔루션 업데이트 ###
-def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
+def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre):
 
     if isinstance(projectNameList, list):
         ## NFC, NFD 오류 문제 해결 (모두 적용)
@@ -83,7 +83,7 @@ def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
             SolutionProjectUpdate(email, projectName)
             
             ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-            SolutionDataFrameUpdate(email, projectName, messagesReview = MessagesReview, bookGenre = BookGenre)
+            SolutionDataFrameUpdate(email, projectName, indexMode = IndexMode, messagesReview = MessagesReview, bookGenre = BookGenre)
             
             # ### Step4 : 솔루션에 프로젝트 데이터셋 학습진행 및 업데이트 ###
             # SolutionDataSetUpdate(email, projectName)
@@ -93,7 +93,7 @@ def SolutionUpdate(email, projectNameList, MessagesReview, BookGenre):
         SolutionProjectUpdate(email, projectName)
         
         ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-        SolutionDataFrameUpdate(email, projectName, messagesReview = MessagesReview)
+        SolutionDataFrameUpdate(email, projectName, indexMode = IndexMode, messagesReview = MessagesReview)
         
         # ### Step4 : 솔루션에 프로젝트 데이터셋 학습진행 및 업데이트 ###
         # SolutionDataSetUpdate(email, projectName)
@@ -123,15 +123,15 @@ def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro,
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account, Split):
+def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account, Split):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
-        SolutionUpdate(email, projectNameList, MessagesReview, BookGenre)
+        SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
         
     elif MainProcess == 'Creation':
         AccountUpdate(email, name, password)
-        SolutionUpdate(email, projectNameList, MessagesReview, BookGenre)
+        SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
         CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro, Account, Split, VoiceFileGen, MessagesReview)
 
 if __name__ == "__main__":
@@ -140,10 +140,11 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
     password = "0128"
-    projectNameList = ['240405_빌리월터스겜블러'] # '240418_부카출판사', '240405_빌리월터스겜블러', '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_마케터의무기들', '240223_노인을위한나라는있다', '240301_인공지능오디오북의새로운지평', '220425_데미안', '230907_우리는행복을진단한다', '220718_웹3.0메타버스', '230925_살아서천국극락낙원에가는방법', '220504_빨간머리앤', '220719_나는선비로소이다', '220719_나는노비로소이다', '240412_카이스트명상수업'
+    projectNameList = ['240412_카이스트명상수업'] # '240418_부카출판사', '240405_빌리월터스겜블러', '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_마케터의무기들', '240223_노인을위한나라는있다', '240301_인공지능오디오북의새로운지평', '220425_데미안', '230907_우리는행복을진단한다', '220718_웹3.0메타버스', '230925_살아서천국극락낙원에가는방법', '220504_빨간머리앤', '220719_나는선비로소이다', '220719_나는노비로소이다', '240412_카이스트명상수업'
     # OriginalName = '220301_인공지능오디오북의새로운지평'
     # NewName = '240301_인공지능오디오북의새로운지평'
-    MessagesReview = "on"
+    IndexMode = "Define" # 'Define', 'Preprocess' : Define 은 Index 전처리 필요 없음, Preprocess 는 Index 전처리 필요함
+    MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
     VoiceDataSet = "TypeCastVoiceDataSet"
     MainLang = "Ko" # 'Ko', 'En'
@@ -157,4 +158,4 @@ if __name__ == "__main__":
 
     # NormalizeUnicode('NFD')
     # ProjectRename(OriginalName, NewName)
-    YaaS(email, name, password, projectNameList, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account, Split)
+    YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account, Split)

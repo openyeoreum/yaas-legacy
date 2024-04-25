@@ -10,56 +10,6 @@ from b2_Solution.bm23_DataSetUpdate import SolutionDataSetUpdate
 
 from b4_Creation.bm25_AudiobookUpdate import CreationAudioBookUpdate
 
-### Sub1 : 한글 유니코드 정규화 ###
-def NormalizeUnicode(Code = "NFC", StoragePath = "/yaas/storage"):
-    for DirPath, DirNames, FileNames in os.walk(StoragePath, topdown = False):
-        # 파일 이름 정규화 및 변경
-        for filename in FileNames:
-            NormalizedFilename = unicodedata.normalize(Code, filename)
-            if filename != NormalizedFilename:
-                OriginalFilePath = os.path.join(DirPath, filename)
-                NewFilePath = os.path.join(DirPath, NormalizedFilename)
-                os.rename(OriginalFilePath, NewFilePath)
-                print(f"[ 파일 이름 {Code} 변경: '{filename}' -> {Code}: '({NormalizedFilename})' ]")
-
-        # 디렉토리 이름 정규화 및 변경
-        for dirname in DirNames:
-            NormalizedDirname = unicodedata.normalize(Code, dirname)
-            if dirname != NormalizedDirname:
-                OriginalDirPath = os.path.join(DirPath, dirname)
-                NewDirPath = os.path.join(DirPath, NormalizedDirname)
-                os.rename(OriginalDirPath, NewDirPath)
-                print(f"[ 디렉토리 이름 {Code} 변경: '{dirname}' -> {Code}: '({NormalizedDirname})' ]")
-                
-### Sub2 : 프로젝트명 변경 ###
-def ProjectRename(OriginalName, NewName, StoragePath = "/yaas/storage"):
-    NFCOriginalName = unicodedata.normalize("NFC", OriginalName)
-    NFDOriginalName = unicodedata.normalize("NFD", OriginalName)
-    Unicodes = [NFCOriginalName, NFDOriginalName]
-    for _OriginalName in Unicodes:
-        # 모든 디렉토리와 파일을 거꾸로 순회
-        for root, dirs, files in os.walk(StoragePath, topdown = False):
-            # 파일 이름 변경
-            for name in files:
-                if _OriginalName in name:
-                    OriginalFilePath = os.path.join(root, name)
-                    NewFileName = name.replace(_OriginalName, NewName)
-                    NewFilePath = os.path.join(root, NewFileName)
-                    os.rename(OriginalFilePath, NewFilePath)
-                    print(f"[ 파일 이름 변경: '{OriginalFilePath}' -> '({NewFilePath})' ]")
-            
-            # 디렉토리 이름 변경
-            for name in dirs:
-                if _OriginalName in name:
-                    OriginalDirPath = os.path.join(root, name)
-                    NewDirName = name.replace(_OriginalName, NewName)
-                    NewDirPath = os.path.join(root, NewDirName)
-                    os.rename(OriginalDirPath, NewDirPath)
-                    print(f"[ 디렉토리 이름 변경: '{OriginalDirPath}' -> '({NewDirPath})' ]")
-
-######################################################################################################################
-######################################################################################################################
-
 ### Main1 : 솔루션 업데이트 ###
 def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre):
 
@@ -140,7 +90,7 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
     password = "0128"
-    projectNameList = ['240412_카이스트명상수업'] # '240418_부카출판사', '240405_빌리월터스겜블러', '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_마케터의무기들', '240223_노인을위한나라는있다', '240301_인공지능오디오북의새로운지평', '220425_데미안', '230907_우리는행복을진단한다', '220718_웹3.0메타버스', '230925_살아서천국극락낙원에가는방법', '220504_빨간머리앤', '220719_나는선비로소이다', '220719_나는노비로소이다', '240412_카이스트명상수업'
+    projectNameList = ['240405_빌리월터스겜블러'] # '240418_부카출판사', '240405_빌리월터스겜블러', '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_마케터의무기들', '240223_노인을위한나라는있다', '240301_인공지능오디오북의새로운지평', '220425_데미안', '230907_우리는행복을진단한다', '220718_웹3.0메타버스', '230925_살아서천국극락낙원에가는방법', '220504_빨간머리앤', '220719_나는선비로소이다', '220719_나는노비로소이다', '240412_카이스트명상수업'
     # OriginalName = '220301_인공지능오디오북의새로운지평'
     # NewName = '240301_인공지능오디오북의새로운지평'
     IndexMode = "Define" # 'Define', 'Preprocess' : Define 은 Index 전처리 필요 없음, Preprocess 는 Index 전처리 필요함
@@ -150,12 +100,10 @@ if __name__ == "__main__":
     MainLang = "Ko" # 'Ko', 'En'
     Intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     VoiceFileGen = "on" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
-    MainProcess = "Solution" # 'Solution', 'Creation'
+    MainProcess = "Creation" # 'Solution', 'Creation'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
     Account = "lucidsun0128@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com'
     Split = "Auto" # 'Auto', 'Manual' : Auto는 긴 음성 생성 후 분할(비용이 작음), Manual은 짧은 음성 분할 생성(비용이 큼)
     #########################################################################
 
-    # NormalizeUnicode('NFD')
-    # ProjectRename(OriginalName, NewName)
     YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account, Split)

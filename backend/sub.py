@@ -54,9 +54,9 @@ def ProjectRename(OriginalName, NewName, StoragePath = "/yaas/storage"):
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
-    OriginalName = '220301_인공지능오디오북의새로운지평'
-    NewName = '240301_인공지능오디오북의새로운지평'
+    OriginalName = '240426_목소리의 힘'
+    NewName = '240426_목소리의힘'
     #########################################################################
 
-    NormalizeUnicode('NFD')
+    # NormalizeUnicode('NFD')
     ProjectRename(OriginalName, NewName)

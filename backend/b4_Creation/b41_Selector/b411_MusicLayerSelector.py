@@ -1195,7 +1195,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         
         return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
     
-    MetaDataSet = [{'BookTitle': projectName, 'RunningTime': SecondsToHMS(sum(FileRunningTimeList))}]
+    MetaDataSet = [{'ProjectName': projectName, 'RunningTime': SecondsToHMS(sum(FileRunningTimeList))}]
     
     IndexTag = EditGenerationKoChunks[0]['Tag']
     IndexTitles = []

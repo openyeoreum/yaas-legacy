@@ -295,7 +295,7 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
             if Intro != None:
                 EditGeneration[i]['Intro'] = Intro['FilePath'].split('/')[-1]
             EditGeneration[i]['Music'] = TitleMusic['FilePath'].split('/')[-1]
-            if (EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+2]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']):
+            if (EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+2]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']) or (EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+2]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+3]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']) or (EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+2]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+3]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+4]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']):
                 TitleActorChunks = EditGeneration[i+1]['ActorChunk']
                 EditId = EditGeneration[i+1]['EditId']
                 StartTime = EndTime
@@ -902,8 +902,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     # 마지막 파일 합성3: 파일의 길이가 짧아서 1시간이 안되는 경우 마지막 번호 추가
     if FileLimitList == []:
         FileLimitList.append(EditId)
-    print(FileLimitList)
-
+        
     # 오디오북 생성
     EditGenerationKoChunks = EditGenerationKoChunksToList(EditGeneration)
     FilesCount = 0
@@ -911,6 +910,8 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     CombinedSize = 0
     CombinedCount = 0
     CombinedSoundFilePaths = []
+    RawPreviewSound = None
+    FileRunningTimeList = []
     CombinedSound = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[0]))
     FilteredFiles = FilteredFiles[1:]
     CombinedSounds = AudioSegment.empty()
@@ -1007,11 +1008,18 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                     TempSound = AudioSegment.from_mp3(FilePath)
                     CombinedSounds += TempSound
                     os.remove(FilePath)
-                
+
                 MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 1}).mp3", 'Master')
+                
+                # 첫번째 파일이 미리듣기 파일
+                if RawPreviewSound == None:
+                    RawPreviewSound = CombinedSounds
+                    PreviewSoundPath = MasterLayerPath.replace('_(1).mp3', '_(Preview).mp3')
+                
                 try:
                     with open(MasterLayerPath, "wb") as MVoiceFile:
                         CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                        FileRunningTimeList.append(CombinedSounds.duration_seconds)
                         CombinedSounds = AudioSegment.empty()
                     # struct.error: 'L' format requires 0 <= number <= 4294967295 에러 방지 (4GB 용량 문제 방지)
                 except:
@@ -1039,6 +1047,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                     
                     with open(MasterLayerPath, "wb") as MVoiceFile:
                         CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                        FileRunningTimeList.append(CombinedSounds.duration_seconds)
                         CombinedSounds = AudioSegment.empty()
 
                 CombinedSoundFilePaths = []
@@ -1060,11 +1069,18 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
             TempSound = AudioSegment.from_mp3(FilePath)
             CombinedSounds += TempSound
             os.remove(FilePath)
-            
+
         MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 2}).mp3", 'Master')
+        
+        # 첫번째 파일이 미리듣기 파일
+        if RawPreviewSound == None:
+            RawPreviewSound = CombinedSounds
+            PreviewSoundPath = MasterLayerPath.replace('(1).mp3', '(Preview).mp3')
+        
         try:
             with open(MasterLayerPath, "wb") as MVoiceFile:
                 CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                FileRunningTimeList.append(CombinedSounds.duration_seconds)
                 CombinedSounds = AudioSegment.empty()
             # struct.error: 'L' format requires 0 <= number <= 4294967295 에러 방지 (4GB 용량 문제 방지)
         except:
@@ -1092,6 +1108,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
             
             with open(MasterLayerPath, "wb") as MVoiceFile:
                 CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                FileRunningTimeList.append(CombinedSounds.duration_seconds)
                 CombinedSounds = AudioSegment.empty()
 
         CombinedSoundFilePaths = []
@@ -1139,13 +1156,89 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
     with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
         json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
 
-    return EditGenerationKoChunks
+    return EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath
+
+## 10-15분 미리듣기 생성 ##
+def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath):
+    if RawPreviewSound.duration_seconds >= 900:
+        PreviewSecond = 0
+        for i in range(len(EditGenerationKoChunks)):
+            Second = EditGenerationKoChunks[i]['ActorChunk'][-1]['EndTime']['Second']
+            if Second is not None:
+                if Second > 900:
+                    break
+                elif 600 <= Second <= 900:
+                    PreviewSecond = Second
+                    try:
+                        if EditGenerationKoChunks[i+1]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']:
+                            break
+                    except IndexError:
+                        break
+    
+        if PreviewSecond != 0:
+            PreviewSound = RawPreviewSound[:PreviewSecond * 1000 + 50]
+            
+            with open(PreviewSoundPath, "wb") as PreviewFile:
+                PreviewSound.export(PreviewFile, format = "mp3", bitrate = "320k")
+                PreviewSound = AudioSegment.empty()
+        
+        RawPreviewSound = AudioSegment.empty()
+
+## 오디오북 메타데이터 생성 ##
+def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList):
+    
+    # 시간, 분, 초로 변환
+    def SecondsToHMS(seconds):
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = seconds % 60
+        
+        return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+    
+    MetaDataSet = [{'BookTitle': projectName, 'RunningTime': SecondsToHMS(sum(FileRunningTimeList))}]
+    
+    IndexTag = EditGenerationKoChunks[0]['Tag']
+    IndexTitles = []
+    for ActorChunk in EditGenerationKoChunks[0]['ActorChunk']:
+        Chunk = ActorChunk['Chunk']
+        IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
+    IndexTitle = ' '.join(IndexTitles)
+    
+    for i in range(len(FileLimitList)):
+        for j in range(len(EditGenerationKoChunks)):
+            if FileLimitList[i] == EditGenerationKoChunks[j]['EditId']:
+                            
+                MetaData = {'FileId': i+1, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i])}
+                MetaDataSet.append(MetaData)
+                
+                # IndexTitle
+                IndexTag = EditGenerationKoChunks[j+1]['Tag']
+                IndexTitles = []
+                for ActorChunk in EditGenerationKoChunks[j+1]['ActorChunk']:
+                    Chunk = ActorChunk['Chunk']
+                    IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
+                IndexTitle = ' '.join(IndexTitles)
+    
+    MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1])}
+    MetaDataSet.append(MetaData)
+
+    fileName = '[' + projectName + '_' + 'AudioBook_MetaDate].json'
+    MetaDatePath = VoiceLayerPathGen(projectName, email, fileName, Folder = 'Master')
+
+    with open(MetaDatePath, 'w', encoding = 'utf-8') as json_file:
+        json.dump(MetaDataSet, json_file, ensure_ascii = False, indent = 4)
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
 def MusicLayerUpdate(projectName, email, MainLang = 'Ko', Intro = 'off'):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
     
-    EditGenerationKoChunks = MusicSelector(projectName, email, MainLang = MainLang, Intro = Intro)
+    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath = MusicSelector(projectName, email, MainLang = MainLang, Intro = Intro)
+    
+    ## 10-15분 미리듣기 생성
+    AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)
+    
+    ## 오디오북 메타데이터 생성
+    AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList)
 
     with get_db() as db:
         

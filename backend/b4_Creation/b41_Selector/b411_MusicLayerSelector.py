@@ -1218,7 +1218,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
                     Chunk = ActorChunk['Chunk']
                     IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
                 IndexTitle = ' '.join(IndexTitles)
-    
+
     MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1])}
     MetaDataSet.append(MetaData)
 

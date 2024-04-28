@@ -1204,23 +1204,24 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
     IndexTitle = ' '.join(IndexTitles)
     
-    for i in range(len(FileLimitList)):
-        for j in range(len(EditGenerationKoChunks)):
-            if FileLimitList[i] == EditGenerationKoChunks[j]['EditId']:
-                            
-                MetaData = {'FileId': i+1, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i])}
-                MetaDataSet.append(MetaData)
-                
-                # IndexTitle
-                IndexTag = EditGenerationKoChunks[j+1]['Tag']
-                IndexTitles = []
-                for ActorChunk in EditGenerationKoChunks[j+1]['ActorChunk']:
-                    Chunk = ActorChunk['Chunk']
-                    IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
-                IndexTitle = ' '.join(IndexTitles)
+    if len(FileLimitList) > 1:
+        for i in range(len(FileLimitList)):
+            for j in range(len(EditGenerationKoChunks)):
+                if FileLimitList[i] == EditGenerationKoChunks[j]['EditId']:
+                                
+                    MetaData = {'FileId': i+1, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i])}
+                    MetaDataSet.append(MetaData)
+                    
+                    # IndexTitle
+                    IndexTag = EditGenerationKoChunks[j+1]['Tag']
+                    IndexTitles = []
+                    for ActorChunk in EditGenerationKoChunks[j+1]['ActorChunk']:
+                        Chunk = ActorChunk['Chunk']
+                        IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
+                    IndexTitle = ' '.join(IndexTitles)
 
-    MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1])}
-    MetaDataSet.append(MetaData)
+        MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1])}
+        MetaDataSet.append(MetaData)
 
     fileName = '[' + projectName + '_' + 'AudioBook_MetaDate].json'
     MetaDatePath = VoiceLayerPathGen(projectName, email, fileName, Folder = 'Master')

@@ -58,9 +58,9 @@ def ContextToText(Id, BookTitle, Index, Chunk, ContextDefine, ContextCompletion,
     ReasonOfWildness = WMWM['ReasonOfWildness']
 
     if not isinstance(Needs, (int, float, complex)):
-        print(Scores)
-        print(Purpose)
-        print(Needs)
+        # print(Scores)
+        # print(Purpose)
+        # print(Needs)
         NeedsScore = Scores.get(Needs, 0)
     else:
         NeedsScore = Needs

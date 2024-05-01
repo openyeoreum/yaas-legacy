@@ -22,7 +22,7 @@ def AddSoundDataSetToDB():
         # JSON 데이터 불러오기
         RelationalDataPath = GetRelationalDataPath()
         
-        typeCastVoiceDataSet = LoadJsonFrame(RelationalDataPath + "/b572_Character/b572-01_TypeCastVoiceDataSet.json")
+        voiceDataSet = LoadJsonFrame(RelationalDataPath + "/b572_Character/b572-01_VoiceDataSet.json")
         logoDataSet = LoadJsonFrame(RelationalDataPath + "/b573_Logo/b573-01_LogoDataSet.json")
         introDataSet = LoadJsonFrame(RelationalDataPath + "/b574_Intro/b574-01_IntroDataSet.json")
         titleMusicDataSet = LoadJsonFrame(RelationalDataPath + "/b575_Music/b575-01_TitleMusicDataSet.json")
@@ -32,7 +32,7 @@ def AddSoundDataSetToDB():
 
         # DB Commit
         if ExistingSoundDataSet:
-            ExistingSoundDataSet.TypeCastVoiceDataSet = typeCastVoiceDataSet
+            ExistingSoundDataSet.VoiceDataSet = voiceDataSet
             ExistingSoundDataSet.LogoDataSet = logoDataSet
             ExistingSoundDataSet.IntroDataSet = introDataSet
             ExistingSoundDataSet.TitleMusicDataSet = titleMusicDataSet
@@ -41,7 +41,7 @@ def AddSoundDataSetToDB():
             print(f"[ General | AddExistingSoundDataSetToDB 변경사항 업데이트 ]")
         else:
             soundDataSet = SoundDataSet(
-                TypeCastVoiceDataSet = typeCastVoiceDataSet,
+                VoiceDataSet = voiceDataSet,
                 LogoDataSet = logoDataSet,
                 IntroDataSet = introDataSet,
                 TitleMusicDataSet = titleMusicDataSet

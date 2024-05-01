@@ -25,10 +25,10 @@ from backend.b4_Creation.b42_Generator.b424_VoiceSplit import VoiceSplit
 ##### SelectionGenerationKoChunks 생성 #####
 ###########################################
 ## MainLang의 언어별 SelectionGenerationKoChunks와 Voicedataset 불러오기
-def LoadVoiceDataSetCharacters(voicedataset, MainLang):
+def LoadVoiceDataSetCharacters(MainLang):
     
     # MainLang의 언어별 보이스 데이터셋 불러오기
-    voiceDataSet = GetSoundDataSet(voicedataset)
+    voiceDataSet = GetSoundDataSet("VoiceDataSet")
     VoiceDataSet = voiceDataSet[0][1]
     
     if MainLang == 'Ko':
@@ -45,9 +45,9 @@ def LoadVoiceDataSetCharacters(voicedataset, MainLang):
     return VoiceDataSetCharacters
 
 ## SelectionGenerationKoChunks와 언어별 보이스 데이터셋 불러오기
-def LoadSelectionGenerationKoChunks(projectName, email, voicedataset, MainLang):
+def LoadSelectionGenerationKoChunks(projectName, email, MainLang):
 
-    VoiceDataSetCharacters = LoadVoiceDataSetCharacters(voicedataset, MainLang)
+    VoiceDataSetCharacters = LoadVoiceDataSetCharacters(MainLang)
     
     project = GetProject(projectName, email)
     CharacterCompletion = project.CharacterCompletion[2]['CheckedCharacterTags'][1:]
@@ -342,8 +342,8 @@ def ActorChunkSetting(RawChunk):
     return ActorChunk
 
 # 낭독 ActorMatching
-def ActorMatchedSelectionGenerationChunks(projectName, email, voiceDataSet, MainLang):
-    voiceDataSetCharacters, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, voiceDataSet, MainLang)
+def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang):
+    voiceDataSetCharacters, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, MainLang)
     
     # CharacterTags 구하기 (케릭터 태그와 성별 선정)
     CharacterTags = []
@@ -496,8 +496,17 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
     return EditGenerationKoListChunks
 
 ## TypecastVoice 생성 ##
-def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
+def ActorVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
     attempt = 0
+    ## ElevenLabs
+    while attempt < 60:
+        try:
+            ########## API 요청 ##########
+            Api_key = os.getenv("ELEVENLABS_API_KEY")
+            client = ElevenLabs(api_key=Api_key)
+            
+            
+    ## TypeCast
     while attempt < 60:
         try:
             ########## API 요청 ##########
@@ -563,7 +572,7 @@ def TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED
 
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
-                    segment_durations = VoiceSplit(projectName, email, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                    VoiceSplit(projectName, email, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
 
                 return "Continue"
             else:
@@ -899,8 +908,8 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceFileGen = 'on', MessagesReview = "off"):
-    MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, voiceDataSet, MainLang)
+def VoiceLayerSplitGenerator(projectName, email, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceFileGen = 'on', MessagesReview = "off"):
+    MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
     
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
     # MatchedActors 경로 생성
@@ -1174,7 +1183,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
-                    ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                    ChangedName = ActorVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
                     if ChangedName != 'Continue':
                         if Macro == "Auto":
                             TypeCastMacro(ChangedName, Account)
@@ -1190,7 +1199,7 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
                     if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') and not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav'):
-                        ChangedName = TypecastVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                        ChangedName = ActorVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 
                         if ChangedName == 'Continue':
                             ## 히스토리 저장 ##
@@ -1224,10 +1233,10 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
-def VoiceLayerUpdate(projectName, email, voiceDataSet, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceFileGen = "on", MessagesReview = "off"):
+def VoiceLayerUpdate(projectName, email, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     
-    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
+    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
 
     with get_db() as db:
         
@@ -1255,7 +1264,6 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "웹3.0메타버스"
-    voiceDataSet = "TypeCastVoiceDataSet"
     mainLang = 'Ko'
     mode = "Manual"
     macro = "Manual"

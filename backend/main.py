@@ -50,7 +50,7 @@ def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
         
 ### Main2 : 콘텐츠 제작 ###
 
-def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro, Account, VoiceFileGen, MessagesReview):
+def CreationUpdate(email, projectNameList, MainLang, Intro, Macro, Account, VoiceFileGen, MessagesReview):
 
     if isinstance(projectNameList, list):
         ## NFC, NFD 오류 문제 해결 (모두 적용)
@@ -69,11 +69,11 @@ def CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro,
             #     projectName = _projectName
 
             ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, VoiceDataSet, MainLang, Intro, macro = Macro, account = Account, voiceFileGen = VoiceFileGen, messagesReview = MessagesReview)
+            CreationAudioBookUpdate(projectName, email, MainLang, Intro, macro = Macro, account = Account, voiceFileGen = VoiceFileGen, messagesReview = MessagesReview)
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account):
+def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
@@ -82,7 +82,7 @@ def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, Book
     elif MainProcess == 'Creation':
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
-        CreationUpdate(email, projectNameList, VoiceDataSet, MainLang, Intro, Macro, Account, VoiceFileGen, MessagesReview)
+        CreationUpdate(email, projectNameList, MainLang, Intro, Macro, Account, VoiceFileGen, MessagesReview)
 
 if __name__ == "__main__":
 
@@ -94,7 +94,6 @@ if __name__ == "__main__":
     IndexMode = "Define" # 'Define', 'Preprocess' : Define 은 Index 전처리 필요 없음, Preprocess 는 Index 전처리 필요함
     MessagesReview = "off" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
-    VoiceDataSet = "TypeCastVoiceDataSet"
     MainLang = "Ko" # 'Ko', 'En'
     Intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     VoiceFileGen = "on" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
@@ -103,4 +102,4 @@ if __name__ == "__main__":
     Account = "lucidsun0128@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com'
     #########################################################################
 
-    YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, VoiceDataSet, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account)
+    YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, MainLang, Intro, VoiceFileGen, MainProcess, Macro, Account)

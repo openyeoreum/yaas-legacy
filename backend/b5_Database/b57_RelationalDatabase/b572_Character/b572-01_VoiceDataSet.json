@@ -3,7 +3,7 @@
         "DataSetId": "None",
         "DataSetName": "None",
         "DB": "Relational",
-        "Type": "TypeCastVoiceDataSet"
+        "Type": "VoiceDataSet"
     },
     {
         "CharactersKo": [
@@ -76,7 +76,7 @@
                 },
                 "ApiSetting": {
                     "name": "None",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["None"],
                         "emotion_prompt": "None"
@@ -163,7 +163,7 @@
                 },
                 "ApiSetting": {
                     "name": "연우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -250,7 +250,7 @@
                 },
                 "ApiSetting": {
                     "name": "연우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -339,7 +339,7 @@
                 },
                 "ApiSetting": {
                     "name": "연우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -426,7 +426,7 @@
                 },
                 "ApiSetting": {
                     "name": "연우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -515,7 +515,7 @@
                 },
                 "ApiSetting": {
                     "name": "연우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -602,7 +602,7 @@
                 },
                 "ApiSetting": {
                     "name": "유라",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -689,7 +689,7 @@
                 },
                 "ApiSetting": {
                     "name": "유라",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -776,7 +776,7 @@
                 },
                 "ApiSetting": {
                     "name": "유라",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -865,7 +865,7 @@
                 },
                 "ApiSetting": {
                     "name": "유라",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -954,7 +954,7 @@
                 },
                 "ApiSetting": {
                     "name": "유라",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -1041,7 +1041,7 @@
                 },
                 "ApiSetting": {
                     "name": "김건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -1128,7 +1128,7 @@
                 },
                 "ApiSetting": {
                     "name": "김건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -1215,7 +1215,7 @@
                 },
                 "ApiSetting": {
                     "name": "김건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -1302,7 +1302,7 @@
                 },
                 "ApiSetting": {
                     "name": "김건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -1389,7 +1389,7 @@
                 },
                 "ApiSetting": {
                     "name": "김건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -1478,7 +1478,7 @@
                 },
                 "ApiSetting": {
                     "name": "김건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -1567,7 +1567,7 @@
                 },
                 "ApiSetting": {
                     "name": "김건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -1654,7 +1654,7 @@
                 },
                 "ApiSetting": {
                     "name": "김건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -1741,7 +1741,7 @@
                 },
                 "ApiSetting": {
                     "name": "김건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -1828,7 +1828,7 @@
                 },
                 "ApiSetting": {
                     "name": "김건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -1915,7 +1915,7 @@
                 },
                 "ApiSetting": {
                     "name": "준상",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -2004,7 +2004,7 @@
                 },
                 "ApiSetting": {
                     "name": "준상",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -2093,7 +2093,7 @@
                 },
                 "ApiSetting": {
                     "name": "준상",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -2180,7 +2180,7 @@
                 },
                 "ApiSetting": {
                     "name": "한준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -2267,7 +2267,7 @@
                 },
                 "ApiSetting": {
                     "name": "한준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -2356,7 +2356,7 @@
                 },
                 "ApiSetting": {
                     "name": "한준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -2445,7 +2445,7 @@
                 },
                 "ApiSetting": {
                     "name": "한준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -2534,7 +2534,7 @@
                 },
                 "ApiSetting": {
                     "name": "한준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -2623,7 +2623,7 @@
                 },
                 "ApiSetting": {
                     "name": "한준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -2712,7 +2712,7 @@
                 },
                 "ApiSetting": {
                     "name": "한준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -2801,7 +2801,7 @@
                 },
                 "ApiSetting": {
                     "name": "미선",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -2888,7 +2888,7 @@
                 },
                 "ApiSetting": {
                     "name": "미선",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -2975,7 +2975,7 @@
                 },
                 "ApiSetting": {
                     "name": "주호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -3062,7 +3062,7 @@
                 },
                 "ApiSetting": {
                     "name": "주호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2"],
                         "neuter_emotion_tone_preset": ["normal-3", "normal-4"],
@@ -3151,7 +3151,7 @@
                 },
                 "ApiSetting": {
                     "name": "지훈",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -3238,7 +3238,7 @@
                 },
                 "ApiSetting": {
                     "name": "지훈",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -3325,7 +3325,7 @@
                 },
                 "ApiSetting": {
                     "name": "지훈",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -3412,7 +3412,7 @@
                 },
                 "ApiSetting": {
                     "name": "지훈",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -3501,7 +3501,7 @@
                 },
                 "ApiSetting": {
                     "name": "지훈",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -3588,7 +3588,7 @@
                 },
                 "ApiSetting": {
                     "name": "지훈",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -3675,7 +3675,7 @@
                 },
                 "ApiSetting": {
                     "name": "지훈",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -3762,7 +3762,7 @@
                 },
                 "ApiSetting": {
                     "name": "가희",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -3849,7 +3849,7 @@
                 },
                 "ApiSetting": {
                     "name": "가희",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["scream-1", "scream-2", "scream-3"],
                         "emotion_prompt": "None"
@@ -3936,7 +3936,7 @@
                 },
                 "ApiSetting": {
                     "name": "건우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -4023,7 +4023,7 @@
                 },
                 "ApiSetting": {
                     "name": "경호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -4110,7 +4110,7 @@
                 },
                 "ApiSetting": {
                     "name": "경호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["cold-1", "cold-2", "cold-3", "cold-4"],
                         "emotion_prompt": "None"
@@ -4198,7 +4198,7 @@
                 },
                 "ApiSetting": {
                     "name": "김경화앵커",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -4286,7 +4286,7 @@
                 },
                 "ApiSetting": {
                     "name": "김경화앵커",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -4373,7 +4373,7 @@
                 },
                 "ApiSetting": {
                     "name": "남준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3"],
                         "emotion_prompt": "None"
@@ -4460,7 +4460,7 @@
                 },
                 "ApiSetting": {
                     "name": "노을",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2"],
                         "emotion_prompt": "None"
@@ -4547,7 +4547,7 @@
                 },
                 "ApiSetting": {
                     "name": "노을",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2"],
                         "emotion_prompt": "None"
@@ -4634,7 +4634,7 @@
                 },
                 "ApiSetting": {
                     "name": "노을",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sarcasm-1", "inspire-1", "inspire-2"],
                         "emotion_prompt": "None"
@@ -4721,7 +4721,7 @@
                 },
                 "ApiSetting": {
                     "name": "도희",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -4808,7 +4808,7 @@
                 },
                 "ApiSetting": {
                     "name": "도희",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -4895,7 +4895,7 @@
                 },
                 "ApiSetting": {
                     "name": "류은",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -4982,7 +4982,7 @@
                 },
                 "ApiSetting": {
                     "name": "류은",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-3", "normal-4"],
                         "neuter_emotion_tone_preset": ["normal-3", "normal-4"],
@@ -5071,7 +5071,7 @@
                 },
                 "ApiSetting": {
                     "name": "류은",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -5158,7 +5158,7 @@
                 },
                 "ApiSetting": {
                     "name": "류은",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3"],
                         "emotion_prompt": "None"
@@ -5245,7 +5245,7 @@
                 },
                 "ApiSetting": {
                     "name": "류은",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -5332,7 +5332,7 @@
                 },
                 "ApiSetting": {
                     "name": "류은",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -5419,7 +5419,7 @@
                 },
                 "ApiSetting": {
                     "name": "류은",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -5506,7 +5506,7 @@
                 },
                 "ApiSetting": {
                     "name": "명주",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -5593,7 +5593,7 @@
                 },
                 "ApiSetting": {
                     "name": "명주",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -5680,7 +5680,7 @@
                 },
                 "ApiSetting": {
                     "name": "모건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -5767,7 +5767,7 @@
                 },
                 "ApiSetting": {
                     "name": "모건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -5854,7 +5854,7 @@
                 },
                 "ApiSetting": {
                     "name": "모건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -5941,7 +5941,7 @@
                 },
                 "ApiSetting": {
                     "name": "모건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -6028,7 +6028,7 @@
                 },
                 "ApiSetting": {
                     "name": "민준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -6115,7 +6115,7 @@
                 },
                 "ApiSetting": {
                     "name": "민지",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -6202,7 +6202,7 @@
                 },
                 "ApiSetting": {
                     "name": "민지",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -6291,7 +6291,7 @@
                 },
                 "ApiSetting": {
                     "name": "민지",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -6378,7 +6378,7 @@
                 },
                 "ApiSetting": {
                     "name": "민지",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -6465,7 +6465,7 @@
                 },
                 "ApiSetting": {
                     "name": "민지",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -6552,7 +6552,7 @@
                 },
                 "ApiSetting": {
                     "name": "민지",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -6639,7 +6639,7 @@
                 },
                 "ApiSetting": {
                     "name": "범수",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -6728,7 +6728,7 @@
                 },
                 "ApiSetting": {
                     "name": "범수",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -6815,7 +6815,7 @@
                 },
                 "ApiSetting": {
                     "name": "범수",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -6904,7 +6904,7 @@
                 },
                 "ApiSetting": {
                     "name": "범수",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -6991,7 +6991,7 @@
                 },
                 "ApiSetting": {
                     "name": "범수",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -7078,7 +7078,7 @@
                 },
                 "ApiSetting": {
                     "name": "범수",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -7165,7 +7165,7 @@
                 },
                 "ApiSetting": {
                     "name": "범수",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -7252,7 +7252,7 @@
                 },
                 "ApiSetting": {
                     "name": "범수",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -7339,7 +7339,7 @@
                 },
                 "ApiSetting": {
                     "name": "상우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -7426,7 +7426,7 @@
                 },
                 "ApiSetting": {
                     "name": "서준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -7513,7 +7513,7 @@
                 },
                 "ApiSetting": {
                     "name": "서준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -7600,7 +7600,7 @@
                 },
                 "ApiSetting": {
                     "name": "서준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -7687,7 +7687,7 @@
                 },
                 "ApiSetting": {
                     "name": "서준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -7774,7 +7774,7 @@
                 },
                 "ApiSetting": {
                     "name": "석표",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -7861,7 +7861,7 @@
                 },
                 "ApiSetting": {
                     "name": "성호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -7948,7 +7948,7 @@
                 },
                 "ApiSetting": {
                     "name": "성호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -8035,7 +8035,7 @@
                 },
                 "ApiSetting": {
                     "name": "세나",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -8122,7 +8122,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -8209,7 +8209,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -8296,7 +8296,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -8383,7 +8383,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -8470,7 +8470,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -8557,7 +8557,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3"],
                         "emotion_prompt": "None"
@@ -8644,7 +8644,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -8731,7 +8731,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -8818,7 +8818,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["whisper-1", "whisper-2", "whisper-3", "whisper-4"],
                         "emotion_prompt": "None"
@@ -8905,7 +8905,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["whisper-1", "whisper-2", "whisper-3", "whisper-4"],
                         "emotion_prompt": "None"
@@ -8992,7 +8992,7 @@
                 },
                 "ApiSetting": {
                     "name": "세진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["cheer-1", "cheer-2", "cheer-3", "cheer-4"],
                         "emotion_prompt": "None"
@@ -9079,7 +9079,7 @@
                 },
                 "ApiSetting": {
                     "name": "세희",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -9166,7 +9166,7 @@
                 },
                 "ApiSetting": {
                     "name": "세희",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -9253,7 +9253,7 @@
                 },
                 "ApiSetting": {
                     "name": "세희",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
@@ -9342,7 +9342,7 @@
                 },
                 "ApiSetting": {
                     "name": "송진섭스토리텔러",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -9429,7 +9429,7 @@
                 },
                 "ApiSetting": {
                     "name": "송진섭스토리텔러",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -9516,7 +9516,7 @@
                 },
                 "ApiSetting": {
                     "name": "수호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -9603,7 +9603,7 @@
                 },
                 "ApiSetting": {
                     "name": "수호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2"],
                         "emotion_prompt": "None"
@@ -9690,7 +9690,7 @@
                 },
                 "ApiSetting": {
                     "name": "수호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -9777,7 +9777,7 @@
                 },
                 "ApiSetting": {
                     "name": "순이",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -9864,7 +9864,7 @@
                 },
                 "ApiSetting": {
                     "name": "순이",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -9951,7 +9951,7 @@
                 },
                 "ApiSetting": {
                     "name": "시연",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -10038,7 +10038,7 @@
                 },
                 "ApiSetting": {
                     "name": "시연",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "neuter_emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
@@ -10127,7 +10127,7 @@
                 },
                 "ApiSetting": {
                     "name": "시원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -10214,7 +10214,7 @@
                 },
                 "ApiSetting": {
                     "name": "신혜",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -10301,7 +10301,7 @@
                 },
                 "ApiSetting": {
                     "name": "아리",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["whisper-1", "whisper-2", "whisper-3", "whisper-4"],
                         "emotion_prompt": "None"
@@ -10388,7 +10388,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -10475,7 +10475,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -10562,7 +10562,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -10649,7 +10649,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -10736,7 +10736,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -10823,7 +10823,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -10910,7 +10910,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -10997,7 +10997,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -11084,7 +11084,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -11171,7 +11171,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -11258,7 +11258,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -11345,7 +11345,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -11432,7 +11432,7 @@
                 },
                 "ApiSetting": {
                     "name": "애란",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -11519,7 +11519,7 @@
                 },
                 "ApiSetting": {
                     "name": "영규",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -11606,7 +11606,7 @@
                 },
                 "ApiSetting": {
                     "name": "영규",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -11693,7 +11693,7 @@
                 },
                 "ApiSetting": {
                     "name": "영규",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -11780,7 +11780,7 @@
                 },
                 "ApiSetting": {
                     "name": "영규",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -11867,7 +11867,7 @@
                 },
                 "ApiSetting": {
                     "name": "예린",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -11954,7 +11954,7 @@
                 },
                 "ApiSetting": {
                     "name": "예린",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -12041,7 +12041,7 @@
                 },
                 "ApiSetting": {
                     "name": "예린",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -12128,7 +12128,7 @@
                 },
                 "ApiSetting": {
                     "name": "예린",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -12215,7 +12215,7 @@
                 },
                 "ApiSetting": {
                     "name": "재준",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -12302,7 +12302,7 @@
                 },
                 "ApiSetting": {
                     "name": "재호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -12389,7 +12389,7 @@
                 },
                 "ApiSetting": {
                     "name": "재호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -12476,7 +12476,7 @@
                 },
                 "ApiSetting": {
                     "name": "정민",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2"],
                         "emotion_prompt": "None"
@@ -12563,7 +12563,7 @@
                 },
                 "ApiSetting": {
                     "name": "정원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -12650,7 +12650,7 @@
                 },
                 "ApiSetting": {
                     "name": "정원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -12737,7 +12737,7 @@
                 },
                 "ApiSetting": {
                     "name": "정원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -12824,7 +12824,7 @@
                 },
                 "ApiSetting": {
                     "name": "정원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -12911,7 +12911,7 @@
                 },
                 "ApiSetting": {
                     "name": "정원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -12998,7 +12998,7 @@
                 },
                 "ApiSetting": {
                     "name": "정원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -13085,7 +13085,7 @@
                 },
                 "ApiSetting": {
                     "name": "정원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -13172,7 +13172,7 @@
                 },
                 "ApiSetting": {
                     "name": "정원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -13259,7 +13259,7 @@
                 },
                 "ApiSetting": {
                     "name": "정원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -13346,7 +13346,7 @@
                 },
                 "ApiSetting": {
                     "name": "정원",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -13433,7 +13433,7 @@
                 },
                 "ApiSetting": {
                     "name": "정재",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -13520,7 +13520,7 @@
                 },
                 "ApiSetting": {
                     "name": "준호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -13607,7 +13607,7 @@
                 },
                 "ApiSetting": {
                     "name": "준호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -13694,7 +13694,7 @@
                 },
                 "ApiSetting": {
                     "name": "준호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3"],
                         "emotion_prompt": "None"
@@ -13781,7 +13781,7 @@
                 },
                 "ApiSetting": {
                     "name": "준호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -13868,7 +13868,7 @@
                 },
                 "ApiSetting": {
                     "name": "준호",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["soft-1", "soft-2", "soft-3", "soft-4"],
                         "emotion_prompt": "None"
@@ -13955,7 +13955,7 @@
                 },
                 "ApiSetting": {
                     "name": "지안",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -14042,7 +14042,7 @@
                 },
                 "ApiSetting": {
                     "name": "지안",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -14129,7 +14129,7 @@
                 },
                 "ApiSetting": {
                     "name": "지안",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -14216,7 +14216,7 @@
                 },
                 "ApiSetting": {
                     "name": "지안",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -14303,7 +14303,7 @@
                 },
                 "ApiSetting": {
                     "name": "지안",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -14390,7 +14390,7 @@
                 },
                 "ApiSetting": {
                     "name": "지안",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -14477,7 +14477,7 @@
                 },
                 "ApiSetting": {
                     "name": "지우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -14564,7 +14564,7 @@
                 },
                 "ApiSetting": {
                     "name": "지우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -14651,7 +14651,7 @@
                 },
                 "ApiSetting": {
                     "name": "지우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -14738,7 +14738,7 @@
                 },
                 "ApiSetting": {
                     "name": "지우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -14825,7 +14825,7 @@
                 },
                 "ApiSetting": {
                     "name": "진우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1"],
                         "emotion_prompt": "None"
@@ -14912,7 +14912,7 @@
                 },
                 "ApiSetting": {
                     "name": "진우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -14999,7 +14999,7 @@
                 },
                 "ApiSetting": {
                     "name": "진우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -15086,7 +15086,7 @@
                 },
                 "ApiSetting": {
                     "name": "진우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -15173,7 +15173,7 @@
                 },
                 "ApiSetting": {
                     "name": "진우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-3"],
                         "emotion_prompt": "None"
@@ -15260,7 +15260,7 @@
                 },
                 "ApiSetting": {
                     "name": "최석",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -15347,7 +15347,7 @@
                 },
                 "ApiSetting": {
                     "name": "현민",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -15434,7 +15434,7 @@
                 },
                 "ApiSetting": {
                     "name": "현승",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -15521,7 +15521,7 @@
                 },
                 "ApiSetting": {
                     "name": "현승",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -15608,7 +15608,7 @@
                 },
                 "ApiSetting": {
                     "name": "현승",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["None"],
                         "emotion_prompt": "None"
@@ -15695,7 +15695,7 @@
                 },
                 "ApiSetting": {
                     "name": "현승",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["whisper-1", "whisper-2", "whisper-3", "whisper-4"],
                         "emotion_prompt": "None"
@@ -15782,7 +15782,7 @@
                 },
                 "ApiSetting": {
                     "name": "현우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -15869,7 +15869,7 @@
                 },
                 "ApiSetting": {
                     "name": "현우",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -15956,7 +15956,7 @@
                 },
                 "ApiSetting": {
                     "name": "현주",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -16043,7 +16043,7 @@
                 },
                 "ApiSetting": {
                     "name": "현주",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -16130,7 +16130,7 @@
                 },
                 "ApiSetting": {
                     "name": "현주",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -16217,7 +16217,7 @@
                 },
                 "ApiSetting": {
                     "name": "현주",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonedown-1", "tonedown-2", "tonedown-3", "tonedown-4"],
                         "emotion_prompt": "None"
@@ -16304,7 +16304,7 @@
                 },
                 "ApiSetting": {
                     "name": "현주",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3"],
                         "emotion_prompt": "None"
@@ -16391,7 +16391,7 @@
                 },
                 "ApiSetting": {
                     "name": "현주",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2"],
                         "emotion_prompt": "None"
@@ -16478,7 +16478,7 @@
                 },
                 "ApiSetting": {
                     "name": "민지",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -16565,7 +16565,7 @@
                 },
                 "ApiSetting": {
                     "name": "민지",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1"],
                         "emotion_prompt": "None"
@@ -16652,7 +16652,7 @@
                 },
                 "ApiSetting": {
                     "name": "머루",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -16739,7 +16739,7 @@
                 },
                 "ApiSetting": {
                     "name": "샷건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -16826,7 +16826,7 @@
                 },
                 "ApiSetting": {
                     "name": "샷건",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -16913,7 +16913,7 @@
                 },
                 "ApiSetting": {
                     "name": "이승주기자",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -17000,7 +17000,7 @@
                 },
                 "ApiSetting": {
                     "name": "정순",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -17087,7 +17087,7 @@
                 },
                 "ApiSetting": {
                     "name": "주하",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -17174,7 +17174,7 @@
                 },
                 "ApiSetting": {
                     "name": "주하",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -17261,7 +17261,7 @@
                 },
                 "ApiSetting": {
                     "name": "중현",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-2", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -17348,7 +17348,7 @@
                 },
                 "ApiSetting": {
                     "name": "지영",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -17435,7 +17435,7 @@
                 },
                 "ApiSetting": {
                     "name": "지철",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -17522,7 +17522,7 @@
                 },
                 "ApiSetting": {
                     "name": "진",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -17609,7 +17609,7 @@
                 },
                 "ApiSetting": {
                     "name": "창배",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -17696,7 +17696,7 @@
                 },
                 "ApiSetting": {
                     "name": "채린아",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -17783,7 +17783,7 @@
                 },
                 "ApiSetting": {
                     "name": "최석",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -17870,7 +17870,7 @@
                 },
                 "ApiSetting": {
                     "name": "최석",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -17957,7 +17957,7 @@
                 },
                 "ApiSetting": {
                     "name": "파캉",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -18044,7 +18044,7 @@
                 },
                 "ApiSetting": {
                     "name": "오언",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["tonemid-1", "tonemid-2", "tonemid-3", "tonemid-4"],
                         "emotion_prompt": "None"
@@ -18131,7 +18131,7 @@
                 },
                 "ApiSetting": {
                     "name": "케일럽",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -18218,7 +18218,7 @@
                 },
                 "ApiSetting": {
                     "name": "올리비아",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -18305,7 +18305,7 @@
                 },
                 "ApiSetting": {
                     "name": "올리비아",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3", "toneup-4"],
                         "emotion_prompt": "None"
@@ -18392,7 +18392,7 @@
                 },
                 "ApiSetting": {
                     "name": "올리비아",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
                         "emotion_prompt": "None"
@@ -18479,7 +18479,7 @@
                 },
                 "ApiSetting": {
                     "name": "올리비아",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["happy-1", "happy-2", "happy-3", "happy-4"],
                         "emotion_prompt": "None"
@@ -18566,7 +18566,7 @@
                 },
                 "ApiSetting": {
                     "name": "올리비아",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["angry-1", "angry-2", "angry-3", "angry-4"],
                         "emotion_prompt": "None"
@@ -18654,7 +18654,7 @@
                 },
                 "ApiSetting": {
                     "name": "만년대리",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -18742,7 +18742,7 @@
                 },
                 "ApiSetting": {
                     "name": "만년대리",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
@@ -18830,7 +18830,7 @@
                 },
                 "ApiSetting": {
                     "name": "근혁",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -18918,7 +18918,7 @@
                 },
                 "ApiSetting": {
                     "name": "근혁",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["normal-1", "normal-2", "normal-3"],
                         "emotion_prompt": "None"
@@ -19006,7 +19006,7 @@
                 },
                 "ApiSetting": {
                     "name": "근혁",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3"],
                         "emotion_prompt": "None"
@@ -19094,7 +19094,7 @@
                 },
                 "ApiSetting": {
                     "name": "근혁",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["toneup-1", "toneup-2", "toneup-3"],
                         "emotion_prompt": "None"
@@ -19183,7 +19183,7 @@
                 },
                 "ApiSetting": {
                     "name": "None",
-                    "ApiToken": "None",
+                    "Api": "TypeCast",
                     "emotion_tone_preset": {
                         "emotion_tone_preset": ["None"],
                         "emotion_prompt": "None"

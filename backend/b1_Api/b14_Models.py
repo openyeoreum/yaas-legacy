@@ -532,7 +532,7 @@ class SoundDataSet(Base):
     SoundDataSetDate = Column(DateTime, default=SeoulNow)
     
     # VoiceDataSet
-    TypeCastVoiceDataSet = Column(JSON)
+    VoiceDataSet = Column(JSON)
     
     # LogoDataSet
     LogoDataSet = Column(JSON)

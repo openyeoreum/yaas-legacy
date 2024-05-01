@@ -496,96 +496,135 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
     return EditGenerationKoListChunks
 
 ## TypecastVoice 생성 ##
-def ActorVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
+def ActorVoiceGen(projectName, email, name, Chunk, Api, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
     attempt = 0
-    ## ElevenLabs
-    while attempt < 60:
-        try:
-            ########## API 요청 ##########
-            Api_key = os.getenv("ELEVENLABS_API_KEY")
-            client = ElevenLabs(api_key=Api_key)
-            
-            
-    ## TypeCast
-    while attempt < 60:
-        try:
-            ########## API 요청 ##########
-            api_token = os.getenv("TYPECAST_API_TOKEN")
-            HEADERS = {'Authorization': f'Bearer {api_token}'}
+    if Api == "ElevenLabs":
+        ## ElevenLabs
+        while attempt < 60:
+            try:
+                ########## ElevenLabs API 요청 ##########
+                EL_Chunk = Chunk
+                
+                Api_key = os.getenv("ELEVENLABS_API_KEY")
+                client = ElevenLabs(api_key = Api_key)
+                
+                Voice_Audio = client.generate(
+                    text = EL_Chunk,
+                    voice = Voice(
+                        voice_id = 'vLoihgIKGtzyXeEI0Ix9',
+                        settings = VoiceSettings(stability = 0.75, similarity_boost = 0.65, style = 0.05, use_speaker_boost = True)
+                    ),
+                    model = "eleven_multilingual_v2"
+                )
 
-            # get my actor
-            r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
-            my_actors = r.json()['result']
-            
-            if my_actors[0]['name']['ko'] == name:
-                # print(Chunk)
-                # print(RandomEMOTION)
-                # print(RandomSPEED)
-                # print(Pitch)
-                # print(RandomLASTPITCH)
-                # print(voiceLayerPath)
-                # print(my_actors)
-                my_first_actor = my_actors[0]
-                my_first_actor_id = my_first_actor['actor_id']
-
-                # request speech synthesis
-                r = requests.post('https://typecast.ai/api/speak', headers = HEADERS, json = {
-                    'text': Chunk, # 음성을 합성하는 문장
-                    'actor_id': my_first_actor_id, # 캐릭터 아이디로 Actor API에서 캐릭터를 검색
-                    'lang': 'auto', # text의 언어 코드['en-us', 'ko-kr', 'ja-jp', 'es-es', 'auto'], auto는 자동 언어 감지
-                    'xapi_hd': True, # 샘플레이트로 True는 고품질(44.1KHz), False는 저품질(16KHz)
-                    'xapi_audio_format': 'wav', # 오디오 포멧으로 기본값은 'wav', 'mp3'
-                    'model_version': 'latest', # 모델(캐릭터) 버전으로 API를 참고, 최신 모델은 "latest"
-                    'emotion_tone_preset': RandomEMOTION, # 감정으로, actor_id를 사용하여 Actor API 에서 캐릭터에 사용 가능한 감정을 검색
-                    'emotion_prompt': None, # 감정 프롬프트(한/영)를 입력, 입력시 'emotion_tone_preset'는 'emotion_prompt'로 설정
-                    'volume': 120, # 오디오 볼륨으로 기본값은 100, 범위: 0.5배는 50 - 2배는 200, 
-                    'speed_x': RandomSPEED, # 말하는 속도로 기본값은 1, 범위: 0.5(빠름) - 1.5(느림)
-                    'tempo': 1.0, # 음성 재생속도로 기본값은 1, 범위: 0.5(0.5배 느림) - 2.0(2배 빠름)
-                    'pitch': Pitch, # 음성 피치로 기본값은 0, 범위: -12 - 12
-                    'max_seconds': 60, # 음성의 최대 길이로 기본값은 30, 범위: 1 - 60
-                    'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
-                    'last_pitch': RandomLASTPITCH, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
-                })
-                speak_url = r.json()['result']['speak_v2_url']
-
-                # polling the speech synthesis result
-                for _ in range(120):
-                    r = requests.get(speak_url, headers=HEADERS)
-                    ret = r.json()['result']
-                    # audio is ready
-                    if ret['status'] == 'done':
-                        # download audio file
-                        r = requests.get(ret['audio_download_url'])
-                        if len(SplitChunks) == 1:
-                            if "M.wav" in voiceLayerPath:
-                                fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
-                            else:
-                                fileName = voiceLayerPath.replace(".wav", "_(0).wav")
-                        else:
-                            fileName = voiceLayerPath
-                        with open(fileName, 'wb') as f:
-                            f.write(r.content)
-                        break
+                if len(SplitChunks) == 1:
+                    if "M.wav" in voiceLayerPath:
+                        fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
                     else:
-                        print(f"VoiceGen: {ret['status']}, {name} waiting 1 second")
-                        time.sleep(1)
+                        fileName = voiceLayerPath.replace(".wav", "_(0).wav")
+                else:
+                    fileName = voiceLayerPath
 
+                print(f"VoiceGen: {name} waiting 1 second")
+                
+                voiceLayerPathMp3 = voiceLayerPath.replace(".wav", ".mp3")
+                save(Voice_Audio, voiceLayerPathMp3)
+                
+                # mp3으로 저장된 파일을 wav로 변경
+                Voice_Audio_Mp3 = AudioSegment.from_mp3(voiceLayerPathMp3)
+                audio.export(voiceLayerPath, format = "wav")
+                os.remove(voiceLayerPathMp3)
+                
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
                     VoiceSplit(projectName, email, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
 
                 return "Continue"
-            else:
-                return name
-            ########## API 요청 ##########
-        except KeyError:
-            attempt += 1
-            print(f"[ KeyError 발생, 재시도 {attempt}/60 ]")
-            time.sleep(60)  # 1분 대기 후 재시도
+                ########## ElevenLabs API 요청 ##########
+            except Exception as e:
+                sys.exit(f"[ 예상치 못한 에러 발생: {e} ]")
 
-        except Exception as e:
-            sys.exit(f"[ 예상치 못한 에러 발생: {e} ]")
-    sys.exit("[ 1시간째 API 무응답, 요금을 충전하세요. ]")
+    if Api == "TypeCast":
+        ## TypeCast
+        while attempt < 60:
+            try:
+                ########## TypeCast API 요청 ##########
+                api_token = os.getenv("TYPECAST_API_TOKEN")
+                HEADERS = {'Authorization': f'Bearer {api_token}'}
+
+                # get my actor
+                r = requests.get('https://typecast.ai/api/actor', headers = HEADERS)
+                my_actors = r.json()['result']
+                
+                if my_actors[0]['name']['ko'] == name:
+                    # print(Chunk)
+                    # print(RandomEMOTION)
+                    # print(RandomSPEED)
+                    # print(Pitch)
+                    # print(RandomLASTPITCH)
+                    # print(voiceLayerPath)
+                    # print(my_actors)
+                    my_first_actor = my_actors[0]
+                    my_first_actor_id = my_first_actor['actor_id']
+
+                    # request speech synthesis
+                    r = requests.post('https://typecast.ai/api/speak', headers = HEADERS, json = {
+                        'text': Chunk, # 음성을 합성하는 문장
+                        'actor_id': my_first_actor_id, # 캐릭터 아이디로 Actor API에서 캐릭터를 검색
+                        'lang': 'auto', # text의 언어 코드['en-us', 'ko-kr', 'ja-jp', 'es-es', 'auto'], auto는 자동 언어 감지
+                        'xapi_hd': True, # 샘플레이트로 True는 고품질(44.1KHz), False는 저품질(16KHz)
+                        'xapi_audio_format': 'wav', # 오디오 포멧으로 기본값은 'wav', 'mp3'
+                        'model_version': 'latest', # 모델(캐릭터) 버전으로 API를 참고, 최신 모델은 "latest"
+                        'emotion_tone_preset': RandomEMOTION, # 감정으로, actor_id를 사용하여 Actor API 에서 캐릭터에 사용 가능한 감정을 검색
+                        'emotion_prompt': None, # 감정 프롬프트(한/영)를 입력, 입력시 'emotion_tone_preset'는 'emotion_prompt'로 설정
+                        'volume': 120, # 오디오 볼륨으로 기본값은 100, 범위: 0.5배는 50 - 2배는 200, 
+                        'speed_x': RandomSPEED, # 말하는 속도로 기본값은 1, 범위: 0.5(빠름) - 1.5(느림)
+                        'tempo': 1.0, # 음성 재생속도로 기본값은 1, 범위: 0.5(0.5배 느림) - 2.0(2배 빠름)
+                        'pitch': Pitch, # 음성 피치로 기본값은 0, 범위: -12 - 12
+                        'max_seconds': 60, # 음성의 최대 길이로 기본값은 30, 범위: 1 - 60
+                        'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
+                        'last_pitch': RandomLASTPITCH, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
+                    })
+                    speak_url = r.json()['result']['speak_v2_url']
+
+                    # polling the speech synthesis result
+                    for _ in range(120):
+                        r = requests.get(speak_url, headers=HEADERS)
+                        ret = r.json()['result']
+                        # audio is ready
+                        if ret['status'] == 'done':
+                            # download audio file
+                            r = requests.get(ret['audio_download_url'])
+                            if len(SplitChunks) == 1:
+                                if "M.wav" in voiceLayerPath:
+                                    fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
+                                else:
+                                    fileName = voiceLayerPath.replace(".wav", "_(0).wav")
+                            else:
+                                fileName = voiceLayerPath
+                            with open(fileName, 'wb') as f:
+                                f.write(r.content)
+                            break
+                        else:
+                            print(f"VoiceGen: {ret['status']}, {name} waiting 1 second")
+                            time.sleep(1)
+
+                    if len(SplitChunks) > 1:
+                        ### 음성파일을 분할하는 코드 ###
+                        VoiceSplit(projectName, email, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+
+                    return "Continue"
+                else:
+                    return name
+                ########## TypeCast API 요청 ##########
+            except KeyError:
+                attempt += 1
+                print(f"[ KeyError 발생, 재시도 {attempt}/60 ]")
+                time.sleep(60)  # 1분 대기 후 재시도
+
+            except Exception as e:
+                sys.exit(f"[ 예상치 못한 에러 발생: {e} ]")
+        sys.exit("[ 1시간째 API 무응답, 요금을 충전하세요. ]")
 
 ## 생성된 음성 합치기 ##
 ## Pause 추출
@@ -908,13 +947,15 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceFileGen = 'on', MessagesReview = "off"):
+def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
     
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
     # MatchedActors 경로 생성
     fileName = projectName + '_' + 'MatchedVoices.json'
     MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName, 'Mixed')
+    fileName = '[' + projectName + '_' + 'CloneVoice_Setting].json'
+    CloneVoiceActorPath = VoiceLayerPathGen(projectName, email, fileName, 'Master')
     # MatchedChunksEdit 경로 생성
     fileName = '[' + projectName + '_' + 'AudioBook_Edit].json'
     MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName, 'Master')
@@ -927,6 +968,56 @@ def VoiceLayerSplitGenerator(projectName, email, MainLang = 'Ko', Mode = "Manual
         with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
             MatchedChunks = json.load(MatchedChunksJson)
         
+        ### CloneVoice ###
+        ## Narrator가 "CloneVoice" 인 경우 CloneVoiceDic 생성 ##
+        print(f'Narrator: {Narrator} !!!!!')
+        if Narrator == 'VoiceClone':
+            if not os.path.exists(CloneVoiceActorPath):
+                CloneVoiceActor = {
+                    "Name": f"{CloneVoiceName}({projectName})",
+                    "ApiSetting": {
+                        "name": f"{CloneVoiceName}",
+                        "Api": "ElevenLabs",
+                        "voice_id": "Voice_id",
+                        "stability": 0.75,
+                        "similarity_boost": 0.65,
+                        "style": 0.05,
+                        "model": "eleven_multilingual_v2",
+                        "SettingCompletion": "세팅 완료 후 Completion으로 변경"
+                    }
+                }
+                with open(CloneVoiceActorPath, 'w', encoding = 'utf-8') as CloneVoiceActorJson:
+                    json.dump(CloneVoiceActor, CloneVoiceActorJson, ensure_ascii = False, indent = 4)
+                sys.exit(f'[ 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
+            else:
+                with open(CloneVoiceActorPath, 'r', encoding = 'utf-8') as CloneVoiceActorJson:
+                    CloneVoiceActor = json.load(CloneVoiceActorJson)
+                
+                # 클론보이스 세팅이 완료되었는지 확인
+                SettingCompletion = CloneVoiceActor['ApiSetting']['SettingCompletion']
+                if SettingCompletion != 'Completion':
+                    sys.exit(f'[ 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
+                else:
+                    ## MatchedVoices 변경
+                    for _Matched in MatchedActors:
+                        if _Matched['CharacterTag'] == 'Narrator':
+                            BeforeNarratorName = _Matched['ActorName']
+                            AfterNarratorName = CloneVoiceActor['Name']
+                            _Matched['ActorName'] = AfterNarratorName
+                            _Matched['ApiSetting'] = CloneVoiceActor['ApiSetting']
+                    ## MatchedVoices 변경사항 저장
+                    with open(MatchedActorsPath, 'w', encoding = 'utf-8') as MatchedActorsJson:
+                        json.dump(MatchedActors, MatchedActorsJson, ensure_ascii = False, indent = 4)
+                            
+                    ## AudioBook_Edit 변경
+                    for _Edit in MatchedChunks:
+                        if _Edit['ActorName'] == BeforeNarratorName:
+                            _Edit['ActorName'] = AfterNarratorName
+                    ## AudioBook_Edit 변경사항 저장
+                    with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunksJson:
+                        json.dump(MatchedChunks, MatchedChunksJson, ensure_ascii = False, indent = 4)
+        ### CloneVoice ###
+
         ## AudioBook_Edit에 새로운 ActorName이 발생한 경우 이를 MatchedActors에 추가
         # MatchedActors 검토
         MatchedActorNames = []
@@ -1183,7 +1274,7 @@ def VoiceLayerSplitGenerator(projectName, email, MainLang = 'Ko', Mode = "Manual
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
-                    ChangedName = ActorVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                    ChangedName = ActorVoiceGen(projectName, email, name, Chunk, Api, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
                     if ChangedName != 'Continue':
                         if Macro == "Auto":
                             TypeCastMacro(ChangedName, Account)
@@ -1199,7 +1290,7 @@ def VoiceLayerSplitGenerator(projectName, email, MainLang = 'Ko', Mode = "Manual
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
                     if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') and not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav'):
-                        ChangedName = ActorVoiceGen(projectName, email, name, Chunk, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                        ChangedName = ActorVoiceGen(projectName, email, name, Chunk, Api, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 
                         if ChangedName == 'Continue':
                             ## 히스토리 저장 ##
@@ -1233,10 +1324,10 @@ def VoiceLayerSplitGenerator(projectName, email, MainLang = 'Ko', Mode = "Manual
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
-def VoiceLayerUpdate(projectName, email, MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceFileGen = "on", MessagesReview = "off"):
+def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     
-    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
+    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
 
     with get_db() as db:
         

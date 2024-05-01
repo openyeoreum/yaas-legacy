@@ -19201,6 +19201,57 @@
                     "last_pitch": [-2, -1, 0]
                 }
             }
+        ],
+        "CloneCharacters": [
+            {
+                "CharacterId": 0,
+                "Name": "None",
+                "ApiSetting": {
+                    "name": "None",
+                    "Api": "TypeCast",
+                    "emotion_tone_preset": {
+                        "emotion_tone_preset": ["None"],
+                        "emotion_prompt": "None"
+                    },
+                    "emotion_prompt": {
+                        "emotion_tone_preset": "emotion_prompt",
+                        "emotion_prompt": "None"
+                    },
+                    "volume": 120,
+                    "speed_x": [1.05],
+                    "tempo": 1.0,
+                    "pitch": 0,
+                    "max_seconds": 60,
+                    "force_length": 0,
+                    "last_pitch": [-2, -1, 0]
+                }
+            },
+            {
+                "CharacterId": 0,
+                "Name": "None",
+                "ApiSetting": {
+                    "name": "None",
+                    "Api": "ElevenLabs",
+                    "voice_id": "None",
+                    "stability": 0,
+                    "similarity_boost": 0,
+                    "style": 0,
+                    "model": "eleven_multilingual_v2"
+                }
+            },
+            {
+                "CharacterId": 1,
+                "Name": "이덕주(카이스트명상수업)",
+                "ApiSetting": {
+                    "name": "이덕주",
+                    "Api": "ElevenLabs",
+                    "voice_id": "vLoihgIKGtzyXeEI0Ix9",
+                    "stability": 0.75,
+                    "similarity_boost": 0.65,
+                    "style": 0.05,
+                    "model": "eleven_multilingual_v2"
+                }
+            }
         ]
     }
 ]

@@ -496,7 +496,7 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
     return EditGenerationKoListChunks
 
 ## TypecastVoice 생성 ##
-def ActorVoiceGen(projectName, email, name, Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
+def ActorVoiceGen(projectName, email, name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
     attempt = 0
 
     ##################
@@ -509,8 +509,6 @@ def ActorVoiceGen(projectName, email, name, Chunk, Api, ApiSetting, RandomEMOTIO
         SimilarityBoost = ApiSetting['similarity_boost']
         Style = ApiSetting['style']
         Model = ApiSetting['model']
-        
-        EL_Chunk = Chunk
         
         while attempt < 60:
             try:
@@ -969,9 +967,9 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "name": f"{CloneVoiceName}",
                     "Api": "ElevenLabs",
                     "voice_id": "Voice_id",
-                    "stability": 0.75,
-                    "similarity_boost": 0.65,
-                    "style": 0.05,
+                    "stability": 0.80,
+                    "similarity_boost": 0.70,
+                    "style": 0.00,
                     "model": "eleven_multilingual_v2",
                     "SettingCompletion": "세팅 완료 후 Completion으로 변경"
                 }
@@ -1217,6 +1215,29 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             EditId = Update['EditId']
             Name = Update['ActorName']
             Pause = Update['Pause']
+            
+            ## ElevenLabs Chunk Modify ##
+            def ModifyELChunk(chunk):
+                # 1. Chunk 마지막 3개의 글자 중에 . 과 , 이 포함되어 있으면 이를 모두 삭제하고 .하나만 표기
+                if '.' in chunk[-3:] or ',' in chunk[-3:]:
+                    chunk = chunk[:-3] + chunk[-3:].replace('.', '').replace(',', '') + '.'
+                # 2. ~.은 ,로 변경
+                chunk = chunk.replace('~.', ',')
+                # 3. Chunk의 마지막 3개를 제외하고 .이 포함되면 이를 모두 삭제
+                chunk = chunk[:-3].replace('.', '') + chunk[-3:]
+                return chunk
+            
+            ## ElevenLabs Chunk
+            EL_Chunk = None
+            if Api == 'ElevenLabs':
+                ELChunks = []
+                for _ELChunk in Update['ActorChunk']:
+                    ELChunk = ModifyELChunk(_ELChunk)
+                    ELChunks.append(ELChunk)
+                EL_Chunk = " ".join(ELChunks)
+                print(f"ChunkModify: ({EL_Chunk})")
+            ## ElevenLabs Chunk Modify ##
+
             Chunk = " ".join(Update['ActorChunk'])
             ChunkCount = len(Update['ActorChunk']) - 1 # 파일의 마지막 순번을 표기
 
@@ -1298,7 +1319,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
-                    ChangedName = ActorVoiceGen(projectName, email, name, Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                    ChangedName = ActorVoiceGen(projectName, email, name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
                     if ChangedName != 'Continue':
                         if Macro == "Auto":
                             TypeCastMacro(ChangedName, Account)
@@ -1314,7 +1335,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
                     if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') and not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav'):
-                        ChangedName = ActorVoiceGen(projectName, email, name, Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                        ChangedName = ActorVoiceGen(projectName, email, name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 
                         if ChangedName == 'Continue':
                             ## 히스토리 저장 ##
@@ -1383,17 +1404,3 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    # client = ElevenLabs(
-    # api_key="193e7ccf8948a7a5264de47004c60064" # Defaults to ELEVEN_API_KEY
-    # )
-
-    # audio = client.generate(
-    #     text = "카이스트 명상수업. 카이스트 학생들의 마음을 재건해준 명강이. 이덕주 지음. 드러가며. 다시 수업을 시작하는 이유. 카이스트는, 1988년에 부임해 30여 년을 몸담았던 학교다. 나는 정년을 준비하고 있었다. 이천십구년 칠월에 출판사로부터 메일을 받았다. ‘카이스트 명상 수업’에 관한 책을 냈으면 좋겠다는 것이다. 많이 망설여졌다. 학생들에게 명상을 가르치긴 했지만, 책을 낼 정도는 아니라고 생각했다.",
-    #     voice = Voice(
-    #         voice_id = 'vLoihgIKGtzyXeEI0Ix9',
-    #         settings = VoiceSettings(stability = 0.75, similarity_boost = 0.65, style = 0.05, use_speaker_boost = True)
-    #     ),
-    #     model = "eleven_multilingual_v2"
-    # )
-
-    # save(audio, "/yaas/my-file.mp3")

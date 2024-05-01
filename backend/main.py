@@ -92,7 +92,7 @@ if __name__ == "__main__":
     password = "0128"
     projectNameList = ['240412_카이스트명상수업'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘'
     IndexMode = "Define" # 'Define', 'Preprocess' : Define 은 Index 전처리 필요 없음, Preprocess 는 Index 전처리 필요함
-    MessagesReview = "off" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
+    MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
     MainLang = "Ko" # 'Ko', 'En'
     Narrator = "VoiceClone" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터

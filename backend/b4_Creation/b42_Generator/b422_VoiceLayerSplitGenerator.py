@@ -496,25 +496,35 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
     return EditGenerationKoListChunks
 
 ## TypecastVoice 생성 ##
-def ActorVoiceGen(projectName, email, name, Chunk, Api, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
+def ActorVoiceGen(projectName, email, name, Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
     attempt = 0
+
+    ##################
+    ### ElevenLabs ###
+    ##################
     if Api == "ElevenLabs":
-        ## ElevenLabs
+        # Api Setting
+        VoiceId = ApiSetting['voice_id']
+        Stability = ApiSetting['stability']
+        SimilarityBoost = ApiSetting['similarity_boost']
+        Style = ApiSetting['style']
+        Model = ApiSetting['model']
+        
+        EL_Chunk = Chunk
+        
         while attempt < 60:
             try:
                 ########## ElevenLabs API 요청 ##########
-                EL_Chunk = Chunk
-                
                 Api_key = os.getenv("ELEVENLABS_API_KEY")
                 client = ElevenLabs(api_key = Api_key)
                 
                 Voice_Audio = client.generate(
                     text = EL_Chunk,
                     voice = Voice(
-                        voice_id = 'vLoihgIKGtzyXeEI0Ix9',
-                        settings = VoiceSettings(stability = 0.75, similarity_boost = 0.65, style = 0.05, use_speaker_boost = True)
+                        voice_id = VoiceId,
+                        settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True)
                     ),
-                    model = "eleven_multilingual_v2"
+                    model = Model
                 )
 
                 if len(SplitChunks) == 1:
@@ -525,15 +535,15 @@ def ActorVoiceGen(projectName, email, name, Chunk, Api, RandomEMOTION, RandomSPE
                 else:
                     fileName = voiceLayerPath
 
-                print(f"VoiceGen: {name} waiting 1 second")
+                print(f"VoiceGen: completion, {name} waiting 0.5 second")
                 
-                voiceLayerPathMp3 = voiceLayerPath.replace(".wav", ".mp3")
-                save(Voice_Audio, voiceLayerPathMp3)
+                fileNameMp3 = fileName.replace(".wav", ".mp3")
+                save(Voice_Audio, fileNameMp3)
                 
                 # mp3으로 저장된 파일을 wav로 변경
-                Voice_Audio_Mp3 = AudioSegment.from_mp3(voiceLayerPathMp3)
-                audio.export(voiceLayerPath, format = "wav")
-                os.remove(voiceLayerPathMp3)
+                Voice_Audio_Mp3 = AudioSegment.from_mp3(fileNameMp3)
+                Voice_Audio_Mp3.export(fileName, format = "wav")
+                os.remove(fileNameMp3)
                 
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
@@ -544,8 +554,10 @@ def ActorVoiceGen(projectName, email, name, Chunk, Api, RandomEMOTION, RandomSPE
             except Exception as e:
                 sys.exit(f"[ 예상치 못한 에러 발생: {e} ]")
 
+    ################
+    ### TypeCast ###
+    ################
     if Api == "TypeCast":
-        ## TypeCast
         while attempt < 60:
             try:
                 ########## TypeCast API 요청 ##########
@@ -946,6 +958,54 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         
     return EditGenerationKoChunks
 
+## CloneVoice 셋팅
+def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, CloneVoiceActorPath, SelectionGenerationKoChunks):
+    ## Narrator가 "CloneVoice" 인 경우 CloneVoiceDic 생성 ##
+    if Narrator == 'VoiceClone':
+        if not os.path.exists(CloneVoiceActorPath):
+            CloneVoiceActor = {
+                "Name": f"{CloneVoiceName}({projectName})",
+                "ApiSetting": {
+                    "name": f"{CloneVoiceName}",
+                    "Api": "ElevenLabs",
+                    "voice_id": "Voice_id",
+                    "stability": 0.75,
+                    "similarity_boost": 0.65,
+                    "style": 0.05,
+                    "model": "eleven_multilingual_v2",
+                    "SettingCompletion": "세팅 완료 후 Completion으로 변경"
+                }
+            }
+            with open(CloneVoiceActorPath, 'w', encoding = 'utf-8') as CloneVoiceActorJson:
+                json.dump(CloneVoiceActor, CloneVoiceActorJson, ensure_ascii = False, indent = 4)
+            sys.exit(f'[ 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
+        else:
+            with open(CloneVoiceActorPath, 'r', encoding = 'utf-8') as CloneVoiceActorJson:
+                CloneVoiceActor = json.load(CloneVoiceActorJson)
+            
+            # 클론보이스 세팅이 완료되었는지 확인
+            SettingCompletion = CloneVoiceActor['ApiSetting']['SettingCompletion']
+            if SettingCompletion != 'Completion':
+                sys.exit(f'[ 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
+            else:
+                ## MatchedVoices 변경
+                for _Matched in MatchedActors:
+                    if _Matched['CharacterTag'] == 'Narrator':
+                        BeforeNarratorName = _Matched['ActorName']
+                        AfterNarratorName = CloneVoiceActor['Name']
+                        _Matched['ActorName'] = AfterNarratorName
+                        _Matched['ApiSetting'] = CloneVoiceActor['ApiSetting']
+                        
+                ## AudioBook_Edit 변경
+                if BeforeNarratorName != AfterNarratorName:
+                    for _Edit in SelectionGenerationKoChunks:
+                        if _Edit['ActorName'] == BeforeNarratorName:
+                            _Edit['ActorName'] = AfterNarratorName
+        
+        return MatchedActors, SelectionGenerationKoChunks
+    
+    return MatchedActors, SelectionGenerationKoChunks
+
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
@@ -962,61 +1022,14 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     OriginFileName = '' + projectName + '_' + 'VoiceLayer_Origin.json'
     MatchedChunksOriginPath = VoiceLayerPathGen(projectName, email, OriginFileName, 'Mixed')
     
+    ## CloneVoice 셋팅
+    MatchedActors, SelectionGenerationKoChunks = CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, CloneVoiceActorPath, SelectionGenerationKoChunks)
+
     if os.path.exists(MatchedActorsPath):
         with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
             MatchedActors = json.load(MatchedActorsJson)
         with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
             MatchedChunks = json.load(MatchedChunksJson)
-        
-        ### CloneVoice ###
-        ## Narrator가 "CloneVoice" 인 경우 CloneVoiceDic 생성 ##
-        print(f'Narrator: {Narrator} !!!!!')
-        if Narrator == 'VoiceClone':
-            if not os.path.exists(CloneVoiceActorPath):
-                CloneVoiceActor = {
-                    "Name": f"{CloneVoiceName}({projectName})",
-                    "ApiSetting": {
-                        "name": f"{CloneVoiceName}",
-                        "Api": "ElevenLabs",
-                        "voice_id": "Voice_id",
-                        "stability": 0.75,
-                        "similarity_boost": 0.65,
-                        "style": 0.05,
-                        "model": "eleven_multilingual_v2",
-                        "SettingCompletion": "세팅 완료 후 Completion으로 변경"
-                    }
-                }
-                with open(CloneVoiceActorPath, 'w', encoding = 'utf-8') as CloneVoiceActorJson:
-                    json.dump(CloneVoiceActor, CloneVoiceActorJson, ensure_ascii = False, indent = 4)
-                sys.exit(f'[ 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
-            else:
-                with open(CloneVoiceActorPath, 'r', encoding = 'utf-8') as CloneVoiceActorJson:
-                    CloneVoiceActor = json.load(CloneVoiceActorJson)
-                
-                # 클론보이스 세팅이 완료되었는지 확인
-                SettingCompletion = CloneVoiceActor['ApiSetting']['SettingCompletion']
-                if SettingCompletion != 'Completion':
-                    sys.exit(f'[ 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
-                else:
-                    ## MatchedVoices 변경
-                    for _Matched in MatchedActors:
-                        if _Matched['CharacterTag'] == 'Narrator':
-                            BeforeNarratorName = _Matched['ActorName']
-                            AfterNarratorName = CloneVoiceActor['Name']
-                            _Matched['ActorName'] = AfterNarratorName
-                            _Matched['ApiSetting'] = CloneVoiceActor['ApiSetting']
-                    ## MatchedVoices 변경사항 저장
-                    with open(MatchedActorsPath, 'w', encoding = 'utf-8') as MatchedActorsJson:
-                        json.dump(MatchedActors, MatchedActorsJson, ensure_ascii = False, indent = 4)
-                            
-                    ## AudioBook_Edit 변경
-                    for _Edit in MatchedChunks:
-                        if _Edit['ActorName'] == BeforeNarratorName:
-                            _Edit['ActorName'] = AfterNarratorName
-                    ## AudioBook_Edit 변경사항 저장
-                    with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunksJson:
-                        json.dump(MatchedChunks, MatchedChunksJson, ensure_ascii = False, indent = 4)
-        ### CloneVoice ###
 
         ## AudioBook_Edit에 새로운 ActorName이 발생한 경우 이를 MatchedActors에 추가
         # MatchedActors 검토
@@ -1046,6 +1059,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
     ## MatchedActor 순서대로 Speech 생성
     for MatchedActor in MatchedActors:
+        Api = MatchedActor['ApiSetting']['Api']
         Actor = MatchedActor['ActorName']
 
         print(f"< Project: {projectName} | Actor: {Actor} | VoiceLayerGenerator 시작 >")
@@ -1228,25 +1242,35 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         History['Pause'] = Pause
                         Modify = "Yes"
 
-            ## 보이스 선정 ##                
-            for VoiceData in VoiceDataSetCharacters:
-                if Name == VoiceData['Name']:
-                    ApiSetting = VoiceData['ApiSetting']
-                    name = ApiSetting['name']
-                    # ApiToken = ApiSetting['ApiToken']
-                    EMOTION = ApiSetting['emotion_tone_preset']['emotion_tone_preset']
-                    SPEED = ApiSetting['speed_x']
-                    Pitch = ApiSetting['pitch']
+            ## TypeCast ApiSetting ##
+            if Api == 'TypeCast':
+                ## 보이스 선정 ##                
+                for VoiceData in VoiceDataSetCharacters:
+                    if Name == VoiceData['Name']:
+                        ApiSetting = VoiceData['ApiSetting']
+                        name = ApiSetting['name']
+                        EMOTION = ApiSetting['emotion_tone_preset']['emotion_tone_preset']
+                        SPEED = ApiSetting['speed_x']
+                        Pitch = ApiSetting['pitch']
+                
+                ## 'Narrator', 'Character' 태그가 아닌 경우 끝음 조절하기 ##
+                if Update['Tag'] not in ['Narrator', 'Character']:
+                    LASTPITCH = [-2]
+                    _LastPitchSwitch = 1
+                elif _LastPitchSwitch == 1:
+                    LASTPITCH = [-2]
+                    _LastPitchSwitch = 0
+                else:
+                    LASTPITCH = ApiSetting['last_pitch']
             
-            ## 'Narrator', 'Character' 태그가 아닌 경우 끝음 조절하기 ##
-            if Update['Tag'] not in ['Narrator', 'Character']:
-                LASTPITCH = [-2]
-                _LastPitchSwitch = 1
-            elif _LastPitchSwitch == 1:
-                LASTPITCH = [-2]
-                _LastPitchSwitch = 0
-            else:
-                LASTPITCH = ApiSetting['last_pitch']
+            ## ElevenLabs ApiSetting ##
+            elif Api == 'ElevenLabs':
+                ApiSetting = MatchedActor['ApiSetting']
+                name = ApiSetting['name']
+                EMOTION = ['None']
+                SPEED = [1.00]
+                Pitch = 0
+                LASTPITCH = [0]
             
             ## TypeCastMacro에 따른 restart 코드 ##
             restart = True
@@ -1274,7 +1298,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
-                    ChangedName = ActorVoiceGen(projectName, email, name, Chunk, Api, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                    ChangedName = ActorVoiceGen(projectName, email, name, Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
                     if ChangedName != 'Continue':
                         if Macro == "Auto":
                             TypeCastMacro(ChangedName, Account)
@@ -1290,7 +1314,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
                     if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') and not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav'):
-                        ChangedName = ActorVoiceGen(projectName, email, name, Chunk, Api, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                        ChangedName = ActorVoiceGen(projectName, email, name, Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 
                         if ChangedName == 'Continue':
                             ## 히스토리 저장 ##
@@ -1359,17 +1383,17 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    client = ElevenLabs(
-    api_key="193e7ccf8948a7a5264de47004c60064" # Defaults to ELEVEN_API_KEY
-    )
+    # client = ElevenLabs(
+    # api_key="193e7ccf8948a7a5264de47004c60064" # Defaults to ELEVEN_API_KEY
+    # )
 
-    audio = client.generate(
-        text = "카이스트 명상수업. 카이스트 학생들의 마음을 재건해준 명강이. 이덕주 지음. 드러가며. 다시 수업을 시작하는 이유. 카이스트는, 1988년에 부임해 30여 년을 몸담았던 학교다. 나는 정년을 준비하고 있었다. 이천십구년 칠월에 출판사로부터 메일을 받았다. ‘카이스트 명상 수업’에 관한 책을 냈으면 좋겠다는 것이다. 많이 망설여졌다. 학생들에게 명상을 가르치긴 했지만, 책을 낼 정도는 아니라고 생각했다.",
-        voice = Voice(
-            voice_id = 'vLoihgIKGtzyXeEI0Ix9',
-            settings = VoiceSettings(stability = 0.75, similarity_boost = 0.65, style = 0.05, use_speaker_boost = True)
-        ),
-        model = "eleven_multilingual_v2"
-    )
+    # audio = client.generate(
+    #     text = "카이스트 명상수업. 카이스트 학생들의 마음을 재건해준 명강이. 이덕주 지음. 드러가며. 다시 수업을 시작하는 이유. 카이스트는, 1988년에 부임해 30여 년을 몸담았던 학교다. 나는 정년을 준비하고 있었다. 이천십구년 칠월에 출판사로부터 메일을 받았다. ‘카이스트 명상 수업’에 관한 책을 냈으면 좋겠다는 것이다. 많이 망설여졌다. 학생들에게 명상을 가르치긴 했지만, 책을 낼 정도는 아니라고 생각했다.",
+    #     voice = Voice(
+    #         voice_id = 'vLoihgIKGtzyXeEI0Ix9',
+    #         settings = VoiceSettings(stability = 0.75, similarity_boost = 0.65, style = 0.05, use_speaker_boost = True)
+    #     ),
+    #     model = "eleven_multilingual_v2"
+    # )
 
-    save(audio, "/yaas/my-file.mp3")
+    # save(audio, "/yaas/my-file.mp3")

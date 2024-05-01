@@ -533,7 +533,7 @@ def ActorVoiceGen(projectName, email, name, Chunk, EL_Chunk, Api, ApiSetting, Ra
                 else:
                     fileName = voiceLayerPath
 
-                print(f"VoiceGen: completion, {name} waiting 0.5 second")
+                print(f"VoiceGen: completion, {name} waiting 1-5 second")
                 
                 fileNameMp3 = fileName.replace(".wav", ".mp3")
                 save(Voice_Audio, fileNameMp3)
@@ -549,6 +549,11 @@ def ActorVoiceGen(projectName, email, name, Chunk, EL_Chunk, Api, ApiSetting, Ra
 
                 return "Continue"
                 ########## ElevenLabs API 요청 ##########
+            except KeyError:
+                attempt += 1
+                print(f"[ KeyError 발생, 재시도 {attempt}/60 ]")
+                time.sleep(60)  # 1분 대기 후 재시도
+                
             except Exception as e:
                 sys.exit(f"[ 예상치 못한 에러 발생: {e} ]")
 
@@ -1235,7 +1240,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     ELChunk = ModifyELChunk(_ELChunk)
                     ELChunks.append(ELChunk)
                 EL_Chunk = " ".join(ELChunks)
-                print(f"ChunkModify: ({EL_Chunk})")
+                # print(f"ChunkModify: ({EL_Chunk})")
             ## ElevenLabs Chunk Modify ##
 
             Chunk = " ".join(Update['ActorChunk'])

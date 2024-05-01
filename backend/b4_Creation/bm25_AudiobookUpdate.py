@@ -1,7 +1,6 @@
 import sys
 sys.path.append("/yaas")
 
-from backend.b4_Creation.b42_Generator.b422_VoiceLayerGenerator import VoiceLayerGenerator
 from backend.b4_Creation.b42_Generator.b422_VoiceLayerSplitGenerator import VoiceLayerUpdate
 from backend.b4_Creation.b41_Selector.b411_MusicLayerSelector import MusicLayerUpdate
 
@@ -12,17 +11,14 @@ from backend.b4_Creation.b41_Selector.b411_MusicLayerSelector import MusicLayerU
 ###########################
 
 ### Creation에 오디오북 제작 및 업데이트 ###
-def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, intro, mode = "Manual", macro = "Manual", account = "None", voiceFileGen = "on", split = "Manual", messagesReview = "off"):
+def CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, intro, mode = "Manual", macro = "Manual", account = "None", voiceFileGen = "on", messagesReview = "off"):
     
     #####################
     ### 01_VoiceLayer ###
     #####################
-    if split == "Manual":
-        VoiceLayerGenerator(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, MessagesReview = messagesReview)
-        MusicLayerUpdate(projectName, email, MainLang = mainLang, Intro = intro)
-    else:
-        VoiceLayerUpdate(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
-        MusicLayerUpdate(projectName, email, MainLang = mainLang, Intro = intro)
+    VoiceLayerUpdate(projectName, email, voiceDataSet, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
+    MusicLayerUpdate(projectName, email, MainLang = mainLang, Intro = intro)
+    
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
@@ -34,9 +30,8 @@ if __name__ == "__main__":
     voiceFileGen = "off" # 'on', 'off'
     macro = "Manual"
     account = "None"
-    split = "Manual"
     messagesReview = "off"
     #########################################################################
     
     ### Step6 : 크리에이션이 오디오북 제작 ###
-    CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, macro = macro, account = account, voiceFileGen = voiceFileGen, split = split, messagesReview = messagesReview)
+    CreationAudioBookUpdate(projectName, email, voiceDataSet, mainLang, macro = macro, account = account, voiceFileGen = voiceFileGen, messagesReview = messagesReview)

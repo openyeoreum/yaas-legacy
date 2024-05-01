@@ -384,7 +384,7 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, voiceDataSet, Main
     # with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
     #     json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
     # ### 테스트 후 삭제 ###
-    
+        
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
         ## 중성 캐릭터의 ActorName과 CharacterTag 변경
@@ -906,20 +906,49 @@ def VoiceLayerSplitGenerator(projectName, email, voiceDataSet, MainLang = 'Ko', 
     # MatchedActors 경로 생성
     fileName = projectName + '_' + 'MatchedVoices.json'
     MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName, 'Mixed')
+    # MatchedChunksEdit 경로 생성
+    fileName = '[' + projectName + '_' + 'AudioBook_Edit].json'
+    MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName, 'Master')
+    OriginFileName = '' + projectName + '_' + 'VoiceLayer_Origin.json'
+    MatchedChunksOriginPath = VoiceLayerPathGen(projectName, email, OriginFileName, 'Mixed')
+    
     if os.path.exists(MatchedActorsPath):
         with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
             MatchedActors = json.load(MatchedActorsJson)
+        with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
+            MatchedChunks = json.load(MatchedChunksJson)
+        
+        ## AudioBook_Edit에 새로운 ActorName이 발생한 경우 이를 MatchedActors에 추가
+        # MatchedActors 검토
+        MatchedActorNames = []
+        for _Matched in MatchedActors:
+            if _Matched['ActorName'] not in MatchedActorNames:
+                MatchedActorNames.append(_Matched['ActorName'])
+        
+        # AudioBook_Edit 검토
+        EditActorNames = []
+        for _Edit in MatchedChunks:
+            if _Edit['ActorName'] not in EditActorNames:
+                EditActorNames.append(_Edit['ActorName'])
+
+        # 새롭게 추가될 ActorNames
+        NewActorNames = [actor for actor in EditActorNames if actor not in MatchedActorNames]
+
+        # 새롭게 추가될 ActorNames이 존재할 경우 MatchedActors 업데이트
+        if NewActorNames != []:
+            for Characters in VoiceDataSetCharacters:
+                if Characters['Name'] in NewActorNames:
+                    NewActorDic = {"CharacterTag": "NewCharacter", "ActorName": Characters['Name'], "ApiSetting": Characters['ApiSetting']}
+                    MatchedActors.append(NewActorDic)
+            # 새롭게 추가된 캐릭터 내용 저장 (덮어쓰기)
+            with open(MatchedActorsPath, 'w', encoding = 'utf-8') as MatchedActorsJson:
+                json.dump(MatchedActors, MatchedActorsJson, ensure_ascii = False, indent = 4)
 
     ## MatchedActor 순서대로 Speech 생성
     for MatchedActor in MatchedActors:
         Actor = MatchedActor['ActorName']
 
         print(f"< Project: {projectName} | Actor: {Actor} | VoiceLayerGenerator 시작 >")
-        # MatchedChunksEdit 경로 생성
-        fileName = '[' + projectName + '_' + 'AudioBook_Edit].json'
-        MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName, 'Master')
-        OriginFileName = '' + projectName + '_' + 'VoiceLayer_Origin.json'
-        MatchedChunksOriginPath = VoiceLayerPathGen(projectName, email, OriginFileName, 'Mixed')
         
         ## MatchedChunksPath.json이 존재하면 해당 파일로 VoiceLayerGenerator 진행, 아닐경우 새롭게 생성
         if (not os.path.exists(MatchedChunksPath)) and (not os.path.exists(unicodedata.normalize('NFC', MatchedChunksPath))) and (not os.path.exists(unicodedata.normalize('NFD', MatchedChunksPath))):
@@ -1231,17 +1260,17 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    # client = ElevenLabs(
-    # api_key="193e7ccf8948a7a5264de47004c60064" # Defaults to ELEVEN_API_KEY
-    # )
+    client = ElevenLabs(
+    api_key="193e7ccf8948a7a5264de47004c60064" # Defaults to ELEVEN_API_KEY
+    )
 
-    # audio = client.generate(
-    #     text = "카이스트 명상수업. 카이스트 학생들의 마음을 재건해준 명강이. 이덕주 지음. 드러가며. 다시 수업을 시작하는 이유. 카이스트는, 1988년에 부임해 30여 년을 몸담았던 학교다. 나는 정년을 준비하고 있었다. 이천십구년 칠월에 출판사로부터 메일을 받았다. ‘카이스트 명상 수업’에 관한 책을 냈으면 좋겠다는 것이다. 많이 망설여졌다. 학생들에게 명상을 가르치긴 했지만, 책을 낼 정도는 아니라고 생각했다.",
-    #     voice = Voice(
-    #         voice_id = 'vLoihgIKGtzyXeEI0Ix9',
-    #         settings = VoiceSettings(stability = 0.75, similarity_boost = 0.65, style = 0.05, use_speaker_boost = True)
-    #     ),
-    #     model = "eleven_multilingual_v2"
-    # )
+    audio = client.generate(
+        text = "카이스트 명상수업. 카이스트 학생들의 마음을 재건해준 명강이. 이덕주 지음. 드러가며. 다시 수업을 시작하는 이유. 카이스트는, 1988년에 부임해 30여 년을 몸담았던 학교다. 나는 정년을 준비하고 있었다. 이천십구년 칠월에 출판사로부터 메일을 받았다. ‘카이스트 명상 수업’에 관한 책을 냈으면 좋겠다는 것이다. 많이 망설여졌다. 학생들에게 명상을 가르치긴 했지만, 책을 낼 정도는 아니라고 생각했다.",
+        voice = Voice(
+            voice_id = 'vLoihgIKGtzyXeEI0Ix9',
+            settings = VoiceSettings(stability = 0.75, similarity_boost = 0.65, style = 0.05, use_speaker_boost = True)
+        ),
+        model = "eleven_multilingual_v2"
+    )
 
-    # save(audio, "/yaas/my-file.mp3")
+    save(audio, "/yaas/my-file.mp3")

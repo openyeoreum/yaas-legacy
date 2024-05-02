@@ -15,6 +15,7 @@ from collections import defaultdict
 from elevenlabs import Voice, VoiceSettings, save
 from elevenlabs.client import ElevenLabs
 from sqlalchemy.orm.attributes import flag_modified
+from audoai.noise_removal import NoiseRemovalClient
 from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetSoundDataSet
@@ -763,7 +764,8 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath):
     return UniqueFiles
 
 ## 생성된 음성파일 합치기
-def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, VoiceFileGen = 'on'):
+def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = 'off', VoiceFileGen = 'on'):
+    noise_removal = NoiseRemovalClient(api_key = os.getenv("AUDO_API_KEY"))
     # VoiceLayerFileName = projectName + "_VoiceLayer.wav"
     # normalizeVoiceLayerFileName = unicodedata.normalize('NFC', VoiceLayerFileName)
     voiceLayerPath = VoiceLayerPathGen(projectName, email, '', 'Mixed')
@@ -812,6 +814,10 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     file_limit = 100  # 파일 분할 기준
     current_file_index = 1
     CombinedSound = AudioSegment.empty()
+    VoiceEnhanceCompletionSwitch = False
+    with open(CloneVoiceActorPath, 'r', encoding = 'utf-8') as CloneVoiceActorJson:
+        CloneVoiceActor = json.load(CloneVoiceActorJson)
+    VoiceEnhanceCompletion = CloneVoiceActor['ApiSetting']['VoiceEnhanceCompletion']
 
     UpdateTQDM = tqdm(EditGenerationKoChunks,
                     total = len(EditGenerationKoChunks),
@@ -822,7 +828,14 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     for Update in UpdateTQDM:
         Update['EndTime'] = []
         for j in range(len(Update['Pause'])):
-            with open(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]), 'rb') as VoiceFile:
+            ## VoiceEnhance
+            if (Narrator == 'VoiceClone') and (CloneVoiceName in FilteredFiles[FilesCount]) and (VoiceEnhanceCompletion != 'Completion') and (VoiceEnhance == 'on'):
+                VoiceFilePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
+                result = noise_removal.process(VoiceFilePath)
+                result.save(VoiceFilePath)
+                print(f"[ VoiceEnhance: {FilteredFiles[FilesCount]} ]")
+                VoiceEnhanceCompletionSwitch = True
+            with open(VoiceFilePath, 'rb') as VoiceFile:
                 sound_file = AudioSegment.from_wav(VoiceFile)
             PauseDuration_ms = Update['Pause'][j] * 1000
             silence = AudioSegment.silent(duration = PauseDuration_ms)
@@ -858,6 +871,12 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             
         CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
 
+    # 저자 성우 음성 노이즈 제거 되었다면 "Completion" 생성
+    if VoiceEnhanceCompletionSwitch:
+        CloneVoiceActor['ApiSetting']['VoiceEnhanceCompletion'] = "Completion"
+        with open(CloneVoiceActorPath, 'w', encoding = 'utf-8') as CloneVoiceActorJson:
+            json.dump(CloneVoiceActor, CloneVoiceActorJson, ensure_ascii = False, indent = 4)
+    
     # 최종 파일 합치기
     FinalCombined = AudioSegment.empty()
     for i in range(1, current_file_index):
@@ -976,7 +995,8 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "similarity_boost": 0.70,
                     "style": 0.00,
                     "model": "eleven_multilingual_v2",
-                    "SettingCompletion": "세팅 완료 후 Completion으로 변경"
+                    "SettingCompletion": "세팅 완료 후 Completion으로 변경",
+                    "VoiceEnhanceCompletion": "None"
                 }
             }
             with open(CloneVoiceActorPath, 'w', encoding = 'utf-8') as CloneVoiceActorJson:
@@ -1010,7 +1030,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
     return MatchedActors, SelectionGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceFileGen = 'on', MessagesReview = "off"):
+def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
     
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
@@ -1369,15 +1389,15 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)
-    EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, VoiceFileGen = VoiceFileGen)
+    EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen)
     
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
-def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceFileGen = "on", MessagesReview = "off"):
+def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     
-    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
+    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
 
     with get_db() as db:
         

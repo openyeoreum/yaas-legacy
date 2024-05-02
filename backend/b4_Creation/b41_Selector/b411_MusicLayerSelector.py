@@ -939,13 +939,15 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                     if (PauseNum > 0) and (PauseSearchFileName not in FileName):
                         break
                 if EditId == 2 and Tag in ['Narrator', 'Caption']:
-                    SlicePause = Update['Pause'][PauseNum:]
+                    SlicePause = Update['Pause'][len(ActorChunk) - PauseNum:]
                 else:
                     SlicePause = Update['Pause'][-PauseNum:]
                 
                 # 일치하는 파일이름으로 해당 파일 믹싱 (Pause 설정 및 EndTime 기록 등)
                 ProcessFileName = f"{projectName}_{Update['EditId']}_{Update['ActorName']}_({_chunknum})"
                 if ProcessFileName in FilteredFiles[FilesCount]:
+                    # print(f'FilteredFiles[FilesCount]: {FilteredFiles[FilesCount]}')
+                    # print(f'ProcessFileName: {ProcessFileName}')
                     Update['EndTime'] = []
                     # Index 구분 (EndTime 중복 방지)
                     PauseCount = None
@@ -954,6 +956,7 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                         PauseCount = len(SlicePause)
                     else:
                         Pause = SlicePause
+                    # print(f'Pause: {len(ActorChunk)}, {PauseNum}, {Pause}\n\n')
                     for _pausenum in range(len(Pause)):
                         if len(FilteredFiles) > FilesCount:
                             if '_[' in FilteredFiles[FilesCount]:

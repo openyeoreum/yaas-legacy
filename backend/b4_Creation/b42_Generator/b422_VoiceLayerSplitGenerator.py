@@ -10,6 +10,7 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
+from time import sleep
 from pydub import AudioSegment
 from collections import defaultdict
 from elevenlabs import Voice, VoiceSettings, save
@@ -828,11 +829,13 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     for Update in UpdateTQDM:
         Update['EndTime'] = []
         for j in range(len(Update['Pause'])):
+            VoiceFilePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
             ## VoiceEnhance
             if (Narrator == 'VoiceClone') and (CloneVoiceName in FilteredFiles[FilesCount]) and (VoiceEnhanceCompletion != 'Completion') and (VoiceEnhance == 'on'):
-                VoiceFilePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
                 result = noise_removal.process(VoiceFilePath)
+                sleep(2.0)
                 result.save(VoiceFilePath)
+                sleep(1.0)
                 print(f"[ VoiceEnhance: {FilteredFiles[FilesCount]} ]")
                 VoiceEnhanceCompletionSwitch = True
             with open(VoiceFilePath, 'rb') as VoiceFile:

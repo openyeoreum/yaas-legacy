@@ -315,7 +315,7 @@ def ActorChunkSetting(RawChunk):
     ActorChunk = ActorChunk.replace('(0.70)', '')
     ActorChunk = ActorChunk.replace('(0.75)', '')
     ActorChunk = ActorChunk.replace('(0.80)', '')
-    ActorChunk = ActorChunk.replace('(0.90)', '')
+    ActorChunk = ActorChunk.replace('(0.91)', '')
     ActorChunk = ActorChunk.replace('(1.00)', '')
     ActorChunk = ActorChunk.replace('(1.10)', '')
     ActorChunk = ActorChunk.replace('(1.20)', '')
@@ -504,7 +504,7 @@ def ActorVoiceGen(projectName, email, tag, name, Chunk, EL_Chunk, Api, ApiSettin
     attempt = 0
 
     ### 음성 속도 조절 함수 ###
-    def ChangeSpeedIndexVoice(VoicePath, Speed = 1.0, Pad = 1.5, Reverberance = 35, RoomScale = 30, HighFreqDamping = 50, PreDelay = 20):
+    def ChangeSpeedIndexVoice(VoicePath, Speed = 1.0, Pad = 1.5, Reverberance = 30, RoomScale = 25, HighFreqDamping = 50, PreDelay = 17):
         CopyFilePath = VoicePath.replace('.wav', '_Change.wav')
         shutil.copyfile(VoicePath, CopyFilePath)
         
@@ -566,13 +566,13 @@ def ActorVoiceGen(projectName, email, tag, name, Chunk, EL_Chunk, Api, ApiSettin
 
                 ## tag가 Title, Logue인 경우 ##
                 if tag in ['Title', 'Logue']:
-                    print(f"ChangeSpeed(0.88): ({tag}) Voice waiting 1-2 second")
-                    ChangeSpeedIndexVoice(fileName, Speed = 0.88, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
+                    print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
+                    ChangeSpeedIndexVoice(fileName, Speed = 0.89, Reverberance = 3, RoomScale = 3, HighFreqDamping = 6, PreDelay = 2)
 
                 ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
                 if tag in ['Part', 'Chapter', 'Index']:
-                    print(f"ChangeSpeed(0.90): ({tag}) Voice waiting 1-2 second")
-                    ChangeSpeedIndexVoice(fileName, Speed = 0.90, Pad = 1.5, Reverberance = 35, RoomScale = 30, HighFreqDamping = 50, PreDelay = 20)
+                    print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
+                    ChangeSpeedIndexVoice(fileName, Speed = 0.91, Pad = 1.5, Reverberance = 30, RoomScale = 25, HighFreqDamping = 50, PreDelay = 17)
                 
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
@@ -657,18 +657,18 @@ def ActorVoiceGen(projectName, email, tag, name, Chunk, EL_Chunk, Api, ApiSettin
 
                     ## tag가 Title, Logue인 경우 속도 ##
                     if tag in ['Title', 'Logue']:
-                        print(f"ChangeSpeed(0.88): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Speed = 0.88, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
+                        print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
+                        ChangeSpeedIndexVoice(fileName, Speed = 0.89, Reverberance = 3, RoomScale = 3, HighFreqDamping = 6, PreDelay = 2)
 
                     ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
                     if tag in ['Part', 'Chapter', 'Index']:
-                        print(f"ChangeSpeed(0.90): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Speed = 0.90, Pad = 1, Reverberance = 35, RoomScale = 30, HighFreqDamping = 50, PreDelay = 20)
+                        print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
+                        ChangeSpeedIndexVoice(fileName, Speed = 0.91, Pad = 1.5, Reverberance = 30, RoomScale = 25, HighFreqDamping = 50, PreDelay = 17)
 
                     ## tag가 Character인 경우 ##
                     elif tag in ['Character']:
-                        print(f"ChangeSpeed(1.08): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Speed = 1.08, Pad = 0.5, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
+                        print(f"ChangeSpeed(1.07): ({tag}) Voice waiting 1-2 second")
+                        ChangeSpeedIndexVoice(fileName, Speed = 1.07, Pad = 0.5, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
 
                     if len(SplitChunks) > 1:
                         ### 음성파일을 분할하는 코드 ###

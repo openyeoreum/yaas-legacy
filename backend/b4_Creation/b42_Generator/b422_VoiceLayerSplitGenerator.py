@@ -500,7 +500,7 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
     return EditGenerationKoListChunks
 
 ## TypecastVoice 생성 ##
-def ActorVoiceGen(projectName, email, tag, name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
+def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
     attempt = 0
 
     ### 음성 속도 조절 함수 ###
@@ -509,7 +509,7 @@ def ActorVoiceGen(projectName, email, tag, name, Chunk, EL_Chunk, Api, ApiSettin
         shutil.copyfile(VoicePath, CopyFilePath)
         
         tfm = sox.Transformer()
-        # 속도를 절반으로 줄임 (피치 유지)
+        # 속도를 줄임 (피치 유지)
         tfm.tempo(Speed, 's')
         # 1초 추가(잔향의 끊어짐 방지)
         tfm.pad(0, Pad)
@@ -566,15 +566,17 @@ def ActorVoiceGen(projectName, email, tag, name, Chunk, EL_Chunk, Api, ApiSettin
                 Voice_Audio_Mp3.export(fileName, format = "wav")
                 os.remove(fileNameMp3)
 
-                ## tag가 Title, Logue인 경우 ##
-                if tag in ['Title', 'Logue']:
-                    print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
-                    ChangeSpeedIndexVoice(fileName, Speed = 0.89, Reverberance = 3, RoomScale = 3, HighFreqDamping = 6, PreDelay = 2)
+                ## VoiceReverbe ##
+                if voiceReverbe == 'on':
+                    ## tag가 Title, Logue인 경우 ##
+                    if tag in ['Title', 'Logue']:
+                        print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
+                        ChangeSpeedIndexVoice(fileName, Speed = 0.89, Reverberance = 3, RoomScale = 3, HighFreqDamping = 6, PreDelay = 2)
 
-                ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
-                if tag in ['Part', 'Chapter', 'Index']:
-                    print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
-                    ChangeSpeedIndexVoice(fileName, Speed = 0.91, Pad = 1.5, Reverberance = 30, RoomScale = 25, HighFreqDamping = 50, PreDelay = 17)
+                    ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
+                    if tag in ['Part', 'Chapter', 'Index']:
+                        print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
+                        ChangeSpeedIndexVoice(fileName, Speed = 0.91, Pad = 1.5, Reverberance = 30, RoomScale = 25, HighFreqDamping = 50, PreDelay = 17)
                 
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
@@ -657,20 +659,22 @@ def ActorVoiceGen(projectName, email, tag, name, Chunk, EL_Chunk, Api, ApiSettin
                             print(f"VoiceGen: {ret['status']}, {name} waiting 1 second")
                             time.sleep(1)
 
-                    ## tag가 Title, Logue인 경우 속도 ##
-                    if tag in ['Title', 'Logue']:
-                        print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Speed = 0.89, Reverberance = 3, RoomScale = 3, HighFreqDamping = 6, PreDelay = 2)
+                    ## VoiceReverbe ##
+                    if voiceReverbe == 'on':
+                        ## tag가 Title, Logue인 경우 속도 ##
+                        if tag in ['Title', 'Logue']:
+                            print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
+                            ChangeSpeedIndexVoice(fileName, Speed = 0.89, Reverberance = 3, RoomScale = 3, HighFreqDamping = 6, PreDelay = 2)
 
-                    ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
-                    if tag in ['Part', 'Chapter', 'Index']:
-                        print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Speed = 0.91, Pad = 1.5, Reverberance = 30, RoomScale = 25, HighFreqDamping = 50, PreDelay = 17)
+                        ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
+                        if tag in ['Part', 'Chapter', 'Index']:
+                            print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
+                            ChangeSpeedIndexVoice(fileName, Speed = 0.91, Pad = 1.5, Reverberance = 30, RoomScale = 25, HighFreqDamping = 50, PreDelay = 17)
 
-                    ## tag가 Character인 경우 ##
-                    elif tag in ['Character']:
-                        print(f"ChangeSpeed(1.07): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Volume = 0.95, Speed = 1.07, Pad = 0.5, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
+                        ## tag가 Character인 경우 ##
+                        if tag in ['Character']:
+                            print(f"ChangeSpeed(1.07): ({tag}) Voice waiting 1-2 second")
+                            ChangeSpeedIndexVoice(fileName, Volume = 0.95, Speed = 1.07, Pad = 0.5, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
 
                     if len(SplitChunks) > 1:
                         ### 음성파일을 분할하는 코드 ###
@@ -1040,9 +1044,9 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "name": f"{CloneVoiceName}",
                     "Api": "ElevenLabs",
                     "voice_id": "Voice_id",
-                    "stability": 0.80,
-                    "similarity_boost": 0.70,
-                    "style": 0.00,
+                    "stability": 0.60,
+                    "similarity_boost": 0.80,
+                    "style": 0.03,
                     "model": "eleven_multilingual_v2",
                     "SettingCompletion": "세팅 완료 후 Completion으로 변경",
                     "VoiceEnhanceCompletion": "None"
@@ -1079,7 +1083,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
     return MatchedActors, SelectionGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
+def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
     
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
@@ -1393,7 +1397,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
-                    ChangedName = ActorVoiceGen(projectName, email, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                    ChangedName = ActorVoiceGen(projectName, email, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
                     if ChangedName != 'Continue':
                         if Macro == "Auto":
                             TypeCastMacro(ChangedName, Account)
@@ -1409,7 +1413,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
                     if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') and not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav'):
-                        ChangedName = ActorVoiceGen(projectName, email, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                        ChangedName = ActorVoiceGen(projectName, email, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 
                         if ChangedName == 'Continue':
                             ## 히스토리 저장 ##
@@ -1443,10 +1447,10 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
-def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
+def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     
-    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
+    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
 
     with get_db() as db:
         

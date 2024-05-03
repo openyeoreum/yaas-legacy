@@ -11,13 +11,13 @@ from backend.b4_Creation.b41_Selector.b411_MusicLayerSelector import MusicLayerU
 ###########################
 
 ### Creation에 오디오북 제작 및 업데이트 ###
-def CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, mainLang, intro, mode = "Manual", macro = "Manual", account = "None", voiceEnhance = "off", voiceFileGen = "on", messagesReview = "off"):
+def CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, cloneVoiceSpeed, voiceReverbe, mainLang, intro, mode = "Manual", macro = "Manual", account = "None", voiceEnhance = "off", voiceFileGen = "on", messagesReview = "off"):
     
     #####################
     ### 01_VoiceLayer ###
     #####################
-    VoiceLayerUpdate(projectName, email, Narrator = narrator, CloneVoiceName = cloneVoiceName, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, VoiceEnhance = voiceEnhance, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
-    MusicLayerUpdate(projectName, email, CloneVoiceName = cloneVoiceName, MainLang = mainLang, Intro = intro)
+    VoiceLayerUpdate(projectName, email, Narrator = narrator, CloneVoiceName = cloneVoiceName, VoiceReverbe = voiceReverbe, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, VoiceEnhance = voiceEnhance, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
+    MusicLayerUpdate(projectName, email, CloneVoiceName = cloneVoiceName, CloneVoiceSpeed = cloneVoiceSpeed, MainLang = mainLang, Intro = intro)
     
 if __name__ == "__main__":
 
@@ -26,7 +26,9 @@ if __name__ == "__main__":
     projectName = '노인을위한나라는있다' # '데미안', '빨간머리앤', '웹3.0메타버스', '나는선비로소이다', '나는노비로소이다', '카이스트명상수업', '우리는행복을진단한다', '웹3.0메타버스', '살아서천국극락낙원에가는방법'
     narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone'
     cloneVoiceName = "저자명"
+    cloneVoiceSpeed = 1 # 1, 1.n : 1 은 오디오북 정상속도, 1.n 은 오디오북 속도 상승
     voiceEnhance = "off" # 'on', 'off'
+    voiceReverbe = "on" # 'on', 'off' : on 은 인덱스와 대화문에 리버브 적용, off 는 리버브 미적용
     mainLang = "Ko"
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     voiceFileGen = "off" # 'on', 'off'
@@ -36,4 +38,4 @@ if __name__ == "__main__":
     #########################################################################
     
     ### Step6 : 크리에이션이 오디오북 제작 ###
-    CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, mainLang, macro = macro, account = account, voiceEnhance = voiceEnhance, voiceFileGen = voiceFileGen, messagesReview = messagesReview)
+    CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, cloneVoiceSpeed, voiceReverbe, mainLang, macro = macro, account = account, voiceEnhance = voiceEnhance, voiceFileGen = voiceFileGen, messagesReview = messagesReview)

@@ -4,6 +4,8 @@ import sys
 import re
 import random
 import copy
+import shutil
+import sox
 import json
 sys.path.append("/yaas")
 
@@ -749,7 +751,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
     return UniqueFiles
 
 ## 생성된 음성파일 합치기
-def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off'):
+def MusicSelector(projectName, email, CloneVoiceName = "저자명", CloneVoiceSpeed = 1, MainLang = 'Ko', Intro = 'off'):
     EditGeneration, MusicMixingDatas = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro)
     
     ## voiceLayer 경로와 musicLayer 경로 ##
@@ -966,7 +968,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                                 with open(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]), 'rb') as mVoiceFile:
                                     sound_file = AudioSegment.from_wav(mVoiceFile)
                             
-                            # ElevenLabs의 끊어읽기 시간을 고려해서 CloneVoice Puase시간 추가
+                            # CloneVoice의 끊어읽기 시간을 고려해서 CloneVoice Puase시간 추가
                             AddPause = 0
                             if (CloneVoiceName in FilteredFiles[FilesCount]) and (_pausenum == len(Pause)-1):
                                 AddPause = 0.2
@@ -974,6 +976,22 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                             # if EditId in [1, 2, 3, 4, 5, 6]: ######
                             #     print(f'{EditId}, {FilteredFiles[FilesCount]}, {SlicePause}, {PauseNum}, {Pause}, {FilesCount} : {PauseDuration_ms}') ######
                             silence = AudioSegment.silent(duration = PauseDuration_ms)
+                            
+                            ## CloneVoice의 낭독 시간을 고려해서 스피드 조절 ##
+                            if ('_[' not in FilteredFiles[FilesCount]) and (CloneVoiceName in FilteredFiles[FilesCount]) and (CloneVoiceSpeed != 1):
+                                VoicePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
+                                CopyFilePath = VoicePath.replace('.wav', '_Speed.wav')
+                                
+                                # 음성 속도를 줄임 (피치 유지)
+                                tfm = sox.Transformer()
+                                tfm.tempo(CloneVoiceSpeed, 's')
+                                tfm.build(VoicePath, CopyFilePath)
+                                sound_file = AudioSegment.from_wav(CopyFilePath)
+                                os.remove(CopyFilePath)
+                                
+                                # Pause 속도를 줄임
+                                silence = (Pause[_pausenum] + AddPause) * (1000 / CloneVoiceSpeed)
+                                
                             CombinedSound += sound_file + silence
                             CombinedSize += 1
                             FilesCount += 1
@@ -1237,10 +1255,10 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         json.dump(MetaDataSet, json_file, ensure_ascii = False, indent = 4)
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
-def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off'):
+def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", CloneVoiceSpeed = 1, MainLang = 'Ko', Intro = 'off'):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
     
-    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro)
+    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, CloneVoiceSpeed = CloneVoiceSpeed, MainLang = MainLang, Intro = Intro)
     
     ## 10-15분 미리듣기 생성
     AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)

@@ -504,7 +504,7 @@ def ActorVoiceGen(projectName, email, tag, name, Chunk, EL_Chunk, Api, ApiSettin
     attempt = 0
 
     ### 음성 속도 조절 함수 ###
-    def ChangeSpeedIndexVoice(VoicePath, Speed = 1.0, Pad = 1.5, Reverberance = 30, RoomScale = 25, HighFreqDamping = 50, PreDelay = 17):
+    def ChangeSpeedIndexVoice(VoicePath, Volume = 1.0, Speed = 1.0, Pad = 1.5, Reverberance = 30, RoomScale = 25, HighFreqDamping = 50, PreDelay = 17):
         CopyFilePath = VoicePath.replace('.wav', '_Change.wav')
         shutil.copyfile(VoicePath, CopyFilePath)
         
@@ -515,6 +515,8 @@ def ActorVoiceGen(projectName, email, tag, name, Chunk, EL_Chunk, Api, ApiSettin
         tfm.pad(0, Pad)
         # 잔향(리버브) 추가
         tfm.reverb(reverberance = Reverberance, room_scale = RoomScale, high_freq_damping = HighFreqDamping, pre_delay = PreDelay)
+        # 볼륨 조절
+        tfm.vol(Volume)
         # 변환 실행
         tfm.build(CopyFilePath, VoicePath)
         
@@ -668,7 +670,7 @@ def ActorVoiceGen(projectName, email, tag, name, Chunk, EL_Chunk, Api, ApiSettin
                     ## tag가 Character인 경우 ##
                     elif tag in ['Character']:
                         print(f"ChangeSpeed(1.07): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Speed = 1.07, Pad = 0.5, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
+                        ChangeSpeedIndexVoice(fileName, Volume = 0.95, Speed = 1.07, Pad = 0.5, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
 
                     if len(SplitChunks) > 1:
                         ### 음성파일을 분할하는 코드 ###

@@ -749,7 +749,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
     return UniqueFiles
 
 ## 생성된 음성파일 합치기
-def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
+def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off'):
     EditGeneration, MusicMixingDatas = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro)
     
     ## voiceLayer 경로와 musicLayer 경로 ##
@@ -965,8 +965,12 @@ def MusicSelector(projectName, email, MainLang = 'Ko', Intro = 'off'):
                             else:
                                 with open(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]), 'rb') as mVoiceFile:
                                     sound_file = AudioSegment.from_wav(mVoiceFile)
-                                
-                            PauseDuration_ms = Pause[_pausenum] * 1000
+                            
+                            # ElevenLabs의 끊어읽기 시간을 고려해서 CloneVoice Puase시간 추가
+                            AddPause = 0
+                            if (CloneVoiceName in FilteredFiles[FilesCount]) and (_pausenum == len(Pause)-1):
+                                AddPause = 0.3
+                            PauseDuration_ms = (Pause[_pausenum] + AddPause) * 1000
                             # if EditId in [1, 2, 3, 4, 5, 6]: ######
                             #     print(f'{EditId}, {FilteredFiles[FilesCount]}, {SlicePause}, {PauseNum}, {Pause}, {FilesCount} : {PauseDuration_ms}') ######
                             silence = AudioSegment.silent(duration = PauseDuration_ms)
@@ -1233,10 +1237,10 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         json.dump(MetaDataSet, json_file, ensure_ascii = False, indent = 4)
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
-def MusicLayerUpdate(projectName, email, MainLang = 'Ko', Intro = 'off'):
+def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off'):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
     
-    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath = MusicSelector(projectName, email, MainLang = MainLang, Intro = Intro)
+    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro)
     
     ## 10-15분 미리듣기 생성
     AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)

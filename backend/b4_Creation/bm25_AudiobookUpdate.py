@@ -17,7 +17,7 @@ def CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, mainLa
     ### 01_VoiceLayer ###
     #####################
     VoiceLayerUpdate(projectName, email, Narrator = narrator, CloneVoiceName = cloneVoiceName, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, VoiceEnhance = voiceEnhance, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
-    MusicLayerUpdate(projectName, email, MainLang = mainLang, Intro = intro)
+    MusicLayerUpdate(projectName, email, CloneVoiceName = cloneVoiceName, MainLang = mainLang, Intro = intro)
     
 if __name__ == "__main__":
 

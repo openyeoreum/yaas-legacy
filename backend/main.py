@@ -97,7 +97,7 @@ if __name__ == "__main__":
     MainLang = "Ko" # 'Ko', 'En'
     Narrator = "VoiceClone" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
     CloneVoiceName = "이덕주" # Narrator = "VoiceClone" 인 경우 '저자명' 작성
-    CloneVoiceSpeed = 1 # 1, 1.n : 1 은 오디오북 정상속도, 1.n 은 오디오북 속도 상승
+    CloneVoiceSpeed = 1.1 # 1, 1.n : 1 은 오디오북 정상속도, 1.n 은 오디오북 속도 상승
     VoiceEnhance = "off" # 'on', 'off' : on 은 클론보이스 노이즈 제거, off 는 클론보이스 노이즈 제거 비활성
     VoiceReverbe = "on" # 'on', 'off' : on 은 인덱스와 대화문에 리버브 적용, off 는 리버브 미적용
     Intro = "off" # Intro = ['한국출판문화산업진흥원' ...]

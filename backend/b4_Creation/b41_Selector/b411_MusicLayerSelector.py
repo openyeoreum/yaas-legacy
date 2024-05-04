@@ -2,6 +2,7 @@ import os
 import unicodedata
 import sys
 import re
+import time
 import random
 import copy
 import shutil
@@ -904,7 +905,26 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", CloneVoiceSp
     # 마지막 파일 합성3: 파일의 길이가 짧아서 1시간이 안되는 경우 마지막 번호 추가
     if FileLimitList == []:
         FileLimitList.append(EditId)
+
+    ## _Speed.wav 파일 생성 (Clone Voice 속도 조절시) ##
+    if CloneVoiceSpeed != 1:
         
+        UpdateTQDM = tqdm(FilteredFiles,
+                        total = len(FilteredFiles),
+                        desc = 'CloneVoiceSpeed')
+        
+        _SpeedRemoveList = []
+        for Update in UpdateTQDM:
+            if ('_[' not in Update) and (CloneVoiceName in Update):
+                VoiceFilePath = os.path.join(voiceLayerPath, Update)
+                _SpeedFilePath = VoiceFilePath.replace('.wav', '_Speed.wav')
+                tfm = sox.Transformer()
+                tfm.tempo(CloneVoiceSpeed, 's')
+                tfm.build(VoiceFilePath, _SpeedFilePath)
+                
+                _SpeedRemoveList.append(_SpeedFilePath)
+    ## _Speed.wav 파일 생성 (Clone Voice 속도 조절시) ##
+
     # 오디오북 생성
     EditGenerationKoChunks = EditGenerationKoChunksToList(EditGeneration)
     FilesCount = 0
@@ -977,20 +997,21 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", CloneVoiceSp
                             #     print(f'{EditId}, {FilteredFiles[FilesCount]}, {SlicePause}, {PauseNum}, {Pause}, {FilesCount} : {PauseDuration_ms}') ######
                             silence = AudioSegment.silent(duration = PauseDuration_ms)
                             
-                            ## CloneVoice의 낭독 시간을 고려해서 스피드 조절 ##
-                            if ('_[' not in FilteredFiles[FilesCount]) and (CloneVoiceName in FilteredFiles[FilesCount]) and (CloneVoiceSpeed != 1):
-                                VoicePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
-                                CopyFilePath = VoicePath.replace('.wav', '_Speed.wav')
-                                
-                                # 음성 속도를 줄임 (피치 유지)
-                                tfm = sox.Transformer()
-                                tfm.tempo(CloneVoiceSpeed, 's')
-                                tfm.build(VoicePath, CopyFilePath)
-                                sound_file = AudioSegment.from_wav(CopyFilePath)
-                                os.remove(CopyFilePath)
-                                
-                                # Pause 속도를 줄임
-                                silence = (Pause[_pausenum] + AddPause) * (1000 / CloneVoiceSpeed)
+                            ## _Speed.wav 파일 선택 (Clone Voice 속도 조절시) ##
+                            if CloneVoiceSpeed != 1:
+                                if ('_[' not in FilteredFiles[FilesCount]) and (Tag in ['Narrator', 'Caption']) and (CloneVoiceName in FilteredFiles[FilesCount]):
+                                    # Caption의 경우 첫번째 제목 부분은 음성 속도를 조금 느리게
+                                    if not (Tag == 'Caption' and _pausenum == 0):
+                                        VoicePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
+                                        _SpeedFilePath = VoicePath.replace('.wav', '_Speed.wav')
+
+                                        # Voice 속도를 빠르게
+                                        sound_file = AudioSegment.from_wav(_SpeedFilePath)
+                                        
+                                        # Pause 속도를 빠르게
+                                        PauseDuration_ms = PauseDuration_ms/CloneVoiceSpeed
+                                        silence = AudioSegment.silent(duration = PauseDuration_ms)
+                            ## _Speed.wav 파일 선택 (Clone Voice 속도 조절시) ##
                                 
                             CombinedSound += sound_file + silence
                             CombinedSize += 1
@@ -1138,6 +1159,12 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", CloneVoiceSp
 
         CombinedSoundFilePaths = []
 
+    ## _Speed.wav 파일 모두 삭제 (Clone Voice 속도 조절시) ##
+    if CloneVoiceSpeed != 1:
+        for _SpeedFile in _SpeedRemoveList:
+            os.remove(_SpeedFile)
+    ## _Speed.wav 파일 모두 삭제 (Clone Voice 속도 조절시) ##
+        
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
     
@@ -1295,3 +1322,21 @@ if __name__ == "__main__":
     mainLang = 'Ko'
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     #########################################################################
+    
+    sound_file1 = AudioSegment.from_wav("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/MusicLayers/Music1/240412_카이스트명상수업_2_이덕주(240412_카이스트명상수업)_(1)M_[TitleMusic].wav")
+    silence1 = AudioSegment.silent(duration = 1500)
+    
+    sound_file2 = AudioSegment.from_wav("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/VoiceLayers/240412_카이스트명상수업_2_이덕주(240412_카이스트명상수업)_(2)M_Speed.wav")
+    silence2 = AudioSegment.silent(duration = 590)
+    
+    sound_file3 = AudioSegment.from_wav("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/VoiceLayers/240412_카이스트명상수업_2_이덕주(240412_카이스트명상수업)_(3)M_Speed.wav")
+    silence3 = AudioSegment.silent(duration = 3000)
+
+    sound_file4 = AudioSegment.from_wav("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/VoiceLayers/240412_카이스트명상수업_7_이덕주(240412_카이스트명상수업)_(8)M_Speed.wav")
+    silence4 = AudioSegment.silent(duration = 590)
+    
+    sound_file5 = AudioSegment.from_wav("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/VoiceLayers/240412_카이스트명상수업_7_이덕주(240412_카이스트명상수업)_(9)M_Speed.wav")
+    silence5 = AudioSegment.silent(duration = 590)
+
+    combine_sound = sound_file1 + silence1 + sound_file2 + silence2 + sound_file3 + silence3 + sound_file4 + silence4 + sound_file5 + silence5
+    combine_sound.export("/yaas/test.mp3", format = "mp3", bitrate = "320k")

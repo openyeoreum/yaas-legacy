@@ -1044,9 +1044,9 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "name": f"{CloneVoiceName}",
                     "Api": "ElevenLabs",
                     "voice_id": "Voice_id",
-                    "stability": 0.60,
-                    "similarity_boost": 0.80,
-                    "style": 0.03,
+                    "stability": 0.65,
+                    "similarity_boost": 0.70,
+                    "style": 0.00,
                     "model": "eleven_multilingual_v2",
                     "SettingCompletion": "세팅 완료 후 Completion으로 변경",
                     "VoiceEnhanceCompletion": "None"

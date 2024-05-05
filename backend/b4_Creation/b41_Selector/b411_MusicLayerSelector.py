@@ -752,7 +752,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
     return UniqueFiles
 
 ## 생성된 음성파일 합치기
-def MusicSelector(projectName, email, CloneVoiceName = "저자명", CloneVoiceSpeed = 1, MainLang = 'Ko', Intro = 'off'):
+def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off'):
     EditGeneration, MusicMixingDatas = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro)
     
     ## voiceLayer 경로와 musicLayer 경로 ##
@@ -786,9 +786,9 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", CloneVoiceSp
     MusicRawFiles = [f for f in os.listdir(musicLayerPath) if f.endswith('.wav')]
     # Music 모든 .wav 파일 목록의 노멀라이즈
     MusicRawFiles = [unicodedata.normalize('NFC', s) for s in MusicRawFiles]
-    
+
     MusicFiles = []
-    MusicFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?_([A-Za-z]+)\.wav"
+    MusicFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?_([^\.]+)\.wav"
     for i in range(len(MusicRawFiles)):
         MusicFileMatch = re.match(MusicFilePattern, MusicRawFiles[i])
         if MusicFileMatch == None:
@@ -796,12 +796,13 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", CloneVoiceSp
             MusicFileMatch = re.match(MusicFilePattern, normalizeMusicRawFile)
         
         if MusicFileMatch:
-            chunkid, actorname, _ = MusicFileMatch.groups()
+            chunkid, actorname, _, tagmusic = MusicFileMatch.groups()
         for j in range(len(EditGeneration)):
             if float(chunkid) == EditGeneration[j]['EditId'] and actorname == EditGeneration[j]['ActorName']:
                 MusicFiles.append(MusicRawFiles[i])
+                print(f'After MusicRawFiles[i]: {MusicRawFiles[i]}')
                 break
-
+    
     ## MusicMixingDatas를 활용하여 VoiceFilteredFiles파일 제거
     removeCount = 0
     for i in range(len(MusicMixingDatas)):
@@ -899,14 +900,26 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", CloneVoiceSp
         EditEndTimes.append(Second)  # 마지막 파일 끝 시간 추가
         
     # 마지막 파일 합성2: 뒷부분 2개의 파일의 시간 합이 70분 이하일 경우 두 파일
-    if len(EditEndTimes) > 1 and (EditEndTimes[-1] - EditEndTimes[-2] <= 4200):
+    if len(EditEndTimes) > 1 and (EditEndTimes[-1] - EditEndTimes[-2] <= 4000):
         FileLimitList.pop()
     
-    # 마지막 파일 합성3: 파일의 길이가 짧아서 1시간이 안되는 경우 마지막 번호 추가
+    # 마지막 파일 합성3: 파일의 길이가 짧아서 오디오북이 총 1시간이 안되는 경우 마지막 번호 추가
     if FileLimitList == []:
         FileLimitList.append(EditId)
 
     ## _Speed.wav 파일 생성 (Clone Voice 속도 조절시) ##
+    # Speed 변수 가져오기
+    MatchedActorsfileName = projectName + '_' + 'MatchedVoices.json'
+    MatchedActorsPath = VoiceLayerPathGen(projectName, email, MatchedActorsfileName, 'Mixed')
+    with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
+        MatchedActors = json.load(MatchedActorsJson)
+
+    CloneVoiceSpeed = 1
+    for MatchedActor in MatchedActors:
+        if (CloneVoiceName in MatchedActor['ActorName']) and (projectName in MatchedActor['ActorName']):
+            CloneVoiceSpeed = MatchedActor['ApiSetting']['Speed']
+    
+    # Speed 변수가 1이 아닌 경우 속도 조절
     if CloneVoiceSpeed != 1:
         
         UpdateTQDM = tqdm(FilteredFiles,
@@ -918,6 +931,9 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", CloneVoiceSp
             if ('_[' not in Update) and (CloneVoiceName in Update):
                 VoiceFilePath = os.path.join(voiceLayerPath, Update)
                 _SpeedFilePath = VoiceFilePath.replace('.wav', '_Speed.wav')
+                if os.path.exists(_SpeedFilePath):
+                    os.remove(_SpeedFilePath)
+                
                 tfm = sox.Transformer()
                 tfm.tempo(CloneVoiceSpeed, 's')
                 tfm.build(VoiceFilePath, _SpeedFilePath)
@@ -1000,11 +1016,10 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", CloneVoiceSp
                             ## _Speed.wav 파일 선택 (Clone Voice 속도 조절시) ##
                             if CloneVoiceSpeed != 1:
                                 if ('_[' not in FilteredFiles[FilesCount]) and (Tag in ['Narrator', 'Caption']) and (CloneVoiceName in FilteredFiles[FilesCount]):
-                                    # Caption의 경우 첫번째 제목 부분은 음성 속도를 조금 느리게
+                                    # Caption의 경우 첫번째 제목 부분은 음성 속도를 원래대로
                                     if not (Tag == 'Caption' and _pausenum == 0):
                                         VoicePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
                                         _SpeedFilePath = VoicePath.replace('.wav', '_Speed.wav')
-
                                         # Voice 속도를 빠르게
                                         sound_file = AudioSegment.from_wav(_SpeedFilePath)
                                         
@@ -1282,10 +1297,10 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         json.dump(MetaDataSet, json_file, ensure_ascii = False, indent = 4)
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
-def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", CloneVoiceSpeed = 1, MainLang = 'Ko', Intro = 'off'):
+def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off'):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
     
-    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, CloneVoiceSpeed = CloneVoiceSpeed, MainLang = MainLang, Intro = Intro)
+    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro)
     
     ## 10-15분 미리듣기 생성
     AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)

@@ -50,7 +50,7 @@ def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
         
 ### Main2 : 콘텐츠 제작 ###
 
-def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, CloneVoiceSpeed, VoiceReverbe, MainLang, Intro, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview):
+def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview):
 
     if isinstance(projectNameList, list):
         ## NFC, NFD 오류 문제 해결 (모두 적용)
@@ -69,11 +69,11 @@ def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, CloneVoiceS
             #     projectName = _projectName
 
             ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, Narrator, CloneVoiceName, CloneVoiceSpeed, VoiceReverbe, MainLang, Intro, macro = Macro, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, messagesReview = MessagesReview)
+            CreationAudioBookUpdate(projectName, email, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, macro = Macro, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, messagesReview = MessagesReview)
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, CloneVoiceSpeed, VoiceReverbe, MainLang, Intro, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account):
+def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
@@ -82,7 +82,7 @@ def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, Book
     elif MainProcess == 'Creation':
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
-        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, CloneVoiceSpeed, VoiceReverbe, MainLang, Intro, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview)
+        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview)
 
 if __name__ == "__main__":
 
@@ -97,7 +97,6 @@ if __name__ == "__main__":
     MainLang = "Ko" # 'Ko', 'En'
     Narrator = "VoiceClone" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
     CloneVoiceName = "이덕주" # Narrator = "VoiceClone" 인 경우 '저자명' 작성
-    CloneVoiceSpeed = 1.1 # 1, 1.n : 1 은 오디오북 정상속도, 1.n 은 오디오북 속도 상승
     VoiceEnhance = "off" # 'on', 'off' : on 은 클론보이스 노이즈 제거, off 는 클론보이스 노이즈 제거 비활성
     VoiceReverbe = "on" # 'on', 'off' : on 은 인덱스와 대화문에 리버브 적용, off 는 리버브 미적용
     Intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
@@ -107,4 +106,4 @@ if __name__ == "__main__":
     Account = "lucidsun0128@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com'
     #########################################################################
 
-    YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, CloneVoiceSpeed, VoiceReverbe, MainLang, Intro, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account)
+    YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account)

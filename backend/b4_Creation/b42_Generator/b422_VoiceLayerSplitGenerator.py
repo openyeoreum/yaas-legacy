@@ -571,12 +571,12 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
                     ## tag가 Title, Logue인 경우 ##
                     if tag in ['Title', 'Logue']:
                         print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Volume = 1.00, Speed = 0.89, Pad = 0.5, Reverberance = 3, RoomScale = 3, HighFreqDamping = 6, PreDelay = 2)
+                        ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.89, Pad = 0.5, Reverberance = 3, RoomScale = 3, HighFreqDamping = 6, PreDelay = 2)
 
                     ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
                     if tag in ['Part', 'Chapter', 'Index']:
                         print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Volume = 1.00, Speed = 0.91, Pad = 1.0, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
+                        ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.91, Pad = 1.0, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
                 
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
@@ -664,12 +664,12 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
                         ## tag가 Title, Logue인 경우 속도 ##
                         if tag in ['Title', 'Logue']:
                             print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
-                            ChangeSpeedIndexVoice(fileName, Volume = 1.00, Speed = 0.89, Pad = 0.5, Reverberance = 3, RoomScale = 3, HighFreqDamping = 6, PreDelay = 2)
+                            ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.89, Pad = 0.5, Reverberance = 3, RoomScale = 3, HighFreqDamping = 6, PreDelay = 2)
 
                         ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
                         if tag in ['Part', 'Chapter', 'Index']:
                             print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
-                            ChangeSpeedIndexVoice(fileName, Volume = 1.00, Speed = 0.91, Pad = 1.0, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
+                            ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.91, Pad = 1.0, Reverberance = 5, RoomScale = 5, HighFreqDamping = 10, PreDelay = 3)
 
                         ## tag가 Character인 경우 ##
                         if tag in ['Character']:
@@ -866,9 +866,10 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     current_file_index = 1
     CombinedSound = AudioSegment.empty()
     VoiceEnhanceCompletionSwitch = False
-    with open(CloneVoiceActorPath, 'r', encoding = 'utf-8') as CloneVoiceActorJson:
-        CloneVoiceActor = json.load(CloneVoiceActorJson)
-    VoiceEnhanceCompletion = CloneVoiceActor['ApiSetting']['VoiceEnhanceCompletion']
+    if Narrator == 'VoiceClone':
+        with open(CloneVoiceActorPath, 'r', encoding = 'utf-8') as CloneVoiceActorJson:
+            CloneVoiceActor = json.load(CloneVoiceActorJson)
+        VoiceEnhanceCompletion = CloneVoiceActor['ApiSetting']['VoiceEnhanceCompletion']
 
     UpdateTQDM = tqdm(EditGenerationKoChunks,
                     total = len(EditGenerationKoChunks),
@@ -1048,6 +1049,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "similarity_boost": [0.80, 0.82, 0.84, 0.86, 0.88],
                     "style": [0.00],
                     "model": "eleven_multilingual_v2",
+                    "Speed": 1.10,
                     "SettingCompletion": "세팅 완료 후 Completion으로 변경",
                     "VoiceEnhanceCompletion": "None"
                 }

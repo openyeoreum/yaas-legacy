@@ -1322,21 +1322,3 @@ if __name__ == "__main__":
     mainLang = 'Ko'
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     #########################################################################
-    
-    sound_file1 = AudioSegment.from_wav("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/MusicLayers/Music1/240412_카이스트명상수업_2_이덕주(240412_카이스트명상수업)_(1)M_[TitleMusic].wav")
-    silence1 = AudioSegment.silent(duration = 1500)
-    
-    sound_file2 = AudioSegment.from_wav("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/VoiceLayers/240412_카이스트명상수업_2_이덕주(240412_카이스트명상수업)_(2)M_Speed.wav")
-    silence2 = AudioSegment.silent(duration = 590)
-    
-    sound_file3 = AudioSegment.from_wav("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/VoiceLayers/240412_카이스트명상수업_2_이덕주(240412_카이스트명상수업)_(3)M_Speed.wav")
-    silence3 = AudioSegment.silent(duration = 3000)
-
-    sound_file4 = AudioSegment.from_wav("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/VoiceLayers/240412_카이스트명상수업_7_이덕주(240412_카이스트명상수업)_(8)M_Speed.wav")
-    silence4 = AudioSegment.silent(duration = 590)
-    
-    sound_file5 = AudioSegment.from_wav("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/VoiceLayers/240412_카이스트명상수업_7_이덕주(240412_카이스트명상수업)_(9)M_Speed.wav")
-    silence5 = AudioSegment.silent(duration = 590)
-
-    combine_sound = sound_file1 + silence1 + sound_file2 + silence2 + sound_file3 + silence3 + sound_file4 + silence4 + sound_file5 + silence5
-    combine_sound.export("/yaas/test.mp3", format = "mp3", bitrate = "320k")

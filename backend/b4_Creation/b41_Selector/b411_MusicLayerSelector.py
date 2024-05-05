@@ -800,7 +800,6 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
         for j in range(len(EditGeneration)):
             if float(chunkid) == EditGeneration[j]['EditId'] and actorname == EditGeneration[j]['ActorName']:
                 MusicFiles.append(MusicRawFiles[i])
-                print(f'After MusicRawFiles[i]: {MusicRawFiles[i]}')
                 break
     
     ## MusicMixingDatas를 활용하여 VoiceFilteredFiles파일 제거

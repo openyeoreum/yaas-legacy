@@ -997,10 +997,12 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                     for _pausenum in range(len(Pause)):
                         if len(FilteredFiles) > FilesCount:
                             if '_[' in FilteredFiles[FilesCount]:
-                                with open(os.path.join(musicLayerPath, FilteredFiles[FilesCount]), 'rb') as _mVoiceFile:
+                                _VoiceFilePath = os.path.join(musicLayerPath, FilteredFiles[FilesCount])
+                                with open(_VoiceFilePath, 'rb') as _mVoiceFile:
                                     sound_file = AudioSegment.from_wav(_mVoiceFile)
                             else:
-                                with open(os.path.join(voiceLayerPath, FilteredFiles[FilesCount]), 'rb') as mVoiceFile:
+                                _VoiceFilePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
+                                with open(_VoiceFilePath, 'rb') as mVoiceFile:
                                     sound_file = AudioSegment.from_wav(mVoiceFile)
                             
                             # CloneVoice의 끊어읽기 시간을 고려해서 CloneVoice Puase시간 추가
@@ -1017,15 +1019,15 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                                 if ('_[' not in FilteredFiles[FilesCount]) and (Tag in ['Narrator', 'Caption']) and (CloneVoiceName in FilteredFiles[FilesCount]):
                                     # Caption의 경우 첫번째 제목 부분은 음성 속도를 원래대로
                                     if not (Tag == 'Caption' and _pausenum == 0):
-                                        VoicePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
-                                        _SpeedFilePath = VoicePath.replace('.wav', '_Speed.wav')
+                                        _VoiceFilePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
+                                        _SpeedFilePath = _VoiceFilePath.replace('.wav', '_Speed.wav')
                                         # Voice 속도를 빠르게
                                         sound_file = AudioSegment.from_wav(_SpeedFilePath)
                                         # Pause 속도를 빠르게
                                         PauseDuration_ms = PauseDuration_ms/CloneVoiceSpeed
                                         silence = AudioSegment.silent(duration = PauseDuration_ms)
                             ## _Speed.wav 파일 선택 (Clone Voice 속도 조절시) ##
-                                
+                            
                             CombinedSound += sound_file + silence
                             CombinedSize += 1
                             FilesCount += 1
@@ -1221,7 +1223,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
         json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
 
-    return EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath
+    return EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath
 
 ## 10-15분 미리듣기 생성 ##
 def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath):
@@ -1250,7 +1252,7 @@ def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPat
         RawPreviewSound = AudioSegment.empty()
 
 ## 오디오북 메타데이터 생성 ##
-def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList):
+def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, VoiceFilePath):
     
     # 시간, 분, 초로 변환
     def SecondsToHMS(seconds):
@@ -1288,7 +1290,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
             MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1])}
             MetaDataSet.append(MetaData)
         except:
-            print(f'[ (Second: {FileRunningTimeList[-1]}) 이후 시간대 파일이 누락됨, Edit과 VoiceLayer 음성.wav 파일간에 불일치 부분이 있는지 확인 ]')
+            sys.exit(f'[ (FileRunningTimeList: {FileRunningTimeList}), (LastVoiceFilePath: {VoiceFilePath}) ]\n[ 해당 EditId 이후 파일 삭제 요망, Edit과 VoiceLayer 음성.wav 파일간에 불일치 확인 ]')
 
     fileName = '[' + projectName + '_' + 'AudioBook_MetaDate].json'
     MetaDatePath = VoiceLayerPathGen(projectName, email, fileName, Folder = 'Master')
@@ -1300,13 +1302,13 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
 def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off'):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
     
-    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro)
+    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro)
     
     ## 10-15분 미리듣기 생성
     AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)
     
     ## 오디오북 메타데이터 생성
-    AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList)
+    AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, _VoiceFilePath)
 
     with get_db() as db:
         

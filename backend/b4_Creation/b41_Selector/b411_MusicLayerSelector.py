@@ -1021,7 +1021,6 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                                         _SpeedFilePath = VoicePath.replace('.wav', '_Speed.wav')
                                         # Voice 속도를 빠르게
                                         sound_file = AudioSegment.from_wav(_SpeedFilePath)
-                                        
                                         # Pause 속도를 빠르게
                                         PauseDuration_ms = PauseDuration_ms/CloneVoiceSpeed
                                         silence = AudioSegment.silent(duration = PauseDuration_ms)
@@ -1285,9 +1284,11 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
                         Chunk = ActorChunk['Chunk']
                         IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
                     IndexTitle = ' '.join(IndexTitles)
-
-        MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1])}
-        MetaDataSet.append(MetaData)
+        try:
+            MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1])}
+            MetaDataSet.append(MetaData)
+        except:
+            print(f'[ (Second: {FileRunningTimeList[-1]}) 이후 시간대 파일이 누락됨, Edit과 VoiceLayer 음성.wav 파일간에 불일치 부분이 있는지 확인 ]')
 
     fileName = '[' + projectName + '_' + 'AudioBook_MetaDate].json'
     MetaDatePath = VoiceLayerPathGen(projectName, email, fileName, Folder = 'Master')

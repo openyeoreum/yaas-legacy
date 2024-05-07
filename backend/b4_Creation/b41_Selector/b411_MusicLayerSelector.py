@@ -1008,7 +1008,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                             # CloneVoice의 끊어읽기 시간을 고려해서 CloneVoice Puase시간 추가
                             AddPause = 0
                             if (CloneVoiceName in FilteredFiles[FilesCount]) and (_pausenum == len(Pause)-1):
-                                AddPause = 0.2
+                                AddPause = 0.3
                             PauseDuration_ms = (Pause[_pausenum] + AddPause) * 1000
                             # if EditId in [1, 2, 3, 4, 5, 6]: ######
                             #     print(f'{EditId}, {FilteredFiles[FilesCount]}, {SlicePause}, {PauseNum}, {Pause}, {FilesCount} : {PauseDuration_ms}') ######

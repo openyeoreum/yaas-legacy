@@ -1051,6 +1051,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "style": [0.00],
                     "model": "eleven_multilingual_v2",
                     "Speed": 1.10,
+                    "Pitch": 0,
                     "SettingCompletion": "세팅 완료 후 Completion으로 변경",
                     "VoiceEnhanceCompletion": "None"
                 }

@@ -917,13 +917,14 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     for MatchedActor in MatchedActors:
         if (CloneVoiceName in MatchedActor['ActorName']) and (projectName in MatchedActor['ActorName']):
             CloneVoiceSpeed = MatchedActor['ApiSetting']['Speed']
+            CloneVoicePitch =  MatchedActor['ApiSetting']['Pitch']
     
     # Speed 변수가 1이 아닌 경우 속도 조절
-    if CloneVoiceSpeed != 1:
+    if CloneVoiceSpeed != 1 or CloneVoicePitch != 0:
         
         UpdateTQDM = tqdm(FilteredFiles,
                         total = len(FilteredFiles),
-                        desc = 'CloneVoiceSpeed')
+                        desc = 'CloneVoiceSpeed & Pitch')
         
         _SpeedRemoveList = []
         for Update in UpdateTQDM:
@@ -934,7 +935,12 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                     os.remove(_SpeedFilePath)
                 
                 tfm = sox.Transformer()
-                tfm.tempo(CloneVoiceSpeed, 's')
+                if CloneVoicePitch != 1:
+                    print(f'CloneVoiceSpeed: {CloneVoiceSpeed}')
+                    tfm.tempo(CloneVoiceSpeed, 's')
+                if CloneVoicePitch != 0:
+                    print(f'CloneVoicePitch: {CloneVoicePitch}')
+                    tfm.pitch(CloneVoicePitch)
                 tfm.build(VoiceFilePath, _SpeedFilePath)
                 
                 _SpeedRemoveList.append(_SpeedFilePath)

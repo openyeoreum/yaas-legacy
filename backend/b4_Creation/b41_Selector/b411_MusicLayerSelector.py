@@ -914,6 +914,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
         MatchedActors = json.load(MatchedActorsJson)
 
     CloneVoiceSpeed = 1
+    CloneVoicePitch = 0
     for MatchedActor in MatchedActors:
         if (CloneVoiceName in MatchedActor['ActorName']) and (projectName in MatchedActor['ActorName']):
             CloneVoiceSpeed = MatchedActor['ApiSetting']['Speed']
@@ -936,10 +937,8 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                 
                 tfm = sox.Transformer()
                 if CloneVoicePitch != 1:
-                    print(f'CloneVoiceSpeed: {CloneVoiceSpeed}')
                     tfm.tempo(CloneVoiceSpeed, 's')
                 if CloneVoicePitch != 0:
-                    print(f'CloneVoicePitch: {CloneVoicePitch}')
                     tfm.pitch(CloneVoicePitch)
                 tfm.build(VoiceFilePath, _SpeedFilePath)
                 

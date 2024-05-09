@@ -272,10 +272,10 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
                 CaptionMusic = matchedMusic
 
     ## _Intro2_가 Title앞에 존재하는 경우 ##
+    _Intro2_VoiceFileNames = []
     if editGeneration[0]['Tag'] == 'Intro':
         EditId = editGeneration[0]['EditId']
         ActorName = editGeneration[0]['ActorName']
-        _Intro2_VoiceFileNames = []
         for a in range(len(editGeneration[0]['ActorChunk'])):
             _Intro2_VoiceFileNames.append([f'{projectName}_{EditId}_{ActorName}_({a})M.wav', f'{projectName}_{EditId}_{ActorName}_({a}).wav'])
         EditGeneration = editGeneration[1:]

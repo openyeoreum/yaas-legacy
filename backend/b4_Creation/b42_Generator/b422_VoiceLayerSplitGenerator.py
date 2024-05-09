@@ -1307,6 +1307,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 chunk = chunk.replace('~.', ',')
                 # 3. Chunk의 마지막 3개를 제외하고 .이 포함되면 이를 모두 삭제
                 chunk = chunk[:-3].replace('.', '') + chunk[-3:]
+                # 4. ~,는 .로 변경
+                chunk = chunk.replace('~,', '.')
                 return chunk
             
             ## ElevenLabs Chunk

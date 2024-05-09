@@ -220,12 +220,12 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
 ## VoiceLayer에 Musics 믹싱 파일 선정
 def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
     
-    EditGeneration, MatchedMusics = MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = 'off')
+    editGeneration, MatchedMusics = MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = 'off')
     
     ## EditGeneration 내에 Part, Chapter 유무 확인
     PartSwitch = False
     ChapterSwitch = False
-    for Edit in EditGeneration:
+    for Edit in editGeneration:
         if Edit['Tag'] == 'Part':
             PartSwitch = True
         elif Edit['Tag'] == 'Chapter':
@@ -270,6 +270,18 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
                 IndexMusic = matchedMusic
             if 'Caption' in matchedMusic['Tag']:
                 CaptionMusic = matchedMusic
+
+    ## _Intro2_가 Title앞에 존재하는 경우 ##
+    if editGeneration[0]['Tag'] == 'Intro':
+        EditId = editGeneration[0]['EditId']
+        ActorName = editGeneration[0]['ActorName']
+        _Intro2_VoiceFileNames = []
+        for a in range(len(editGeneration[0]['ActorChunk'])):
+            _Intro2_VoiceFileNames.append([f'{projectName}_{EditId}_{ActorName}_({a})M.wav', f'{projectName}_{EditId}_{ActorName}_({a}).wav'])
+        EditGeneration = editGeneration[1:]
+    else:
+        EditGeneration = editGeneration
+    ## _Intro2_가 Title앞에 존재하는 경우 ##
 
     # TagMusic 위치 매칭
     MusicMixingDatas = []
@@ -367,7 +379,7 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
     IndexMusicPath = IndexMusic['FilePath']
     CaptionMusicPath = CaptionMusic['FilePath']
     
-    return EditGeneration, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath
+    return editGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath
 
 ## Musics 파일 볼륨 값 일치시키기 (볼륨이 Volume값 보다 작을 경우에는 원본 볼륨을 유지)
 def MusicsVolume(MusicPath, Volume):
@@ -388,13 +400,26 @@ def MusicsVolume(MusicPath, Volume):
 ## Musics 믹싱
 def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
     
-    EditGeneration, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro)
+    EditGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro)
     ## 각 사운드 생성
     Volume = -30 # 볼륨은 최대 값을 0으로 산정 -값이 클수록 볼륨이 작음(-25 ~ -32)
     Logo_Audio = AudioSegment.from_wav(LogoPath) + AudioSegment.silent(duration = 3000)
     Intro_Audio = AudioSegment.empty()
     if IntroPath != None:
         Intro_Audio = AudioSegment.from_wav(IntroPath) + AudioSegment.silent(duration = 3500)
+    
+    ## _Intro2_가 Title앞에 존재하는 경우 ##
+    _Intro2_Audio = AudioSegment.empty()
+    if EditGeneration[0]['Tag'] == 'Intro':
+        ActorChunk = EditGeneration[0]['ActorChunk']
+        for a in range(len(ActorChunk)):
+            if os.path.exists(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][0])):
+                _Intro2_Voice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][0]))
+            elif os.path.exists(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][1])):
+                _Intro2_Voice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][1]))
+            _Intro2_Audio += _Intro2_Voice + AudioSegment.silent(duration = ActorChunk[a]['Pause'] * 1000)
+    ## _Intro2_가 Title앞에 존재하는 경우 ##
+
     TitleMusic_Audio = MusicsVolume(TitleMusicPath, Volume)
     PartMusic_Audio = MusicsVolume(PartMusicPath, Volume)
     ChapterMusic_Audio = MusicsVolume(ChapterMusicPath, Volume)
@@ -402,7 +427,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
     CaptionMusic_Audio = MusicsVolume(CaptionMusicPath, Volume)
     
     ### 초기화: Mixed Audio누적 추가 시간 생성 ###
-    MixedMusicAudio = Logo_Audio + Intro_Audio
+    MixedMusicAudio = Logo_Audio + Intro_Audio + _Intro2_Audio
     AccumulatedTimesList = [{'EditId': 0, 'ActorChunkId': 0, 'AccumulatedTime': MixedMusicAudio.duration_seconds + MusicMixingDatas[0]['Music']['Setting']['Length'][0]}]
     
     ###################################
@@ -954,8 +979,15 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     CombinedSoundFilePaths = []
     RawPreviewSound = None
     FileRunningTimeList = []
-    CombinedSound = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[0]))
-    FilteredFiles = FilteredFiles[1:]
+
+    ## _Intro2_가 Title앞에 존재하는 경우 ##
+    if EditGenerationKoChunks[0]['Tag'] == 'Intro':
+        CombinedSound = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[1]))
+        FilteredFiles = FilteredFiles[2:]
+    ## _Intro2_가 Title앞에 존재하는 경우 ##
+    else:
+        CombinedSound = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[0]))
+        FilteredFiles = FilteredFiles[1:]
     CombinedSounds = AudioSegment.empty()
     total_duration_seconds = CombinedSound.duration_seconds
 
@@ -1189,7 +1221,15 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
     
     ## TitleMusic 최종 시간 자리 수정
-    TitleSectionEditGenerationKo = EditGenerationKoChunks[1]
+    ## _Intro2_가 Title앞에 존재하는 경우 ##
+    if EditGenerationKoChunks[0]['Tag'] == 'Intro':
+        for i in range(len(EditGenerationKoChunks[0]['ActorChunk'])):
+            EditGenerationKoChunks[0]['ActorChunk'][i]['EndTime'] = {"Time": None, "Second": None}
+            
+        TitleSectionEditGenerationKo = EditGenerationKoChunks[2]
+    ## _Intro2_가 Title앞에 존재하는 경우 ##
+    else:
+        TitleSectionEditGenerationKo = EditGenerationKoChunks[1]
     NoneEndTimes = []
     nonNoneEndTimes = []
     
@@ -1202,7 +1242,13 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     
     for i in range(len(TitleSectionEditGenerationKo['ActorChunk'])):
         TitleSectionEditGenerationKo['ActorChunk'][i]['EndTime'] = EndTimes[i]
-    EditGenerationKoChunks[1] = TitleSectionEditGenerationKo
+    
+    ## _Intro2_가 Title앞에 존재하는 경우 ##
+    if EditGenerationKoChunks[0]['Tag'] == 'Intro':
+        EditGenerationKoChunks[2] = TitleSectionEditGenerationKo
+    ## _Intro2_가 Title앞에 존재하는 경우 ##
+    else:
+        EditGenerationKoChunks[1] = TitleSectionEditGenerationKo
     
     ## EndTitleMusic 최종 시간 자리 수정
     for i, EditGenerationKo in enumerate(EditGenerationKoChunks):

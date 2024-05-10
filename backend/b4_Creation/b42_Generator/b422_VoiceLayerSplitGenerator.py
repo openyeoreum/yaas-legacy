@@ -665,12 +665,12 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
                         ## tag가 Title, Logue인 경우 속도 ##
                         if tag in ['Title', 'Logue']:
                             print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
-                            ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.89, Pad = 0.5, Reverb = 'off')
+                            ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.95, Pad = 0.5, Reverb = 'off')
 
                         ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
                         if tag in ['Part', 'Chapter', 'Index']:
                             print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
-                            ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.91, Pad = 1.0, Reverb = 'off')
+                            ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.97, Pad = 1.0, Reverb = 'off')
 
                         ## tag가 Character인 경우 ##
                         if tag in ['Character']:

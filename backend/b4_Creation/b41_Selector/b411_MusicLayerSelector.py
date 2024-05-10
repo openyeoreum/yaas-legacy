@@ -11,7 +11,6 @@ import json
 sys.path.append("/yaas")
 
 from tqdm import tqdm
-from math import log10
 from pydub import AudioSegment
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User
@@ -441,13 +440,22 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
             StartTime = MusicMixingData['StartTime']
             EndTime = MusicMixingData['EndTime']
             VoiceFileNames = MusicMixingData['VoiceFileName']
+            Pause = MusicMixingData['Pause']
             # 파일 선별
-            if os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0])):
-                TitleVoice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[0]))
-                LastVoiceFileName = VoiceFileNames[0]
-            elif os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[1])):
-                TitleVoice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[1]))
-                LastVoiceFileName = VoiceFileNames[1]
+            TitleVoice = AudioSegment.empty()
+            if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0]))) and ('M' in VoiceFileNames[0]):
+                M_Switch = 1
+            else:
+                M_Switch = 0
+            for j in range(len(VoiceFileNames)):
+                if M_Switch == 1:
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' in VoiceFileNames[j]):
+                        TitleVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                        LastVoiceFileName = VoiceFileNames[j]
+                else:
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' not in VoiceFileNames[j]):
+                        TitleVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                        LastVoiceFileName = VoiceFileNames[j]
             MusicFilePath = MusicLayerPathGen(projectName, email, LastVoiceFileName)
             # TitleVoice 생성 및 리스트 저장
             TitleVoices.append(TitleVoice)
@@ -509,6 +517,8 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
     
     # EndTitleMusic 슬라이스
     MixedTitleEndMusicAudio = TitleMusic_Audio[EndTitleLength * 1000 : (EndTitleLength * 1000) + 45000]
+    # 볼륨을 5dB 낮춤
+    MixedTitleEndMusicAudio = MixedTitleEndMusicAudio - 5
     
     # FadeIn
     FadedInAudio = MixedTitleEndMusicAudio.fade_in(5000)
@@ -776,6 +786,24 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files):
 
     return UniqueFiles
 
+## 파일과 Edit간 불일치시 FilteredFiles 재구성
+def MatchEditWithVoiceFile(EditGeneration, FilteredFiles):
+    MatchedFilteredFiles = []
+    for Edit in EditGeneration:
+        EditId = Edit['EditId']
+        ActorChunk = Edit['ActorChunk']
+        for ChunkId in range(len(ActorChunk)):
+            EditIdText = f'_{EditId}_'
+            ChunkIdText = f'({ChunkId})'
+            
+            for file in FilteredFiles:
+                if EditIdText in file and ChunkIdText in file:
+                    MatchedFilteredFiles.append(file)
+                    FilteredFiles.pop(0)
+                    break
+    
+    return MatchedFilteredFiles
+
 ## 생성된 음성파일 합치기
 def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off'):
     EditGeneration, MusicMixingDatas = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro)
@@ -969,6 +997,9 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                 
                 _SpeedRemoveList.append(_SpeedFilePath)
     ## _Speed.wav 파일 생성 (Clone Voice 속도 조절시) ##
+
+    ## 파일과 Edit간 불일치시 FilteredFiles 재구성
+    FilteredFiles = MatchEditWithVoiceFile(EditGeneration, FilteredFiles)
 
     # 오디오북 생성
     EditGenerationKoChunks = EditGenerationKoChunksToList(EditGeneration)
@@ -1265,6 +1296,11 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             
     EditGenerationKoChunks[LastEditChunkId]['ActorChunk'][LastActorChunkId]['EndTime'] = {"Time": None, "Second": None}
     EditGenerationKoChunks[_LastEditChunkId]['ActorChunk'][_LastActorChunkId]['EndTime'] = LastEndTime
+
+    ## Title이 여러개인 경우 최종시간 ##
+    if EditGenerationKoChunks[0]['Tag'] == 'Title':
+        for i in range(len(EditGenerationKoChunks[0]['ActorChunk'])):
+            EditGenerationKoChunks[0]['ActorChunk'][i]['EndTime'] = {"Time": None, "Second": None}
 
     # MatchedChunksEdit 경로 생성
     fileName = '[' + projectName + '_' + 'AudioBook_Edit].json'

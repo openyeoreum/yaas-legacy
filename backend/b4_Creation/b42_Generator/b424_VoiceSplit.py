@@ -9,7 +9,7 @@ import sys
 sys.path.append("/yaas")
 
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from google.cloud import speech
+from openai import OpenAI
 from pydub import AudioSegment
 
 #########################
@@ -17,49 +17,37 @@ from pydub import AudioSegment
 #########################
 ## 음성파일을 STT로 단어별 시간 계산하기
 def VoiceTimeStemps(voiceLayerPath, LanguageCode):
-    # 환경 변수 설정 또는 코드 내에서 직접 경로 지정
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/yaas/backend/b4_Creation/b42_Generator/speechtotext-415411-4c2386f811df.json"
 
     # 클라이언트 생성
-    client = speech.SpeechClient()
+    client = OpenAI()
 
     # 오디오 파일 읽기
-    with io.open(voiceLayerPath, 'rb') as AudioFile:
-        GenedVoice = AudioFile.read()
+    audio_file = open(voiceLayerPath, "rb")
 
     # 오디오 파일 설정
-    audio = speech.RecognitionAudio(content = GenedVoice)
-    config = speech.RecognitionConfig(
-        encoding = speech.RecognitionConfig.AudioEncoding.LINEAR16,
-        sample_rate_hertz = 44100,
-        language_code = LanguageCode,
-        enable_word_time_offsets = True
+    transcript = client.audio.transcriptions.create(
+    file=audio_file,
+    model="whisper-1",
+    response_format="verbose_json",
+    timestamp_granularities=["word"]
     )
 
-    # 음성 인식 요청 및 응답 처리
-    response = client.recognize(config = config, audio = audio)
     # 각 단어의 시작 및 종료 타임스탬프 출력
     voiceTimeStemps = []
     Voices = []
     Id = 1
-    for result in response.results:
-        for alternative in result.alternatives:
-            for wordInfo in alternative.words:
-                word = wordInfo.word
-                # total_seconds() 호출로 변환
-                start_time = wordInfo.start_time.total_seconds() if wordInfo.start_time else 0
-                end_time = wordInfo.end_time.total_seconds() if wordInfo.end_time else 0
-                voiceTimeStemps.append({"낭독기록번호": Id, "낭독기록": word, "시작": start_time, "끝": end_time})
-                Voices.append({"낭독기록번호": Id, "낭독기록": word})
-                Id += 1
+    start_time = 0
+    for result in transcript.words:
+        word = result['word']
+        # total_seconds() 호출로 변환
+        voiceTimeStemps.append({"낭독기록번호": Id, "낭독기록": word, "시작": start_time, "끝": result['end']})
+        start_time = result['end']
+        Voices.append({"낭독기록번호": Id, "낭독기록": word})
+        Id += 1
     
-    # 마지막 문장이 누락시, 해당 부분 추가
-    result_end_time = result.result_end_time.total_seconds() if wordInfo.start_time else 0
-    
-    if result_end_time - end_time >= 0.5:
-        voiceTimeStemps.append({"낭독기록번호": Id, "낭독기록": '~', "시작": end_time, "끝": result_end_time})
-        Voices.append({"낭독기록번호": Id, "낭독기록": '~'})
-                
+    # 마지막 문장이 누락 문제 해결로 해당 부분 추가
+    Voices.append({"낭독기록번호": Id, "낭독기록": '~'})
+
     return voiceTimeStemps, Voices
 
 ######################

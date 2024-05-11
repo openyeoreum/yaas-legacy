@@ -17,7 +17,7 @@ from extension.e1_Solution.e13_ExtensionDataFrame.e131_ExtensionDataCommit.e1311
 ##### InputList 생성 #####
 #########################
 # LifeGraphTranslationKo 로드
-def LoadLifeGraphs(lifeGraphSetName, latestUpdateDate):
+def LoadLifeDataTextsKo(lifeGraphSetName, latestUpdateDate):
     lifeGraph = GetLifeGraph(lifeGraphSetName, latestUpdateDate)
     LifeGraphsKo = lifeGraph.LifeGraphTranslationKo[1]['LifeGraphsKo'][200:]
     LifeGraphsEn = lifeGraph.LifeGraphTranslationEn[1]['LifeGraphsEn'][200:]
@@ -194,7 +194,7 @@ def LifeGraphContextDefineProcess(lifeGraphSetName, latestUpdateDate, LifeGraphD
                 
                 # 2분 대기 이후 다시 코드 실행
                 ErrorCount += 1
-                print((f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도"))
+                print((f"Project: {lifeGraphSetName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도"))
                 time.sleep(120)
                 if ErrorCount == 5:
                     print(f"Project: {lifeGraphSetName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
@@ -428,7 +428,7 @@ if __name__ == "__main__":
         
         return lifeGraphList
 
-    LifeGraphsKo, LifeGraphsEn = LoadLifeGraphs(lifeGraphSetName, latestUpdateDate)
+    LifeGraphsKo, LifeGraphsEn = LoadLifeDataTextsKo(lifeGraphSetName, latestUpdateDate)
     LifeGraphsGlobalList = []
     LifeGraphId = 1
     ResidenceAccuracyText = ''

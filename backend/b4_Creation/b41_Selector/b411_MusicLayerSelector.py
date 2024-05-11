@@ -1426,3 +1426,30 @@ if __name__ == "__main__":
     mainLang = 'Ko'
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
     #########################################################################
+    
+    # import os
+    # from pydub import AudioSegment
+
+    # # 폴더 경로 지정
+    # folder_path = "/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240412_카이스트명상수업/240412_카이스트명상수업_mixed_audiobook_file/VoiceLayers"
+
+    # # 폴더 내 파일 목록 가져오기
+    # file_list = os.listdir(folder_path)
+
+    # # 파일 목록에서 조건에 맞는 wav 파일 찾기
+    # for file_name in file_list:
+    #     if file_name.endswith(".wav") and "신치홍(240412_카이스트명상수업)" in file_name:
+    #         # 오디오 파일 로드
+    #         file_path = os.path.join(folder_path, file_name)
+    #         sound = AudioSegment.from_wav(file_path)
+            
+    #         # 볼륨을 5dB 높임
+    #         louder_sound = sound + 5
+            
+    #         # 수정된 오디오 파일 저장
+    #         louder_file_name = file_name
+    #         louder_file_path = os.path.join(folder_path, louder_file_name)
+    #         louder_sound.export(louder_file_path, format="wav")
+            
+    #         print(f"{file_name} 파일의 볼륨이 조정되어 {louder_file_name}으로 저장되었습니다.")
+    

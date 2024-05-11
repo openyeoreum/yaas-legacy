@@ -1490,19 +1490,3 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    
-    # import json
-
-    # # 파일 경로 지정
-    # file_path = '/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240223_마케터의무기들/240223_마케터의무기들_master_audiobook_file/[240223_마케터의무기들_AudioBook_Edit].json'
-
-    # # 파일 열기 및 JSON 데이터 로드
-    # with open(file_path, 'r', encoding='utf-8') as file:
-    #     data = json.load(file)
-
-    # # EditId 추출 및 중복 확인
-    # edit_ids = [item['EditId'] for item in data]
-    # duplicates = set([x for x in edit_ids if edit_ids.count(x) > 1])
-
-    # # 중복된 EditId 출력
-    # print('중복된 EditId:', duplicates)

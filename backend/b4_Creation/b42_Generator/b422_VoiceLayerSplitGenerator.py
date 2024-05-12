@@ -522,7 +522,6 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
         tfm.build(CopyFilePath, VoicePath)
         
         os.remove(CopyFilePath)
-
     ##################
     ### ElevenLabs ###
     ##################
@@ -1302,8 +1301,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             ## ElevenLabs Chunk Modify ##
             def ModifyELChunk(chunk):
                 # 1. Chunk 마지막 3개의 글자 중에 . 과 , 이 포함되어 있으면 이를 모두 삭제하고 .하나만 표기
-                if '.' in chunk[-3:] or ',' in chunk[-3:]:
-                    chunk = chunk[:-3] + chunk[-3:].replace('.', '').replace(',', '') + '.'
+                chunk = chunk[:-3] + chunk[-3:].replace('.', '').replace(',', '') + '.'
                 # 2. ~.은 ,로 변경
                 chunk = chunk.replace('~.', ',')
                 # 3. Chunk의 마지막 3개를 제외하고 .이 포함되면 이를 모두 삭제
@@ -1312,7 +1310,13 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 chunk = chunk.replace('~,', '.')
                 return chunk
             
-            ## ElevenLabs Chunk
+            ## ChunkEndPoint 후처리
+            def ModifyTCChunk(chunk):
+                # Chunk 마지막 3개의 글자 중에 . 과 , 이 포함되어 있으면 이를 모두 삭제하고 ,하나만 표기
+                chunk = chunk[:-3] + chunk[-3:].replace('.', '').replace(',', '') + ','
+                return chunk
+            
+            ## ElevenLabs Chunk Modify ##
             EL_Chunk = None
             if Api == 'ElevenLabs':
                 ELChunks = []
@@ -1320,14 +1324,21 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     ELChunk = ModifyELChunk(_ELChunk)
                     ELChunks.append(ELChunk)
                 EL_Chunk = " ".join(ELChunks)
-                # print(f"ChunkModify: ({EL_Chunk})")
-            ## ElevenLabs Chunk Modify ##
-
-            Chunk = " ".join(Update['ActorChunk'])
+            # print(f"ChunkModify: ({EL_Chunk})")
+            ## TypeCast Chunk Modify ##
+            Chunk = None
+            if Api == 'TypeCast':
+                Chunks = []
+                for _Chunk in Update['ActorChunk']:
+                    _chunk = ModifyTCChunk(_Chunk)
+                    Chunks.append(_chunk)
+            Chunk = " ".join(Chunks)
+            
+            HistoryChunk = " ".join(Update['ActorChunk'])
             ChunkCount = len(Update['ActorChunk']) - 1 # 파일의 마지막 순번을 표기
 
             #### Split을 위한 딕셔너리 리스트 생성 ####
-            rawSplitChunks = [chunk.replace('~.', '').replace('.,', '').replace('.,', '') for chunk in Update['ActorChunk']]
+            rawSplitChunks = [chunk.replace('~.', '').replace('~,', '').replace('.,', '').replace('.,', '') for chunk in Update['ActorChunk']]
             SplitChunks = []
             for i in range(len(rawSplitChunks)):
                 SplitChunk = {'낭독문장번호': i + 1, '낭독문장': rawSplitChunks[i]}
@@ -1341,8 +1352,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     if History['ActorName'] != Name:
                         History['ActorName'] = Name
                         Modify = "Yes"
-                    if History['ActorChunk'] != Chunk:
-                        History['ActorChunk'] = Chunk
+                    if History['ActorChunk'] != HistoryChunk:
+                        History['ActorChunk'] = HistoryChunk
                         Modify = "Yes"
                     if History['Tag'] != Tag:
                         History['Tag'] = Tag

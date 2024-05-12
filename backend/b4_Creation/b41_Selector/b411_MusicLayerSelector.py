@@ -396,8 +396,20 @@ def MusicsVolume(MusicPath, Volume):
     
     return NormalizedAudio
 
+## MusicFiles를 모두 제거
+def RemoveMusicFiles(MusicLayerPath):
+    # 디렉토리 내의 모든 파일과 디렉토리 목록을 검색
+    for filename in os.listdir(MusicLayerPath):
+        # 파일 경로 생성
+        FilePath = os.path.join(MusicLayerPath, filename)
+        # 파일이 .wav 확장자를 가지면
+        if FilePath.endswith('.wav'):
+            # 파일 삭제
+            os.remove(FilePath)
+
 ## Musics 믹싱
 def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
+    RemoveMusicFiles(MusicLayerPathGen(projectName, email, ''))
     
     EditGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro)
     ## 각 사운드 생성
@@ -1452,4 +1464,3 @@ if __name__ == "__main__":
     #         louder_sound.export(louder_file_path, format="wav")
             
     #         print(f"{file_name} 파일의 볼륨이 조정되어 {louder_file_name}으로 저장되었습니다.")
-    

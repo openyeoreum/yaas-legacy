@@ -26,10 +26,10 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
 
     # 오디오 파일 설정
     transcript = client.audio.transcriptions.create(
-    file=audio_file,
-    model="whisper-1",
-    response_format="verbose_json",
-    timestamp_granularities=["word"]
+    file = audio_file,
+    model = "whisper-1",
+    response_format = "verbose_json",
+    timestamp_granularities = ["word"]
     )
 
     # 각 단어의 시작 및 종료 타임스탬프 출력
@@ -602,8 +602,13 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
     def find_optimal_split_point(audio, split_time, detail = False):
         # 주변 평균값 탐색을 위한 초기화
         metrics = []
-        step = 0.05 if not detail else 0.01  # 세밀한 분석을 위한 단계 조정
-        range_end = 0.35 if not detail else 0.05  # 세밀한 분석을 위한 범위 조정
+        ## Open AI 위스퍼로 변경하며 수치를 줄임 (기존수치)
+        # step = 0.05 if not detail else 0.01  # 세밀한 분석을 위한 단계 조정
+        # range_end = 0.35 if not detail else 0.05  # 세밀한 분석을 위한 범위 조정
+        
+        ## Open AI 위스퍼로 변경하며 수치를 줄임 (줄임)
+        step = 0.03 if not detail else 0.01  # 세밀한 분석을 위한 단계 조정
+        range_end = 0.21 if not detail else 0.03  # 세밀한 분석을 위한 범위 조정
 
         for delta in np.arange(-range_end, range_end + step, step):
             start = int((split_time + delta) * 1000)  # milliseconds

@@ -528,9 +528,9 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
             EndTitleVoices += EndTitleVoice
     
     # EndTitleMusic 슬라이스
-    MixedTitleEndMusicAudio = TitleMusic_Audio[EndTitleLength * 1000 : (EndTitleLength * 1000) + 45000]
-    # 볼륨을 5dB 낮춤
-    MixedTitleEndMusicAudio = MixedTitleEndMusicAudio - 5
+    MixedTitleEndMusicAudio = TitleMusic_Audio[EndTitleLength * 1000 : (EndTitleLength * 1000) + 60000]
+    # 볼륨을 4dB 낮춤
+    MixedTitleEndMusicAudio = MixedTitleEndMusicAudio - 4
     
     # FadeIn
     FadedInAudio = MixedTitleEndMusicAudio.fade_in(5000)
@@ -1326,6 +1326,8 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
 
 ## 10-15분 미리듣기 생성 ##
 def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath):
+    AudiobookPreviewSecond = 0
+    
     if RawPreviewSound.duration_seconds >= 900:
         PreviewSecond = 0
         for i in range(len(EditGenerationKoChunks)):
@@ -1343,15 +1345,17 @@ def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPat
     
         if PreviewSecond != 0:
             PreviewSound = RawPreviewSound[:PreviewSecond * 1000 + 50]
-            
+            AudiobookPreviewSecond = PreviewSound.duration_seconds
             with open(PreviewSoundPath, "wb") as PreviewFile:
                 PreviewSound.export(PreviewFile, format = "mp3", bitrate = "320k")
                 PreviewSound = AudioSegment.empty()
         
         RawPreviewSound = AudioSegment.empty()
+    
+    return AudiobookPreviewSecond
 
 ## 오디오북 메타데이터 생성 ##
-def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, VoiceFilePath):
+def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, VoiceFilePath, AudiobookPreviewSecond):
     
     # 시간, 분, 초로 변환
     def SecondsToHMS(seconds):
@@ -1361,7 +1365,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         
         return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
     
-    MetaDataSet = [{'ProjectName': projectName, 'RunningTime': SecondsToHMS(sum(FileRunningTimeList))}]
+    MetaDataSet = [{'ProjectName': projectName, 'RunningTime': SecondsToHMS(sum(FileRunningTimeList))}, {"FileId": 1, "Title": "미리듣기", 'RunningTime': SecondsToHMS(AudiobookPreviewSecond)}]
     
     IndexTag = EditGenerationKoChunks[0]['Tag']
     IndexTitles = []
@@ -1375,7 +1379,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
             for j in range(len(EditGenerationKoChunks)):
                 if FileLimitList[i] == EditGenerationKoChunks[j]['EditId']:
                                 
-                    MetaData = {'FileId': i+1, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i])}
+                    MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i])}
                     MetaDataSet.append(MetaData)
                     
                     # IndexTitle
@@ -1386,7 +1390,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
                         IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
                     IndexTitle = ' '.join(IndexTitles)
         try:
-            MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1])}
+            MetaData = {'FileId': i+3, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1])}
             MetaDataSet.append(MetaData)
         except:
             sys.exit(f'[ (FileRunningTimeList: {FileRunningTimeList}), (LastVoiceFilePath: {VoiceFilePath}) ]\n[ 해당 EditId 이후 파일 삭제 요망, Edit과 VoiceLayer 음성.wav 파일간에 불일치 확인 ]')
@@ -1404,10 +1408,10 @@ def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang 
     EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro)
     
     ## 10-15분 미리듣기 생성
-    AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)
+    AudiobookPreviewSecond = AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)
     
     ## 오디오북 메타데이터 생성
-    AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, _VoiceFilePath)
+    AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, _VoiceFilePath, AudiobookPreviewSecond)
 
     with get_db() as db:
         

@@ -3,7 +3,7 @@
     "OpenAI": {
         "BaseModel": {
             "ShortTokensModel": "gpt-3.5-turbo-0125",
-            "LongTokensModel": "gpt-4-turbo"
+            "LongTokensModel": "gpt-4o"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [{"Date": "CharacterCompletion-231104034753", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8H4qi78e"}],
@@ -13,7 +13,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-4-turbo"
+        "MasterModel": "gpt-4o"
     },
     "ANTHROPIC": {
         "BaseModel": {

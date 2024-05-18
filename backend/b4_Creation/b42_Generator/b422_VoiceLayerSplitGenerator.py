@@ -1257,20 +1257,24 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             ## EditGenerationKoChunks의 List(프로세스)
             EditGenerationKoChunks = EditGenerationKoChunksToList(EditGenerationKoChunks)
         else:
-            with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
+            ## EditGenerationKoChunks에 중복 EditId 문제 해결 ##
+            with open(MatchedChunksPath, 'r', encoding='utf-8') as MatchedChunksJson:
                 EditGenerationKoChunks = json.load(MatchedChunksJson)
-                
-                ## EditGenerationKoChunks에 중복 EditId 문제 해결
+
                 for i in range(len(EditGenerationKoChunks)):
                     if i > 0 and EditGenerationKoChunks[i]["EditId"] == EditGenerationKoChunks[i-1]["EditId"]:
                         count = 1
-                        while i+count < len(EditGenerationKoChunks) and EditGenerationKoChunks[i+count]["EditId"] == EditGenerationKoChunks[i]["EditId"]:
+                        while i + count < len(EditGenerationKoChunks) and EditGenerationKoChunks[i + count]["EditId"] == EditGenerationKoChunks[i]["EditId"]:
                             count += 1
                         for j in range(count):
-                            EditGenerationKoChunks[i+j]["EditId"] = round(EditGenerationKoChunks[i+j]["EditId"] + 0.01 * (j+1), 2)
+                            EditGenerationKoChunks[i + j]["EditId"] = round(EditGenerationKoChunks[i + j]["EditId"] + 0.01 * (j + 1), 2)
+
+            with open(MatchedChunksPath, 'w', encoding='utf-8') as MatchedChunksJson:
+                json.dump(EditGenerationKoChunks, MatchedChunksJson, ensure_ascii=False, indent=4)
+            ## EditGenerationKoChunks에 중복 EditId 문제 해결 ##
                 
-                ## EditGenerationKoChunks의 Dic(프로세스)
-                EditGenerationKoChunks = EditGenerationKoChunksToList(EditGenerationKoChunks)
+            ## EditGenerationKoChunks의 Dic(프로세스)
+            EditGenerationKoChunks = EditGenerationKoChunksToList(EditGenerationKoChunks)
 
         ## 일부만 생성하는지, 전체를 생성하는지의 옵션
         if Mode == 'Manual':

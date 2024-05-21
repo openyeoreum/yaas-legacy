@@ -50,7 +50,7 @@ def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
         
 ### Main2 : 콘텐츠 제작 ###
 
-def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview):
+def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview):
 
     if isinstance(projectNameList, list):
         ## NFC, NFD 오류 문제 해결 (모두 적용)
@@ -69,11 +69,11 @@ def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverb
             #     projectName = _projectName
 
             ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, macro = Macro, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, messagesReview = MessagesReview)
+            CreationAudioBookUpdate(projectName, email, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, audiobookSplitting = AudiobookSplitting, macro = Macro, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, messagesReview = MessagesReview)
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account):
+def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
@@ -82,7 +82,7 @@ def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, Book
     elif MainProcess == 'Creation':
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
-        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview)
+        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview)
 
 if __name__ == "__main__":
 
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
     password = "0128"
-    projectNameList = ['240405_빌리월터스겜블러'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘'
+    projectNameList = ['240223_마케터의무기들'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘'
     IndexMode = "Define" # 'Define', 'Preprocess' : Define 은 Index 전처리 필요 없음, Preprocess 는 Index 전처리 필요함
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
@@ -100,10 +100,11 @@ if __name__ == "__main__":
     VoiceEnhance = "off" # 'on', 'off' : on 은 클론보이스 노이즈 제거, off 는 클론보이스 노이즈 제거 비활성
     VoiceReverbe = "on" # 'on', 'off' : on 은 인덱스와 대화문에 리버브 적용, off 는 리버브 미적용
     Intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
+    AudiobookSplitting = "Auto" # 'Auto', 'Manual' : Auto 는 오디오북 자동 분할, Manual 은 오디오북 수동 분할
     VoiceFileGen = "on" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     MainProcess = "Creation" # 'Solution', 'Creation'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
     Account = "khsis3516@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com'
     #########################################################################
 
-    YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account)
+    YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account)

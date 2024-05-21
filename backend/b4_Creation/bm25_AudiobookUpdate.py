@@ -11,13 +11,13 @@ from backend.b4_Creation.b41_Selector.b411_MusicLayerSelector import MusicLayerU
 ###########################
 
 ### Creation에 오디오북 제작 및 업데이트 ###
-def CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, voiceReverbe, mainLang, intro, mode = "Manual", macro = "Manual", account = "None", voiceEnhance = "off", voiceFileGen = "on", messagesReview = "off"):
+def CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, voiceReverbe, mainLang, intro, audiobookSplitting = "Auto", mode = "Manual", macro = "Manual", account = "None", voiceEnhance = "off", voiceFileGen = "on", messagesReview = "off"):
     
     #####################
     ### 01_VoiceLayer ###
     #####################
     VoiceLayerUpdate(projectName, email, Narrator = narrator, CloneVoiceName = cloneVoiceName, VoiceReverbe = voiceReverbe, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, VoiceEnhance = voiceEnhance, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
-    MusicLayerUpdate(projectName, email, CloneVoiceName = cloneVoiceName, MainLang = mainLang, Intro = intro)
+    MusicLayerUpdate(projectName, email, CloneVoiceName = cloneVoiceName, MainLang = mainLang, Intro = intro, AudiobookSplitting = audiobookSplitting)
     
 if __name__ == "__main__":
 
@@ -30,6 +30,7 @@ if __name__ == "__main__":
     voiceReverbe = "on" # 'on', 'off' : on 은 인덱스와 대화문에 리버브 적용, off 는 리버브 미적용
     mainLang = "Ko"
     intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
+    audiobookSplitting = "Auto" # 'Auto', 'Manual' : Auto 는 오디오북 자동 분할, Manual 은 오디오북 수동 분할
     voiceFileGen = "off" # 'on', 'off'
     macro = "Manual"
     account = "None"

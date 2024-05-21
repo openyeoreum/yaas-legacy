@@ -4,6 +4,8 @@ import sys
 import re
 import time
 import random
+import copy
+import shutil
 import sox
 import json
 sys.path.append("/yaas")
@@ -815,7 +817,7 @@ def MatchEditWithVoiceFile(EditGeneration, FilteredFiles):
     return MatchedFilteredFiles
 
 ## 생성된 음성파일 합치기
-def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto'):
+def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off'):
     EditGeneration, MusicMixingDatas = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro)
     
     ## voiceLayer 경로와 musicLayer 경로 ##
@@ -931,7 +933,6 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
 
         return EditGenerationKoListChunks
 
-    ## Audiobook_Splitting ##
     # 목차 단위로 나누기 위한 FileLimitList 만들기
     IndexsTags = ['Part', 'Chapter', 'Index']
     FileLimitList = []
@@ -940,82 +941,35 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     LastValidEditId = None # 1시간을 초과하기 전의 마지막 유효한 EditId를 추적
     EditEndTimes = [] # 각 파일 끝 시간을 기록하기 위한 리스트
 
-    if AudiobookSplitting == 'Manual':
-        fileName = '[' + projectName + '_' + 'AudioBook_Splitting].json'
-        IndexTagsListPath = VoiceLayerPathGen(projectName, email, fileName, 'Master')
+    for edit in EditGeneration:
+        EditId = edit['EditId']
+        Tag = edit['Tag']
+        if edit['ActorChunk'][-1]['EndTime']['Second'] is not None:
+            Second = edit['ActorChunk'][-1]['EndTime']['Second']
         
-        if not os.path.exists(IndexTagsListPath):
-            IndexTagsList = [{'AudioBook_Splitting': 'No'}]
-            
-            for edit in EditGeneration:
-                EditId = edit['EditId']
-                Tag = edit['Tag']
-                if edit['ActorChunk'][-1]['EndTime']['Second'] is not None:
-                    Second = edit['ActorChunk'][-1]['EndTime']['Second']
-                ActorChunk = edit['ActorChunk']
-                Chunks = []
-                for chunk in ActorChunk:
-                    Chunks.append(chunk['Chunk'].replace('.', '').replace(',', '').replace('~', ''))
-                Chunk = ' '.join(Chunks)
-                    
-                # 'Part', 'Chapter', 'Index' 태그가 있을 경우 IndexTagsList 추가
-                if Tag in IndexsTags:
-                    if Tag == 'Part':
-                        IndexTagsList.append({"<-----------------(Part)----------------->": "", "EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Second": Second, "StartPoint": '', "": "<-----------------(Part)----------------->"})
-                    if Tag == 'Chapter':
-                        IndexTagsList.append({"<-----------------(Chapter)----------------->": "", "EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Second": Second, "StartPoint": '', "": "<-----------------(Chapter)----------------->"})
-                    if Tag == 'Index':
-                        IndexTagsList.append({"<-----------------(Index)----------------->": "", "EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Second": Second, "StartPoint": '', "": "<-----------------(Index)----------------->"})
-                else:
-                    IndexTagsList.append({"EditId": EditId, "Tag": Tag, "Second": Second, "StartPoint": ''})
-                    
-            # JSON 파일로 저장
-            with open(IndexTagsListPath, 'w', encoding = 'utf-8') as f:
-                json.dump(IndexTagsList, f, ensure_ascii = False, indent = 4)
+        # 'Part', 'Chapter', 'Index' 태그가 있는지 확인하고, 누적 시간을 추적합니다.
+        if Tag in IndexsTags:
+            if Second - LastSplitSecond < 3600:  # 60분을 아직 초과하지 않은 경우
+                LastValidEditId = EditId  # 현재 EditId를 유효한 분할 후보로 업데이트
+            else:  # 60분을 초과하는 경우
+                if LastValidEditId is not None:
+                    FileLimitList.append(LastValidEditId - 1)  # 마지막 유효한 분할 지점을 추가
+                    EditEndTimes.append(Second)  # 파일 끝 시간 기록
+                    LastSplitSecond = Second  # 마지막 분할 지점을 현재 초과 지점으로 업데이트
+                    LastValidEditId = EditId  # 현재 EditId를 새로운 유효한 후보로 설정
 
-            sys.exit(f'[ 오디오북 분할 세팅을 완료하세요. 완료 후 "AudioBook_Splitting": "Yes" 로 변경 : {IndexTagsListPath} ]')
-        else:
-            with open(IndexTagsListPath, 'r', encoding='utf-8') as f:
-                IndexTagsList = json.load(f)
-            if IndexTagsList[0]['AudioBook_Splitting'] == 'No':
-                sys.exit(f'[ 오디오북 분할 세팅을 완료하세요. 완료 후 "AudioBook_Splitting": "Yes" 로 변경 : {IndexTagsListPath} ]')
-            else:
-                _IndexTagsList = IndexTagsList[1:]
-                for IndexTag in _IndexTagsList:
-                    if IndexTag['StartPoint'] != "":
-                        FileLimitList.append(IndexTag['EditId'] - 1)
+    # 마지막 파일 합성1: 마지막으로 남은 분할 후보가 10분 이상일 경우 추가
+    if (Second - LastSplitSecond > 600) and (LastValidEditId is not None and LastValidEditId not in FileLimitList):
+        FileLimitList.append(LastValidEditId - 1)
+        EditEndTimes.append(Second)  # 마지막 파일 끝 시간 추가
+        
+    # 마지막 파일 합성2: 뒷부분 2개의 파일의 시간 합이 70분 이하일 경우 두 파일
+    if len(EditEndTimes) > 1 and (EditEndTimes[-1] - EditEndTimes[-2] <= 4000):
+        FileLimitList.pop()
     
-    else:
-        for edit in EditGeneration:
-            EditId = edit['EditId']
-            Tag = edit['Tag']
-            if edit['ActorChunk'][-1]['EndTime']['Second'] is not None:
-                Second = edit['ActorChunk'][-1]['EndTime']['Second']
-            
-            # 'Part', 'Chapter', 'Index' 태그가 있는지 확인하고, 누적 시간을 추적합니다.
-            if Tag in IndexsTags:
-                if Second - LastSplitSecond < 3600:  # 60분을 아직 초과하지 않은 경우
-                    LastValidEditId = EditId  # 현재 EditId를 유효한 분할 후보로 업데이트
-                else:  # 60분을 초과하는 경우
-                    if LastValidEditId is not None:
-                        FileLimitList.append(LastValidEditId - 1)  # 마지막 유효한 분할 지점을 추가
-                        EditEndTimes.append(Second)  # 파일 끝 시간 기록
-                        LastSplitSecond = Second  # 마지막 분할 지점을 현재 초과 지점으로 업데이트
-                        LastValidEditId = EditId  # 현재 EditId를 새로운 유효한 후보로 설정
-
-        # 마지막 파일 합성1: 마지막으로 남은 분할 후보가 10분 이상일 경우 추가
-        if (Second - LastSplitSecond > 600) and (LastValidEditId is not None and LastValidEditId not in FileLimitList):
-            FileLimitList.append(LastValidEditId - 1)
-            EditEndTimes.append(Second)  # 마지막 파일 끝 시간 추가
-            
-        # 마지막 파일 합성2: 뒷부분 2개의 파일의 시간 합이 70분 이하일 경우 두 파일
-        if len(EditEndTimes) > 1 and (EditEndTimes[-1] - EditEndTimes[-2] <= 4000):
-            FileLimitList.pop()
-        
-        # 마지막 파일 합성3: 파일의 길이가 짧아서 오디오북이 총 1시간이 안되는 경우 마지막 번호 추가
-        if FileLimitList == []:
-            FileLimitList.append(EditId)
-    ## AudioBook_Splitting ##
+    # 마지막 파일 합성3: 파일의 길이가 짧아서 오디오북이 총 1시간이 안되는 경우 마지막 번호 추가
+    if FileLimitList == []:
+        FileLimitList.append(EditId)
 
     ## _Speed.wav 파일 생성 (Clone Voice 속도 조절시) ##
     # Speed 변수 가져오기
@@ -1448,10 +1402,10 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         json.dump(MetaDataSet, json_file, ensure_ascii = False, indent = 4)
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
-def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto'):
+def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off'):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
     
-    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting)
+    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro)
     
     ## 10-15분 미리듣기 생성
     AudiobookPreviewSecond = AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)

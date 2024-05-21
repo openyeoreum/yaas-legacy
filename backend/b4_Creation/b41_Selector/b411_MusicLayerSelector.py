@@ -1207,7 +1207,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                     PreviewSoundPath = MasterLayerPath.replace('_(1).mp3', '_(Preview).mp3')
                 
                 try:
-                    print(f"[ {projectName}_AudioBook_({SplitCount + 1}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
+                    print(f"\n[ {projectName}_AudioBook_({SplitCount + 1}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
                     with open(MasterLayerPath, "wb") as MVoiceFile:
                         CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
                         FileRunningTimeList.append(CombinedSounds.duration_seconds)
@@ -1269,7 +1269,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             PreviewSoundPath = MasterLayerPath.replace('(1).mp3', '(Preview).mp3')
         
         try:
-            print(f"[ {projectName}_AudioBook_({SplitCount + 1}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
+            print(f"\n[ {projectName}_AudioBook_({SplitCount + 1}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
             with open(MasterLayerPath, "wb") as MVoiceFile:
                 CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
                 FileRunningTimeList.append(CombinedSounds.duration_seconds)

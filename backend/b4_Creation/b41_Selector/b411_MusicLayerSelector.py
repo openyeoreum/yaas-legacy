@@ -961,13 +961,13 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                 # 'Part', 'Chapter', 'Index' 태그가 있을 경우 IndexTagsList 추가
                 if Tag in IndexsTags:
                     if Tag == 'Part':
-                        IndexTagsList.append({"<-----------------(Part)----------------->": "", "EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Second": Second, "StartPoint": '', "": "<-----------------(Part)----------------->"})
+                        IndexTagsList.append({"<-----------------(Part)----------------->": "", "EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Second": SecondsToHMS(Second), "StartPoint": '', "": "<-----------------(Part)----------------->"})
                     if Tag == 'Chapter':
-                        IndexTagsList.append({"<-----------------(Chapter)----------------->": "", "EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Second": Second, "StartPoint": '', "": "<-----------------(Chapter)----------------->"})
+                        IndexTagsList.append({"<-----------------(Chapter)----------------->": "", "EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Second": SecondsToHMS(Second), "StartPoint": '', "": "<-----------------(Chapter)----------------->"})
                     if Tag == 'Index':
-                        IndexTagsList.append({"<-----------------(Index)----------------->": "", "EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Second": Second, "StartPoint": '', "": "<-----------------(Index)----------------->"})
+                        IndexTagsList.append({"<-----------------(Index)----------------->": "", "EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Second": SecondsToHMS(Second), "StartPoint": '', "": "<-----------------(Index)----------------->"})
                 else:
-                    IndexTagsList.append({"EditId": EditId, "Tag": Tag, "Second": Second, "StartPoint": ''})
+                    IndexTagsList.append({"EditId": EditId, "Tag": Tag, "Second": SecondsToHMS(Second), "StartPoint": ''})
                     
             # JSON 파일로 저장
             with open(IndexTagsListPath, 'w', encoding = 'utf-8') as f:
@@ -983,10 +983,12 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                 _IndexTagsList = IndexTagsList[1:]
                 for IndexTag in _IndexTagsList:
                     if IndexTag['StartPoint'] != "":
-                        FileLimitList.append(IndexTag['EditId'] - 1)
-    
+                        FileLimitList.append(BeforeEditId)
+                    BeforeEditId = IndexTag['EditId']
     else:
-        for edit in EditGeneration:
+        for i, edit in enumerate(EditGeneration):
+            if i > 0:
+                BeforeEditId = EditGeneration[i-1]['EditId']
             EditId = edit['EditId']
             Tag = edit['Tag']
             if edit['ActorChunk'][-1]['EndTime']['Second'] is not None:
@@ -994,21 +996,22 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             
             # 'Part', 'Chapter', 'Index' 태그가 있는지 확인하고, 누적 시간을 추적합니다.
             if Tag in IndexsTags:
-                if Second - LastSplitSecond < 3600:  # 60분을 아직 초과하지 않은 경우
+                if Second - LastSplitSecond < 4000:  # 4000초을 아직 초과하지 않은 경우
                     LastValidEditId = EditId  # 현재 EditId를 유효한 분할 후보로 업데이트
-                else:  # 60분을 초과하는 경우
+                    LastValidBeforeEditId = BeforeEditId
+                else:  # 4000초을 초과하는 경우
                     if LastValidEditId is not None:
-                        FileLimitList.append(LastValidEditId - 1)  # 마지막 유효한 분할 지점을 추가
+                        FileLimitList.append(LastValidBeforeEditId)  # 마지막 유효한 분할 지점을 추가
                         EditEndTimes.append(Second)  # 파일 끝 시간 기록
                         LastSplitSecond = Second  # 마지막 분할 지점을 현재 초과 지점으로 업데이트
                         LastValidEditId = EditId  # 현재 EditId를 새로운 유효한 후보로 설정
 
         # 마지막 파일 합성1: 마지막으로 남은 분할 후보가 10분 이상일 경우 추가
         if (Second - LastSplitSecond > 600) and (LastValidEditId is not None and LastValidEditId not in FileLimitList):
-            FileLimitList.append(LastValidEditId - 1)
+            FileLimitList.append(LastValidBeforeEditId)
             EditEndTimes.append(Second)  # 마지막 파일 끝 시간 추가
             
-        # 마지막 파일 합성2: 뒷부분 2개의 파일의 시간 합이 70분 이하일 경우 두 파일
+        # 마지막 파일 합성2: 뒷부분 2개의 파일의 시간 합이 4000초 이하일 경우 두 파일
         if len(EditEndTimes) > 1 and (EditEndTimes[-1] - EditEndTimes[-2] <= 4000):
             FileLimitList.pop()
         
@@ -1204,6 +1207,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                     PreviewSoundPath = MasterLayerPath.replace('_(1).mp3', '_(Preview).mp3')
                 
                 try:
+                    print(f"[ {projectName}_AudioBook_({SplitCount + 1}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
                     with open(MasterLayerPath, "wb") as MVoiceFile:
                         CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
                         FileRunningTimeList.append(CombinedSounds.duration_seconds)
@@ -1214,7 +1218,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                     CombinedSoundsPart2 = CombinedSounds[len(CombinedSounds)//2:]
                     CombinedSounds = AudioSegment.empty()
                     
-                    CombinedSoundsPart1Path = MasterLayerPath.replace(".mp3", "part1.mp3")
+                    CombinedSoundsPart1Path = MasterLayerPath.replace(".mp3", "_Part1.mp3")
                     with open(CombinedSoundsPart1Path, "wb") as P1MVoiceFile:
                         print(f"[ 대용량 파일 분할 저장: {CombinedSoundsPart1Path} ]")
                         CombinedSoundsPart1.export(P1MVoiceFile, format = "mp3", bitrate = "320k")
@@ -1223,7 +1227,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                         CombinedSoundsPart1 = AudioSegment.empty()
                     os.remove(CombinedSoundsPart1Path)
                     
-                    CombinedSoundsPart2Path = MasterLayerPath.replace(".mp3", "part2.mp3")
+                    CombinedSoundsPart2Path = MasterLayerPath.replace(".mp3", "_Part2.mp3")
                     with open(CombinedSoundsPart2Path, "wb") as P2MVoiceFile:
                         print(f"[ 대용량 파일 분할 저장: {CombinedSoundsPart2Path} ]")
                         CombinedSoundsPart2.export(P2MVoiceFile, format = "mp3", bitrate = "320k")
@@ -1265,6 +1269,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             PreviewSoundPath = MasterLayerPath.replace('(1).mp3', '(Preview).mp3')
         
         try:
+            print(f"[ {projectName}_AudioBook_({SplitCount + 1}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
             with open(MasterLayerPath, "wb") as MVoiceFile:
                 CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
                 FileRunningTimeList.append(CombinedSounds.duration_seconds)

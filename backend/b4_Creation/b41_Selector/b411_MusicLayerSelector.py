@@ -996,10 +996,10 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             
             # 'Part', 'Chapter', 'Index' 태그가 있는지 확인하고, 누적 시간을 추적합니다.
             if Tag in IndexsTags:
-                if Second - LastSplitSecond < 4000:  # 4000초을 아직 초과하지 않은 경우
+                if Second - LastSplitSecond < 3600:  # 3600초을 아직 초과하지 않은 경우
                     LastValidEditId = EditId  # 현재 EditId를 유효한 분할 후보로 업데이트
                     LastValidBeforeEditId = BeforeEditId
-                else:  # 4000초을 초과하는 경우
+                else:  # 3600초을 초과하는 경우
                     if LastValidEditId is not None:
                         FileLimitList.append(LastValidBeforeEditId)  # 마지막 유효한 분할 지점을 추가
                         EditEndTimes.append(Second)  # 파일 끝 시간 기록

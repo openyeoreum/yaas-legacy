@@ -1424,7 +1424,6 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     RandomEMOTION = EMOTION[0]
                 RandomSPEED = random.choice(SPEED)
                 RandomLASTPITCH = random.choice(lastpitch)
-
                 ## 수정 여부에 따라 파일명 변경 ##
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
@@ -1444,7 +1443,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 else:
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
-                    if not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') and not os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav'):
+                    if not (os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') or os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav')):
                         ChangedName = ActorVoiceGen(projectName, email, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 
                         if ChangedName == 'Continue':

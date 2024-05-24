@@ -788,8 +788,38 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
-    DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
+    # DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # 데이터 설정
+    keywords = ['Python', 'Machine Learning', 'Data Science', 'AI', 'Deep Learning']
+    importances = [85, 95, 80, 90, 70]
+
+    # 스타일 설정
+    sns.set(style="whitegrid")
+
+    # 그래프 생성
+    plt.figure(figsize=(12, 7))
+    bars = plt.barh(keywords, importances, color=sns.color_palette("pastel"))
+
+    # 제목과 레이블 설정
+    plt.xlabel('Importance', fontsize=14)
+    plt.ylabel('Keywords', fontsize=14)
+    plt.title('Keyword Importance', fontsize=18, weight='bold')
+
+    # 중요도 값 표시
+    for bar in bars:
+        plt.text(bar.get_width() + 1, bar.get_y() + bar.get_height()/2, f'{bar.get_width()}', 
+                va='center', ha='left', fontsize=12, color='dimgrey')
+
+    # 그래프 저장
+    plt.savefig('keyword_importance_beautiful.png', bbox_inches='tight', dpi=300)
+
+    # 그래프 표시
+    plt.show()

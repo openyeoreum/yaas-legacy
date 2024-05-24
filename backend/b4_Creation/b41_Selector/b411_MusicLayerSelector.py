@@ -1434,8 +1434,8 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
     for ActorChunk in EditGenerationKoChunks[0]['ActorChunk']:
         Chunk = ActorChunk['Chunk']
         IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
-    if IndexTag in ['Intro', 'Title', 'Logue', 'Part', 'Chapter', 'Index']:
-        IndexTitle = ' '.join(IndexTitles)
+    # if IndexTag in ['Intro', 'Title', 'Logue', 'Part', 'Chapter', 'Index']:
+    IndexTitle = ' '.join(IndexTitles)
     
     if len(FileLimitList) > 1:
         for i in range(len(FileLimitList)):

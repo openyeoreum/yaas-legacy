@@ -1469,7 +1469,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
     CSVFileName = '[' + projectName + '_' + 'AudioBook_MetaDate].csv'
     MetaDateCSVPath = VoiceLayerPathGen(projectName, email, CSVFileName, Folder = 'Master')
     # CSV 헤더
-    HeaderCSV = ["No", "파일제목", "재생시간", "파일크기"]
+    HeaderCSV = ["No", "파일제목", "재생시간", "파일크기(MB)"]
     # CSV 데이터
     MeatDataCSV = []
     for entry in MetaDataSet[1:]:

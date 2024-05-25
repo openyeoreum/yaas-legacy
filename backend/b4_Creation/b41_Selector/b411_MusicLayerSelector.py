@@ -951,8 +951,10 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             for edit in EditGeneration:
                 EditId = edit['EditId']
                 Tag = edit['Tag']
-                if edit['ActorChunk'][-1]['EndTime']['Second'] is not None:
+                if edit['ActorChunk'][-1]['EndTime']['Time'] is not None:
                     Time = edit['ActorChunk'][-1]['EndTime']['Time']
+                else:
+                    Time = None
                 ActorChunk = edit['ActorChunk']
                 Chunks = []
                 for chunk in ActorChunk:

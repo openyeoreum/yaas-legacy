@@ -1203,15 +1203,15 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                     CombinedSounds += TempSound
                     os.remove(FilePath)
 
-                MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 1}).mp3", 'Master')
+                MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 2}).mp3", 'Master')
                 
                 # 첫번째 파일이 미리듣기 파일
                 if RawPreviewSound == None:
                     RawPreviewSound = CombinedSounds
-                    PreviewSoundPath = MasterLayerPath.replace('_(1).mp3', '_(Preview).mp3')
+                    PreviewSoundPath = MasterLayerPath.replace('_(2).mp3', '_(2, Preview).mp3')
                 
                 try:
-                    print(f"\n[ {projectName}_AudioBook_({SplitCount + 1}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
+                    print(f"\n[ {projectName}_AudioBook_({SplitCount + 2}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
                     with open(MasterLayerPath, "wb") as MVoiceFile:
                         CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
                         FileRunningTimeList.append(CombinedSounds.duration_seconds)
@@ -1269,15 +1269,10 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             CombinedSounds += TempSound
             os.remove(FilePath)
 
-        MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 2}).mp3", 'Master')
-        
-        # 첫번째 파일이 미리듣기 파일
-        if RawPreviewSound == None:
-            RawPreviewSound = CombinedSounds
-            PreviewSoundPath = MasterLayerPath.replace('(1).mp3', '(Preview).mp3')
+        MasterLayerPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_({SplitCount + 3}).mp3", 'Master')
         
         try:
-            print(f"\n[ {projectName}_AudioBook_({SplitCount + 1}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
+            print(f"\n[ {projectName}_AudioBook_({SplitCount + 3}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
             with open(MasterLayerPath, "wb") as MVoiceFile:
                 CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
                 FileRunningTimeList.append(CombinedSounds.duration_seconds)

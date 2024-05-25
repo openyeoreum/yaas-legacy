@@ -794,32 +794,30 @@ if __name__ == "__main__":
     mode = "Master"
     #########################################################################
     
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
-    # 데이터 설정
-    keywords = ['Python', 'Machine Learning', 'Data Science', 'AI', 'Deep Learning']
-    importances = [85, 95, 80, 90, 70]
-
-    # 스타일 설정
-    sns.set(style="whitegrid")
-
-    # 그래프 생성
-    plt.figure(figsize=(12, 7))
-    bars = plt.barh(keywords, importances, color=sns.color_palette("pastel"))
-
-    # 제목과 레이블 설정
-    plt.xlabel('Importance', fontsize=14)
-    plt.ylabel('Keywords', fontsize=14)
-    plt.title('Keyword Importance', fontsize=18, weight='bold')
-
-    # 중요도 값 표시
-    for bar in bars:
-        plt.text(bar.get_width() + 1, bar.get_y() + bar.get_height()/2, f'{bar.get_width()}', 
-                va='center', ha='left', fontsize=12, color='dimgrey')
-
-    # 그래프 저장
-    plt.savefig('keyword_importance_beautiful.png', bbox_inches='tight', dpi=300)
-
-    # 그래프 표시
-    plt.show()
+    from openai import OpenAI
+ 
+    client = OpenAI()
+    
+    assistant = client.beta.assistants.create(
+    name="Financial Analyst Assistant",
+    instructions="You are an expert financial analyst. Use you knowledge base to answer questions about audited financial statements.",
+    model="gpt-4o",
+    tools=[{"type": "file_search"}],
+    )
+    
+    # Create a vector store caled "Financial Statements"
+    vector_store = client.beta.vector_stores.create(name="Financial Statements")
+    
+    # Ready the files for upload to OpenAI
+    file_paths = ["edgar/goog-10k.pdf", "edgar/brka-10k.txt"]
+    file_streams = [open(path, "rb") for path in file_paths]
+    
+    # Use the upload and poll SDK helper to upload the files, add them to the vector store,
+    # and poll the status of the file batch for completion.
+    file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
+    vector_store_id=vector_store.id, files=file_streams
+    )
+    
+    # You can print the status and the file counts of the batch to see the result of this operation.
+    print(file_batch.status)
+    print(file_batch.file_counts)

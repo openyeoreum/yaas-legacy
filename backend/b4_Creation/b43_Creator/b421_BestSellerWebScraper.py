@@ -1,3 +1,4 @@
+import os
 import json
 import time
 import re
@@ -108,91 +109,104 @@ def BookDetailsScraper(Rank, Date, driver, wait):
     BookReviews = DataListToDataText(BookReviews, BookReviews[0].replace('\n펼치기', '') if BookReviews else BookReviews)
     ## 함께 구매한 책들
     try:
-        BookPurchased = driver.find_element(By.CSS_SELECTOR, ".prod_list.swiper-wrapper")
-        BookPurchaseds = BookPurchased.find_elements(By.CSS_SELECTOR, ".prod_item.swiper-slide.swiper-slide-visible")
-        BookPurchasedList = [book.text for book in BookPurchaseds]
+        wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.prod_info.purchase_together_item')))
+        BookPurchaseds = driver.find_elements(By.CSS_SELECTOR, '.prod_info.purchase_together_item')
+        BookPurchasedList = []
+        for BookPurchased in BookPurchaseds:
+            prod_name = BookPurchased.get_attribute('data-product-name')
+            prod_author = BookPurchased.get_attribute('data-product-author')
+            BookPurchasedList.append({"title": prod_name, "author": prod_author})
     except:
         BookPurchasedList = []
-    # ## 사용자 총점
-    # ConsumerScore = ClassNameScrape(wait, "caption-badge.caption-secondary")
-    # ConsumerScore = DataListToDataText(ConsumerScore, ConsumerScore[0] if ConsumerScore else ConsumerScore)
     ## 구매리뷰
     try:
         wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.comment_list .comment_item')))
         Comments = driver.find_elements(By.CSS_SELECTOR, '.comment_list .comment_item')
-        CommentList = [comment.text for comment in Comments]
+        CommentList = []
+        for Comment in Comments:
+            comment_text = Comment.find_element(By.CSS_SELECTOR, '.comment_text').text
+            btn_like = Comment.find_element(By.CSS_SELECTOR, '.btn_like').text
+            CommentList.append({"comment": comment_text, "like": btn_like})
     except:
         CommentList = []
     
     return {"Rank": Rank, "Date": Date, "ISBN": ISBN, "Title": Title, "Author": Author, "AuthorInfo": AuthorInfo, "Publish": Publish, "PublishedDate": PublishedDate, "IntroCategory": IntroCategory, "Intro": Intro, "BookIndex": BookIndex, "BookReviews": BookReviews, "BookPurchasedList": BookPurchasedList, "CommentList": CommentList}
 
 ## 교보문고 베스트셀러 스크래퍼
-def BestsellerScraper(driver, period = 'Daily'):
+def BestsellerScraper(driver, period = 'Weekly'):
     BookDataList = []
+    LastRank = 0
     wait = WebDriverWait(driver, 10)
-    if period == 'Daily':
-        Period = 1
-    elif period == 'Weekly':
+    if period == 'Weekly':
         Period = 2
+        BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_WeeklyBookData/"
     elif period == 'Monthly':
         Period = 3
+        BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1812_MonthlyBookData/"
+    elif period == 'Yearly':
+        Period = 4
+        BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1813_YearlyBookData/"
         
     for i in range(1, 21): # 1, 21
         for j in range(1, 51): # 1, 51
             try:
-                driver.get(f"https://product.kyobobook.co.kr/bestseller/online?period=00{Period}&page={i}&per=50") # period=001(일간), period=002(주간), period=003(월간)
+                driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period=00{Period}#?page={i}&per=50") # period=002(주간), period=003(월간), period=004(연간)
                 RandomSleepTime = random.uniform(5, 7)
                 time.sleep(RandomSleepTime)
                 Rank = ((i-1) * 50) + j
-                DateXpath = "/html/body/div[3]/main/section[2]/div/section/div[2]/div[2]/div[6]/div[1]/span"
+                DateXpath = "/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[1]/span"
                 Date = wait.until(EC.presence_of_element_located((By.XPATH, DateXpath))).text
-                # 교보문고 베스트셀러 페이지 중간 광고 전후 태그 변화에 따른 ol[n] 및 lo[n] 변화
-                BookXpaths = None
-                if 1 <= j <= 10:
-                    BookXpaths = [
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div[2]/div[6]/div[4]/ol[1]/li[{j}]/div[2]/div[1]/a/span/img",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div[2]/div[6]/div[4]/ol[1]/li[{j}]/div[2]/div[1]/div/a/span[1]",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div[2]/div[6]/div[4]/ol[1]/li[{j}]/div[2]/div[1]/div/a/span[2]",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div[2]/div[6]/div[4]/ol[1]/li[{j}]/div[2]/div[2]/div[3]/div/div/a"
-                    ]
-                elif 11 <= j <= 50:
-                    BookXpaths = [
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div[2]/div[6]/div[4]/ol[2]/li[{j - 10}]/div[2]/div[1]/a/span/img",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div[2]/div[6]/div[4]/ol[2]/li[{j - 10}]/div[2]/div[1]/div/a/span[1]",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div[2]/div[6]/div[4]/ol[2]/li[{j - 10}]/div[2]/div[1]/div/a/span[2]",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div[2]/div[6]/div[4]/ol[2]/li[{j - 10}]/div[2]/div[2]/div[3]/div/div/a"
-                    ]
-                if BookXpaths is not None:
-                    if not ClickBookElement(driver, wait, BookXpaths):
-                        continue
-                    
-                    BookData = BookDetailsScraper(Rank, Date, driver, wait)
-                    BookDataList.append(BookData)
-
-                    print(f"[ {Rank}위 도서 : {BookData['Title']} ]")
-                    RandomSleepTime = random.uniform(1, 2)
-                    time.sleep(RandomSleepTime)
-            except:
+                FilePath = BookDataPath + f"{Date}_{period}BookData.json"
+                if LastRank == 0 and os.path.exists(FilePath):
+                    with open(FilePath, 'r', encoding='utf-8') as BooksJson:
+                        BookDataList = json.load(BooksJson)
+                        LastRank = BookDataList[-1]['Rank']
+                
+                if Rank > LastRank:
+                    # 교보문고 베스트셀러 페이지 중간 광고 전후 태그 변화에 따른 ol[n] 및 lo[n] 변화
+                    BookXpaths = None
+                    if 1 <= j <= 10:
+                        BookXpaths = [
+                            f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[1]/li[{j}]/div[2]/div[1]/a/span/img",
+                            f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[1]/li[{j}]/div[2]/div[1]/div/a/span[1]",
+                            f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[1]/li[{j}]/div[2]/div[1]/div/a/span[2]",
+                            f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[1]/li[{j}]/div[2]/div[2]/div[3]/div/div/a"
+                        ]
+                    elif 11 <= j <= 50:
+                        BookXpaths = [
+                            f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[2]/li[{j - 10}]/div[2]/div[1]/a/span/img",
+                            f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[2]/li[{j - 10}]/div[2]/div[1]/div/a/span[1]",
+                            f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[2]/li[{j - 10}]/div[2]/div[1]/div/a/span[2]",
+                            f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[2]/li[{j - 10}]/div[2]/div[2]/div[3]/div/div/a"
+                        ]
+                    if BookXpaths is not None:
+                        if not ClickBookElement(driver, wait, BookXpaths):
+                            continue
+                        
+                        BookData = BookDetailsScraper(Rank, Date, driver, wait)
+                        BookDataList.append(BookData)
+                        with open(FilePath, 'w', encoding = 'utf-8') as BooksJson:
+                            json.dump(BookDataList, BooksJson, ensure_ascii = False, indent = 4)
+                        print(f"[ {Rank}위 도서 : {BookData['Title']} ]")
+                        RandomSleepTime = random.uniform(1, 2)
+                        time.sleep(RandomSleepTime)
+            except Exception:
                 print(f"< {i}위 도서는 스크래핑 실패, 패스 >")
                 continue
 
-    return BookDataList
-
 ## 교보문고 베스트셀러 스크래퍼
 def BestsellerWebScraper(period):
-    driver = SeleniumHubDrive()
-    BooksData = BestsellerScraper(driver, period) ## Daily, Weekly, Monthly
-
-    with open('bestseller_books.json', 'w', encoding='utf-8') as BooksJson:
-        json.dump(BooksData, BooksJson, ensure_ascii=False, indent=4)
-    print(f"[ 베스트셀러 도서 정보 저장 완료 ]\n")
+    print(f"[ {period} 베스트셀러 도서 스크래핑 시작 ]\n")
     
+    driver = SeleniumHubDrive()
+    BestsellerScraper(driver, period) ## Daily, Weekly, Monthly
     driver.quit()
+    
+    print(f"[ {period} 베스트셀러 도서 스크래핑 완료 ]\n")
 
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
-    period = 'Daily' ## Daily, Weekly, Monthly
+    period = 'Weekly' ## 'Weekly', 'Monthly', 'Yearly'
     #########################################################################
-    
     BestsellerWebScraper(period)

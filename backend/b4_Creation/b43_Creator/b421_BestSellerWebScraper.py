@@ -38,7 +38,8 @@ def ClickBookElement(driver, wait, BookXpaths):
             driver.execute_script("arguments[0].click();", BookElement)  # 강제 클릭
             return True
         except Exception as e:
-            print(f"Error clicking element with XPath {Xpath}: {e}")
+            print(f"< {Xpath} 클릭에 실패 후 재시도 : {e} >")
+            time.sleep(1)
     return False
 
 ## ClassName기반 스크랩
@@ -126,14 +127,20 @@ def BookDetailsScraper(Rank, Date, driver, wait):
     return {"Rank": Rank, "Date": Date, "ISBN": ISBN, "Title": Title, "Author": Author, "AuthorInfo": AuthorInfo, "Publish": Publish, "PublishedDate": PublishedDate, "IntroCategory": IntroCategory, "Intro": Intro, "BookIndex": BookIndex, "BookReviews": BookReviews, "BookPurchasedList": BookPurchasedList, "CommentList": CommentList}
 
 ## 교보문고 베스트셀러 스크래퍼
-def BestsellerScraper(driver):
+def BestsellerScraper(driver, period = 'Daily'):
     BookDataList = []
     wait = WebDriverWait(driver, 10)
-
+    if period == 'Daily':
+        Period = 1
+    elif period == 'Weekly':
+        Period = 2
+    elif period == 'Monthly':
+        Period = 3
+        
     for i in range(1, 21): # 1, 21
         for j in range(1, 51): # 1, 51
-            # try:
-                driver.get(f"https://product.kyobobook.co.kr/bestseller/online?period=001&page={i}&per=50")
+            try:
+                driver.get(f"https://product.kyobobook.co.kr/bestseller/online?period=00{Period}&page={i}&per=50") # period=001(일간), period=002(주간), period=003(월간)
                 RandomSleepTime = random.uniform(5, 7)
                 time.sleep(RandomSleepTime)
                 Rank = ((i-1) * 50) + j
@@ -165,16 +172,16 @@ def BestsellerScraper(driver):
                     print(f"[ {Rank}위 도서 : {BookData['Title']} ]")
                     RandomSleepTime = random.uniform(1, 2)
                     time.sleep(RandomSleepTime)
-            # except Exception as e:
-            #     print(f"Error scraping book {i}: {e}")
-            #     continue
+            except:
+                print(f"< {i}위 도서는 스크래핑 실패, 패스 >")
+                continue
 
     return BookDataList
 
 ## 교보문고 베스트셀러 스크래퍼
-def BestsellerWebScraper():
+def BestsellerWebScraper(period):
     driver = SeleniumHubDrive()
-    BooksData = BestsellerScraper(driver)
+    BooksData = BestsellerScraper(driver, period) ## Daily, Weekly, Monthly
 
     with open('bestseller_books.json', 'w', encoding='utf-8') as BooksJson:
         json.dump(BooksData, BooksJson, ensure_ascii=False, indent=4)
@@ -183,4 +190,9 @@ def BestsellerWebScraper():
     driver.quit()
 
 if __name__ == "__main__":
-    BestsellerWebScraper()
+    
+    ############################ 하이퍼 파라미터 설정 ############################
+    period = 'Daily' ## Daily, Weekly, Monthly
+    #########################################################################
+    
+    BestsellerWebScraper(period)

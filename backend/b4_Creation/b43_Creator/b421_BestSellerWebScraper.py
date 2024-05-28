@@ -70,26 +70,28 @@ def BookDetailsScraper(Rank, Date, driver, wait):
     # 페이지가 로드될 때까지 대기
     wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[3]/header/div[2]/div")))
 
-    # ISBN
+    ## ISBN
     ISBN = ClassNameScrape(wait, "tbl_row_wrap")
     ISBN = DataListToDataText(ISBN, re.search(r'ISBN (\d+)', ISBN[0]).group(1) if ISBN else ISBN)
-    # 도서제목
+    ## 도서제목
     Title = ClassNameScrape(wait, "prod_title_area", "prod_title")
     Title = DataListToDataText(Title, Title[0] if Title else Title)
-    # 작가
+    ## 작가
     Author = ClassNameScrape(wait, "author")
     Author = DataListToDataText(Author, Author[0] if Author else Author)
-    # 작가정보
+    ## 작가정보
     AuthorInfo = ClassNameScrape(wait, "writer_info_box", "info_text")
     AuthorInfo = DataListToDataText(AuthorInfo, '\n'.join(AuthorInfo) if AuthorInfo else AuthorInfo)        
-    # 출판사, 발행일
+    ## 출판사, 발행일
     PublishedData = ClassNameScrape(wait, "prod_info_text.publish_date")
     PublishedData = DataListToDataText(PublishedData, PublishedData[0].split(" · ") if PublishedData else PublishedData)
-    if PublishedData is not None:
+    try:
         Publish = PublishedData[0]
-        PublishedDate = PublishedData[1]
-    else:
+    except:
         Publish = None
+    try:
+        PublishedDate = PublishedData[1]
+    except:
         PublishedDate = None
     ## 도서 카테고리
     IntroCategory = ClassNameScrape(wait, "intro_category_list")
@@ -97,34 +99,39 @@ def BookDetailsScraper(Rank, Date, driver, wait):
     ## 책소개(인트로)
     Intro = ClassNameScrape(wait, "intro_bottom")
     Intro = DataListToDataText(Intro, Intro[0] if Intro else Intro)
-    # 목차
+    ## 목차
     BookIndex = ClassNameScrape(wait, "book_contents_item")
     BookIndex = DataListToDataText(BookIndex, BookIndex[0] if BookIndex else BookIndex)
-    # 도서정보(리뷰)
+    ## 도서정보(리뷰)
     BookReviews = ClassNameScrape(wait, "product_detail_area.book_publish_review")
     BookReviews = DataListToDataText(BookReviews, BookReviews[0].replace('\n펼치기', '') if BookReviews else BookReviews)
-    # 함께 구매한 책들
-    BooksPurchased = ClassNameScrape(wait, "prod_list.swiper-wrapper")
-    BooksPurchased = DataListToDataText(BooksPurchased, BooksPurchased[0].replace('원\n', '원@\n@').split("@\n@") if BooksPurchased else BooksPurchased)
-    # 사용자 총점
-    ConsumerScore = ClassNameScrape(wait, "caption-badge.caption-secondary", "val")
-    ConsumerScore = DataListToDataText(ConsumerScore, ConsumerScore[0] if ConsumerScore else ConsumerScore)
-    # 구매리뷰
+    ## 함께 구매한 책들
+    try:
+        BookPurchased = driver.find_element(By.CSS_SELECTOR, ".prod_list.swiper-wrapper")
+        BookPurchaseds = BookPurchased.find_elements(By.CSS_SELECTOR, ".prod_item.swiper-slide.swiper-slide-visible")
+        BookPurchasedList = [book.text for book in BookPurchaseds]
+    except:
+        BookPurchasedList = []
+    # ## 사용자 총점
+    # ConsumerScore = ClassNameScrape(wait, "caption-badge.caption-secondary")
+    # ConsumerScore = DataListToDataText(ConsumerScore, ConsumerScore[0] if ConsumerScore else ConsumerScore)
+    ## 구매리뷰
     try:
         wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.comment_list .comment_item')))
         Comments = driver.find_elements(By.CSS_SELECTOR, '.comment_list .comment_item')
         CommentList = [comment.text for comment in Comments]
     except:
-        CommentList = None
+        CommentList = []
     
-    return {"Rank": Rank, "Date": Date, "ISBN": ISBN, "Title": Title, "Author": Author, "AuthorInfo": AuthorInfo, "Publish": Publish, "PublishedDate": PublishedDate, "IntroCategory": IntroCategory, "Intro": Intro, "BookIndex": BookIndex, "BookReviews": BookReviews, "BooksPurchased": BooksPurchased, "ConsumerScore": ConsumerScore, "CommentList": CommentList}
+    return {"Rank": Rank, "Date": Date, "ISBN": ISBN, "Title": Title, "Author": Author, "AuthorInfo": AuthorInfo, "Publish": Publish, "PublishedDate": PublishedDate, "IntroCategory": IntroCategory, "Intro": Intro, "BookIndex": BookIndex, "BookReviews": BookReviews, "BookPurchasedList": BookPurchasedList, "CommentList": CommentList}
 
+## 교보문고 베스트셀러 스크래퍼
 def BestsellerScraper(driver):
     BookDataList = []
     wait = WebDriverWait(driver, 10)
 
-    for i in range(1, 11): # 1, 21
-        for j in range(1, 2): # 1, 51
+    for i in range(1, 21): # 1, 21
+        for j in range(1, 51): # 1, 51
             # try:
                 driver.get(f"https://product.kyobobook.co.kr/bestseller/online?period=001&page={i}&per=50")
                 RandomSleepTime = random.uniform(5, 7)
@@ -164,6 +171,7 @@ def BestsellerScraper(driver):
 
     return BookDataList
 
+## 교보문고 베스트셀러 스크래퍼
 def BestsellerWebScraper():
     driver = SeleniumHubDrive()
     BooksData = BestsellerScraper(driver)

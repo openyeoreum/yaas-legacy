@@ -1208,7 +1208,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                 # 첫번째 파일이 미리듣기 파일
                 if RawPreviewSound == None:
                     RawPreviewSound = CombinedSounds
-                    PreviewSoundPath = MasterLayerPath.replace('_(2).mp3', '_(2, Preview).mp3')
+                    PreviewSoundPath = MasterLayerPath.replace('_(2).mp3', '_(1, Preview).mp3')
                 
                 try:
                     print(f"\n[ {projectName}_AudioBook_({SplitCount + 2}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")

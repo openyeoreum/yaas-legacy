@@ -151,7 +151,6 @@ def BestsellerScraper(driver, period = 'Weekly'):
     # 기존 파일 확인 후 스크래핑 시작 페이지와 파일번호 설정 (i, j)
     driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period=00{Period}#?page=1&per=50") # period=002(주간), period=003(월간), period=004(연간)
     time.sleep(random.uniform(5, 7))
-    Rank = ((i-1) * 50) + j
     DateXpath = "/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[1]/span"
     Date = wait.until(EC.presence_of_element_located((By.XPATH, DateXpath))).text
     FilePath = BookDataPath + f"{Date}_{period}BookData.json"

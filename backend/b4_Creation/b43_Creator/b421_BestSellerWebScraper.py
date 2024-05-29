@@ -231,6 +231,6 @@ def BestsellerWebScraper(period):
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
-    period = 'Weekly' ## 'Total', 'Weekly', 'Monthly', 'Yearly'
+    period = 'Monthly' ## 'Total', 'Weekly', 'Monthly', 'Yearly'
     #########################################################################
     BestsellerWebScraper(period)

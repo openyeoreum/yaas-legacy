@@ -136,21 +136,21 @@ def BookDetailsScraper(Rank, Date, driver, wait):
 def BestsellerScraper(driver, period = 'Weekly'):
     BookDataList = []
     LastRank = 0
-    EndSwitch = 0
+    EndSwitch = False
     wait = WebDriverWait(driver, 10)
     # period 값에 따른 페이지 설정
     if period == 'Weekly':
-        Period = 2
+        Period = '002'
         BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_WeeklyBookData/"
     elif period == 'Monthly':
-        Period = 3
+        Period = '003'
         BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1812_MonthlyBookData/"
     elif period == 'Yearly':
-        Period = 4
+        Period = '004'
         BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1813_YearlyBookData/"
 
     # 기존 파일 확인 후 스크래핑 시작 페이지와 파일번호 설정 (i, j)
-    driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period=00{Period}#?page=1&per=50") # period=002(주간), period=003(월간), period=004(연간)
+    driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page=1&per=50") # period=002(주간), period=003(월간), period=004(연간)
     time.sleep(random.uniform(5, 7))
     DateXpath = "/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[1]/span"
     Date = wait.until(EC.presence_of_element_located((By.XPATH, DateXpath))).text
@@ -171,8 +171,14 @@ def BestsellerScraper(driver, period = 'Weekly'):
     for i in range(start_i, 21): # 1, 21
         for j in range(start_j if i == start_i else 1, 51): # 1, 51
             try:
-                driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period=00{Period}#?page={i}&per=50") # period=002(주간), period=003(월간), period=004(연간)
+                PageURL = f"https://product.kyobobook.co.kr/bestseller/total?period=00{Period}#?page={i}&per=50"
+                driver.get(PageURL) # period=002(주간), period=003(월간), period=004(연간)
                 time.sleep(random.uniform(5, 7))
+                CurrentURL = driver.current_url
+                if PageURL not in CurrentURL:
+                    print(f"< {Rank}위 도서는 전체 페이지에 포함되지 않음, 마지막까지 스크래핑 완료 >")
+                    EndSwitch = True
+                    break
                 Rank = ((i-1) * 50) + j
                 
                 # 교보문고 베스트셀러 페이지 중간 광고 전후 태그 변화에 따른 ol[n] 및 lo[n] 변화
@@ -196,14 +202,6 @@ def BestsellerScraper(driver, period = 'Weekly'):
                         continue
                     
                     BookData = BookDetailsScraper(Rank, Date, driver, wait)
-                    if len(BookDataList) >= 3:
-                        if BookData['Title'] in [BookDataList[0]['Title'], BookDataList[1]['Title'], BookDataList[2]['Title']]:
-                            EndSwitch += 1
-                            if EndSwitch == 1:
-                                continue
-                            elif EndSwitch == 2:
-                                break
-                        
                     BookDataList.append(BookData)
                     with open(FilePath, 'w', encoding = 'utf-8') as BooksJson:
                         json.dump(BookDataList, BooksJson, ensure_ascii = False, indent = 4)
@@ -211,9 +209,9 @@ def BestsellerScraper(driver, period = 'Weekly'):
                     RandomSleepTime = random.uniform(1, 2)
                     time.sleep(RandomSleepTime)
             except Exception:
-                print(f"< {i}위 도서는 스크래핑 실패, 패스 >")
+                print(f"< {Rank}위 도서는 스크래핑 실패, 패스 >")
                 continue
-        if EndSwitch == 2:
+        if EndSwitch:
             break  # 모든 반복문을 종료함
 
 ## 교보문고 베스트셀러 스크래퍼

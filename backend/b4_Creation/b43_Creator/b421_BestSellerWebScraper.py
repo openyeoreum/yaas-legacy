@@ -172,12 +172,13 @@ def BestsellerScraper(driver, period = 'Weekly'):
     for i in range(start_i, 21): # 1, 21
         for j in range(start_j if i == start_i else 1, 51): # 1, 51
             try:
-                PageURL = f"https://product.kyobobook.co.kr/bestseller/total?period=00{Period}#?page={i}&per=50"
+                PageURL = f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page={i}&per=50"
                 driver.get(PageURL) # period=002(주간), period=003(월간), period=004(연간)
                 time.sleep(random.uniform(5, 7))
                 CurrentURL = driver.current_url
                 Rank = ((i-1) * 50) + j
-                
+                print(f'CurrentURL: {CurrentURL}')
+                print(f'PageURL   : {PageURL}')
                 # 페이지 정보가 넘어서는지 확인 절차
                 if PageURL not in CurrentURL:
                     print(f'CurrentURL: {CurrentURL}')

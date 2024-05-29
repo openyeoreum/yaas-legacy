@@ -177,8 +177,6 @@ def BestsellerScraper(driver, period = 'Weekly'):
                 time.sleep(random.uniform(5, 7))
                 CurrentURL = driver.current_url
                 Rank = ((i-1) * 50) + j
-                print(f'CurrentURL: {CurrentURL}')
-                print(f'PageURL   : {PageURL}')
                 # 페이지 정보가 넘어서는지 확인 절차
                 if PageURL not in CurrentURL:
                     print(f'CurrentURL: {CurrentURL}')

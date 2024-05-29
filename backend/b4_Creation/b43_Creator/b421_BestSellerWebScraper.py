@@ -196,12 +196,13 @@ def BestsellerScraper(driver, period = 'Weekly'):
                         continue
                     
                     BookData = BookDetailsScraper(Rank, Date, driver, wait)
-                    if BookData['Title'] in [BookDataList[0]['Title'], BookDataList[1]['Title']]:
-                        EndSwitch += 1
-                        if EndSwitch == 1:
-                            continue
-                        elif EndSwitch == 2:
-                            break
+                    if len(BookDataList) >= 3:
+                        if BookData['Title'] in [BookDataList[0]['Title'], BookDataList[1]['Title'], BookDataList[2]['Title']]:
+                            EndSwitch += 1
+                            if EndSwitch == 1:
+                                continue
+                            elif EndSwitch == 2:
+                                break
                         
                     BookDataList.append(BookData)
                     with open(FilePath, 'w', encoding = 'utf-8') as BooksJson:

@@ -34,12 +34,13 @@ def ClickBookElement(driver, wait, BookXpaths):
     for Xpath in BookXpaths:
         try:
             BookElement = wait.until(EC.element_to_be_clickable((By.XPATH, Xpath)))
+            time.sleep(1)
             driver.execute_script("arguments[0].scrollIntoView(true);", BookElement)
             time.sleep(2)
             driver.execute_script("arguments[0].click();", BookElement)  # 강제 클릭
             return True
         except Exception as e:
-            print(f"< {Xpath} 클릭에 실패 후 재시도 : {e} >")
+            print(f"< {Xpath} 클릭에 실패, 재시도 : {e} >")
             time.sleep(1)
     return False
 
@@ -175,11 +176,15 @@ def BestsellerScraper(driver, period = 'Weekly'):
                 driver.get(PageURL) # period=002(주간), period=003(월간), period=004(연간)
                 time.sleep(random.uniform(5, 7))
                 CurrentURL = driver.current_url
+                Rank = ((i-1) * 50) + j
+                
+                # 페이지 정보가 넘어서는지 확인 절차
                 if PageURL not in CurrentURL:
+                    print(f'CurrentURL: {CurrentURL}')
+                    print(f'PageURL   : {PageURL}')
                     print(f"< {Rank}위 도서는 전체 페이지에 포함되지 않음, 마지막까지 스크래핑 완료 >")
                     EndSwitch = True
                     break
-                Rank = ((i-1) * 50) + j
                 
                 # 교보문고 베스트셀러 페이지 중간 광고 전후 태그 변화에 따른 ol[n] 및 lo[n] 변화
                 BookXpaths = None

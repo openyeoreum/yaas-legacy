@@ -136,6 +136,7 @@ def BookDetailsScraper(Rank, Date, driver, wait):
 def BestsellerScraper(driver, period = 'Weekly'):
     BookDataList = []
     LastRank = 0
+    EndSwitch = 0
     wait = WebDriverWait(driver, 10)
     # period 값에 따른 페이지 설정
     if period == 'Weekly':
@@ -195,6 +196,13 @@ def BestsellerScraper(driver, period = 'Weekly'):
                         continue
                     
                     BookData = BookDetailsScraper(Rank, Date, driver, wait)
+                    if BookData['Title'] in [BookDataList[0]['Title'], BookDataList[1]['Title']]:
+                        EndSwitch += 1
+                        if EndSwitch == 1:
+                            continue
+                        elif EndSwitch == 2:
+                            break
+                        
                     BookDataList.append(BookData)
                     with open(FilePath, 'w', encoding = 'utf-8') as BooksJson:
                         json.dump(BookDataList, BooksJson, ensure_ascii = False, indent = 4)
@@ -204,6 +212,8 @@ def BestsellerScraper(driver, period = 'Weekly'):
             except Exception:
                 print(f"< {i}위 도서는 스크래핑 실패, 패스 >")
                 continue
+        if EndSwitch == 2:
+            break  # 모든 반복문을 종료함
 
 ## 교보문고 베스트셀러 스크래퍼
 def BestsellerWebScraper(period):

@@ -120,8 +120,8 @@ def BookDetailsScraper(Rank, Date, driver, wait):
     except:
         BookPurchasedList = []
     ## 총 리뷰 수
-    CommentsCount = ClassNameScrape(wait, "product_detail_area.klover_review_wrap", "title_heading")
-    CommentsCount = DataListToDataText(Intro, Intro[0] if Intro else Intro)
+    CommentsCountText = driver.find_element(By.XPATH, "//p[@class='title_heading' and @data-review-label='title']").text
+    CommentsCount = int(re.search(r'\((\d+)\)', CommentsCountText).group(1))
     ## 구매리뷰
     try:
         wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.comment_list .comment_item')))
@@ -129,12 +129,12 @@ def BookDetailsScraper(Rank, Date, driver, wait):
         CommentList = []
         for Comment in Comments:
             comment_text = Comment.find_element(By.CSS_SELECTOR, '.comment_text').text
-            btn_like = Comment.find_element(By.CSS_SELECTOR, '.btn_like').text
+            btn_like = int(Comment.find_element(By.CSS_SELECTOR, '.btn_like').text)
             CommentList.append({"comment": comment_text, "like": btn_like})
     except:
         CommentList = []
     
-    return {"Rank": [{"Date": Date, "Rank": Date}], "ISBN": ISBN, "Title": Title, "Author": Author, "AuthorInfo": AuthorInfo, "Publish": Publish, "PublishedDate": PublishedDate, "IntroCategory": IntroCategory, "Intro": Intro, "BookIndex": BookIndex, "BookReviews": BookReviews, "BookPurchasedList": BookPurchasedList, "CommentsCount": CommentsCount, "CommentList": CommentList}
+    return {"Rank": [{"Date": Date, "Rank": Rank}], "ISBN": ISBN, "Title": Title, "Author": Author, "AuthorInfo": AuthorInfo, "Publish": Publish, "PublishedDate": PublishedDate, "IntroCategory": IntroCategory, "Intro": Intro, "BookIndex": BookIndex, "BookReviews": BookReviews, "BookPurchasedList": BookPurchasedList, "CommentsCount": CommentsCount, "CommentList": CommentList}
 
 ## 교보문고 베스트셀러 스크래퍼
 def BestsellerScraper(driver, period = 'Weekly'):
@@ -162,7 +162,7 @@ def BestsellerScraper(driver, period = 'Weekly'):
     if LastRank == 0 and os.path.exists(FilePath):
         with open(FilePath, 'r', encoding='utf-8') as BooksJson:
             BookDataList = json.load(BooksJson)
-            LastRank = BookDataList[-1]['Rank']
+            LastRank = BookDataList[-1]['Rank']['Rank']
     
     # Rank 산출 역순으로 (start_i, start_j)값 선정
     if LastRank != 0:
@@ -244,11 +244,12 @@ def BestsellerWebScraper(period):
 
 ## 교보문고 베스트셀러 스크래퍼
 def TotalBookDataUpdate(period):
-    print(f"[ {period} 베스트셀러 도서 스크래핑 & 업데이트 시작 ]\n")
+    print(f"[ {period} 베스트셀러 도서 스크래핑 시작 ]\n")
     
     ## 베스트셀러 도서 스크래핑
     BookDataList = BestsellerWebScraper(period)
     
+    print(f"[ TotalBookData 업데이트 시작 ]\n")
     ## 기존 토탈 데이터셋
     TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_TotalBookData/TotalBookData.json"
     if os.path.exists(TotalBookDataPath):

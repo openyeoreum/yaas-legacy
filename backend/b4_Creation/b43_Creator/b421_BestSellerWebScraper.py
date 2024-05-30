@@ -120,8 +120,11 @@ def BookDetailsScraper(Rank, Date, driver, wait):
     except:
         BookPurchasedList = []
     ## 총 리뷰 수
-    CommentsCountText = driver.find_element(By.XPATH, "//p[@class='title_heading' and @data-review-label='title']").text
-    CommentsCount = int(re.search(r'\((\d+)\)', CommentsCountText).group(1))
+    try:
+        CommentsCountText = driver.find_element(By.XPATH, "//p[@class='title_heading' and @data-review-label='title']").text
+        CommentsCount = int(re.search(r'\((\d+)\)', CommentsCountText).group(1))
+    except:
+        CommentsCount = None
     ## 구매리뷰
     try:
         wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.comment_list .comment_item')))

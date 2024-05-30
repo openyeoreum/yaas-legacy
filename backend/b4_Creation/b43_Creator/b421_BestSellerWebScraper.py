@@ -165,7 +165,7 @@ def BestsellerScraper(driver, period = 'Weekly'):
     if LastRank == 0 and os.path.exists(FilePath):
         with open(FilePath, 'r', encoding='utf-8') as BooksJson:
             BookDataList = json.load(BooksJson)
-            LastRank = BookDataList[-1]['Rank']['Rank']
+            LastRank = BookDataList[-1]['Rank'][0]['Rank']
     
     # Rank 산출 역순으로 (start_i, start_j)값 선정
     if LastRank != 0:

@@ -119,6 +119,9 @@ def BookDetailsScraper(Rank, Date, driver, wait):
             BookPurchasedList.append({"title": prod_name, "author": prod_author})
     except:
         BookPurchasedList = []
+    ## 총 리뷰 수
+    CommentsCount = ClassNameScrape(wait, "product_detail_area.klover_review_wrap", "title_heading")
+    CommentsCount = DataListToDataText(Intro, Intro[0] if Intro else Intro)
     ## 구매리뷰
     try:
         wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.comment_list .comment_item')))
@@ -131,7 +134,7 @@ def BookDetailsScraper(Rank, Date, driver, wait):
     except:
         CommentList = []
     
-    return {"Rank": Rank, "Date": Date, "ISBN": ISBN, "Title": Title, "Author": Author, "AuthorInfo": AuthorInfo, "Publish": Publish, "PublishedDate": PublishedDate, "IntroCategory": IntroCategory, "Intro": Intro, "BookIndex": BookIndex, "BookReviews": BookReviews, "BookPurchasedList": BookPurchasedList, "CommentList": CommentList}
+    return {"Rank": [{"Date": Date, "Rank": Date}], "ISBN": ISBN, "Title": Title, "Author": Author, "AuthorInfo": AuthorInfo, "Publish": Publish, "PublishedDate": PublishedDate, "IntroCategory": IntroCategory, "Intro": Intro, "BookIndex": BookIndex, "BookReviews": BookReviews, "BookPurchasedList": BookPurchasedList, "CommentsCount": CommentsCount, "CommentList": CommentList}
 
 ## 교보문고 베스트셀러 스크래퍼
 def BestsellerScraper(driver, period = 'Weekly'):
@@ -142,13 +145,13 @@ def BestsellerScraper(driver, period = 'Weekly'):
     # period 값에 따른 페이지 설정
     if period == 'Weekly':
         Period = '002'
-        BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_WeeklyBookData/"
+        BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1812_WeeklyBookData/"
     elif period == 'Monthly':
         Period = '003'
-        BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1812_MonthlyBookData/"
+        BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1813_MonthlyBookData/"
     elif period == 'Yearly':
         Period = '004'
-        BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1813_YearlyBookData/"
+        BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1814_YearlyBookData/"
 
     # 기존 파일 확인 후 스크래핑 시작 페이지와 파일번호 설정 (i, j)
     driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page=1&per=50") # period=002(주간), period=003(월간), period=004(연간)
@@ -171,6 +174,7 @@ def BestsellerScraper(driver, period = 'Weekly'):
 
     for i in range(start_i, 21): # 1, 21
         PageURL = f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page={i}&per=50"
+        NoneCount = 0  # None 횟수를 세는 변수 추가
         for j in range(start_j if i == start_i else 1, 51): # 1, 51
             try:
                 driver.get(PageURL)
@@ -205,7 +209,18 @@ def BestsellerScraper(driver, period = 'Weekly'):
                     if not ClickBookElement(driver, wait, BookXpaths):
                         continue
                     BookData = BookDetailsScraper(Rank, Date, driver, wait)
-                    BookDataList.append(BookData)
+                    
+                    if BookData['Title'] is None:
+                        NoneCount += 1  # None 횟수 증가
+                        if NoneCount < 2:
+                            j -= 1  # 현재 반복을 다시 실행
+                            continue
+                        else:
+                            NoneCount = 0  # None 횟수 초기화
+                            continue
+                    else:
+                        BookDataList.append(BookData)
+                        
                     with open(FilePath, 'w', encoding = 'utf-8') as BooksJson:
                         json.dump(BookDataList, BooksJson, ensure_ascii = False, indent = 4)
                     print(f"[ {Rank}위 도서 : {BookData['Title']} ]")
@@ -216,20 +231,83 @@ def BestsellerScraper(driver, period = 'Weekly'):
                 continue
         if EndSwitch:
             break  # 모든 반복문을 종료함
+    
+    return BookDataList
 
 ## 교보문고 베스트셀러 스크래퍼
 def BestsellerWebScraper(period):
-    print(f"[ {period} 베스트셀러 도서 스크래핑 시작 ]\n")
-    
     driver = SeleniumHubDrive()
-    BestsellerScraper(driver, period) ## Daily, Weekly, Monthly
+    BookDataList = BestsellerScraper(driver, period) ## Daily, Weekly, Monthly
     driver.quit()
     
-    print(f"[ {period} 베스트셀러 도서 스크래핑 완료 ]\n")
+    return BookDataList
+
+## 교보문고 베스트셀러 스크래퍼
+def TotalBookDataUpdate(period):
+    print(f"[ {period} 베스트셀러 도서 스크래핑 & 업데이트 시작 ]\n")
+    
+    ## 베스트셀러 도서 스크래핑
+    BookDataList = BestsellerWebScraper(period)
+    
+    ## 기존 토탈 데이터셋
+    TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_TotalBookData/TotalBookData.json"
+    if os.path.exists(TotalBookDataPath):
+        with open(TotalBookDataPath, 'r', encoding = 'utf-8') as BooksJson:
+            TotalBookDataList = json.load(BooksJson)
+
+        ## 토탈 데이터셋 ISBNList 구축
+        TotalBookDataISBNList = []
+        for TotalBookData in TotalBookDataList:
+            TotalBookDataISBNList.append(TotalBookData['ISBN'])
+        
+        ## 스크래핑 데이터의 토탈 데이터셋 업데이트
+        Update = True
+        for BookData in BookDataList:
+            if BookData['ISBN'] in TotalBookDataISBNList:
+                Update = False
+                Id = TotalBookDataISBNList.index(BookData['ISBN'])
+            if Update:
+                TotalBookDataList.append(BookData)
+            else:
+                # Date 추가
+                if BookData['Rank'][0] not in TotalBookDataList[Id]['Rank']:
+                    TotalBookDataList[Id]['Rank'] += BookData['Rank']
+                TotalBookDataList[Id]['BookPurchasedList'] = BookData['BookPurchasedList']
+                TotalBookDataList[Id]['CommentsCount'] = BookData['CommentsCount']
+                TotalBookDataList[Id]['CommentList'] = BookData['CommentList']
+
+        with open(TotalBookDataPath, 'w', encoding='utf-8') as BooksJson:
+            json.dump(TotalBookDataList, BooksJson, ensure_ascii=False, indent = 4)
+    else:
+        with open(TotalBookDataPath, 'w', encoding='utf-8') as BooksJson:
+            json.dump(BookDataList, BooksJson, ensure_ascii = False, indent = 4)
+
+    print(f"[ {period} 베스트셀러 도서 스크래핑 & 업데이트 완료 ]\n")
 
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
-    period = 'Yearly' ## 'Weekly', 'Monthly', 'Yearly'
+    period = 'Weekly' ## 'Weekly', 'Monthly', 'Yearly'
     #########################################################################
-    BestsellerWebScraper(period)
+    TotalBookDataUpdate(period)
+    
+    # # JSON 파일 경로
+    # json_file_path = '/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1813_YearlyBookData/2023년_YearlyBookData.json'
+
+    # # 저장할 폴더 경로
+    # output_folder = '/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1813_YearlyBookData/2023년_YearlyBookData'
+
+    # # 폴더가 존재하지 않으면 생성
+    # os.makedirs(output_folder, exist_ok=True)
+
+    # # JSON 파일 읽기
+    # with open(json_file_path, 'r', encoding='utf-8') as f:
+    #     data = json.load(f)
+
+    # # 각 딕셔너리를 개별 파일로 저장
+    # for idx, item in enumerate(data):
+    #     item_file_path = os.path.join(output_folder, f'2023년_YearlyBookData({idx+1}).json')
+    #     with open(item_file_path, 'w', encoding='utf-8') as item_file:
+    #         json.dump(item, item_file, ensure_ascii=False, indent=4)
+
+    # print("모든 딕셔너리가 개별 파일로 저장되었습니다.")

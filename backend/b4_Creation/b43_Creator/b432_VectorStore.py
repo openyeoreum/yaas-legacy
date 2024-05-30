@@ -799,17 +799,28 @@ if __name__ == "__main__":
     client = OpenAI()
     
     assistant = client.beta.assistants.create(
-    name="Financial Analyst Assistant",
-    instructions="You are an expert financial analyst. Use you knowledge base to answer questions about audited financial statements.",
+    name="도서 매칭 전문가",
+    instructions="당신은 도서 매칭 전문가 입니다. 질문에 가장 적합한 도서를 매칭해 주세요.",
     model="gpt-4o",
     tools=[{"type": "file_search"}],
     )
     
     # Create a vector store caled "Financial Statements"
-    vector_store = client.beta.vector_stores.create(name="Financial Statements")
+    vector_store = client.beta.vector_stores.create(name="2023년 베스트셀러")
     
-    # Ready the files for upload to OpenAI
-    file_paths = ["edgar/goog-10k.pdf", "edgar/brka-10k.txt"]
+
+    def get_json_file_paths(directory):
+        json_file_paths = []
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                if file.endswith(".json"):
+                    full_path = os.path.join(root, file)
+                    json_file_paths.append(full_path)
+        return json_file_paths
+
+    directory = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1813_YearlyBookData/2023년_YearlyBookData"
+    file_paths = get_json_file_paths(directory)
+    
     file_streams = [open(path, "rb") for path in file_paths]
     
     # Use the upload and poll SDK helper to upload the files, add them to the vector store,

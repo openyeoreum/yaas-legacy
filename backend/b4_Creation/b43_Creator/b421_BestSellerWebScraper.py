@@ -170,10 +170,10 @@ def BestsellerScraper(driver, period = 'Weekly'):
         start_j = 1
 
     for i in range(start_i, 21): # 1, 21
+        PageURL = f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page={i}&per=50"
         for j in range(start_j if i == start_i else 1, 51): # 1, 51
             try:
-                PageURL = f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page={i}&per=50"
-                driver.get(PageURL) # period=002(주간), period=003(월간), period=004(연간)
+                driver.get(PageURL)
                 time.sleep(random.uniform(5, 7))
                 CurrentURL = driver.current_url
                 Rank = ((i-1) * 50) + j
@@ -204,7 +204,6 @@ def BestsellerScraper(driver, period = 'Weekly'):
                 if BookXpaths is not None:
                     if not ClickBookElement(driver, wait, BookXpaths):
                         continue
-                    
                     BookData = BookDetailsScraper(Rank, Date, driver, wait)
                     BookDataList.append(BookData)
                     with open(FilePath, 'w', encoding = 'utf-8') as BooksJson:
@@ -231,6 +230,6 @@ def BestsellerWebScraper(period):
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
-    period = 'Monthly' ## 'Total', 'Weekly', 'Monthly', 'Yearly'
+    period = 'Yearly' ## 'Weekly', 'Monthly', 'Yearly'
     #########################################################################
     BestsellerWebScraper(period)

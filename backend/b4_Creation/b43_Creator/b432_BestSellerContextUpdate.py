@@ -201,10 +201,8 @@ def BestSellerContextDefineProcess(Process1 = "BestSellerContextDefine", Process
                 print(f"Project: {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | JSONDecode 완료")
                 ErrorCount2 = 0
                 process2_complete = True
-        
-        # 다음 아이템으로 이동
-        i += 1
 
+        ## totalBookDataList 업데이트
         for BookData in totalBookDataList:
             if BookData['ISBN'] == InputList[i]['ISBN']:
                 ## BestSellerCommentAnalysis
@@ -234,6 +232,9 @@ def BestSellerContextDefineProcess(Process1 = "BestSellerContextDefine", Process
             
         with open(TempTotalBookDataPath, 'w', encoding = 'utf-8') as TempBooksJson:
             json.dump(totalBookDataList, TempBooksJson, ensure_ascii = False, indent = 4)
+            
+        # 다음 아이템으로 이동
+        i += 1
 
     return totalBookDataList
 

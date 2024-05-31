@@ -1,0 +1,274 @@
+{
+    "TaskName": "BestSellerCommentAnalysis",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-3.5-turbo-0125",
+            "LongTokensModel": "gpt-4o"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "gpt-4o"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-haiku-20240307",
+            "LongTokensModel": "claude-3-haiku-20240307"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-opus-20240229"
+    },
+    "Temperature": 0.8,
+    "OutputTokensRatio": 0.5,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서 구매자의 <리뷰>를 평가하여 <리뷰평가.json>을 작성하는 전문가 입니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<리뷰평가.json> 요소)\n",
+                    "Message": "1) 평가: 10개의 <리뷰>를 개별적으로 '긍정', '중립', '부정'으로 평가\n2) 종합: 도서 구매자의 <리뷰>를 종합하여 하나의 문장으로 정리\n3) 피드백: 저자 또는 출판사가 도서 구매자의 <리뷰>를 보고 다음 도서에 개선 또는 발전시킬 수 있는 피드백 요소 3가지"
+                },
+                {
+                    "Mark": "\n\n(<리뷰평가.json>의 작성 양식)\n",
+                    "Message": "{‘리뷰평가’: {'평가': [{'구매자1': '긍정'}, {'구매자2': '중립'}, ... {'구매자10': '부정'}], '종합': '도서 구매자의 <리뷰>를 종합한 하나의 문장', '피드백': [{'피드백1': '저자 또는 출판사가 도서 구매자의 <리뷰>를 보고'}, {'피드백2': '다음 도서에 개선 또는 발전시킬 수 있는'}, {'피드백3': '피드백 요소 3가지']}}\n\n단, <리뷰>가 없을 경우에는 {'리뷰평가': '없음'}으로 작성"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<리뷰평가.json> 작성시작)\n",
+                    "InputMark": "<리뷰>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<리뷰평가.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서 구매자의 <리뷰>를 평가하여 <리뷰평가.json>을 작성하는 전문가 입니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<리뷰평가.json> 요소)\n",
+                    "Message": "1) 평가: 10개의 <리뷰>를 개별적으로 '긍정', '중립', '부정'으로 평가\n2) 종합: 도서 구매자의 <리뷰>를 종합하여 하나의 문장으로 정리\n3) 피드백: 저자 또는 출판사가 도서 구매자의 <리뷰>를 보고 다음 도서에 개선 또는 발전시킬 수 있는 피드백 요소 3가지"
+                },
+                {
+                    "Mark": "\n\n(<리뷰평가.json>의 작성 양식)\n",
+                    "Message": "{‘리뷰평가’: {'평가': [{'구매자1': '긍정'}, {'구매자2': '중립'}, ... {'구매자10': '부정'}], '종합': '도서 구매자의 <리뷰>를 종합한 하나의 문장', '피드백': [{'피드백1': '저자 또는 출판사가 도서 구매자의 <리뷰>를 보고'}, {'피드백2': '다음 도서에 개선 또는 발전시킬 수 있는'}, {'피드백3': '피드백 요소 3가지']}}\n\n단, <리뷰>가 없을 경우에는 {'리뷰평가': '없음'}으로 작성"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<리뷰평가.json> 작성시작)\n",
+                    "InputMark": "<리뷰>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<리뷰평가.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서 구매자의 <리뷰>를 평가하여 <리뷰평가.json>을 작성하는 전문가 입니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<리뷰평가.json> 요소)\n",
+                    "Message": "1) 평가: 10개의 <리뷰>를 개별적으로 '긍정', '중립', '부정'으로 평가\n2) 종합: 도서 구매자의 <리뷰>를 종합하여 하나의 문장으로 정리\n3) 피드백: 저자 또는 출판사가 도서 구매자의 <리뷰>를 보고 다음 도서에 개선 또는 발전시킬 수 있는 피드백 요소 3가지"
+                },
+                {
+                    "Mark": "\n\n(<리뷰평가.json>의 작성 양식)\n",
+                    "Message": "{‘리뷰평가’: {'평가': [{'구매자1': '긍정'}, {'구매자2': '중립'}, ... {'구매자10': '부정'}], '종합': '도서 구매자의 <리뷰>를 종합한 하나의 문장', '피드백': [{'피드백1': '저자 또는 출판사가 도서 구매자의 <리뷰>를 보고'}, {'피드백2': '다음 도서에 개선 또는 발전시킬 수 있는'}, {'피드백3': '피드백 요소 3가지']}}\n\n단, <리뷰>가 없을 경우에는 {'리뷰평가': '없음'}으로 작성"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<리뷰평가.json> 작성시작)\n",
+                    "InputMark": "<리뷰>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<리뷰평가.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 도서 구매자의 <리뷰>를 평가하여 <리뷰평가.json>을 작성하는 전문가 입니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<리뷰평가.json> 요소)\n",
+                    "Message": "1) 평가: 10개의 <리뷰>를 개별적으로 '긍정', '중립', '부정'으로 평가\n2) 종합: 도서 구매자의 <리뷰>를 종합하여 하나의 문장으로 정리\n3) 피드백: 저자 또는 출판사가 도서 구매자의 <리뷰>를 보고 다음 도서에 개선 또는 발전시킬 수 있는 피드백 요소 3가지"
+                },
+                {
+                    "Mark": "\n\n(<리뷰평가.json>의 작성 양식)\n",
+                    "Message": "{‘리뷰평가’: {'평가': [{'구매자1': '긍정'}, {'구매자2': '중립'}, ... {'구매자10': '부정'}], '종합': '도서 구매자의 <리뷰>를 종합한 하나의 문장', '피드백': [{'피드백1': '저자 또는 출판사가 도서 구매자의 <리뷰>를 보고'}, {'피드백2': '다음 도서에 개선 또는 발전시킬 수 있는'}, {'피드백3': '피드백 요소 3가지']}}\n\n단, <리뷰>가 없을 경우에는 {'리뷰평가': '없음'}으로 작성"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<리뷰평가.json> 작성시작)\n",
+                    "InputMark": "<리뷰>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<리뷰평가.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

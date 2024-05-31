@@ -45,6 +45,7 @@ def AddPromptToDB():
         correctionKo = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-01_CorrectionKo.json")
         # correctionEn = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-02_CorrectionEn.json")
         voiceSplit = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-02_VoiceSplit.json")
+        bestSellerContextDefine = LoadJsonFrame(PromptDataPath + "/b5411_CreatorPrompt/b5411-01_BestSellerContextDefine.json")
         ### 아래로 추가되는 프롬프트 작성 ###
 
         ExistingPrompt = db.query(Prompt).first()
@@ -74,6 +75,7 @@ def AddPromptToDB():
             ExistingPrompt.CorrectionKo = correctionKo
             # ExistingPrompt.CorrectionEn = correctionEn
             ExistingPrompt.VoiceSplit = voiceSplit
+            ExistingPrompt.BestSellerContextDefine = bestSellerContextDefine
             ### 아래로 추가되는 프롬프트 작성 ###
             
             print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
@@ -101,7 +103,8 @@ def AddPromptToDB():
                 # TranslationEn = translationEn,
                 CorrectionKo = correctionKo,
                 # CorrectionEn = correctionEn,
-                VoiceSplit = voiceSplit
+                VoiceSplit = voiceSplit,
+                BestSellerContextDefine = bestSellerContextDefine
                 ### 아래로 추가되는 프롬프트 작성 ###
                 )
             db.add(prompt)

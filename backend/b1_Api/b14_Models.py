@@ -446,7 +446,10 @@ class Prompt(Base):
     # MixingMasteringJa = Column(JSON)
     # MixingMasteringZh = Column(JSON)
     # MixingMasteringEs = Column(JSON)
-
+    
+    # CreatorPrompt
+    BestSellerContextDefine = Column(JSON)
+    
 
 #######################
 ### TrainingDataset ###

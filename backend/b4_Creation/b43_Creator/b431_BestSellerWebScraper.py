@@ -121,8 +121,8 @@ def BookDetailsScraper(Rank, Date, driver, wait):
         BookPurchasedList = []
     ## 총 리뷰 수
     try:
-        CommentsCountText = driver.find_element(By.XPATH, "//p[@class='title_heading' and @data-review-label='title']").text
-        CommentsCount = int(re.search(r'\((\d+)\)', CommentsCountText).group(1))
+        CommentsCountText = driver.find_element(By.CSS_SELECTOR, 'span.review_desc > span.val').text
+        CommentsCount = int(CommentsCountText)
     except:
         CommentsCount = None
     ## 구매리뷰

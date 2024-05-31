@@ -1,7 +1,7 @@
 import sys
 sys.path.append("/yaas")
 
-from backend.b4_Creation.b43_Creator.b421_BestSellerWebScraper import BestsellerWebScraper
+from backend.b4_Creation.b43_Creator.b431_BestSellerWebScraper import BestsellerWebScraper
 
 ##########################
 ##########################

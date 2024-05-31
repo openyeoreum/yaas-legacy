@@ -449,6 +449,7 @@ class Prompt(Base):
     
     # CreatorPrompt
     BestSellerContextDefine = Column(JSON)
+    BestSellerCommentAnalysis = Column(JSON)
     
 
 #######################

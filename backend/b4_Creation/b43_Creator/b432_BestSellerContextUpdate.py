@@ -231,7 +231,10 @@ def BestSellerContextDefineProcess(Process1 = "BestSellerContextDefine", Process
                 json.dump(totalBookDataList, TempBooksJson, ensure_ascii = False, indent = 4)
 
     return totalBookDataList
-        
+
+## BSContextDefine 프롬프트 요청 및 결과물 TotalBookDataList에 업데이트 및 점수배점
+# def BestSellerContextDefineUpdate():
+
 if __name__ == "__main__":
 
-    BestSellerContextDefineProcess(Process = "BestSellerContextDefine", MessagesReview = "on")
+    BestSellerContextDefineProcess()

@@ -22,7 +22,7 @@ def LoadTotalBookDataList(TotalBookDataPath):
     ## TotalBookDataList중 업데이트가 필요한 부분 선정(이중 분석 방지)
     totalBookDataList = []
     for BookData in TotalBookDataList:
-        if 'Context' not in BookData:
+        if ('Context' not in BookData) and ('CommentAnalysis' not in BookData):
             totalBookDataList.append(BookData)
     
     return totalBookDataList
@@ -112,6 +112,11 @@ def BSCommentAnalysisFilter(Response, CommentCount):
     # Error6: 자료의 구조가 다를 때의 예외 처리
     if len(OutputDic['평가']) != CommentCount:
         return "BSCommentAnalysis, JSON에서 오류 발생: 평가수 누락"
+    # '평가' 부분 리스트화
+    OutputDic['평가'] = [list(item.values())[0] for item in OutputDic['평가']]
+    # '피드백' 부분 리스트화
+    OutputDic['피드백'] = [list(item.values())[0] for item in OutputDic['피드백']]
+    
     return OutputDic
 
 #######################
@@ -228,7 +233,7 @@ def BestSellerContextDefineProcess(Process1 = "BestSellerContextDefine", Process
                 break
             
         with open(TempTotalBookDataPath, 'w', encoding = 'utf-8') as TempBooksJson:
-                json.dump(totalBookDataList, TempBooksJson, ensure_ascii = False, indent = 4)
+            json.dump(totalBookDataList, TempBooksJson, ensure_ascii = False, indent = 4)
 
     return totalBookDataList
 

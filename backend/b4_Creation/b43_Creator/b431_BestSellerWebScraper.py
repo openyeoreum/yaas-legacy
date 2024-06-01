@@ -278,7 +278,6 @@ def TotalBookDataUpdate(period):
                     TotalBookDataList[Id]['Rank'] += BookData['Rank']
                 TotalBookDataList[Id]['BookPurchasedList'] = BookData['BookPurchasedList']
                 TotalBookDataList[Id]['CommentsCount'] = BookData['CommentsCount']
-                TotalBookDataList[Id]['CommentList'] = BookData['CommentList']
 
         with open(TotalBookDataPath, 'w', encoding='utf-8') as BooksJson:
             json.dump(TotalBookDataList, BooksJson, ensure_ascii=False, indent = 4)

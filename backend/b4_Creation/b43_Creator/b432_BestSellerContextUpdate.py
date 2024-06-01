@@ -129,7 +129,8 @@ def BestSellerContextDefineProcess(Process1 = "BestSellerContextDefine", Process
 
     ## 작업이 되지 않은 부분부터 totalBookDataList와 InputList 형성
     totalBookDataList, inputList = LoadTotalBookDataToInputList(TotalBookDataPath)
-    TempTotalBookDataPath = f"/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_TotalBookData/TempTotalBookData/{Date()}_TempTotalBookData.json"
+    Date = totalBookDataList[0]['Rank'][-1]['Date']
+    TempTotalBookDataPath = f"/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_TotalBookData/TempTotalBookData/{Date}_TempTotalBookData.json"
     StartPoint = 0
     if os.path.exists(TempTotalBookDataPath):
         with open(TempTotalBookDataPath, 'r', encoding = 'utf-8') as TempBooksJson:

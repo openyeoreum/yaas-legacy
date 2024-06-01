@@ -19,17 +19,32 @@ def LoadTotalBookDataList(TotalBookDataPath):
     with open(TotalBookDataPath, 'r', encoding = 'utf-8') as BooksJson:
         TotalBookDataList = json.load(BooksJson)
     
+    ## Date 설정
+    Date = None
+    for BookData in TotalBookDataList:
+        if ('Context' not in BookData) or ('CommentAnalysis' not in BookData) or ('BookScore' not in BookData):
+            Date = BookData['Rank'][-1]['Date']
+            break
+    
+    if Date is None:
+        Date = '전체기간'
+    
+    return TotalBookDataList, Date
+
+## totalBookDataList로 필터
+def FilterTotalBookDataList(TotalBookDataPath):
+    TotalBookDataList, Date = LoadTotalBookDataList(TotalBookDataPath)
     ## TotalBookDataList중 업데이트가 필요한 부분 선정(이중 분석 방지)
     totalBookDataList = []
     for BookData in TotalBookDataList:
-        if ('Context' not in BookData) and ('CommentAnalysis' not in BookData):
+        if ('Context' not in BookData) or ('CommentAnalysis' not in BookData) or ('BookScore' not in BookData):
             totalBookDataList.append(BookData)
     
-    return totalBookDataList
+    return totalBookDataList, Date
 
 ## LoadTotalBookData의 inputList 치환
 def LoadTotalBookDataToInputList(TotalBookDataPath):
-    totalBookDataList = LoadTotalBookDataList(TotalBookDataPath)
+    totalBookDataList, Date = FilterTotalBookDataList(TotalBookDataPath)
     
     InputList = []
     for i ,BookData in enumerate(totalBookDataList):
@@ -68,7 +83,7 @@ def LoadTotalBookDataToInputList(TotalBookDataPath):
         InputDic = {'Id': i+1, 'ISBN': ISBN, 'Book': BookDataText, 'Comment': CommentTexts, 'CommentCount': len(CommentList)}
         InputList.append(InputDic)
         
-    return totalBookDataList, InputList
+    return totalBookDataList, InputList, Date
 
 ######################
 ##### Filter 조건 #####
@@ -110,8 +125,10 @@ def BSCommentAnalysisFilter(Response, CommentCount):
     if ('평가' not in OutputDic or '종합' not in OutputDic or '피드백' not in OutputDic):
         return "BSCommentAnalysis, JSON에서 오류 발생: JSONKeyError"
     # Error6: 자료의 구조가 다를 때의 예외 처리
-    if len(OutputDic['평가']) != CommentCount:
+    if len(OutputDic['평가']) < CommentCount:
         return "BSCommentAnalysis, JSON에서 오류 발생: 평가수 누락"
+    else:
+        OutputDic['평가'] = OutputDic['평가'][:CommentCount]
     # '평가' 부분 리스트화
     OutputDic['평가'] = [list(item.values())[0] for item in OutputDic['평가']]
     # '피드백' 부분 리스트화
@@ -123,36 +140,28 @@ def BSCommentAnalysisFilter(Response, CommentCount):
 ##### Process 진행 #####
 #######################
 ## BSContextDefine 프롬프트 요청 및 결과물 Json화
-def BestSellerContextDefineProcess(Process1 = "BestSellerContextDefine", Process2 = "BestSellerCommentAnalysis", MessagesReview = "on"):   
-    ## TotalBookData와 임시TotalBookData 경로 
-    TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_TotalBookData/TotalBookData.json"
-
+def BestSellerContextDefineProcess(TotalBookDataPath, projectName, email, Process1 = "BestSellerContextDefine", Process2 = "BestSellerCommentAnalysis", MessagesReview = "on", mode = "Master"):
     ## 작업이 되지 않은 부분부터 totalBookDataList와 InputList 형성
-    totalBookDataList, inputList = LoadTotalBookDataToInputList(TotalBookDataPath)
-    Date = totalBookDataList[0]['Rank'][-1]['Date']
+    totalBookDataList, inputList, Date = LoadTotalBookDataToInputList(TotalBookDataPath)
     TempTotalBookDataPath = f"/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_TotalBookData/TempTotalBookData/{Date}_TempTotalBookData.json"
     StartPoint = 0
+    InContext = True
     if os.path.exists(TempTotalBookDataPath):
         with open(TempTotalBookDataPath, 'r', encoding = 'utf-8') as TempBooksJson:
             totalBookDataList = json.load(TempBooksJson)
             for StartPoint in range(len(totalBookDataList)):
-                if 'Context' not in totalBookDataList[StartPoint]:
+                if ('Context' not in totalBookDataList[StartPoint]) or ('CommentAnalysis' not in totalBookDataList[StartPoint]):
+                    InContext = False
                     break
-    InputList = inputList[StartPoint:]
-    
-    ## General 하이퍼 파라미터
-    email = "General"
-    projectName = "BestSeller"
-    mode = "Master"
+    if InContext:
+        StartPoint += 1
     
     ## WMWMDefineProcess
+    InputList = inputList[StartPoint:]
     ProcessCount = 1
     ErrorCount1 = 0
     ErrorCount2 = 0
     InputCount = len(InputList)
-    projectName = "BestSeller"
-    email = "General"
-    mode = "Master"
     i = 0
     
     while i < InputCount:
@@ -171,16 +180,16 @@ def BestSellerContextDefineProcess(Process1 = "BestSellerContextDefine", Process
             Filter1 = BSContextDefineFilter(Response1)
 
             if isinstance(Filter1, str):
-                print(f"Project: {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | {Filter1}")
+                print(f"Project: {Date} {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | {Filter1}")
                 ErrorCount1 += 1
-                print(f"Project: {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회, 2분 후 프롬프트 재시도")
+                print(f"Project: {Date} {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회, 2분 후 프롬프트 재시도")
                 time.sleep(120)
                 if ErrorCount1 == 5:
-                    sys.exit(f"Project: {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회 초과, 프롬프트 종료")
+                    sys.exit(f"Project: {Date} {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회 초과, 프롬프트 종료")
                 continue
             else:
                 OutputDic1 = Filter1
-                print(f"Project: {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | JSONDecode 완료")
+                print(f"Project: {Date} {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | JSONDecode 완료")
                 ErrorCount1 = 0
                 process1_complete = True
             
@@ -190,16 +199,16 @@ def BestSellerContextDefineProcess(Process1 = "BestSellerContextDefine", Process
             Filter2 = BSCommentAnalysisFilter(Response2, CommentCount)
 
             if isinstance(Filter2, str):
-                print(f"Project: {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | {Filter2}")
+                print(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | {Filter2}")
                 ErrorCount2 += 1
-                print(f"Project: {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount2}회, 2분 후 프롬프트 재시도")
+                print(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount2}회, 2분 후 프롬프트 재시도")
                 time.sleep(120)
                 if ErrorCount2 == 5:
-                    sys.exit(f"Project: {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount2}회 초과, 프롬프트 종료")
+                    sys.exit(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount2}회 초과, 프롬프트 종료")
                 continue
             else:
                 OutputDic2 = Filter2
-                print(f"Project: {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | JSONDecode 완료")
+                print(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | JSONDecode 완료")
                 ErrorCount2 = 0
                 process2_complete = True
 
@@ -240,8 +249,87 @@ def BestSellerContextDefineProcess(Process1 = "BestSellerContextDefine", Process
     return totalBookDataList
 
 ## BSContextDefine 프롬프트 요청 및 결과물 TotalBookDataList에 업데이트 및 점수배점
-# def BestSellerContextDefineUpdate():
+def BestSellerContextDefineUpdate(projectName = "BestSeller", email = "General", process1 = "BestSellerContextDefine", process2 = "BestSellerCommentAnalysis", messagesReview = "on", mode = "Master"):
+    TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_TotalBookData/TotalBookData.json"
+    TotalBookDataList, Date = LoadTotalBookDataList(TotalBookDataPath)
+    
+    print(f"< User: {email} | Project: {Date} {projectName} | BestSeller ContextDefine/CommentAnalysis 시작 >")
+    ## 0: TotalBookDataList 업데이트 여부 확인
+    NonUpdate = False
+    for BookData in TotalBookDataList:
+        if ('Context' not in BookData) or ('CommentAnalysis' not in BookData) or ('BookScore' not in BookData):
+            NonUpdate = True
+            break
+
+    if NonUpdate:
+        totalBookDataList = BestSellerContextDefineProcess(TotalBookDataPath, projectName, email, Process1 = process1, Process2 = process2, MessagesReview = messagesReview, mode = mode)
+        
+        ## 1: TotalBookDataList 업데이트
+        for bookData in totalBookDataList:
+            for i in range(len(TotalBookDataList)):
+                if bookData['ISBN'] == TotalBookDataList[i]['ISBN']:
+                    print(f"{bookData['ISBN']}\n{BookData['ISBN']}\n")
+                    TotalBookDataList[i] = bookData
+                    break
+        
+        ## 2: TotalBookDataList 점수배점
+        for i in range(len(TotalBookDataList)):
+            # A: RankScore (40%)
+            Rank = TotalBookDataList[i]['Rank'][-1]['Rank']
+            if Rank <= 50:
+                RankScore = (51 - Rank) * 2 * 0.4
+            else:
+                RankScore = 0
+            # B: RankHistoryScore (10%)
+            RankHistory = TotalBookDataList[i]['Rank']
+            if len(RankHistory) >= 10:
+                RankHistory = RankHistory[-10:]
+                
+            RankScores = 0
+            for rank in RankHistory:
+                _Rank = rank['Rank']
+                if _Rank <= 50:
+                    RankScores += (51 - _Rank) / 5
+            RankHistoryScores = RankScores * 0.1
+            # C: CommentCountScore (30%)
+            CommentCount = TotalBookDataList[i]['CommentsCount']
+            if CommentCount >= 1000:
+                CommentCountScore = 1000 / 10 * 0.3
+            else:
+                CommentCountScore = CommentCount / 10 * 0.3
+            # D: CommentLikeScore (20%)
+            CommentList = TotalBookDataList[i]['CommentList']
+            _CommentListScore = 0
+            for Comment in CommentList:
+                Like = Comment['like']
+                Evaluation = Comment['evaluation']
+                if Evaluation == '긍정':
+                    evaluation = 1
+                elif Evaluation == '부정':
+                    evaluation = -0.5
+                else:
+                    evaluation = 0.5
+                _CommentListScore += Like * evaluation
+            
+            if _CommentListScore >= 500:
+                CommentListScore = 500 / 5 * 0.2
+            elif _CommentListScore <= -500:
+                CommentListScore = -500 / 5 * 0.2
+            else:
+                CommentListScore = _CommentListScore / 5 * 0.2
+                
+            ## BookScore 합산
+            BookScore = RankScore + RankHistoryScores + CommentCountScore + CommentListScore
+        
+            TotalBookDataList[i]['BookScore'] = BookScore
+            
+        with open(TotalBookDataPath, 'w', encoding = 'utf-8') as BooksJson:
+            json.dump(TotalBookDataList, BooksJson, ensure_ascii = False, indent = 4)
+        print(f"< User: {email} | Project: {Date} {projectName} | BestSeller ContextDefine/CommentAnalysis 완료 >")
+        
+    else:
+        print(f"[ User: {email} | Project: {Date} {projectName} | BestSeller ContextDefine/CommentAnalysis는 이미 완료됨 ]\n")
 
 if __name__ == "__main__":
 
-    BestSellerContextDefineProcess()
+    BestSellerContextDefineUpdate()

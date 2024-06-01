@@ -1,9 +1,10 @@
 import os
 import re
-import sys
 import json
+import sys
 sys.path.append("/yaas")
 
+from datetime import datetime
 from sqlalchemy import desc
 from backend.b1_Api.b14_Models import LifeGraph
 from backend.b1_Api.b13_Database import get_db
@@ -17,10 +18,26 @@ def GetLifeGraphSetsPath(lifeGraphSetName):
     LifeGraphDataPath = GetLifeGraphDataPath()
     directory = LifeGraphDataPath + "/e4211_RawData/e4211-01_LifeGraphSets/"
     pattern = f"e4211-01_\\d{{6}}_{lifeGraphSetName}_LifeGraph.json"
+    
+    def GetLatestFile(Files):
+        FileDates = []
+        for file in Files:
+            try:
+                DateStr = file.split('_')[1]
+                FileDate = datetime.strptime(DateStr, '%y%m%d')
+                FileDates.append((file, FileDate))
+            except ValueError:
+                continue
 
-    for filename in os.listdir(directory):
-        if re.match(pattern, filename):
-            return os.path.join(directory, filename)
+        FileDates.sort(key=lambda x: x[1], reverse=True)
+        LatestFile = FileDates[0][0] if FileDates else None
+
+        return LatestFile
+    
+    filename = GetLatestFile(os.listdir(directory))
+    
+    if re.match(pattern, filename):
+        return os.path.join(directory, filename)
 
     return None
 
@@ -83,4 +100,14 @@ def AddLifeGraphToDB(lifeGraphSetName, lifeGraphSetManager, lifeGraphSetSource, 
         db.commit()
          
 if __name__ == "__main__":
-    AddLifeGraphToDB("CourseraMeditation", "Duck-JooLee", "Coursera", "Global", 23120601)
+    
+    ############################ 하이퍼 파라미터 설정 ############################
+    lifeGraphSetName = "CourseraMeditation"
+    latestUpdateDate = 23120601
+    LifeGraphDataFramePath = "/yaas/extension/e4_Database/e41_DatabaseFeedback/e411_LifeGraphData/"
+    messagesReview = "on"
+    mode = "Master"
+    #########################################################################
+    LifeGraphSetsPath = GetLifeGraphSetsPath(lifeGraphSetName)
+    print(LifeGraphSetsPath)
+    # AddLifeGraphToDB("CourseraMeditation", "Duck-JooLee", "Coursera", "Global", 23120601)

@@ -14,7 +14,6 @@ from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User, Prompt
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetPromptFrame, GetTrainingDataset
 from backend.b2_Solution.b21_General.b212_PromptCommit import GetPromptDataPath, LoadJsonFrame
-from extension.e1_Solution.e11_General.e111_GetDBtable import GetExtensionPromptFrame
 
 
 ######################
@@ -54,8 +53,7 @@ def LoadLLMapiKey(email):
 def LLMmessages(Process, Input, Root = "backend", Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
     if Root == "backend":
       promptFrame = GetPromptFrame(Process)
-    elif Root == "extension":
-      promptFrame = GetExtensionPromptFrame(Process)
+
     messageTime = "current time: " + str(Date("Second")) + '\n\n'
     
     # messages
@@ -210,8 +208,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
     client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     if root == "backend":
       promptFrame = GetPromptFrame(Process)
-    elif root == "extension":
-      promptFrame = GetExtensionPromptFrame(Process)
+
     
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, Root = root, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
@@ -468,8 +465,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
     client = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
     if root == "backend":
       promptFrame = GetPromptFrame(Process)
-    elif root == "extension":
-      promptFrame = GetExtensionPromptFrame(Process)
+
     
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, Root = root, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 

@@ -570,7 +570,6 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
-    DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     FeedbackDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s112_FeedbackDataSet/"
     CompleteDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s113_CompleteDataSet/"
     TrainingDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s114_TrainingDataSet/"

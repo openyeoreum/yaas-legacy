@@ -4,6 +4,7 @@ import unicodedata
 import sys
 sys.path.append("/yaas")
 
+from dotenv import load_dotenv
 from b2_Solution.bm21_GeneralUpdate import AccountUpdate, SolutionProjectUpdate
 from b2_Solution.bm22_DataFrameUpdate import SolutionDataFrameUpdate
 from b2_Solution.bm23_DataSetUpdate import SolutionDataSetUpdate
@@ -12,6 +13,11 @@ from b4_Creation.bm25_AudiobookUpdate import CreationAudioBookUpdate
 
 ### Main1 : 솔루션 업데이트 ###
 def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre):
+
+    ## .env 파일 로드(API_KEY 등 환경 변수 액세스)
+    envPath = os.path.join(os.path.dirname(__file__), '..', 'storage', '.env')
+    load_dotenv(dotenv_path = envPath)
+
 
     if isinstance(projectNameList, list):
         ## NFC, NFD 오류 문제 해결 (모두 적용)

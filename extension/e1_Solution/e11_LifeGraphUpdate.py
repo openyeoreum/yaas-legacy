@@ -15,12 +15,15 @@ import textwrap
 import sys
 sys.path.append("/yaas")
 
+from tqdm import tqdm
 from PIL import Image
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from datetime import datetime
 from langdetect import detect
 from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
 from firebase_admin import credentials
 from firebase_admin import db
 
@@ -130,8 +133,8 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
     sns.barplot(x = 'AgeRange', y = 'Score', hue = 'AgeRange', data = DataFrame, palette = DataFrame['Color'].to_list(), dodge = False, ax = ax[0])
     ax[0].set_title(f'{Email}\n{FileName}\n', fontweight = 'bold')
     ax[0].set_xlabel('\nAge', fontweight = 'bold')
-    ax[0].set_ylabel('HapScore', fontweight = 'bold')
-    ax[0].legend().remove() # 범례 제거
+    ax[0].set_ylabel('Happiness Score', fontweight = 'bold')
+    # ax[0].legend().remove() # 범례 제거
     ax[0].set_yticks(range(-10, 11, 2)) # y축 눈금을 2단위로 설정
     ax[0].axhline(0, color='black', linewidth=0.5) # y=0 위치에 수평선 추가
     for index, row in DataFrame.iterrows():
@@ -181,7 +184,7 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
             plt.savefig(PNGPath, dpi = 300)
             plt.close()
             
-    return PDFPath, PNGPaths
+    return FileName, PDFPath, PNGPaths
 
 ## 라이프그래프의 이미지를 PDF로 묶기
 def PNGsToPDF(PNGPaths, PDFPath):
@@ -213,24 +216,34 @@ def PNGsToPDF(PNGPaths, PDFPath):
     pdf.save()
 
 ## 구글 스프레드 시트 업데이트
-def UpdateSheet(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courserameditation-028871d3c653.json', FileName = 'Coursera Meditation Project', SheetName = 'sheet1', Type = 'Text', HeaderRow = 2, Row = 3, Colum = 1, Data = 'Hello', SubData = 'World!'):
+def UpdateSheet(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courserameditation-028871d3c653.json', ProjectName = 'Coursera Meditation Project', SheetName = 'sheet1', Type = 'Text', HeaderRow = 2, Row = 3, Colum = 1, Data = 'Hello', SubData = 'World!', FileName = 'None', FilePath = 'None', FolderId = '16SB0qJBhEwCugqOe_bV7QYecFj922u1J'):
     # 서비스 계정
     SERVICE_ACCOUNT_FILE = AccountFilePath
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
     credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes = SCOPES)
     client = gspread.authorize(credentials)
-    # 읽고 쓰기
-    Sheet = client.open(FileName)
+    # 스프레드시트 읽고 쓰기
+    Sheet = client.open(ProjectName)
     worksheet = Sheet.worksheet(SheetName)
     worksheet.get_all_records(head = HeaderRow)
     if Type == 'Text':
         worksheet.update_cell(Row, Colum, Data)
     elif Type == 'Link':
-        worksheet.update_cell(Row, Colum, f'=HYPERLINK("{Data}", "{SubData}")')
+        # 파일을 구글 드라이브에 업로드
+        driveservice = build('drive', 'v3', credentials = credentials)
+        FileMetadata = {'name': FileName + '.pdf', 'parents': [FolderId]}
+        Media = MediaFileUpload(FilePath, mimetype = 'application/pdf')
+        File = driveservice.files().create(body = FileMetadata, media_body = Media, fields = 'id').execute()
+        # 파일을 구글 드라이브에 업로드
+        FileId = File.get('id')
+        FileLink = f'https://drive.google.com/file/d/{FileId}/view?usp=sharing'
+        # 스프레드시트 링크 삽입
+        worksheet.update_cell(Row, Colum, f'=HYPERLINK("{FileLink}", "{SubData}")')
     
 ## 구글 스프레드 시트에 라이프그래프 업데이트 ##
 def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphList):
-    for i in range(len(BeforeLifeGraphList)):
+    # for i in range(len(BeforeLifeGraphList)):
+    for i in tqdm(range(5), desc = "Updating Life Graphs"):
         # 라이프그래프 데이터 추출
         Id = BeforeLifeGraphList[i]['LifeGraphId']
         Date = BeforeLifeGraphList[i]['LifeGraphDate']
@@ -241,7 +254,7 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphList):
         LifeData = BeforeLifeGraphList[i]['LifeData']
         
         # 라이프그래프 파일 생성
-        PDFPath, PNGPaths = LifeGraphToPNG(Date, Name, Age, Language, Email, LifeData)
+        fileName, PDFPath, PNGPaths = LifeGraphToPNG(Date, Name, Age, Language, Email, LifeData)
         PNGsToPDF(PNGPaths, PDFPath)
         BeforeLifeGraphList[i]['LifeGraphFile'] = PDFPath
         
@@ -252,7 +265,7 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphList):
         UpdateSheet(Row = row, Colum = 3, Data = Name)
         UpdateSheet(Row = row, Colum = 4, Data = Age)
         UpdateSheet(Row = row, Colum = 5, Data = Email)
-        UpdateSheet(Row = row, Type = 'Link', Colum = 6, Data = PDFPath, SubData = f'({Name})의_라이프그래프_다운로드')
+        UpdateSheet(Row = row, Type = 'Link', Colum = 6, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
 
 ### 라이프 그래프 업데이트 ###
 def LifeGraphUpdate():
@@ -260,36 +273,4 @@ def LifeGraphUpdate():
     UpdateBeforeLifeGraphToSheet(BeforeLifeGraphList)
     
 if __name__ == "__main__":
-    # LifeGraphUpdate()
-    
-    import gspread
-    from google.oauth2.service_account import Credentials
-    from googleapiclient.discovery import build
-    from googleapiclient.http import MediaFileUpload
-
-    AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courserameditation-028871d3c653.json'
-    # 구글 드라이브와 스프레드시트 API 설정
-    SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/spreadsheets']
-    SERVICE_ACCOUNT_FILE = AccountFilePath
-
-    credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
-    drive_service = build('drive', 'v3', credentials=credentials)
-    sheets_client = gspread.authorize(credentials)
-
-    # PDF 파일을 구글 드라이브에 업로드
-    file_metadata = {'name': 'your_pdf_file_name.pdf'}
-    media = MediaFileUpload('path_to_your_pdf_file.pdf', mimetype='application/pdf')
-    file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-
-    file_id = file.get('id')
-    file_link = f'https://drive.google.com/file/d/{file_id}/view?usp=sharing'
-
-    # 스프레드시트 열기 및 링크 삽입
-    spreadsheet = sheets_client.open('your_spreadsheet_name')
-    worksheet = spreadsheet.sheet1
-
-    row = 1  # 링크를 삽입할 행 번호
-    col = 1  # 링크를 삽입할 열 번호
-    worksheet.update_cell(row, col, f'=HYPERLINK("{file_link}", "PDF 파일 보기")')
-
-    print(f'PDF file link inserted at {row},{col} in the spreadsheet.')
+    LifeGraphUpdate()

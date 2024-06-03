@@ -242,7 +242,7 @@ def UpdateSheet(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courseram
     
 ## 구글 스프레드 시트에 라이프그래프 업데이트 ##
 def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphList):
-    for i in tqdm(range(len(BeforeLifeGraphList)), desc = "Updating Life Graphs"):
+    for i in tqdm(range(len(BeforeLifeGraphList)), desc = "[ 라이프그래프 구글시트 업데이트 ]"):
         # 라이프그래프 데이터 추출
         Id = BeforeLifeGraphList[i]['LifeGraphId']
         Date = BeforeLifeGraphList[i]['LifeGraphDate']

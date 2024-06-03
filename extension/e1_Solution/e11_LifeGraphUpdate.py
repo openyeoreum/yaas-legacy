@@ -152,12 +152,17 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
     else:
         Width = 50
     WrappedTexts = []
+    TotalRows = len(DataFrame)
     for index, row in DataFrame.iterrows():
         if row['LifeDataId'] <= 9:
             wrapped_text = "\n    ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
         else:
             wrapped_text = "\n      ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
-        WrappedTexts.append(f"{row['LifeDataId']}. {row['StartAge']}-{row['EndAge']}: {wrapped_text}\n")
+            
+        if index == TotalRows - 1:
+            WrappedTexts.append(f"{row['LifeDataId']}. {row['StartAge']}-{row['EndAge']}: {wrapped_text}")
+        else:
+            WrappedTexts.append(f"{row['LifeDataId']}. {row['StartAge']}-{row['EndAge']}: {wrapped_text}\n")
         
     # 첫 번째는 25개, 그 후에는 54개 단위로 묶기
     ReasonText = "\n".join(WrappedTexts)
@@ -249,6 +254,7 @@ def UpdateSheet(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courseram
 def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
     UpdateCount = 0
     for i in tqdm(range(len(BeforeLifeGraphList)), desc = "[ 라이프그래프 구글시트 업데이트 ]"):
+        # if 'LifeGraphFile' in BeforeLifeGraphList[i]:
         # 라이프그래프 데이터 추출
         Id = BeforeLifeGraphList[i]['LifeGraphId']
         Date = BeforeLifeGraphList[i]['LifeGraphDate']

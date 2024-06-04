@@ -13,24 +13,26 @@ import json
 import time
 import gspread
 import firebase_admin
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 import textwrap
 import sys
 sys.path.append("/yaas")
 
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+
 from tqdm import tqdm
-from PIL import Image
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
 from datetime import datetime
+from PIL import Image
 from langdetect import detect
-from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+from google.oauth2.service_account import Credentials
 from firebase_admin import credentials
 from firebase_admin import db
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
 
 ## 오늘 날짜 설정
 def Date(Option = "Day"):
@@ -116,6 +118,14 @@ def DownloadLifeGraph(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/cou
 
 ## 라이프그래프의 이미지화(PNG)
 def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
+    # 폰트설정 (한글의 경우 노토산스 ko, 기존은 노토산스)
+    if Language == 'ko':
+        FontPath = '/yaas/storage/s2_Meditation/Font/Noto_Sans_KR/NotoSansKR-VariableFont_wght.ttf'
+    else:
+        FontPath = '/yaas/storage/s2_Meditation/Font/Noto_Sans/NotoSans-VariableFont_wdth,wght.ttf'
+    Font = fm.FontProperties(fname = FontPath)
+    plt.rc('font', family = Font.get_name())
+    
     PNGPaths = []
     FilePath = f"/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/BeforeLifeGraphImages/"
     FileName = f"{LifeGraphDate.replace('-', '')}_{Name}({Age})_LifeGraph"

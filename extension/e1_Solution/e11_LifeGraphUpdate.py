@@ -1,4 +1,4 @@
-## 라이프그래프 비포, 에프터 서치 후 두 그래프를 합쳐서 에프터에 대한 효과를 설명해주기
+## 라이프그래프 비포, 에프터 서치 후 두 그래프를 합쳐서 에프터에 대한 효과를 설명해주기 -> 해당 효과를 바탕으로 PDF 보고서 만들어주기
 ## 현재 행복하다는 사람한테는 새로운 방법 제시
 ## 새로운 일자의 BeforeLifeGraph 업데이트 할때 이전에 있던 라이프 그래프에서 없는 부분만 업데이트 하기(모두 업데이트 하지 말고), 그리고 구글 스프레드 시트에 업데이트 할때는 파일 경로가 없는 녀석만 업데이트
 ## 분석된 라이프 그래프 이미지 만들기
@@ -104,7 +104,7 @@ def MergeRecentLifeGraph(RecentBeforeLifeGraphList, BeforeLifeGraphList):
     
     return MergedBeforeLifeGraphList
         
-## 라이프그래프 데이터 다운로드 ##
+### 라이프그래프 데이터 다운로드 ###
 def DownloadLifeGraph(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/coursera-meditation-db-firebase-adminsdk-okrn4-80af02fd79.json', Quality = 0):
     # 저장경로 설정
     BeforeLifeGraphStorage = '/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/'
@@ -234,7 +234,7 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
             
     return FileName, PDFPath, PNGPaths
 
-## 라이프그래프의 이미지를 PDF로 묶기
+### 라이프그래프의 이미지를 PDF로 묶기 ###
 def PNGsToPDF(PNGPaths, PDFPath):
     # PDF로 저장
     A4Width, A4Height = A4
@@ -317,7 +317,7 @@ def UpdateSheet(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courseram
         # 스프레드시트 링크 삽입
         worksheet.update_cell(Row, Colum, f'=HYPERLINK("{FileLink}", "{SubData}")')
     
-## 구글 스프레드 시트에 라이프그래프 업데이트 ##
+### 구글 스프레드 시트에 라이프그래프 업데이트 ###
 def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
     # 추가행 업데이트
     AddRowToSheet(BeforeLifeGraphList)
@@ -345,11 +345,11 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
             UpdateSheet(Row = row, Colum = 2, Data = Date)
             UpdateSheet(Row = row, Colum = 3, Data = Name)
             UpdateSheet(Row = row, Colum = 4, Data = Age)
-            UpdateSheet(Row = row, Colum = 5, Data = Email)
+            UpdateSheet(Row = row, Colum = 6, Data = Email)
             UpdateSheet(Row = row, Type = 'Link', Colum = 7, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
             
             UpdateCount += 1
-            if UpdateCount >= 10:
+            if UpdateCount >= 5:
                 with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
                     json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
                 UpdateCount = 0
@@ -359,7 +359,9 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
         with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
             json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
 
+#########################
 ### 라이프 그래프 업데이트 ###
+#########################
 def LifeGraphUpdate():
     BeforeLifeGraphPath, BeforeLifeGraphList = DownloadLifeGraph()
     UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList)

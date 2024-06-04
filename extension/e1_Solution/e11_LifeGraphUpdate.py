@@ -263,8 +263,37 @@ def PNGsToPDF(PNGPaths, PDFPath):
         os.remove(PNGPath)
     pdf.save()
 
+## 추가행 업데이트
+def AddRowToSheet(BeforeLifeGraphList, AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courserameditation-028871d3c653.json', ProjectName = 'Coursera Meditation Project', SheetName = 'BeforeLifeGraph'):
+    ## Sheet에서 최신 Id 가져오기
+    # 서비스 계정
+    SERVICE_ACCOUNT_FILE = AccountFilePath
+    SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+    credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes = SCOPES)
+    client = gspread.authorize(credentials)
+    # 스프레드시트 읽고 쓰기
+    Sheet = client.open(ProjectName)
+    worksheet = Sheet.worksheet(SheetName)
+    # 가장 최신 id 가져오기
+    RecentId = worksheet.acell('A3').value
+    
+    ## Sheet에서 가져온 최신 Id가 BeforeLifeGraphList에서 몇 번째 데이터인지 찾기
+    for i in range(len(BeforeLifeGraphList)):
+        if BeforeLifeGraphList[i]['LifeGraphId'] == RecentId:
+            AddNum = i
+            break
+
+    ## AddNum 만큼 새로운 행 추가
+    if AddNum > 0:
+        # 2행 다음부터 AddNum 만큼의 새로운 행 추가
+        NewRows = [[''] * worksheet.col_count] * AddNum
+        worksheet.insert_rows(NewRows, row = 3)
+        print(f'[ 스프레드 시트({SheetName})에 ({AddNum})개의 빈 행 추가 ]')
+    else:
+        print(f'[ 스프레드 시트({SheetName})에 추가할 빈 행 없음 ]')
+
 ## 구글 스프레드 시트 업데이트
-def UpdateSheet(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courserameditation-028871d3c653.json', ProjectName = 'Coursera Meditation Project', SheetName = 'sheet1', Type = 'Text', HeaderRow = 2, Row = 3, Colum = 1, Data = 'Hello', SubData = 'World!', FileName = 'None', FilePath = 'None', FolderId = '16SB0qJBhEwCugqOe_bV7QYecFj922u1J'):
+def UpdateSheet(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courserameditation-028871d3c653.json', ProjectName = 'Coursera Meditation Project', SheetName = 'BeforeLifeGraph', Type = 'Text', HeaderRow = 2, Row = 3, Colum = 1, Data = 'Hello', SubData = 'World!', FileName = 'None', FilePath = 'None', FolderId = '16SB0qJBhEwCugqOe_bV7QYecFj922u1J'):
     # 서비스 계정
     SERVICE_ACCOUNT_FILE = AccountFilePath
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
@@ -290,9 +319,12 @@ def UpdateSheet(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courseram
     
 ## 구글 스프레드 시트에 라이프그래프 업데이트 ##
 def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
+    # 추가행 업데이트
+    AddRowToSheet(BeforeLifeGraphList)
+    # 라이프 그래프 업데이트
     UpdateCount = 0
     for i in tqdm(range(len(BeforeLifeGraphList)), desc = "[ 라이프그래프 구글시트 업데이트 ]"):
-        if 'LifeGraphFile' in BeforeLifeGraphList[i]:
+        if 'LifeGraphFile' not in BeforeLifeGraphList[i]:
             # 라이프그래프 데이터 추출
             Id = BeforeLifeGraphList[i]['LifeGraphId']
             Date = BeforeLifeGraphList[i]['LifeGraphDate']
@@ -321,7 +353,7 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
                 with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
                     json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
                 UpdateCount = 0
-            time.sleep(2)
+            time.sleep(2.5)
         
     if UpdateCount > 0:
         with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:

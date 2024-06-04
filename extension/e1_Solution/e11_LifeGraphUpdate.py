@@ -217,9 +217,9 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
             wrapped_text = "\n         ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
             
         if index == TotalRows - 1:
-            WrappedTexts.append(f"{NumberConverter(row['LifeDataId'])}   {row['StartAge']}-{row['EndAge']} | {row['Score']}:  {wrapped_text}")
+            WrappedTexts.append(f"{NumberConverter(row['LifeDataId'])}   {row['StartAge']}-{row['EndAge']} ({row['Score']}) :  {wrapped_text}")
         else:
-            WrappedTexts.append(f"({row['LifeDataId']})  {row['StartAge']}-{row['EndAge']}:  {wrapped_text}\n")
+            WrappedTexts.append(f"{NumberConverter(row['LifeDataId'])}   {row['StartAge']}-{row['EndAge']} ({row['Score']}) :  {wrapped_text}\n")
         
     # 첫 번째는 22개, 그 후에는 50개 단위로 묶기
     ProfileText = f"|    {LifeGraphDate}    |    {Name}    |    0-{Age}    |\n\n\n"

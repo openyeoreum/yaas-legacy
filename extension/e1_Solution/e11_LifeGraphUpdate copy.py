@@ -32,7 +32,7 @@ from googleapiclient.http import MediaFileUpload
 from google.oauth2.service_account import Credentials
 from firebase_admin import credentials
 from firebase_admin import db
-from reportlab.lib.pagesizes import portrait
+from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
 ## 오늘 날짜 설정
@@ -160,9 +160,9 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
     PDFPath = FilePath + FileName + '.pdf'
 
     ## 표지 페이지 생성
-    fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
-    fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
-    ax.text(0.01, 0.99, f"\nDate             :  {LifeGraphDate}\nName          :  {Name}\nAge               :  {Age}\nEmail           :  {Email}\nLanguage  :  {Language}", wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax.transAxes)
+    fig, ax = plt.subplots(figsize=(8.27, 11.69))  # A4 크기 (인치 단위)
+    fig.subplots_adjust(left = 0.06, right = 0.94, top = 0.9, bottom = 0.1)  # 여백 설정
+    ax.text(0.01, 0.99, f"\n\n\nDate          :  {LifeGraphDate}\nName         :  {Name}\nAge             :  {Age}\nEmail         :  {Email}\nLanguage :  {Language}", wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax.transAxes)
     ax.axis('off')  # 텍스트 영역의 축 숨기기
     
     # 표지 페이지 저장
@@ -187,8 +187,8 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
 
     # 상단 그래프
     sns.barplot(x = 'AgeRange', y = 'Score', hue = 'AgeRange', data = DataFrame, palette = DataFrame['Color'].to_list(), dodge = False, ax = ax[0])
-    ax[0].set_title(f'\n\n', fontweight = 'bold')
-    ax[0].set_xlabel(f'\nAge', fontweight = 'bold')
+    ax[0].set_title(f'{Email}\n{FileName}\n', fontweight = 'bold')
+    ax[0].set_xlabel('\nAge', fontweight = 'bold')
     ax[0].set_ylabel('Happiness Score', fontweight = 'bold')
     # ax[0].legend().remove() # 범례 제거
     ax[0].set_yticks(range(-10, 11, 2)) # y축 눈금을 2단위로 설정
@@ -216,8 +216,7 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
             WrappedTexts.append(f"({row['LifeDataId']})  {row['StartAge']}-{row['EndAge']}:  {wrapped_text}\n")
         
     # 첫 번째는 22개, 그 후에는 50개 단위로 묶기
-    ProfileText = f"{LifeGraphDate}   |   {Name} ({Age})\n\n\n"
-    ReasonText = ProfileText + "\n".join(WrappedTexts)
+    ReasonText = "\n".join(WrappedTexts)
     ReasonLines = ReasonText.split('\n')
     PagedReasonLines = [ReasonLines[:22]] + [ReasonLines[i:i+50] for i in range(22, len(ReasonLines), 50)]
 
@@ -252,29 +251,44 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
 def PNGsToPDF(PNGPaths, PDFPath):
     # 디자인 포멧 경로
     DesignFormatPath = "/yaas/storage/s2_Meditation/Design_Format/LifeGraph_Design_Format/LifeGraph_Design_Format_"
-    
-    # 첫 번째 이미지 크기에 맞는 PDF 생성
-    FirstImage = Image.open(PNGPaths[0])
-    FirstWidth, FirstHeight = FirstImage.size
-    pdf = canvas.Canvas(PDFPath, pagesize=portrait((FirstWidth, FirstHeight)))
+    # PDF로 저장
+    A4Width, A4Height = A4
+    pdf = canvas.Canvas(PDFPath, pagesize = A4)
+
+    # 이미지 크기 조정
+    def ImageResize(Image, Width, Height):
+        ImageWidth, ImageHeight = Image.size
+        AspectRatio = ImageWidth / ImageHeight
+        if AspectRatio > 1:
+            NewWidth = Width
+            NewHeight = A4Width / AspectRatio
+        else:
+            NewHeight = Height
+            NewWidth = Height * AspectRatio
+        # 중앙에 이미지 배치
+        x = (Width - NewWidth) / 2
+        y = (Height - NewHeight) / 2
+        # 이미지 크기 조정
+        ResizedImage = Image.resize((int(NewWidth), int(NewHeight)), Image.LANCZOS)
+        return ResizedImage, x, y, NewWidth, NewHeight
 
     for i in range(len(PNGPaths)):
-        # 그래프 이미지와 디자인 포멧 불러오기
+        # 그래프 이미지와 디자인 포멧 불러오기 및 리사이즈
         image = Image.open(PNGPaths[i])
+        image, x, y, NewWidth, NewHeight = ImageResize(image, A4Width, A4Height)
         DesignFormat = Image.open(DesignFormatPath + f"{i}.png")
+        DesignFormat, x, y, NewWidth, NewHeight = ImageResize(DesignFormat, A4Width, A4Height)
         # 그래프 이미지와 디자인 포멧 합치기
         image = image.convert("RGBA")
         DesignFormat = DesignFormat.convert("RGBA")
         BlendedImage = ImageChops.multiply(DesignFormat, image)
         # 합쳐진 이미지 임시저장
-        BlendedImage.save(PNGPaths[i], "PNG", optimize=True)
+        BlendedImage.save(PNGPaths[i], "PNG")
         # 이미지를 PDF에 추가
-        pdf.drawImage(PNGPaths[i], 0, 0)
+        pdf.drawImage(PNGPaths[i], x, y, width = NewWidth, height = NewHeight)
         pdf.showPage()
         # PDF로 저장된 PNG 파일 제거
         os.remove(PNGPaths[i])
-
-    # PDF 파일 저장
     pdf.save()
 
 ## 추가행 업데이트

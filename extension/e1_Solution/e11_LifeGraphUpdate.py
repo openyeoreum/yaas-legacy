@@ -197,6 +197,12 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
         if {row['Score']} != 0:
             ax[0].text(index, row['Score'] / 2, str(row['Score']), color = 'white', ha = "center", weight = 'bold')
 
+    # 원형숫자로 변경
+    def NumberConverter(Number):
+        ConvertedNumbers = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩', '⑪', '⑫', '⑬', '⑭', '⑮']
+        Number = int(Number)
+        return ConvertedNumbers[Number-1]
+
     # 하단 절반을 위한 텍스트 준비 (단어 줄바꿈 포함)
     if Language == 'en':
         Width = 70
@@ -211,12 +217,12 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
             wrapped_text = "\n         ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
             
         if index == TotalRows - 1:
-            WrappedTexts.append(f"({row['LifeDataId']})  {row['StartAge']}-{row['EndAge']}:  {wrapped_text}")
+            WrappedTexts.append(f"{NumberConverter(row['LifeDataId'])}   {row['StartAge']}-{row['EndAge']} | {row['Score']}:  {wrapped_text}")
         else:
             WrappedTexts.append(f"({row['LifeDataId']})  {row['StartAge']}-{row['EndAge']}:  {wrapped_text}\n")
         
     # 첫 번째는 22개, 그 후에는 50개 단위로 묶기
-    ProfileText = f"{LifeGraphDate}   |   {Name} ({Age})\n\n\n"
+    ProfileText = f"|    {LifeGraphDate}    |    {Name}    |    0-{Age}    |\n\n\n"
     ReasonText = ProfileText + "\n".join(WrappedTexts)
     ReasonLines = ReasonText.split('\n')
     PagedReasonLines = [ReasonLines[:22]] + [ReasonLines[i:i+50] for i in range(22, len(ReasonLines), 50)]

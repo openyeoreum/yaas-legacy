@@ -149,11 +149,11 @@ def DownloadLifeGraph(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/cou
 def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
     # 폰트설정 (한글의 경우 노토산스 ko, 기존은 노토산스)
     if Language == 'ko':
-        FontPath = '/yaas/storage/s2_Meditation/Font/Noto_Sans_KR/NotoSansKR-VariableFont_wght.ttf'
+        FontPath = '/yaas/storage/s2_Meditation/Font/Noto_Sans_KR/static/NotoSansKR-Medium.ttf'
     else:
-        FontPath = '/yaas/storage/s2_Meditation/Font/Noto_Sans/NotoSans-VariableFont_wdth,wght.ttf'
-    Font = fm.FontProperties(fname = FontPath)
-    plt.rc('font', family = Font.get_name())
+        FontPath = '/yaas/storage/s2_Meditation/Font/Noto_Sans/static/NotoSans-Medium.ttf'
+    font = fm.FontProperties(fname = FontPath)
+    plt.rc('font', family = font.get_name())
     
     PNGPaths = []
     FilePath = f"/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/BeforeLifeGraphImages/"
@@ -334,4 +334,7 @@ def LifeGraphUpdate():
     UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList)
     
 if __name__ == "__main__":
-    LifeGraphUpdate()
+    # LifeGraphUpdate()
+    
+    import matplotlib
+    print(matplotlib.matplotlib_fname())

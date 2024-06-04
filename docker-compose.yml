@@ -30,7 +30,7 @@ services:
       - "5173:3000"
     volumes:
       - ./backend:/yaas/backend
-      # - ./extension:/yaas/extension
+      - ./extension:/yaas/extension
       # - /Users/remake/Library/Group Containers/G69SCX94XU.duck/Library/Application Support/duck/Volumes.noindex/Storage.localized:/yaas/storage
       # - /Volumes/Storage:/yaas/storage
       - ./storage:/yaas/storage

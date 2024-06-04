@@ -91,13 +91,37 @@ def PreprocessingLifeGraph(FirebaseJson, Quality):
     
     return DateSortedPreprocessedLifeGraphList
 
+## 다운받은 라이프그래프 최신데이터와 합치기
+def MergeRecentLifeGraph(RecentBeforeLifeGraphList, BeforeLifeGraphList):
+    RecentBeforeLifeGraphId = RecentBeforeLifeGraphList[0]['LifeGraphId']
+    
+    for i in range(len(BeforeLifeGraphList)):
+        if BeforeLifeGraphList[i]['LifeGraphId'] == RecentBeforeLifeGraphId:
+            NewBeforeLifeGraphList = BeforeLifeGraphList[:i]
+            
+    MergedBeforeLifeGraphList = NewBeforeLifeGraphList + RecentBeforeLifeGraphList
+    
+    return MergedBeforeLifeGraphList
+        
 ## 라이프그래프 데이터 다운로드 ##
 def DownloadLifeGraph(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/coursera-meditation-db-firebase-adminsdk-okrn4-80af02fd79.json', Quality = 0):
     # 저장경로 설정
-    BeforeLifeGraphStorage = f'/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/'
+    BeforeLifeGraphStorage = '/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/'
     FileName = f'{Date()}_BeforeLifeGraph.json'
     BeforeLifeGraphPath = BeforeLifeGraphStorage + FileName
-    if not os.path.exists(BeforeLifeGraphPath):
+    # 현재 폴더 파일 리스트
+    StoragFileList = os.listdir(BeforeLifeGraphStorage)
+    StoragJsonList = [file for file in StoragFileList if file.endswith('.json')]
+    SortedStoragFileList = sorted(StoragJsonList, key=lambda x: re.search(r'\d+', x).group(), reverse=True)
+    # 가장 최신 파일과, 파일이 여러개 있을 경우 필요 없는 하부 파일 삭제
+    RecentFileName = SortedStoragFileList[0]
+    RecentBeforeLifeGraphPath = BeforeLifeGraphStorage + RecentFileName
+    if len(SortedStoragFileList) >= 3:
+        RemoveFileName = SortedStoragFileList[2:]
+        for RemoveFile in RemoveFileName:
+            os.remove(BeforeLifeGraphStorage + RemoveFile)
+
+    if BeforeLifeGraphPath != RecentBeforeLifeGraphPath:
         # 서비스 계정
         SERVICE_ACCOUNT_FILE = AccountFilePath
         Credentials = credentials.Certificate(SERVICE_ACCOUNT_FILE)
@@ -106,10 +130,15 @@ def DownloadLifeGraph(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/cou
         reference = db.reference('/')
         FirebaseJson = reference.get()
         BeforeLifeGraphList = PreprocessingLifeGraph(FirebaseJson, Quality)
+        # 다운받은 라이프그래프 최신데이터와 합치기
+        with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as RecentBeforeLifeGraphJson:
+            RecentBeforeLifeGraphList = json.load(RecentBeforeLifeGraphJson)
+        MergedBeforeLifeGraphList = MergeRecentLifeGraph(RecentBeforeLifeGraphList, BeforeLifeGraphList)
+        # 합쳐진 라이프 그래프 저장
         with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
-            json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
-        print(f'[ 버전({Date()}) 라이프그래프 다운로드 : {FileName} ]')
-        return BeforeLifeGraphPath, BeforeLifeGraphList
+            json.dump(MergedBeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
+        print(f'[ 버전({Date()}) 라이프그래프 다운로드 및 업데이트 : {FileName} ]')
+        return BeforeLifeGraphPath, MergedBeforeLifeGraphList 
     else:
         with open(BeforeLifeGraphPath, 'r', encoding = 'utf-8') as BeforeLifeGraphJson:
             BeforeLifeGraphList = json.load(BeforeLifeGraphJson)

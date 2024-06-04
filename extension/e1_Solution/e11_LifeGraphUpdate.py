@@ -346,7 +346,7 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
             UpdateSheet(Row = row, Colum = 3, Data = Name)
             UpdateSheet(Row = row, Colum = 4, Data = Age)
             UpdateSheet(Row = row, Colum = 5, Data = Email)
-            UpdateSheet(Row = row, Type = 'Link', Colum = 6, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
+            UpdateSheet(Row = row, Type = 'Link', Colum = 7, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
             
             UpdateCount += 1
             if UpdateCount >= 10:

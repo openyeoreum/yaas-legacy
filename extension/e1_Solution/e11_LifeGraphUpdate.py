@@ -193,14 +193,14 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
     TotalRows = len(DataFrame)
     for index, row in DataFrame.iterrows():
         if row['LifeDataId'] <= 9:
-            wrapped_text = "\n      ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
+            wrapped_text = "\n       ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
         else:
-            wrapped_text = "\n        ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
+            wrapped_text = "\n         ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
             
         if index == TotalRows - 1:
-            WrappedTexts.append(f"({row['LifeDataId']}) {row['StartAge']}-{row['EndAge']}:  {wrapped_text}")
+            WrappedTexts.append(f"({row['LifeDataId']})  {row['StartAge']}-{row['EndAge']}:  {wrapped_text}")
         else:
-            WrappedTexts.append(f"({row['LifeDataId']}) {row['StartAge']}-{row['EndAge']}:  {wrapped_text}\n")
+            WrappedTexts.append(f"({row['LifeDataId']})  {row['StartAge']}-{row['EndAge']}:  {wrapped_text}\n")
         
     # 첫 번째는 25개, 그 후에는 54개 단위로 묶기
     ReasonText = "\n".join(WrappedTexts)

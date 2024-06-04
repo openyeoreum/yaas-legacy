@@ -109,7 +109,7 @@ def DownloadLifeGraph(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/cou
         with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
             json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
         print(f'[ 버전({Date()}) 라이프그래프 다운로드 : {FileName} ]')
-        return BeforeLifeGraphList
+        return BeforeLifeGraphPath, BeforeLifeGraphList
     else:
         with open(BeforeLifeGraphPath, 'r', encoding = 'utf-8') as BeforeLifeGraphJson:
             BeforeLifeGraphList = json.load(BeforeLifeGraphJson)

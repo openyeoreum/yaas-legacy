@@ -18,7 +18,6 @@ def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
     envPath = os.path.join(os.path.dirname(__file__), '..', 'storage', '.env')
     load_dotenv(dotenv_path = envPath)
 
-
     if isinstance(projectNameList, list):
         ## NFC, NFD 오류 문제 해결 (모두 적용)
         for projectName in projectNameList:

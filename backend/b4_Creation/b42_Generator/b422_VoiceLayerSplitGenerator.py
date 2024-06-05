@@ -607,13 +607,13 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
                 my_actors = r.json()['result']
                 
                 if my_actors[0]['name']['ko'] == name:
-                    # print(Chunk)
-                    # print(RandomEMOTION)
-                    # print(RandomSPEED)
-                    # print(Pitch)
-                    # print(RandomLASTPITCH)
-                    # print(voiceLayerPath)
-                    # print(my_actors)
+                    # print(f'Chunk: {Chunk}')
+                    # print(f'RandomEMOTION: {RandomEMOTION}')
+                    # print(f'RandomSPEED: {RandomSPEED}')
+                    # print(f'Pitch: {Pitch}')
+                    # print(f'RandomLASTPITCH: {RandomLASTPITCH}')
+                    # print(f'voiceLayerPath: {voiceLayerPath}')
+                    # print(f'my_actors: {my_actors}')
                     my_first_actor = my_actors[0]
                     my_first_actor_id = my_first_actor['actor_id']
 
@@ -635,11 +635,12 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
                         'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
                         'last_pitch': RandomLASTPITCH, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
                     })
+                    print(r.json())
                     speak_url = r.json()['result']['speak_v2_url']
 
                     # polling the speech synthesis result
                     for _ in range(120):
-                        r = requests.get(speak_url, headers=HEADERS)
+                        r = requests.get(speak_url, headers = HEADERS)
                         ret = r.json()['result']
                         # audio is ready
                         if ret['status'] == 'done':
@@ -1385,11 +1386,11 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 if History['EditId'] == EditId and History["ActorName"] == Name:
                     if History['ActorName'] != Name:
                         Modify = "Yes"
-                        print(f"[ Modify: {Modify}, 성우변경 ]\n({History['ActorName']})\n({Name})")
+                        print(f"[ Modify: {Modify}, (성우) 변경 ]\n({History['ActorName']})\n({Name})")
                         History['ActorName'] = Name
                     if History['ActorChunk'] != OriginChunk:
                         Modify = "Yes"
-                        print(f"[ Modify: {Modify}, 내용변경 ]\n({History['ActorChunk']})\n({OriginChunk})")
+                        print(f"[ Modify: {Modify}, (내용) 변경 ]\n({History['ActorChunk']})\n({OriginChunk})")
                         History['ActorChunk'] = OriginChunk
                     if History['Tag'] != Tag:
                         History['Tag'] = Tag

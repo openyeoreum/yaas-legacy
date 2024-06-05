@@ -635,7 +635,6 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
                         'force_length': 0, # text의 시간을 max_seconds에 맞추려면 1, 기본값은 0
                         'last_pitch': RandomLASTPITCH, # 문장 끝의 피치제어로, 기본값은 0, 범위: -2(최저) - 2(최고)
                     })
-                    print(r.json())
                     speak_url = r.json()['result']['speak_v2_url']
 
                     # polling the speech synthesis result

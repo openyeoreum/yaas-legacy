@@ -684,7 +684,7 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
                 else:
                     return name
                 ########## TypeCast API 요청 ##########
-            except KeyError:
+            except KeyError as e:
                 attempt += 1
                 print(f"[ KeyError 발생, 재시도 {attempt}/60: {e} ]")
                 time.sleep(60)  # 1분 대기 후 재시도

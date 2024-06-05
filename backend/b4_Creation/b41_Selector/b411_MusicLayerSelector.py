@@ -1385,6 +1385,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
 ## 10-15분 미리듣기 생성 ##
 def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath):
     AudiobookPreviewSecond = 0
+    AudiobookPreviewSize = 0
     
     if RawPreviewSound.duration_seconds >= 900:
         PreviewSecond = 0

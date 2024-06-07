@@ -22,6 +22,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
 from matplotlib import font_manager, rc
 from tqdm import tqdm
 from datetime import datetime
@@ -34,8 +35,13 @@ from firebase_admin import credentials
 from firebase_admin import db
 from reportlab.lib.pagesizes import portrait
 from reportlab.pdfgen import canvas
-        
-### 라이프그래프 데이터 다운로드 ###
+
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse
+
+#########################
+##### InputList 생성 #####
+#########################
+### 라이프그래프 데이터 로드 ###
 def LoadLifeGraph():
     # 로드경로 설정
     BeforeLifeGraphStorage = '/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/'
@@ -49,30 +55,64 @@ def LoadLifeGraph():
     with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as BeforeLifeGraphJson:
         BeforeLifeGraphList = json.load(BeforeLifeGraphJson)
         
-    return BeforeLifeGraphList
+    return BeforeLifeGraphList, RecentBeforeLifeGraphPath
 
-## 라이프그래프를 InputText로
-def LifeGraphToInputText(LifeGraph):
-    Date = f"[작성일] {LifeGraph['LifeGraphDate']}\n"
-    Name = f"[이름] {LifeGraph['Name']}\n"
-    Age = f"[나이] {LifeGraph['Age']}\n"
-    Email = f"[이메일] {LifeGraph['Email']}\n\n"
-    InputText = Date + Name + Age + Email
-    for i in range(len(LifeGraph['LifeData'])):
-        age = f"[시기] {LifeGraph['LifeData'][i]['StartAge']}-{LifeGraph['LifeData'][i]['EndAge']}\n"
-        score = f"[행복지수] {LifeGraph['LifeData'][i]['Score']}\n"
-        if i < len(LifeGraph['LifeData']) - 1:
-            reason = f"[내용] {LifeGraph['LifeData'][i]['ReasonGlobal']}\n\n"
-        else:
-            reason = f"[내용] {LifeGraph['LifeData'][i]['ReasonGlobal']}"
-        InputText = InputText + age + score + reason
+## 라이프그래프를 InputList로
+def LifeGraphToInputList():
+    BeforeLifeGraphList, RecentBeforeLifeGraphPath = LoadLifeGraph()
     
-    return InputText 
+    InputList = []
+    for i in range(len(BeforeLifeGraphList)):
+        if 'LifeGraphFile' in BeforeLifeGraphList[i] and 'LifeGraphAnalysis' not in BeforeLifeGraphList[i]:
+            Date = f"[작성일] {BeforeLifeGraphList[i]['LifeGraphDate']}\n"
+            Name = f"[이름] {BeforeLifeGraphList[i]['Name']}\n"
+            Age = f"[나이] {BeforeLifeGraphList[i]['Age']}\n"
+            Email = f"[이메일] {BeforeLifeGraphList[i]['Email']}\n\n"
+            LifeGraphText = Date + Name + Age + Email
+            for j in range(len(LifeGraph['LifeData'])):
+                age = f"[시기] {LifeGraph['LifeData'][j]['StartAge']}-{LifeGraph['LifeData'][j]['EndAge']}\n"
+                score = f"[행복지수] {LifeGraph['LifeData'][j]['Score']}\n"
+                if j < len(LifeGraph['LifeData']) - 1:
+                    reason = f"[내용] {LifeGraph['LifeData'][j]['ReasonGlobal']}\n\n"
+                else:
+                    reason = f"[내용] {LifeGraph['LifeData'][j]['ReasonGlobal']}"
+                LifeGraphText = LifeGraphText + age + score + reason
+            InputDic = {'Id': i+1, 'LifeGraph': LifeGraphText}
+            InputList.append(InputDic)
+    
+    return InputList, RecentBeforeLifeGraphPath
+
+######################
+##### Filter 조건 #####
+######################
+def LifeGraphAnalysisFilter(Response):
+    return Response
 
 ### 라이프그래프 분석 ###
-def LifeGraphAnalysis(BeforeLifeGraphList):
-    for LifeGraph in BeforeLifeGraphList:
-        InputText = LifeGraphToInputText(LifeGraph)
+def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", MessagesReview = "on", mode = "Master"):
+    InputList, RecentBeforeLifeGraphPath = LifeGraphToInputList()
+    ErrorCount = 0
+    InputCount = len(InputList)
+    for i in range(len(InputList)):
+        Input = InputList[i]
+        ProcessCount = i + 1
+        
+        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, messagesReview = MessagesReview)
+        Filter = LifeGraphAnalysisFilter(Response)
+        
+        if isinstance(Filter, str):
+            print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
+            ErrorCount1 += 1
+            print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회, 2분 후 프롬프트 재시도")
+            time.sleep(120)
+            if ErrorCount1 == 5:
+                sys.exit(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회 초과, 프롬프트 종료")
+            continue
+        else:
+            OutputDic = Filter
+            print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | JSONDecode 완료")
+            ErrorCount1 = 0
+        
         
 
 ## 라이프그래프의 이미지화(PNG)

@@ -34,82 +34,11 @@ from firebase_admin import credentials
 from firebase_admin import db
 from reportlab.lib.pagesizes import portrait
 from reportlab.pdfgen import canvas
-
-## 오늘 날짜 설정
-def Date(Option = "Day"):
-    if Option == "Day":
-      now = datetime.now()
-      date = now.strftime('%y%m%d')
-    elif Option == "Second":
-      now = datetime.now()
-      date = now.strftime('%y%m%d%H%M%S')
-    
-    return date
-
-## 라이프그래프 데이터 전처리
-def PreprocessingLifeGraph(FirebaseJson, Answer):
-    # 라이프 그래프의 리스트화
-    RawLifeGraphList = list(FirebaseJson.items())
-    # 라이프 그래프 전처리
-    DatePattern = re.compile(r"\d{4}-\d{2}-\d{2}")
-    PreprocessedLifeGraphList = []
-    for i in range(len(RawLifeGraphList)):
-        LifeGraphId = i + 1
-        LifeGraphDate = DatePattern.search(RawLifeGraphList[i][1]['graph_url']).group()
-        Name = RawLifeGraphList[i][0].strip()
-        Progress = None
-        Age = RawLifeGraphList[i][1]['age']
-        Residence = None
-        PhoneNumber = None
-        Email = RawLifeGraphList[i][1]['email']
-        LifeData = []
-        LifeDataReasons = []
-        AnswerCount = 0
-        for j in range(len(RawLifeGraphList[i][1]['lifeData'])):
-            LifeDataId = j + 1
-            StartAge = RawLifeGraphList[i][1]['lifeData'][j]['startAge']
-            EndAge = RawLifeGraphList[i][1]['lifeData'][j]['endAge']
-            Score = RawLifeGraphList[i][1]['lifeData'][j]['score']
-            ReasonGlobal = RawLifeGraphList[i][1]['lifeData'][j]['reason']
-            LifeDataDic = {"LifeDataId": LifeDataId, "StartAge": StartAge, "EndAge": EndAge, "Score": Score, "ReasonGlobal": ReasonGlobal}
-            LifeData.append(LifeDataDic)
-            if ReasonGlobal != '':
-                AnswerCount += 1
-            LifeDataReasons.append(ReasonGlobal)
-        
-        LifeDataReasonsText = " ".join(LifeDataReasons)
-        try:
-            Language = detect(LifeDataReasonsText)
-        except:
-            Language = None
-        _Answer = AnswerCount
-        
-        LifeGraphDic = {"LifeGraphId": f"{str(LifeGraphId) + '-' + LifeGraphDate}", "LifeGraphDate": LifeGraphDate, "Name": Name, "Progress": Progress, "Age": Age, "Language": Language, "Residence": Residence, "PhoneNumber": PhoneNumber, "Email": Email, "Answer": _Answer, "LifeData": LifeData}
-        if _Answer >= Answer:
-            PreprocessedLifeGraphList.append(LifeGraphDic)
-    # 라이프 그래프 날짜순으로 정리
-    DateSortedPreprocessedLifeGraphList = sorted(PreprocessedLifeGraphList, key = lambda x: datetime.strptime(x["LifeGraphDate"], "%Y-%m-%d"), reverse=True)
-    
-    return DateSortedPreprocessedLifeGraphList
-
-## 다운받은 라이프그래프 최신데이터와 합치기
-def MergeRecentLifeGraph(RecentBeforeLifeGraphList, BeforeLifeGraphList):
-    RecentBeforeLifeGraphId = RecentBeforeLifeGraphList[0]['LifeGraphId']
-    
-    for i in range(len(BeforeLifeGraphList)):
-        if BeforeLifeGraphList[i]['LifeGraphId'] == RecentBeforeLifeGraphId:
-            NewBeforeLifeGraphList = BeforeLifeGraphList[:i]
-            
-    MergedBeforeLifeGraphList = NewBeforeLifeGraphList + RecentBeforeLifeGraphList
-    
-    return MergedBeforeLifeGraphList
         
 ### 라이프그래프 데이터 다운로드 ###
-def DownloadLifeGraph(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/coursera-meditation-db-firebase-adminsdk-okrn4-80af02fd79.json', Answer = 0):
-    # 저장경로 설정
+def LoadLifeGraph():
+    # 로드경로 설정
     BeforeLifeGraphStorage = '/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/'
-    FileName = f'{Date()}_BeforeLifeGraph.json'
-    BeforeLifeGraphPath = BeforeLifeGraphStorage + FileName
     # 현재 폴더 파일 리스트
     StoragFileList = os.listdir(BeforeLifeGraphStorage)
     StoragJsonList = [file for file in StoragFileList if file.endswith('.json')]
@@ -117,34 +46,34 @@ def DownloadLifeGraph(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/cou
     # 가장 최신 파일과, 파일이 여러개 있을 경우 필요 없는 하부 파일 삭제
     RecentFileName = SortedStoragFileList[0]
     RecentBeforeLifeGraphPath = BeforeLifeGraphStorage + RecentFileName
-    if len(SortedStoragFileList) >= 3:
-        RemoveFileName = SortedStoragFileList[2:]
-        for RemoveFile in RemoveFileName:
-            os.remove(BeforeLifeGraphStorage + RemoveFile)
+    with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as BeforeLifeGraphJson:
+        BeforeLifeGraphList = json.load(BeforeLifeGraphJson)
+        
+    return BeforeLifeGraphList
 
-    if BeforeLifeGraphPath != RecentBeforeLifeGraphPath:
-        # 서비스 계정
-        SERVICE_ACCOUNT_FILE = AccountFilePath
-        Credentials = credentials.Certificate(SERVICE_ACCOUNT_FILE)
-        firebase_admin.initialize_app(Credentials, {'databaseURL': 'https://coursera-meditation-db.firebaseio.com/'})
-        # 다운로드 및 JSON 파일 저장
-        reference = db.reference('/')
-        FirebaseJson = reference.get()
-        BeforeLifeGraphList = PreprocessingLifeGraph(FirebaseJson, Answer)
-        # 다운받은 라이프그래프 최신데이터와 합치기
-        with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as RecentBeforeLifeGraphJson:
-            RecentBeforeLifeGraphList = json.load(RecentBeforeLifeGraphJson)
-        MergedBeforeLifeGraphList = MergeRecentLifeGraph(RecentBeforeLifeGraphList, BeforeLifeGraphList)
-        # 합쳐진 라이프 그래프 저장
-        with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
-            json.dump(MergedBeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
-        print(f'[ 버전({Date()}) 라이프그래프 다운로드 및 업데이트 : {FileName} ]')
-        return BeforeLifeGraphPath, MergedBeforeLifeGraphList 
-    else:
-        with open(BeforeLifeGraphPath, 'r', encoding = 'utf-8') as BeforeLifeGraphJson:
-            BeforeLifeGraphList = json.load(BeforeLifeGraphJson)
-        print(f'[ 현재 라이프그래프는 최신버전({Date()}) : {FileName} ]')
-        return BeforeLifeGraphPath, BeforeLifeGraphList
+## 라이프그래프를 InputText로
+def LifeGraphToInputText(LifeGraph):
+    Date = f"[작성일] {LifeGraph['LifeGraphDate']}\n"
+    Name = f"[이름] {LifeGraph['Name']}\n"
+    Age = f"[나이] {LifeGraph['Age']}\n"
+    Email = f"[이메일] {LifeGraph['Email']}\n\n"
+    InputText = Date + Name + Age + Email
+    for i in range(len(LifeGraph['LifeData'])):
+        age = f"[시기] {LifeGraph['LifeData'][i]['StartAge']}-{LifeGraph['LifeData'][i]['EndAge']}\n"
+        score = f"[행복지수] {LifeGraph['LifeData'][i]['Score']}\n"
+        if i < len(LifeGraph['LifeData']) - 1:
+            reason = f"[내용] {LifeGraph['LifeData'][i]['ReasonGlobal']}\n\n"
+        else:
+            reason = f"[내용] {LifeGraph['LifeData'][i]['ReasonGlobal']}"
+        InputText = InputText + age + score + reason
+    
+    return InputText 
+
+### 라이프그래프 분석 ###
+def LifeGraphAnalysis(BeforeLifeGraphList):
+    for LifeGraph in BeforeLifeGraphList:
+        InputText = LifeGraphToInputText(LifeGraph)
+        
 
 ## 라이프그래프의 이미지화(PNG)
 def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):   
@@ -351,7 +280,6 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
             Name = BeforeLifeGraphList[i]['Name']
             Age = BeforeLifeGraphList[i]['Age']
             Language = BeforeLifeGraphList[i]['Language']
-            Answer = BeforeLifeGraphList[i]['Answer']
             Email = BeforeLifeGraphList[i]['Email']
             LifeData = BeforeLifeGraphList[i]['LifeData']
             
@@ -366,10 +294,8 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
             UpdateSheet(Row = row, Colum = 2, Data = Date)
             UpdateSheet(Row = row, Colum = 3, Data = Name)
             UpdateSheet(Row = row, Colum = 4, Data = Age)
-            UpdateSheet(Row = row, Colum = 5, Data = Language)
-            UpdateSheet(Row = row, Colum = 7, Data = Answer)
-            UpdateSheet(Row = row, Colum = 9, Data = Email)
-            UpdateSheet(Row = row, Type = 'Link', Colum = 10, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
+            UpdateSheet(Row = row, Colum = 8, Data = Email)
+            UpdateSheet(Row = row, Type = 'Link', Colum = 9, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
             
             UpdateCount += 1
             if UpdateCount >= 5:
@@ -382,12 +308,16 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
         with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
             json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
 
-#########################
-### 라이프 그래프 업데이트 ###
-#########################
-def LifeGraphUpdate():
-    BeforeLifeGraphPath, BeforeLifeGraphList = DownloadLifeGraph()
-    UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList)
+# #########################
+# ### 라이프 그래프 업데이트 ###
+# #########################
+# def LifeGraphUpdate():
+#     BeforeLifeGraphPath, BeforeLifeGraphList = DownloadLifeGraph()
+#     UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList)
     
 if __name__ == "__main__":
-    LifeGraphUpdate()
+    with open('/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/240605_BeforeLifeGraph.json', 'r', encoding = 'utf-8') as BeforeLifeGraphJson:
+        BeforeLifeGraphList = json.load(BeforeLifeGraphJson)
+    LifeGraph = BeforeLifeGraphList[2]
+    InputText = LifeGraphToInputText(LifeGraph)
+    print(InputText)

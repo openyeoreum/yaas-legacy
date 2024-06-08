@@ -120,6 +120,7 @@ def LifeGraphAnalysisKoFilter(Response):
 def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", MessagesReview = "on", mode = "Master", Answer = 6):
     ## LifeGraphAnalysisProcess
     promptFrameKoPath = "/yaas/extension/e3_Database/e31_PromptData/e311_LifeGraphPrompt/b311-01_LifeGraphAnalysisKo.json"
+    promptFrameEoPath = "/yaas/extension/e3_Database/e31_PromptData/e311_LifeGraphPrompt/b311-02_LifeGraphAnalysisEn.json"
     InputList, RecentBeforeLifeGraphPath = LifeGraphToInputList(Answer)
     with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as RecentBeforeLifeGraph:
         RecentBeforeLifeGraphList = json.load(RecentBeforeLifeGraph)
@@ -135,7 +136,6 @@ def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", 
         ## LifeGraphAnalysisProcess Response 생성
         # 라이프 그래프 언어가 한글인 경우
         if Language == 'ko':
-            print(Language)
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, PromptFramePath = promptFrameKoPath, Mode = mode, messagesReview = MessagesReview)
             Filter = LifeGraphAnalysisKoFilter(Response)
             
@@ -180,8 +180,10 @@ def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", 
                     
                 with open(RecentBeforeLifeGraphPath, 'w', encoding = 'utf-8') as RecentBeforeLifeGraphJson:
                     json.dump(RecentBeforeLifeGraphList, RecentBeforeLifeGraphJson, ensure_ascii = False, indent = 4)
-        # # 라이프 그래프 언어가 한글이 아닌 경우
-        # else:
+        # 라이프 그래프 언어가 한글이 아닌 경우
+        else:
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, PromptFramePath = promptFrameEnPath, Mode = mode, messagesReview = MessagesReview)
+            Filter = LifeGraphAnalysisEnFilter(Response)
         
         # 다음 아이템으로 이동
         i += 1

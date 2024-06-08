@@ -1,0 +1,274 @@
+{
+    "TaskName": "LifeGraphAnalysis",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-3.5-turbo",
+            "LongTokensModel": "gpt-4o"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "gpt-4o"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-haiku-20240307",
+            "LongTokensModel": "claude-3-haiku-20240307"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-opus-20240229"
+    },
+    "Temperature": 0.7,
+    "OutputTokensRatio": 0.5,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(Role)\n",
+            "Message": "There is a <Life Graph> that divides the entire life of the 'author' by age and writes the happiness score for each period and the reasons for it.\nThrough the <Life Graph>, you are a 'subtraction meditation expert' who finds the (mind) of the 'author' and helps the 'author' find their true self by discarding that (mind) through (subtraction meditation).\nTherefore, you now analyze the (mind) that the 'author' has significantly through the <Life Graph> and write <Life Graph Analysis.json>."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(Mind)\n",
+                    "Message": "From the moment a person is born, they store what they see, hear, and experience in their mind through their five senses. It is stored in the mind like a photograph. Just as a photograph is a fake that captures a scene of the world as it is, the photographs in a person's mind are also fake. It is already a past that has passed, but it is only stored in my mind.\n\n(Subtraction Meditation)\nWhen people think of 'meditation', they often think of calming the breath or mind.\nSubtraction meditation is a meditation that discards the things inside me, and the mind actually becomes empty.\nJust as when sand settles in muddy water, the water looks clear at that moment, but it becomes dirty again when shaken, the mind is the same.\nJust as water and soil must be completely scooped out and discarded to be truly clean, and the container must be emptied to hold clean new water, discarding everything inside me allows me to regain my true nature, which is my true self.\n\n(Effects of Subtraction Meditation)\nAs you discard the photos stored in your mind like this, your mind becomes cleaner.\nAs the original mind is revealed, you become aware of your true self.\nAs you empty your mind, your daily life changes. When you completely break free from your own mind, you can achieve human completion.\n\n- You no longer dwell on your past and things that have passed.\n- You can objectively look at yourself and continuously grow.\n- Dusty thoughts, distractions, and negative minds disappear.\n- Your mind is where your body is, so you focus only on what you are doing now.\n- When stress disappears, your body becomes healthy.\n- The size of your mind grows, giving you the room to consider the other person's perspective.\n- You don't get dragged by emotions, so you don't lash out in anger and then regret it.\n\n(Mind Patterns)\nResilient Type: There are ups and downs, but with good resilience, it gradually finds stability.\nControlled Type: Usually stable, but greater growth is expected through the utilization of latent abilities.\nExpressive Type: Engages in active activities but needs to seek stability by considering the surrounding situation.\nLatent Type: Currently slow in demonstrating abilities, but has the potential for great achievements in the future."
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Format)\n",
+                    "Message": "{'AuthorInfo': {'Date': 'YYYY-MM-DD', 'Author': 'Author's name', 'Age': 'Author's age', 'Nationality': 'Estimated author's nationality', 'MindPattern': 'Choose from Resilient, Controlled, Expressive, Latent', 'MindProblems': ['Write 3-5 keywords', 'of mind problem types', 'the author wants to solve', 'as a list'], 'MindAbilities': ['Write 3-5 keywords', 'of mind ability types', 'that are positive and empowering', 'in the author's life', 'as a list']}, 'ImportantPeriods': [{'Period': 'Write the start age-end age of the selected period as is', 'HappinessIndex': 'Write the happiness index of the selected period as is', 'Content': 'Write the content of the selected period as is', 'Mind': 'Estimate and write the mind problem the author most wanted to solve in that period', 'Cause': 'Estimate and write the cause of that mind arising for the author in that period', 'ExpectedQuestion': 'Estimate and write the question the author would definitely ask if they met a subtraction meditation expert to solve the mind problem', 'ExpectedAnswer': 'As a subtraction meditation expert, write an expected answer that supports the author's life and conveys that by subtracting the mind, they can solve the problem of the expected question and gain very positive effects'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Procedure)\n",
+                    "Message": "- Author Information\n1. According to the (<Life Graph Analysis.json> Writing Format), write the 'Date', 'Author', 'Age' in 'AuthorInfo'.\n2. Estimate and write 'Nationality', 'MindPattern', 'MindProblems', 'MindAbilities' from 'AuthorInfo' through the <Life Graph>.\n\n- Important Periods\n3. Select 3-5 'Important Periods' from the <Life Graph> that have a major impact on the 'author's life.\n4. According to the (<Life Graph Analysis.json> Writing Format), write the selected 3-5 'Important Periods' as a list of 'Period', 'HappinessIndex', and 'Content'.\n5. For 'Mind', estimate and write the mind problem the author most wanted to solve in that period.\n6. For 'ExpectedQuestion', estimate and write the question the author would definitely ask if they met a subtraction meditation expert to solve the mind problem.\n7. For 'ExpectedAnswer', as a subtraction meditation expert, write an expected answer that supports the author's life and conveys that by subtracting the mind, they can solve the problem of the expected question and gain very positive effects."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Start)\n",
+                    "InputMark": "<Life Graph>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<Life Graph Analysis.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(Role)\n",
+            "Message": "There is a <Life Graph> that divides the entire life of the 'author' by age and writes the happiness score for each period and the reasons for it.\nThrough the <Life Graph>, you are a 'subtraction meditation expert' who finds the (mind) of the 'author' and helps the 'author' find their true self by discarding that (mind) through (subtraction meditation).\nTherefore, you now analyze the (mind) that the 'author' has significantly through the <Life Graph> and write <Life Graph Analysis.json>."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(Mind)\n",
+                    "Message": "From the moment a person is born, they store what they see, hear, and experience in their mind through their five senses. It is stored in the mind like a photograph. Just as a photograph is a fake that captures a scene of the world as it is, the photographs in a person's mind are also fake. It is already a past that has passed, but it is only stored in my mind.\n\n(Subtraction Meditation)\nWhen people think of 'meditation', they often think of calming the breath or mind.\nSubtraction meditation is a meditation that discards the things inside me, and the mind actually becomes empty.\nJust as when sand settles in muddy water, the water looks clear at that moment, but it becomes dirty again when shaken, the mind is the same.\nJust as water and soil must be completely scooped out and discarded to be truly clean, and the container must be emptied to hold clean new water, discarding everything inside me allows me to regain my true nature, which is my true self.\n\n(Effects of Subtraction Meditation)\nAs you discard the photos stored in your mind like this, your mind becomes cleaner.\nAs the original mind is revealed, you become aware of your true self.\nAs you empty your mind, your daily life changes. When you completely break free from your own mind, you can achieve human completion.\n\n- You no longer dwell on your past and things that have passed.\n- You can objectively look at yourself and continuously grow.\n- Dusty thoughts, distractions, and negative minds disappear.\n- Your mind is where your body is, so you focus only on what you are doing now.\n- When stress disappears, your body becomes healthy.\n- The size of your mind grows, giving you the room to consider the other person's perspective.\n- You don't get dragged by emotions, so you don't lash out in anger and then regret it.\n\n(Mind Patterns)\nResilient Type: There are ups and downs, but with good resilience, it gradually finds stability.\nControlled Type: Usually stable, but greater growth is expected through the utilization of latent abilities.\nExpressive Type: Engages in active activities but needs to seek stability by considering the surrounding situation.\nLatent Type: Currently slow in demonstrating abilities, but has the potential for great achievements in the future."
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Format)\n",
+                    "Message": "{'AuthorInfo': {'Date': 'YYYY-MM-DD', 'Author': 'Author's name', 'Age': 'Author's age', 'Nationality': 'Estimated author's nationality', 'MindPattern': 'Choose from Resilient, Controlled, Expressive, Latent', 'MindProblems': ['Write 3-5 keywords', 'of mind problem types', 'the author wants to solve', 'as a list'], 'MindAbilities': ['Write 3-5 keywords', 'of mind ability types', 'that are positive and empowering', 'in the author's life', 'as a list']}, 'ImportantPeriods': [{'Period': 'Write the start age-end age of the selected period as is', 'HappinessIndex': 'Write the happiness index of the selected period as is', 'Content': 'Write the content of the selected period as is', 'Mind': 'Estimate and write the mind problem the author most wanted to solve in that period', 'Cause': 'Estimate and write the cause of that mind arising for the author in that period', 'ExpectedQuestion': 'Estimate and write the question the author would definitely ask if they met a subtraction meditation expert to solve the mind problem', 'ExpectedAnswer': 'As a subtraction meditation expert, write an expected answer that supports the author's life and conveys that by subtracting the mind, they can solve the problem of the expected question and gain very positive effects'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Procedure)\n",
+                    "Message": "- Author Information\n1. According to the (<Life Graph Analysis.json> Writing Format), write the 'Date', 'Author', 'Age' in 'AuthorInfo'.\n2. Estimate and write 'Nationality', 'MindPattern', 'MindProblems', 'MindAbilities' from 'AuthorInfo' through the <Life Graph>.\n\n- Important Periods\n3. Select 3-5 'Important Periods' from the <Life Graph> that have a major impact on the 'author's life.\n4. According to the (<Life Graph Analysis.json> Writing Format), write the selected 3-5 'Important Periods' as a list of 'Period', 'HappinessIndex', and 'Content'.\n5. For 'Mind', estimate and write the mind problem the author most wanted to solve in that period.\n6. For 'ExpectedQuestion', estimate and write the question the author would definitely ask if they met a subtraction meditation expert to solve the mind problem.\n7. For 'ExpectedAnswer', as a subtraction meditation expert, write an expected answer that supports the author's life and conveys that by subtracting the mind, they can solve the problem of the expected question and gain very positive effects."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Start)\n",
+                    "InputMark": "<Life Graph>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<Life Graph Analysis.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(Role)\n",
+            "Message": "There is a <Life Graph> that divides the entire life of the 'author' by age and writes the happiness score for each period and the reasons for it.\nThrough the <Life Graph>, you are a 'subtraction meditation expert' who finds the (mind) of the 'author' and helps the 'author' find their true self by discarding that (mind) through (subtraction meditation).\nTherefore, you now analyze the (mind) that the 'author' has significantly through the <Life Graph> and write <Life Graph Analysis.json>."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(Mind)\n",
+                    "Message": "From the moment a person is born, they store what they see, hear, and experience in their mind through their five senses. It is stored in the mind like a photograph. Just as a photograph is a fake that captures a scene of the world as it is, the photographs in a person's mind are also fake. It is already a past that has passed, but it is only stored in my mind.\n\n(Subtraction Meditation)\nWhen people think of 'meditation', they often think of calming the breath or mind.\nSubtraction meditation is a meditation that discards the things inside me, and the mind actually becomes empty.\nJust as when sand settles in muddy water, the water looks clear at that moment, but it becomes dirty again when shaken, the mind is the same.\nJust as water and soil must be completely scooped out and discarded to be truly clean, and the container must be emptied to hold clean new water, discarding everything inside me allows me to regain my true nature, which is my true self.\n\n(Effects of Subtraction Meditation)\nAs you discard the photos stored in your mind like this, your mind becomes cleaner.\nAs the original mind is revealed, you become aware of your true self.\nAs you empty your mind, your daily life changes. When you completely break free from your own mind, you can achieve human completion.\n\n- You no longer dwell on your past and things that have passed.\n- You can objectively look at yourself and continuously grow.\n- Dusty thoughts, distractions, and negative minds disappear.\n- Your mind is where your body is, so you focus only on what you are doing now.\n- When stress disappears, your body becomes healthy.\n- The size of your mind grows, giving you the room to consider the other person's perspective.\n- You don't get dragged by emotions, so you don't lash out in anger and then regret it.\n\n(Mind Patterns)\nResilient Type: There are ups and downs, but with good resilience, it gradually finds stability.\nControlled Type: Usually stable, but greater growth is expected through the utilization of latent abilities.\nExpressive Type: Engages in active activities but needs to seek stability by considering the surrounding situation.\nLatent Type: Currently slow in demonstrating abilities, but has the potential for great achievements in the future."
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Format)\n",
+                    "Message": "{'AuthorInfo': {'Date': 'YYYY-MM-DD', 'Author': 'Author's name', 'Age': 'Author's age', 'Nationality': 'Estimated author's nationality', 'MindPattern': 'Choose from Resilient, Controlled, Expressive, Latent', 'MindProblems': ['Write 3-5 keywords', 'of mind problem types', 'the author wants to solve', 'as a list'], 'MindAbilities': ['Write 3-5 keywords', 'of mind ability types', 'that are positive and empowering', 'in the author's life', 'as a list']}, 'ImportantPeriods': [{'Period': 'Write the start age-end age of the selected period as is', 'HappinessIndex': 'Write the happiness index of the selected period as is', 'Content': 'Write the content of the selected period as is', 'Mind': 'Estimate and write the mind problem the author most wanted to solve in that period', 'Cause': 'Estimate and write the cause of that mind arising for the author in that period', 'ExpectedQuestion': 'Estimate and write the question the author would definitely ask if they met a subtraction meditation expert to solve the mind problem', 'ExpectedAnswer': 'As a subtraction meditation expert, write an expected answer that supports the author's life and conveys that by subtracting the mind, they can solve the problem of the expected question and gain very positive effects'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Procedure)\n",
+                    "Message": "- Author Information\n1. According to the (<Life Graph Analysis.json> Writing Format), write the 'Date', 'Author', 'Age' in 'AuthorInfo'.\n2. Estimate and write 'Nationality', 'MindPattern', 'MindProblems', 'MindAbilities' from 'AuthorInfo' through the <Life Graph>.\n\n- Important Periods\n3. Select 3-5 'Important Periods' from the <Life Graph> that have a major impact on the 'author's life.\n4. According to the (<Life Graph Analysis.json> Writing Format), write the selected 3-5 'Important Periods' as a list of 'Period', 'HappinessIndex', and 'Content'.\n5. For 'Mind', estimate and write the mind problem the author most wanted to solve in that period.\n6. For 'ExpectedQuestion', estimate and write the question the author would definitely ask if they met a subtraction meditation expert to solve the mind problem.\n7. For 'ExpectedAnswer', as a subtraction meditation expert, write an expected answer that supports the author's life and conveys that by subtracting the mind, they can solve the problem of the expected question and gain very positive effects."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Start)\n",
+                    "InputMark": "<Life Graph>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<Life Graph Analysis.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(Role)\n",
+            "Message": "There is a <Life Graph> that divides the entire life of the 'author' by age and writes the happiness score for each period and the reasons for it.\nThrough the <Life Graph>, you are a 'subtraction meditation expert' who finds the (mind) of the 'author' and helps the 'author' find their true self by discarding that (mind) through (subtraction meditation).\nTherefore, you now analyze the (mind) that the 'author' has significantly through the <Life Graph> and write <Life Graph Analysis.json>."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(Mind)\n",
+                    "Message": "From the moment a person is born, they store what they see, hear, and experience in their mind through their five senses. It is stored in the mind like a photograph. Just as a photograph is a fake that captures a scene of the world as it is, the photographs in a person's mind are also fake. It is already a past that has passed, but it is only stored in my mind.\n\n(Subtraction Meditation)\nWhen people think of 'meditation', they often think of calming the breath or mind.\nSubtraction meditation is a meditation that discards the things inside me, and the mind actually becomes empty.\nJust as when sand settles in muddy water, the water looks clear at that moment, but it becomes dirty again when shaken, the mind is the same.\nJust as water and soil must be completely scooped out and discarded to be truly clean, and the container must be emptied to hold clean new water, discarding everything inside me allows me to regain my true nature, which is my true self.\n\n(Effects of Subtraction Meditation)\nAs you discard the photos stored in your mind like this, your mind becomes cleaner.\nAs the original mind is revealed, you become aware of your true self.\nAs you empty your mind, your daily life changes. When you completely break free from your own mind, you can achieve human completion.\n\n- You no longer dwell on your past and things that have passed.\n- You can objectively look at yourself and continuously grow.\n- Dusty thoughts, distractions, and negative minds disappear.\n- Your mind is where your body is, so you focus only on what you are doing now.\n- When stress disappears, your body becomes healthy.\n- The size of your mind grows, giving you the room to consider the other person's perspective.\n- You don't get dragged by emotions, so you don't lash out in anger and then regret it.\n\n(Mind Patterns)\nResilient Type: There are ups and downs, but with good resilience, it gradually finds stability.\nControlled Type: Usually stable, but greater growth is expected through the utilization of latent abilities.\nExpressive Type: Engages in active activities but needs to seek stability by considering the surrounding situation.\nLatent Type: Currently slow in demonstrating abilities, but has the potential for great achievements in the future."
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Format)\n",
+                    "Message": "{'AuthorInfo': {'Date': 'YYYY-MM-DD', 'Author': 'Author's name', 'Age': 'Author's age', 'Nationality': 'Estimated author's nationality', 'MindPattern': 'Choose from Resilient, Controlled, Expressive, Latent', 'MindProblems': ['Write 3-5 keywords', 'of mind problem types', 'the author wants to solve', 'as a list'], 'MindAbilities': ['Write 3-5 keywords', 'of mind ability types', 'that are positive and empowering', 'in the author's life', 'as a list']}, 'ImportantPeriods': [{'Period': 'Write the start age-end age of the selected period as is', 'HappinessIndex': 'Write the happiness index of the selected period as is', 'Content': 'Write the content of the selected period as is', 'Mind': 'Estimate and write the mind problem the author most wanted to solve in that period', 'Cause': 'Estimate and write the cause of that mind arising for the author in that period', 'ExpectedQuestion': 'Estimate and write the question the author would definitely ask if they met a subtraction meditation expert to solve the mind problem', 'ExpectedAnswer': 'As a subtraction meditation expert, write an expected answer that supports the author's life and conveys that by subtracting the mind, they can solve the problem of the expected question and gain very positive effects'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Procedure)\n",
+                    "Message": "- Author Information\n1. According to the (<Life Graph Analysis.json> Writing Format), write the 'Date', 'Author', 'Age' in 'AuthorInfo'.\n2. Estimate and write 'Nationality', 'MindPattern', 'MindProblems', 'MindAbilities' from 'AuthorInfo' through the <Life Graph>.\n\n- Important Periods\n3. Select 3-5 'Important Periods' from the <Life Graph> that have a major impact on the 'author's life.\n4. According to the (<Life Graph Analysis.json> Writing Format), write the selected 3-5 'Important Periods' as a list of 'Period', 'HappinessIndex', and 'Content'.\n5. For 'Mind', estimate and write the mind problem the author most wanted to solve in that period.\n6. For 'ExpectedQuestion', estimate and write the question the author would definitely ask if they met a subtraction meditation expert to solve the mind problem.\n7. For 'ExpectedAnswer', as a subtraction meditation expert, write an expected answer that supports the author's life and conveys that by subtracting the mind, they can solve the problem of the expected question and gain very positive effects."
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<Life Graph Analysis.json> Writing Start)\n",
+                    "InputMark": "<Life Graph>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<Life Graph Analysis.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

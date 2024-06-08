@@ -185,6 +185,8 @@ def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", 
         
         # 다음 아이템으로 이동
         i += 1
+        
+    return RecentBeforeLifeGraphPath, RecentBeforeLifeGraphList
 
 ## 라이프그래프의 이미지화(PNG)
 def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):   

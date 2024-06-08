@@ -50,9 +50,12 @@ def LoadLLMapiKey(email):
 ##### OpenAI LLM Response #####
 ###############################
 ## 프롬프트 요청할 LLMmessages 메세지 구조 생성
-def LLMmessages(Process, Input, Root = "backend", Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
-    if Root == "backend":
+def LLMmessages(Process, Input, Root = "backend", promptFramePath = "", Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
+    if promptFramePath == "":
       promptFrame = GetPromptFrame(Process)
+    else:
+      with open(promptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
+        promptFrame = [json.load(promptFrameJson)]
 
     messageTime = "current time: " + str(Date("Second")) + '\n\n'
     
@@ -178,9 +181,9 @@ def LLMmessages(Process, Input, Root = "backend", Output = "", mode = "Example",
     return messages, outputTokens, totalTokens, Temperature
   
 ## 프롬프트에 메세지 확인
-def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = "backend", MODE = "Example", INPUT2 = "", INPUTMEMORY = "", OUTPUTMEMORY = "", MEMORYCOUNTER = "", OUTPUTENDER = ""):
+def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = "backend", PromptFramePath = "", MODE = "Example", INPUT2 = "", INPUTMEMORY = "", OUTPUTMEMORY = "", MEMORYCOUNTER = "", OUTPUTENDER = ""):
 
-    Messages, outputTokens, TotalTokens, Temperature = LLMmessages(Process, Input, Root = ROOT, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryCounter = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
+    Messages, outputTokens, TotalTokens, Temperature = LLMmessages(Process, Input, Root = ROOT, promptFramePath = PromptFramePath, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryCounter = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
     
     TextMessagesList = [f"\n############# Messages #############\n",
                         f"Messages: ({Count}), ({Model}), ({MODE}), (Tep:{Temperature})\n",
@@ -203,14 +206,17 @@ def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = "bac
     return print(TextMessages + TextReponse)
   
 ## 프롬프트 실행
-def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backend", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
     # client = OpenAI(api_key = LoadLLMapiKey(email))
     client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
-    if root == "backend":
+    if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)
+    else:
+      with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
+        promptFrame = [json.load(promptFrameJson)]
 
     
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, Root = root, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
     if Mode == "Master":
       Model = promptFrame[0]["OpenAI"]["MasterModel"]
@@ -266,10 +272,10 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
           if isinstance(email, str):
             print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse 완료")
           else:
-            print(f"LifeGraphSetName: {projectName} | Process: {Process} | OpenAI_LLMresponse 완료")
+            print(f"LifeGraphName: {projectName} | Process: {Process} | OpenAI_LLMresponse 완료")
           
           if messagesReview == "on":
-            LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = root, MODE = Mode, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+            LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = root, PromptFramePath = PromptFramePath, MODE = Mode, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
 
           return Response, Usage, Model
       
@@ -277,7 +283,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
           if isinstance(email, str):
             print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생\n\n{e}")
           else:
-            print(f"LifeGraphSetName: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생\n\n{e}")
+            print(f"LifeGraphName: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생\n\n{e}")
           time.sleep(random.uniform(5, 10))
           continue
       # except openai.APIError as e:
@@ -389,9 +395,9 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
 
       # 토큰수별 모델 선정
       if ModelTokens == "Short":
-        BaseModel = "gpt-3.5-turbo-0125"
+        BaseModel = "gpt-3.5-turbo"
       elif ModelTokens == "Long":
-        BaseModel = "gpt-3.5-turbo-0125"
+        BaseModel = "gpt-3.5-turbo"
       
       # FineTuning 요청
       FineTuningJob = client.fine_tuning.jobs.create(
@@ -460,11 +466,14 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
 ##################################
 
 ## 프롬프트 실행
-def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "backend", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
 
     client = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
-    if root == "backend":
+    if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)
+    else:
+      with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
+        promptFrame = [json.load(promptFrameJson)]
 
     
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, Root = root, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
@@ -550,7 +559,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
           if isinstance(email, str):
             print(f"Project: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 완료")
           else:
-            print(f"LifeGraphSetName: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 완료")
+            print(f"LifeGraphName: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 완료")
           
           if messagesReview == "on":
             LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
@@ -561,7 +570,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
           if isinstance(email, str):
             print(f"Project: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse에서 오류 발생\n\n{e}")
           else:
-            print(f"LifeGraphSetName: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse에서 오류 발생\n\n{e}")
+            print(f"LifeGraphName: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse에서 오류 발생\n\n{e}")
           time.sleep(random.uniform(5, 10))
           continue
 

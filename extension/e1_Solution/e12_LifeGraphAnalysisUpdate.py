@@ -48,9 +48,9 @@ def LoadLifeGraph():
     # 현재 폴더 파일 리스트
     StoragFileList = os.listdir(BeforeLifeGraphStorage)
     StoragJsonList = [file for file in StoragFileList if file.endswith('.json')]
-    SortedStoragFileList = sorted(StoragJsonList, key=lambda x: re.search(r'\d+', x).group(), reverse=True)
+    SortedStorageFileList = sorted(StoragJsonList, key = lambda x: datetime.strptime(re.search(r'\d{6}-\d{6}', x).group(), '%y%m%d-%H%M%S'), reverse = True)
     # 가장 최신 파일과, 파일이 여러개 있을 경우 필요 없는 하부 파일 삭제
-    RecentFileName = SortedStoragFileList[0]
+    RecentFileName = SortedStorageFileList[0]
     RecentBeforeLifeGraphPath = BeforeLifeGraphStorage + RecentFileName
     with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as BeforeLifeGraphJson:
         BeforeLifeGraphList = json.load(BeforeLifeGraphJson)
@@ -58,62 +58,133 @@ def LoadLifeGraph():
     return BeforeLifeGraphList, RecentBeforeLifeGraphPath
 
 ## 라이프그래프를 InputList로
-def LifeGraphToInputList():
+def LifeGraphToInputList(Answer):
     BeforeLifeGraphList, RecentBeforeLifeGraphPath = LoadLifeGraph()
     
     InputList = []
     for i in range(len(BeforeLifeGraphList)):
-        if 'LifeGraphFile' in BeforeLifeGraphList[i] and 'LifeGraphAnalysis' not in BeforeLifeGraphList[i]:
+        if BeforeLifeGraphList[i]['LifeGraphFile'] is not None and BeforeLifeGraphList[i]['AnalysisData'] == [] and BeforeLifeGraphList[i]['Answer'] >= Answer:
+            LifeGraphId = BeforeLifeGraphList[i]['LifeGraphId']
+            Language = BeforeLifeGraphList[i]['Language']
             Date = f"[작성일] {BeforeLifeGraphList[i]['LifeGraphDate']}\n"
             Name = f"[이름] {BeforeLifeGraphList[i]['Name']}\n"
             Age = f"[나이] {BeforeLifeGraphList[i]['Age']}\n"
             Email = f"[이메일] {BeforeLifeGraphList[i]['Email']}\n\n"
             LifeGraphText = Date + Name + Age + Email
-            for j in range(len(LifeGraph['LifeData'])):
-                age = f"[시기] {LifeGraph['LifeData'][j]['StartAge']}-{LifeGraph['LifeData'][j]['EndAge']}\n"
-                score = f"[행복지수] {LifeGraph['LifeData'][j]['Score']}\n"
-                if j < len(LifeGraph['LifeData']) - 1:
-                    reason = f"[내용] {LifeGraph['LifeData'][j]['ReasonGlobal']}\n\n"
+            for j in range(len(BeforeLifeGraphList[i]['LifeData'])):
+                age = f"[시기] {BeforeLifeGraphList[i]['LifeData'][j]['StartAge']}-{BeforeLifeGraphList[i]['LifeData'][j]['EndAge']}\n"
+                score = f"[행복지수] {BeforeLifeGraphList[i]['LifeData'][j]['Score']}\n"
+                if j < len(BeforeLifeGraphList[i]['LifeData']) - 1:
+                    reason = f"[내용] {BeforeLifeGraphList[i]['LifeData'][j]['ReasonGlobal']}\n\n"
                 else:
-                    reason = f"[내용] {LifeGraph['LifeData'][j]['ReasonGlobal']}"
+                    reason = f"[내용] {BeforeLifeGraphList[i]['LifeData'][j]['ReasonGlobal']}"
                 LifeGraphText = LifeGraphText + age + score + reason
-            InputDic = {'Id': i+1, 'LifeGraph': LifeGraphText}
+            InputDic = {'Id': i+1, 'LifeGraphId': LifeGraphId, 'Language': Language, 'LifeGraph': LifeGraphText}
             InputList.append(InputDic)
     
     return InputList, RecentBeforeLifeGraphPath
 
-######################
-##### Filter 조건 #####
-######################
-def LifeGraphAnalysisFilter(Response):
-    return Response
+########################
+##### FilterKo 조건 #####
+########################
+def LifeGraphAnalysisKoFilter(Response):
+    # Error1: json 형식이 아닐 때의 예외 처리
+    try:
+        outputJson = json.loads(Response)
+    except json.JSONDecodeError:
+        return "BSContextDefine, JSONDecode에서 오류 발생: JSONDecodeError"
+    # Error2: 딕셔너리가 "작성자정보"의 키로 시작하지 않을때의 예외처리
+    try:
+        OutputDic1 = outputJson['작성자정보']
+    except:
+        return "BSContextDefine, JSON에서 오류 발생: '작성자정보' 미포함"
+    # Error3: 딕셔너리가 "중요시기"의 키로 시작하지 않을때의 예외처리
+    try:
+        OutputDic2 = outputJson['중요시기']
+    except:
+        return "BSContextDefine, JSON에서 오류 발생: '중요시기' 미포함"
+    # Error3: 자료의 구조가 다를 때의 예외 처리
+    if ('작성일' not in OutputDic1 or '작성자' not in OutputDic1 or '나이' not in OutputDic1 or '국적' not in OutputDic1 or '마음패턴' not in OutputDic1 or '마음문제' not in OutputDic1 or '마음능력' not in OutputDic1):
+        return "BSContextDefine, JSON에서 오류 발생: JSONKeyError"
+    # Error4: "중요시기"가 리스트가 아닐때의 예외처리
+    if not isinstance(OutputDic2, list):
+        return "BSContextDefine, JSON에서 오류 발생: '중요시기'가 리스트가 아님"
+    # Error5: "중요시기" 리스트 내 딕셔너리 자료의 구조가 다를 때의 예외 처리
+    for outputDic in OutputDic2:
+        if ('시기' not in outputDic or '행복지수' not in outputDic or '내용' not in outputDic or '마음' not in outputDic or '원인' not in outputDic or '예상질문' not in outputDic or '예상답변' not in outputDic):
+            return "BSContextDefine, JSON에서 오류 발생: '중요시기'가 리스트 내에서 JSONKeyError"
+
+    return outputJson
 
 ### 라이프그래프 분석 ###
-def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", MessagesReview = "on", mode = "Master"):
-    InputList, RecentBeforeLifeGraphPath = LifeGraphToInputList()
+def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", MessagesReview = "on", mode = "Master", Answer = 6):
+    ## LifeGraphAnalysisProcess
+    promptFrameKoPath = "/yaas/extension/e3_Database/e31_PromptData/e311_LifeGraphPrompt/b311-01_LifeGraphAnalysisKo.json"
+    InputList, RecentBeforeLifeGraphPath = LifeGraphToInputList(Answer)
+    with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as RecentBeforeLifeGraph:
+        RecentBeforeLifeGraphList = json.load(RecentBeforeLifeGraph)
     ErrorCount = 0
     InputCount = len(InputList)
-    for i in range(len(InputList)):
-        Input = InputList[i]
+    i = 0
+    
+    while i < InputCount:
+        Input = InputList[i]['LifeGraph']
+        Language = InputList[i]['Language']
         ProcessCount = i + 1
         
-        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, messagesReview = MessagesReview)
-        Filter = LifeGraphAnalysisFilter(Response)
+        ## LifeGraphAnalysisProcess Response 생성
+        # 라이프 그래프 언어가 한글인 경우
+        if Language == 'ko':
+            print(Language)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, PromptFramePath = promptFrameKoPath, Mode = mode, messagesReview = MessagesReview)
+            Filter = LifeGraphAnalysisKoFilter(Response)
+            
+            if isinstance(Filter, str):
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
+                ErrorCount += 1
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도")
+                time.sleep(120)
+                if ErrorCount == 5:
+                    sys.exit(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+                continue
+            else:
+                OutputDic = Filter
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | JSONDecode 완료")
+                ErrorCount = 0
+                
+                ## RecentBeforeLifeGraph 업데이트
+                for BeforeLifeGraph in RecentBeforeLifeGraphList:
+                    if BeforeLifeGraph['LifeGraphId'] == InputList[i]['LifeGraphId']:
+                        BeforeLifeGraph['Residence'] = OutputDic['작성자정보']
+                        BeforeLifeGraph['Pattern'] = OutputDic['작성자정보']
+                        BeforeLifeGraph['Negative'] = OutputDic['작성자정보']
+                        BeforeLifeGraph['Positive'] = OutputDic['작성자정보']
+                        LifeData = BeforeLifeGraph['LifeData']
+                        AnalysisData = []
+                        for Data in OutputDic['중요시기']:
+                            StartAge, EndAge = map(int, Data['시기'].split('-'))
+                            for data in LifeData:
+                                if StartAge == data['StartAge'] and EndAge == data['EndAge']:
+                                    LifeDataId = data['LifeDataId']
+                                    break
+                            Score = Data['행복지수']
+                            ReasonGlobal = Data['내용']
+                            Problem = Data['마음']
+                            Reason = Data['원인']
+                            Question = Data['예상질문']
+                            Answer = Data['예상답변']
+                            AnalysisDataDic = {'LifeDataId': LifeDataId, 'StartAge': StartAge, 'EndAge': EndAge, 'Score': Score, 'ReasonGlobal': ReasonGlobal, 'Problem': Problem, 'Reason': Reason, 'Question': Question, 'Answer': Answer, }
+                            AnalysisData.append(AnalysisDataDic)
+                        BeforeLifeGraph['AnalysisData'] = AnalysisData
+                        break
+                    
+                with open(RecentBeforeLifeGraphPath, 'w', encoding = 'utf-8') as RecentBeforeLifeGraphJson:
+                    json.dump(RecentBeforeLifeGraphList, RecentBeforeLifeGraphJson, ensure_ascii = False, indent = 4)
+        # # 라이프 그래프 언어가 한글이 아닌 경우
+        # else:
         
-        if isinstance(Filter, str):
-            print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
-            ErrorCount1 += 1
-            print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회, 2분 후 프롬프트 재시도")
-            time.sleep(120)
-            if ErrorCount1 == 5:
-                sys.exit(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회 초과, 프롬프트 종료")
-            continue
-        else:
-            OutputDic = Filter
-            print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | JSONDecode 완료")
-            ErrorCount1 = 0
-        
-        
+        # 다음 아이템으로 이동
+        i += 1
 
 ## 라이프그래프의 이미지화(PNG)
 def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):   
@@ -124,7 +195,7 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
     plt.rcParams['axes.unicode_minus'] = False  # 유니코드 마이너스 설정
     
     PNGPaths = []
-    FilePath = f"/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/BeforeLifeGraphImages/"
+    FilePath = f"/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/s2113_BeforeLifeGraphAnalysisPDF/"
     FileName = f"{LifeGraphDate.replace('-', '')}_{Name}({Age})_LifeGraph"
     PDFPath = FilePath + FileName + '.pdf'
 
@@ -356,8 +427,40 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
 #     UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList)
     
 if __name__ == "__main__":
-    with open('/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/240605_BeforeLifeGraph.json', 'r', encoding = 'utf-8') as BeforeLifeGraphJson:
-        BeforeLifeGraphList = json.load(BeforeLifeGraphJson)
-    LifeGraph = BeforeLifeGraphList[2]
-    InputText = LifeGraphToInputText(LifeGraph)
-    print(InputText)
+    
+    ############################ 하이퍼 파라미터 설정 ############################
+    email = "General"
+    projectName = "Meditation"
+    #########################################################################
+    # LifeGraphAnalysisProcess(projectName, email)
+    
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas as pd
+
+    # 데이터 생성
+    data = pd.DataFrame({
+        'x': range(10),
+        'y': [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+    })
+
+    # A4 용지 크기 설정 (in inches)
+    fig = plt.figure(figsize=(11.7, 8.3))
+
+    # 그래프 그리기
+    ax1 = fig.add_subplot(212)  # 2행 1열 중 2번째 영역
+    sns.lineplot(x='x', y='y', data=data, ax=ax1)
+    ax1.set_title('Line Plot')
+
+    # 텍스트 추가
+    ax2 = fig.add_subplot(224)  # 2행 2열 중 4번째 영역
+    ax2.axis('off')  # 축 제거
+    text = "This is an example text in the lower right quadrant of the A4 page."
+    ax2.text(0.5, 0.5, text, horizontalalignment='center', verticalalignment='center', fontsize=12)
+
+    # 여백 조정
+    plt.subplots_adjust(hspace=0.3, wspace=0.3)
+
+    # PDF 파일로 저장
+    output_path = "/yaas/test.pdf"
+    plt.savefig(output_path, format='pdf')

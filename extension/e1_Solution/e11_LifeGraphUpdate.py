@@ -40,9 +40,10 @@ def Date(Option = "Day"):
     if Option == "Day":
       now = datetime.now()
       date = now.strftime('%y%m%d')
+      date += '-000000'
     elif Option == "Second":
       now = datetime.now()
-      date = now.strftime('%y%m%d%H%M%S')
+      date = now.strftime('%y%m%d-%H%M%S')
     
     return date
 
@@ -62,7 +63,11 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
         Residence = None
         PhoneNumber = None
         Email = RawLifeGraphList[i][1]['email']
+        Pattern = None
+        Negative = None
+        Positive = None
         LifeData = []
+        AnalysisData = []
         LifeDataReasons = []
         AnswerCount = 0
         for j in range(len(RawLifeGraphList[i][1]['lifeData'])):
@@ -84,7 +89,7 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
             Language = None
         _Answer = AnswerCount
         
-        LifeGraphDic = {"LifeGraphId": f"{str(LifeGraphId) + '-' + LifeGraphDate}", "LifeGraphDate": LifeGraphDate, "Name": Name, "Progress": Progress, "Age": Age, "Language": Language, "Residence": Residence, "PhoneNumber": PhoneNumber, "Email": Email, "Answer": _Answer, "LifeData": LifeData}
+        LifeGraphDic = {"LifeGraphId": f"{str(LifeGraphId) + '-' + LifeGraphDate}", "LifeGraphDate": LifeGraphDate, "Name": Name, "Progress": Progress, "Age": Age, "Language": Language, "Residence": Residence, "Answer": _Answer, "PhoneNumber": PhoneNumber, "Email": Email, "Pattern": Pattern, "Negative": Negative, "Positive": Positive, "LifeData": LifeData, "LifeGraphFile": None, "AnalysisData": AnalysisData, "LifeGraphAnalysisFile": None}
         if _Answer >= Answer:
             PreprocessedLifeGraphList.append(LifeGraphDic)
     # 라이프 그래프 날짜순으로 정리
@@ -94,35 +99,55 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
 
 ## 다운받은 라이프그래프 최신데이터와 합치기
 def MergeRecentLifeGraph(RecentBeforeLifeGraphList, BeforeLifeGraphList):
-    RecentBeforeLifeGraphId = RecentBeforeLifeGraphList[0]['LifeGraphId']
+    RecentBeforeLifeGraphId = None
+    if RecentBeforeLifeGraphList != []:
+        RecentBeforeLifeGraphId = RecentBeforeLifeGraphList[0]['LifeGraphId']
+        for i in range(len(BeforeLifeGraphList)):
+            if BeforeLifeGraphList[i]['LifeGraphId'] == RecentBeforeLifeGraphId:
+                NewBeforeLifeGraphList = BeforeLifeGraphList[:i]
+                break
+                
+        MergedBeforeLifeGraphList = NewBeforeLifeGraphList + RecentBeforeLifeGraphList
+        return MergedBeforeLifeGraphList
     
-    for i in range(len(BeforeLifeGraphList)):
-        if BeforeLifeGraphList[i]['LifeGraphId'] == RecentBeforeLifeGraphId:
-            NewBeforeLifeGraphList = BeforeLifeGraphList[:i]
-            
-    MergedBeforeLifeGraphList = NewBeforeLifeGraphList + RecentBeforeLifeGraphList
-    
-    return MergedBeforeLifeGraphList
+    else:
+        return BeforeLifeGraphList
         
 ### 라이프그래프 데이터 다운로드 ###
-def DownloadLifeGraph(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/coursera-meditation-db-firebase-adminsdk-okrn4-80af02fd79.json', Answer = 0):
+def DownloadLifeGraph(Term = 'Day', AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/coursera-meditation-db-firebase-adminsdk-okrn4-80af02fd79.json', Answer = 0):
     # 저장경로 설정
-    BeforeLifeGraphStorage = '/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/'
-    FileName = f'{Date()}_BeforeLifeGraph.json'
+    BeforeLifeGraphStorage = '/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/s2111_BeforeLifeGraph/'
+    date = Date(Option = Term)
+    FileName = f'{date}_BeforeLifeGraph.json'
     BeforeLifeGraphPath = BeforeLifeGraphStorage + FileName
     # 현재 폴더 파일 리스트
     StoragFileList = os.listdir(BeforeLifeGraphStorage)
     StoragJsonList = [file for file in StoragFileList if file.endswith('.json')]
-    SortedStoragFileList = sorted(StoragJsonList, key=lambda x: re.search(r'\d+', x).group(), reverse=True)
-    # 가장 최신 파일과, 파일이 여러개 있을 경우 필요 없는 하부 파일 삭제
-    RecentFileName = SortedStoragFileList[0]
+    SortedStorageFileList = sorted(StoragJsonList, key = lambda x: datetime.strptime(re.search(r'\d{6}-\d{6}', x).group(), '%y%m%d-%H%M%S'), reverse = True)
+    if SortedStorageFileList != []:
+        # 가장 최신 파일과, 파일이 여러개 있을 경우 필요 없는 하부 파일 삭제
+        RecentFileName = SortedStorageFileList[0]
+        match = re.search(r'\d{6}-\d{6}', RecentFileName)
+        Recentdate = match.group()
+    else:
+        RecentFileName = '000000-000000_BeforeLifeGraph.json'
     RecentBeforeLifeGraphPath = BeforeLifeGraphStorage + RecentFileName
-    if len(SortedStoragFileList) >= 3:
-        RemoveFileName = SortedStoragFileList[2:]
+    if len(SortedStorageFileList) >= 3:
+        RemoveFileName = SortedStorageFileList[2:]
         for RemoveFile in RemoveFileName:
             os.remove(BeforeLifeGraphStorage + RemoveFile)
 
-    if BeforeLifeGraphPath != RecentBeforeLifeGraphPath:
+    # 파일명 중 yymmdd-HHmmss 비교 함수 #
+    def CompareFilename(fileName, recentFileName, Term):
+        Beforedt = datetime.strptime(fileName.split('_')[0], "%y%m%d-%H%M%S")
+        Recentdt = datetime.strptime(recentFileName.split('_')[0], "%y%m%d-%H%M%S")
+        if Term == 'Second':
+            return Beforedt != Recentdt
+        elif Term == 'Day':
+            return Beforedt.date() != Recentdt.date()
+
+    # 라이프그래프 다운로드 및 업데이트
+    if CompareFilename(FileName, RecentFileName, Term):
         # 서비스 계정
         SERVICE_ACCOUNT_FILE = AccountFilePath
         Credentials = credentials.Certificate(SERVICE_ACCOUNT_FILE)
@@ -132,18 +157,21 @@ def DownloadLifeGraph(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/cou
         FirebaseJson = reference.get()
         BeforeLifeGraphList = PreprocessingLifeGraph(FirebaseJson, Answer)
         # 다운받은 라이프그래프 최신데이터와 합치기
-        with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as RecentBeforeLifeGraphJson:
-            RecentBeforeLifeGraphList = json.load(RecentBeforeLifeGraphJson)
+        try:
+            with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as RecentBeforeLifeGraphJson:
+                RecentBeforeLifeGraphList = json.load(RecentBeforeLifeGraphJson)
+        except:
+            RecentBeforeLifeGraphList = []
         MergedBeforeLifeGraphList = MergeRecentLifeGraph(RecentBeforeLifeGraphList, BeforeLifeGraphList)
         # 합쳐진 라이프 그래프 저장
         with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
             json.dump(MergedBeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
-        print(f'[ 버전({Date()}) 라이프그래프 다운로드 및 업데이트 : {FileName} ]')
-        return BeforeLifeGraphPath, MergedBeforeLifeGraphList 
+        print(f'[ 업데이트 옵션 ({Term}) | 버전({date}) 라이프그래프 다운로드 및 업데이트 : {FileName} ]')
+        return BeforeLifeGraphPath, MergedBeforeLifeGraphList
     else:
-        with open(BeforeLifeGraphPath, 'r', encoding = 'utf-8') as BeforeLifeGraphJson:
+        with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as BeforeLifeGraphJson:
             BeforeLifeGraphList = json.load(BeforeLifeGraphJson)
-        print(f'[ 현재 라이프그래프는 최신버전({Date()}) : {FileName} ]')
+        print(f'[ 업데이트 옵션 ({Term}) | 현재 라이프그래프는 최신버전({Recentdate}) : {RecentFileName} ]')
         return BeforeLifeGraphPath, BeforeLifeGraphList
 
 ## 라이프그래프의 이미지화(PNG)
@@ -155,7 +183,7 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
     plt.rcParams['axes.unicode_minus'] = False  # 유니코드 마이너스 설정
     
     PNGPaths = []
-    FilePath = f"/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/BeforeLifeGraphImages/"
+    FilePath = f"/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/s2112_BeforeLifeGraphPDF/"
     FileName = f"{LifeGraphDate.replace('-', '')}_{Name}({Age})_LifeGraph"
     PDFPath = FilePath + FileName + '.pdf'
 
@@ -298,6 +326,7 @@ def AddRowToSheet(BeforeLifeGraphList, AccountFilePath = '/yaas/storage/s2_Medit
     RecentId = worksheet.acell('A3').value
     
     ## Sheet에서 가져온 최신 Id가 BeforeLifeGraphList에서 몇 번째 데이터인지 찾기
+    AddNum = 0
     for i in range(len(BeforeLifeGraphList)):
         if BeforeLifeGraphList[i]['LifeGraphId'] == RecentId:
             AddNum = i
@@ -344,7 +373,7 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
     # 라이프 그래프 업데이트
     UpdateCount = 0
     for i in tqdm(range(len(BeforeLifeGraphList)), desc = "[ 라이프그래프 구글시트 업데이트 ]"):
-        if 'LifeGraphFile' not in BeforeLifeGraphList[i]:
+        if BeforeLifeGraphList[i]['LifeGraphFile'] is None:
             # 라이프그래프 데이터 추출
             Id = BeforeLifeGraphList[i]['LifeGraphId']
             Date = BeforeLifeGraphList[i]['LifeGraphDate']
@@ -368,8 +397,8 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
             UpdateSheet(Row = row, Colum = 4, Data = Age)
             UpdateSheet(Row = row, Colum = 5, Data = Language)
             UpdateSheet(Row = row, Colum = 7, Data = Answer)
-            UpdateSheet(Row = row, Colum = 9, Data = Email)
-            UpdateSheet(Row = row, Type = 'Link', Colum = 10, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
+            UpdateSheet(Row = row, Colum = 11, Data = Email)
+            UpdateSheet(Row = row, Type = 'Link', Colum = 12, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
             
             UpdateCount += 1
             if UpdateCount >= 5:
@@ -385,9 +414,13 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
 #########################
 ### 라이프 그래프 업데이트 ###
 #########################
-def LifeGraphUpdate():
-    BeforeLifeGraphPath, BeforeLifeGraphList = DownloadLifeGraph()
+def LifeGraphUpdate(term):
+    BeforeLifeGraphPath, BeforeLifeGraphList = DownloadLifeGraph(Term = term)
     UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList)
     
 if __name__ == "__main__":
-    LifeGraphUpdate()
+    
+    ############################ 하이퍼 파라미터 설정 ############################
+    term = "Second"
+    #########################################################################
+    LifeGraphUpdate(term)

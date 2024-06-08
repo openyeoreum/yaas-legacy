@@ -386,6 +386,7 @@ class Prompt(Base):
     PromptId = Column(Integer, primary_key=True, autoincrement=True)
     PromptDate = Column(DateTime, default=SeoulNow)
 
+    ## Yeoreum
     # ScriptPrompt
     IndexDefinePreprocess = Column(JSON)
     IndexDefineDivisionPreprocess = Column(JSON)
@@ -451,6 +452,9 @@ class Prompt(Base):
     BestSellerContextDefine = Column(JSON)
     BestSellerCommentAnalysis = Column(JSON)
     
+    ## Meditation
+    # LifeGraph
+    LifeGraphAnalysis = Column(JSON)
 
 #######################
 ### TrainingDataset ###

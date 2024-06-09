@@ -180,10 +180,10 @@ def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", 
                     
                 with open(RecentBeforeLifeGraphPath, 'w', encoding = 'utf-8') as RecentBeforeLifeGraphJson:
                     json.dump(RecentBeforeLifeGraphList, RecentBeforeLifeGraphJson, ensure_ascii = False, indent = 4)
-        # 라이프 그래프 언어가 한글이 아닌 경우
-        else:
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, PromptFramePath = promptFrameEnPath, Mode = mode, messagesReview = MessagesReview)
-            Filter = LifeGraphAnalysisEnFilter(Response)
+        # # 라이프 그래프 언어가 한글이 아닌 경우
+        # else:
+        #     Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, PromptFramePath = promptFrameEnPath, Mode = mode, messagesReview = MessagesReview)
+        #     Filter = LifeGraphAnalysisEnFilter(Response)
         
         # 다음 아이템으로 이동
         i += 1

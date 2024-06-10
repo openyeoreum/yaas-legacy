@@ -60,6 +60,10 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
         Name = RawLifeGraphList[i][0].strip()
         Progress = None
         Age = RawLifeGraphList[i][1]['age']
+        if 'region' in RawLifeGraphList[i][1]:
+            Residence = RawLifeGraphList[i][1]['region']
+        else:
+            Residence = None
         Residence = None
         PhoneNumber = None
         Email = RawLifeGraphList[i][1]['email']

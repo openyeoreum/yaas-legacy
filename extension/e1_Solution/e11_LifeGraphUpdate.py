@@ -60,14 +60,10 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
         Name = RawLifeGraphList[i][0].strip()
         Progress = None
         Age = RawLifeGraphList[i][1]['age']
-        print(f'{i}: {RawLifeGraphList[i][1]}\n\n')
-        if Name == '이준영':
-            sys.exit()
         if 'region' in RawLifeGraphList[i][1]:
             Residence = RawLifeGraphList[i][1]['region']
         else:
             Residence = None
-        Residence = None
         PhoneNumber = None
         Email = RawLifeGraphList[i][1]['email']
         Pattern = None
@@ -197,7 +193,7 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Residence, Email, LifeDat
     ## 표지 페이지 생성
     fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
     fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
-    ax.text(0.01, 0.99, f"\nDate             :  {LifeGraphDate}\nName          :  {Name}\nAge               :  {Age}\nRegion           :  {Residence}\nEmail           :  {Email}\nLanguage  :  {Language}", wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax.transAxes)
+    ax.text(0.01, 0.99, f"\nDate             :  {LifeGraphDate}\nName          :  {Name}\nAge               :  {Age}\nResidence :  {Residence}\nEmail           :  {Email}\nLanguage  :  {Language}", wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax.transAxes)
     ax.axis('off')  # 텍스트 영역의 축 숨기기
     
     # 표지 페이지 저장

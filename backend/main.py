@@ -109,7 +109,7 @@ if __name__ == "__main__":
     VoiceFileGen = "on" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     MainProcess = "Creation" # 'Solution', 'Creation'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
-    Account = "khsis3516@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com'
+    Account = "lunahyeon00128@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com'
     #########################################################################
 
     YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account)

@@ -60,6 +60,9 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
         Name = RawLifeGraphList[i][0].strip()
         Progress = None
         Age = RawLifeGraphList[i][1]['age']
+        print(f'{i}: {RawLifeGraphList[i][1]}\n\n')
+        if Name == '이준영':
+            sys.exit()
         if 'region' in RawLifeGraphList[i][1]:
             Residence = RawLifeGraphList[i][1]['region']
         else:
@@ -134,7 +137,7 @@ def DownloadLifeGraph(Term = 'Day', AccountFilePath = '/yaas/storage/s2_Meditati
         match = re.search(r'\d{6}-\d{6}', RecentFileName)
         Recentdate = match.group()
     else:
-        RecentFileName = '000000-000000_BeforeLifeGraph.json'
+        RecentFileName = '000101-000001_BeforeLifeGraph.json'
     RecentBeforeLifeGraphPath = BeforeLifeGraphStorage + RecentFileName
     if len(SortedStorageFileList) >= 3:
         RemoveFileName = SortedStorageFileList[2:]
@@ -179,7 +182,7 @@ def DownloadLifeGraph(Term = 'Day', AccountFilePath = '/yaas/storage/s2_Meditati
         return BeforeLifeGraphPath, BeforeLifeGraphList
 
 ## 라이프그래프의 이미지화(PNG)
-def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):   
+def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Residence, Email, LifeData):   
     # 기본 폰트 설정, Noto Sans CJK 폰트 경로 설정
     font_path = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
     font_prop = font_manager.FontProperties(fname = font_path)
@@ -194,7 +197,7 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
     ## 표지 페이지 생성
     fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
     fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
-    ax.text(0.01, 0.99, f"\nDate             :  {LifeGraphDate}\nName          :  {Name}\nAge               :  {Age}\nEmail           :  {Email}\nLanguage  :  {Language}", wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax.transAxes)
+    ax.text(0.01, 0.99, f"\nDate             :  {LifeGraphDate}\nName          :  {Name}\nAge               :  {Age}\nRegion           :  {Residence}\nEmail           :  {Email}\nLanguage  :  {Language}", wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax.transAxes)
     ax.axis('off')  # 텍스트 영역의 축 숨기기
     
     # 표지 페이지 저장
@@ -254,7 +257,7 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
             WrappedTexts.append(f"{NumberConverter(row['LifeDataId'])}   {row['StartAge']}-{row['EndAge']} ({row['Score']}) :  {wrapped_text}\n")
         
     # 첫 번째는 22개, 그 후에는 50개 단위로 묶기
-    ProfileText = f"|    {LifeGraphDate}    |    {Name}    |    0-{Age}    |\n\n\n"
+    ProfileText = f"|    {LifeGraphDate}    |    {Name}    |    0-{Age}    |    {Residence}    |\n\n\n"
     ReasonText = ProfileText + "\n".join(WrappedTexts)
     ReasonLines = ReasonText.split('\n')
     PagedReasonLines = [ReasonLines[:22]] + [ReasonLines[i:i+50] for i in range(22, len(ReasonLines), 50)]
@@ -384,12 +387,13 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
             Name = BeforeLifeGraphList[i]['Name']
             Age = BeforeLifeGraphList[i]['Age']
             Language = BeforeLifeGraphList[i]['Language']
+            Residence = BeforeLifeGraphList[i]['Residence']
             Answer = BeforeLifeGraphList[i]['Answer']
             Email = BeforeLifeGraphList[i]['Email']
             LifeData = BeforeLifeGraphList[i]['LifeData']
             
             # 라이프그래프 파일 생성
-            fileName, PDFPath, PNGPaths = LifeGraphToPNG(Date, Name, Age, Language, Email, LifeData)
+            fileName, PDFPath, PNGPaths = LifeGraphToPNG(Date, Name, Age, Language, Residence, Email, LifeData)
             PNGsToPDF(PNGPaths, PDFPath)
             BeforeLifeGraphList[i]['LifeGraphFile'] = PDFPath
             
@@ -400,6 +404,7 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
             UpdateSheet(Row = row, Colum = 3, Data = Name)
             UpdateSheet(Row = row, Colum = 4, Data = Age)
             UpdateSheet(Row = row, Colum = 5, Data = Language)
+            UpdateSheet(Row = row, Colum = 6, Data = Residence)
             UpdateSheet(Row = row, Colum = 7, Data = Answer)
             UpdateSheet(Row = row, Colum = 11, Data = Email)
             UpdateSheet(Row = row, Type = 'Link', Colum = 12, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)

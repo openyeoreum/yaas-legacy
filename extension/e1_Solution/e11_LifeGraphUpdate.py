@@ -57,7 +57,8 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
     for i in range(len(RawLifeGraphList)):
         LifeGraphId = i + 1
         LifeGraphDate = DatePattern.search(RawLifeGraphList[i][1]['graph_url']).group()
-        Name = RawLifeGraphList[i][0].strip()
+        name = RawLifeGraphList[i][0].strip()
+        Name = re.sub(r'\(\d+\)', '', name)
         Progress = None
         Age = RawLifeGraphList[i][1]['age']
         if 'region' in RawLifeGraphList[i][1]:

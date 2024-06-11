@@ -44,7 +44,7 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Load
 ### 라이프그래프 데이터 로드 ###
 def LoadLifeGraph():
     # 로드경로 설정
-    BeforeLifeGraphStorage = '/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/'
+    BeforeLifeGraphStorage = '/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/s2111_BeforeLifeGraph/'
     # 현재 폴더 파일 리스트
     StoragFileList = os.listdir(BeforeLifeGraphStorage)
     StoragJsonList = [file for file in StoragFileList if file.endswith('.json')]
@@ -155,10 +155,10 @@ def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", 
                 ## RecentBeforeLifeGraph 업데이트
                 for BeforeLifeGraph in RecentBeforeLifeGraphList:
                     if BeforeLifeGraph['LifeGraphId'] == InputList[i]['LifeGraphId']:
-                        BeforeLifeGraph['Residence'] = OutputDic['작성자정보']
-                        BeforeLifeGraph['Pattern'] = OutputDic['작성자정보']
-                        BeforeLifeGraph['Negative'] = OutputDic['작성자정보']
-                        BeforeLifeGraph['Positive'] = OutputDic['작성자정보']
+                        BeforeLifeGraph['Residence'] = OutputDic['작성자정보']['국적']
+                        BeforeLifeGraph['Pattern'] = OutputDic['작성자정보']['마음패턴']
+                        BeforeLifeGraph['Negative'] = OutputDic['작성자정보']['마음문제']
+                        BeforeLifeGraph['Positive'] = OutputDic['작성자정보']['마음능력']
                         LifeData = BeforeLifeGraph['LifeData']
                         AnalysisData = []
                         for Data in OutputDic['중요시기']:
@@ -436,35 +436,4 @@ if __name__ == "__main__":
     email = "General"
     projectName = "Meditation"
     #########################################################################
-    # LifeGraphAnalysisProcess(projectName, email)
-    
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    import pandas as pd
-
-    # 데이터 생성
-    data = pd.DataFrame({
-        'x': range(10),
-        'y': [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
-    })
-
-    # A4 용지 크기 설정 (in inches)
-    fig = plt.figure(figsize=(11.7, 8.3))
-
-    # 그래프 그리기
-    ax1 = fig.add_subplot(212)  # 2행 1열 중 2번째 영역
-    sns.lineplot(x='x', y='y', data=data, ax=ax1)
-    ax1.set_title('Line Plot')
-
-    # 텍스트 추가
-    ax2 = fig.add_subplot(224)  # 2행 2열 중 4번째 영역
-    ax2.axis('off')  # 축 제거
-    text = "This is an example text in the lower right quadrant of the A4 page."
-    ax2.text(0.5, 0.5, text, horizontalalignment='center', verticalalignment='center', fontsize=12)
-
-    # 여백 조정
-    plt.subplots_adjust(hspace=0.3, wspace=0.3)
-
-    # PDF 파일로 저장
-    output_path = "/yaas/test.pdf"
-    plt.savefig(output_path, format='pdf')
+    LifeGraphAnalysisProcess(projectName, email)

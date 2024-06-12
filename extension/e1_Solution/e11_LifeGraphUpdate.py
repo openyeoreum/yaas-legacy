@@ -61,6 +61,7 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
         Name = re.sub(r'\(\d+\)', '', name)
         Progress = None
         Age = RawLifeGraphList[i][1]['age']
+        Nation = None
         if 'region' in RawLifeGraphList[i][1]:
             Residence = RawLifeGraphList[i][1]['region']
         else:
@@ -93,12 +94,21 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
             Language = None
         _Answer = AnswerCount
         
-        LifeGraphDic = {"LifeGraphId": f"{str(LifeGraphId) + '-' + LifeGraphDate}", "LifeGraphDate": LifeGraphDate, "Name": Name, "Progress": Progress, "Age": Age, "Language": Language, "Residence": Residence, "Answer": _Answer, "PhoneNumber": PhoneNumber, "Email": Email, "Pattern": Pattern, "Negative": Negative, "Positive": Positive, "LifeData": LifeData, "LifeGraphFile": None, "AnalysisData": AnalysisData, "LifeGraphAnalysisFile": None}
+        LifeGraphDic = {"LifeGraphId": f"{str(LifeGraphId) + '-' + LifeGraphDate}", "LifeGraphDate": LifeGraphDate, "Name": Name, "Progress": Progress, "Age": Age, "Language": Language, "Nation": Nation, "Residence": Residence, "Answer": _Answer, "PhoneNumber": PhoneNumber, "Email": Email, "Pattern": Pattern, "Negative": Negative, "Positive": Positive, "LifeData": LifeData, "LifeGraphFile": None, "AnalysisData": AnalysisData, "LifeGraphAnalysisFile": None}
         if _Answer >= Answer:
             PreprocessedLifeGraphList.append(LifeGraphDic)
-    # 라이프 그래프 날짜순으로 정리
-    DateSortedPreprocessedLifeGraphList = sorted(PreprocessedLifeGraphList, key = lambda x: datetime.strptime(x["LifeGraphDate"], "%Y-%m-%d"), reverse=True)
+    ## 라이프 그래프 날짜역순(같은 날짜는 생성 역순)으로 정리
+    def ExtractFirstNumber(LifeGraphId):
+        return int(LifeGraphId.split('-')[0])
     
+    DateSortedPreprocessedLifeGraphList = sorted(
+    PreprocessedLifeGraphList,
+    key=lambda x: (
+        datetime.strptime(x["LifeGraphDate"], "%Y-%m-%d"), 
+        ExtractFirstNumber(x["LifeGraphId"])
+    ),
+    reverse=True
+)
     return DateSortedPreprocessedLifeGraphList
 
 ## 다운받은 라이프그래프 최신데이터와 합치기
@@ -113,7 +123,6 @@ def MergeRecentLifeGraph(RecentBeforeLifeGraphList, BeforeLifeGraphList):
                 
         MergedBeforeLifeGraphList = NewBeforeLifeGraphList + RecentBeforeLifeGraphList
         return MergedBeforeLifeGraphList
-    
     else:
         return BeforeLifeGraphList
         
@@ -289,7 +298,7 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Residence, Email, LifeDat
 ### 라이프그래프의 이미지를 PDF로 묶기 ###
 def PNGsToPDF(PNGPaths, PDFPath):
     # 디자인 포멧 경로
-    DesignFormatPath = "/yaas/storage/s2_Meditation/Design_Format/LifeGraph_Design_Format/LifeGraph_Design_Format_"
+    DesignFormatPath = "/yaas/storage/s2_Meditation/Design_Format/s2112_BeforeLifeGraphPDF_Format/s2112_BeforeLifeGraphPDF_Format_"
     
     # 첫 번째 이미지 크기에 맞는 PDF 생성
     FirstImage = Image.open(PNGPaths[0])
@@ -427,6 +436,6 @@ def LifeGraphUpdate(term):
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
-    term = "Day"
+    term = "Second"
     #########################################################################
     LifeGraphUpdate(term)

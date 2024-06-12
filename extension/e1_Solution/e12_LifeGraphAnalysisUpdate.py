@@ -66,53 +66,98 @@ def LifeGraphToInputList(Answer):
         if BeforeLifeGraphList[i]['LifeGraphFile'] is not None and BeforeLifeGraphList[i]['AnalysisData'] == [] and BeforeLifeGraphList[i]['Answer'] >= Answer:
             LifeGraphId = BeforeLifeGraphList[i]['LifeGraphId']
             Language = BeforeLifeGraphList[i]['Language']
-            Date = f"[작성일] {BeforeLifeGraphList[i]['LifeGraphDate']}\n"
-            Name = f"[이름] {BeforeLifeGraphList[i]['Name']}\n"
-            Age = f"[나이] {BeforeLifeGraphList[i]['Age']}\n"
-            Email = f"[이메일] {BeforeLifeGraphList[i]['Email']}\n\n"
+            if Language == 'ko':
+                Date = f"[작성일] {BeforeLifeGraphList[i]['LifeGraphDate']}\n"
+                Name = f"[이름] {BeforeLifeGraphList[i]['Name']}\n"
+                Age = f"[나이] {BeforeLifeGraphList[i]['Age']}\n"
+                Email = f"[이메일] {BeforeLifeGraphList[i]['Email']}\n\n"
+            else:
+                Date = f"[Date] {BeforeLifeGraphList[i]['LifeGraphDate']}\n"
+                Name = f"[Author] {BeforeLifeGraphList[i]['Name']}\n"
+                Age = f"[Age] {BeforeLifeGraphList[i]['Age']}\n"
+                Email = f"[Email] {BeforeLifeGraphList[i]['Email']}\n\n"
             LifeGraphText = Date + Name + Age + Email
             for j in range(len(BeforeLifeGraphList[i]['LifeData'])):
-                age = f"[시기] {BeforeLifeGraphList[i]['LifeData'][j]['StartAge']}-{BeforeLifeGraphList[i]['LifeData'][j]['EndAge']}\n"
-                score = f"[행복지수] {BeforeLifeGraphList[i]['LifeData'][j]['Score']}\n"
-                if j < len(BeforeLifeGraphList[i]['LifeData']) - 1:
-                    reason = f"[내용] {BeforeLifeGraphList[i]['LifeData'][j]['ReasonGlobal']}\n\n"
+                if Language == 'ko':
+                    age = f"[시기] {BeforeLifeGraphList[i]['LifeData'][j]['StartAge']}-{BeforeLifeGraphList[i]['LifeData'][j]['EndAge']}\n"
+                    score = f"[행복지수] {BeforeLifeGraphList[i]['LifeData'][j]['Score']}\n"
+                    if j < len(BeforeLifeGraphList[i]['LifeData']) - 1:
+                        reason = f"[내용] {BeforeLifeGraphList[i]['LifeData'][j]['ReasonGlobal']}\n\n"
+                    else:
+                        reason = f"[내용] {BeforeLifeGraphList[i]['LifeData'][j]['ReasonGlobal']}"
                 else:
-                    reason = f"[내용] {BeforeLifeGraphList[i]['LifeData'][j]['ReasonGlobal']}"
+                    age = f"[Period] {BeforeLifeGraphList[i]['LifeData'][j]['StartAge']}-{BeforeLifeGraphList[i]['LifeData'][j]['EndAge']}\n"
+                    score = f"[HappinessIndex] {BeforeLifeGraphList[i]['LifeData'][j]['Score']}\n"
+                    if j < len(BeforeLifeGraphList[i]['LifeData']) - 1:
+                        reason = f"[Content] {BeforeLifeGraphList[i]['LifeData'][j]['ReasonGlobal']}\n\n"
+                    else:
+                        reason = f"[Content] {BeforeLifeGraphList[i]['LifeData'][j]['ReasonGlobal']}"
                 LifeGraphText = LifeGraphText + age + score + reason
             InputDic = {'Id': i+1, 'LifeGraphId': LifeGraphId, 'Language': Language, 'LifeGraph': LifeGraphText}
             InputList.append(InputDic)
     
     return InputList, RecentBeforeLifeGraphPath
 
-########################
-##### FilterKo 조건 #####
-########################
+############################
+##### FilterKo, En 조건 #####
+############################
+## FilterKo
 def LifeGraphAnalysisKoFilter(Response):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(Response)
     except json.JSONDecodeError:
-        return "BSContextDefine, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "JSONDecode에서 오류 발생: JSONDecodeError"
     # Error2: 딕셔너리가 "작성자정보"의 키로 시작하지 않을때의 예외처리
     try:
         OutputDic1 = outputJson['작성자정보']
     except:
-        return "BSContextDefine, JSON에서 오류 발생: '작성자정보' 미포함"
+        return "JSON에서 오류 발생: '작성자정보' 미포함"
     # Error3: 딕셔너리가 "중요시기"의 키로 시작하지 않을때의 예외처리
     try:
         OutputDic2 = outputJson['중요시기']
     except:
-        return "BSContextDefine, JSON에서 오류 발생: '중요시기' 미포함"
+        return "JSON에서 오류 발생: '중요시기' 미포함"
     # Error3: 자료의 구조가 다를 때의 예외 처리
     if ('작성일' not in OutputDic1 or '작성자' not in OutputDic1 or '나이' not in OutputDic1 or '국적' not in OutputDic1 or '마음패턴' not in OutputDic1 or '마음문제' not in OutputDic1 or '마음능력' not in OutputDic1):
-        return "BSContextDefine, JSON에서 오류 발생: JSONKeyError"
+        return "JSON에서 오류 발생: JSONKeyError"
     # Error4: "중요시기"가 리스트가 아닐때의 예외처리
     if not isinstance(OutputDic2, list):
-        return "BSContextDefine, JSON에서 오류 발생: '중요시기'가 리스트가 아님"
+        return "JSON에서 오류 발생: '중요시기'가 리스트가 아님"
     # Error5: "중요시기" 리스트 내 딕셔너리 자료의 구조가 다를 때의 예외 처리
     for outputDic in OutputDic2:
         if ('시기' not in outputDic or '행복지수' not in outputDic or '내용' not in outputDic or '마음' not in outputDic or '원인' not in outputDic or '예상질문' not in outputDic or '예상답변' not in outputDic):
-            return "BSContextDefine, JSON에서 오류 발생: '중요시기'가 리스트 내에서 JSONKeyError"
+            return "JSON에서 오류 발생: '중요시기'가 리스트 내에서 JSONKeyError"
+
+    return outputJson
+
+## FilterEn
+def LifeGraphAnalysisEnFilter(Response):
+    # Error1: json 형식이 아닐 때의 예외 처리
+    try:
+        outputJson = json.loads(Response)
+    except json.JSONDecodeError:
+        return "JSONDecode에서 오류 발생: JSONDecodeError"
+    # Error2: 딕셔너리가 "작성자정보"의 키로 시작하지 않을때의 예외처리
+    try:
+        OutputDic1 = outputJson['AuthorInfo']
+    except:
+        return "JSON에서 오류 발생: 'AuthorInfo' 미포함"
+    # Error3: 딕셔너리가 "중요시기"의 키로 시작하지 않을때의 예외처리
+    try:
+        OutputDic2 = outputJson['ImportantPeriods']
+    except:
+        return "JSON에서 오류 발생: 'ImportantPeriods' 미포함"
+    # Error3: 자료의 구조가 다를 때의 예외 처리
+    if ('Date' not in OutputDic1 or 'Author' not in OutputDic1 or 'Age' not in OutputDic1 or 'Nationality' not in OutputDic1 or 'MindPattern' not in OutputDic1 or 'MindProblems' not in OutputDic1 or 'MindAbilities' not in OutputDic1):
+        return "JSON에서 오류 발생: JSONKeyError"
+    # Error4: "중요시기"가 리스트가 아닐때의 예외처리
+    if not isinstance(OutputDic2, list):
+        return "JSON에서 오류 발생: 'ImportantPeriods'가 리스트가 아님"
+    # Error5: "중요시기" 리스트 내 딕셔너리 자료의 구조가 다를 때의 예외 처리
+    for outputDic in OutputDic2:
+        if ('Period' not in outputDic or 'HappinessIndex' not in outputDic or 'Content' not in outputDic or 'Mind' not in outputDic or 'Cause' not in outputDic or 'ExpectedQuestion' not in outputDic or 'ExpectedAnswer' not in outputDic):
+            return "JSON에서 오류 발생: 'ImportantPeriods'가 리스트 내에서 JSONKeyError"
 
     return outputJson
 
@@ -120,7 +165,7 @@ def LifeGraphAnalysisKoFilter(Response):
 def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", MessagesReview = "on", mode = "Master", Answer = 6):
     ## LifeGraphAnalysisProcess
     promptFrameKoPath = "/yaas/extension/e3_Database/e31_PromptData/e311_LifeGraphPrompt/b311-01_LifeGraphAnalysisKo.json"
-    promptFrameEoPath = "/yaas/extension/e3_Database/e31_PromptData/e311_LifeGraphPrompt/b311-02_LifeGraphAnalysisEn.json"
+    promptFrameEnPath = "/yaas/extension/e3_Database/e31_PromptData/e311_LifeGraphPrompt/b311-02_LifeGraphAnalysisEn.json"
     InputList, RecentBeforeLifeGraphPath = LifeGraphToInputList(Answer)
     with open(RecentBeforeLifeGraphPath, 'r', encoding = 'utf-8') as RecentBeforeLifeGraph:
         RecentBeforeLifeGraphList = json.load(RecentBeforeLifeGraph)
@@ -180,10 +225,10 @@ def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", 
                     
                 with open(RecentBeforeLifeGraphPath, 'w', encoding = 'utf-8') as RecentBeforeLifeGraphJson:
                     json.dump(RecentBeforeLifeGraphList, RecentBeforeLifeGraphJson, ensure_ascii = False, indent = 4)
-        # # 라이프 그래프 언어가 한글이 아닌 경우
-        # else:
-        #     Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, PromptFramePath = promptFrameEnPath, Mode = mode, messagesReview = MessagesReview)
-        #     Filter = LifeGraphAnalysisEnFilter(Response)
+        # 라이프 그래프 언어가 한글이 아닌 경우
+        else:
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, PromptFramePath = promptFrameEnPath, Mode = mode, messagesReview = MessagesReview)
+            Filter = LifeGraphAnalysisEnFilter(Response)
         
         # 다음 아이템으로 이동
         i += 1
@@ -301,7 +346,7 @@ def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):
 ### 라이프그래프의 이미지를 PDF로 묶기 ###
 def PNGsToPDF(PNGPaths, PDFPath):
     # 디자인 포멧 경로
-    DesignFormatPath = "/yaas/storage/s2_Meditation/Design_Format/LifeGraph_Design_Format/LifeGraph_Design_Format_"
+    DesignFormatPath = "/yaas/storage/s2_Meditation/Design_Format/s2112_BeforeLifeGraphPDF_Format/s2112_BeforeLifeGraphPDF_Format_"
     
     # 첫 번째 이미지 크기에 맞는 PDF 생성
     FirstImage = Image.open(PNGPaths[0])

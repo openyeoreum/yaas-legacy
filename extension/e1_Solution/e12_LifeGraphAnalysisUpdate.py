@@ -93,8 +93,11 @@ def LifeGraphToInputList(Answer):
                     else:
                         reason = f"[Content] {BeforeLifeGraphList[i]['LifeData'][j]['ReasonGlobal']}"
                 LifeGraphText = LifeGraphText + age + score + reason
+            if Language == 'ko':
+                print(LifeGraphText)
             InputDic = {'Id': i+1, 'LifeGraphId': LifeGraphId, 'Language': Language, 'LifeGraph': LifeGraphText}
             InputList.append(InputDic)
+    sys.exit()
     
     return InputList, RecentBeforeLifeGraphPath
 
@@ -482,3 +485,36 @@ if __name__ == "__main__":
     projectName = "Meditation"
     #########################################################################
     LifeGraphAnalysisProcess(projectName, email)
+    
+    # import matplotlib.pyplot as plt
+    # import seaborn as sns
+
+    # # 샘플 데이터 생성
+    # data = sns.load_dataset('iris')
+
+    # # A4용지 크기 설정 (Inches)
+    # fig, axs = plt.subplots(2, 2, figsize = (8.27, 11.69))
+
+    # # 좌측 상단에 그래프 그리기
+    # sns.scatterplot(data = data, x = 'sepal_length', y = 'sepal_width', ax = axs[0, 0])
+    # axs[0, 0].set_title('Sepal Length vs Width')
+
+    # # 우측 하단에 그래프 그리기
+    # sns.histplot(data = data, x = 'petal_length', ax = axs[1, 1], kde = True)
+    # axs[1, 1].set_title('Petal Length Distribution')
+
+    # # 나머지 부분에 텍스트 작성
+    # # 우측 상단 텍스트
+    # axs[0, 1].text(0.5, 0.5, 'This is the upper right section.', ha = 'center', va = 'center', fontsize = 12)
+    # axs[0, 1].axis('off')
+
+    # # 좌측 하단 텍스트
+    # axs[1, 0].text(0.5, 0.5, 'This is the lower left section.', ha = 'center', va = 'center', fontsize = 12)
+    # axs[1, 0].axis('off')
+
+    # # 레이아웃 조정
+    # plt.tight_layout()
+
+    # # PDF로 저장
+    # file_path = "/yaas/test.pdf"
+    # plt.savefig(file_path)

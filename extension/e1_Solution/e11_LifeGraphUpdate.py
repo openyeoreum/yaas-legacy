@@ -114,6 +114,7 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
 ## 다운받은 라이프그래프 최신데이터와 합치기
 def MergeRecentLifeGraph(RecentBeforeLifeGraphList, BeforeLifeGraphList):
     RecentBeforeLifeGraphId = None
+    NewBeforeLifeGraphList = []
     if RecentBeforeLifeGraphList != []:
         RecentBeforeLifeGraphId = RecentBeforeLifeGraphList[0]['LifeGraphId']
         for i in range(len(BeforeLifeGraphList)):

@@ -1272,7 +1272,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     for __chunk in ActorChunk:
                         chunk = __chunk['Chunk']
                         ChunkLength = len(chunk)
-                        if ChunkTokens + ChunkLength >= 460:
+                        if ChunkTokens + ChunkLength >= 400:
                             _EditGenerationKoChunks.append({"EditId": _chunk_['EditId'], "ChunkId": _chunk_['ChunkId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
                             SplitActorChunk = []
                             ChunkTokens = 0

@@ -15,6 +15,7 @@ import time
 import gspread
 import firebase_admin
 import textwrap
+import urllib.parse
 import sys
 sys.path.append("/yaas")
 
@@ -52,11 +53,13 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
     # 라이프 그래프의 리스트화
     RawLifeGraphList = list(FirebaseJson.items())
     # 라이프 그래프 전처리
+    IdPattern = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z")
     DatePattern = re.compile(r"\d{4}-\d{2}-\d{2}")
     PreprocessedLifeGraphList = []
     for i in range(len(RawLifeGraphList)):
-        LifeGraphId = i + 1
-        LifeGraphDate = DatePattern.search(RawLifeGraphList[i][1]['graph_url']).group()
+        url = urllib.parse.unquote(RawLifeGraphList[i][1]['graph_url'])
+        LifeGraphId = IdPattern.search(url).group()
+        LifeGraphDate = DatePattern.search(url).group()
         name = RawLifeGraphList[i][0].strip()
         Name = re.sub(r'\(\d+\)', '', name)
         Progress = None
@@ -94,21 +97,15 @@ def PreprocessingLifeGraph(FirebaseJson, Answer):
             Language = None
         _Answer = AnswerCount
         
-        LifeGraphDic = {"LifeGraphId": f"{str(LifeGraphId) + '-' + LifeGraphDate}", "LifeGraphDate": LifeGraphDate, "Name": Name, "Progress": Progress, "Age": Age, "Language": Language, "Nation": Nation, "Residence": Residence, "Answer": _Answer, "PhoneNumber": PhoneNumber, "Email": Email, "Pattern": Pattern, "Negative": Negative, "Positive": Positive, "LifeData": LifeData, "LifeGraphFile": None, "AnalysisData": AnalysisData, "LifeGraphAnalysisFile": None}
+        LifeGraphDic = {"LifeGraphId": LifeGraphId, "LifeGraphDate": LifeGraphDate, "Name": Name, "Progress": Progress, "Age": Age, "Language": Language, "Nation": Nation, "Residence": Residence, "Answer": _Answer, "PhoneNumber": PhoneNumber, "Email": Email, "Pattern": Pattern, "Negative": Negative, "Positive": Positive, "LifeData": LifeData, "LifeGraphFile": None, "AnalysisData": AnalysisData, "LifeGraphAnalysisFile": None}
         if _Answer >= Answer:
             PreprocessedLifeGraphList.append(LifeGraphDic)
     ## 라이프 그래프 날짜역순(같은 날짜는 생성 역순)으로 정리
-    def ExtractFirstNumber(LifeGraphId):
-        return int(LifeGraphId.split('-')[0])
-    
     DateSortedPreprocessedLifeGraphList = sorted(
-    PreprocessedLifeGraphList,
-    key=lambda x: (
-        datetime.strptime(x["LifeGraphDate"], "%Y-%m-%d"), 
-        ExtractFirstNumber(x["LifeGraphId"])
-    ),
-    reverse=True
-)
+        PreprocessedLifeGraphList,
+        key=lambda x: datetime.strptime(x["LifeGraphId"], "%Y-%m-%dT%H:%M:%S.%fZ"),
+        reverse=True
+    )
     return DateSortedPreprocessedLifeGraphList
 
 ## 다운받은 라이프그래프 최신데이터와 합치기
@@ -121,7 +118,6 @@ def MergeRecentLifeGraph(RecentBeforeLifeGraphList, BeforeLifeGraphList):
             if BeforeLifeGraphList[i]['LifeGraphId'] == RecentBeforeLifeGraphId:
                 NewBeforeLifeGraphList = BeforeLifeGraphList[:i]
                 break
-                
         MergedBeforeLifeGraphList = NewBeforeLifeGraphList + RecentBeforeLifeGraphList
         return MergedBeforeLifeGraphList
     else:

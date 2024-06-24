@@ -6,6 +6,7 @@ import csv
 import time
 import random
 import sox
+import pandas as pd
 import json
 sys.path.append("/yaas")
 
@@ -1462,7 +1463,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
     ## Json 파일 저장
     with open(MetaDatePath, 'w', encoding = 'utf-8') as json_file:
         json.dump(MetaDataSet, json_file, ensure_ascii = False, indent = 4)
-        
+
     ## CSV 파일 저장
     CSVFileName = '[' + projectName + '_' + 'AudioBook_MetaDate].csv'
     MetaDateCSVPath = VoiceLayerPathGen(projectName, email, CSVFileName, Folder = 'Master')
@@ -1478,6 +1479,12 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         writer = csv.writer(csv_file)
         writer.writerow(HeaderCSV)
         writer.writerows(MeatDataCSV)
+        
+    # CSV 파일 읽기
+    df = pd.read_csv(MetaDateCSVPath)
+
+    # 데이터프레임을 엑셀 파일로 저장
+    df.to_excel(MetaDateCSVPath.replace('.csv', '.xlsx'), index = False, engine = 'openpyxl')
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
 def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto'):

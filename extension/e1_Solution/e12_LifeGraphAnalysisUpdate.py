@@ -95,6 +95,10 @@ def LifeGraphToInputList(Answer):
                 LifeGraphText = LifeGraphText + age + score + reason
             InputDic = {'Id': i+1, 'LifeGraphId': LifeGraphId, 'Language': Language, 'LifeGraph': LifeGraphText}
             InputList.append(InputDic)
+            if InputDic['Language'] == 'ko':
+                with open(f'LifeGraphText{i}.txt', 'w', encoding='utf-8') as file:
+                    file.write(InputDic['LifeGraph'])
+    sys.exit()
     
     return InputList, RecentBeforeLifeGraphPath
 

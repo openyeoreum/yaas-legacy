@@ -95,7 +95,7 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     name = "yeoreum"
     password = "0128"
-    projectNameList = ['240223_나무에서만난경영지혜'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증'
+    projectNameList = ['240703_인공지능보이스를활용한비즈니스성공스토리'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증'
     IndexMode = "Define" # 'Define', 'Preprocess' : Define 은 Index 전처리 필요 없음, Preprocess 는 Index 전처리 필요함
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     VoiceEnhance = "off" # 'on', 'off' : on 은 클론보이스 노이즈 제거, off 는 클론보이스 노이즈 제거 비활성
     VoiceReverbe = "on" # 'on', 'off' : on 은 인덱스와 대화문에 리버브 적용, off 는 리버브 미적용
     Intro = "off" # Intro = ['한국출판문화산업진흥원' ...]
-    AudiobookSplitting = "Manual" # 'Auto', 'Manual' : Auto 는 오디오북 자동 분할, Manual 은 오디오북 수동 분할
+    AudiobookSplitting = "Auto" # 'Auto', 'Manual' : Auto 는 오디오북 자동 분할, Manual 은 오디오북 수동 분할
     VoiceFileGen = "on" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     MainProcess = "Creation" # 'Solution', 'Creation'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동

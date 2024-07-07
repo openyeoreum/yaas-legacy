@@ -476,7 +476,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
         promptFrame = [json.load(promptFrameJson)]
 
     
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, Root = root, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
     if Mode == "Master":
       Model = promptFrame[0]["ANTHROPIC"]["MasterModel"]

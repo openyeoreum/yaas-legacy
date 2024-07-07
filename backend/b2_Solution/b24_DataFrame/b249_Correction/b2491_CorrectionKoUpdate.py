@@ -303,11 +303,18 @@ def ReplaceNthOccurrence(CleanText, NonINPUT, NonOUTPUT, n):
 
 ## CorrectionKo의 Filter(Error 예외처리)
 def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount):
+    # Error1: 결과가 마지막까지 생성되지 않을 경우 예외 처리
+    if f'[{InputDots}]' not in responseData:
+        return f"OUTPUT의 마지막 [{InputDots}]이 생성되지 않음, OUTPUT이 덜 생성됨"
+    
     # [n] 불일치 오류시 이를 찾을 수 있도록 CorrectionText를 미리 저장
     CorrectionText = responseData
     
     # [n]을 통해 문장 분리 및 전처리가 가능하도록 [n]을 '●'로 치환
     responseData = NumbersToDots(responseData)
+    LastTagIndex = responseData.rfind("<끊어읽기보정>")
+    if LastTagIndex != -1:
+        responseData = responseData[LastTagIndex + len("<끊어읽기보정>"):].strip()
     responseData = responseData.replace('<끊어읽기보정>\n\n', '')
     responseData = responseData.replace('<끊어읽기보정>\n', '')
     responseData = responseData.replace('<끊어읽기보정>', '')
@@ -335,7 +342,7 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
     InputDic = [Input for Input in InputDic if Input]
     InputDic = [item for item in InputDic if item.strip() != '']
 
-    # Error1: 결과가 list가 아닐 때의 예외 처리
+    # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"
     # # Error2: INPUT, OUTPUT .(Periods) 불일치시 예외 처리
@@ -345,6 +352,7 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
     #     Difference = abs(OutPutPeriods - InPutPeriods) / InPutPeriods * 100
     #     if Difference > 25:
     #         return f"INPUT, OUTPUT '.(Periods)' 불일치율 25% 이상 오류 발생: 불일치율({Difference}))"
+    # Error2: INPUT, OUTPUT .(Periods) 불일치시 예외 처리
     # Error3: INPUT, OUTPUT 불일치시 예외 처리
     try:
         nonCommonParts, nonCommonPartRatio = DiffOutputDic(InputDic, OutputDic)
@@ -407,12 +415,12 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
                                     ReplaceCleanInput = ReplaceNthOccurrence(CleanInput, NonINPUT, NonOUTPUT, n)
                                     for N in range(10):
                                         ReplaceCleanOutput = ReplaceNthOccurrence(CleanOutput, NonINPUT, NonOUTPUT, N)
-                                        print(f'replace1: {NonINPUT + longCommonSubstring}')
-                                        print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')
-                                        print(f'CleanInput:  {CleanInput}')
-                                        print(f'CleanOutput: {CleanOutput}')
-                                        print(f'ReplaceCleanInput:  {ReplaceCleanInput}')
-                                        print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                                        # print(f'replace1: {NonINPUT + longCommonSubstring}')
+                                        # print(f'replace2: {NonOUTPUT + longCommonSubstring}\n------------------------------------\n')
+                                        # print(f'CleanInput:  {CleanInput}')
+                                        # print(f'CleanOutput: {CleanOutput}')
+                                        # print(f'ReplaceCleanInput:  {ReplaceCleanInput}')
+                                        # print(f'ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
                                         # ReplaceCleanInput과 ReplaceCleanOutput를 비교하여 동일한 문자 발견시 바로 코드 종료
                                         if ReplaceCleanInput == ReplaceCleanOutput:
                                             # nonCommonPartsNum += 1
@@ -423,10 +431,10 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
                                             for j in range(len(CleanInput) + 1):
                                                 ReplaceCleanInput = CleanInput[:j] + NonOUTPUT + CleanInput[j:]
                                                 ReplaceCleanOutput = CleanOutput[:j] + NonINPUT + CleanOutput[j:]
-                                                print(f'{j}-1) ReplaceCleanInput: {ReplaceCleanInput}')
-                                                print(f'{j}-1) CleanOutput:       {CleanOutput}\n')
-                                                print(f'{j}-2) CleanInput:         {CleanInput}')
-                                                print(f'{j}-2) ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
+                                                # print(f'{j}-1) ReplaceCleanInput: {ReplaceCleanInput}')
+                                                # print(f'{j}-1) CleanOutput:       {CleanOutput}\n')
+                                                # print(f'{j}-2) CleanInput:         {CleanInput}')
+                                                # print(f'{j}-2) ReplaceCleanOutput: {ReplaceCleanOutput}\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
                                                 if ReplaceCleanInput == CleanOutput or CleanInput == ReplaceCleanOutput:
                                                     # nonCommonPartsNum += 1
                                                     nonOutputDicError += 1 ## Test5
@@ -574,7 +582,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             outputEnder = ""
             
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)

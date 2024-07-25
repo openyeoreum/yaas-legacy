@@ -1038,7 +1038,11 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
 def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, CloneVoiceActorPath, SelectionGenerationKoChunks):
     ## Narrator가 "CloneVoice" 인 경우 CloneVoiceDic 생성 ##
     if Narrator == 'VoiceClone':
+        CloneVoiceFolderPath = CloneVoiceActorPath.replace('CloneVoice_Setting].json', 'CloneVoice_File]')
         if not os.path.exists(CloneVoiceActorPath):
+            if not os.path.exists(CloneVoiceActorPath):
+                os.mkdir(CloneVoiceFolderPath)
+                print(f'[ 클로닝할 보이스 파일이 필요합니다 : {CloneVoiceFolderPath}, 보이스 파일을 폴더에 넣은 후 "VoiceFileCompletion": "Completion"으로 변경해 주세요 ] ]')
             CloneVoiceActor = {
                 "Name": f"{CloneVoiceName}({projectName})",
                 "ApiSetting": {
@@ -1051,6 +1055,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "model": "eleven_multilingual_v2",
                     "Speed": 1.10,
                     "Pitch": 0,
+                    "VoiceFileCompletion": "세팅 완료 후 Completion으로 변경",
                     "SettingCompletion": "세팅 완료 후 Completion으로 변경",
                     "VoiceEnhanceCompletion": "None"
                 }
@@ -1061,11 +1066,68 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         else:
             with open(CloneVoiceActorPath, 'r', encoding = 'utf-8') as CloneVoiceActorJson:
                 CloneVoiceActor = json.load(CloneVoiceActorJson)
+            VoiceFileCompletion = CloneVoiceActor['ApiSetting']['VoiceFileCompletion']
+            Name = CloneVoiceActor['Name']
+            Voice_id = CloneVoiceActor['ApiSetting']['voice_id']
+            Stability = CloneVoiceActor['ApiSetting']['stability'][0]
+            SimilarityBoost = CloneVoiceActor['ApiSetting']['similarity_boost'][0]
+            Style = CloneVoiceActor['ApiSetting']['style'][0]
             
+            Api_key = os.getenv("ELEVENLABS_API_KEY")
+            client = ElevenLabs(api_key = Api_key)
+            
+            if VoiceFileCompletion != 'Completion':
+                sys.exit(f'[ 클로닝할 보이스 파일이 필요합니다 : {CloneVoiceFolderPath}, 보이스 파일이 존재한다면 "VoiceFileCompletion": "Completion"으로 변경해 주세요 ]')
+            else:
+                if Voice_id == "Voice_id":                   
+                    # 클로닝할 보이스 파일 리스트 생성
+                    VoiceFiles = os.listdir(CloneVoiceFolderPath)
+                    _voiceFiles = [os.path.join(CloneVoiceFolderPath, file) for file in VoiceFiles if file.lower().endswith('.mp3')]
+                    
+                    # 보이스 클로닝
+                    VOICE = client.clone(
+                        name = Name,
+                        description = f"{Stability}/{SimilarityBoost}/{Style}",
+                        files = _voiceFiles,
+                    )
+                    
+                    # voice_id 생성 및 json 저장
+                    CloneVoiceActor['ApiSetting']['voice_id'] = VOICE.voice_id
+                    with open(CloneVoiceActorPath, 'w', encoding = 'utf-8') as CloneVoiceActorJson:
+                        json.dump(CloneVoiceActor, CloneVoiceActorJson, ensure_ascii = False, indent = 4)
+
+                    # 클로닝된 보이스 샘플 생성
+                    Voice_Audio = client.generate(
+                        text = f'이 오디오북은, 여름의 인공지능 클로닝 기술로 제작된, {CloneVoiceName} 보이스로 낭독되었습니다.',
+                        voice = Voice(
+                            voice_id = CloneVoiceActor['ApiSetting']['voice_id'],
+                            settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True)
+                        ),
+                        model = CloneVoiceActor['ApiSetting']['model']
+                    )
+                    print(f"VoiceGen: completion, {Name} waiting 1-5 second")
+                    SampleFile = f'{Name}_{Stability}/{SimilarityBoost}/{Style}_ClonedVoice.mp3'
+                    SamplefileName = os.path.join(CloneVoiceFolderPath, SampleFile)
+                    save(Voice_Audio, SamplefileName)
+                    sys.exit(f'[ 샘플 {SamplefileName} 확인 후, 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
+                
             # 클론보이스 세팅이 완료되었는지 확인
             SettingCompletion = CloneVoiceActor['ApiSetting']['SettingCompletion']
             if SettingCompletion != 'Completion':
-                sys.exit(f'[ 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
+                # 클로닝된 보이스 샘플 생성
+                Voice_Audio = client.generate(
+                    text = f'이 오디오북은, 여름의 인공지능 클로닝 기술로 제작된, {CloneVoiceName} 보이스로 낭독되었습니다.',
+                    voice = Voice(
+                        voice_id = CloneVoiceActor['ApiSetting']['voice_id'],
+                        settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True)
+                    ),
+                    model = CloneVoiceActor['ApiSetting']['model']
+                )
+                print(f"VoiceGen: completion, {Name} waiting 1-5 second")
+                SampleFile = f'{Name}_{Stability}/{SimilarityBoost}/{Style}_ClonedVoice.mp3'
+                SamplefileName = os.path.join(CloneVoiceFolderPath, SampleFile)
+                save(Voice_Audio, SamplefileName)
+                sys.exit(f'[ 샘플 {SamplefileName} 확인 후, 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
             else:
                 ## MatchedVoices 변경
                 for _Matched in MatchedActors:

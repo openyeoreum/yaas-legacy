@@ -1106,7 +1106,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                         model = CloneVoiceActor['ApiSetting']['model']
                     )
                     print(f"VoiceGen: completion, {Name} waiting 1-5 second")
-                    SampleFile = f'{Name}_{Stability}/{SimilarityBoost}/{Style}_ClonedVoice.mp3'
+                    SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice.mp3'
                     SamplefileName = os.path.join(CloneVoiceFolderPath, SampleFile)
                     save(Voice_Audio, SamplefileName)
                     sys.exit(f'[ 샘플 {SamplefileName} 확인 후, 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
@@ -1124,7 +1124,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     model = CloneVoiceActor['ApiSetting']['model']
                 )
                 print(f"VoiceGen: completion, {Name} waiting 1-5 second")
-                SampleFile = f'{Name}_{Stability}/{SimilarityBoost}/{Style}_ClonedVoice.mp3'
+                SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice.mp3'
                 SamplefileName = os.path.join(CloneVoiceFolderPath, SampleFile)
                 save(Voice_Audio, SamplefileName)
                 sys.exit(f'[ 샘플 {SamplefileName} 확인 후, 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
@@ -1598,3 +1598,4 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
+    

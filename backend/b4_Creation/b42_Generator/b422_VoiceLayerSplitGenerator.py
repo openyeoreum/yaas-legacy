@@ -1078,10 +1078,12 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
             
             texts = [
                 f"안녕하세요. 이 오디오북은, 여름의 인공지능 클로닝 기술로 제작된, {CloneVoiceName} 보이스로 낭독되었습니다.",
-                f"Hello. This audiobook was narrated in {CloneVoiceName}'s voice, produced using Yeoreum's AI cloning technology.",
-                f"你好。这本有声读物是由여름的人工智能克隆技术制作的{CloneVoiceName}声音朗读的。"
+                f"Hello. This audiobook was, narrated in {CloneVoiceName}'s voice, produced using 여름's AI cloning technology.",
+                f"你好.这本有声读物是由여름的人工智能克隆技术制作的,{CloneVoiceName}声音朗读的."
                 ]
-            lang = ["Ko", "En", "Zh"]
+            models = ["eleven_multilingual_v2", "eleven_turbo_v2.5", "eleven_multilingual_v2"]
+            langs = ["Ko", "En", "Zh"]
+
             
             if VoiceFileCompletion != 'Completion':
                 sys.exit(f'[ 클로닝할 보이스 파일이 필요합니다 : {CloneVoiceFolderPath}, 보이스 파일이 존재한다면 "VoiceFileCompletion": "Completion"으로 변경해 주세요 ]')
@@ -1114,7 +1116,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                             model = CloneVoiceActor['ApiSetting']['model']
                         )
                         print(f"VoiceGen: completion, {Name} waiting 1-5 second")
-                        SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice({lang[i]}).mp3'
+                        SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice({langs[i]}).mp3'
                         SamplefileName = os.path.join(CloneVoiceFolderPath, SampleFile)
                         save(Voice_Audio, SamplefileName)
                     sys.exit(f'[ 샘플 {SamplefileName} 확인 후, 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
@@ -1133,7 +1135,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                         model = CloneVoiceActor['ApiSetting']['model']
                     )
                     print(f"VoiceGen: completion, {Name} waiting 1-5 second")
-                    SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice({lang[i]}).mp3'
+                    SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice({langs[i]}).mp3'
                     SamplefileName = os.path.join(CloneVoiceFolderPath, SampleFile)
                     save(Voice_Audio, SamplefileName)
                 sys.exit(f'[ 샘플 {SamplefileName} 확인 후, 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')

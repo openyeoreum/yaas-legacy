@@ -1077,9 +1077,9 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
             client = ElevenLabs(api_key = Api_key)
             
             texts = [
-                f"이 오디오북은, 여름의 인공지능 클로닝 기술로 제작된, {CloneVoiceName} 보이스로 낭독되었습니다.",
-                f"This audiobook was narrated using the {CloneVoiceName} voice, created with Yeo-reum's AI cloning technology.",
-                f"这本有声书是由여름人工智能克隆技术创建的{CloneVoiceName}语音narrated的。"
+                f"안녕하세요. 이 오디오북은, 여름의 인공지능 클로닝 기술로 제작된, {CloneVoiceName} 보이스로 낭독되었습니다.",
+                f"Hello. This audiobook was narrated in {CloneVoiceName}'s voice, produced using Yeoreum's AI cloning technology.",
+                f"你好。这本有声读物是由여름的人工智能克隆技术制作的{CloneVoiceName}声音朗读的。"
                 ]
             lang = ["Ko", "En", "Zh"]
             

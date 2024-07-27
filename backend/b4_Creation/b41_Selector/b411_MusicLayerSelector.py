@@ -1054,7 +1054,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                     os.remove(_SpeedFilePath)
                 
                 tfm = sox.Transformer()
-                if CloneVoicePitch != 1:
+                if CloneVoiceSpeed != 1:
                     tfm.tempo(CloneVoiceSpeed, 's')
                 if CloneVoicePitch != 0:
                     tfm.pitch(CloneVoicePitch)

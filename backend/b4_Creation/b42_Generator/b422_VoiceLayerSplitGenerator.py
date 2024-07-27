@@ -1052,9 +1052,10 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "stability": [0.70],
                     "similarity_boost": [0.80],
                     "style": [0.00],
-                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2.5", "Zh": "eleven_multilingual_v2"},
+                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Speed": 1.10,
                     "Pitch": 0,
+                    "VoiceFileSetting": {"Speed": 1.0, "Volume": 1.0, "Pitch": 0, "Reverbe": 'off'},
                     "VoiceFileCompletion": "세팅 완료 후 Completion으로 변경",
                     "SettingCompletion": "세팅 완료 후 Completion으로 변경",
                     "VoiceEnhanceCompletion": "None"
@@ -1082,15 +1083,36 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                 f"你好.这本有声读物是由여름的人工智能克隆技术制作的,{CloneVoiceName}声音朗读的."
                 ]
             langs = ["Ko", "En", "Zh"]
-
             
             if VoiceFileCompletion != 'Completion':
-                sys.exit(f'[ 클로닝할 보이스 파일이 필요합니다 : {CloneVoiceFolderPath}, 보이스 파일이 존재한다면 "VoiceFileCompletion": "Completion"으로 변경해 주세요 ]')
+                sys.exit(f'[ 1) 클로닝할 보이스 파일이 필요합니다 : {CloneVoiceFolderPath}, 보이스 파일을 폴더에 넣어주세요 ]\n[ 2) "VoiceFileSetting" 값을 완성해 주세요 ]\n[ 3) "VoiceFileCompletion": "Completion"으로 변경해 주세요 ]')
             else:
                 if Voice_id == "Voice_id":                   
                     # 클로닝할 보이스 파일 리스트 생성
                     VoiceFiles = os.listdir(CloneVoiceFolderPath)
                     _voiceFiles = [os.path.join(CloneVoiceFolderPath, file) for file in VoiceFiles if file.lower().endswith('.mp3')]
+                    if '_CloningSetted' not in _voiceFiles[0]:
+                        _SettedVoiceFiles = [os.path.join(CloneVoiceFolderPath, file.replace('.mp3', '_CloningSetted.mp3')) for file in VoiceFiles if file.lower().endswith('.mp3')]
+                    
+                    # 클로닝할 보이스 파일에 VoiceFileSetting 적용
+                    CloneVoiceSpeed = CloneVoiceActor['ApiSetting']['VoiceFileSetting']['Speed']
+                    CloneVoiceVolume = CloneVoiceActor['ApiSetting']['VoiceFileSetting']['Volume']
+                    CloneVoicePitch = CloneVoiceActor['ApiSetting']['VoiceFileSetting']['Pitch']
+                    CloneVoiceReverbe = CloneVoiceActor['ApiSetting']['VoiceFileSetting']['Reverbe']
+                    if CloneVoiceSpeed != 1 or CloneVoiceVolume != 1 or CloneVoicePitch != 0 or CloneVoiceReverbe != 'off':
+                        for i in range(len(_voiceFiles)):
+                            tfm = sox.Transformer()
+                            if CloneVoiceSpeed != 1:
+                                tfm.tempo(CloneVoiceSpeed, 's')
+                            if CloneVoiceVolume != 1:
+                                tfm.vol(CloneVoiceVolume)
+                            if CloneVoicePitch != 0:
+                                tfm.pitch(CloneVoicePitch)
+                            if CloneVoiceReverbe == 'on':
+                                tfm.pad(0, 1)
+                                tfm.reverb(reverberance = 5, room_scale = 5, high_freq_damping = 10, pre_delay = 3)
+                            tfm.build(_voiceFiles[i], _SettedVoiceFiles[i])
+                        _voiceFiles = _SettedVoiceFiles
                     
                     # 보이스 클로닝
                     VOICE = client.clone(
@@ -1118,6 +1140,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                         SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice({langs[i]}).mp3'
                         SamplefileName = os.path.join(CloneVoiceFolderPath, SampleFile)
                         save(Voice_Audio, SamplefileName)
+                        
                     sys.exit(f'[ 샘플 {SamplefileName} 확인 후, 클론보이스 세팅을 완료하세요 : {CloneVoiceActorPath} ]')
                 
             # 클론보이스 세팅이 완료되었는지 확인
@@ -1608,4 +1631,3 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    

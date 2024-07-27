@@ -1049,7 +1049,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "name": f"{CloneVoiceName}",
                     "Api": "ElevenLabs",
                     "voice_id": "Voice_id",
-                    "stability": [0.70],
+                    "stability": [0.80],
                     "similarity_boost": [0.80],
                     "style": [0.00],
                     "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},

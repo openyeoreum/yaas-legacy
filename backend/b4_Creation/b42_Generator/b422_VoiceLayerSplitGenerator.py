@@ -531,7 +531,7 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
         Stability = random.choice(ApiSetting['stability'])
         SimilarityBoost = random.choice(ApiSetting['similarity_boost'])
         Style = random.choice(ApiSetting['style'])
-        Model = ApiSetting['model']
+        Model = ApiSetting['models']['Ko']
         
         while attempt < 60:
             try:
@@ -1052,7 +1052,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "stability": [0.70],
                     "similarity_boost": [0.80],
                     "style": [0.00],
-                    "model": "eleven_multilingual_v2",
+                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2.5", "Zh": "eleven_multilingual_v2"},
                     "Speed": 1.10,
                     "Pitch": 0,
                     "VoiceFileCompletion": "세팅 완료 후 Completion으로 변경",
@@ -1081,7 +1081,6 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                 f"Hello. This audiobook was, narrated in {CloneVoiceName}'s voice, produced using 여름's AI cloning technology.",
                 f"你好.这本有声读物是由여름的人工智能克隆技术制作的,{CloneVoiceName}声音朗读的."
                 ]
-            models = ["eleven_multilingual_v2", "eleven_turbo_v2.5", "eleven_multilingual_v2"]
             langs = ["Ko", "En", "Zh"]
 
             
@@ -1113,7 +1112,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                                 voice_id = CloneVoiceActor['ApiSetting']['voice_id'],
                                 settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True)
                             ),
-                            model = CloneVoiceActor['ApiSetting']['model']
+                            model = CloneVoiceActor['ApiSetting']['models'][langs[i]]
                         )
                         print(f"VoiceGen: completion, {Name} waiting 1-5 second")
                         SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice({langs[i]}).mp3'
@@ -1132,7 +1131,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                             voice_id = CloneVoiceActor['ApiSetting']['voice_id'],
                             settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True)
                         ),
-                        model = CloneVoiceActor['ApiSetting']['model']
+                        model = CloneVoiceActor['ApiSetting']['models'][langs[i]]
                     )
                     print(f"VoiceGen: completion, {Name} waiting 1-5 second")
                     SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice({langs[i]}).mp3'

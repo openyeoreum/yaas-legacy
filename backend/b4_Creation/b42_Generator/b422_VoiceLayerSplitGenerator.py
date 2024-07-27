@@ -1150,6 +1150,8 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
             if SettingCompletion != 'Completion':
                 # 클로닝된 보이스 샘플 생성
                 for i in range(len(texts)):
+                    if langs[i] == 'En':
+                        Style = 0
                     Voice_Audio = client.generate(
                         text = texts[i],
                         voice = Voice(

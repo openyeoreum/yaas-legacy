@@ -1054,7 +1054,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "style": [0.00],
                     "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Speed": 1.10,
-                    "Pitch": 0,
+                    "Pitch": -0.3,
                     "VoiceFileSetting": {"Speed": 1.0, "Volume": 1.0, "Pitch": 0, "Reverbe": 'off'},
                     "VoiceFileCompletion": "세팅 완료 후 Completion으로 변경",
                     "SettingCompletion": "세팅 완료 후 Completion으로 변경",
@@ -1110,7 +1110,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                                 tfm.pitch(CloneVoicePitch)
                             if CloneVoiceReverbe == 'on':
                                 tfm.pad(0, 1)
-                                tfm.reverb(reverberance = 5, room_scale = 5, high_freq_damping = 10, pre_delay = 3)
+                                tfm.reverb(reverberance = 4, room_scale = 4, high_freq_damping = 8, pre_delay = 2)
                             tfm.build(_voiceFiles[i], _SettedVoiceFiles[i])
                         _voiceFiles = _SettedVoiceFiles
                     
@@ -1128,6 +1128,8 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
 
                     # 클로닝된 보이스 샘플 생성
                     for i in range(len(texts)):
+                        if langs[i] == 'En':
+                            Style = 0
                         Voice_Audio = client.generate(
                             text = texts[i],
                             voice = Voice(

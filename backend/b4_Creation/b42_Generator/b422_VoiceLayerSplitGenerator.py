@@ -1054,8 +1054,8 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "style": [0.00],
                     "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Speed": 1.10,
-                    "Pitch": -0.3,
-                    "VoiceFileSetting": {"Speed": 1.0, "Volume": 1.0, "Pitch": 0, "Reverbe": 'off'},
+                    "Pitch": 0,
+                    "VoiceFileSetting": {"Speed": 1.0, "Volume": 1.0, "Pitch": -0.3, "Reverbe": 'off'},
                     "VoiceFileCompletion": "세팅 완료 후 Completion으로 변경",
                     "SettingCompletion": "세팅 완료 후 Completion으로 변경",
                     "VoiceEnhanceCompletion": "None"

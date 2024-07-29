@@ -1204,10 +1204,13 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     MatchedActors, SelectionGenerationKoChunks = CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, CloneVoiceActorPath, SelectionGenerationKoChunks)
 
     if os.path.exists(MatchedActorsPath):
-        with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
-            MatchedActors = json.load(MatchedActorsJson)
-        with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
-            MatchedChunks = json.load(MatchedChunksJson)
+        try:
+            with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
+                MatchedActors = json.load(MatchedActorsJson)
+            with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
+                MatchedChunks = json.load(MatchedChunksJson)
+        except:
+            sys.exit(f'[ MatchedVoices 파일이 이미 생성됨, 삭제해주세요 : {MatchedActorsPath} ]')
 
         ## AudioBook_Edit에 새로운 ActorName이 발생한 경우 이를 MatchedActors에 추가
         # MatchedActors 검토

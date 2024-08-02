@@ -395,9 +395,9 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
 
       # 토큰수별 모델 선정
       if ModelTokens == "Short":
-        BaseModel = "gpt-3.5-turbo"
+        BaseModel = "gpt-4o-mini"
       elif ModelTokens == "Long":
-        BaseModel = "gpt-3.5-turbo"
+        BaseModel = "gpt-4o-mini"
       
       # FineTuning 요청
       FineTuningJob = client.fine_tuning.jobs.create(

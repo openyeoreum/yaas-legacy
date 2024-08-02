@@ -2,11 +2,11 @@
     "TaskName": "CharacterCompletion",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-3.5-turbo",
+            "ShortTokensModel": "gpt-4o-mini",
             "LongTokensModel": "gpt-4o"
         },
         "ExampleFineTunedModel": {
-            "ShortTokensModel": [{"Date": "CharacterCompletion-231104034753", "Model": "ft:gpt-3.5-turbo-0613:yeoreum::8H4qi78e"}],
+            "ShortTokensModel": [{"Date": "CharacterCompletion-231104034753", "Model": "ft:gpt-4o-mini-0613:yeoreum::8H4qi78e"}],
             "LongTokensModel": []
         },
         "MemoryFineTunedModel": {

@@ -2,7 +2,7 @@
     "TaskName": "DuplicationPreprocess",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-3.5-turbo",
+            "ShortTokensModel": "gpt-4o-mini",
             "LongTokensModel": "gpt-4o"
         },
         "ExampleFineTunedModel": {

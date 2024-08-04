@@ -1468,7 +1468,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 for _Chunk in Update['ActorChunk']:
                     _chunk = ModifyTCChunk(_Chunk)
                     Chunks.append(_chunk)
-            Chunk = " ".join(Chunks)
+                Chunk = " ".join(Chunks)
             
             OriginChunk = " ".join(Update['ActorChunk'])
             ChunkCount = len(Update['ActorChunk']) - 1 # 파일의 마지막 순번을 표기

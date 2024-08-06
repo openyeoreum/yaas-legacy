@@ -431,7 +431,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
             _Intro2_Audio += _Intro2_Voice + AudioSegment.silent(duration = ActorChunk[a]['Pause'] * 1000)
     ## _Intro2_가 Title앞에 존재하는 경우 ##
 
-    TitleMusic_Audio = MusicsVolume(TitleMusicPath, Volume)
+    TitleMusic_Audio = MusicsVolume(TitleMusicPath, Volume + 10)
     PartMusic_Audio = MusicsVolume(PartMusicPath, Volume)
     ChapterMusic_Audio = MusicsVolume(ChapterMusicPath, Volume)
     IndexMusic_Audio = MusicsVolume(IndexMusicPath, Volume)
@@ -490,10 +490,35 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
     AccumulatedTimesList[-1]['AccumulatedTime'] += LastLengthTime
             
     # Mixing
-    MixedTitleMusicAudio = TitleMusic_Audio
+    # 기존의 배경 음악과 볼륨이 10 낮은 배경 음악 준비
+    OriginalMusic = TitleMusic_Audio
+    ReducedVolumeMusic = TitleMusic_Audio - 10
+    MixedTitleMusicAudio = OriginalMusic
+
     for i in range(len(TitleVoices)):
-        # 성우의 목소리 오버레이
-        MixedTitleMusicAudio = MixedTitleMusicAudio.overlay(TitleVoices[i], position = Length[i] * 1000)
+        # 현재 성우의 목소리 길이
+        voice_length = len(TitleVoices[i])
+        # 성우의 목소리가 시작될 위치 (ms 단위)
+        start_position = Length[i] * 1000
+        # 페이드 인/아웃 길이 (목소리 길이의 15%)
+        fade_duration = int(voice_length * 0.20)
+        # 기존 음악을 시작부터 페이드 아웃 지점까지 나눔
+        before_voice = MixedTitleMusicAudio[:start_position]
+        # 페이드 아웃 적용
+        before_voice = before_voice.fade_out(fade_duration)
+        # 목소리가 끝난 후부터 나머지 음악
+        after_voice_start = start_position + voice_length
+        after_voice = MixedTitleMusicAudio[after_voice_start:]
+        # 페이드 인 적용
+        if i == len(TitleVoices)-1:
+            last_fade_duration = int(voice_length * 0.35)
+            after_voice = after_voice.fade_in(last_fade_duration)
+        else:
+            after_voice = after_voice.fade_in(fade_duration)
+        # 각 부분을 합쳐 새로운 MixedTitleMusicAudio 생성
+        MixedTitleMusicAudio = before_voice + TitleVoices[i] + after_voice
+    # 전체 구간에서 볼륨이 10 낮은 배경 음악을 최종 믹스된 오디오와 겹치게 오버레이
+    MixedTitleMusicAudio = MixedTitleMusicAudio.overlay(ReducedVolumeMusic)
     
     # FadeOut
     FadeLenth = int((Length[i+2] * 1000) - (Length[i+1] * 1000))

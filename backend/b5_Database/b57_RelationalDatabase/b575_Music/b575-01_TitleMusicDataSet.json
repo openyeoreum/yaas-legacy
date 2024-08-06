@@ -710,6 +710,22 @@
                                 "Volume": 100,
                                 "Direction": "뒤"
                             }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/4_TitleMusicSet/46_TitleMusic.wav",
+                            "Setting": {
+                                "Length": [8.00, 16.00, 22.00, 28.00, 36.00],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/4_TitleMusicSet/47_TitleMusic.wav",
+                            "Setting": {
+                                "Length": [10.00, 15.00, 17.50, 24.12, 30.12],
+                                "Volume": 120,
+                                "Direction": "뒤"
+                            }
                         }
                     ],
                     "PartMusic": [

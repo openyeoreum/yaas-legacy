@@ -18588,7 +18588,8 @@
                 "CharacterId": 213,
                 "Name": "손석구(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/213_손석구(일반).wav",
-                "Quilty": 10,
+                "Quilty": 0,
+                "_Quilty": 10,
                 "Grade": ["Actor"],
                 "Context": {
                     "Genre": [
@@ -18675,7 +18676,8 @@
                 "CharacterId": 214,
                 "Name": "손석구(일반, 피치다운)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/214_손석구(일반, 피치다운).wav",
-                "Quilty": 10,
+                "Quilty": 0,
+                "_Quilty": 10,
                 "Grade": ["Actor"],
                 "Context": {
                     "Genre": [

@@ -13,6 +13,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from time import sleep
+from datetime import datetime
 from pydub import AudioSegment
 from collections import defaultdict
 from elevenlabs import Voice, VoiceSettings, save
@@ -500,7 +501,7 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
     return EditGenerationKoListChunks
 
 ## TypecastVoice 생성 ##
-def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
+def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, voiceReverbe, tag, name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview):
     attempt = 0
 
     ### 음성 속도 조절 함수 ###
@@ -580,7 +581,7 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
                 
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
-                    VoiceSplit(projectName, email, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                    VoiceSplit(projectName, email, Modify, ModifyFolderPath, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
 
                 return "Continue"
                 ########## ElevenLabs API 요청 ##########
@@ -678,7 +679,7 @@ def ActorVoiceGen(projectName, email, voiceReverbe, tag, name, Chunk, EL_Chunk, 
 
                     if len(SplitChunks) > 1:
                         ### 음성파일을 분할하는 코드 ###
-                        VoiceSplit(projectName, email, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                        VoiceSplit(projectName, email, Modify, ModifyFolderPath, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
 
                     return "Continue"
                 else:
@@ -813,6 +814,126 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath):
                 UniqueFiles.append(file)
 
     return UniqueFiles
+
+## 생성된 수정(Modify)파일 합치기
+def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
+    ModifyFileName = ModifyFolderName + '.wav'
+    ModifyFilePath = os.path.join(ModifyFolderPath, ModifyFileName)
+    # 파일 이름을 파싱하여 정렬하기 위한 함수
+    SentenceSeparatorPath = "/yaas/storage/s1_Yeoreum/s19_ModifyStorage/1_ModifySound_문장사이음.wav"
+    ParagraphSeparatorPath = "/yaas/storage/s1_Yeoreum/s19_ModifyStorage/2_ModifySound_문단사이음.wav"
+
+    # 문장과 문단 사이 소리 로드
+    SentenceSeparator = AudioSegment.from_wav(SentenceSeparatorPath) - 5
+    ParagraphSeparator = AudioSegment.from_wav(ParagraphSeparatorPath) - 5
+
+    # 파일 이름을 파싱하여 정렬하기 위한 함수
+    def ParseFilename(filename):
+        parts = filename.split('_')
+        paragraph = int(parts[2])
+        sentence = int(parts[-1].split('(')[-1].split(')')[0])
+        return paragraph, sentence
+
+    # 폴더 내의 모든 .wav 파일 목록 추출
+    RawModifiedFiles = [f for f in os.listdir(ModifyFolderPath) if f.endswith("Modify.wav")]
+    # 모든 .wav 파일 목록의 노멀라이즈
+    RawModifiedFiles = [unicodedata.normalize('NFC', s) for s in RawModifiedFiles]
+
+    # 파일을 정렬
+    SortedModifiedFiles = sorted(RawModifiedFiles, key = ParseFilename)
+
+    # 정렬된 파일을 병합
+    FinalCombined = AudioSegment.empty()
+    previous_paragraph = None
+    previous_sentence = None
+
+    UpdateTQDM = tqdm(SortedModifiedFiles,
+                    total = len(SortedModifiedFiles),
+                    desc = 'ModifiedVoiceGenerator')
+
+    for Update in UpdateTQDM:
+        ModifiedFilePath = os.path.join(ModifyFolderPath, Update)
+        ModifiedVoice = AudioSegment.from_wav(ModifiedFilePath)
+        
+        CurrentParagraph, CurrentSentence = ParseFilename(Update)
+        
+        if previous_paragraph is not None:
+            if CurrentParagraph != previous_paragraph:
+                FinalCombined += ParagraphSeparator
+            elif CurrentSentence != previous_sentence:
+                FinalCombined += SentenceSeparator
+        
+        FinalCombined += ModifiedVoice
+        previous_paragraph = CurrentParagraph
+        previous_sentence = CurrentSentence
+
+    try:
+        with open(ModifyFilePath, "wb") as VoiceFile:
+            FinalCombined.export(VoiceFile, format = "wav")
+            FinalCombined = AudioSegment.empty()
+        # struct.error: 'L' format requires 0 <= number <= 4294967295 에러 방지 (4GB 용량 문제 방지)
+    except:
+        os.remove(ModifyFilePath)
+        ModifyFilePathMp3 = ModifyFilePath.replace(".wav", ".mp3")
+        # 오디오 파일을 12개의 파트로 나눈 후 3분할로 저장
+        PartLength = len(FinalCombined) // 12
+        parts = []
+        for i in range(12):
+            start = i * PartLength
+            if i == 11:  # 마지막 파트에서는 나머지 모두를 포함
+                part = FinalCombined[start:]
+            else:
+                part = FinalCombined[start:start+PartLength]
+            parts.append(part)
+
+        # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
+        FinalCombinedPart1 = AudioSegment.empty()
+        for i, part in enumerate(parts[:4]):
+            TempPath = ModifyFilePathMp3.replace(".mp3", f"_Part{i+1}.mp3")
+            with open(TempPath, "wb") as file:
+                print(f"[ 대용량 파일 분할 저장: {TempPath} ]")
+                part.export(file, format = "mp3", bitrate = "320k")
+                LoadedPart = AudioSegment.from_file(TempPath)
+                FinalCombinedPart1 += LoadedPart  # 파트 합치기
+            os.remove(TempPath)  # 임시 파일 삭제
+        FinalCombined = AudioSegment.empty()  # 메모리 해제
+        
+        # 최종 파일 저장
+        with open(ModifyFilePathMp3.replace(".mp3", f"_(1).mp3"), "wb") as FinalCombined_file:
+            FinalCombinedPart1.export(FinalCombined_file, format = "mp3", bitrate = "320k")
+            FinalCombinedPart1 = AudioSegment.empty()  # 메모리 해제
+            
+        # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
+        FinalCombinedPart2 = AudioSegment.empty()
+        for i, part in enumerate(parts[4:8]):
+            TempPath = ModifyFilePathMp3.replace(".mp3", f"_Part{i+5}.mp3")
+            with open(TempPath, "wb") as file:
+                print(f"[ 대용량 파일 분할 저장: {TempPath} ]")
+                part.export(file, format = "mp3", bitrate = "320k")
+                LoadedPart = AudioSegment.from_file(TempPath)
+                FinalCombinedPart2 += LoadedPart  # 파트 합치기
+            os.remove(TempPath)  # 임시 파일 삭제
+
+        # 최종 파일 저장
+        with open(ModifyFilePathMp3.replace(".mp3", f"_(2).mp3"), "wb") as FinalCombined_file:
+            FinalCombinedPart2.export(FinalCombined_file, format = "mp3", bitrate = "320k")
+            FinalCombinedPart2 = AudioSegment.empty()  # 메모리 해제
+            
+        # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
+        FinalCombinedPart3 = AudioSegment.empty()
+        for i, part in enumerate(parts[8:]):
+            TempPath = ModifyFilePathMp3.replace(".mp3", f"_Part{i+9}.mp3")
+            with open(TempPath, "wb") as file:
+                print(f"[ 대용량 파일 분할 저장: {TempPath} ]")
+                part.export(file, format = "mp3", bitrate = "320k")
+                LoadedPart = AudioSegment.from_file(TempPath)
+                FinalCombinedPart3 += LoadedPart  # 파트 합치기
+            os.remove(TempPath)  # 임시 파일 삭제
+
+        # 최종 파일 저장
+        with open(ModifyFilePathMp3.replace(".mp3", f"_(3).mp3"), "wb") as FinalCombined_file:
+            FinalCombinedPart3.export(FinalCombined_file, format = "mp3", bitrate = "320k")
+            FinalCombinedPart3 = AudioSegment.empty()  # 메모리 해제
 
 ## 생성된 음성파일 합치기
 def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = 'off', VoiceFileGen = 'on'):
@@ -1187,7 +1308,12 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
-    
+    ## Modify 시간에 맞추어 폴더 생성
+    ModifyTime = datetime.now().strftime("%Y%m%d%H%M%S")
+    ModifyFolderName = f"{ModifyTime}_Modified_Part"
+    ModifyFolderPath = VoiceLayerPathGen(projectName, email, ModifyFolderName, 'Master')
+    if not os.path.exists(ModifyFolderPath):
+        os.makedirs(ModifyFolderPath)
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
     # MatchedActors 경로 생성
     fileName = projectName + '_' + 'MatchedVoices.json'
@@ -1553,7 +1679,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 if Modify == "Yes":
                     FileName = projectName + '_' + str(EditId) + '_' + Name + 'M.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
-                    ChangedName = ActorVoiceGen(projectName, email, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                    ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
                     if ChangedName != 'Continue':
                         if Macro == "Auto":
                             TypeCastMacro(ChangedName, Account)
@@ -1569,7 +1695,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
                     if not (os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') or os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav')):
-                        ChangedName = ActorVoiceGen(projectName, email, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                        ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 
                         if ChangedName == 'Continue':
                             ## 히스토리 저장 ##
@@ -1599,6 +1725,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)
     EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen)
+    ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName)
     
     return EditGenerationKoChunks
 

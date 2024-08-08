@@ -595,7 +595,7 @@ def VoiceTimeStempsClassification(VoiceTimeStemps, ResponseJson):
     return SplitTimeList
 
 ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
+def VoiceFileSplit(Modify, ModifyFolderPath, VoiceLayerPath, SplitTimeList):
     # 오디오 파일 로드
     audio = AudioSegment.from_wav(VoiceLayerPath)
     
@@ -697,7 +697,6 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         # 세그먼트 재생 시간 저장
         segment_duration = segment.duration_seconds
         segment_durations.append(segment_duration)
-        
         ExportPathText = VoiceLayerPath.replace(".wav", "")
         if ExportPathText[-1] == 'M':
             ExportPathText = ExportPathText.replace("M", "")
@@ -705,6 +704,12 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
         else:
             ExportPath = ExportPathText + f"_({i}).wav"
         segment.export(ExportPath, format = "wav")
+        if Modify == "Yes":
+            InspectionExportPath = ExportPathText + f"_({i})Modify.wav"
+            InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
+            InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
+            segment.export(InspectionExportMasterFilePath, format = "wav")
+
         print(f"Segment {i} exported: Start at {start_point / 1000:.5f}, end at {split_point:.5f} with fades and silence")
         start_point = end_point
         
@@ -714,7 +719,7 @@ def VoiceFileSplit(VoiceLayerPath, SplitTimeList):
     return segment_durations
 
 ## VoiceSplit 최종 함수
-def VoiceSplit(projectName, email, name, VoiceLayerPath, SplitSents, LanguageCode = "ko-KR", MessagesReview = "off"):
+def VoiceSplit(projectName, email, Modify, ModifyFolderPath, name, VoiceLayerPath, SplitSents, LanguageCode = "ko-KR", MessagesReview = "off"):
 
     print(f"VoiceSplit: progress, {name} waiting 5-15 second")
     for _ in range(3):
@@ -726,7 +731,7 @@ def VoiceSplit(projectName, email, name, VoiceLayerPath, SplitSents, LanguageCod
             ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
             SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
             ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-            segment_durations = VoiceFileSplit(VoiceLayerPath, SplitTimeList)
+            segment_durations = VoiceFileSplit(Modify, ModifyFolderPath, VoiceLayerPath, SplitTimeList)
             
             return segment_durations
         except TypeError as e:

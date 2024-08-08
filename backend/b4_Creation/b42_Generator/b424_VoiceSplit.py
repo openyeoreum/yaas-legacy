@@ -704,6 +704,7 @@ def VoiceFileSplit(Modify, ModifyFolderPath, VoiceLayerPath, SplitTimeList):
         else:
             ExportPath = ExportPathText + f"_({i}).wav"
         segment.export(ExportPath, format = "wav")
+        # 수정 파일 별도 저장
         if Modify == "Yes":
             InspectionExportPath = ExportPathText + f"_({i})Modify.wav"
             InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)

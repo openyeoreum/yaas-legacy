@@ -1064,7 +1064,9 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
     # 파일 이름을 파싱하여 정렬하기 위한 함수
     def ParseFilename(filename):
         parts = filename.split('_')
-        paragraph = int(parts[2])
+        paragraph = float(parts[2])
+        if paragraph.is_integer():  # 소수점 이하가 0인 경우
+            paragraph = int(paragraph)  # 정수로 변환
         sentence = int(parts[-1].split('(')[-1].split(')')[0])
         return paragraph, sentence
 
@@ -1644,12 +1646,15 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             ActorModify = "No"
             NewActorSwitch = 1
             for AllHistory in GenerationKoChunkAllHistory:
-                if AllHistory['EditId'] == EditId and AllHistory['ActorName'] == Name:
-                    NewActorSwitch = 0
+                if AllHistory['EditId'] == EditId:
+                    OriginName = AllHistory['ActorName']
+                    if AllHistory['ActorName'] == Name:
+                        NewActorSwitch = 0
+
             if NewActorSwitch == 1:
                 ActorModify = "Yes"
                 Modify = "Yes"
-                print(f"[ ActorModify: {ActorModify}, (성우) 변경 ]\n({Name})")
+                print(f"[ ActorModify: {ActorModify}, (성우) 변경 ]\n({OriginName})\n({Name})")
             ChunkModify = "No"
             for History in GenerationKoChunkHistorys:
                 if History['EditId'] == EditId and History["ActorName"] == Name:

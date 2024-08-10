@@ -19331,7 +19331,7 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["남"],
+                    "Gender": ["여"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
@@ -19373,6 +19373,184 @@
                     },
                     "Speed": 1,
                     "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 217,
+                "Name": "이나(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
+                "Quilty": 0,
+                "Grade": ["Main"],
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 0},
+                        {"index": "여", "Score": 0},
+                        {"index": "중성", "Score": 0}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 0},
+                        {"index": "중립적", "Score": 0},
+                        {"index": "내향적", "Score": 0}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 0},
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "평온", "Score": 0},
+                        {"index": "무감정", "Score": 0},
+                        {"index": "피곤", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 0}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 0},
+                        {"index": "중립", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "화남", "Score": 0}
+                    ],
+                    "TypeCastContext": {}
+                },
+                "ApiSetting": {
+                    "name": "이나(리디밍러브)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "8hSoM8ADib2T84p3oaDm",
+                    "stability": [
+                        1.0
+                    ],
+                    "similarity_boost": [
+                        0.3
+                    ],
+                    "style": [
+                        0.0
+                    ],
+                    "models": {
+                        "Ko": "eleven_multilingual_v2",
+                        "En": "eleven_turbo_v2_5",
+                        "Zh": "eleven_multilingual_v2"
+                    },
+                    "Speed": 1,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 105,
+                "Name": "이나(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/105_세희(중간톤, 피치다운).wav",
+                "Quilty": 10,
+                "Grade": ["Main", "Actor"],
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 9.5},
+                        {"index": "비문학", "Score": 3},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 7},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 8},
+                        {"index": "노년", "Score": 7}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 3},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 4},
+                        {"index": "즐거움", "Score": 6},
+                        {"index": "평온", "Score": 10},
+                        {"index": "무감정", "Score": 10},
+                        {"index": "피곤", "Score": 10},
+                        {"index": "슬픔", "Score": 9},
+                        {"index": "두려움", "Score": 8},
+                        {"index": "놀람", "Score": 4}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 3},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 9},
+                        {"index": "대화", "Score": 3}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 10},
+                        {"index": "중립", "Score": 10},
+                        {"index": "슬픔", "Score": 9},
+                        {"index": "화남", "Score": 6}
+                    ],
+                    "TypeCastContext": {}
+                },
+                "ApiSetting": {
+                    "name": "이나",
+                    "Api": "TypeCast",
+                    "emotion_tone_preset": {
+                        "emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
+                        "neuter_emotion_tone_preset": ["sad-1", "sad-2", "sad-3", "sad-4"],
+                        "emotion_prompt": "None"
+                    },
+                    "emotion_prompt": {
+                        "emotion_tone_preset": "emotion_prompt",
+                        "emotion_prompt": "None"
+                    },
+                    "volume": 120,
+                    "speed_x": [1.05],
+                    "tempo": 1.0,
+                    "pitch": 0,
+                    "neuter_pitch": -1,
+                    "max_seconds": 60,
+                    "force_length": 0,
+                    "last_pitch": [-2, -1, 0]
                 }
             }
         ],

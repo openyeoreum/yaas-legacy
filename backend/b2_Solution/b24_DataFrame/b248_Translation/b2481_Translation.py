@@ -51,53 +51,17 @@ def LoadSFXBodys(projectName, email):
     
     return SFXIndexs, SFXBodys
 
-## inputList의 InputList 치환 (인덱스, 캡션 부분 합치기)
-def MergeInputList(inputList):
-    InputList = []
-    MergeBuffer = ''
-    MergeIds = []
-    NonMergeFound = False
-
-    for item in inputList:
-        if list(item.keys())[1] == 'Merge':
-            # 'Merge' 태그가 붙은 항목의 내용을 버퍼에 추가하고 ID를 MergeIds에 추가합니다.
-            MergeBuffer += list(item.values())[1]
-            MergeIds.append(item['Id'])
-        else:
-            # 'Merge'가 아닌 태그가 발견된 경우
-            NonMergeFound = True
-            if MergeBuffer:
-                # 버퍼에 내용이 있으면 현재 항목과 합칩니다.
-                content = MergeBuffer + list(item.values())[1]
-                # 'Id'는 MergeIds에 현재 항목의 'Id'를 추가하여 리스트로 만듭니다.
-                currentId = MergeIds + [item['Id']]
-                # 합쳐진 내용과 'Id' 리스트를 가진 새 딕셔너리를 만듭니다.
-                mergedItem = {'Id': currentId, list(item.keys())[1]: content.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
-                InputList.append(mergedItem)
-                # 버퍼와 ID 리스트를 초기화합니다.
-                MergeBuffer = ''
-                MergeIds = []
-            else:
-                # 버퍼가 비어 있으면 현재 항목을 결과 리스트에 그대로 추가합니다.
-                InputList.append(item)
-    
-    # 리스트의 끝에 도달했을 때 버퍼에 남아 있는 'Merge' 내용을 처리합니다.
-    if MergeBuffer and not NonMergeFound:
-        # 모든 항목이 'Merge'인 경우 마지막 항목만 처리합니다.
-        mergedItem = {'Id': MergeIds, list(item.keys())[1]: MergeBuffer.replace('\n\n\n\n', '\n\n').replace('\n\n\n', '\n\n')}
-        InputList.append(mergedItem)
-
-    return InputList
-
-## SFXBodys의 inputList 치환
-def SFXBodysToInputList(projectName, email):
+## 16-1. TranslationIndex (목차번역)의 inputList 치환
+def TranslationIndexToInputList(projectName, email):
     SFXIndexs, SFXBodys = LoadSFXBodys(projectName, email)
-    
+    ## 16-1. TranslationIndex (목차번역)
     ## 1: IndexInputText 치환
     IndexText = ''
     for i in range(len(SFXIndexs)):
         Indexs = SFXIndexs[i]
-        IndexTag = Indexs[0]['IndexTag']
+        IndexTag = Indexs[0]['Tag']
+        
+        Enter = ''
         Index = ''
         for j in range(len(Indexs)):
             Index += f"{Indexs[j]['Chunk']}"
@@ -106,40 +70,52 @@ def SFXBodysToInputList(projectName, email):
         else:
             Enter = '\n'
         if i == len(SFXIndexs)-1 :
-            Enter = ''            
+            Enter = ''
         IndexText += f'[{IndexTag}]\n{Index}{Enter}'
     IndexInputList = [{'Id': 1, 'Continue': IndexText}]
     
+    return IndexInputList
+    
+## 16-2. TranslationKeyWordList (단어장번역)의 inputList 치환
+def TranslationKeyWordListToInputList(projectName, email):
+    SFXIndexs, SFXBodys = LoadSFXBodys(projectName, email)
+    ## 16-2. TranslationKeyWordList (단어장번역)
     ## 2: BodyText 치환
-    IndexInputText = []
-
-    
+    BodyInputList = []
+    for i in range(len(SFXBodys)):
+        Bodys = SFXBodys[i]
         
-    InputList = MergeInputList(inputList)
-    
-    # ChunkIdList 형성
-    InputChunkIdList = []
-    for Input in InputList:
-        InputChunkIds = []
-
-        # 'Id'가 리스트인지 확인
-        if isinstance(Input['Id'], list):
-            for Id in Input['Id']:
-                InputChunkIds += BodyFrameBodys[Id - 1]['ChunkId']
-        else:
-            # 'Id'가 단일 정수인 경우
-            Id = Input['Id']
-            InputChunkIds += BodyFrameBodys[Id - 1]['ChunkId']
-
-        InputChunkIdList.append(InputChunkIds)
+        IndexId = Bodys[0]['IndexId']
+        IndexTag = Bodys[0]['IndexTag']
+        Index = Bodys[0]['Index']
         
-    return IndexInputList, InputChunkIdList
+        BodyId = Bodys[0]['BodyId']
+        BodyTag = Bodys[0]['Tag']
+        
+        Tab = ''
+        Enter = ''
+        Body = ''
+        if BodyTag == 'Caption':
+            Tab = '\t'
+        for j in range(len(Bodys)):
+            if j == len(Bodys)-1 :
+                Enter = ''
+            else:
+                Enter = '\n'
+            Body += f"{Tab}{Bodys[j]['Chunk']}{Enter}"
+        BodyInputList.append({'Id': BodyId, 'Index': {'IndexId': IndexId, 'IndexTag': IndexTag, 'Index': Index}, 'Continue': Body})
+        
+    return BodyInputList
+
+# ## 16-3. TranslationBody (연계번역)의 inputList 치환
+# def TranslationKeyWordListToInputList(projectName, email, KeyWordList):
+#     BodyInputList = TranslationKeyWordListToInputList(projectName, email)
 
 ######################
 ##### Filter 조건 #####
 ######################
-## SFXMatching의 Filter(Error 예외처리)
-def SFXMatchingFilter(Input, responseData, memoryCounter):
+## 16-1. TranslationIndex의 Filter(Error 예외처리)
+def TranslationIndexFilter(Input, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -200,7 +176,7 @@ def SFXMatchingFilter(Input, responseData, memoryCounter):
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def SFXMatchingInputMemory(inputMemoryDics, MemoryLength):
+def TranslationInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -216,7 +192,7 @@ def SFXMatchingInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def SFXMatchingOutputMemory(outputMemoryDics, MemoryLength):
+def TranslationOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -236,13 +212,23 @@ def SFXMatchingOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## SFXMatching 프롬프트 요청 및 결과물 Json화
-def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## 16-1. TranslationIndex (목차번역) 프롬프트 요청 및 결과물 Json화
+def TranslationIndexProcess(projectName, email, ProcessNumber, DataFramePath, memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+    # 언어별 Process 설정
+    if ProcessNumber == '17':
+        Process = 'TranslationIndexEn'
+    if ProcessNumber == '18':
+        Process = 'TranslationIndexJa'
+    if ProcessNumber == '19':
+        Process = 'TranslationIndexZh'
+    if ProcessNumber == '20':
+        Process = 'TranslationIndexEs'
+        
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '15', DataFramePath)    
-    inputList, inputChunkIdList = BodyFrameBodysToInputList(projectName, email)
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, f'{Process}_{ProcessNumber}-1', DataFramePath)    
+    inputList = TranslationIndexToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
         return OutputMemoryDicsFile
@@ -258,7 +244,7 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
     outputMemory = []
     ErrorCount = 0
         
-    # SFXMatchingProcess
+    # TranslationIndexProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -308,7 +294,7 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = SFXMatchingFilter(Input, responseData, memoryCounter)
+            Filter = TranslationIndexFilter(Input, responseData, memoryCounter)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -651,13 +637,13 @@ def SplitChunkIntoTokens(Chunk):
     return Tokens
 
 ## 데이터 치환
-def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory", importance = 0):
+def TranslationResponseJson(projectName, email, ProcessNumber, Process, DataFramePath, messagesReview = 'off', mode = "Memory", importance = 0):
     # Chunk, ChunkId 데이터 추출
     InputList, InputChunkIdList = BodyFrameBodysToInputList(projectName, email, Task = "Body")
     BodyFrameSplitedBodyScripts, BodyFrameBodys = LoadBodyFrameBodys(projectName, email)
     
     # 데이터 치환
-    outputMemoryDics = SFXMatchingProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = TranslationIndexProcess(projectName, email, ProcessNumber, DataFramePath, MessagesReview = messagesReview, Mode = mode)
 
     # outputMemoryDics의 ChunksList 형성
     ChunkList = []
@@ -864,8 +850,8 @@ def SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 SFXMatching에 업데이트
-def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, Importance = 0):
-    print(f"< User: {email} | Project: {projectName} | 15_SFXMatchingUpdate 시작 >")
+def TranslationUpdate(projectName, email, ProcessNumber, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None, Importance = 0):
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
     # SFXMatching의 Count값 가져오기
     ContinueCount, Completion = SFXMatchingCountLoad(projectName, email)
     if Completion == "No":
@@ -873,10 +859,10 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
         if ExistedDataFrame != None:
             # 이전 작업이 존재할 경우 가져온 뒤 업데이트
             AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "SFXMatching", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate는 ExistedSFXMatching으로 대처됨 ]\n")
+            AddExistedDataSetToDB(projectName, email, f"{Process}", ExistedDataSet)
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}는 Existed{Process}으로 대처됨 ]\n")
         else:
-            responseJson = SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode, importance = Importance)
+            responseJson = TranslationResponseJson(projectName, email, ProcessNumber, DataFramePath, messagesReview = MessagesReview, mode = Mode, importance = Importance)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]
@@ -887,13 +873,13 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
-                            desc = 'SFXMatchingUpdate')
+                            desc = f'{Process}Update')
             # i값 수동 생성
             i = 0
             for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f"SFXMatchingUpdate: {Update['BodyId']}")
+                UpdateTQDM.set_description(f"{Process}Update: {Update['BodyId']}")
                 time.sleep(0.0001)
-                SFXSplitedBodyChunks = Update['SFXSplitedBodyChunks']
+                SFXSplitedBodyChunks = Update[f'{Process}SplitedBodyChunks']
                 AddSFXSplitedBodysToDB(projectName, email, SFXSplitedBodyChunks)
 
                 # i값 수동 업데이트
@@ -902,16 +888,18 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
             SFXMatchingCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate 완료 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
 
     else:
-        print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate는 이미 완료됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}는 이미 완료됨 ]\n")
 
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "240801_빨간풍차가있는집"
+    ProcessNumber = '17'
+    Process = 'TranslationKo'
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
@@ -919,4 +907,4 @@ if __name__ == "__main__":
     mode = "Master"
     #########################################################################
     
-    SFXBodysToInputList(projectName, email)
+    TranslationIndexProcess(projectName, email, ProcessNumber, Process, DataFramePath)

@@ -159,7 +159,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
 ###################################
 
 ### 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesReview = "on", bookGenre = "Auto"):
+def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesReview = "on", bookGenre = "Auto", Translations = []):
     ############################ 하이퍼 파라미터 설정 ############################
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
@@ -464,6 +464,40 @@ def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesRe
     existedDataSet = None
 
 
+    #########################
+    ### 17-20_Translation ###
+    #########################
+    if Translations != []:
+        for Translation in Translations:
+            if Translation == 'En':
+                ProcessNumber = '17'
+                Process = 'TranslationEn'
+            if Translation == 'Ja':
+                ProcessNumber = '18'
+                Process = 'TranslationJa'
+            if Translation == 'Zh':
+                ProcessNumber = '19'
+                Process = 'TranslationZh'
+            if Translation == 'Es':
+                ProcessNumber = '20'
+                Process = 'TranslationEs'
+                
+            InitCorrectionKo(projectName, email)
+            InitRawDataSet(projectName, email, "CorrectionKo")
+            if existedDataFrameMode == "on":
+                existedDataFrame = LoadexistedDataFrame(projectName, email, "CorrectionKo", DataFramePath)
+                recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CorrectionKo", RawDataSetPath)
+            mode = "Master"
+            CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+            
+            if existedDataFrame == None:
+                updatedCorrectionKo = UpdatedCorrectionKo(projectName, email)
+                SaveDataFrame(projectName, email, "21_CorrectionKo", updatedCorrectionKo, DataFramePath)       
+                SaveDataSet(projectName, email, "21", "CorrectionKo", RawDataSetPath)
+            existedDataFrame = None
+            existedDataSet = None
+
+
     #######################
     ### 21_CorrectionKo ###
     #######################
@@ -482,6 +516,25 @@ def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesRe
     existedDataFrame = None
     existedDataSet = None
     
+    
+    ########################
+    ### 22-25_Correction ###
+    ########################
+    if Translations != []:
+        for Translation in Translations:
+            if Translation == 'En':
+                ProcessNumber = '17'
+                Process = 'TranslationEn'
+            if Translation == 'Ja':
+                ProcessNumber = '18'
+                Process = 'TranslationJa'
+            if Translation == 'Zh':
+                ProcessNumber = '19'
+                Process = 'TranslationZh'
+            if Translation == 'Es':
+                ProcessNumber = '20'
+                Process = 'TranslationEs'
+    
 
     ################################
     ### 26_SelectionGenerationKo ###
@@ -495,6 +548,25 @@ def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesRe
         updatedSelectionGenerationKo = UpdatedSelectionGenerationKo(projectName, email)
         SaveDataFrame(projectName, email, "26_SelectionGenerationKo", updatedSelectionGenerationKo, DataFramePath)       
     existedDataFrame = None
+    
+    
+    #################################
+    ### 27-30_SelectionGeneration ###
+    #################################
+    if Translations != []:
+        for Translation in Translations:
+            if Translation == 'En':
+                ProcessNumber = '17'
+                Process = 'TranslationEn'
+            if Translation == 'Ja':
+                ProcessNumber = '18'
+                Process = 'TranslationJa'
+            if Translation == 'Zh':
+                ProcessNumber = '19'
+                Process = 'TranslationZh'
+            if Translation == 'Es':
+                ProcessNumber = '20'
+                Process = 'TranslationEs'
 
 if __name__ == "__main__":
 

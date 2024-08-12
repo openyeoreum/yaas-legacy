@@ -1,0 +1,275 @@
+{
+    "TaskName": "TranslationIndexEn",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-4o-mini",
+            "LongTokensModel": "gpt-4o"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "gpt-4o"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-5-sonnet-20240620",
+            "LongTokensModel": "claude-3-5-sonnet-20240620"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-5-sonnet-20240620"
+    },
+    "Temperature": 0.5,
+    "OutputTokensRatio": 1.5,
+    "OutputFormat": "text",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 한국어 도서의 <한국어 도서목차>를 영어로 번역하는 전문 번역사 입니다. 우선 한국어로 된 <한국어 도서목차>에서 해당 목차로 구성된 도서전체를 번역할 때 중요하다고 판단되는 단어들로 [중요단어장]을 제작합니다. 그리고 <한국어 도서목차>를 영어로 일관성 있게 순서대로 번역하여 [영어도서목차]를 제작합니다. [중요단어장]과 [영어도서목차]를 합하여 최종적으로 <영어 도서목차.json>를 완성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<영어 도서목차.json>양식)\n",
+                    "Message": "{‘중요단어장’: [{‘한국어’: ‘중요 단어의 한국어’, ‘영어’: ‘중요단어의 영어 번역’}, ... , {‘한국어’: ‘중요 단어의 한국어’, ‘영어’: ‘중요단어의 영어 번역’}], ’영어도서목차’: [{‘목차기호’: ‘목차에 표기된 기호’, ‘영어목차’: ‘영어로 번역된 목차’}, ... , {‘목차기호’: ‘목차에 표기된 기호’, ‘영어목차’: ‘영어로 번역된 목차’}]}"
+                },
+                {
+                    "Mark": "\n\n(<영어 도서목차.json> 완성 방법)\n",
+                    "Message": "1. <한국어 도서목차>에서 해당 목차로 구성된 도서전체를 번역할 때 중요하다고 판단되는 단어들을 ‘한국어’와 ‘영어’로 작성하여 [중요단어장]을 제작합니다.\n2. <한국어 도서목차>를 영어로 일관성 있게 순서대로 번역하여 ‘목차기호’와 ‘영어목차’를 작성하여 [영어도서목차]를 제작합니다.\n3. [중요단어장]과 [영어도서목차]를 합하여 최종적으로 <영어 도서목차.json>를 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<영어 도서목차.json> 완성작업 시작)\n",
+                    "InputMark": "<한국어 도서목차>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<영어 도서목차.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 한국어 도서의 <한국어 도서목차>를 영어로 번역하는 전문 번역사 입니다. 우선 한국어로 된 <한국어 도서목차>에서 해당 목차로 구성된 도서전체를 번역할 때 중요하다고 판단되는 단어들로 [중요단어장]을 제작합니다. 그리고 <한국어 도서목차>를 영어로 일관성 있게 순서대로 번역하여 [영어도서목차]를 제작합니다. [중요단어장]과 [영어도서목차]를 합하여 최종적으로 <영어 도서목차.json>를 완성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<영어 도서목차.json>양식)\n",
+                    "Message": "{‘중요단어장’: [{‘한국어’: ‘중요 단어의 한국어’, ‘영어’: ‘중요단어의 영어 번역’}, ... , {‘한국어’: ‘중요 단어의 한국어’, ‘영어’: ‘중요단어의 영어 번역’}], ’영어도서목차’: [{‘목차기호’: ‘목차에 표기된 기호’, ‘영어목차’: ‘영어로 번역된 목차’}, ... , {‘목차기호’: ‘목차에 표기된 기호’, ‘영어목차’: ‘영어로 번역된 목차’}]}"
+                },
+                {
+                    "Mark": "\n\n(<영어 도서목차.json> 완성 방법)\n",
+                    "Message": "1. <한국어 도서목차>에서 해당 목차로 구성된 도서전체를 번역할 때 중요하다고 판단되는 단어들을 ‘한국어’와 ‘영어’로 작성하여 [중요단어장]을 제작합니다.\n2. <한국어 도서목차>를 영어로 일관성 있게 순서대로 번역하여 ‘목차기호’와 ‘영어목차’를 작성하여 [영어도서목차]를 제작합니다.\n3. [중요단어장]과 [영어도서목차]를 합하여 최종적으로 <영어 도서목차.json>를 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<영어 도서목차.json> 완성작업 시작)\n",
+                    "InputMark": "<한국어 도서목차>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<영어 도서목차.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 한국어 도서의 <한국어 도서목차>를 영어로 번역하는 전문 번역사 입니다. 우선 한국어로 된 <한국어 도서목차>에서 해당 목차로 구성된 도서전체를 번역할 때 중요하다고 판단되는 단어들로 [중요단어장]을 제작합니다. 그리고 <한국어 도서목차>를 영어로 일관성 있게 순서대로 번역하여 [영어도서목차]를 제작합니다. [중요단어장]과 [영어도서목차]를 합하여 최종적으로 <영어 도서목차.json>를 완성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<영어 도서목차.json>양식)\n",
+                    "Message": "{‘중요단어장’: [{‘한국어’: ‘중요 단어의 한국어’, ‘영어’: ‘중요단어의 영어 번역’}, ... , {‘한국어’: ‘중요 단어의 한국어’, ‘영어’: ‘중요단어의 영어 번역’}], ’영어도서목차’: [{‘목차기호’: ‘목차에 표기된 기호’, ‘영어목차’: ‘영어로 번역된 목차’}, ... , {‘목차기호’: ‘목차에 표기된 기호’, ‘영어목차’: ‘영어로 번역된 목차’}]}"
+                },
+                {
+                    "Mark": "\n\n(<영어 도서목차.json> 완성 방법)\n",
+                    "Message": "1. <한국어 도서목차>에서 해당 목차로 구성된 도서전체를 번역할 때 중요하다고 판단되는 단어들을 ‘한국어’와 ‘영어’로 작성하여 [중요단어장]을 제작합니다.\n2. <한국어 도서목차>를 영어로 일관성 있게 순서대로 번역하여 ‘목차기호’와 ‘영어목차’를 작성하여 [영어도서목차]를 제작합니다.\n3. [중요단어장]과 [영어도서목차]를 합하여 최종적으로 <영어 도서목차.json>를 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<영어 도서목차.json> 완성작업 시작)\n",
+                    "InputMark": "<한국어 도서목차>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<영어 도서목차.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 한국어 도서의 <한국어 도서목차>를 영어로 번역하는 전문 번역사 입니다. 우선 한국어로 된 <한국어 도서목차>에서 해당 목차로 구성된 도서전체를 번역할 때 중요하다고 판단되는 단어들로 [중요단어장]을 제작합니다. 그리고 <한국어 도서목차>를 영어로 일관성 있게 순서대로 번역하여 [영어도서목차]를 제작합니다. [중요단어장]과 [영어도서목차]를 합하여 최종적으로 <영어 도서목차.json>를 완성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<영어 도서목차.json>양식)\n",
+                    "Message": "{‘중요단어장’: [{‘한국어’: ‘중요 단어의 한국어’, ‘영어’: ‘중요단어의 영어 번역’}, ... , {‘한국어’: ‘중요 단어의 한국어’, ‘영어’: ‘중요단어의 영어 번역’}], ’영어도서목차’: [{‘목차기호’: ‘목차에 표기된 기호’, ‘영어목차’: ‘영어로 번역된 목차’}, ... , {‘목차기호’: ‘목차에 표기된 기호’, ‘영어목차’: ‘영어로 번역된 목차’}]}"
+                },
+                {
+                    "Mark": "\n\n(<영어 도서목차.json> 완성 방법)\n",
+                    "Message": "1. <한국어 도서목차>에서 해당 목차로 구성된 도서전체를 번역할 때 중요하다고 판단되는 단어들을 ‘한국어’와 ‘영어’로 작성하여 [중요단어장]을 제작합니다.\n2. <한국어 도서목차>를 영어로 일관성 있게 순서대로 번역하여 ‘목차기호’와 ‘영어목차’를 작성하여 [영어도서목차]를 제작합니다.\n3. [중요단어장]과 [영어도서목차]를 합하여 최종적으로 <영어 도서목차.json>를 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<영어 도서목차.json> 완성작업 시작)\n",
+                    "InputMark": "<한국어 도서목차>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<영어 도서목차.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

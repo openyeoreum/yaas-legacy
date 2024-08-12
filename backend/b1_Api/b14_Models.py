@@ -231,7 +231,6 @@ class Project(Base):
     SFXMatching = Column(JSON)
     
     # Translation
-    TranslationKo = Column(JSON)
     TranslationEn = Column(JSON)
     TranslationJa = Column(JSON)
     TranslationZh = Column(JSON)
@@ -349,7 +348,6 @@ class ProjectHistory(Base):
     SFXMatchingStatus = Column(JSON(64))
     
     # Translation
-    TranslationKoStatus = Column(String(64))
     TranslationEnStatus = Column(String(64))
     TranslationJaStatus = Column(String(64))
     TranslationZhStatus = Column(String(64))
@@ -419,11 +417,18 @@ class Prompt(Base):
     SFXMultiQuery = Column(JSON)
     
     # TranslationPrompt
-    TranslationKo = Column(JSON)
-    # TranslationEn = Column(JSON)
-    # TranslationJa = Column(JSON)
-    # TranslationZh = Column(JSON)
-    # TranslationEs = Column(JSON)
+    TranslationIndexEn = Column(JSON)
+    TranslationBodyEn = Column(JSON)
+    TranslationEn = Column(JSON)
+    TranslationIndexJa = Column(JSON)
+    TranslationBodyJa = Column(JSON)
+    TranslationJa = Column(JSON)
+    TranslationIndexZh = Column(JSON)
+    TranslationBodyZh = Column(JSON)
+    TranslationZh = Column(JSON)
+    TranslationIndexEs = Column(JSON)
+    TranslationBodyEs = Column(JSON)
+    TranslationEs = Column(JSON)
     
     # CorrectionPrompt
     CorrectionKo = Column(JSON)

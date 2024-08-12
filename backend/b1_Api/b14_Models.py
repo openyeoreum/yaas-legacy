@@ -418,17 +418,17 @@ class Prompt(Base):
     
     # TranslationPrompt
     TranslationIndexEn = Column(JSON)
+    TranslationWordListEn = Column(JSON)
     TranslationBodyEn = Column(JSON)
-    TranslationEn = Column(JSON)
     TranslationIndexJa = Column(JSON)
+    TranslationWordListJa = Column(JSON)
     TranslationBodyJa = Column(JSON)
-    TranslationJa = Column(JSON)
     TranslationIndexZh = Column(JSON)
+    TranslationWordListZh = Column(JSON)
     TranslationBodyZh = Column(JSON)
-    TranslationZh = Column(JSON)
     TranslationIndexEs = Column(JSON)
+    TranslationWordListEs = Column(JSON)
     TranslationBodyEs = Column(JSON)
-    TranslationEs = Column(JSON)
     
     # CorrectionPrompt
     CorrectionKo = Column(JSON)
@@ -507,11 +507,18 @@ class TrainingDataset(Base):
     SFXMultiQuery = Column(JSON)
     
     # TranslationDataset
-    TranslationKo = Column(JSON)
-    TranslationEn = Column(JSON)
-    TranslationJa = Column(JSON)
-    TranslationZh = Column(JSON)
-    TranslationEs = Column(JSON)
+    TranslationIndexEn = Column(JSON)
+    TranslationWordListEn = Column(JSON)
+    TranslationBodyEn = Column(JSON)
+    TranslationIndexJa = Column(JSON)
+    TranslationWordListJa = Column(JSON)
+    TranslationBodyJa = Column(JSON)
+    TranslationIndexZh = Column(JSON)
+    TranslationWordListZh = Column(JSON)
+    TranslationBodyZh = Column(JSON)
+    TranslationIndexEs = Column(JSON)
+    TranslationWordListEs = Column(JSON)
+    TranslationBodyEs = Column(JSON)
     
     # CorrectionDataset
     CorrectionKo = Column(JSON)

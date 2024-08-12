@@ -14,7 +14,8 @@ def NormalizeUnicode(Code = "NFC", StoragePath = "/yaas/storage"):
                 OriginalFilePath = os.path.join(DirPath, filename)
                 NewFilePath = os.path.join(DirPath, NormalizedFilename)
                 os.rename(OriginalFilePath, NewFilePath)
-                print(f"[ 파일 이름 {Code} 변경: '{filename}' -> {Code}: '({NormalizedFilename})' ]")
+                if 'AudioBook_Edit' in filename:
+                    print(f"[ 파일 이름 {Code} 변경: '{filename}' -> {Code}: '({NormalizedFilename})' ]")
 
         # 디렉토리 이름 정규화 및 변경
         for dirname in DirNames:
@@ -23,7 +24,8 @@ def NormalizeUnicode(Code = "NFC", StoragePath = "/yaas/storage"):
                 OriginalDirPath = os.path.join(DirPath, dirname)
                 NewDirPath = os.path.join(DirPath, NormalizedDirname)
                 os.rename(OriginalDirPath, NewDirPath)
-                print(f"[ 디렉토리 이름 {Code} 변경: '{dirname}' -> {Code}: '({NormalizedDirname})' ]")
+                if 'AudioBook_Edit' in filename:
+                    print(f"[ 디렉토리 이름 {Code} 변경: '{dirname}' -> {Code}: '({NormalizedDirname})' ]")
                 
 ### Sub2 : 프로젝트명 변경 ###
 def ProjectRename(OriginalName, NewName, StoragePath = "/yaas/storage"):
@@ -54,9 +56,9 @@ def ProjectRename(OriginalName, NewName, StoragePath = "/yaas/storage"):
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
-    OriginalName = '240426_목소리의 힘'
-    NewName = '240426_목소리의힘'
+    OriginalName = '240801_빨간풍차가있는집'
+    NewName = '240801_빨간풍차가있는집'
     #########################################################################
 
-    # NormalizeUnicode('NFD')
-    ProjectRename(OriginalName, NewName)
+    NormalizeUnicode('NFC')
+    # ProjectRename(OriginalName, NewName)

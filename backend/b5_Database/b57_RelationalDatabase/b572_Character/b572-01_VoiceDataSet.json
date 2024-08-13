@@ -10303,7 +10303,7 @@
                     "name": "아리",
                     "Api": "TypeCast",
                     "emotion_tone_preset": {
-                        "emotion_tone_preset": ["whisper-1", "whisper-2", "whisper-3", "whisper-4"],
+                        "emotion_tone_preset": ["normal-1", "normal-2", "normal-3", "normal-4"],
                         "emotion_prompt": "None"
                     },
                     "emotion_prompt": {

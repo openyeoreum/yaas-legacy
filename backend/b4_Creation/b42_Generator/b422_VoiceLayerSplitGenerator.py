@@ -1332,7 +1332,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     ## Modify 시간에 맞추어 폴더 생성
     ModifyTime = datetime.now().strftime("%Y%m%d%H%M%S")
     ModifyFolderName = f"{ModifyTime}_Modified_Part"
-    ModifyFolderPath = VoiceLayerPathGen(projectName, email, ModifyFolderName, 'Master')
+    ModifyFolder = f"[{projectName}_Modified]/{ModifyFolderName}"
+    ModifyFolderPath = VoiceLayerPathGen(projectName, email, ModifyFolder, 'Master')
     if not os.path.exists(ModifyFolderPath):
         os.makedirs(ModifyFolderPath)
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처

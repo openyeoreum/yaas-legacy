@@ -225,7 +225,6 @@ def AddProjectToDB(projectName, email):
                 CharacterCompletion = characterCompletion,
                 SoundMatching = soundMatching,
                 SFXMatching = sFXMatching,
-                TranslationKo = translationKo,
                 TranslationEn = translationEn,
                 CorrectionKo = correctionKo,
                 CorrectionEn = correctionEn,

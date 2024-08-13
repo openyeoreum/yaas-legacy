@@ -80,7 +80,7 @@ def TranslationIndexToInputList(projectName, email):
     return IndexInputList, IndexsCount, IndexTagList
     
 ## 16-2. TranslationKeyWordList (단어장번역)의 inputList 치환
-def TranslationKeyWordListToInputList(projectName, email, ):
+def TranslationKeyWordListToInputList(projectName, email, TranslationIndexText):
     SFXIndexs, SFXBodys = LoadSFXBodys(projectName, email)
     ## 16-2. TranslationKeyWordList (단어장번역)
     ## 2: BodyText 치환
@@ -344,8 +344,27 @@ def TranslationResponseJson(projectName, email, ProcessNumber, DataFramePath, me
     translationIndexOutputMemoryDics = TranslationIndexProcess(projectName, email, ProcessNumber, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     translationIndexWordList = translationIndexOutputMemoryDics[0]['중요단어장']
-    translationIndex = translationIndexOutputMemoryDics[0]['영어도서목차']
+    translationIndexList = translationIndexOutputMemoryDics[0]['영어도서목차']
+    
+    ## TranslationIndex 중요단어장
+    IndexWordList = []
+    for IndexWord in translationIndexWordList:
+        Source = IndexWord['한국어']
+        Target = IndexWord['영어']
+        IndexWordList.append({'Source': Source, 'Target': Target})
+    
+    ## TranslationIndex 영어번역 목차
+    TranslationIndexText = '<영어 도서목차>\n'
+    for translationIndex in translationIndexList:
+        Tag = translationIndex['목차기호']
+        TranslationIndex = translationIndex['영어목차']
+        TranslationIndexText += f'{Tag} {TranslationIndex}\n'
+    TranslationIndexText += '\n'
+    
+    print(TranslationIndexText)
+    sys.exit()
 
+    TranslationKeyWordListToInputList(projectName, email, TranslationIndexText)
     # return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 SFXMatching에 업데이트
@@ -396,7 +415,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "240801_빨간풍차가있는집"
+    projectName = "240412_카이스트명상수업"
     ProcessNumber = '17'
     Process = 'TranslationKo'
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
@@ -406,4 +425,4 @@ if __name__ == "__main__":
     mode = "Master"
     #########################################################################
     
-    TranslationIndexProcess(projectName, email, ProcessNumber, DataFramePath)
+    TranslationResponseJson(projectName, email, ProcessNumber, DataFramePath, messagesReview = messagesReview)

@@ -1662,7 +1662,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     if AllHistory['ActorName'] == Name:
                         NewActorSwitch = 0
 
-            if NewActorSwitch == 1:
+            if NewActorSwitch == 1 and GenerationKoChunkAllHistory != []:
                 ActorModify = "Yes"
                 Modify = "Yes"
                 print(f"[ ActorModify: {ActorModify}, (성우) 변경 ]\n({OriginName})\n({Name})")

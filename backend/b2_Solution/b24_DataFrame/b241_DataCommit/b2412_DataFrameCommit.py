@@ -3,6 +3,7 @@ import re
 import json
 import unicodedata
 import sys
+import time
 sys.path.append("/yaas")
 
 from datetime import datetime
@@ -143,12 +144,23 @@ def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFrame
 
     ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
     try:
-        DataFramePathList = os.listdir(DataFramePath)
-    except:
         try:
-            DataFramePathList = os.listdir(DataFramePathNFCNormalized)
+            DataFramePathList = os.listdir(DataFramePath)
         except:
-            DataFramePathList = os.listdir(DataFramePathNFDNormalized)
+            try:
+                DataFramePathList = os.listdir(DataFramePathNFCNormalized)
+            except:
+                DataFramePathList = os.listdir(DataFramePathNFDNormalized)
+    except:
+        # 갑자기 발생하는 원인 모를 오류를 위해서 0.01초 휴식 후 재시도
+        time.sleep(0.01)
+        try:
+            DataFramePathList = os.listdir(DataFramePath)
+        except:
+            try:
+                DataFramePathList = os.listdir(DataFramePathNFCNormalized)
+            except:
+                DataFramePathList = os.listdir(DataFramePathNFDNormalized)
 
     # 일치하는 파일 검색
     matched_file = None
@@ -179,12 +191,23 @@ def SaveAddOutputMemory(projectName, email, AddOutputMemoryDics, ProcessNum, Dat
 
     ## 한글의 유니코드 문제로 인해 일반과 노멀라이즈를 2개로 분리하여 가장 최근 파일찾기 실행
     try:
-        DataFramePathList = os.listdir(DataFramePath)
-    except:
         try:
-            DataFramePathList = os.listdir(DataFramePathNFCNormalized)
+            DataFramePathList = os.listdir(DataFramePath)
         except:
-            DataFramePathList = os.listdir(DataFramePathNFDNormalized)
+            try:
+                DataFramePathList = os.listdir(DataFramePathNFCNormalized)
+            except:
+                DataFramePathList = os.listdir(DataFramePathNFDNormalized)
+    except:
+        # 갑자기 발생하는 원인 모를 오류를 위해서 0.01초 휴식 후 재시도
+        time.sleep(0.01)
+        try:
+            DataFramePathList = os.listdir(DataFramePath)
+        except:
+            try:
+                DataFramePathList = os.listdir(DataFramePathNFCNormalized)
+            except:
+                DataFramePathList = os.listdir(DataFramePathNFDNormalized)
 
     # 일치하는 파일 검색
     matched_file = None

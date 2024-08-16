@@ -32,6 +32,9 @@ def MultiProcessing(projectNameList, MessagesReview, VoiceFileGen, MainProcess, 
         
     print(f"[ Projects: {projectNameList} | MultiProcessing 완료 ]")
 
+## 코세라 그래프 수집 등
+## 매주 북리스트 수집
+
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################

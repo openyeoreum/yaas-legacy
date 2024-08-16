@@ -1179,7 +1179,7 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
 ## CloneVoice 셋팅
 def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, CloneVoiceActorPath, SelectionGenerationKoChunks):
     ## Narrator가 "CloneVoice" 인 경우 CloneVoiceDic 생성 ##
-    if Narrator == 'VoiceClone':
+    if Narrator == 'VoiceClone' and CloneVoiceName != '':
         CloneVoiceFolderPath = CloneVoiceActorPath.replace('CloneVoice_Setting].json', 'CloneVoice_File]')
         if not os.path.exists(CloneVoiceActorPath):
             if not os.path.exists(CloneVoiceActorPath):
@@ -1324,7 +1324,37 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         
         return MatchedActors, SelectionGenerationKoChunks
     
-    return MatchedActors, SelectionGenerationKoChunks
+    ## Narrator가 "VoiceActor" 이면서 성우가 지정된 경우 CloneVoiceDic 생성 ##
+    elif Narrator == 'VoiceActor' and CloneVoiceName != '':
+        # VoiceDataSetPath 로드
+        VoiceDataSetPath = "/yaas/backend/b5_Database/b57_RelationalDatabase/b572_Character/b572-01_VoiceDataSet.json"
+        with open(VoiceDataSetPath, 'r', encoding = 'utf-8') as VoiceDataSetJson:
+            VoiceDataSet = json.load(VoiceDataSetJson)
+        VoiceActos = VoiceDataSet[1]['CharactersKo']
+        
+        ## VoiceActor 매칭
+        for VoiceActor in VoiceActos:
+            if VoiceActor['Name'] == CloneVoiceName:
+                MatchedVoiceActor = VoiceActor
+                
+        ## MatchedVoices 변경
+        for _Matched in MatchedActors:
+            if _Matched['CharacterTag'] == 'Narrator':
+                BeforeNarratorName = _Matched['ActorName']
+                AfterNarratorName = MatchedVoiceActor['Name']
+                _Matched['ActorName'] = AfterNarratorName
+                _Matched['ApiSetting'] = MatchedVoiceActor['ApiSetting']
+                
+        ## AudioBook_Edit 변경
+        if BeforeNarratorName != AfterNarratorName:
+            for _Edit in SelectionGenerationKoChunks:
+                if _Edit['ActorName'] == BeforeNarratorName:
+                    _Edit['ActorName'] = AfterNarratorName
+        
+        return MatchedActors, SelectionGenerationKoChunks
+
+    else:
+        return MatchedActors, SelectionGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):

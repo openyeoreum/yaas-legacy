@@ -101,7 +101,7 @@ if __name__ == "__main__":
     BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
     MainLang = "Ko" # 'Ko', 'En'
     Narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
-    CloneVoiceName = "장봉근" # Narrator = "VoiceClone" 인 경우 '저자명' 작성
+    CloneVoiceName = "송다훈(일반)" # Narrator = "VoiceClone" 인 경우 '저자명' 작성
     VoiceEnhance = "off" # 'on', 'off' : on 은 클론보이스 노이즈 제거, off 는 클론보이스 노이즈 제거 비활성
     VoiceReverbe = "on" # 'on', 'off' : on 은 인덱스와 대화문에 리버브 적용, off 는 리버브 미적용
     Intro = "off" # Intro = ['한국출판문화산업진흥원' ...], off 는 인트로 미적용

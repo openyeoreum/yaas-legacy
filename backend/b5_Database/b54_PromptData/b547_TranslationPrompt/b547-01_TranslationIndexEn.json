@@ -13,7 +13,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-4o"
+        "MasterModel": "gpt-4o-2024-08-06"
     },
     "ANTHROPIC": {
         "BaseModel": {

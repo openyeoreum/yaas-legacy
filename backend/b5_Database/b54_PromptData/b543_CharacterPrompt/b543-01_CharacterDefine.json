@@ -3,7 +3,7 @@
     "OpenAI": {
         "BaseModel": {
             "ShortTokensModel": "gpt-4o-mini",
-            "LongTokensModel": "gpt-4o"
+            "LongTokensModel": "gpt-4o-2024-08-06"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [{"Date": "CharacterDefine-231022073805", "Model": "ft:gpt-4o-mini-0613:yeoreum::8CTTEzmS"}, {"Date": "CharacterDefine-231102055753", "Model": "ft:gpt-4o-mini-0613:yeoreum::8GJjYaiZ"}, {"Date": "CharacterDefine-231108032841", "Model": "ft:gpt-4o-mini:yeoreum::8ILpWsR7"}],
@@ -13,7 +13,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-4o"
+        "MasterModel": "gpt-4o-2024-08-06"
     },
     "ANTHROPIC": {
         "BaseModel": {

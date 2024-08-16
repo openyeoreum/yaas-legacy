@@ -1,5 +1,4 @@
 import os
-import multiprocessing
 import unicodedata
 import sys
 sys.path.append("/yaas")
@@ -12,7 +11,7 @@ from b2_Solution.bm23_DataSetUpdate import SolutionDataSetUpdate
 from b4_Creation.bm25_AudiobookUpdate import CreationAudioBookUpdate
 
 ### Main1 : 솔루션 업데이트 ###
-def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre):
+def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre, Translations):
 
     # ## .env 파일 로드(API_KEY 등 환경 변수 액세스)
     # envPath = os.path.join(os.path.dirname(__file__), '..', 'storage', '.env')
@@ -38,7 +37,7 @@ def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
             SolutionProjectUpdate(email, projectName)
             
             ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-            SolutionDataFrameUpdate(email, projectName, indexMode = IndexMode, messagesReview = MessagesReview, bookGenre = BookGenre)
+            SolutionDataFrameUpdate(email, projectName, indexMode = IndexMode, messagesReview = MessagesReview, bookGenre = BookGenre, Translations = Translations)
             
             # ### Step4 : 솔루션에 프로젝트 데이터셋 학습진행 및 업데이트 ###
             # SolutionDataSetUpdate(email, projectName)
@@ -78,15 +77,15 @@ def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverb
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account):
+def YaaS(email, name, password, projectNameList, Translations, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
-        SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
+        SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre, Translations)
         
     elif MainProcess == 'Solution&Creation':
         AccountUpdate(email, name, password)
-        SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre)
+        SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre, Translations)
         CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview)
 
 if __name__ == "__main__":
@@ -113,4 +112,4 @@ if __name__ == "__main__":
     Account = "khsis3516@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com'
     #########################################################################
 
-    YaaS(email, name, password, projectNameList, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account)
+    YaaS(email, name, password, projectNameList, Translations, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account)

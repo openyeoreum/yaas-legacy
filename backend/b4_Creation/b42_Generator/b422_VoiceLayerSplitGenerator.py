@@ -75,6 +75,7 @@ def LoadSelectionGenerationKoChunks(projectName, email, MainLang):
         # SelectionGenerationSplitedIndexs = project.SelectionGenerationEs[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     
     # SecondaryNarratorList, TertiaryNarratorList 형성
+    # print(f"@@@@@{CharacterCompletion}")
     SecondaryNarratorList = [CharacterCompletion[0]['MainCharacterList'][0]['MainCharacter']]
     TertiaryNarratorList = []
     for Character in CharacterCompletion[0]['MainCharacterList'][1:]:

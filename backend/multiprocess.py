@@ -46,4 +46,4 @@ if __name__ == "__main__":
     Account = "khsis3516@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com'
     #########################################################################
     
-    MultiProcessing(projectNameList, MessagesReview, VoiceFileGen, MainProcess, Macro, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json')
+    MultiProcessing(projectNameList, MessagesReview, VoiceFileGen, MainProcess, Macro, Account)

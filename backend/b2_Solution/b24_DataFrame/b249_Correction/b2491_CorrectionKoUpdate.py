@@ -582,6 +582,9 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             outputEnder = ""
             
             # Response 생성
+            if ErrorCount in [2, 4]:
+                Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+
             Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
             # OutputStarter, OutputEnder에 따른 Response 전처리

@@ -1059,19 +1059,6 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     CloneVoiceSpeed = 1
     CloneVoicePitch = 0
     for MatchedActor in MatchedActors:
-        print(MatchedActor)
-        sys.exit()
-        ###############
-        ###############
-        ###############
-        ###############
-        ## 1. 모든 일레븐렙스 ApiSetting이 포함된 부분에 Volume값 추가(Cloned 보이스 데이터가 생성되는 부분도) ##
-        ## 2. 아래 코드에 Volume값 추가 ##
-        ## 3. 일레븐렙스일 경우에는 모두 확인하도록 하기 ##
-        ###############
-        ###############
-        ###############
-        ###############
         if (CloneVoiceName in MatchedActor['ActorName']) and (projectName in MatchedActor['ActorName']):
             CloneVoiceSpeed = MatchedActor['ApiSetting']['Speed']
             CloneVoicePitch =  MatchedActor['ApiSetting']['Pitch']

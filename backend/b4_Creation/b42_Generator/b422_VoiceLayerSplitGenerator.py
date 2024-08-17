@@ -530,6 +530,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, voiceReverbe, ta
     if Api == "ElevenLabs":
         # Api Setting
         VoiceId = ApiSetting['voice_id']
+        Volume = ApiSetting['Volume']
         Stability = random.choice(ApiSetting['stability'])
         SimilarityBoost = random.choice(ApiSetting['similarity_boost'])
         Style = random.choice(ApiSetting['style'])
@@ -565,6 +566,8 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, voiceReverbe, ta
                 
                 # mp3으로 저장된 파일을 wav로 변경
                 Voice_Audio_Mp3 = AudioSegment.from_mp3(fileNameMp3)
+                if Volume != 0:
+                    Voice_Audio_Mp3 = Voice_Audio_Mp3 + Volume
                 Voice_Audio_Mp3.export(fileName, format = "wav")
                 os.remove(fileNameMp3)
 

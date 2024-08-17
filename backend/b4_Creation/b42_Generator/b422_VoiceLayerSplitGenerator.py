@@ -1196,6 +1196,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "similarity_boost": [0.80],
                     "style": [0.00],
                     "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
                     "Speed": 1.10,
                     "Pitch": 0,
                     "VoiceFileSetting": {"Speed": 1.0, "Volume": 1.0, "Pitch": -0.3, "Reverbe": 'off'},

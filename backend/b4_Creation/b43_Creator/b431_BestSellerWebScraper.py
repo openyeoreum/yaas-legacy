@@ -157,7 +157,8 @@ def BestsellerScraper(driver, period = 'Weekly'):
         BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1814_YearlyBookData/"
 
     # 기존 파일 확인 후 스크래핑 시작 페이지와 파일번호 설정 (i, j)
-    driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page=1&per=50") # period=002(주간), period=003(월간), period=004(연간)
+    # driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page=1&per=50") # period=002(주간), period=003(월간), period=004(연간)
+    driver.get(f"https://store.kyobobook.co.kr/bestseller/total/{Period}?page=1&per=50") # period=002(주간), period=003(월간), period=004(연간)
     time.sleep(random.uniform(5, 7))
     DateXpath = "/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[1]/span"
     Date = wait.until(EC.presence_of_element_located((By.XPATH, DateXpath))).text
@@ -176,7 +177,7 @@ def BestsellerScraper(driver, period = 'Weekly'):
         start_j = 1
 
     for i in range(start_i, 21): # 1, 21
-        PageURL = f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page={i}&per=50"
+        PageURL = f"https://store.kyobobook.co.kr/bestseller/total/{Period}?page={i}&per=50"
         NoneCount = 0  # None 횟수를 세는 변수 추가
         for j in range(start_j if i == start_i else 1, 51): # 1, 51
             try:

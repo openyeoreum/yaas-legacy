@@ -102,7 +102,7 @@ def Loadyaasconfig(yaasconfigPath = '/yaas/backend/yaasconfig.json'):
 def MultiProcessing(projectNameList, MessagesReview, VoiceFileGen, MainProcess, Macro, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json'):
     yaasconfig = Loadyaasconfig(yaasconfigPath = yaasconfigPath)
     
-    print(f"[ Projects: {projectNameList} | MultiProcessing 시작 ]")
+    print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
     
     processes = []
     for projectName in projectNameList:
@@ -116,7 +116,7 @@ def MultiProcessing(projectNameList, MessagesReview, VoiceFileGen, MainProcess, 
     for p in processes:
         p.join()
         
-    print(f"[ Projects: {projectNameList} | MultiProcessing 완료 ]")
+    print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 완료 ]")
     
 ## 추가 병렬 진행 : 코세라 라이프 그래프 최신화
 ## 추가 병렬 진행 : 교보문고 베스트셀러 스크래핑

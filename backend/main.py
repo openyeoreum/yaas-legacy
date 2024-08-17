@@ -1,4 +1,6 @@
 import os
+import json
+import multiprocessing
 import unicodedata
 import sys
 sys.path.append("/yaas")
@@ -88,28 +90,46 @@ def YaaS(email, name, password, projectNameList, Translations, IndexMode, Messag
         SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre, Translations)
         CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview)
 
+### YaaS Multiprocessing : 오디오북 병렬 제작 ###
+
+## yaasconfig 로드
+def Loadyaasconfig(yaasconfigPath = '/yaas/backend/yaasconfig.json'):
+    with open(yaasconfigPath, 'r') as f:
+        yaasconfig = json.load(f)
+    return yaasconfig
+
+## MultiProcessing
+def MultiProcessing(projectNameList, MessagesReview, VoiceFileGen, MainProcess, Macro, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json'):
+    yaasconfig = Loadyaasconfig(yaasconfigPath = yaasconfigPath)
+    
+    print(f"[ Projects: {projectNameList} | MultiProcessing 시작 ]")
+    
+    processes = []
+    for projectName in projectNameList:
+        YaasConfig = yaasconfig[projectName]
+        Process = multiprocessing.Process(target = YaaS,
+                                          args = (YaasConfig["email"], YaasConfig["name"], YaasConfig["password"], YaasConfig["projectNameList"], YaasConfig["Translations"], YaasConfig["IndexMode"], MessagesReview, YaasConfig["BookGenre"], YaasConfig["Narrator"], YaasConfig["CloneVoiceName"], YaasConfig["VoiceReverbe"], YaasConfig["MainLang"], YaasConfig["Intro"], YaasConfig["AudiobookSplitting"], YaasConfig["VoiceEnhance"], VoiceFileGen, MainProcess, Macro, Account))
+        processes.append(Process)
+        Process.start()
+        
+    # 모든 프로세스가 종료될 때까지 기다림
+    for p in processes:
+        p.join()
+        
+    print(f"[ Projects: {projectNameList} | MultiProcessing 완료 ]")
+    
+## 추가 병렬 진행 : 코세라 라이프 그래프 최신화
+## 추가 병렬 진행 : 교보문고 베스트셀러 스크래핑
+
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
-    email = "yeoreum00128@gmail.com"
-    name = "yeoreum"
-    password = "0128"
-    projectNameList = ['240812_룰루레몬스토리'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240812_룰루레몬스토리', '240815_노유파'
-    Translations = [] # ['En', 'Ja', 'Zh', 'Es'] 번역할 언어를 리스트로 구성, 번역이 없을 경우 []빈 리스트 구성
-    IndexMode = "Define" # 'Define', 'Preprocess' : Define 은 Index 전처리 필요 없음, Preprocess 는 Index 전처리 필요함
-    BookGenre = "Auto" # 'Auto', '문학', '비문학', '아동', '시', '학술'
-    MainLang = "Ko" # 'Ko', 'En'
-    Narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
-    CloneVoiceName = "송다훈(일반)" # Narrator = "VoiceClone" 인 경우 '저자명' 작성
-    VoiceEnhance = "off" # 'on', 'off' : on 은 클론보이스 노이즈 제거, off 는 클론보이스 노이즈 제거 비활성
-    VoiceReverbe = "on" # 'on', 'off' : on 은 인덱스와 대화문에 리버브 적용, off 는 리버브 미적용
-    Intro = "off" # Intro = ['한국출판문화산업진흥원' ...], off 는 인트로 미적용
-    AudiobookSplitting = "Auto" # 'Auto', 'Manual' : Auto 는 오디오북 자동 분할, Manual 은 오디오북 수동 분할
+    projectNameList = ['240815_노유파'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240812_룰루레몬스토리', '240815_노유파'
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     MainProcess = "Solution&Creation" # 'Solution', 'Creation'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
     Account = "khsis3516@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com'
     #########################################################################
-
-    YaaS(email, name, password, projectNameList, Translations, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account)
+    
+    MultiProcessing(projectNameList, MessagesReview, VoiceFileGen, MainProcess, Macro, Account)

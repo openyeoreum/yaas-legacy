@@ -95,10 +95,6 @@ def LifeGraphToInputList(Answer):
                 LifeGraphText = LifeGraphText + age + score + reason
             InputDic = {'Id': i+1, 'LifeGraphId': LifeGraphId, 'Language': Language, 'LifeGraph': LifeGraphText}
             InputList.append(InputDic)
-            if InputDic['Language'] == 'ko':
-                with open(f'/yaas/LifeGraphText/LifeGraphText{i}.txt', 'w', encoding='utf-8') as file:
-                    file.write(InputDic['LifeGraph'])
-    sys.exit()
     
     return InputList, RecentBeforeLifeGraphPath
 
@@ -166,7 +162,7 @@ def LifeGraphAnalysisEnFilter(Response):
     return outputJson
 
 ### 라이프그래프 분석 ###
-def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", MessagesReview = "on", mode = "Master", Answer = 6):
+def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", MessagesReview = "on", mode = "Master", Answer = 3):
     ## LifeGraphAnalysisProcess
     promptFrameKoPath = "/yaas/extension/e3_Database/e31_PromptData/e311_LifeGraphPrompt/b311-01_LifeGraphAnalysisKo.json"
     promptFrameEnPath = "/yaas/extension/e3_Database/e31_PromptData/e311_LifeGraphPrompt/b311-02_LifeGraphAnalysisEn.json"
@@ -226,14 +222,54 @@ def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", 
                             AnalysisData.append(AnalysisDataDic)
                         BeforeLifeGraph['AnalysisData'] = AnalysisData
                         break
-                    
-                with open(RecentBeforeLifeGraphPath, 'w', encoding = 'utf-8') as RecentBeforeLifeGraphJson:
-                    json.dump(RecentBeforeLifeGraphList, RecentBeforeLifeGraphJson, ensure_ascii = False, indent = 4)
+
         # 라이프 그래프 언어가 한글이 아닌 경우
         else:
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, PromptFramePath = promptFrameEnPath, Mode = mode, messagesReview = MessagesReview)
             Filter = LifeGraphAnalysisEnFilter(Response)
-        
+            
+            if isinstance(Filter, str):
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
+                ErrorCount += 1
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도")
+                time.sleep(120)
+                if ErrorCount == 5:
+                    sys.exit(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+                continue
+            else:
+                OutputDic = Filter
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | JSONDecode 완료")
+                ErrorCount = 0
+                
+                ## RecentBeforeLifeGraph 업데이트
+                for BeforeLifeGraph in RecentBeforeLifeGraphList:
+                    if BeforeLifeGraph['LifeGraphId'] == InputList[i]['LifeGraphId']:
+                        BeforeLifeGraph['Residence'] = OutputDic['AuthorInfo']['Nationality']
+                        BeforeLifeGraph['Pattern'] = OutputDic['AuthorInfo']['MindPattern']
+                        BeforeLifeGraph['Negative'] = OutputDic['AuthorInfo']['MindProblems']
+                        BeforeLifeGraph['Positive'] = OutputDic['AuthorInfo']['MindAbilities']
+                        LifeData = BeforeLifeGraph['LifeData']
+                        AnalysisData = []
+                        for Data in OutputDic['ImportantPeriods']:
+                            StartAge, EndAge = map(int, Data['Period'].split('-'))
+                            for data in LifeData:
+                                if StartAge == data['StartAge'] and EndAge == data['EndAge']:
+                                    LifeDataId = data['LifeDataId']
+                                    break
+                            Score = Data['HappinessIndex']
+                            ReasonGlobal = Data['Content']
+                            Problem = Data['Mind']
+                            Reason = Data['Cause']
+                            Question = Data['ExpectedQuestion']
+                            Answer = Data['ExpectedAnswer']
+                            AnalysisDataDic = {'LifeDataId': LifeDataId, 'StartAge': StartAge, 'EndAge': EndAge, 'Score': Score, 'ReasonGlobal': ReasonGlobal, 'Problem': Problem, 'Reason': Reason, 'Question': Question, 'Answer': Answer, }
+                            AnalysisData.append(AnalysisDataDic)
+                        BeforeLifeGraph['AnalysisData'] = AnalysisData
+                        break
+            
+            # 최신화된 lifegraph 저장
+            with open(RecentBeforeLifeGraphPath, 'w', encoding = 'utf-8') as RecentBeforeLifeGraphJson:
+                json.dump(RecentBeforeLifeGraphList, RecentBeforeLifeGraphJson, ensure_ascii = False, indent = 4)
         # 다음 아이템으로 이동
         i += 1
         

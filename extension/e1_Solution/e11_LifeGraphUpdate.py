@@ -408,9 +408,9 @@ def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
             UpdateSheet(Row = row, Colum = 4, Data = Age)
             UpdateSheet(Row = row, Colum = 5, Data = Language)
             UpdateSheet(Row = row, Colum = 6, Data = Residence)
-            UpdateSheet(Row = row, Colum = 7, Data = Answer)
-            UpdateSheet(Row = row, Colum = 11, Data = Email)
-            UpdateSheet(Row = row, Type = 'Link', Colum = 12, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
+            UpdateSheet(Row = row, Colum = 8, Data = Answer)
+            UpdateSheet(Row = row, Colum = 12, Data = Email)
+            UpdateSheet(Row = row, Type = 'Link', Colum = 13, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
             
             UpdateCount += 1
             if UpdateCount >= 5:

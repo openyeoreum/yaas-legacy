@@ -29,12 +29,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto",
-        "MessagesReview": "on",
-        "VoiceFileGen": "off",
-        "MainProcess": "Solution&Creation",
-        "Macro": "Auto",
-        "Account": "khsis3516@naver.com"
+        "AudiobookSplitting": "Manual"
     },
     "240801_빨간풍차가있는집": {
         "email": "yeoreum00128@gmail.com",
@@ -50,12 +45,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto",
-        "MessagesReview": "on",
-        "VoiceFileGen": "off",
-        "MainProcess": "Solution&Creation",
-        "Macro": "Auto",
-        "Account": "khsis3516@naver.com"
+        "AudiobookSplitting": "Manual"
     },
     "240802_암을이기는천연항암제": {
         "email": "yeoreum00128@gmail.com",
@@ -71,7 +61,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto"
+        "AudiobookSplitting": "Manual"
     },
     "240815_노유파": {
         "email": "yeoreum00128@gmail.com",
@@ -103,6 +93,6 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto"
+        "AudiobookSplitting": "Manual"
     }
 }

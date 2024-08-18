@@ -415,7 +415,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "240412_카이스트명상수업"
+    projectName = "240801_빨간풍차가있는집"
     ProcessNumber = '17'
     Process = 'TranslationKo'
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"

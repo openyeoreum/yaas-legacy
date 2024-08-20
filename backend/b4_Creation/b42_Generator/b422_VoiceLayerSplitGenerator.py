@@ -1693,12 +1693,20 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             NewActorSwitch = 1
             edit_id_found = False  # EditId가 발견되었는지 여부를 추적
 
+            FloatEditIdList = []
             for AllHistory in GenerationKoChunkAllHistory:
-                if AllHistory['EditId'] == EditId:
+                AllHistoryEditId = AllHistory['EditId']
+                if AllHistoryEditId % 1 != 0:
+                    FloatEditIdList.append(AllHistoryEditId)
+                if AllHistoryEditId == EditId:
                     edit_id_found = True  # EditId가 발견되었음을 표시
                     OriginName = AllHistory['ActorName']
                     if AllHistory['ActorName'] == Name:
                         NewActorSwitch = 0
+                        
+            # 새로운 EditId(예를들면 1.01과 같은)가 중간에 발생할 경우 Modify
+            if EditId % 1 != 0 and EditId not in FloatEditIdList:
+                Modify = "Yes"
 
             # for 루프가 끝난 후 EditId가 하나도 발견되지 않은 경우 NewActorSwitch를 0으로 설정
             if not edit_id_found:
@@ -1709,6 +1717,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 Modify = "Yes"
                 print(f"[ ActorModify: {ActorModify}, (성우) 변경 ]\n({OriginName})\n({Name})")
             ChunkModify = "No"
+            
             for History in GenerationKoChunkHistorys:
                 if History['EditId'] == EditId and History["ActorName"] == Name:
                     if History['ActorChunk'] != OriginChunk:

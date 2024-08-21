@@ -551,22 +551,32 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
             MusicFilePath = MusicLayerPathGen(projectName, email, LastVoiceFileName)
             # EndTitleVoices 생성 및 리스트 저장
             EndTitleVoices += EndTitleVoice
-    
+
     # EndTitleMusic 슬라이스
-    MixedTitleEndMusicAudio = TitleMusic_Audio[EndTitleLength * 1000 : (EndTitleLength * 1000) + 60000]
-    # 볼륨을 4dB 낮춤
-    MixedTitleEndMusicAudio = MixedTitleEndMusicAudio - 4
-    
+    mixedTitleEndMusicAudio = TitleMusic_Audio[EndTitleLength * 1000 : (EndTitleLength * 1000) + 70000]
+
+    # 볼륨을 10dB, 4dB 낮춤
+    MixedTitleEndMusicAudio = mixedTitleEndMusicAudio - 12
+    LastMixedTitleEndMusicAudio = mixedTitleEndMusicAudio - 4
+
+    # LastMixedTitleEndMusicAudio에서 EndTitleVoices 시간 만큼 무음 처리
+    LastMixedTitleEndMusicAudio = LastMixedTitleEndMusicAudio.overlay(AudioSegment.silent(duration=len(EndTitleVoices)), position=500)
+
+    # EndTitleVoices 끝난 후 10초간 페이드 인 적용
+    LastMixedTitleEndMusicAudio = LastMixedTitleEndMusicAudio.fade_in(10000)
+
     # FadeIn
     FadedInAudio = MixedTitleEndMusicAudio.fade_in(5000)
     _MixedTitleEndMusicAudio = FadedInAudio.fade_out(10000)
-    
+    _LastMixedTitleEndMusicAudio = FadedInAudio.fade_out(10000)
+
     # Mixing
     MixedTitleEndMusicAudio = _MixedTitleEndMusicAudio.overlay(EndTitleVoices, position = 500)
-    
+    FinalMixedTitleEndMusicAudio = _LastMixedTitleEndMusicAudio.overlay(MixedTitleEndMusicAudio)
+
     # MixedMusicAudio에 저장
     MixedTitleMusicPath = MusicFilePath.replace('.wav', '_[EndMusic].wav')
-    MixedTitleEndMusicAudio.export(MixedTitleMusicPath, format = 'wav')
+    FinalMixedTitleEndMusicAudio.export(MixedTitleMusicPath, format = 'wav')
     
     ###############################################
     ### Part, Chapter, Index, Caption Music 믹싱 ###

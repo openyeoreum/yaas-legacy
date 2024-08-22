@@ -19779,7 +19779,7 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["여"],
+                    "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
@@ -19869,7 +19869,7 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["여"],
+                    "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
@@ -19910,7 +19910,7 @@
                         "Zh": "eleven_multilingual_v2"
                     },
                     "Volume": 0,
-                    "Speed": 1,
+                    "Speed": 1.1,
                     "Pitch": 0
                 }
             }

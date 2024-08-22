@@ -61,7 +61,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Manual"
+        "AudiobookSplitting": "Auto"
     },
     "240815_노유파": {
         "email": "yeoreum00128@gmail.com",

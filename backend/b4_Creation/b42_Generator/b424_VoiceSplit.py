@@ -689,7 +689,7 @@ def VoiceFileSplit(Modify, ModifyFolderPath, VoiceLayerPath, SplitTimeList):
         end_point = int(split_point * 1000)  # milliseconds로 변환
         segment = audio[start_point:end_point]
         # 페이드인/아웃 적용
-        segment = segment.fade_in(duration = 30).fade_out(duration = 30)  # 0.03초 페이드인, 0.03초 페이드아웃
+        segment = segment.fade_in(duration = 100).fade_out(duration = 100)  # 0.03초 페이드인, 0.03초 페이드아웃
         # 무음 추가
         silence = AudioSegment.silent(duration = 30)  # 0.03초 무음
         segment = silence + segment + silence  # 무음 - 세그먼트 - 무음

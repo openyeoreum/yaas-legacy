@@ -162,7 +162,7 @@ def LoadReaction(ReactionYYMM):
                 ReactionData['Reaction'] = "7_SubmitGoogleForm"
                 matched = True  # 조건이 일치하면 matched를 True로 설정
         if not matched:
-            UnMatchedGoogleFormData.append({'Name': GoogleFormData['Full Name'], "Residence": GoogleFormData['Country of Residence'], 'Email': GoogleFormData['Email Address']})  # 조건이 일치하지 않은 경우에만 저장
+            UnMatchedGoogleFormData.append({'Name': GoogleFormData['Full Name'], "Residence": GoogleFormData['Country of Residence'], 'Email': GoogleFormData['Email Address'],  'PhoneNumber': GoogleFormData['Phone Number (Including Country Code)\nex) +82 000 0000 0000']})  # 조건이 일치하지 않은 경우에만 저장
 
     with open(os.path.join(ReactionsPath, f"{ReactionFolder}_종합.json"), 'w', encoding = 'utf-8') as jsonfile:
         json.dump(ReactionJson, jsonfile, ensure_ascii = False, indent = 4)
@@ -297,9 +297,10 @@ if __name__ == "__main__":
     # 5) 오픈(5_Open(n))
     # 6) 구글폼클릭[채널](6_Click(n))
     # 7) 구글폼작성(7_SubmitGoogleForm)
-    # 8) 연락(8_Contact)
-    # 9) 세미나(9_Seminar)
-    # 10) 격려(10_Encouragement)
-    # 11) 등록(11_Registration)
-    # 12) 과정(12_MeditationStage(n))
-    # 13) 휴먼(13_OnBreak(yymmdd))
+    # 8) 연락처없음(8_NoNumber)
+    # 9) 연락(9_Contact)
+    # 10) 세미나(10_Seminar)
+    # 11) 격려(11_Encouragement)
+    # 12) 등록(12_Registration)
+    # 13) 과정(13_MeditationStage(n))
+    # 14) 휴먼(14_OnBreak(yymmdd))

@@ -275,238 +275,238 @@ def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", 
         
     return RecentBeforeLifeGraphPath, RecentBeforeLifeGraphList
 
-## 라이프그래프의 이미지화(PNG)
-def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):   
-    # 기본 폰트 설정, Noto Sans CJK 폰트 경로 설정
-    font_path = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
-    font_prop = font_manager.FontProperties(fname = font_path)
-    rc('font', family = font_prop.get_name())
-    plt.rcParams['axes.unicode_minus'] = False  # 유니코드 마이너스 설정
+# ## 라이프그래프의 이미지화(PNG)
+# def LifeGraphToPNG(LifeGraphDate, Name, Age, Language, Email, LifeData):   
+#     # 기본 폰트 설정, Noto Sans CJK 폰트 경로 설정
+#     font_path = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
+#     font_prop = font_manager.FontProperties(fname = font_path)
+#     rc('font', family = font_prop.get_name())
+#     plt.rcParams['axes.unicode_minus'] = False  # 유니코드 마이너스 설정
     
-    PNGPaths = []
-    FilePath = f"/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/s2113_BeforeLifeGraphAnalysisPDF/"
-    FileName = f"{LifeGraphDate.replace('-', '')}_{Name}({Age})_LifeGraph"
-    PDFPath = FilePath + FileName + '.pdf'
+#     PNGPaths = []
+#     FilePath = f"/yaas/storage/s2_Meditation/s21_BeforeStorage/s211_BeforeLifeGraph/s2113_BeforeLifeGraphAnalysisPDF/"
+#     FileName = f"{LifeGraphDate.replace('-', '')}_{Name}({Age})_LifeGraph"
+#     PDFPath = FilePath + FileName + '.pdf'
 
-    ## 표지 페이지 생성
-    fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
-    fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
-    ax.text(0.01, 0.99, f"\nDate             :  {LifeGraphDate}\nName          :  {Name}\nAge               :  {Age}\nEmail           :  {Email}\nLanguage  :  {Language}", wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax.transAxes)
-    ax.axis('off')  # 텍스트 영역의 축 숨기기
+#     ## 표지 페이지 생성
+#     fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
+#     fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
+#     ax.text(0.01, 0.99, f"\nDate             :  {LifeGraphDate}\nName          :  {Name}\nAge               :  {Age}\nEmail           :  {Email}\nLanguage  :  {Language}", wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax.transAxes)
+#     ax.axis('off')  # 텍스트 영역의 축 숨기기
     
-    # 표지 페이지 저장
-    PNGPath = FilePath + FileName + '(0).png'
-    PNGPaths.append(PNGPath)
-    plt.savefig(PNGPath, dpi = 300)
-    plt.close()
+#     # 표지 페이지 저장
+#     PNGPath = FilePath + FileName + '(0).png'
+#     PNGPaths.append(PNGPath)
+#     plt.savefig(PNGPath, dpi = 300)
+#     plt.close()
 
-    ## 첫번째 페이지 생성
-    DataFrame = pd.DataFrame(LifeData)
-    DataFrame['AgeRange'] = DataFrame['StartAge'].astype(str) + '-' + DataFrame['EndAge'].astype(str)
-    def ScoreToColor(score):
-        if score >= 0:
-            return plt.cm.Greens(score / 10)
-        else:
-            return plt.cm.Reds(-score / 10)
-    DataFrame['Color'] = DataFrame['Score'].apply(ScoreToColor)
+#     ## 첫번째 페이지 생성
+#     DataFrame = pd.DataFrame(LifeData)
+#     DataFrame['AgeRange'] = DataFrame['StartAge'].astype(str) + '-' + DataFrame['EndAge'].astype(str)
+#     def ScoreToColor(score):
+#         if score >= 0:
+#             return plt.cm.Greens(score / 10)
+#         else:
+#             return plt.cm.Reds(-score / 10)
+#     DataFrame['Color'] = DataFrame['Score'].apply(ScoreToColor)
 
-    # 지정된 여백으로 그림 및 축 생성, 여백 설정
-    fig, ax = plt.subplots(2, 1, figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
-    fig.subplots_adjust(left = 0.1, right = 0.9, top = 0.9, bottom = 0.1, hspace = 0.4)  # 플롯 사이에 공간 추가
+#     # 지정된 여백으로 그림 및 축 생성, 여백 설정
+#     fig, ax = plt.subplots(2, 1, figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
+#     fig.subplots_adjust(left = 0.1, right = 0.9, top = 0.9, bottom = 0.1, hspace = 0.4)  # 플롯 사이에 공간 추가
 
-    # 상단 그래프
-    sns.barplot(x = 'AgeRange', y = 'Score', hue = 'AgeRange', data = DataFrame, palette = DataFrame['Color'].to_list(), dodge = False, ax = ax[0])
-    ax[0].set_title(f'\n\n', fontweight = 'bold')
-    ax[0].set_xlabel(f'\nAge', fontweight = 'bold')
-    ax[0].set_ylabel('Happiness Score', fontweight = 'bold')
-    # ax[0].legend().remove() # 범례 제거
-    ax[0].set_yticks(range(-10, 11, 2)) # y축 눈금을 2단위로 설정
-    ax[0].axhline(0, color='black', linewidth=0.5) # y=0 위치에 수평선 추가
-    for index, row in DataFrame.iterrows():
-        if {row['Score']} != 0:
-            ax[0].text(index, row['Score'] / 2, str(row['Score']), color = 'white', ha = "center", weight = 'bold')
+#     # 상단 그래프
+#     sns.barplot(x = 'AgeRange', y = 'Score', hue = 'AgeRange', data = DataFrame, palette = DataFrame['Color'].to_list(), dodge = False, ax = ax[0])
+#     ax[0].set_title(f'\n\n', fontweight = 'bold')
+#     ax[0].set_xlabel(f'\nAge', fontweight = 'bold')
+#     ax[0].set_ylabel('Happiness Score', fontweight = 'bold')
+#     # ax[0].legend().remove() # 범례 제거
+#     ax[0].set_yticks(range(-10, 11, 2)) # y축 눈금을 2단위로 설정
+#     ax[0].axhline(0, color='black', linewidth=0.5) # y=0 위치에 수평선 추가
+#     for index, row in DataFrame.iterrows():
+#         if {row['Score']} != 0:
+#             ax[0].text(index, row['Score'] / 2, str(row['Score']), color = 'white', ha = "center", weight = 'bold')
 
-    # 원형숫자로 변경
-    def NumberConverter(Number):
-        ConvertedNumbers = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩', '⑪', '⑫', '⑬', '⑭', '⑮']
-        Number = int(Number)
-        return ConvertedNumbers[Number-1]
+#     # 원형숫자로 변경
+#     def NumberConverter(Number):
+#         ConvertedNumbers = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩', '⑪', '⑫', '⑬', '⑭', '⑮']
+#         Number = int(Number)
+#         return ConvertedNumbers[Number-1]
 
-    # 하단 절반을 위한 텍스트 준비 (단어 줄바꿈 포함)
-    if Language == 'en':
-        Width = 70
-    else:
-        Width = 50
-    WrappedTexts = []
-    TotalRows = len(DataFrame)
-    for index, row in DataFrame.iterrows():
-        if row['LifeDataId'] <= 9:
-            wrapped_text = "\n       ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
-        else:
-            wrapped_text = "\n         ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
+#     # 하단 절반을 위한 텍스트 준비 (단어 줄바꿈 포함)
+#     if Language == 'en':
+#         Width = 70
+#     else:
+#         Width = 50
+#     WrappedTexts = []
+#     TotalRows = len(DataFrame)
+#     for index, row in DataFrame.iterrows():
+#         if row['LifeDataId'] <= 9:
+#             wrapped_text = "\n       ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
+#         else:
+#             wrapped_text = "\n         ".join(textwrap.wrap(row['ReasonGlobal'], width = Width))
             
-        if index == TotalRows - 1:
-            WrappedTexts.append(f"{NumberConverter(row['LifeDataId'])}   {row['StartAge']}-{row['EndAge']} ({row['Score']}) :  {wrapped_text}")
-        else:
-            WrappedTexts.append(f"{NumberConverter(row['LifeDataId'])}   {row['StartAge']}-{row['EndAge']} ({row['Score']}) :  {wrapped_text}\n")
+#         if index == TotalRows - 1:
+#             WrappedTexts.append(f"{NumberConverter(row['LifeDataId'])}   {row['StartAge']}-{row['EndAge']} ({row['Score']}) :  {wrapped_text}")
+#         else:
+#             WrappedTexts.append(f"{NumberConverter(row['LifeDataId'])}   {row['StartAge']}-{row['EndAge']} ({row['Score']}) :  {wrapped_text}\n")
         
-    # 첫 번째는 22개, 그 후에는 50개 단위로 묶기
-    ProfileText = f"|    {LifeGraphDate}    |    {Name}    |    0-{Age}    |\n\n\n"
-    ReasonText = ProfileText + "\n".join(WrappedTexts)
-    ReasonLines = ReasonText.split('\n')
-    PagedReasonLines = [ReasonLines[:22]] + [ReasonLines[i:i+50] for i in range(22, len(ReasonLines), 50)]
+#     # 첫 번째는 22개, 그 후에는 50개 단위로 묶기
+#     ProfileText = f"|    {LifeGraphDate}    |    {Name}    |    0-{Age}    |\n\n\n"
+#     ReasonText = ProfileText + "\n".join(WrappedTexts)
+#     ReasonLines = ReasonText.split('\n')
+#     PagedReasonLines = [ReasonLines[:22]] + [ReasonLines[i:i+50] for i in range(22, len(ReasonLines), 50)]
 
-    # 하단 텍스트
-    ax[1].text(0.01, 0.99, "\n".join(PagedReasonLines[0]), wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax[1].transAxes)
-    ax[1].axis('off')  # 텍스트 영역의 축 숨기기
+#     # 하단 텍스트
+#     ax[1].text(0.01, 0.99, "\n".join(PagedReasonLines[0]), wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax[1].transAxes)
+#     ax[1].axis('off')  # 텍스트 영역의 축 숨기기
 
-    # 첫번째 페이지 저장
-    PNGPath = FilePath + FileName + '(1).png'
-    PNGPaths.append(PNGPath)
-    plt.savefig(PNGPath, dpi = 300)
-    plt.close()
+#     # 첫번째 페이지 저장
+#     PNGPath = FilePath + FileName + '(1).png'
+#     PNGPaths.append(PNGPath)
+#     plt.savefig(PNGPath, dpi = 300)
+#     plt.close()
     
-    ## 두번째 페이지부터 생성
-    if len(PagedReasonLines) >= 2:
-        _PagedReasonLines = PagedReasonLines[1:]
-        for i in range(len(_PagedReasonLines)):
-            fig, ax = plt.subplots(figsize=(8.27, 11.69))  # A4 크기 (인치 단위)
-            fig.subplots_adjust(left = 0.1, right = 0.9, top = 0.9, bottom = 0.1)  # 여백 설정
-            ax.text(0.01, 0.99, "\n".join(_PagedReasonLines[i]), wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax.transAxes)
-            ax.axis('off')  # 텍스트 영역의 축 숨기기
+#     ## 두번째 페이지부터 생성
+#     if len(PagedReasonLines) >= 2:
+#         _PagedReasonLines = PagedReasonLines[1:]
+#         for i in range(len(_PagedReasonLines)):
+#             fig, ax = plt.subplots(figsize=(8.27, 11.69))  # A4 크기 (인치 단위)
+#             fig.subplots_adjust(left = 0.1, right = 0.9, top = 0.9, bottom = 0.1)  # 여백 설정
+#             ax.text(0.01, 0.99, "\n".join(_PagedReasonLines[i]), wrap = True, horizontalalignment = 'left', verticalalignment = 'top', fontsize = 11, transform = ax.transAxes)
+#             ax.axis('off')  # 텍스트 영역의 축 숨기기
 
-            # 두번째 페이지부터 저장
-            PNGPath = FilePath + FileName + f'({i+2}).png'
-            PNGPaths.append(PNGPath)
-            plt.savefig(PNGPath, dpi = 300)
-            plt.close()
+#             # 두번째 페이지부터 저장
+#             PNGPath = FilePath + FileName + f'({i+2}).png'
+#             PNGPaths.append(PNGPath)
+#             plt.savefig(PNGPath, dpi = 300)
+#             plt.close()
             
-    return FileName, PDFPath, PNGPaths
+#     return FileName, PDFPath, PNGPaths
 
-### 라이프그래프의 이미지를 PDF로 묶기 ###
-def PNGsToPDF(PNGPaths, PDFPath):
-    # 디자인 포멧 경로
-    DesignFormatPath = "/yaas/storage/s2_Meditation/Design_Format/s2112_BeforeLifeGraphPDF_Format/s2112_BeforeLifeGraphPDF_Format_"
+# ### 라이프그래프의 이미지를 PDF로 묶기 ###
+# def PNGsToPDF(PNGPaths, PDFPath):
+#     # 디자인 포멧 경로
+#     DesignFormatPath = "/yaas/storage/s2_Meditation/Design_Format/s2112_BeforeLifeGraphPDF_Format/s2112_BeforeLifeGraphPDF_Format_"
     
-    # 첫 번째 이미지 크기에 맞는 PDF 생성
-    FirstImage = Image.open(PNGPaths[0])
-    FirstWidth, FirstHeight = FirstImage.size
-    pdf = canvas.Canvas(PDFPath, pagesize=portrait((FirstWidth, FirstHeight)))
+#     # 첫 번째 이미지 크기에 맞는 PDF 생성
+#     FirstImage = Image.open(PNGPaths[0])
+#     FirstWidth, FirstHeight = FirstImage.size
+#     pdf = canvas.Canvas(PDFPath, pagesize=portrait((FirstWidth, FirstHeight)))
 
-    for i in range(len(PNGPaths)):
-        # 그래프 이미지와 디자인 포멧 불러오기
-        image = Image.open(PNGPaths[i])
-        DesignFormat = Image.open(DesignFormatPath + f"{i}.png")
-        # 그래프 이미지와 디자인 포멧 합치기
-        image = image.convert("RGBA")
-        DesignFormat = DesignFormat.convert("RGBA")
-        BlendedImage = ImageChops.multiply(DesignFormat, image)
-        # 합쳐진 이미지 임시저장
-        BlendedImage.save(PNGPaths[i], "PNG", optimize=True)
-        # 이미지를 PDF에 추가
-        pdf.drawImage(PNGPaths[i], 0, 0)
-        pdf.showPage()
-        # PDF로 저장된 PNG 파일 제거
-        os.remove(PNGPaths[i])
+#     for i in range(len(PNGPaths)):
+#         # 그래프 이미지와 디자인 포멧 불러오기
+#         image = Image.open(PNGPaths[i])
+#         DesignFormat = Image.open(DesignFormatPath + f"{i}.png")
+#         # 그래프 이미지와 디자인 포멧 합치기
+#         image = image.convert("RGBA")
+#         DesignFormat = DesignFormat.convert("RGBA")
+#         BlendedImage = ImageChops.multiply(DesignFormat, image)
+#         # 합쳐진 이미지 임시저장
+#         BlendedImage.save(PNGPaths[i], "PNG", optimize=True)
+#         # 이미지를 PDF에 추가
+#         pdf.drawImage(PNGPaths[i], 0, 0)
+#         pdf.showPage()
+#         # PDF로 저장된 PNG 파일 제거
+#         os.remove(PNGPaths[i])
 
-    # PDF 파일 저장
-    pdf.save()
+#     # PDF 파일 저장
+#     pdf.save()
 
-## 추가행 업데이트
-def AddRowToSheet(BeforeLifeGraphList, AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courserameditation-028871d3c653.json', ProjectName = 'Coursera Meditation Project', SheetName = 'BeforeLifeGraph'):
-    ## Sheet에서 최신 Id 가져오기
-    # 서비스 계정
-    SERVICE_ACCOUNT_FILE = AccountFilePath
-    SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-    credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes = SCOPES)
-    client = gspread.authorize(credentials)
-    # 스프레드시트 읽고 쓰기
-    Sheet = client.open(ProjectName)
-    worksheet = Sheet.worksheet(SheetName)
-    # 가장 최신 id 가져오기
-    RecentId = worksheet.acell('A3').value
+# ## 추가행 업데이트
+# def AddRowToSheet(BeforeLifeGraphList, AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courserameditation-028871d3c653.json', ProjectName = 'Coursera Meditation Project', SheetName = 'BeforeLifeGraph'):
+#     ## Sheet에서 최신 Id 가져오기
+#     # 서비스 계정
+#     SERVICE_ACCOUNT_FILE = AccountFilePath
+#     SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+#     credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes = SCOPES)
+#     client = gspread.authorize(credentials)
+#     # 스프레드시트 읽고 쓰기
+#     Sheet = client.open(ProjectName)
+#     worksheet = Sheet.worksheet(SheetName)
+#     # 가장 최신 id 가져오기
+#     RecentId = worksheet.acell('A3').value
     
-    ## Sheet에서 가져온 최신 Id가 BeforeLifeGraphList에서 몇 번째 데이터인지 찾기
-    for i in range(len(BeforeLifeGraphList)):
-        if BeforeLifeGraphList[i]['LifeGraphId'] == RecentId:
-            AddNum = i
-            break
+#     ## Sheet에서 가져온 최신 Id가 BeforeLifeGraphList에서 몇 번째 데이터인지 찾기
+#     for i in range(len(BeforeLifeGraphList)):
+#         if BeforeLifeGraphList[i]['LifeGraphId'] == RecentId:
+#             AddNum = i
+#             break
 
-    ## AddNum 만큼 새로운 행 추가
-    if AddNum > 0:
-        # 2행 다음부터 AddNum 만큼의 새로운 행 추가
-        NewRows = [[''] * worksheet.col_count] * AddNum
-        worksheet.insert_rows(NewRows, row = 3)
-        print(f'[ 스프레드 시트({SheetName})에 ({AddNum})개의 빈 행 추가 ]')
-    else:
-        print(f'[ 스프레드 시트({SheetName})에 추가할 빈 행 없음 ]')
+#     ## AddNum 만큼 새로운 행 추가
+#     if AddNum > 0:
+#         # 2행 다음부터 AddNum 만큼의 새로운 행 추가
+#         NewRows = [[''] * worksheet.col_count] * AddNum
+#         worksheet.insert_rows(NewRows, row = 3)
+#         print(f'[ 스프레드 시트({SheetName})에 ({AddNum})개의 빈 행 추가 ]')
+#     else:
+#         print(f'[ 스프레드 시트({SheetName})에 추가할 빈 행 없음 ]')
 
-## 구글 스프레드 시트 업데이트
-def UpdateSheet(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courserameditation-028871d3c653.json', ProjectName = 'Coursera Meditation Project', SheetName = 'BeforeLifeGraph', Type = 'Text', HeaderRow = 2, Row = 3, Colum = 1, Data = 'Hello', SubData = 'World!', FileName = 'None', FilePath = 'None', FolderId = '16SB0qJBhEwCugqOe_bV7QYecFj922u1J'):
-    # 서비스 계정
-    SERVICE_ACCOUNT_FILE = AccountFilePath
-    SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-    credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes = SCOPES)
-    client = gspread.authorize(credentials)
-    # 스프레드시트 읽고 쓰기
-    Sheet = client.open(ProjectName)
-    worksheet = Sheet.worksheet(SheetName)
-    worksheet.get_all_records(head = HeaderRow)
-    if Type == 'Text':
-        worksheet.update_cell(Row, Colum, Data)
-    elif Type == 'Link':
-        # 파일을 구글 드라이브에 업로드
-        driveservice = build('drive', 'v3', credentials = credentials)
-        FileMetadata = {'name': FileName + '.pdf', 'parents': [FolderId]}
-        Media = MediaFileUpload(FilePath, mimetype = 'application/pdf')
-        File = driveservice.files().create(body = FileMetadata, media_body = Media, fields = 'id').execute()
-        # 파일을 구글 드라이브에 업로드
-        FileId = File.get('id')
-        FileLink = f'https://drive.google.com/file/d/{FileId}/view?usp=sharing'
-        # 스프레드시트 링크 삽입
-        worksheet.update_cell(Row, Colum, f'=HYPERLINK("{FileLink}", "{SubData}")')
+# ## 구글 스프레드 시트 업데이트
+# def UpdateSheet(AccountFilePath = '/yaas/storage/s2_Meditation/API_KEY/courserameditation-028871d3c653.json', ProjectName = 'Coursera Meditation Project', SheetName = 'BeforeLifeGraph', Type = 'Text', HeaderRow = 2, Row = 3, Colum = 1, Data = 'Hello', SubData = 'World!', FileName = 'None', FilePath = 'None', FolderId = '16SB0qJBhEwCugqOe_bV7QYecFj922u1J'):
+#     # 서비스 계정
+#     SERVICE_ACCOUNT_FILE = AccountFilePath
+#     SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+#     credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes = SCOPES)
+#     client = gspread.authorize(credentials)
+#     # 스프레드시트 읽고 쓰기
+#     Sheet = client.open(ProjectName)
+#     worksheet = Sheet.worksheet(SheetName)
+#     worksheet.get_all_records(head = HeaderRow)
+#     if Type == 'Text':
+#         worksheet.update_cell(Row, Colum, Data)
+#     elif Type == 'Link':
+#         # 파일을 구글 드라이브에 업로드
+#         driveservice = build('drive', 'v3', credentials = credentials)
+#         FileMetadata = {'name': FileName + '.pdf', 'parents': [FolderId]}
+#         Media = MediaFileUpload(FilePath, mimetype = 'application/pdf')
+#         File = driveservice.files().create(body = FileMetadata, media_body = Media, fields = 'id').execute()
+#         # 파일을 구글 드라이브에 업로드
+#         FileId = File.get('id')
+#         FileLink = f'https://drive.google.com/file/d/{FileId}/view?usp=sharing'
+#         # 스프레드시트 링크 삽입
+#         worksheet.update_cell(Row, Colum, f'=HYPERLINK("{FileLink}", "{SubData}")')
     
-### 구글 스프레드 시트에 라이프그래프 업데이트 ###
-def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
-    # 추가행 업데이트
-    AddRowToSheet(BeforeLifeGraphList)
-    # 라이프 그래프 업데이트
-    UpdateCount = 0
-    for i in tqdm(range(len(BeforeLifeGraphList)), desc = "[ 라이프그래프 구글시트 업데이트 ]"):
-        if 'LifeGraphFile' not in BeforeLifeGraphList[i]:
-            # 라이프그래프 데이터 추출
-            Id = BeforeLifeGraphList[i]['LifeGraphId']
-            Date = BeforeLifeGraphList[i]['LifeGraphDate']
-            Name = BeforeLifeGraphList[i]['Name']
-            Age = BeforeLifeGraphList[i]['Age']
-            Language = BeforeLifeGraphList[i]['Language']
-            Email = BeforeLifeGraphList[i]['Email']
-            LifeData = BeforeLifeGraphList[i]['LifeData']
+# ### 구글 스프레드 시트에 라이프그래프 업데이트 ###
+# def UpdateBeforeLifeGraphToSheet(BeforeLifeGraphPath, BeforeLifeGraphList):
+#     # 추가행 업데이트
+#     AddRowToSheet(BeforeLifeGraphList)
+#     # 라이프 그래프 업데이트
+#     UpdateCount = 0
+#     for i in tqdm(range(len(BeforeLifeGraphList)), desc = "[ 라이프그래프 구글시트 업데이트 ]"):
+#         if 'LifeGraphFile' not in BeforeLifeGraphList[i]:
+#             # 라이프그래프 데이터 추출
+#             Id = BeforeLifeGraphList[i]['LifeGraphId']
+#             Date = BeforeLifeGraphList[i]['LifeGraphDate']
+#             Name = BeforeLifeGraphList[i]['Name']
+#             Age = BeforeLifeGraphList[i]['Age']
+#             Language = BeforeLifeGraphList[i]['Language']
+#             Email = BeforeLifeGraphList[i]['Email']
+#             LifeData = BeforeLifeGraphList[i]['LifeData']
             
-            # 라이프그래프 파일 생성
-            fileName, PDFPath, PNGPaths = LifeGraphToPNG(Date, Name, Age, Language, Email, LifeData)
-            PNGsToPDF(PNGPaths, PDFPath)
-            BeforeLifeGraphList[i]['LifeGraphFile'] = PDFPath
+#             # 라이프그래프 파일 생성
+#             fileName, PDFPath, PNGPaths = LifeGraphToPNG(Date, Name, Age, Language, Email, LifeData)
+#             PNGsToPDF(PNGPaths, PDFPath)
+#             BeforeLifeGraphList[i]['LifeGraphFile'] = PDFPath
             
-            # 구글 스프레드 시트 업데이트
-            row = i + 3
-            UpdateSheet(Row = row, Colum = 1, Data = Id)
-            UpdateSheet(Row = row, Colum = 2, Data = Date)
-            UpdateSheet(Row = row, Colum = 3, Data = Name)
-            UpdateSheet(Row = row, Colum = 4, Data = Age)
-            UpdateSheet(Row = row, Colum = 8, Data = Email)
-            UpdateSheet(Row = row, Type = 'Link', Colum = 9, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
+#             # 구글 스프레드 시트 업데이트
+#             row = i + 3
+#             UpdateSheet(Row = row, Colum = 1, Data = Id)
+#             UpdateSheet(Row = row, Colum = 2, Data = Date)
+#             UpdateSheet(Row = row, Colum = 3, Data = Name)
+#             UpdateSheet(Row = row, Colum = 4, Data = Age)
+#             UpdateSheet(Row = row, Colum = 8, Data = Email)
+#             UpdateSheet(Row = row, Type = 'Link', Colum = 9, Data = PDFPath, SubData = f'({Name})의 라이프그래프 보기/다운로드', FileName = fileName, FilePath = PDFPath)
             
-            UpdateCount += 1
-            if UpdateCount >= 5:
-                with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
-                    json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
-                UpdateCount = 0
-            time.sleep(4)
+#             UpdateCount += 1
+#             if UpdateCount >= 5:
+#                 with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
+#                     json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
+#                 UpdateCount = 0
+#             time.sleep(4)
         
-    if UpdateCount > 0:
-        with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
-            json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
+#     if UpdateCount > 0:
+#         with open(BeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
+#             json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
 
 # #########################
 # ### 라이프 그래프 업데이트 ###

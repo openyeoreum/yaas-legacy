@@ -331,6 +331,7 @@ def ActorChunkSetting(RawChunk):
     ActorChunk = ActorChunk.replace('.,', ',')
     ActorChunk = ActorChunk.replace('..', '.')
     
+    ActorChunk = ActorChunk[:-3] + ActorChunk[-3:].replace('.', '').replace(',', '') + '.'
     ActorChunk = ActorChunk.replace('\n', '')
 
     SFXPattern = r"<효과음시작[0-9]{1,5}>|<효과음끝[0-9]{1,5}>"

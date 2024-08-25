@@ -286,9 +286,9 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "General"
     projectName = "Meditation"
-    ReactionYYMM = "2408"
+    reactionYYMM = "2408"
     #########################################################################
-    LifeGraphReactionProcess(ReactionYYMM)
+    LifeGraphReactionProcess(reactionYYMM)
     
     # 1) 메일주소없음(1_NoEmail)
     # 2) 수신거부(2_Unsubscribe)

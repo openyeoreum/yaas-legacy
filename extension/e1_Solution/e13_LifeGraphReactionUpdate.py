@@ -167,7 +167,7 @@ def LoadReaction(ReactionYYMM):
     with open(os.path.join(ReactionsPath, f"{ReactionFolder}_종합.json"), 'w', encoding = 'utf-8') as jsonfile:
         json.dump(ReactionJson, jsonfile, ensure_ascii = False, indent = 4)
         
-    print(f"[ ({len(UnMatchedGoogleFormData)})개의 구글폼 데이터가 전체 데이터베이스에 이메일 매칭 안됨 ]\n[ (코세라 데이터베이스)와 ({ReactionFolder}_구글폼매칭실패.json)를 직접 매칭해주세요. ]")
+    print(f"[ ({len(UnMatchedGoogleFormData)})명의 구글폼 작성자가 라이프그래프 구글시트에서 이메일 매칭 안됨 ]\n[ (코세라 데이터베이스)와 ({ReactionFolder}_구글폼매칭실패.json)를 직접 매칭해주세요. ]")
     with open(os.path.join(ReactionsPath, f"{ReactionFolder}_구글폼매칭실패.json"), 'w', encoding = 'utf-8') as json_file:
         json.dump(UnMatchedGoogleFormData, json_file, ensure_ascii = False, indent = 4)
 

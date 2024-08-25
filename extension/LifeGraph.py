@@ -19,7 +19,10 @@ def LifeGraph(email, projectName, term, reactionYYMM):
     # 1. 스티비에 "상세 통계 한번에 내보내기"
     # 2. 폴더 압축을 풀고, "전송.csv" 파일을 추가하여 "YYMMDD_reaction" 폴더 완성
     # 3. 폴더 추가 및 프로세스 진행
+    # 4. "MMDD_reaction_구글폼매칭실패.json"은 라이프그래프 구글시트에 없는 대상임으로, 수동으로(사람이 직접) 업데이트
     LifeGraphReactionProcess(reactionYYMM)
+    
+    print("[ 라이프그래프 구글시트 업데이트 완료 ]")
 
 if __name__ == "__main__":
 

@@ -1365,13 +1365,51 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
-    ## Modify 시간에 맞추어 폴더 생성
+
+    ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
+    BaseModifyFolder = f"[{projectName}_Modified]"
+    BaseModifiedFolderPath = VoiceLayerPathGen(projectName, email, BaseModifyFolder, 'Master')
+    # 경로를 정규화(NFC)하여 파일 시스템 문제를 해결
+    BaseModifiedFolderPath = unicodedata.normalize('NFC', BaseModifiedFolderPath)
+    
     ModifyTime = datetime.now().strftime("%Y%m%d%H%M%S")
-    ModifyFolderName = f"{ModifyTime}_Modified_Part"
-    ModifyFolder = f"[{projectName}_Modified]/{ModifyFolderName}"
-    ModifyFolderPath = VoiceLayerPathGen(projectName, email, ModifyFolder, 'Master')
+    ModifyFolder = f"{ModifyTime}_Modified_Part"
+    ModifyFolderPath = os.path.join(BaseModifiedFolderPath, ModifyFolder)
+    
+    # [{projectName}_Modified] 폴더 안에 있는 모든 폴더를 검사
+    for folderName in os.listdir(BaseModifiedFolderPath):
+        folderPath = os.path.join(BaseModifiedFolderPath, folderName)
+        
+        # 폴더인지 확인
+        if os.path.isdir(folderPath):
+            # 폴더 안의 파일 목록 가져오기
+            files = os.listdir(folderPath)
+            
+            # 빈 폴더인 경우 삭제
+            if not files:
+                os.rmdir(folderPath)
+                continue
+            
+            # "n_Modified_Part.wav" 파일이 있는지 확인
+            ModifiedPartFileFound = any(file.endswith("_Modified_Part.wav") for file in files)
+            
+            if not ModifiedPartFileFound:
+                # ModifyFolderPath가 없는 경우 생성
+                if not os.path.exists(ModifyFolderPath):
+                    os.makedirs(ModifyFolderPath)
+
+                # 폴더 내 파일을 ModifyFolderPath로 이동
+                for file in files:
+                    shutil.move(os.path.join(folderPath, file), ModifyFolderPath)
+    
+                # 빈 폴더 삭제
+                os.rmdir(folderPath)
+                
+    # Modify 시간에 맞추어 폴더 생성
     if not os.path.exists(ModifyFolderPath):
         os.makedirs(ModifyFolderPath)
+    ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
+    
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
     # MatchedActors 경로 생성
     fileName = projectName + '_' + 'MatchedVoices.json'
@@ -1835,7 +1873,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     time.sleep(0.1)
     EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen)
     ## 최종 생성된 수정부분 음성파일 합치기 ##
-    ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName)
+    ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolder)
     
     return EditGenerationKoChunks
 

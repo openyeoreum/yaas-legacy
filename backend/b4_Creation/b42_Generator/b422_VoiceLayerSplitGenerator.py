@@ -1369,8 +1369,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
     BaseModifyFolder = f"[{projectName}_Modified]"
     BaseModifiedFolderPath = VoiceLayerPathGen(projectName, email, BaseModifyFolder, 'Master')
-    # 경로를 정규화(NFC)하여 파일 시스템 문제를 해결
-    BaseModifiedFolderPath = unicodedata.normalize('NFC', BaseModifiedFolderPath)
+    # # 경로를 정규화(NFC)하여 파일 시스템 문제를 해결
+    # BaseModifiedFolderPath = unicodedata.normalize('NFC', BaseModifiedFolderPath)
     
     ModifyTime = datetime.now().strftime("%Y%m%d%H%M%S")
     ModifyFolder = f"{ModifyTime}_Modified_Part"

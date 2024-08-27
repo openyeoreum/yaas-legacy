@@ -1369,8 +1369,12 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
     BaseModifyFolder = f"[{projectName}_Modified]"
     BaseModifiedFolderPath = VoiceLayerPathGen(projectName, email, BaseModifyFolder, 'Master')
-    # # 경로를 정규화(NFC)하여 파일 시스템 문제를 해결
-    # BaseModifiedFolderPath = unicodedata.normalize('NFC', BaseModifiedFolderPath)
+    
+    # 경로를 정규화(NFC)하여 파일 시스템 문제를 해결
+    if os.path.exists(unicodedata.normalize('NFC', BaseModifiedFolderPath)):
+        BaseModifiedFolderPath = unicodedata.normalize('NFC', BaseModifiedFolderPath)
+    elif os.path.exists(unicodedata.normalize('NFD', BaseModifiedFolderPath)):
+        BaseModifiedFolderPath = unicodedata.normalize('NFD', BaseModifiedFolderPath)
     
     ModifyTime = datetime.now().strftime("%Y%m%d%H%M%S")
     ModifyFolder = f"{ModifyTime}_Modified_Part"
@@ -1702,6 +1706,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             if Api == 'ElevenLabs':
                 ELChunks = []
                 for _ELChunk in Update['ActorChunk']:
+                    if _ELChunk.startswith('[') and _ELChunk.endswith(']'):
+                        _ELChunk = f'지금 생성될 내용은, "{_ELChunk.strip("[]")}", 문단 입니다'
                     ELChunk = ModifyELChunk(_ELChunk)
                     ELChunks.append(ELChunk)
                 EL_Chunk = " ".join(ELChunks)
@@ -1711,6 +1717,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             if Api == 'TypeCast':
                 Chunks = []
                 for _Chunk in Update['ActorChunk']:
+                    if _Chunk.startswith('[') and _Chunk.endswith(']'):
+                        _Chunk = f'지금 생성될 내용은, "{_ELChunk.strip("[]")}", 문단 입니다'
                     _chunk = ModifyTCChunk(_Chunk)
                     Chunks.append(_chunk)
                 Chunk = " ".join(Chunks)
@@ -1719,10 +1727,30 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             ChunkCount = len(Update['ActorChunk']) - 1 # 파일의 마지막 순번을 표기
 
             #### Split을 위한 딕셔너리 리스트 생성 ####
-            rawSplitChunks = [chunk.replace('~.', '').replace('~,', '').replace('.,', '').replace('.,', '') for chunk in Update['ActorChunk']]
+            RawSplitChunks = [chunk.replace('~.', '').replace('~,', '').replace('.,', '').replace('.,', '') for chunk in Update['ActorChunk']]
+            # '[내용]'인 부분은 단어의 부드러운 음성 처리 방법
+            rawSplitChunks = []
+            removeSplitChunksNumber = []
+            Number = 1
+            for RawSplitChunk in RawSplitChunks:
+                if RawSplitChunk.startswith('[') and RawSplitChunk.endswith(']'):
+                    rawSplitChunks.append('지금 생성될 내용은')
+                    rawSplitChunks.append(f"{RawSplitChunk.strip('[]')}")
+                    rawSplitChunks.append('문단 입니다')
+                    removeSplitChunksNumber.append(Number)
+                    removeSplitChunksNumber.append(Number + 2)
+                    Number += 2
+                else:
+                    rawSplitChunks.append(RawSplitChunk)
+                Number += 1
+                
             SplitChunks = []
             for i in range(len(rawSplitChunks)):
-                SplitChunk = {'낭독문장번호': i + 1, '낭독문장': rawSplitChunks[i]}
+                Remove = 'No'
+                if i + 1 in removeSplitChunksNumber:
+                    Remove = 'Yes'
+                SplitChunk = {'낭독문장번호': i + 1, '낭독문장': rawSplitChunks[i], '제거': Remove}
+                # print(f'SplitChunk: ({SplitChunk})')
                 SplitChunks.append(SplitChunk)
             #### Split을 위한 딕셔너리 리스트 생성 ####
 

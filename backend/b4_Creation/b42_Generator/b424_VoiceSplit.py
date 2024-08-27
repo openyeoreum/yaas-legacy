@@ -595,7 +595,12 @@ def VoiceTimeStempsClassification(VoiceTimeStemps, ResponseJson):
     return SplitTimeList
 
 ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-def VoiceFileSplit(Modify, ModifyFolderPath, VoiceLayerPath, SplitTimeList):
+def VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, VoiceLayerPath, SplitTimeList):
+    # RemoveNumbers '[]'처리로 인해서 저장되지 말아야할 부분 제거
+    RemoveNumbers = []
+    for i in range(len(SplitSents)):
+        if SplitSents[i]['제거'] == 'Yes':
+            RemoveNumbers.append(i)
     # 오디오 파일 로드
     audio = AudioSegment.from_wav(VoiceLayerPath)
     
@@ -685,33 +690,39 @@ def VoiceFileSplit(Modify, ModifyFolderPath, VoiceLayerPath, SplitTimeList):
     segment_durations = []
     start_point = 0
     split_points.append(audio.duration_seconds)  # 마지막 부분 포함하기 위해 추가
+    FileNumber = 0
     for i, split_point in enumerate(split_points):
         end_point = int(split_point * 1000)  # milliseconds로 변환
-        segment = audio[start_point:end_point]
-        # 페이드인/아웃 적용
-        segment = segment.fade_in(duration = 100).fade_out(duration = 100)  # 0.03초 페이드인, 0.03초 페이드아웃
-        # 무음 추가
-        silence = AudioSegment.silent(duration = 30)  # 0.03초 무음
-        segment = silence + segment + silence  # 무음 - 세그먼트 - 무음
-        
-        # 세그먼트 재생 시간 저장
-        segment_duration = segment.duration_seconds
-        segment_durations.append(segment_duration)
-        ExportPathText = VoiceLayerPath.replace(".wav", "")
-        if ExportPathText[-1] == 'M':
-            ExportPathText = ExportPathText.replace("M", "")
-            ExportPath = ExportPathText + f"_({i})M.wav"
-        else:
-            ExportPath = ExportPathText + f"_({i}).wav"
-        segment.export(ExportPath, format = "wav")
-        # 수정 파일 별도 저장
-        if Modify == "Yes":
-            InspectionExportPath = ExportPathText + f"_({i})Modify.wav"
-            InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
-            InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
-            segment.export(InspectionExportMasterFilePath, format = "wav")
+        # RemoveNumbers '[]'처리로 인해서 저장되지 말아야할 부분 필터
+        if i not in RemoveNumbers:
+            segment = audio[start_point:end_point]
+            # 페이드인/아웃 적용
+            segment = segment.fade_in(duration = 100).fade_out(duration = 100)  # 0.03초 페이드인, 0.03초 페이드아웃
+            # 무음 추가
+            silence = AudioSegment.silent(duration = 30)  # 0.03초 무음
+            segment = silence + segment + silence  # 무음 - 세그먼트 - 무음
+            
+            # 세그먼트 재생 시간 저장
+            segment_duration = segment.duration_seconds
+            segment_durations.append(segment_duration)
+            ExportPathText = VoiceLayerPath.replace(".wav", "")
+            if ExportPathText[-1] == 'M':
+                ExportPathText = ExportPathText.replace("M", "")
+                ExportPath = ExportPathText + f"_({FileNumber})M.wav"
+            else:
+                ExportPath = ExportPathText + f"_({FileNumber}).wav"
+            ExportPath
+            segment.export(ExportPath, format = "wav")
+            # 수정 파일 별도 저장
+            if Modify == "Yes":
+                InspectionExportPath = ExportPathText + f"_({FileNumber})Modify.wav"
+                InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
+                InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
+                segment.export(InspectionExportMasterFilePath, format = "wav")
 
-        print(f"Segment {i} exported: Start at {start_point / 1000:.5f}, end at {split_point:.5f} with fades and silence")
+            print(f"Segment {FileNumber} exported: Start at {start_point / 1000:.5f}, end at {split_point:.5f} with fades and silence")
+            FileNumber += 1
+            
         start_point = end_point
         
     # 파일 분할이 완료된 후 원본 오디오 파일 삭제
@@ -732,7 +743,7 @@ def VoiceSplit(projectName, email, Modify, ModifyFolderPath, name, VoiceLayerPat
             ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
             SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
             ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
-            segment_durations = VoiceFileSplit(Modify, ModifyFolderPath, VoiceLayerPath, SplitTimeList)
+            segment_durations = VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, VoiceLayerPath, SplitTimeList)
             
             return segment_durations
         except TypeError as e:

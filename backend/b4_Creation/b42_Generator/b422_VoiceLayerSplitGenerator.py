@@ -1706,8 +1706,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             if Api == 'ElevenLabs':
                 ELChunks = []
                 for _ELChunk in Update['ActorChunk']:
-                    if _ELChunk.startswith('[') and _ELChunk.endswith(']'):
-                        _ELChunk = f'지금 생성될 내용은, "{_ELChunk.strip("[]")}", 문단 입니다'
+                    if _ELChunk.strip().startswith('[') and _ELChunk.strip().endswith(']'):
+                        _ELChunk = f'지금 생성될 내용은, "{_ELChunk.strip().strip("[]")}", 문단 입니다'
                     ELChunk = ModifyELChunk(_ELChunk)
                     ELChunks.append(ELChunk)
                 EL_Chunk = " ".join(ELChunks)
@@ -1717,8 +1717,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             if Api == 'TypeCast':
                 Chunks = []
                 for _Chunk in Update['ActorChunk']:
-                    if _Chunk.startswith('[') and _Chunk.endswith(']'):
-                        _Chunk = f'지금 생성될 내용은, "{_ELChunk.strip("[]")}", 문단 입니다'
+                    if _Chunk.strip().startswith('[') and _Chunk.strip().endswith(']'):
+                        _Chunk = f'지금 생성될 내용은, "{_ELChunk.strip().strip("[]")}", 문단 입니다'
                     _chunk = ModifyTCChunk(_Chunk)
                     Chunks.append(_chunk)
                 Chunk = " ".join(Chunks)
@@ -1733,9 +1733,9 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             removeSplitChunksNumber = []
             Number = 1
             for RawSplitChunk in RawSplitChunks:
-                if RawSplitChunk.startswith('[') and RawSplitChunk.endswith(']'):
+                if RawSplitChunk.strip().startswith('[') and RawSplitChunk.strip().endswith(']'):
                     rawSplitChunks.append('지금 생성될 내용은')
-                    rawSplitChunks.append(f"{RawSplitChunk.strip('[]')}")
+                    rawSplitChunks.append(f"{RawSplitChunk.strip().strip('[]')}")
                     rawSplitChunks.append('문단 입니다')
                     removeSplitChunksNumber.append(Number)
                     removeSplitChunksNumber.append(Number + 2)

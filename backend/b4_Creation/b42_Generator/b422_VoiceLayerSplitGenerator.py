@@ -537,7 +537,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
         Style = random.choice(ApiSetting['style'])
         Model = ApiSetting['models']['Ko']
         
-        while attempt < 60:
+        while attempt < 65:
             try:
                 ########## ElevenLabs API 요청 ##########
                 Api_key = os.getenv("ELEVENLABS_API_KEY")
@@ -599,17 +599,22 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 ########## ElevenLabs API 요청 ##########
             except KeyError as e:
                 attempt += 1
-                print(f"[ KeyError 발생, 재시도 {attempt}/60: {e} ]")
+                print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
                 time.sleep(60)  # 1분 대기 후 재시도
                 
             except Exception as e:
-                sys.exit(f"[ 예상치 못한 에러 발생: {e} ]")
+                attempt += 1
+                if attempt >= 5:
+                    sys.exit(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                else:
+                    print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                    time.sleep(5)
 
     ################
     ### TypeCast ###
     ################
     if Api == "TypeCast":
-        while attempt < 60:
+        while attempt < 65:
             try:
                 ########## TypeCast API 요청 ##########
                 API_TOKEN = os.getenv("TYPECAST_API_TOKEN")
@@ -706,11 +711,16 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 ########## TypeCast API 요청 ##########
             except KeyError as e:
                 attempt += 1
-                print(f"[ KeyError 발생, 재시도 {attempt}/60: {e} ]")
+                print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
                 time.sleep(60)  # 1분 대기 후 재시도
-
+                
             except Exception as e:
-                sys.exit(f"[ 예상치 못한 에러 발생: {e} ]")
+                attempt += 1
+                if attempt >= 5:
+                    sys.exit(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                else:
+                    print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                    time.sleep(5)
         sys.exit("[ 1시간째 API 무응답, 요금을 충전하세요. ]")
 
 ## 생성된 음성 합치기 ##
@@ -1409,7 +1419,6 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 # 폴더 내 파일을 ModifyFolderPath로 이동
                 for file in files:
                     shutil.move(os.path.join(folderPath, file), ModifyFolderPath)
-    
                 # 빈 폴더 삭제, 단 ModifyFolderPath는 삭제하지 않음
                 if folderPath != ModifyFolderPath:
                     os.rmdir(folderPath)

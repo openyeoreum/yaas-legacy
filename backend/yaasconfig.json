@@ -61,7 +61,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto"
+        "AudiobookSplitting": "Manual"
     },
     "240815_노유파": {
         "email": "yeoreum00128@gmail.com",
@@ -72,8 +72,8 @@
         "IndexMode": "Define",
         "BookGenre": "Auto",
         "MainLang": "Ko",
-        "Narrator": "VoiceClone",
-        "CloneVoiceName": "장봉근",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "장봉근(일반)",
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",

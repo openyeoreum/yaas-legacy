@@ -13,7 +13,7 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit imp
 # BodyText 로드
 def LoadBodyText(projectName, email):
     project = GetProject(projectName, email)
-    _bodyText = project.BodyText
+    _bodyText = project.BodyText + '\n\n"끝까지 들어주셔서 감사합니다."\n\n"안녕하세요."\n"스튜디오 여름 입니다."\n"스튜디오 여름에서 이 책을 오디오북으로 제작하게 되어 영광이며,"\n"모든 책을 편하게 들을 수 있는 그날을 스튜디오 여름이 열어가겠습니다."'
     PronunciationPreprocessFrame = project.PronunciationPreprocessFrame[1]['PreprocessScripts'][1:]
     
     bodyText = ""

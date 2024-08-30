@@ -1380,6 +1380,10 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     ModifyFolder = f"{ModifyTime}_Modified_Part"
     ModifyFolderPath = os.path.join(BaseModifiedFolderPath, ModifyFolder)
     
+    # Modify 시간에 맞추어 폴더 생성
+    if not os.path.exists(ModifyFolderPath):
+        os.makedirs(ModifyFolderPath)
+    
     # [{projectName}_Modified] 폴더 안에 있는 모든 폴더를 검사
     for folderName in os.listdir(BaseModifiedFolderPath):
         folderPath = os.path.join(BaseModifiedFolderPath, folderName)
@@ -1406,12 +1410,9 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 for file in files:
                     shutil.move(os.path.join(folderPath, file), ModifyFolderPath)
     
-                # 빈 폴더 삭제
-                os.rmdir(folderPath)
-                
-    # Modify 시간에 맞추어 폴더 생성
-    if not os.path.exists(ModifyFolderPath):
-        os.makedirs(ModifyFolderPath)
+                # 빈 폴더 삭제, 단 ModifyFolderPath는 삭제하지 않음
+                if folderPath != ModifyFolderPath:
+                    os.rmdir(folderPath)
     ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
     
     ## MatchedActors 가 존재하면 함수에서 호출된 MatchedActors를 json파일에서 대처
@@ -1583,13 +1584,23 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 else:
                     EditGenerationKoChunks.remove(NewGenerationKoChunk)
             
-            ## 빈 ActorChunk 삭제
+            ## 빈 ActorChunk 삭제 및 목차 및 문장 끝 후처리
             for i in range(len(EditGenerationKoChunks)):
+                _tag = EditGenerationKoChunks[i]['Tag']
                 for j in range(len(EditGenerationKoChunks[i]['ActorChunk'])):
+                    # 문장 끝 후처리
+                    _ActorChunk = EditGenerationKoChunks[i]['ActorChunk'][j]
+                    modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '.', _ActorChunk)
+                    # 목차 후처리
+                    if _tag in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
+                        modified_ActorChunk = f'[{modified_ActorChunk}]'
+                    EditGenerationKoChunks[i]['ActorChunk'][j] = modified_ActorChunk
+                    # 빈 ActorChunk 삭제
                     if extract_text(EditGenerationKoChunks[i]['ActorChunk'][j]) == '':
                         del EditGenerationKoChunks[i]['ActorChunk'][j]
                         del EditGenerationKoChunks[i]['Pause'][j]
                         del EditGenerationKoChunks[i]['EndTime'][j]
+            
             #### Split을 위한 문장을 합치는 코드 ####
             
             ## EditGenerationKoChunks의 Dic(검수)

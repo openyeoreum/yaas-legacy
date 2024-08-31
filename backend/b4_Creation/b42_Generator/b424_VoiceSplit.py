@@ -729,7 +729,7 @@ def VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracket
             FrontSilence = AudioSegment.silent(duration = 30) # 0.03초 무음
             BackSilence = AudioSegment.silent(duration = 30)
             if BracketsSwitch:
-                BackSilence = AudioSegment.silent(duration = 100) # 0.10초 무음
+                BackSilence = AudioSegment.silent(duration = 150) # 0.15초 무음
             segment = FrontSilence + segment + BackSilence  # 무음 - 세그먼트 - 무음
             
             # 세그먼트 재생 시간 저장

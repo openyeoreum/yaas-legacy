@@ -1405,17 +1405,14 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             
             # 빈 폴더인 경우 삭제
             if not files:
-                os.rmdir(folderPath)
-                continue
+                if folderPath != ModifyFolderPath:
+                    os.rmdir(folderPath)
+                    continue
             
             # "n_Modified_Part.wav" 파일이 있는지 확인
             ModifiedPartFileFound = any(file.endswith("_Modified_Part.wav") for file in files)
             
             if not ModifiedPartFileFound:
-                # ModifyFolderPath가 없는 경우 생성
-                if not os.path.exists(ModifyFolderPath):
-                    os.makedirs(ModifyFolderPath)
-
                 # 폴더 내 파일을 ModifyFolderPath로 이동
                 for file in files:
                     shutil.move(os.path.join(folderPath, file), ModifyFolderPath)

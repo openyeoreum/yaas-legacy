@@ -1069,8 +1069,36 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
     ModifyFileName = ModifyFolderName + '.wav'
     ModifyFilePath = os.path.join(ModifyFolderPath, ModifyFileName)
     # 파일 이름을 파싱하여 정렬하기 위한 함수
-    SentenceSeparatorPath = "/yaas/storage/s1_Yeoreum/s19_ModifyStorage/1_ModifySound_문장사이음.wav"
-    ParagraphSeparatorPath = "/yaas/storage/s1_Yeoreum/s19_ModifyStorage/2_ModifySound_문단사이음.wav"
+    ModifyStoragePath = "/yaas/storage/s1_Yeoreum/s19_ModifyStorage/"
+    SentenceSeparatorPath = ModifyStoragePath + "1_ModifySound_문장사이음.wav"
+    ParagraphSeparatorPath = ModifyStoragePath + "2_ModifySound_문단사이음.wav"
+    # EditID 소리 출력
+    Number_0_Path = ModifyStoragePath + "3_ModifySound_Zero.wav"
+    Number_1_Path = ModifyStoragePath + "3_ModifySound_One.wav"
+    Number_2_Path = ModifyStoragePath + "3_ModifySound_Two.wav"
+    Number_3_Path = ModifyStoragePath + "3_ModifySound_Three.wav"
+    Number_4_Path = ModifyStoragePath + "3_ModifySound_Four.wav"
+    Number_5_Path = ModifyStoragePath + "3_ModifySound_Five.wav"
+    Number_6_Path = ModifyStoragePath + "3_ModifySound_Six.wav"
+    Number_7_Path = ModifyStoragePath + "3_ModifySound_Seven.wav"
+    Number_8_Path = ModifyStoragePath + "3_ModifySound_Eight.wav"
+    Number_9_Path = ModifyStoragePath + "3_ModifySound_Nine.wav"
+    Number_Point_Path = ModifyStoragePath + "3_ModifySound_Point.wav"
+    NumberSoundMap = {'0': Number_0_Path, '1': Number_1_Path, '2': Number_2_Path, '3': Number_3_Path, '4': Number_4_Path, '5': Number_5_Path, '6': Number_6_Path, '7': Number_7_Path, '8': Number_8_Path, '9': Number_9_Path, '.': Number_Point_Path}
+    # EditID 소리 합성 함수
+    def AudioNumber(number_str):
+        # Create an empty AudioSegment
+        audioNumber = AudioSegment.silent(duration=0)
+        # Iterate over each character in the number string
+        for char in number_str:
+            if char in NumberSoundMap:
+                # Load the corresponding sound file
+                sound_file = NumberSoundMap[char]
+                audio_segment = AudioSegment.from_file(sound_file) - 5
+                # Append the audio segment to the output audio
+                audioNumber += audio_segment
+        
+        return audioNumber
 
     # 문장과 문단 사이 소리 로드
     SentenceSeparator = AudioSegment.from_wav(SentenceSeparatorPath) - 5
@@ -1109,9 +1137,12 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
             ModifiedVoice = AudioSegment.from_wav(ModifiedFilePath)
             
             CurrentParagraph, CurrentSentence = ParseFilename(Update)
+            # # EditID 소리 합성
+            # Number = AudioNumber(str(CurrentParagraph))
             
             if previous_paragraph is not None:
                 if CurrentParagraph != previous_paragraph:
+                    # FinalCombined += ParagraphSeparator + Number
                     FinalCombined += ParagraphSeparator
                 elif CurrentSentence != previous_sentence:
                     FinalCombined += SentenceSeparator

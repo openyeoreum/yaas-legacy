@@ -408,7 +408,7 @@ def RemoveMusicFiles(MusicLayerPath):
             os.remove(FilePath)
 
 ## Musics 믹싱
-def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
+def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVolume = -10):
     RemoveMusicFiles(MusicLayerPathGen(projectName, email, ''))
     
     EditGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro)
@@ -492,7 +492,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off'):
     # Mixing
     # 기존의 배경 음악과 볼륨이 10 낮은 배경 음악 준비
     OriginalMusic = TitleMusic_Audio
-    ReducedVolumeMusic = TitleMusic_Audio - 10
+    ReducedVolumeMusic = TitleMusic_Audio + EndMusicVolume
     MixedTitleMusicAudio = OriginalMusic
 
     for i in range(len(TitleVoices)):
@@ -852,8 +852,8 @@ def MatchEditWithVoiceFile(EditGeneration, FilteredFiles):
     return MatchedFilteredFiles
 
 ## 생성된 음성파일 합치기
-def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto'):
-    EditGeneration, MusicMixingDatas = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro)
+def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10):
+    EditGeneration, MusicMixingDatas = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro, EndMusicVolume = EndMusicVolume)
     
     ## voiceLayer 경로와 musicLayer 경로 ##
     voiceLayerPath = VoiceLayerPathGen(projectName, email, '')
@@ -1522,10 +1522,10 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
     df.to_excel(MetaDateCSVPath.replace('.csv', '.xlsx'), index = False, engine = 'openpyxl')
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
-def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto'):
+def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
     
-    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting)
+    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting, EndMusicVolume = EndMusicVolume)
     
     ## 10-15분 미리듣기 생성
     AudiobookPreviewSecond, AudiobookPreviewSize = AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)

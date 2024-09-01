@@ -13,7 +13,8 @@
         "VoiceEnhance": "'on', 'off' : on 은 클론보이스 노이즈 제거, off 는 클론보이스 노이즈 제거 비활성",
         "VoiceReverbe": "'on', 'off' : on 은 인덱스와 대화문에 리버브 적용, off 는 리버브 미적용",
         "Intro": "Intro = ['한국출판문화산업진흥원' ...], off 는 인트로 미적용",
-        "AudiobookSplitting": "'Auto', 'Manual' : Auto 는 오디오북 자동 분할, Manual 은 오디오북 수동 분할"
+        "AudiobookSplitting": "'Auto', 'Manual' : Auto 는 오디오북 자동 분할, Manual 은 오디오북 수동 분할",
+        "EndMusicVolume": "-10 ~ -20, : 마지막 끝말과 함께 나오는 End Music의 볼륨"
     },
     "240705_도산안창호": {
         "email": "yeoreum00128@gmail.com",
@@ -29,7 +30,8 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Manual"
+        "AudiobookSplitting": "Manual",
+        "EndMusicVolume": -10
     },
     "240801_빨간풍차가있는집": {
         "email": "yeoreum00128@gmail.com",
@@ -45,7 +47,8 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Manual"
+        "AudiobookSplitting": "Manual",
+        "EndMusicVolume": -10
     },
     "240802_암을이기는천연항암제": {
         "email": "yeoreum00128@gmail.com",
@@ -61,7 +64,8 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Manual"
+        "AudiobookSplitting": "Manual",
+        "EndMusicVolume": -16
     },
     "240815_노유파": {
         "email": "yeoreum00128@gmail.com",
@@ -77,7 +81,8 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto"
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     },
     "240812_룰루레몬스토리": {
         "email": "yeoreum00128@gmail.com",
@@ -93,6 +98,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Manual"
+        "AudiobookSplitting": "Manual",
+        "EndMusicVolume": -10
     }
 }

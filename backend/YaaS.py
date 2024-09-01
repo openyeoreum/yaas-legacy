@@ -56,7 +56,7 @@ def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre,
         
 ### Main2 : 콘텐츠 제작 ###
 
-def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview):
+def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview):
 
     if isinstance(projectNameList, list):
         ## NFC, NFD 오류 문제 해결 (모두 적용)
@@ -75,11 +75,11 @@ def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverb
             #     projectName = _projectName
 
             ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, audiobookSplitting = AudiobookSplitting, macro = Macro, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, messagesReview = MessagesReview)
+            CreationAudioBookUpdate(projectName, email, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, audiobookSplitting = AudiobookSplitting, endMusicVolume = EndMusicVolume, macro = Macro, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, messagesReview = MessagesReview)
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
 
-def YaaS(email, name, password, projectNameList, Translations, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account):
+def YaaS(email, name, password, projectNameList, Translations, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
@@ -88,7 +88,7 @@ def YaaS(email, name, password, projectNameList, Translations, IndexMode, Messag
     elif MainProcess == 'Solution&Creation':
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre, Translations)
-        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview)
+        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, Macro, Account, VoiceEnhance, VoiceFileGen, MessagesReview)
 
 ### YaaS Multiprocessing : 오디오북 병렬 제작 ###
 
@@ -107,7 +107,7 @@ def MultiProcessing(projectNameList, MessagesReview, VoiceFileGen, MainProcess, 
     processes = []
     for projectName in projectNameList:
         YaasConfig = yaasconfig[projectName]
-        Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["name"], YaasConfig["password"], YaasConfig["projectNameList"], YaasConfig["Translations"], YaasConfig["IndexMode"], MessagesReview, YaasConfig["BookGenre"], YaasConfig["Narrator"], YaasConfig["CloneVoiceName"], YaasConfig["VoiceReverbe"], YaasConfig["MainLang"], YaasConfig["Intro"], YaasConfig["AudiobookSplitting"], YaasConfig["VoiceEnhance"], VoiceFileGen, MainProcess, Macro, Account))
+        Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["name"], YaasConfig["password"], YaasConfig["projectNameList"], YaasConfig["Translations"], YaasConfig["IndexMode"], MessagesReview, YaasConfig["BookGenre"], YaasConfig["Narrator"], YaasConfig["CloneVoiceName"], YaasConfig["VoiceReverbe"], YaasConfig["MainLang"], YaasConfig["Intro"], YaasConfig["AudiobookSplitting"], YaasConfig["EndMusicVolume"], YaasConfig["VoiceEnhance"], VoiceFileGen, MainProcess, Macro, Account))
         processes.append(Process)
         Process.start()
         

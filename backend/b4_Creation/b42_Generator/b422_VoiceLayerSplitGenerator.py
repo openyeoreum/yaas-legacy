@@ -1446,7 +1446,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             if not ModifiedPartFileFound:
                 # 폴더 내 파일을 ModifyFolderPath로 이동
                 for file in files:
-                    shutil.move(os.path.join(folderPath, file), ModifyFolderPath)
+                    if folderPath != ModifyFolderPath:
+                        shutil.move(os.path.join(folderPath, file), ModifyFolderPath)
                 # 빈 폴더 삭제, 단 ModifyFolderPath는 삭제하지 않음
                 if folderPath != ModifyFolderPath:
                     os.rmdir(folderPath)
@@ -1771,8 +1772,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                                 _EditGenerationChunk = _EditGenerationActorChunk[i]['Chunk']
                                 _EditGenerationKoChunk['ActorChunk'][i]['Chunk'] = _EditGenerationChunk.replace('[[', '[').replace(']]', ']')
                                 print(_EditGenerationKoChunk['ActorChunk'][i]['Chunk'])
-                with open(MatchedChunksPath, 'w', encoding='utf-8') as MatchedChunksJson:
-                    json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii=False, indent=4)
+                # with open(MatchedChunksPath, 'w', encoding='utf-8') as MatchedChunksJson:
+                #     json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii=False, indent=4)
             
             ## ElevenLabs Chunk Modify ##
             EL_Chunk = None
@@ -1982,6 +1983,11 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                             print(f'\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n@  캐릭터 불일치 -----> [TypeCastAPI의 캐릭터를 ( {ChangedName} ) 으로 변경하세요!] <-----  @\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n')
                             sys.exit()
                     else:
+                        ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
+                        if BracketsSwitch:
+                            with open(MatchedChunksPath, 'w', encoding='utf-8') as MatchedChunksJson:
+                                json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii=False, indent=4)
+                        ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
                         with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
                             json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
                 else:
@@ -1990,6 +1996,11 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
 
                         if ChangedName == 'Continue':
+                            ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
+                            if BracketsSwitch:
+                                with open(MatchedChunksPath, 'w', encoding='utf-8') as MatchedChunksJson:
+                                    json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii=False, indent=4)
+                            ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
                             ## 히스토리 저장 ##
                             # 동일한 EditId와 ActorName을 가진 항목이 있는지 확인
                             AddSwitch = True  # 새 항목을 추가해야 하는지 여부를 나타내는 플래그

@@ -586,7 +586,9 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 
                 if len(SplitChunks) > 1:
                     ### 음성파일을 분할하는 코드 ###
-                    VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                    if RetryIdList != []:
+                        return RetryIdList
                 # 수정 파일 별도 저장
                 if len(SplitChunks) == 1 and Modify == "Yes":
                     Voice_Audio_Wav = AudioSegment.from_wav(fileName)
@@ -696,7 +698,9 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
 
                     if len(SplitChunks) > 1:
                         ### 음성파일을 분할하는 코드 ###
-                        VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                        RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                        if RetryIdList != []:
+                            return RetryIdList
                     # 수정 파일 별도 저장
                     if len(SplitChunks) == 1 and Modify == "Yes":
                         Voice_Audio_Wav = AudioSegment.from_wav(fileName)
@@ -1734,7 +1738,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             Name = Update['ActorName']
             Pause = Update['Pause']
             
-            ## ElevenLabs Chunk Modify ##
+            ### ElevenLabs, TypeCast Chunk Modify ###
             ## 끝에서부터 3개의 문자에서 '.', ',', ' '가 있으면 이를 제거 후 마지막에 '.' 표기
             def ModifyELChunk(chunk):
                 # 1. Chunk 마지막 3개의 글자 중에 . 과 , 이 포함되어 있으면 이를 모두 삭제하고 .하나만 표기
@@ -1751,7 +1755,45 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 # Chunk 마지막 3개의 글자 중에 . 과 , 이 포함되어 있으면 이를 모두 삭제하고 ,하나만 표기
                 chunk = chunk[:-3] + chunk[-3:].replace('.', '').replace(',', '') + ','
                 return chunk
-            
+            ### ElevenLabs, TypeCast Chunk Modify ###
+            ### RetryVoiceGen ###
+            def RetryVoiceGen(name, retry, RetryIdList, SplitChunks):
+                print(f"[[RetryVoiceGen: {name}]]")
+                retry += 1
+                SplitSents = SplitChunks
+                # 1. SentList의 복구 ('[]' 이전으로 복구)
+                RawSplitSents = []
+                for SplitSent in SplitSents:
+                    if SplitSent['제거'] == 'No':
+                        RawSplitSents.append(SplitSent)
+                
+                # 2. RawSplitSents에서 RetryIdList(다시 재생성 해야하는 음성)
+                RetrySplitSents = []
+                RetryELChunks = []
+                RetryChunks = []
+                i = 1
+                for RetryId in RetryIdList:
+                    # RetryChunks 합치기
+                    FrontWords = "지금 생성될 내용은"
+                    MiddleWords = RawSplitSents[RetryId]['낭독문장']
+                    EndWords = "문장 입니다"
+                    _retryChunk = f'{FrontWords}, "{MiddleWords}", {EndWords}'
+                    # RetryChunks 합치기
+                    RetryChunks.append(ModifyTCChunk(_retryChunk))
+                    RetryELChunks.append(ModifyELChunk(_retryChunk))
+                    # RetrySplitSents 합치기
+                    RetrySplitSents.append({'낭독문장번호': i, '낭독문장': FrontWords, '제거': 'Yes'})
+                    RetrySplitSents.append({'낭독문장번호': i + 1, '낭독문장': FrontWords, '제거': 'Yes'})
+                    RetrySplitSents.append({'낭독문장번호': i + 2, '낭독문장': FrontWords, '제거': 'Yes'})
+                    i += 3
+                
+                Chunk = " ".join(RetryChunks)
+                EL_Chunk = " ".join(RetryELChunks)
+                SplitChunks = RetrySplitSents
+                BracketsSwitch = True
+                bracketsSplitChunksNumber = RetryIdList
+                return retry, BracketsSwitch, bracketsSplitChunksNumber, Chunk, EL_Chunk, SplitChunks
+            ### RetryVoiceGen ###
             ## Brackets 부분 생성 적용 ##
             BracketsSwitch = False
             BracketsNumber = []
@@ -1802,7 +1844,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     if _Chunk.strip().startswith('[') and _Chunk.strip().endswith(']'):
                         _Chunk = f'지금 생성될 내용은, "{_Chunk.strip().strip("[]")}", 문장 입니다'
                         if idx + 1 in BracketsNumber:
-                            _Chunk = ModifyELChunk(_Chunk)
+                            _Chunk = ModifyTCChunk(_Chunk)
                             BracketsChunks.append(_Chunk)
                     _chunk = ModifyTCChunk(_Chunk)
                     Chunks.append(_chunk)
@@ -1973,7 +2015,15 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     FileName = projectName + '_' + str(EditId) + '_' + Name + '.wav'
                 if ChunkModify == "Yes":
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
-                    ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                    retry = 0
+                    while retry <= 3:
+                        ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                        ## retry 시작 (잘못 짤린 음성의 재생성) ##
+                        if not isinstance(ChangedName, list):
+                            break
+                        RetryIdList = ChangedName
+                        retry, BracketsSwitch, bracketsSplitChunksNumber, Chunk, EL_Chunk, SplitChunks = RetryVoiceGen(name, retry, RetryIdList, SplitChunks)
+
                     if ChangedName != 'Continue':
                         if Macro == "Auto":
                             TypeCastMacro(ChangedName, Account)
@@ -1993,7 +2043,14 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 else:
                     voiceLayerPath = VoiceLayerPathGen(projectName, email, FileName, 'Mixed')
                     if not (os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount}).wav') or os.path.exists(voiceLayerPath.replace(".wav", "") + f'_({ChunkCount})M.wav')):
-                        ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                        retry = 0
+                        while retry <= 3:
+                            ChangedName = ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceReverbe, Update['Tag'], name, Chunk, EL_Chunk, Api, ApiSetting, RandomEMOTION, RandomSPEED, Pitch, RandomLASTPITCH, voiceLayerPath, SplitChunks, MessagesReview)
+                            ## retry 시작 (잘못 짤린 음성의 재생성) ##
+                            if not isinstance(ChangedName, list):
+                                break
+                            RetryIdList = ChangedName
+                            retry, BracketsSwitch, bracketsSplitChunksNumber, Chunk, EL_Chunk, SplitChunks = RetryVoiceGen(name, retry, RetryIdList, SplitChunks)
 
                         if ChangedName == 'Continue':
                             ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)

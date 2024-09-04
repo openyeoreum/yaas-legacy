@@ -446,7 +446,10 @@ class Prompt(Base):
     
     # MixingMasteringPrompt
     ChunkPostCorrection = Column(JSON)
+    SentsSpliting = Column(JSON)
+    VoiceInspection = Column(JSON)
     VoiceSplit = Column(JSON)
+    VoiceSplitInspection = Column(JSON)
     # MixingMasteringKo = Column(JSON)
     # MixingMasteringEn = Column(JSON)
     # MixingMasteringJa = Column(JSON)

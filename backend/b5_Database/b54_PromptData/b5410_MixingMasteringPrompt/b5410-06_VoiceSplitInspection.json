@@ -1,0 +1,274 @@
+{
+    "TaskName": "VoiceSplit",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-4o-mini",
+            "LongTokensModel": "gpt-4o-mini"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "gpt-4o-2024-08-06"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-5-sonnet-20240620",
+            "LongTokensModel": "claude-3-5-sonnet-20240620"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-5-sonnet-20240620"
+    },
+    "Temperature": 0.5,
+    "OutputTokensRatio": 1,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 데이터 분석가 입니다. <문제 정답 매칭.json>에서 '문제': '단어 [알파벳] 단어'와 '정답': '단어 [숫자] 단어'의 매칭이 맞는지 <'단어 [숫자] 단어' 나열>을 보고 검수하여 <매칭검수.json>작성을 완성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<매칭검수.json> 작성 양식)\n",
+                    "Message": "{'매칭': [{'매칭숫자': 1, '검수': '불합격', '문제': '열여덟번째 [B] 문장', '수정정답': '번째 [5] 문장입니다'}, {'매칭숫자': 2, '검수': '합격', '문제': '입니다 [C] 지금', '수정정답': '문장입니다 [6] 지금'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<매칭검수.json> 작성법)\n",
+                    "Message": "1. <문제 정답 매칭.json>는 문제: '단어 [알파벳] 단어'를 보고 [알파벳]과 동일한 [숫자]가 무엇인지 <'단어 [숫자] 단어' 나열>에서 찾은 후, 정답: '단어 [숫자] 단어'를 작성한 리스트 입니다.\n2. 문제: '단어 [알파벳] 단어'와 정답: '단어 [숫자] 단어'의 매칭이 맞는지 <'단어 [숫자] 단어' 나열>을 보고 검수합니다.\n3. 문제: '단어 [알파벳] 단어'와 정답: '단어 [숫자] 단어'의 매칭이 맞으면 '검수': '합격'이며, 틀리면 '검수': '불합격' 입니다.\n4. '합격'인 경우 '수정정답': '단어 [숫자] 단어'을 <문제 정답 매칭.json>의 '정답'과 동일하게 작성하고, '불합격'인 경우 맞는 정답으로 수정하여 '수정정답'을 작성합니다.\n5. <문제 정답 매칭.json> 순서대로 '매칭숫자', '검수', '문제', '정답'을 작성하여 <매칭검수.json>작성을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<매칭검수.json> 작업 시작)\n",
+                    "InputMark": "",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<문제 정답 매칭.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 데이터 분석가 입니다. <문제 정답 매칭.json>에서 '문제': '단어 [알파벳] 단어'와 '정답': '단어 [숫자] 단어'의 매칭이 맞는지 <'단어 [숫자] 단어' 나열>을 보고 검수하여 <매칭검수.json>작성을 완성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<매칭검수.json> 작성 양식)\n",
+                    "Message": "{'매칭': [{'매칭숫자': 1, '검수': '불합격', '문제': '열여덟번째 [B] 문장', '수정정답': '번째 [5] 문장입니다'}, {'매칭숫자': 2, '검수': '합격', '문제': '입니다 [C] 지금', '수정정답': '문장입니다 [6] 지금'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<매칭검수.json> 작성법)\n",
+                    "Message": "1. <문제 정답 매칭.json>는 문제: '단어 [알파벳] 단어'를 보고 [알파벳]과 동일한 [숫자]가 무엇인지 <'단어 [숫자] 단어' 나열>에서 찾은 후, 정답: '단어 [숫자] 단어'를 작성한 리스트 입니다.\n2. 문제: '단어 [알파벳] 단어'와 정답: '단어 [숫자] 단어'의 매칭이 맞는지 <'단어 [숫자] 단어' 나열>을 보고 검수합니다.\n3. 문제: '단어 [알파벳] 단어'와 정답: '단어 [숫자] 단어'의 매칭이 맞으면 '검수': '합격'이며, 틀리면 '검수': '불합격' 입니다.\n4. '합격'인 경우 '수정정답': '단어 [숫자] 단어'을 <문제 정답 매칭.json>의 '정답'과 동일하게 작성하고, '불합격'인 경우 맞는 정답으로 수정하여 '수정정답'을 작성합니다.\n5. <문제 정답 매칭.json> 순서대로 '매칭숫자', '검수', '문제', '정답'을 작성하여 <매칭검수.json>작성을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<매칭검수.json> 작업 시작)\n",
+                    "InputMark": "",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<문제 정답 매칭.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 데이터 분석가 입니다. <문제 정답 매칭.json>에서 '문제': '단어 [알파벳] 단어'와 '정답': '단어 [숫자] 단어'의 매칭이 맞는지 <'단어 [숫자] 단어' 나열>을 보고 검수하여 <매칭검수.json>작성을 완성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<매칭검수.json> 작성 양식)\n",
+                    "Message": "{'매칭': [{'매칭숫자': 1, '검수': '불합격', '문제': '열여덟번째 [B] 문장', '수정정답': '번째 [5] 문장입니다'}, {'매칭숫자': 2, '검수': '합격', '문제': '입니다 [C] 지금', '수정정답': '문장입니다 [6] 지금'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<매칭검수.json> 작성법)\n",
+                    "Message": "1. <문제 정답 매칭.json>는 문제: '단어 [알파벳] 단어'를 보고 [알파벳]과 동일한 [숫자]가 무엇인지 <'단어 [숫자] 단어' 나열>에서 찾은 후, 정답: '단어 [숫자] 단어'를 작성한 리스트 입니다.\n2. 문제: '단어 [알파벳] 단어'와 정답: '단어 [숫자] 단어'의 매칭이 맞는지 <'단어 [숫자] 단어' 나열>을 보고 검수합니다.\n3. 문제: '단어 [알파벳] 단어'와 정답: '단어 [숫자] 단어'의 매칭이 맞으면 '검수': '합격'이며, 틀리면 '검수': '불합격' 입니다.\n4. '합격'인 경우 '수정정답': '단어 [숫자] 단어'을 <문제 정답 매칭.json>의 '정답'과 동일하게 작성하고, '불합격'인 경우 맞는 정답으로 수정하여 '수정정답'을 작성합니다.\n5. <문제 정답 매칭.json> 순서대로 '매칭숫자', '검수', '문제', '정답'을 작성하여 <매칭검수.json>작성을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "\n\n(<매칭검수.json> 작업 시작)\n",
+                    "InputMark": "",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<문제 정답 매칭.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 데이터 분석가 입니다. <문제 정답 매칭.json>에서 '문제': '단어 [알파벳] 단어'와 '정답': '단어 [숫자] 단어'의 매칭이 맞는지 <'단어 [숫자] 단어' 나열>을 보고 검수하여 <매칭검수.json>작성을 완성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<매칭검수.json> 작성 양식)\n",
+                    "Message": "{'매칭': [{'매칭숫자': 1, '검수': '불합격', '문제': '열여덟번째 [B] 문장', '수정정답': '번째 [5] 문장입니다'}, {'매칭숫자': 2, '검수': '합격', '문제': '입니다 [C] 지금', '수정정답': '문장입니다 [6] 지금'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<매칭검수.json> 작성법)\n",
+                    "Message": "1. <문제 정답 매칭.json>는 문제: '단어 [알파벳] 단어'를 보고 [알파벳]과 동일한 [숫자]가 무엇인지 <'단어 [숫자] 단어' 나열>에서 찾은 후, 정답: '단어 [숫자] 단어'를 작성한 리스트 입니다.\n2. 문제: '단어 [알파벳] 단어'와 정답: '단어 [숫자] 단어'의 매칭이 맞는지 <'단어 [숫자] 단어' 나열>을 보고 검수합니다.\n3. 문제: '단어 [알파벳] 단어'와 정답: '단어 [숫자] 단어'의 매칭이 맞으면 '검수': '합격'이며, 틀리면 '검수': '불합격' 입니다.\n4. '합격'인 경우 '수정정답': '단어 [숫자] 단어'을 <문제 정답 매칭.json>의 '정답'과 동일하게 작성하고, '불합격'인 경우 맞는 정답으로 수정하여 '수정정답'을 작성합니다.\n5. <문제 정답 매칭.json> 순서대로 '매칭숫자', '검수', '문제', '정답'을 작성하여 <매칭검수.json>작성을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample":""
+                },
+                {
+                    "Mark": "\n\n(<매칭검수.json> 작업 시작)\n",
+                    "InputMark": "",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "<문제 정답 매칭.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

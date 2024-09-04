@@ -13,6 +13,202 @@ from openai import OpenAI
 from pydub import AudioSegment
 
 #########################
+##### SentsSpliting #####
+#########################
+## SentsSpliting Input
+def SentsSplitingInput(SplitSents, SplitWords):
+    SplitSentsList = []
+    SplitSentsMerge = ''
+    SplitSentsMergeSwitch = False
+    for SplitSent in SplitSents:
+        if '지금 생성될 내용은' == SplitSent['낭독문장']:
+            SplitSentsMergeSwitch = True
+        elif '문장 입니다' == SplitSent['낭독문장']:
+            SplitSentsMergeSwitch = False
+            
+        if '지금 생성될 내용은' == SplitSent['낭독문장'] or '문장 입니다' == SplitSent['낭독문장'] or SplitSentsMergeSwitch:
+            if '문장 입니다' == SplitSent['낭독문장']:
+                SplitSentsMerge += f"{SplitSent['낭독문장']}"
+            else:
+                SplitSentsMerge += f"{SplitSent['낭독문장']} "
+        else:
+            SplitSentsMerge = SplitSent['낭독문장']
+        if not SplitSentsMergeSwitch:
+            SplitSentsList.append(SplitSentsMerge.replace('.', '').replace(',', ''))
+            SplitSentsMerge = ''
+    
+    SplitWordsList = []
+    for SplitWord in SplitWords:
+        SplitWordsList.append(SplitWord['낭독기록'])
+    
+    SentsInputText = '\n\n'.join(SplitSentsList)
+    WordsInputText = f"\n\n<낭독녹음>\n{'/'.join(SplitWordsList)}"
+    Input = SentsInputText + WordsInputText
+    
+    return Input
+
+## SentsSpliting 필터
+def SentsSplitingFilter(Response):
+    # Error1: json 형식이 아닐 때의 예외 처리
+    try:
+        outputJson = json.loads(Response)
+    except json.JSONDecodeError:
+        return "SentsSpliting, JSONDecode에서 오류 발생: JSONDecodeError"
+    # Error2: 딕셔너리가 "매칭독자"의 키로 시작하지 않을때의 예외처리
+    try:
+        OutputDic = outputJson['낭독녹음분리']
+    except:
+        return "SentsSpliting, JSON에서 오류 발생: '낭독녹음분리' 비생성"
+    # Error3: 자료의 구조가 다를 때의 예외 처리
+    for Output in OutputDic:
+        if ('문장' not in Output or '형태' not in Output):
+            return "SentsSpliting, JSON에서 오류 발생: JSONKeyError"
+    # Error4: 형태 태깅이 다른 경우 예외 처리
+    for Output in OutputDic:
+        if not '형태' in Output['형태']:
+            return "SentsSpliting, JSON에서 오류 발생: TaggingError, '형태1' 또는 '형태2'로 태깅되지 않음"
+    # Error5: 형태 순서 불매칭 예외 처리
+        
+    return OutputDic
+
+## SentsSpliting Process (STT 보이스 문장별로 분리)
+def SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList, Process = "SentsSpliting", MessagesReview = "off"):
+    # SentsSplitingProcess
+    Input = SentsSplitingInput(SplitSents, SplitWords)
+    ErrorCount = 0
+    while 10 >= ErrorCount:
+        # Response 생성
+        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = "", messagesReview = MessagesReview)
+        Filter = SentsSplitingFilter(Response)
+        
+        if isinstance(Filter, str):
+            print(f"Project: {projectName} | Process: {Process} | {Filter}")
+            ErrorCount += 1
+            if ErrorCount == 3:
+                return 'Retry'
+        else:
+            ResponseJson = Filter
+            print(f"Project: {projectName} | Process: {Process} | JSONDecode 완료")
+            break
+
+    # VoiceInspection Input 생성 그리고 1차 VoiceInspection(알고리즘)
+    voiceInspection = ''
+    for i in range(len(ResponseJson)):
+        Sent = ResponseJson[i]['문장'].lstrip('/').rstrip('/')
+        if '형태1' in ResponseJson[i]['형태']:
+            SentForInspection = Sent.replace('될/내용', '될내용').replace('문장/입', '문장입')
+            if not ('될내용은/' in SentForInspection) and ('/문장입' in SentForInspection):
+                RetryIdList.append(i)
+                if i == len(ResponseJson)-1:
+                    voiceInspection += Sent
+                else:
+                    voiceInspection += f"{Sent}, "
+    
+    # print(f"SplitSents: {SplitSents}")
+    # print(f"SplitWords: {SplitWords}")
+    # print(f"voiceInspection: {voiceInspection}")
+    # print(f"RetryIdList: {RetryIdList}")
+        
+    return RetryIdList
+
+#######################################
+##### VoiceSplitInspectionProcess #####
+#######################################
+## VoiceSplitInspection Input
+def VoiceSplitInspectionInput(ResponseJson, NotSameNumberWordList):
+    # print(f'ResponseJson: {ResponseJson}\n\n')
+    # print(f'NotSameNumberWordList: {NotSameNumberWordList}\n\n')
+    MatchingResult = {'매칭': []}
+    for i in range(len(ResponseJson)):
+        AlphabetPart = ResponseJson[i]['알파벳부분']
+        NumberPart = ResponseJson[i]['숫자부분']
+        MatchingResult['매칭'].append({'매칭숫자': i + 1, '문제': AlphabetPart, '정답': NumberPart})
+        
+    Input = f"{''.join(NotSameNumberWordList)}\n\n<문제 정답 매칭.json>\n{str(MatchingResult)}"
+    
+    return Input
+
+## VoiceSplitInspection 필터
+def VoiceSplitInspectionFilter(Response, ResponseJson):
+    # Error1: json 형식이 아닐 때의 예외 처리
+    try:
+        outputJson = json.loads(Response)
+    except json.JSONDecodeError:
+        return "VoiceSplitInspection, JSONDecode에서 오류 발생: JSONDecodeError"
+    # Error2: 딕셔너리가 "매칭독자"의 키로 시작하지 않을때의 예외처리
+    try:
+        OutputDic = outputJson['매칭']
+    except:
+        return "VoiceSplitInspection, JSON에서 오류 발생: '낭독녹음분리' 비생성"
+    # Error3: 자료의 구조가 다를 때의 예외 처리
+    for Output in OutputDic:
+        if ('매칭숫자' not in Output or '검수' not in Output or '문제' not in Output or '수정정답' not in Output):
+            return "VoiceSplitInspection, JSON에서 오류 발생: JSONKeyError"
+    # Error4: Input과 Output의 개수가 다를 때의 예외처리
+    if len(OutputDic) != len(ResponseJson):
+        return "VoiceSplitInspection, Input과 Output의 개수가 다름"
+        
+    return OutputDic
+
+## VoiceSplitInspection Process (보이스 분할이 많은 경우 잘못된 부분이 많기에 재검수)
+def VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameNumberWordList, Process = "VoiceSplitInspection", MessagesReview = "off"):
+    print(f"[[VoiceSplitInspectionProcess: {name}]]")
+    # VoiceSplitInspectionProcess
+    Input = VoiceSplitInspectionInput(ResponseJson, NotSameNumberWordList)
+    ErrorCount = 0
+    while 10 >= ErrorCount:
+        # Response 생성
+        memoryCounter = "- '불합격'인 경우 <매칭검수.json> '정답': '단어 [숫자] 단어' 부분에 '합격'이 되는 정답을 작성합니다. -"
+        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
+        Filter = VoiceSplitInspectionFilter(Response, ResponseJson)
+        
+        if isinstance(Filter, str):
+            print(f"Project: {projectName} | Process: {Process} | {Filter}")
+            ErrorCount += 1
+            if ErrorCount == 3:
+                return ResponseJson
+        else:
+            inspectionResponseJson = Filter
+            print(f"Project: {projectName} | Process: {Process} | JSONDecode 완료")
+            break
+    
+    # InspectionResponseJson의 ResponseJson화
+    InspectionResponseJson = []
+    beforenum = 0
+    afternum = re.findall(r'\[(\d+)\]', inspectionResponseJson[-1]['수정정답'])[-1]
+    for i in range(len(inspectionResponseJson)):
+        Inspection = inspectionResponseJson[i]['검수']
+        if Inspection == "불합격":
+            AlphabetPart = inspectionResponseJson[i]['문제']
+            NumberPart = inspectionResponseJson[i]['수정정답']
+            numbers = re.findall(r'\[(\d+)\]', NumberPart)
+            MatchingNumber = None
+            for num in numbers:
+                if str(num) != str(ResponseJson[i]['매칭숫자']):
+                    MatchingNumber = num
+            if MatchingNumber is None:
+                MatchingNumber = ResponseJson[i]['매칭숫자']
+            Alpahbet = re.search(r'\[([A-Za-z])\]', AlphabetPart).group(1)
+            Number = int(MatchingNumber)
+            # num이 순서대로 존재하는지 검토
+            if i + 1 < len(inspectionResponseJson): 
+                afternum = ResponseJson[i+1]['매칭숫자']
+            print(f"beforenum: {beforenum}, MatchingNumber: {MatchingNumber}, afternum: {afternum}")
+            if int(beforenum) < int(MatchingNumber) <= int(afternum):
+                InspectionResponseJson.append({'알파벳부분': AlphabetPart, '숫자부분': NumberPart, '매칭숫자': MatchingNumber, '알파벳': Alpahbet, '숫자': Number})
+            else:
+                InspectionResponseJson.append(ResponseJson[i])
+            beforenum = MatchingNumber
+        else:
+            InspectionResponseJson.append(ResponseJson[i])
+    
+    # print(f"ResponseJson: {ResponseJson}\n\n")
+    # print(f"Response: {Response}\n\n")
+    # print(f"InspectionResponseJson: {InspectionResponseJson}\n\n")
+    
+    return InspectionResponseJson
+
+#########################
 ##### InputList 생성 #####
 #########################
 ## 음성파일을 STT로 단어별 시간 계산하기
@@ -34,7 +230,7 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
 
     # 각 단어의 시작 및 종료 타임스탬프 출력
     voiceTimeStemps = []
-    Voices = []
+    SplitWords = []
     Id = 1
     start_time = 0
     for result in transcript.words:
@@ -42,13 +238,13 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
         # total_seconds() 호출로 변환
         voiceTimeStemps.append({"낭독기록번호": Id, "낭독기록": word, "시작": start_time, "끝": result['end']})
         start_time = result['end']
-        Voices.append({"낭독기록번호": Id, "낭독기록": word})
+        SplitWords.append({"낭독기록번호": Id, "낭독기록": word})
         Id += 1
     
     # 마지막 문장이 누락 문제 해결로 해당 부분 추가
-    Voices.append({"낭독기록번호": Id, "낭독기록": '~'})
+    SplitWords.append({"낭독기록번호": Id, "낭독기록": '~'})
 
-    return voiceTimeStemps, Voices
+    return voiceTimeStemps, SplitWords
 
 ######################
 ##### Filter 조건 #####
@@ -222,17 +418,37 @@ def InputText(SplitSents, SplitWords, SameNum):
             AlphabetABSentList.append(Alphabet)
             CleanSplitBeforeSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i-1]['낭독문장'].strip())
             BeforeWord = CleanSplitBeforeSent.split()
+            # print(f'{i}-BeforeWord: {BeforeWord}')
             CleanSplitAfterSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i]['낭독문장'].strip())
             AfterWord = CleanSplitAfterSent.split()
+            # print(f'{i}-AfterWord: {AfterWord}')
+            if i - 2 >= 0:
+                CleanSplitEarlierSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i-2]['낭독문장'].strip())
+                EarlierWord = CleanSplitEarlierSent.split()
+            if i + 1 < len(SplitSents):
+                CleanSplitLaterSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i+1]['낭독문장'].strip())
+                LaterWord = CleanSplitLaterSent.split()
             try:
                 AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
             except IndexError:
-                AlphabetABWordList.append(["None", BeforeWord[-1], Alphabet, AfterWord[0], "None"])
+                if len(BeforeWord) < 2 and len(AfterWord) >= 2:
+                    if EarlierWord != []:
+                        AlphabetABWordList.append([EarlierWord[-1], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
+                    else:
+                        AlphabetABWordList.append(["None", BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
+                elif len(BeforeWord) >= 2 and len(AfterWord) < 2:
+                    if LaterWord != []:
+                        AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], LaterWord[0]])
+                    else:
+                        AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], "None"])
+                else:
+                    AlphabetABWordList.append(["None", BeforeWord[-1], Alphabet, AfterWord[0], "None"])
+            EarlierWord = []
+            LaterWord = []
             AlphabetList.append(Alphabet)
             if i < len(SplitSents) - 1:
                 Alphabet = chr(ord(Alphabet) + 1)
         AlphabetABSentList.append(SplitSents[i]['낭독문장'])
-    
     # SEAlphabetList 생성
     SEAlphabetList = ['Start'] + AlphabetList + ['End']
 
@@ -439,23 +655,23 @@ def InputText(SplitSents, SplitWords, SameNum):
     # print(f'SESameDic: {SESameDic}\n\n')
     
     # NotSameAlphabetSentList 생성 (Input으로 들어갈 문장)
-    NotSameAlphabetSentList = []
-    SeenSentences = {}
+    _NotSameAlphabetSentList = []
     for i, item in enumerate(AlphabetABSentList):
         if item in NotSameAlphabet:
-            # Add the sentence before the alphabet if it hasn't been added already
-            if AlphabetABSentList[i-1] not in SeenSentences:
-                NotSameAlphabetSentList.append(AlphabetABSentList[i-1])
-                SeenSentences[AlphabetABSentList[i-1]] = True
-            # Add the alphabet
-            NotSameAlphabetSentList.append(item.replace(item, f' [{item}] '))
-            # Add the sentence after the alphabet if it exists and hasn't been added already
-            if i+1 < len(AlphabetABSentList) and AlphabetABSentList[i+1] not in SeenSentences:
-                NotSameAlphabetSentList.append(AlphabetABSentList[i+1])
-                SeenSentences[AlphabetABSentList[i+1]] = True
-                
+            _NotSameAlphabetSentList.append(AlphabetABSentList[i-1])
+            _NotSameAlphabetSentList.append(item.replace(item, f' [{item}] '))
+            if i + 1 < len(AlphabetABSentList):
+                _NotSameAlphabetSentList.append(AlphabetABSentList[i+1])
+    # NotSameAlphabetSentList에서 앞 뒤 중복 제거
+    NotSameAlphabetSentList = []
+    SeenSentence = None
+    for item in _NotSameAlphabetSentList:
+        if item != SeenSentence:
+            NotSameAlphabetSentList.append(item)
+        SeenSentence = item
+    
     # print(f'NotSameAlphabetSentList: {NotSameAlphabetSentList}\n\n')
-
+    
     # NotSameNumberWordList 생성 (Input으로 들어갈 문장)
     NotSameNumberWordList = []
     NumberABSentList = [0] + NumberABSentList + [LastNumber + 1]
@@ -487,7 +703,8 @@ def InputText(SplitSents, SplitWords, SameNum):
     
     # 최종 Input 생성
     Input = "<낭독원문>\n" + ''.join(NotSameAlphabetSentList) + "\n\n" + "<낭독STT단어문>\n" + ''.join(NotSameNumberWordList)
-    
+    # print(f'Input: {Input}')
+
     # 최종 ErrorInput 생성    
     ErrorInput = "<낭독원문>\n" + ' '.join([f"[{item}]" if len(item) == 1 and item.isalpha() else item for item in AlphabetABSentList]) + "\n\n" + "<낭독STT단어문>\n" + ' '.join([f"[{item}]" if isinstance(item, int) else item for item in _NumberABSentList])
 
@@ -505,12 +722,12 @@ def InputText(SplitSents, SplitWords, SameNum):
                 MemoryCounter.append(f'{ABWordList[1]} [{ABWordList[2]}] {ABWordList[3]}')
                 
     return {"Normal": {"Input": Input, "NotSameAlphabet": NotSameAlphabet, "lastNumber": lastNumber, "NumberWordList": NumberWordList, "MemoryCounter": MemoryCounter, "RawResponse": RawResponse},
-            "Error": {"Input": ErrorInput, "NotSameAlphabet": AlphabetList, "lastNumber": lastNumber, "NumberWordList": NumberWordList, "MemoryCounter": ErrorMemoryCounter, "RawResponse": ErrorRawResponse}}
+            "Error": {"Input": ErrorInput, "NotSameAlphabet": AlphabetList, "lastNumber": lastNumber, "NumberWordList": NumberWordList, "MemoryCounter": ErrorMemoryCounter, "RawResponse": ErrorRawResponse}}, NotSameNumberWordList
 
 ## VoiceSplit 프롬프트 요청
-def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = "off"):
+def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = "off"):
     ## Input1과 Input2를 입력으로 받아 최종 InputSet 생성
-    InputSet = InputText(SplitSents, SplitWords, 3)
+    InputSet, NotSameNumberWordList = InputText(SplitSents, SplitWords, 3)
     # print(f"Input: {InputSet['Normal']['Input']}\n\n")
     # print(f"ErrorInput: {InputSet['Error']['Input']}\n\n")
     # print(f"NotSameAlphabet: {InputSet['Normal']['NotSameAlphabet']}\n\n")
@@ -522,7 +739,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
     ErrorOutput = ''
     if InputSet['Normal']['NotSameAlphabet'] != []:
         _Mode = "Normal"
-        for _ in range(3):
+        for ErrorCount in range(3):
             ### Normal 모드인 경우 (일반적인 프롬프트), Error 모드인 경우 (프롬프트에서 에러 발생시) ###
             if _Mode == "Normal":
                 Input = InputSet['Normal']['Input']
@@ -551,6 +768,9 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
             # Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, 0, Mode = "Example", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
+            ## VoiceSplit이 많아서 오답률이 클 경우 VoiceSplitInspectionProcess 프롬프트 요청
+            if len(ResponseJson) >= 6:
+                ResponseJson = VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameNumberWordList, Process = "VoiceSplitInspection", MessagesReview = MessagesReview)
             
             if isinstance(ResponseJson, str):
                 ### Error 모드 전환
@@ -582,7 +802,7 @@ def VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "Voi
     else:
         ResponseJson = InputSet['Normal']['RawResponse']
         
-    return ResponseJson
+    return ResponseJson   
 
 ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
 def VoiceTimeStempsClassification(VoiceTimeStemps, ResponseJson):
@@ -773,14 +993,18 @@ def VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bra
         try:
             ## 음성파일을 STT로 단어별 시간 계산하기
             voiceTimeStemps, SplitWords = VoiceTimeStemps(VoiceLayerPath, LanguageCode)
+            ## SentsSpliting Process (STT 보이스 문장별로 분리)
+            RetryIdList = []
+            if any(d['제거'] == 'Yes' for d in SplitSents):
+                RetryIdList = SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList, MessagesReview = MessagesReview)
             ## VoiceSplit 프롬프트 요청
-            ResponseJson = VoiceSplitProcess(projectName, email, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = MessagesReview)
+            ResponseJson = VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = MessagesReview)
             ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps 커팅 데이터 구축
             SplitTimeList = VoiceTimeStempsClassification(voiceTimeStemps, ResponseJson)
             ## VoiceSplit 프롬프트 요청을 바탕으로 SplitTimeStemps(음성 파일에서 커팅되어야 할 부분) 구축
             segment_durations = VoiceFileSplit(SplitSents, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, VoiceLayerPath, SplitTimeList)
             
-            return segment_durations
+            return RetryIdList, segment_durations
         except TypeError as e:
             print(f"VoiceSplit: retry, {name} waiting 10-20 second | {e}")
             time.sleep(5)  # 5초 대기 후 재시도

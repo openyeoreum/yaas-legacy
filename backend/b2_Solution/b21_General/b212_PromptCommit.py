@@ -54,7 +54,10 @@ def AddPromptToDB():
         # translationBodyEs = LoadJsonFrame(PromptDataPath + "/b547_TranslationPrompt/b547-12_TranslationBodyEs.json")
         correctionKo = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-01_CorrectionKo.json")
         # correctionEn = LoadJsonFrame(PromptDataPath + "/b548_CorrectionPrompt/b548-02_CorrectionEn.json")
-        voiceSplit = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-02_VoiceSplit.json")
+        sentsSpliting = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-02_SentsSpliting.json")
+        voiceInspection = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-04_VoiceInspection.json")
+        voiceSplit = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-05_VoiceSplit.json")
+        voiceSplitInspection = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-06_voiceSplitInspection.json")
         bestSellerContextDefine = LoadJsonFrame(PromptDataPath + "/b5411_CreatorPrompt/b5411-01_BestSellerContextDefine.json")
         bestSellerCommentAnalysis = LoadJsonFrame(PromptDataPath + "/b5411_CreatorPrompt/b5411-02_BestSellerCommentAnalysis.json")
         ### 아래로 추가되는 프롬프트 작성 ###
@@ -96,7 +99,10 @@ def AddPromptToDB():
             # ExistingPrompt.TranslationEn = translationEn
             ExistingPrompt.CorrectionKo = correctionKo
             # ExistingPrompt.CorrectionEn = correctionEn
+            ExistingPrompt.SentsSpliting = sentsSpliting
+            ExistingPrompt.VoiceInspection = voiceInspection
             ExistingPrompt.VoiceSplit = voiceSplit
+            ExistingPrompt.VoiceSplitInspection = voiceSplitInspection
             ExistingPrompt.BestSellerContextDefine = bestSellerContextDefine
             ExistingPrompt.BestSellerCommentAnalysis = bestSellerCommentAnalysis
             ### 아래로 추가되는 프롬프트 작성 ###
@@ -136,7 +142,10 @@ def AddPromptToDB():
                 # TranslationBodyEs = translationBodyEs,
                 CorrectionKo = correctionKo,
                 # CorrectionEn = correctionEn,
+                SentsSpliting = sentsSpliting,
+                VoiceInspection = voiceInspection,
                 VoiceSplit = voiceSplit,
+                VoiceSplitInspection = voiceSplitInspection,
                 BestSellerContextDefine = bestSellerContextDefine,
                 BestSellerCommentAnalysis = bestSellerCommentAnalysis
                 ### 아래로 추가되는 프롬프트 작성 ###

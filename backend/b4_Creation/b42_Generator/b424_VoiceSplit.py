@@ -410,6 +410,8 @@ def InputText(SplitSents, SplitWords, SameNum):
     AlphabetList = []
     AlphabetABSentList = []
     AlphabetABWordList = []
+    EarlierWord = []
+    LaterWord = []
 
     # 분석 및 리스트 생성
     for i in range(len(SplitSents)):

@@ -1644,6 +1644,14 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         del EditGenerationKoChunks[i]['ActorChunk'][j]
                         del EditGenerationKoChunks[i]['Pause'][j]
                         del EditGenerationKoChunks[i]['EndTime'][j]
+                        
+            # ## @@@ 마지막 스튜디오 여름 관련 문구 삭제(해당 문구는 캐릭터가 없는 경우를 위해 제공됨으로 실제 오디오북 제작에는 필요 없음)
+            # if '들어주셔서' in EditGenerationKoChunks[-2]['ActorChunk'][0]:
+            #     print(EditGenerationKoChunks[-1]['ActorChunk'][0])
+            #     del EditGenerationKoChunks[-1]
+            #     sys.exit()
+            
+            # ## Index 정렬(Part - Chapter - Index 순서 앞 당기기)
             
             #### Split을 위한 문장을 합치는 코드 ####
             

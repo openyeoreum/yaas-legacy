@@ -1633,7 +1633,11 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     # 문장 끝 후처리
                     _ActorChunk = EditGenerationKoChunks[i]['ActorChunk'][j]
                     if _tag not in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
-                        modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '.', _ActorChunk)
+                        if i == 2:
+                            modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '', _ActorChunk)
+                            modified_ActorChunk = f'[{modified_ActorChunk}]'
+                        else:
+                            modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '.', _ActorChunk)
                     # 목차 후처리
                     if _tag in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
                         modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '', _ActorChunk)
@@ -1645,13 +1649,44 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         del EditGenerationKoChunks[i]['Pause'][j]
                         del EditGenerationKoChunks[i]['EndTime'][j]
                         
-            # ## @@@ 마지막 스튜디오 여름 관련 문구 삭제(해당 문구는 캐릭터가 없는 경우를 위해 제공됨으로 실제 오디오북 제작에는 필요 없음)
-            # if '들어주셔서' in EditGenerationKoChunks[-2]['ActorChunk'][0]:
-            #     print(EditGenerationKoChunks[-1]['ActorChunk'][0])
-            #     del EditGenerationKoChunks[-1]
-            #     sys.exit()
+            ## $$$마지막 스튜디오 여름 관련 문구 삭제(해당 문구는 캐릭터가 없는 경우를 위해 제공됨으로 실제 오디오북 제작에는 필요 없음)
+            EndingChunks = ['끝까지', '들어주셔서', '스튜디오', '열어가겠습니다']
+            # 특정 리스트에서 해당 항목이 몇 개 포함되어 있는지 세는 함수
+            def CountMatchingChunks(target, chunks):
+                return sum(1 for chunk in chunks if chunk in target)
+            # EditGenerationKoChunks[-2]와 [-1]을 검사하여 삭제하는 함수
+            if 'ActorChunk' in EditGenerationKoChunks[-2]:
+                matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-2]['ActorChunk'])
+                if matched_count >= 2:
+                    del EditGenerationKoChunks[-2]
+
+            if 'ActorChunk' in EditGenerationKoChunks[-1]:
+                matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-1]['ActorChunk'])
+                if matched_count >= 2:
+                    del EditGenerationKoChunks[-1]
             
-            # ## Index 정렬(Part - Chapter - Index 순서 앞 당기기)
+            ## Index 정렬(Part:1 - Chapter:2 - Index:3 으로 태그 순서 정렬)
+            def SorIndexTags(EditGenerationKoChunks):
+                # Part, Chapter, Index 태그에 대한 우선순위를 정의합니다.
+                TagOrder = ["Part", "Chapter", "Index"]
+                FoundTags = []
+                
+                # Part, Chapter, Index 태그가 존재하는지 확인
+                for chunk in EditGenerationKoChunks:
+                    tag = chunk.get("Tag")
+                    if tag in TagOrder and tag not in FoundTags:
+                        FoundTags.append(tag)
+                # 태그들이 존재하는 순서에 맞춰 Part, Chapter, Index로 변경
+                for chunk in EditGenerationKoChunks:
+                    tag = chunk.get("Tag")
+                    if tag in FoundTags:
+                        # 태그 순서를 변경하여 Part, Chapter, Index 순서로 매핑
+                        new_tag = TagOrder[FoundTags.index(tag)]
+                        chunk["Tag"] = new_tag
+                
+                return EditGenerationKoChunks
+
+            EditGenerationKoChunks = SorIndexTags(EditGenerationKoChunks)
             
             #### Split을 위한 문장을 합치는 코드 ####
             

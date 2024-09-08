@@ -1408,7 +1408,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         return MatchedActors, SelectionGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
+def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
 
     ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
@@ -1670,13 +1670,11 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 
                 return EditGenerationKoChunks
 
-            EditGenerationKoChunks = SorIndexTags(EditGenerationKoChunks)
-            
-            #### Split을 위한 문장을 합치는 코드 ####
-            
+            EditGenerationKoChunks = SorIndexTags(EditGenerationKoChunks)            
             ## EditGenerationKoChunks의 Dic(검수)
             EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
             
+            #### ReadingStyle: NarratorOnly와 AllCharacters의 설정 ####
             ## 마지막 스튜디오 여름 관련 문구 삭제(해당 문구는 캐릭터가 없는 경우를 위해 제공됨으로 실제 오디오북 제작에는 필요 없음)
             EndingChunks = ['끝까지', '들어주셔서', '스튜디오', '열어가겠습니다']
             # 특정 리스트에서 해당 항목이 몇 개 포함되어 있는지 세는 함수
@@ -1684,7 +1682,6 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 return sum(1 for chunk in chunks if chunk in target)
             # EditGenerationKoChunks[-2]와 [-1]을 검사하여 삭제하는 함수
             if 'ActorChunk' in EditGenerationKoChunks[-2]:
-                print(f"@#@$#$@{EditGenerationKoChunks[-2]}")
                 matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-2]['ActorChunk'])
                 if matched_count >= 2:
                     del EditGenerationKoChunks[-2]
@@ -1693,6 +1690,21 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-1]['ActorChunk'])
                 if matched_count >= 2:
                     del EditGenerationKoChunks[-1]
+            
+            ## ReadingStyle: NarratorOnly와 AllCharacters의 설정
+            if ReadingStyle == 'NarratorOnly':
+                for MatchedActor in MatchedActors:
+                    if MatchedActor['CharacterTag'] == 'Narrator':
+                        NarratorActorName = MatchedActor['ActorName']
+                    if MatchedActor['CharacterTag'] == 'SecondaryNarrator':
+                        SecondaryNarratorActorName = MatchedActor['ActorName']
+                    
+                for chunk in EditGenerationKoChunks:
+                    if chunk['Tag'] == 'Character':
+                        chunk['ActorName'] = SecondaryNarratorActorName
+                    else:
+                        chunk['ActorName'] = NarratorActorName
+            #### ReadingStyle: NarratorOnly와 AllCharacters의 설정 ####
             
             # MatchedActors, MatchedChunks 저장 (Dic 저장 후 다시 List로 변환)
             fileName = projectName + '_' + 'MatchedVoices.json'
@@ -2135,10 +2147,10 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
-def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
+def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     
-    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
+    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
 
     with get_db() as db:
         

@@ -130,11 +130,9 @@ def Loadyaasconfig(yaasconfigPath = '/yaas/backend/yaasconfig.json'):
 
 ## MultiProcessing
 def MultiProcessing(projectNameList, Narrator, CloneVoiceName, MessagesReview, VoiceFileGen, MainProcess, Macro, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json'):
-    yaasconfig = Loadyaasconfig(yaasconfigPath = yaasconfigPath)
-    
     print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
-    
     ConfigUpdate(projectNameList, Narrator, CloneVoiceName)
+    yaasconfig = Loadyaasconfig(yaasconfigPath = yaasconfigPath)
     
     processes = []
     for projectName in projectNameList:
@@ -155,9 +153,9 @@ def MultiProcessing(projectNameList, Narrator, CloneVoiceName, MessagesReview, V
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
-    projectNameList = ['240907_안혜숙'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240812_룰루레몬스토리', '240815_노유파'
+    projectNameList = ['240908_박지선'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240812_룰루레몬스토리', '240815_노유파'
     Narrator = "VoiceClone" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
-    CloneVoiceName = "안혜숙" # 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
+    CloneVoiceName = "박지선" # 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     MainProcess = "Solution&Creation" # 'Solution', 'Creation'
@@ -165,4 +163,4 @@ if __name__ == "__main__":
     Account = "khsis3516@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com'
     #########################################################################
     
-    MultiProcessing(projectNameList, MessagesReview, VoiceFileGen, MainProcess, Macro, Account)
+    MultiProcessing(projectNameList, Narrator, CloneVoiceName, MessagesReview, VoiceFileGen, MainProcess, Macro, Account)

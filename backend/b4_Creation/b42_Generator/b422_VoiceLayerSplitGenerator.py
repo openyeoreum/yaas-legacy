@@ -1633,7 +1633,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     # 문장 끝 후처리
                     _ActorChunk = EditGenerationKoChunks[i]['ActorChunk'][j]
                     if _tag not in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
-                        if i == 2:
+                        if i == 1:
                             modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '', _ActorChunk)
                             modified_ActorChunk = f'[{modified_ActorChunk}]'
                         else:
@@ -1648,22 +1648,6 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         del EditGenerationKoChunks[i]['ActorChunk'][j]
                         del EditGenerationKoChunks[i]['Pause'][j]
                         del EditGenerationKoChunks[i]['EndTime'][j]
-                        
-            ## $$$마지막 스튜디오 여름 관련 문구 삭제(해당 문구는 캐릭터가 없는 경우를 위해 제공됨으로 실제 오디오북 제작에는 필요 없음)
-            EndingChunks = ['끝까지', '들어주셔서', '스튜디오', '열어가겠습니다']
-            # 특정 리스트에서 해당 항목이 몇 개 포함되어 있는지 세는 함수
-            def CountMatchingChunks(target, chunks):
-                return sum(1 for chunk in chunks if chunk in target)
-            # EditGenerationKoChunks[-2]와 [-1]을 검사하여 삭제하는 함수
-            if 'ActorChunk' in EditGenerationKoChunks[-2]:
-                matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-2]['ActorChunk'])
-                if matched_count >= 2:
-                    del EditGenerationKoChunks[-2]
-
-            if 'ActorChunk' in EditGenerationKoChunks[-1]:
-                matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-1]['ActorChunk'])
-                if matched_count >= 2:
-                    del EditGenerationKoChunks[-1]
             
             ## Index 정렬(Part:1 - Chapter:2 - Index:3 으로 태그 순서 정렬)
             def SorIndexTags(EditGenerationKoChunks):
@@ -1692,6 +1676,23 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             
             ## EditGenerationKoChunks의 Dic(검수)
             EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)
+            
+            ## 마지막 스튜디오 여름 관련 문구 삭제(해당 문구는 캐릭터가 없는 경우를 위해 제공됨으로 실제 오디오북 제작에는 필요 없음)
+            EndingChunks = ['끝까지', '들어주셔서', '스튜디오', '열어가겠습니다']
+            # 특정 리스트에서 해당 항목이 몇 개 포함되어 있는지 세는 함수
+            def CountMatchingChunks(target, chunks):
+                return sum(1 for chunk in chunks if chunk in target)
+            # EditGenerationKoChunks[-2]와 [-1]을 검사하여 삭제하는 함수
+            if 'ActorChunk' in EditGenerationKoChunks[-2]:
+                print(f"@#@$#$@{EditGenerationKoChunks[-2]}")
+                matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-2]['ActorChunk'])
+                if matched_count >= 2:
+                    del EditGenerationKoChunks[-2]
+
+            if 'ActorChunk' in EditGenerationKoChunks[-1]:
+                matched_count = sum(CountMatchingChunks(actor_chunk['Chunk'], EndingChunks) for actor_chunk in EditGenerationKoChunks[-1]['ActorChunk'])
+                if matched_count >= 2:
+                    del EditGenerationKoChunks[-1]
             
             # MatchedActors, MatchedChunks 저장 (Dic 저장 후 다시 List로 변환)
             fileName = projectName + '_' + 'MatchedVoices.json'

@@ -1633,7 +1633,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     # 문장 끝 후처리
                     _ActorChunk = EditGenerationKoChunks[i]['ActorChunk'][j]
                     if _tag not in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
-                        if i == 1:
+                        if i in [1, 2]:
                             modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '', _ActorChunk)
                             modified_ActorChunk = f'[{modified_ActorChunk}]'
                         else:

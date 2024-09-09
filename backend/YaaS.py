@@ -108,7 +108,7 @@ def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyl
             ### Step6 : 크리에이션이 오디오북 제작 ###
             CreationAudioBookUpdate(projectName, email, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, audiobookSplitting = AudiobookSplitting, endMusicVolume = EndMusicVolume, macro = Macro, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, messagesReview = MessagesReview)
             
-### YaaS : YaaS의 통합으로 'Solution', 'Creation' ###
+### YaaS : YaaS의 통합으로 'Solution', 'Solution&Creation' ###
 
 def YaaS(email, name, password, projectNameList, Translations, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Account):
 
@@ -154,88 +154,15 @@ def MultiProcessing(projectNameList, Narrator, CloneVoiceName, ReadingStyle, Mes
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
-    projectNameList = ['240909_이명원'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240812_룰루레몬스토리', '240815_노유파'
+    projectNameList = ['240909_AI미래시나리오2030샘플'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240812_룰루레몬스토리', '240815_노유파'
     Narrator = "VoiceClone" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
-    CloneVoiceName = "이명원" # 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
-    ReadingStyle = "AllCharacters" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
+    CloneVoiceName = "LSR고객연구소" # 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
+    ReadingStyle = "NarratorOnly" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
-    MainProcess = "Solution&Creation" # 'Solution', 'Creation'
+    MainProcess = "Solution&Creation" # 'Solution', 'Solution&Creation'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
     Account = "khsis3516@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com'
     #########################################################################
     
     MultiProcessing(projectNameList, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, MainProcess, Macro, Account)
-    
-    # from PyPDF2 import PdfReader, PdfWriter
-    # from decimal import Decimal
-
-    # def split_pdf(input_pdf, output_pdf):
-    #     reader = PdfReader(input_pdf)
-    #     writer = PdfWriter()
-        
-    #     for page_num in range(len(reader.pages)):
-    #         page = reader.pages[page_num]
-    #         media_box = page.mediabox
-
-    #         # 페이지 크기 정보
-    #         width = media_box.width
-    #         height = media_box.height
-            
-    #         # Decimal 형식으로 하단 15%를 제거하기 위한 높이 계산
-    #         cut_height = height * Decimal('0.15')  # 하단 15% 계산
-    #         new_lower_left = cut_height  # 하단 15%만큼 자른 후의 시작점
-            
-    #         # 좌측 절반 페이지 (하단 15% 제거)
-    #         left_page = page
-    #         left_page.cropbox.lower_left = (Decimal(0), new_lower_left)  # 하단 15% 제거
-    #         left_page.cropbox.upper_right = (width / 2, height)
-
-    #         # 좌측 절반을 새 PDF에 추가
-    #         writer.add_page(left_page)
-
-    #         # 우측 절반 페이지 (하단 15% 제거)
-    #         right_page = page
-    #         right_page.cropbox.lower_left = (width / 2, new_lower_left)  # 하단 15% 제거
-    #         right_page.cropbox.upper_right = (width, height)
-
-    #         # 우측 절반을 새 PDF에 추가
-    #         writer.add_page(right_page)
-
-    #     # 결과를 새 PDF 파일로 저장
-    #     with open(output_pdf, "wb") as output_file:
-    #         writer.write(output_file)
-
-    # # 파일 경로 설정
-    # input_pdf = "/yaas/LGE240731-book.pdf"
-    # output_pdf = "/yaas/LGE240731-book(half).pdf"
-
-    # # PDF 나누기 실행
-    # split_pdf(input_pdf, output_pdf)
-    
-    # import PyPDF2
-
-    # def convert_even_pages_to_text(pdf_path, txt_output_path):
-    #     # PDF 파일 열기
-    #     with open(pdf_path, 'rb') as file:
-    #         reader = PyPDF2.PdfReader(file)
-    #         text = ""
-
-    #         # 각 페이지에서 짝수 페이지 (1부터 시작) 텍스트 추출
-    #         for page_num in range(len(reader.pages)):
-    #             # 인덱스 기준이 0부터이므로 실제 짝수 페이지는 page_num + 1이 짝수인 경우
-    #             if (page_num + 1) % 2 == 0:
-    #                 page = reader.pages[page_num]
-    #                 text += f"\n--- Page {page_num + 1} ---\n"
-    #                 text += page.extract_text()
-
-    #         # 추출한 텍스트를 텍스트 파일로 저장
-    #         with open(txt_output_path, 'w', encoding='utf-8') as text_file:
-    #             text_file.write(text)
-
-    #     print(f"짝수 페이지 텍스트가 '{txt_output_path}'에 저장되었습니다.")
-
-    # # 사용 예시
-    # pdf_file = "/yaas/LGE240731-book(half).pdf"  # 변환할 PDF 파일 경로
-    # text_file = "/yaas/LGE240731-book(half).txt"  # 저장할 텍스트 파일 경로
-    # convert_even_pages_to_text(pdf_file, text_file)

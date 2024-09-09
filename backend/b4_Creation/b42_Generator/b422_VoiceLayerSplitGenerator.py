@@ -46,7 +46,7 @@ def LoadVoiceDataSetCharacters(MainLang):
     #     VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
     # if MainLang == 'Es':
     #     VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
-        
+    
     return VoiceDataSetCharacters
 
 ## SelectionGenerationKoChunks와 언어별 보이스 데이터셋 불러오기
@@ -2149,7 +2149,6 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
 def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
-    
     EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
 
     with get_db() as db:

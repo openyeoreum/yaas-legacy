@@ -871,7 +871,9 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     #         pass
     # 성우 변경 파일이 생성되었을 경우 이전 성우 파일명으로 새로운 RawFiles 리스트에서 생성
     Files = []
-    VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"
+    # VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"
+    VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣A-Za-z]+\(.*?\))_\((\d+)\)M?\.wav"
+
     for i in range(len(RawFiles)):
         VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
         if VoiceFileMatch == None:

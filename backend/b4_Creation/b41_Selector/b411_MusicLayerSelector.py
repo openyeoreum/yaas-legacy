@@ -309,7 +309,24 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
             if Intro != None:
                 EditGeneration[i]['Intro'] = Intro['FilePath'].split('/')[-1]
             EditGeneration[i]['Music'] = TitleMusic['FilePath'].split('/')[-1]
-            if (EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+2]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']) or (EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+2]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+3]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']) or (EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+2]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+3]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+4]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']) or (EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+2]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+3]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+4]['Tag'] in ['Narrator', 'Caption']) and (EditGeneration[i+5]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index']):
+            # print(f"{i+1} {EditGeneration[i+1]['Tag']}")
+            # print(f"{i+2} {EditGeneration[i+2]['Tag']}")
+            # print(f"{i+3} {EditGeneration[i+3]['Tag']}")
+            # print(f"{i+4} {EditGeneration[i+4]['Tag']}")
+            if ((EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and 
+                (EditGeneration[i+2]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index'])) or \
+            ((EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and 
+                (EditGeneration[i+2]['Tag'] in ['Narrator', 'Caption']) and 
+                (EditGeneration[i+3]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index'])) or \
+            ((EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and 
+                (EditGeneration[i+2]['Tag'] in ['Narrator', 'Caption']) and 
+                (EditGeneration[i+3]['Tag'] in ['Narrator', 'Caption']) and 
+                (EditGeneration[i+4]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index'])) or \
+            ((EditGeneration[i+1]['Tag'] in ['Narrator', 'Caption']) and 
+                (EditGeneration[i+2]['Tag'] in ['Narrator', 'Caption']) and 
+                (EditGeneration[i+3]['Tag'] in ['Narrator', 'Caption']) and 
+                (EditGeneration[i+4]['Tag'] in ['Narrator', 'Caption']) and 
+                (EditGeneration[i+5]['Tag'] in ['Logue', 'Part', 'Chapter', 'Index'])):
                 TitleActorChunks = EditGeneration[i+1]['ActorChunk']
                 EditId = EditGeneration[i+1]['EditId']
                 StartTime = EndTime
@@ -865,7 +882,8 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     VoiceRawFiles = [unicodedata.normalize('NFC', s) for s in VoiceRawFiles]
     
     VoiceFiles = []
-    VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"
+    # VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"
+    VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣A-Za-z]+\(.*?\))_\((\d+)\)M?\.wav"
     for i in range(len(VoiceRawFiles)):
         VoiceFileMatch = re.match(VoiceFilePattern, VoiceRawFiles[i])
         if VoiceFileMatch == None:

@@ -1446,9 +1446,14 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     os.rmdir(folderPath)
                     continue
             
-            # "n_Modified_Part.wav" 파일이 있는지 확인
-            ModifiedPartFileFound = any(re.match(r".*_Modified_Part(\(\d+\))?\.wav$", file) for file in files)
-            
+            ## "n_Modified_Part.wav" 또는 "n_Modified_Par_(n).mp3" 파일이 있는지 확인
+            # "_Modified_Part.wav" 파일이 있는지 확인
+            wavFileFound = any(file.endswith("_Modified_Part.wav") for file in files)
+            # "_Modified_Part_(n).mp3" 파일이 있는지 확인
+            mp3FileFound = any(re.match(r".*_Modified_Part_\(\d+\)\.mp3$", file) for file in files)
+            # 둘 중 하나라도 찾으면 True
+            ModifiedPartFileFound = wavFileFound or mp3FileFound
+
             if not ModifiedPartFileFound:
                 # 폴더 내 파일을 ModifyFolderPath로 이동
                 for file in files:

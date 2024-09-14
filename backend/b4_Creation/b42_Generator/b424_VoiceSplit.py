@@ -771,7 +771,7 @@ def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process 
             # Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, 0, Mode = "Example", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
             ## VoiceSplit이 많아서 오답률이 클 경우 VoiceSplitInspectionProcess 프롬프트 요청
-            if len(ResponseJson) >= 2:
+            if len(ResponseJson) >= 5: ###@@ 여기에 숫자를 지정 @@###
                 ResponseJson = VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameNumberWordList, Process = "VoiceSplitInspection", MessagesReview = MessagesReview)
             
             if isinstance(ResponseJson, str):

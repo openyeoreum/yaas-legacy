@@ -1138,24 +1138,26 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
                         total = len(SortedModifiedFiles),
                         desc = 'ModifiedVoiceGenerator')
 
+        audio_segments = []
+
         for Update in UpdateTQDM:
             ModifiedFilePath = os.path.join(ModifyFolderPath, Update)
             ModifiedVoice = AudioSegment.from_wav(ModifiedFilePath)
             
             CurrentParagraph, CurrentSentence = ParseFilename(Update)
-            # # EditID 소리 합성
-            # Number = AudioNumber(str(CurrentParagraph))
-            
+
             if previous_paragraph is not None:
                 if CurrentParagraph != previous_paragraph:
-                    # FinalCombined += ParagraphSeparator + Number
-                    FinalCombined += ParagraphSeparator
+                    audio_segments.append(ParagraphSeparator)
                 elif CurrentSentence != previous_sentence:
-                    FinalCombined += SentenceSeparator
+                    audio_segments.append(SentenceSeparator)
             
-            FinalCombined += ModifiedVoice
+            audio_segments.append(ModifiedVoice)
             previous_paragraph = CurrentParagraph
             previous_sentence = CurrentSentence
+
+        # 모든 세그먼트를 한 번에 합치기
+        FinalCombined = sum(audio_segments)
 
         try:
             with open(ModifyFilePath, "wb") as VoiceFile:

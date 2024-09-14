@@ -158,7 +158,7 @@ def VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameN
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
-        memoryCounter = "- '불합격'인 경우 <매칭검수.json> '정답': '단어 [숫자] 단어' 부분에 '합격'이 되는 정답을 작성합니다. -"
+        memoryCounter = "- 매우중요!, <매칭검수.json>의 '매칭' 중 '검수'가 '불합격'인 경우에는 '수정정답'에 정답이 되는 '단어 [숫자] 단어'을 정확하게 작성합니다. 이것이 가장 중요합니다. -"
         Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
         Filter = VoiceSplitInspectionFilter(Response, ResponseJson)
         
@@ -771,7 +771,7 @@ def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process 
             # Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, 0, Mode = "Example", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
             ## VoiceSplit이 많아서 오답률이 클 경우 VoiceSplitInspectionProcess 프롬프트 요청
-            if len(ResponseJson) >= 6:
+            if len(ResponseJson) >= 2:
                 ResponseJson = VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameNumberWordList, Process = "VoiceSplitInspection", MessagesReview = MessagesReview)
             
             if isinstance(ResponseJson, str):

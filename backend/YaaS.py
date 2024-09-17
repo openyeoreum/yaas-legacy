@@ -154,9 +154,9 @@ def MultiProcessing(projectNameList, Narrator, CloneVoiceName, ReadingStyle, Mes
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
-    projectNameList = ['240812_룰루레몬스토리'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240812_룰루레몬스토리', '240815_노유파'
+    projectNameList = ['240910_AI미래시나리오2030'] # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240812_룰루레몬스토리', '240815_노유파', '240908_나무스토리텔링'
     Narrator = "VoiceClone" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
-    CloneVoiceName = "LSR고객연구소" # 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
+    CloneVoiceName = "LG전자(일반)" # 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
     ReadingStyle = "NarratorOnly" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
@@ -165,4 +165,46 @@ if __name__ == "__main__":
     Account = "khsis3516@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com'
     #########################################################################
     
-    MultiProcessing(projectNameList, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, MainProcess, Macro, Account)
+    # MultiProcessing(projectNameList, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, MainProcess, Macro, Account)
+    
+    import json
+    from collections import Counter
+
+    # JSON 파일 경로를 지정합니다.
+    json_file_path = '/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240910_AI미래시나리오2030/240910_AI미래시나리오2030_dataframe_file/yeoreum00128@gmail.com_240910_AI미래시나리오2030_12-2_outputMemoryDics_240917.json'
+
+    # JSON 파일을 읽어서 파이썬 객체로 변환합니다.
+    with open(json_file_path, 'r', encoding='utf-8') as file:
+        data = json.load(file)
+
+    # 첫 번째 리스트의 첫 번째 요소에 접근하여 성우 정보를 가져옵니다.
+    voice_actors = data[0][0]
+
+    # 모든 담당인물번호를 저장할 리스트를 초기화합니다.
+    assigned_numbers = []
+
+    # 각 성우의 '담당인물번호'를 리스트에 추가합니다.
+    for actor_name, actor_info in voice_actors.items():
+        assigned_numbers.extend(actor_info['담당인물번호'])
+
+    # 중복된 번호를 찾기 위해 번호의 출현 횟수를 계산합니다.
+    number_counts = Counter(assigned_numbers)
+
+    # 중복된 번호를 찾습니다.
+    duplicates = [number for number, count in number_counts.items() if count > 1]
+
+    # 1부터 131까지의 전체 번호 집합을 생성합니다.
+    all_numbers = set(range(1, 132))
+
+    # 할당된 번호를 집합으로 변환합니다.
+    assigned_numbers_set = set(assigned_numbers)
+
+    # 누락된 번호를 계산합니다.
+    missing_numbers = sorted(all_numbers - assigned_numbers_set)
+
+    # 결과를 출력합니다.
+    print("누락된 담당인물번호:")
+    print(missing_numbers)
+
+    print("\n중복된 담당인물번호:")
+    print(duplicates)

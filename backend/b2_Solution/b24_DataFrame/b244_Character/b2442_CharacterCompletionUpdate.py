@@ -764,9 +764,10 @@ def RemoveActorsBasedOnFrequency(actors, continuous_actors):
 ## 대화가 이어지는 Character는 나누기
 def DividedIntoContinuousConversation(ResponseJson, CharacterList):
     # ##################
-    # with open('OldCharacterList.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
+    # with open('OldCharacterList.json', 'w', encoding='utf-8') as json_file:
+    #     json.dump(CharacterList, json_file, ensure_ascii=False, indent=4)
     # ##################
+    new_characters = []  # 새로운 캐릭터를 저장할 리스트 생성
     for MainCharacter in CharacterList:
         for mainCharacter in MainCharacter['Actors']:
             ChunkIds = []
@@ -790,20 +791,30 @@ def DividedIntoContinuousConversation(ResponseJson, CharacterList):
             
             # 제거되지 않은 Actors 업데이트
             MainCharacter['Actors'] = filteredActors
-            MainCharacter['Frequency'] = MainCharacter['Frequency'] - removedactorFrequencys
+            MainCharacter['Frequency'] -= removedactorFrequencys
             MainCharacter['ActorIdx'] = [id for id in MainCharacter['ActorIdx'] if id not in removedactorIds]
             
-            # 제거된 Actors 새로운 캐릭터로 추가하기
-            DividedCharacterId = len(CharacterList) + 1
+            # 제거된 Actors를 새로운 캐릭터로 추가하기 위해 준비
+            DividedCharacterId = len(CharacterList) + len(new_characters) + 1
             DividedCharacterTag = 'Character' + str(DividedCharacterId)
             
-            DividedCharacterDic = {'CharacterId': DividedCharacterId, 'CharacterTag': DividedCharacterTag, 'Gender': MainCharacter['Gender'], 'Age': MainCharacter['Age'], 'Actors': removedActors, 'Frequency': removedactorFrequencys, 'ActorIdx': removedactorIds}
+            DividedCharacterDic = {
+                'CharacterId': DividedCharacterId,
+                'CharacterTag': DividedCharacterTag,
+                'Gender': MainCharacter['Gender'],
+                'Age': MainCharacter['Age'],
+                'Actors': removedActors,
+                'Frequency': removedactorFrequencys,
+                'ActorIdx': removedactorIds
+            }
             
-            CharacterList.append(DividedCharacterDic)
+            new_characters.append(DividedCharacterDic)
 
+    # 루프가 끝난 후에 새로운 캐릭터들을 추가
+    CharacterList.extend(new_characters)
     # ##################
-    # with open('NewCharacterList.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
+    # with open('NewCharacterList.json', 'w', encoding='utf-8') as json_file:
+    #     json.dump(CharacterList, json_file, ensure_ascii=False, indent=4)
     # ##################
     
     return CharacterList
@@ -875,10 +886,10 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
             NewCharacterCount += 1
     
     CharacterList = [Narrator] + NewCharacter
-    
+    print("오케이1")
     # 대화가 이어지는 Character는 나누기
     CharacterList = DividedIntoContinuousConversation(ResponseJson, CharacterList)
-
+    print("오케이2")
     # CharacterList에 Voice 데이터 참가
     for Character in CharacterList:
         for i in range(len(SelectedCharacters)):

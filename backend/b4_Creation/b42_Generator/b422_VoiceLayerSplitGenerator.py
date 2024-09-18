@@ -272,7 +272,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
     if (CharacterTag != "Narrator") and (CharacterGender not in ['남', '여']):
         NeuterCharacterTag = CharacterTag
         for VoiceData in VoiceDataSetCharacters:
-            if VoiceData['Choice'] == 'Narrator':
+            if VoiceData['Choice'] == 'Narrator' and VoiceData['Quilty'] != 0:
                 # VoiceData의 깊은 복사본을 생성
                 ModifiedVoiceData = copy.deepcopy(VoiceData)
                 # 복사본에 대해 변경 적용
@@ -1638,7 +1638,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             ## 빈 ActorChunk 삭제 및 목차 및 문장 끝 후처리
             for i in range(len(EditGenerationKoChunks)):
                 _tag = EditGenerationKoChunks[i]['Tag']
-                for j in range(len(EditGenerationKoChunks[i]['ActorChunk'])):
+                # 'ActorChunk'를 역순으로 순회합니다
+                for j in reversed(range(len(EditGenerationKoChunks[i]['ActorChunk']))):
                     # 문장 끝 후처리
                     _ActorChunk = EditGenerationKoChunks[i]['ActorChunk'][j]
                     if _tag not in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:

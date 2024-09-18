@@ -588,7 +588,7 @@
         "IndexMode": "Define",
         "BookGenre": "Auto",
         "MainLang": "Ko",
-        "Narrator": "VoiceClone",
+        "Narrator": "VoiceActor",
         "CloneVoiceName": "LG전자(일반)",
         "ReadingStyle": "NarratorOnly",
         "VoiceEnhance": "off",

@@ -114,7 +114,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Manual",
+        "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
     },
     "240906_황아현": {

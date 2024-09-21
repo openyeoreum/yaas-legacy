@@ -161,7 +161,7 @@ if __name__ == "__main__":
     CloneVoiceName = "장봉근(일반)" # 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
     ReadingStyle = "NarratorOnly" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
-    VoiceFileGen = "on" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
+    VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     MainProcess = "Solution&Creation" # 'Solution', 'Solution&Creation'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
     Account = "khsis3516@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com'

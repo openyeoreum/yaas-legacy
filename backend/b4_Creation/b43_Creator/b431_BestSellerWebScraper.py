@@ -281,7 +281,7 @@ def TotalBookDataUpdate(period):
                 TotalBookDataList[Id]['CommentsCount'] = BookData['CommentsCount']
 
         with open(TotalBookDataPath, 'w', encoding='utf-8') as BooksJson:
-            json.dump(TotalBookDataList, BooksJson, ensure_ascii=False, indent = 4)
+            json.dump(TotalBookDataList, BooksJson, ensure_ascii = False, indent = 4)
     else:
         with open(TotalBookDataPath, 'w', encoding='utf-8') as BooksJson:
             json.dump(BookDataList, BooksJson, ensure_ascii = False, indent = 4)
@@ -312,6 +312,6 @@ if __name__ == "__main__":
     # for idx, item in enumerate(data):
     #     item_file_path = os.path.join(output_folder, f'2023년_YearlyBookData({idx+1}).json')
     #     with open(item_file_path, 'w', encoding='utf-8') as item_file:
-    #         json.dump(item, item_file, ensure_ascii=False, indent=4)
+    #         json.dump(item, item_file, ensure_ascii = False, indent = 4)
 
     # print("모든 딕셔너리가 개별 파일로 저장되었습니다.")

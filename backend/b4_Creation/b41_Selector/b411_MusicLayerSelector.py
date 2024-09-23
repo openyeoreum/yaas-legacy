@@ -206,7 +206,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
         
         ## MatchedMusics 파일 생성
         with open(MatchedMusicLayerPath, 'w', encoding='utf-8') as MatchedMusicsJson:
-            json.dump(MatchedMusics, MatchedMusicsJson, ensure_ascii=False, indent=4)
+            json.dump(MatchedMusics, MatchedMusicsJson, ensure_ascii = False, indent = 4)
     else:
         with open(MatchedMusicLayerPath, 'r', encoding = 'utf-8') as MatchedMusicsJson:
             MatchedMusics = json.load(MatchedMusicsJson)

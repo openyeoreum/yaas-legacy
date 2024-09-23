@@ -845,8 +845,30 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath):
                 if UniqueFiles and ExtractFileInfo(UniqueFiles[-1], RemoveList)['has_M'] == False and ExtractFileInfo(UniqueFiles[-1], RemoveList)['gen_num'] == info['gen_num'] and ExtractFileInfo(UniqueFiles[-1], RemoveList)['detail_gen_num'] == info['detail_gen_num']:
                     UniqueFiles.pop()  # 'M'이 없는 파일 제거
                 UniqueFiles.append(file)
+    
+    # FilteredFiles의 그룹화 및 EditGenerationKoChunks를 벗어나는 파일 범위 리스트에서 삭제
+    FilteredFilesGroups = {}
+    # Process each filename
+    for filename in UniqueFiles:
+        parts = filename.split('_')
+        if len(parts) >= 3:
+            number = parts[2]  # Extract the 'number' part
+            if number not in FilteredFilesGroups:
+                FilteredFilesGroups[number] = []
+            FilteredFilesGroups[number].append(filename)
+        else:
+            print(f"Filename '{filename}' does not match the expected format.")
 
-    return UniqueFiles
+    # Convert the groups to a list of lists, sorted by number
+    FilteredGroupFiles = [group for key, group in sorted(FilteredFilesGroups.items(), key=lambda x: float(x[0]) if x[0].replace('.', '', 1).isdigit() else x[0])]
+
+    # FilteredFiles 재구성
+    FilteredFiles = []
+    for i in range(len(editGenerationKoChunks)):
+        for j in range(len(editGenerationKoChunks[i]['Pause'])):
+            FilteredFiles.append(FilteredGroupFiles[i][j])
+
+    return FilteredFiles
 
 ## 생성된 음성파일 합치기
 def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = 'off', VoiceFileGen = 'on'):
@@ -939,43 +961,43 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
 
             # 파일 단위로 저장 및 CombinedSound 초기화
             if FilesCount % file_limit == 0 or FilesCount == len(FilteredFiles):
-                MinNumber = current_file_index*file_limit-file_limit+1
-                MaxNumber = min(current_file_index*file_limit, len(FilteredFiles))
+                MinNumber = current_file_index * file_limit - file_limit + 1
+                MaxNumber = min(current_file_index * file_limit, len(FilteredFiles))
                 file_name = f"{projectName}_VoiceLayer_{MinNumber}-{MaxNumber}.wav"
                 CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
                 CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
                 current_file_index += 1
 
     # for 루프 종료 후 남은 CombinedSound 처리 (특수경우)
-    if (not CombinedSound.empty()) and (int(CombinedSound.duration_seconds) >= 1):
-        minNumber = current_file_index*file_limit-file_limit+1
-        _maxNumber = FilesCount
-        maxNumber = FilesCount + 1
-        
-        if minNumber < maxNumber and len(FilteredFiles) == maxNumber:
-            file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
-            current_file_index += 1
-        elif minNumber < _maxNumber and len(FilteredFiles) == _maxNumber:
-            file_name = f"{projectName}_VoiceLayer_{minNumber}-{maxNumber}.wav"
-            current_file_index += 1
-            
-        CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
+    if not CombinedSound.empty():
+        MinNumber = (current_file_index - 1) * file_limit + 1
+        MaxNumber = FilesCount
+        file_name = f"{projectName}_VoiceLayer_{MinNumber}-{MaxNumber}.wav"
+        CombinedSound.export(os.path.join(voiceLayerPath, file_name), format="wav")
+        # CombinedSound 초기화 필요 없음
 
     # 저자 성우 음성 노이즈 제거 되었다면 "Completion" 생성
     if VoiceEnhanceCompletionSwitch:
         CloneVoiceActor['ApiSetting']['VoiceEnhanceCompletion'] = "Completion"
-        with open(CloneVoiceActorPath, 'w', encoding = 'utf-8') as CloneVoiceActorJson:
-            json.dump(CloneVoiceActor, CloneVoiceActorJson, ensure_ascii = False, indent = 4)
-    
+        with open(CloneVoiceActorPath, 'w', encoding='utf-8') as CloneVoiceActorJson:
+            json.dump(CloneVoiceActor, CloneVoiceActorJson, ensure_ascii=False, indent=4)
+        
     # 최종 파일 합치기
     FinalCombined = AudioSegment.empty()
-    for i in range(1, current_file_index):
-        part_name = f"{projectName}_VoiceLayer_{i*file_limit-file_limit+1}-{min(i*file_limit, len(FilteredFiles))}.wav"
+    for i in range(1, current_file_index + 1):  # current_file_index + 1로 수정
+        MinNumber = (i - 1) * file_limit + 1
+        if i * file_limit < FilesCount:
+            MaxNumber = i * file_limit
+        else:
+            MaxNumber = FilesCount  # 마지막 파일의 MaxNumber는 FilesCount로 설정
+        part_name = f"{projectName}_VoiceLayer_{MinNumber}-{MaxNumber}.wav"
         part_path = os.path.join(voiceLayerPath, part_name)
-        part = AudioSegment.from_wav(part_path)
-        FinalCombined += part
-        # 파일 묶음 삭제
-        os.remove(part_path)
+        # 파일이 존재하는지 확인
+        if os.path.exists(part_path):
+            part = AudioSegment.from_wav(part_path)
+            FinalCombined += part
+            # 파일 묶음 삭제
+            os.remove(part_path)
 
     # wav파일과 Edit의 시간 오차율 교정
     FinalCombined_seconds = FinalCombined.duration_seconds

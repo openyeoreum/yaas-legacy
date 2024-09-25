@@ -2603,6 +2603,14 @@
                                 "Volume": 115,
                                 "Direction": "뒤"
                             }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/15_TitleMusicSet/156_IndexMusic.wav",
+                            "Setting": {
+                                "Length": [1.00, 2.00],
+                                "Volume": 110,
+                                "Direction": "뒤"
+                            }
                         }
                     ]
                 }

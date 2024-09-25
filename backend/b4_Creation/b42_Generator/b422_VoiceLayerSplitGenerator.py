@@ -933,12 +933,20 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                     total = len(EditGenerationKoChunks),
                     desc = 'VoiceGenerator')
 
+    # DeNoiseVoiceLayer폴더 생성
+    DeNoiseVoiceLayerPath = voiceLayerPath.replace('/VoiceLayers/', f'/VoiceLayers/{projectName}_DeNoiseVoiceLayer/')
+    if not os.path.exists(DeNoiseVoiceLayerPath):
+        os.makedirs(DeNoiseVoiceLayerPath)
+
     # 전체 오디오 클립의 누적 길이를 추적하는 변수 추가
     total_duration_seconds = 0
+    VoiceBookSplitList = [{'DeNoiseVoiceBookFilePath': DeNoiseVoiceLayerPath + f'{projectName}_DeNoiseVoiceBook.wav', 'Length': None}]
+    Length = 0
     for Update in UpdateTQDM:
         Update['EndTime'] = []
         for j in range(len(Update['Pause'])):
             VoiceFilePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
+            DeNoiseVoiceFilePath = os.path.join(DeNoiseVoiceLayerPath, FilteredFiles[FilesCount])
             ## VoiceEnhance
             if (Narrator == 'VoiceClone') and (CloneVoiceName in FilteredFiles[FilesCount]) and (VoiceEnhanceCompletion != 'Completion') and (VoiceEnhance == 'on'):
                 result = noise_removal.process(VoiceFilePath)
@@ -953,6 +961,12 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             silence = AudioSegment.silent(duration = PauseDuration_ms)
             CombinedSound += sound_file + silence
             FilesCount += 1
+            
+            Start = Length
+            End = Length + len(sound_file)
+            VoiceBookSplitDic = {'DeNoiseVoiceFilePath': DeNoiseVoiceFilePath, 'Length': {'Start': Start, 'End': End}}
+            VoiceBookSplitList.append(VoiceBookSplitDic)
+            Length += len(sound_file + silence)
 
             # 누적된 CombinedSound의 길이를 전체 길이 추적 변수에 추가
             total_duration_seconds += sound_file.duration_seconds + PauseDuration_ms / 1000.0
@@ -967,6 +981,9 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                 CombinedSound.export(os.path.join(voiceLayerPath, file_name), format = "wav")
                 CombinedSound = AudioSegment.empty()  # 다음 파일 묶음을 위한 초기화
                 current_file_index += 1
+    
+    # VoiceBook 최종 시간 입력
+    VoiceBookSplitList[0]['Length'] = VoiceBookSplitList[-1]['Length']['End'] + len(silence)
 
     # for 루프 종료 후 남은 CombinedSound 처리 (특수경우)
     if not CombinedSound.empty():
@@ -1083,6 +1100,12 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             with open(voiceLayerPathMp3.replace(".mp3", f"_(3).mp3"), "wb") as FinalCombined_file:
                 FinalCombinedPart3.export(FinalCombined_file, format = "mp3", bitrate = "320k")
                 FinalCombinedPart3 = AudioSegment.empty()  # 메모리 해제
+        
+        # VoiceBook VoiceBookSplitList 저장
+        VoiceBookSplitListName = '[' + projectName + '_' + 'DeNoiseVoice_SplitPoint].json'
+        VoiceBookSplitListPath = VoiceLayerPathGen(projectName, email, VoiceBookSplitListName, 'Mixed')
+        with open(VoiceBookSplitListPath, 'w', encoding = 'utf-8') as VoiceBookSplitListJson:
+            json.dump(VoiceBookSplitList, VoiceBookSplitListJson, ensure_ascii = False, indent = 4)
     
     ## EditGenerationKoChunks의 Dic(검수)
     EditGenerationKoChunks = EditGenerationKoChunksToDic(EditGenerationKoChunks)

@@ -616,5 +616,25 @@
         "Intro": "off",
         "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
+    },
+    "240925_불멸의지혜": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "240925_불멸의지혜"
+        ],
+        "Translations": [],
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "이나(일반)",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     }
 }

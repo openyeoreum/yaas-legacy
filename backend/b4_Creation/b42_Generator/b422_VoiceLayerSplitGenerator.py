@@ -1687,15 +1687,21 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 for j in reversed(range(len(EditGenerationKoChunks[i]['ActorChunk']))):
                     # 문장 끝 후처리
                     _ActorChunk = EditGenerationKoChunks[i]['ActorChunk'][j]
+                    _ActorChunk = _ActorChunk.strip()
+                    _ActorChunk = _ActorChunk.replace('.,', ',').replace(',~.', ',').replace('..', '.')
+                    _ActorChunk = re.sub(r'^[\.,~]+', '', _ActorChunk)  # 앞부분의 ',', '.', '~' 제거
                     if _tag not in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
                         if i in [1, 2]:
                             modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '', _ActorChunk)
+                            modified_ActorChunk = modified_ActorChunk.strip()
                             modified_ActorChunk = f'[{modified_ActorChunk}]'
                         else:
                             modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '.', _ActorChunk)
+                            modified_ActorChunk = modified_ActorChunk.strip()
                     # 목차 후처리
                     if _tag in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
                         modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '', _ActorChunk)
+                        modified_ActorChunk = modified_ActorChunk.strip()
                         modified_ActorChunk = f'[{modified_ActorChunk}]'
                     EditGenerationKoChunks[i]['ActorChunk'][j] = modified_ActorChunk
                     # 빈 ActorChunk 삭제

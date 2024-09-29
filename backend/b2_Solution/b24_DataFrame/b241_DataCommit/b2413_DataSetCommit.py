@@ -311,6 +311,12 @@ def LoadExistedDataSets(projectName, email, Process, FeedbackDataSetPath):
     MaxDate = 0
     RecentFile = None
 
+    ## NFC, NFD 오류 문제 해결 (모두 적용)
+    if os.path.exists(unicodedata.normalize('NFC', FeedbackDataSetPath)):
+        FeedbackDataSetPath = unicodedata.normalize('NFC', FeedbackDataSetPath)
+    elif os.path.exists(unicodedata.normalize('NFD', FeedbackDataSetPath)):
+        FeedbackDataSetPath = unicodedata.normalize('NFD', FeedbackDataSetPath)
+
     for FileName in os.listdir(FeedbackDataSetPath):
         FileNameNormalized = unicodedata.normalize('NFC', FileName)
         match = pattern.match(FileNameNormalized)       

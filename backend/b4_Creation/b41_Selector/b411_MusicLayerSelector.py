@@ -75,6 +75,8 @@ def VoiceLayerPathGen(projectName, email, FileName, Folder = 'Mixed'):
     # 최종 경로 생성
     if Folder == "Mixed":
         LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", FileName)
+    if Folder == "DeNoiseMixed":
+        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", f"{projectName}_DeNoiseVoiceLayer", "DeNoiseVoiceLayer", FileName)
     if Folder == "Master":
         LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_master_audiobook_file", FileName)
     # print(voiceLayerPath)
@@ -428,6 +430,21 @@ def RemoveMusicFiles(MusicLayerPath):
 def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVolume = -10):
     RemoveMusicFiles(MusicLayerPathGen(projectName, email, ''))
     
+    ## DeNoise폴더내에 파일이 있는지 확인 (있다면 해당 파일로 믹싱 시작)
+    DeNoiseMixedVar = "Mixed"
+    DeNoiseFolderPath = os.path.join(VoiceLayerPathGen(projectName, email, ''), f"{projectName}_DeNoiseVoiceLayer", "DeNoiseVoiceLayer")
+
+    # 폴더가 존재하는지 확인
+    if os.path.exists(DeNoiseFolderPath):
+        # 폴더 내 파일 리스트 가져오고 .wav 파일이 있는지 확인
+        wavInDeNoiseFolderPath = os.listdir(DeNoiseFolderPath)
+        wavExists = any(file.endswith('.wav') for file in wavInDeNoiseFolderPath)
+        # .wav 파일이 하나라도 있으면 True
+        if wavExists:
+            DeNoiseMixedVar = "DeNoiseMixed"
+    print(f"[ MixingMode : {DeNoiseMixedVar} ]")
+    ## DeNoise폴더내에 파일이 있는지 확인 (있다면 해당 파일로 믹싱 시작)
+    
     EditGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro)
     ## 각 사운드 생성
     Volume = -30 # 볼륨은 최대 값을 0으로 산정 -값이 클수록 볼륨이 작음(-25 ~ -32)
@@ -441,10 +458,10 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
     if EditGeneration[0]['Tag'] == 'Intro':
         ActorChunk = EditGeneration[0]['ActorChunk']
         for a in range(len(ActorChunk)):
-            if os.path.exists(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][0])):
-                _Intro2_Voice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][0]))
-            elif os.path.exists(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][1])):
-                _Intro2_Voice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][1]))
+            if os.path.exists(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][0], DeNoiseMixedVar)):
+                _Intro2_Voice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][0], DeNoiseMixedVar))
+            elif os.path.exists(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][1], DeNoiseMixedVar)):
+                _Intro2_Voice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, _Intro2_VoiceFileNames[a][1], DeNoiseMixedVar))
             _Intro2_Audio += _Intro2_Voice + AudioSegment.silent(duration = ActorChunk[a]['Pause'] * 1000)
     ## _Intro2_가 Title앞에 존재하는 경우 ##
 
@@ -472,18 +489,18 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
             Pause = MusicMixingData['Pause']
             # 파일 선별
             TitleVoice = AudioSegment.empty()
-            if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0]))) and ('M' in VoiceFileNames[0]):
+            if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0], DeNoiseMixedVar))) and ('M' in VoiceFileNames[0]):
                 M_Switch = 1
             else:
                 M_Switch = 0
             for j in range(len(VoiceFileNames)):
                 if M_Switch == 1:
-                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' in VoiceFileNames[j]):
-                        TitleVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' in VoiceFileNames[j]):
+                        TitleVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000))
                         LastVoiceFileName = VoiceFileNames[j]
                 else:
-                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' not in VoiceFileNames[j]):
-                        TitleVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' not in VoiceFileNames[j]):
+                        TitleVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000))
                         LastVoiceFileName = VoiceFileNames[j]
             MusicFilePath = MusicLayerPathGen(projectName, email, LastVoiceFileName)
             # TitleVoice 생성 및 리스트 저장
@@ -559,11 +576,11 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
             Pause = MusicMixingData['Pause']
             Chunk = MusicMixingData['Chunk']
             # 파일 선별
-            if os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0])):
-                EndTitleVoice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[0])) + AudioSegment.silent(duration = Pause * 1000)
+            if os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0], DeNoiseMixedVar)):
+                EndTitleVoice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[0], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000)
                 LastVoiceFileName = VoiceFileNames[0]
-            elif os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[1])):
-                EndTitleVoice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[1])) + AudioSegment.silent(duration = Pause * 1000)
+            elif os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[1], DeNoiseMixedVar)):
+                EndTitleVoice = AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[1], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000)
                 LastVoiceFileName = VoiceFileNames[1]
             MusicFilePath = MusicLayerPathGen(projectName, email, LastVoiceFileName)
             # EndTitleVoices 생성 및 리스트 저장
@@ -609,18 +626,18 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
             Pause = MusicMixingData['Pause']
             # 파일 선별
             PartVoice = AudioSegment.empty()
-            if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0]))) and ('M' in VoiceFileNames[0]):
+            if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0], DeNoiseMixedVar))) and ('M' in VoiceFileNames[0]):
                 M_Switch = 1
             else:
                 M_Switch = 0
             for j in range(len(VoiceFileNames)):
                 if M_Switch == 1:
-                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' in VoiceFileNames[j]):
-                        PartVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' in VoiceFileNames[j]):
+                        PartVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000))
                         LastVoiceFileName = VoiceFileNames[j]
                 else:
-                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' not in VoiceFileNames[j]):
-                        PartVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' not in VoiceFileNames[j]):
+                        PartVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000))
                         LastVoiceFileName = VoiceFileNames[j]
             MusicFilePath = MusicLayerPathGen(projectName, email, LastVoiceFileName)
             M_Switch = 0
@@ -652,18 +669,18 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
             Pause = MusicMixingData['Pause']
             # 파일 선별
             ChapterVoice = AudioSegment.empty()
-            if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0]))) and ('M' in VoiceFileNames[0]):
+            if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0], DeNoiseMixedVar))) and ('M' in VoiceFileNames[0]):
                 M_Switch = 1
             else:
                 M_Switch = 0
             for j in range(len(VoiceFileNames)):
                 if M_Switch == 1:
-                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' in VoiceFileNames[j]):
-                        ChapterVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' in VoiceFileNames[j]):
+                        ChapterVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000))
                         LastVoiceFileName = VoiceFileNames[j]
                 else:
-                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' not in VoiceFileNames[j]):
-                        ChapterVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' not in VoiceFileNames[j]):
+                        ChapterVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000))
                         LastVoiceFileName = VoiceFileNames[j]
             MusicFilePath = MusicLayerPathGen(projectName, email, LastVoiceFileName)
             M_Switch = 0
@@ -695,18 +712,18 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
             Pause = MusicMixingData['Pause']
             # 파일 선별
             IndexVoice = AudioSegment.empty()
-            if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0]))) and ('M' in VoiceFileNames[0]):
+            if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[0], DeNoiseMixedVar))) and ('M' in VoiceFileNames[0]):
                 M_Switch = 1
             else:
                 M_Switch = 0
             for j in range(len(VoiceFileNames)):
                 if M_Switch == 1:
-                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' in VoiceFileNames[j]):
-                        IndexVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' in VoiceFileNames[j]):
+                        IndexVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000))
                         LastVoiceFileName = VoiceFileNames[j]
                 else:
-                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' not in VoiceFileNames[j]):
-                        IndexVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' not in VoiceFileNames[j]):
+                        IndexVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000))
                         LastVoiceFileName = VoiceFileNames[j]
             MusicFilePath = MusicLayerPathGen(projectName, email, LastVoiceFileName)
             M_Switch = 0
@@ -744,12 +761,12 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
                 M_Switch = 0
             for j in range(len(VoiceFileNames)):
                 if M_Switch == 1:
-                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' in VoiceFileNames[j]):
-                        CaptionVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' in VoiceFileNames[j]):
+                        CaptionVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000))
                         LastVoiceFileName = VoiceFileNames[j]
                 else:
-                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j]))) and ('M' not in VoiceFileNames[j]):
-                        CaptionVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j])) + AudioSegment.silent(duration = Pause * 1000))
+                    if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' not in VoiceFileNames[j]):
+                        CaptionVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration = Pause * 1000))
                         LastVoiceFileName = VoiceFileNames[j]
             MusicFilePath = MusicLayerPathGen(projectName, email,LastVoiceFileName)
             M_Switch = 0
@@ -788,7 +805,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
         MixedMusicPath = MusicFilePath.replace('.wav', f"_[{MusicMixingData['Tag']}Music].wav")
         MixedMusicAudio.export(MixedMusicPath, format = 'wav')
     
-    return EditGeneration, MusicMixingDatas
+    return EditGeneration, MusicMixingDatas, DeNoiseMixedVar
 
 ## 생성된 음성파일 정렬/필터
 def SortAndRemoveDuplicates(editGenerationKoChunks, files):
@@ -870,10 +887,10 @@ def MatchEditWithVoiceFile(EditGeneration, FilteredFiles):
 
 ## 생성된 음성파일 합치기
 def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10):
-    EditGeneration, MusicMixingDatas = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro, EndMusicVolume = EndMusicVolume)
+    EditGeneration, MusicMixingDatas, DeNoiseMixedVar = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro, EndMusicVolume = EndMusicVolume)
     
     ## voiceLayer 경로와 musicLayer 경로 ##
-    voiceLayerPath = VoiceLayerPathGen(projectName, email, '')
+    voiceLayerPath = VoiceLayerPathGen(projectName, email, '', DeNoiseMixedVar)
     musicLayerPath = MusicLayerPathGen(projectName, email, '')
 
     # Voice 폴더 내의 모든 .wav 파일 목록 추출

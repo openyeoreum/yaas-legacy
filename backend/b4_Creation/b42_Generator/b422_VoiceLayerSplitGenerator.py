@@ -2288,33 +2288,3 @@ if __name__ == "__main__":
     mode = "Manual"
     macro = "Manual"
     #########################################################################
-    
-    from pydub import AudioSegment
-    import json
-    import os
-
-    # 메인 오디오 파일의 경로
-    audio_file_path = '/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240910_AI미래시나리오2030/240910_AI미래시나리오2030_mixed_audiobook_file/VoiceLayers/240910_AI미래시나리오2030_DeNoiseVoiceLayer/240910_AI미래시나리오2030_DeNoiseVoiceBook.wav'
-
-    # 오디오 파일 로드
-    audio = AudioSegment.from_wav(audio_file_path)
-
-    # JSON 데이터 로드
-    with open('/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240910_AI미래시나리오2030/240910_AI미래시나리오2030_mixed_audiobook_file/VoiceLayers/[240910_AI미래시나리오2030_DeNoiseVoice_SplitPoint].json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    data = data[2:]
-
-    # 각 세그먼트 처리
-    for segment in data:
-        start_ms = segment['Length']['Start']  # 시작 시간 (밀리초)
-        end_ms = segment['Length']['End']      # 종료 시간 (밀리초)
-        output_path = segment['DeNoiseVoiceFilePath']
-
-        # 세그먼트 추출
-        extracted = audio[start_ms:end_ms]
-
-        # 출력 디렉토리 생성 (없을 경우)
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
-        # 추출한 세그먼트 저장
-        extracted.export(output_path, format='wav')

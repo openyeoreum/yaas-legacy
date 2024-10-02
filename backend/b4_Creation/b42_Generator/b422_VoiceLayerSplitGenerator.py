@@ -1081,7 +1081,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             # 최종 파일 저장
             with open(voiceLayerPathMp3.replace(".mp3", f"_(1).mp3"), "wb") as FinalCombined_file:
                 FinalCombinedPart1.export(FinalCombined_file, format = "mp3", bitrate = "320k")
-                FinalCombinedPart1 = AudioSegment.empty()  # 메모리 해제
+            FinalCombinedPart1 = AudioSegment.empty()  # 메모리 해제
                 
             # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
             FinalCombinedPart2 = AudioSegment.empty()
@@ -1097,7 +1097,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             # 최종 파일 저장
             with open(voiceLayerPathMp3.replace(".mp3", f"_(2).mp3"), "wb") as FinalCombined_file:
                 FinalCombinedPart2.export(FinalCombined_file, format = "mp3", bitrate = "320k")
-                FinalCombinedPart2 = AudioSegment.empty()  # 메모리 해제
+            FinalCombinedPart2 = AudioSegment.empty()  # 메모리 해제
                 
             # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
             FinalCombinedPart3 = AudioSegment.empty()
@@ -1113,7 +1113,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             # 최종 파일 저장
             with open(voiceLayerPathMp3.replace(".mp3", f"_(3).mp3"), "wb") as FinalCombined_file:
                 FinalCombinedPart3.export(FinalCombined_file, format = "mp3", bitrate = "320k")
-                FinalCombinedPart3 = AudioSegment.empty()  # 메모리 해제
+            FinalCombinedPart3 = AudioSegment.empty()  # 메모리 해제
         
         #### DeNoise ####
         # VoiceBookSplitList 저장
@@ -1284,7 +1284,7 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
             # 최종 파일 저장
             with open(ModifyFilePathMp3.replace(".mp3", f"_(1).mp3"), "wb") as FinalCombined_file:
                 FinalCombinedPart1.export(FinalCombined_file, format = "mp3", bitrate = "320k")
-                FinalCombinedPart1 = AudioSegment.empty()  # 메모리 해제
+            FinalCombinedPart1 = AudioSegment.empty()  # 메모리 해제
                 
             # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
             FinalCombinedPart2 = AudioSegment.empty()
@@ -1300,7 +1300,7 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
             # 최종 파일 저장
             with open(ModifyFilePathMp3.replace(".mp3", f"_(2).mp3"), "wb") as FinalCombined_file:
                 FinalCombinedPart2.export(FinalCombined_file, format = "mp3", bitrate = "320k")
-                FinalCombinedPart2 = AudioSegment.empty()  # 메모리 해제
+            FinalCombinedPart2 = AudioSegment.empty()  # 메모리 해제
                 
             # 각 파트를 임시 파일로 저장 후 다시 로드하여 합치기
             FinalCombinedPart3 = AudioSegment.empty()
@@ -1316,7 +1316,7 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
             # 최종 파일 저장
             with open(ModifyFilePathMp3.replace(".mp3", f"_(3).mp3"), "wb") as FinalCombined_file:
                 FinalCombinedPart3.export(FinalCombined_file, format = "mp3", bitrate = "320k")
-                FinalCombinedPart3 = AudioSegment.empty()  # 메모리 해제
+            FinalCombinedPart3 = AudioSegment.empty()  # 메모리 해제
     ## 폴더 내에 파일이 없으면 폴더 삭제
     else:
         os.rmdir(ModifyFolderPath)

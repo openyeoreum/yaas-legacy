@@ -772,11 +772,14 @@ def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Inspecti
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
             ## VoiceSplit이 많아서 오답률이 클 경우 VoiceSplitInspectionProcess 프롬프트 요청
             
-            ## VoiceSplitInspectionProcess 요건1: BracketsSwitch라서 제거할 요소가 존재할때
+            ## VoiceSplitInspectionProcess 요건1: BracketsSwitch라서 제거할 요소가 존재할 때와 낭독문장이 매우 짧아서 주의가 필요할 때
             RemoveDic = False
             for SplitSentDic in SplitSents:
                 if SplitSentDic['제거'] == 'Yes':
                     RemoveDic = True
+                else:
+                    if len(SplitSentDic['낭독문장']) <= 5:
+                        RemoveDic = True
 
              ## VoiceSplitInspectionProcess 요건2: ResponseJson의 개수가 많을때 (InspectionCount개수)
             if len(ResponseJson) >= InspectionCount or RemoveDic: ###@@ 여기에 숫자를 지정 @@###

@@ -118,15 +118,22 @@ def SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList
 def VoiceSplitInspectionInput(ResponseJson, NotSameNumberWordList):
     # print(f'ResponseJson: {ResponseJson}\n\n')
     # print(f'NotSameNumberWordList: {NotSameNumberWordList}\n\n')
+    AlphabetPartList = []
     MatchingResult = {'매칭': []}
     for i in range(len(ResponseJson)):
         AlphabetPart = ResponseJson[i]['알파벳부분']
         NumberPart = ResponseJson[i]['숫자부분']
-        MatchingResult['매칭'].append({'매칭숫자': i + 1, '문제': AlphabetPart, '정답': NumberPart})
         
-    Input = f"{''.join(NotSameNumberWordList)}\n\n<문제 정답 매칭.json>\n{str(MatchingResult)}"
+        match = re.search(r'(\S{2})\s*\[.*?\]\s*(\S{2})', AlphabetPart)
+        FrontTwoBeforeWord = match.group(1)
+        BackTwoAfterWors = match.group(2)
+        
+        MatchingResult['매칭'].append({'문제번호': i + 1, '문제': f'{FrontTwoBeforeWord} [숫자] {BackTwoAfterWors}', '정답': NumberPart})
+        AlphabetPartList.append(AlphabetPart)
+        
+    Input = f"\n<문제 정답 매칭.json>\n{str(MatchingResult)}\n\n<'단어 [숫자] 단어' 나열>\n{''.join(NotSameNumberWordList)}"
     
-    return Input
+    return Input, AlphabetPartList
 
 ## VoiceSplitInspection 필터
 def VoiceSplitInspectionFilter(Response, ResponseJson):
@@ -142,7 +149,7 @@ def VoiceSplitInspectionFilter(Response, ResponseJson):
         return "VoiceSplitInspection, JSON에서 오류 발생: '낭독녹음분리' 비생성"
     # Error3: 자료의 구조가 다를 때의 예외 처리
     for Output in OutputDic:
-        if ('매칭숫자' not in Output or '검수' not in Output or '문제' not in Output or '수정정답' not in Output):
+        if ('문제번호' not in Output or '검수' not in Output or '문제' not in Output or '수정정답' not in Output):
             return "VoiceSplitInspection, JSON에서 오류 발생: JSONKeyError"
     # Error4: Input과 Output의 개수가 다를 때의 예외처리
     if len(OutputDic) != len(ResponseJson):
@@ -154,11 +161,11 @@ def VoiceSplitInspectionFilter(Response, ResponseJson):
 def VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameNumberWordList, Process = "VoiceSplitInspection", MessagesReview = "off"):
     print(f"[[VoiceSplitInspectionProcess: {name}]]")
     # VoiceSplitInspectionProcess
-    Input = VoiceSplitInspectionInput(ResponseJson, NotSameNumberWordList)
+    Input, AlphabetPartList = VoiceSplitInspectionInput(ResponseJson, NotSameNumberWordList)
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
-        memoryCounter = "- 매우중요!, <매칭검수.json>의 '매칭' 중 '검수'가 '불합격'인 경우에는 '수정정답'에 정답이 되는 '단어 [숫자] 단어'을 정확하게 작성합니다. 이것이 가장 중요합니다. -"
+        memoryCounter = "\n- 매우중요!, 틀려서 ‘검수': '불합격’인 경우 <'단어 [숫자] 단어' 나열>를 꼼꼼히 보고 맞는 정답으로 '수정정답'을 작성합니다. 이것이 가장 중요합니다. -\n"
         Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
         Filter = VoiceSplitInspectionFilter(Response, ResponseJson)
         
@@ -179,7 +186,7 @@ def VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameN
     for i in range(len(inspectionResponseJson)):
         Inspection = inspectionResponseJson[i]['검수']
         if Inspection == "불합격":
-            AlphabetPart = inspectionResponseJson[i]['문제']
+            AlphabetPart = AlphabetPartList[i]
             NumberPart = inspectionResponseJson[i]['수정정답']
             numbers = re.findall(r'\[(\d+)\]', NumberPart)
             MatchingNumber = None
@@ -192,8 +199,10 @@ def VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameN
             Number = int(MatchingNumber)
             # num이 순서대로 존재하는지 검토
             if i + 1 < len(inspectionResponseJson): 
-                afternum = ResponseJson[i+1]['매칭숫자']
-            print(f"beforenum: {beforenum}, MatchingNumber: {MatchingNumber}, afternum: {afternum}")
+                OriginAfternum = ResponseJson[i+1]['매칭숫자']
+                InspectionAfternum = re.findall(r'\[(\d+)\]', inspectionResponseJson[i+1]['수정정답'])[-1]
+                afternum = max(OriginAfternum, InspectionAfternum)
+            # print(f"beforenum: {beforenum}, MatchingNumber: {MatchingNumber}, afternum: {afternum}")
             if int(beforenum) < int(MatchingNumber) <= int(afternum):
                 InspectionResponseJson.append({'알파벳부분': AlphabetPart, '숫자부분': NumberPart, '매칭숫자': MatchingNumber, '알파벳': Alpahbet, '숫자': Number})
             else:
@@ -202,9 +211,9 @@ def VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameN
         else:
             InspectionResponseJson.append(ResponseJson[i])
     
-    # print(f"ResponseJson: {ResponseJson}\n\n")
-    # print(f"Response: {Response}\n\n")
-    # print(f"InspectionResponseJson: {InspectionResponseJson}\n\n")
+    print(f"ResponseJson: {ResponseJson}\n\n")
+    print(f"Response: {Response}\n\n")
+    print(f"InspectionResponseJson: {InspectionResponseJson}\n\n")
     
     return InspectionResponseJson
 
@@ -822,7 +831,11 @@ def VoiceTimeStempsClassification(VoiceTimeStemps, ResponseJson):
     SplitTimeList = []
     for Response in ResponseJson:
         CurrentTime = int(Response['숫자'])
-        CurrentSplitTime = VoiceTimeStemps[CurrentTime]['시작']
+        try:
+            CurrentSplitTime = VoiceTimeStemps[CurrentTime]['시작']
+        except IndexError:
+            CurrentTime -= 1
+            CurrentSplitTime = VoiceTimeStemps[CurrentTime]['시작']
         SplitTimeList.append(CurrentSplitTime)
         
     return SplitTimeList

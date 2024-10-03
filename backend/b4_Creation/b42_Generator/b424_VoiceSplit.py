@@ -124,7 +124,7 @@ def VoiceSplitInspectionInput(ResponseJson, NotSameNumberWordList):
         AlphabetPart = ResponseJson[i]['알파벳부분']
         NumberPart = ResponseJson[i]['숫자부분']
         
-        match = re.search(r'(\S{2})\s*\[.*?\]\s*(\S{2})', AlphabetPart)
+        match = re.search(r'(\S+)\s*\[.*?\]\s*(\S+)', AlphabetPart)
         FrontTwoBeforeWord = match.group(1)
         BackTwoAfterWors = match.group(2)
         

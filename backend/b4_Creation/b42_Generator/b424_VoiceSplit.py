@@ -727,7 +727,7 @@ def InputText(SplitSents, SplitWords, SameNum):
             "Error": {"Input": ErrorInput, "NotSameAlphabet": AlphabetList, "lastNumber": lastNumber, "NumberWordList": NumberWordList, "MemoryCounter": ErrorMemoryCounter, "RawResponse": ErrorRawResponse}}, NotSameNumberWordList
 
 ## VoiceSplit 프롬프트 요청
-def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process = "VoiceSplit", MessagesReview = "off"):
+def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, InspectionCount = 5, Process = "VoiceSplit", MessagesReview = "off"):
     ## Input1과 Input2를 입력으로 받아 최종 InputSet 생성
     InputSet, NotSameNumberWordList = InputText(SplitSents, SplitWords, 3)
     # print(f"Input: {InputSet['Normal']['Input']}\n\n")
@@ -771,7 +771,15 @@ def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Process 
             # Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, 0, Mode = "Example", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
             ## VoiceSplit이 많아서 오답률이 클 경우 VoiceSplitInspectionProcess 프롬프트 요청
-            if len(ResponseJson) >= 5: ###@@ 여기에 숫자를 지정 @@###
+            
+            ## VoiceSplitInspectionProcess 요건1: BracketsSwitch라서 제거할 요소가 존재할때
+            RemoveDic = False
+            for SplitSentDic in SplitSents:
+                if SplitSentDic['제거'] == 'Yes':
+                    RemoveDic = True
+
+             ## VoiceSplitInspectionProcess 요건2: ResponseJson의 개수가 많을때 (InspectionCount개수)
+            if len(ResponseJson) >= InspectionCount or RemoveDic: ###@@ 여기에 숫자를 지정 @@###
                 ResponseJson = VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameNumberWordList, Process = "VoiceSplitInspection", MessagesReview = MessagesReview)
             
             if isinstance(ResponseJson, str):
@@ -1019,3 +1027,28 @@ if __name__ == "__main__":
     VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/테스트(가)_0_연우(중간톤, 피치다운).wav"
     LanguageCode = "ko-KR"
     #########################################################################
+    
+    ## 검수 프로세스 테스트 코드 ##
+    from openai import OpenAI
+    client = OpenAI()
+
+    audio_file = open("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240925_불멸의지혜/240925_불멸의지혜_mixed_audiobook_file/VoiceLayers/240925_불멸의지혜_31_이나(일반)M.wav", "rb")
+    transcription = client.audio.transcriptions.create(
+        file=audio_file,
+        model="whisper-1", 
+        response_format="verbose_json",
+        timestamp_granularities=["word"],
+    )
+    print(transcription.words)
+    
+    Words = transcription.words
+    Sentence = ''
+    for i in range(len(Words) - 1):
+        pause = Words[i+1]['start'] - Words[i]['end']
+        if pause == 0:
+            Sentence += Words[i]['word'] + ' '
+        else:
+            Sentence += Words[i]['word'] + f'({pause}) '
+    Sentence += Words[-1]['word'] + f"({transcription.duration - Words[-1]['end']})"
+            
+    print(f"\n\nSentence: {Sentence}")

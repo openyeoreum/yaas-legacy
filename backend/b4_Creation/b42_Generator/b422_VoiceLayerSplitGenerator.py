@@ -605,13 +605,13 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
                 time.sleep(60)  # 1분 대기 후 재시도
                 
-            # except Exception as e:
-            #     attempt += 1
-            #     if attempt >= 5:
-            #         sys.exit(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
-            #     else:
-            #         print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
-            #         time.sleep(5)
+            except Exception as e:
+                attempt += 1
+                if attempt >= 5:
+                    sys.exit(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                else:
+                    print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                    time.sleep(5)
 
     ################
     ### TypeCast ###
@@ -719,13 +719,13 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
                 time.sleep(60)  # 1분 대기 후 재시도
                 
-            # except Exception as e:
-            #     attempt += 1
-            #     if attempt >= 5:
-            #         sys.exit(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
-            #     else:
-            #         print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
-            #         time.sleep(5)
+            except Exception as e:
+                attempt += 1
+                if attempt >= 5:
+                    sys.exit(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                else:
+                    print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                    time.sleep(5)
         sys.exit("[ 1시간째 API 무응답, 요금을 충전하세요. ]")
 
 ## 생성된 음성 합치기 ##

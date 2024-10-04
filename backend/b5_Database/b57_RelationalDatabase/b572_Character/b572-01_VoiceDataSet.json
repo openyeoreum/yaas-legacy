@@ -19447,10 +19447,10 @@
                     "Api": "ElevenLabs",
                     "voice_id": "d7RIFVfU7a1Xicu33dH8",
                     "stability": [
-                        0.4
+                        0.95
                     ],
                     "similarity_boost": [
-                        0.8
+                        0.6
                     ],
                     "style": [
                         0.0

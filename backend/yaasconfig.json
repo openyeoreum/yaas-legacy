@@ -29,7 +29,7 @@
         "BookGenre": "Auto",
         "MainLang": "Ko",
         "Narrator": "VoiceActor",
-        "CloneVoiceName": "",
+        "CloneVoiceName": "안현호(일반)",
         "ReadingStyle": "AllCharacters",
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
@@ -635,7 +635,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
-        "EndMusicVolume": -10
+        "EndMusicVolume": -12
     },
     "240930_정회준": {
         "email": "yeoreum00128@gmail.com",

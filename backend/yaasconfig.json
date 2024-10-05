@@ -34,7 +34,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Manual",
+        "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
     },
     "240801_빨간풍차가있는집": {

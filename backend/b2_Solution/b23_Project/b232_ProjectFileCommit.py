@@ -17,16 +17,17 @@ def LoadTextFile(filepath):
         return None
 
 # 개발시에만 활용
-def MoveTextFile(projectName, email):
-    ScriptFilesPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_ScriptFiles"
+def ExistenceOrNotTextFile(projectName, email):
+    project = GetProject(projectName, email)
+    ScriptFilesPath = project.ScriptPath
     PDFFileSourcePath = os.path.join(ScriptFilesPath, projectName + ".pdf")
     IndexFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Index.txt")
     BodyFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Body.txt")
-    
-    project = GetProject(projectName, email)
-    
-    shutil.copy(IndexFileSourcePath, project.ScriptPath)
-    shutil.copy(BodyFileSourcePath, project.ScriptPath)
+
+    if os.path.exists(PDFFileSourcePath) or (os.path.exists(IndexFileSourcePath) and os.path.exists(BodyFileSourcePath)):
+        pass
+    else:
+        sys.exit(f"\n[ 아래 폴더에 {projectName + '.pdf'} 또는 {projectName + '_Index.txt'} + {projectName + '_Body.txt'} 파일을 넣어주세요 ]\n{ScriptFilesPath}")
 
 def AddTextToDB(projectName, email):
     with get_db() as db:
@@ -40,14 +41,14 @@ def AddTextToDB(projectName, email):
         indexFilePath = os.path.join(project.ScriptPath, projectName + "_Index.txt")
         bodyFilePath = os.path.join(project.ScriptPath, projectName + "_Body.txt")
         
-        # 파일이 이미 존재하면 삭제
-        if os.path.exists(indexFilePath):
-            os.remove(indexFilePath)
-        if os.path.exists(bodyFilePath):
-            os.remove(bodyFilePath)
+        # # 파일이 이미 존재하면 삭제
+        # if os.path.exists(indexFilePath):
+        #     os.remove(indexFilePath)
+        # if os.path.exists(bodyFilePath):
+        #     os.remove(bodyFilePath)
 
         # 파일 이동 (개발시에만 활용)
-        MoveTextFile(projectName, email)
+        ExistenceOrNotTextFile(projectName, email)
 
         IndexFileText = LoadTextFile(indexFilePath)
         BodyFileText = LoadTextFile(bodyFilePath)

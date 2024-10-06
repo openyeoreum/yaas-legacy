@@ -254,6 +254,89 @@ def AddFrameMetaDataToDB(projectName, email):
         db.commit()
 
 
+#####################################
+##### 00_BookPreprocess Process #####
+#####################################
+## 0-1. 1-0 BookPreprocess이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.BookPreprocessFrame[1] = ExistedDataFrame[1]
+        
+        flag_modified(project, "BookPreprocessFrame")
+        
+        db.add(project)
+        db.commit()
+
+## 0-1. 1-1 BookPreprocess의 BookPages(페이지) updateBookPages 업데이트 형식
+def UpdateBookPreprocessBookPages(project, PageId, PageElement, Script):    
+    updateBookPages = {
+        "PageId": PageId,
+        "PageElement": PageElement,
+        "Script": Script
+    }
+    
+    project.BookPreprocessFrame[1]["BookPages"].append(updateBookPages)
+    project.BookPreprocessFrame[0]["PageCount"] = PageId
+    
+## 0-1. 1-2 BookPreprocess의 BookPages(페이지) updateBookPages 업데이트
+def AddBookPreprocessBookPagesToDB(projectName, email, PageId, PageElement, Script):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateBookPreprocessBookPages(project, PageId, PageElement, Script)
+        
+        flag_modified(project, "BookPreprocessFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 0-1. BookPreprocess의Count의 가져오기
+def BookPreprocessCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    PreprocessCount = project.BookPreprocessFrame[0]["PageCount"]
+    Completion = project.BookPreprocessFrame[0]["Completion"]
+    
+    return PreprocessCount, Completion
+
+## 0-1. BookPreprocess의 초기화
+def InitBookPreprocess(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.BookPreprocessFrame[0]["PageCount"] = 0
+        project.BookPreprocessFrame[0]["Completion"] = "No"
+        project.BookPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-00_BookPreprocessFrame.json")[1]
+
+        flag_modified(project, "BookPreprocessFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 0-1. 업데이트된 BookPreprocess 출력
+def UpdatedBookPreprocess(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+
+    return project.BookPreprocessFrame
+
+## 0-1. BookPreprocessCompletion 업데이트
+def BookPreprocessCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.BookPreprocessFrame[0]["Completion"] = "Yes"
+
+        flag_modified(project, "BookPreprocessFrame")
+
+        db.add(project)
+        db.commit()
+        
+        
 ##################################
 ##### 01_IndexDefine Process #####
 ##################################

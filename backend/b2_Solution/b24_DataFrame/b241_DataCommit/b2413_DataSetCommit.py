@@ -248,7 +248,6 @@ def InitRawDataSet(projectName, email, Process):
                 "OutputEmbedding": "None"
             }
         ]
-                
         flag_modified(trainingDataset, Process)
         
         db.add(trainingDataset)

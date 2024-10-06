@@ -198,6 +198,7 @@ class Project(Base):
     BodyText = Column(Text)
     
     # Script
+    BookPreprocessFrame = Column(JSON)
     IndexFrame = Column(JSON)
     DuplicationPreprocessFrame = Column(JSON)
     PronunciationPreprocessFrame = Column(JSON)
@@ -315,6 +316,7 @@ class ProjectHistory(Base):
     
     ## Process
     # Script
+    BookPreprocessFrameStatus = Column(String(64))
     IndexFrameStatus = Column(String(64))
     DuplicationPreprocessFrameStatus = Column(String(64))
     PronunciationPreprocessFrameStatus = Column(String(64))
@@ -386,6 +388,7 @@ class Prompt(Base):
 
     ## Yeoreum
     # ScriptPrompt
+    BookPreprocess = Column(JSON)
     IndexDefinePreprocess = Column(JSON)
     IndexDefineDivisionPreprocess = Column(JSON)
     IndexDefine = Column(JSON)
@@ -479,6 +482,7 @@ class TrainingDataset(Base):
     TrainingDatasetDate = Column(DateTime, default=SeoulNow)
 
     # ScriptDataset
+    BookPreprocess = Column(JSON)
     IndexDefinePreprocess = Column(JSON)
     IndexDefineDivisionPreprocess = Column(JSON)
     IndexDefine = Column(JSON)

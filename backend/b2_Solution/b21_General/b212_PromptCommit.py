@@ -22,6 +22,7 @@ def AddPromptToDB():
         # JSON 데이터 불러오기
         PromptDataPath = GetPromptDataPath()
         
+        bookPreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-00_BookPreprocess.json")
         indexDefinePreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-01_IndexDefinePreprocess.json")
         indexDefineDivisionPreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-02_IndexDefineDivisionPreprocess.json")
         indexDefine = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-03_IndexDefine.json")
@@ -66,6 +67,7 @@ def AddPromptToDB():
 
         # DB Commit
         if ExistingPrompt:
+            ExistingPrompt.BookPreprocess = bookPreprocess
             ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
             ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
             ExistingPrompt.IndexDefine = indexDefine
@@ -110,6 +112,7 @@ def AddPromptToDB():
             print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
         else:
             prompt = Prompt(
+                BookPreprocess = bookPreprocess,
                 IndexDefinePreprocess = indexDefinePreprocess,
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,
                 IndexDefine = indexDefine,

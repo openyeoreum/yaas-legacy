@@ -7,8 +7,9 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, InitIndexFrame, UpdatedIndexFrame, InitDuplicationPreprocess, UpdatedDuplicationPreprocess, InitPronunciationPreprocess, UpdatedPronunciationPreprocess, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, InitBookPreprocess, UpdatedBookPreprocess, InitIndexFrame, UpdatedIndexFrame, InitDuplicationPreprocess, UpdatedDuplicationPreprocess, InitPronunciationPreprocess, UpdatedPronunciationPreprocess, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
+from backend.b2_Solution.b24_DataFrame.b242_Script.b2420_BookPreprocessUpdate import BookPreprocessUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_DuplicationPreprocessUpdate import DuplicationPreprocessUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2423_PronunciationPreprocessUpdate import PronunciationPreprocessUpdate
@@ -183,6 +184,26 @@ def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesRe
     AddFrameMetaDataToDB(projectName, email)
 
     AddDataSetMetaDataToDB(projectName, email)
+
+
+    #########################
+    ### 00_BookPreprocess ###
+    #########################
+    InitBookPreprocess(projectName, email)
+    InitRawDataSet(projectName, email, "BookPreprocess")
+    if existedDataFrameMode == "on":
+        existedDataFrame = LoadexistedDataFrame(projectName, email, "BookPreprocess", DataFramePath)
+        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BookPreprocess", RawDataSetPath)
+    mode = "Master"
+    BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+
+    if existedDataFrame == None:
+        updatedBookPreprocess = UpdatedBookPreprocess(projectName, email)
+        SaveDataFrame(projectName, email, "00_BookPreprocessFrame", updatedBookPreprocess, DataFramePath)
+    if existedDataSet == None:
+        SaveDataSet(projectName, email, "00", "BookPreprocess", RawDataSetPath)
+    existedDataFrame = None
+    existedDataSet = None
 
 
     ###################################

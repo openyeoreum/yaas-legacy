@@ -88,6 +88,7 @@ def AddProjectToDB(projectName, email):
         # JSON 데이터 불러오기
         ProjectDataPath = GetProjectDataPath()
         
+        bookPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-00_BookPreprocessFrame.json")
         indexFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-01_IndexFrame.json")
         duplicationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_DuplicationPreprocessFrame.json")
         pronunciationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_PronunciationPreprocessFrame.json")
@@ -147,6 +148,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.Music1Path = music1FolderPath
             ExistingProject.Music2Path = music2FolderPath
             ExistingProject.MasterAudioBookPath = masterAudioBookPath
+            ExistingProject.BookPreprocessFrame = bookPreprocessFrame
             ExistingProject.IndexFrame = indexFrame
             ExistingProject.DuplicationPreprocessFrame = duplicationPreprocessFrame
             ExistingProject.PronunciationPreprocessFrame = pronunciationPreprocessFrame
@@ -205,6 +207,7 @@ def AddProjectToDB(projectName, email):
                 Music1Path = music1FolderPath,
                 Music2Path = music2FolderPath,
                 MasterAudioBookPath = masterAudioBookPath,
+                BookPreprocessFrame = bookPreprocessFrame,
                 IndexFrame = indexFrame,
                 DuplicationPreprocessFrame = duplicationPreprocessFrame,
                 PronunciationPreprocessFrame = pronunciationPreprocessFrame,

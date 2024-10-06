@@ -414,81 +414,96 @@ if __name__ == "__main__":
     mode = "Master"
     #########################################################################
     
-    import pdfplumber
     import os
+    import pdfplumber
     from PyPDF2 import PdfWriter, PdfReader
 
-    # PageForm = "Normal", "Wide"
-    def PDFToText(projectName, email, PageForm="Normal", Left=1, Right=1, Up=1, Down=1):
+    def PDFBookCropping(projectName, email, PageForm="Normal", Left=1, Right=1, Up=1, Down=1):
         # PDF 파일 경로 설정
         TextDirPath = f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_ScriptFiles/{projectName}'
         PDFPath = TextDirPath + '.pdf'
         NormalPDFPath = TextDirPath + f'/{projectName}_Normal.pdf'
-        # Text 추출 파일 저장 경로
+        CroppedPDFPath = TextDirPath + f'/{projectName}_Cropped.pdf'
+        # Text PDF 변환 파일 저장 폴더 생성
         os.makedirs(TextDirPath, exist_ok=True)
 
-        # PageForm이 Wide일 경우 좌우 페이지 분할하여 저장
+        ## 1. 페이지 분할
         if PageForm == "Wide":
             NormalPDFWriter = PdfWriter()
-            with open(PDFPath, 'rb') as pdf_file:
-                pdf_reader = PdfReader(pdf_file)
-                for i, page in enumerate(pdf_reader.pages):
-                    # 페이지의 크기 (width, height)
-                    page_media_box = page.mediabox
-                    page_width = page_media_box.width
-                    page_height = page_media_box.height
+            with open(PDFPath, 'rb') as pdf:
+                pdf_reader = PdfReader(pdf)
+                for page in pdf_reader.pages:
+                    page_width = page.mediabox.width
+                    page_height = page.mediabox.height
+                    # 좌측 페이지 추가
+                    left_page = page
+                    left_page.mediabox.upper_right = (page_width / 2, page_height)
+                    NormalPDFWriter.add_page(left_page)
+                    # 우측 페이지 추가
+                    right_page = page
+                    right_page.mediabox.lower_left = (page_width / 2, 0)
+                    right_page.mediabox.upper_right = (page_width, page_height)
+                    NormalPDFWriter.add_page(right_page)
 
-                    # 좌측 페이지: 페이지의 왼쪽 절반 부분
-                    left_page = PdfWriter()
-                    left_page.add_blank_page(width=page_width / 2, height=page_height)
-                    left_page_page = left_page.pages[0]
-                    left_page_page.merge_page(page)
-                    left_page_page.mediabox.upper_right = (page_width / 2, page_height)
-                    NormalPDFWriter.add_page(left_page_page)
-
-                    # 우측 페이지: 페이지의 오른쪽 절반 부분
-                    right_page = PdfWriter()
-                    right_page.add_blank_page(width=page_width / 2, height=page_height)
-                    right_page_page = right_page.pages[0]
-                    right_page_page.merge_page(page)
-                    right_page_page.mediabox.lower_left = (page_width / 2, 0)
-                    right_page_page.mediabox.upper_right = (page_width, page_height)
-                    NormalPDFWriter.add_page(right_page_page)
-
-            # 하나의 병합된 PDF 파일로 저장
             with open(NormalPDFPath, 'wb') as NormalPDF:
                 NormalPDFWriter.write(NormalPDF)
-            print("PDF 좌우 분할 및 병합 저장이 완료되었습니다.")
-
         else:
-            print("PageForm이 Normal이므로 분할 작업을 수행하지 않습니다.")
-            # for i, page in enumerate(pdf.pages):
-            #     # 페이지의 크기 (width, height)
-            #     PageWidth = page.width
-            #     PageHeight = page.height
+            with open(PDFPath, 'rb') as pdf:
+                with open(NormalPDFPath, 'wb') as NormalPDF:
+                    NormalPDF.write(pdf.read())
 
-            #     # 하단 10%를 제외한 높이
-            #     cropped_height = page_height * 0.9
+        ## 2. 페이지별 사이즈 잘라내기
+        with open(NormalPDFPath, 'rb') as normal_pdf_file:
+            pdf_reader = PdfReader(normal_pdf_file)
+            CroppedPDFWriter = PdfWriter()
+            for page in pdf_reader.pages:
+                page_width = float(page.mediabox.width)
+                page_height = float(page.mediabox.height)
+                original_left = float(page.mediabox.lower_left[0])
+                original_bottom = float(page.mediabox.lower_left[1])
+                # 새 좌표 계산
+                new_left = original_left + (1 - Left) * page_width / 2
+                new_right = original_left + page_width - (1 - Right) * page_width / 2
+                new_bottom = original_bottom + (1 - Down) * page_height / 2
+                new_top = original_bottom + page_height - (1 - Up) * page_height / 2
+                # Mediabox 설정
+                page.mediabox.lower_left = (new_left, new_bottom)
+                page.mediabox.upper_right = (new_right, new_top)
+                
+                CroppedPDFWriter.add_page(page)
 
-            #     # 좌측 페이지: 페이지의 왼쪽 절반 부분 (하단 10% 제외)
-            #     left_bbox = (0, 0, page_width / 2, cropped_height)
-            #     left_text = page.within_bbox(left_bbox).extract_text()
+        with open(CroppedPDFPath, 'wb') as CroppedPDF:
+            CroppedPDFWriter.write(CroppedPDF)
 
-            #     # 우측 페이지: 페이지의 오른쪽 절반 부분 (하단 10% 제외)
-            #     right_bbox = (page_width / 2, 0, page_width, cropped_height)
-            #     right_text = page.within_bbox(right_bbox).extract_text()
+    def PDFToText(projectName, email):
+        # 경로 설정
+        TextDirPath = f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_ScriptFiles/{projectName}'
+        CroppedPDFPath = TextDirPath + f'/{projectName}_Cropped.pdf'
+        TextOutputDir = TextDirPath + f'/{projectName}_Text'
 
-            #     # 좌측 텍스트를 파일로 저장
-            #     left_output_file = os.path.join(output_dir, f'page_{i+1}_left.txt')
-            #     with open(left_output_file, 'w', encoding='utf-8') as f:
-            #         f.write(left_text or '')
+        # 텍스트 출력 폴더 생성
+        os.makedirs(TextOutputDir, exist_ok=True)
 
-            #     # 우측 텍스트를 파일로 저장
-            #     right_output_file = os.path.join(output_dir, f'page_{i+1}_right.txt')
-            #     with open(right_output_file, 'w', encoding='utf-8') as f:
-            #         f.write(right_text or '')
+        # PDF 파일 열기
+        with pdfplumber.open(CroppedPDFPath) as pdf:
+            for i, page in enumerate(pdf.pages, start=1):
+                # 페이지의 bbox 좌표 가져오기
+                x0, y0, x1, y1 = page.bbox
 
-                # print(f"Page {i+1} split into left and right parts saved to {left_output_file} and {right_output_file}")
+                # 페이지를 bbox 영역으로 자르기
+                cropped_page = page.crop((x0, y0, x1, y1))
 
+                # 텍스트 추출
+                text = cropped_page.extract_text()
+                if text:
+                    # 각 페이지의 텍스트를 파일로 저장
+                    text_filename = os.path.join(TextOutputDir, f'{projectName}_Page_{i}.txt')
+                    with open(text_filename, 'w', encoding='utf-8') as text_file:
+                        text_file.write(text)
+                else:
+                    print(f"{i}번째 페이지에서 텍스트를 추출할 수 없습니다.")
+                    
+    # 예제 호출
     PageForm = "Wide"
-    PDFToText(projectName, email, PageForm)
+    PDFBookCropping(projectName, email, PageForm, 0.9, 0.9, 0.8, 0.7)
+    PDFToText(projectName, email)

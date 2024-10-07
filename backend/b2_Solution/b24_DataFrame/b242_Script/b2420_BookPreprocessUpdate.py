@@ -191,23 +191,6 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
     TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
     JsonPath = os.path.join(TextDirPath, f'[{projectName}_PDFToTextSetting].json')
     TextOutputDir = TextDirPath + f'/{projectName}_Text'
-    pdfBookToTextSetting = {
-        "ProjectName": f"{projectName}",
-        "PDFBookToTextSetting": {
-            "PageForm": "Normal", # 1페이지씩 구성된 경우는 "Normal", 2페이지씩 구성된 경우는 "Wide"
-            "Left": 1, # 페이지의 좌측 1-0 값으로, 1이면 모두, 0이면 없음
-            "Right": 1, # 페이지의 우측 1-0 값으로, 1이면 모두, 0이면 없음
-            "Up": 1, # 페이지의 위측 1-0 값으로, 1이면 모두, 0이면 없음
-            "Down": 1, # 페이지의 아래측 1-0 값으로, 1이면 모두, 0이면 없음
-            "TitlePages": [1], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지의 리스트
-            "IndexPages": [2, 3], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지 리스트
-            "DuplicatePage": [],  # {projectName}_Cropped.pdf 파일에서 중복되어 필요없는 페이지 리스트
-            "SettingCompletion": "세팅 완료 후 Completion으로 변경",
-            "PDFBookToTextCompletion": "세팅 완료 후 Completion으로 자동변경"
-        }
-    }
-    with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
-        json.dump(pdfBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
     ## JSON 파일이 없으면 생성
     if not os.path.exists(JsonPath):
         print(f"JSON 파일을 생성합니다: {JsonPath}")

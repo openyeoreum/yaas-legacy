@@ -492,6 +492,7 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
             if PageElement == 'Index':
                 IndexText += f'{Script}\n'
             elif PageElement == 'Title':
+                IndexText += f'{Script}\n'
                 BodyText += f'{Script}\n\n'
             elif PageElement == 'index':
                 BodyText += f'\n\n{Script}\n\n'

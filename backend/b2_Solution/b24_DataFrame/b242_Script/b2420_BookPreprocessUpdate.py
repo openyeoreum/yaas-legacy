@@ -18,38 +18,11 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 #########################
 
 ## PDF파일 편집
-def PDFBookCropping(projectName, email, TextDirPath):
-    # PDF 파일 경로 설정
-    JsonPath = TextDirPath + f'/[{projectName}_PDFToTextSetting].json'
+def PDFBookCropping(projectName, email, PDFBookToTextSetting, TextDirPath):
+    # 경로 설정
     PDFPath = TextDirPath + f'/{projectName}.pdf'
     NormalPDFPath = TextDirPath + f'/{projectName}_Normal.pdf'
     CroppedPDFPath = TextDirPath + f'/{projectName}_Cropped.pdf'
-
-    # 1. PDFBookToTextSetting.json 생성
-    PDFBookToTextSetting = {
-        "ProjectName": f"{projectName}",
-        "PDFBookToTextSetting": {
-            "PageForm": "Normal", # 1페이지씩 구성된 경우는 "Normal", 2페이지씩 구성된 경우는 "Wide"
-            "Left": 1, # 페이지의 좌측 1-0 값으로, 1이면 모두, 0이면 없음
-            "Right": 1, # 페이지의 우측 1-0 값으로, 1이면 모두, 0이면 없음
-            "Up": 1, # 페이지의 위측 1-0 값으로, 1이면 모두, 0이면 없음
-            "Down": 1, # 페이지의 아래측 1-0 값으로, 1이면 모두, 0이면 없음
-            "TitlePages": [1], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지의 리스트
-            "IndexPages": [2, 3], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지 리스트
-            "DuplicatePage": [],  # {projectName}_Cropped.pdf 파일에서 중복되어 필요없는 페이지 리스트
-            "SettingCompletion": "세팅 완료 후 Completion으로 변경",
-            "IndexBodyCompletion": "_Index.txt, _Body.txt 완료 후 Completion으로 변경"
-        }
-    }
-    
-    # JSON 파일이 없으면 생성
-    if not os.path.exists(JsonPath):
-        with open(JsonPath, 'w', encoding='utf-8') as json_file:
-            json.dump(PDFBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
-            
-    # JSON 파일 불러오기
-    with open(JsonPath, 'r', encoding='utf-8') as json_file:
-        PDFBookToTextSetting = json.load(json_file)
     
     PageForm = PDFBookToTextSetting['PDFBookToTextSetting']['PageForm']
     Left = PDFBookToTextSetting['PDFBookToTextSetting']['Left']
@@ -65,7 +38,7 @@ def PDFBookCropping(projectName, email, TextDirPath):
         else:
             reference_width = pdf_reader.pages[1].mediabox.width - 1  # 페이지가 3장 미만인 경우 두번째 페이지 폭 사용
 
-    ## 2. 페이지 분할
+    ## 1. 페이지 분할
     if PageForm == "Wide":
         NormalPDFWriter = PdfWriter()
         with open(PDFPath, 'rb') as pdf:
@@ -95,7 +68,7 @@ def PDFBookCropping(projectName, email, TextDirPath):
             with open(NormalPDFPath, 'wb') as NormalPDF:
                 NormalPDF.write(pdf.read())
 
-    ## 3. 페이지별 사이즈 잘라내기
+    ## 2. 페이지별 사이즈 잘라내기
     with open(NormalPDFPath, 'rb') as normal_pdf_file:
         pdf_reader = PdfReader(normal_pdf_file)
         CroppedPDFWriter = PdfWriter()
@@ -118,16 +91,16 @@ def PDFBookCropping(projectName, email, TextDirPath):
     with open(CroppedPDFPath, 'wb') as CroppedPDF:
         CroppedPDFWriter.write(CroppedPDF)
         
-    return PDFBookToTextSetting, JsonPath
+    return PDFBookToTextSetting
 
 ## PDF파일 편집 및 텍스트화
-def PDFBookToText(projectName, email):
+def PDFBookToText(projectName, email, PDFBookToTextSetting):
     # 경로 설정
     TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
     CroppedPDFPath = TextDirPath + f'/{projectName}_Cropped.pdf'
     TextOutputDir = TextDirPath + f'/{projectName}_Text'
     # PDF파일 편집
-    PDFBookToTextSetting, JsonPath = PDFBookCropping(projectName, email, TextDirPath)
+    PDFBookToTextSetting = PDFBookCropping(projectName, email, PDFBookToTextSetting, TextDirPath)
     # 텍스트 출력 폴더 생성
     os.makedirs(TextOutputDir, exist_ok = True)
 
@@ -144,10 +117,10 @@ def PDFBookToText(projectName, email):
             # 각 페이지의 텍스트를 파일로 저장
             text_filename = os.path.join(TextOutputDir, f'{projectName}_Page_{i}.txt')
             BookTextList.append(text)
-            with open(text_filename, 'w', encoding='utf-8') as text_file:
+            with open(text_filename, 'w', encoding = 'utf-8') as text_file:
                 text_file.write(text)
                 
-    return BookTextList, PDFBookToTextSetting, TextOutputDir, JsonPath
+    return BookTextList, PDFBookToTextSetting
 
 ## InputList 페이지별 단어 가장 앞/뒤 부분의 재배치
 def FixSplitWords(InputList):
@@ -214,41 +187,99 @@ def MergeBodyElements(InputList):
 
 ## TextFile의 BookPreprocessInputList 치환 (인덱스, 캡션 부분 합치기)
 def BookPreprocessInputList(projectName, email, IndexLength = 50):
-    BookTextList, PDFBookToTextSetting, TextOutputDir, JsonPath = PDFBookToText(projectName, email)
+    # 경로 설정
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
+    JsonPath = os.path.join(TextDirPath, f'[{projectName}_PDFToTextSetting].json')
+    TextOutputDir = TextDirPath + f'/{projectName}_Text'
+    pdfBookToTextSetting = {
+        "ProjectName": f"{projectName}",
+        "PDFBookToTextSetting": {
+            "PageForm": "Normal", # 1페이지씩 구성된 경우는 "Normal", 2페이지씩 구성된 경우는 "Wide"
+            "Left": 1, # 페이지의 좌측 1-0 값으로, 1이면 모두, 0이면 없음
+            "Right": 1, # 페이지의 우측 1-0 값으로, 1이면 모두, 0이면 없음
+            "Up": 1, # 페이지의 위측 1-0 값으로, 1이면 모두, 0이면 없음
+            "Down": 1, # 페이지의 아래측 1-0 값으로, 1이면 모두, 0이면 없음
+            "TitlePages": [1], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지의 리스트
+            "IndexPages": [2, 3], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지 리스트
+            "DuplicatePage": [],  # {projectName}_Cropped.pdf 파일에서 중복되어 필요없는 페이지 리스트
+            "SettingCompletion": "세팅 완료 후 Completion으로 변경",
+            "PDFBookToTextCompletion": "세팅 완료 후 Completion으로 자동변경"
+        }
+    }
+    with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
+        json.dump(pdfBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
+    ## JSON 파일이 없으면 생성
+    if not os.path.exists(JsonPath):
+        print(f"JSON 파일을 생성합니다: {JsonPath}")
+        ## PDFBookToTextSetting.json 생성
+        pdfBookToTextSetting = {
+            "ProjectName": f"{projectName}",
+            "PDFBookToTextSetting": {
+                "PageForm": "Normal", # 1페이지씩 구성된 경우는 "Normal", 2페이지씩 구성된 경우는 "Wide"
+                "Left": 1, # 페이지의 좌측 1-0 값으로, 1이면 모두, 0이면 없음
+                "Right": 1, # 페이지의 우측 1-0 값으로, 1이면 모두, 0이면 없음
+                "Up": 1, # 페이지의 위측 1-0 값으로, 1이면 모두, 0이면 없음
+                "Down": 1, # 페이지의 아래측 1-0 값으로, 1이면 모두, 0이면 없음
+                "TitlePages": [1], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지의 리스트
+                "IndexPages": [2, 3], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지 리스트
+                "DuplicatePage": [],  # {projectName}_Cropped.pdf 파일에서 중복되어 필요없는 페이지 리스트
+                "SettingCompletion": "세팅 완료 후 Completion으로 변경",
+                "PDFBookToTextCompletion": "세팅 완료 후 Completion으로 자동변경"
+            }
+        }
+        with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
+            json.dump(pdfBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
+ 
+    ## JSON 파일 불러오기
+    with open(JsonPath, 'r', encoding = 'utf-8') as json_file:
+        PDFBookToTextSetting = json.load(json_file)
 
-    InputList = []
-    if PDFBookToTextSetting['PDFBookToTextSetting']['SettingCompletion'] == 'Completion':
-        TitlePages = PDFBookToTextSetting['PDFBookToTextSetting']['TitlePages']
-        IndexPages = PDFBookToTextSetting['PDFBookToTextSetting']['IndexPages']
-        DuplicatePage = PDFBookToTextSetting['PDFBookToTextSetting']['DuplicatePage']
-        for i, BookText in enumerate(BookTextList, start = 1):
-            Input = {'Id': i, 'PageElement': '', 'Continue': BookText}
-            if BookText != '' and i not in DuplicatePage:
-                if i in TitlePages:
-                    Input['PageElement'] = 'Title'
-                    Input['Continue'] = f'{BookText}\n\n'
-                elif i in IndexPages:
-                    Input['PageElement'] = 'Index'
-                    Input['Continue'] = f'\n{BookText}\n'
-                elif (len(BookText) <= IndexLength) and ((len(BookText) >= 3 and '.' not in BookText[-3:]) or (len(BookText) < 3 and '.' not in BookText)):
-                    Input['PageElement'] = 'index'
-                    Input['Continue'] = f'\n\n{BookText}\n\n'
-                else:
-                    Input['PageElement'] = 'Body'
-                InputList.append(Input)
-        
-        # InputList 페이지별 단어 가장 앞/뒤 부분의 재배치
-        InputList = FixSplitWords(InputList)
-        # InputList의 Body부분 합치고 Id 재정렬
-        MergedInputList = MergeBodyElements(InputList)
-        
-        # JSON 파일로 저장
-        with open(os.path.join(TextOutputDir, f'{projectName}_BookPreprocess_InputList.json'), 'w', encoding = 'utf-8') as InputListJson:
-            json.dump(MergedInputList, InputListJson, ensure_ascii = False, indent = 4)
+    ## PDFBookToTextSetting.json 생성
+    if PDFBookToTextSetting['PDFBookToTextCompletion'] != 'Completion':
+        BookTextList, PDFBookToTextSetting, JsonPath = PDFBookToText(projectName, email, PDFBookToTextSetting)
+
+        InputList = []
+        if PDFBookToTextSetting['PDFBookToTextSetting']['SettingCompletion'] == 'Completion':
+            TitlePages = PDFBookToTextSetting['PDFBookToTextSetting']['TitlePages']
+            IndexPages = PDFBookToTextSetting['PDFBookToTextSetting']['IndexPages']
+            DuplicatePage = PDFBookToTextSetting['PDFBookToTextSetting']['DuplicatePage']
+            for i, BookText in enumerate(BookTextList, start = 1):
+                Input = {'Id': i, 'Continue': BookText, 'PageElement': ''}
+                if BookText != '' and i not in DuplicatePage:
+                    if i in TitlePages:
+                        Input['PageElement'] = 'Title'
+                        Input['Continue'] = f'{BookText}\n\n'
+                    elif i in IndexPages:
+                        Input['PageElement'] = 'Index'
+                        Input['Continue'] = f'\n{BookText}\n'
+                    elif (len(BookText) <= IndexLength) and ((len(BookText) >= 3 and '.' not in BookText[-3:]) or (len(BookText) < 3 and '.' not in BookText)):
+                        Input['PageElement'] = 'index'
+                        Input['Continue'] = f'\n\n{BookText}\n\n'
+                    else:
+                        Input['PageElement'] = 'Body'
+                    InputList.append(Input)
+            
+            # InputList 페이지별 단어 가장 앞/뒤 부분의 재배치
+            InputList = FixSplitWords(InputList)
+            # InputList의 Body부분 합치고 Id 재정렬
+            MergedInputList = MergeBodyElements(InputList)
+            
+            # JSON 파일로 저장
+            with open(os.path.join(TextOutputDir, f'{projectName}_BookPreprocess_InputList.json'), 'w', encoding = 'utf-8') as InputListJson:
+                json.dump(MergedInputList, InputListJson, ensure_ascii = False, indent = 4)
+            
+            # "PDFBookToTextCompletion" = Completion
+            PDFBookToTextSetting['PDFBookToTextCompletion'] = 'Completion'
+            # JSON 파일 저장
+            with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
+                json.dump(PDFBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
+        else:
+            sys.exit(f'[ PDF To Text 세팅을 완료하세요 : {JsonPath} ]')
     else:
-        sys.exit(f'[ PDF To Text 세팅을 완료하세요 : {JsonPath} ]')
-
-    return InputList
+        with open(os.path.join(TextOutputDir, f'{projectName}_BookPreprocess_InputList.json'), 'r', encoding = 'utf-8') as InputListJson:
+            MergedInputList = json.load(InputListJson)
+        
+    return MergedInputList
 
 ######################
 ##### Filter 조건 #####
@@ -264,26 +295,13 @@ def BookPreprocessFilter(responseData):
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"
-    # # Error3: 결과가 '말하는인물'이 '없음'일 때의 예외 처리 (없음일 경우에는 Narrator 낭독)
-    # for dic in OutputDic:
-    #     for key, value in dic.items():
-    #         if value['말하는인물'] == '없음' or value['말하는인물'] == '' or value['말하는인물'] == 'none':
-    #             return "'말하는인물': '없음' 오류 발생: NonValueError"
-    # Error4: 자료의 구조가 다를 때의 예외 처리
     for dic in OutputDic:
         try:
-            key = list(dic.keys())[0]
-            if not key in TalkTag:
+            if not '인공지능 음성 스크립트' in dic:
                 return "JSON에서 오류 발생: JSONKeyError"
-            else:
-                if not ('말의종류' in dic[key] and '말하는인물' in dic[key] and '말하는인물의성별' in dic[key] and '말하는인물의나이' in dic[key] and '말하는인물의감정' in dic[key] and '인물의역할' in dic[key] and '듣는인물' in dic[key]):
-                    return "JSON에서 오류 발생: JSONKeyError"
         # Error5: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
-    # Error6: Input과 Output의 개수가 다를 때의 예외처리
-    if len(OutputDic) != len(TalkTag):
-        return "JSONCount에서 오류 발생: JSONCountError"
 
     return {'json': outputJson, 'filter': OutputDic}
 
@@ -376,34 +394,28 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            PageElement = InputDic['PageElement']
             memoryCounter = ""
             outputEnder = ""
 
-            if PageElement == "Body":
-                # Response 생성
-                Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
-                
-                # OutputStarter, OutputEnder에 따른 Response 전처리
-                promptFrame = GetPromptFrame(Process)
-                if mode in ["Example", "ExampleFineTuning", "Master"]:
-                    Example = promptFrame[0]["Example"]
-                    if Response.startswith(Example[2]["OutputStarter"]):
-                        Response = Response.replace(Example[2]["OutputStarter"], "", 1)
-                    responseData = Example[2]["OutputStarter"] + Response
-                elif mode in ["Memory", "MemoryFineTuning"]:
-                    if Response.startswith("[" + outputEnder):
-                        responseData = Response
-                    else:
-                        if Response.startswith(outputEnder):
-                            Response = Response.replace(outputEnder, "", 1)
-                        responseData = outputEnder + Response
-                print(Response)
-                sys.exit()
-                        
-                Filter = BookPreprocessFilter(responseData)
-            else:
-                pass
+            # Response 생성
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            
+            # OutputStarter, OutputEnder에 따른 Response 전처리
+            promptFrame = GetPromptFrame(Process)
+            if mode in ["Example", "ExampleFineTuning", "Master"]:
+                Example = promptFrame[0]["Example"]
+                if Response.startswith(Example[2]["OutputStarter"]):
+                    Response = Response.replace(Example[2]["OutputStarter"], "", 1)
+                responseData = Example[2]["OutputStarter"] + Response
+            elif mode in ["Memory", "MemoryFineTuning"]:
+                if Response.startswith("[" + outputEnder):
+                    responseData = Response
+                else:
+                    if Response.startswith(outputEnder):
+                        Response = Response.replace(outputEnder, "", 1)
+                    responseData = outputEnder + Response
+                    
+            Filter = BookPreprocessFilter(responseData)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -456,7 +468,7 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
         outputMemoryDics.append(OutputDic)
         outputMemory = BookPreprocessOutputMemory(outputMemoryDics, MemoryLength)
         
-        SaveOutputMemory(projectName, email, outputMemoryDics, '02-1', DataFramePath)
+        SaveOutputMemory(projectName, email, outputMemoryDics, '00', DataFramePath)
     
     return outputMemoryDics
 
@@ -505,7 +517,7 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
 def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 00_BookPreprocessUpdate 시작 >")
     # BookPreprocess의 Count값 가져오기
-    ContinueCount, CharacterCount, Completion = BookPreprocessCountLoad(projectName, email)
+    PageCount, Completion = BookPreprocessCountLoad(projectName, email)
     if Completion == "No":
         
         if ExistedDataFrame != None:
@@ -565,6 +577,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-                    
-    # 예제 호출
-    BookPreprocessProcess(projectName, email, DataFramePath)

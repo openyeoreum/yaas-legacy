@@ -296,10 +296,10 @@ def AddBookPreprocessBookPagesToDB(projectName, email, PageId, PageElement, Scri
 def BookPreprocessCountLoad(projectName, email):
 
     project = GetProject(projectName, email)
-    PreprocessCount = project.BookPreprocessFrame[0]["PageCount"]
+    PageCount = project.BookPreprocessFrame[0]["PageCount"]
     Completion = project.BookPreprocessFrame[0]["Completion"]
     
-    return PreprocessCount, Completion
+    return PageCount, Completion
 
 ## 0-1. BookPreprocess의 초기화
 def InitBookPreprocess(projectName, email):

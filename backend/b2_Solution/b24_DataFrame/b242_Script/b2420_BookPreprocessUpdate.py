@@ -518,12 +518,13 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
         # BookPreprocess의 Count값 가져오기
         PageCount, Completion = BookPreprocessCountLoad(projectName, email)
         if Completion == "No":
+            
             if ExistedDataFrame != None:
                 # 이전 작업이 존재할 경우 가져온 뒤 업데이트
                 AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame)
                 AddExistedDataSetToDB(projectName, email, "BookPreprocess", ExistedDataSet)
                 print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
-                sys.exit(f"[ (({projectName}_Index.txt)), (({projectName}_Body.txt)) 파일을 완성하여 아래 경로에 옮겨주세요. ]\n{TextDirPath}\n")
+                sys.exit(f"\n\n[ (({projectName}_Index.txt)), (({projectName}_Body.txt)) 파일을 완성하여 아래 경로에 복사해주세요. ]\n{TextDirPath}\n\n")
             else:
                 responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
                 
@@ -538,7 +539,7 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
                 # i값 수동 생성
                 i = 0
                 for Update in UpdateTQDM:
-                    UpdateTQDM.set_description(f'BookPreprocessUpdate: {Update}')
+                    UpdateTQDM.set_description(f'BookPreprocessUpdate: {Update["Script"][:10]}...')
                     time.sleep(0.0001)
                     PageId = Update["PageId"]
                     PageElement = Update["PageElement"]
@@ -552,10 +553,10 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
                 # Completion "Yes" 업데이트
                 BookPreprocessCompletionUpdate(projectName, email)
                 print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate 완료 ]\n")
-                sys.exit(f"[ (({projectName}_Index.txt)), (({projectName}_Body.txt)) 파일을 완성하여 아래 경로에 옮겨주세요. ]\n{TextDirPath}\n")
         else:
             print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 이미 완료됨 ]\n")
-            sys.exit(f"[ (({projectName}_Index.txt)), (({projectName}_Body.txt)) 파일을 완성하여 아래 경로에 옮겨주세요. ]\n{TextDirPath}\n")
+    else:
+        print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
         
 if __name__ == "__main__":
 

@@ -13,14 +13,22 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 
 # IndexText 로드
 def LoadIndexText(projectName, email):
+    # 경로 설정
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
+    IndexTextFilePath = TextDirPath + f'/{projectName}_Index.txt'
+    BodyTextFilePath = TextDirPath + f'/{projectName}_Body.txt'
+    
     project = GetProject(projectName, email)
     indexText = project.IndexText
-    _IndexText = indexText.replace('.', '_')
-    _IndexText = _IndexText.replace('!', '_')
-    _IndexText = _IndexText.replace('?', '_')
-    _IndexText = _IndexText.replace("'", '|').replace('’', '|').replace('‘', '|')
-    _IndexText = _IndexText.replace('"', '|').replace('“', '|').replace('”', '|')
-    _IndexText = _IndexText.replace('/', '&')
+    if indexText is None:
+      sys.exit(f"\n\n[ (({projectName}_Index.txt)), (({projectName}_Body.txt)) 파일을 완성하여 아래 경로에 옮겨주세요. ]\n{TextDirPath}\n\n")
+    else:
+      _IndexText = indexText.replace('.', '_')
+      _IndexText = _IndexText.replace('!', '_')
+      _IndexText = _IndexText.replace('?', '_')
+      _IndexText = _IndexText.replace("'", '|').replace('’', '|').replace('‘', '|')
+      _IndexText = _IndexText.replace('"', '|').replace('“', '|').replace('”', '|')
+      _IndexText = _IndexText.replace('/', '&')
     
     return _IndexText
 

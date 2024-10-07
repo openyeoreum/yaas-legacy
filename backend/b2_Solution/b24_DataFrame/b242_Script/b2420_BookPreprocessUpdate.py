@@ -120,7 +120,7 @@ def PDFBookToText(projectName, email, PDFBookToTextSetting):
             with open(text_filename, 'w', encoding = 'utf-8') as text_file:
                 text_file.write(text)
                 
-    return BookTextList, PDFBookToTextSetting
+    return BookTextList
 
 ## InputList 페이지별 단어 가장 앞/뒤 부분의 재배치
 def FixSplitWords(InputList):
@@ -164,8 +164,8 @@ def MergeBodyElements(InputList):
                 # Merge the current and next Body elements
                 merged_element = {
                     "Id": new_id,
-                    "PageElement": "Body",
-                    "Continue": current_element["Continue"] + InputList[i + 1]["Continue"]
+                    "Continue": current_element["Continue"] + InputList[i + 1]["Continue"],
+                    "PageElement": "Body"
                 }
                 MergedInputList.append(merged_element)
                 new_id += 1
@@ -189,7 +189,7 @@ def MergeBodyElements(InputList):
 def BookPreprocessInputList(projectName, email, IndexLength = 50):
     # 경로 설정
     TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
-    JsonPath = os.path.join(TextDirPath, f'[{projectName}_PDFToTextSetting].json')
+    JsonPath = os.path.join(TextDirPath, f'[{projectName}_PDFSetting].json')
     TextOutputDir = TextDirPath + f'/{projectName}_Text'
     ## JSON 파일이 없으면 생성
     if not os.path.exists(JsonPath):
@@ -214,12 +214,12 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
             json.dump(pdfBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
  
     ## JSON 파일 불러오기
-    with open(JsonPath, 'r', encoding = 'utf-8') as json_file:
+    with open(JsonPath, 'r', encoding='utf-8') as json_file:
         PDFBookToTextSetting = json.load(json_file)
 
     ## PDFBookToTextSetting.json 생성
-    if PDFBookToTextSetting['PDFBookToTextCompletion'] != 'Completion':
-        BookTextList, PDFBookToTextSetting, JsonPath = PDFBookToText(projectName, email, PDFBookToTextSetting)
+    if PDFBookToTextSetting['PDFBookToTextSetting']['PDFBookToTextCompletion'] != 'Completion':
+        BookTextList = PDFBookToText(projectName, email, PDFBookToTextSetting)
 
         InputList = []
         if PDFBookToTextSetting['PDFBookToTextSetting']['SettingCompletion'] == 'Completion':
@@ -227,17 +227,17 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
             IndexPages = PDFBookToTextSetting['PDFBookToTextSetting']['IndexPages']
             DuplicatePage = PDFBookToTextSetting['PDFBookToTextSetting']['DuplicatePage']
             for i, BookText in enumerate(BookTextList, start = 1):
-                Input = {'Id': i, 'Continue': BookText, 'PageElement': ''}
+                Input = {'Id': i, 'Continue': BookText, 'PageElement': None}
                 if BookText != '' and i not in DuplicatePage:
                     if i in TitlePages:
-                        Input['PageElement'] = 'Title'
                         Input['Continue'] = f'{BookText}\n\n'
+                        Input['PageElement'] = 'Title'
                     elif i in IndexPages:
-                        Input['PageElement'] = 'Index'
                         Input['Continue'] = f'\n{BookText}\n'
+                        Input['PageElement'] = 'Index'
                     elif (len(BookText) <= IndexLength) and ((len(BookText) >= 3 and '.' not in BookText[-3:]) or (len(BookText) < 3 and '.' not in BookText)):
-                        Input['PageElement'] = 'index'
                         Input['Continue'] = f'\n\n{BookText}\n\n'
+                        Input['PageElement'] = 'index'
                     else:
                         Input['PageElement'] = 'Body'
                     InputList.append(Input)
@@ -246,13 +246,18 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
             InputList = FixSplitWords(InputList)
             # InputList의 Body부분 합치고 Id 재정렬
             MergedInputList = MergeBodyElements(InputList)
+            # InputList의 정렬
+            ArraiedInputList = []
+            for InputList in MergedInputList:
+                ArraiedInput = {'Id': InputList['Id'], 'Continue': InputList['Continue'], 'PageElement': InputList['PageElement']}
+                ArraiedInputList.append(ArraiedInput)
             
             # JSON 파일로 저장
             with open(os.path.join(TextOutputDir, f'{projectName}_BookPreprocess_InputList.json'), 'w', encoding = 'utf-8') as InputListJson:
-                json.dump(MergedInputList, InputListJson, ensure_ascii = False, indent = 4)
+                json.dump(ArraiedInputList, InputListJson, ensure_ascii = False, indent = 4)
             
             # "PDFBookToTextCompletion" = Completion
-            PDFBookToTextSetting['PDFBookToTextCompletion'] = 'Completion'
+            PDFBookToTextSetting['PDFBookToTextSetting']['PDFBookToTextCompletion'] = 'Completion'
             # JSON 파일 저장
             with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
                 json.dump(PDFBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
@@ -260,9 +265,9 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
             sys.exit(f'[ PDF To Text 세팅을 완료하세요 : {JsonPath} ]')
     else:
         with open(os.path.join(TextOutputDir, f'{projectName}_BookPreprocess_InputList.json'), 'r', encoding = 'utf-8') as InputListJson:
-            MergedInputList = json.load(InputListJson)
+            ArraiedInputList = json.load(InputListJson)
         
-    return MergedInputList
+    return ArraiedInputList
 
 ######################
 ##### Filter 조건 #####
@@ -298,6 +303,7 @@ def BookPreprocessInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryList = []
     for inputmeMory in inputMemoryDic:
         key = list(inputmeMory.keys())[1]  # 두 번째 키값
+        print(inputmeMory)
         if key == "Continue":
             inputMemoryList.append(inputmeMory['Continue'])
         else:

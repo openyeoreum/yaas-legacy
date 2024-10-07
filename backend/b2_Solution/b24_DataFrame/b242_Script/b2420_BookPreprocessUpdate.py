@@ -343,7 +343,7 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
     inputList = BookPreprocessInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
-        return OutputMemoryDicsFile
+        return OutputMemoryDicsFile, inputList
 
     TotalCount = 0
     ProcessCount = 1
@@ -459,7 +459,7 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
         
         SaveOutputMemory(projectName, email, outputMemoryDics, '00', DataFramePath)
     
-    return outputMemoryDics
+    return outputMemoryDics, inputList
 
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
@@ -467,93 +467,95 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
     
 ## 데이터 치환
 def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
-    # Chunk, ChunkId 데이터 추출
-    project = GetProject(projectName, email)
-    BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    CharacterTagChunk = []
-    CharacterTagChunkId = []
-    for i in range(len(BodyFrame)):
-        for j in range(len(BodyFrame[i]['SplitedBodyChunks'])):
-            if BodyFrame[i]['SplitedBodyChunks'][j]['Tag'] == "Character":
-                CharacterTagChunk.append(BodyFrame[i]['SplitedBodyChunks'][j]['Chunk'])
-                CharacterTagChunkId.append(BodyFrame[i]['SplitedBodyChunks'][j]['ChunkId'])
-    
+    # 경로 설정
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
+    TextOutputDir = TextDirPath + f'/{projectName}_Text'
+    _IndexTextFilePath = TextOutputDir + f'/{projectName}_Index.txt'
+    _BodyTextFilePath = TextOutputDir + f'/{projectName}_Body.txt'
     # 데이터 치환
-    outputMemoryDics = BookPreprocessProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics, inputList = BookPreprocessProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
-    responseJson = []
-    responseCount = 0
+    responseJson = []    
+    for i in range(len(outputMemoryDics)):
+        PageId = inputList[i]['Id']
+        PageElement = inputList[i]['PageElement']
+        Script = outputMemoryDics[i][0]['인공지능 음성 스크립트']
+        responseJson.append({"PageId": PageId, "PageElement": PageElement, "Script": Script})
     
-    for response in outputMemoryDics:
-        if response != "Pass":
-            for dic in response:
-                ChunkId = CharacterTagChunkId[responseCount]
-                Chunk = CharacterTagChunk[responseCount]
-                for key, value in dic.items():
-                    Character = value['말하는인물']
-                    Type = value['말의종류']
-                    Gender = value['말하는인물의성별']
-                    Age = value['말하는인물의나이']
-                    Emotion = value['말하는인물의감정']
-                    Role = value['인물의역할']
-                    Listener = value['듣는인물']
-                responseCount += 1
-                responseJson.append({"ChunkId": ChunkId, "Chunk": Chunk, "Character": Character, "Type": Type, "Gender": Gender, "Age": Age, "Emotion": Emotion, "Role": Role, "Listener": Listener})
-    
+    ## IndexText와 BodyText 저장
+    if not (os.path.exists(_IndexTextFilePath) and os.path.exists(_BodyTextFilePath)):
+        IndexText = ''
+        BodyText = ''
+        for Response in responseJson:
+            PageElement = Response['PageElement']
+            Script = Response['Script']
+            if PageElement == 'Index':
+                IndexText += f'{Script}\n'
+            elif PageElement == 'Title':
+                BodyText += f'{Script}\n\n'
+            elif PageElement == 'index':
+                BodyText += f'\n\n{Script}\n\n'
+            elif PageElement == 'Body':
+                BodyText += f'{Script} '
+        
+        with open(_IndexTextFilePath, 'w', encoding='utf-8') as file:
+            file.write(IndexText)
+        with open(_BodyTextFilePath, 'w', encoding='utf-8') as file:
+            file.write(BodyText)
+            
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 BookPreprocess에 업데이트
 def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
-    print(f"< User: {email} | Project: {projectName} | 00_BookPreprocessUpdate 시작 >")
-    # BookPreprocess의 Count값 가져오기
-    PageCount, Completion = BookPreprocessCountLoad(projectName, email)
-    if Completion == "No":
+    # 경로 설정
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
+    IndexTextFilePath = TextDirPath + f'/{projectName}_Index.txt'
+    BodyTextFilePath = TextDirPath + f'/{projectName}_Body.txt'
+    
+    if not (os.path.exists(IndexTextFilePath) and os.path.exists(BodyTextFilePath)):
         
-        if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "BookPreprocess", ExistedDataSet)
-            print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
-        else:
-            responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
-            
-            # ResponseJson을 ContinueCount로 슬라이스
-            ResponseJson = responseJson[ContinueCount:]
-            ResponseJsonCount = len(ResponseJson)
-            
-            CharacterChunkId = ContinueCount
-            
-            # TQDM 셋팅
-            UpdateTQDM = tqdm(ResponseJson,
-                            total = ResponseJsonCount,
-                            desc = 'BookPreprocessUpdate')
-            # i값 수동 생성
-            i = 0
-            for Update in UpdateTQDM:
-                UpdateTQDM.set_description(f'BookPreprocessUpdate: {Update}')
-                time.sleep(0.0001)
-                CharacterChunkId += 1
-                ChunkId = Update["ChunkId"]
-                Chunk = Update["Chunk"]
-                Character = Update["Character"]
-                Type = Update["Type"]
-                Gender = Update["Gender"]
-                Age = Update["Age"]
-                Emotion = Update["Emotion"]
-                Role = Update["Role"]
-                Listener = Update["Listener"]
+        print(f"< User: {email} | Project: {projectName} | 00_BookPreprocessUpdate 시작 >")
+        # BookPreprocess의 Count값 가져오기
+        PageCount, Completion = BookPreprocessCountLoad(projectName, email)
+        if Completion == "No":
+            if ExistedDataFrame != None:
+                # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+                AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame)
+                AddExistedDataSetToDB(projectName, email, "BookPreprocess", ExistedDataSet)
+                print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
+                sys.exit(f"[ (({projectName}_Index.txt)), (({projectName}_Body.txt)) 파일을 완성하여 아래 경로에 옮겨주세요. ]\n{TextDirPath}\n")
+            else:
+                responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
                 
-                AddBookPreprocessChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
-                # i값 수동 업데이트
-                i += 1
-            
-            UpdateTQDM.close()
-            # Completion "Yes" 업데이트
-            BookPreprocessCompletionUpdate(projectName, email)
-            print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate 완료 ]\n")
-        
-    else:
-        print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 이미 완료됨 ]\n")
+                # ResponseJson을 ContinueCount로 슬라이스
+                ResponseJson = responseJson[PageCount:]
+                ResponseJsonCount = len(ResponseJson)
+
+                # TQDM 셋팅
+                UpdateTQDM = tqdm(ResponseJson,
+                                total = ResponseJsonCount,
+                                desc = 'BookPreprocessUpdate')
+                # i값 수동 생성
+                i = 0
+                for Update in UpdateTQDM:
+                    UpdateTQDM.set_description(f'BookPreprocessUpdate: {Update}')
+                    time.sleep(0.0001)
+                    PageId = Update["PageId"]
+                    PageElement = Update["PageElement"]
+                    Script = Update["Script"]
+                    
+                    AddBookPreprocessBookPagesToDB(projectName, email, PageId, PageElement, Script)
+                    # i값 수동 업데이트
+                    i += 1
+                
+                UpdateTQDM.close()
+                # Completion "Yes" 업데이트
+                BookPreprocessCompletionUpdate(projectName, email)
+                print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate 완료 ]\n")
+                sys.exit(f"[ (({projectName}_Index.txt)), (({projectName}_Body.txt)) 파일을 완성하여 아래 경로에 옮겨주세요. ]\n{TextDirPath}\n")
+        else:
+            print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 이미 완료됨 ]\n")
+            sys.exit(f"[ (({projectName}_Index.txt)), (({projectName}_Body.txt)) 파일을 완성하여 아래 경로에 옮겨주세요. ]\n{TextDirPath}\n")
         
 if __name__ == "__main__":
 

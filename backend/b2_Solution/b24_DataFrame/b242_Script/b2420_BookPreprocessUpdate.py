@@ -683,7 +683,7 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
             ]
         
         BodyText = SplitLongDialogues(BodyText, EndPunctuation)
-        BodyText = SplitLongDialogues(BodyText, EndPunctuation)
+        BodyText = SplitLongSentences(BodyText, EndPunctuation)
         
         with open(_IndexTextFilePath, 'w', encoding = 'utf-8') as file:
             file.write(IndexText)

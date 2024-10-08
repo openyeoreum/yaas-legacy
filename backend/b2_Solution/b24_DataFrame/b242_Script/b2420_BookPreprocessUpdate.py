@@ -103,9 +103,11 @@ def PDFBookToText(projectName, email, PDFBookToTextSetting):
     PDFBookToTextSetting = PDFBookCropping(projectName, email, PDFBookToTextSetting, TextDirPath)
     # 텍스트 출력 폴더 생성
     os.makedirs(TextOutputDir, exist_ok = True)
+    os.makedirs(os.path.join(TextOutputDir, f'{projectName}_Pages'), exist_ok = True)
 
     # PDF 파일 열기
     BookTextList = []
+    
     with pdfplumber.open(CroppedPDFPath) as pdf:
         for i, page in enumerate(pdf.pages, start = 1):
             # 페이지의 bbox 좌표 가져오기
@@ -115,7 +117,7 @@ def PDFBookToText(projectName, email, PDFBookToTextSetting):
             # 텍스트 추출
             text = cropped_page.extract_text()
             # 각 페이지의 텍스트를 파일로 저장
-            text_filename = os.path.join(TextOutputDir, f'{projectName}_Page_{i}.txt')
+            text_filename = os.path.join(TextOutputDir, f'{projectName}_Pages', f'{projectName}_Page_{i}.txt')
             BookTextList.append(text)
             with open(text_filename, 'w', encoding = 'utf-8') as text_file:
                 text_file.write(text)
@@ -253,7 +255,7 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
                 ArraiedInputList.append(ArraiedInput)
             
             # JSON 파일로 저장
-            with open(os.path.join(TextOutputDir, f'{projectName}_BookPreprocess_InputList.json'), 'w', encoding = 'utf-8') as InputListJson:
+            with open(os.path.join(TextOutputDir, f'{projectName}_InputList.json'), 'w', encoding = 'utf-8') as InputListJson:
                 json.dump(ArraiedInputList, InputListJson, ensure_ascii = False, indent = 4)
             
             # "PDFBookToTextCompletion" = Completion
@@ -264,7 +266,7 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
         else:
             sys.exit(f'\n[ (([{projectName}_PDFSetting.json])) 세팅을 완료하세요 ]\n({JsonPath})\n')
     else:
-        with open(os.path.join(TextOutputDir, f'{projectName}_BookPreprocess_InputList.json'), 'r', encoding = 'utf-8') as InputListJson:
+        with open(os.path.join(TextOutputDir, f'{projectName}_InputList.json'), 'r', encoding = 'utf-8') as InputListJson:
             ArraiedInputList = json.load(InputListJson)
         
     return ArraiedInputList
@@ -464,7 +466,92 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
-    
+## _Body(검수용).txt 생성 함수
+def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
+    text = BodyText
+
+    # 큰 따옴표 시작(“)의 개수를 카운트합니다.
+    start_quote_count = text.count('“')
+    # 큰 따옴표 끝(”)의 개수를 카운트합니다.
+    end_quote_count = text.count('”')
+
+    # 패턴을 정의합니다: “로 시작하고 ”로 끝나는 부분을 찾습니다.
+    # 큰 따옴표 끝이 없을 수도 있으므로, 이를 고려하여 패턴을 작성합니다.
+    pattern = r'“(.*?)”'
+
+    # 정규식을 사용하여 매칭되는 부분을 찾습니다.
+    matches = list(re.finditer(pattern, text))
+
+    # 만약 큰 따옴표 끝(”)이 없는 경우를 처리하기 위해 시작 따옴표 위치를 모두 찾습니다.
+    start_positions = [m.start() for m in re.finditer('“', text)]
+
+    # 처리된 텍스트를 저장할 변수를 초기화합니다.
+    processed_text = ''
+    last_pos = 0
+    quote_number = 1
+
+    # 이미 매칭된 위치의 끝 인덱스를 저장합니다.
+    matched_ends = set()
+
+    for match in matches:
+        start, end = match.span()
+        matched_ends.add(end)
+
+        segmentN = text[last_pos:start]
+        MarkN = ''
+        if '”' in segmentN:
+            MarkN = '***'
+        segmentQ = match.group()
+        MarkQ = ''
+        if segmentQ.count('“') >= 2:
+            MarkQ = '***'
+
+        # 이전 위치부터 현재 매칭 시작 지점까지의 텍스트를 추가합니다.
+        processed_text += f'{MarkN}{segmentN}'
+        
+        # 큰 따옴표 시작 부분 처리
+        processed_text += '\n\n'
+        processed_text += f'{MarkQ}({quote_number}): '
+        processed_text += segmentQ
+        processed_text += '\n\n'
+        
+        # 인덱스와 위치 업데이트
+        quote_number += 1
+        last_pos = end
+
+    # 큰 따옴표 끝(”)이 없는 시작 따옴표를 처리합니다.
+    for pos in start_positions:
+        if pos < last_pos:
+            continue  # 이미 처리된 시작 따옴표는 건너뜁니다.
+        # 다음 큰 따옴표 시작 위치 또는 텍스트의 끝까지를 가져옵니다.
+        next_start = text.find('“', pos + 1)
+        if next_start == -1:
+            next_start = len(text)
+        # 시작 따옴표부터 다음 시작 따옴표 전까지의 텍스트를 가져옵니다.
+        segmentQ = text[pos:next_start]
+        segmentN = text[last_pos:pos]
+        # 이전 위치부터 현재 시작 따옴표까지의 텍스트를 추가합니다.
+        processed_text += segmentN
+        # 큰 따옴표 시작 부분 처리
+        processed_text += '\n\n'
+        processed_text += f'***({quote_number}): '
+        processed_text += segmentQ
+        processed_text += '\n\n'
+        # 인덱스와 위치 업데이트
+        quote_number += 1
+        last_pos = next_start
+
+    # 남은 텍스트를 추가합니다.
+    processed_text += text[last_pos:]
+
+    # 검수용 파일의 첫 줄 작성
+    inspection_text = f'[큰 따옴표 시작(“) 개수 : {start_quote_count}, 큰 따옴표 끝(”) 개수 : {end_quote_count}, ***가 표시된 부분을 잘 확인]\n\n'
+    inspection_text += processed_text
+
+    # 검수용 파일 저장
+    with open(_BodyTextInspectionFilePath, 'w', encoding='utf-8') as file:
+        file.write(inspection_text)
+
 ## 데이터 치환
 def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # 경로 설정
@@ -472,6 +559,7 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
     TextOutputDir = TextDirPath + f'/{projectName}_Text'
     _IndexTextFilePath = TextOutputDir + f'/{projectName}_Index.txt'
     _BodyTextFilePath = TextOutputDir + f'/{projectName}_Body.txt'
+    _BodyTextInspectionFilePath = TextOutputDir + f'/{projectName}_Body(검수용).txt'
     # 데이터 치환
     outputMemoryDics, inputList = BookPreprocessProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
@@ -503,6 +591,7 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
             file.write(IndexText)
         with open(_BodyTextFilePath, 'w', encoding='utf-8') as file:
             file.write(BodyText)
+        BodyTextInspection(BodyText, _BodyTextInspectionFilePath)
             
     return responseJson
 
@@ -525,7 +614,7 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
                 AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame)
                 AddExistedDataSetToDB(projectName, email, "BookPreprocess", ExistedDataSet)
                 print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
-                sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n")
+                sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치\n2.\n3. 본문(_Body)파일 내 쌍따옴표(\"대화문\") 개수 일치 * _Body(검수용) 파일 확인\n\n")
             else:
                 responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
                 

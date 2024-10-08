@@ -552,6 +552,75 @@ def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
     with open(_BodyTextInspectionFilePath, 'w', encoding='utf-8') as file:
         file.write(inspection_text)
 
+## BodyText 긴 대화문장 사이 분할 생성 함수
+def SplitLongDialogues(BodyText, EndPunctuation):
+    # 대화문을 찾는 정규 표현식 패턴
+    dialogue_pattern = r'“([^”]+)”'
+
+    def SplitDialogue(dialogue):
+        if len(dialogue) <= 100:
+            return f'“{dialogue}”'
+        
+        parts = []
+        current_part = ""
+        for i, char in enumerate(dialogue):
+            current_part += char
+            if len(current_part) >= 80 and any(current_part.endswith(p) for p in EndPunctuation):
+                parts.append(current_part.strip())
+                current_part = ""
+        
+        # 마지막 부분이 남아 있으면 추가
+        if current_part:
+            parts.append(current_part.strip())
+        # 각 부분을 " "로 연결
+        return '” “'.join([f'“{part}”' for part in parts])
+
+    # 대화문을 찾고 분리 후 다시 합침
+    SplitedBodyText = re.sub(dialogue_pattern, lambda match: SplitDialogue(match.group(1)), BodyText)
+    
+    return SplitedBodyText
+
+## BodyText 긴 일반문장 사이 분할 생성 함수
+def SplitLongSentences(BodyText, EndPunctuation):   
+    # 중간에 분할 가능한 패턴들
+    SplitablePhrases = [
+        '데 ', '고 ', '로 ', '며 ', '서 ', '지 ', '게 ', '을 ', 
+        '는 ', '이 ', '가 ', '니 ', '도 ', '와 ', '과 ', '의 ', 
+        '서 ', '럼 ', '에 ', '큼 ', '만 ', '뿐 ', '때 ', '것 '
+    ]
+
+    def SplitSentence(sentence):
+        if len(sentence) <= 200:
+            return sentence
+        
+        current_part = ""
+        count_since_split = 0  # 80자 카운트를 위한 변수
+        i = 0
+        
+        while i < len(sentence):
+            current_part += sentence[i]
+            count_since_split += 1
+            
+            # 80자 이후에 splitable_phrases에 해당하는 패턴을 찾음
+            if count_since_split >= 100:
+                for phrase in SplitablePhrases:
+                    if current_part.endswith(phrase):
+                        # 패턴을 찾으면 그 위치에서 문장을 분할
+                        split_idx = len(current_part)
+                        return current_part[:split_idx] + '∨∨' + SplitSentence(sentence[split_idx:].strip())
+            i += 1
+        
+        return sentence
+
+    # end_punctuation으로 문장을 분리
+    sentence_pattern = '|'.join(map(re.escape, EndPunctuation))
+    sentences = re.split(f'(?<={sentence_pattern})', BodyText)
+    
+    # 각 문장을 처리하고 다시 합침
+    SplitedBodyText = ''.join([SplitSentence(sentence) for sentence in sentences])
+    
+    return SplitedBodyText
+
 ## 데이터 치환
 def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # 경로 설정
@@ -587,9 +656,38 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
             elif PageElement == 'Body':
                 BodyText += f'{Script} '
         
-        with open(_IndexTextFilePath, 'w', encoding='utf-8') as file:
+            ## 문장종결 부호, 아래 함수들에 필요
+            EndPunctuation = [
+                '다.', '다!', '다?', 
+                '나.', '나!', '나?', 
+                '까.', '까!', '까?', 
+                '요.', '요!', '요?', 
+                '죠.', '죠!', '죠?', 
+                '듯.', '듯!', '듯?', 
+                '것.', '것!', '것?', 
+                '라.', '라!', '라?', 
+                '가.', '가!', '가?', 
+                '니.', '니!', '니?', 
+                '군.', '군!', '군?', 
+                '오.', '오!', '오?', 
+                '자.', '자!', '자?', 
+                '네.', '네!', '네?', 
+                '소.', '소!', '소?', 
+                '지.', '지!', '지?', 
+                '어.', '어!', '어?', 
+                '봐.', '봐!', '봐?', 
+                '해.', '해!', '해?', 
+                '야.', '야!', '야?', 
+                '아.', '아!', '아?', 
+                '든.', '든!', '든?'
+            ]
+        
+        BodyText = SplitLongDialogues(BodyText, EndPunctuation)
+        BodyText = SplitLongDialogues(BodyText, EndPunctuation)
+        
+        with open(_IndexTextFilePath, 'w', encoding = 'utf-8') as file:
             file.write(IndexText)
-        with open(_BodyTextFilePath, 'w', encoding='utf-8') as file:
+        with open(_BodyTextFilePath, 'w', encoding = 'utf-8') as file:
             file.write(BodyText)
         BodyTextInspection(BodyText, _BodyTextInspectionFilePath)
             

@@ -21,7 +21,7 @@ def LoadIndexText(projectName, email):
     project = GetProject(projectName, email)
     indexText = project.IndexText
     if indexText is None:
-      sys.exit(f"\n\n[ (({projectName}_Index.txt)), (({projectName}_Body.txt)) 파일을 완성하여 아래 경로에 복사해주세요. ]\n{TextDirPath}\n\n")
+      sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n")
     else:
       _IndexText = indexText.replace('.', '_')
       _IndexText = _IndexText.replace('!', '_')

@@ -26,7 +26,7 @@ def ExistenceOrNotTextFile(projectName, email):
     if os.path.exists(PDFFileSourcePath) or (os.path.exists(IndexFileSourcePath) and os.path.exists(BodyFileSourcePath)):
         pass
     else:
-        sys.exit(f"\n[ 아래 폴더에 {projectName + '.pdf'} 또는 {projectName + '_Index.txt'} + {projectName + '_Body.txt'} 파일을 넣어주세요 ]\n{ScriptFilesPath}")
+        sys.exit(f"\n[ 아래 폴더에 ((({projectName + '.pdf'}))) 또는 ((({projectName + '_Index.txt'} + {projectName + '_Body.txt'}))) 파일을 넣어주세요 ]\n({ScriptFilesPath})")
 
 def AddTextToDB(projectName, email):
     with get_db() as db:

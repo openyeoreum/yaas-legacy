@@ -262,7 +262,7 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
             with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
                 json.dump(PDFBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
         else:
-            sys.exit(f'[ PDF To Text 세팅을 완료하세요 : {JsonPath} ]')
+            sys.exit(f'\n[ (([{projectName}_PDFSetting.json])) 세팅을 완료하세요 ]\n({JsonPath})\n')
     else:
         with open(os.path.join(TextOutputDir, f'{projectName}_BookPreprocess_InputList.json'), 'r', encoding = 'utf-8') as InputListJson:
             ArraiedInputList = json.load(InputListJson)
@@ -525,7 +525,7 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
                 AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame)
                 AddExistedDataSetToDB(projectName, email, "BookPreprocess", ExistedDataSet)
                 print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
-                sys.exit(f"\n\n[ (({projectName}_Index.txt)), (({projectName}_Body.txt)) 파일을 완성하여 아래 경로에 복사해주세요. ]\n{TextDirPath}\n\n")
+                sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n")
             else:
                 responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
                 

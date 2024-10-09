@@ -21,7 +21,7 @@ def LoadIndexText(projectName, email):
     project = GetProject(projectName, email)
     indexText = project.IndexText
     if indexText is None:
-      sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치\n2. 본문(_Body)파일 내 쌍따옴표(\"대화문\") 개수 일치 * _Body(검수용) 파일 확인\n\n")
+      sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n2. 본문(_Body)파일 내 쌍따옴표(“대화문”의 완성) 개수 일치 * _Body(검수용) 파일 확인\n\n")
     else:
       _IndexText = indexText.replace('.', '_')
       _IndexText = _IndexText.replace('!', '_')

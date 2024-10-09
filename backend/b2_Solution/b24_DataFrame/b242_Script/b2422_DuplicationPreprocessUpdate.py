@@ -211,8 +211,10 @@ def ScriptsDicListToInputList(projectName, email):
         Input = Input.replace('/', '◎')
         Input = Input.replace('<', '(')
         Input = Input.replace('>', ')')
+        Script = Input
+        Input = Input.replace('∨∨', '')
 
-        InputList.append({'Id': i + 1, 'Index': ScriptsDicList[i]['Index'], 'Continue': Input})
+        InputList.append({'Id': i + 1, 'Index': ScriptsDicList[i]['Index'], 'Continue': Input, 'Script': Script})
         
     return InputList
 
@@ -352,6 +354,7 @@ def DuplicationPreprocessProcess(projectName, email, DataFramePath, Process = "D
         if "Continue" in InputDic:
             Input = InputDic['Continue']
             Index = InputDic['Index']
+            Script = InputDic['Script']
             memoryCounter = " - 중요사항 | '중복수정전'과 '중복수정후'는 내용과 서술을 변경하여 글을 바꾸는 것이 절대로 아니며, 단순히 이어서 2번 이상 낭독되는 번역, 약어, 발음, 기타를 찾아서 작성하는 것 | 중복수정이 없을 경우는 {'중복수정': []}로 작성 -\n"
             outputEnder = ""
 
@@ -373,7 +376,7 @@ def DuplicationPreprocessProcess(projectName, email, DataFramePath, Process = "D
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                     
-            Filter = DuplicationPreprocessFilter(responseData, Input, Index)
+            Filter = DuplicationPreprocessFilter(responseData, Script, Index)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -429,6 +432,7 @@ def DuplicationPreprocessProcess(projectName, email, DataFramePath, Process = "D
         SaveOutputMemory(projectName, email, outputMemoryDics, '02-1', DataFramePath)
     
     return outputMemoryDics
+
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################

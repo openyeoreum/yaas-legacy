@@ -596,12 +596,12 @@ def SplitLongSentences(BodyText, EndPunctuation):
     # 중간에 분할 가능한 패턴들
     SplitablePhrases = [
         '데 ', '고 ', '로 ', '며 ', '서 ', '지 ', '게 ', '을 ', 
-        '는 ', '이 ', '가 ', '니 ', '도 ', '와 ', '과 ', '의 ', 
-        '서 ', '럼 ', '에 ', '큼 ', '만 ', '뿐 ', '때 ', '것 '
+        '이 ', '가 ', '니 ', '도 ', '와 ', '과 ', '의 ', 
+        '서 ', '럼 ', '에 ', '큼 ', '만 ', '뿐 ', '때 ', '것 ', ','
     ]
 
     def SplitSentence(sentence):
-        if len(sentence) <= 200:
+        if len(sentence) <= 300:
             return sentence
         
         current_part = ""
@@ -613,7 +613,7 @@ def SplitLongSentences(BodyText, EndPunctuation):
             count_since_split += 1
             
             # 80자 이후에 splitable_phrases에 해당하는 패턴을 찾음
-            if count_since_split >= 100:
+            if count_since_split >= 200:
                 for phrase in SplitablePhrases:
                     if current_part.endswith(phrase):
                         # 패턴을 찾으면 그 위치에서 문장을 분할
@@ -631,6 +631,45 @@ def SplitLongSentences(BodyText, EndPunctuation):
     SplitedBodyText = ''.join([SplitSentence(sentence) for sentence in sentences])
     
     return SplitedBodyText
+
+## BodyText 긴 문단 분할 생성 함수
+def SplitParagraphs(BodyText, EnterEndPunctuation, max_length = 3000):
+    paragraphs = []
+    start = 0
+    in_quote = False
+    current_length = 0
+    
+    for i in range(len(BodyText)):
+        # 따옴표 시작과 끝 구간을 확인
+        if BodyText[i] == '“':
+            in_quote = True
+        elif BodyText[i] == '”':
+            in_quote = False
+        # 줄바꿈 문자를 만나면 길이 제한을 초기화
+        if BodyText[i] == '\n':
+            current_length = 0
+            continue
+        # 따옴표 밖에서만 작업을 수행
+        if not in_quote:
+            current_length += 1
+            
+            if current_length >= max_length:
+                # 가능한 구두점에서 문단 나누기
+                for p in EnterEndPunctuation:
+                    if BodyText[i-len(p)+1:i+1] == p:
+                        paragraphs.append(BodyText[start:i+1].strip())
+                        start = i + 1
+                        current_length = 0
+                        break
+
+    # 마지막 문단 추가
+    if start < len(BodyText):
+        paragraphs.append(BodyText[start:].strip())
+        
+    BodyText = '\n'.join(paragraphs)
+    BodyText = BodyText.replace('\n\n\n', '\n\n')
+
+    return BodyText
 
 ## 데이터 치환
 def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
@@ -675,9 +714,8 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
     Next = BodyTextInspection(BodyText, _BodyTextInspectionFilePath)
     
     if Next:
-        print(Next)
         ## 문장종결 부호, 아래 함수들에 필요
-        EndPunctuation = [
+        EnterEndPunctuation = [
             '다.', '다!', '다?', 
             '나.', '나!', '나?', 
             '까.', '까!', '까?', 
@@ -699,12 +737,16 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
             '해.', '해!', '해?', 
             '야.', '야!', '야?', 
             '아.', '아!', '아?', 
-            '든.', '든!', '든?',
-            '\n', '∨∨'
+            '든.', '든!', '든?'
         ]
+        EndPunctuation = EnterEndPunctuation + ['\n', '∨∨']
         
+        ## BodyText 긴 대화문장 사이 분할
         BodyText = SplitLongDialogues(BodyText, EndPunctuation)
+        ## BodyText 긴 일반문장 사이 분할
         BodyText = SplitLongSentences(BodyText, EndPunctuation)
+        # ## 긴 문단을 분할
+        BodyText = SplitParagraphs(BodyText, EnterEndPunctuation)
     
     with open(_IndexTextFilePath, 'w', encoding = 'utf-8') as file:
         file.write(IndexText)
@@ -734,7 +776,7 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
                 print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
                 
                 responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
-                sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치\n2. 본문(_Body)파일 내 쌍따옴표(\"대화문\") 개수 일치 * _Body(검수용) 파일 확인\n\n")
+                sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n2. 본문(_Body)파일 내 쌍따옴표(“대화문”의 완성) 개수 일치 * _Body(검수용) 파일 확인\n\n")
             else:
                 responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
                 

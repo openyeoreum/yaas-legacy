@@ -25,7 +25,7 @@ def DuplicationPreprocessFrameToInputList(projectName, email):
     duplicationPreprocessFrame = LoadduplicationPreprocessFrame(projectName, email)
     InputList = []
     for i in range(len(duplicationPreprocessFrame)):
-        InputList.append({'Id': i+1, 'Index': duplicationPreprocessFrame[i]['Index'], 'Continue': duplicationPreprocessFrame[i]['DuplicationScript']})
+        InputList.append({'Id': i+1, 'Index': duplicationPreprocessFrame[i]['Index'], 'Continue': duplicationPreprocessFrame[i]['DuplicationScript'].replace('∨∨', ''), 'Script': duplicationPreprocessFrame[i]['DuplicationScript']})
         
     return InputList
 
@@ -163,8 +163,9 @@ def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = 
             mode = "Example"
             
         if "Continue" in InputDic:
-            Index = InputDic['Index']
             Input = InputDic['Continue']
+            Index = InputDic['Index']
+            Script = InputDic['Script']
             Input = RemoveSpecialCharacters(Input)
             memoryCounter = " - 중요사항 | '발음수정전'과 '발음수정후'는 *숫자, *외국어, *기호, *특수문자 등의 요소들을 한글발음으로 수정하는 것 | 발음수정이 없을 경우는 {'발음수정': []}로 작성 -\n"
             outputEnder = ""
@@ -187,7 +188,7 @@ def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = 
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                     
-            Filter = PronunciationPreprocessFilter(responseData, Input, Index)
+            Filter = PronunciationPreprocessFilter(responseData, Script, Index)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -243,6 +244,7 @@ def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = 
         SaveOutputMemory(projectName, email, outputMemoryDics, '02-2', DataFramePath)
     
     return outputMemoryDics
+
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################

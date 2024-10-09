@@ -19266,6 +19266,96 @@
                     "TypeCastContext": {}
                 },
                 "ApiSetting": {
+                    "name": "송다훈(일반)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "i1wC9rmEisUohK76lcV2",
+                    "stability": [
+                        0.95
+                    ],
+                    "similarity_boost": [
+                        0.5
+                    ],
+                    "style": [
+                        0.0
+                    ],
+                    "models": {
+                        "Ko": "eleven_multilingual_v2",
+                        "En": "eleven_turbo_v2_5",
+                        "Zh": "eleven_multilingual_v2"
+                    },
+                    "Volume": 8,
+                    "Speed": 1,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 221,
+                "Name": "송다훈(감정)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
+                "Quilty": 0,
+                "Grade": ["Main"],
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 0},
+                        {"index": "여", "Score": 0},
+                        {"index": "중성", "Score": 0}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 0},
+                        {"index": "중립적", "Score": 0},
+                        {"index": "내향적", "Score": 0}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 0},
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "평온", "Score": 0},
+                        {"index": "무감정", "Score": 0},
+                        {"index": "피곤", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 0}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 0},
+                        {"index": "중립", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "화남", "Score": 0}
+                    ],
+                    "TypeCastContext": {}
+                },
+                "ApiSetting": {
                     "name": "송다훈(룰루레몬스토리)",
                     "Api": "ElevenLabs",
                     "voice_id": "asDeXBMC8hUkhqqL7agO",
@@ -19289,7 +19379,7 @@
                 }
             },
             {
-                "CharacterId": 221,
+                "CharacterId": 222,
                 "Name": "안현호(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
@@ -19379,7 +19469,7 @@
                 }
             },
             {
-                "CharacterId": 222,
+                "CharacterId": 223,
                 "Name": "한수희(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
@@ -19469,7 +19559,7 @@
                 }
             },
             {
-                "CharacterId": 223,
+                "CharacterId": 224,
                 "Name": "이나(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
@@ -19559,7 +19649,7 @@
                 }
             },
             {
-                "CharacterId": 224,
+                "CharacterId": 225,
                 "Name": "이나(슬픔)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/105_세희(중간톤, 피치다운).wav",
                 "Quilty": 10,
@@ -19648,7 +19738,7 @@
                 }
             },
             {
-                "CharacterId": 225,
+                "CharacterId": 226,
                 "Name": "이웅현(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
@@ -19738,7 +19828,7 @@
                 }
             },
             {
-                "CharacterId": 226,
+                "CharacterId": 227,
                 "Name": "장봉근(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
@@ -19828,7 +19918,7 @@
                 }
             },
             {
-                "CharacterId": 226,
+                "CharacterId": 228,
                 "Name": "김의신(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
@@ -19918,7 +20008,7 @@
                 }
             },
             {
-                "CharacterId": 226,
+                "CharacterId": 229,
                 "Name": "이덕주(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
@@ -20008,7 +20098,7 @@
                 }
             },
             {
-                "CharacterId": 226,
+                "CharacterId": 230,
                 "Name": "LG전자(톤업여성낭독)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
@@ -20098,7 +20188,7 @@
                 }
             },
             {
-                "CharacterId": 226,
+                "CharacterId": 231,
                 "Name": "LG전자(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
@@ -20188,7 +20278,7 @@
                 }
             },
             {
-                "CharacterId": 226,
+                "CharacterId": 232,
                 "Name": "루나(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,

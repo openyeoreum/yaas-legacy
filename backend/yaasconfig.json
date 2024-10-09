@@ -676,5 +676,45 @@
         "Intro": "off",
         "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
+    },
+    "241009_책갈피와책수레": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241009_책갈피와책수레"
+        ],
+        "Translations": [],
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "정회준",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241010_틈틈이낭만": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241010_틈틈이낭만"
+        ],
+        "Translations": [],
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     }
 }

@@ -19293,7 +19293,7 @@
                 "Name": "송다훈(감정)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
-                "Grade": ["Main"],
+                "Grade": ["Actor"],
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
@@ -19360,10 +19360,10 @@
                     "Api": "ElevenLabs",
                     "voice_id": "asDeXBMC8hUkhqqL7agO",
                     "stability": [
-                        0.8
+                        0.75
                     ],
                     "similarity_boost": [
-                        0.3
+                        0.4
                     ],
                     "style": [
                         0.0

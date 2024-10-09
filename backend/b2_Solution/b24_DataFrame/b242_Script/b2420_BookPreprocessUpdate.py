@@ -206,8 +206,9 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
                 "Up": 1, # 페이지의 위측 1-0 값으로, 1이면 모두, 0이면 없음
                 "Down": 1, # 페이지의 아래측 1-0 값으로, 1이면 모두, 0이면 없음
                 "TitlePages": [1], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지의 리스트
-                "IndexPages": [2, 3], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지 리스트
-                "DuplicatePage": [],  # {projectName}_Cropped.pdf 파일에서 중복되어 필요없는 페이지 리스트
+                "IndexPages": [2, 3], # {projectName}_Cropped.pdf 파일에서 목차이 존재하는 페이지 리스트
+                "indexPages": [], # {projectName}_Cropped.pdf 파일에서 각 목차의 내용이 존재하는 페이지 리스트
+                "DeletePages": [],  # {projectName}_Cropped.pdf 파일에서 중복되어 필요없는 페이지 리스트
                 "SettingCompletion": "세팅 완료 후 Completion으로 변경",
                 "PDFBookToTextCompletion": "완료 후 Completion으로 자동변경",
                 "InspectionCompletion": "완료 후 Completion으로 자동변경"
@@ -228,10 +229,10 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
         if PDFBookToTextSetting['PDFBookToTextSetting']['SettingCompletion'] == 'Completion':
             TitlePages = PDFBookToTextSetting['PDFBookToTextSetting']['TitlePages']
             IndexPages = PDFBookToTextSetting['PDFBookToTextSetting']['IndexPages']
-            DuplicatePage = PDFBookToTextSetting['PDFBookToTextSetting']['DuplicatePage']
+            DeletePages = PDFBookToTextSetting['PDFBookToTextSetting']['DeletePages']
             for i, BookText in enumerate(BookTextList, start = 1):
                 Input = {'Id': i, 'Continue': BookText, 'PageElement': None}
-                if BookText != '' and i not in DuplicatePage:
+                if BookText != '' and i not in DeletePages:
                     if i in TitlePages:
                         Input['Continue'] = f'{BookText}\n\n'
                         Input['PageElement'] = 'Title'
@@ -473,17 +474,19 @@ def IndexInspection(IndexText: str, BodyText: str) -> bool:
     index_lines = IndexText.splitlines()
 
     # 각 목차가 BodyText 안에 존재하는지 확인
+    IndexCompletion = True
     for line in index_lines:
         # 공백 줄이나 빈 줄은 건너뛰기
         if line.strip() == "":
             continue
-        
+        Line = f'{line}\n'
         # 목차 항목이 BodyText에 없으면 False 반환
-        if line not in BodyText:
-            return False
+        if Line not in BodyText:
+            print(f'- 누락 인덱스: {line}')
+            IndexCompletion = False
     
     # 모든 목차가 BodyText에 있으면 True 반환
-    return True
+    return IndexCompletion
 
 ## _Body.txt의 대화문 확인
 def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
@@ -737,7 +740,8 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
     ## JSON 파일 불러오기
     with open(JsonPath, 'r', encoding='utf-8') as json_file:
         PDFBookToTextSetting = json.load(json_file)
-        
+    
+    TextProcess = False
     if PDFBookToTextSetting['PDFBookToTextSetting']['InspectionCompletion'] != 'Completion':
         ## IndexText와 BodyText 저장
         if not (os.path.exists(_IndexTextFilePath) and os.path.exists(_BodyTextFilePath)):
@@ -809,6 +813,7 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
             with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
                 json.dump(PDFBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
             print(f"\n[ ({projectName}_Index.txt), ({projectName}_Body.txt) 파일이 완성되었습니다. ]")
+            TextProcess = True
             with open(IndexTextFilePath, 'w', encoding = 'utf-8') as file:
                 file.write(IndexText)
             with open(BodyTextFilePath, 'w', encoding = 'utf-8') as file:
@@ -819,7 +824,7 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
         with open(_BodyTextFilePath, 'w', encoding = 'utf-8') as file:
             file.write(BodyText)
             
-    return responseJson
+    return responseJson, TextProcess
 
 ## 프롬프트 요청 및 결과물 Json을 BookPreprocess에 업데이트
 def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
@@ -841,10 +846,14 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
                 AddExistedDataSetToDB(projectName, email, "BookPreprocess", ExistedDataSet)
                 print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
                 
-                responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
-                sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n2. 본문(_Body)파일 내 쌍따옴표(“대화문”의 완성) 개수 일치 * _Body(검수용) 파일 확인\n\n")
+                _, TextProcess = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+
+                if TextProcess == False:
+                    sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n2. 본문(_Body)파일 내 쌍따옴표(“대화문”의 완성) 개수 일치 * _Body(검수용) 파일 확인\n3. 캡션 등의 줄바꿈 및 캡션이 아닌 일반 문장은 마지막 온점(.)처리\n\n")
+                else:
+                    time.sleep(0.1)
             else:
-                responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+                responseJson, _ = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
                 
                 # ResponseJson을 ContinueCount로 슬라이스
                 ResponseJson = responseJson[PageCount:]

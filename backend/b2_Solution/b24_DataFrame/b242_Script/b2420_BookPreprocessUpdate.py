@@ -209,7 +209,8 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
                 "IndexPages": [2, 3], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지 리스트
                 "DuplicatePage": [],  # {projectName}_Cropped.pdf 파일에서 중복되어 필요없는 페이지 리스트
                 "SettingCompletion": "세팅 완료 후 Completion으로 변경",
-                "PDFBookToTextCompletion": "세팅 완료 후 Completion으로 자동변경"
+                "PDFBookToTextCompletion": "완료 후 Completion으로 자동변경",
+                "InspectionCompletion": "완료 후 Completion으로 자동변경"
             }
         }
         with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
@@ -289,7 +290,7 @@ def BookPreprocessFilter(responseData):
         try:
             if not '인공지능 음성 스크립트' in dic:
                 return "JSON에서 오류 발생: JSONKeyError"
-        # Error5: 자료의 형태가 Str일 때의 예외처리
+        # Error3: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
 
@@ -466,7 +467,25 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
 ################################
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
-## _Body(검수용).txt 생성 함수
+## _Index.txt, _Body.txt의 목차일치 확인
+def IndexInspection(IndexText: str, BodyText: str) -> bool:
+    # IndexText는 여러 줄로 되어 있으므로 줄 단위로 분리
+    index_lines = IndexText.splitlines()
+
+    # 각 목차가 BodyText 안에 존재하는지 확인
+    for line in index_lines:
+        # 공백 줄이나 빈 줄은 건너뛰기
+        if line.strip() == "":
+            continue
+        
+        # 목차 항목이 BodyText에 없으면 False 반환
+        if line not in BodyText:
+            return False
+    
+    # 모든 목차가 BodyText에 있으면 True 반환
+    return True
+
+## _Body.txt의 대화문 확인
 def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
     text = BodyText
 
@@ -549,9 +568,9 @@ def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
     processed_text += text[last_pos:]
 
     # 검수용 파일의 첫 줄 작성 및 다음 코드 스탭 결정
-    Next = False
+    BodyTextCompletion = False
     if (start_quote_count == end_quote_count) and (MarkCount == 0):
-        Next = True
+        BodyTextCompletion = True
         inspection_text = f'[큰 따옴표 (“...”) 개수 : {start_quote_count}, 검수완료]\n\n'
     else:
         inspection_text = f'[큰 따옴표 시작(“) 개수 : {start_quote_count}, 큰 따옴표 끝(”) 개수 : {end_quote_count}, ***가 표시된 부분 ({MarkCount}) 곳을 잘 확인]\n\n'
@@ -561,7 +580,7 @@ def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
     with open(_BodyTextInspectionFilePath, 'w', encoding='utf-8') as file:
         file.write(inspection_text)
 
-    return Next
+    return BodyTextCompletion
 
 ## BodyText 긴 대화문장 사이 분할 생성 함수
 def SplitLongDialogues(BodyText, EndPunctuation):
@@ -661,97 +680,144 @@ def SplitParagraphs(BodyText, EnterEndPunctuation, max_length = 3000):
                         start = i + 1
                         current_length = 0
                         break
-
     # 마지막 문단 추가
     if start < len(BodyText):
         paragraphs.append(BodyText[start:].strip())
-        
     BodyText = '\n'.join(paragraphs)
-    BodyText = BodyText.replace('\n\n\n', '\n\n')
 
     return BodyText
 
 ## 데이터 치환
-def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
-    # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
-    TextOutputDir = TextDirPath + f'/{projectName}_Text'
-    _IndexTextFilePath = TextOutputDir + f'/{projectName}_Index.txt'
-    _BodyTextFilePath = TextOutputDir + f'/{projectName}_Body.txt'
-    _BodyTextInspectionFilePath = TextOutputDir + f'/{projectName}_Body(검수용).txt'
-    # 데이터 치환
+def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   
+    ### A. 데이터 치환 ###
     outputMemoryDics, inputList = BookPreprocessProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
-    responseJson = []    
+    responseJson = []
     for i in range(len(outputMemoryDics)):
         PageId = inputList[i]['Id']
         PageElement = inputList[i]['PageElement']
+        Input = inputList[i]['Continue']
         Script = outputMemoryDics[i][0]['인공지능 음성 스크립트']
-        responseJson.append({"PageId": PageId, "PageElement": PageElement, "Script": Script})
-    
-    ## IndexText와 BodyText 저장
-    if not (os.path.exists(_IndexTextFilePath) and os.path.exists(_BodyTextFilePath)):
-        IndexText = ''
-        BodyText = ''
-        for Response in responseJson:
-            PageElement = Response['PageElement']
-            Script = Response['Script']
-            if PageElement == 'Index':
-                IndexText += f'{Script}\n'
-            elif PageElement == 'Title':
-                IndexText += f'{Script}\n'
-                BodyText += f'{Script}\n\n'
-            elif PageElement == 'index':
-                BodyText += f'\n\n{Script}\n\n'
-            elif PageElement == 'Body':
-                BodyText += f'{Script} '
-    else:
-        with open(_IndexTextFilePath, 'r', encoding='utf-8') as file:
-            IndexText = file.read()
-        with open(_BodyTextFilePath, 'r', encoding='utf-8') as file:
-            BodyText = file.read()
-            
-    Next = BodyTextInspection(BodyText, _BodyTextInspectionFilePath)
-    
-    if Next:
-        ## 문장종결 부호, 아래 함수들에 필요
-        EnterEndPunctuation = [
-            '다.', '다!', '다?', 
-            '나.', '나!', '나?', 
-            '까.', '까!', '까?', 
-            '요.', '요!', '요?', 
-            '죠.', '죠!', '죠?', 
-            '듯.', '듯!', '듯?', 
-            '것.', '것!', '것?', 
-            '라.', '라!', '라?', 
-            '가.', '가!', '가?', 
-            '니.', '니!', '니?', 
-            '군.', '군!', '군?', 
-            '오.', '오!', '오?', 
-            '자.', '자!', '자?', 
-            '네.', '네!', '네?', 
-            '소.', '소!', '소?', 
-            '지.', '지!', '지?', 
-            '어.', '어!', '어?', 
-            '봐.', '봐!', '봐?', 
-            '해.', '해!', '해?', 
-            '야.', '야!', '야?', 
-            '아.', '아!', '아?', 
-            '든.', '든!', '든?'
-        ]
-        EndPunctuation = EnterEndPunctuation + ['\n', '∨∨']
         
-        ## BodyText 긴 대화문장 사이 분할
-        BodyText = SplitLongDialogues(BodyText, EndPunctuation)
-        ## BodyText 긴 일반문장 사이 분할
-        BodyText = SplitLongSentences(BodyText, EndPunctuation)
-        # ## 긴 문단을 분할
-        BodyText = SplitParagraphs(BodyText, EnterEndPunctuation)
+        ## Script에 마지막 단어 누락 방지 코드 ##
+        # 1. Input에서 마지막 라인을 추출합니다.
+        lines = Input.split('\n')
+        InputLine = lines[-1]
+
+        # 2. Input 마지막 라인에서 앞 10 - 15글자를 추출
+        substring = ''
+        if len(InputLine) >= 15:
+            substring = InputLine[:15]
+        elif len(InputLine) >= 10:
+            substring = InputLine[:10]
+        else:
+            pass
+        if substring:
+            # 3. Script에서 동일한 부분을 찾아 그 이후 부분을 삭제
+            pos = Script.find(substring)
+            if pos != -1:
+                Script = Script[:pos + len(substring)]
+                # 4. Script에서 일치하는 부분을 Input의 마지막 라인으로 대체
+                Script = Script.replace(substring, InputLine)
+        ## 마지막 단어 누락 방지 코드 ##
+
+        responseJson.append({"PageId": PageId, "PageElement": PageElement, "Script": Script})
+
+    ### B. 검수 ###
+    # 경로 설정
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
+    JsonPath = os.path.join(TextDirPath, f'[{projectName}_PDFSetting].json')
+    TextOutputDir = TextDirPath + f'/{projectName}_Text'
+    IndexTextFilePath = TextDirPath + f'/{projectName}_Index.txt'
+    BodyTextFilePath = TextDirPath + f'/{projectName}_Body.txt'
+    _IndexTextFilePath = TextOutputDir + f'/{projectName}_Index.txt'
+    _BodyTextFilePath = TextOutputDir + f'/{projectName}_Body.txt'
+    _BodyTextInspectionFilePath = TextOutputDir + f'/{projectName}_Body(검수용).txt'
     
-    with open(_IndexTextFilePath, 'w', encoding = 'utf-8') as file:
-        file.write(IndexText)
-    with open(_BodyTextFilePath, 'w', encoding = 'utf-8') as file:
-        file.write(BodyText)
+    ## JSON 파일 불러오기
+    with open(JsonPath, 'r', encoding='utf-8') as json_file:
+        PDFBookToTextSetting = json.load(json_file)
+        
+    if PDFBookToTextSetting['PDFBookToTextSetting']['InspectionCompletion'] != 'Completion':
+        ## IndexText와 BodyText 저장
+        if not (os.path.exists(_IndexTextFilePath) and os.path.exists(_BodyTextFilePath)):
+            IndexText = ''
+            BodyText = ''
+            for Response in responseJson:
+                PageElement = Response['PageElement']
+                Script = Response['Script']
+                if PageElement == 'Index':
+                    IndexText += f'{Script}\n'
+                elif PageElement == 'Title':
+                    IndexText += f'{Script}\n'
+                    BodyText += f'{Script}\n\n'
+                elif PageElement == 'index':
+                    BodyText += f'\n\n{Script}\n\n'
+                elif PageElement == 'Body':
+                    BodyText += f'{Script} '
+        else:
+            with open(_IndexTextFilePath, 'r', encoding='utf-8') as file:
+                IndexText = file.read()
+            with open(_BodyTextFilePath, 'r', encoding='utf-8') as file:
+                BodyText = file.read()
+
+        ## 검수1: 목차 확인
+        IndexCompletion = IndexInspection(IndexText, BodyText)
+        if not IndexCompletion:
+            print(f"\n[ * 검수1: ({projectName}_Index.txt), ({projectName}_Body.txt) 목차 검수 필요 * ]")
+        ## 검수2: 대화문 확인
+        BodyTextCompletion = BodyTextInspection(BodyText, _BodyTextInspectionFilePath)
+        if not BodyTextCompletion:
+            print(f"[ * 검수2: ({projectName}_Index.txt), ({projectName}_Body.txt) 따옴표 검수 필요 * ]")
+        
+        if IndexCompletion and BodyTextCompletion:
+            ## 문장종결 부호, 아래 함수들에 필요
+            EnterEndPunctuation = [
+                '다.', '다!', '다?', 
+                '나.', '나!', '나?', 
+                '까.', '까!', '까?', 
+                '요.', '요!', '요?', 
+                '죠.', '죠!', '죠?', 
+                '듯.', '듯!', '듯?', 
+                '것.', '것!', '것?', 
+                '라.', '라!', '라?', 
+                '가.', '가!', '가?', 
+                '니.', '니!', '니?', 
+                '군.', '군!', '군?', 
+                '오.', '오!', '오?', 
+                '자.', '자!', '자?', 
+                '네.', '네!', '네?', 
+                '소.', '소!', '소?', 
+                '지.', '지!', '지?', 
+                '어.', '어!', '어?', 
+                '봐.', '봐!', '봐?', 
+                '해.', '해!', '해?', 
+                '야.', '야!', '야?', 
+                '아.', '아!', '아?', 
+                '든.', '든!', '든?'
+            ]
+            EndPunctuation = EnterEndPunctuation + ['\n', '∨∨']
+            
+            ## BodyText 긴 대화문장 사이 분할
+            BodyText = SplitLongDialogues(BodyText, EndPunctuation)
+            ## BodyText 긴 일반문장 사이 분할
+            BodyText = SplitLongSentences(BodyText, EndPunctuation)
+            ## 긴 문단을 분할
+            BodyText = SplitParagraphs(BodyText, EnterEndPunctuation)
+
+            PDFBookToTextSetting['PDFBookToTextSetting']['InspectionCompletion'] = 'Completion'
+            with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
+                json.dump(PDFBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
+            print(f"\n[ ({projectName}_Index.txt), ({projectName}_Body.txt) 파일이 완성되었습니다. ]")
+            with open(IndexTextFilePath, 'w', encoding = 'utf-8') as file:
+                file.write(IndexText)
+            with open(BodyTextFilePath, 'w', encoding = 'utf-8') as file:
+                file.write(BodyText)
+        
+        with open(_IndexTextFilePath, 'w', encoding = 'utf-8') as file:
+            file.write(IndexText)
+        with open(_BodyTextFilePath, 'w', encoding = 'utf-8') as file:
+            file.write(BodyText)
             
     return responseJson
 

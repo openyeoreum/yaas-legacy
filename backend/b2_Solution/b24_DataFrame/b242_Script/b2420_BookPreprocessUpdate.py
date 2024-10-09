@@ -493,6 +493,7 @@ def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
     # 이미 매칭된 위치의 끝 인덱스를 저장합니다.
     matched_ends = set()
 
+    MarkCount = 0
     for match in matches:
         start, end = match.span()
         matched_ends.add(end)
@@ -501,10 +502,12 @@ def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
         MarkN = ''
         if '”' in segmentN:
             MarkN = '***'
+            MarkCount += 1
         segmentQ = match.group()
         MarkQ = ''
         if segmentQ.count('“') >= 2:
             MarkQ = '***'
+            MarkCount += 1
 
         # 이전 위치부터 현재 매칭 시작 지점까지의 텍스트를 추가합니다.
         processed_text += f'{MarkN}{segmentN}'
@@ -535,6 +538,7 @@ def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
         # 큰 따옴표 시작 부분 처리
         processed_text += '\n\n'
         processed_text += f'***({quote_number}): '
+        MarkCount += 1
         processed_text += segmentQ
         processed_text += '\n\n'
         # 인덱스와 위치 업데이트
@@ -544,13 +548,20 @@ def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
     # 남은 텍스트를 추가합니다.
     processed_text += text[last_pos:]
 
-    # 검수용 파일의 첫 줄 작성
-    inspection_text = f'[큰 따옴표 시작(“) 개수 : {start_quote_count}, 큰 따옴표 끝(”) 개수 : {end_quote_count}, ***가 표시된 부분을 잘 확인]\n\n'
+    # 검수용 파일의 첫 줄 작성 및 다음 코드 스탭 결정
+    Next = False
+    if (start_quote_count == end_quote_count) and (MarkCount == 0):
+        Next = True
+        inspection_text = f'[큰 따옴표 (“...”) 개수 : {start_quote_count}, 검수완료]\n\n'
+    else:
+        inspection_text = f'[큰 따옴표 시작(“) 개수 : {start_quote_count}, 큰 따옴표 끝(”) 개수 : {end_quote_count}, ***가 표시된 부분 ({MarkCount}) 곳을 잘 확인]\n\n'
     inspection_text += processed_text
 
     # 검수용 파일 저장
     with open(_BodyTextInspectionFilePath, 'w', encoding='utf-8') as file:
         file.write(inspection_text)
+
+    return Next
 
 ## BodyText 긴 대화문장 사이 분할 생성 함수
 def SplitLongDialogues(BodyText, EndPunctuation):
@@ -573,7 +584,7 @@ def SplitLongDialogues(BodyText, EndPunctuation):
         if current_part:
             parts.append(current_part.strip())
         # 각 부분을 " "로 연결
-        return '” “'.join([f'“{part}”' for part in parts])
+        return ' ” “ '.join(parts)
 
     # 대화문을 찾고 분리 후 다시 합침
     SplitedBodyText = re.sub(dialogue_pattern, lambda match: SplitDialogue(match.group(1)), BodyText)
@@ -614,7 +625,7 @@ def SplitLongSentences(BodyText, EndPunctuation):
 
     # end_punctuation으로 문장을 분리
     sentence_pattern = '|'.join(map(re.escape, EndPunctuation))
-    sentences = re.split(f'(?<={sentence_pattern})', BodyText)
+    sentences = re.split(f'({sentence_pattern})', BodyText)
     
     # 각 문장을 처리하고 다시 합침
     SplitedBodyText = ''.join([SplitSentence(sentence) for sentence in sentences])
@@ -655,41 +666,50 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
                 BodyText += f'\n\n{Script}\n\n'
             elif PageElement == 'Body':
                 BodyText += f'{Script} '
-        
-            ## 문장종결 부호, 아래 함수들에 필요
-            EndPunctuation = [
-                '다.', '다!', '다?', 
-                '나.', '나!', '나?', 
-                '까.', '까!', '까?', 
-                '요.', '요!', '요?', 
-                '죠.', '죠!', '죠?', 
-                '듯.', '듯!', '듯?', 
-                '것.', '것!', '것?', 
-                '라.', '라!', '라?', 
-                '가.', '가!', '가?', 
-                '니.', '니!', '니?', 
-                '군.', '군!', '군?', 
-                '오.', '오!', '오?', 
-                '자.', '자!', '자?', 
-                '네.', '네!', '네?', 
-                '소.', '소!', '소?', 
-                '지.', '지!', '지?', 
-                '어.', '어!', '어?', 
-                '봐.', '봐!', '봐?', 
-                '해.', '해!', '해?', 
-                '야.', '야!', '야?', 
-                '아.', '아!', '아?', 
-                '든.', '든!', '든?'
-            ]
+    else:
+        with open(_IndexTextFilePath, 'r', encoding='utf-8') as file:
+            IndexText = file.read()
+        with open(_BodyTextFilePath, 'r', encoding='utf-8') as file:
+            BodyText = file.read()
+            
+    Next = BodyTextInspection(BodyText, _BodyTextInspectionFilePath)
+    
+    if Next:
+        print(Next)
+        ## 문장종결 부호, 아래 함수들에 필요
+        EndPunctuation = [
+            '다.', '다!', '다?', 
+            '나.', '나!', '나?', 
+            '까.', '까!', '까?', 
+            '요.', '요!', '요?', 
+            '죠.', '죠!', '죠?', 
+            '듯.', '듯!', '듯?', 
+            '것.', '것!', '것?', 
+            '라.', '라!', '라?', 
+            '가.', '가!', '가?', 
+            '니.', '니!', '니?', 
+            '군.', '군!', '군?', 
+            '오.', '오!', '오?', 
+            '자.', '자!', '자?', 
+            '네.', '네!', '네?', 
+            '소.', '소!', '소?', 
+            '지.', '지!', '지?', 
+            '어.', '어!', '어?', 
+            '봐.', '봐!', '봐?', 
+            '해.', '해!', '해?', 
+            '야.', '야!', '야?', 
+            '아.', '아!', '아?', 
+            '든.', '든!', '든?',
+            '\n', '∨∨'
+        ]
         
         BodyText = SplitLongDialogues(BodyText, EndPunctuation)
         BodyText = SplitLongSentences(BodyText, EndPunctuation)
-        
-        with open(_IndexTextFilePath, 'w', encoding = 'utf-8') as file:
-            file.write(IndexText)
-        with open(_BodyTextFilePath, 'w', encoding = 'utf-8') as file:
-            file.write(BodyText)
-        BodyTextInspection(BodyText, _BodyTextInspectionFilePath)
+    
+    with open(_IndexTextFilePath, 'w', encoding = 'utf-8') as file:
+        file.write(IndexText)
+    with open(_BodyTextFilePath, 'w', encoding = 'utf-8') as file:
+        file.write(BodyText)
             
     return responseJson
 
@@ -712,7 +732,9 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
                 AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame)
                 AddExistedDataSetToDB(projectName, email, "BookPreprocess", ExistedDataSet)
                 print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
-                sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치\n2.\n3. 본문(_Body)파일 내 쌍따옴표(\"대화문\") 개수 일치 * _Body(검수용) 파일 확인\n\n")
+                
+                responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+                sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치\n2. 본문(_Body)파일 내 쌍따옴표(\"대화문\") 개수 일치 * _Body(검수용) 파일 확인\n\n")
             else:
                 responseJson = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
                 

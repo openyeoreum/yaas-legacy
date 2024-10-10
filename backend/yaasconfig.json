@@ -674,7 +674,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto",
+        "AudiobookSplitting": "Manual",
         "EndMusicVolume": -10
     },
     "241009_책갈피와책수레": {
@@ -694,7 +694,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto",
+        "AudiobookSplitting": "Manual",
         "EndMusicVolume": -10
     },
     "241010_틈틈이낭만": {
@@ -708,13 +708,13 @@
         "IndexMode": "Define",
         "BookGenre": "Auto",
         "MainLang": "Ko",
-        "Narrator": "VoiceClone",
+        "Narrator": "VoiceActor",
         "CloneVoiceName": "",
         "ReadingStyle": "NarratorOnly",
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto",
+        "AudiobookSplitting": "Manual",
         "EndMusicVolume": -10
     }
 }

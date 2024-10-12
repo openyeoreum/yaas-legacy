@@ -211,9 +211,9 @@ def VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameN
         else:
             InspectionResponseJson.append(ResponseJson[i])
     
-    print(f"ResponseJson: {ResponseJson}\n\n")
-    print(f"Response: {Response}\n\n")
-    print(f"InspectionResponseJson: {InspectionResponseJson}\n\n")
+    # print(f"ResponseJson: {ResponseJson}\n\n")
+    # print(f"Response: {Response}\n\n")
+    # print(f"InspectionResponseJson: {InspectionResponseJson}\n\n")
     
     return InspectionResponseJson
 

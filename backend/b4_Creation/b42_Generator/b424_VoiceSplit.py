@@ -243,11 +243,10 @@ def VoiceTimeStemps(voiceLayerPath, LanguageCode):
     Id = 1
     start_time = 0
     for result in transcript.words:
-        word = result['word']
         # total_seconds() 호출로 변환
-        voiceTimeStemps.append({"낭독기록번호": Id, "낭독기록": word, "시작": start_time, "끝": result['end']})
-        start_time = result['end']
-        SplitWords.append({"낭독기록번호": Id, "낭독기록": word})
+        voiceTimeStemps.append({"낭독기록번호": Id, "낭독기록": result.word, "시작": start_time, "끝": result.end})
+        start_time = result.end
+        SplitWords.append({"낭독기록번호": Id, "낭독기록": result.word})
         Id += 1
     
     # 마지막 문장이 누락 문제 해결로 해당 부분 추가

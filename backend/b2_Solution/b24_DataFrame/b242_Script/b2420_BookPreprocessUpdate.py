@@ -387,7 +387,7 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = ""
+            memoryCounter = "- 구두점(, .), 따옴표(“” \" ')는 낭독에서 매우 중요함으로, 절대로 절대로 수정 및 추가, 삭제 하지 않습니다. -\n"
             outputEnder = ""
 
             # Response 생성

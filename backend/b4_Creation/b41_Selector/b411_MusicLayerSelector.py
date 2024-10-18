@@ -1015,7 +1015,6 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     if AudiobookSplitting == 'Manual':
         fileName = '[' + projectName + '_' + 'AudioBook_Splitting].json'
         IndexTagsListPath = VoiceLayerPathGen(projectName, email, fileName, 'Master')
-        
         if not os.path.exists(IndexTagsListPath):
             IndexTagsList = [{'AudioBook_Splitting': 'No'}]
             

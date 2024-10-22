@@ -154,7 +154,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto",
+        "AudiobookSplitting": "Manual",
         "EndMusicVolume": -10
     },
     "240910_AI미래시나리오2030": {
@@ -271,6 +271,26 @@
         "Narrator": "VoiceActor",
         "CloneVoiceName": "",
         "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Manual",
+        "EndMusicVolume": -10
+    },
+    "240405_빌리월터스겜블러": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "240405_빌리월터스겜블러"
+        ],
+        "Translations": [],
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "주호(일반톤, 피치다운)",
+        "ReadingStyle": "AllCharacters",
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",

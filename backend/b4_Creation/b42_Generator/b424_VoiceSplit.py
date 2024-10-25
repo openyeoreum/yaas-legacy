@@ -2,6 +2,7 @@ import os
 import io
 import json
 import re
+import unicodedata
 import numpy as np
 import time
 import copy
@@ -427,38 +428,54 @@ def InputText(SplitSents, SplitWords, SameNum):
     EarlierWord = []
     LaterWord = []
 
+    def AlphabetABSentListGen(i, SplitSents):
+        # print(f'{i}-SplitSents: {SplitSents}')
+        # 알파벳 추가 및 인덱스 계산
+        AlphabetABSentList.append(Alphabet)
+        CleanSplitBeforeSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i-1]['낭독문장'].strip())
+        BeforeWord = CleanSplitBeforeSent.split()
+        # print(f'{i}-BeforeWord: {BeforeWord}')
+        CleanSplitAfterSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i]['낭독문장'].strip())
+        # print(f'{i}-SplitSents[i]["낭독문장"]: {SplitSents[i]["낭독문장"]}')
+        # print(f'{i}-CleanSplitAfterSent: {CleanSplitAfterSent}')
+        AfterWord = CleanSplitAfterSent.split()
+        # print(f'{i}-AfterWord: {AfterWord}')
+        if i - 2 >= 0:
+            CleanSplitEarlierSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i-2]['낭독문장'].strip())
+            EarlierWord = CleanSplitEarlierSent.split()
+            # print(f'{i}-EarlierWord: {EarlierWord}')
+        if i + 1 < len(SplitSents):
+            CleanSplitLaterSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i+1]['낭독문장'].strip())
+            LaterWord = CleanSplitLaterSent.split()
+            # print(f'{i}-LaterWord: {LaterWord}')
+        try:
+            AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
+        except IndexError:
+            if len(BeforeWord) < 2 and len(AfterWord) >= 2:
+                if EarlierWord != []:
+                    AlphabetABWordList.append([EarlierWord[-1], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
+                else:
+                    AlphabetABWordList.append(["None", BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
+            elif len(BeforeWord) >= 2 and len(AfterWord) < 2:
+                if LaterWord != []:
+                    AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], LaterWord[0]])
+                else:
+                    AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], "None"])
+            else:
+                AlphabetABWordList.append(["None", BeforeWord[-1], Alphabet, AfterWord[0], "None"])
+        return AlphabetABWordList
+
     # 분석 및 리스트 생성
     for i in range(len(SplitSents)):
         if i > 0:
-            # 알파벳 추가 및 인덱스 계산
-            AlphabetABSentList.append(Alphabet)
-            CleanSplitBeforeSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i-1]['낭독문장'].strip())
-            BeforeWord = CleanSplitBeforeSent.split()
-            # print(f'{i}-BeforeWord: {BeforeWord}')
-            CleanSplitAfterSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i]['낭독문장'].strip())
-            AfterWord = CleanSplitAfterSent.split()
-            # print(f'{i}-AfterWord: {AfterWord}')
-            if i - 2 >= 0:
-                CleanSplitEarlierSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i-2]['낭독문장'].strip())
-                EarlierWord = CleanSplitEarlierSent.split()
-            if i + 1 < len(SplitSents):
-                CleanSplitLaterSent = re.sub(r'[^가-힣A-Za-z\s]', '', SplitSents[i+1]['낭독문장'].strip())
-                LaterWord = CleanSplitLaterSent.split()
             try:
-                AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
+                AlphabetABWordList = AlphabetABSentListGen(i, SplitSents)
             except IndexError:
-                if len(BeforeWord) < 2 and len(AfterWord) >= 2:
-                    if EarlierWord != []:
-                        AlphabetABWordList.append([EarlierWord[-1], BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
-                    else:
-                        AlphabetABWordList.append(["None", BeforeWord[-1], Alphabet, AfterWord[0], AfterWord[1]])
-                elif len(BeforeWord) >= 2 and len(AfterWord) < 2:
-                    if LaterWord != []:
-                        AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], LaterWord[0]])
-                    else:
-                        AlphabetABWordList.append([BeforeWord[-2], BeforeWord[-1], Alphabet, AfterWord[0], "None"])
-                else:
-                    AlphabetABWordList.append(["None", BeforeWord[-1], Alphabet, AfterWord[0], "None"])
+                for j in SplitSents:
+                    Sent = SplitSents[j]['낭독문장']
+                    SplitSents[j]['낭독문장'] = unicodedata.normalize('NFC', Sent)
+                AlphabetABWordList = AlphabetABSentListGen(i, SplitSents)
+                
             EarlierWord = []
             LaterWord = []
             AlphabetList.append(Alphabet)

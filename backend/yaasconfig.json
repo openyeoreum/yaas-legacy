@@ -296,5 +296,45 @@
         "Intro": "off",
         "AudiobookSplitting": "Manual",
         "EndMusicVolume": -10
+    },
+    "241024_오성삼유튜브": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241024_오성삼유튜브"
+        ],
+        "Translations": [],
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "오성삼",
+        "ReadingStyle": "AllCharacters",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241024_서울장애인가족지원센터당선작13선": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241024_서울장애인가족지원센터당선작13선"
+        ],
+        "Translations": [],
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "이나(일반)",
+        "ReadingStyle": "AllCharacters",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     }
 }

@@ -496,6 +496,7 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
         Pause = []
         EndTime = []
         for i in range(len(ActorChunk)):
+            # print(f'{ActorChunk[i]}\n')
             _ActorChunk.append(ActorChunk[i]['Chunk'])
             Pause.append(ActorChunk[i]['Pause'])
             EndTime.append(ActorChunk[i]['EndTime'])
@@ -745,7 +746,7 @@ def ExtractPause(chunk):
         return 0
 
 ## 생성된 음성파일 정렬/필터
-def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath):
+def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath, projectName):
     # 파일명에서 필요한 정보를 추출하는 함수
     def ExtractFileInfo(FileName, removeList):
         match = re.match(r"(.+)\_(\d+(\.\d+)?)\_(.+?\(.+?\))\_\((\d+)\)(M?)\.wav", FileName)
@@ -827,8 +828,39 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath):
     
     # editInfos에 남은 파일이 있는지 확인 (생성되지 못한 파일)
     if editInfos != []:
-        for editInfo in editInfos:
-            print(f"[ 파일 생성 또는 EditId 확인 필요: {editInfo} ]")
+        # 1. 동일한 EditId에서 가장 큰 DetailEditNum 찾기
+        max_detail_nums = {}
+        for info in editInfos:
+            print(f"[ 파일 생성 또는 EditId 확인 필요: {info} ]")
+            edit_id = info['EditId']
+            detail_num = info['DetailEditNum']
+            max_detail_nums[edit_id] = max(max_detail_nums.get(edit_id, -1), detail_num)
+
+        # 2. RemoveVoiceFileList 생성
+        RemoveVoiceFileList = []
+        for edit_id, max_num in max_detail_nums.items():
+            for i in range(1, 11):
+                RemoveVoiceFileList.append({'EditId': edit_id, 'DetailEditNum': max_num + i})
+
+        # 3. 파일 삭제
+        # 폴더 내의 모든 파일 리스트를 가져옴
+        all_files = os.listdir(voiceLayerPath)
+        for item in RemoveVoiceFileList:
+            edit_id = item['EditId']
+            detail_num = item['DetailEditNum']
+            # 정규표현식 패턴 생성
+            # 보이스이름이 어떠한 텍스트라도 올 수 있으므로 .*으로 처리
+            pattern_with_m = re.compile(rf"{projectName}_{edit_id}_.+\({detail_num}\)M\.wav$")
+            pattern_without_m = re.compile(rf"{projectName}_{edit_id}_.+\({detail_num}\)\.wav$")
+            
+            # 파일명 필터링 및 삭제
+            for file_name in all_files:
+                file_path = os.path.join(voiceLayerPath, file_name)
+                
+                if pattern_with_m.match(file_name) or pattern_without_m.match(file_name):
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                        print(f"[ Chunk의 수가 줄어서, 그 수를 넘어서는 파일 삭제: {file_name} ]")
         sys.exit()
 
     # 중복 제거
@@ -919,7 +951,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
 
     # 폴더 내의 모든 .wav 파일 목록 정렬/필터
-    FilteredFiles = SortAndRemoveDuplicates(EditGenerationKoChunks, Files, voiceLayerPath)
+    FilteredFiles = SortAndRemoveDuplicates(EditGenerationKoChunks, Files, voiceLayerPath, projectName)
     FilesCount = 0
     file_limit = 100  # 파일 분할 기준
     current_file_index = 1

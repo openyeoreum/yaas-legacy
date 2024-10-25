@@ -425,10 +425,10 @@ def InputText(SplitSents, SplitWords, SameNum):
     AlphabetList = []
     AlphabetABSentList = []
     AlphabetABWordList = []
-    EarlierWord = []
-    LaterWord = []
 
     def AlphabetABSentListGen(i, SplitSents):
+        EarlierWord = []
+        LaterWord = []
         # print(f'{i}-SplitSents: {SplitSents}')
         # 알파벳 추가 및 인덱스 계산
         AlphabetABSentList.append(Alphabet)
@@ -476,8 +476,6 @@ def InputText(SplitSents, SplitWords, SameNum):
                     SplitSents[j]['낭독문장'] = unicodedata.normalize('NFC', Sent)
                 AlphabetABWordList = AlphabetABSentListGen(i, SplitSents)
                 
-            EarlierWord = []
-            LaterWord = []
             AlphabetList.append(Alphabet)
             if i < len(SplitSents) - 1:
                 Alphabet = chr(ord(Alphabet) + 1)

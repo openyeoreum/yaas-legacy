@@ -2349,7 +2349,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
                             # 동일한 EditId와 ActorName을 가진 항목이 없을 경우 새 항목 추가
                             if AddSwitch:
-                                GenerationKoChunkHistory = {"EditId": EditId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": OriginChunk, "Pause": Pause}
+                                GenerationKoChunkHistory = {"EditId": EditId, "Tag": Update['Tag'], "ActorName": Name, "ActorChunk": OriginChunk, "ActorChunks": Update['ActorChunk'], "Pause": Pause}
                                 GenerationKoChunkHistorys.append(GenerationKoChunkHistory)
                                 with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
                                     json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)

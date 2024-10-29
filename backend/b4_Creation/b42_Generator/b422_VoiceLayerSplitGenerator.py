@@ -1734,17 +1734,29 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 if GenerationKoChunkAllHistory[k]['EditId'] == EditID and GenerationKoChunkAllHistory[k]['ActorName'] == ActorNAME:
                     ExistedHistory = True
                     HistoryPauseCount = len(GenerationKoChunkAllHistory[k]['Pause'])
-                    # print(HistoryPauseCount)
-                    # print(ChunkCount)
                     
-                    ## A. 문장 개수 또는 문장의 위치가 다르고, 새로운 문장이 생성되었을 때 ##
-                    if ChunkCount != HistoryPauseCount:
+                    ## History와 Edit의 문장 일치도 확인
+                    ChunkMatching = True
+                    if 'ActorChunks' in GenerationKoChunkAllHistory[k]:
+                        # print(GenerationKoChunkAllHistory[k]['EditId'])
+                        # print(GenerationKoChunkAllHistory[k])
+                        ChunkMatching = False
+                        HistoryActorChunks = GenerationKoChunkAllHistory[k]['ActorChunks']
+                        if len(HistoryActorChunks) == ChunkCount:
+                            if (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][0]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-0])) and (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][-1]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-1])):
+                                # print(MatchedChunks[i]['ActorChunk'][0]['Chunk'])
+                                ChunkMatching = True
+                                # print(f'{i}_ChunkMatching: {ChunkMatching}')
+                    # print(f'{i}_ChunkMatching: {ChunkMatching}')
+                    ## A. 문장 개수가 다르거나, 새로운 문장이 생성되었을 때 ##
+                    if (ChunkCount != HistoryPauseCount) or (not ChunkMatching):
                         for g in range(ChunkCount):
                             edit_chunk = MatchedChunks[i]['ActorChunk'][g]['Chunk']
                             MatchedChunks[i]['ActorChunk'][g]['Chunk'] = edit_chunk.replace('[[', '').replace(']]', '')
                             edit_chunk = MatchedChunks[i]['ActorChunk'][g]['Chunk']
-                            if (g in OneBracketList) and ("[" not in Chunk[:3] and "]" not in Chunk[-3:]):
+                            if (g in OneBracketList) and ("[" not in edit_chunk[:3] and "]" not in edit_chunk[-3:]):
                                 MatchedChunks[i]['ActorChunk'][g]['Chunk'] = f'[{edit_chunk}]'
+                                # print(MatchedChunks[i]['ActorChunk'][g]['Chunk'])
                                 
                     ## B. 문장 개수 또는 문장의 위치가 같고, 기존에 있던 문장일 때 ##
                     else:
@@ -1764,7 +1776,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                                 edit_chunk = EditChunk[f]['Chunk']
                                 EditChunk[f]['Chunk'] = edit_chunk.replace('[[', '').replace(']]', '')
                                 edit_chunk = EditChunk[f]['Chunk']
-                                if (f in OneBracketList) and ("[" not in Chunk[:3] and "]" not in Chunk[-3:]):
+                                if (f in OneBracketList) and ("[" not in edit_chunk[:3] and "]" not in edit_chunk[-3:]):
                                     EditChunk[f]['Chunk'] = f'[{edit_chunk}]'
             ## BB. 기존 히스토리에 해당 데이터가 없을때
             if not ExistedHistory:
@@ -1772,8 +1784,9 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     edit_chunk = MatchedChunks[i]['ActorChunk'][h]['Chunk']
                     MatchedChunks[i]['ActorChunk'][h]['Chunk'] = edit_chunk.replace('[[', '').replace(']]', '')
                     edit_chunk = MatchedChunks[i]['ActorChunk'][h]['Chunk']
-                    if (h in OneBracketList) and ("[" not in Chunk[:3] and "]" not in Chunk[-3:]):
+                    if (h in OneBracketList) and ("[" not in edit_chunk[:3] and "]" not in edit_chunk[-3:]):
                         MatchedChunks[i]['ActorChunk'][h]['Chunk'] = f'[{edit_chunk}]'
+                        # print(MatchedChunks[i]['ActorChunk'][h]['Chunk'])
         with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunks_Json:
             json.dump(MatchedChunks, MatchedChunks_Json, ensure_ascii = False, indent = 4)
         # sys.exit()
@@ -2233,6 +2246,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         Modify = "Yes"
                         print(f"[ ChunkModify: {ChunkModify}, (내용) 변경 ]\n({History['ActorChunk']})\n({OriginChunk})")
                         History['ActorChunk'] = OriginChunk.replace('[[', '[').replace(']]', ']')
+                        History['ActorChunks'] = Update['ActorChunk']
                     if History['Tag'] != Tag:
                         History['Tag'] = Tag
                     if History['Pause'] != Pause:

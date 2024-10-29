@@ -164,7 +164,7 @@ def BestsellerScraper(driver, period = 'Weekly'):
     Date = wait.until(EC.presence_of_element_located((By.XPATH, DateXpath))).text
     FilePath = BookDataPath + f"{Date}_{period}BookData.json"
     if LastRank == 0 and os.path.exists(FilePath):
-        with open(FilePath, 'r', encoding='utf-8') as BooksJson:
+        with open(FilePath, 'r', encoding = 'utf-8') as BooksJson:
             BookDataList = json.load(BooksJson)
             LastRank = BookDataList[-1]['Rank'][0]['Rank']
     
@@ -280,10 +280,10 @@ def TotalBookDataUpdate(period):
                 TotalBookDataList[Id]['BookPurchasedList'] = BookData['BookPurchasedList']
                 TotalBookDataList[Id]['CommentsCount'] = BookData['CommentsCount']
 
-        with open(TotalBookDataPath, 'w', encoding='utf-8') as BooksJson:
+        with open(TotalBookDataPath, 'w', encoding = 'utf-8') as BooksJson:
             json.dump(TotalBookDataList, BooksJson, ensure_ascii = False, indent = 4)
     else:
-        with open(TotalBookDataPath, 'w', encoding='utf-8') as BooksJson:
+        with open(TotalBookDataPath, 'w', encoding = 'utf-8') as BooksJson:
             json.dump(BookDataList, BooksJson, ensure_ascii = False, indent = 4)
 
     print(f"[ {period} 베스트셀러 도서 스크래핑 & 업데이트 완료 ]\n")
@@ -305,13 +305,13 @@ if __name__ == "__main__":
     # os.makedirs(output_folder, exist_ok=True)
 
     # # JSON 파일 읽기
-    # with open(json_file_path, 'r', encoding='utf-8') as f:
+    # with open(json_file_path, 'r', encoding = 'utf-8') as f:
     #     data = json.load(f)
 
     # # 각 딕셔너리를 개별 파일로 저장
     # for idx, item in enumerate(data):
     #     item_file_path = os.path.join(output_folder, f'2023년_YearlyBookData({idx+1}).json')
-    #     with open(item_file_path, 'w', encoding='utf-8') as item_file:
+    #     with open(item_file_path, 'w', encoding = 'utf-8') as item_file:
     #         json.dump(item, item_file, ensure_ascii = False, indent = 4)
 
     # print("모든 딕셔너리가 개별 파일로 저장되었습니다.")

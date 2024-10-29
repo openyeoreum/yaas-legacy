@@ -289,7 +289,7 @@ def SaveDataSet(projectName, email, ProcessNumber, Process, RawDataSetPath):
     while os.path.exists(Newfilename):
         counter += 1
         Newfilename = f"{base} ({counter}){ext}"
-    with open(Newfilename, 'w', encoding='utf-8') as f:
+    with open(Newfilename, 'w', encoding = 'utf-8') as f:
         json.dump(ProcessDataset, f, ensure_ascii = False, indent = 4)
 
 
@@ -327,7 +327,7 @@ def LoadExistedDataSets(projectName, email, Process, FeedbackDataSetPath):
 
     if RecentFile:
         FullPath = os.path.join(FeedbackDataSetPath, RecentFile)
-        with open(FullPath, 'r', encoding='utf-8') as file:
+        with open(FullPath, 'r', encoding = 'utf-8') as file:
             ExistedDataSet = json.load(file)
             # print(RecentFile)
             return RecentFile, ExistedDataSet

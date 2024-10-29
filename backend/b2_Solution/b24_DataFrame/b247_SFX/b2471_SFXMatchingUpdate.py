@@ -518,7 +518,7 @@ def SFXToBodys(projectName, email, ResponseJson):
                         break
 
         # json_data = json.dumps(CorrectionChunkList, ensure_ascii = False, indent = 4)
-        # with open('CorrectionChunkList.json', 'w', encoding='utf-8') as file:
+        # with open('CorrectionChunkList.json', 'w', encoding = 'utf-8') as file:
         #     file.write(json_data)
 
         # SFXCorrectionChunk 합성
@@ -563,7 +563,7 @@ def SFXToBodys(projectName, email, ResponseJson):
             body['SFX'] = SFXBody
 
     # json_data = json.dumps(Bodys, ensure_ascii = False, indent = 4)
-    # with open('Bodys.json', 'w', encoding='utf-8') as file:
+    # with open('Bodys.json', 'w', encoding = 'utf-8') as file:
     #     file.write(json_data)
 
     flag_modified(project, "HalfBodyFrame")

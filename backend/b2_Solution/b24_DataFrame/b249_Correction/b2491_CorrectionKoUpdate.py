@@ -734,7 +734,7 @@ def ResponseJsonText(projectName, email, responseJson):
 
     # 파일이 존재하는지 확인
     if not any(re.match(f"{baseFilePath}_\d{{6}}\.txt", filename) for filename in os.listdir(os.path.dirname(baseFilePath))):
-        with open(fullFilePath, "w", encoding="utf-8") as file:
+        with open(fullFilePath, "w", encoding = "utf-8") as file:
             file.write(responseJsonText)
 
 ## Chunk를 Tokens로 치환

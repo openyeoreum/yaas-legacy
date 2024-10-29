@@ -49,7 +49,7 @@ def SaveDataFrame(projectName, email, Process, UpdatedFrame, RawDataSetPath):
     while os.path.exists(newFilename):
         counter += 1
         newFilename = f"{base} ({counter}){ext}"
-    with open(newFilename, 'w', encoding='utf-8') as f:
+    with open(newFilename, 'w', encoding = 'utf-8') as f:
         json.dump(UpdatedFrame, f, ensure_ascii = False, indent = 4)
         
 def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
@@ -84,7 +84,7 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
                 RecentFile = FileName
 
     if RecentFile:
-        with open(os.path.join(dataFramePath, RecentFile), 'r', encoding='utf-8') as file:
+        with open(os.path.join(dataFramePath, RecentFile), 'r', encoding = 'utf-8') as file:
             ExistedDataFrame = json.load(file)
             return ExistedDataFrame
 
@@ -138,7 +138,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
     # 파일 읽기 및 데이터 업데이트
     if RecentFile:
         FilePath = os.path.join(dataFramePath, RecentFile)
-        with open(FilePath, 'r', encoding='utf-8') as file:
+        with open(FilePath, 'r', encoding = 'utf-8') as file:
             ExistedDataFrame = json.load(file)
         
         # Bodys 데이터 업데이트
@@ -148,7 +148,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
             ExistedDataFrame[2]["Bodys"] = Bodys
 
         # 변경된 데이터 저장
-        with open(FilePath, 'w', encoding='utf-8') as file:
+        with open(FilePath, 'w', encoding = 'utf-8') as file:
             json.dump(ExistedDataFrame, file, ensure_ascii = False, indent = 4)
 
     return None

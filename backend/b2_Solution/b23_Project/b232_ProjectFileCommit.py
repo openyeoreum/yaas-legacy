@@ -9,7 +9,7 @@ from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 
 def LoadTextFile(filepath):
     if os.path.exists(filepath):
-        with open(filepath, 'r', encoding='utf-8') as file:
+        with open(filepath, 'r', encoding = 'utf-8') as file:
             Text = file.read()
         return Text
     else:

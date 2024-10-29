@@ -218,7 +218,7 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
             json.dump(pdfBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
  
     ## JSON 파일 불러오기
-    with open(JsonPath, 'r', encoding='utf-8') as json_file:
+    with open(JsonPath, 'r', encoding = 'utf-8') as json_file:
         PDFBookToTextSetting = json.load(json_file)
 
     ## PDFBookToTextSetting.json 생성
@@ -580,7 +580,7 @@ def BodyTextInspection(BodyText, _BodyTextInspectionFilePath):
     inspection_text += processed_text
 
     # 검수용 파일 저장
-    with open(_BodyTextInspectionFilePath, 'w', encoding='utf-8') as file:
+    with open(_BodyTextInspectionFilePath, 'w', encoding = 'utf-8') as file:
         file.write(inspection_text)
 
     return BodyTextCompletion
@@ -738,7 +738,7 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
     _BodyTextInspectionFilePath = TextOutputDir + f'/{projectName}_Body(검수용).txt'
     
     ## JSON 파일 불러오기
-    with open(JsonPath, 'r', encoding='utf-8') as json_file:
+    with open(JsonPath, 'r', encoding = 'utf-8') as json_file:
         PDFBookToTextSetting = json.load(json_file)
     
     TextProcess = False
@@ -760,9 +760,9 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
                 elif PageElement == 'Body':
                     BodyText += f'{Script} '
         else:
-            with open(_IndexTextFilePath, 'r', encoding='utf-8') as file:
+            with open(_IndexTextFilePath, 'r', encoding = 'utf-8') as file:
                 IndexText = file.read()
-            with open(_BodyTextFilePath, 'r', encoding='utf-8') as file:
+            with open(_BodyTextFilePath, 'r', encoding = 'utf-8') as file:
                 BodyText = file.read()
 
         ## 검수1: 목차 확인

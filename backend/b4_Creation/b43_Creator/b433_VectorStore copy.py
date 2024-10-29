@@ -25,7 +25,7 @@ def load_and_encode_data(directory):
     metadata = []
     for filename in os.listdir(directory):
         if filename.endswith('.json'):
-            with open(os.path.join(directory, filename), 'r', encoding='utf-8') as file:
+            with open(os.path.join(directory, filename), 'r', encoding = 'utf-8') as file:
                 data = json.load(file)
                 text_to_encode = f"{data['Title']} {data['Author']} {data['Intro']}"
                 vector = encode_text(text_to_encode)

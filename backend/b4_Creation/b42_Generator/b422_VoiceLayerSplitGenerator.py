@@ -1042,8 +1042,8 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     # 저자 성우 음성 노이즈 제거 되었다면 "Completion" 생성
     if VoiceEnhanceCompletionSwitch:
         CloneVoiceActor['ApiSetting']['VoiceEnhanceCompletion'] = "Completion"
-        with open(CloneVoiceActorPath, 'w', encoding='utf-8') as CloneVoiceActorJson:
-            json.dump(CloneVoiceActor, CloneVoiceActorJson, ensure_ascii=False, indent=4)
+        with open(CloneVoiceActorPath, 'w', encoding = 'utf-8') as CloneVoiceActorJson:
+            json.dump(CloneVoiceActor, CloneVoiceActorJson, ensure_ascii = False, indent = 4)
         
     # 최종 파일 합치기
     FinalCombined = AudioSegment.empty()
@@ -1151,8 +1151,8 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         # VoiceBookSplitList 저장
         VoiceBookSplitListName = '[' + projectName + '_' + 'DeNoiseVoice_SplitPoint].json'
         VoiceBookSplitListPath = VoiceLayerPathGen(projectName, email, VoiceBookSplitListName, 'Mixed')
-        with open(VoiceBookSplitListPath, 'w', encoding='utf-8') as VoiceBookSplitListJson:
-            json.dump(VoiceBookSplitList, VoiceBookSplitListJson, ensure_ascii=False, indent=4)
+        with open(VoiceBookSplitListPath, 'w', encoding = 'utf-8') as VoiceBookSplitListJson:
+            json.dump(VoiceBookSplitList, VoiceBookSplitListJson, ensure_ascii = False, indent = 4)
 
         # DeNoiseVoiceLayer 폴더에 {projectName}_DeNoiseVoiceBook 파일이 존재할 경우 분할 처리
         if os.path.exists(DeNoiseVoicesFilePath):
@@ -1535,7 +1535,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         return MatchedActors, SelectionGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
+def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
 
     ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
@@ -1661,6 +1661,126 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
         else:
             GenerationKoChunkHistory = []
         GenerationKoChunkAllHistory += GenerationKoChunkHistory
+
+    #### EditGenerationKoChunks에 중복 EditId 문제 해결 ####
+    ## Chunk의 토큰 수가 큰 경우의 해결, 또는 빈 리스트 제거
+    _MatchedChunks = copy.deepcopy(MatchedChunks)
+    MatchedChunks = []
+    for _chunk_ in _MatchedChunks:
+        ActorChunk = _chunk_['ActorChunk']
+        if ActorChunk == []:
+            continue
+        ChunkTokens = 0
+        SplitActorChunk = []
+        for __chunk in ActorChunk:
+            chunk = __chunk['Chunk']
+            ChunkLength = len(chunk)
+            if ChunkTokens + ChunkLength >= 400:
+                MatchedChunks.append({"EditId": _chunk_['EditId'], "ChunkId": _chunk_['ChunkId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
+                SplitActorChunk = []
+                ChunkTokens = 0
+            SplitActorChunk.append(__chunk)
+            ChunkTokens += ChunkLength
+        if SplitActorChunk:
+            MatchedChunks.append({"EditId": _chunk_['EditId'], "ChunkId": _chunk_['ChunkId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
+
+    ## EditId가 동일한 경우 해결
+    for i in range(len(MatchedChunks)):
+        if i > 0 and MatchedChunks[i]["EditId"] == MatchedChunks[i-1]["EditId"]:
+            count = 1
+            while i + count < len(MatchedChunks) and MatchedChunks[i + count]["EditId"] == MatchedChunks[i]["EditId"]:
+                count += 1
+            for j in range(count):
+                MatchedChunks[i + j]["EditId"] = round(MatchedChunks[i + j]["EditId"] + 0.01 * (j + 1), 2)
+    #### EditGenerationKoChunks에 중복 EditId 문제 해결 ####
+
+    #### Brackets 자동 생성 ####
+    if Bracket == "Auto" and GenerationKoChunkAllHistory != []:
+        ## 대괄호 전처리(대괄호의 위치 및 과반수에 따라 조정)
+        for i in range(len(MatchedChunks)):
+            BracketCount = 0
+            OneBracketList = []
+            ModifyCount = 0
+            ChunkCount = len(MatchedChunks[i]['ActorChunk'])
+            EditID = MatchedChunks[i]['EditId']
+            ActorNAME = MatchedChunks[i]['ActorName']
+            for j in range(ChunkCount):
+                Chunk = MatchedChunks[i]['ActorChunk'][j]['Chunk']
+                
+                ## 1. 대괄호 전처리
+                if "[[" in Chunk[:3] and "]]" in Chunk[-3:]:
+                    Chunk = Chunk.replace('[[[', '').replace(']]]', '').replace('[[', '').replace(']]', '')
+                    MatchedChunks[i]['ActorChunk'][j]['Chunk'] = f'[[{Chunk}]]'
+                    BracketCount += 1
+                elif Chunk[:3].count("[") == 1 and Chunk[-3:].count("]") == 1:
+                    Chunk = Chunk[:2].replace("[", "") + Chunk[2:]
+                    Chunk = Chunk[:-2] + Chunk[-2:].replace("]", "")
+                    MatchedChunks[i]['ActorChunk'][j]['Chunk'] = f'[{Chunk}]'
+                    OneBracketList.append(j)
+            # if OneBracketList != []:
+            #     print(f'{i}: {OneBracketList}')
+            
+            ## 2. 대괄호 개수를 통한 처리
+            if BracketCount > ChunkCount / 2:
+                for s in range(ChunkCount):
+                    Chunk = MatchedChunks[i]['ActorChunk'][s]['Chunk']
+                    Chunk = Chunk.replace('[[', '[').replace(']]', ']')
+                    MatchedChunks[i]['ActorChunk'][s]['Chunk'] = Chunk
+                    
+            ## 3. 수정의 과반수에 따라 조정
+            ExistedHistory = False
+            for k in range(len(GenerationKoChunkAllHistory)):
+                ## AA. 같은 EditId에 이름이 같을때(기존 히스토리에 해당 데이터가 있을때)
+                if GenerationKoChunkAllHistory[k]['EditId'] == EditID and GenerationKoChunkAllHistory[k]['ActorName'] == ActorNAME:
+                    ExistedHistory = True
+                    HistoryPauseCount = len(GenerationKoChunkAllHistory[k]['Pause'])
+                    # print(HistoryPauseCount)
+                    # print(ChunkCount)
+                    
+                    ## A. 문장 개수 또는 문장의 위치가 다르고, 새로운 문장이 생성되었을 때 ##
+                    if ChunkCount != HistoryPauseCount:
+                        for g in range(ChunkCount):
+                            edit_chunk = MatchedChunks[i]['ActorChunk'][g]['Chunk']
+                            MatchedChunks[i]['ActorChunk'][g]['Chunk'] = edit_chunk.replace('[[', '').replace(']]', '')
+                            edit_chunk = MatchedChunks[i]['ActorChunk'][g]['Chunk']
+                            if (g in OneBracketList) and ("[" not in Chunk[:3] and "]" not in Chunk[-3:]):
+                                MatchedChunks[i]['ActorChunk'][g]['Chunk'] = f'[{edit_chunk}]'
+                                
+                    ## B. 문장 개수 또는 문장의 위치가 같고, 기존에 있던 문장일 때 ##
+                    else:
+                        HistoryChunk = GenerationKoChunkAllHistory[k]['ActorChunk']
+                        EditChunk = MatchedChunks[i]['ActorChunk']
+                        ## 3-1. ModifyCount 체크
+                        for l in range(ChunkCount):
+                            edit_chunk = EditChunk[l]['Chunk'].replace('[[', '[').replace(']]', ']')
+                            if edit_chunk not in HistoryChunk:
+                                # print(f'{EditID}_HistoryChunk: {HistoryChunk}')
+                                # print(f'{EditID}_edit_chunk: {edit_chunk}\n')
+                                ModifyCount += 1
+                                EditChunk[l]['Chunk'] = f'[[{edit_chunk}]]'.replace('[[[', '[[').replace(']]]', ']]')
+                        ## 3-2. ModifyCount 과반수 확인
+                        if ModifyCount > ChunkCount / 2:
+                            for f in range(ChunkCount):
+                                edit_chunk = EditChunk[f]['Chunk']
+                                EditChunk[f]['Chunk'] = edit_chunk.replace('[[', '').replace(']]', '')
+                                edit_chunk = EditChunk[f]['Chunk']
+                                if (f in OneBracketList) and ("[" not in Chunk[:3] and "]" not in Chunk[-3:]):
+                                    EditChunk[f]['Chunk'] = f'[{edit_chunk}]'
+            ## BB. 기존 히스토리에 해당 데이터가 없을때
+            if not ExistedHistory:
+                for h in range(ChunkCount):
+                    edit_chunk = MatchedChunks[i]['ActorChunk'][h]['Chunk']
+                    MatchedChunks[i]['ActorChunk'][h]['Chunk'] = edit_chunk.replace('[[', '').replace(']]', '')
+                    edit_chunk = MatchedChunks[i]['ActorChunk'][h]['Chunk']
+                    if (h in OneBracketList) and ("[" not in Chunk[:3] and "]" not in Chunk[-3:]):
+                        MatchedChunks[i]['ActorChunk'][h]['Chunk'] = f'[{edit_chunk}]'
+        with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunks_Json:
+            json.dump(MatchedChunks, MatchedChunks_Json, ensure_ascii = False, indent = 4)
+        # sys.exit()
+    ## 1. 대괄호 1개가 ModifyCount > ChunkCount / 2일때 해제되는 문제
+    ## 2. 수정 이전 문장의 개수를 파악하는 문제
+    ##### 3. 문장의 순서 또는 내용이 변경된 경우 -> 이 경우는 현재 파악못함 #####
+    #### Brackets 자동 생성 ####
 
     ## MatchedActor 순서대로 Speech 생성
     for MatchedActor in MatchedActors:
@@ -1830,7 +1950,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 if matched_count >= 2:
                     del EditGenerationKoChunks[-1]
             
-            ## ReadingStyle: NarratorOnly와 AllCharacters의 설정
+            #### ReadingStyle: NarratorOnly와 AllCharacters의 설정 ####
             if ReadingStyle == 'NarratorOnly':
                 for MatchedActor in MatchedActors:
                     if MatchedActor['CharacterTag'] == 'Narrator':
@@ -1858,42 +1978,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             ## EditGenerationKoChunks의 List(프로세스)
             EditGenerationKoChunks = EditGenerationKoChunksToList(EditGenerationKoChunks)
         else:
-            ## EditGenerationKoChunks에 중복 EditId 문제 해결 ##
-            with open(MatchedChunksPath, 'r', encoding='utf-8') as MatchedChunksJson:
-                EditGenerationKoChunks = json.load(MatchedChunksJson)
-                
-                ## Chunk의 토큰 수가 큰 경우의 해결, 또는 빈 리스트 제거
-                _EditGenerationKoChunks = []
-                for _chunk_ in EditGenerationKoChunks:
-                    ActorChunk = _chunk_['ActorChunk']
-                    if ActorChunk == []:
-                        continue
-                    ChunkTokens = 0
-                    SplitActorChunk = []
-                    for __chunk in ActorChunk:
-                        chunk = __chunk['Chunk']
-                        ChunkLength = len(chunk)
-                        if ChunkTokens + ChunkLength >= 400:
-                            _EditGenerationKoChunks.append({"EditId": _chunk_['EditId'], "ChunkId": _chunk_['ChunkId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
-                            SplitActorChunk = []
-                            ChunkTokens = 0
-                        SplitActorChunk.append(__chunk)
-                        ChunkTokens += ChunkLength
-                    if SplitActorChunk:
-                        _EditGenerationKoChunks.append({"EditId": _chunk_['EditId'], "ChunkId": _chunk_['ChunkId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
-
-                ## EditId가 동일한 경우 해결
-                for i in range(len(_EditGenerationKoChunks)):
-                    if i > 0 and _EditGenerationKoChunks[i]["EditId"] == _EditGenerationKoChunks[i-1]["EditId"]:
-                        count = 1
-                        while i + count < len(_EditGenerationKoChunks) and _EditGenerationKoChunks[i + count]["EditId"] == _EditGenerationKoChunks[i]["EditId"]:
-                            count += 1
-                        for j in range(count):
-                            _EditGenerationKoChunks[i + j]["EditId"] = round(_EditGenerationKoChunks[i + j]["EditId"] + 0.01 * (j + 1), 2)
-
-            with open(MatchedChunksPath, 'w', encoding='utf-8') as MatchedChunksJson:
-                json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii=False, indent=4)
-            ## EditGenerationKoChunks에 중복 EditId 문제 해결 ##
+            with open(MatchedChunksPath, 'r', encoding = 'utf-8') as MatchedChunksJson:
+                _EditGenerationKoChunks = json.load(MatchedChunksJson)
                 
             ## EditGenerationKoChunks의 Dic(프로세스)
             EditGenerationKoChunks = EditGenerationKoChunksToList(_EditGenerationKoChunks)
@@ -2009,8 +2095,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                                 _EditGenerationChunk = _EditGenerationActorChunk[i]['Chunk']
                                 _EditGenerationKoChunk['ActorChunk'][i]['Chunk'] = _EditGenerationChunk.replace('[[', '[').replace(']]', ']')
                                 print(_EditGenerationKoChunk['ActorChunk'][i]['Chunk'])
-                # with open(MatchedChunksPath, 'w', encoding='utf-8') as MatchedChunksJson:
-                #     json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii=False, indent=4)
+                # with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunksJson:
+                #     json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii = False, indent = 4)
             
             ## ElevenLabs Chunk Modify ##
             EL_Chunk = None
@@ -2230,8 +2316,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     else:
                         ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
                         if BracketsSwitch:
-                            with open(MatchedChunksPath, 'w', encoding='utf-8') as MatchedChunksJson:
-                                json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii=False, indent=4)
+                            with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunksJson:
+                                json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii = False, indent = 4)
                         ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
                         with open(MatchedChunkHistorysPath, 'w', encoding = 'utf-8') as json_file:
                             json.dump(GenerationKoChunkHistorys, json_file, ensure_ascii = False, indent = 4)
@@ -2250,8 +2336,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         if ChangedName == 'Continue':
                             ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
                             if BracketsSwitch:
-                                with open(MatchedChunksPath, 'w', encoding='utf-8') as MatchedChunksJson:
-                                    json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii=False, indent=4)
+                                with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunksJson:
+                                    json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii = False, indent = 4)
                             ## [[내용]]을 [내용]으로 다시 되돌리기(다음에 다시 사용되기 위함)
                             ## 히스토리 저장 ##
                             # 동일한 EditId와 ActorName을 가진 항목이 있는지 확인
@@ -2286,9 +2372,9 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
-def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
+def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
-    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
+    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Bracket = Bracket, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
 
     with get_db() as db:
         

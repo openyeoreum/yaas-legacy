@@ -764,7 +764,7 @@ def RemoveActorsBasedOnFrequency(actors, continuous_actors):
 ## 대화가 이어지는 Character는 나누기
 def DividedIntoContinuousConversation(ResponseJson, CharacterList):
     # ##################
-    # with open('OldCharacterList.json', 'w', encoding='utf-8') as json_file:
+    # with open('OldCharacterList.json', 'w', encoding = 'utf-8') as json_file:
     #     json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
     # ##################
     new_characters = []  # 새로운 캐릭터를 저장할 리스트 생성
@@ -813,7 +813,7 @@ def DividedIntoContinuousConversation(ResponseJson, CharacterList):
     # 루프가 끝난 후에 새로운 캐릭터들을 추가
     CharacterList.extend(new_characters)
     # ##################
-    # with open('NewCharacterList.json', 'w', encoding='utf-8') as json_file:
+    # with open('NewCharacterList.json', 'w', encoding = 'utf-8') as json_file:
     #     json.dump(CharacterList, json_file, ensure_ascii = False, indent = 4)
     # ##################
     

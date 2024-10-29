@@ -247,7 +247,7 @@ def SelectionGenerationKoJson(projectName, email):
     SelectionGenerationKoSplitedIndexs = SelectionGenerationKoSplitedIndexs
     
     # file_path = "/yaas/SelectionGenerationKoFrame.json"
-    # with open(file_path, 'w', encoding='utf-8') as file:
+    # with open(file_path, 'w', encoding = 'utf-8') as file:
     #     json.dump(SelectionGenerationKoFrame, file, ensure_ascii = False, indent = 4)
         
     return SelectionGenerationKoBookContext, SelectionGenerationKoSplitedIndexs

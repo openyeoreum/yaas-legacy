@@ -207,7 +207,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
         MatchedMusics.append(MatchedCaptionMusicDic)
         
         ## MatchedMusics 파일 생성
-        with open(MatchedMusicLayerPath, 'w', encoding='utf-8') as MatchedMusicsJson:
+        with open(MatchedMusicLayerPath, 'w', encoding = 'utf-8') as MatchedMusicsJson:
             json.dump(MatchedMusics, MatchedMusicsJson, ensure_ascii = False, indent = 4)
     else:
         with open(MatchedMusicLayerPath, 'r', encoding = 'utf-8') as MatchedMusicsJson:
@@ -1048,7 +1048,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
 
             sys.exit(f'[ 오디오북 분할 세팅을 완료하세요. 완료 후 "AudioBook_Splitting": "Yes" 로 변경 : {IndexTagsListPath} ]')
         else:
-            with open(IndexTagsListPath, 'r', encoding='utf-8') as f:
+            with open(IndexTagsListPath, 'r', encoding = 'utf-8') as f:
                 IndexTagsList = json.load(f)
             if IndexTagsList[0]['AudioBook_Splitting'] == 'No':
                 sys.exit(f'[ 오디오북 분할 세팅을 완료하세요. 완료 후 "AudioBook_Splitting": "Yes" 로 변경 : {IndexTagsListPath} ]')
@@ -1544,7 +1544,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         if "FileId" in entry:
             MeatDataCSV.append([entry.get("FileId"), entry.get("IndexTitle", entry.get("Title")), entry.get("RunningTime"), entry.get("FileSize(MB)")])
     
-    with open(MetaDateCSVPath, mode='w', newline='', encoding='utf-8') as csv_file:
+    with open(MetaDateCSVPath, mode='w', newline='', encoding = 'utf-8') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(HeaderCSV)
         writer.writerows(MeatDataCSV)

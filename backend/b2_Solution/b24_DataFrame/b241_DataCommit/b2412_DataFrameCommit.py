@@ -60,7 +60,7 @@ def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
         FullPath = os.path.join(dataFramePath, filename)
         if pattern.match(FullPath):
             print(f"< User: {email} | Project: {projectName} | {FullPath} 로드 >")
-            with open(FullPath, 'r', encoding='utf-8') as file:
+            with open(FullPath, 'r', encoding = 'utf-8') as file:
                 OutputMemoryDicsFile = json.load(file)
             OutputMemoryCount = len(OutputMemoryDicsFile)
             break  # 첫 번째 일치하는 파일을 찾으면 반복 종료
@@ -69,7 +69,7 @@ def LoadOutputMemory(projectName, email, ProcessNum, DataFramePath):
         normalizedFullPath = os.path.join(dataFramePath, normalizedFilename)
         if pattern.match(normalizedFullPath):
             print(f"< User: {email} | Project: {projectName} | {normalizedFullPath} 로드 >")
-            with open(normalizedFullPath, 'r', encoding='utf-8') as file:
+            with open(normalizedFullPath, 'r', encoding = 'utf-8') as file:
                 OutputMemoryDicsFile = json.load(file)
             OutputMemoryCount = len(OutputMemoryDicsFile)
             break  # 첫 번째 일치하는 파일을 찾으면 반복 종료
@@ -103,7 +103,7 @@ def LoadAddOutputMemory(projectName, email, ProcessNum, DataFramePath):
         FullPath = os.path.join(dataFramePath, normalizedFilename)
         if pattern.match(FullPath):
             print(f"< User: {email} | Project: {projectName} | {FullPath} 로드 >")
-            with open(FullPath, 'r', encoding='utf-8') as file:
+            with open(FullPath, 'r', encoding = 'utf-8') as file:
                 AddOutputMemoryDicsFile = json.load(file)
             break  # 첫 번째 일치하는 파일을 찾으면 반복 종료
 
@@ -177,7 +177,7 @@ def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFrame
         OutputMemoryDicsFilename = os.path.join(DataFramePath, email + '_' + projectName + '_' + ProcessNum + '_outputMemoryDics_' + str(Date()) + '.json')
 
     # OutputMemoryDics 데이터를 파일에 덮어쓰기
-    with open(OutputMemoryDicsFilename, 'w', encoding='utf-8') as file:
+    with open(OutputMemoryDicsFilename, 'w', encoding = 'utf-8') as file:
         json.dump(OutputMemoryDics, file, ensure_ascii = False, indent = 4)
         
 ## 업데이트된 AddOutputMemoryDics 파일 저장하기
@@ -224,7 +224,7 @@ def SaveAddOutputMemory(projectName, email, AddOutputMemoryDics, ProcessNum, Dat
         AddOutputMemoryDicsFilename = os.path.join(DataFramePath, email + '_' + projectName + '_' + ProcessNum + '_addOutputMemoryDics_' + str(Date()) + '.json')
 
     # OutputMemoryDics 데이터를 파일에 덮어쓰기
-    with open(AddOutputMemoryDicsFilename, 'w', encoding='utf-8') as file:
+    with open(AddOutputMemoryDicsFilename, 'w', encoding = 'utf-8') as file:
         json.dump(AddOutputMemoryDics, file, ensure_ascii = False, indent = 4)
 
 ###################################################

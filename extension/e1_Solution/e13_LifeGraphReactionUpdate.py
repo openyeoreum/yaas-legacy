@@ -188,7 +188,7 @@ def UpdateSheet(ColumNames, CSVFilePath, AccountFilePath = '/yaas/storage/s2_Med
     SheetHeaders = worksheet.row_values(2)
 
     # CSV 파일에서 데이터 읽기
-    with open(CSVFilePath, mode='r', encoding='utf-8') as csvfile:
+    with open(CSVFilePath, mode='r', encoding = 'utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
         CSVData = list(reader)  # CSV 데이터
     
@@ -230,7 +230,7 @@ def LifeGraphReactionProcess(ReactionYYMM):
                 BeforeLifeGraph[f'{ReactionYYMM}_ReactionData'] = ReactionDic
     
     # BeforeLifeGraphList 최신화
-    with open(RecentBeforeLifeGraphPath, 'w', encoding='utf-8') as BeforeLifeGraphJson:
+    with open(RecentBeforeLifeGraphPath, 'w', encoding = 'utf-8') as BeforeLifeGraphJson:
         json.dump(BeforeLifeGraphList, BeforeLifeGraphJson, ensure_ascii = False, indent = 4)
     
     ## CSV 저장
@@ -242,7 +242,7 @@ def LifeGraphReactionProcess(ReactionYYMM):
     ColumNames = ['row', 'name', 'residence(GF)', 'expected residence', 'pattern', 'negative', 'positive', 'phone number', 'send', f'{ReactionYYMM}_email']
 
     # CSV 파일 생성 및 데이터 쓰기
-    with open(CSVFilePath, mode='w', newline='', encoding='utf-8') as csvfile:
+    with open(CSVFilePath, mode='w', newline='', encoding = 'utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames = ColumNames)
         # CSV 파일에 헤더 쓰기
         writer.writeheader()

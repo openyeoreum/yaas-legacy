@@ -11,12 +11,12 @@ from backend.b4_Creation.b41_Selector.b411_MusicLayerSelector import MusicLayerU
 ###########################
 
 ### Creation에 오디오북 제작 및 업데이트 ###
-def CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, readingStyle, voiceReverbe, mainLang, intro, audiobookSplitting = "Auto", endMusicVolume = -10, mode = "Manual", macro = "Manual", account = "None", voiceEnhance = "off", voiceFileGen = "on", messagesReview = "off"):
+def CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, readingStyle, voiceReverbe, mainLang, intro, audiobookSplitting = "Auto", endMusicVolume = -10, mode = "Manual", macro = "Manual", bracket = "Manual", account = "None", voiceEnhance = "off", voiceFileGen = "on", messagesReview = "off"):
     
     #####################
     ### 01_VoiceLayer ###
     #####################
-    VoiceLayerUpdate(projectName, email, Narrator = narrator, CloneVoiceName = cloneVoiceName, ReadingStyle = readingStyle, VoiceReverbe = voiceReverbe, MainLang = mainLang, Mode = mode, Macro = macro, Account = account, VoiceEnhance = voiceEnhance, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
+    VoiceLayerUpdate(projectName, email, Narrator = narrator, CloneVoiceName = cloneVoiceName, ReadingStyle = readingStyle, VoiceReverbe = voiceReverbe, MainLang = mainLang, Mode = mode, Macro = macro, Bracket = bracket, Account = account, VoiceEnhance = voiceEnhance, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
     MusicLayerUpdate(projectName, email, CloneVoiceName = cloneVoiceName, MainLang = mainLang, Intro = intro, AudiobookSplitting = audiobookSplitting, EndMusicVolume = endMusicVolume)
     
 if __name__ == "__main__":
@@ -35,9 +35,10 @@ if __name__ == "__main__":
     endMusicVolume = -10
     voiceFileGen = "off" # 'on', 'off'
     macro = "Manual"
+    bracket = "Manual"
     account = "None"
     messagesReview = "off"
     #########################################################################
     
     ### Step6 : 크리에이션이 오디오북 제작 ###
-    CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, readingStyle, voiceReverbe, mainLang, macro = macro, account = account, voiceEnhance = voiceEnhance, voiceFileGen = voiceFileGen, messagesReview = messagesReview)
+    CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, readingStyle, voiceReverbe, mainLang, macro = macro, bracket = bracket, account = account, voiceEnhance = voiceEnhance, voiceFileGen = voiceFileGen, messagesReview = messagesReview)

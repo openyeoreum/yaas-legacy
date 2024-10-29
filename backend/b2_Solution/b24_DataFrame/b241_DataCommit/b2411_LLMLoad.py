@@ -329,7 +329,7 @@ def OpenAI_LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Proces
       IOList = ProcessDataset["FeedbackDataset"][1:]
       TotalTokens = 0
       
-      with open(newFilename, 'w', encoding='utf-8') as file:
+      with open(newFilename, 'w', encoding = 'utf-8') as file:
         for i in range(len(IOList)):
           # "InputMemory"가 "None"일 경우 빈 텍스트("") 처리
           if IOList[i]["InputMemory"] == "None":
@@ -445,7 +445,7 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
       db.merge(prompt)
       db.commit()
       
-    with open(newFilename, "a", encoding="utf-8") as file:
+    with open(newFilename, "a", encoding = "utf-8") as file:
       jsonLine = json.dumps(fineTunedModelDic)
       file.write(jsonLine)
         

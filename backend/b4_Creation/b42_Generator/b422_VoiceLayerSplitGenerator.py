@@ -1603,7 +1603,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     
     ## CloneVoice 셋팅
     MatchedActors, SelectionGenerationKoChunks = CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, CloneVoiceActorPath, SelectionGenerationKoChunks)
-
+    MatchedChunks = []
     if os.path.exists(unicodedata.normalize('NFC', MatchedActorsPath)) or os.path.exists(unicodedata.normalize('NFD', MatchedActorsPath)):
         try:
             print(unicodedata.normalize('NFC', MatchedActorsPath))

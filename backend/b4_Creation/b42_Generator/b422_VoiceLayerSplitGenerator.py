@@ -905,7 +905,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath, proje
     return FilteredFiles
 
 ## voiceLayer의 모든 볼륨을 일정하게 만듬(아주 중요!)
-def VolumeEqualization(voiceLayerPath, RawFiles, Mode = 'Raw'):
+def VolumeEqualization(voiceLayerPath, RawFiles, Mode = 'Raw', AddVolume = 2):
     # 오디오 파일 로드
     audio_segments = [AudioSegment.from_wav(os.path.join(voiceLayerPath, filename)) for filename in RawFiles]
     # 각 오디오 파일의 RMS 값 계산
@@ -929,7 +929,7 @@ def VolumeEqualization(voiceLayerPath, RawFiles, Mode = 'Raw'):
             adjustment_db = 0  # RMS 값이 0인 경우 조정값을 0으로 설정
 
         # 볼륨 조정
-        adjusted_audio = audio + adjustment_db
+        adjusted_audio = audio + adjustment_db + AddVolume
         # 기존 파일 이름에 덮어쓰기
         adjusted_audio.export(os.path.join(voiceLayerPath, RawFiles[i]), format='wav')
         # tqdm 업데이트

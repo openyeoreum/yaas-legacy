@@ -904,6 +904,41 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath, proje
 
     return FilteredFiles
 
+## voiceLayer의 모든 볼륨을 일정하게 만듬(아주 중요!)
+def VolumeEqualization(voiceLayerPath, RawFiles, Mode = 'Raw'):
+    # 오디오 파일 로드
+    audio_segments = [AudioSegment.from_wav(os.path.join(voiceLayerPath, filename)) for filename in RawFiles]
+    # 각 오디오 파일의 RMS 값 계산
+    rms_values = [audio.rms for audio in audio_segments]
+    # 전체 파일의 평균 RMS 계산
+    if len(rms_values) > 0:
+        avg_rms = sum(rms_values) / len(rms_values)
+    else:
+        avg_rms = 0
+
+    UpdateTQDM = tqdm(audio_segments,
+                    total = len(audio_segments),
+                    desc = f'{Mode}_VolumeEqualization')
+
+    # 각 오디오 파일을 평균 RMS에 맞게 볼륨 조정
+    for i, audio in enumerate(audio_segments):
+        rms = audio.rms
+        if rms != 0:
+            adjustment_db = 20 * math.log10(avg_rms / rms)
+        else:
+            adjustment_db = 0  # RMS 값이 0인 경우 조정값을 0으로 설정
+
+        # 볼륨 조정
+        adjusted_audio = audio + adjustment_db
+        # 기존 파일 이름에 덮어쓰기
+        adjusted_audio.export(os.path.join(voiceLayerPath, RawFiles[i]), format='wav')
+        # tqdm 업데이트
+        UpdateTQDM.update(1)
+    # tqdm 닫기
+    UpdateTQDM.close()
+    # 메모리 해제
+    audio_segments = []
+
 ## 생성된 음성파일 합치기
 def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = 'off', VoiceFileGen = 'on'):
     noise_removal = NoiseRemovalClient(api_key = os.getenv("AUDO_API_KEY"))
@@ -916,40 +951,6 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     RawFiles = [unicodedata.normalize('NFC', s) for s in RawFiles]
     
     #### VolumeEqualization ####
-    ## voiceLayer의 모든 볼륨을 일정하게 만듬(아주 중요!)
-    def VolumeEqualization(voiceLayerPath, RawFiles):
-        # 오디오 파일 로드
-        audio_segments = [AudioSegment.from_wav(os.path.join(voiceLayerPath, filename)) for filename in RawFiles]
-        # 각 오디오 파일의 RMS 값 계산
-        rms_values = [audio.rms for audio in audio_segments]
-        # 전체 파일의 평균 RMS 계산
-        if len(rms_values) > 0:
-            avg_rms = sum(rms_values) / len(rms_values)
-        else:
-            avg_rms = 0
-
-        UpdateTQDM = tqdm(audio_segments,
-                        total = len(audio_segments),
-                        desc = 'VolumeEqualization')
-
-        # 각 오디오 파일을 평균 RMS에 맞게 볼륨 조정
-        for i, audio in enumerate(audio_segments):
-            rms = audio.rms
-            if rms != 0:
-                adjustment_db = 20 * math.log10(avg_rms / rms)
-            else:
-                adjustment_db = 0  # RMS 값이 0인 경우 조정값을 0으로 설정
-
-            # 볼륨 조정
-            adjusted_audio = audio + adjustment_db
-            # 기존 파일 이름에 덮어쓰기
-            adjusted_audio.export(os.path.join(voiceLayerPath, RawFiles[i]), format='wav')
-            # tqdm 업데이트
-            UpdateTQDM.update(1)
-        # tqdm 닫기
-        UpdateTQDM.close()
-        # 메모리 해제
-        audio_segments = []
     VolumeEqualization(voiceLayerPath, RawFiles)
     #### VolumeEqualization ####
     
@@ -1285,6 +1286,10 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
     RawModifiedFiles = [f for f in os.listdir(ModifyFolderPath) if f.endswith("Modify.wav")]
     # 모든 .wav 파일 목록의 노멀라이즈
     RawModifiedFiles = [unicodedata.normalize('NFC', s) for s in RawModifiedFiles]
+
+    #### VolumeEqualization ####
+    VolumeEqualization(ModifyFolderPath, RawModifiedFiles, Mode = 'Modify')
+    #### VolumeEqualization ####
 
     ## 폴더 내에 파일이 있으면 합치기 시작
     if RawModifiedFiles != []:

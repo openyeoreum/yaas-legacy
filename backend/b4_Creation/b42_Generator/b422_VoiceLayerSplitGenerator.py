@@ -1739,7 +1739,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     #### EditGenerationKoChunks에 중복 EditId 문제 해결 ####
 
     #### Brackets 자동 생성 ####
-    if Bracket == "Auto" and GenerationKoChunkAllHistory != []:
+    if Bracket != "Manual" and GenerationKoChunkAllHistory != []:
         ## 대괄호 전처리(대괄호의 위치 및 과반수에 따라 조정)
         for i in range(len(MatchedChunks)):
             BracketCount = 0
@@ -1833,7 +1833,10 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         # print(MatchedChunks[i]['ActorChunk'][h]['Chunk'])
         with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunks_Json:
             json.dump(MatchedChunks, MatchedChunks_Json, ensure_ascii = False, indent = 4)
-        # sys.exit()
+        if Bracket != "Practice":
+            sys.exit(f"[ ((Bracket = {Bracket}))는 연습모드로 실제 수정&생성에는 ((Bracket = Auto 또는 Manual))로 변경해주세요. ]")
+        else:
+            print(f"[ ((Bracket = {Bracket}))로 Edit 파일의 대괄호가 자동으로 처리되었습니다. ]")
     ## 1. 대괄호 1개가 ModifyCount > ChunkCount / 2일때 해제되는 문제
     ## 2. 수정 이전 문장의 개수를 파악하는 문제
     ##### 3. 문장의 순서 또는 내용이 변경된 경우 -> 이 경우는 현재 파악못함 #####

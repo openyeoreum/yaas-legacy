@@ -164,7 +164,7 @@ if __name__ == "__main__":
     VoiceFileGen = "on" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     MainProcess = "Solution&Creation" # 'Solution', 'Solution&Creation'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
-    Bracket = "Auto" # 'Auto', 'Manual', 'Practice' : Auto는 대괄호 자동, Manual은 대괄호 수동
+    Bracket = "Auto" # 'Auto', 'Manual', 'Practice' : Auto는 대괄호 자동, Manual은 대괄호 수동, Practice는 연습
     Account = "aldus5909@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com', 'kka6887@hanmail.net', 'aldus5909@naver.com'
     #########################################################################
     

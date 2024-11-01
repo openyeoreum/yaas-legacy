@@ -1833,7 +1833,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         # print(MatchedChunks[i]['ActorChunk'][h]['Chunk'])
         with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunks_Json:
             json.dump(MatchedChunks, MatchedChunks_Json, ensure_ascii = False, indent = 4)
-        if Bracket != "Practice":
+        if Bracket == "Practice":
             sys.exit(f"[ ((Bracket = {Bracket}))는 연습모드로 실제 수정&생성에는 ((Bracket = Auto 또는 Manual))로 변경해주세요. ]")
         else:
             print(f"[ ((Bracket = {Bracket}))로 Edit 파일의 대괄호가 자동으로 처리되었습니다. ]")

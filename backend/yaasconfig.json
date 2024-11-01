@@ -356,5 +356,25 @@
         "Intro": "off",
         "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
+    },
+    "241029_누가정부창업지원을받는가": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241029_누가정부창업지원을받는가"
+        ],
+        "Translations": [],
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "정호준(일반)",
+        "ReadingStyle": "AllCharacters",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     }
 }

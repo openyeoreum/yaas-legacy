@@ -1818,9 +1818,15 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         ChunkMatching = False
                         HistoryActorChunks = GenerationKoChunkAllHistory[k]['ActorChunks']
                         if len(HistoryActorChunks) == ChunkCount:
-                            if (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][0]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-0])) and (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][-1]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-1])):
-                                # print(MatchedChunks[i]['ActorChunk'][0]['Chunk'])
-                                ChunkMatching = True
+                            # 2개인 경우에는 한쪽이 바뀌는 것은 문제 없음
+                            if ChunkCount == 2:
+                                if (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][0]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-0])) or (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][-1]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-1])):
+                                    ChunkMatching = True
+                            # 2개인 경우에는 한쪽이 바뀌는 것은 문제 없음
+                            else:
+                                if (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][0]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-0])) and (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][-1]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-1])):
+                                    ChunkMatching = True
+                            
                                 # print(f'{i}_ChunkMatching: {ChunkMatching}')
                     # print(f'{i}_ChunkMatching: {ChunkMatching}')
                     ## A. 문장 개수가 다르거나, 새로운 문장이 생성되었을 때 ##

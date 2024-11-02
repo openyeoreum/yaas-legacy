@@ -10,6 +10,8 @@ import copy
 import shutil
 import sox
 import subprocess
+import numpy as np
+import pyloudnorm as pyln
 import sys
 sys.path.append("/yaas")
 
@@ -905,42 +907,66 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath, proje
     return FilteredFiles
 
 ## voiceLayer의 모든 볼륨을 일정하게 만듬(아주 중요!)
-def VolumeEqualization(voiceLayerPath, RawFiles, Mode = 'Raw', AddVolume = 2):
+## 동일화된 Voice파일들 원본을 Raw_로 저장(여러번 실행시 음질저하 문제 해결을 위해 아주 중요!)
+def VolumeEqualization(voiceLayerPath, RawFiles, Mode = 'Raw', target_lufs = -23.0, extra_gain_db = 1.0):
+    if Mode == 'Raw':
+        # 백업 폴더 생성
+        backup_folder = os.path.join(voiceLayerPath, 'VolumeEqualizationBackup')
+        os.makedirs(backup_folder, exist_ok = True)
+
     # 오디오 파일 로드
     audio_segments = [AudioSegment.from_wav(os.path.join(voiceLayerPath, filename)) for filename in RawFiles]
-    # 각 오디오 파일의 RMS 값 계산
-    rms_values = [audio.rms for audio in audio_segments]
-    # 전체 파일의 평균 RMS 계산
-    if len(rms_values) > 0:
-        avg_rms = sum(rms_values) / len(rms_values)
-    else:
-        avg_rms = 0
+    meter = pyln.Meter(44100)  # 표준 샘플 레이트
 
     UpdateTQDM = tqdm(audio_segments,
-                    total = len(audio_segments),
-                    desc = f'{Mode}_VolumeEqualization')
+                      total=len(audio_segments),
+                      desc=f'{Mode}_VolumeEqualization')
 
-    # 각 오디오 파일을 평균 RMS에 맞게 볼륨 조정
     for i, audio in enumerate(audio_segments):
-        rms = audio.rms
-        if rms != 0:
-            adjustment_db = 20 * math.log10(avg_rms / rms)
-        else:
-            adjustment_db = 0  # RMS 값이 0인 경우 조정값을 0으로 설정
+        try:
+            # 오디오를 numpy array로 변환 (LUFS 측정용)
+            audio_samples = np.array(audio.get_array_of_samples(), dtype=np.float32) / (1 << (audio.sample_width * 8 - 1))
+            
+            # 짧은 오디오 확인 및 파일명 출력
+            if len(audio_samples) < meter.block_size:
+                UpdateTQDM.update(1)  # tqdm 업데이트
+                continue  # 짧은 파일은 건너뛰기
 
-        # 볼륨 조정
-        adjusted_audio = audio + adjustment_db + AddVolume
-        # 기존 파일 이름에 덮어쓰기
-        adjusted_audio.export(os.path.join(voiceLayerPath, RawFiles[i]), format='wav')
-        # tqdm 업데이트
-        UpdateTQDM.update(1)
+            # LUFS 측정
+            loudness = meter.integrated_loudness(audio_samples)
+            # 목표 LUFS에 맞춰 볼륨 조정
+            adjustment_db = target_lufs - loudness
+            adjusted_audio = audio.apply_gain(adjustment_db)
+            # 추가 볼륨 증가
+            adjusted_audio = adjusted_audio.apply_gain(extra_gain_db)
+            # 클리핑 방지
+            if adjusted_audio.max_dBFS > 0:
+                adjusted_audio = adjusted_audio.normalize()
+            if Mode == 'Raw':
+                # 기존 파일을 백업 폴더에 복사
+                original_file = os.path.join(voiceLayerPath, RawFiles[i])
+                backup_file = os.path.join(backup_folder, RawFiles[i])
+                shutil.copyfile(original_file, backup_file)
+            # 새로운 오디오로 기존 파일 덮어쓰기
+            adjusted_audio.export(original_file, format = 'wav')
+            # tqdm 업데이트
+            UpdateTQDM.update(1)
+
+        except ValueError as e:
+            if Mode == 'Raw':
+                # 오류 발생 시 파일을 백업 폴더에 복사
+                original_file = os.path.join(voiceLayerPath, RawFiles[i])
+                backup_file = os.path.join(backup_folder, RawFiles[i])
+                shutil.copyfile(original_file, backup_file)
+            UpdateTQDM.update(1)  # tqdm 업데이트 후 계속 진행
+
     # tqdm 닫기
     UpdateTQDM.close()
     # 메모리 해제
     audio_segments = []
 
 ## 생성된 음성파일 합치기
-def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = 'off', VoiceFileGen = 'on'):
+def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = 'off', VoiceFileGen = 'on', VolumeEqual = 'Mixing'):
     noise_removal = NoiseRemovalClient(api_key = os.getenv("AUDO_API_KEY"))
     # VoiceLayerFileName = projectName + "_VoiceLayer.wav"
     # normalizeVoiceLayerFileName = unicodedata.normalize('NFC', VoiceLayerFileName)
@@ -949,11 +975,6 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     RawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav')]
     # 모든 .wav 파일 목록의 노멀라이즈
     RawFiles = [unicodedata.normalize('NFC', s) for s in RawFiles]
-    
-    #### VolumeEqualization ####
-    VolumeEqualization(voiceLayerPath, RawFiles)
-    #### VolumeEqualization ####
-    
     # # VoiceLayer 파일이 생성되었을 경우 해당 파일명을 RawFiles 리스트에서 삭제
     # if (VoiceLayerFileName in RawFiles) or (normalizeVoiceLayerFileName in RawFiles):
     #     try:
@@ -992,6 +1013,10 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
 
     # 폴더 내의 모든 .wav 파일 목록 정렬/필터
     FilteredFiles = SortAndRemoveDuplicates(EditGenerationKoChunks, Files, voiceLayerPath, projectName)
+    #### VolumeEqualization ####
+    if VolumeEqual == "Mastering":
+        VolumeEqualization(voiceLayerPath, FilteredFiles)
+    #### VolumeEqualization ####
     FilesCount = 0
     file_limit = 100  # 파일 분할 기준
     current_file_index = 1
@@ -1222,7 +1247,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
                     ]
                     subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         else:
-            print(f"[ 수동적인 De-Noise Voice 작업이 필요하다면 아래 경로에 '_VoiceBook.wav'파일을 DeNoising 하여, '_DeNoiseVoiceBook.wav' 파일을 생성 및 '_DeNoiseVoiceLayer' 폴더에 넣어주세요. ]\n{DeNoiseVoicesFilePath}")
+            print(f"[ >>> 수동적인 De-Noise Voice 작업이 필요하다면 아래 경로에 '_VoiceBook.wav'파일을 DeNoising 하여, '_DeNoiseVoiceBook.wav' 파일을 생성 및 '_DeNoiseVoiceLayer' 폴더에 넣어주세요. <<< ]\n{DeNoiseVoicesFilePath}")
         #### DeNoise ####
     
     ## EditGenerationKoChunks의 Dic(검수)
@@ -1579,7 +1604,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         return MatchedActors, SelectionGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
-def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
+def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
     MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
 
     ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
@@ -2426,16 +2451,16 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
     ## 최종 생성된 음성파일 합치기 ##
     time.sleep(0.1)
-    EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen)
+    EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, VolumeEqual = VolumeEqual)
     ## 최종 생성된 수정부분 음성파일 합치기 ##
     ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolder)
     
     return EditGenerationKoChunks
 
 ## 프롬프트 요청 및 결과물 Json을 VoiceLayer에 업데이트
-def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
+def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
-    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Bracket = Bracket, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
+    EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Bracket = Bracket, VolumeEqual = VolumeEqual, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
 
     with get_db() as db:
         

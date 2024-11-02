@@ -5,6 +5,7 @@ import re
 import csv
 import time
 import random
+import shutil
 import sox
 import pandas as pd
 import json
@@ -885,8 +886,44 @@ def MatchEditWithVoiceFile(EditGeneration, FilteredFiles):
     
     return MatchedFilteredFiles
 
+## voiceLayer의 VolumeEqualization으로 볼륨 동일화 오디오북 생성 후
+## 동일화된 Voice파일들 원본으로 복원(여러번 실행시 음질저하 문제 해결을 위해 아주 중요!)
+def RestoreOriginalFiles(voiceLayerPath):
+    # 백업 폴더 경로 지정
+    backup_folder = os.path.join(voiceLayerPath, 'VolumeEqualizationBackup')
+    # 백업 폴더에 있는 파일 목록 가져오기
+    if not os.path.exists(backup_folder):
+        print(f"[ {backup_folder} 가 존재하지 않음 ]")
+        return
+    
+    RawFiles = os.listdir(backup_folder)
+    UpdateTQDM = tqdm(RawFiles,
+                      total=len(RawFiles),
+                      desc='Restore_VolumeEqualFiles')
+    
+    for filename in RawFiles:
+        backup_file = os.path.join(backup_folder, filename)
+        original_file = os.path.join(voiceLayerPath, filename)
+        try:
+            # 백업 파일을 원래 경로로 덮어쓰기
+            shutil.copyfile(backup_file, original_file)
+        except Exception as e:
+            print(f"Error restoring file {filename}: {e}")
+        # tqdm 업데이트
+        UpdateTQDM.update(1)
+        
+    # tqdm 닫기
+    UpdateTQDM.close()
+    
+    # 백업 폴더 삭제
+    try:
+        shutil.rmtree(backup_folder)
+        print(f"[ VolumeEqualization 이후, 원래 파일로 RestoreOriginalFiles 완료 ]")
+    except Exception as e:
+        print(f"[ {backup_folder} 가 존재하지 않음 ]")
+
 ## 생성된 음성파일 합치기
-def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10):
+def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing'):
     EditGeneration, MusicMixingDatas, DeNoiseMixedVar = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro, EndMusicVolume = EndMusicVolume)
     
     ## voiceLayer 경로와 musicLayer 경로 ##
@@ -1449,6 +1486,11 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     ## EndTime이 업데이트 된 EditGenerationKoChunks 저장
     with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
         json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    
+    #### VolumeEqualization 파일 복원 ####
+    if VolumeEqual == "Mastering":
+        RestoreOriginalFiles(voiceLayerPath)
+    #### VolumeEqualization 파일 복원 ####
 
     return EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath
 
@@ -1556,10 +1598,10 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
     df.to_excel(MetaDateCSVPath.replace('.csv', '.xlsx'), index = False, engine = 'openpyxl')
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
-def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10):
+def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing'):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
     
-    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting, EndMusicVolume = EndMusicVolume)
+    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting, EndMusicVolume = EndMusicVolume, VolumeEqual = VolumeEqual)
     
     ## 10-15분 미리듣기 생성
     AudiobookPreviewSecond, AudiobookPreviewSize = AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)

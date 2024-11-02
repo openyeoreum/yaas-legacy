@@ -909,9 +909,14 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath, proje
 ## voiceLayer의 모든 볼륨을 일정하게 만듬(아주 중요!)
 ## 동일화된 Voice파일들 원본을 Raw_로 저장(여러번 실행시 음질저하 문제 해결을 위해 아주 중요!)
 def VolumeEqualization(voiceLayerPath, RawFiles, Mode = 'Raw', target_lufs = -23.0, extra_gain_db = 1.0):
+    print('[ VolumeEqualization : Mastering ]')
     if Mode == 'Raw':
         # 백업 폴더 생성
         backup_folder = os.path.join(voiceLayerPath, 'VolumeEqualizationBackup')
+        # 폴더가 존재하면 삭제
+        if os.path.exists(backup_folder):
+            shutil.rmtree(backup_folder)
+        # 빈 폴더 생성
         os.makedirs(backup_folder, exist_ok = True)
 
     # 오디오 파일 로드
@@ -942,9 +947,9 @@ def VolumeEqualization(voiceLayerPath, RawFiles, Mode = 'Raw', target_lufs = -23
             # 클리핑 방지
             if adjusted_audio.max_dBFS > 0:
                 adjusted_audio = adjusted_audio.normalize()
+            # 기존 파일을 백업 폴더에 복사
+            original_file = os.path.join(voiceLayerPath, RawFiles[i])
             if Mode == 'Raw':
-                # 기존 파일을 백업 폴더에 복사
-                original_file = os.path.join(voiceLayerPath, RawFiles[i])
                 backup_file = os.path.join(backup_folder, RawFiles[i])
                 shutil.copyfile(original_file, backup_file)
             # 새로운 오디오로 기존 파일 덮어쓰기
@@ -1259,7 +1264,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     return EditGenerationKoChunks
 
 ## 생성된 수정(Modify)파일 합치기
-def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
+def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName, VolumeEqual):
     ModifyFileName = ModifyFolderName + '.wav'
     ModifyFilePath = os.path.join(ModifyFolderPath, ModifyFileName)
     # 파일 이름을 파싱하여 정렬하기 위한 함수
@@ -1313,7 +1318,8 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName):
     RawModifiedFiles = [unicodedata.normalize('NFC', s) for s in RawModifiedFiles]
 
     #### VolumeEqualization ####
-    VolumeEqualization(ModifyFolderPath, RawModifiedFiles, Mode = 'Modify')
+    if VolumeEqual == "Mastering":
+        VolumeEqualization(ModifyFolderPath, RawModifiedFiles, Mode = 'Modify')
     #### VolumeEqualization ####
 
     ## 폴더 내에 파일이 있으면 합치기 시작
@@ -2453,7 +2459,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     time.sleep(0.1)
     EditGenerationKoChunks = VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath, Narrator, CloneVoiceName, CloneVoiceActorPath, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, VolumeEqual = VolumeEqual)
     ## 최종 생성된 수정부분 음성파일 합치기 ##
-    ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolder)
+    ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolder, VolumeEqual)
     
     return EditGenerationKoChunks
 

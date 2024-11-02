@@ -908,7 +908,7 @@ def SortAndRemoveDuplicates(editGenerationKoChunks, files, voiceLayerPath, proje
 
 ## voiceLayer의 모든 볼륨을 일정하게 만듬(아주 중요!)
 ## 동일화된 Voice파일들 원본을 Raw_로 저장(여러번 실행시 음질저하 문제 해결을 위해 아주 중요!)
-def VolumeEqualization(voiceLayerPath, RawFiles, Mode = 'Raw', target_lufs = -23.0, extra_gain_db = 1.0):
+def VolumeEqualization(voiceLayerPath, RawFiles, Mode = 'Raw', target_lufs = -23.0, extra_gain_db = 2.0):
     print('[ VolumeEqualization : Mastering ]')
     if Mode == 'Raw':
         # 백업 폴더 생성

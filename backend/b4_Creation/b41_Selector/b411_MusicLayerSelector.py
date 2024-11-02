@@ -918,7 +918,7 @@ def RestoreOriginalFiles(voiceLayerPath):
     # 백업 폴더 삭제
     try:
         shutil.rmtree(backup_folder)
-        print(f"[ VolumeEqualization 이후, 원래 파일로 RestoreOriginalFiles 완료 ]")
+        print(f"[ VolumeEqualization : Mastering >>> RestoreOriginalFiles 복구 완료 ]")
     except Exception as e:
         print(f"[ {backup_folder} 가 존재하지 않음 ]")
 

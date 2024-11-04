@@ -1822,7 +1822,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                             if ChunkCount == 2:
                                 if (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][0]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-0])) or (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][-1]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-1])):
                                     ChunkMatching = True
-                            # 2개인 경우에는 한쪽이 바뀌는 것은 문제 없음
+                            # 2개가 아닌 경우는 양쪽이 안 바뀌면 문제 없음, 한쪽만 바뀌는 것은 문제
                             else:
                                 if (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][0]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-0])) and (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][-1]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-1])):
                                     ChunkMatching = True

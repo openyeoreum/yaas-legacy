@@ -20546,7 +20546,7 @@
             },
             {
                 "CharacterId": 232,
-                "Name": "연아(일반)",
+                "Name": "보민(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/.wav",
                 "Quilty": 0,
                 "Grade": ["Main"],
@@ -20589,7 +20589,7 @@
                 },
                 "Voice": {
                     "Language": ["ko"],
-                    "Gender": ["남"],
+                    "Gender": ["여"],
                     "Age": [
                         {"index": "유년", "Score": 0},
                         {"index": "청소년", "Score": 0},
@@ -20612,7 +20612,7 @@
                     "TypeCastContext": {}
                 },
                 "ApiSetting": {
-                    "name": "연아(틈틈이낭만아이)",
+                    "name": "보민(연주아이)",
                     "Api": "ElevenLabs",
                     "voice_id": "qGvf5HwDImCqchVW40nt",
                     "stability": [
@@ -20622,7 +20622,7 @@
                         0.6
                     ],
                     "style": [
-                        0
+                        0.0
                     ],
                     "models": {
                         "Ko": "eleven_multilingual_v2",

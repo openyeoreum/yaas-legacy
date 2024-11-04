@@ -1483,6 +1483,20 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     fileName = '[' + projectName + '_' + 'AudioBook_Edit].json'
     MatchedChunksPath = VoiceLayerPathGen(projectName, email, fileName, Folder = 'Master')
 
+    # 오디오북 파일별 러닝타임 업데이트
+    CumulativeRunningTime = 0
+    CumulativeNum = 0
+    for j in range(len(EditGenerationKoChunks)):
+        if EditGenerationKoChunks[j]['EditId'] - 1 in FileLimitList:
+            CumulativeRunningTime += FileRunningTimeList[CumulativeNum]
+            CumulativeNum += 1
+        for k in range(len(EditGenerationKoChunks[j]['ActorChunk'])):
+            if EditGenerationKoChunks[j]['ActorChunk'][k]['EndTime']['Second'] != None:
+                SplitFileTime = SecondsToHMS(EditGenerationKoChunks[j]['ActorChunk'][k]['EndTime']['Second'] - CumulativeRunningTime)
+                EditGenerationKoChunks[j]['ActorChunk'][k]['EndTime'][f'Time({CumulativeNum + 2})'] = SplitFileTime
+            else:
+                EditGenerationKoChunks[j]['ActorChunk'][k]['EndTime'][f'Time({CumulativeNum + 2})'] = None
+
     ## EndTime이 업데이트 된 EditGenerationKoChunks 저장
     with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
         json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
@@ -1546,12 +1560,10 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
     # if IndexTag in ['Intro', 'Title', 'Logue', 'Part', 'Chapter', 'Index']:
     IndexTitle = ' '.join(IndexTitles)
-    
     if len(FileLimitList) > 1:
         for i in range(len(FileLimitList)):
             for j in range(len(EditGenerationKoChunks)):
                 if FileLimitList[i] == EditGenerationKoChunks[j]['EditId']:
-                                
                     MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i]), 'FileSize(MB)': round(FileSizeList[i], 1)}
                     MetaDataSet.append(MetaData)
                     
@@ -1627,7 +1639,7 @@ def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang 
         
         db.add(project)
         db.commit()
-        
+    
     print(f"[ User: {email} | Project: {projectName} | MusicLayerGenerator 완료 ]\n")
 
 if __name__ == "__main__":

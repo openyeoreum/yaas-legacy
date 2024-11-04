@@ -20613,8 +20613,8 @@
                 },
                 "ApiSetting": {
                     "name": "연아(틈틈이낭만아이)",
-                    "Api": "qGvf5HwDImCqchVW40nt",
-                    "voice_id": "MWSxDWfPSwb3tZVzsrEt",
+                    "Api": "ElevenLabs",
+                    "voice_id": "qGvf5HwDImCqchVW40nt",
                     "stability": [
                         0.8
                     ],

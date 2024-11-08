@@ -58,7 +58,7 @@ def AddPromptToDB():
         sentsSpliting = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-02_SentsSpliting.json")
         voiceInspection = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-04_VoiceInspection.json")
         voiceSplit = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-05_VoiceSplit.json")
-        voiceSplitInspection = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-06_voiceSplitInspection.json")
+        voiceSplitInspection = LoadJsonFrame(PromptDataPath + "/b5410_MixingMasteringPrompt/b5410-06_VoiceSplitInspection.json")
         bestSellerContextDefine = LoadJsonFrame(PromptDataPath + "/b5411_CreatorPrompt/b5411-01_BestSellerContextDefine.json")
         bestSellerCommentAnalysis = LoadJsonFrame(PromptDataPath + "/b5411_CreatorPrompt/b5411-02_BestSellerCommentAnalysis.json")
         ### 아래로 추가되는 프롬프트 작성 ###

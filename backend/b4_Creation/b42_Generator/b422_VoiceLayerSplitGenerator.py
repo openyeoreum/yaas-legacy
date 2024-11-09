@@ -17,6 +17,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from time import sleep
+from difflib import SequenceMatcher
 from datetime import datetime
 from pydub import AudioSegment
 from collections import defaultdict
@@ -1770,6 +1771,14 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     #### EditGenerationKoChunks에 중복 EditId 문제 해결 ####
 
     #### Brackets 자동 생성 ####
+    # 완전 일치 확인 함수
+    def ExactMatch(chunk1, chunk2):
+        return re.sub(r'[^가-힣]', '', chunk1) == re.sub(r'[^가-힣]', '', chunk2)
+
+    # 90% 이상 일치 확인 함수
+    def SimilarMatch(chunk1, chunk2, threshold = 0.9):
+        return SequenceMatcher(None, re.sub(r'[^가-힣]', '', chunk1), re.sub(r'[^가-힣]', '', chunk2)).ratio() >= threshold
+    
     if Bracket != "Manual" and GenerationKoChunkAllHistory != []:
         ## 대괄호 전처리(대괄호의 위치 및 과반수에 따라 조정)
         for i in range(len(MatchedChunks)):
@@ -1820,11 +1829,14 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         if len(HistoryActorChunks) == ChunkCount:
                             # 2개인 경우에는 한쪽이 바뀌는 것은 문제 없음
                             if ChunkCount == 2:
-                                if (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][0]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-0])) or (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][-1]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-1])):
+                                if ExactMatch(MatchedChunks[i]['ActorChunk'][0]['Chunk'], GenerationKoChunkAllHistory[k]['ActorChunks'][0]) or ExactMatch(MatchedChunks[i]['ActorChunk'][-1]['Chunk'], GenerationKoChunkAllHistory[k]['ActorChunks'][-1]):
                                     ChunkMatching = True
                             # 2개가 아닌 경우는 양쪽이 안 바뀌면 문제 없음, 한쪽만 바뀌는 것은 문제
                             else:
-                                if (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][0]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-0])) and (re.sub(r'[^가-힣]', '', MatchedChunks[i]['ActorChunk'][-1]['Chunk']) == re.sub(r'[^가-힣]', '', GenerationKoChunkAllHistory[k]['ActorChunks'][-1])):
+                                if (ExactMatch(MatchedChunks[i]['ActorChunk'][0]['Chunk'], GenerationKoChunkAllHistory[k]['ActorChunks'][0]) and
+                                    SimilarMatch(MatchedChunks[i]['ActorChunk'][-1]['Chunk'], GenerationKoChunkAllHistory[k]['ActorChunks'][-1])) or \
+                                (SimilarMatch(MatchedChunks[i]['ActorChunk'][0]['Chunk'], GenerationKoChunkAllHistory[k]['ActorChunks'][0]) and
+                                    ExactMatch(MatchedChunks[i]['ActorChunk'][-1]['Chunk'], GenerationKoChunkAllHistory[k]['ActorChunks'][-1])):
                                     ChunkMatching = True
                             
                                 # print(f'{i}_ChunkMatching: {ChunkMatching}')

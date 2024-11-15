@@ -2152,6 +2152,14 @@
                                 "Volume": 110,
                                 "Direction": "뒤"
                             }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/12_TitleMusicSet/125_PartMusic.wav",
+                            "Setting": {
+                                "Length": [2.87, 6.00],
+                                "Volume": 110,
+                                "Direction": "뒤"
+                            }
                         }
                     ],
                     "IndexMusic": [
@@ -2738,6 +2746,14 @@
                                 "Volume": 90,
                                 "Direction": "뒤"
                             }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/16_TitleMusicSet/164_TitleMusic.wav",
+                            "Setting": {
+                                "Length": [8.00, 16.00, 20.00, 26.00, 34.00],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
                         }
                     ],
                     "PartMusic": [
@@ -2769,6 +2785,14 @@
                             "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/16_TitleMusicSet/164_PartMusic.wav",
                             "Setting": {
                                 "Length": [2.13, 10.46],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/16_TitleMusicSet/165_PartMusic.wav",
+                            "Setting": {
+                                "Length": [1, 2],
                                 "Volume": 100,
                                 "Direction": "뒤"
                             }

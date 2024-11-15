@@ -387,6 +387,9 @@ class Prompt(Base):
     PromptDate = Column(DateTime, default=SeoulNow)
 
     ## Yeoreum
+    # ScriptGen
+    SejongCityOfficeOfEducation_Elementary = Column(JSON)
+    
     # ScriptPrompt
     BookPreprocess = Column(JSON)
     IndexDefinePreprocess = Column(JSON)
@@ -480,6 +483,9 @@ class TrainingDataset(Base):
 
     TrainingDatasetId = Column(Integer, primary_key=True, autoincrement=True)
     TrainingDatasetDate = Column(DateTime, default=SeoulNow)
+
+    # ScriptGenDataset
+    SejongCityOfficeOfEducation_Elementary = Column(JSON)
 
     # ScriptDataset
     BookPreprocess = Column(JSON)

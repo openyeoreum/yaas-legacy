@@ -22,6 +22,7 @@ def AddPromptToDB():
         # JSON 데이터 불러오기
         PromptDataPath = GetPromptDataPath()
         
+        sejongCityOfficeOfEducation_Elementary = LoadJsonFrame(PromptDataPath + "/b540_ScriptGenPrompt/b540-01_SejongCityOfficeOfEducation_Elementary.json")
         bookPreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-00_BookPreprocess.json")
         indexDefinePreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-01_IndexDefinePreprocess.json")
         indexDefineDivisionPreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-02_IndexDefineDivisionPreprocess.json")
@@ -67,6 +68,7 @@ def AddPromptToDB():
 
         # DB Commit
         if ExistingPrompt:
+            ExistingPrompt.SejongCityOfficeOfEducation_Elementary = sejongCityOfficeOfEducation_Elementary
             ExistingPrompt.BookPreprocess = bookPreprocess
             ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
             ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
@@ -112,6 +114,7 @@ def AddPromptToDB():
             print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
         else:
             prompt = Prompt(
+                SejongCityOfficeOfEducation_Elementary = sejongCityOfficeOfEducation_Elementary,
                 BookPreprocess = bookPreprocess,
                 IndexDefinePreprocess = indexDefinePreprocess,
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,

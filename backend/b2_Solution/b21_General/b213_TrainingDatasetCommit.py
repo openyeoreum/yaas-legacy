@@ -36,6 +36,7 @@ def AddTrainingDatasetToDB(projectName, email):
             ExistingDataset.ProjectsStorageId = projectsStorageId
             ExistingDataset.ProjectId = projectId
             ExistingDataset.ProjectName = projectname
+            ExistingDataset.SejongCityOfficeOfEducation_Elementary = trainingDataset
             ExistingDataset.BookPreprocess = trainingDataset
             ExistingDataset.IndexDefinePreprocess = trainingDataset
             ExistingDataset.IndexDefineDivisionPreprocess = trainingDataset
@@ -80,6 +81,7 @@ def AddTrainingDatasetToDB(projectName, email):
                 ProjectsStorageId = projectsStorageId,
                 ProjectId = projectId,
                 ProjectName = projectname,
+                SejongCityOfficeOfEducation_Elementary = trainingDataset,
                 BookPreprocess = trainingDataset,
                 IndexDefinePreprocess = trainingDataset,
                 IndexDefineDivisionPreprocess = trainingDataset,

@@ -16,268 +16,95 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 #########################
 ##### InputList 생성 #####
 #########################
-
-## PDF파일 편집
-def PDFBookCropping(projectName, email, PDFBookToTextSetting, TextDirPath):
-    # 경로 설정
-    PDFPath = TextDirPath + f'/{projectName}.pdf'
-    NormalPDFPath = TextDirPath + f'/{projectName}_Normal.pdf'
-    CroppedPDFPath = TextDirPath + f'/{projectName}_Cropped.pdf'
+## LoadRawScript 로드
+def LoadRawScript(projectName, email):
+    ScriptFilePath = f'/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file'
+    RawScriptJsonFileName = f'{projectName}_RawScript.json'
+    RawScriptFilePath = os.path.join(ScriptFilePath, RawScriptJsonFileName)
     
-    PageForm = PDFBookToTextSetting['PDFBookToTextSetting']['PageForm']
-    Left = PDFBookToTextSetting['PDFBookToTextSetting']['Left']
-    Right = PDFBookToTextSetting['PDFBookToTextSetting']['Right']
-    Up = PDFBookToTextSetting['PDFBookToTextSetting']['Up']
-    Down = PDFBookToTextSetting['PDFBookToTextSetting']['Down']
-
-    # 기준 폭을 결정하기 위해 PDF의 3번째 페이지 폭 확인
-    with open(PDFPath, 'rb') as pdf:
-        pdf_reader = PdfReader(pdf)
-        if len(pdf_reader.pages) >= 3:
-            reference_width = pdf_reader.pages[2].mediabox.width - 1
-        else:
-            reference_width = pdf_reader.pages[1].mediabox.width - 1  # 페이지가 3장 미만인 경우 두번째 페이지 폭 사용
-
-    ## 1. 페이지 분할
-    if PageForm == "Wide":
-        NormalPDFWriter = PdfWriter()
-        with open(PDFPath, 'rb') as pdf:
-            pdf_reader = PdfReader(pdf)
-            for page in pdf_reader.pages:
-                page_width = page.mediabox.width
-                page_height = page.mediabox.height
-                
-                # 페이지가 기준 폭보다 작은 경우 분할하지 않고 그대로 추가
-                if page_width < reference_width:
-                    NormalPDFWriter.add_page(page)
-                else:
-                    # 좌측 페이지 추가
-                    left_page = page
-                    left_page.mediabox.upper_right = (page_width / 2, page_height)
-                    NormalPDFWriter.add_page(left_page)
-                    # 우측 페이지 추가
-                    right_page = page
-                    right_page.mediabox.lower_left = (page_width / 2, 0)
-                    right_page.mediabox.upper_right = (page_width, page_height)
-                    NormalPDFWriter.add_page(right_page)
-
-        with open(NormalPDFPath, 'wb') as NormalPDF:
-            NormalPDFWriter.write(NormalPDF)
-    else:
-        with open(PDFPath, 'rb') as pdf:
-            with open(NormalPDFPath, 'wb') as NormalPDF:
-                NormalPDF.write(pdf.read())
-
-    ## 2. 페이지별 사이즈 잘라내기
-    with open(NormalPDFPath, 'rb') as normal_pdf_file:
-        pdf_reader = PdfReader(normal_pdf_file)
-        CroppedPDFWriter = PdfWriter()
-        for page in pdf_reader.pages:
-            page_width = float(page.mediabox.width)
-            page_height = float(page.mediabox.height)
-            original_left = float(page.mediabox.lower_left[0])
-            original_bottom = float(page.mediabox.lower_left[1])
-            # 새 좌표 계산
-            new_left = original_left + (1 - Left) * page_width / 2
-            new_right = original_left + page_width - (1 - Right) * page_width / 2
-            new_bottom = original_bottom + (1 - Down) * page_height / 2
-            new_top = original_bottom + page_height - (1 - Up) * page_height / 2
-            # Mediabox 설정
-            page.mediabox.lower_left = (new_left, new_bottom)
-            page.mediabox.upper_right = (new_right, new_top)
-            
-            CroppedPDFWriter.add_page(page)
-
-    with open(CroppedPDFPath, 'wb') as CroppedPDF:
-        CroppedPDFWriter.write(CroppedPDF)
-        
-    return PDFBookToTextSetting
-
-## PDF파일 편집 및 텍스트화
-def PDFBookToText(projectName, email, PDFBookToTextSetting):
-    # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
-    CroppedPDFPath = TextDirPath + f'/{projectName}_Cropped.pdf'
-    TextOutputDir = TextDirPath + f'/{projectName}_Text'
-    # PDF파일 편집
-    PDFBookToTextSetting = PDFBookCropping(projectName, email, PDFBookToTextSetting, TextDirPath)
-    # 텍스트 출력 폴더 생성
-    os.makedirs(TextOutputDir, exist_ok = True)
-    os.makedirs(os.path.join(TextOutputDir, f'{projectName}_Pages'), exist_ok = True)
-
-    # PDF 파일 열기
-    BookTextList = []
-    
-    with pdfplumber.open(CroppedPDFPath) as pdf:
-        for i, page in enumerate(pdf.pages, start = 1):
-            # 페이지의 bbox 좌표 가져오기
-            x0, y0, x1, y1 = page.bbox
-            # 페이지를 bbox 영역으로 자르기
-            cropped_page = page.crop((x0, y0, x1, y1))
-            # 텍스트 추출
-            text = cropped_page.extract_text()
-            # 각 페이지의 텍스트를 파일로 저장
-            text_filename = os.path.join(TextOutputDir, f'{projectName}_Pages', f'{projectName}_Page_{i}.txt')
-            BookTextList.append(text)
-            with open(text_filename, 'w', encoding = 'utf-8') as text_file:
-                text_file.write(text)
-                
-    return BookTextList
-
-## InputList 페이지별 단어 가장 앞/뒤 부분의 재배치
-def FixSplitWords(InputList):
-    for i in range(len(InputList) - 1):
-        current_entry = InputList[i]
-        next_entry = InputList[i + 1]
-
-        # 현재와 다음 엔트리가 모두 "Body"인 경우에만 처리합니다.
-        if current_entry["PageElement"] == "Body" and next_entry["PageElement"] == "Body":
-            second_continue = next_entry["Continue"]
-            # 정규식을 사용하여 선행 공백, 첫 번째 단어, 나머지로 분리합니다.
-            # re.DOTALL 플래그를 사용하여 줄바꿈 문자를 포함합니다.
-            match = re.match(r'(\s*)(\S*)(.*)', second_continue, re.DOTALL)
-
-            if match:
-                leading_spaces = match.group(1)
-                first_word = match.group(2)
-                rest_of_text = match.group(3)
-                # 선행 공백이 없고 첫 번째 단어가 존재하면 분리된 단어로 판단합니다.
-                if leading_spaces == '' and first_word != '':
-                    # 첫 번째 단어를 현재 엔트리의 "Continue"에 추가합니다.
-                    current_entry["Continue"] += first_word
-                    # 다음 엔트리의 "Continue"에서 첫 번째 단어를 제거합니다.
-                    next_entry["Continue"] = rest_of_text
-                else:
-                    continue
-            else:
-                continue
-    return InputList
-
-## InputList의 Body부분 합치고 Id 재정렬
-def MergeBodyElements(InputList):
-    MergedInputList = []
-    i = 0
-    new_id = 1
-    
-    while i < len(InputList):
-        current_element = InputList[i]
-        if current_element["PageElement"].lower() == "body":
-            if i + 1 < len(InputList) and InputList[i + 1]["PageElement"].lower() == "body":
-                # Merge the current and next Body elements
-                merged_element = {
-                    "Id": new_id,
-                    "Continue": current_element["Continue"] + InputList[i + 1]["Continue"],
-                    "PageElement": "Body"
-                }
-                MergedInputList.append(merged_element)
-                new_id += 1
-                i += 2  # Skip the next element as it has been merged
-            else:
-                # Add the current element without merging
-                current_element["Id"] = new_id
-                MergedInputList.append(current_element)
-                new_id += 1
-                i += 1
-        else:
-            # Add non-Body elements without merging
-            current_element["Id"] = new_id
-            MergedInputList.append(current_element)
-            new_id += 1
-            i += 1
-    
-    return MergedInputList
-
-## TextFile의 BookPreprocessInputList 치환 (인덱스, 캡션 부분 합치기)
-def BookPreprocessInputList(projectName, email, IndexLength = 50):
-    # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
-    JsonPath = os.path.join(TextDirPath, f'[{projectName}_PDFSetting].json')
-    TextOutputDir = TextDirPath + f'/{projectName}_Text'
-    ## JSON 파일이 없으면 생성
-    if not os.path.exists(JsonPath):
-        print(f"JSON 파일을 생성합니다: {JsonPath}")
-        ## PDFBookToTextSetting.json 생성
-        pdfBookToTextSetting = {
-            "ProjectName": f"{projectName}",
-            "PDFBookToTextSetting": {
-                "PageForm": "Normal", # 1페이지씩 구성된 경우는 "Normal", 2페이지씩 구성된 경우는 "Wide"
-                "Left": 1, # 페이지의 좌측 1-0 값으로, 1이면 모두, 0이면 없음
-                "Right": 1, # 페이지의 우측 1-0 값으로, 1이면 모두, 0이면 없음
-                "Up": 1, # 페이지의 위측 1-0 값으로, 1이면 모두, 0이면 없음
-                "Down": 1, # 페이지의 아래측 1-0 값으로, 1이면 모두, 0이면 없음
-                "TitlePages": [1], # {projectName}_Cropped.pdf 파일에서 Title이 존재하는 페이지의 리스트
-                "IndexPages": [2, 3], # {projectName}_Cropped.pdf 파일에서 목차이 존재하는 페이지 리스트
-                "indexPages": [], # {projectName}_Cropped.pdf 파일에서 각 목차의 내용이 존재하는 페이지 리스트
-                "DeletePages": [],  # {projectName}_Cropped.pdf 파일에서 중복되어 필요없는 페이지 리스트
-                "SettingCompletion": "세팅 완료 후 Completion으로 변경",
-                "PDFBookToTextCompletion": "완료 후 Completion으로 자동변경",
-                "InspectionCompletion": "완료 후 Completion으로 자동변경"
-            }
+    # 기본 RawScript JSON 구조
+    RawScriptJson = [
+        {
+            "RawScript_Completion": "No",
+            "Process": ""
+        },
+        {
+            "Id": 1,
+            "Tag": "",
+            "Name": "",
+            "Age": "",
+            "Gender": "",
+            "Title": "",
+            "Content": ""
         }
-        with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
-            json.dump(pdfBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
- 
-    ## JSON 파일 불러오기
-    with open(JsonPath, 'r', encoding = 'utf-8') as json_file:
-        PDFBookToTextSetting = json.load(json_file)
+    ]
 
-    ## PDFBookToTextSetting.json 생성
-    if PDFBookToTextSetting['PDFBookToTextSetting']['PDFBookToTextCompletion'] != 'Completion':
-        BookTextList = PDFBookToText(projectName, email, PDFBookToTextSetting)
-
-        InputList = []
-        if PDFBookToTextSetting['PDFBookToTextSetting']['SettingCompletion'] == 'Completion':
-            TitlePages = PDFBookToTextSetting['PDFBookToTextSetting']['TitlePages']
-            IndexPages = PDFBookToTextSetting['PDFBookToTextSetting']['IndexPages']
-            DeletePages = PDFBookToTextSetting['PDFBookToTextSetting']['DeletePages']
-            for i, BookText in enumerate(BookTextList, start = 1):
-                Input = {'Id': i, 'Continue': BookText, 'PageElement': None}
-                if BookText != '' and i not in DeletePages:
-                    if i in TitlePages:
-                        Input['Continue'] = f'{BookText}\n\n'
-                        Input['PageElement'] = 'Title'
-                    elif i in IndexPages:
-                        Input['Continue'] = f'\n{BookText}\n'
-                        Input['PageElement'] = 'Index'
-                    elif (len(BookText) <= IndexLength) and ((len(BookText) >= 3 and '.' not in BookText[-3:]) or (len(BookText) < 3 and '.' not in BookText)):
-                        Input['Continue'] = f'\n\n{BookText}\n\n'
-                        Input['PageElement'] = 'index'
-                    else:
-                        Input['PageElement'] = 'Body'
-                    InputList.append(Input)
-            
-            # InputList 페이지별 단어 가장 앞/뒤 부분의 재배치
-            InputList = FixSplitWords(InputList)
-            # InputList의 Body부분 합치고 Id 재정렬
-            MergedInputList = MergeBodyElements(InputList)
-            # InputList의 정렬
-            ArraiedInputList = []
-            for InputList in MergedInputList:
-                ArraiedInput = {'Id': InputList['Id'], 'Continue': InputList['Continue'], 'PageElement': InputList['PageElement']}
-                ArraiedInputList.append(ArraiedInput)
-            
-            # JSON 파일로 저장
-            with open(os.path.join(TextOutputDir, f'{projectName}_InputList.json'), 'w', encoding = 'utf-8') as InputListJson:
-                json.dump(ArraiedInputList, InputListJson, ensure_ascii = False, indent = 4)
-            
-            # "PDFBookToTextCompletion" = Completion
-            PDFBookToTextSetting['PDFBookToTextSetting']['PDFBookToTextCompletion'] = 'Completion'
-            # JSON 파일 저장
-            with open(JsonPath, 'w', encoding = 'utf-8') as json_file:
-                json.dump(PDFBookToTextSetting, json_file, ensure_ascii = False, indent = 4)
+    # 파일이 존재할 경우 로드
+    if os.path.exists(RawScriptFilePath):
+        with open(RawScriptFilePath, 'r', encoding = 'utf-8') as RawScript_Json:
+            rawScriptJson = json.load(RawScript_Json)
+        # RawScript_Completion 체크
+        if rawScriptJson[0].get("RawScript_Completion") == "Yes" and rawScriptJson[0].get("RawScript_Completion") != "":
+            Raw_ScriptJson = rawScriptJson[1:]
+            return Raw_ScriptJson
         else:
-            sys.exit(f'\n[ (([{projectName}_PDFSetting.json])) 세팅을 완료하세요 ]\n({JsonPath})\n')
+            sys.exit(f'[ (([{projectName}_RawScript.json])) 작성을 완료하고 "RawScript_Completion": "Yes"로 변경해주세요 ]\n{RawScriptFilePath}')
     else:
-        with open(os.path.join(TextOutputDir, f'{projectName}_InputList.json'), 'r', encoding = 'utf-8') as InputListJson:
-            ArraiedInputList = json.load(InputListJson)
+        # 파일이 없으면 생성하고 초기 데이터 저장
+        with open(RawScriptFilePath, 'w', encoding = 'utf-8') as file:
+            json.dump(RawScriptJson, file, ensure_ascii = False, indent = 4)
+        sys.exit(f'[ (([{projectName}_RawScript.json])) 작성을 완료하고 "RawScript_Completion": "Yes"로 변경해주세요 ]\n{RawScriptFilePath}')
+
+## LoadRawScript의 inputList 치환
+def LoadRawScriptToInputList(projectName, email):
+    rawScriptJson = LoadRawScript(projectName, email)
+    
+    InputList = []
+    for i in range(len(rawScriptJson)):
+        Id = rawScriptJson[i]['Id']
         
-    return ArraiedInputList
+        Tag = rawScriptJson[i]['Tag']
+        tag = ''
+        if Tag != '':
+            tag = f'[{Tag}]\n'
+        
+        Name = rawScriptJson[i]['Name']
+        name = ''
+        if Name != '':
+            name = f'이름: {Name}\n'
+            
+        Age = rawScriptJson[i]['Age']
+        age = ''
+        if Age != '':
+            age = f'나이: {Age}\n'
+            
+        Gender = rawScriptJson[i]['Gender']
+        gender = ''
+        if Gender != '':
+            gender = f'성별: {Gender}\n'
+            
+        Title = rawScriptJson[i]['Title']
+        title = ''
+        if Title != '':
+            title = f'제목: {Title}\n'
+            
+        Content = rawScriptJson[i]['Content']
+        content = ''
+        if Content != '':
+            content = f'내용:\n{Content}'
+        
+        RawScript = tag + name + age + gender + title + content
+            
+        InputDic = {'Id': Id, 'Continue': RawScript}
+        InputList.append(InputDic)
+        
+    return InputList
 
 ######################
 ##### Filter 조건 #####
 ######################
-## BookPreprocess의 Filter(Error 예외처리)
-def BookPreprocessFilter(responseData):
+## ScriptGeneration의 Filter(Error 예외처리)
+def ScriptGenerationFilter(responseData):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -301,7 +128,7 @@ def BookPreprocessFilter(responseData):
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def BookPreprocessInputMemory(inputMemoryDics, MemoryLength):
+def ScriptGenerationInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -318,7 +145,7 @@ def BookPreprocessInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def BookPreprocessOutputMemory(outputMemoryDics, MemoryLength):
+def ScriptGenerationOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -338,13 +165,13 @@ def BookPreprocessOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## BookPreprocess 프롬프트 요청 및 결과물 Json화
-def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPreprocess", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## ScriptGeneration 프롬프트 요청 및 결과물 Json화
+def ScriptGenerationProcess(projectName, email, DataFramePath, Process = "SejongCityOfficeOfEducation_Elementary", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
-    AddProjectContextToDB(projectName, email, "BookPreprocess")
+    AddProjectContextToDB(projectName, email, Process)
 
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '00', DataFramePath)
-    inputList = BookPreprocessInputList(projectName, email)
+    inputList = LoadRawScriptToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
         return OutputMemoryDicsFile, inputList
@@ -360,7 +187,7 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
     outputMemory = []
     ErrorCount = 0
         
-    # BookPreprocessProcess
+    # ScriptGenerationProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -387,7 +214,7 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = "- 구두점(, .), 따옴표(“” \" ')는 낭독에서 매우 중요함으로, 절대로 절대로 수정 및 추가, 삭제 하지 않습니다. -\n"
+            memoryCounter = ""
             outputEnder = ""
 
             # Response 생성
@@ -408,7 +235,7 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                     
-            Filter = BookPreprocessFilter(responseData)
+            Filter = ScriptGenerationFilter(responseData)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -453,13 +280,13 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = BookPreprocessInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = ScriptGenerationInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = BookPreprocessOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = ScriptGenerationOutputMemory(outputMemoryDics, MemoryLength)
         
         SaveOutputMemory(projectName, email, outputMemoryDics, '00', DataFramePath)
     
@@ -691,9 +518,9 @@ def SplitParagraphs(BodyText, EnterEndPunctuation, max_length = 3000):
     return BodyText
 
 ## 데이터 치환
-def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   
+def ScriptGenerationResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   
     ### A. 데이터 치환 ###
-    outputMemoryDics, inputList = BookPreprocessProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics, inputList = ScriptGenerationProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     for i in range(len(outputMemoryDics)):
@@ -826,8 +653,8 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
             
     return responseJson, TextProcess
 
-## 프롬프트 요청 및 결과물 Json을 BookPreprocess에 업데이트
-def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+## 프롬프트 요청 및 결과물 Json을 ScriptGeneration에 업데이트
+def ScriptGenerationUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     # 경로 설정
     TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
     IndexTextFilePath = TextDirPath + f'/{projectName}_Index.txt'
@@ -835,25 +662,25 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
     
     if not (os.path.exists(IndexTextFilePath) and os.path.exists(BodyTextFilePath)):
         
-        print(f"< User: {email} | Project: {projectName} | 00_BookPreprocessUpdate 시작 >")
-        # BookPreprocess의 Count값 가져오기
-        PageCount, Completion = BookPreprocessCountLoad(projectName, email)
+        print(f"< User: {email} | Project: {projectName} | 00_ScriptGenerationUpdate 시작 >")
+        # ScriptGeneration의 Count값 가져오기
+        PageCount, Completion = ScriptGenerationCountLoad(projectName, email)
         if Completion == "No":
             
             if ExistedDataFrame != None:
                 # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-                AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame)
-                AddExistedDataSetToDB(projectName, email, "BookPreprocess", ExistedDataSet)
-                print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
+                AddExistedScriptGenerationToDB(projectName, email, ExistedDataFrame)
+                AddExistedDataSetToDB(projectName, email, "ScriptGeneration", ExistedDataSet)
+                print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenerationUpdate는 ExistedScriptGeneration으로 대처됨 ]\n")
                 
-                _, TextProcess = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+                _, TextProcess = ScriptGenerationResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
 
                 if TextProcess == False:
                     sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n2. 본문(_Body)파일 내 쌍따옴표(“대화문”의 완성) 개수 일치 * _Body(검수용) 파일 확인\n3. 캡션 등의 줄바꿈 및 캡션이 아닌 일반 문장은 마지막 온점(.)처리\n\n")
                 else:
                     time.sleep(0.1)
             else:
-                responseJson, _ = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+                responseJson, _ = ScriptGenerationResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
                 
                 # ResponseJson을 ContinueCount로 슬라이스
                 ResponseJson = responseJson[PageCount:]
@@ -862,37 +689,39 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
                 # TQDM 셋팅
                 UpdateTQDM = tqdm(ResponseJson,
                                 total = ResponseJsonCount,
-                                desc = 'BookPreprocessUpdate')
+                                desc = 'ScriptGenerationUpdate')
                 # i값 수동 생성
                 i = 0
                 for Update in UpdateTQDM:
-                    UpdateTQDM.set_description(f'BookPreprocessUpdate: {Update["Script"][:10]}...')
+                    UpdateTQDM.set_description(f'ScriptGenerationUpdate: {Update["Script"][:10]}...')
                     time.sleep(0.0001)
                     PageId = Update["PageId"]
                     PageElement = Update["PageElement"]
                     Script = Update["Script"]
                     
-                    AddBookPreprocessBookPagesToDB(projectName, email, PageId, PageElement, Script)
+                    AddScriptGenerationBookPagesToDB(projectName, email, PageId, PageElement, Script)
                     # i값 수동 업데이트
                     i += 1
                 
                 UpdateTQDM.close()
                 # Completion "Yes" 업데이트
-                BookPreprocessCompletionUpdate(projectName, email)
-                print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate 완료 ]\n")
+                ScriptGenerationCompletionUpdate(projectName, email)
+                print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenerationUpdate 완료 ]\n")
         else:
-            print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 이미 완료됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenerationUpdate는 이미 완료됨 ]\n")
     else:
-        print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenerationUpdate는 ExistedScriptGeneration으로 대처됨 ]\n")
 
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "241005_그해여름필립로커웨이에서일어난소설같은일"
+    projectName = "240919_암을이기는천연항암제요약"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"
     mode = "Master"
     #########################################################################
+    
+    ScriptGenerationProcess(projectName, email, DataFramePath)

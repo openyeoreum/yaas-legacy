@@ -410,7 +410,7 @@ def IndexMatching(projectName, email):
     
     # IndexMatching 오류체크
     if nonMatchingIndexList != []:
-        sys.exit(f"Index 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | IndexMatchingError\n\n[ {projectName}의 IndexFrame과 PronunciationPreprocess를 비교 후 수정하세요! ]\n\n{nonMatchingIndexList}")
+        sys.exit(f"Index 불일치 오류 발생: Project: {projectName} | Process: BodyFrameUpdate | IndexMatchingError\n\n[ {projectName}의 IndexFrame과 PronunciationPreprocess를 비교 후 수정하세요! Index가 일치함에도 IndexMatchingError가 지속되면, 큰 따옴표 개수를 비교하세요! ]\n\n{nonMatchingIndexList}")
         
     INPUT = re.sub("[^가-힣]", "", str(CharacterTaggedChunks))
     OUTPUT = re.sub("[^가-힣]", "", str(IndexMatchedChunks))

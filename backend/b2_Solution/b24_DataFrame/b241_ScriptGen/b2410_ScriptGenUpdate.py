@@ -168,7 +168,7 @@ def ScriptGenOutputMemory(outputMemoryDics, MemoryLength):
 ## ScriptGen 프롬프트 요청 및 결과물 Json화
 def ScriptGenProcess(projectName, email, DataFramePath, Process = "SejongCityOfficeOfEducation_Elementary", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
-    AddProjectContextToDB(projectName, email, "ScriptGen")
+    AddProjectContextToDB(projectName, email, Process)
 
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '00', DataFramePath)
     inputList = LoadRawScriptToInputList(projectName, email, Process)
@@ -727,4 +727,3 @@ if __name__ == "__main__":
     # InputList = LoadRawScriptToInputList(projectName, email, "SejongCityOfficeOfEducation_Middle")
     # print(InputList)
     ScriptGenProcess(projectName, email, DataFramePath)
-    

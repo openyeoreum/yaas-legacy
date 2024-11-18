@@ -171,7 +171,6 @@ def AddProjectToDB(projectName, email):
             ExistingProject.CharacterCompletion = characterCompletion
             ExistingProject.SoundMatching = soundMatching
             ExistingProject.SFXMatching = sFXMatching
-            ExistingProject.TranslationKo = translationKo
             ExistingProject.TranslationEn = translationEn
             ExistingProject.CorrectionKo = correctionKo
             ExistingProject.CorrectionEn = correctionEn

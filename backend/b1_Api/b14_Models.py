@@ -198,7 +198,7 @@ class Project(Base):
     BodyText = Column(Text)
     
     # ScriptGen
-    ScriptGenFrame = Column(Text)
+    ScriptGenFrame = Column(JSON)
     
     # Script
     BookPreprocessFrame = Column(JSON)

@@ -10,7 +10,7 @@ from tqdm import tqdm
 from PyPDF2 import PdfWriter, PdfReader
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedBookPreprocessToDB, AddBookPreprocessBookPagesToDB, BookPreprocessCountLoad, BookPreprocessCompletionUpdate
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedScriptGenToDB, AddScriptGenBookPagesToDB, ScriptGenCountLoad, ScriptGenCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -103,8 +103,8 @@ def LoadRawScriptToInputList(projectName, email, Process):
 ######################
 ##### Filter 조건 #####
 ######################
-## ScriptGeneration의 Filter(Error 예외처리)
-def ScriptGenerationFilter(responseData):
+## ScriptGen의 Filter(Error 예외처리)
+def ScriptGenFilter(responseData):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -128,7 +128,7 @@ def ScriptGenerationFilter(responseData):
 ##### Memory 생성 #####
 ######################
 ## inputMemory 형성
-def ScriptGenerationInputMemory(inputMemoryDics, MemoryLength):
+def ScriptGenInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryDic = inputMemoryDics[-(MemoryLength + 1):]
     
     inputMemoryList = []
@@ -145,7 +145,7 @@ def ScriptGenerationInputMemory(inputMemoryDics, MemoryLength):
     return inputMemory
 
 ## outputMemory 형성
-def ScriptGenerationOutputMemory(outputMemoryDics, MemoryLength):
+def ScriptGenOutputMemory(outputMemoryDics, MemoryLength):
     outputMemoryDic = outputMemoryDics[-MemoryLength:]
     
     OUTPUTmemoryDic = []
@@ -165,10 +165,10 @@ def ScriptGenerationOutputMemory(outputMemoryDics, MemoryLength):
 #######################
 ##### Process 진행 #####
 #######################
-## ScriptGeneration 프롬프트 요청 및 결과물 Json화
-def ScriptGenerationProcess(projectName, email, DataFramePath, Process = "SejongCityOfficeOfEducation_Elementary", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+## ScriptGen 프롬프트 요청 및 결과물 Json화
+def ScriptGenProcess(projectName, email, DataFramePath, Process = "SejongCityOfficeOfEducation_Elementary", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
-    AddProjectContextToDB(projectName, email, Process)
+    AddProjectContextToDB(projectName, email, "ScriptGen")
 
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '00', DataFramePath)
     inputList = LoadRawScriptToInputList(projectName, email, Process)
@@ -187,7 +187,7 @@ def ScriptGenerationProcess(projectName, email, DataFramePath, Process = "Sejong
     outputMemory = []
     ErrorCount = 0
         
-    # ScriptGenerationProcess
+    # ScriptGenProcess
     while TotalCount < len(InputList):
         # Momory 계열 모드의 순서
         if Mode == "Memory":
@@ -235,7 +235,7 @@ def ScriptGenerationProcess(projectName, email, DataFramePath, Process = "Sejong
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                     
-            Filter = ScriptGenerationFilter(responseData)
+            Filter = ScriptGenFilter(responseData)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -280,13 +280,13 @@ def ScriptGenerationProcess(projectName, email, DataFramePath, Process = "Sejong
         try:
             InputDic = InputList[TotalCount]
             inputMemoryDics.append(InputDic)
-            inputMemory = ScriptGenerationInputMemory(inputMemoryDics, MemoryLength)
+            inputMemory = ScriptGenInputMemory(inputMemoryDics, MemoryLength)
         except IndexError:
             pass
         
         # outputMemory 형성
         outputMemoryDics.append(OutputDic)
-        outputMemory = ScriptGenerationOutputMemory(outputMemoryDics, MemoryLength)
+        outputMemory = ScriptGenOutputMemory(outputMemoryDics, MemoryLength)
         
         SaveOutputMemory(projectName, email, outputMemoryDics, '00', DataFramePath)
     
@@ -518,9 +518,9 @@ def SplitParagraphs(BodyText, EnterEndPunctuation, max_length = 3000):
     return BodyText
 
 ## 데이터 치환
-def ScriptGenerationResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   
+def ScriptGenResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   
     ### A. 데이터 치환 ###
-    outputMemoryDics, inputList = ScriptGenerationProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics, inputList = ScriptGenProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     for i in range(len(outputMemoryDics)):
@@ -653,8 +653,8 @@ def ScriptGenerationResponseJson(projectName, email, DataFramePath, messagesRevi
             
     return responseJson, TextProcess
 
-## 프롬프트 요청 및 결과물 Json을 ScriptGeneration에 업데이트
-def ScriptGenerationUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+## 프롬프트 요청 및 결과물 Json을 ScriptGen에 업데이트
+def ScriptGenUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     # 경로 설정
     TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
     IndexTextFilePath = TextDirPath + f'/{projectName}_Index.txt'
@@ -662,25 +662,25 @@ def ScriptGenerationUpdate(projectName, email, DataFramePath, MessagesReview = '
     
     if not (os.path.exists(IndexTextFilePath) and os.path.exists(BodyTextFilePath)):
         
-        print(f"< User: {email} | Project: {projectName} | 00_ScriptGenerationUpdate 시작 >")
-        # ScriptGeneration의 Count값 가져오기
-        PageCount, Completion = ScriptGenerationCountLoad(projectName, email)
+        print(f"< User: {email} | Project: {projectName} | 00_ScriptGenUpdate 시작 >")
+        # ScriptGen의 Count값 가져오기
+        PageCount, Completion = ScriptGenCountLoad(projectName, email)
         if Completion == "No":
             
             if ExistedDataFrame != None:
                 # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-                AddExistedScriptGenerationToDB(projectName, email, ExistedDataFrame)
-                AddExistedDataSetToDB(projectName, email, "ScriptGeneration", ExistedDataSet)
-                print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenerationUpdate는 ExistedScriptGeneration으로 대처됨 ]\n")
+                AddExistedScriptGenToDB(projectName, email, ExistedDataFrame)
+                AddExistedDataSetToDB(projectName, email, "ScriptGen", ExistedDataSet)
+                print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenUpdate는 ExistedScriptGen으로 대처됨 ]\n")
                 
-                _, TextProcess = ScriptGenerationResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+                _, TextProcess = ScriptGenResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
 
                 if TextProcess == False:
                     sys.exit(f"\n\n[ ((({projectName}_Index.txt))), ((({projectName}_Body.txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({TextDirPath})\n\n1. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n2. 본문(_Body)파일 내 쌍따옴표(“대화문”의 완성) 개수 일치 * _Body(검수용) 파일 확인\n3. 캡션 등의 줄바꿈 및 캡션이 아닌 일반 문장은 마지막 온점(.)처리\n\n")
                 else:
                     time.sleep(0.1)
             else:
-                responseJson, _ = ScriptGenerationResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+                responseJson, _ = ScriptGenResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
                 
                 # ResponseJson을 ContinueCount로 슬라이스
                 ResponseJson = responseJson[PageCount:]
@@ -689,28 +689,28 @@ def ScriptGenerationUpdate(projectName, email, DataFramePath, MessagesReview = '
                 # TQDM 셋팅
                 UpdateTQDM = tqdm(ResponseJson,
                                 total = ResponseJsonCount,
-                                desc = 'ScriptGenerationUpdate')
+                                desc = 'ScriptGenUpdate')
                 # i값 수동 생성
                 i = 0
                 for Update in UpdateTQDM:
-                    UpdateTQDM.set_description(f'ScriptGenerationUpdate: {Update["Script"][:10]}...')
+                    UpdateTQDM.set_description(f'ScriptGenUpdate: {Update["Script"][:10]}...')
                     time.sleep(0.0001)
                     PageId = Update["PageId"]
                     PageElement = Update["PageElement"]
                     Script = Update["Script"]
                     
-                    AddScriptGenerationBookPagesToDB(projectName, email, PageId, PageElement, Script)
+                    AddScriptGenBookPagesToDB(projectName, email, PageId, PageElement, Script)
                     # i값 수동 업데이트
                     i += 1
                 
                 UpdateTQDM.close()
                 # Completion "Yes" 업데이트
-                ScriptGenerationCompletionUpdate(projectName, email)
-                print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenerationUpdate 완료 ]\n")
+                ScriptGenCompletionUpdate(projectName, email)
+                print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenUpdate 완료 ]\n")
         else:
-            print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenerationUpdate는 이미 완료됨 ]\n")
+            print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenUpdate는 이미 완료됨 ]\n")
     else:
-        print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenerationUpdate는 ExistedScriptGeneration으로 대처됨 ]\n")
+        print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenUpdate는 ExistedScriptGen으로 대처됨 ]\n")
 
 if __name__ == "__main__":
 
@@ -726,5 +726,5 @@ if __name__ == "__main__":
     
     # InputList = LoadRawScriptToInputList(projectName, email, "SejongCityOfficeOfEducation_Middle")
     # print(InputList)
-    ScriptGenerationProcess(projectName, email, DataFramePath)
+    ScriptGenProcess(projectName, email, DataFramePath)
     

@@ -374,6 +374,26 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
+        "AudiobookSplitting": "Manual",
+        "EndMusicVolume": -10
+    },
+    "241118_우리반오디오북아름초5학년5반": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241118_우리반오디오북아름초5학년5반"
+        ],
+        "Translations": [],
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "정호준(일반)",
+        "ReadingStyle": "AllCharacters",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
         "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
     }

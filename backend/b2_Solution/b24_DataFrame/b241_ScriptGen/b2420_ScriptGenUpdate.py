@@ -17,7 +17,7 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 ##### InputList 생성 #####
 #########################
 ## LoadRawScript 로드
-def LoadRawScript(projectName, email):
+def LoadRawScript(projectName, email, Process):
     ScriptFilePath = f'/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file'
     RawScriptJsonFileName = f'{projectName}_RawScript.json'
     RawScriptFilePath = os.path.join(ScriptFilePath, RawScriptJsonFileName)
@@ -26,7 +26,7 @@ def LoadRawScript(projectName, email):
     RawScriptJson = [
         {
             "RawScript_Completion": "No",
-            "Process": ""
+            "Process": f"{Process}"
         },
         {
             "Id": 1,
@@ -56,8 +56,8 @@ def LoadRawScript(projectName, email):
         sys.exit(f'[ (([{projectName}_RawScript.json])) 작성을 완료하고 "RawScript_Completion": "Yes"로 변경해주세요 ]\n{RawScriptFilePath}')
 
 ## LoadRawScript의 inputList 치환
-def LoadRawScriptToInputList(projectName, email):
-    rawScriptJson = LoadRawScript(projectName, email)
+def LoadRawScriptToInputList(projectName, email, Process):
+    rawScriptJson = LoadRawScript(projectName, email, Process)
     
     InputList = []
     for i in range(len(rawScriptJson)):
@@ -171,7 +171,7 @@ def ScriptGenerationProcess(projectName, email, DataFramePath, Process = "Sejong
     AddProjectContextToDB(projectName, email, Process)
 
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '00', DataFramePath)
-    inputList = LoadRawScriptToInputList(projectName, email)
+    inputList = LoadRawScriptToInputList(projectName, email, Process)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
         return OutputMemoryDicsFile, inputList
@@ -716,7 +716,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "240919_암을이기는천연항암제요약"
+    projectName = "241118_우리반오디오북아름초5학년5반"
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
@@ -724,4 +724,7 @@ if __name__ == "__main__":
     mode = "Master"
     #########################################################################
     
+    # InputList = LoadRawScriptToInputList(projectName, email, "SejongCityOfficeOfEducation_Middle")
+    # print(InputList)
     ScriptGenerationProcess(projectName, email, DataFramePath)
+    

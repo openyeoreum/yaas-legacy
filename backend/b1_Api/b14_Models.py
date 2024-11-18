@@ -197,6 +197,9 @@ class Project(Base):
     CharacterText = Column(Text)
     BodyText = Column(Text)
     
+    # ScriptGen
+    ScriptGenFrame = Column(Text)
+    
     # Script
     BookPreprocessFrame = Column(JSON)
     IndexFrame = Column(JSON)
@@ -315,6 +318,9 @@ class ProjectHistory(Base):
     AudioBookFile = Column(Text)
     
     ## Process
+    # ScriptGen
+    ScriptGenFrame = Column(Text)
+    
     # Script
     BookPreprocessFrameStatus = Column(String(64))
     IndexFrameStatus = Column(String(64))
@@ -389,6 +395,7 @@ class Prompt(Base):
     ## Yeoreum
     # ScriptGen
     SejongCityOfficeOfEducation_Elementary = Column(JSON)
+    SejongCityOfficeOfEducation_Middle = Column(JSON)
     
     # ScriptPrompt
     BookPreprocess = Column(JSON)
@@ -486,6 +493,7 @@ class TrainingDataset(Base):
 
     # ScriptGenDataset
     SejongCityOfficeOfEducation_Elementary = Column(JSON)
+    SejongCityOfficeOfEducation_Middle = Column(JSON)
 
     # ScriptDataset
     BookPreprocess = Column(JSON)

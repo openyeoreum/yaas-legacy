@@ -255,6 +255,88 @@ def AddFrameMetaDataToDB(projectName, email):
 
 
 #####################################
+##### 00_ScriptGen Process #####
+#####################################
+## 0-1. 1-0 ScriptGen이 이미 ExistedFrame으로 존재할때 업데이트
+def AddExistedScriptGenToDB(projectName, email, ExistedDataFrame):
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.ScriptGenFrame[1] = ExistedDataFrame[1]
+        
+        flag_modified(project, "ScriptGenFrame")
+        
+        db.add(project)
+        db.commit()
+
+## 0-1. 1-1 ScriptGen의 Scripts(페이지) updateScripts 업데이트 형식
+def UpdateScripts(project, ScriptId, Script):    
+    updateScripts = {
+        "ScriptId": ScriptId,
+        "Script": Script
+    }
+    
+    project.ScriptGenFrame[1]["Scripts"].append(updateScripts)
+    project.ScriptGenFrame[0]["ScriptCount"] = ScriptId
+    
+## 0-1. 1-2 ScriptGen의 Scripts(페이지) updateScripts 업데이트
+def AddScriptGenBookPagesToDB(projectName, email, ScriptId, Script):
+    with get_db() as db:
+        
+        project = GetProject(projectName, email)
+        UpdateScripts(project, ScriptId, Script)
+        
+        flag_modified(project, "ScriptGenFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 0-1. ScriptGen의Count의 가져오기
+def ScriptGenCountLoad(projectName, email):
+
+    project = GetProject(projectName, email)
+    ScriptCount = project.ScriptGenFrame[0]["ScriptCount"]
+    Completion = project.ScriptGenFrame[0]["Completion"]
+    
+    return ScriptCount, Completion
+
+## 0-1. ScriptGen의 초기화
+def InitScriptGen(projectName, email):
+    ProjectDataPath = GetProjectDataPath()
+    with get_db() as db:
+    
+        project = GetProject(projectName, email)
+        project.ScriptGenFrame[0]["ScriptCount"] = 0
+        project.ScriptGenFrame[0]["Completion"] = "No"
+        project.ScriptGenFrame[1] = LoadJsonFrame(ProjectDataPath + "/b530_ScriptGen/b530-00_ScriptGenFrame.json")[1]
+
+        flag_modified(project, "ScriptGenFrame")
+        
+        db.add(project)
+        db.commit()
+        
+## 0-1. 업데이트된 ScriptGen 출력
+def UpdatedScriptGen(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+
+    return project.ScriptGenFrame
+
+## 0-1. ScriptGenCompletion 업데이트
+def ScriptGenCompletionUpdate(projectName, email):
+    with get_db() as db:
+
+        project = GetProject(projectName, email)
+        project.ScriptGenFrame[0]["Completion"] = "Yes"
+
+        flag_modified(project, "ScriptGenFrame")
+
+        db.add(project)
+        db.commit()
+
+
+#####################################
 ##### 00_BookPreprocess Process #####
 #####################################
 ## 0-1. 1-0 BookPreprocess이 이미 ExistedFrame으로 존재할때 업데이트

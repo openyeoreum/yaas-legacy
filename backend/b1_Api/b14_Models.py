@@ -492,8 +492,7 @@ class TrainingDataset(Base):
     TrainingDatasetDate = Column(DateTime, default=SeoulNow)
 
     # ScriptGenDataset
-    SejongCityOfficeOfEducation_Elementary = Column(JSON)
-    SejongCityOfficeOfEducation_Middle = Column(JSON)
+    ScriptGen = Column(JSON)
 
     # ScriptDataset
     BookPreprocess = Column(JSON)

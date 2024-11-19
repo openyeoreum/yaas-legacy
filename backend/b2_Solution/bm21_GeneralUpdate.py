@@ -35,7 +35,7 @@ def AccountUpdate(email, name, password):
     # AddProjectsStorageToDB('ahyeon', 'ahyeon0128@gmail.com')
 
 ### 솔루션에 프로젝트 업데이트 ###
-def SolutionProjectUpdate(email, projectName):
+def SolutionProjectUpdate(email, projectName, ScriptGen):
 
     ### b232_ProjectCommit ###
     AddProjectToDB(projectName, email)
@@ -49,7 +49,7 @@ def SolutionProjectUpdate(email, projectName):
 
     ### b233_ProjectFileCommit ###
     # AddTextToDB
-    AddTextToDB(projectName, email)
+    AddTextToDB(projectName, email, ScriptGen)
     # AddTextToDB('빨간머리앤', email)
     # AddTextToDB('웹3.0메타버스', email)
     # AddTextToDB('나는선비로소이다', email)

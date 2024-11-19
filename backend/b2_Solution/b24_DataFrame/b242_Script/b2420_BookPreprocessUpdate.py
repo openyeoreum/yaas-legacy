@@ -307,7 +307,6 @@ def BookPreprocessInputMemory(inputMemoryDics, MemoryLength):
     inputMemoryList = []
     for inputmeMory in inputMemoryDic:
         key = list(inputmeMory.keys())[1]  # 두 번째 키값
-        print(inputmeMory)
         if key == "Continue":
             inputMemoryList.append(inputmeMory['Continue'])
         else:

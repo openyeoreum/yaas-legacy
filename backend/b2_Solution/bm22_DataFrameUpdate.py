@@ -9,7 +9,7 @@ from datetime import datetime
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, InitScriptGen, UpdatedScriptGen, InitBookPreprocess, UpdatedBookPreprocess, InitIndexFrame, UpdatedIndexFrame, InitDuplicationPreprocess, UpdatedDuplicationPreprocess, InitPronunciationPreprocess, UpdatedPronunciationPreprocess, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
-from backend.b2_Solution.b24_DataFrame.b241_ScriptGen.b2410_ScriptGenUpdate import ScriptGenUpdate
+from backend.b2_Solution.b24_DataFrame.b241_ScriptGen.b2410_ScriptGenUpdate import ScriptGenUpdate, ScriptGenResponseJson
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2420_BookPreprocessUpdate import BookPreprocessUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2421_IndexDefineUpdate import IndexFrameUpdate
 from backend.b2_Solution.b24_DataFrame.b242_Script.b2422_DuplicationPreprocessUpdate import DuplicationPreprocessUpdate
@@ -161,7 +161,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
 ###################################
 
 ### 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-def SolutionDataFrameUpdate(email, projectName, scriptGen = "None", indexMode = "Define", messagesReview = "on", bookGenre = "Auto", Translations = []):
+def SolutionDataFrameUpdate(email, projectName, scriptGen, indexMode = "Define", messagesReview = "on", bookGenre = "Auto", Translations = []):
     ############################ 하이퍼 파라미터 설정 ############################
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
@@ -190,41 +190,42 @@ def SolutionDataFrameUpdate(email, projectName, scriptGen = "None", indexMode = 
     ####################
     ### 00_ScriptGen ###
     ####################
-    InitScriptGen(projectName, email)
-    InitRawDataSet(projectName, email, scriptGen)
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, f"ScriptGenFrame", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ScriptGen", RawDataSetPath)
-    mode = "Master"
-    ScriptGenUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
-
-    if existedDataFrame == None:
-        updatedScriptGen = UpdatedScriptGen(projectName, email)
-        SaveDataFrame(projectName, email, "00_ScriptGenFrame", updatedScriptGen, DataFramePath)
-    if existedDataSet == None:
-        SaveDataSet(projectName, email, "00", "ScriptGen", RawDataSetPath)
-    existedDataFrame = None
-    existedDataSet = None
+    if scriptGen['ScriptGen'] == 'on':
+        InitScriptGen(projectName, email)
+        InitRawDataSet(projectName, email, "ScriptGen")
+        if existedDataFrameMode == "on":
+            existedDataFrame = LoadexistedDataFrame(projectName, email, "ScriptGenFrame", DataFramePath)
+            recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ScriptGen", RawDataSetPath)
+        mode = "Master"
+        ScriptGenUpdate(projectName, email, DataFramePath, scriptGen, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+        if existedDataFrame == None:
+            updatedScriptGen = UpdatedScriptGen(projectName, email)
+            SaveDataFrame(projectName, email, "00_ScriptGenFrame", updatedScriptGen, DataFramePath)
+        if existedDataSet == None:
+            SaveDataSet(projectName, email, "00", "ScriptGen", RawDataSetPath)
+        existedDataFrame = None
+        existedDataSet = None
 
 
     #########################
     ### 00_BookPreprocess ###
     #########################
-    InitBookPreprocess(projectName, email)
-    InitRawDataSet(projectName, email, "BookPreprocess")
-    if existedDataFrameMode == "on":
-        existedDataFrame = LoadexistedDataFrame(projectName, email, "BookPreprocessFrame", DataFramePath)
-        recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BookPreprocess", RawDataSetPath)
-    mode = "Master"
-    BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    if scriptGen['ScriptGen'] != 'on':
+        InitBookPreprocess(projectName, email)
+        InitRawDataSet(projectName, email, "BookPreprocess")
+        if existedDataFrameMode == "on":
+            existedDataFrame = LoadexistedDataFrame(projectName, email, "BookPreprocessFrame", DataFramePath)
+            recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BookPreprocess", RawDataSetPath)
+        mode = "Master"
+        BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
 
-    if existedDataFrame == None:
-        updatedBookPreprocess = UpdatedBookPreprocess(projectName, email)
-        SaveDataFrame(projectName, email, "00_BookPreprocessFrame", updatedBookPreprocess, DataFramePath)
-    if existedDataSet == None:
-        SaveDataSet(projectName, email, "00", "BookPreprocess", RawDataSetPath)
-    existedDataFrame = None
-    existedDataSet = None
+        if existedDataFrame == None:
+            updatedBookPreprocess = UpdatedBookPreprocess(projectName, email)
+            SaveDataFrame(projectName, email, "00_BookPreprocessFrame", updatedBookPreprocess, DataFramePath)
+        if existedDataSet == None:
+            SaveDataSet(projectName, email, "00", "BookPreprocess", RawDataSetPath)
+        existedDataFrame = None
+        existedDataSet = None
 
 
     ###################################

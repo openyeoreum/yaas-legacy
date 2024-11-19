@@ -16,19 +16,22 @@ def LoadTextFile(filepath):
         return None
 
 # 개발시에만 활용
-def ExistenceOrNotTextFile(projectName, email):
+def ExistenceOrNotTextFile(projectName, email, ScriptGen):
     project = GetProject(projectName, email)
     ScriptFilesPath = project.ScriptPath
     PDFFileSourcePath = os.path.join(ScriptFilesPath, projectName + ".pdf")
     IndexFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Index.txt")
     BodyFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Body.txt")
 
-    if os.path.exists(PDFFileSourcePath) or (os.path.exists(IndexFileSourcePath) and os.path.exists(BodyFileSourcePath)):
-        pass
+    if ScriptGen['ScriptGen'] != 'on':
+        if os.path.exists(PDFFileSourcePath) or (os.path.exists(IndexFileSourcePath) and os.path.exists(BodyFileSourcePath)):
+            pass
+        else:
+            sys.exit(f"\n[ 아래 폴더에 ((({projectName + '.pdf'}))) 또는 ((({projectName + '_Index.txt'} + {projectName + '_Body.txt'}))) 파일을 넣어주세요 ]\n({ScriptFilesPath})")
     else:
-        sys.exit(f"\n[ 아래 폴더에 ((({projectName + '.pdf'}))) 또는 ((({projectName + '_Index.txt'} + {projectName + '_Body.txt'}))) 파일을 넣어주세요 ]\n({ScriptFilesPath})")
+        print("\n[ Script Generation 프로세스 ]\n")
 
-def AddTextToDB(projectName, email):
+def AddTextToDB(projectName, email, ScriptGen):
     with get_db() as db:
         user = db.query(User).filter(User.Email == email).first()
         project = GetProject(projectName, email)
@@ -47,7 +50,7 @@ def AddTextToDB(projectName, email):
         #     os.remove(bodyFilePath)
 
         # 파일 이동 (개발시에만 활용)
-        ExistenceOrNotTextFile(projectName, email)
+        ExistenceOrNotTextFile(projectName, email, ScriptGen)
 
         IndexFileText = LoadTextFile(indexFilePath)
         BodyFileText = LoadTextFile(bodyFilePath)

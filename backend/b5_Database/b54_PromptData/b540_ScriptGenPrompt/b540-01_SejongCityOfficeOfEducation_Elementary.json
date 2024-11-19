@@ -2,7 +2,7 @@
     "TaskName": "SejongCityOfficeOfEducation_Elementary",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-4o-mini",
+            "ShortTokensModel": "gpt-4o-2024-08-06",
             "LongTokensModel": "gpt-4o-2024-08-06"
         },
         "ExampleFineTunedModel": {

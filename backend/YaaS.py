@@ -13,7 +13,7 @@ from b2_Solution.bm23_DataSetUpdate import SolutionDataSetUpdate
 from b4_Creation.bm25_AudiobookUpdate import CreationAudioBookUpdate
 
 ### Main1 : 프로젝트 Config 생성 ###
-def ConfigUpdate(projectNameList, Narrator, CloneVoiceName, ReadingStyle):
+def ConfigUpdate(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle):
 
     ConfigPath = '/yaas/backend/yaasconfig.json'
     with open(ConfigPath, 'r', encoding = 'utf-8') as ConfigJson:
@@ -27,6 +27,7 @@ def ConfigUpdate(projectNameList, Narrator, CloneVoiceName, ReadingStyle):
                 "password": "0128",
                 "projectNameList": [projectName],
                 "Translations": [],
+                "ScriptGen": ScriptGen,
                 "IndexMode": "Define",
                 "BookGenre": "Auto",
                 "MainLang": "Ko",
@@ -44,7 +45,7 @@ def ConfigUpdate(projectNameList, Narrator, CloneVoiceName, ReadingStyle):
         json.dump(ConfigData, ConfigJson, ensure_ascii = False, indent = 4)
 
 ### Main1 : 솔루션 업데이트 ###
-def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre, Translations):
+def SolutionUpdate(email, projectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations):
 
     # ## .env 파일 로드(API_KEY 등 환경 변수 액세스)
     # envPath = os.path.join(os.path.dirname(__file__), '..', 'storage', '.env')
@@ -67,20 +68,20 @@ def SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre,
             #     projectName = _projectName
 
             ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
-            SolutionProjectUpdate(email, projectName)
+            SolutionProjectUpdate(email, projectName, ScriptGen)
             
             ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-            SolutionDataFrameUpdate(email, projectName, indexMode = IndexMode, messagesReview = MessagesReview, bookGenre = BookGenre, Translations = Translations)
+            SolutionDataFrameUpdate(email, projectName, scriptGen = ScriptGen, indexMode = IndexMode, messagesReview = MessagesReview, bookGenre = BookGenre, Translations = Translations)
             
             # ### Step4 : 솔루션에 프로젝트 데이터셋 학습진행 및 업데이트 ###
             # SolutionDataSetUpdate(email, projectName)
     
     else:
         ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
-        SolutionProjectUpdate(email, projectName)
+        SolutionProjectUpdate(email, projectName, ScriptGen)
         
         ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-        SolutionDataFrameUpdate(email, projectName, indexMode = IndexMode, messagesReview = MessagesReview)
+        SolutionDataFrameUpdate(email, projectName, scriptGen = ScriptGen, indexMode = IndexMode, messagesReview = MessagesReview)
         
         # ### Step4 : 솔루션에 프로젝트 데이터셋 학습진행 및 업데이트 ###
         # SolutionDataSetUpdate(email, projectName)
@@ -110,15 +111,15 @@ def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyl
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Solution&Creation' ###
 
-def YaaS(email, name, password, projectNameList, Translations, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Bracket, VolumeEqual, Account):
+def YaaS(email, name, password, projectNameList, Translations, ScriptGen, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, VoiceEnhance, VoiceFileGen, MainProcess, Macro, Bracket, VolumeEqual, Account):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
-        SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre, Translations)
+        SolutionUpdate(email, projectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations)
         
     elif MainProcess == 'Solution&Creation':
         AccountUpdate(email, name, password)
-        SolutionUpdate(email, projectNameList, IndexMode, MessagesReview, BookGenre, Translations)
+        SolutionUpdate(email, projectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations)
         CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, MessagesReview)
 
 ### YaaS Multiprocessing : 오디오북 병렬 제작 ###
@@ -130,15 +131,15 @@ def Loadyaasconfig(yaasconfigPath = '/yaas/backend/yaasconfig.json'):
     return yaasconfig
 
 ## MultiProcessing
-def MultiProcessing(projectNameList, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, MainProcess, Macro, Bracket, VolumeEqual, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json'):
+def MultiProcessing(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, MainProcess, Macro, Bracket, VolumeEqual, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json'):
     print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
-    ConfigUpdate(projectNameList, Narrator, CloneVoiceName, ReadingStyle)
+    ConfigUpdate(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle)
     yaasconfig = Loadyaasconfig(yaasconfigPath = yaasconfigPath)
     
     processes = []
     for projectName in projectNameList:
         YaasConfig = yaasconfig[projectName]
-        Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["name"], YaasConfig["password"], YaasConfig["projectNameList"], YaasConfig["Translations"], YaasConfig["IndexMode"], MessagesReview, YaasConfig["BookGenre"], YaasConfig["Narrator"], YaasConfig["CloneVoiceName"], YaasConfig["ReadingStyle"], YaasConfig["VoiceReverbe"], YaasConfig["MainLang"], YaasConfig["Intro"], YaasConfig["AudiobookSplitting"], YaasConfig["EndMusicVolume"], YaasConfig["VoiceEnhance"], VoiceFileGen, MainProcess, Macro, Bracket, VolumeEqual, Account))
+        Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["name"], YaasConfig["password"], YaasConfig["projectNameList"], YaasConfig["Translations"], YaasConfig["ScriptGen"], YaasConfig["IndexMode"], MessagesReview, YaasConfig["BookGenre"], YaasConfig["Narrator"], YaasConfig["CloneVoiceName"], YaasConfig["ReadingStyle"], YaasConfig["VoiceReverbe"], YaasConfig["MainLang"], YaasConfig["Intro"], YaasConfig["AudiobookSplitting"], YaasConfig["EndMusicVolume"], YaasConfig["VoiceEnhance"], VoiceFileGen, MainProcess, Macro, Bracket, VolumeEqual, Account))
         processes.append(Process)
         Process.start()
         
@@ -154,10 +155,14 @@ def MultiProcessing(projectNameList, Narrator, CloneVoiceName, ReadingStyle, Mes
 if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
+    ## projectNameList ##
     ## '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240919_암을이기는천연항암제요약', '240812_룰루레몬스토리', '240815_노유파', '240908_나무스토리텔링', '240910_AI미래시나리오2030', '240925_불멸의지혜', '241005_그해여름필립로커웨이에서일어난소설같은일', '241009_책갈피와책수레', '241010_틈틈이낭만', '241024_오성삼유튜브', '241024_서울장애인가족지원센터당선작13선', '241029_누가정부창업지원을받는가', '241116_베이버터와다섯개의빛', '241118_우리반오디오북아름초5학년5반'
+    
+    ## ScriptGen ##
+    ## {"ScriptGen": "off", "Process": "", "KeyList": []}, {"ScriptGen": "on", "Process": "SejongCityOfficeOfEducation_Elementary", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]}
 
     projectNameList = ['241118_우리반오디오북아름초5학년5반']
-    ScriptGen = {"Gen": "off", "Process": "SejongCityOfficeOfEducation_Elementary"} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'Process' : 'SejongCityOfficeOfEducation_Elementary'
+    ScriptGen = {"ScriptGen": "on", "Process": "SejongCityOfficeOfEducation_Elementary", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'Process' : 'SejongCityOfficeOfEducation_Elementary' ... / 'KeyList' : ['프롬프트 결과로', '나오는 KeyList', '작성']
     Narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
     CloneVoiceName = "정호준(일반)" # 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
     ReadingStyle = "AllCharacters" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
@@ -170,4 +175,4 @@ if __name__ == "__main__":
     Account = "lunahyeon00128@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com', 'kka6887@hanmail.net', 'aldus5909@naver.com'
     #########################################################################
 
-    MultiProcessing(projectNameList, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, MainProcess, Macro, Bracket, VolumeEqual, Account)
+    MultiProcessing(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, MainProcess, Macro, Bracket, VolumeEqual, Account)

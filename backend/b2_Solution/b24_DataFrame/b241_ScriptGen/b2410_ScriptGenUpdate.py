@@ -406,7 +406,3 @@ if __name__ == "__main__":
     messagesReview = "on"
     mode = "Master"
     #########################################################################
-    
-    # InputList = LoadRawScriptToInputList(projectName, email, "SejongCityOfficeOfEducation_Middle")
-    # print(InputList)
-    ScriptGenProcess(projectName, email, DataFramePath)

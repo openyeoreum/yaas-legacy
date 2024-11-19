@@ -196,7 +196,7 @@ def SolutionDataFrameUpdate(email, projectName, scriptGen, indexMode = "Define",
         if existedDataFrameMode == "on":
             existedDataFrame = LoadexistedDataFrame(projectName, email, "ScriptGenFrame", DataFramePath)
             recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ScriptGen", RawDataSetPath)
-        mode = "Master"
+        mode = "Memory"
         ScriptGenUpdate(projectName, email, DataFramePath, scriptGen, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
         if existedDataFrame == None:
             updatedScriptGen = UpdatedScriptGen(projectName, email)

@@ -467,5 +467,34 @@
         "Intro": "off",
         "AudiobookSplitting": "Manual",
         "EndMusicVolume": -10
+    },
+    "241118_세종교육청우리반오디오북새움중1학년8반": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241118_세종교육청우리반오디오북새움중1학년8반"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "Process": "SejongCityOfficeOfEducation_Poem",
+            "KeyList": [
+                "선생님의 소개",
+                "아이가 작성한 시",
+                "선생님의 칭찬"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "곽지희선생님(일반)",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     }
 }

@@ -394,7 +394,7 @@ class Prompt(Base):
 
     ## Yeoreum
     # ScriptGen
-    SejongCityOfficeOfEducation_Elementary = Column(JSON)
+    SejongCityOfficeOfEducation_Poem = Column(JSON)
     SejongCityOfficeOfEducation_Middle = Column(JSON)
     
     # ScriptPrompt

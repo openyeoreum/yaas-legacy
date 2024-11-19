@@ -1,5 +1,5 @@
 {
-    "TaskName": "SejongCityOfficeOfEducation_Elementary",
+    "TaskName": "SejongCityOfficeOfEducation_Poem",
     "OpenAI": {
         "BaseModel": {
             "ShortTokensModel": "gpt-4o-2024-08-06",

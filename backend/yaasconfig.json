@@ -28,7 +28,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -52,7 +53,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -76,7 +78,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -100,7 +103,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -124,7 +128,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -148,7 +153,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -172,7 +178,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -196,7 +203,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -220,7 +228,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -244,7 +253,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -268,7 +278,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -292,7 +303,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -316,7 +328,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -340,7 +353,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -364,7 +378,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -388,7 +403,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -412,7 +428,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -436,7 +453,8 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
-            "Process": "None"
+            "Process": "None",
+            "KeyList": []
         },
         "IndexMode": "Define",
         "BookGenre": "Auto",
@@ -470,8 +488,8 @@
         "IndexMode": "Define",
         "BookGenre": "Auto",
         "MainLang": "Ko",
-        "Narrator": "VoiceActor",
-        "CloneVoiceName": "정호준(일반)",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "곽지희(일반)",
         "ReadingStyle": "AllCharacters",
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",

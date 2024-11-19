@@ -347,12 +347,10 @@ def ScriptGenUpdate(projectName, email, DataFramePath, ScriptGen, MessagesReview
     RawBodyTextFilePath = TextDirPath + f'/{projectName}_Body(Raw).txt'
     
     if not (os.path.exists(IndexTextFilePath) and os.path.exists(BodyTextFilePath)):
-        
         print(f"< User: {email} | Project: {projectName} | 00_ScriptGenUpdate 시작 >")
         # ScriptGen의 Count값 가져오기
         ScriptCount, Completion = ScriptGenCountLoad(projectName, email)
         if Completion == "No":
-            
             if ExistedDataFrame != None:
                 # 이전 작업이 존재할 경우 가져온 뒤 업데이트
                 AddExistedScriptGenToDB(projectName, email, ExistedDataFrame)
@@ -379,7 +377,7 @@ def ScriptGenUpdate(projectName, email, DataFramePath, ScriptGen, MessagesReview
                 # i값 수동 생성
                 i = 0
                 for Update in UpdateTQDM:
-                    UpdateTQDM.set_description(f'ScriptGenUpdate: {Update["Script"][:10]}...')
+                    UpdateTQDM.set_description(f'ScriptGenUpdate: {Update["ScriptId"]}...')
                     time.sleep(0.0001)
                     ScriptId = Update["ScriptId"]
                     Script = Update["Script"]

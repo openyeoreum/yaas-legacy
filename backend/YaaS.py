@@ -163,8 +163,8 @@ if __name__ == "__main__":
 
     projectNameList = ['241118_우리반오디오북아름초5학년5반']
     ScriptGen = {"ScriptGen": "on", "Process": "SejongCityOfficeOfEducation_Elementary", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'Process' : 'SejongCityOfficeOfEducation_Elementary' ... / 'KeyList' : ['프롬프트 결과로', '나오는 KeyList', '작성']
-    Narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
-    CloneVoiceName = "정호준(일반)" # 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
+    Narrator = "VoiceClone" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
+    CloneVoiceName = "곽지희선생님(일반)" # 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
     ReadingStyle = "AllCharacters" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성

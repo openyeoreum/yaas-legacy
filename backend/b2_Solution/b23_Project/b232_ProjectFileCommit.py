@@ -27,6 +27,7 @@ def ExistenceOrNotTextFile(projectName, email, ScriptGen):
         if os.path.exists(PDFFileSourcePath) or (os.path.exists(IndexFileSourcePath) and os.path.exists(BodyFileSourcePath)):
             pass
         else:
+            print("\n[ General Script 프로세스 ]\n")
             sys.exit(f"\n[ 아래 폴더에 ((({projectName + '.pdf'}))) 또는 ((({projectName + '_Index.txt'} + {projectName + '_Body.txt'}))) 파일을 넣어주세요 ]\n({ScriptFilesPath})")
     else:
         print("\n[ Script Generation 프로세스 ]\n")

@@ -432,6 +432,14 @@
                                 "Volume": 90,
                                 "Direction": "뒤"
                             }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/2_TitleMusicSet/24_TitleMusic.wav",
+                            "Setting": {
+                                "Length": [7, 12, 22, 28, 43],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
                         }
                     ],
                     "PartMusic": [
@@ -463,6 +471,22 @@
                             "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/2_TitleMusicSet/24_PartMusic.wav",
                             "Setting": {
                                 "Length": [2.50, 6.25],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/2_TitleMusicSet/25_PartMusic.wav",
+                            "Setting": {
+                                "Length": [3, 6],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/2_TitleMusicSet/26_PartMusic.wav",
+                            "Setting": {
+                                "Length": [2, 5],
                                 "Volume": 100,
                                 "Direction": "뒤"
                             }

@@ -92,9 +92,9 @@ def LoadRawScriptToInputList(projectName, email, Process, TextDirPath):
         if Content != '':
             content = f'내용:\n{Content}'
         
-        RawScript = tag + name + age + gender + title + content
+        RawScript = '\n' + tag + name + age + gender + title + content + '\n'
             
-        InputDic = {'Id': Id, 'Continue': RawScript}
+        InputDic = {'Id': Id, 'Continue': RawScript, 'Name': Name, 'Title': Title}
         InputList.append(InputDic)
         
     return InputList
@@ -216,8 +216,11 @@ def ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, 
             mode = "Example"
             
         if "Continue" in InputDic:
-            Input = InputDic['Continue']
-            memoryCounter = ""
+            Input = '\n' + InputDic['Continue']
+            if outputMemory == []:
+                memoryCounter = f" '{InputDic['Name']}, {InputDic['Title']}'의 부분을 작성해주세요.\n\n".replace("', ", "'")
+            else:
+                memoryCounter = f"에서 '{InputDic['Name']} {InputDic['Title']}'의 부분을 이어서 작성해주세요.\n\n".replace("', ", "'")
             outputEnder = ""
 
             # Response 생성

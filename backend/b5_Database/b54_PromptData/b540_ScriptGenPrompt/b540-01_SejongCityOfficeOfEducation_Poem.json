@@ -77,7 +77,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n\n(<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>을 작성해주세요.)\n",
+                    "Mark": "\n\n\n(<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json> 작업 시작)\n\n",
                     "InputMark": "<아이>가 작성한 <시>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
@@ -87,7 +87,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>",
+            "OutputMark": "\n\n<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -137,8 +137,8 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n\n(<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>을 작성해주세요.)\n",
-                    "InputMark": "<아이>\n",
+                    "Mark": "\n\n\n(<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json> 작업 시작)\n\n",
+                    "InputMark": "<아이>가 작성한 <시>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
                     "Input2": "INPUT2"
@@ -147,7 +147,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>",
+            "OutputMark": "\n\n<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -190,7 +190,7 @@
                     "OutputExample":""
                 },
                 {
-                    "Mark": "\n\n\n(<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>을 작성해주세요.)\n",
+                    "Mark": "\n\n\n(<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json> 작업 시작)\n\n",
                     "InputMark": "<아이>가 작성한 <시>\n",
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
@@ -204,7 +204,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>",
+            "OutputMark": "\n\n<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
@@ -249,7 +249,7 @@
                     "OutputExample":""
                 },
                 {
-                    "Mark": "\n\n\n(<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>을 작성해주세요.)\n",
+                    "Mark": "\n\n\n(<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json> 작업 시작)\n\n",
                     "InputMark": "<아이>가 작성한 <시>\n",
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
@@ -263,7 +263,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>",
+            "OutputMark": "\n\n<시를 매우 긍정적으로 소개하고 칭찬해주는 글.json>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",

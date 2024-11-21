@@ -161,7 +161,7 @@ if __name__ == "__main__":
     ## ScriptGen ##
     ## {"ScriptGen": "off", "Process": "", "KeyList": []}, {"ScriptGen": "on", "Process": "SejongCityOfficeOfEducation_Poem", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]}
 
-    projectNameList = ['241118_세종교육청우리반오디오북아름초5학년5반']
+    projectNameList = ['241121_세종교육청우리반오디오북테스트']
     ScriptGen = {"ScriptGen": "on", "Process": "SejongCityOfficeOfEducation_Poem", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'Process' : 'SejongCityOfficeOfEducation_Poem' ... / 'KeyList' : ['프롬프트 결과로', '나오는 KeyList', '작성']
     Narrator = "VoiceClone" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
     CloneVoiceName = "한벼리선생님" # 'Narrator = 'VoiceActor' 인 경우 '저자명(특성)' 작성, 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성

@@ -394,8 +394,8 @@ class Prompt(Base):
 
     ## Yeoreum
     # ScriptGen
+    ChangesAfterMeditation_Script = Column(JSON)
     SejongCityOfficeOfEducation_Poem = Column(JSON)
-    SejongCityOfficeOfEducation_Middle = Column(JSON)
     
     # ScriptPrompt
     BookPreprocess = Column(JSON)

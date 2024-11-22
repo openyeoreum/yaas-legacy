@@ -1452,8 +1452,8 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     "Speed": 1.10,
                     "Pitch": 0,
                     "VoiceFileSetting": {"Speed": 1.0, "Volume": 1.0, "Pitch": -0.3, "Reverbe": 'off'},
-                    "VoiceFileCompletion": "세팅 완료 후 Completion으로 변경",
-                    "SettingCompletion": "세팅 완료 후 Completion으로 변경",
+                    "VoiceFileCompletion": "세팅 완료 후 Completion",
+                    "SettingCompletion": "세팅 완료 후 Completion",
                     "VoiceEnhanceCompletion": "None"
                 }
             }

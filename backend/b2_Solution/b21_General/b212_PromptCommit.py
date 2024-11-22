@@ -22,7 +22,8 @@ def AddPromptToDB():
         # JSON 데이터 불러오기
         PromptDataPath = GetPromptDataPath()
         
-        SejongCityOfficeOfEducation_Poem = LoadJsonFrame(PromptDataPath + "/b540_ScriptGenPrompt/b540-01_SejongCityOfficeOfEducation_Poem.json")
+        changesAfterMeditation_Script = LoadJsonFrame(PromptDataPath + "/b540_ScriptGenPrompt/b540-00_ChangesAfterMeditation_Script.json")
+        sejongCityOfficeOfEducation_Poem = LoadJsonFrame(PromptDataPath + "/b540_ScriptGenPrompt/b540-01_SejongCityOfficeOfEducation_Poem.json")
         bookPreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-00_BookPreprocess.json")
         indexDefinePreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-01_IndexDefinePreprocess.json")
         indexDefineDivisionPreprocess = LoadJsonFrame(PromptDataPath + "/b541_ScriptPrompt/b541-02_IndexDefineDivisionPreprocess.json")
@@ -68,7 +69,8 @@ def AddPromptToDB():
 
         # DB Commit
         if ExistingPrompt:
-            ExistingPrompt.SejongCityOfficeOfEducation_Poem = SejongCityOfficeOfEducation_Poem
+            ExistingPrompt.ChangesAfterMeditation_Script = changesAfterMeditation_Script
+            ExistingPrompt.SejongCityOfficeOfEducation_Poem = sejongCityOfficeOfEducation_Poem
             ExistingPrompt.BookPreprocess = bookPreprocess
             ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
             ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
@@ -114,7 +116,8 @@ def AddPromptToDB():
             print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
         else:
             prompt = Prompt(
-                SejongCityOfficeOfEducation_Poem = SejongCityOfficeOfEducation_Poem,
+                ChangesAfterMeditation_Script = changesAfterMeditation_Script,
+                SejongCityOfficeOfEducation_Poem = sejongCityOfficeOfEducation_Poem,
                 BookPreprocess = bookPreprocess,
                 IndexDefinePreprocess = indexDefinePreprocess,
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,

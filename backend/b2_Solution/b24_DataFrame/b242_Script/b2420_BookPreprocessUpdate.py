@@ -209,7 +209,7 @@ def BookPreprocessInputList(projectName, email, IndexLength = 50):
                 "IndexPages": [2, 3], # {projectName}_Cropped.pdf 파일에서 목차이 존재하는 페이지 리스트
                 "indexPages": [], # {projectName}_Cropped.pdf 파일에서 각 목차의 내용이 존재하는 페이지 리스트
                 "DeletePages": [],  # {projectName}_Cropped.pdf 파일에서 중복되어 필요없는 페이지 리스트
-                "SettingCompletion": "세팅 완료 후 Completion으로 변경",
+                "SettingCompletion": "세팅 완료 후 Completion",
                 "PDFBookToTextCompletion": "완료 후 Completion으로 자동변경",
                 "InspectionCompletion": "완료 후 Completion으로 자동변경"
             }

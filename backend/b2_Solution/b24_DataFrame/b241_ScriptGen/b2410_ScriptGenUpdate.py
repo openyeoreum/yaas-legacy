@@ -103,7 +103,7 @@ def LoadRawScriptToInputList(projectName, email, Process, TextDirPath):
 ##### Filter 조건 #####
 ######################
 ## ScriptGen의 Filter(Error 예외처리)
-def ScriptGenFilter(responseData, KeyList):
+def ScriptGenFilter(responseData, MainKey, KeyList):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -113,17 +113,18 @@ def ScriptGenFilter(responseData, KeyList):
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"
-    # Error3: 자료의 첫번째 키가 '단락'이 아닐 경우
+    # Error3: 자료의 첫번째 키가 MainKey가 아닐 경우
     for dic in OutputDic:
         try:
-            if not '단락' in dic:
+            mainKey = next(iter(dic.keys()))
+            if mainKey != MainKey:
                 return "JSON에서 오류 발생: JSONKeyError"
         # Error3: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
         # Error4: 자료의 하부 키들이
         for Key in KeyList:
-            if not Key in dic['단락']:
+            if not Key in dic[MainKey]:
                 return f"JSON에서 오류 발생: JSONKeyError, '{Key}' Key 누락"
 
     return {'json': outputJson, 'filter': OutputDic}
@@ -218,9 +219,9 @@ def ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, 
         if "Continue" in InputDic:
             Input = '\n' + InputDic['Continue']
             if outputMemory == []:
-                memoryCounter = f" '{InputDic['Name']}, {InputDic['Title']}'의 부분을 작성해주세요.\n\n".replace("', ", "'")
+                memoryCounter = f" '{InputDic['Name']}, {InputDic['Title']}'의 부분을 작성해주세요.\n\n".replace("', ", "'").replace(", '", "'")
             else:
-                memoryCounter = f"에서 '{InputDic['Name']} {InputDic['Title']}'의 부분을 이어서 작성해주세요.\n\n".replace("', ", "'")
+                memoryCounter = f"에서 '{InputDic['Name']} {InputDic['Title']}'의 부분을 이어서 작성해주세요.\n\n".replace("', ", "'").replace(", '", "'")
             outputEnder = ""
 
             # Response 생성
@@ -240,7 +241,7 @@ def ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, 
                     if Response.startswith(outputEnder):
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
-            Filter = ScriptGenFilter(responseData, ScriptGen['KeyList'])
+            Filter = ScriptGenFilter(responseData, ScriptGen['MainKey'], ScriptGen['KeyList'])
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -309,30 +310,45 @@ def ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, Script
     responseJson = []
     ScriptIndex = ''
     ScriptBody = ''
-    for i in range(len(outputMemoryDics)):
-        Title = f"<{RawScriptJson[i]['Title']}>\n"
-        Name = f"{RawScriptJson[i]['Name']}\n\n"
-        Scripts = ""
-        for Key in ScriptGen['KeyList']:
-            Scripts += f"{outputMemoryDics[i][0]['단락'][Key]}\n\n"
-        
-        Script = Title + Name + Scripts
-        ScriptDic = {'ScriptId': i+1, 'Script': Script}
-        
-        ScriptIndex += f'{Title}\n'
-        ScriptBody += Script
-        
-        responseJson.append(ScriptDic)
+    ## A-1. RawScriptJson에 Title이 표기된 경우 (프롬프트에 타이틀을 주어준 경우)
+    if RawScriptJson[0]['Title'] != '':
+        for i in range(len(outputMemoryDics)):
+            Title = f"<{RawScriptJson[i]['Title']}>\n"
+            Name = f"{RawScriptJson[i]['Name']}\n\n"
+            Scripts = ""
+            for Key in ScriptGen['KeyList']:
+                Scripts += f"{outputMemoryDics[i][0][ScriptGen['MainKey']][Key]}\n\n"
+            
+            Script = Title + Name + Scripts
+            ScriptDic = {'ScriptId': i+1, 'Script': Script}
+            
+            ScriptIndex += f'{Title}\n'
+            ScriptBody += Script
+            
+            responseJson.append(ScriptDic)
+    ## A-2. RawScriptJson에 Title이 표기된 경우 (프롬프트에 타이틀을 주어준 경우)
+    else:
+        for i in range(len(outputMemoryDics)):
+            ScriptIndex = f"{outputMemoryDics[i][0][ScriptGen['MainKey']][ScriptGen['KeyList'][0]]}"
+            ScriptBody = f"{outputMemoryDics[i][0][ScriptGen['MainKey']][ScriptGen['KeyList'][1]]}"
+            ScriptDic = {'ScriptId': i+1, 'Script': ScriptBody}
+            
+            responseJson.append(ScriptDic)
     
     ### B. projectName_Index.text 저장 ###
-    ScriptRawIndexFilePath = TextDirPath + f'/{projectName}_Index(Raw).txt'
+    if ScriptGen['RawMode'] == 'on':
+        ScriptRawIndexFilePath = TextDirPath + f'/{projectName}_Index(Raw).txt'
+        ScriptRawBodyFilePath = TextDirPath + f'/{projectName}_Body(Raw).txt'
+    else:
+        ScriptRawIndexFilePath = TextDirPath + f'/{projectName}_Index.txt'
+        ScriptRawBodyFilePath = TextDirPath + f'/{projectName}_Body.txt'
+        
     ScriptIndexFilePath = TextDirPath + f'/{projectName}_Index.txt'
     if not (os.path.exists(ScriptRawIndexFilePath) or os.path.exists(ScriptIndexFilePath)):
         with open(ScriptRawIndexFilePath, 'w', encoding = 'utf-8') as index_file:
             index_file.write(ScriptIndex)
     
     ### C. projectName_Body.text 저장 ###
-    ScriptRawBodyFilePath = TextDirPath + f'/{projectName}_Body(Raw).txt'
     ScriptBodyFilePath = TextDirPath + f'/{projectName}_Body.txt'
     if not (os.path.exists(ScriptRawBodyFilePath) or os.path.exists(ScriptBodyFilePath)):
         with open(ScriptRawBodyFilePath, 'w', encoding = 'utf-8') as body_file:

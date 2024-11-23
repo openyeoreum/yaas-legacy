@@ -305,7 +305,7 @@ def ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, 
 def ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, ScriptGen, messagesReview = 'off', mode = "Memory"):   
     ### A. 데이터 치환 ###
     RawScriptJson = LoadRawScript(projectName, email, ScriptGen['Process'], TextDirPath)
-    outputMemoryDics = ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, MessagesReview = messagesReview, Mode = ScriptGen['Mode'])
 
     responseJson = []
     ScriptIndex = ''

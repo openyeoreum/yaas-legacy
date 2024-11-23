@@ -480,7 +480,7 @@
             "ScriptGen": "on",
             "RawMode": "on",
             "Process": "SejongCityOfficeOfEducation_Poem",
-            "MainKey": "단락",
+            "Mode": "Example", "MainKey": "단락",
             "KeyList": [
                 "선생님의 소개",
                 "아이가 작성한 시",
@@ -511,7 +511,7 @@
             "ScriptGen": "on",
             "RawMode": "on",
             "Process": "SejongCityOfficeOfEducation_Poem",
-            "MainKey": "단락",
+            "Mode": "Example", "MainKey": "단락",
             "KeyList": [
                 "선생님의 소개",
                 "아이가 작성한 시",
@@ -542,7 +542,7 @@
             "ScriptGen": "on",
             "RawMode": "on",
             "Process": "SejongCityOfficeOfEducation_Poem",
-            "MainKey": "단락",
+            "Mode": "Example", "MainKey": "단락",
             "KeyList": [
                 "선생님의 소개",
                 "아이가 작성한 시",
@@ -698,7 +698,7 @@
             "ScriptGen": "off",
             "RawMode": "on",
             "Process": "",
-            "MainKey": "",
+            "Mode": "Example", "MainKey": "",
             "KeyList": []
         },
         "IndexMode": "Define",
@@ -725,7 +725,7 @@
             "ScriptGen": "on",
             "RawMode": "off",
             "Process": "ChangesAfterMeditation_Script",
-            "MainKey": "글내용",
+            "Mode": "Example", "MainKey": "글내용",
             "KeyList": [
                 "목차",
                 "내용"
@@ -755,7 +755,7 @@
             "ScriptGen": "off",
             "RawMode": "on",
             "Process": "",
-            "MainKey": "",
+            "Mode": "Example", "MainKey": "",
             "KeyList": []
         },
         "IndexMode": "Define",
@@ -782,7 +782,7 @@
             "ScriptGen": "off",
             "RawMode": "on",
             "Process": "",
-            "MainKey": "",
+            "Mode": "Example", "MainKey": "",
             "KeyList": []
         },
         "IndexMode": "Define",
@@ -809,7 +809,7 @@
             "ScriptGen": "on",
             "RawMode": "on",
             "Process": "ChangesAfterMeditation_Script",
-            "MainKey": "글내용",
+            "Mode": "Example", "MainKey": "글내용",
             "KeyList": [
                 "목차",
                 "내용"
@@ -839,7 +839,7 @@
             "ScriptGen": "on",
             "RawMode": "off",
             "Process": "ChangesAfterMeditation_Script",
-            "MainKey": "글내용",
+            "Mode": "Example", "MainKey": "글내용",
             "KeyList": [
                 "목차",
                 "내용"
@@ -869,7 +869,7 @@
             "ScriptGen": "on",
             "RawMode": "off",
             "Process": "ChangesAfterMeditation_Script",
-            "MainKey": "글내용",
+            "Mode": "Example", "MainKey": "글내용",
             "KeyList": [
                 "목차",
                 "내용"

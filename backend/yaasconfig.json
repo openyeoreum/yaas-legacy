@@ -1200,5 +1200,36 @@
         "Intro": "off",
         "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
+    },
+    "241124_소성경": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241124_소성경"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "RawMode": "off",
+            "Process": "ChangesAfterMeditation_Script",
+            "Mode": "Example",
+            "MainKey": "글내용",
+            "KeyList": [
+                "목차",
+                "내용"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "소성경",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     }
 }

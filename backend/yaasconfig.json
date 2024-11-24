@@ -480,7 +480,8 @@
             "ScriptGen": "on",
             "RawMode": "on",
             "Process": "SejongCityOfficeOfEducation_Poem",
-            "Mode": "Example", "MainKey": "단락",
+            "Mode": "Example",
+            "MainKey": "단락",
             "KeyList": [
                 "선생님의 소개",
                 "아이가 작성한 시",
@@ -511,7 +512,8 @@
             "ScriptGen": "on",
             "RawMode": "on",
             "Process": "SejongCityOfficeOfEducation_Poem",
-            "Mode": "Example", "MainKey": "단락",
+            "Mode": "Example",
+            "MainKey": "단락",
             "KeyList": [
                 "선생님의 소개",
                 "아이가 작성한 시",
@@ -542,7 +544,8 @@
             "ScriptGen": "on",
             "RawMode": "on",
             "Process": "SejongCityOfficeOfEducation_Poem",
-            "Mode": "Example", "MainKey": "단락",
+            "Mode": "Example",
+            "MainKey": "단락",
             "KeyList": [
                 "선생님의 소개",
                 "아이가 작성한 시",
@@ -698,7 +701,8 @@
             "ScriptGen": "off",
             "RawMode": "on",
             "Process": "",
-            "Mode": "Example", "MainKey": "",
+            "Mode": "Example",
+            "MainKey": "",
             "KeyList": []
         },
         "IndexMode": "Define",
@@ -725,7 +729,8 @@
             "ScriptGen": "on",
             "RawMode": "off",
             "Process": "ChangesAfterMeditation_Script",
-            "Mode": "Example", "MainKey": "글내용",
+            "Mode": "Example",
+            "MainKey": "글내용",
             "KeyList": [
                 "목차",
                 "내용"
@@ -755,7 +760,8 @@
             "ScriptGen": "off",
             "RawMode": "on",
             "Process": "",
-            "Mode": "Example", "MainKey": "",
+            "Mode": "Example",
+            "MainKey": "",
             "KeyList": []
         },
         "IndexMode": "Define",
@@ -782,7 +788,8 @@
             "ScriptGen": "off",
             "RawMode": "on",
             "Process": "",
-            "Mode": "Example", "MainKey": "",
+            "Mode": "Example",
+            "MainKey": "",
             "KeyList": []
         },
         "IndexMode": "Define",
@@ -809,7 +816,8 @@
             "ScriptGen": "on",
             "RawMode": "on",
             "Process": "ChangesAfterMeditation_Script",
-            "Mode": "Example", "MainKey": "글내용",
+            "Mode": "Example",
+            "MainKey": "글내용",
             "KeyList": [
                 "목차",
                 "내용"
@@ -839,7 +847,8 @@
             "ScriptGen": "on",
             "RawMode": "off",
             "Process": "ChangesAfterMeditation_Script",
-            "Mode": "Example", "MainKey": "글내용",
+            "Mode": "Example",
+            "MainKey": "글내용",
             "KeyList": [
                 "목차",
                 "내용"
@@ -869,7 +878,8 @@
             "ScriptGen": "on",
             "RawMode": "off",
             "Process": "ChangesAfterMeditation_Script",
-            "Mode": "Example", "MainKey": "글내용",
+            "Mode": "Example",
+            "MainKey": "글내용",
             "KeyList": [
                 "목차",
                 "내용"
@@ -880,6 +890,310 @@
         "MainLang": "Ko",
         "Narrator": "VoiceClone",
         "CloneVoiceName": "이상초",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241123_박호연": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241123_박호연"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "RawMode": "off",
+            "Process": "ChangesAfterMeditation_Script",
+            "Mode": "Example",
+            "MainKey": "글내용",
+            "KeyList": [
+                "목차",
+                "내용"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "박호연",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241123_이백": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241123_이백"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "RawMode": "off",
+            "Process": "ChangesAfterMeditation_Script",
+            "Mode": "Example",
+            "MainKey": "글내용",
+            "KeyList": [
+                "목차",
+                "내용"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "이백",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241123_이건태": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241123_이건태"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "RawMode": "off",
+            "Process": "ChangesAfterMeditation_Script",
+            "Mode": "Example",
+            "MainKey": "글내용",
+            "KeyList": [
+                "목차",
+                "내용"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "이건태",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241123_빛솔": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241123_빛솔"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "off",
+            "RawMode": "on",
+            "Process": "",
+            "Mode": "Example",
+            "MainKey": "",
+            "KeyList": []
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "빛솔",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241124_송정연": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241124_송정연"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "RawMode": "on",
+            "Process": "ChangesAfterMeditation_Script",
+            "Mode": "Example",
+            "MainKey": "글내용",
+            "KeyList": [
+                "목차",
+                "내용"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "송정연",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241124_송정연테스트": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241124_송정연테스트"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "RawMode": "off",
+            "Process": "ChangesAfterMeditation_Script",
+            "Mode": "Example",
+            "MainKey": "글내용",
+            "KeyList": [
+                "목차",
+                "내용"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "송정연",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241124_양진혁": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241124_양진혁"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "RawMode": "off",
+            "Process": "ChangesAfterMeditation_Script",
+            "Mode": "Example",
+            "MainKey": "글내용",
+            "KeyList": [
+                "목차",
+                "내용"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "양진혁",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241124_김해령": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241124_김해령"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "RawMode": "off",
+            "Process": "ChangesAfterMeditation_Script",
+            "Mode": "Example",
+            "MainKey": "글내용",
+            "KeyList": [
+                "목차",
+                "내용"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "김해령",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241124_강대성": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241124_강대성"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "RawMode": "off",
+            "Process": "ChangesAfterMeditation_Script",
+            "Mode": "Example",
+            "MainKey": "글내용",
+            "KeyList": [
+                "목차",
+                "내용"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "상대성",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241124_엄마는고맙다": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241124_엄마는고맙다"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "off",
+            "RawMode": "on",
+            "Process": "",
+            "Mode": "Example",
+            "MainKey": "",
+            "KeyList": []
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "한수희",
         "ReadingStyle": "NarratorOnly",
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",

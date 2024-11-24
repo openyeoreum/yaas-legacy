@@ -2,8 +2,8 @@
     "TaskName": "SejongCityOfficeOfEducation_Poem",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-4o-2024-08-06",
-            "LongTokensModel": "gpt-4o-2024-08-06"
+            "ShortTokensModel": "gpt-4o-2024-11-20",
+            "LongTokensModel": "gpt-4o-2024-11-20"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -13,7 +13,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-4o-2024-08-06"
+        "MasterModel": "gpt-4o-2024-11-20"
     },
     "ANTHROPIC": {
         "BaseModel": {

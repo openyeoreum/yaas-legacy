@@ -801,7 +801,7 @@ if __name__ == "__main__":
     assistant = client.beta.assistants.create(
     name="도서 매칭 전문가",
     instructions="당신은 도서 매칭 전문가 입니다. 질문에 가장 적합한 도서를 매칭해 주세요.",
-    model="gpt-4o-2024-08-06",
+    model="gpt-4o-2024-11-20",
     tools=[{"type": "file_search"}],
     )
     

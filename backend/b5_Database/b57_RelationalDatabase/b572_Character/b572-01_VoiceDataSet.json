@@ -19884,9 +19884,9 @@
                     "TypeCastContext": {}
                 },
                 "ApiSetting": {
-                    "name": "한수희(시낭독)",
+                    "name": "한수희(일반)",
                     "Api": "ElevenLabs",
-                    "voice_id": "1OnBKlfdNREl1mJaF3SF",
+                    "voice_id": "VYrwkuG9mPiB3SmEOMRW",
                     "stability": [
                         0.9
                     ],

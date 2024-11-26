@@ -11,13 +11,13 @@ from backend.b4_Creation.b41_Selector.b411_MusicLayerSelector import MusicLayerU
 ###########################
 
 ### Creation에 오디오북 제작 및 업데이트 ###
-def CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, readingStyle, voiceReverbe, mainLang, intro, audiobookSplitting = "Auto", endMusicVolume = -10, mode = "Manual", macro = "Manual", bracket = "Manual", volumeEqual = "Mixing", account = "None", voiceEnhance = "off", voiceFileGen = "on", messagesReview = "off"):
+def CreationAudioBookUpdate(projectName, email, narrator, cloneVoiceName, readingStyle, voiceReverbe, mainLang, intro, audiobookSplitting = "Auto", endMusicVolume = -10, mode = "Manual", macro = "Manual", bracket = "Manual", volumeEqual = "Mixing", account = "None", voiceEnhance = "off", voiceFileGen = "on", bitrate = "320k", messagesReview = "off"):
     
     #####################
     ### 01_VoiceLayer ###
     #####################
     VoiceLayerUpdate(projectName, email, Narrator = narrator, CloneVoiceName = cloneVoiceName, ReadingStyle = readingStyle, VoiceReverbe = voiceReverbe, MainLang = mainLang, Mode = mode, Macro = macro, Bracket = bracket, VolumeEqual = volumeEqual, Account = account, VoiceEnhance = voiceEnhance, VoiceFileGen = voiceFileGen, MessagesReview = messagesReview)
-    MusicLayerUpdate(projectName, email, CloneVoiceName = cloneVoiceName, MainLang = mainLang, Intro = intro, AudiobookSplitting = audiobookSplitting, EndMusicVolume = endMusicVolume, VolumeEqual = volumeEqual)
+    MusicLayerUpdate(projectName, email, CloneVoiceName = cloneVoiceName, MainLang = mainLang, Intro = intro, AudiobookSplitting = audiobookSplitting, EndMusicVolume = endMusicVolume, VolumeEqual = volumeEqual, Bitrate = bitrate)
     
 if __name__ == "__main__":
 

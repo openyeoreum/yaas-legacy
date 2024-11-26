@@ -923,7 +923,7 @@ def RestoreOriginalFiles(voiceLayerPath):
         print(f"[ {backup_folder} 가 존재하지 않음 ]")
 
 ## 생성된 음성파일 합치기
-def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing'):
+def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing', Bitrate = '320k'):
     EditGeneration, MusicMixingDatas, DeNoiseMixedVar = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro, EndMusicVolume = EndMusicVolume)
     
     ## voiceLayer 경로와 musicLayer 경로 ##
@@ -1320,7 +1320,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                 try:
                     print(f"\n[ {projectName}_AudioBook_({SplitCount + 2}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
                     with open(MasterLayerPath, "wb") as MVoiceFile:
-                        CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                        CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = Bitrate)
                         FileRunningTimeList.append(CombinedSounds.duration_seconds)
                         FileSize = os.path.getsize(MasterLayerPath)/(1024 * 1024)
                         FileSizeList.append(FileSize)
@@ -1334,7 +1334,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                     CombinedSoundsPart1Path = MasterLayerPath.replace(".mp3", "_Part1.mp3")
                     with open(CombinedSoundsPart1Path, "wb") as P1MVoiceFile:
                         print(f"[ 대용량 파일 분할 저장: {CombinedSoundsPart1Path} ]")
-                        CombinedSoundsPart1.export(P1MVoiceFile, format = "mp3", bitrate = "320k")
+                        CombinedSoundsPart1.export(P1MVoiceFile, format = "mp3", bitrate = Bitrate)
                         CombinedSoundsPart1 = AudioSegment.from_file(CombinedSoundsPart1Path)
                         CombinedSounds += CombinedSoundsPart1
                         CombinedSoundsPart1 = AudioSegment.empty()
@@ -1343,14 +1343,14 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                     CombinedSoundsPart2Path = MasterLayerPath.replace(".mp3", "_Part2.mp3")
                     with open(CombinedSoundsPart2Path, "wb") as P2MVoiceFile:
                         print(f"[ 대용량 파일 분할 저장: {CombinedSoundsPart2Path} ]")
-                        CombinedSoundsPart2.export(P2MVoiceFile, format = "mp3", bitrate = "320k")
+                        CombinedSoundsPart2.export(P2MVoiceFile, format = "mp3", bitrate = Bitrate)
                         CombinedSoundsPart2 = AudioSegment.from_file(CombinedSoundsPart2Path)
                         CombinedSounds += CombinedSoundsPart2
                         CombinedSoundsPart2 = AudioSegment.empty()
                     os.remove(CombinedSoundsPart2Path)
                     
                     with open(MasterLayerPath, "wb") as MVoiceFile:
-                        CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                        CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = Bitrate)
                         FileRunningTimeList.append(CombinedSounds.duration_seconds)
                         FileSize = os.path.getsize(MasterLayerPath)/(1024 * 1024)
                         FileSizeList.append(FileSize)
@@ -1381,7 +1381,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
         try:
             print(f"\n[ {projectName}_AudioBook_({SplitCount + 3}).mp3 저장, 길이 : {SecondsToHMS(len(CombinedSounds)/1000)} ]")
             with open(MasterLayerPath, "wb") as MVoiceFile:
-                CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = Bitrate)
                 FileRunningTimeList.append(CombinedSounds.duration_seconds)
                 FileSize = os.path.getsize(MasterLayerPath)/(1024 * 1024)
                 FileSizeList.append(FileSize)
@@ -1395,7 +1395,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             CombinedSoundsPart1Path = MasterLayerPath.replace(".mp3", "_Part1.mp3")
             with open(CombinedSoundsPart1Path, "wb") as P1MVoiceFile:
                 print(f"[ 대용량 파일 분할 저장: {CombinedSoundsPart1Path} ]")
-                CombinedSoundsPart1.export(P1MVoiceFile, format = "mp3", bitrate = "320k")
+                CombinedSoundsPart1.export(P1MVoiceFile, format = "mp3", bitrate = Bitrate)
                 CombinedSoundsPart1 = AudioSegment.from_file(CombinedSoundsPart1Path)
                 CombinedSounds += CombinedSoundsPart1
                 CombinedSoundsPart1 = AudioSegment.empty()
@@ -1404,14 +1404,14 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             CombinedSoundsPart2Path = MasterLayerPath.replace(".mp3", "_Part2.mp3")
             with open(CombinedSoundsPart2Path, "wb") as P2MVoiceFile:
                 print(f"[ 대용량 파일 분할 저장: {CombinedSoundsPart2Path} ]")
-                CombinedSoundsPart2.export(P2MVoiceFile, format = "mp3", bitrate = "320k")
+                CombinedSoundsPart2.export(P2MVoiceFile, format = "mp3", bitrate = Bitrate)
                 CombinedSoundsPart2 = AudioSegment.from_file(CombinedSoundsPart2Path)
                 CombinedSounds += CombinedSoundsPart2
                 CombinedSoundsPart2 = AudioSegment.empty()
             os.remove(CombinedSoundsPart2Path)
             
             with open(MasterLayerPath, "wb") as MVoiceFile:
-                CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = "320k")
+                CombinedSounds.export(MVoiceFile, format = "mp3", bitrate = Bitrate)
                 FileRunningTimeList.append(CombinedSounds.duration_seconds)
                 FileSize = os.path.getsize(MasterLayerPath)/(1024 * 1024)
                 FileSizeList.append(FileSize)
@@ -1509,7 +1509,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     return EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath
 
 ## 10-15분 미리듣기 생성 ##
-def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath):
+def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath, Bitrate):
     AudiobookPreviewSecond = 0
     AudiobookPreviewSize = 0
     
@@ -1532,7 +1532,7 @@ def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPat
             PreviewSound = RawPreviewSound[:PreviewSecond * 1000 + 50]
             AudiobookPreviewSecond = PreviewSound.duration_seconds
             with open(PreviewSoundPath, "wb") as PreviewFile:
-                PreviewSound.export(PreviewFile, format = "mp3", bitrate = "320k")
+                PreviewSound.export(PreviewFile, format = "mp3", bitrate = Bitrate)
                 PreviewSound = AudioSegment.empty()
             AudiobookPreviewSize = os.path.getsize(PreviewSoundPath)/(1024 * 1024)
         
@@ -1610,13 +1610,13 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
     df.to_excel(MetaDateCSVPath.replace('.csv', '.xlsx'), index = False, engine = 'openpyxl')
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
-def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing'):
+def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing', Bitrate = '320k'):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
     
-    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting, EndMusicVolume = EndMusicVolume, VolumeEqual = VolumeEqual)
+    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting, EndMusicVolume = EndMusicVolume, VolumeEqual = VolumeEqual, Bitrate = Bitrate)
     
     ## 10-15분 미리듣기 생성
-    AudiobookPreviewSecond, AudiobookPreviewSize = AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath)
+    AudiobookPreviewSecond, AudiobookPreviewSize = AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath, Bitrate)
     
     ## 오디오북 메타데이터 생성
     AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, _VoiceFilePath, AudiobookPreviewSecond, AudiobookPreviewSize)

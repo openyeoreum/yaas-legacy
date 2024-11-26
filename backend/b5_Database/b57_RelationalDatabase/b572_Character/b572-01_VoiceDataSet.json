@@ -21597,13 +21597,13 @@
                     "Api": "ElevenLabs",
                     "voice_id": "hnyhvmYcWFF7zFnBKKEj",
                     "stability": [
-                        0.45
+                        0.9
                     ],
                     "similarity_boost": [
-                        0.75
+                        0.7
                     ],
                     "style": [
-                        0.01
+                        0
                     ],
                     "models": {
                         "Ko": "eleven_multilingual_v2",

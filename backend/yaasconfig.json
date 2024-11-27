@@ -595,5 +595,33 @@
         "Intro": "off",
         "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
+    },
+    "241127_엄마의첫공부": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241127_엄마의첫공부"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "off",
+            "RawMode": "on",
+            "Process": "",
+            "Mode": "Master",
+            "MainKey": "",
+            "KeyList": []
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "홍순범",
+        "ReadingStyle": "AllCharacters",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     }
 }

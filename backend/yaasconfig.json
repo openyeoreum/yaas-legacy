@@ -623,5 +623,33 @@
         "Intro": "off",
         "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
+    },
+    "241128_끌리는이들에겐이유가있다": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241128_끌리는이들에겐이유가있다"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "off",
+            "RawMode": "on",
+            "Process": "",
+            "Mode": "Master",
+            "MainKey": "",
+            "KeyList": []
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "박기수",
+        "ReadingStyle": "AllCharacters",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     }
 }

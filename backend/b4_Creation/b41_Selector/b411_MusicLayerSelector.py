@@ -1174,11 +1174,13 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     RawPreviewSound = None
     FileRunningTimeList = []
     FileSizeList = []
-
+    
     ## _Intro2_가 Title앞에 존재하는 경우 ##
     if EditGenerationKoChunks[0]['Tag'] == 'Intro':
-        CombinedSound = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[1]))
-        FilteredFiles = FilteredFiles[2:]
+        IntroCount = len(EditGenerationKoChunks[0]['ActorChunk'])
+        CombinedSound = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[IntroCount]))
+        FilteredFiles = FilteredFiles[IntroCount+1:]
+        
     ## _Intro2_가 Title앞에 존재하는 경우 ##
     else:
         CombinedSound = AudioSegment.from_wav(os.path.join(musicLayerPath, FilteredFiles[0]))

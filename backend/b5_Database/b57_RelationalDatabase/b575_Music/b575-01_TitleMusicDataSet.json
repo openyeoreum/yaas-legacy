@@ -440,6 +440,14 @@
                                 "Volume": 100,
                                 "Direction": "뒤"
                             }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s16_MusicStorage/s161_TitleMusic/2_TitleMusicSet/25_TitleMusic.wav",
+                            "Setting": {
+                                "Length": [9.5, 17.5, 24, 30.5, 41],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
                         }
                     ],
                     "PartMusic": [

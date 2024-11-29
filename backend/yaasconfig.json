@@ -617,7 +617,7 @@
         "MainLang": "Ko",
         "Narrator": "VoiceClone",
         "CloneVoiceName": "홍순범",
-        "ReadingStyle": "AllCharacters",
+        "ReadingStyle": "NarratorOnly",
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",

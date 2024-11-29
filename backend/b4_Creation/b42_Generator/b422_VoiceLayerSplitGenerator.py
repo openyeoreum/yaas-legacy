@@ -1439,7 +1439,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                 os.mkdir(CloneVoiceFolderPath)
                 print(f'[ 클로닝할 보이스 파일이 필요합니다 : {CloneVoiceFolderPath}, 보이스 파일을 폴더에 넣은 후 "VoiceFileCompletion": "Completion"으로 변경해 주세요 ] ]')
             CloneVoiceActor = {
-                "Name": f"{CloneVoiceName}({projectName})",
+                "Name": f"{CloneVoiceName}({projectName})-저자클로닝",
                 "ApiSetting": {
                     "name": f"{CloneVoiceName}",
                     "Api": "ElevenLabs",

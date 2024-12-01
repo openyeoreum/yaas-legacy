@@ -651,5 +651,33 @@
         "Intro": "off",
         "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
+    },
+    "240412_카이스트명상수업": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "240412_카이스트명상수업"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "off",
+            "RawMode": "on",
+            "Process": "",
+            "Mode": "Master",
+            "MainKey": "",
+            "KeyList": []
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "이덕주(낭독)",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     }
 }

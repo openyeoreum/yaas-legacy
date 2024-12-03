@@ -225,7 +225,10 @@ def ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, 
             outputEnder = ""
 
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, ScriptGen['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            if ScriptGen['Model'] == "OpenAI":
+                Response, Usage, Model = OpenAI_LLMresponse(projectName, email, ScriptGen['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            elif ScriptGen['Model'] == "ANTHROPIC":
+                Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, ScriptGen['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(ScriptGen['Process'])

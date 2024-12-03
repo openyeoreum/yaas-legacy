@@ -28,6 +28,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -53,6 +54,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -78,6 +80,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -103,6 +106,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -128,6 +132,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -153,6 +158,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -178,6 +184,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -203,6 +210,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -228,6 +236,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -253,6 +262,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -278,6 +288,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -303,6 +314,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -328,6 +340,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -353,6 +366,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -378,6 +392,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -403,6 +418,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -428,6 +444,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -453,6 +470,7 @@
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
+            "Model": "OpenAI",
             "Process": "None",
             "KeyList": []
         },
@@ -479,6 +497,7 @@
         "ScriptGen": {
             "ScriptGen": "on",
             "RawMode": "on",
+            "Model": "OpenAI",
             "Process": "SejongCityOfficeOfEducation_Poem",
             "Mode": "Example",
             "MainKey": "단락",
@@ -511,6 +530,7 @@
         "ScriptGen": {
             "ScriptGen": "on",
             "RawMode": "on",
+            "Model": "OpenAI",
             "Process": "SejongCityOfficeOfEducation_Poem",
             "Mode": "Example",
             "MainKey": "단락",
@@ -543,6 +563,7 @@
         "ScriptGen": {
             "ScriptGen": "on",
             "RawMode": "on",
+            "Model": "OpenAI",
             "Process": "SejongCityOfficeOfEducation_Poem",
             "Mode": "Example",
             "MainKey": "단락",
@@ -575,6 +596,7 @@
         "ScriptGen": {
             "ScriptGen": "on",
             "RawMode": "off",
+            "Model": "OpenAI",
             "Process": "SejongCityOfficeOfEducation_Poem",
             "Mode": "Master",
             "MainKey": "단락",
@@ -607,6 +629,7 @@
         "ScriptGen": {
             "ScriptGen": "off",
             "RawMode": "on",
+            "Model": "OpenAI",
             "Process": "",
             "Mode": "Master",
             "MainKey": "",
@@ -635,6 +658,7 @@
         "ScriptGen": {
             "ScriptGen": "off",
             "RawMode": "on",
+            "Model": "OpenAI",
             "Process": "",
             "Mode": "Master",
             "MainKey": "",
@@ -663,6 +687,7 @@
         "ScriptGen": {
             "ScriptGen": "off",
             "RawMode": "on",
+            "Model": "OpenAI",
             "Process": "",
             "Mode": "Master",
             "MainKey": "",

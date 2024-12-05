@@ -162,10 +162,10 @@ if __name__ == "__main__":
     # 우리반시집: {"ScriptGen": "on", "RawMode": "off", "Model": "OpenAI", "Process": "SejongCityOfficeOfEducation_Poem", "Mode": "Master", "MainKey": "단락", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]}
     # 빼기명상을통한나의변화: {"ScriptGen": "on", "RawMode": "off", "Model": "OpenAI", "Process": "ChangesAfterMeditation_Script", "Mode": "Master", "MainKey": "글내용", "KeyList": ["목차", "내용"]}
 
-    projectNameList = ['241127_엄마의첫공부']
+    projectNameList = ['241204_개정교육과정초등교과별이해연수']
     ScriptGen = {"ScriptGen": "off", "RawMode": "on", "Model": "OpenAI", "Process": "", "Mode": "Master", "MainKey": "", "KeyList": []} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'RawMode' : 'on', 'off' : on 은 _Index(Raw).txt 및 _Body(Raw).txt 생성, off 는 _Index.txt 및 _Body.txt 생성 / 'Process' : 'SejongCityOfficeOfEducation_Poem' ... / 'MainKey', 'KeyList' : '메인키': ['프롬프트 결과로', '나오는 KeyList', '작성']
-    Narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
-    CloneVoiceName = "이덕주(낭독)" # 'Narrator = 'VoiceActor' 인 경우 '저자명(특성)' 작성, 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
+    Narrator = "VoiceClone" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
+    CloneVoiceName = "진미옥" # 'Narrator = 'VoiceActor' 인 경우 '저자명(특성)' 작성, 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
     ReadingStyle = "AllCharacters" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성

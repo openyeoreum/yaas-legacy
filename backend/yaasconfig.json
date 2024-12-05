@@ -673,7 +673,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto",
+        "AudiobookSplitting": "Manual",
         "EndMusicVolume": -10
     },
     "240412_카이스트명상수업": {

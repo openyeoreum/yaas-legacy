@@ -1602,6 +1602,22 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
 
     # 데이터프레임을 엑셀 파일로 저장
     df.to_excel(MetaDateCSVPath.replace('.csv', '.xlsx'), index = False, engine = 'openpyxl')
+    
+## 오디오북 러닝타임 기록 ##
+def AudiobookRunningTimeRecord(projectName, FileRunningTimeList):
+    # BodyScript의 개수 구하기
+    BodyScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file/{projectName}_Body.txt"
+    with open(BodyScriptPath, 'r', encoding='utf-8') as Textfile:
+        BodyScript = Textfile.read()
+    BodyScriptLenth = len(BodyScript)
+    
+    # RunningTime 초 구하기
+    RunningTime = sum(FileRunningTimeList)
+    RunningTimeJsonPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_ScriptFiles/{projectName}_RunningTime.json"
+    
+    # RunningTimeJson 저장
+    with open(RunningTimeJsonPath, 'w', encoding = 'utf-8') as Jsonfile:
+        json.dump({"ProjectName": projectName, "BodyScriptLenth": BodyScriptLenth, "RunningTime": RunningTime}, Jsonfile, ensure_ascii = False, indent = 4)
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
 def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing', Bitrate = '320k'):
@@ -1614,6 +1630,9 @@ def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang 
     
     ## 오디오북 메타데이터 생성
     AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, _VoiceFilePath, AudiobookPreviewSecond, AudiobookPreviewSize)
+
+    ## 오디오북 러닝타임 기록
+    AudiobookRunningTimeRecord(projectName, FileRunningTimeList)
 
     with get_db() as db:
         

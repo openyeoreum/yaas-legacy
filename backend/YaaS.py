@@ -120,6 +120,11 @@ def YaaS(email, name, password, projectNameList, Translations, ScriptGen, IndexM
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations)
         CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview)
+        
+    elif MainProcess == 'Sample':
+        AccountUpdate(email, name, password)
+        SolutionUpdate(email, projectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations)
+        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview)
 
 ### YaaS Multiprocessing : 오디오북 병렬 제작 ###
 
@@ -130,13 +135,13 @@ def Loadyaasconfig(yaasconfigPath = '/yaas/backend/yaasconfig.json'):
     return yaasconfig
 
 ## MultiProcessing
-def MultiProcessing(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json'):
-    print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
-    ConfigUpdate(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle)
+def MultiProcessing(ProjectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json'):
+    print(f"[ Projects: {ProjectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
+    ConfigUpdate(ProjectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle)
     yaasconfig = Loadyaasconfig(yaasconfigPath = yaasconfigPath)
     
     processes = []
-    for projectName in projectNameList:
+    for projectName in ProjectNameList:
         YaasConfig = yaasconfig[projectName]
         Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["name"], YaasConfig["password"], YaasConfig["projectNameList"], YaasConfig["Translations"], YaasConfig["ScriptGen"], YaasConfig["IndexMode"], MessagesReview, YaasConfig["BookGenre"], YaasConfig["Narrator"], YaasConfig["CloneVoiceName"], YaasConfig["ReadingStyle"], YaasConfig["VoiceReverbe"], YaasConfig["MainLang"], YaasConfig["Intro"], YaasConfig["AudiobookSplitting"], YaasConfig["EndMusicVolume"], YaasConfig["VoiceEnhance"], VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account))
         processes.append(Process)
@@ -146,7 +151,7 @@ def MultiProcessing(projectNameList, ScriptGen, Narrator, CloneVoiceName, Readin
     for p in processes:
         p.join()
         
-    print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 완료 ]")
+    print(f"[ Projects: {ProjectNameList} | 병렬 프로세스(MultiProcessing) 완료 ]")
 
 ## 추가 병렬 진행 : 코세라 라이프 그래프 최신화
 ## 추가 병렬 진행 : 교보문고 베스트셀러 스크래핑
@@ -162,19 +167,20 @@ if __name__ == "__main__":
     # 우리반시집: {"ScriptGen": "on", "RawMode": "off", "Model": "OpenAI", "Process": "SejongCityOfficeOfEducation_Poem", "Mode": "Master", "MainKey": "단락", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]}
     # 빼기명상을통한나의변화: {"ScriptGen": "on", "RawMode": "off", "Model": "OpenAI", "Process": "ChangesAfterMeditation_Script", "Mode": "Master", "MainKey": "글내용", "KeyList": ["목차", "내용"]}
 
-    projectNameList = ['241118_세종교육청우리반오디오북새움중1학년8반']
+    ProjectNameList = ['241128_끌리는이들에겐이유가있다']
     ScriptGen = {"ScriptGen": "off", "RawMode": "on", "Model": "OpenAI", "Process": "", "Mode": "Master", "MainKey": "", "KeyList": []} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'RawMode' : 'on', 'off' : on 은 _Index(Raw).txt 및 _Body(Raw).txt 생성, off 는 _Index.txt 및 _Body.txt 생성 / 'Process' : 'SejongCityOfficeOfEducation_Poem' ... / 'MainKey', 'KeyList' : '메인키': ['프롬프트 결과로', '나오는 KeyList', '작성']
     Narrator = "VoiceClone" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
     CloneVoiceName = "진미옥" # 'Narrator = 'VoiceActor' 인 경우 '저자명(특성)' 작성, 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
     ReadingStyle = "AllCharacters" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
+    MusicDB = "Storage" # 'Storage', 'Template' : Storage 는 음악을 Storage 에서 선택, Template 는 음악을 Template 에서 선택
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     Bitrate = "320k" # 320k, 192k, 128k, 64k : 최종 저장되는 오디오북 mp3파일의 음질
-    MainProcess = "Solution&Creation" # 'Solution', 'Solution&Creation'
+    MainProcess = "Solution&Creation" # 'Solution', 'Solution&Creation', 'Sample'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
     Bracket = "Auto" # 'Auto', 'Manual', 'Practice' : Auto는 대괄호 자동, Manual은 대괄호 수동, Practice는 연습
     VolumeEqual = "Mastering" # 'Mixing', 'Mastering' : Mixing은 작업중, Mastering은 최종 마무리로 모든 음성 일률화
     Account = "lunahyeon00128@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com', 'kka6887@hanmail.net', 'aldus5909@naver.com'
     #########################################################################
 
-    MultiProcessing(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account)
+    MultiProcessing(ProjectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account)

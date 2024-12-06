@@ -1437,7 +1437,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         if not os.path.exists(CloneVoiceActorPath):
             if not os.path.exists(CloneVoiceActorPath):
                 os.mkdir(CloneVoiceFolderPath)
-                print(f'[ 클로닝할 보이스 파일이 필요합니다 : {CloneVoiceFolderPath}, 보이스 파일을 폴더에 넣은 후 "VoiceFileCompletion": "Completion"으로 변경해 주세요 ] ]')
+                print(f'[ 클로닝할 보이스 파일이 필요합니다 : {CloneVoiceFolderPath}, 보이스 파일을 폴더에 넣은 후 "VoiceFileCompletion": "Completion"으로 변경해 주세요 ]')
             CloneVoiceActor = {
                 "Name": f"{CloneVoiceName}({projectName})-저자클로닝",
                 "ApiSetting": {

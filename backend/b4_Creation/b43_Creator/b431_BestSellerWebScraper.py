@@ -147,13 +147,13 @@ def BestsellerScraper(driver, period = 'Weekly'):
     wait = WebDriverWait(driver, 10)
     # period 값에 따른 페이지 설정
     if period == 'Weekly':
-        Period = '002'
+        Period = 'weekly'
         BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1812_WeeklyBookData/"
     elif period == 'Monthly':
-        Period = '003'
+        Period = 'monthly'
         BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1813_MonthlyBookData/"
     elif period == 'Yearly':
-        Period = '004'
+        Period = 'annual'
         BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1814_YearlyBookData/"
 
     # 기존 파일 확인 후 스크래핑 시작 페이지와 파일번호 설정 (i, j)

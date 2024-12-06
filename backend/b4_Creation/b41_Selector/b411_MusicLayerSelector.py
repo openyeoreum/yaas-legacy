@@ -1620,7 +1620,8 @@ def SaveAudiobookRunningTime(projectName, FileRunningTimeList):
     with open(RunningTimeJsonPath, 'w', encoding = 'utf-8') as Jsonfile:
         json.dump({"ProjectName": projectName, "BodyScriptLenth": BodyScriptLenth, "RunningTime": RunningTime}, Jsonfile, ensure_ascii = False, indent = 4)
         
-def SaveMixingTemplate(projectName
+def SaveMixingTemplate(projectName):
+    return None
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
 def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing', Bitrate = '320k'):
@@ -1638,7 +1639,7 @@ def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang 
     SaveAudiobookRunningTime(projectName, FileRunningTimeList)
     
     ## 믹싱 템플릿 저장
-    SaveMixingTemplate(projectName, FileRunningTimeList)
+    SaveMixingTemplate(projectName)
 
     with get_db() as db:
         

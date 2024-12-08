@@ -102,7 +102,7 @@ def EstimateGen(projectName, email):
 # 1. 견적서 및 계약서 등 모든 서류 제작
 # 2. 샘플을 위한 Body 분리
 # 3. 나레이터셋 선정(샘플 2-3개)
-# 4. 
+# 4. 전달 이메일 작성?
 
 if __name__ == "__main__":
     

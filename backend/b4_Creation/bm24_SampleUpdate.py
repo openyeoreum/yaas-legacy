@@ -74,9 +74,9 @@ def SampleSetting(projectName, email):
                         "RunningTime(hms)": SecondsToHMS(RunningTime),
                         "RunningTime(estimate)": SecondsToHMS(math.ceil(RunningTime / 3600) * 3600),
                         "VoiceActorPrice(raw)": VoiceActorPrice,
-                        "VoiceActorPrice(estimate))": f"{math.ceil(VoiceActorPrice/350000)*350000:,}원",
+                        "VoiceActorPrice(estimate)": f"{math.ceil(VoiceActorPrice/350000)*350000:,}원",
                         "VoiceClonePrice(raw)": VoiceClonePrice,
-                        "VoiceClonePrice(estimate))": f"{math.ceil(VoiceClonePrice/420000)*420000:,}원",
+                        "VoiceClonePrice(estimate)": f"{math.ceil(VoiceClonePrice/420000)*420000:,}원",
                     }
                 }
             ## SampleSetting Json 파일저장

@@ -762,7 +762,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
                     j += 1  # 일반 파일일 경우 다음 항목으로 이동
                 else:
                     j += 1  # 파일이 존재하지 않을 경우에도 다음 항목으로 이동
-            MusicFilePath = MusicLayerPathGen(projectName, email,LastVoiceFileName)
+            MusicFilePath = MusicLayerPathGen(projectName, email, LastVoiceFileName)
 
             # Mixing
             if CaptionMusic_Audio.duration_seconds >= CaptionVoice.duration_seconds:
@@ -797,6 +797,46 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
         # MixedMusicAudio에 결합 및 저장
         MixedMusicPath = MusicFilePath.replace('.wav', f"_[{MusicMixingData['Tag']}Music].wav")
         MixedMusicAudio.export(MixedMusicPath, format = 'wav')
+        
+    ## Music1 폴더 내 모든 음악파일 저장
+    musicLayerPath = MusicLayerPathGen(projectName, email, '',)
+    
+    # 음악파일을 숫자로 정렬하는 함수
+    def ExtractNumber(filepath):
+        filename = os.path.basename(filepath)
+        match = re.search(rf'{projectName}_(\d+\.?\d*)', filename)
+        if match:
+            return float(match.group(1))
+        return float('inf')
+
+    MusicFiles = []
+    # 디렉토리 내의 모든 WAV 파일 찾기
+    for root, dirs, files in os.walk(musicLayerPath):
+        for file in files:
+            if file.endswith('.wav'):
+                MusicFiles.append(os.path.join(root, file))
+                
+    # 추출된 숫자를 기준으로 정렬
+    SortedMusicFiles = sorted(MusicFiles, key=ExtractNumber)
+    
+    # 문장과 문단 사이 소리 로드
+    ModifyStoragePath = "/yaas/storage/s1_Yeoreum/s19_ModifyStorage/"
+    ParagraphSeparatorPath = ModifyStoragePath + "2_ModifySound_문단사이음.wav"
+    ParagraphSeparator = AudioSegment.from_wav(ParagraphSeparatorPath) - 5
+    
+    UpdateTQDM = tqdm(SortedMusicFiles,
+                    total = len(SortedMusicFiles),
+                    desc = 'Music1FileGenerator')
+
+    Music1Combined = AudioSegment.empty()
+    for i, Update in enumerate(UpdateTQDM):
+        MusicFile = AudioSegment.from_wav(Update)
+        Music1Combined += MusicFile
+        if i != len(UpdateTQDM) - 1:
+            Music1Combined += ParagraphSeparator
+            
+    MusicPartPath = os.path.join(musicLayerPath, f"{projectName}_Music1_Part.wav")
+    Music1Combined.export(MusicPartPath, format = "wav")
     
     return EditGeneration, MusicMixingDatas, DeNoiseMixedVar
 

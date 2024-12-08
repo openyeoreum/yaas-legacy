@@ -1619,9 +1619,42 @@ def SaveAudiobookRunningTime(projectName, FileRunningTimeList):
     # RunningTimeJson 저장
     with open(RunningTimeJsonPath, 'w', encoding = 'utf-8') as Jsonfile:
         json.dump({"ProjectName": projectName, "BodyScriptLenth": BodyScriptLenth, "RunningTime": RunningTime}, Jsonfile, ensure_ascii = False, indent = 4)
+
+## 음악 믹싱 템플릿 저장 ##
+def SaveMusicTemplate(projectName, email, MainLang = 'Ko'):
+    ## 도서 SelectionGenerationKoBookContext 로드
+    project = GetProject(projectName, email)
+    ## MainLang의 언어별 SelectionGenerationKoChunks 불러오기
+    if MainLang == 'Ko':
+        SelectionGeneration = project.SelectionGenerationKo[1]
+    if MainLang == 'En':
+        SelectionGeneration = project.SelectionGenerationEn[1]
+    # if MainLang == 'Ja':
+        # SelectionGeneration = project.SelectionGenerationJa[1]
+    # if MainLang == 'Zh':
+        # SelectionGeneration = project.SelectionGenerationZh[1]
+    # if MainLang == 'Es':
+        # SelectionGeneration = project.SelectionGenerationEs[1]
         
-def SaveMixingTemplate(projectName):
-    return None
+    Genre = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['Genre']
+    GenreRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['GenreRatio']
+    GenderRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Gender']['GenderRatio']
+    AgeRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Age']['AgeRatio']
+    PersonalityRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Personality']['PersonalityRatio']
+    EmotionRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Emotion']['EmotionRatio']
+    ContextCompletion = {"Genre": Genre, "GenreRatio": GenreRatio, "GenderRatio": GenderRatio, "AgeRatio": AgeRatio, "PersonalityRatio": PersonalityRatio, "EmotionRatio": EmotionRatio}
+    
+    ## MatchedMusics 로드
+    fileName = '[' + projectName + '_' + 'MatchedMusics].json'
+    MatchedMusicLayerPath = MusicLayerPathGen(projectName, email, fileName)
+    with open(MatchedMusicLayerPath, 'r', encoding = 'utf-8') as JsonFile:
+        MatchedMusics = json.load(JsonFile)
+        
+    ## MusicTemplate 저장
+    MusicTemplatePath = f"/yaas/storage/s1_Yeoreum/s16_MusicStorage/s160_MusicTemplate/{projectName}_MusicTemplate.json"
+    MusicTemplate = {"ProjectName": projectName, "ContextCompletion": ContextCompletion, "MatchedMusics": MatchedMusics}
+    with open(MusicTemplatePath, 'w', encoding = 'utf-8') as JsonFile:
+        json.dump(MusicTemplate, JsonFile, ensure_ascii = False, indent = 4)
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
 def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing', Bitrate = '320k'):
@@ -1639,7 +1672,7 @@ def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang 
     SaveAudiobookRunningTime(projectName, FileRunningTimeList)
     
     ## 믹싱 템플릿 저장
-    SaveMixingTemplate(projectName)
+    SaveMusicTemplate(projectName, email)
 
     with get_db() as db:
         

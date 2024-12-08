@@ -31,7 +31,7 @@ def SampleSetting(projectName, email):
     
     ScriptFile = f"{projectName}_Script.txt"
     ProjectScriptFilePath = os.path.join(ScriptFilePath, ScriptFile)
-    SampleFile = f"{projectName}_Sample.json"
+    SampleFile = f"{projectName}_Sample_Setting.json"
     ProjectSampleFilePath = os.path.join(ScriptFilePath, SampleFile)
     RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Samples/s1212_RunningTimeData"
     
@@ -62,7 +62,7 @@ def SampleSetting(projectName, email):
         VoiceActorPrice = 350000 * RunningTime/3600
         VoiceClonePrice = 420000 * RunningTime/3600
         
-        ## 04_SampleSetting Json 생성 ##
+        ## 04_Sample_Setting Json 생성 ##
         if not os.path.exists(ProjectSampleFilePath):
             SampleSetting = {
                     "ProjectName": f"{projectName}",

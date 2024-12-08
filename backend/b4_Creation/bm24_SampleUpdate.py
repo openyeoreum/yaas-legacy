@@ -59,8 +59,8 @@ def SampleSetting(projectName, email):
         
         ## 03_ScriptText RunningTime 계산 ##
         RunningTime = SampleScriptLenth * AverageRunningTimeRatio
-        VoiceActorPrice = 350000 * RunningTime/3600
-        VoiceClonePrice = 420000 * RunningTime/3600
+        VoiceActorPrice = 200000 * SampleScriptLenth/10000
+        VoiceClonePrice = 250000 * SampleScriptLenth/10000
         
         ## 04_Sample_Setting Json 생성 ##
         if not os.path.exists(ProjectSampleFilePath):
@@ -69,14 +69,15 @@ def SampleSetting(projectName, email):
                     "EstimateSetting": {
                         "ProjectName": "",
                         "Client": "",
-                        "Lenth": SampleScriptLenth,
+                        "Lenth(raw)": SampleScriptLenth,
+                        "Lenth(estimate)": math.ceil(SampleScriptLenth/10000)*10000,
                         "RunningTime(s)": RunningTime,
                         "RunningTime(hms)": SecondsToHMS(RunningTime),
-                        "RunningTime(estimate)": SecondsToHMS(math.ceil(RunningTime / 3600) * 3600),
+                        "RunningTime(estimate)": SecondsToHMS(math.ceil(RunningTime / 1800) * 1800),
                         "VoiceActorPrice(raw)": VoiceActorPrice,
-                        "VoiceActorPrice(estimate))": f"{math.ceil(VoiceActorPrice/350000)*350000:,}원",
+                        "VoiceActorPrice(estimate)": f"{math.ceil(VoiceActorPrice/200000)*200000:,}원",
                         "VoiceClonePrice(raw)": VoiceClonePrice,
-                        "VoiceClonePrice(estimate))": f"{math.ceil(VoiceClonePrice/420000)*420000:,}원",
+                        "VoiceClonePrice(estimate)": f"{math.ceil(VoiceClonePrice/250000)*250000:,}원",
                     }
                 }
             ## SampleSetting Json 파일저장
@@ -97,10 +98,11 @@ def SampleSetting(projectName, email):
 def EstimateGen(projectName, email):
     SampleSetting = SampleSetting(projectName, email)
         
-### Creation에 마케팅 전략 보고서 제작 및 업데이트 ###
-# 스크랩은 도서, 인물, 콘텐츠
-# 벡터DB는 도서, 인물, 콘텐츠를 하나의 모델로(페르소나를 형성하는 모델) 통합
-# 도서별 마케팅 전략 보고서, 주간/월간 트렌드 보고서(글 콘텐츠 3개), 도서별 콜드메일 마케팅
+### Sample 보고서 제작 및 업데이트 ###
+# 1. 견적서 및 계약서 등 모든 서류 제작
+# 2. 샘플을 위한 Body 분리
+# 3. 나레이터셋 선정(샘플 2-3개)
+# 4. 전달 이메일 작성?
 
 if __name__ == "__main__":
     

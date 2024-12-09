@@ -204,7 +204,7 @@ def EstimateToPNG(projectName, email):
     ax.patch.set_alpha(0.0) # 투명 배경
     fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
     # 제목
-    ax.text(0.05, 1, f"『{Project}』, {Client}  |  오디오북 제작 견적서", 
+    ax.text(0.05, 1, f"『{Project}』 {Client}  |  오디오북 제작 견적서", 
     fontsize = 14, weight = 'bold', transform = ax.transAxes, color = 'white')
     # 성우 보이스
     ax.text(0.05, 0.8, f"선택1: 성우 보이스        {Lenth}       {VoiceActorPriceVAT} (부가세포함)\n\n                                                                       {VoiceActorPrice} ({VoiceActorVAT})", 

@@ -15,11 +15,12 @@ from reportlab.pdfgen import canvas
 
 from backend.b4_Creation.b43_Creator.b431_BestSellerWebScraper import BestsellerWebScraper
 
-##########################
-##########################
-##### ContentsUpdate #####
-##########################
-##########################
+########################
+########################
+##### SampleUpdate #####
+########################
+########################
+
 ### 시간, 분, 초로 변환 ###
 def SecondsToHMS(seconds):
     hours = seconds // 3600

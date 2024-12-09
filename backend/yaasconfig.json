@@ -644,7 +644,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto",
+        "AudiobookSplitting": "Manual",
         "EndMusicVolume": -10
     },
     "241128_끌리는이들에겐이유가있다": {

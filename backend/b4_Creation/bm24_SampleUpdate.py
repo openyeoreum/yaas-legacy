@@ -106,17 +106,6 @@ def SampleSettingGen(projectName, email):
     else:
         sys.exit(f"\n[ 아래 폴더에 ((({projectName + '_Script.txt'}))) 파일을 넣어주세요 ]\n({ScriptFilePath})\n")
 
-## 오늘 날짜
-def Date(Option = "Day"):
-    if Option == "Day":
-      now = datetime.now()
-      date = now.strftime('%y%m%d')
-    elif Option == "Second":
-      now = datetime.now()
-      date = now.strftime('%y%m%d%H%M%S')
-    
-    return date
-
 ### 라이프그래프의 이미지를 PDF로 묶기 ###
 def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
     # 디자인 포멧 경로
@@ -150,6 +139,44 @@ def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
     
     # PDF 파일 저장
     pdf.save()
+
+## 오늘 날짜
+def Date(Option = "Day"):
+    if Option == "Day":
+      now = datetime.now()
+      date = now.strftime('%y%m%d')
+    elif Option == "Second":
+      now = datetime.now()
+      date = now.strftime('%y%m%d%H%M%S')
+    
+    return date
+
+## 긴 문자열을 단어 단위로 나눔
+def SplitProjectName(ProjectName, MaxLength = 16):
+    # 입력된 문자열의 길이가 MaxLength 이하면 그대로 반환
+    if len(ProjectName) <= MaxLength:
+        return ProjectName
+    
+    # 입력된 문자열의 길이가 MaxLength 초과하면 줄 분리
+    words = ProjectName.split()
+    SplitedProjcetName = []
+    CurrentLine = []
+    CurrentLength = 0
+    
+    for word in words:
+        word_length = len(word) + (1 if CurrentLine else 0)
+        if CurrentLength + word_length <= MaxLength:
+            CurrentLine.append(word)
+            CurrentLength += word_length
+        else:
+            if CurrentLine:
+                SplitedProjcetName.append(' '.join(CurrentLine))
+            CurrentLine = [word]
+            CurrentLength = len(word)
+    if CurrentLine:
+        SplitedProjcetName.append(' '.join(CurrentLine))
+    
+    return '\n'.join(SplitedProjcetName)
 
 ### EstimatePDFGen 생성 ###
 def EstimateToPNG(projectName, email):
@@ -189,8 +216,8 @@ def EstimateToPNG(projectName, email):
     ax.patch.set_alpha(0.0) # 투명 배경
     fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
     # 제목
-    ax.text(0.6, 0.925, f"일자: {Date()}\n\n도서: {Project}\n\n의뢰: {Client}",
-    fontsize = 14, weight = 'bold', transform = ax.transAxes, color = 'white')
+    ax.text(0.6, 1.04, f"일자: {Date()}\n\n도서: {SplitProjectName(Project)}\n\n의뢰: {Client}",
+    fontsize = 14, weight = 'bold', transform = ax.transAxes, color = 'white', va = 'top', ha = 'left')
     ax.axis('off')  # 텍스트 영역의 축 숨기기
     
     # 표지 페이지 저장
@@ -222,9 +249,10 @@ def EstimateToPNG(projectName, email):
     plt.close()
     
     PNGsToPDF(EstimatePNGPaths, EstimatePDFPath)
+
 ### Sample 보고서 제작 및 업데이트 ###
 # 1. 견적서 및 계약서 등 모든 서류 제작
-# 2. 샘플을 위한 Body 분리
+# 2. 샘플을 위한 Body 분리 스크립트 생성(목차 + 바디)
 # 3. 나레이터셋 선정(샘플 2-3개)
 # 4. 전달 이메일 작성?
 
@@ -232,7 +260,7 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    ProjectName = '241206_테스트'
+    ProjectName = '241210_끌리는이들에겐이유가있다요약'
     #########################################################################
     
     EstimateToPNG(ProjectName, email)

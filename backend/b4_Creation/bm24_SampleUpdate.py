@@ -106,40 +106,6 @@ def SampleSettingGen(projectName, email):
     else:
         sys.exit(f"\n[ 아래 폴더에 ((({projectName + '_Script.txt'}))) 파일을 넣어주세요 ]\n({ScriptFilePath})\n")
 
-### 라이프그래프의 이미지를 PDF로 묶기 ###
-def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
-    # 디자인 포멧 경로
-    DesignFormatPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Samples/s1211_SampleSet/Design_Format/s121_Estimate_Format_"
-    
-    # 첫 번째 이미지 크기에 맞는 PDF 생성
-    FirstImage = Image.open(EstimatePNGPaths[0])
-    FirstWidth, FirstHeight = FirstImage.size
-    pdf = canvas.Canvas(EstimatePDFPath, pagesize = portrait((FirstWidth, FirstHeight)))
-
-    for i in range(len(EstimatePNGPaths)):
-        # 그래프 이미지와 디자인 포멧 불러오기
-        text = Image.open(EstimatePNGPaths[i]).convert("RGBA")
-        DesignFormat = Image.open(DesignFormatPath + f"{i}.png").convert("RGBA")
-        # 이미지 크기 맞추기
-        if text.size != DesignFormat.size:
-            text = text.resize(DesignFormat.size)
-        # 그래프 이미지와 디자인 포멧 합치기
-        CompositeImage = Image.alpha_composite(DesignFormat, text)
-        # 합쳐진 이미지 임시저장
-        CompositeImage.save(EstimatePNGPaths[i], "PNG", optimize = True)
-        # 이미지를 PDF에 추가
-        pdf.drawImage(EstimatePNGPaths[i], 0, 0)
-        pdf.showPage()
-        # PDF로 저장된 PNG 파일 제거
-        os.remove(EstimatePNGPaths[i])
-    
-    # 마지막 라이센스 이미지를 PDF에 추가
-    pdf.drawImage("/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Samples/s1211_SampleSet/Design_Format/s121_Estimate_Format_2.png", 0, 0)
-    pdf.showPage()
-    
-    # PDF 파일 저장
-    pdf.save()
-
 ## 오늘 날짜
 def Date(Option = "Day"):
     if Option == "Day":
@@ -177,6 +143,40 @@ def SplitProjectName(ProjectName, MaxLength = 16):
         SplitedProjcetName.append(' '.join(CurrentLine))
     
     return '\n'.join(SplitedProjcetName)
+
+## 라이프그래프의 이미지를 PDF로 묶기
+def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
+    # 디자인 포멧 경로
+    DesignFormatPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Samples/s1211_SampleSet/Design_Format/s121_Estimate_Format_"
+    
+    # 첫 번째 이미지 크기에 맞는 PDF 생성
+    FirstImage = Image.open(EstimatePNGPaths[0])
+    FirstWidth, FirstHeight = FirstImage.size
+    pdf = canvas.Canvas(EstimatePDFPath, pagesize = portrait((FirstWidth, FirstHeight)))
+
+    for i in range(len(EstimatePNGPaths)):
+        # 그래프 이미지와 디자인 포멧 불러오기
+        text = Image.open(EstimatePNGPaths[i]).convert("RGBA")
+        DesignFormat = Image.open(DesignFormatPath + f"{i}.png").convert("RGBA")
+        # 이미지 크기 맞추기
+        if text.size != DesignFormat.size:
+            text = text.resize(DesignFormat.size)
+        # 그래프 이미지와 디자인 포멧 합치기
+        CompositeImage = Image.alpha_composite(DesignFormat, text)
+        # 합쳐진 이미지 임시저장
+        CompositeImage.save(EstimatePNGPaths[i], "PNG", optimize = True)
+        # 이미지를 PDF에 추가
+        pdf.drawImage(EstimatePNGPaths[i], 0, 0)
+        pdf.showPage()
+        # PDF로 저장된 PNG 파일 제거
+        os.remove(EstimatePNGPaths[i])
+    
+    # 마지막 라이센스 이미지를 PDF에 추가
+    pdf.drawImage("/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Samples/s1211_SampleSet/Design_Format/s121_Estimate_Format_2.png", 0, 0)
+    pdf.showPage()
+    
+    # PDF 파일 저장
+    pdf.save()
 
 ### EstimatePDFGen 생성 ###
 def EstimateToPNG(projectName, email):
@@ -250,17 +250,11 @@ def EstimateToPNG(projectName, email):
     
     PNGsToPDF(EstimatePNGPaths, EstimatePDFPath)
 
-### Sample 보고서 제작 및 업데이트 ###
-# 1. 견적서 및 계약서 등 모든 서류 제작
-# 2. 샘플을 위한 Body 분리 스크립트 생성(목차 + 바디)
-# 3. 나레이터셋 선정(샘플 2-3개)
-# 4. 전달 이메일 작성?
-
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    ProjectName = '241210_끌리는이들에겐이유가있다요약'
+    ProjectName = '241210_공부하듯주식해서보화찾기요약'
     #########################################################################
     
     EstimateToPNG(ProjectName, email)

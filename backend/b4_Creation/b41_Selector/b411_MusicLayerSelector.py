@@ -835,8 +835,8 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
         if i != len(UpdateTQDM) - 1:
             Music1Combined += ParagraphSeparator
             
-    MusicPartPath = os.path.join(musicLayerPath, f"{projectName}_Music1_Part.wav")
-    Music1Combined.export(MusicPartPath, format = "wav")
+    MusicPartPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_(0, Index).mp3", 'Master')
+    Music1Combined.export(MusicPartPath, format = "mp3")
     
     return EditGeneration, MusicMixingDatas, DeNoiseMixedVar
 
@@ -1569,9 +1569,15 @@ def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPat
                 PreviewSound.export(PreviewFile, format = "mp3", bitrate = Bitrate)
                 PreviewSound = AudioSegment.empty()
             AudiobookPreviewSize = os.path.getsize(PreviewSoundPath)/(1024 * 1024)
-        
         RawPreviewSound = AudioSegment.empty()
-    
+        
+    else:
+        AudiobookPreviewSecond = RawPreviewSound.duration_seconds
+        with open(PreviewSoundPath, "wb") as PreviewFile:
+            RawPreviewSound.export(PreviewFile, format="mp3", bitrate=Bitrate)
+        AudiobookPreviewSize = os.path.getsize(PreviewSoundPath)/(1024 * 1024)
+        RawPreviewSound = AudioSegment.empty()
+        
     return AudiobookPreviewSecond, AudiobookPreviewSize
 
 ## 오디오북 메타데이터 생성 ##

@@ -182,9 +182,10 @@ def WMWMMatchingFilter(responseData, memoryCounter):
             key = '토론요약'
             if not ('장르' in dic[key] and '성별' in dic[key] and '연령' in dic[key] and '성향' in dic[key] and '감성' in dic[key] and '문구' in dic[key] and '대상독자' in dic[key] and '주제' in dic[key] and '목적' in dic[key] and '이유' in dic[key] and '대표질문' in dic[key] and '필요성' in dic[key] and '필요성배점이유' in dic[key] and '지식적유익성' in dic[key] and '지식적유익성배점이유' in dic[key] and '마음가짐의유익성' in dic[key] and '마음가짐의유익성배점이유' in dic[key] and '실천의유익성' in dic[key] and '실천의유익성배점이유' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
-        # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
+        except KeyError:
+            return "JSON에서 오류 발생: KeyError"
         
     return {'json': outputJson, 'filter': OutputDic}
 

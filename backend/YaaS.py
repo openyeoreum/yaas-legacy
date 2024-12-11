@@ -160,7 +160,7 @@ if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     ## projectNameList ##
-    # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240919_암을이기는천연항암제요약', '240812_룰루레몬스토리', '240815_노유파', '240908_나무스토리텔링', '240910_AI미래시나리오2030', '240925_불멸의지혜', '241005_그해여름필립로커웨이에서일어난소설같은일', '241009_책갈피와책수레', '241010_틈틈이낭만', '241024_오성삼유튜브', '241024_서울장애인가족지원센터당선작13선', '241029_누가정부창업지원을받는가', '241116_베이버터와다섯개의빛', '241118_세종교육청우리반오디오북새움중1학년8반', '241118_세종교육청우리반오디오북아름초5학년5반', '241118_세종교육청우리반오디오북아름초1학년1반', '241127_엄마의첫공부', '241128_끌리는이들에겐이유가있다'
+    # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240919_암을이기는천연항암제요약', '240812_룰루레몬스토리', '240815_노유파', '240908_나무스토리텔링', '240910_AI미래시나리오2030', '240925_불멸의지혜', '241005_그해여름필립로커웨이에서일어난소설같은일', '241009_책갈피와책수레', '241010_틈틈이낭만', '241024_오성삼유튜브', '241024_서울장애인가족지원센터당선작13선', '241029_누가정부창업지원을받는가', '241116_베이버터와다섯개의빛', '241118_세종교육청우리반오디오북새움중1학년8반', '241118_세종교육청우리반오디오북아름초5학년5반', '241118_세종교육청우리반오디오북아름초1학년1반', '241127_엄마의첫공부', '241128_끌리는이들에겐이유가있다', '241204_개정교육과정초등교과별이해연수', '241210_공부하듯주식해서보화찾기요약', '241210_끌리는이들에겐이유가있다요약', '241210_나는외식창업에적합한사람인가요약'
     
     ## ScriptGen ##
     # 디폴트: {"ScriptGen": "off", "RawMode": "on", "Model": "OpenAI", "Process": "", "Mode": "Master", "MainKey": "", "KeyList": []}
@@ -168,16 +168,16 @@ if __name__ == "__main__":
     # 우리반시집: {"ScriptGen": "on", "RawMode": "off", "Model": "OpenAI", "Process": "SejongCityOfficeOfEducation_Poem", "Mode": "Master", "MainKey": "단락", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]}
     # 빼기명상을통한나의변화: {"ScriptGen": "on", "RawMode": "off", "Model": "OpenAI", "Process": "ChangesAfterMeditation_Script", "Mode": "Master", "MainKey": "글내용", "KeyList": ["목차", "내용"]}
 
-    ProjectNameList = ['241210_공부하듯주식해서보화찾기요약']
-    ScriptGen = {"ScriptGen": "off", "RawMode": "on", "Model": "OpenAI", "Process": "", "Mode": "Master", "MainKey": "", "KeyList": []} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'RawMode' : 'on', 'off' : on 은 _Index(Raw).txt 및 _Body(Raw).txt 생성, off 는 _Index.txt 및 _Body.txt 생성 / 'Process' : 'SejongCityOfficeOfEducation_Poem' ... / 'MainKey', 'KeyList' : '메인키': ['프롬프트 결과로', '나오는 KeyList', '작성']
+    ProjectNameList = ['241204_개정교육과정초등교과별이해연수']
+    ScriptGen = {"ScriptGen": "off", "RawMode": "on", "Model": "OpenAI", "Process": "", "Mode": "Master", "MainKey": "", "KeyList": []} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'RawMode' : 'on', 'off' : on 은 _Index(Raw).txt 및 _Body(Raw).txt 생성, off 는 _Index.txt 및 _Body.txt 생성 / 'Process' : 'SejongCityOfficeOfEducation_Poem' ... / 'MainKey': 'KeyList' : '메인키': ['프롬프트 결과로', '나오는 KeyList', '작성']
     Narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
     CloneVoiceName = "" # 'Narrator = 'VoiceActor' 인 경우 '저자명(특성)' 작성, 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
     ReadingStyle = "AllCharacters" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
     MusicDB = "Storage" # 'Storage', 'Template', 'ProjectName' : Storage 는 음악을 Storage 에서 선택, Template 는 음악을 Template 에서 선택, ProjectName 은 해당 프로젝트에서 선택
-    MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
+    MessagesReview = "off" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     Bitrate = "320k" # 320k, 192k, 128k, 64k : 최종 저장되는 오디오북 mp3파일의 음질
-    MainProcess = "Sample" # 'Solution', 'Solution&Creation', 'Sample'
+    MainProcess = "Solution&Creation" # 'Solution', 'Solution&Creation', 'Sample'
     Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
     Bracket = "Auto" # 'Auto', 'Manual', 'Practice' : Auto는 대괄호 자동, Manual은 대괄호 수동, Practice는 연습
     VolumeEqual = "Mastering" # 'Mixing', 'Mastering' : Mixing은 작업중, Mastering은 최종 마무리로 모든 음성 일률화

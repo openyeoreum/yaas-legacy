@@ -1590,7 +1590,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         for VoiceActor in VoiceActos:
             if VoiceActor['Name'] == CloneVoiceName:
                 MatchedVoiceActor = VoiceActor
-                
+        print(MatchedVoiceActor)
         ## MatchedVoices 변경
         for _Matched in MatchedActors:
             if _Matched['CharacterTag'] == 'Narrator':

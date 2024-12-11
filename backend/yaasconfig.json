@@ -850,35 +850,6 @@
         "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
     },
-    "241206_테스트": {
-        "email": "yeoreum00128@gmail.com",
-        "name": "yeoreum",
-        "password": "0128",
-        "projectNameList": [
-            "241206_테스트"
-        ],
-        "Translations": [],
-        "ScriptGen": {
-            "ScriptGen": "off",
-            "RawMode": "on",
-            "Model": "OpenAI",
-            "Process": "",
-            "Mode": "Master",
-            "MainKey": "",
-            "KeyList": []
-        },
-        "IndexMode": "Define",
-        "BookGenre": "Auto",
-        "MainLang": "Ko",
-        "Narrator": "VoiceActor",
-        "CloneVoiceName": "",
-        "ReadingStyle": "AllCharacters",
-        "VoiceEnhance": "off",
-        "VoiceReverbe": "on",
-        "Intro": "off",
-        "AudiobookSplitting": "Auto",
-        "EndMusicVolume": -10
-    },
     "241210_나는외식창업에적합한사람인가요약": {
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
@@ -943,6 +914,64 @@
         "password": "0128",
         "projectNameList": [
             "241210_공부하듯주식해서보화찾기요약"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "off",
+            "RawMode": "on",
+            "Model": "OpenAI",
+            "Process": "",
+            "Mode": "Master",
+            "MainKey": "",
+            "KeyList": []
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "",
+        "ReadingStyle": "AllCharacters",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241204_개정교육과정초등교과별이해연수": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241204_개정교육과정초등교과별이해연수"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "off",
+            "RawMode": "on",
+            "Model": "OpenAI",
+            "Process": "",
+            "Mode": "Master",
+            "MainKey": "",
+            "KeyList": []
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceClone",
+        "CloneVoiceName": "진미옥",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
+    },
+    "241210_나는외식창업에적합한사람인가요약": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241210_나는외식창업에적합한사람인가요약"
         ],
         "Translations": [],
         "ScriptGen": {

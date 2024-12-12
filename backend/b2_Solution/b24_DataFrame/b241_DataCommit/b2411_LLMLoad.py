@@ -50,8 +50,29 @@ def LoadLLMapiKey(email):
 ##### OpenAI LLM Response #####
 ###############################
 ## 프롬프트 요청할 LLMmessages 메세지 구조 생성
-def LLMmessages(Process, Input, Root = "backend", promptFramePath = "", Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
-   
+def LLMmessages(Process, Input, Model, Root = "backend", promptFramePath = "", Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
+    ## '...'을 “...”로 변경하여 Claude에서도 json 형식이 갖춰지도록 구성
+    def ConvertQuotes(Model, Message):
+        if "claude" in Model:
+            Message = Message.replace("‘", "“")
+            Message = Message.replace("’", "”")
+            if not Message:
+                return Message
+            QuoteCount = 0
+            ConvertMessage = ""
+            for char in Message:
+                if char == "'":
+                    QuoteCount += 1
+                    if QuoteCount % 2 == 1:
+                        ConvertMessage += "“"
+                    else:
+                        ConvertMessage += "”"
+                else:
+                    ConvertMessage += char
+            return ConvertMessage
+        else:
+            return Message
+    
     if promptFramePath == "":
       promptFrame = GetPromptFrame(Process)
     else:
@@ -74,9 +95,9 @@ def LLMmessages(Process, Input, Root = "backend", promptFramePath = "", Output =
         },
         {
           "role": Example[1]["Role"],
-          "content": Example[1]["Request"][0]["Mark"] + Example[1]["Request"][0]["Message"] +
-                    Example[1]["Request"][1]["Mark"] + Example[1]["Request"][1]["Message"] +
-                    Example[1]["Request"][2]["Mark"] + Example[1]["Request"][2]["Message"] +
+          "content": Example[1]["Request"][0]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][0]["Message"]) +
+                    Example[1]["Request"][1]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][1]["Message"]) +
+                    Example[1]["Request"][2]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][2]["Message"]) +
                     Example[1]["Request"][3]["Mark"] + Example[1]["Request"][3]["InputExampleMark"] + str(Example[1]["Request"][3]["InputExample"]) +
                     Example[1]["Request"][3]["OutputExampleMark"] + str(Example[1]["Request"][3]["OutputExample"]) +
                     Example[1]["Request"][4]["Mark"] + Example[1]["Request"][4]["InputExampleMark"] + str(Example[1]["Request"][4]["InputExample"]) +
@@ -106,9 +127,9 @@ def LLMmessages(Process, Input, Root = "backend", promptFramePath = "", Output =
         },
         {
           "role": Memory[1]["Role"],
-          "content": Memory[1]["Request"][0]["Mark"] + Memory[1]["Request"][0]["Message"] +
-                    Memory[1]["Request"][1]["Mark"] + Memory[1]["Request"][1]["Message"] +
-                    Memory[1]["Request"][2]["Mark"] + Memory[1]["Request"][2]["Message"] +
+          "content": Memory[1]["Request"][0]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][0]["Message"]) +
+                    Memory[1]["Request"][1]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][1]["Message"]) +
+                    Memory[1]["Request"][2]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][2]["Message"]) +
                     Memory[1]["Request"][3]["Mark"] + Memory[1]["Request"][3]["InputExampleMark"] + Memory[1]["Request"][3]["InputExample"] +
                     Memory[1]["Request"][3]["OutputExampleMark"] + Memory[1]["Request"][3]["OutputExample"] +
                     Memory[1]["Request"][4]["Mark"] + Memory[1]["Request"][4]["InputExampleMark"] + Memory[1]["Request"][4]["InputExample"] +
@@ -137,9 +158,9 @@ def LLMmessages(Process, Input, Root = "backend", promptFramePath = "", Output =
         },
         {
           "role": ExampleFineTuning[1]["Role"],
-          "content": ExampleFineTuning[1]["Request"][0]["Mark"] + ExampleFineTuning[1]["Request"][0]["Message"] +
-                    ExampleFineTuning[1]["Request"][1]["Mark"] + ExampleFineTuning[1]["Request"][1]["Message"] +
-                    ExampleFineTuning[1]["Request"][2]["Mark"] + ExampleFineTuning[1]["Request"][2]["Message"] +
+          "content": ExampleFineTuning[1]["Request"][0]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][0]["Message"]) +
+                    ExampleFineTuning[1]["Request"][1]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][1]["Message"]) +
+                    ExampleFineTuning[1]["Request"][2]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][2]["Message"]) +
                     ExampleFineTuning[1]["Request"][6]["Mark"] + ExampleFineTuning[1]["Request"][6]["InputMark"] + str(Input) +
                     ExampleFineTuning[1]["Request"][6]["InputMark2"] + str(input2)
         },
@@ -158,9 +179,9 @@ def LLMmessages(Process, Input, Root = "backend", promptFramePath = "", Output =
         },
         {
           "role": MemoryFineTuning[1]["Role"],
-          "content": MemoryFineTuning[1]["Request"][0]["Mark"] + MemoryFineTuning[1]["Request"][0]["Message"] +
-                    MemoryFineTuning[1]["Request"][1]["Mark"] + MemoryFineTuning[1]["Request"][1]["Message"] +
-                    MemoryFineTuning[1]["Request"][2]["Mark"] + MemoryFineTuning[1]["Request"][2]["Message"] +
+          "content": MemoryFineTuning[1]["Request"][0]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][0]["Message"]) +
+                    MemoryFineTuning[1]["Request"][1]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][1]["Message"]) +
+                    MemoryFineTuning[1]["Request"][2]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][2]["Message"]) +
                     MemoryFineTuning[1]["Request"][5]["Mark"] + MemoryFineTuning[1]["Request"][5]["InputMark"] + str(inputMemory) + str(Input) +
                     MemoryFineTuning[1]["Request"][5]["InputMark2"] + str(inputMemory2) + str(input2)
         },
@@ -178,13 +199,15 @@ def LLMmessages(Process, Input, Root = "backend", promptFramePath = "", Output =
     outputTokens = InputTokens * OutputTokensRatio
     totalTokens = messageTokens + outputTokens
     Temperature = promptFrame[0]["Temperature"]
+    print(messages)
+    sys.exit()
     
     return messages, outputTokens, totalTokens, Temperature
   
 ## 프롬프트에 메세지 확인
 def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = "backend", PromptFramePath = "", MODE = "Example", INPUT2 = "", INPUTMEMORY = "", OUTPUTMEMORY = "", MEMORYCOUNTER = "", OUTPUTENDER = ""):
 
-    Messages, outputTokens, TotalTokens, Temperature = LLMmessages(Process, Input, Root = ROOT, promptFramePath = PromptFramePath, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryCounter = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
+    Messages, outputTokens, TotalTokens, Temperature = LLMmessages(Process, Input, Model, Root = ROOT, promptFramePath = PromptFramePath, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryCounter = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
     
     TextMessagesList = [f"\n############# Messages #############\n",
                         f"Messages: ({Count}), ({Model}), ({MODE}), (Tep:{Temperature})\n",
@@ -217,7 +240,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
         promptFrame = [json.load(promptFrameJson)]
 
     
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'gpt', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
     if Mode == "Master":
       Model = promptFrame[0]["OpenAI"]["MasterModel"]
@@ -340,7 +363,7 @@ def OpenAI_LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Proces
           Input = IOList[i]["Input"]
           output = IOList[i]["Feedback"]
           
-          messages, outputTokens, totalTokens, Temperature = LLMmessages(Process, Input, Output = output, mode = MOde, inputMemory = InputMemory)
+          messages, outputTokens, totalTokens, Temperature = LLMmessages(Process, Input, 'gpt', Output = output, mode = MOde, inputMemory = InputMemory)
           
           TrainingData = {"messages": [messages[0], messages[1], messages[2]]}
 
@@ -468,23 +491,7 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
 
 ## 프롬프트 실행
 def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
-    ## '...'을 “...”로 변경하여 Claude에서도 json 형식이 갖춰지도록 구성
-    def ConvertQuotes(Response):
-        if not Response:
-            return Response
-        QuoteCount = 0
-        ConvertResponse = ""
-        for char in Response:
-            if char == "'":
-                QuoteCount += 1
-                if QuoteCount % 2 == 1:
-                    ConvertResponse += "“"
-                else:
-                    ConvertResponse += "”"
-            else:
-                ConvertResponse += char
-        return ConvertResponse
-      
+
     client = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
     if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)
@@ -493,7 +500,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
         promptFrame = [json.load(promptFrameJson)]
 
     
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
     if Mode == "Master":
       Model = promptFrame[0]["ANTHROPIC"]["MasterModel"]
@@ -549,7 +556,6 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
           
           # Response Mode 전처리 ([...]와 {...}중 하나로 전처리)
           if promptFrame[0]["OutputFormat"] == 'json':
-              Response = ConvertQuotes(Response)
               Response = Response.replace('\n', '\\n')
               start_index_bracket = Response.find('[')
               start_index_brace = Response.find('{')

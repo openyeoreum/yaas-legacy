@@ -1026,5 +1026,37 @@
         "Intro": "off",
         "AudiobookSplitting": "Auto",
         "EndMusicVolume": -10
+    },
+    "241212_황아현": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "241212_황아현"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "on",
+            "RawMode": "off",
+            "Model": "ANTHROPIC",
+            "Process": "ChangesAfterMeditation_Script",
+            "Mode": "Master",
+            "MainKey": "글내용",
+            "KeyList": [
+                "목차",
+                "내용"
+            ]
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "황아현",
+        "ReadingStyle": "NarratorOnly",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "EndMusicVolume": -10
     }
 }

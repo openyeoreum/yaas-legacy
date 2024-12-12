@@ -199,9 +199,7 @@ def LLMmessages(Process, Input, Model, Root = "backend", promptFramePath = "", O
     outputTokens = InputTokens * OutputTokensRatio
     totalTokens = messageTokens + outputTokens
     Temperature = promptFrame[0]["Temperature"]
-    print(messages)
-    sys.exit()
-    
+
     return messages, outputTokens, totalTokens, Temperature
   
 ## 프롬프트에 메세지 확인

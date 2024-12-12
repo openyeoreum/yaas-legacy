@@ -17,6 +17,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from time import sleep
+from collections import OrderedDict
 from difflib import SequenceMatcher
 from datetime import datetime
 from pydub import AudioSegment
@@ -992,7 +993,6 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     Files = []
     # VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"
     VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣A-Za-z]+\(.*?\))_\((\d+)\)M?\.wav"
-    print(RawFiles)
     for i in range(len(RawFiles)):
         VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
         if VoiceFileMatch == None:
@@ -1697,17 +1697,38 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 sys.exit(f'[ MatchedVoices 파일이 이미 생성됨, 삭제해주세요 : {MatchedActorsPath} ]')
 
         ## AudioBook_Edit에 새로운 ActorName이 발생한 경우 이를 MatchedActors에 추가
+        ## ModifiedChunk를 Chunk로 다시 변환
         # MatchedActors 검토
+        # MatchedActorNames에서 voice_id가 다른 경우 업데이트
         MatchedActorNames = []
         for _Matched in MatchedActors:
             if _Matched['ActorName'] not in MatchedActorNames:
                 MatchedActorNames.append(_Matched['ActorName'])
         
-        # AudioBook_Edit 검토
+        # AudioBook_Edit 검토 및 ModifiedChunk를 Chunk로 다시 변환
         EditActorNames = []
+        # AudioBook_Edit 검토
         for _Edit in MatchedChunks:
             if _Edit['ActorName'] not in EditActorNames:
                 EditActorNames.append(_Edit['ActorName'])
+            # ModifiedChunk를 Chunk로 다시 변환
+            for _chunK in _Edit['ActorChunk']:
+                if "ModifiedChunk" in _chunK:
+                    # 일반 딕셔너리를 OrderedDict로 변환
+                    ordered_chunk = OrderedDict(_chunK)
+                    # 순서를 유지하면서 키 변경
+                    new_items = [(k if k != "ModifiedChunk" else "Chunk", v) 
+                                for k, v in ordered_chunk.items()]
+                    # 새로운 OrderedDict 생성
+                    _chunK.clear()
+                    _chunK.update(OrderedDict(new_items))
+
+        # voice_id 업데이트
+        for _Matched in MatchedActors:
+            if _Matched['ApiSetting']['Api'] == "ElevenLabs":
+                for Characters in VoiceDataSetCharacters:
+                        if _Matched['ActorName'] == Characters['Name']:
+                            _Matched['ApiSetting']['voice_id'] = Characters['ApiSetting']['voice_id']
 
         # 새롭게 추가될 ActorNames
         NewActorNames = [actor for actor in EditActorNames if actor not in MatchedActorNames]
@@ -1718,6 +1739,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 if Characters['Name'] in NewActorNames:
                     NewActorDic = {"CharacterTag": "NewCharacter", "ActorName": Characters['Name'], "ApiSetting": Characters['ApiSetting']}
                     MatchedActors.append(NewActorDic)
+                        
             # 새롭게 추가된 캐릭터 내용 저장 (덮어쓰기)
             with open(MatchedActorsPath, 'w', encoding = 'utf-8') as MatchedActorsJson:
                 json.dump(MatchedActors, MatchedActorsJson, ensure_ascii = False, indent = 4)

@@ -12,6 +12,7 @@ import json
 sys.path.append("/yaas")
 
 from tqdm import tqdm
+from collections import OrderedDict
 from pydub import AudioSegment
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User
@@ -1538,7 +1539,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
         RestoreOriginalFiles(voiceLayerPath)
     #### VolumeEqualization 파일 복원 ####
 
-    return EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath
+    return EditGenerationKoChunks, MatchedChunksPath, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath
 
 ## 10-15분 미리듣기 생성 ##
 def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath, Bitrate):
@@ -1577,6 +1578,96 @@ def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPat
         RawPreviewSound = AudioSegment.empty()
         
     return AudiobookPreviewSecond, AudiobookPreviewSize
+
+## ModifiedChunk 기록
+def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunksPath):
+    BaseModifyFolder = f"[{projectName}_Modified]"
+    BaseModifiedFolderPath = VoiceLayerPathGen(projectName, email, BaseModifyFolder, 'Master')
+    
+    def GetLatestModifiedFolder(base_path):
+        ModifiedFolders = []
+        pattern = re.compile(r'\d{14}_Modified_Part$')
+        try:
+            for item in os.listdir(base_path):
+                full_path = os.path.join(base_path, item)
+                if os.path.isdir(full_path) and pattern.search(item):
+                    ModifiedFolders.append(full_path)
+        except FileNotFoundError:
+            return None
+        if not ModifiedFolders:
+            return None
+        latest_folder = max(ModifiedFolders, 
+                          key=lambda x: re.search(r'(\d{14})_Modified_Part$', 
+                                                os.path.basename(x)).group(1))
+        return latest_folder
+    
+    def GetModifiedWavFiles(folder_path):
+        if not folder_path or not os.path.exists(folder_path):
+            return []
+        ModifiedWavFiles = []
+        pattern = re.compile(r'.*\.wav$', re.IGNORECASE)
+        try:
+            for item in os.listdir(folder_path):
+                if pattern.match(item):
+                    ModifiedWavFiles.append(item)
+        except FileNotFoundError:
+            return []
+            
+        # WAV 파일명에서 EditId와 ChunkId 추출하여 딕셔너리 리스트 생성
+        ModifiedWavInfoList = []
+        wav_pattern = re.compile(r'\d{6}_[^_]+_(\d+)_[^_]+\(.*?\)_\((\d+)\)Modify\.wav$')
+        
+        # EditId별로 ChunkId를 그룹화하기 위한 임시 딕셔너리
+        edit_groups = {}
+        
+        for ModifiedWavFile in sorted(ModifiedWavFiles):
+            match = wav_pattern.match(ModifiedWavFile)
+            if match:
+                edit_id, chunk_id = map(int, match.groups())
+                
+                # EditId가 이미 있으면 ChunkId 추가, 없으면 새로운 리스트 생성
+                if edit_id in edit_groups:
+                    edit_groups[edit_id].append(chunk_id)
+                else:
+                    edit_groups[edit_id] = [chunk_id]
+        
+        # 그룹화된 데이터를 원하는 형식으로 변환
+        ModifiedWavInfoList = [
+            {
+                "EditId": edit_id,
+                "ChunkId": sorted(chunk_ids)  # ChunkId 리스트를 정렬하여 저장
+            }
+            for edit_id, chunk_ids in sorted(edit_groups.items())  # EditId 기준으로 정렬
+        ]
+        
+        return ModifiedWavInfoList
+    
+    # 최신 Modified_Part 폴더 찾기
+    LatestModifiedFolder = GetLatestModifiedFolder(BaseModifiedFolderPath)
+    # wav 파일 리스트와 정보 딕셔너리 리스트 얻기
+    ModifiedWavInfoList = GetModifiedWavFiles(LatestModifiedFolder)
+    
+    print(ModifiedWavInfoList)
+    
+    ## EditGenerationKoChunks에 ModifiedChunk 기록
+    for ModifiedWavInfo in ModifiedWavInfoList:
+        for EditGenerationKoChunk in EditGenerationKoChunks:
+            if ModifiedWavInfo['EditId'] == EditGenerationKoChunk['EditId']:
+                for ModifiedChunkId in ModifiedWavInfo['ChunkId']:
+                    _chunK = EditGenerationKoChunk['ActorChunk'][ModifiedChunkId]
+                    if "Chunk" in _chunK:
+                        # 일반 딕셔너리를 OrderedDict로 변환
+                        ordered_chunk = OrderedDict(_chunK)
+                        # 순서를 유지하면서 키 변경
+                        new_items = [(k if k != "Chunk" else "ModifiedChunk", v) 
+                                    for k, v in ordered_chunk.items()]
+                        # 새로운 OrderedDict 생성
+                        _chunK.clear()
+                        _chunK.update(OrderedDict(new_items))
+                        
+    ## EndTime이 업데이트 된 EditGenerationKoChunks 저장
+    with open(MatchedChunksPath, 'w', encoding = 'utf-8') as json_file:
+        json.dump(EditGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
 
 ## 오디오북 메타데이터 생성 ##
 def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, VoiceFilePath, AudiobookPreviewSecond, AudiobookPreviewSize):
@@ -1704,13 +1795,16 @@ def SaveMusicTemplate(projectName, email, MainLang = 'Ko'):
 def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing', Bitrate = '320k'):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
     
-    EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting, EndMusicVolume = EndMusicVolume, VolumeEqual = VolumeEqual, Bitrate = Bitrate)
+    EditGenerationKoChunks, MatchedChunksPath, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting, EndMusicVolume = EndMusicVolume, VolumeEqual = VolumeEqual, Bitrate = Bitrate)
     
     ## 10-15분 미리듣기 생성
     AudiobookPreviewSecond, AudiobookPreviewSize = AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath, Bitrate)
     
     ## 오디오북 메타데이터 생성
     AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, _VoiceFilePath, AudiobookPreviewSecond, AudiobookPreviewSize)
+
+    ## ModifiedChunk 기록
+    RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunksPath)
 
     ## 오디오북 러닝타임 기록
     SaveAudiobookRunningTime(projectName, FileRunningTimeList)

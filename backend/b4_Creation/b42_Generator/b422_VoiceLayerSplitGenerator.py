@@ -92,7 +92,6 @@ def LoadSelectionGenerationKoChunks(projectName, email, MainLang):
         for j in range(len(SelectionGenerationSplitedBodys)):
             SelectionGenerationSplitedChunks = SelectionGenerationSplitedBodys[j]['SelectionGeneration' + MainLang + 'SplitedChunks']
             for k in range(len(SelectionGenerationSplitedChunks)):
-                ChunkId = SelectionGenerationSplitedChunks[k]['ChunkId']
                 Chunk = SelectionGenerationSplitedChunks[k]['Chunk']
                 Tag = SelectionGenerationSplitedChunks[k]['Tag']
                 Voice = SelectionGenerationSplitedChunks[k]['Voice']
@@ -100,7 +99,7 @@ def LoadSelectionGenerationKoChunks(projectName, email, MainLang):
                     Voice['CharacterTag'] = 'SecondaryNarrator'
                 if Voice['Character'] in TertiaryNarratorList:
                     Voice['CharacterTag'] = 'TertiaryNarrator'
-                SelectionGenerationChunks.append({'ChunkId': ChunkId, 'Tag': Tag, 'Chunk': Chunk, 'Voice': Voice})
+                SelectionGenerationChunks.append({'Tag': Tag, 'Chunk': Chunk, 'Voice': Voice})
     
     return VoiceDataSetCharacters, CharacterCompletion, SelectionGenerationBookContext, SelectionGenerationChunks
 
@@ -473,7 +472,6 @@ def EditGenerationKoChunksToDic(EditGenerationKoChunks):
     EditGenerationKoDicChunks = []
     for Chunks in EditGenerationKoChunks:
         EditId = Chunks['EditId']
-        ChunkId = Chunks['ChunkId']
         Tag = Chunks['Tag']
         ActorName = Chunks['ActorName']
         ActorChunk = Chunks['ActorChunk']
@@ -483,7 +481,7 @@ def EditGenerationKoChunksToDic(EditGenerationKoChunks):
         for i in range(len(ActorChunk)):
             AudioDic = {"Chunk": ActorChunk[i], "Pause": Pause[i], "EndTime": EndTime[i]}
             Audio.append(AudioDic)
-        EditGenerationKoDicChunks.append({"EditId": EditId, "ChunkId": ChunkId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": Audio})
+        EditGenerationKoDicChunks.append({"EditId": EditId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": Audio})
     
     return EditGenerationKoDicChunks
 
@@ -492,7 +490,6 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
     EditGenerationKoListChunks = []
     for Chunks in EditGenerationKoChunks:
         EditId = Chunks['EditId']
-        ChunkId = Chunks['ChunkId']
         Tag = Chunks['Tag']
         ActorName = Chunks['ActorName']
         ActorChunk = Chunks['ActorChunk']
@@ -504,7 +501,7 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
             _ActorChunk.append(ActorChunk[i]['Chunk'])
             Pause.append(ActorChunk[i]['Pause'])
             EndTime.append(ActorChunk[i]['EndTime'])
-        EditGenerationKoListChunks.append({"EditId": EditId, "ChunkId": ChunkId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": _ActorChunk, "Pause": Pause, "EndTime": EndTime})
+        EditGenerationKoListChunks.append({"EditId": EditId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": _ActorChunk, "Pause": Pause, "EndTime": EndTime})
     
     return EditGenerationKoListChunks
 
@@ -1003,9 +1000,9 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
             VoiceFileMatch = re.match(VoiceFilePattern, normalizeRawFile)
         
         if VoiceFileMatch:
-            chunkid, actorname, _ = VoiceFileMatch.groups()
+            editid, actorname, _ = VoiceFileMatch.groups()
         for j in range(len(EditGenerationKoChunks)):
-            if float(chunkid) == EditGenerationKoChunks[j]['EditId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
+            if float(editid) == EditGenerationKoChunks[j]['EditId'] and actorname == EditGenerationKoChunks[j]['ActorName']:
                 Files.append(RawFiles[i])
                 break
 
@@ -1590,7 +1587,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         for VoiceActor in VoiceActos:
             if VoiceActor['Name'] == CloneVoiceName:
                 MatchedVoiceActor = VoiceActor
-        print(MatchedVoiceActor)
+                
         ## MatchedVoices 변경
         for _Matched in MatchedActors:
             if _Matched['CharacterTag'] == 'Narrator':
@@ -1752,13 +1749,13 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             chunk = __chunk['Chunk']
             ChunkLength = len(chunk)
             if ChunkTokens + ChunkLength >= 400:
-                MatchedChunks.append({"EditId": _chunk_['EditId'], "ChunkId": _chunk_['ChunkId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
+                MatchedChunks.append({"EditId": _chunk_['EditId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
                 SplitActorChunk = []
                 ChunkTokens = 0
             SplitActorChunk.append(__chunk)
             ChunkTokens += ChunkLength
         if SplitActorChunk:
-            MatchedChunks.append({"EditId": _chunk_['EditId'], "ChunkId": _chunk_['ChunkId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
+            MatchedChunks.append({"EditId": _chunk_['EditId'], "Tag": _chunk_['Tag'], "ActorName": _chunk_['ActorName'], "ActorChunk": SplitActorChunk})
 
     ## EditId가 동일한 경우 해결
     for i in range(len(MatchedChunks)):
@@ -1940,7 +1937,6 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 return re.sub(r'[^가-힣a-zA-Z0-9]', '', text)
 
             for GenerationKoChunk in SelectionGenerationKoChunks:
-                chunkid = GenerationKoChunk['ChunkId']
                 tag = GenerationKoChunk['Tag']
                 actorname = GenerationKoChunk['ActorName']
                 actorchunks = [chunk + "," for chunk in GenerationKoChunk['ActorChunk']]
@@ -1951,7 +1947,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     chunks = [GenerationKoChunk['Chunk']]
                 pauses = [ExtractPause(chunk) for chunk in chunks]
 
-                newChunk = {"EditId": None, "ChunkId": [chunkid], "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses, "Endtime": None}
+                newChunk = {"EditId": None, "Tag": tag, "ActorName": actorname, "ActorChunk": actorchunks, "Pause": pauses, "Endtime": None}
 
                 if tempChunk and len(' '.join(tempChunk['ActorChunk'] + actorchunks)) <= 350 and (tempChunk['Tag'] == tag and tempChunk['ActorName'] == actorname):
                     # 기존 문장과 새로운 문장을 언어만 남긴 상태로 비교
@@ -1960,7 +1956,6 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     if new_text not in combined_text:  # 새로운 문장이 기존 문장에 포함되어 있지 않은 경우에만 합침
                         tempChunk['ActorChunk'] += actorchunks
                         tempChunk['Pause'] += pauses
-                        tempChunk['ChunkId'] += [chunkid]
                     else:  # 새로운 문장이 기존 문장에 포함되어 있는 경우, 새로운 딕셔너리로 시작
                         tempChunk = appendAndResetTemp(tempChunk, newChunk)
                 else:
@@ -1969,7 +1964,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         if len(combined_text) > 350:
                             split_chunks, split_pauses = splitChunksAndPauses(tempChunk['ActorChunk'], tempChunk['Pause'])
                             for sc, sp in zip(split_chunks, split_pauses):
-                                split_chunk = {"EditId": None, "ChunkId": tempChunk['ChunkId'], "Tag": tempChunk['Tag'], "ActorName": tempChunk['ActorName'], "ActorChunk": sc, "Pause": sp, "Endtime": None}
+                                split_chunk = {"EditId": None, "Tag": tempChunk['Tag'], "ActorName": tempChunk['ActorName'], "ActorChunk": sc, "Pause": sp, "Endtime": None}
                                 EditGenerationKoChunks.append(split_chunk)
                             tempChunk = None  # Reset after splitting
                     tempChunk = appendAndResetTemp(tempChunk, newChunk)

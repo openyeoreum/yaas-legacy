@@ -977,9 +977,9 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             VoiceFileMatch = re.match(VoiceFilePattern, normalizeVoiceRawFile)
         
         if VoiceFileMatch:
-            chunkid, actorname, _ = VoiceFileMatch.groups()
+            editid, actorname, _ = VoiceFileMatch.groups()
         for j in range(len(EditGeneration)):
-            if float(chunkid) == EditGeneration[j]['EditId'] and actorname == EditGeneration[j]['ActorName']:
+            if float(editid) == EditGeneration[j]['EditId'] and actorname == EditGeneration[j]['ActorName']:
                 VoiceFiles.append(VoiceRawFiles[i])
                 break
     
@@ -1000,9 +1000,9 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             MusicFileMatch = re.match(MusicFilePattern, normalizeMusicRawFile)
         
         if MusicFileMatch:
-            chunkid, actorname, _, tagmusic = MusicFileMatch.groups()
+            editid, actorname, _, tagmusic = MusicFileMatch.groups()
         for j in range(len(EditGeneration)):
-            if float(chunkid) == EditGeneration[j]['EditId'] and actorname == EditGeneration[j]['ActorName']:
+            if float(editid) == EditGeneration[j]['EditId'] and actorname == EditGeneration[j]['ActorName']:
                 MusicFiles.append(MusicRawFiles[i])
                 break
     
@@ -1038,7 +1038,6 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
         EditGenerationKoDicChunks = []
         for Chunks in EditGenerationKoChunks:
             EditId = Chunks['EditId']
-            ChunkId = Chunks['ChunkId']
             Tag = Chunks['Tag']
             ActorName = Chunks['ActorName']
             ActorChunk = Chunks['ActorChunk']
@@ -1048,7 +1047,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             for i in range(max(len(ActorChunk), len(Pause), len(EndTime))):
                 AudioDic = {"Chunk": ActorChunk[i] if i < len(ActorChunk) else None, "Pause": Pause[i] if i < len(Pause) else None, "EndTime": EndTime[i] if i < len(EndTime) else None}
                 Audio.append(AudioDic)
-            EditGenerationKoDicChunks.append({"EditId": EditId, "ChunkId": ChunkId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": Audio})
+            EditGenerationKoDicChunks.append({"EditId": EditId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": Audio})
         
         return EditGenerationKoDicChunks
 
@@ -1057,7 +1056,6 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
         EditGenerationKoListChunks = []
         for Chunks in EditGenerationKoChunks:
             EditId = Chunks['EditId']
-            ChunkId = Chunks['ChunkId']
             Tag = Chunks['Tag']
             ActorName = Chunks['ActorName']
             ActorChunk = Chunks['ActorChunk']
@@ -1068,7 +1066,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                 _ActorChunk.append(ActorChunk[i]['Chunk'])
                 Pause.append(ActorChunk[i]['Pause'])
                 EndTime.append(ActorChunk[i]['EndTime'])
-            EditGenerationKoListChunks.append({"EditId": EditId, "ChunkId": ChunkId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": _ActorChunk, "Pause": Pause, "EndTime": EndTime})
+            EditGenerationKoListChunks.append({"EditId": EditId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": _ActorChunk, "Pause": Pause, "EndTime": EndTime})
 
         return EditGenerationKoListChunks
 

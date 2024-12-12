@@ -514,14 +514,14 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
           if promptFrame[0]["OutputFormat"] == 'json':
             response = client.messages.create(
                 model = Model,
-                max_tokens = int(outputTokens),
+                max_tokens = 4096,
                 system = Messages[0]["content"],
                 messages = [{"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"}]
             )
           else:
             response = client.messages.create(
                 model = Model,
-                max_tokens = int(outputTokens),
+                max_tokens = 4096,
                 system = Messages[0]["content"],
                 messages = [{"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}"}]
             )
@@ -532,6 +532,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
           
           # Response Mode 전처리 ([...]와 {...}중 하나로 전처리)
           if promptFrame[0]["OutputFormat"] == 'json':
+              Response = Response.replace('\n', '\\n')
               start_index_bracket = Response.find('[')
               start_index_brace = Response.find('{')
               if start_index_bracket != -1 and start_index_brace != -1:

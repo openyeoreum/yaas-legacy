@@ -17,8 +17,8 @@
     },
     "ANTHROPIC": {
         "BaseModel": {
-            "ShortTokensModel": "claude-3-5-sonnet-20240620",
-            "LongTokensModel": "claude-3-5-sonnet-20240620"
+            "ShortTokensModel": "claude-3-5-sonnet-latest",
+            "LongTokensModel": "claude-3-5-sonnet-latest"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -28,7 +28,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "claude-3-5-sonnet-20240620"
+        "MasterModel": "claude-3-5-sonnet-latest"
     },
     "Temperature": 0.4,
     "OutputTokensRatio": 0.5,

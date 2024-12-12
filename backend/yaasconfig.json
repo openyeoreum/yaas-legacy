@@ -1018,7 +1018,7 @@
         "IndexMode": "Define",
         "BookGenre": "Auto",
         "MainLang": "Ko",
-        "Narrator": "VoiceActor",
+        "Narrator": "VoiceClone",
         "CloneVoiceName": "이준영",
         "ReadingStyle": "NarratorOnly",
         "VoiceEnhance": "off",

@@ -51,6 +51,7 @@ def LoadLLMapiKey(email):
 ###############################
 ## 프롬프트 요청할 LLMmessages 메세지 구조 생성
 def LLMmessages(Process, Input, Root = "backend", promptFramePath = "", Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
+   
     if promptFramePath == "":
       promptFrame = GetPromptFrame(Process)
     else:
@@ -467,7 +468,23 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
 
 ## 프롬프트 실행
 def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
-
+    ## '...'을 “...”로 변경하여 Claude에서도 json 형식이 갖춰지도록 구성
+    def ConvertQuotes(Response):
+        if not Response:
+            return Response
+        QuoteCount = 0
+        ConvertResponse = ""
+        for char in Response:
+            if char == "'":
+                QuoteCount += 1
+                if QuoteCount % 2 == 1:
+                    ConvertResponse += "“"
+                else:
+                    ConvertResponse += "”"
+            else:
+                ConvertResponse += char
+        return ConvertResponse
+      
     client = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
     if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)
@@ -532,6 +549,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
           
           # Response Mode 전처리 ([...]와 {...}중 하나로 전처리)
           if promptFrame[0]["OutputFormat"] == 'json':
+              Response = ConvertQuotes(Response)
               Response = Response.replace('\n', '\\n')
               start_index_bracket = Response.find('[')
               start_index_brace = Response.find('{')
@@ -575,6 +593,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
           time.sleep(random.uniform(5, 10))
           continue
 
+if __name__ == "__main__":
 
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
@@ -584,5 +603,3 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
     CompleteDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s113_CompleteDataSet/"
     TrainingDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s114_TrainingDataSet/"
     #########################################################################
-
-    OpenAI_LLMFineTuning(projectName, email, "05", "CharacterCompletion", TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3)

@@ -17,7 +17,7 @@
     },
     "ANTHROPIC": {
         "BaseModel": {
-            "ShortTokensModel": "claude-3-5-sonnet-latest",
+            "ShortTokensModel": "claude-3-5-haiku-latest",
             "LongTokensModel": "claude-3-5-sonnet-latest"
         },
         "ExampleFineTunedModel": {

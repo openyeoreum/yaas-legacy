@@ -992,7 +992,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     Files = []
     # VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣]+\(.*?\))_\((\d+)\)M?\.wav"
     VoiceFilePattern = r".*?_(\d+(?:\.\d+)?)_([가-힣A-Za-z]+\(.*?\))_\((\d+)\)M?\.wav"
-
+    print(RawFiles)
     for i in range(len(RawFiles)):
         VoiceFileMatch = re.match(VoiceFilePattern, RawFiles[i])
         if VoiceFileMatch == None:
@@ -1436,7 +1436,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                 os.mkdir(CloneVoiceFolderPath)
                 print(f'[ 클로닝할 보이스 파일이 필요합니다 : {CloneVoiceFolderPath}, 보이스 파일을 폴더에 넣은 후 "VoiceFileCompletion": "Completion"으로 변경해 주세요 ]')
             CloneVoiceActor = {
-                "Name": f"{CloneVoiceName}({projectName})-저자클로닝",
+                "Name": f"{CloneVoiceName}({projectName})",
                 "ApiSetting": {
                     "name": f"{CloneVoiceName}",
                     "Api": "ElevenLabs",

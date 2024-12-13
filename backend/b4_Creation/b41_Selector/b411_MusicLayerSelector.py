@@ -1582,7 +1582,7 @@ def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPat
 ## ModifiedChunk 기록
 def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunksPath):
     BaseModifyFolder = f"[{projectName}_Modified]"
-    BaseModifiedFolderPath = VoiceLayerPathGen(projectName, email, BaseModifyFolder, 'Master')
+    BaseModifiedFolderPath = VoiceLayerPathGen(projectName, email, BaseModifyFolder, 'master')
     
     def GetLatestModifiedFolder(base_path):
         ModifiedFolders = []
@@ -1593,8 +1593,10 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
                 if os.path.isdir(full_path) and pattern.search(item):
                     ModifiedFolders.append(full_path)
         except FileNotFoundError:
+            print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재하지 않습니다. ]')
             return None
         if not ModifiedFolders:
+            print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재하지 않습니다. ]')
             return None
         latest_folder = max(ModifiedFolders, 
                           key=lambda x: re.search(r'(\d{14})_Modified_Part$', 
@@ -1603,6 +1605,7 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
     
     def GetModifiedWavFiles(folder_path):
         if not folder_path or not os.path.exists(folder_path):
+            print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재하지 않습니다. ]\n{folder_path}')
             return []
         ModifiedWavFiles = []
         pattern = re.compile(r'.*\.wav$', re.IGNORECASE)
@@ -1611,11 +1614,13 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
                 if pattern.match(item):
                     ModifiedWavFiles.append(item)
         except FileNotFoundError:
+            print(f'[ 내부에 wav 파일이 존재하지 않습니다. ]\n{folder_path}')
             return []
             
         # WAV 파일명에서 EditId와 ChunkId 추출하여 딕셔너리 리스트 생성
         ModifiedWavInfoList = []
-        wav_pattern = re.compile(r'\d{6}_[^_]+_(\d+)_[^_]+\(.*?\)_\((\d+)\)Modify\.wav$')
+        # 정수 또는 소수점 이하 최대 4자리까지 매칭
+        wav_pattern = re.compile(r'\d{6}_[^_]+_(\d+(?:\.\d{1,4})?)_[^_]+\(.*?\)_\((\d+)\)Modify\.wav$')
         
         # EditId별로 ChunkId를 그룹화하기 위한 임시 딕셔너리
         edit_groups = {}
@@ -1623,21 +1628,33 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
         for ModifiedWavFile in sorted(ModifiedWavFiles):
             match = wav_pattern.match(ModifiedWavFile)
             if match:
-                edit_id, chunk_id = map(int, match.groups())
-                
-                # EditId가 이미 있으면 ChunkId 추가, 없으면 새로운 리스트 생성
-                if edit_id in edit_groups:
-                    edit_groups[edit_id].append(chunk_id)
-                else:
-                    edit_groups[edit_id] = [chunk_id]
+                try:
+                    edit_id = float(match.group(1))
+                    # 소수점 이하 자릿수 검증
+                    if '.' in str(edit_id):
+                        decimal_places = len(str(edit_id).split('.')[1])
+                        if decimal_places > 4:
+                            print(f"Warning: EditId {edit_id} in {ModifiedWavFile} has more than 4 decimal places")
+                            continue
+                            
+                    chunk_id = int(match.group(2))
+                    
+                    # EditId가 이미 있으면 ChunkId 추가, 없으면 새로운 리스트 생성
+                    if edit_id in edit_groups:
+                        edit_groups[edit_id].append(chunk_id)
+                    else:
+                        edit_groups[edit_id] = [chunk_id]
+                except ValueError as e:
+                    print(f"Error parsing file {ModifiedWavFile}: {str(e)}")
+                    continue
         
         # 그룹화된 데이터를 원하는 형식으로 변환
         ModifiedWavInfoList = [
             {
                 "EditId": edit_id,
-                "ChunkId": sorted(chunk_ids)  # ChunkId 리스트를 정렬하여 저장
+                "ChunkId": sorted(chunk_ids)
             }
-            for edit_id, chunk_ids in sorted(edit_groups.items())  # EditId 기준으로 정렬
+            for edit_id, chunk_ids in sorted(edit_groups.items())
         ]
         
         return ModifiedWavInfoList
@@ -1650,16 +1667,14 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
     ## EditGenerationKoChunks에 ModifiedChunk 기록
     for ModifiedWavInfo in ModifiedWavInfoList:
         for EditGenerationKoChunk in EditGenerationKoChunks:
+            # 소수점 4자리까지만 비교
             if ModifiedWavInfo['EditId'] == EditGenerationKoChunk['EditId']:
                 for ModifiedChunkId in ModifiedWavInfo['ChunkId']:
                     _chunK = EditGenerationKoChunk['ActorChunk'][ModifiedChunkId]
                     if "Chunk" in _chunK:
-                        # 일반 딕셔너리를 OrderedDict로 변환
                         ordered_chunk = OrderedDict(_chunK)
-                        # 순서를 유지하면서 키 변경
                         new_items = [(k if k != "Chunk" else "ModifiedChunk", v) 
                                     for k, v in ordered_chunk.items()]
-                        # 새로운 OrderedDict 생성
                         _chunK.clear()
                         _chunK.update(OrderedDict(new_items))
                         

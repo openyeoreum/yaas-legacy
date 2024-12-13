@@ -1582,7 +1582,7 @@ def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPat
 ## ModifiedChunk 기록
 def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunksPath):
     BaseModifyFolder = f"[{projectName}_Modified]"
-    BaseModifiedFolderPath = VoiceLayerPathGen(projectName, email, BaseModifyFolder, 'master')
+    BaseModifiedFolderPath = VoiceLayerPathGen(projectName, email, BaseModifyFolder, 'Master')
     
     def GetLatestModifiedFolder(base_path):
         ModifiedFolders = []

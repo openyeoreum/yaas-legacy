@@ -3,9 +3,11 @@ import json
 import time
 import re
 import random
+import math
 import sys
 sys.path.append("/yaas")
 
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -139,8 +141,23 @@ def BookDetailsScraper(Rank, Date, driver, wait):
     
     return {"Rank": [{"Date": Date, "Rank": Rank}], "ISBN": ISBN, "Title": Title, "Author": Author, "AuthorInfo": AuthorInfo, "Publish": Publish, "PublishedDate": PublishedDate, "IntroCategory": IntroCategory, "Intro": Intro, "BookIndex": BookIndex, "BookReviews": BookReviews, "BookPurchasedList": BookPurchasedList, "CommentsCount": CommentsCount, "CommentList": CommentList}
 
+## 교보문고 시간표기 변경
+def ConvertWeek(DateRange):
+    # 시작 날짜 추출 (~ 기준으로 분리 후 첫 번째 값의 공백 제거)
+    start_date_str = DateRange.split('~')[0].strip()
+    # 문자열을 datetime 객체로 변환
+    start_date = datetime.strptime(start_date_str, '%Y.%m.%d')
+    # 해당 월의 첫 날짜
+    first_day = datetime(start_date.year, start_date.month, 1)
+    # 시작 날짜가 해당 월의 몇 번째 주차인지 계산
+    week_number = math.ceil((start_date.day + first_day.weekday()) / 7)
+    # 결과 문자열 생성
+    Date = f"{start_date.year}년 {start_date.month}월 {week_number}주"
+    
+    return Date
+
 ## 교보문고 베스트셀러 스크래퍼
-def BestsellerScraper(driver, period = 'Weekly'):
+def BestsellerScraper(driver, period = 'Weekly', rank = 200):
     BookDataList = []
     LastRank = 0
     EndSwitch = False
@@ -157,11 +174,12 @@ def BestsellerScraper(driver, period = 'Weekly'):
         BookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1814_YearlyBookData/"
 
     # 기존 파일 확인 후 스크래핑 시작 페이지와 파일번호 설정 (i, j)
-    # driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page=1&per=50") # period=002(주간), period=003(월간), period=004(연간)
-    driver.get(f"https://store.kyobobook.co.kr/bestseller/total/{Period}?page=1&per=50") # period=002(주간), period=003(월간), period=004(연간)
+    # driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page=1&per=50")
+    driver.get(f"https://store.kyobobook.co.kr/bestseller/total/{Period}?page=1&per=50")
     time.sleep(random.uniform(5, 7))
-    DateXpath = "/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[1]/span"
-    Date = wait.until(EC.presence_of_element_located((By.XPATH, DateXpath))).text
+    DateXpath = "/html/body/div[1]/main/section/div/div/section/div[3]/span" ### 페이지 상위 2024.12.04 ~ 2024.12.10 와 같은 시간표시 부분을 통해 xpath 확인 ###
+    DateRange = wait.until(EC.presence_of_element_located((By.XPATH, DateXpath))).text
+    Date = ConvertWeek(DateRange)
     FilePath = BookDataPath + f"{Date}_{period}BookData.json"
     if LastRank == 0 and os.path.exists(FilePath):
         with open(FilePath, 'r', encoding = 'utf-8') as BooksJson:
@@ -186,10 +204,15 @@ def BestsellerScraper(driver, period = 'Weekly'):
                 CurrentURL = driver.current_url
                 Rank = ((i-1) * 50) + j
                 # 페이지 정보가 넘어서는지 확인 절차
+                if Rank > rank:
+                    print(f"< {Period} {Rank-1}위 도서까지 스크래핑 완료 >")
+                    EndSwitch = True
+                    break
+                # 페이지 정보가 넘어서는지 확인 절차
                 if PageURL not in CurrentURL:
                     print(f'CurrentURL: {CurrentURL}')
                     print(f'PageURL   : {PageURL}')
-                    print(f"< {Rank}위 도서는 전체 페이지에 포함되지 않음, 마지막까지 스크래핑 완료 >")
+                    print(f"< {Period} {Rank}위 도서는 전체 페이지에 포함되지 않음, 마지막까지 스크래핑 완료 >")
                     EndSwitch = True
                     break
                 
@@ -197,17 +220,13 @@ def BestsellerScraper(driver, period = 'Weekly'):
                 BookXpaths = None
                 if 1 <= j <= 10:
                     BookXpaths = [
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[1]/li[{j}]/div[2]/div[1]/a/span/img",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[1]/li[{j}]/div[2]/div[1]/div/a/span[1]",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[1]/li[{j}]/div[2]/div[1]/div/a/span[2]",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[1]/li[{j}]/div[2]/div[2]/div[3]/div/div/a"
+                        f"/html/body/div[1]/main/section/div/div/section/ol[1]/li[{j}]/div/div[2]/div[1]/a/div/img", ### 도서 이미지 부분을 통해 xpath 확인 ###
+                        f"/html/body/div[1]/main/section/div/div/section/ol[1]/li[{j}]/div/div[2]/div[2]/a"
                     ]
                 elif 11 <= j <= 50:
                     BookXpaths = [
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[2]/li[{j - 10}]/div[2]/div[1]/a/span/img",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[2]/li[{j - 10}]/div[2]/div[1]/div/a/span[1]",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[2]/li[{j - 10}]/div[2]/div[1]/div/a/span[2]",
-                        f"/html/body/div[3]/main/section[2]/div/section/div[2]/div/div[2]/div[3]/ol[2]/li[{j - 10}]/div[2]/div[2]/div[3]/div/div/a"
+                        f"/html/body/div[1]/main/section/div/div/section/ol[2]/li[{j - 10}]/div/div[2]/div[1]/a/div/img",
+                        f"/html/body/div[1]/main/section/div/div/section/ol[2]/li[{j - 10}]/div/div[2]/div[2]/a"
                     ]
                 if BookXpaths is not None:
                     if not ClickBookElement(driver, wait, BookXpaths):
@@ -252,7 +271,6 @@ def TotalBookDataUpdate(period):
     
     ## 베스트셀러 도서 스크래핑
     BookDataList = BestsellerWebScraper(period)
-    
     print(f"[ TotalBookData 업데이트 시작 ]\n")
     ## 기존 토탈 데이터셋
     TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1811_TotalBookData/TotalBookData.json"
@@ -266,8 +284,8 @@ def TotalBookDataUpdate(period):
             TotalBookDataISBNList.append(TotalBookData['ISBN'])
         
         ## 스크래핑 데이터의 토탈 데이터셋 업데이트
-        Update = True
         for BookData in BookDataList:
+            Update = True
             if BookData['ISBN'] in TotalBookDataISBNList:
                 Update = False
                 Id = TotalBookDataISBNList.index(BookData['ISBN'])
@@ -294,24 +312,3 @@ if __name__ == "__main__":
     period = 'Weekly' ## 'Weekly', 'Monthly', 'Yearly'
     #########################################################################
     TotalBookDataUpdate(period)
-    
-    # # JSON 파일 경로
-    # json_file_path = '/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1813_YearlyBookData/2023년_YearlyBookData.json'
-
-    # # 저장할 폴더 경로
-    # output_folder = '/yaas/storage/s1_Yeoreum/s18_MarketDataStorage/s181_BookData/s1813_YearlyBookData/2023년_YearlyBookData'
-
-    # # 폴더가 존재하지 않으면 생성
-    # os.makedirs(output_folder, exist_ok=True)
-
-    # # JSON 파일 읽기
-    # with open(json_file_path, 'r', encoding = 'utf-8') as f:
-    #     data = json.load(f)
-
-    # # 각 딕셔너리를 개별 파일로 저장
-    # for idx, item in enumerate(data):
-    #     item_file_path = os.path.join(output_folder, f'2023년_YearlyBookData({idx+1}).json')
-    #     with open(item_file_path, 'w', encoding = 'utf-8') as item_file:
-    #         json.dump(item, item_file, ensure_ascii = False, indent = 4)
-
-    # print("모든 딕셔너리가 개별 파일로 저장되었습니다.")

@@ -15,11 +15,11 @@ from reportlab.pdfgen import canvas
 
 from backend.b4_Creation.b43_Creator.b431_BestSellerWebScraper import BestsellerWebScraper
 
-########################
-########################
-##### SampleUpdate #####
-########################
-########################
+##########################
+##########################
+##### EstimateUpdate #####
+##########################
+##########################
 
 ### 시간, 분, 초로 변환 ###
 def SecondsToHMS(seconds):
@@ -249,6 +249,12 @@ def EstimateToPNG(projectName, email):
     plt.close()
     
     PNGsToPDF(EstimatePNGPaths, EstimatePDFPath)
+    
+##########################
+##########################
+##### SampleUpdate #####
+##########################
+##########################
 
 if __name__ == "__main__":
     

@@ -1647,8 +1647,6 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
     # wav 파일 리스트와 정보 딕셔너리 리스트 얻기
     ModifiedWavInfoList = GetModifiedWavFiles(LatestModifiedFolder)
     
-    print(ModifiedWavInfoList)
-    
     ## EditGenerationKoChunks에 ModifiedChunk 기록
     for ModifiedWavInfo in ModifiedWavInfoList:
         for EditGenerationKoChunk in EditGenerationKoChunks:

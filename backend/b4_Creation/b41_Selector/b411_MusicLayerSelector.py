@@ -1583,6 +1583,7 @@ def AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPat
 def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunksPath):
     BaseModifyFolder = f"[{projectName}_Modified]"
     BaseModifiedFolderPath = VoiceLayerPathGen(projectName, email, BaseModifyFolder, 'Master')
+    print(f"[ RecordModifiedChunk: 디렉토리 존재 여부 ({os.path.isdir(BaseModifiedFolderPath)}) ]")
     
     def GetLatestModifiedFolder(base_path):
         ModifiedFolders = []
@@ -1604,7 +1605,7 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
         return latest_folder
     
     def GetModifiedWavFiles(folder_path):
-        if not folder_path or not os.path.exists(folder_path):
+        if not folder_path or not os.path.isdir(folder_path):
             print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재하지 않습니다. ]\n{folder_path}')
             return []
         ModifiedWavFiles = []
@@ -1614,7 +1615,7 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
                 if pattern.match(item):
                     ModifiedWavFiles.append(item)
         except FileNotFoundError:
-            print(f'[ 내부에 wav 파일이 존재하지 않습니다. ]\n{folder_path}')
+            print(f"[ RecordModifiedChunk: 최신 _Modified_Part 폴더 내 파일 반영 Chunk >>> RecordModifiedChunk ]")
             return []
             
         # WAV 파일명에서 EditId와 ChunkId 추출하여 딕셔너리 리스트 생성
@@ -1661,6 +1662,7 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
     
     # 최신 Modified_Part 폴더 찾기
     LatestModifiedFolder = GetLatestModifiedFolder(BaseModifiedFolderPath)
+    print(LatestModifiedFolder)
     # wav 파일 리스트와 정보 딕셔너리 리스트 얻기
     ModifiedWavInfoList = GetModifiedWavFiles(LatestModifiedFolder)
     

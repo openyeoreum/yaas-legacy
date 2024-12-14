@@ -29,26 +29,22 @@ def SecondsToHMS(seconds):
     
     return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
 
-### SciptFile의 SampleSetting ###
-def SampleSettingGen(projectName, email):
-    ScriptFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Samples/s1211_SampleSet/{projectName}_Sample"
-    try:
-        os.makedirs(ScriptFilePath, exist_ok = True)
-    except Exception as e:
-        print(f"Error in makedirs: {e}")
-    
+### SciptFile의 EstimateSetting ###
+def EstimateSettingGen(projectName, email):
+    ScriptFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
     ScriptFile = f"{projectName}_Script.txt"
     ProjectScriptFilePath = os.path.join(ScriptFilePath, ScriptFile)
-    SampleFile = f"{projectName}_Sample_Setting.json"
-    ProjectSampleFilePath = os.path.join(ScriptFilePath, SampleFile)
-    RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Samples/s1212_RunningTimeData"
+    EstimateFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_estimate_file"
+    EstimateFile = f"[{projectName}_AudioBookEstimate_Setting].json"
+    ProjectEstimateFilePath = os.path.join(EstimateFilePath, EstimateFile)
+    RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s17_ContentBookStorage/s171_Estimate/s1712_RunningTimeData"
     
     ## 01_ScriptText 불러오기 ##
     if os.path.exists(ProjectScriptFilePath):
         with open(ProjectScriptFilePath, 'r', encoding = 'utf-8') as TextFile:
-            SampleScript = TextFile.read()
-            SampleScript = unicodedata.normalize('NFC', SampleScript)
-        SampleScriptLenth = len(SampleScript) * 0.99 # 텍스트 퍼센트율 조정
+            EstimateScript = TextFile.read()
+            EstimateScript = unicodedata.normalize('NFC', EstimateScript)
+        EstimateScriptLenth = len(EstimateScript) * 0.99 # 텍스트 퍼센트율 조정
         
         ## 02_RunningTimeData 불러오기 ##
         RunningTimeRatioList = []
@@ -66,19 +62,19 @@ def SampleSettingGen(projectName, email):
         AverageRunningTimeRatio = sum(RunningTimeRatioList) / len(RunningTimeRatioList)
         
         ## 03_ScriptText RunningTime 계산 ##
-        RunningTime = SampleScriptLenth * AverageRunningTimeRatio
-        VoiceActorPrice = 200000 * SampleScriptLenth/10000
-        VoiceClonePrice = 250000 * SampleScriptLenth/10000
+        RunningTime = EstimateScriptLenth * AverageRunningTimeRatio
+        VoiceActorPrice = 200000 * EstimateScriptLenth/10000
+        VoiceClonePrice = 250000 * EstimateScriptLenth/10000
         
-        ## 04_Sample_Setting Json 생성 ##
-        if not os.path.exists(ProjectSampleFilePath):
-            SampleSetting = {
+        ## 04_Estimate_Setting Json 생성 ##
+        if not os.path.exists(ProjectEstimateFilePath):
+            EstimateSetting = {
                     "ProjectName": f"{projectName}",
                     "EstimateSetting": {
                         "ProjectName": "",
                         "Client": "",
-                        "Lenth(raw)": SampleScriptLenth,
-                        "Lenth(estimate)": f"{math.ceil(SampleScriptLenth/10000)*10000:,}자",
+                        "Lenth(raw)": EstimateScriptLenth,
+                        "Lenth(estimate)": f"{math.ceil(EstimateScriptLenth/10000)*10000:,}자",
                         "RunningTime(s)": RunningTime,
                         "RunningTime(hms)": SecondsToHMS(RunningTime),
                         "RunningTime(estimate)": SecondsToHMS(math.ceil(RunningTime / 1800) * 1800),
@@ -92,17 +88,17 @@ def SampleSettingGen(projectName, email):
                         "VoiceClonePrice(estimate+vat)": f"{int(math.ceil(VoiceClonePrice/250000)*250000*1.1):,}원",
                     }
                 }
-            ## SampleSetting Json 파일저장
-            with open(ProjectSampleFilePath, 'w', encoding = 'utf-8') as JsonFile:
-                json.dump(SampleSetting, JsonFile, indent = 4, ensure_ascii = False)
-            sys.exit(f"\n[ 샘플 세팅을 완료하세요 : {ScriptFilePath} ]\n")
+            ## EstimateSetting Json 파일저장
+            with open(ProjectEstimateFilePath, 'w', encoding = 'utf-8') as JsonFile:
+                json.dump(EstimateSetting, JsonFile, indent = 4, ensure_ascii = False)
+            sys.exit(f"\n[ 샘플 세팅을 완료하세요 : {EstimateFilePath} ]\n")
         else:
-            with open(ProjectSampleFilePath, 'r', encoding = 'utf-8') as JsonFile:
-                SampleSetting = json.load(JsonFile)
-            if SampleSetting['EstimateSetting']['ProjectName'] != "" and SampleSetting['EstimateSetting']['Client'] != "":
-                return SampleSetting, ScriptFilePath
+            with open(ProjectEstimateFilePath, 'r', encoding = 'utf-8') as JsonFile:
+                EstimateSetting = json.load(JsonFile)
+            if EstimateSetting['EstimateSetting']['ProjectName'] != "" and EstimateSetting['EstimateSetting']['Client'] != "":
+                return EstimateSetting, EstimateFilePath
             else:
-                sys.exit(f"\n[ 샘플 세팅을 완료하세요 : {ScriptFilePath} ]\n")
+                sys.exit(f"\n[ 샘플 세팅을 완료하세요 : {EstimateFilePath} ]\n")
     else:
         sys.exit(f"\n[ 아래 폴더에 ((({projectName + '_Script.txt'}))) 파일을 넣어주세요 ]\n({ScriptFilePath})\n")
 
@@ -147,7 +143,7 @@ def SplitProjectName(ProjectName, MaxLength = 16):
 ## 라이프그래프의 이미지를 PDF로 묶기
 def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
     # 디자인 포멧 경로
-    DesignFormatPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Samples/s1211_SampleSet/Design_Format/s121_Estimate_Format_"
+    DesignFormatPath = "/yaas/storage/s1_Yeoreum/s17_ContentBookStorage/s171_Estimate/s1711_EstematiFormat/EstimateFormat_"
     
     # 첫 번째 이미지 크기에 맞는 PDF 생성
     FirstImage = Image.open(EstimatePNGPaths[0])
@@ -172,7 +168,7 @@ def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
         os.remove(EstimatePNGPaths[i])
     
     # 마지막 라이센스 이미지를 PDF에 추가
-    pdf.drawImage("/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_Samples/s1211_SampleSet/Design_Format/s121_Estimate_Format_2.png", 0, 0)
+    pdf.drawImage("/yaas/storage/s1_Yeoreum/s17_ContentBookStorage/s171_Estimate/s1711_EstematiFormat/EstimateFormat_2.png", 0, 0)
     pdf.showPage()
     
     # PDF 파일 저장
@@ -180,20 +176,20 @@ def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
 
 ### EstimatePDFGen 생성 ###
 def EstimateToPNG(projectName, email):
-    SampleSetting, ScriptFilePath = SampleSettingGen(projectName, email)
+    EstimateSetting, EstimateFilePath = EstimateSettingGen(projectName, email)
     
     ## 견적서 데이터
-    Project = SampleSetting['EstimateSetting']['ProjectName']
-    Client = SampleSetting['EstimateSetting']['Client']
-    Lenth = SampleSetting['EstimateSetting']['Lenth(estimate)']
+    Project = EstimateSetting['EstimateSetting']['ProjectName']
+    Client = EstimateSetting['EstimateSetting']['Client']
+    Lenth = EstimateSetting['EstimateSetting']['Lenth(estimate)']
     
-    VoiceActorPriceVAT = SampleSetting['EstimateSetting']['VoiceActorPrice(estimate+vat)']
-    VoiceActorPrice = SampleSetting['EstimateSetting']['VoiceActorPrice(estimate)']
-    VoiceActorVAT = SampleSetting['EstimateSetting']['VoiceActorPrice(vat)']
+    VoiceActorPriceVAT = EstimateSetting['EstimateSetting']['VoiceActorPrice(estimate+vat)']
+    VoiceActorPrice = EstimateSetting['EstimateSetting']['VoiceActorPrice(estimate)']
+    VoiceActorVAT = EstimateSetting['EstimateSetting']['VoiceActorPrice(vat)']
     
-    VoiceClonePriceVAT = SampleSetting['EstimateSetting']['VoiceClonePrice(estimate+vat)']
-    VoiceClonePrice = SampleSetting['EstimateSetting']['VoiceClonePrice(estimate)']
-    VoiceCloneVAT = SampleSetting['EstimateSetting']['VoiceClonePrice(vat)']
+    VoiceClonePriceVAT = EstimateSetting['EstimateSetting']['VoiceClonePrice(estimate+vat)']
+    VoiceClonePrice = EstimateSetting['EstimateSetting']['VoiceClonePrice(estimate)']
+    VoiceCloneVAT = EstimateSetting['EstimateSetting']['VoiceClonePrice(vat)']
     
     ## 기본 폰트 설정, Noto Sans CJK 폰트 경로 설정
     font_path = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
@@ -202,8 +198,8 @@ def EstimateToPNG(projectName, email):
     plt.rcParams['axes.unicode_minus'] = False  # 유니코드 마이너스 설정
     
     EstimatePNGPaths = []
-    EstimateFolderPath = os.path.join(ScriptFilePath, "Estimate")
-    EstimateFileName = f"{projectName}_Estimate"
+    EstimateFolderPath = os.path.join(EstimateFilePath, f"{projectName}_AudioBookEstimate")
+    EstimateFileName = f"{projectName}_AudioBookEstimate"
     EstimatePDFPath = os.path.join(EstimateFolderPath, f'{EstimateFileName}.pdf')
     
     ## 01_Estimate 폴더 생성
@@ -252,7 +248,7 @@ def EstimateToPNG(projectName, email):
     
 ##########################
 ##########################
-##### SampleUpdate #####
+##### EstimateUpdate #####
 ##########################
 ##########################
 
@@ -260,7 +256,7 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    ProjectName = '241210_세종시교육청'
+    ProjectName = '241204_개정교육과정초등교과별이해연수'
     #########################################################################
     
     EstimateToPNG(ProjectName, email)

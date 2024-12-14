@@ -821,7 +821,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
     SortedMusicFiles = sorted(MusicFiles, key=ExtractNumber)
     
     # 문장과 문단 사이 소리 로드
-    ModifyStoragePath = "/yaas/storage/s1_Yeoreum/s19_ModifyStorage/"
+    ModifyStoragePath = "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s189_ModifyStorage/"
     ParagraphSeparatorPath = ModifyStoragePath + "2_ModifySound_문단사이음.wav"
     ParagraphSeparator = AudioSegment.from_wav(ParagraphSeparatorPath) - 5
     
@@ -1657,7 +1657,7 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
             }
             for edit_id, chunk_ids in sorted(edit_groups.items())
         ]
-        print(f"[ RecordModifiedChunk: [{projectName}_Audiobook_Edit].json 에 ({len(ModifiedWavInfoList)})개 Edit에 Chunk >>> RecordModifiedChunk 변경 완료 ]")
+        print(f"[ RecordModifiedChunk: [{projectName}_Audiobook_Edit].json 에 ({len(ModifiedWavInfoList)})개 Edit에 Chunk >>> ModifiedChunk 변경 완료 ]")
         return ModifiedWavInfoList
     
     # 최신 Modified_Part 폴더 찾기
@@ -1801,7 +1801,7 @@ def SaveMusicTemplate(projectName, email, MainLang = 'Ko'):
         MatchedMusics = json.load(JsonFile)
         
     ## MusicTemplate 저장
-    MusicTemplatePath = f"/yaas/storage/s1_Yeoreum/s16_MusicStorage/s160_MusicTemplate/{projectName}_MusicTemplate.json"
+    MusicTemplatePath = f"/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s181_MusicTemplate/{projectName}_MusicTemplate.json"
     MusicTemplate = {"ProjectName": projectName, "ContextCompletion": ContextCompletion, "MatchedMusics": MatchedMusics}
     with open(MusicTemplatePath, 'w', encoding = 'utf-8') as JsonFile:
         json.dump(MusicTemplate, JsonFile, ensure_ascii = False, indent = 4)

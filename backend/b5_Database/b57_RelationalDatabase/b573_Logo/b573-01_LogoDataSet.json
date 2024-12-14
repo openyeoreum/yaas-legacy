@@ -9,7 +9,7 @@
         "Logos": [
             {
                 "LogoId": 0,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/.wav",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/.wav",
                 "Logo": {
                     "Language": "Ko",
                     "Genre": "None"
@@ -22,7 +22,7 @@
             },
             {
                 "LogoId": 1,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/1_Logo_문학(세희).wav",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/1_Logo_문학(세희).wav",
                 "Logo": {
                     "Language": "Ko",
                     "Genre": "문학"
@@ -35,7 +35,7 @@
             },
             {
                 "LogoId": 2,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/2_Logo_비문학(유라).wav",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/2_Logo_비문학(유라).wav",
                 "Logo": {
                     "Language": "Ko",
                     "Genre": "비문학"
@@ -48,7 +48,7 @@
             },
             {
                 "LogoId": 3,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/3_Logo_아동(류은).wav",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/3_Logo_아동(류은).wav",
                 "Logo": {
                     "Language": "Ko",
                     "Genre": "아동"
@@ -61,7 +61,7 @@
             },
             {
                 "LogoId": 4,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/4_Logo_시(연우).wav",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/4_Logo_시(연우).wav",
                 "Logo": {
                     "Language": "Ko",
                     "Genre": "시"
@@ -74,7 +74,7 @@
             },
             {
                 "LogoId": 5,
-                "FilePath": "/yaas/storage/s1_Yeoreum/s14_LogoStorage/5_Logo_학술(수호).wav",
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/5_Logo_학술(수호).wav",
                 "Logo": {
                     "Language": "Ko",
                     "Genre": "학술"

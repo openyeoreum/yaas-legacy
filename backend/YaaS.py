@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from b2_Solution.bm21_GeneralUpdate import AccountUpdate, SolutionProjectUpdate
 from backend.b2_Solution.bm23_DataFrameUpdate import SolutionDataFrameUpdate
 from backend.b2_Solution.bm24_DataSetUpdate import SolutionDataSetUpdate
-from backend.b4_Creation.bm25_AudioBookUpdate import CreationAudioBookUpdate
+from backend.b4_Creation.bm27_AudioBookUpdate import CreationAudioBookUpdate
 
 ### Main1 : 프로젝트 Config 생성 ###
 def ConfigUpdate(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle):

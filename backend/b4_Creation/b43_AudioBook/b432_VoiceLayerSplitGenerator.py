@@ -29,8 +29,8 @@ from audoai.noise_removal import NoiseRemovalClient
 from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetSoundDataSet
-from backend.b4_Creation.b41_AudioBook.b413_TypeCastWebMacro import TypeCastMacro
-from backend.b4_Creation.b41_AudioBook.b414_VoiceSplit import VoiceSplit
+from backend.b4_Creation.b43_AudioBook.b433_TypeCastWebMacro import TypeCastMacro
+from backend.b4_Creation.b43_AudioBook.b434_VoiceSplit import VoiceSplit
 
 ###########################################
 ##### SelectionGenerationKoChunks 생성 #####
@@ -1266,7 +1266,7 @@ def ModifiedVoiceGenerator(ModifyFolderPath, ModifyFolderName, VolumeEqual):
     ModifyFileName = ModifyFolderName + '.wav'
     ModifyFilePath = os.path.join(ModifyFolderPath, ModifyFileName)
     # 파일 이름을 파싱하여 정렬하기 위한 함수
-    ModifyStoragePath = "/yaas/storage/s1_Yeoreum/s19_ModifyStorage/"
+    ModifyStoragePath = "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s189_ModifyStorage/"
     SentenceSeparatorPath = ModifyStoragePath + "1_ModifySound_문장사이음.wav"
     ParagraphSeparatorPath = ModifyStoragePath + "2_ModifySound_문단사이음.wav"
     # EditID 소리 출력

@@ -33,6 +33,17 @@ def AddProjectToDB(projectName, email):
         scriptPath = os.path.join(projectPath, f"{projectName}_script_file")
         dataFramePath = os.path.join(projectPath, f"{projectName}_dataframe_file")
         dataSetPath = os.path.join(projectPath, f"{projectName}_dataset_file")
+        
+        estimatePath = os.path.join(projectPath, f"{projectName}_estimate_file")
+        
+        mixedTextBookPath = os.path.join(projectPath, f"{projectName}_mixed_textbook_file")
+        
+        masterTextBookPath = os.path.join(projectPath, f"{projectName}_master_textbook_file")
+        
+        mixedContentBookPath = os.path.join(projectPath, f"{projectName}_mixed_contentbook_file")
+        
+        masterContentBookPath = os.path.join(projectPath, f"{projectName}_master_contentbook_file")
+        
         mixedAudioBookPath = os.path.join(projectPath, f"{projectName}_mixed_audiobook_file")
         
         voiceLayersPath = os.path.join(mixedAudioBookPath, 'VoiceLayers')
@@ -64,6 +75,11 @@ def AddProjectToDB(projectName, email):
             os.makedirs(scriptPath, exist_ok = True)
             os.makedirs(dataFramePath, exist_ok = True)
             os.makedirs(dataSetPath, exist_ok = True)
+            os.makedirs(estimatePath, exist_ok = True)
+            os.makedirs(mixedTextBookPath, exist_ok = True)
+            os.makedirs(masterTextBookPath, exist_ok = True)
+            os.makedirs(mixedContentBookPath, exist_ok = True)
+            os.makedirs(masterContentBookPath, exist_ok = True)
             os.makedirs(mixedAudioBookPath, exist_ok = True)
             os.makedirs(voiceLayersPath, exist_ok = True)
             # os.makedirs(narratorPath, exist_ok = True)

@@ -29,8 +29,8 @@ from audoai.noise_removal import NoiseRemovalClient
 from backend.b1_Api.b14_Models import User
 from backend.b1_Api.b13_Database import get_db
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetSoundDataSet
-from backend.b4_Creation.b42_Generator.b423_TypeCastWebMacro import TypeCastMacro
-from backend.b4_Creation.b42_Generator.b424_VoiceSplit import VoiceSplit
+from backend.b4_Creation.b41_AudioBook.b413_TypeCastWebMacro import TypeCastMacro
+from backend.b4_Creation.b41_AudioBook.b414_VoiceSplit import VoiceSplit
 
 ###########################################
 ##### SelectionGenerationKoChunks 생성 #####

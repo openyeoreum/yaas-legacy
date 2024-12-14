@@ -1594,10 +1594,10 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
                 if os.path.isdir(full_path) and pattern.search(item):
                     ModifiedFolders.append(full_path)
         except FileNotFoundError:
-            print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재하지 않습니다. ]')
+            print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재 여부 ({os.listdir(base_path)}), ModifiedChunk 변경 없음 ]')
             return None
         if not ModifiedFolders:
-            print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재하지 않습니다. ]')
+            print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재 여부 ({os.listdir(base_path)}), ModifiedChunk 변경 없음 ]')
             return None
         latest_folder = max(ModifiedFolders, 
                           key=lambda x: re.search(r'(\d{14})_Modified_Part$', 
@@ -1606,7 +1606,7 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
     
     def GetModifiedWavFiles(folder_path):
         if not folder_path or not os.path.isdir(folder_path):
-            print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재하지 않습니다. ]\n{folder_path}')
+            print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재 여부 ({folder_path}), ModifiedChunk 변경 없음 ]')
             return []
         ModifiedWavFiles = []
         pattern = re.compile(r'.*\.wav$', re.IGNORECASE)
@@ -1615,7 +1615,7 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
                 if pattern.match(item):
                     ModifiedWavFiles.append(item)
         except FileNotFoundError:
-            print(f"[ RecordModifiedChunk: 최신 _Modified_Part 폴더 내 파일 반영 Chunk >>> RecordModifiedChunk ]")
+            print(f'[ [{projectName}_Modified] 하부에 최신의 폴더가 존재 여부 ({folder_path}), ModifiedChunk 변경 없음 ]')
             return []
             
         # WAV 파일명에서 EditId와 ChunkId 추출하여 딕셔너리 리스트 생성
@@ -1657,7 +1657,7 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
             }
             for edit_id, chunk_ids in sorted(edit_groups.items())
         ]
-        
+        print(f"[ RecordModifiedChunk: [{projectName}_Audiobook_Edit].json 에 ({len(ModifiedWavInfoList)})개 Edit에 Chunk >>> RecordModifiedChunk 변경 완료 ]")
         return ModifiedWavInfoList
     
     # 최신 Modified_Part 폴더 찾기

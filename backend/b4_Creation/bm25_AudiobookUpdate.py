@@ -1,8 +1,8 @@
 import sys
 sys.path.append("/yaas")
 
-from backend.b4_Creation.b42_Generator.b422_VoiceLayerSplitGenerator import VoiceLayerUpdate
-from backend.b4_Creation.b41_Selector.b411_MusicLayerSelector import MusicLayerUpdate
+from backend.b4_Creation.b41_AudioBook.b412_VoiceLayerSplitGenerator import VoiceLayerUpdate
+from backend.b4_Creation.b41_AudioBook.b415_MusicLayerSelector import MusicLayerUpdate
 
 ###########################
 ###########################

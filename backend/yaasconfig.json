@@ -19,6 +19,96 @@
         "MusicDB": "Storage",
         "EndMusicVolume": "-10 ~ -20, : 마지막 끝말과 함께 나오는 End Music의 볼륨"
     },
+    "240223_나무에서만난경영지혜": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "240223_나무에서만난경영지혜"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "off",
+            "RawMode": "on",
+            "Model": "OpenAI",
+            "Process": "",
+            "Mode": "Master",
+            "MainKey": "",
+            "KeyList": []
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "",
+        "ReadingStyle": "AllCharacters",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
+        "EndMusicVolume": -10
+    },
+    "240223_노인을위한나라는있다": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "240223_노인을위한나라는있다"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "off",
+            "RawMode": "on",
+            "Model": "OpenAI",
+            "Process": "",
+            "Mode": "Master",
+            "MainKey": "",
+            "KeyList": []
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "",
+        "ReadingStyle": "AllCharacters",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
+        "EndMusicVolume": -10
+    },
+    "240223_마케터의무기들": {
+        "email": "yeoreum00128@gmail.com",
+        "name": "yeoreum",
+        "password": "0128",
+        "projectNameList": [
+            "240223_마케터의무기들"
+        ],
+        "Translations": [],
+        "ScriptGen": {
+            "ScriptGen": "off",
+            "RawMode": "on",
+            "Model": "OpenAI",
+            "Process": "",
+            "Mode": "Master",
+            "MainKey": "",
+            "KeyList": []
+        },
+        "IndexMode": "Define",
+        "BookGenre": "Auto",
+        "MainLang": "Ko",
+        "Narrator": "VoiceActor",
+        "CloneVoiceName": "",
+        "ReadingStyle": "AllCharacters",
+        "VoiceEnhance": "off",
+        "VoiceReverbe": "on",
+        "Intro": "off",
+        "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
+        "EndMusicVolume": -10
+    },
     "240705_도산안창호": {
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
@@ -767,96 +857,6 @@
         "password": "0128",
         "projectNameList": [
             "240223_나는외식창업에적합한사람인가"
-        ],
-        "Translations": [],
-        "ScriptGen": {
-            "ScriptGen": "off",
-            "RawMode": "on",
-            "Model": "OpenAI",
-            "Process": "",
-            "Mode": "Master",
-            "MainKey": "",
-            "KeyList": []
-        },
-        "IndexMode": "Define",
-        "BookGenre": "Auto",
-        "MainLang": "Ko",
-        "Narrator": "VoiceActor",
-        "CloneVoiceName": "",
-        "ReadingStyle": "AllCharacters",
-        "VoiceEnhance": "off",
-        "VoiceReverbe": "on",
-        "Intro": "off",
-        "AudiobookSplitting": "Auto",
-        "MusicDB": "Storage",
-        "EndMusicVolume": -10
-    },
-    "240223_나무에서만난경영지혜": {
-        "email": "yeoreum00128@gmail.com",
-        "name": "yeoreum",
-        "password": "0128",
-        "projectNameList": [
-            "240223_나무에서만난경영지혜"
-        ],
-        "Translations": [],
-        "ScriptGen": {
-            "ScriptGen": "off",
-            "RawMode": "on",
-            "Model": "OpenAI",
-            "Process": "",
-            "Mode": "Master",
-            "MainKey": "",
-            "KeyList": []
-        },
-        "IndexMode": "Define",
-        "BookGenre": "Auto",
-        "MainLang": "Ko",
-        "Narrator": "VoiceActor",
-        "CloneVoiceName": "",
-        "ReadingStyle": "AllCharacters",
-        "VoiceEnhance": "off",
-        "VoiceReverbe": "on",
-        "Intro": "off",
-        "AudiobookSplitting": "Auto",
-        "MusicDB": "Storage",
-        "EndMusicVolume": -10
-    },
-    "240223_노인을위한나라는있다": {
-        "email": "yeoreum00128@gmail.com",
-        "name": "yeoreum",
-        "password": "0128",
-        "projectNameList": [
-            "240223_노인을위한나라는있다"
-        ],
-        "Translations": [],
-        "ScriptGen": {
-            "ScriptGen": "off",
-            "RawMode": "on",
-            "Model": "OpenAI",
-            "Process": "",
-            "Mode": "Master",
-            "MainKey": "",
-            "KeyList": []
-        },
-        "IndexMode": "Define",
-        "BookGenre": "Auto",
-        "MainLang": "Ko",
-        "Narrator": "VoiceActor",
-        "CloneVoiceName": "",
-        "ReadingStyle": "AllCharacters",
-        "VoiceEnhance": "off",
-        "VoiceReverbe": "on",
-        "Intro": "off",
-        "AudiobookSplitting": "Auto",
-        "MusicDB": "Storage",
-        "EndMusicVolume": -10
-    },
-    "240223_마케터의무기들": {
-        "email": "yeoreum00128@gmail.com",
-        "name": "yeoreum",
-        "password": "0128",
-        "projectNameList": [
-            "240223_마케터의무기들"
         ],
         "Translations": [],
         "ScriptGen": {

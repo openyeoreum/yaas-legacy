@@ -132,7 +132,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
     PersonalityRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Personality']['PersonalityRatio']
     EmotionRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Emotion']['EmotionRatio']
     if not os.path.exists(MatchedMusicLayerPath):
-        print(f"[ MusicDB : {MusicDB} ]")
+        print(f"[ MusicDB : {MusicDB}로 생성 ]")
         ## Storage에서 MatchedMusics 생성
         if MusicDB == 'Storage':
             ## MatchedMusics 생성

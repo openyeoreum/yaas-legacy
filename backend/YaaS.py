@@ -12,15 +12,15 @@ from backend.b2_Solution.bm24_DataSetUpdate import SolutionDataSetUpdate
 from backend.b4_Creation.bm27_AudioBookUpdate import CreationAudioBookUpdate
 
 ### Main1 : 프로젝트 Config 생성 ###
-def ConfigUpdate(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle):
+def ConfigUpdate(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MusicDB):
 
     ConfigPath = '/yaas/backend/yaasconfig.json'
     with open(ConfigPath, 'r', encoding = 'utf-8') as ConfigJson:
         ConfigData = json.load(ConfigJson)
 
     for projectName in projectNameList:
-        if projectName not in ConfigData:
-            ConfigData[projectName] = {
+        if unicodedata.normalize('NFC', projectName) not in ConfigData:
+            ConfigData[unicodedata.normalize('NFC', projectName)] = {
                 "email": "yeoreum00128@gmail.com",
                 "name": "yeoreum",
                 "password": "0128",
@@ -37,6 +37,7 @@ def ConfigUpdate(projectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingSt
                 "VoiceReverbe": "on",
                 "Intro": "off",
                 "AudiobookSplitting": "Auto",
+                "MusicDB": MusicDB,
                 "EndMusicVolume": -10
             }
 
@@ -87,7 +88,7 @@ def SolutionUpdate(email, projectNameList, ScriptGen, IndexMode, MessagesReview,
         
 ### Main2 : 콘텐츠 제작 ###
 
-def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview):
+def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview):
 
     if isinstance(projectNameList, list):
         ## NFC, NFD 오류 문제 해결 (모두 적용)
@@ -106,11 +107,11 @@ def CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyl
             #     projectName = _projectName
 
             ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, audiobookSplitting = AudiobookSplitting, endMusicVolume = EndMusicVolume, macro = Macro, bracket = Bracket, volumeEqual = VolumeEqual, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, bitrate = Bitrate, messagesReview = MessagesReview)
+            CreationAudioBookUpdate(projectName, email, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, audiobookSplitting = AudiobookSplitting, musicDB = MusicDB, endMusicVolume = EndMusicVolume, macro = Macro, bracket = Bracket, volumeEqual = VolumeEqual, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, bitrate = Bitrate, messagesReview = MessagesReview)
             
 ### YaaS : YaaS의 통합으로 'Solution', 'Solution&Creation' ###
 
-def YaaS(email, name, password, projectNameList, Translations, ScriptGen, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, VoiceEnhance, VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account):
+def YaaS(email, name, password, projectNameList, Translations, ScriptGen, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, VoiceEnhance, VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account):
 
     if MainProcess == 'Solution':
         AccountUpdate(email, name, password)
@@ -119,12 +120,12 @@ def YaaS(email, name, password, projectNameList, Translations, ScriptGen, IndexM
     elif MainProcess == 'Solution&Creation':
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations)
-        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview)
+        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview)
         
     elif MainProcess == 'Sample':
         AccountUpdate(email, name, password)
         SolutionUpdate(email, projectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations)
-        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview)
+        CreationUpdate(email, projectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview)
 
 ### YaaS Multiprocessing : 오디오북 병렬 제작 ###
 
@@ -135,9 +136,9 @@ def Loadyaasconfig(yaasconfigPath = '/yaas/backend/yaasconfig.json'):
     return yaasconfig
 
 ## MultiProcessing
-def MultiProcessing(ProjectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json'):
+def MultiProcessing(ProjectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MusicDB, MessagesReview, VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json'):
     print(f"[ Projects: {ProjectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
-    ConfigUpdate(ProjectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle)
+    ConfigUpdate(ProjectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MusicDB)
     yaasconfig = Loadyaasconfig(yaasconfigPath = yaasconfigPath)
     
     processes = []
@@ -147,7 +148,7 @@ def MultiProcessing(ProjectNameList, ScriptGen, Narrator, CloneVoiceName, Readin
         CloneVoiceName = unicodedata.normalize('NFC', CloneVoiceName)
         
         YaasConfig = yaasconfig[projectName]
-        Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["name"], YaasConfig["password"], YaasConfig["projectNameList"], YaasConfig["Translations"], YaasConfig["ScriptGen"], YaasConfig["IndexMode"], MessagesReview, YaasConfig["BookGenre"], YaasConfig["Narrator"], YaasConfig["CloneVoiceName"], YaasConfig["ReadingStyle"], YaasConfig["VoiceReverbe"], YaasConfig["MainLang"], YaasConfig["Intro"], YaasConfig["AudiobookSplitting"], YaasConfig["EndMusicVolume"], YaasConfig["VoiceEnhance"], VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account))
+        Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["name"], YaasConfig["password"], YaasConfig["projectNameList"], YaasConfig["Translations"], YaasConfig["ScriptGen"], YaasConfig["IndexMode"], MessagesReview, YaasConfig["BookGenre"], YaasConfig["Narrator"], YaasConfig["CloneVoiceName"], YaasConfig["ReadingStyle"], YaasConfig["VoiceReverbe"], YaasConfig["MainLang"], YaasConfig["Intro"], YaasConfig["AudiobookSplitting"], YaasConfig["MusicDB"], YaasConfig["EndMusicVolume"], YaasConfig["VoiceEnhance"], VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account))
         processes.append(Process)
         Process.start()
         
@@ -172,12 +173,12 @@ if __name__ == "__main__":
     # 우리반시집: {"ScriptGen": "on", "RawMode": "off", "Model": "ANTHROPIC", "Process": "SejongCityOfficeOfEducation_Poem", "Mode": "Master", "MainKey": "단락", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]}
     # 빼기명상을통한나의변화: {"ScriptGen": "on", "RawMode": "off", "Model": "ANTHROPIC", "Process": "ChangesAfterMeditation_Script", "Mode": "Master", "MainKey": "글내용", "KeyList": ["목차", "내용"]}
 
-    ProjectNameList = ['241204_개정교육과정초등교과별이해연수']
+    ProjectNameList = ['241210_끌리는이들에겐이유가있다요약']
     ScriptGen = {"ScriptGen": "off", "RawMode": "on", "Model": "ANTHROPIC", "Process": "", "Mode": "Master", "MainKey": "", "KeyList": []} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'RawMode' : 'on', 'off' : on 은 _Index(Raw).txt 및 _Body(Raw).txt 생성, off 는 _Index.txt 및 _Body.txt 생성 / 'Process' : 'SejongCityOfficeOfEducation_Poem' ... / 'MainKey': 'KeyList' : '메인키': ['프롬프트 결과로', '나오는 KeyList', '작성']
     Narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
     CloneVoiceName = "" # 'Narrator = 'VoiceActor' 인 경우 '저자명(특성)' 작성, 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
     ReadingStyle = "NarratorOnly" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
-    MusicDB = "Storage" # 'Storage', 'Template', 'ProjectName' : Storage 는 음악을 Storage 에서 선택, Template 는 음악을 Template 에서 선택, ProjectName 은 해당 프로젝트에서 선택
+    MusicDB = "Template" # 'Storage', 'Template', 'ProjectName' : Storage 는 음악을 Storage 에서 선택, Template 는 음악을 Template 에서 선택, ProjectName 은 Template 에서 해당 프로젝트에서 선택
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
     Bitrate = "320k" # 320k, 192k, 128k, 64k : 최종 저장되는 오디오북 mp3파일의 음질
@@ -188,4 +189,4 @@ if __name__ == "__main__":
     Account = "junyoung8@nate.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com', 'kka6887@hanmail.net', 'aldus5909@naver.com', 'junyoung8@nate.com'
     #########################################################################
 
-    MultiProcessing(ProjectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MessagesReview, VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account)
+    MultiProcessing(ProjectNameList, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MusicDB, MessagesReview, VoiceFileGen, Bitrate, MainProcess, Macro, Bracket, VolumeEqual, Account)

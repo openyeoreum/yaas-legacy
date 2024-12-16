@@ -16,6 +16,7 @@
         "VoiceReverbe": "'on', 'off' : on 은 인덱스와 대화문에 리버브 적용, off 는 리버브 미적용",
         "Intro": "Intro = ['한국출판문화산업진흥원' ...], off 는 인트로 미적용",
         "AudiobookSplitting": "'Auto', 'Manual' : Auto 는 오디오북 자동 분할, Manual 은 오디오북 수동 분할",
+        "MusicDB": "Storage",
         "EndMusicVolume": "-10 ~ -20, : 마지막 끝말과 함께 나오는 End Music의 볼륨"
     },
     "240705_도산안창호": {
@@ -42,6 +43,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240801_빨간풍차가있는집": {
@@ -68,6 +70,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240802_암을이기는천연항암제": {
@@ -94,6 +97,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -16
     },
     "240815_노유파": {
@@ -120,6 +124,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -16
     },
     "240812_룰루레몬스토리": {
@@ -146,6 +151,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240909_AI미래시나리오2030샘플": {
@@ -172,6 +178,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240908_나무스토리텔링": {
@@ -198,6 +205,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240910_AI미래시나리오2030": {
@@ -224,6 +232,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240919_암을이기는천연항암제요약": {
@@ -250,6 +259,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240925_불멸의지혜": {
@@ -276,6 +286,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -12
     },
     "241005_그해여름필립로커웨이에서일어난소설같은일": {
@@ -302,6 +313,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241009_책갈피와책수레": {
@@ -328,6 +340,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241010_틈틈이낭만": {
@@ -354,6 +367,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240405_빌리월터스겜블러": {
@@ -380,6 +394,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241024_오성삼유튜브": {
@@ -406,6 +421,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241024_서울장애인가족지원센터당선작13선": {
@@ -432,6 +448,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241029_누가정부창업지원을받는가": {
@@ -458,6 +475,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241116_베이버터와다섯개의빛": {
@@ -484,6 +502,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241118_세종교육청우리반오디오북새움중1학년8반": {
@@ -517,6 +536,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241118_세종교육청우리반오디오북아름초1학년1반": {
@@ -550,6 +570,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241118_세종교육청우리반오디오북아름초5학년5반": {
@@ -583,6 +604,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241118_세종교육청우리반오디오북아름초5학년5반수정": {
@@ -616,6 +638,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241127_엄마의첫공부": {
@@ -645,6 +668,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241128_끌리는이들에겐이유가있다": {
@@ -674,6 +698,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Manual",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240412_카이스트명상수업": {
@@ -703,6 +728,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241204_개정교육과정초등교과별이해연수": {
@@ -732,6 +758,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240223_나는외식창업에적합한사람인가": {
@@ -761,6 +788,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240223_나무에서만난경영지혜": {
@@ -790,6 +818,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240223_노인을위한나라는있다": {
@@ -819,6 +848,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "240223_마케터의무기들": {
@@ -848,6 +878,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241210_나는외식창업에적합한사람인가요약": {
@@ -877,6 +908,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     },
     "241210_끌리는이들에겐이유가있다요약": {
@@ -906,6 +938,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
+        "MusicDB": "Template",
         "EndMusicVolume": -10
     },
     "241210_공부하듯주식해서보화찾기요약": {
@@ -935,35 +968,7 @@
         "VoiceReverbe": "on",
         "Intro": "off",
         "AudiobookSplitting": "Auto",
-        "EndMusicVolume": -10
-    },
-    "241204_테스트": {
-        "email": "yeoreum00128@gmail.com",
-        "name": "yeoreum",
-        "password": "0128",
-        "projectNameList": [
-            "241204_테스트"
-        ],
-        "Translations": [],
-        "ScriptGen": {
-            "ScriptGen": "off",
-            "RawMode": "on",
-            "Model": "ANTHROPIC",
-            "Process": "",
-            "Mode": "Master",
-            "MainKey": "",
-            "KeyList": []
-        },
-        "IndexMode": "Define",
-        "BookGenre": "Auto",
-        "MainLang": "Ko",
-        "Narrator": "VoiceActor",
-        "CloneVoiceName": "",
-        "ReadingStyle": "NarratorOnly",
-        "VoiceEnhance": "off",
-        "VoiceReverbe": "on",
-        "Intro": "off",
-        "AudiobookSplitting": "Auto",
+        "MusicDB": "Storage",
         "EndMusicVolume": -10
     }
 }

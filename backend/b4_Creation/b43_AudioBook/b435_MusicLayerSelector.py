@@ -107,123 +107,236 @@ def MusicLayerPathGen(projectName, email, FileName):
     return LayerPath
 
 ## VoiceLayer에 Logo 선택 후 경로 생성
-def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = 'off'):
-
+def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = 'Storage'):
     ## MatchedMusics 파일 경로 생성
     fileName = '[' + projectName + '_' + 'MatchedMusics].json'
     MatchedMusicLayerPath = MusicLayerPathGen(projectName, email, fileName)
-    
+
     ## MusicDataSet 불러오기
     SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet = LoadMusicDataSet(projectName, email, MainLang = MainLang)
-    
+
+    ## MusicTemplates 생성
+    MusicTemplatePath = "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s181_MusicTemplate"
+    MusicTemplates = []
+    for filename in os.listdir(MusicTemplatePath):
+        if filename.endswith('.json'):
+            file_path = os.path.join(MusicTemplatePath, filename)
+            with open(file_path, 'r', encoding = 'utf-8') as file:
+                MusicTemplates.append(json.load(file))
+
+    ## 도서 SelectionGenerationKoBookContext 로드
+    Genre = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['Genre']
+    GenreRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['GenreRatio']
+    GenderRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Gender']['GenderRatio']
+    AgeRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Age']['AgeRatio']
+    PersonalityRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Personality']['PersonalityRatio']
+    EmotionRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Emotion']['EmotionRatio']
     if not os.path.exists(MatchedMusicLayerPath):
-        
-        ## 도서 SelectionGenerationKoBookContext 로드
-        Genre = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['Genre']
-        GenreRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['GenreRatio']
-        GenderRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Gender']['GenderRatio']
-        AgeRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Age']['AgeRatio']
-        PersonalityRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Personality']['PersonalityRatio']
-        EmotionRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Emotion']['EmotionRatio']
-        
-        ## MatchedMusics 생성
-        MatchedMusics = []
-        
-        ## LogoDataSet에서 LogoPath 찾기
-        for Logo in LogoDataSet:
-            if (Logo['Logo']['Genre'] == Genre) and (Logo['Logo']['Language'] == MainLang):
-                MatchedLogoDic = {'Tag': 'Logo', 'FilePath': Logo['FilePath'], 'Setting': Logo['Setting']}
-                break
-        MatchedMusics.append(MatchedLogoDic)
-        
-        ## IntroDataSet에서 IntroPath 찾기
-        MatchedIntroDic = {'Tag': None, 'FilePath': None, 'Setting': None}
-        if Intro != "off":
-            for Intro in IntroDataSet:
-                if (Intro['Intro']['Type'] == Intro) and (Intro['Intro']['Language'] == MainLang):
-                    MatchedIntroDic = {'Tag': 'Intro', 'FilePath': Intro['FilePath'], 'Setting': Intro['Setting']}
-                    break
-        MatchedMusics.append(MatchedIntroDic)
-        
-        ## TitleMusicDataSet에서 TitleMusicPath 찾기
-        TitleMusicScoreList = []
-        for TitleMusic in TitleMusicDataSet:
-            # GenreScore 계산
-            GenreScores = TitleMusic['TitleMusic']['Genre']
-            MergedGenreScore = 0
-            for GenreScore in GenreScores:
-                if GenreScore['index'] in GenreRatio:
-                    MergedGenreScore += (GenreScore['Score'] * GenreRatio[GenreScore['index']])
-            # GenderScore 계산
-            GenderScores = TitleMusic['TitleMusic']['Gender']
-            MergedGenderScore = 0
-            for GenderScore in GenderScores:
-                if GenderScore['index'] in GenderRatio:
-                    MergedGenderScore += (GenderScore['Score'] * GenderRatio[GenderScore['index']])
-            # AgeScore 계산
-            AgeScores = TitleMusic['TitleMusic']['Age']
-            MergedAgeScore = 0
-            for AgeScore in AgeScores:
-                if AgeScore['index'] in AgeRatio:
-                    MergedAgeScore += (AgeScore['Score'] * AgeRatio[AgeScore['index']])
-            # PersonalityScore 계산
-            PersonalityScores = TitleMusic['TitleMusic']['Personality']
-            MergedPersonalityScore = 0
-            for PersonalityScore in PersonalityScores:
-                if PersonalityScore['index'] in PersonalityRatio:
-                    MergedPersonalityScore += (PersonalityScore['Score'] * PersonalityRatio[PersonalityScore['index']])
-            # EmotionScore 계산
-            EmotionScores = TitleMusic['TitleMusic']['Emotion']
-            MergedEmotionScore = 0
-            for EmotionScore in EmotionScores:
-                if EmotionScore['index'] in EmotionRatio:
-                    MergedEmotionScore += (EmotionScore['Score'] * EmotionRatio[EmotionScore['index']])
-            # TitleMusic Score 합산
-            TitleMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
+        print(f"[ MusicDB : {MusicDB} ]")
+        ## Storage에서 MatchedMusics 생성
+        if MusicDB == 'Storage':
+            ## MatchedMusics 생성
+            MatchedMusics = []
             
-        # TitleMusic FilePath 도출
-        MatchedTitleMusic = TitleMusicDataSet[TitleMusicScoreList.index(max(TitleMusicScoreList))]
-        
-        # TitleMusic 선택
-        RandomTitleMusicDic = random.choice(MatchedTitleMusic['MusicSet']['TitleMusic'])
-        MatchedTitleMusicDic = {'Tag': 'Title', 'FilePath': RandomTitleMusicDic['FilePath'], 'Setting': RandomTitleMusicDic['Setting']}
-        MatchedMusics.append(MatchedTitleMusicDic)
-        
-        # MainPartChapterMusic 선택
-        RandomMainPartChapterMusicDic = random.sample(MatchedTitleMusic['MusicSet']['PartMusic'], 2)
-        MatchedMainPartChapterMusicDic = {'Tag': 'MainChapterPart', 'FilePath': RandomMainPartChapterMusicDic[0]['FilePath'], 'Setting': RandomMainPartChapterMusicDic[0]['Setting']}
-        MatchedMusics.append(MatchedMainPartChapterMusicDic)
-        
-        # SubPartChapterMusic, IndexMusic, CaptionMusic 선택
-        RandomIndexMusicDic = random.sample(MatchedTitleMusic['MusicSet']['IndexMusic'], 3)
-        # 초가 가장 높은 값을 1순위로 정렬
-        SortedIndexMusicDic = sorted(RandomIndexMusicDic, key = lambda x: x["Setting"]["Length"][-1] * 0.3 + x["Setting"]["Length"][0], reverse=True)
-        
-        MatchedSubPartChapterMusicDic = {'Tag': 'SubChapterPart', 'FilePath': SortedIndexMusicDic[0]['FilePath'], 'Setting': SortedIndexMusicDic[0]['Setting']}
-        MatchedMusics.append(MatchedSubPartChapterMusicDic)
-        
-        MatchedIndexMusicDic = {'Tag': 'Index', 'FilePath': SortedIndexMusicDic[1]['FilePath'], 'Setting': SortedIndexMusicDic[1]['Setting']}
-        MatchedMusics.append(MatchedIndexMusicDic)
-        
-        MatchedCaptionMusicDic = {'Tag': 'Caption', 'FilePath': SortedIndexMusicDic[2]['FilePath'], 'Setting': SortedIndexMusicDic[2]['Setting']}
-        MatchedMusics.append(MatchedCaptionMusicDic)
-        
+            ## LogoDataSet에서 LogoPath 찾기
+            for Logo in LogoDataSet:
+                if (Logo['Logo']['Genre'] == Genre) and (Logo['Logo']['Language'] == MainLang):
+                    MatchedLogoDic = {'Tag': 'Logo', 'File': Logo['FilePath'].split('/')[-1], 'FilePath': Logo['FilePath'], 'Setting': Logo['Setting']}
+                    break
+            MatchedMusics.append(MatchedLogoDic)
+            
+            ## IntroDataSet에서 IntroPath 찾기
+            MatchedIntroDic = {'Tag': "Intro", 'FilePath': None, 'Setting': None}
+            if Intro != "off":
+                for Intro in IntroDataSet:
+                    if (Intro['Intro']['Type'] == Intro) and (Intro['Intro']['Language'] == MainLang):
+                        MatchedIntroDic = {'Tag': 'Intro', 'File': Intro['FilePath'].split('/')[-1], 'FilePath': Intro['FilePath'], 'Setting': Intro['Setting']}
+                        break
+            MatchedMusics.append(MatchedIntroDic)
+            
+            ## TitleMusicDataSet에서 TitleMusicPath 찾기
+            TitleMusicScoreList = []
+            for TitleMusic in TitleMusicDataSet:
+                # GenreScore 계산
+                GenreScores = TitleMusic['TitleMusic']['Genre']
+                MergedGenreScore = 0
+                for GenreScore in GenreScores:
+                    if GenreScore['index'] in GenreRatio:
+                        MergedGenreScore += (GenreScore['Score'] * GenreRatio[GenreScore['index']])
+                # GenderScore 계산
+                GenderScores = TitleMusic['TitleMusic']['Gender']
+                MergedGenderScore = 0
+                for GenderScore in GenderScores:
+                    if GenderScore['index'] in GenderRatio:
+                        MergedGenderScore += (GenderScore['Score'] * GenderRatio[GenderScore['index']])
+                # AgeScore 계산
+                AgeScores = TitleMusic['TitleMusic']['Age']
+                MergedAgeScore = 0
+                for AgeScore in AgeScores:
+                    if AgeScore['index'] in AgeRatio:
+                        MergedAgeScore += (AgeScore['Score'] * AgeRatio[AgeScore['index']])
+                # PersonalityScore 계산
+                PersonalityScores = TitleMusic['TitleMusic']['Personality']
+                MergedPersonalityScore = 0
+                for PersonalityScore in PersonalityScores:
+                    if PersonalityScore['index'] in PersonalityRatio:
+                        MergedPersonalityScore += (PersonalityScore['Score'] * PersonalityRatio[PersonalityScore['index']])
+                # EmotionScore 계산
+                EmotionScores = TitleMusic['TitleMusic']['Emotion']
+                MergedEmotionScore = 0
+                for EmotionScore in EmotionScores:
+                    if EmotionScore['index'] in EmotionRatio:
+                        MergedEmotionScore += (EmotionScore['Score'] * EmotionRatio[EmotionScore['index']])
+                # TitleMusic Score 합산
+                TitleMusicScoreList.append((MergedGenreScore/1000) * (MergedGenderScore/1000) * (MergedAgeScore/1000) * (MergedPersonalityScore/1000) * (MergedEmotionScore/1000))
+                
+            # TitleMusic FilePath 도출
+            MatchedTitleMusic = TitleMusicDataSet[TitleMusicScoreList.index(max(TitleMusicScoreList))]
+            
+            # TitleMusic 선택
+            RandomTitleMusicDic = random.choice(MatchedTitleMusic['MusicSet']['TitleMusic'])
+            MatchedTitleMusicDic = {'Tag': 'Title', 'File': RandomTitleMusicDic['FilePath'].split('/')[-1], 'FilePath': RandomTitleMusicDic['FilePath'], 'Setting': RandomTitleMusicDic['Setting']}
+            MatchedMusics.append(MatchedTitleMusicDic)
+            
+            # MainPartChapterMusic 선택
+            RandomMainPartChapterMusicDic = random.sample(MatchedTitleMusic['MusicSet']['PartMusic'], 2)
+            MatchedMainPartChapterMusicDic = {'Tag': 'MainChapterPart', 'File': RandomMainPartChapterMusicDic[0]['FilePath'].split('/')[-1], 'FilePath': RandomMainPartChapterMusicDic[0]['FilePath'], 'Setting': RandomMainPartChapterMusicDic[0]['Setting']}
+            MatchedMusics.append(MatchedMainPartChapterMusicDic)
+            
+            # SubPartChapterMusic, IndexMusic, CaptionMusic 선택
+            RandomIndexMusicDic = random.sample(MatchedTitleMusic['MusicSet']['IndexMusic'], 3)
+            # 초가 가장 높은 값을 1순위로 정렬
+            SortedIndexMusicDic = sorted(RandomIndexMusicDic, key = lambda x: x["Setting"]["Length"][-1] * 0.3 + x["Setting"]["Length"][0], reverse=True)
+            MatchedSubPartChapterMusicDic = {'Tag': 'SubChapterPart', 'File': SortedIndexMusicDic[0]['FilePath'].split('/')[-1], 'FilePath': SortedIndexMusicDic[0]['FilePath'], 'Setting': SortedIndexMusicDic[0]['Setting']}
+            MatchedMusics.append(MatchedSubPartChapterMusicDic)
+            
+            MatchedIndexMusicDic = {'Tag': 'Index', 'File': SortedIndexMusicDic[1]['FilePath'].split('/')[-1], 'FilePath': SortedIndexMusicDic[1]['FilePath'], 'Setting': SortedIndexMusicDic[1]['Setting']}
+            MatchedMusics.append(MatchedIndexMusicDic)
+            
+            MatchedCaptionMusicDic = {'Tag': 'Caption', 'File': SortedIndexMusicDic[2]['FilePath'].split('/')[-1], 'FilePath': SortedIndexMusicDic[2]['FilePath'], 'Setting': SortedIndexMusicDic[2]['Setting']}
+            MatchedMusics.append(MatchedCaptionMusicDic)
+
+        ## Template에서 MatchedMusics 선택
+        elif MusicDB == 'Template':
+            ## TitleMusicDataSet에서 TitleMusicPath 찾기
+            MusicTemplateScoreList = []
+            for MusicTemplate in MusicTemplates:
+                # GenreScore 계산
+                MusicTemplateGenreRatio = MusicTemplate['ContextCompletion']['GenreRatio']
+                CommonKeys = set(GenreRatio.keys()) & set(MusicTemplateGenreRatio.keys())
+                if '기타' in CommonKeys:
+                    CommonKeys.remove('기타')
+                MergedGenreScore = sum(GenreRatio.get(key, 0) * MusicTemplateGenreRatio.get(key, 0) for key in CommonKeys)
+                # GenderScore 계산
+                MusicTemplateGenderRatio = MusicTemplate['ContextCompletion']['GenderRatio']
+                CommonKeys = set(GenderRatio.keys()) & set(MusicTemplateGenderRatio.keys())
+                if '기타' in CommonKeys:
+                    CommonKeys.remove('기타')
+                MergedGenderScore = sum(GenderRatio.get(key, 0) * MusicTemplateGenderRatio.get(key, 0) for key in CommonKeys)
+                # AgeScore 계산
+                MusicTemplateAgeRatio = MusicTemplate['ContextCompletion']['AgeRatio']
+                CommonKeys = set(AgeRatio.keys()) & set(MusicTemplateAgeRatio.keys())
+                if '기타' in CommonKeys:
+                    CommonKeys.remove('기타')
+                MergedAgeScore = sum(AgeRatio.get(key, 0) * MusicTemplateAgeRatio.get(key, 0) for key in CommonKeys)
+                # PersonalityScore 계산
+                MusicTemplatePersonalityRatio = MusicTemplate['ContextCompletion']['PersonalityRatio']
+                CommonKeys = set(PersonalityRatio.keys()) & set(MusicTemplatePersonalityRatio.keys())
+                if '기타' in CommonKeys:
+                    CommonKeys.remove('기타')
+                MergedPersonalityScore = sum(PersonalityRatio.get(key, 0) * MusicTemplatePersonalityRatio.get(key, 0) for key in CommonKeys)
+                # EmotionScore 계산
+                MusicTemplateEmotionRatio = MusicTemplate['ContextCompletion']['EmotionRatio']
+                CommonKeys = set(EmotionRatio.keys()) & set(MusicTemplateEmotionRatio.keys())
+                if '기타' in CommonKeys:
+                    CommonKeys.remove('기타')
+                MergedEmotionScore = sum(EmotionRatio.get(key, 0) * MusicTemplateEmotionRatio.get(key, 0) for key in CommonKeys)
+                # MusicTemplate Score 합산
+                MusicTemplateScoreList.append(MergedGenreScore * MergedGenderScore * MergedAgeScore * MergedPersonalityScore * MergedEmotionScore)
+
+            # MatchedMusicTemplate 도출
+            MatchedMusicTemplate = MusicTemplates[MusicTemplateScoreList.index(max(MusicTemplateScoreList))]
+            MatchedMusics = MatchedMusicTemplate['MatchedMusics']
+
+        ## Template에서 MatchedMusics 지정
+        else:
+            MatchedFound = False
+            for MusicTemplate in MusicTemplates:
+                if MusicTemplate['ProjectName'] == MusicDB:
+                    MatchedMusics = MusicTemplate['MatchedMusics']
+                    MatchedFound = True
+                if MusicTemplate['ProjectName'] == unicodedata.normalize('NFC', MusicDB):
+                    MatchedMusics = MusicTemplate['MatchedMusics']
+                    MatchedFound = True
+
+            if not MatchedFound:
+                sys.exit(f"[ MusicDB: ({MusicDB})의 이름이 ProjectName과 일치하지 않음, MusicTemplate을 선택할 수 없음 ]")
+
         ## MatchedMusics 파일 생성
         with open(MatchedMusicLayerPath, 'w', encoding = 'utf-8') as MatchedMusicsJson:
             json.dump(MatchedMusics, MatchedMusicsJson, ensure_ascii = False, indent = 4)
     else:
         with open(MatchedMusicLayerPath, 'r', encoding = 'utf-8') as MatchedMusicsJson:
             MatchedMusics = json.load(MatchedMusicsJson)
+
+    ## MatchedMusics의 File과 FilePath가 일치하지 않을 경우 File 적용
+    NewMatchedMusics = []
+    for MatchedMusic in MatchedMusics:
+        Tag = MatchedMusic['Tag']
+        if 'File' not in MatchedMusic:
+            if MatchedMusic['FilePath'] is not None:
+                File = MatchedMusic['FilePath'].split('/')[-1]
+            else:
+                File = None
+        else:
+            File = MatchedMusic['File']
         
-    return EditGeneration, MatchedMusics
+        if File is None:
+            FilePath = None
+        else:
+            if Tag == 'Logo':
+                for LogoData in LogoDataSet:
+                    LogoDataFile = LogoData['FilePath'].split('/')[-1]
+                    if File == LogoDataFile:
+                        FilePath = LogoData['FilePath']
+                        break
+            elif Tag in [None, 'Intro']:
+                for IntroData in IntroDataSet:
+                    IntroDataFile = IntroData['FilePath'].split('/')[-1]
+                    if File == IntroDataFile:
+                        FilePath = IntroData['FilePath']
+                        break
+            else:
+                TitleMusicDataFound = False  # 플래그 변수 추가
+                for TitleMusicData in TitleMusicDataSet:
+                    if TitleMusicDataFound:  # 찾았으면 외부 반복문도 종료
+                        break
+                    TitleMusicSet = TitleMusicData['MusicSet']['TitleMusic']
+                    PartMusicSet = TitleMusicData['MusicSet']['PartMusic']
+                    IndexMusicSet = TitleMusicData['MusicSet']['IndexMusic']
+                    MusicSets = TitleMusicSet + PartMusicSet + IndexMusicSet
+                    for MusicSet in MusicSets:
+                        TitleMusicDataFile = MusicSet['FilePath'].split('/')[-1]
+                        if File == TitleMusicDataFile:
+                            FilePath = MusicSet['FilePath']
+                            TitleMusicDataFound = True  # 찾았다는 표시
+                            break
+        
+        NewMatchedMusic = {'Tag': MatchedMusic['Tag'], 'File': File, 'FilePath': FilePath, 'Setting': MatchedMusic['Setting']}
+        NewMatchedMusics.append(NewMatchedMusic)
+
+    ## NewMatchedMusics 파일 저장
+    with open(MatchedMusicLayerPath, 'w', encoding = 'utf-8') as MatchedMusicsJson:
+        json.dump(NewMatchedMusics, MatchedMusicsJson, ensure_ascii = False, indent = 4)
+
+    return EditGeneration, NewMatchedMusics
 
 ################################################
 ##### VoiceLayer에 Logo, Intro, Music 합치기 #####
 ################################################
 ## VoiceLayer에 Musics 믹싱 파일 선정
-def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off'):
-    editGeneration, MatchedMusics = MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = 'off')
-    
+def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = 'Template'):
+    editGeneration, MatchedMusics = MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = 'Template')
     ## EditGeneration 내에 Part, Chapter 유무 확인
     PartSwitch = False
     ChapterSwitch = False
@@ -428,7 +541,7 @@ def RemoveMusicFiles(MusicLayerPath):
             os.remove(FilePath)
 
 ## Musics 믹싱
-def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVolume = -10):
+def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = 'Template', EndMusicVolume = -10):
     RemoveMusicFiles(MusicLayerPathGen(projectName, email, ''))
     
     ## DeNoise폴더내에 파일이 있는지 확인 (있다면 해당 파일로 믹싱 시작)
@@ -446,7 +559,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', EndMusicVol
     print(f"[ MixingMode : {DeNoiseMixedVar} ]")
     ## DeNoise폴더내에 파일이 있는지 확인 (있다면 해당 파일로 믹싱 시작)
     
-    EditGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro)
+    EditGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro, MusicDB = MusicDB)
     ## 각 사운드 생성
     Volume = -30 # 볼륨은 최대 값을 0으로 산정 -값이 클수록 볼륨이 작음(-25 ~ -32)
     Logo_Audio = AudioSegment.from_wav(LogoPath) + AudioSegment.silent(duration = 3000)
@@ -956,8 +1069,8 @@ def RestoreOriginalFiles(voiceLayerPath):
         print(f"[ {backup_folder} 가 존재하지 않음 ]")
 
 ## 생성된 음성파일 합치기
-def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing', Bitrate = '320k'):
-    EditGeneration, MusicMixingDatas, DeNoiseMixedVar = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro, EndMusicVolume = EndMusicVolume)
+def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', MusicDB = 'Template', EndMusicVolume = -10, VolumeEqual = 'Mixing', Bitrate = '320k'):
+    EditGeneration, MusicMixingDatas, DeNoiseMixedVar = MusicsMixing(projectName, email, MainLang = MainLang, Intro = Intro, MusicDB = MusicDB, EndMusicVolume = EndMusicVolume)
     
     ## voiceLayer 경로와 musicLayer 경로 ##
     voiceLayerPath = VoiceLayerPathGen(projectName, email, '', DeNoiseMixedVar)
@@ -1807,14 +1920,14 @@ def SaveMusicTemplate(projectName, email, MainLang = 'Ko'):
         json.dump(MusicTemplate, JsonFile, ensure_ascii = False, indent = 4)
 
 ## 프롬프트 요청 및 결과물 Json을 MusicLayer에 업데이트
-def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', EndMusicVolume = -10, VolumeEqual = 'Mixing', Bitrate = '320k'):
+def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang = 'Ko', Intro = 'off', AudiobookSplitting = 'Auto', MusicDB = 'Template', EndMusicVolume = -10, VolumeEqual = 'Mixing', Bitrate = '320k'):
     print(f"< User: {email} | Project: {projectName} | MusicLayerGenerator 시작 >")
-    
-    EditGenerationKoChunks, MatchedChunksPath, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting, EndMusicVolume = EndMusicVolume, VolumeEqual = VolumeEqual, Bitrate = Bitrate)
-    
+
+    EditGenerationKoChunks, MatchedChunksPath, FileLimitList, FileRunningTimeList, FileSizeList, RawPreviewSound, PreviewSoundPath, _VoiceFilePath = MusicSelector(projectName, email, CloneVoiceName = CloneVoiceName, MainLang = MainLang, Intro = Intro, AudiobookSplitting = AudiobookSplitting, MusicDB = MusicDB, EndMusicVolume = EndMusicVolume, VolumeEqual = VolumeEqual, Bitrate = Bitrate)
+
     ## 10-15분 미리듣기 생성
     AudiobookPreviewSecond, AudiobookPreviewSize = AudiobookPreviewGen(EditGenerationKoChunks, RawPreviewSound, PreviewSoundPath, Bitrate)
-    
+
     ## 오디오북 메타데이터 생성
     AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, _VoiceFilePath, AudiobookPreviewSecond, AudiobookPreviewSize)
 
@@ -1823,7 +1936,7 @@ def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang 
 
     ## 오디오북 러닝타임 기록
     SaveAudiobookRunningTime(projectName, FileRunningTimeList)
-    
+
     ## 믹싱 템플릿 저장
     SaveMusicTemplate(projectName, email)
 

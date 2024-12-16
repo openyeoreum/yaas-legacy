@@ -174,7 +174,7 @@ if __name__ == "__main__":
     # 빼기명상을통한나의변화: {"ScriptGen": "on", "RawMode": "off", "Model": "ANTHROPIC", "Process": "ChangesAfterMeditation_Script", "Mode": "Master", "MainKey": "글내용", "KeyList": ["목차", "내용"]}
 
     MainProcess = "Solution&Creation" # 'Solution', 'Solution&Creation', 'Sample'
-    ProjectNameList = ['241210_나는외식창업에적합한사람인가요약']
+    ProjectNameList = ['241210_끌리는이들에겐이유가있다요약']
     ScriptGen = {"ScriptGen": "off", "RawMode": "on", "Model": "ANTHROPIC", "Process": "", "Mode": "Master", "MainKey": "", "KeyList": []} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'RawMode' : 'on', 'off' : on 은 _Index(Raw).txt 및 _Body(Raw).txt 생성, off 는 _Index.txt 및 _Body.txt 생성 / 'Process' : 'SejongCityOfficeOfEducation_Poem' ... / 'MainKey': 'KeyList' : '메인키': ['프롬프트 결과로', '나오는 KeyList', '작성']
     Narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
     CloneVoiceName = "" # 'Narrator = 'VoiceActor' 인 경우 '저자명(특성)' 작성, 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성

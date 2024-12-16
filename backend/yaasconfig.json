@@ -3,8 +3,9 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": "['240801_빨간풍차가있는집', '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240812_룰루레몬스토리' ...]",
+        "ProjectNameList": "['240801_빨간풍차가있는집', '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240418_부카출판사', '240426_목소리의힘', '240523_고객검증', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240812_룰루레몬스토리' ...]",
         "Translations": "['En', 'Ja', 'Zh', 'Es'] 번역할 언어를 리스트로 구성, 번역이 없을 경우 []빈 리스트 구성",
+        "MainProcess": "",
         "ScriptGen": "# 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'RawMode' : 'on', 'off' : on 은 _Index(Raw).txt 및 _Body(Raw).txt 생성, off 는 _Index.txt 및 _Body.txt 생성 / 'Process' : 'SejongCityOfficeOfEducation_Poem' ... / 'MainKey', 'KeyList' : '메인키': ['프롬프트 결과로', '나오는 KeyList', '작성']",
         "IndexMode": "'Define', 'Preprocess' : Define 은 Index 전처리 필요 없음, Preprocess 는 Index 전처리 필요함",
         "BookGenre": "'Auto', '문학', '비문학', '아동', '시', '학술'",
@@ -23,9 +24,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240223_나무에서만난경영지혜"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -53,9 +55,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240223_노인을위한나라는있다"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -83,9 +86,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240223_마케터의무기들"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -113,9 +117,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240705_도산안창호"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -140,9 +145,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240801_빨간풍차가있는집"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -167,9 +173,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240802_암을이기는천연항암제"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -194,9 +201,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240815_노유파"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -221,9 +229,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240812_룰루레몬스토리"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -248,9 +257,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240909_AI미래시나리오2030샘플"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -275,9 +285,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240908_나무스토리텔링"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -302,9 +313,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240910_AI미래시나리오2030"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -329,9 +341,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240919_암을이기는천연항암제요약"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -356,9 +369,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240925_불멸의지혜"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -383,9 +397,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241005_그해여름필립로커웨이에서일어난소설같은일"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -410,9 +425,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241009_책갈피와책수레"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -437,9 +453,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241010_틈틈이낭만"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -464,9 +481,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240405_빌리월터스겜블러"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -491,9 +509,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241024_오성삼유튜브"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -518,9 +537,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241024_서울장애인가족지원센터당선작13선"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -545,9 +565,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241029_누가정부창업지원을받는가"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -572,9 +593,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241116_베이버터와다섯개의빛"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -599,9 +621,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241118_세종교육청우리반오디오북새움중1학년8반"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "on",
@@ -633,9 +656,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241118_세종교육청우리반오디오북아름초1학년1반"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "on",
@@ -667,9 +691,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241118_세종교육청우리반오디오북아름초5학년5반"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "on",
@@ -701,9 +726,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241118_세종교육청우리반오디오북아름초5학년5반수정"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "on",
@@ -735,9 +761,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241127_엄마의첫공부"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -765,9 +792,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241128_끌리는이들에겐이유가있다"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -795,9 +823,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240412_카이스트명상수업"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -825,9 +854,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241204_개정교육과정초등교과별이해연수"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -855,9 +885,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "240223_나는외식창업에적합한사람인가"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -885,9 +916,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241210_나는외식창업에적합한사람인가요약"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -915,9 +947,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241210_끌리는이들에겐이유가있다요약"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",
@@ -945,9 +978,10 @@
         "email": "yeoreum00128@gmail.com",
         "name": "yeoreum",
         "password": "0128",
-        "projectNameList": [
+        "ProjectNameList": [
             "241210_공부하듯주식해서보화찾기요약"
         ],
+        "MainProcess": "Solution&Creation",
         "Translations": [],
         "ScriptGen": {
             "ScriptGen": "off",

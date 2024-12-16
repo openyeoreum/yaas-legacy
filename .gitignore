@@ -21,8 +21,8 @@ backend/b5_Database/b50_DatabaseVolumesPostgres/
 
 # # b62_UserStorage 폴더 내의 특정 폴더 및 파일만 유지
 # storage/s1_Yeoreum/s12_UserStorage/*
-# !storage/s1_Yeoreum/s15_ContentBookStorage/s151_AudioBookEstimate/
-# !storage/s1_Yeoreum/s15_ContentBookStorage/s151_AudioBookEstimate/*
+# !storage/s1_Yeoreum/s15_EstimateStorage/s151_AudioBookEstimate/
+# !storage/s1_Yeoreum/s15_EstimateStorage/s151_AudioBookEstimate/*
 
 # alembic 파일
 alembic.ini

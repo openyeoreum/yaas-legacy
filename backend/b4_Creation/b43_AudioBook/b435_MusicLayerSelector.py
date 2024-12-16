@@ -1882,7 +1882,7 @@ def SaveAudiobookRunningTime(projectName, FileRunningTimeList):
     
     # RunningTime 초 구하기
     RunningTime = sum(FileRunningTimeList)
-    RunningTimeJsonPath = f"/yaas/storage/s1_Yeoreum/s15_ContentBookStorage/s151_AudioBookEstimate/s1512_RunningTimeData/{projectName}_RunningTime.json"
+    RunningTimeJsonPath = f"/yaas/storage/s1_Yeoreum/s15_EstimateStorage/s151_AudioBookEstimate/s1512_RunningTimeData/{projectName}_RunningTime.json"
     
     # RunningTimeJson 저장
     with open(RunningTimeJsonPath, 'w', encoding = 'utf-8') as Jsonfile:

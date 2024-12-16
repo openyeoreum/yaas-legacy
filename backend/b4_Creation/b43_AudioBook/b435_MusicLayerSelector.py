@@ -8,6 +8,7 @@ import random
 import shutil
 import sox
 import pandas as pd
+import contextlib
 import json
 sys.path.append("/yaas")
 
@@ -1284,33 +1285,37 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     CloneVoiceSpeed = 1
     CloneVoicePitch = 0
     for MatchedActor in MatchedActors:
-        if (CloneVoiceName in MatchedActor['ActorName']) and (projectName in MatchedActor['ActorName']):
+        # CloneVoiceSpeed & Pitch는 ElevenLabs만 가능 따라서, Speed와 Pitch 옵션이 필요함
+        if 'Speed' in MatchedActor['ApiSetting'] and 'Pitch' in MatchedActor['ApiSetting']:
+            ActorName = MatchedActor['ActorName']
             CloneVoiceSpeed = MatchedActor['ApiSetting']['Speed']
-            CloneVoicePitch =  MatchedActor['ApiSetting']['Pitch']
-    
-    # Speed 변수가 1이 아닌 경우 속도 조절
-    if CloneVoiceSpeed != 1 or CloneVoicePitch != 0:
+            CloneVoicePitch = MatchedActor['ApiSetting']['Pitch']
         
-        UpdateTQDM = tqdm(FilteredFiles,
-                        total = len(FilteredFiles),
-                        desc = 'CloneVoiceSpeed & Pitch')
-        
-        _SpeedRemoveList = []
-        for Update in UpdateTQDM:
-            if ('_[' not in Update) and (CloneVoiceName in Update):
-                VoiceFilePath = os.path.join(voiceLayerPath, Update)
-                _SpeedFilePath = VoiceFilePath.replace('.wav', '_Speed.wav')
-                if os.path.exists(_SpeedFilePath):
-                    os.remove(_SpeedFilePath)
+            # Speed 변수가 1이 아닌 경우 속도 조절
+            if CloneVoiceSpeed != 1 or CloneVoicePitch != 0:
+                print(f"[ CloneVoiceSpeed & Pitch: ActorName({ActorName}), Speed({CloneVoiceSpeed}), Pitch({CloneVoicePitch}) ]")
+                UpdateTQDM = tqdm(FilteredFiles,
+                                total = len(FilteredFiles),
+                                desc = 'CloneVoiceSpeed & Pitch')
                 
-                tfm = sox.Transformer()
-                if CloneVoiceSpeed != 1:
-                    tfm.tempo(CloneVoiceSpeed, 's')
-                if CloneVoicePitch != 0:
-                    tfm.pitch(CloneVoicePitch)
-                tfm.build(VoiceFilePath, _SpeedFilePath)
-                
-                _SpeedRemoveList.append(_SpeedFilePath)
+                _SpeedRemoveList = []
+                for Update in UpdateTQDM:
+                    if ('_[' not in Update) and (CloneVoiceName in Update):
+                        VoiceFilePath = os.path.join(voiceLayerPath, Update)
+                        _SpeedFilePath = VoiceFilePath.replace('.wav', '_Speed.wav')
+                        if os.path.exists(_SpeedFilePath):
+                            os.remove(_SpeedFilePath)
+                        
+                        with open(os.devnull, 'w') as devnull:
+                            with contextlib.redirect_stderr(devnull):
+                                tfm = sox.Transformer()
+                                if CloneVoiceSpeed != 1:
+                                    tfm.tempo(CloneVoiceSpeed, 's')
+                                if CloneVoicePitch != 0:
+                                    tfm.pitch(CloneVoicePitch)
+                                tfm.build(VoiceFilePath, _SpeedFilePath)
+                        
+                        _SpeedRemoveList.append(_SpeedFilePath)
     ## _Speed.wav 파일 생성 (Clone Voice 속도 조절시) ##
 
     ## 파일과 Edit간 불일치시 FilteredFiles 재구성

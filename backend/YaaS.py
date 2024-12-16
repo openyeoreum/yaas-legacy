@@ -176,7 +176,7 @@ if __name__ == "__main__":
 
     ProjectNameList = ["241204_개정교육과정초등교과별이해연수"]
     MainProcess = "Solution&Creation" # 'Solution', 'Solution&Creation', 'Sample'
-    # MainProcess = {"Domain": "", "Estimate": [], "Script": "", "Content": [], "Sample": [], "Marketing": []} #[]면 리스트 ""면 템플릿 및 데이터 등 선택
+    # MainProcess = {"DataCollection": ["None 또는 Domain(도메인은 OO트렌드) 중 다중 선택"], "Estimate": ["None 또는 TextBook, AudioBook, VideoBook 중 다중 선택"], "Script": "None 또는 Domain(도메인은 OO트렌드) 중 선택", "TextBook": "None 또는 텍스트북 템플릿 중 선택", "AudioBook": "None 또는 오디오북 클로닝 여부 등 선택", "Sample": ["None 또는 TextBook, AudioBook, VideoBook 중 다중 선택"], "Marketing": ["None 또는 템플릿 리스트 중 다중 선택"]}
     ScriptGen = {"ScriptGen": "off", "RawMode": "on", "Model": "ANTHROPIC", "Process": "", "Mode": "Master", "MainKey": "", "KeyList": []} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'RawMode' : 'on', 'off' : on 은 _Index(Raw).txt 및 _Body(Raw).txt 생성, off 는 _Index.txt 및 _Body.txt 생성 / 'Process' : 'SejongCityOfficeOfEducation_Poem' ... / 'MainKey': 'KeyList' : '메인키': ['프롬프트 결과로', '나오는 KeyList', '작성']
     Narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
     CloneVoiceName = "" # 'Narrator = 'VoiceActor' 인 경우 '저자명(특성)' 작성, 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성

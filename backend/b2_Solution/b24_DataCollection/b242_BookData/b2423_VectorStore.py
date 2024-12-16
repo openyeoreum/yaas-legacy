@@ -818,7 +818,7 @@ if __name__ == "__main__":
                     json_file_paths.append(full_path)
         return json_file_paths
 
-    directory = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_BookData/s1523_YearlyBookData/2023년_YearlyBookData"
+    directory = "/yaas/storage/s1_Yeoreum/s14_DataCollectionStorage/s142_BookData/s1423_YearlyBookData/2023년_YearlyBookData"
     file_paths = get_json_file_paths(directory)
     
     file_streams = [open(path, "rb") for path in file_paths]

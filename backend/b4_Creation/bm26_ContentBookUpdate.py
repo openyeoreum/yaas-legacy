@@ -37,7 +37,7 @@ def EstimateSettingGen(projectName, email):
     EstimateFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_estimate_file"
     EstimateFile = f"[{projectName}_AudioBookEstimate_Setting].json"
     ProjectEstimateFilePath = os.path.join(EstimateFilePath, EstimateFile)
-    RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s17_ContentBookStorage/s171_Estimate/s1712_RunningTimeData"
+    RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s15_ContentBookStorage/s151_AudioBookEstimate/s1512_RunningTimeData"
     
     ## 01_ScriptText 불러오기 ##
     if os.path.exists(ProjectScriptFilePath):
@@ -143,7 +143,7 @@ def SplitProjectName(ProjectName, MaxLength = 16):
 ## 라이프그래프의 이미지를 PDF로 묶기
 def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
     # 디자인 포멧 경로
-    DesignFormatPath = "/yaas/storage/s1_Yeoreum/s17_ContentBookStorage/s171_Estimate/s1711_EstematiFormat/EstimateFormat_"
+    DesignFormatPath = "/yaas/storage/s1_Yeoreum/s15_ContentBookStorage/s151_AudioBookEstimate/s1511_EstemateFormat/EstimateFormat_"
     
     # 첫 번째 이미지 크기에 맞는 PDF 생성
     FirstImage = Image.open(EstimatePNGPaths[0])
@@ -168,7 +168,7 @@ def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
         os.remove(EstimatePNGPaths[i])
     
     # 마지막 라이센스 이미지를 PDF에 추가
-    pdf.drawImage("/yaas/storage/s1_Yeoreum/s17_ContentBookStorage/s171_Estimate/s1711_EstematiFormat/EstimateFormat_2.png", 0, 0)
+    pdf.drawImage("/yaas/storage/s1_Yeoreum/s15_ContentBookStorage/s151_AudioBookEstimate/s1511_EstemateFormat/EstimateFormat_2.png", 0, 0)
     pdf.showPage()
     
     # PDF 파일 저장

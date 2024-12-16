@@ -1060,7 +1060,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "웹3.0메타버스"
-    VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s13_VoiceStorage/테스트(가)_0_연우(중간톤, 피치다운).wav"
+    VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/테스트(가)_0_연우(중간톤, 피치다운).wav"
     LanguageCode = "ko-KR"
     #########################################################################
     

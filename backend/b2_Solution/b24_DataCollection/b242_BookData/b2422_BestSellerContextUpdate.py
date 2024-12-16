@@ -143,7 +143,7 @@ def BSCommentAnalysisFilter(Response, CommentCount):
 def BestSellerContextDefineProcess(TotalBookDataPath, projectName, email, Process1 = "BestSellerContextDefine", Process2 = "BestSellerCommentAnalysis", MessagesReview = "on", mode = "Master"):
     ## 작업이 되지 않은 부분부터 totalBookDataList와 InputList 형성
     totalBookDataList, inputList, Date = LoadTotalBookDataToInputList(TotalBookDataPath)
-    TempTotalBookDataPath = f"/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_BookData/s1521_TotalBookData/TempTotalBookData/{Date}_TempTotalBookData.json"
+    TempTotalBookDataPath = f"/yaas/storage/s1_Yeoreum/s14_DataCollectionStorage/s142_BookData/s1421_TotalBookData/TempTotalBookData/{Date}_TempTotalBookData.json"
     StartPoint = 0
     InContext = True
     if os.path.exists(TempTotalBookDataPath):
@@ -250,7 +250,7 @@ def BestSellerContextDefineProcess(TotalBookDataPath, projectName, email, Proces
 
 ## BSContextDefine 프롬프트 요청 및 결과물 TotalBookDataList에 업데이트 및 점수배점
 def BestSellerContextDefineUpdate(projectName = "BestSeller", email = "General", process1 = "BestSellerContextDefine", process2 = "BestSellerCommentAnalysis", messagesReview = "on", mode = "Master"):
-    TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_BookData/s1521_TotalBookData/TotalBookData.json"
+    TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s14_DataCollectionStorage/s142_BookData/s1421_TotalBookData/TotalBookData.json"
     TotalBookDataList, Date = LoadTotalBookDataList(TotalBookDataPath)
     
     print(f"< User: {email} | Project: {Date} {projectName} | BestSeller ContextDefine/CommentAnalysis 시작 >")

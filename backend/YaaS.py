@@ -65,7 +65,6 @@ def YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCol
             TextBookConfig = {"TextBook": TextBook}
             
         ### Step3-6 : AudioBookConfig 설정 ###
-        print(AudioBook)
         if AudioBook == "None":
             AudioBookConfig = {}
         else:

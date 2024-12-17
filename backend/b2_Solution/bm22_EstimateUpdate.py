@@ -28,14 +28,14 @@ def SecondsToHMS(seconds):
     return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
 
 ### SciptFile의 EstimateSetting ###
-def EstimateSettingGen(projectName, email):
+def EstimateSettingGen(projectName, Estimate, Estimates):
     ScriptFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
     ScriptFile = f"{projectName}_Script.txt"
     ProjectScriptFilePath = os.path.join(ScriptFilePath, ScriptFile)
     EstimateFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_estimate_file"
-    EstimateFile = f"[{projectName}_AudioBookEstimate_Setting].json"
+    EstimateFile = f"[{projectName}_{Estimate}Estimate_Setting].json"
     ProjectEstimateFilePath = os.path.join(EstimateFilePath, EstimateFile)
-    RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s141_AudioBookEstimate/s1412_RunningTimeData"
+    RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s141_RunningTimeData"
     
     ## 01_ScriptText 불러오기 ##
     if os.path.exists(ProjectScriptFilePath):
@@ -61,35 +61,62 @@ def EstimateSettingGen(projectName, email):
         
         ## 03_ScriptText RunningTime 계산 ##
         RunningTime = EstimateScriptLenth * AverageRunningTimeRatio
-        VoiceActorPrice = 200000 * EstimateScriptLenth/10000
-        VoiceClonePrice = 250000 * EstimateScriptLenth/10000
         
         ## 04_Estimate_Setting Json 생성 ##
+        if Estimate == "TextBook":
+            StandardPrice = 100000 * EstimateScriptLenth/10000
+            PremiumPrice = 200000 * EstimateScriptLenth/10000
+        if Estimate == "AudioBook":
+            StandardPrice = 200000 * EstimateScriptLenth/10000
+            PremiumPrice = 250000 * EstimateScriptLenth/10000
+        if Estimate == "VideoBook":
+            StandardPrice = 400000 * EstimateScriptLenth/10000
+            PremiumPrice = 500000 * EstimateScriptLenth/10000
         if not os.path.exists(ProjectEstimateFilePath):
+            projectname = ""
+            client = ""
+            
+            ## 사전 작업된 EstimateSetting에서 프로젝트 이름, 클라이언트 이름 불러오기
+            for estimate in Estimates:
+                estimate_file = f"[{projectName}_{estimate}Estimate_Setting].json"
+                Project_estimate_file_path = os.path.join(EstimateFilePath, estimate_file)
+                if os.path.exists(Project_estimate_file_path):
+                    with open(Project_estimate_file_path, 'r', encoding = 'utf-8') as JsonFile:
+                        EstimateSetting = json.load(JsonFile)
+                        projectname = EstimateSetting['EstimateSetting']['ProjectName']
+                        client = EstimateSetting['EstimateSetting']['Client']
+                        break
+                    
             EstimateSetting = {
                     "ProjectName": f"{projectName}",
                     "EstimateSetting": {
-                        "ProjectName": "",
-                        "Client": "",
+                        "ProjectName": projectname,
+                        "Client": client,
                         "Lenth(raw)": EstimateScriptLenth,
                         "Lenth(estimate)": f"{math.ceil(EstimateScriptLenth/10000)*10000:,}자",
                         "RunningTime(s)": RunningTime,
                         "RunningTime(hms)": SecondsToHMS(RunningTime),
                         "RunningTime(estimate)": SecondsToHMS(math.ceil(RunningTime / 1800) * 1800),
-                        "VoiceActorPrice(raw)": VoiceActorPrice,
-                        "VoiceActorPrice(estimate)": f"{int(math.ceil(VoiceActorPrice/200000)*200000):,}원",
-                        "VoiceActorPrice(vat)": f"{int(math.ceil(VoiceActorPrice/200000)*200000/10):,}원",
-                        "VoiceActorPrice(estimate+vat)": f"{int(math.ceil(VoiceActorPrice/200000)*200000*1.1):,}원",
-                        "VoiceClonePrice(raw)": VoiceClonePrice,
-                        "VoiceClonePrice(estimate)": f"{int(math.ceil(VoiceClonePrice/250000)*250000):,}원",
-                        "VoiceClonePrice(vat)": f"{int(math.ceil(VoiceClonePrice/250000)*250000/10):,}원",
-                        "VoiceClonePrice(estimate+vat)": f"{int(math.ceil(VoiceClonePrice/250000)*250000*1.1):,}원",
+                        "StandardPrice(raw)": StandardPrice,
+                        "StandardPrice(estimate)": f"{int(math.ceil(StandardPrice/200000)*200000):,}원",
+                        "StandardPrice(vat)": f"{int(math.ceil(StandardPrice/200000)*200000/10):,}원",
+                        "StandardPrice(estimate+vat)": f"{int(math.ceil(StandardPrice/200000)*200000*1.1):,}원",
+                        "PremiumPrice(raw)": PremiumPrice,
+                        "PremiumPrice(estimate)": f"{int(math.ceil(PremiumPrice/250000)*250000):,}원",
+                        "PremiumPrice(vat)": f"{int(math.ceil(PremiumPrice/250000)*250000/10):,}원",
+                        "PremiumPrice(estimate+vat)": f"{int(math.ceil(PremiumPrice/250000)*250000*1.1):,}원",
                     }
                 }
+            
             ## EstimateSetting Json 파일저장
             with open(ProjectEstimateFilePath, 'w', encoding = 'utf-8') as JsonFile:
                 json.dump(EstimateSetting, JsonFile, indent = 4, ensure_ascii = False)
-            sys.exit(f"\n[ 샘플 세팅을 완료하세요 : {EstimateFilePath} ]\n")
+                
+            ## 사전 작업된 EstimateSetting에서 프로젝트 이름, 클라이언트 이름이 존재할 경우 return 아닐 경우 sys.exit
+            if projectname != "" and client != "":
+                return EstimateSetting, EstimateFilePath
+            else:
+                sys.exit(f"\n[ 샘플 세팅을 완료하세요 : {EstimateFilePath} ]\n")
         else:
             with open(ProjectEstimateFilePath, 'r', encoding = 'utf-8') as JsonFile:
                 EstimateSetting = json.load(JsonFile)
@@ -139,9 +166,14 @@ def SplitProjectName(ProjectName, MaxLength = 16):
     return '\n'.join(SplitedProjcetName)
 
 ## 라이프그래프의 이미지를 PDF로 묶기
-def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
+def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath, Estimate):
     # 디자인 포멧 경로
-    DesignFormatPath = "/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s141_AudioBookEstimate/s1411_EstemateFormat/EstimateFormat_"
+    if Estimate == "TextBook":
+        DesignFormatPath = "/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s142_TextBookEstemateTemplate/TextBookEstimateTemplate_"
+    if Estimate == "AudioBook":
+        DesignFormatPath = "/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s143_AudioBookEstemateTemplate/AudioBookEstimateTemplate_"
+    if Estimate == "VideoBook":
+        DesignFormatPath = "/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s144_VideoBookEstemateTemplate/VideoBookEstimateTemplate_"
     
     # 첫 번째 이미지 크기에 맞는 PDF 생성
     FirstImage = Image.open(EstimatePNGPaths[0])
@@ -166,89 +198,97 @@ def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath):
         os.remove(EstimatePNGPaths[i])
     
     # 마지막 라이센스 이미지를 PDF에 추가
-    pdf.drawImage("/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s141_AudioBookEstimate/s1411_EstemateFormat/EstimateFormat_2.png", 0, 0)
+    pdf.drawImage(f"{DesignFormatPath}2.png", 0, 0)
     pdf.showPage()
     
     # PDF 파일 저장
     pdf.save()
 
-### EstimatePDFGen 생성 ###
-def EstimateToPNG(projectName, email):
-    EstimateSetting, EstimateFilePath = EstimateSettingGen(projectName, email)
-    
-    ## 견적서 데이터
-    Project = EstimateSetting['EstimateSetting']['ProjectName']
-    Client = EstimateSetting['EstimateSetting']['Client']
-    Lenth = EstimateSetting['EstimateSetting']['Lenth(estimate)']
-    
-    VoiceActorPriceVAT = EstimateSetting['EstimateSetting']['VoiceActorPrice(estimate+vat)']
-    VoiceActorPrice = EstimateSetting['EstimateSetting']['VoiceActorPrice(estimate)']
-    VoiceActorVAT = EstimateSetting['EstimateSetting']['VoiceActorPrice(vat)']
-    
-    VoiceClonePriceVAT = EstimateSetting['EstimateSetting']['VoiceClonePrice(estimate+vat)']
-    VoiceClonePrice = EstimateSetting['EstimateSetting']['VoiceClonePrice(estimate)']
-    VoiceCloneVAT = EstimateSetting['EstimateSetting']['VoiceClonePrice(vat)']
-    
-    ## 기본 폰트 설정, Noto Sans CJK 폰트 경로 설정
-    font_path = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
-    font_prop = font_manager.FontProperties(fname = font_path)
-    rc('font', family = font_prop.get_name())
-    plt.rcParams['axes.unicode_minus'] = False  # 유니코드 마이너스 설정
-    
-    EstimatePNGPaths = []
-    EstimateFolderPath = os.path.join(EstimateFilePath, f"{projectName}_AudioBookEstimate")
-    EstimateFileName = f"{projectName}_AudioBookEstimate"
-    EstimatePDFPath = os.path.join(EstimateFolderPath, f'{EstimateFileName}.pdf')
-    
-    ## 01_Estimate 폴더 생성
-    if not os.path.exists(EstimateFolderPath):
-        os.makedirs(EstimateFolderPath)
-
-    ## 02_표지 페이지 생성
-    fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
-    fig.patch.set_alpha(0.0) # 투명 배경
-    ax.patch.set_alpha(0.0) # 투명 배경
-    fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
-    # 제목
-    ax.text(0.6, 1.04, f"일자: {Date()}\n\n도서: {SplitProjectName(Project)}\n\n의뢰: {Client}",
-    fontsize = 14, weight = 'bold', transform = ax.transAxes, color = 'white', va = 'top', ha = 'left')
-    ax.axis('off')  # 텍스트 영역의 축 숨기기
-    
-    # 표지 페이지 저장
-    EstimatePNG0Path = os.path.join(EstimateFolderPath, f'{EstimateFileName}(0).png')
-    EstimatePNGPaths.append(EstimatePNG0Path)
-    plt.savefig(EstimatePNG0Path, dpi = 300, transparent = True)
-    plt.close()
-
-    ## 03_견적서 페이지 생성
-    fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
-    fig.patch.set_alpha(0.0) # 투명 배경
-    ax.patch.set_alpha(0.0) # 투명 배경
-    fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
-    # 제목
-    ax.text(0.05, 1, f"『{Project}』 {Client}  |  오디오북 제작 견적서", 
-    fontsize = 14, weight = 'bold', transform = ax.transAxes, color = 'white')
-    # 성우 보이스
-    ax.text(0.05, 0.8, f"선택1: 성우 보이스        {Lenth}       {VoiceActorPriceVAT} (부가세포함)\n\n                                                                       {VoiceActorPrice} ({VoiceActorVAT})", 
-    fontsize = 11, weight = 'bold', transform = ax.transAxes, color = 'white')
-    # 클로닝 보이스
-    ax.text(0.05, 0.5, f"선택2: 클로닝 보이스    {Lenth}       {VoiceClonePriceVAT} (부가세포함)\n\n                                                                       {VoiceClonePrice} ({VoiceCloneVAT})", 
-    fontsize = 11, weight = 'bold', transform = ax.transAxes, color = 'white')
-    ax.axis('off')  # 텍스트 영역의 축 숨기기
-    
-    # 견적서 페이지 저장
-    EstimatePNG1Path = os.path.join(EstimateFolderPath, f'{EstimateFileName}(1).png')
-    EstimatePNGPaths.append(EstimatePNG1Path)
-    plt.savefig(EstimatePNG1Path, dpi = 300, transparent = True)
-    plt.close()
-    
-    PNGsToPDF(EstimatePNGPaths, EstimatePDFPath)
-    
 ##########################
 ##########################
 ##### EstimateUpdate #####
 ##########################
 ##########################
+
+### EstimatePDF 생성 ###
+def SolutionEstimateUpdate(projectName, email, Estimates):
+    for i, Estimate in enumerate(Estimates):
+        EstimateSetting, EstimateFilePath = EstimateSettingGen(projectName, Estimate, Estimates)
+        
+        print(f"< User: {email} | Project: {projectName} | 0{i+1}_{Estimate}_EstimateUpdate 시작 >")
+
+        EstimatePNGPaths = []
+        EstimateFolderPath = os.path.join(EstimateFilePath, f"{projectName}_{Estimate}Estimate")
+        EstimateFileName = f"{projectName}_{Estimate}Estimate"
+        EstimatePDFPath = os.path.join(EstimateFolderPath, f'{EstimateFileName}.pdf')
+
+        if not os.path.exists(EstimatePDFPath):
+            ## 견적서 데이터
+            Project = EstimateSetting['EstimateSetting']['ProjectName']
+            Client = EstimateSetting['EstimateSetting']['Client']
+            Lenth = EstimateSetting['EstimateSetting']['Lenth(estimate)']
+            
+            StandardPriceVAT = EstimateSetting['EstimateSetting']['StandardPrice(estimate+vat)']
+            StandardPrice = EstimateSetting['EstimateSetting']['StandardPrice(estimate)']
+            VoiceActorVAT = EstimateSetting['EstimateSetting']['StandardPrice(vat)']
+            
+            PremiumPriceVAT = EstimateSetting['EstimateSetting']['PremiumPrice(estimate+vat)']
+            PremiumPrice = EstimateSetting['EstimateSetting']['PremiumPrice(estimate)']
+            VoiceCloneVAT = EstimateSetting['EstimateSetting']['PremiumPrice(vat)']
+            
+            ## 기본 폰트 설정, Noto Sans CJK 폰트 경로 설정
+            font_path = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
+            font_prop = font_manager.FontProperties(fname = font_path)
+            rc('font', family = font_prop.get_name())
+            plt.rcParams['axes.unicode_minus'] = False  # 유니코드 마이너스 설정
+            
+            ## 01_Estimate 폴더 생성
+            if not os.path.exists(EstimateFolderPath):
+                os.makedirs(EstimateFolderPath)
+
+            ## 02_표지 페이지 생성
+            fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
+            fig.patch.set_alpha(0.0) # 투명 배경
+            ax.patch.set_alpha(0.0) # 투명 배경
+            fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
+            # 제목
+            ax.text(0.6, 1.04, f"일자: {Date()}\n\n도서: {SplitProjectName(Project)}\n\n의뢰: {Client}",
+            fontsize = 14, weight = 'bold', transform = ax.transAxes, color = 'white', va = 'top', ha = 'left')
+            ax.axis('off')  # 텍스트 영역의 축 숨기기
+            
+            # 표지 페이지 저장
+            EstimatePNG0Path = os.path.join(EstimateFolderPath, f'{EstimateFileName}(0).png')
+            EstimatePNGPaths.append(EstimatePNG0Path)
+            plt.savefig(EstimatePNG0Path, dpi = 300, transparent = True)
+            plt.close()
+
+            ## 03_견적서 페이지 생성
+            fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
+            fig.patch.set_alpha(0.0) # 투명 배경
+            ax.patch.set_alpha(0.0) # 투명 배경
+            fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
+            # 제목
+            ax.text(0.05, 1, f"『{Project}』 {Client}  |  오디오북 제작 견적서", 
+            fontsize = 14, weight = 'bold', transform = ax.transAxes, color = 'white')
+            # 성우 보이스
+            ax.text(0.05, 0.8, f"선택1: 성우 보이스        {Lenth}       {StandardPriceVAT} (부가세포함)\n\n                                                                       {StandardPrice} ({VoiceActorVAT})", 
+            fontsize = 11, weight = 'bold', transform = ax.transAxes, color = 'white')
+            # 클로닝 보이스
+            ax.text(0.05, 0.5, f"선택2: 클로닝 보이스    {Lenth}       {PremiumPriceVAT} (부가세포함)\n\n                                                                       {PremiumPrice} ({VoiceCloneVAT})", 
+            fontsize = 11, weight = 'bold', transform = ax.transAxes, color = 'white')
+            ax.axis('off')  # 텍스트 영역의 축 숨기기
+            
+            # 견적서 페이지 저장
+            EstimatePNG1Path = os.path.join(EstimateFolderPath, f'{EstimateFileName}(1).png')
+            EstimatePNGPaths.append(EstimatePNG1Path)
+            plt.savefig(EstimatePNG1Path, dpi = 300, transparent = True)
+            plt.close()
+            
+            PNGsToPDF(EstimatePNGPaths, EstimatePDFPath, Estimate)
+            
+            print(f"[ User: {email} | Project: {projectName} | 0{i+1}_{Estimate}_EstimateUpdate 완료 ]\n")
+        else:
+            print(f"[ User: {email} | Project: {projectName} | 0{i+1}_{Estimate}_EstimateUpdate가 이미 완료됨 ]\n")
 
 if __name__ == "__main__":
     
@@ -257,4 +297,4 @@ if __name__ == "__main__":
     ProjectName = '241204_개정교육과정초등교과별이해연수'
     #########################################################################
     
-    EstimateToPNG(ProjectName, email)
+    SolutionEstimateUpdate(ProjectName, email)

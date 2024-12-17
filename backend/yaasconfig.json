@@ -877,7 +877,7 @@
         "VoiceEnhance": "off",
         "VoiceReverbe": "on",
         "Intro": "off",
-        "AudiobookSplitting": "Auto",
+        "AudiobookSplitting": "Manual",
         "MusicDB": "Storage",
         "EndMusicVolume": -10
     },

@@ -17,8 +17,28 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 ##### InputList 생성 #####
 #########################
 
+## Script파일 여부 확인
+def ExistenceOrNotScriptFile(projectName, email):
+    project = GetProject(projectName, email)
+    ScriptFilesPath = project.ScriptPath
+    PDFFileSourcePath = os.path.join(ScriptFilesPath, projectName + ".pdf")
+    IndexFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Index.txt")
+    BodyFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Body.txt")
+    ProjectConfig = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_config.json"
+    
+    with open(ProjectConfig, 'r', encoding = 'utf-8') as ConfigJson:
+        Config = json.load(ConfigJson)
+        ScriptConfig = Config['ScriptConfig']
+    
+    if ScriptConfig == {}:
+        if os.path.exists(PDFFileSourcePath) or (os.path.exists(IndexFileSourcePath) and os.path.exists(BodyFileSourcePath)):
+            pass
+        else:
+            sys.exit(f"\n[ 아래 폴더에 ((({projectName + '.pdf'}))) 또는 ((({projectName + '_Index.txt'} + {projectName + '_Body.txt'}))) 파일을 넣어주세요 ]\n({ScriptFilesPath})")
+
 ## PDF파일 편집
 def PDFBookCropping(projectName, email, PDFBookToTextSetting, TextDirPath):
+    ExistenceOrNotScriptFile(projectName, email)
     # 경로 설정
     PDFPath = TextDirPath + f'/{projectName}.pdf'
     NormalPDFPath = TextDirPath + f'/{projectName}_Normal.pdf'

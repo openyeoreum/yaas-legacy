@@ -9,11 +9,9 @@ sys.path.append("/yaas")
 from matplotlib import font_manager, rc
 import matplotlib.pyplot as plt
 from datetime import datetime
-from PIL import Image, ImageChops
+from PIL import Image
 from reportlab.lib.pagesizes import portrait
 from reportlab.pdfgen import canvas
-
-from backend.b2_Solution.b24_DataCollection.b242_BookData.b2421_BestSellerWebScraper import BestsellerWebScraper
 
 ##########################
 ##########################

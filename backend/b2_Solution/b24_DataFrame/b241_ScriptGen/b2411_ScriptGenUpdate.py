@@ -170,12 +170,12 @@ def ScriptGenOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## ScriptGen 프롬프트 요청 및 결과물 Json화
-def ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, Process = "ScriptGen", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def ScriptGenProcess(projectName, email, DataFramePath, ScriptConfig, TextDirPath, Process = "ScriptGen", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, "ScriptGen")
 
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '00', DataFramePath)
-    inputList = LoadRawScriptToInputList(projectName, email, ScriptGen['Process'], TextDirPath)
+    inputList = LoadRawScriptToInputList(projectName, email, ScriptConfig['Process'], TextDirPath)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
         return OutputMemoryDicsFile
@@ -225,13 +225,13 @@ def ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, 
             outputEnder = ""
 
             # Response 생성
-            if ScriptGen['Model'] == "OpenAI":
-                Response, Usage, Model = OpenAI_LLMresponse(projectName, email, ScriptGen['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
-            elif ScriptGen['Model'] == "ANTHROPIC":
-                Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, ScriptGen['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            if ScriptConfig['Model'] == "OpenAI":
+                Response, Usage, Model = OpenAI_LLMresponse(projectName, email, ScriptConfig['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            elif ScriptConfig['Model'] == "ANTHROPIC":
+                Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, ScriptConfig['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
-            promptFrame = GetPromptFrame(ScriptGen['Process'])
+            promptFrame = GetPromptFrame(ScriptConfig['Process'])
             if mode in ["Example", "ExampleFineTuning", "Master"]:
                 Example = promptFrame[0]["Example"]
                 if Response.startswith(Example[2]["OutputStarter"]):
@@ -244,7 +244,7 @@ def ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, 
                     if Response.startswith(outputEnder):
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
-            Filter = ScriptGenFilter(responseData, ScriptGen['MainKey'], ScriptGen['KeyList'])
+            Filter = ScriptGenFilter(responseData, ScriptConfig['MainKey'], ScriptConfig['KeyList'])
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -305,10 +305,10 @@ def ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, 
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
 ## 데이터 치환
-def ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, ScriptGen, messagesReview = 'off', mode = "Memory"):   
+def ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, ScriptConfig, messagesReview = 'off', mode = "Memory"):   
     ### A. 데이터 치환 ###
-    RawScriptJson = LoadRawScript(projectName, email, ScriptGen['Process'], TextDirPath)
-    outputMemoryDics = ScriptGenProcess(projectName, email, DataFramePath, ScriptGen, TextDirPath, MessagesReview = messagesReview, Mode = ScriptGen['Mode'])
+    RawScriptJson = LoadRawScript(projectName, email, ScriptConfig['Process'], TextDirPath)
+    outputMemoryDics = ScriptGenProcess(projectName, email, DataFramePath, ScriptConfig, TextDirPath, MessagesReview = messagesReview, Mode = ScriptConfig['Mode'])
 
     responseJson = []
     ScriptIndex = ''
@@ -319,8 +319,8 @@ def ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, Script
             Title = f"<{RawScriptJson[i]['Title']}>\n"
             Name = f"{RawScriptJson[i]['Name']}\n\n"
             Scripts = ""
-            for Key in ScriptGen['KeyList']:
-                Scripts += f"{outputMemoryDics[i][0][ScriptGen['MainKey']][Key]}\n\n"
+            for Key in ScriptConfig['KeyList']:
+                Scripts += f"{outputMemoryDics[i][0][ScriptConfig['MainKey']][Key]}\n\n"
             
             Script = Title + Name + Scripts
             ScriptDic = {'ScriptId': i+1, 'Script': Script}
@@ -332,14 +332,14 @@ def ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, Script
     ## A-2. RawScriptJson에 Title이 표기된 경우 (프롬프트에 타이틀을 주어준 경우)
     else:
         for i in range(len(outputMemoryDics)):
-            ScriptIndex = f"{outputMemoryDics[i][0][ScriptGen['MainKey']][ScriptGen['KeyList'][0]]}"
-            ScriptBody = f"{outputMemoryDics[i][0][ScriptGen['MainKey']][ScriptGen['KeyList'][1]]}"
+            ScriptIndex = f"{outputMemoryDics[i][0][ScriptConfig['MainKey']][ScriptConfig['KeyList'][0]]}"
+            ScriptBody = f"{outputMemoryDics[i][0][ScriptConfig['MainKey']][ScriptConfig['KeyList'][1]]}"
             ScriptDic = {'ScriptId': i+1, 'Script': ScriptBody}
             
             responseJson.append(ScriptDic)
     
     ### B. projectName_Index.text 저장 ###
-    if ScriptGen['RawMode'] == 'on':
+    if ScriptConfig['RawMode'] == 'on':
         ScriptRawIndexFilePath = TextDirPath + f'/{projectName}_Index(Raw).txt'
         ScriptRawBodyFilePath = TextDirPath + f'/{projectName}_Body(Raw).txt'
     else:
@@ -360,7 +360,7 @@ def ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, Script
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 ScriptGen에 업데이트
-def ScriptGenUpdate(projectName, email, DataFramePath, ScriptGen, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+def ScriptGenUpdate(projectName, email, DataFramePath, ScriptConfig, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     # 경로 설정
     TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
     IndexTextFilePath = TextDirPath + f'/{projectName}_Index.txt'
@@ -379,14 +379,14 @@ def ScriptGenUpdate(projectName, email, DataFramePath, ScriptGen, MessagesReview
                 AddExistedDataSetToDB(projectName, email, "ScriptGen", ExistedDataSet)
                 print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenUpdate는 ExistedScriptGen으로 대처됨 ]\n")
                 
-                responseJson = ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, ScriptGen, messagesReview = MessagesReview, mode = Mode)
+                responseJson = ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, ScriptConfig, messagesReview = MessagesReview, mode = Mode)
 
                 if os.path.exists(RawIndexTextFilePath) and os.path.exists(RawBodyTextFilePath):
                     sys.exit(f"\n\n[ ((({projectName}_Index(Raw).txt))), ((({projectName}_Body(Raw).txt))) 파일을 완성한뒤 파일이름 뒤에  -> (Raw) <- 를 제거해 주세요. ]\n({TextDirPath})\n\n1. 타이틀과 로그 부분을 작성\n2. 추가로 필요한 내용 작성\n3. 낭독이 바뀌는 부분에 \"...\" 쌍따옴표 처리\n\n4. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n5. 본문(_Body)파일 내 쌍따옴표(“대화문”의 완성) 개수 일치 * _Body(검수용) 파일 확인\n6. 캡션 등의 줄바꿈 및 캡션이 아닌 일반 문장은 마지막 온점(.)처리\n\n7. {projectName}_Index(Raw).txt, {projectName}_Body(Raw).txt 파일명에 -> (Raw) <- 를 제거\n\n")
                 else:
                     time.sleep(0.1)
             else:
-                responseJson = ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, ScriptGen, messagesReview = MessagesReview, mode = Mode)
+                responseJson = ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, ScriptConfig, messagesReview = MessagesReview, mode = Mode)
                 
                 # ResponseJson을 ContinueCount로 슬라이스
                 ResponseJson = responseJson[ScriptCount:]

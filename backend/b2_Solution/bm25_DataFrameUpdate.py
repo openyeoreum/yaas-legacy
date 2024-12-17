@@ -161,7 +161,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
 ###################################
 
 ### 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-def SolutionDataFrameUpdate(email, projectName, scriptGen, indexMode = "Define", messagesReview = "on", bookGenre = "Auto", Translations = []):
+def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesReview = "on", bookGenre = "Auto", Translations = []):
     ############################ 하이퍼 파라미터 설정 ############################
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
@@ -171,6 +171,11 @@ def SolutionDataFrameUpdate(email, projectName, scriptGen, indexMode = "Define",
     ### existedDataFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
     existedDataFrameMode = "on" # <- 개발 후 off #
     
+    ProjectConfig = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_config.json"
+    with open(ProjectConfig, 'r', encoding = 'utf-8') as ConfigJson:
+        Config = json.load(ConfigJson)
+        ScriptConfig = Config['ScriptConfig']
+
     # existedDataFrame 초기화
     existedDataFrame = None
     existedDataSet = None
@@ -190,14 +195,14 @@ def SolutionDataFrameUpdate(email, projectName, scriptGen, indexMode = "Define",
     ####################
     ### 00_ScriptGen ###
     ####################
-    if scriptGen['ScriptGen'] == 'on':
+    if ScriptConfig != {}:
         InitScriptGen(projectName, email)
         InitRawDataSet(projectName, email, "ScriptGen")
         if existedDataFrameMode == "on":
             existedDataFrame = LoadexistedDataFrame(projectName, email, "ScriptGenFrame", DataFramePath)
             recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ScriptGen", RawDataSetPath)
         mode = "Memory"
-        ScriptGenUpdate(projectName, email, DataFramePath, scriptGen, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+        ScriptGenUpdate(projectName, email, DataFramePath, ScriptConfig, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
         if existedDataFrame == None:
             updatedScriptGen = UpdatedScriptGen(projectName, email)
             SaveDataFrame(projectName, email, "00_ScriptGenFrame", updatedScriptGen, DataFramePath)
@@ -210,7 +215,7 @@ def SolutionDataFrameUpdate(email, projectName, scriptGen, indexMode = "Define",
     #########################
     ### 00_BookPreprocess ###
     #########################
-    if scriptGen['ScriptGen'] != 'on':
+    if ScriptConfig == {}:
         InitBookPreprocess(projectName, email)
         InitRawDataSet(projectName, email, "BookPreprocess")
         if existedDataFrameMode == "on":

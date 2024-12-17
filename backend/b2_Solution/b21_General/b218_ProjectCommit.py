@@ -40,10 +40,6 @@ def AddProjectToDB(projectName, email):
         
         masterTextBookPath = os.path.join(projectPath, f"{projectName}_master_textbook_file")
         
-        mixedContentBookPath = os.path.join(projectPath, f"{projectName}_mixed_contentbook_file")
-        
-        masterContentBookPath = os.path.join(projectPath, f"{projectName}_master_contentbook_file")
-        
         mixedAudioBookPath = os.path.join(projectPath, f"{projectName}_mixed_audiobook_file")
         
         voiceLayersPath = os.path.join(mixedAudioBookPath, 'VoiceLayers')
@@ -69,6 +65,9 @@ def AddProjectToDB(projectName, email):
         music2FolderPath = os.path.join(musicLayersPath, 'Music2')
         
         masterAudioBookPath = os.path.join(projectPath, f"{projectName}_master_audiobook_file")
+        
+        marketingPath = os.path.join(projectPath, f"{projectName}_marketing_file")
+        
         # 디렉토리 생성
         if not os.path.exists(scriptPath):
             os.makedirs(projectPath, exist_ok = True)
@@ -78,8 +77,6 @@ def AddProjectToDB(projectName, email):
             os.makedirs(estimatePath, exist_ok = True)
             os.makedirs(mixedTextBookPath, exist_ok = True)
             os.makedirs(masterTextBookPath, exist_ok = True)
-            os.makedirs(mixedContentBookPath, exist_ok = True)
-            os.makedirs(masterContentBookPath, exist_ok = True)
             os.makedirs(mixedAudioBookPath, exist_ok = True)
             os.makedirs(voiceLayersPath, exist_ok = True)
             # os.makedirs(narratorPath, exist_ok = True)
@@ -100,6 +97,7 @@ def AddProjectToDB(projectName, email):
             os.makedirs(music1FolderPath, exist_ok = True)
             os.makedirs(music2FolderPath, exist_ok = True)
             os.makedirs(masterAudioBookPath, exist_ok = True)
+            os.makedirs(marketingPath, exist_ok = True)
 
         # JSON 데이터 불러오기
         ProjectDataPath = GetProjectDataPath()

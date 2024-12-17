@@ -5,162 +5,179 @@ import unicodedata
 import sys
 sys.path.append("/yaas")
 
-from dotenv import load_dotenv
 from b2_Solution.bm21_GeneralUpdate import AccountUpdate, SolutionProjectUpdate
-from backend.b2_Solution.bm23_DataFrameUpdate import SolutionDataFrameUpdate
-from backend.b2_Solution.bm24_DataSetUpdate import SolutionDataSetUpdate
-from backend.b4_Creation.bm27_AudioBookUpdate import CreationAudioBookUpdate
+from backend.b2_Solution.bm25_DataFrameUpdate import SolutionDataFrameUpdate
+from backend.b4_Creation.bm28_AudioBookUpdate import CreationAudioBookUpdate
 
-### Main1 : 프로젝트 Config 생성 ###
-def ConfigUpdate(ProjectNameList, MainProcess, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MusicDB):
+### Step3 : 프로젝트 Config 설정 ###
+## YaaSConfig 로드
+def LoadYaaSConfig(ProjectName):
+    ConfigPath = f'/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{ProjectName}/{ProjectName}_config.json'
+    if not os.path.exists(ConfigPath):
+        with open(ConfigPath, 'w', encoding = 'utf-8') as ConfigJson:
+            json.dump({}, ConfigJson, ensure_ascii = False, indent = 4)
+    
+    with open(ConfigPath, 'r', encoding='utf-8') as ConfigJson:
+        YaasConfig = json.load(ConfigJson)
+        
+    return YaasConfig, ConfigPath
 
-    ConfigPath = '/yaas/backend/yaasconfig.json'
-    with open(ConfigPath, 'r', encoding = 'utf-8') as ConfigJson:
-        ConfigData = json.load(ConfigJson)
+## YaaSConfig 설정
+def YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing):
 
-    for projectName in ProjectNameList:
-        if unicodedata.normalize('NFC', projectName) not in ConfigData:
-            ConfigData[unicodedata.normalize('NFC', projectName)] = {
-                "email": "yeoreum00128@gmail.com",
-                "name": "yeoreum",
-                "password": "0128",
-                "ProjectNameList": [projectName],
-                "MainProcess": MainProcess,
-                "Translations": [],
-                "ScriptGen": ScriptGen,
+    ## YaaSConfig 로드
+    YaasConfig, ConfigPath = LoadYaaSConfig(StartProjectName)
+
+    ## YaaSConfig 설정
+    if YaasConfig == {}:
+        print(f"[ Project: {StartProjectName} | Config.json 생성 및 설정 ]")
+        
+        ### Step3-1 : Project 설정 ###
+        email = "yeoreum00128@gmail.com"
+        name = "yeoreum"
+        password = "0128"
+        ProjectName = StartProjectName
+        MainLang = MainLang
+        Translations = Translations
+        
+        ### Step3-2 : EstimateConfig 설정 ###
+        if Estimate == ["None"]:
+            EstimateConfig = {}
+        else:
+            EstimateConfig = {"Estimate": Estimate}
+            
+        ### Step3-3 : DataCollectionConfig 설정 ###
+        if DataCollection == ["None"]:
+            DataCollectionConfig = {}
+        else:
+            DataCollectionConfig = {"DataCollection": DataCollection}
+            
+        ### Step3-4 : ScriptConfig 설정 ###
+        if Script == ["None"]:
+            ScriptConfig = {}
+        else:
+            ScriptConfig = {"Script": Script}
+            
+        ### Step3-5 : TextBookConfig 설정 ###
+        if TextBook == ["None"]:
+            TextBookConfig = {}
+        else:
+            TextBookConfig = {"TextBook": TextBook}
+            
+        ### Step3-6 : AudioBookConfig 설정 ###
+        print(AudioBook)
+        if AudioBook == "None":
+            AudioBookConfig = {}
+        else:
+            CloneVoiceName = AudioBook
+            if "(" in CloneVoiceName and ")" in CloneVoiceName:
+                Narrator = "VoiceActor"
+            else:
+                Narrator = "VoiceClone"
+            AudioBookConfig = {
                 "IndexMode": "Define",
                 "BookGenre": "Auto",
-                "MainLang": "Ko",
                 "Narrator": Narrator,
                 "CloneVoiceName": CloneVoiceName,
-                "ReadingStyle": ReadingStyle,
+                "ReadingStyle": "NarratorOnly",
                 "VoiceEnhance": "off",
                 "VoiceReverbe": "on",
                 "Intro": "off",
                 "AudiobookSplitting": "Auto",
-                "MusicDB": MusicDB,
-                "EndMusicVolume": -10
+                "MusicDB": "Template",
+                "EndMusicVolume": -10,
+                "VoiceFileGen": "off",
+                "Bitrate": "320k",
+                "Macro": "Auto",
+                "Bracket": "Auto",
+                "VolumeEqual": "Mastering"
             }
+            
+        ### Step3-7 MarketingConfig 설정 ###
+        if Marketing == ["None"]:
+            MarketingConfig = {}
+        else:
+            MarketingConfig = {"Marketing": Marketing}
+        
+        ## YaaSConfig 업데이트
+        YaasConfig = {"email": email, "name": name, "password": password, "ProjectName": ProjectName, "MainLang": MainLang, "Translations": Translations, "EstimateConfig": EstimateConfig, "DataCollectionConfig": DataCollectionConfig, "ScriptConfig": ScriptConfig, "TextBookConfig": TextBookConfig, "AudioBookConfig": AudioBookConfig, "MarketingConfig": MarketingConfig}
 
+    ## 업데이트 된 YaaSConfig 저장
     with open(ConfigPath, 'w', encoding = 'utf-8') as ConfigJson:
-        json.dump(ConfigData, ConfigJson, ensure_ascii = False, indent = 4)
+        json.dump(YaasConfig, ConfigJson, ensure_ascii = False, indent = 4)
 
-### Main1 : 솔루션 업데이트 ###
-def SolutionUpdate(email, ProjectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations):
 
-    # ## .env 파일 로드(API_KEY 등 환경 변수 액세스)
-    # envPath = os.path.join(os.path.dirname(__file__), '..', 'storage', '.env')
-    # load_dotenv(dotenv_path = envPath)
-
-    if isinstance(ProjectNameList, list):
-        ## NFC, NFD 오류 문제 해결 (모두 적용)
-        for projectName in ProjectNameList:
-            projectName = unicodedata.normalize('NFC', projectName)
-            # ScriptFilesPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_ScriptFiles"
-            # if os.path.join(ScriptFilesPath, unicodedata.normalize('NFC', _projectName) + "_Index.txt"):
-            #     projectName = unicodedata.normalize('NFC', _projectName)
-            # elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFD', _projectName) + "_Index.txt"):
-            #     projectName = unicodedata.normalize('NFD', _projectName)
-            # elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFKC', _projectName) + "_Index.txt"):
-            #     projectName = unicodedata.normalize('NFKC', _projectName)
-            # elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFKD', _projectName) + "_Index.txt"):
-            #     projectName = unicodedata.normalize('NFKD', _projectName)
-            # else:
-            #     projectName = _projectName
-
-            ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
-            SolutionProjectUpdate(email, projectName, ScriptGen)
-            
-            ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-            SolutionDataFrameUpdate(email, projectName, scriptGen = ScriptGen, indexMode = IndexMode, messagesReview = MessagesReview, bookGenre = BookGenre, Translations = Translations)
-            
-            # ### Step4 : 솔루션에 프로젝트 데이터셋 학습진행 및 업데이트 ###
-            # SolutionDataSetUpdate(email, projectName)
+### Step4-8 : 'Estimate', 'DataCollection', 'Script', 'TextBook', 'AudioBook', 'Marketing' ###
+### Step8 : AudioBook 업데이트 ###
+def AudioBookUpdate(email, ProjectName, Translations, IndexMode, BookGenre, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview):
     
-    else:
+    ### Step8-1 : AudioBook 데이터 프레임 ###
+    SolutionDataFrameUpdate(email, ProjectName, indexMode = IndexMode, messagesReview = MessagesReview)
+    
+    ### Step8-2 : AudioBook 제작 ###
+    CreationAudioBookUpdate(ProjectName, email, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, audiobookSplitting = AudiobookSplitting, musicDB = MusicDB, endMusicVolume = EndMusicVolume, macro = Macro, bracket = Bracket, volumeEqual = VolumeEqual, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, bitrate = Bitrate, messagesReview = MessagesReview)
+
+     
+### Main2 : YaaS에서 통합으로 'Estimate', 'DataCollection', 'Script', 'TextBook', 'AudioBook', 'Marketing' 제작 ###
+def YaaS(email, ProjectName, MainLang, Translations, EstimateConfig, DataCollectionConfig, ScriptConfig, TextBookConfig, AudioBookConfig, MarketingConfig, MessagesReview, Account):
+    
+    ### Step4 : Estimate 업데이트 ###
+    if EstimateConfig != "None":
+        pass
+    
+    ### Step5 : DataCollection 업데이트 ###
+    if DataCollectionConfig != "None":
+        pass
+    
+    ### Step6 : Script 업데이트 ###
+    if ScriptConfig != "None":
+        pass
+        
+    ### Step7 : TextBook 업데이트 ###
+    if TextBookConfig != "None":
+        pass
+    
+    ### Step8 : AudioBook 업데이트 ###
+    if AudioBookConfig != "None":
+        AudioBookUpdate(email, ProjectName, Translations, AudioBookConfig['IndexMode'], AudioBookConfig['BookGenre'], AudioBookConfig['Narrator'], AudioBookConfig['CloneVoiceName'], AudioBookConfig['ReadingStyle'], AudioBookConfig['VoiceReverbe'], MainLang, AudioBookConfig['Intro'], AudioBookConfig['AudiobookSplitting'], AudioBookConfig['MusicDB'], AudioBookConfig['EndMusicVolume'], AudioBookConfig['Macro'], AudioBookConfig['Bracket'], AudioBookConfig['VolumeEqual'], Account, AudioBookConfig['VoiceEnhance'], AudioBookConfig['VoiceFileGen'], AudioBookConfig['Bitrate'], MessagesReview)
+    
+    ### Step9 : Marketing 업데이트 ###
+    if MarketingConfig != "None":
+        pass
+
+### Main1 : YaaS Multiprocessing에서 병렬로 'Estimate', 'DataCollection', 'Script', 'TextBook', 'AudioBook', 'Marketing' 동시 제작 ###
+def MultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing, MessagesReview, Account):
+    ## ProjectNameList NFC 정규화
+    StartProjectName = unicodedata.normalize("NFC", ProjectNameList["StartProjectName"])
+    NFCProjectNameList = []
+    for ProjectName in ProjectNameList["ContinueProjectNameList"]:
+        NFCProjectNameList.append(unicodedata.normalize("NFC", ProjectName))
+    projectNameList = NFCProjectNameList + [StartProjectName]
+    
+    print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
+    
+    ## MultiProcessing 실행
+    MultiProcess = []
+    for projectName in projectNameList:
+        ### Step1 : 솔루션에 계정정보 업데이트 ###
+        AccountUpdate(User['email'], User['name'], User['password'])
         ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
-        SolutionProjectUpdate(email, projectName, ScriptGen)
+        SolutionProjectUpdate(User['email'], StartProjectName)
+        ### Step3 : 프로젝트 Config 설정 ###
+        if projectName == StartProjectName:
+            YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing)
+        ## Config 불러오기
+        YaasConfig, ConfigPath = LoadYaaSConfig(projectName)
         
-        ### Step3 : 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-        SolutionDataFrameUpdate(email, projectName, scriptGen = ScriptGen, indexMode = IndexMode, messagesReview = MessagesReview)
-        
-        # ### Step4 : 솔루션에 프로젝트 데이터셋 학습진행 및 업데이트 ###
-        # SolutionDataSetUpdate(email, projectName)
-        
-### Main2 : 콘텐츠 제작 ###
-
-def CreationUpdate(email, ProjectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview):
-
-    if isinstance(ProjectNameList, list):
-        ## NFC, NFD 오류 문제 해결 (모두 적용)
-        for projectName in ProjectNameList:
-            projectName = unicodedata.normalize('NFC', projectName)
-            # ScriptFilesPath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s121_ScriptFiles"
-            # if os.path.join(ScriptFilesPath, unicodedata.normalize('NFC', _projectName) + "_Index.txt"):
-            #     projectName = unicodedata.normalize('NFC', _projectName)
-            # elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFD', _projectName) + "_Index.txt"):
-            #     projectName = unicodedata.normalize('NFD', _projectName)
-            # elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFKC', _projectName) + "_Index.txt"):
-            #     projectName = unicodedata.normalize('NFKC', _projectName)
-            # elif os.path.join(ScriptFilesPath, unicodedata.normalize('NFKD', _projectName) + "_Index.txt"):
-            #     projectName = unicodedata.normalize('NFKD', _projectName)
-            # else:
-            #     projectName = _projectName
-
-            ### Step6 : 크리에이션이 오디오북 제작 ###
-            CreationAudioBookUpdate(projectName, email, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, audiobookSplitting = AudiobookSplitting, musicDB = MusicDB, endMusicVolume = EndMusicVolume, macro = Macro, bracket = Bracket, volumeEqual = VolumeEqual, account = Account, voiceEnhance = VoiceEnhance, voiceFileGen = VoiceFileGen, bitrate = Bitrate, messagesReview = MessagesReview)
-            
-### YaaS : YaaS의 통합으로 'Solution', 'Solution&Creation' ###
-
-def YaaS(email, name, password, ProjectNameList, MainProcess, Translations, ScriptGen, IndexMode, MessagesReview, BookGenre, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, VoiceEnhance, VoiceFileGen, Bitrate, Macro, Bracket, VolumeEqual, Account):
-    ## 범용 프로세스
-    AccountUpdate(email, name, password)
-    
-    ##
-    if MainProcess == 'Solution':
-        SolutionUpdate(email, ProjectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations)
-        
-    elif MainProcess == 'Solution&Creation':
-        SolutionUpdate(email, ProjectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations)
-        CreationUpdate(email, ProjectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview)
-        
-    elif MainProcess == 'Sample':
-        SolutionUpdate(email, ProjectNameList, ScriptGen, IndexMode, MessagesReview, BookGenre, Translations)
-        CreationUpdate(email, ProjectNameList, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview)
-
-### YaaS Multiprocessing : 오디오북 병렬 제작 ###
-
-## yaasconfig 로드
-def Loadyaasconfig(yaasconfigPath = '/yaas/backend/yaasconfig.json'):
-    with open(yaasconfigPath, 'r') as f:
-        yaasconfig = json.load(f)
-    return yaasconfig
-
-## MultiProcessing
-def MultiProcessing(ProjectNameList, MainProcess, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MusicDB, MessagesReview, VoiceFileGen, Bitrate, Macro, Bracket, VolumeEqual, Account, yaasconfigPath = '/yaas/backend/yaasconfig.json'):
-    print(f"[ Projects: {ProjectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
-    ConfigUpdate(ProjectNameList, MainProcess, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MusicDB)
-    yaasconfig = Loadyaasconfig(yaasconfigPath = yaasconfigPath)
-    
-    processes = []
-    for projectName in ProjectNameList:
-        ## NFC, NFD 오류 문제 해결 (모두 적용)
-        projectName = unicodedata.normalize('NFC', projectName)
-        CloneVoiceName = unicodedata.normalize('NFC', CloneVoiceName)
-        
-        YaasConfig = yaasconfig[projectName]
-        Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["name"], YaasConfig["password"], YaasConfig["ProjectNameList"], YaasConfig["MainProcess"], YaasConfig["Translations"], YaasConfig["ScriptGen"], YaasConfig["IndexMode"], MessagesReview, YaasConfig["BookGenre"], YaasConfig["Narrator"], YaasConfig["CloneVoiceName"], YaasConfig["ReadingStyle"], YaasConfig["VoiceReverbe"], YaasConfig["MainLang"], YaasConfig["Intro"], YaasConfig["AudiobookSplitting"], YaasConfig["MusicDB"], YaasConfig["EndMusicVolume"], YaasConfig["VoiceEnhance"], VoiceFileGen, Bitrate, Macro, Bracket, VolumeEqual, Account))
-        processes.append(Process)
+        Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["ProjectName"], YaasConfig["MainLang"], YaasConfig["Translations"], YaasConfig["EstimateConfig"], YaasConfig["DataCollectionConfig"], YaasConfig["ScriptConfig"], YaasConfig["TextBookConfig"], YaasConfig["AudioBookConfig"], YaasConfig["MarketingConfig"], MessagesReview, Account))
+        MultiProcess.append(Process)
         Process.start()
         
-    # 모든 프로세스가 종료될 때까지 기다림
-    for p in processes:
-        p.join()
+    ## 모든 프로세스가 종료될 때까지 기다림
+    for process in MultiProcess:
+        process.join()
         
-    print(f"[ Projects: {ProjectNameList} | 병렬 프로세스(MultiProcessing) 완료 ]")
-
-## 추가 병렬 진행 : 코세라 라이프 그래프 최신화
-## 추가 병렬 진행 : 교보문고 베스트셀러 스크래핑
+    print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 완료 ]")
 
 if __name__ == "__main__":
 
@@ -174,21 +191,21 @@ if __name__ == "__main__":
     # 우리반시집: {"ScriptGen": "on", "RawMode": "off", "Model": "ANTHROPIC", "Process": "SejongCityOfficeOfEducation_Poem", "Mode": "Master", "MainKey": "단락", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]}
     # 빼기명상을통한나의변화: {"ScriptGen": "on", "RawMode": "off", "Model": "ANTHROPIC", "Process": "ChangesAfterMeditation_Script", "Mode": "Master", "MainKey": "글내용", "KeyList": ["목차", "내용"]}
 
-    ProjectNameList = ["241204_개정교육과정초등교과별이해연수"]
-    MainProcess = "Solution&Creation" # 'Solution', 'Solution&Creation', 'Sample'
-    # MainProcess = {"DataCollection": ["None 또는 Domain(도메인은 OO트렌드) 중 다중 선택"], "Estimate": ["None 또는 TextBook, AudioBook, VideoBook 중 다중 선택"], "Script": "None 또는 Domain(도메인은 OO트렌드) 중 선택", "TextBook": "None 또는 텍스트북 템플릿 중 선택", "AudioBook": "None 또는 오디오북 클로닝 여부 등 선택", "Sample": ["None 또는 TextBook, AudioBook, VideoBook 중 다중 선택"], "Marketing": ["None 또는 템플릿 리스트 중 다중 선택"]} # ScriptProcess는 별도로 구성해줘야함, 번역은 ScriptProcess 단계에서 발생해야함
-    ScriptGen = {"ScriptGen": "off", "RawMode": "on", "Model": "ANTHROPIC", "Process": "", "Mode": "Master", "MainKey": "", "KeyList": []} # 'Gen' : 'on', 'off' : on 은 스크립트 생성으로 시작, off 는 스트립트 생성 필요없음 / 'RawMode' : 'on', 'off' : on 은 _Index(Raw).txt 및 _Body(Raw).txt 생성, off 는 _Index.txt 및 _Body.txt 생성 / 'Process' : 'SejongCityOfficeOfEducation_Poem' ... / 'MainKey': 'KeyList' : '메인키': ['프롬프트 결과로', '나오는 KeyList', '작성']
-    Narrator = "VoiceActor" # 'VoiceActor', 'VoiceClone' : VoiceActor 은 일반성우 나레이터, VoiceClone 은 저자성우 나레이터
-    CloneVoiceName = "" # 'Narrator = 'VoiceActor' 인 경우 '저자명(특성)' 작성, 'Narrator' = 'VoiceClone' 인 경우 '저자명' 작성
-    ReadingStyle = "NarratorOnly" # 'AllCharacters', 'NarratorOnly' : AllCharacters 는 등장인물별 목소리로 낭독, NarratorOnly 는 1인 나레이터 낭독
-    MusicDB = "Template" # 'Storage', 'Template', 'ProjectName' : Storage 는 음악을 Storage 에서 선택, Template 는 음악을 Template 에서 선택, ProjectName 은 Template 에서 해당 프로젝트에서 선택
+    User = {"email": "yeoreum00128@gmail.com", "name": "yeoreum", "password": "0128"}
+    ProjectNameList = {"StartProjectName": "241204_개정교육과정초등교과별이해연수", "ContinueProjectNameList": []}
+    MainLang = "Ko" # 'Ko', 'En', 'Ja', 'Zh', 'Es' ... 중 메인이 되는 언어를 선택
+    Translations = [] # 'En', 'Ja', 'Zh', 'Es' ... 중 다중 선택
+    
+    Estimate = ["AudioBook"] # 'None', 'TextBook', 'AudioBook', 'VideoBook' ... 중 견적이 필요한 제작을 다중 선택
+    DataCollection = ["None"] # 'None', 'Book', 'Meditation', 'Architect' ... 중 데이터 수집이 필요한 도메인을 다중 선택
+    Script = ["None"] # 'None', 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 다중 선택
+    TextBook = ["None"] # 'None', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
+    AudioBook = "진미옥" # 'None', '클로닝성우이름', '성우이름(특성)' ... 중 선택
+    Marketing = ["None"] # 'None', 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택
+    
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
-    VoiceFileGen = "off" # 'on', 'off' : on 은 Voice.wav 파일 생성, off 는 Voice.wav 파일 비생성
-    Bitrate = "320k" # 320k, 192k, 128k, 64k : 최종 저장되는 오디오북 mp3파일의 음질
-    Macro = "Auto" # 'Auto', 'Manual' : Auto는 API 캐릭터 변경 자동, Manual은 API 캐릭터 변경 수동
-    Bracket = "Auto" # 'Auto', 'Manual', 'Practice' : Auto는 대괄호 자동, Manual은 대괄호 수동, Practice는 연습
-    VolumeEqual = "Mastering" # 'Mixing', 'Mastering' : Mixing은 작업중, Mastering은 최종 마무리로 모든 음성 일률화
-    Account = "junyoung8@nate.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com', 'kka6887@hanmail.net', 'aldus5909@naver.com', 'junyoung8@nate.com'
+    Account = "junyoung8@nate.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com', 'kka6887@hanmail.net', 'aldus5909@naver.com', 'junyoung8@nate.com' ... 중 선택
+
     #########################################################################
 
-    MultiProcessing(ProjectNameList, MainProcess, ScriptGen, Narrator, CloneVoiceName, ReadingStyle, MusicDB, MessagesReview, VoiceFileGen, Bitrate, Macro, Bracket, VolumeEqual, Account)
+    MultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing, MessagesReview, Account)

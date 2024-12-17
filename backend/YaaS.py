@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 
 from b2_Solution.bm21_GeneralUpdate import AccountUpdate, SolutionProjectUpdate
 from backend.b2_Solution.bm25_DataFrameUpdate import SolutionDataFrameUpdate
-from backend.b4_Creation.bm29_AudioBookUpdate import CreationAudioBookUpdate
+from backend.b4_Creation.bm28_AudioBookUpdate import CreationAudioBookUpdate
 
 ### Step3 : 프로젝트 Config 설정 ###
 ## YaaSConfig 로드

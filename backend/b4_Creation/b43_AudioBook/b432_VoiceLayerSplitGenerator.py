@@ -2156,6 +2156,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 chunk = chunk[:-3].replace('.', '') + chunk[-3:]
                 # 4. ~,는 .로 변경
                 chunk = chunk.replace('~,', '.\n')
+                chunk = chunk.replace('.\n ', '.\n')
                 return chunk
             ## 끝에서부터 3개의 문자에서 '.', ',', ' '가 있으면 이를 제거 후 마지막에 ',' 표기
             def ModifyTCChunk(chunk):

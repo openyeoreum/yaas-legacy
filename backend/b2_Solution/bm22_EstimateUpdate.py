@@ -37,6 +37,9 @@ def EstimateSettingGen(projectName, Estimate, Estimates):
     ProjectEstimateFilePath = os.path.join(EstimateFilePath, EstimateFile)
     RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s141_RunningTimeData"
     
+    if not os.path.exists(EstimateFilePath):
+        os.makedirs(EstimateFilePath)
+    
     ## 01_ScriptText 불러오기 ##
     if os.path.exists(ProjectScriptFilePath):
         with open(ProjectScriptFilePath, 'r', encoding = 'utf-8') as TextFile:
@@ -64,8 +67,8 @@ def EstimateSettingGen(projectName, Estimate, Estimates):
         
         ## 04_Estimate_Setting Json 생성 ##
         if Estimate == "TextBook":
-            StandardPrice = 100000 * EstimateScriptLenth/10000
-            PremiumPrice = 200000 * EstimateScriptLenth/10000
+            StandardPrice = 1000000 * EstimateScriptLenth/10000
+            PremiumPrice = 1250000 * EstimateScriptLenth/10000
         if Estimate == "AudioBook":
             StandardPrice = 200000 * EstimateScriptLenth/10000
             PremiumPrice = 250000 * EstimateScriptLenth/10000
@@ -116,14 +119,14 @@ def EstimateSettingGen(projectName, Estimate, Estimates):
             if projectname != "" and client != "":
                 return EstimateSetting, EstimateFilePath
             else:
-                sys.exit(f"\n[ 샘플 세팅을 완료하세요 : {EstimateFilePath} ]\n")
+                sys.exit(f"\n[ {Estimate} 세팅 : (([{projectName}_{Estimate}Estimate_Setting].json)) 세팅을 완료하세요 ]\n({ProjectEstimateFilePath})\n")
         else:
             with open(ProjectEstimateFilePath, 'r', encoding = 'utf-8') as JsonFile:
                 EstimateSetting = json.load(JsonFile)
             if EstimateSetting['EstimateSetting']['ProjectName'] != "" and EstimateSetting['EstimateSetting']['Client'] != "":
                 return EstimateSetting, EstimateFilePath
             else:
-                sys.exit(f"\n[ 샘플 세팅을 완료하세요 : {EstimateFilePath} ]\n")
+                sys.exit(f"\n[ {Estimate} 세팅 : (([{projectName}_{Estimate}Estimate_Setting].json)) 세팅을 완료하세요 ]\n({ProjectEstimateFilePath})\n")
     else:
         sys.exit(f"\n[ 아래 폴더에 ((({projectName + '_Script.txt'}))) 파일을 넣어주세요 ]\n({ScriptFilePath})\n")
 
@@ -263,18 +266,39 @@ def SolutionEstimateUpdate(projectName, email, Estimates):
             plt.close()
 
             ## 03_견적서 페이지 생성
+            
+            # 견적 옵션
+            if Estimate == "TextBook":
+                EstimateTitle = "매거진 기획&제작 견적서"
+                Option1 = "스탠다드"
+                Option2 = "프리미엄    "
+                Lenth1 = "20-30페이지"
+                Lenth2 = "30-40페이지"
+            if Estimate == "AudioBook":
+                EstimateTitle = "오디오북 제작 견적서"
+                Option1 = "성우 보이스"
+                Option2 = "클로닝 보이스"
+                Lenth1 = Lenth
+                Lenth2 = Lenth
+            if Estimate == "VideoBook":
+                EstimateTitle = "아바타 영상 제작 견적서"
+                Option1 = "앵커 아바타"
+                Option2 = "클로닝 아바타"
+                Lenth1 = Lenth
+                Lenth2 = Lenth
+            
             fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
             fig.patch.set_alpha(0.0) # 투명 배경
             ax.patch.set_alpha(0.0) # 투명 배경
             fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.9, bottom = 0.1)  # 여백 설정
             # 제목
-            ax.text(0.05, 1, f"『{Project}』 {Client}  |  오디오북 제작 견적서", 
+            ax.text(0.05, 1, f"『{Project}』 {Client}  |  {EstimateTitle}", 
             fontsize = 14, weight = 'bold', transform = ax.transAxes, color = 'white')
             # 성우 보이스
-            ax.text(0.05, 0.8, f"선택1: 성우 보이스        {Lenth}       {StandardPriceVAT} (부가세포함)\n\n                                                                       {StandardPrice} ({VoiceActorVAT})", 
+            ax.text(0.05, 0.8, f"선택1: {Option1}        {Lenth1}       {StandardPriceVAT} (부가세포함)\n\n                                                                       {StandardPrice} ({VoiceActorVAT})", 
             fontsize = 11, weight = 'bold', transform = ax.transAxes, color = 'white')
             # 클로닝 보이스
-            ax.text(0.05, 0.5, f"선택2: 클로닝 보이스    {Lenth}       {PremiumPriceVAT} (부가세포함)\n\n                                                                       {PremiumPrice} ({VoiceCloneVAT})", 
+            ax.text(0.05, 0.5, f"선택2: {Option2}    {Lenth2}       {PremiumPriceVAT} (부가세포함)\n\n                                                                       {PremiumPrice} ({VoiceCloneVAT})", 
             fontsize = 11, weight = 'bold', transform = ax.transAxes, color = 'white')
             ax.axis('off')  # 텍스트 영역의 축 숨기기
             

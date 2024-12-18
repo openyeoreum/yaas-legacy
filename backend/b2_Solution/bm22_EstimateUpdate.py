@@ -67,8 +67,8 @@ def EstimateSettingGen(projectName, Estimate, Estimates):
         
         ## 04_Estimate_Setting Json 생성 ##
         if Estimate == "TextBook":
-            StandardPrice = 1000000 * EstimateScriptLenth/10000
-            PremiumPrice = 1250000 * EstimateScriptLenth/10000
+            StandardPrice = 0
+            PremiumPrice = 0
         if Estimate == "AudioBook":
             StandardPrice = 200000 * EstimateScriptLenth/10000
             PremiumPrice = 250000 * EstimateScriptLenth/10000
@@ -233,11 +233,11 @@ def SolutionEstimateUpdate(projectName, email, Estimates):
             
             StandardPriceVAT = EstimateSetting['EstimateSetting']['StandardPrice(estimate+vat)']
             StandardPrice = EstimateSetting['EstimateSetting']['StandardPrice(estimate)']
-            VoiceActorVAT = EstimateSetting['EstimateSetting']['StandardPrice(vat)']
+            StandardVAT = EstimateSetting['EstimateSetting']['StandardPrice(vat)']
             
             PremiumPriceVAT = EstimateSetting['EstimateSetting']['PremiumPrice(estimate+vat)']
             PremiumPrice = EstimateSetting['EstimateSetting']['PremiumPrice(estimate)']
-            VoiceCloneVAT = EstimateSetting['EstimateSetting']['PremiumPrice(vat)']
+            PremiumVAT = EstimateSetting['EstimateSetting']['PremiumPrice(vat)']
             
             ## 기본 폰트 설정, Noto Sans CJK 폰트 경로 설정
             font_path = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
@@ -274,6 +274,12 @@ def SolutionEstimateUpdate(projectName, email, Estimates):
                 Option2 = "프리미엄    "
                 Lenth1 = "20-30페이지"
                 Lenth2 = "30-40페이지"
+                StandardPriceVAT = "1,100,000원"
+                StandardPrice = "1,000,000원"
+                StandardVAT = "100,000원"
+                PremiumPriceVAT = "1,375,000원"
+                PremiumPrice = "1,250,000원"
+                PremiumVAT = "125,000원"
             if Estimate == "AudioBook":
                 EstimateTitle = "오디오북 제작 견적서"
                 Option1 = "성우 보이스"
@@ -295,10 +301,10 @@ def SolutionEstimateUpdate(projectName, email, Estimates):
             ax.text(0.05, 1, f"『{Project}』 {Client}  |  {EstimateTitle}", 
             fontsize = 14, weight = 'bold', transform = ax.transAxes, color = 'white')
             # 성우 보이스
-            ax.text(0.05, 0.8, f"선택1: {Option1}        {Lenth1}       {StandardPriceVAT} (부가세포함)\n\n                                                                       {StandardPrice} ({VoiceActorVAT})", 
+            ax.text(0.05, 0.8, f"선택1: {Option1}        {Lenth1}       {StandardPriceVAT} (부가세포함)\n\n                                                                       {StandardPrice} ({StandardVAT})", 
             fontsize = 11, weight = 'bold', transform = ax.transAxes, color = 'white')
             # 클로닝 보이스
-            ax.text(0.05, 0.5, f"선택2: {Option2}    {Lenth2}       {PremiumPriceVAT} (부가세포함)\n\n                                                                       {PremiumPrice} ({VoiceCloneVAT})", 
+            ax.text(0.05, 0.5, f"선택2: {Option2}    {Lenth2}       {PremiumPriceVAT} (부가세포함)\n\n                                                                       {PremiumPrice} ({PremiumVAT})", 
             fontsize = 11, weight = 'bold', transform = ax.transAxes, color = 'white')
             ax.axis('off')  # 텍스트 영역의 축 숨기기
             

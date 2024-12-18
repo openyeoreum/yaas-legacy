@@ -188,6 +188,8 @@ def YaaS(email, ProjectName, MainLang, Translations, EstimateConfig, DataCollect
 
 ### Main1-1 : YaaS Multiprocessing 모두 종료 ###
 def YaaSMultiprocessingExit(projectNameList, MultiProcess):
+
+    ## MultiProcessing 종료
     print(f"\n\n[ Projects: {projectNameList} | 모든 병렬 프로세스(YaaS Multiprocessing) 종료 ]")
     for process in MultiProcess:
         if process.is_alive():
@@ -195,25 +197,27 @@ def YaaSMultiprocessingExit(projectNameList, MultiProcess):
 
 ### Main1-2 : YaaS Multiprocessing 실행 ###
 def YaaSMultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing, MessagesReview, Account):
+
     ## ProjectNameList NFC 정규화
     StartProjectName = unicodedata.normalize("NFC", ProjectNameList["StartProjectName"])
     NFCProjectNameList = []
     for ProjectName in ProjectNameList["ContinueProjectNameList"]:
         NFCProjectNameList.append(unicodedata.normalize("NFC", ProjectName))
     
+
     ## ProjectNameList 유효성 검사
     projectNameList = []
     for _ProjectName in (NFCProjectNameList + [StartProjectName]):
-        if _ProjectName != "":
+        if _ProjectName != "" or _ProjectName != "None":
             if len(_ProjectName.split('_')[0]) == 6:
                 projectNameList.append(_ProjectName)
             else:
-                sys.exit(f'[ 잘못된 프로젝트 이름: ({_ProjectName}), YYMMDD_프로젝트명 형식으로 입력 또는 리스트를 비워주세요 ]')
+                sys.exit(f'[ 잘못된 프로젝트 이름: (({_ProjectName})) -> ((YYMMDD_프로젝트명)) 형식으로 입력 또는 리스트를 비워주세요 ]')
     
+    ## MultiProcessing 실행
     print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
     
     if projectNameList != []:
-        ## MultiProcessing 실행
         MultiProcess = []
         for projectName in projectNameList:
             ### Step1 : 솔루션에 계정정보 업데이트 ###

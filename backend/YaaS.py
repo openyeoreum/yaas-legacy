@@ -212,7 +212,7 @@ def YaaSMultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate,
             if len(_ProjectName.split('_')[0]) == 6:
                 projectNameList.append(_ProjectName)
             else:
-                sys.exit(f'[ 잘못된 프로젝트 이름: (({_ProjectName})) -> ((YYMMDD_프로젝트명)) 형식으로 입력 또는 리스트를 비워주세요 ]')
+                sys.exit(f'[ 잘못된 프로젝트 이름: (({_ProjectName})) -> ((YYMMDD_프로젝트명)) 형식으로 프로젝트 이름을 변경해주세요 ]')
     
     ## MultiProcessing 실행
     print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
@@ -250,12 +250,6 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     ## ProjectNameList ##
     # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240919_암을이기는천연항암제요약', '240812_룰루레몬스토리', '240815_노유파', '240908_나무스토리텔링', '240910_AI미래시나리오2030', '240925_불멸의지혜', '241005_그해여름필립로커웨이에서일어난소설같은일', '241009_책갈피와책수레', '241010_틈틈이낭만', '241024_오성삼유튜브', '241024_서울장애인가족지원센터당선작13선', '241029_누가정부창업지원을받는가', '241116_베이버터와다섯개의빛', '241118_세종교육청우리반오디오북새움중1학년8반', '241118_세종교육청우리반오디오북아름초5학년5반', '241118_세종교육청우리반오디오북아름초1학년1반', '241127_엄마의첫공부', '241128_끌리는이들에겐이유가있다', '241204_개정교육과정초등교과별이해연수', '241210_공부하듯주식해서보화찾기요약', '241210_끌리는이들에겐이유가있다요약', '241210_나는외식창업에적합한사람인가요약'
-    
-    ## ScriptGen ##
-    # 디폴트: {"ScriptGen": "off", "RawMode": "on", "Model": "ANTHROPIC", "Process": "", "Mode": "Master", "MainKey": "", "KeyList": []}
-    # 샘플제작: {"ScriptGen": "on", "RawMode": "on", "Model": "ANTHROPIC", "Process": "Sample_Script", "Mode": "Master", "MainKey": "단락", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]}
-    # 우리반시집: {"ScriptGen": "on", "RawMode": "off", "Model": "ANTHROPIC", "Process": "SejongCityOfficeOfEducation_Poem", "Mode": "Master", "MainKey": "단락", "KeyList": ["선생님의 소개", "아이가 작성한 시", "선생님의 칭찬"]}
-    # 빼기명상을통한나의변화: {"ScriptGen": "on", "RawMode": "off", "Model": "ANTHROPIC", "Process": "ChangesAfterMeditation_Script", "Mode": "Master", "MainKey": "글내용", "KeyList": ["목차", "내용"]}
 
     User = {"email": "yeoreum00128@gmail.com", "name": "yeoreum", "password": "0128"}
     ProjectNameList = {"StartProjectName": "241204_개정교육과정초등교과별이해연수", "ContinueProjectNameList": []}

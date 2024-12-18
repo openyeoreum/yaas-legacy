@@ -949,7 +949,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = '
         Music1Combined += MusicFile
         if i != len(UpdateTQDM) - 1:
             Music1Combined += ParagraphSeparator
-            
+
     MusicPartPath = VoiceLayerPathGen(projectName, email, f"{projectName}_AudioBook_(0, Index).mp3", 'Master')
     Music1Combined.export(MusicPartPath, format = "mp3")
     

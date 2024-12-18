@@ -74,7 +74,8 @@ def EstimateSettingGen(projectName, Estimate, Estimates):
             PremiumPrice = 250000 * EstimateScriptLenth/10000
         if Estimate == "VideoBook":
             StandardPrice = 400000 * EstimateScriptLenth/10000
-            PremiumPrice = 500000 * EstimateScriptLenth/10000
+            PremiumPrice = 600000 * EstimateScriptLenth/10000
+            
         if not os.path.exists(ProjectEstimateFilePath):
             projectname = ""
             client = ""
@@ -213,6 +214,16 @@ def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath, Estimate):
 ##########################
 ##########################
 
+### 시간 형식 변환 ###
+def ConvertTimeFormat(RunningTime):
+    # 시, 분, 초를 분리
+    hours, minutes, seconds = RunningTime.split(':')
+    # 2자리 숫자로 포맷팅 (zfill 사용)
+    hours = str(int(hours)).zfill(2)
+    minutes = str(int(minutes)).zfill(2)
+    # 새로운 형식으로 반환
+    return f"{hours}시간{minutes}분"
+
 ### EstimatePDF 생성 ###
 def SolutionEstimateUpdate(projectName, email, Estimates):
     for i, Estimate in enumerate(Estimates):
@@ -230,6 +241,7 @@ def SolutionEstimateUpdate(projectName, email, Estimates):
             Project = EstimateSetting['EstimateSetting']['ProjectName']
             Client = EstimateSetting['EstimateSetting']['Client']
             Lenth = EstimateSetting['EstimateSetting']['Lenth(estimate)']
+            RunningTime = ConvertTimeFormat(EstimateSetting['EstimateSetting']['RunningTime(estimate)'])
             
             StandardPriceVAT = EstimateSetting['EstimateSetting']['StandardPrice(estimate+vat)']
             StandardPrice = EstimateSetting['EstimateSetting']['StandardPrice(estimate)']
@@ -288,10 +300,10 @@ def SolutionEstimateUpdate(projectName, email, Estimates):
                 Lenth2 = Lenth
             if Estimate == "VideoBook":
                 EstimateTitle = "아바타 영상 제작 견적서"
-                Option1 = "앵커 아바타"
-                Option2 = "클로닝 아바타"
-                Lenth1 = Lenth
-                Lenth2 = Lenth
+                Option1 = "아바타           "
+                Option2 = "아바타+보이스"
+                Lenth1 = f"{RunningTime}"
+                Lenth2 = f"{RunningTime}"
             
             fig, ax = plt.subplots(figsize = (8.27, 11.69))  # A4 크기 (인치 단위)
             fig.patch.set_alpha(0.0) # 투명 배경

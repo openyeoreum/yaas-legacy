@@ -48,7 +48,7 @@ def YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCol
         Translations = Translations
         
         ### Step3-2 : EstimateConfig 설정 ###
-        if Estimate == ["None"]:
+        if Estimate == [] or Estimate == [""] or Estimate == ["None"]:
             EstimateConfig = {}
         else:
             EstimateConfig = {
@@ -56,25 +56,25 @@ def YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCol
                 }
             
         ### Step3-3 : DataCollectionConfig 설정 ###
-        if DataCollection == ["None"]:
+        if DataCollection == [] or DataCollection == [""] or DataCollection == ["None"]:
             DataCollectionConfig = {}
         else:
             DataCollectionConfig = {"DataCollection": DataCollection}
             
         ### Step3-4 : ScriptConfig 설정 ###
-        if Script == ["None"]:
+        if Script == [] or Script == [""] or Script == ["None"]:
             ScriptConfig = {}
         else:
             ScriptConfig = {"Script": Script}
             
         ### Step3-5 : TextBookConfig 설정 ###
-        if TextBook == ["None"]:
+        if TextBook == [] or TextBook == [""] or TextBook == ["None"]:
             TextBookConfig = {}
         else:
             TextBookConfig = {"TextBook": TextBook}
             
         ### Step3-6 : AudioBookConfig 설정 ###
-        if AudioBook == "None":
+        if AudioBook == "" or AudioBook == "None":
             AudioBookConfig = {}
         else:
             CloneVoiceName = AudioBook
@@ -102,17 +102,23 @@ def YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCol
                 }
             
         ### Step3-7 MarketingConfig 설정 ###
-        if Marketing == ["None"]:
+        if Marketing == [] or Marketing == [""] or Marketing == ["None"]:
             MarketingConfig = {}
         else:
             MarketingConfig = {"Marketing": Marketing}
         
         ## YaaSConfig 업데이트
-        YaasConfig = {"email": email, "name": name, "password": password, "ProjectName": ProjectName, "MainLang": MainLang, "Translations": Translations, "EstimateConfig": EstimateConfig, "DataCollectionConfig": DataCollectionConfig, "ScriptConfig": ScriptConfig, "TextBookConfig": TextBookConfig, "AudioBookConfig": AudioBookConfig, "MarketingConfig": MarketingConfig}
+        YaasConfig = {"email": email, "name": name, "password": password, "ProjectName": ProjectName, "MainLang": MainLang, "Translations": Translations, "EstimateConfig": EstimateConfig, "DataCollectionConfig": DataCollectionConfig, "ScriptConfig": ScriptConfig, "TextBookConfig": TextBookConfig, "AudioBookConfig": AudioBookConfig, "MarketingConfig": MarketingConfig, "ConfigCompletion": "세팅 완료 후 Completion"}
 
-    ## 업데이트 된 YaaSConfig 저장
-    with open(ConfigPath, 'w', encoding = 'utf-8') as ConfigJson:
-        json.dump(YaasConfig, ConfigJson, ensure_ascii = False, indent = 4)
+        ## 업데이트 된 YaaSConfig 저장
+        with open(ConfigPath, 'w', encoding = 'utf-8') as ConfigJson:
+            json.dump(YaasConfig, ConfigJson, ensure_ascii = False, indent = 4)
+        sys.exit(f'\n[ (([{StartProjectName}_config.json])) 세팅을 완료하세요 ]\n({ConfigPath})\n')
+    else:
+        with open(ConfigPath, 'r', encoding='utf-8') as ConfigJson:
+            YaasConfig = json.load(ConfigJson)
+        if YaasConfig["ConfigCompletion"] != "Completion":
+            sys.exit(f'\n[ (([{StartProjectName}_config.json])) 세팅을 완료하세요 ]\n({ConfigPath})\n')
 
 
 ##############################################################################################
@@ -145,6 +151,7 @@ def AudioBookUpdate(email, ProjectName, Translations, IndexMode, BookGenre, Narr
 ###############################################################################################################
 
 
+### Main2 : YaaS 실행 ###
 def YaaS(email, ProjectName, MainLang, Translations, EstimateConfig, DataCollectionConfig, ScriptConfig, TextBookConfig, AudioBookConfig, MarketingConfig, MessagesReview, Account):
     
     ### Step4 : Estimate 업데이트 ###
@@ -179,43 +186,60 @@ def YaaS(email, ProjectName, MainLang, Translations, EstimateConfig, DataCollect
 #################################################################################################################################
 
 
-def MultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing, MessagesReview, Account):
+### Main1-1 : YaaS Multiprocessing 모두 종료 ###
+def YaaSMultiprocessingExit(projectNameList, MultiProcess):
+    print(f"\n\n[ Projects: {projectNameList} | 모든 병렬 프로세스(YaaS Multiprocessing) 종료 ]")
+    for process in MultiProcess:
+        if process.is_alive():
+            process.terminate()
+
+### Main1-2 : YaaS Multiprocessing 실행 ###
+def YaaSMultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing, MessagesReview, Account):
     ## ProjectNameList NFC 정규화
     StartProjectName = unicodedata.normalize("NFC", ProjectNameList["StartProjectName"])
     NFCProjectNameList = []
     for ProjectName in ProjectNameList["ContinueProjectNameList"]:
         NFCProjectNameList.append(unicodedata.normalize("NFC", ProjectName))
+    
+    ## ProjectNameList 유효성 검사
     projectNameList = []
     for _ProjectName in (NFCProjectNameList + [StartProjectName]):
-        if len(_ProjectName.split('_')[0]) == 6:
-            projectNameList.append(_ProjectName)
-        else:
-            sys.exit(f'[ 잘못된 프로젝트 이름: ("{_ProjectName}"), YYMMDD_프로젝트명 형식으로 입력 또는 리스트를 비워주세요 ]')
+        if _ProjectName != "":
+            if len(_ProjectName.split('_')[0]) == 6:
+                projectNameList.append(_ProjectName)
+            else:
+                sys.exit(f'[ 잘못된 프로젝트 이름: ({_ProjectName}), YYMMDD_프로젝트명 형식으로 입력 또는 리스트를 비워주세요 ]')
     
     print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 시작 ]")
     
-    ## MultiProcessing 실행
-    MultiProcess = []
-    for projectName in projectNameList:
-        ### Step1 : 솔루션에 계정정보 업데이트 ###
-        AccountUpdate(User['email'], User['name'], User['password'])
-        ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
-        SolutionProjectUpdate(User['email'], StartProjectName)
-        ### Step3 : 프로젝트 Config 설정 ###
-        if projectName == StartProjectName:
-            YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing)
-        ## Config 불러오기
-        YaasConfig, ConfigPath = LoadYaaSConfig(projectName)
+    if projectNameList != []:
+        ## MultiProcessing 실행
+        MultiProcess = []
+        for projectName in projectNameList:
+            ### Step1 : 솔루션에 계정정보 업데이트 ###
+            AccountUpdate(User['email'], User['name'], User['password'])
+            ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
+            SolutionProjectUpdate(User['email'], StartProjectName)
+            ### Step3 : 프로젝트 Config 설정 ###
+            if projectName == StartProjectName:
+                YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing)
+            ## Config 불러오기
+            YaasConfig, ConfigPath = LoadYaaSConfig(projectName)
+            
+            try:
+                Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["ProjectName"], YaasConfig["MainLang"], YaasConfig["Translations"], YaasConfig["EstimateConfig"], YaasConfig["DataCollectionConfig"], YaasConfig["ScriptConfig"], YaasConfig["TextBookConfig"], YaasConfig["AudioBookConfig"], YaasConfig["MarketingConfig"], MessagesReview, Account))
+            except KeyError:
+                YaaSMultiprocessingExit(projectNameList, MultiProcess)
+                sys.exit(f'\n\n[ (({projectName}))는 처음 시작하는 (StartProject) 입니다 ]\n[ >>> ((ProjectNameList = {{"StartProjectName": "{projectName}", "ContinueProjectNameList": [...]}})) <<< 와 같이 StartProjectName 에서 시작하세요 ]\n\n')
+                
+            MultiProcess.append(Process)
+            Process.start()
+            
+        ## 모든 프로세스가 종료될 때까지 기다림
+        for process in MultiProcess:
+            process.join()
         
-        Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["ProjectName"], YaasConfig["MainLang"], YaasConfig["Translations"], YaasConfig["EstimateConfig"], YaasConfig["DataCollectionConfig"], YaasConfig["ScriptConfig"], YaasConfig["TextBookConfig"], YaasConfig["AudioBookConfig"], YaasConfig["MarketingConfig"], MessagesReview, Account))
-        MultiProcess.append(Process)
-        Process.start()
-        
-    ## 모든 프로세스가 종료될 때까지 기다림
-    for process in MultiProcess:
-        process.join()
-        
-    print(f"[ Projects: {projectNameList} | 병렬 프로세스(MultiProcessing) 완료 ]")
+    print(f"[ Projects: {projectNameList} | 병렬 프로세스(YaaS MultiProcessing) 완료 ]")
 
 if __name__ == "__main__":
 
@@ -234,16 +258,16 @@ if __name__ == "__main__":
     MainLang = "Ko" # 'Ko', 'En', 'Ja', 'Zh', 'Es' ... 중 메인이 되는 언어를 선택
     Translations = [] # 'En', 'Ja', 'Zh', 'Es' ... 중 다중 선택
     
-    Estimate = ["TextBook", "AudioBook", "VideoBook"] # 'None', 'TextBook', 'AudioBook', 'VideoBook' ... 중 필요한 견적을 다중 선택
-    DataCollection = ["None"] # 'None', 'Book', 'Meditation', 'Architect' ... 중 데이터 수집이 필요한 도메인을 다중 선택
-    Script = ["None"] # 'None', 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 다중 선택
-    TextBook = ["None"] # 'None', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
-    AudioBook = "진미옥" # 'None', '클로닝성우이름', '성우이름(특성)' ... 중 선택
-    Marketing = ["None"] # 'None', 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택
+    Estimate = ["TextBook", "AudioBook", "VideoBook"] # [], 'TextBook', 'AudioBook', 'VideoBook' ... 중 필요한 견적을 다중 선택
+    DataCollection = [] # [], 'Book', 'Meditation', 'Architect' ... 중 데이터 수집이 필요한 도메인을 다중 선택
+    Script = [] # [], 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 다중 선택
+    TextBook = [] # [], 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
+    AudioBook = "진미옥" # '', '클로닝성우이름', '성우이름(특성)' ... 중 선택
+    Marketing = [] # [] 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택
     
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
     Account = "junyoung8@nate.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com', 'kka6887@hanmail.net', 'aldus5909@naver.com', 'junyoung8@nate.com' ... 중 선택
 
     #########################################################################
 
-    MultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing, MessagesReview, Account)
+    YaaSMultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing, MessagesReview, Account)

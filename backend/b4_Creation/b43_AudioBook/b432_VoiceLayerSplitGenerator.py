@@ -1696,8 +1696,12 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             except:
                 sys.exit(f'[ MatchedVoices 파일이 이미 생성됨, 삭제해주세요 : {MatchedActorsPath} ]')
 
-        ## AudioBook_Edit에 새로운 ActorName이 발생한 경우 이를 MatchedActors에 추가
-        ## ModifiedChunk를 Chunk로 다시 변환
+        #######################################
+        #### EditGenerationKoChunks 자동수정 ####
+        #######################################
+
+        ### A+B. AudioBook_Edit에 새로운 ActorName이 발생한 경우 이를 MatchedActors에 추가, ModifiedChunk를 Chunk로 다시 변환 ###
+        ### A. ModifiedChunk를 Chunk로 다시 변환 ###
         # MatchedActors 검토
         # MatchedActorNames에서 voice_id가 다른 경우 업데이트
         MatchedActorNames = []
@@ -1722,7 +1726,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     # 새로운 OrderedDict 생성
                     _chunK.clear()
                     _chunK.update(OrderedDict(new_items))
-
+                    
+        ### B. AudioBook_Edit에 새로운 ActorName이 발생한 경우 이를 MatchedActors에 추가 ###
         # voice_id 업데이트
         for _Matched in MatchedActors:
             if _Matched['ApiSetting']['Api'] == "ElevenLabs":
@@ -1743,6 +1748,156 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             # 새롭게 추가된 캐릭터 내용 저장 (덮어쓰기)
             with open(MatchedActorsPath, 'w', encoding = 'utf-8') as MatchedActorsJson:
                 json.dump(MatchedActors, MatchedActorsJson, ensure_ascii = False, indent = 4)
+                
+        ### C. AutoSplited: EditGenerationKoChunks에 대괄호 및 괄호 기준 자동 Chunk 나누기 ###
+        # MatchedChunks에서 ActorChunk가 없는 경우 제거
+        for i in range(len(MatchedChunks) - 1, -1, -1):
+            _Edit = MatchedChunks[i]
+            if _Edit['ActorChunk'] == []:
+                MatchedChunks.pop(i)
+        
+        # MatchedChunks에서 ActorChunk내 Chunk에 문장 분리 형식이 존재하는 경우 Chunk를 Pause 기준으로 나누기
+        PausePatterns = [
+            r'\)\s*(\d+\.\d+)\s*\[',  # ) 숫자 [
+            r'\]\s*(\d+\.\d+)\s*\[',  # ] 숫자 [
+            r'\]\s*(\d+\.\d+)\s*\(',  # ] 숫자 (
+            r'\)\s*(\d+\.\d+)\s*\('   # ) 숫자 (
+        ]
+
+        PausePatternReplacements = [
+            (r'\)\s*(\d+\.\d+)\s*\[', r')\1['),  # ) 숫자 [ -> )숫자[
+            (r'\]\s*(\d+\.\d+)\s*\[', r']\1['),  # ] 숫자 [ -> ]숫자[
+            (r'\]\s*(\d+\.\d+)\s*\(', r']\1('),  # ] 숫자 ( -> ]숫자(
+            (r'\)\s*(\d+\.\d+)\s*\(', r')\1(')   # ) 숫자 ( -> )숫자(
+        ]
+        ErrorPausePatterns = [
+            '][', '](', ')[', ')(',
+            '] [', '] (', ') [', ') (',
+            ']  [', ']  (', ')  [', ')  ('
+        ]
+        for i in range(len(MatchedChunks)):
+            _Edit = MatchedChunks[i]
+            EditId = _Edit['EditId']
+            Tag = _Edit['Tag']
+            ActorName = _Edit['ActorName']
+            ActorChunk = _Edit['ActorChunk']
+            NewActorChunk = []
+            chunk_count = 0
+            
+            for _chunk in ActorChunk:
+                ChunkText = _chunk['Chunk']
+                # 괄호에 공백이 존재하는 경우 제거
+                ChunkText = ChunkText.replace(' (', '(').replace(') ', ')').replace(' [', '[').replace('] ', ']').replace('( ', '(').replace(' )', ')').replace('[ ', '[').replace(' ]', ']')
+                # 괄호 사이에 Pause가 없는 경우 기본값 0.6 적용
+                ChunkText = ChunkText.replace('](', ']0.3(').replace(')(', ')0.3(').replace(')[', ')0.3[').replace('][', ']0.3[')
+                CurrentPause = _chunk['Pause']
+                EndTime = _chunk['EndTime']
+                
+                # PausePatterns의 공백 처리
+                for pattern, replacement in PausePatternReplacements:
+                    ChunkText = re.sub(pattern, replacement, ChunkText)
+                
+                # 문장 분리 형식 확인
+                hasPattern = any(re.search(pattern, ChunkText) for pattern in PausePatterns)
+                if not hasPattern:
+                    NewActorChunk.append(_chunk)
+                    chunk_count += 1
+                else:
+                    SplitedChunkTexts = []
+                    # 일반 Chunk, 대괄호 Chunk, Pause 찾기
+                    AllMatches = []
+                    # 일반 Chunk 찾기
+                    NormalText = [(m.start(), m.end(), m.group(), 'Normal') 
+                                    for m in re.finditer(r'\((.*?)\)', ChunkText)]
+                    # 대괄호 Chunk 찾기
+                    BracketedText = [(m.start(), m.end(), m.group(), 'Bracket') 
+                                    for m in re.finditer(r'\[(.*?)\]', ChunkText)]
+                    # Pause 찾기
+                    Pause = [(m.start(), m.end(), float(m.group(1)), 'Pause') 
+                            for m in re.finditer(r'(?:\)|\])(\d+\.\d+)(?:\[|\()', ChunkText)]
+                    # Combine all matches and sort by position
+                    AllMatches = NormalText + BracketedText + Pause
+                    AllMatches.sort(key = lambda x: x[0])
+                    # Process matches
+                    CurrentSplitedChunks = []
+                    for match in AllMatches:
+                        if match[3] == 'Pause':
+                            CurrentSplitedChunks.append({
+                                "Distinction": "Pause",
+                                "Text": match[2]
+                            })
+                        else:
+                            text = match[2]
+                            if match[3] == 'Normal':
+                                # 앞뒤 괄호 제거 ('(' 와 ')' 제거)
+                                text = text[1:-1]
+                            CurrentSplitedChunks.append({
+                                "Distinction": match[3],
+                                "Text": text
+                            })
+                    if CurrentSplitedChunks:
+                        SplitedChunkTexts += CurrentSplitedChunks
+                    
+                    # NewActorChunk에 분리된 SplitedChunk 구성하기
+                    if SplitedChunkTexts != []:
+                        SplitedChunkTexts.append({'Distinction': 'Pause', 'Text': CurrentPause})
+
+                        # 2개씩 묶기 위해 range를 2씩 증가
+                        for j in range(0, len(SplitedChunkTexts), 2):
+                            # 오류검사 1. Text 안에 PausePattern이 발견되는 경우
+                            if any(re.search(pattern, SplitedChunkTexts[j]['Text']) for pattern in PausePatterns) or SplitedChunkTexts[j]['Text'] in ErrorPausePatterns:
+                                sys.exit(f'[ AutoChunkSplit BraketError : (({EditId}))에 다음 문장에 (괄호 처리)가 잘못 되었음 >>>  {ChunkText}  <<< ]')
+                            # 오류검사 2. 짝수번째 SplitedChunkTexts가 Pause가 아닌 경우
+                            if SplitedChunkTexts[j + 1]['Distinction'] != 'Pause':
+                                sys.exit(f'[ AutoChunkSplit PauseError : (({EditId}))에 다음 문장에 (Pause 시간 처리)가 잘못 되었음 >>>  {ChunkText}  <<< ]')
+                            # Text와 구분은 첫 번째 청크에서 가져오고, Pause는 두 번째 청크에서 가져옴
+                            NewActorChunk.append({
+                                "Chunk": SplitedChunkTexts[j]['Text'],
+                                "Pause": round(float(SplitedChunkTexts[j + 1]['Text']), 2),
+                                "EndTime": EndTime
+                            })
+                            # 대괄호로 시작하고 끝나는 경우 2개로 카운트
+                            if SplitedChunkTexts[j]['Text'].startswith('[') and SplitedChunkTexts[j]['Text'].endswith(']'):
+                                chunk_count += 2
+                            else:
+                                chunk_count += 1
+
+            ### D. EditGenerationKoChunks에 Edit내 Chunk의 개수 및 텍스트 길이 적정히 조정하기 ###
+            combined_text = ''.join([''.join(chunk['Chunk'].split()) for chunk in NewActorChunk])
+            if chunk_count >= 10 or len(combined_text) >= 350:
+                # 분할 수 결정
+                if chunk_count >= 30:
+                    divisions = 4
+                elif chunk_count >= 20:
+                    divisions = 3
+                else:
+                    divisions = 2
+                
+                # 각 분할별 크기 계산
+                SplitedChunk_count = len(NewActorChunk) // divisions
+                
+                # 분할된 청크들을 저장할 리스트
+                SplitedChunks = []
+                # 청크 분할
+                for j in range(divisions):
+                    StartIdx = j * SplitedChunk_count
+                    # 마지막 분할은 남은 모든 청크를 포함
+                    EndIdx = (j + 1) * SplitedChunk_count if j < divisions - 1 else len(NewActorChunk)
+                    # 새로운 Edit 생성
+                    new_edit = {"EditId": EditId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": NewActorChunk[StartIdx:EndIdx]}
+                    SplitedChunks.append(new_edit)
+                
+                # MatchedChunks 업데이트
+                # 첫 번째 분할은 현재 위치에 저장
+                MatchedChunks[i] = SplitedChunks[0]
+                # 나머지 분할들은 순서대로 삽입
+                for k, SplitedChunks in enumerate(SplitedChunks[1:], 1):
+                    MatchedChunks.insert(i + k, SplitedChunks)
+            else:
+                # 분할이 필요없는 경우 기존 코드대로 처리
+                New_Edit = {"EditId": EditId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": NewActorChunk}
+                MatchedChunks[i] = New_Edit
+            ### D. EditGenerationKoChunks에 Edit내 Chunk의 개수 및 텍스트 길이 적정히 조정하기 ###
 
     ## 모든 인물 전체 히스토리 불러오기 (Modify 검사 용도)
     GenerationKoChunkAllHistory = []
@@ -1910,14 +2065,18 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     ##### 3. 문장의 순서 또는 내용이 변경된 경우 -> 이 경우는 현재 파악못함 #####
     #### Brackets 자동 생성 ####
 
-    ## MatchedActor 순서대로 Speech 생성
+    #### MatchedActor 순서대로 Speech 생성 ####
     for MatchedActor in MatchedActors:
         Api = MatchedActor['ApiSetting']['Api']
         Actor = MatchedActor['ActorName']
 
         print(f"< Project: {projectName} | Actor: {Actor} | VoiceLayerGenerator 시작 >")
         
-        ## MatchedChunksPath.json이 존재하면 해당 파일로 VoiceLayerGenerator 진행, 아닐경우 새롭게 생성
+        ########################################
+        #### EditGenerationKoChunks 최초 생성 ####
+        ########################################
+        
+        ## (MatchedChunksPath) [ProjectName_AudioBook_Edit].json이 존재하면 해당 파일로 VoiceLayerGenerator 진행, 아닐경우 새롭게 생성
         if (not os.path.exists(MatchedChunksPath)) and (not os.path.exists(unicodedata.normalize('NFC', MatchedChunksPath))) and (not os.path.exists(unicodedata.normalize('NFD', MatchedChunksPath))):
             # SelectionGenerationKoChunks의 EditGenerationKoChunks화
             EditGenerationKoChunks = []
@@ -2091,6 +2250,16 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         chunk['ActorName'] = NarratorActorName
             #### ReadingStyle: NarratorOnly와 AllCharacters의 설정 ####
             
+            #### EditGenerationKoChunks 안에 대괄호[] 및 괄호()의 후처리 ####
+            for chunk in EditGenerationKoChunks:
+                for actorchunk in chunk['ActorChunk']:
+                    actorchunk['Chunk'] = actorchunk['Chunk'].replace('[[', '[').replace(']]', ']')
+                    # 대괄호와 괄호로 둘러싸인 내용을 쉼표로 처리
+                    actorchunk['Chunk'] = re.sub(r'\[(.*?)\]', r', \1,', actorchunk['Chunk'])
+                    actorchunk['Chunk'] = re.sub(r'\((.*?)\)', r', \1,', actorchunk['Chunk'])
+                    actorchunk['Chunk'] = actorchunk['Chunk'].replace('[', '').replace(']', '').replace('(', '').replace(')', '')
+            #### EditGenerationKoChunks 안에 대괄호[] 및 괄호()의 후처리 ####
+            
             # MatchedActors, MatchedChunks 저장 (Dic 저장 후 다시 List로 변환)
             fileName = projectName + '_' + 'MatchedVoices.json'
             MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName, 'Mixed')
@@ -2109,6 +2278,10 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 
             ## EditGenerationKoChunks의 Dic(프로세스)
             EditGenerationKoChunks = EditGenerationKoChunksToList(_EditGenerationKoChunks)
+
+        ########################################
+        #### EditGenerationKoChunks 음성 생성 ####
+        ########################################
 
         ## 일부만 생성하는지, 전체를 생성하는지의 옵션
         if Mode == 'Manual':

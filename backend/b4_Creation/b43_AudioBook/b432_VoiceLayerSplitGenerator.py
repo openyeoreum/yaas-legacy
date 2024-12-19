@@ -1679,18 +1679,18 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     MatchedChunks = []
     if os.path.exists(unicodedata.normalize('NFC', MatchedActorsPath)) or os.path.exists(unicodedata.normalize('NFD', MatchedActorsPath)):
         try:
-            print(unicodedata.normalize('NFC', MatchedActorsPath))
+            print(f"[ 적용 MatchedVoices : {unicodedata.normalize('NFC', MatchedActorsPath)} ]")
             with open(unicodedata.normalize('NFC', MatchedActorsPath), 'r', encoding = 'utf-8') as MatchedActorsJson:
                 MatchedActors = json.load(MatchedActorsJson)
-            print(unicodedata.normalize('NFC', MatchedChunksPath))
+            print(f"[ 적용 AudioBook_Edit : {unicodedata.normalize('NFC', MatchedChunksPath)} ]")
             with open(unicodedata.normalize('NFC', MatchedChunksPath), 'r', encoding = 'utf-8') as MatchedChunksJson:
                 MatchedChunks = json.load(MatchedChunksJson)
         except:
             try:
-                print(unicodedata.normalize('NFD', MatchedActorsPath))
+                print(f"[ 적용 MatchedVoices : {unicodedata.normalize('NFD', MatchedActorsPath)} ]")
                 with open(unicodedata.normalize('NFD', MatchedActorsPath), 'r', encoding = 'utf-8') as MatchedActorsJson:
                     MatchedActors = json.load(MatchedActorsJson)
-                print(unicodedata.normalize('NFD', MatchedChunksPath))
+                print(f"[ 적용 AudioBook_Edit : {unicodedata.normalize('NFD', MatchedChunksPath)} ]")
                 with open(unicodedata.normalize('NFD', MatchedChunksPath), 'r', encoding = 'utf-8') as MatchedChunksJson:
                     MatchedChunks = json.load(MatchedChunksJson)
             except:

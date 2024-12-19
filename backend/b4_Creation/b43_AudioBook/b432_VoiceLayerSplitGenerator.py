@@ -1748,7 +1748,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             # 새롭게 추가된 캐릭터 내용 저장 (덮어쓰기)
             with open(MatchedActorsPath, 'w', encoding = 'utf-8') as MatchedActorsJson:
                 json.dump(MatchedActors, MatchedActorsJson, ensure_ascii = False, indent = 4)
-                
+        
+        ### C+D. AutoSplited, Edit내 Chunk의 개수 및 텍스트 길이 관리(긴 경우 Edit을 나눔) ###
         ### C. AutoSplited: EditGenerationKoChunks에 대괄호 및 괄호 기준 자동 Chunk 나누기 ###
         # MatchedChunks에서 ActorChunk가 없는 경우 제거
         for i in range(len(MatchedChunks) - 1, -1, -1):
@@ -1757,13 +1758,33 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 MatchedChunks.pop(i)
         
         # MatchedChunks에서 ActorChunk내 Chunk에 문장 분리 형식이 존재하는 경우 Chunk를 Pause 기준으로 나누기
+        # 문장 끝부분 괄호를 닫지 않아도 닫아주는 함수
+        def FixBrackets(ChunkText):
+            # 괄호 쌍 정의
+            Brackets = {'(': ')', '[': ']'}
+            # 시작 괄호가 없는 끝 괄호 처리
+            if ChunkText[0] not in Brackets and ChunkText[0] not in Brackets.values():
+                for i, char in enumerate(ChunkText):
+                    if char in Brackets.values():
+                        # 끝 괄호에 맞는 시작 괄호 찾기
+                        start_bracket = [k for k, v in Brackets.items() if v == char][0]
+                        ChunkText = start_bracket + ChunkText
+                        break
+            # 끝 괄호가 없는 시작 괄호 처리
+            if ChunkText[-1] not in Brackets and ChunkText[-1] not in Brackets.values():
+                for char in reversed(ChunkText):
+                    if char in Brackets:
+                        ChunkText = ChunkText + Brackets[char]
+                        break
+            
+            return ChunkText
+        
         PausePatterns = [
             r'\)\s*(\d+\.\d+)\s*\[',  # ) 숫자 [
             r'\]\s*(\d+\.\d+)\s*\[',  # ] 숫자 [
             r'\]\s*(\d+\.\d+)\s*\(',  # ] 숫자 (
             r'\)\s*(\d+\.\d+)\s*\('   # ) 숫자 (
         ]
-
         PausePatternReplacements = [
             (r'\)\s*(\d+\.\d+)\s*\[', r')\1['),  # ) 숫자 [ -> )숫자[
             (r'\]\s*(\d+\.\d+)\s*\[', r']\1['),  # ] 숫자 [ -> ]숫자[
@@ -1803,6 +1824,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     NewActorChunk.append(_chunk)
                     chunk_count += 1
                 else:
+                    ChunkText = FixBrackets(ChunkText)
                     SplitedChunkTexts = []
                     # 일반 Chunk, 대괄호 Chunk, Pause 찾기
                     AllMatches = []

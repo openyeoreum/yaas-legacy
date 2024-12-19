@@ -2279,6 +2279,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     # 대괄호와 괄호로 둘러싸인 내용을 쉼표로 처리
                     actorchunk['Chunk'] = re.sub(r'\[(.*?)\]', r', \1,', actorchunk['Chunk'])
                     actorchunk['Chunk'] = re.sub(r'\((.*?)\)', r', \1,', actorchunk['Chunk'])
+                    actorchunk['Chunk'] = actorchunk['Chunk'].replace(' , ', ', ')
                     actorchunk['Chunk'] = actorchunk['Chunk'].replace('[', '').replace(']', '').replace('(', '').replace(')', '')
             #### EditGenerationKoChunks 안에 대괄호[] 및 괄호()의 후처리 ####
             

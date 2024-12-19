@@ -223,7 +223,7 @@ def YaaSMultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate,
             ### Step1 : 솔루션에 계정정보 업데이트 ###
             AccountUpdate(User['email'], User['name'], User['password'])
             ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
-            SolutionProjectUpdate(User['email'], StartProjectName)
+            SolutionProjectUpdate(User['email'], projectName)
             ### Step3 : 프로젝트 Config 설정 ###
             if projectName == StartProjectName:
                 YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing)

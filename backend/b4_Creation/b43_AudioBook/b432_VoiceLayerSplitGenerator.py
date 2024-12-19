@@ -1809,7 +1809,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 ChunkText = _chunk['Chunk']
                 # 괄호에 공백이 존재하는 경우 제거
                 ChunkText = ChunkText.replace(' (', '(').replace(') ', ')').replace(' [', '[').replace('] ', ']').replace('( ', '(').replace(' )', ')').replace('[ ', '[').replace(' ]', ']')
-                # 괄호 사이에 Pause가 없는 경우 기본값 0.6 적용
+                # 괄호 사이에 Pause가 없는 경우 기본값 0.3 적용
                 ChunkText = ChunkText.replace('](', ']0.3(').replace(')(', ')0.3(').replace(')[', ')0.3[').replace('][', ']0.3[')
                 CurrentPause = _chunk['Pause']
                 EndTime = _chunk['EndTime']

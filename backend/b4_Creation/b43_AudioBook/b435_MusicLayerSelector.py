@@ -1212,6 +1212,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                 for chunk in ActorChunk:
                     Chunks.append(chunk['Chunk'].replace('.', '').replace(',', '').replace('~', ''))
                 Chunk = ' '.join(Chunks)
+                Chunk = Chunk[:20] + ('...' if len(Chunk) > 20 else '')
                     
                 # 'Part', 'Chapter', 'Index' 태그가 있을 경우 IndexTagsList 추가
                 if Tag in IndexsTags:
@@ -1222,7 +1223,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                     if Tag == 'Index':
                         IndexTagsList.append({"<-----------------(Index)----------------->": "", "EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Time": Time, "StartPoint": '', "": "<-----------------(Index)----------------->"})
                 else:
-                    IndexTagsList.append({"EditId": EditId, "Tag": Tag, "Time": Time, "StartPoint": ''})
+                    IndexTagsList.append({"EditId": EditId, "Tag": Tag, "Chunk": Chunk, "Time": Time, "StartPoint": ''})
                     
             # JSON 파일로 저장
             with open(IndexTagsListPath, 'w', encoding = 'utf-8') as f:
@@ -1235,11 +1236,23 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             if IndexTagsList[0]['AudioBook_Splitting'] == 'No':
                 sys.exit(f'[ 오디오북 분할 세팅을 완료하세요. 완료 후 "AudioBook_Splitting": "Yes" 로 변경 : {IndexTagsListPath} ]')
             else:
-                _IndexTagsList = IndexTagsList[1:]
-                for IndexTag in _IndexTagsList:
-                    if IndexTag['StartPoint'] != "":
+                _IndexTagsList = IndexTagsList[1:]  # 첫 번째 항목을 제외한 리스트
+                FileCount = 3
+                for j in range(len(_IndexTagsList)):
+                    if _IndexTagsList[j]['StartPoint'] != "":
+                        _IndexTagsList[j]['StartPoint'] = FileCount
+                        FileCount += 1
                         FileLimitList.append(BeforeEditId)
-                    BeforeEditId = IndexTag['EditId']
+                    
+                    BeforeEditId = _IndexTagsList[j]['EditId']
+                    
+                # 원본 IndexTagsList에 변경사항 반영
+                IndexTagsList[1:] = _IndexTagsList
+
+                # 변경사항 JSON 파일로 저장
+                with open(IndexTagsListPath, 'w', encoding='utf-8') as f:
+                    json.dump(IndexTagsList, f, ensure_ascii = False, indent = 4)
+
     else:
         for i, edit in enumerate(EditGeneration):
             if i > 0:

@@ -17,7 +17,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 ## SeleniumHubDrive 연결
 def SeleniumHubDrive():
-    print(f"[ SeleniumHubDrive 연결 시도 ]\n")
+    print(f"[ SeleniumHubDrive : 교보문고 연결 시도 ]\n")
     hub_url = "http://selenium:4444/wd/hub"
     options = Options()
     options.add_argument('--no-sandbox')
@@ -28,7 +28,7 @@ def SeleniumHubDrive():
     options.add_argument('--window-size=1920,1080')
 
     driver = webdriver.Remote(command_executor=hub_url, options=options)
-    print(f"[ SeleniumHubDrive 연결 완료 ]\n")
+    print(f"[ SeleniumHubDrive : 교보문고 연결 완료 ]\n")
     return driver
 
 ## BookElement 강제 클릭

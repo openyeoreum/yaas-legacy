@@ -393,10 +393,25 @@ class Prompt(Base):
     PromptDate = Column(DateTime, default=SeoulNow)
 
     ## Yeoreum
-    # ScriptGen
+    ## DataCollectionPrompt
+    # TargetData
+    PublisherContextDefine = Column(JSON)
+    PublisherWMWMDefine = Column(JSON)
+    
+    # TrendData
+    BestSellerContextDefine = Column(JSON)
+    BestSellerCommentAnalysis = Column(JSON)
+    BestSellerWMWMDefine = Column(JSON)
+    
+    # ScriptData
+    
+    ## ScriptPrompt
     ChangesAfterMeditation_Script = Column(JSON)
     SejongCityOfficeOfEducation_Poem = Column(JSON)
     
+    ## TextBookPrompt
+    
+    ## AudioBookPrompt
     # ScriptPrompt
     BookPreprocess = Column(JSON)
     IndexDefinePreprocess = Column(JSON)
@@ -469,9 +484,7 @@ class Prompt(Base):
     # MixingMasteringZh = Column(JSON)
     # MixingMasteringEs = Column(JSON)
     
-    # CreatorPrompt
-    BestSellerContextDefine = Column(JSON)
-    BestSellerCommentAnalysis = Column(JSON)
+    ## VideoBookPrompt
     
     ## Meditation
     # LifeGraph
@@ -491,9 +504,14 @@ class TrainingDataset(Base):
     TrainingDatasetId = Column(Integer, primary_key=True, autoincrement=True)
     TrainingDatasetDate = Column(DateTime, default=SeoulNow)
 
-    # ScriptGenDataset
+    ## DataCollectionDataset
+
+    ## ScriptDataset
     ScriptGen = Column(JSON)
 
+    ## TextBookDataset
+
+    ## AudioBookDataset
     # ScriptDataset
     BookPreprocess = Column(JSON)
     IndexDefinePreprocess = Column(JSON)
@@ -560,6 +578,8 @@ class TrainingDataset(Base):
     # MixingMasteringJa = Column(JSON)
     # MixingMasteringZh = Column(JSON)
     # MixingMasteringEs = Column(JSON)
+    
+    ## VideoBookDataset
 
 
 #####################

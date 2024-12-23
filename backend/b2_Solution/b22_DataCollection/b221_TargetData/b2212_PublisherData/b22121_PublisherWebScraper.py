@@ -8,6 +8,7 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -57,16 +58,16 @@ def ValidateAndFixUrl(url):
         url = 'https://' + url
     return url
 
-## 출판사 홈페이지 스크래퍼
-def PublisherScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage):
+## 출판사 메인 페이지 Html 스크래퍼
+def PublisherHtmlScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage):
     try:
         # URL 검증 및 수정
         FixedUrl = ValidateAndFixUrl(HomePage)
         if not FixedUrl:
-            print(f"[ ({Id}) {PublisherName}: 유효하지 않은 URL({HomePage}) 입니다. ]")
+            print(f"< ({Id}) {PublisherName}: 유효하지 않은 URL({HomePage}) 입니다. >")
             return "None"
             
-        print(f"[ ({Id}) {PublisherName}: 접속 시도 URL - {FixedUrl} ]")
+        print(f"< ({Id}) {PublisherName}: 접속 시도 URL - {FixedUrl} >")
         
         # 출판사 홈페이지 접속
         Driver.get(FixedUrl)
@@ -88,93 +89,119 @@ def PublisherScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage):
         with open(WebPageTxtPath, 'w', encoding='utf-8') as f:
             f.write(Driver.page_source)
             
-        print(f"[ ({Id}) {PublisherName}: 웹페이지 스크래핑 완료 ]")
+        print(f"< ({Id}) {PublisherName}: 웹페이지 스크래핑 완료 >")
         return WebPageTxtPath
         
     except TimeoutException:
-        print(f"[ ({Id}) {PublisherName}: 페이지 로딩 시간 초과. 서버 응답이 없습니다. ]")
+        print(f"< ({Id}) {PublisherName}: 페이지 로딩 시간 초과. 서버 응답이 없습니다. >")
         return "None"
     except NoSuchElementException:
-        print(f"[ ({Id}) {PublisherName}: 페이지 구조가 변경되었거나 필요한 요소를 찾을 수 없습니다. ]")
+        print(f"< ({Id}) {PublisherName}: 페이지 구조가 변경되었거나 필요한 요소를 찾을 수 없습니다. >")
         return "None"
     except Exception as e:
-        print(f"[ ({Id}) {PublisherName}: 예상치 못한 에러 발생 - {str(e)} ]")
-        print(f"[ 시도한 URL: {HomePage} -> {FixedUrl} ]")
+        print(f"< ({Id}) {PublisherName}: 예상치 못한 에러 발생 - {str(e)} >")
+        print(f"< 시도한 URL: {HomePage} -> {FixedUrl} >")
         return "None"
     
-## 교보문고 베스트셀러 스크래퍼
-def BestsellerWebScraper(PublisherDataPath):
+## 출판사 메인페이지 정보 스크래퍼
+def PublisherWebScraper(PublisherDataPath):
     ## TotalPublisherDataJson 로드
     TotalPublisherDataJsonName = "TotalPublisherData.json"
     TotalPublisherDataJsonPath = os.path.join(PublisherDataPath, TotalPublisherDataJsonName)
-    with open(TotalPublisherDataJsonPath, 'r', encoding = 'utf-8') as json_file:
-        TotalPublisherData = json.load(json_file)
+    with open(TotalPublisherDataJsonPath, 'r', encoding = 'utf-8') as PublisherJson:
+        TotalPublisherData = json.load(PublisherJson)
     
     ## SeleniumHubDrive 연결
     Driver = SeleniumHubDrive()
     
     ## 출판사 홈페이지 스크래퍼
+    ScrapCounter = 0  # 카운터 변수 추가
     for i in range(len(TotalPublisherData)):
         if TotalPublisherData[i]['CustomerInformation']['WebPageTxtPath'] == "":
             Id = TotalPublisherData[i]['Id']
             PublisherName = TotalPublisherData[i]['CustomerInformation']['Name']
             HomePage = TotalPublisherData[i]['CustomerInformation']['HomePage']
-            WebPageTxtPath = PublisherScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage)
+            WebPageTxtPath = PublisherHtmlScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage)
             TotalPublisherData[i]['CustomerInformation']['WebPageTxtPath'] = WebPageTxtPath
-            with open(TotalPublisherDataJsonPath, 'w', encoding='utf-8') as json_file:
-                json.dump(TotalPublisherData, json_file, ensure_ascii = False, indent = 4)
-    
+            
+            ## 5회 마다 저장
+            ScrapCounter += 1
+            if ScrapCounter % 5 == 0:
+                with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
+                    json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
+
+    if ScrapCounter % 5 != 0:
+        with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
+            json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
+
     ## SeleniumHubDrive 종료
     Driver.quit()
-    
-    return TotalPublisherData
 
-## 교보문고 베스트셀러 스크래퍼
+    return TotalPublisherDataJsonPath, TotalPublisherData
+
+## 출판사 스크랩 데이터에서 중요 부분만 남기기
+def ExtractingHtml(WebPageTxtPath):
+    ## Html 파일 읽기
+    with open(WebPageTxtPath, 'r', encoding = 'utf-8') as file:
+        content = file.read()
+    ## HTML에서 한글과 이메일 주변 텍스트 추출(태그 제거)
+    soup = BeautifulSoup(content, 'html.parser')
+    text = soup.get_text()
+    
+    ## 1. 한글 추출
+    KoreanPattern = re.compile('[가-힣]+')
+    KoreanText = ' '.join(KoreanPattern.findall(text))
+    # 연속된 줄바꿈을 최대 2개로 제한
+    KoreanText = re.sub(r'\n{3,}', '\n\n', KoreanText)
+    # 각 줄의 좌우 공백만 제거하되 줄바꿈은 유지
+    KoreanText = '\n'.join(line.strip() for line in KoreanText.splitlines(True))
+    # 연속된 공백을 하나로 통일
+    KoreanText = re.sub(r'\s+', ' ', KoreanText)
+    # 한글 텍스트 저장
+    WebPageKoreanTxtPath = f"{WebPageTxtPath.rsplit('.', 1)[0]}_Extract.txt"
+    with open(WebPageKoreanTxtPath, 'w', encoding = 'utf-8') as f:
+        f.write(KoreanText)
+    
+    ## 2. 이메일 텍스트 추출
+    EmailPattern = re.compile(r'[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*[a-zA-Z0-9]+@[a-zA-Z0-9.-]+(\.[a-zA-Z]{2,})+')
+    EmailText = EmailPattern.finditer(text)
+    EmailText = [match.group() for match in EmailText]
+    
+    return EmailText
+
+## 출판사 이메일 및 메인페이지 정보 스크래퍼
 def TotalPublisherDataUpdate():
-    ## TotalPublisherDataJson 경로
+    print(f"[ 출판사 이메일 및 메인페이지 정보 스크래핑 시작 ]\n")
+    
+    ## 출판사 이메일 및 메인페이지 정보 스크래핑
     PublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData"
-    print(f"[ 출판사 메일 스크래핑 시작 ]\n")
-    
-    ## 베스트셀러 도서 스크래핑
-    TotalPublisherData = BestsellerWebScraper(PublisherDataPath)
-    print(f"[ TotalPublisherData 업데이트 시작 ]\n")
-    # ## 기존 토탈 데이터셋
-    
-    # if os.path.exists(TotalBookDataPath):
-    #     with open(TotalBookDataPath, 'r', encoding = 'utf-8') as BooksJson:
-    #         TotalBookDataList = json.load(BooksJson)
-
-    #     ## 토탈 데이터셋 ISBNList 구축
-    #     TotalBookDataISBNList = []
-    #     for TotalBookData in TotalBookDataList:
-    #         TotalBookDataISBNList.append(TotalBookData['ISBN'])
+    TotalPublisherDataJsonPath, TotalPublisherData = PublisherWebScraper(PublisherDataPath)
+    print(f"[ 출판사 이메일 및 메인페이지 정보 업데이트 시작 ]\n")
+    ## 기존 토탈 데이터셋
+    if TotalPublisherData[-1]['CustomerInformation']['Email'] != "":
         
-    #     ## 스크래핑 데이터의 토탈 데이터셋 업데이트
-    #     for BookData in BookDataList:
-    #         Update = True
-    #         if BookData['ISBN'] in TotalBookDataISBNList:
-    #             Update = False
-    #             Id = TotalBookDataISBNList.index(BookData['ISBN'])
-    #         if Update:
-    #             TotalBookDataList.append(BookData)
-    #         else:
-    #             # Date 추가
-    #             if BookData['Rank'][0] not in TotalBookDataList[Id]['Rank']:
-    #                 TotalBookDataList[Id]['Rank'] += BookData['Rank']
-    #             TotalBookDataList[Id]['BookPurchasedList'] = BookData['BookPurchasedList']
-    #             TotalBookDataList[Id]['CommentsCount'] = BookData['CommentsCount']
-
-    #     with open(TotalBookDataPath, 'w', encoding = 'utf-8') as BooksJson:
-    #         json.dump(TotalBookDataList, BooksJson, ensure_ascii = False, indent = 4)
-    # else:
-    #     with open(TotalBookDataPath, 'w', encoding = 'utf-8') as BooksJson:
-    #         json.dump(BookDataList, BooksJson, ensure_ascii = False, indent = 4)
-
-    # print(f"[ {period} 베스트셀러 도서 스크래핑 & 업데이트 완료 ]\n")
+        print(f"[ 출판사 이메일 및 메인페이지 정보 스크래핑 & 업데이트 완료 ]\n")
+    
+    else:
+        for i in range(len(TotalPublisherData)):
+            Id = TotalPublisherData[i]['Id']
+            Name = TotalPublisherData[i]['CustomerInformation']['Name']
+            WebPageTxtPath = TotalPublisherData[i]['CustomerInformation']['WebPageTxtPath']
+            Email = TotalPublisherData[i]['CustomerInformation']['Email']
+            if Email == "":
+                if WebPageTxtPath != "None":
+                    EmailText = ExtractingHtml(WebPageTxtPath)
+                    TotalPublisherData[i]['CustomerInformation']['Email'] = EmailText
+                elif WebPageTxtPath == "None":
+                    TotalPublisherData[i]['CustomerInformation']['Email'] = []
+                elif WebPageTxtPath == "":
+                    break
+        ## 출판사 이메일 업데이트 사항 저장
+        with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
+            json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
+            
+        print(f"[ ({Id}) ({Name}) 출판사까지 이메일 및 메인페이지 정보 스크래핑 & 업데이트 완료 ]\n")
 
 if __name__ == "__main__":
     
-    ############################ 하이퍼 파라미터 설정 ############################
-
-    #########################################################################
     TotalPublisherDataUpdate()

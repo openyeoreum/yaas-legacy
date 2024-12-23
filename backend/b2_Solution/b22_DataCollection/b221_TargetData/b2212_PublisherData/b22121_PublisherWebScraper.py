@@ -117,12 +117,12 @@ def PublisherWebScraper(PublisherDataPath):
     ## 출판사 홈페이지 스크래퍼
     ScrapCounter = 0  # 카운터 변수 추가
     for i in range(len(TotalPublisherData)):
-        if TotalPublisherData[i]['CustomerInformation']['WebPageTxtPath'] == "":
+        if TotalPublisherData[i]['PublisherInformation']['WebPageTxtPath'] == "":
             Id = TotalPublisherData[i]['Id']
-            PublisherName = TotalPublisherData[i]['CustomerInformation']['Name']
-            HomePage = TotalPublisherData[i]['CustomerInformation']['HomePage']
+            PublisherName = TotalPublisherData[i]['PublisherInformation']['Name']
+            HomePage = TotalPublisherData[i]['PublisherInformation']['HomePage']
             WebPageTxtPath = PublisherHtmlScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage)
-            TotalPublisherData[i]['CustomerInformation']['WebPageTxtPath'] = WebPageTxtPath
+            TotalPublisherData[i]['PublisherInformation']['WebPageTxtPath'] = WebPageTxtPath
             
             ## 5회 마다 저장
             ScrapCounter += 1
@@ -178,22 +178,22 @@ def TotalPublisherDataUpdate():
     TotalPublisherDataJsonPath, TotalPublisherData = PublisherWebScraper(PublisherDataPath)
     print(f"[ 출판사 이메일 및 메인페이지 정보 업데이트 시작 ]\n")
     ## 기존 토탈 데이터셋
-    if TotalPublisherData[-1]['CustomerInformation']['Email'] != "":
+    if TotalPublisherData[-1]['PublisherInformation']['Email'] != "":
         
         print(f"[ 출판사 이메일 및 메인페이지 정보 스크래핑 & 업데이트 완료 ]\n")
     
     else:
         for i in range(len(TotalPublisherData)):
             Id = TotalPublisherData[i]['Id']
-            Name = TotalPublisherData[i]['CustomerInformation']['Name']
-            WebPageTxtPath = TotalPublisherData[i]['CustomerInformation']['WebPageTxtPath']
-            Email = TotalPublisherData[i]['CustomerInformation']['Email']
+            Name = TotalPublisherData[i]['PublisherInformation']['Name']
+            WebPageTxtPath = TotalPublisherData[i]['PublisherInformation']['WebPageTxtPath']
+            Email = TotalPublisherData[i]['PublisherInformation']['Email']
             if Email == "":
                 if WebPageTxtPath != "None":
                     EmailText = ExtractingHtml(WebPageTxtPath)
-                    TotalPublisherData[i]['CustomerInformation']['Email'] = EmailText
+                    TotalPublisherData[i]['PublisherInformation']['Email'] = EmailText
                 elif WebPageTxtPath == "None":
-                    TotalPublisherData[i]['CustomerInformation']['Email'] = []
+                    TotalPublisherData[i]['PublisherInformation']['Email'] = []
                 elif WebPageTxtPath == "":
                     break
         ## 출판사 이메일 업데이트 사항 저장

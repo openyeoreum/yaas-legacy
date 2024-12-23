@@ -38,19 +38,24 @@ def LoadTotalPublisherDataToInputList(TotalPublisherDataPath):
     
     InputList = []
     for i, PublisherData in enumerate(totalPublisherDataList):
-        Id = PublisherData['Id']
-        PublisherName = f"[출판사명] {PublisherData['Name']}\n\n"
-        Classification = f"[주요항목] {PublisherData['Classification']}\n\n"
-        Subcategories = f"[세부항목] {PublisherData['Subcategories']}\n\n"
-        HomePage = f"[홈페이지] {PublisherData['HomePage']}\n\n"
-        WebPageKoreanTxtPath = f"{PublisherData['WebPageTxtPath'].rsplit('.', 1)[0]}_Extract.txt"
-        with open(WebPageKoreanTxtPath, 'r', encoding = 'utf-8') as f:
-            PageBody = f.read() 
-        HomePageBody = f"[홈페이지내용발췌] {PageBody}"
-
-        PublisherDataText = PublisherName + Classification + Subcategories + HomePage + HomePageBody
+        PublisherId = PublisherData['Id']
+        PublisherName = f"[출판사명] {PublisherData['PublisherInformation']['Name']}\n\n"
+        Classification = f"[주요항목] {PublisherData['PublisherInformation']['Classification']}\n\n"
+        Subcategories = f"[세부항목] {PublisherData['PublisherInformation']['Subcategories']}\n\n"
+        HomePage = f"[홈페이지] {PublisherData['PublisherInformation']['HomePage']}\n\n"
+        WebPageKoreanTxtPath = f"{PublisherData['PublisherInformation']['WebPageTxtPath'].rsplit('.', 1)[0]}_Extract.txt"
+        if 'None' in WebPageKoreanTxtPath:
+            PublisherDataText = None
+        else:
+            with open(WebPageKoreanTxtPath, 'r', encoding = 'utf-8') as f:
+                PageBody = f.read() 
+            HomePageBody = f"[홈페이지내용발췌] {PageBody}"
+            if PageBody != '':
+                PublisherDataText = PublisherName + Classification + Subcategories + HomePage + HomePageBody
+            else:
+                PublisherDataText = None
    
-        InputDic = {'Id': Id, 'PublisherName': PublisherName, 'Publisher': PublisherDataText}
+        InputDic = {'Id': i, 'PublisherId': PublisherId, 'PublisherName': PublisherData['PublisherInformation']['Name'], 'PublisherText': PublisherDataText}
         InputList.append(InputDic)
         
     return totalPublisherDataList, InputList
@@ -207,7 +212,7 @@ def PublisherContextDefineProcess(TotalPublisherDataPath, projectName, email, Pr
 
 ## PublisherContextDefine 프롬프트 요청 및 결과물 TotalPublisherDataList에 업데이트 및 점수배점
 def PublisherContextDefineUpdate(projectName = "Publisher", email = "General", process1 = "PublisherContextDefine", process2 = "PublisherCommentAnalysis", messagesReview = "on", mode = "Master"):
-    TotalPublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_PublisherData/s15221_TotalPublisherData/TotalPublisherData.json"
+    TotalPublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData/TotalPublisherData.json"
     TotalPublisherDataList, Date = LoadTotalPublisherDataList(TotalPublisherDataPath)
     
     print(f"< User: {email} | Project: {Date} {projectName} | Publisher ContextDefine/CommentAnalysis 시작 >")
@@ -288,5 +293,6 @@ def PublisherContextDefineUpdate(projectName = "Publisher", email = "General", p
         print(f"[ User: {email} | Project: {Date} {projectName} | Publisher ContextDefine/CommentAnalysis는 이미 완료됨 ]\n")
 
 if __name__ == "__main__":
-
-    PublisherContextDefineUpdate()
+    TotalPublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData/TotalPublisherData.json"
+    totalPublisherDataList, InputList = LoadTotalPublisherDataToInputList(TotalPublisherDataPath)
+    print(InputList[1])

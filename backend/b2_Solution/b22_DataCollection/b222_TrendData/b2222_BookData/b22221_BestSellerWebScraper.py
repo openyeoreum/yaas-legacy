@@ -165,13 +165,13 @@ def BestsellerScraper(driver, period = 'Weekly', rank = 200):
     # period 값에 따른 페이지 설정
     if period == 'Weekly':
         Period = 'weekly'
-        BookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_BookData/s1522_WeeklyBookData/"
+        BookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_BookData/s15222_WeeklyBookData/"
     elif period == 'Monthly':
         Period = 'monthly'
-        BookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_BookData/s1523_MonthlyBookData/"
+        BookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_BookData/s15223_MonthlyBookData/"
     elif period == 'Yearly':
         Period = 'annual'
-        BookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_BookData/s1524_YearlyBookData/"
+        BookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_BookData/s15224_YearlyBookData/"
 
     # 기존 파일 확인 후 스크래핑 시작 페이지와 파일번호 설정 (i, j)
     # driver.get(f"https://product.kyobobook.co.kr/bestseller/total?period={Period}#?page=1&per=50")
@@ -273,7 +273,7 @@ def TotalBookDataUpdate(period):
     BookDataList = BestsellerWebScraper(period)
     print(f"[ TotalBookData 업데이트 시작 ]\n")
     ## 기존 토탈 데이터셋
-    TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_BookData/s1521_TotalBookData/TotalBookData.json"
+    TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_BookData/s15221_TotalBookData/TotalBookData.json"
     if os.path.exists(TotalBookDataPath):
         with open(TotalBookDataPath, 'r', encoding = 'utf-8') as BooksJson:
             TotalBookDataList = json.load(BooksJson)

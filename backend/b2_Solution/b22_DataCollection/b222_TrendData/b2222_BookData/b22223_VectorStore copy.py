@@ -6,7 +6,7 @@ from transformers import AutoTokenizer, AutoModel
 import torch
 
 # 경로 설정
-data_directory = '/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_BookData/s1523_YearlyBookData/2023년_YearlyBookData/'
+data_directory = '/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_BookData/s1523_YearlyBookData/2023년_YearlyBookData/'
 
 # 모델 및 토크나이저 로드
 tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")

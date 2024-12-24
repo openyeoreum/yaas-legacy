@@ -115,7 +115,7 @@ def PublisherCommentAnalysisFilter(Response, CommentCount):
 ##### Process 진행 #####
 #######################
 ## PublisherContextDefine 프롬프트 요청 및 결과물 Json화
-def PublisherContextDefineProcess(TotalPublisherDataPath, projectName, email, Process1 = "PublisherContextDefine", Process2 = "PublisherCommentAnalysis", MessagesReview = "on", mode = "Master"):
+def PublisherContextDefineProcess(TotalPublisherDataPath, projectName, email, Process1 = "PublisherContextDefine", Process2 = "PublisherMWMWDefine", Process3 = "PublisherAudioBookAnalysis", MessagesReview = "on", mode = "Master"):
     ## 작업이 되지 않은 부분부터 totalPublisherDataList와 InputList 형성
     totalPublisherDataList, inputList = LoadTotalPublisherDataToInputList(TotalPublisherDataPath)
     StartPoint = 0

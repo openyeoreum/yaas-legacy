@@ -23,8 +23,12 @@ def AddPromptToDB():
         PromptDataPath = GetPromptDataPath()
         
         # DataCollectionPrompt
+        publisherContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-01_PublisherContextDefine.json")
+        publisherWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-02_PublisherWMWMDefine.json")
+        publisherAudioBookAnalysis = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-03_PublisherAudioBookAnalysis.json")
         bestSellerContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-01_BestSellerContextDefine.json")
-        bestSellerCommentAnalysis = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-02_BestSellerCommentAnalysis.json")
+        bestSellerWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-02_BestSellerWMWMDefine.json")
+        bestSellerCommentAnalysis = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-03_BestSellerCommentAnalysis.json")
         # ScriptPrompt
         changesAfterMeditation_Script = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5421_InstantScriptPrompt/b5421-01_ChangesAfterMeditation_Script.json")
         sejongCityOfficeOfEducation_Poem = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5421_InstantScriptPrompt/b5421-02_SejongCityOfficeOfEducation_Poem.json")
@@ -75,6 +79,9 @@ def AddPromptToDB():
 
         # DB Commit
         if ExistingPrompt:
+            ExistingPrompt.BestSellerContextDefine = bestSellerContextDefine
+            ExistingPrompt.BestSellerWMWMDefine = bestSellerWMWMDefine
+            ExistingPrompt.BestSellerCommentAnalysis = bestSellerCommentAnalysis
             ExistingPrompt.ChangesAfterMeditation_Script = changesAfterMeditation_Script
             ExistingPrompt.SejongCityOfficeOfEducation_Poem = sejongCityOfficeOfEducation_Poem
             ExistingPrompt.BookPreprocess = bookPreprocess
@@ -115,13 +122,14 @@ def AddPromptToDB():
             ExistingPrompt.VoiceInspection = voiceInspection
             ExistingPrompt.VoiceSplit = voiceSplit
             ExistingPrompt.VoiceSplitInspection = voiceSplitInspection
-            ExistingPrompt.BestSellerContextDefine = bestSellerContextDefine
-            ExistingPrompt.BestSellerCommentAnalysis = bestSellerCommentAnalysis
             ### 아래로 추가되는 프롬프트 작성 ###
             
             print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
         else:
             prompt = Prompt(
+                BestSellerContextDefine = bestSellerContextDefine,
+                BestSellerWMWMDefine = bestSellerWMWMDefine,
+                BestSellerCommentAnalysis = bestSellerCommentAnalysis,
                 ChangesAfterMeditation_Script = changesAfterMeditation_Script,
                 SejongCityOfficeOfEducation_Poem = sejongCityOfficeOfEducation_Poem,
                 BookPreprocess = bookPreprocess,
@@ -160,9 +168,7 @@ def AddPromptToDB():
                 SentsSpliting = sentsSpliting,
                 VoiceInspection = voiceInspection,
                 VoiceSplit = voiceSplit,
-                VoiceSplitInspection = voiceSplitInspection,
-                BestSellerContextDefine = bestSellerContextDefine,
-                BestSellerCommentAnalysis = bestSellerCommentAnalysis
+                VoiceSplitInspection = voiceSplitInspection
                 ### 아래로 추가되는 프롬프트 작성 ###
                 )
             db.add(prompt)

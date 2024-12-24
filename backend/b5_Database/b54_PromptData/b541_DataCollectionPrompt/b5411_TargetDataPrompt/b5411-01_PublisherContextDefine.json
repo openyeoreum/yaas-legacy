@@ -1,0 +1,274 @@
+{
+    "TaskName": "PublisherContextDefine",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-4o-mini",
+            "LongTokensModel": "gpt-4o-2024-11-20"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "gpt-4o-2024-11-20"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-5-haiku-latest",
+            "LongTokensModel": "claude-3-5-sonnet-latest"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-5-sonnet-latest"
+    },
+    "Temperature": 0.8,
+    "OutputTokensRatio": 0.5,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 출판사, 언론사 등의 홈페이지의 메인페이지 텍스트 정보를 보고 그 정보를 분류 및 분석하는 전문가 입니다. <메인페이지 텍스트 정보>를 분석하여 <메인페이지 분석.json>를 작성합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<메인페이지 분석.json>의 구조 및 내용)\n",
+                    "Message": "{‘분석’: {‘핵심슬로건’: ‘출판사, 언론사가 메인페이지에서 소개하고 싶은 핵심슬로건을 한 문장으로 작성’, ‘목적’: ‘출판사, 언론사가 핵심슬로건을 내거는 목적을 추측하여 한 문장으로 작성’, ‘이유’: ‘출판사, 언론사가 핵심슬로건을 내거는 목적이 어떠한 이유에서 도출되었는지를 추측하여 한 문장으로 작성’, ‘질문’: ‘출판사, 언론사가 핵심슬로건을 달성하기 위해서 자신의 롤모델에게 어떠한 질문을 할 것인지를 추측하여 한 문장으로 작성’, ‘주제’: [‘핵심’, ‘슬로건의’, ‘주제 키워드’], ‘전문가’: [‘출판사, 언론사를’, ‘구성하는’, ‘전문가 키워드’]}, ‘정확도’: ‘추측의 정확도를 100점 만점으로 표기’}\n"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<메인페이지 텍스트 정보>를 분석하여 <메인페이지 분석.json>를 작성해주세요)\n\n",
+                    "InputMark": "<메인페이지 텍스트 정보>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n<메인페이지 분석.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 출판사, 언론사 등의 홈페이지의 메인페이지 텍스트 정보를 보고 그 정보를 분류 및 분석하는 전문가 입니다. <메인페이지 텍스트 정보>를 분석하여 <메인페이지 분석.json>를 작성합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<메인페이지 분석.json>의 구조 및 내용)\n",
+                    "Message": "{‘분석’: {‘핵심슬로건’: ‘출판사, 언론사가 메인페이지에서 소개하고 싶은 핵심슬로건을 한 문장으로 작성’, ‘목적’: ‘출판사, 언론사가 핵심슬로건을 내거는 목적을 추측하여 한 문장으로 작성’, ‘이유’: ‘출판사, 언론사가 핵심슬로건을 내거는 목적이 어떠한 이유에서 도출되었는지를 추측하여 한 문장으로 작성’, ‘질문’: ‘출판사, 언론사가 핵심슬로건을 달성하기 위해서 자신의 롤모델에게 어떠한 질문을 할 것인지를 추측하여 한 문장으로 작성’, ‘주제’: [‘핵심’, ‘슬로건의’, ‘주제 키워드’], ‘전문가’: [‘출판사, 언론사를’, ‘구성하는’, ‘전문가 키워드’]}, ‘정확도’: ‘추측의 정확도를 100점 만점으로 표기’}\n"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<메인페이지 텍스트 정보>를 분석하여 <메인페이지 분석.json>를 작성해주세요)\n\n",
+                    "InputMark": "<메인페이지 텍스트 정보>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n<메인페이지 분석.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 출판사, 언론사 등의 홈페이지의 메인페이지 텍스트 정보를 보고 그 정보를 분류 및 분석하는 전문가 입니다. <메인페이지 텍스트 정보>를 분석하여 <메인페이지 분석.json>를 작성합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<메인페이지 분석.json>의 구조 및 내용)\n",
+                    "Message": "{‘분석’: {‘핵심슬로건’: ‘출판사, 언론사가 메인페이지에서 소개하고 싶은 핵심슬로건을 한 문장으로 작성’, ‘목적’: ‘출판사, 언론사가 핵심슬로건을 내거는 목적을 추측하여 한 문장으로 작성’, ‘이유’: ‘출판사, 언론사가 핵심슬로건을 내거는 목적이 어떠한 이유에서 도출되었는지를 추측하여 한 문장으로 작성’, ‘질문’: ‘출판사, 언론사가 핵심슬로건을 달성하기 위해서 자신의 롤모델에게 어떠한 질문을 할 것인지를 추측하여 한 문장으로 작성’, ‘주제’: [‘핵심’, ‘슬로건의’, ‘주제 키워드’], ‘전문가’: [‘출판사, 언론사를’, ‘구성하는’, ‘전문가 키워드’]}, ‘정확도’: ‘추측의 정확도를 100점 만점으로 표기’}\n"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<메인페이지 텍스트 정보>를 분석하여 <메인페이지 분석.json>를 작성해주세요)\n\n",
+                    "InputMark": "<메인페이지 텍스트 정보>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n<메인페이지 분석.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할)\n",
+            "Message": "당신은 출판사, 언론사 등의 홈페이지의 메인페이지 텍스트 정보를 보고 그 정보를 분류 및 분석하는 전문가 입니다. <메인페이지 텍스트 정보>를 분석하여 <메인페이지 분석.json>를 작성합니다."
+        },
+        {
+            "Role": "user",
+            "Request": 
+            [
+                {
+                    "Mark": "(<메인페이지 분석.json>의 구조 및 내용)\n",
+                    "Message": "{‘분석’: {‘핵심슬로건’: ‘출판사, 언론사가 메인페이지에서 소개하고 싶은 핵심슬로건을 한 문장으로 작성’, ‘목적’: ‘출판사, 언론사가 핵심슬로건을 내거는 목적을 추측하여 한 문장으로 작성’, ‘이유’: ‘출판사, 언론사가 핵심슬로건을 내거는 목적이 어떠한 이유에서 도출되었는지를 추측하여 한 문장으로 작성’, ‘질문’: ‘출판사, 언론사가 핵심슬로건을 달성하기 위해서 자신의 롤모델에게 어떠한 질문을 할 것인지를 추측하여 한 문장으로 작성’, ‘주제’: [‘핵심’, ‘슬로건의’, ‘주제 키워드’], ‘전문가’: [‘출판사, 언론사를’, ‘구성하는’, ‘전문가 키워드’]}, ‘정확도’: ‘추측의 정확도를 100점 만점으로 표기’}\n"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n(<메인페이지 텍스트 정보>를 분석하여 <메인페이지 분석.json>를 작성해주세요)\n\n",
+                    "InputMark": "<메인페이지 텍스트 정보>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n<메인페이지 분석.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

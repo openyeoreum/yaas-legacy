@@ -8,6 +8,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from backend.b2_Solution.b21_General.b211_GetDBtable import GetProject, GetPromptFrame
+from backend.b2_Solution.b21_General.b219_ProjectFileCommit import AddTextToDB
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2412_DataFrameCommit import FindDataframeFilePaths, AddExistedIndexFrameToDB, AddIndexFrameBodyToDB, IndexFrameCountLoad, InitIndexFrame, IndexFrameCompletionUpdate
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
@@ -18,10 +19,12 @@ def LoadIndexText(projectName, email):
     TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
     RawIndexTextFilePath = TextDirPath + f'/{projectName}_Index(Raw).txt'
     RawBodyTextFilePath = TextDirPath + f'/{projectName}_Body(Raw).txt'
-    
+    # IndexText, BodyText Commit
+    AddTextToDB(projectName, email, TextDirPath)
     
     project = GetProject(projectName, email)
     indexText = project.IndexText
+    
     if indexText is None:
       ## [ Script Generation 프로세스 ] 인 경우 ##
       if os.path.exists(RawIndexTextFilePath) and os.path.exists(RawBodyTextFilePath):

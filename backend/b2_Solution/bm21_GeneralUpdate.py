@@ -7,6 +7,7 @@ from backend.b2_Solution.b21_General.b214_SoundDatasetCommit import AddSoundData
 from backend.b2_Solution.b21_General.b215_UserCommit import AddUserToDB
 from backend.b2_Solution.b21_General.b217_ProjectsStorageCommit import AddProjectsStorageToDB
 from backend.b2_Solution.b21_General.b218_ProjectCommit import AddProjectToDB
+from backend.b2_Solution.b21_General.b219_ProjectFileCommit import AddTextToDB
 
 #################################
 #################################
@@ -36,7 +37,7 @@ def AccountUpdate(email, name, password):
 ### 솔루션에 프로젝트 업데이트 ###
 def SolutionProjectUpdate(email, projectName):
 
-    ### b232_ProjectCommit ###
+    ### b218_ProjectCommit ###
     AddProjectToDB(projectName, email)
     # AddProjectToDB('빨간머리앤', email)
     # AddProjectToDB('웹3.0메타버스', email)
@@ -45,6 +46,9 @@ def SolutionProjectUpdate(email, projectName):
     # AddProjectToDB('카이스트명상수업', email)
     # AddProjectToDB('우리는행복을진단한다', email)
     # AddProjectToDB('살아서천국극락낙원에가는방법', email)
+    
+    ### b219_ProjectsStorageCommit ###
+    AddTextToDB(projectName, email)
 
     ### b212_TrainingDatasetCommit ###
     AddTrainingDatasetToDB(projectName, email)

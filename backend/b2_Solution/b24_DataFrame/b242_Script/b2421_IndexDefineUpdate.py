@@ -19,8 +19,6 @@ def LoadIndexText(projectName, email):
     TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
     RawIndexTextFilePath = TextDirPath + f'/{projectName}_Index(Raw).txt'
     RawBodyTextFilePath = TextDirPath + f'/{projectName}_Body(Raw).txt'
-    # IndexText, BodyText Commit
-    AddTextToDB(projectName, email, TextDirPath)
     
     project = GetProject(projectName, email)
     indexText = project.IndexText

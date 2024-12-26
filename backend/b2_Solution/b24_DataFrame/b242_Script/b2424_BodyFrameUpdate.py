@@ -37,7 +37,7 @@ def LoadBodyText(projectName, email):
     AbsDiff = abs(Len_bodyText - LenbodyText)
     RelativeDiff = AbsDiff / LenbodyText
     if RelativeDiff >= 0.05:
-        sys.exit(f"[ 분할 전후 텍스트 {RelativeDiff}% 만큼 다름 (_bodyText: {Len_bodyText} != bodyText: {LenbodyText}) ]")
+        sys.exit(f"[ 분할 전후 텍스트 {RelativeDiff * 100}% 만큼 다름 (_bodyText: {Len_bodyText} != bodyText: {LenbodyText}) ]")
     
     return bodyText
 

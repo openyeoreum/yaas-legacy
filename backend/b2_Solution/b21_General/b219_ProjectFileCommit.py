@@ -18,7 +18,9 @@ def LoadTextFile(filepath):
         return None
 
 # Index, Body Commit
-def AddTextToDB(projectName, email, TextDirPath):
+def AddTextToDB(projectName, email):
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
+    
     with get_db() as db:
         user = db.query(User).filter(User.Email == email).first()
         project = GetProject(projectName, email)

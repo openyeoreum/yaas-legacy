@@ -54,8 +54,9 @@ def LoadMusicDataSet(projectName, email, MainLang = 'Ko'):
     ## TitleMusicDataSet 불러오기
     soundDataSet = GetSoundDataSet("TitleMusicDataSet")
     TitleMusicDataSet = soundDataSet[0][1]['TitleMusics'][1:]
+    LogueMusicDataSet = soundDataSet[0][1]['LogueMusics'][1:]
     
-    return SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet
+    return SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, LogueMusicDataSet
 
 ############################
 ##### MusicMatched 생성 #####
@@ -114,7 +115,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
     MatchedMusicLayerPath = MusicLayerPathGen(projectName, email, fileName)
 
     ## MusicDataSet 불러오기
-    SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet = LoadMusicDataSet(projectName, email, MainLang = MainLang)
+    SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, LogueMusicDataSet = LoadMusicDataSet(projectName, email, MainLang = MainLang)
 
     ## MusicTemplates 생성
     MusicTemplatePath = "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s181_MusicTemplate"
@@ -282,6 +283,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
 
     ## MatchedMusics의 File과 FilePath가 일치하지 않을 경우 File 적용
     NewMatchedMusics = []
+    FilePath = None
     for MatchedMusic in MatchedMusics:
         Tag = MatchedMusic['Tag']
         if 'File' not in MatchedMusic:
@@ -315,7 +317,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
                     TitleMusicSet = TitleMusicData['MusicSet']['TitleMusic']
                     PartMusicSet = TitleMusicData['MusicSet']['PartMusic']
                     IndexMusicSet = TitleMusicData['MusicSet']['IndexMusic']
-                    MusicSets = TitleMusicSet + PartMusicSet + IndexMusicSet
+                    MusicSets = TitleMusicSet + PartMusicSet + IndexMusicSet + LogueMusicDataSet
                     for MusicSet in MusicSets:
                         TitleMusicDataFile = MusicSet['FilePath'].split('/')[-1]
                         if File == TitleMusicDataFile:

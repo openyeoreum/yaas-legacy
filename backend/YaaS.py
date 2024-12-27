@@ -252,7 +252,7 @@ if __name__ == "__main__":
     # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240919_암을이기는천연항암제요약', '240812_룰루레몬스토리', '240815_노유파', '240908_나무스토리텔링', '240910_AI미래시나리오2030', '240925_불멸의지혜', '241005_그해여름필립로커웨이에서일어난소설같은일', '241009_책갈피와책수레', '241010_틈틈이낭만', '241024_오성삼유튜브', '241024_서울장애인가족지원센터당선작13선', '241029_누가정부창업지원을받는가', '241116_베이버터와다섯개의빛', '241118_세종교육청우리반오디오북새움중1학년8반', '241118_세종교육청우리반오디오북아름초5학년5반', '241118_세종교육청우리반오디오북아름초1학년1반', '241127_엄마의첫공부', '241128_끌리는이들에겐이유가있다', '241204_개정교육과정초등교과별이해연수', '241210_공부하듯주식해서보화찾기요약', '241210_끌리는이들에겐이유가있다요약', '241210_나는외식창업에적합한사람인가요약', '241226_법이사라진내멋대로마을을지켜줘'
 
     User = {"email": "yeoreum00128@gmail.com", "name": "yeoreum", "password": "0128"}
-    ProjectNameList = {"StartProjectName": "241226_법이사라진내멋대로마을을지켜줘", "ContinueProjectNameList": [""]}
+    ProjectNameList = {"StartProjectName": "", "ContinueProjectNameList": ["241226_법이사라진내멋대로마을을지켜줘"]}
     MainLang = "Ko" # 'Ko', 'En', 'Ja', 'Zh', 'Es' ... 중 메인이 되는 언어를 선택
     Translations = [] # 'En', 'Ja', 'Zh', 'Es' ... 중 다중 선택
     
@@ -264,7 +264,7 @@ if __name__ == "__main__":
     Marketing = [] # [] 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택
     
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력
-    Account = "junyoung8@nate.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com', 'kka6887@hanmail.net', 'aldus5909@naver.com', 'junyoung8@nate.com' ... 중 선택
+    Account = "kka6887@naver.com" # 'yeoreum00128@naver.com', 'lucidsun0128@naver.com', 'ahyeon00128@naver.com', 'khsis3516@naver.com', 'lunahyeon00128@naver.com', 'kka6887@hanmail.net', 'aldus5909@naver.com', 'junyoung8@nate.com', 'kka6887@naver.com' ... 중 선택
 
     #########################################################################
 

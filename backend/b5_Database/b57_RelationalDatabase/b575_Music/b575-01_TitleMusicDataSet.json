@@ -6,6 +6,49 @@
         "Type": "TitleMusic"
     },
     {
+        "LogueMusics": [
+            {
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s186_LogueMusic/.wav",
+                "Setting": {
+                    "Length": [0.00, 0.00],
+                    "Volume": 100,
+                    "Direction": "뒤"
+                }
+            },
+            {
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s186_LogueMusic/1_LogueMusic.wav",
+                "Setting": {
+                    "Length": [
+                        0.75,
+                        2.00
+                    ],
+                    "Volume": 100,
+                    "Direction": "뒤"
+                }
+            },
+            {
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s186_LogueMusic/2_LogueMusic.wav",
+                "Setting": {
+                    "Length": [
+                        0.75,
+                        1.00
+                    ],
+                    "Volume": 100,
+                    "Direction": "뒤"
+                }
+            },
+            {
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s186_LogueMusic/4_LogueMusic.wav",
+                "Setting": {
+                    "Length": [
+                        0.75,
+                        1.00
+                    ],
+                    "Volume": 100,
+                    "Direction": "뒤"
+                }
+            }
+        ],
         "TitleMusics": [
             {
                 "TitleMusicId": 0,

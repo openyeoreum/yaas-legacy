@@ -130,80 +130,80 @@ def PublisherContextDefineProcess(TotalPublisherDataPath, projectName, email, Pr
     
     while i < InputCount:
         ProcessCount = i+1
-        Input = InputList[i]['Publisher']
-        
-        # 상태 추적 변수
-        process1_complete = False
-        process2_complete = False
+        Input = InputList[i]['PublisherText']
+        if Input != None:
+            # 상태 추적 변수
+            process1_complete = False
+            process2_complete = False
 
-        ## PublisherContextDefine Response 생성
-        while not process1_complete:
-            Response1, Usage, Model = OpenAI_LLMresponse(projectName, email, Process1, Input, ProcessCount, Mode = mode, messagesReview = MessagesReview)
-            Filter1 = PublisherContextDefineFilter(Response1)
+            ## PublisherContextDefine Response 생성
+            while not process1_complete:
+                Response1, Usage, Model = OpenAI_LLMresponse(projectName, email, Process1, Input, ProcessCount, Mode = mode, messagesReview = MessagesReview)
+                Filter1 = PublisherContextDefineFilter(Response1)
 
-            if isinstance(Filter1, str):
-                print(f"Project: {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | {Filter1}")
-                ErrorCount1 += 1
-                print(f"Project: {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회, 2분 후 프롬프트 재시도")
-                time.sleep(120)
-                if ErrorCount1 == 5:
-                    sys.exit(f"Project: {Date} {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회 초과, 프롬프트 종료")
-                continue
-            else:
-                OutputDic1 = Filter1
-                print(f"Project: {Date} {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | JSONDecode 완료")
-                ErrorCount1 = 0
-                process1_complete = True
-            
-        ## PublisherCommentAnalysis Response 생성
-        while not process2_complete:
-            Response2, Usage, Model = OpenAI_LLMresponse(projectName, email, Process2, Input2, ProcessCount, Mode = mode, messagesReview = MessagesReview)
-            Filter2 = PublisherCommentAnalysisFilter(Response2, CommentCount)
-
-            if isinstance(Filter2, str):
-                print(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | {Filter2}")
-                ErrorCount2 += 1
-                print(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount2}회, 2분 후 프롬프트 재시도")
-                time.sleep(120)
-                if ErrorCount2 == 5:
-                    sys.exit(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount2}회 초과, 프롬프트 종료")
-                continue
-            else:
-                OutputDic2 = Filter2
-                print(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | JSONDecode 완료")
-                ErrorCount2 = 0
-                process2_complete = True
-
-        ## totalPublisherDataList 업데이트
-        for PublisherData in totalPublisherDataList:
-            if PublisherData['ISBN'] == InputList[i]['ISBN']:
-                ## PublisherCommentAnalysis
-                if OutputDic2['평가'] == '없음':
-                    PublisherData['CommentAnalysis'] = None
+                if isinstance(Filter1, str):
+                    print(f"Project: {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | {Filter1}")
+                    ErrorCount1 += 1
+                    print(f"Project: {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회, 2분 후 프롬프트 재시도")
+                    time.sleep(120)
+                    if ErrorCount1 == 5:
+                        sys.exit(f"Project: {Date} {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount1}회 초과, 프롬프트 종료")
+                    continue
                 else:
-                    Evaluation = OutputDic2['평가']
-                    for k in range(len(Evaluation)):
-                        PublisherData['CommentList'][k]['evaluation'] = Evaluation[k]
-                    Synthesis = OutputDic2['종합']
-                    Feedback = OutputDic2['피드백']
-                    CommentAnalysis = {'synthesis': Synthesis, 'feedback': Feedback}
-                    PublisherData['CommentAnalysis'] = CommentAnalysis
+                    OutputDic1 = Filter1
+                    print(f"Project: {Date} {projectName} | Process: {Process1} {ProcessCount}/{InputCount} | JSONDecode 완료")
+                    ErrorCount1 = 0
+                    process1_complete = True
                 
-                ## PublisherContextDefine
-                Message = OutputDic1['한줄메세지']
-                Reader = OutputDic1['독자키워드']
-                Subject = OutputDic1['주제키워드']
-                Purpose = OutputDic1['독자목적']
-                Reason = OutputDic1['독자원인']
-                Question = OutputDic1['독자질문']
-                Comment = OutputDic1['독자리뷰']
-                Importance = OutputDic1['독자만족도']
-                Context = {"Message": Message, "Reader": Reader, "Subject": Subject, "Purpose": Purpose, "Reason": Reason, "Question": Question, "Comment": Comment, "Importance": Importance}
-                PublisherData['Context'] = Context
-                break
-            
-        with open(TempTotalPublisherDataPath, 'w', encoding = 'utf-8') as TempPublishersJson:
-            json.dump(totalPublisherDataList, TempPublishersJson, ensure_ascii = False, indent = 4)
+            ## PublisherCommentAnalysis Response 생성
+            while not process2_complete:
+                Response2, Usage, Model = OpenAI_LLMresponse(projectName, email, Process2, Input, ProcessCount, Mode = mode, messagesReview = MessagesReview)
+                Filter2 = PublisherCommentAnalysisFilter(Response2)
+
+                if isinstance(Filter2, str):
+                    print(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | {Filter2}")
+                    ErrorCount2 += 1
+                    print(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount2}회, 2분 후 프롬프트 재시도")
+                    time.sleep(120)
+                    if ErrorCount2 == 5:
+                        sys.exit(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount2}회 초과, 프롬프트 종료")
+                    continue
+                else:
+                    OutputDic2 = Filter2
+                    print(f"Project: {Date} {projectName} | Process: {Process2} {ProcessCount}/{InputCount} | JSONDecode 완료")
+                    ErrorCount2 = 0
+                    process2_complete = True
+
+            ## totalPublisherDataList 업데이트
+            for PublisherData in totalPublisherDataList:
+                if PublisherData['ISBN'] == InputList[i]['ISBN']:
+                    ## PublisherCommentAnalysis
+                    if OutputDic2['평가'] == '없음':
+                        PublisherData['CommentAnalysis'] = None
+                    else:
+                        Evaluation = OutputDic2['평가']
+                        for k in range(len(Evaluation)):
+                            PublisherData['CommentList'][k]['evaluation'] = Evaluation[k]
+                        Synthesis = OutputDic2['종합']
+                        Feedback = OutputDic2['피드백']
+                        CommentAnalysis = {'synthesis': Synthesis, 'feedback': Feedback}
+                        PublisherData['CommentAnalysis'] = CommentAnalysis
+                    
+                    ## PublisherContextDefine
+                    Message = OutputDic1['한줄메세지']
+                    Reader = OutputDic1['독자키워드']
+                    Subject = OutputDic1['주제키워드']
+                    Purpose = OutputDic1['독자목적']
+                    Reason = OutputDic1['독자원인']
+                    Question = OutputDic1['독자질문']
+                    Comment = OutputDic1['독자리뷰']
+                    Importance = OutputDic1['독자만족도']
+                    Context = {"Message": Message, "Reader": Reader, "Subject": Subject, "Purpose": Purpose, "Reason": Reason, "Question": Question, "Comment": Comment, "Importance": Importance}
+                    PublisherData['Context'] = Context
+                    break
+                
+            with open(TempTotalPublisherDataPath, 'w', encoding = 'utf-8') as TempPublishersJson:
+                json.dump(totalPublisherDataList, TempPublishersJson, ensure_ascii = False, indent = 4)
             
         # 다음 아이템으로 이동
         i += 1
@@ -293,6 +293,10 @@ def PublisherContextDefineUpdate(projectName = "Publisher", email = "General", p
         print(f"[ User: {email} | Project: {Date} {projectName} | Publisher ContextDefine/CommentAnalysis는 이미 완료됨 ]\n")
 
 if __name__ == "__main__":
+    
+    ############################ 하이퍼 파라미터 설정 ############################
+    email = "yeoreum00128@gmail.com"
+    ProjectName = '241204_개정교육과정초등교과별이해연수'
+    #########################################################################
     TotalPublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData/TotalPublisherData.json"
-    totalPublisherDataList, InputList = LoadTotalPublisherDataToInputList(TotalPublisherDataPath)
-    print(InputList[1])
+    PublisherContextDefineProcess(TotalPublisherDataPath, ProjectName, email)

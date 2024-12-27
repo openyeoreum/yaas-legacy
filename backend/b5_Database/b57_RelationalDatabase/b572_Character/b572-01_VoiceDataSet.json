@@ -3869,6 +3869,93 @@
             },
             {
                 "CharacterId": 44,
+                "Name": "건우(일반, 피치다운)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
+                "Quilty": 0,
+                "Grade": ["Actor"],
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 0},
+                        {"index": "여", "Score": 0},
+                        {"index": "중성", "Score": 0}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 0},
+                        {"index": "중립적", "Score": 0},
+                        {"index": "내향적", "Score": 0}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 0},
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "평온", "Score": 0},
+                        {"index": "무감정", "Score": 0},
+                        {"index": "피곤", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 0}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 0},
+                        {"index": "중립", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "화남", "Score": 0}
+                    ],
+                    "TypeCastContext": {}
+                },
+                "ApiSetting": {
+                    "name": "건우",
+                    "Api": "TypeCast",
+                    "emotion_tone_preset": {
+                        "emotion_tone_preset": ["normal-1"],
+                        "emotion_prompt": "None"
+                    },
+                    "emotion_prompt": {
+                        "emotion_tone_preset": "emotion_prompt",
+                        "emotion_prompt": "None"
+                    },
+                    "volume": 120,
+                    "speed_x": [1],
+                    "tempo": 1.0,
+                    "pitch": -1,
+                    "max_seconds": 60,
+                    "force_length": 0,
+                    "last_pitch": [-2, -1]
+                }
+            },
+            {
+                "CharacterId": 44,
                 "Name": "건우(슬픔)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/44_건우(슬픔).wav",
                 "Quilty": 8,

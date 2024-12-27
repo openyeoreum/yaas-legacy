@@ -24,7 +24,7 @@ def AddPromptToDB():
         
         # DataCollectionPrompt
         publisherContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-01_PublisherContextDefine.json")
-        # publisherWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-02_PublisherWMWMDefine.json")
+        publisherWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-02_PublisherWMWMDefine.json")
         # publisherAudioBookAnalysis = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-03_PublisherAudioBookAnalysis.json")
         bestSellerContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-01_BestSellerContextDefine.json")
         # bestSellerWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-02_BestSellerWMWMDefine.json")
@@ -80,7 +80,7 @@ def AddPromptToDB():
         # DB Commit
         if ExistingPrompt:
             ExistingPrompt.PublisherContextDefine = publisherContextDefine
-            # ExistingPrompt.PublisherWMWMDefine = publisherWMWMDefine
+            ExistingPrompt.PublisherWMWMDefine = publisherWMWMDefine
             # ExistingPrompt.PublisherAudioBookAnalysis = publisherAudioBookAnalysis
             ExistingPrompt.BestSellerContextDefine = bestSellerContextDefine
             # ExistingPrompt.BestSellerWMWMDefine = bestSellerWMWMDefine
@@ -131,7 +131,7 @@ def AddPromptToDB():
         else:
             prompt = Prompt(
                 PublisherContextDefine = publisherContextDefine,
-                # PublisherWMWMDefine = publisherWMWMDefine,
+                PublisherWMWMDefine = publisherWMWMDefine,
                 # PublisherAudioBookAnalysis = publisherAudioBookAnalysis,
                 BestSellerContextDefine = bestSellerContextDefine,
                 # BestSellerWMWMDefine = bestSellerWMWMDefine,

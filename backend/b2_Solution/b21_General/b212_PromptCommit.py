@@ -25,7 +25,7 @@ def AddPromptToDB():
         # DataCollectionPrompt
         publisherContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-01_PublisherContextDefine.json")
         publisherWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-02_PublisherWMWMDefine.json")
-        # publisherAudioBookAnalysis = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-03_PublisherAudioBookAnalysis.json")
+        publisherServiceDemand = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-03_PublisherServiceDemand.json")
         bestSellerContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-01_BestSellerContextDefine.json")
         # bestSellerWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-02_BestSellerWMWMDefine.json")
         bestSellerCommentAnalysis = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-03_BestSellerCommentAnalysis.json")
@@ -81,7 +81,7 @@ def AddPromptToDB():
         if ExistingPrompt:
             ExistingPrompt.PublisherContextDefine = publisherContextDefine
             ExistingPrompt.PublisherWMWMDefine = publisherWMWMDefine
-            # ExistingPrompt.PublisherAudioBookAnalysis = publisherAudioBookAnalysis
+            ExistingPrompt.PublisherServiceDemand = publisherServiceDemand
             ExistingPrompt.BestSellerContextDefine = bestSellerContextDefine
             # ExistingPrompt.BestSellerWMWMDefine = bestSellerWMWMDefine
             ExistingPrompt.BestSellerCommentAnalysis = bestSellerCommentAnalysis
@@ -132,7 +132,7 @@ def AddPromptToDB():
             prompt = Prompt(
                 PublisherContextDefine = publisherContextDefine,
                 PublisherWMWMDefine = publisherWMWMDefine,
-                # PublisherAudioBookAnalysis = publisherAudioBookAnalysis,
+                PublisherServiceDemand = publisherServiceDemand,
                 BestSellerContextDefine = bestSellerContextDefine,
                 # BestSellerWMWMDefine = bestSellerWMWMDefine,
                 BestSellerCommentAnalysis = bestSellerCommentAnalysis,

@@ -397,7 +397,7 @@ class Prompt(Base):
     # TargetData
     PublisherContextDefine = Column(JSON)
     PublisherWMWMDefine = Column(JSON)
-    PublisherAudioBookAnalysis = Column(JSON)
+    PublisherServiceDemand = Column(JSON)
     
     # TrendData
     BestSellerContextDefine = Column(JSON)

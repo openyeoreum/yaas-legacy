@@ -1,9 +1,10 @@
 import os
 import json
 import time
+import csv
 import re
 import random
-import math
+import ast
 import sys
 sys.path.append("/yaas")
 
@@ -81,16 +82,16 @@ def PublisherHtmlScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage)
         # 현재 시간을 파일명에 포함
         ScrapingTime = datetime.now().strftime("%Y%m%d%H%M%S")
         
-        WebPageTxtDirName = "TotalPublisherData"
+        WebPageTxtDirName = "TotalPublisherDataTXT"
         WebPageTxtName = f"{ScrapingTime}_({Id}) {PublisherName}_WebPage.txt"
-        WebPageTxtPath = os.path.join(PublisherDataPath, WebPageTxtDirName, WebPageTxtName)
+        WebPageTXTPath = os.path.join(PublisherDataPath, WebPageTxtDirName, WebPageTxtName)
         
         # HTML을 txt 파일로 저장
-        with open(WebPageTxtPath, 'w', encoding='utf-8') as f:
+        with open(WebPageTXTPath, 'w', encoding='utf-8') as f:
             f.write(Driver.page_source)
             
         print(f"< ({Id}) {PublisherName}: 웹페이지 스크래핑 완료 >")
-        return WebPageTxtPath
+        return WebPageTXTPath
         
     except TimeoutException:
         print(f"< ({Id}) {PublisherName}: 페이지 로딩 시간 초과. 서버 응답이 없습니다. >")
@@ -117,12 +118,12 @@ def PublisherWebScraper(PublisherDataPath):
     ## 출판사 홈페이지 스크래퍼
     ScrapCounter = 0  # 카운터 변수 추가
     for i in range(len(TotalPublisherData)):
-        if TotalPublisherData[i]['PublisherInformation']['WebPageTxtPath'] == "":
+        if TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath'] == "":
             Id = TotalPublisherData[i]['Id']
             PublisherName = TotalPublisherData[i]['PublisherInformation']['Name']
             HomePage = TotalPublisherData[i]['PublisherInformation']['HomePage']
-            WebPageTxtPath = PublisherHtmlScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage)
-            TotalPublisherData[i]['PublisherInformation']['WebPageTxtPath'] = WebPageTxtPath
+            WebPageTXTPath = PublisherHtmlScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage)
+            TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath'] = WebPageTXTPath
             
             ## 5회 마다 저장
             ScrapCounter += 1
@@ -140,9 +141,9 @@ def PublisherWebScraper(PublisherDataPath):
     return TotalPublisherDataJsonPath, TotalPublisherData
 
 ## 출판사 스크랩 데이터에서 중요 부분만 남기기
-def ExtractingHtml(WebPageTxtPath):
+def ExtractingHtml(WebPageTXTPath):
     ## Html 파일 읽기
-    with open(WebPageTxtPath, 'r', encoding = 'utf-8') as file:
+    with open(WebPageTXTPath, 'r', encoding = 'utf-8') as file:
         content = file.read()
     ## HTML에서 한글과 이메일 주변 텍스트 추출(태그 제거)
     soup = BeautifulSoup(content, 'html.parser')
@@ -158,7 +159,7 @@ def ExtractingHtml(WebPageTxtPath):
     # 연속된 공백을 하나로 통일
     KoreanText = re.sub(r'\s+', ' ', KoreanText)
     # 한글 텍스트 저장
-    WebPageKoreanTxtPath = f"{WebPageTxtPath.rsplit('.', 1)[0]}_Extract.txt"
+    WebPageKoreanTxtPath = f"{WebPageTXTPath.rsplit('.', 1)[0]}_Extract.txt"
     with open(WebPageKoreanTxtPath, 'w', encoding = 'utf-8') as f:
         f.write(KoreanText)
     
@@ -169,12 +170,77 @@ def ExtractingHtml(WebPageTxtPath):
     
     return EmailText
 
+## Name, Email 데이터를 CSV로 저장
+def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 500):
+    # 0) 폴더 존재 유무 검사
+    if os.path.exists(TotalPublisherDataCSVPath):
+        print(f"[ SaveEmaiToCSV : 이미 완료됨 ]")
+        return
+    os.makedirs(TotalPublisherDataCSVPath)
+
+    # 1) 모든 (Name, Email) 쌍을 'flatten' 형태로 수집할 리스트
+    flattened_data = []
+
+    for item in TotalPublisherData:
+        name = item["PublisherInformation"].get("Name", "")
+        email = item["PublisherInformation"].get("Email", "")
+
+        # 이메일이 비어있지 않은 경우만 처리
+        if email:
+            # 문자열로 표현된 리스트인 경우 -> 실제 리스트 변환
+            if isinstance(email, str) and email.strip().startswith('[') and email.strip().endswith(']'):
+                try:
+                    email_list = ast.literal_eval(email)  # 문자열을 파이썬 리스트로 변환
+                    if not isinstance(email_list, list):
+                        email_list = [str(email_list)]
+                except:
+                    # 변환 실패 시 그대로 단일 문자열로 처리
+                    email_list = [email]
+            elif isinstance(email, list):
+                # 이미 리스트 타입이라면 그대로 사용
+                email_list = email
+            else:
+                # 그 외라면 단일 문자열 이메일로 간주
+                email_list = [email]
+
+            # 중복 제거
+            unique_emails = list(set(email_list))
+
+            # 하나의 Name에 여러 이메일이 있을 경우 -> 각각 flatten_data에 추가
+            for e in unique_emails:
+                flattened_data.append((name, e))
+
+    # 2) 최대 500행씩 CSV 저장
+    #    flattened_data는 이미 (Name, Email) 쌍으로 '한 행에 들어갈 데이터'가 준비된 상태
+    for start_idx in range(0, len(flattened_data), ChunkSize):
+        end_idx = start_idx + ChunkSize
+        chunk = flattened_data[start_idx:end_idx]
+
+        # 파일명 생성 (ex: 1_PublisherEmail(500).csv)
+        file_index = (start_idx // ChunkSize) + 1
+        num_rows_in_chunk = len(chunk)
+        csv_filename = f"{file_index}_PublisherEmail({num_rows_in_chunk}).csv"
+        csv_filepath = os.path.join(TotalPublisherDataCSVPath, csv_filename)
+
+        # CSV 파일 쓰기
+        with open(csv_filepath, 'w', encoding='utf-8', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            # 헤더 작성
+            writer.writerow(["Name", "Email"])
+
+            # 실제 데이터 작성 (chunk에 들어있는 (Name, Email) 쌍)
+            for name, e in chunk:
+                writer.writerow([name, e])
+
+        print(f"[ SaveEmaiToCSV : ({csv_filename}) 저장 완료 ]")
+        
 ## 출판사 이메일 및 메인페이지 정보 스크래퍼
 def TotalPublisherDataUpdate():
     print(f"[ 출판사 이메일 및 메인페이지 정보 스크래핑 시작 ]\n")
     
     ## 출판사 이메일 및 메인페이지 정보 스크래핑
     PublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData"
+    TotalPublisherDataCSVPath = os.path.join(PublisherDataPath, "TotalPublisherDataCSV")
     TotalPublisherDataJsonPath, TotalPublisherData = PublisherWebScraper(PublisherDataPath)
     print(f"[ 출판사 이메일 및 메인페이지 정보 업데이트 시작 ]\n")
     ## 기존 토탈 데이터셋
@@ -186,21 +252,25 @@ def TotalPublisherDataUpdate():
         for i in range(len(TotalPublisherData)):
             Id = TotalPublisherData[i]['Id']
             Name = TotalPublisherData[i]['PublisherInformation']['Name']
-            WebPageTxtPath = TotalPublisherData[i]['PublisherInformation']['WebPageTxtPath']
+            WebPageTXTPath = TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath']
             Email = TotalPublisherData[i]['PublisherInformation']['Email']
             if Email == "":
-                if WebPageTxtPath != "None":
-                    EmailText = ExtractingHtml(WebPageTxtPath)
+                if WebPageTXTPath != "None":
+                    EmailText = ExtractingHtml(WebPageTXTPath)
                     TotalPublisherData[i]['PublisherInformation']['Email'] = EmailText
-                elif WebPageTxtPath == "None":
+                elif WebPageTXTPath == "None":
                     TotalPublisherData[i]['PublisherInformation']['Email'] = []
-                elif WebPageTxtPath == "":
+                elif WebPageTXTPath == "":
                     break
         ## 출판사 이메일 업데이트 사항 저장
         with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
             json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
             
         print(f"[ ({Id}) ({Name}) 출판사까지 이메일 및 메인페이지 정보 스크래핑 & 업데이트 완료 ]\n")
+    
+    ## Name, Email 데이터를 CSV로 저장
+    SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath)
+    
 
 if __name__ == "__main__":
     

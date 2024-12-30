@@ -49,7 +49,7 @@ def LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, MainKey, MaxTe
                 PublisherDataText = PublisherName + Classification + Subcategories + HomePage + HomePageBody
             else:
                 PublisherDataText = None
-   
+            
         InputDic = {'Id': i, 'PublisherId': PublisherId, 'PublisherName': PublisherData['PublisherInformation']['Name'], 'PublisherText': PublisherDataText}
         InputList.append(InputDic)
         

@@ -167,6 +167,8 @@ def ExtractingHtml(WebPageTXTPath):
     EmailPattern = re.compile(r'[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*[a-zA-Z0-9]+@[a-zA-Z0-9.-]+(\.[a-zA-Z]{2,})+')
     EmailText = EmailPattern.finditer(text)
     EmailText = [match.group() for match in EmailText]
+    # 중복 제거
+    EmailText = list(set(EmailText))
     
     return EmailText
 
@@ -179,7 +181,7 @@ def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 50
     os.makedirs(TotalPublisherDataCSVPath)
 
     # 1) 모든 (Name, Email) 쌍을 'flatten' 형태로 수집할 리스트
-    flattened_data = []
+    FlattenedData = []
 
     for item in TotalPublisherData:
         name = item["PublisherInformation"].get("Name", "")
@@ -187,43 +189,24 @@ def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 50
 
         # 이메일이 비어있지 않은 경우만 처리
         if email:
-            # 문자열로 표현된 리스트인 경우 -> 실제 리스트 변환
-            if isinstance(email, str) and email.strip().startswith('[') and email.strip().endswith(']'):
-                try:
-                    email_list = ast.literal_eval(email)  # 문자열을 파이썬 리스트로 변환
-                    if not isinstance(email_list, list):
-                        email_list = [str(email_list)]
-                except:
-                    # 변환 실패 시 그대로 단일 문자열로 처리
-                    email_list = [email]
-            elif isinstance(email, list):
-                # 이미 리스트 타입이라면 그대로 사용
-                email_list = email
-            else:
-                # 그 외라면 단일 문자열 이메일로 간주
-                email_list = [email]
-
-            # 중복 제거
-            unique_emails = list(set(email_list))
-
             # 하나의 Name에 여러 이메일이 있을 경우 -> 각각 flatten_data에 추가
-            for e in unique_emails:
-                flattened_data.append((name, e))
+            for e_mail in email:
+                FlattenedData.append((name, e_mail))
 
     # 2) 최대 500행씩 CSV 저장
-    #    flattened_data는 이미 (Name, Email) 쌍으로 '한 행에 들어갈 데이터'가 준비된 상태
-    for start_idx in range(0, len(flattened_data), ChunkSize):
+    # FlattenedData는 이미 (Name, Email) 쌍으로 '한 행에 들어갈 데이터'가 준비된 상태
+    for start_idx in range(0, len(FlattenedData), ChunkSize):
         end_idx = start_idx + ChunkSize
-        chunk = flattened_data[start_idx:end_idx]
+        chunk = FlattenedData[start_idx:end_idx]
 
         # 파일명 생성 (ex: 1_PublisherEmail(500).csv)
-        file_index = (start_idx // ChunkSize) + 1
-        num_rows_in_chunk = len(chunk)
-        csv_filename = f"{file_index}_PublisherEmail({num_rows_in_chunk}).csv"
-        csv_filepath = os.path.join(TotalPublisherDataCSVPath, csv_filename)
+        FileIndex = (start_idx // ChunkSize) + 1
+        NumChunk = len(chunk)
+        CSVFileName = f"{FileIndex}_PublisherEmail({NumChunk}).csv"
+        CSVFilePath = os.path.join(TotalPublisherDataCSVPath, CSVFileName)
 
         # CSV 파일 쓰기
-        with open(csv_filepath, 'w', encoding='utf-8', newline='') as csvfile:
+        with open(CSVFilePath, 'w', encoding='utf-8', newline='') as csvfile:
             writer = csv.writer(csvfile)
             # 헤더 작성
             writer.writerow(["Name", "Email"])
@@ -232,7 +215,7 @@ def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 50
             for name, e in chunk:
                 writer.writerow([name, e])
 
-        print(f"[ SaveEmaiToCSV : ({csv_filename}) 저장 완료 ]")
+        print(f"[ SaveEmaiToCSV : ({CSVFileName}) 저장 완료 ]")
         
 ## 출판사 이메일 및 메인페이지 정보 스크래퍼
 def TotalPublisherDataUpdate():

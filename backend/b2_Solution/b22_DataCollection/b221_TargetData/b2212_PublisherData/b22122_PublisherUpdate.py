@@ -24,7 +24,7 @@ def LoadTotalPublisherDataList(TotalPublisherDataJsonPath, MainKey):
     return totalPublisherDataList
 
 ## LoadTotalPublisherData의 inputList 치환
-def LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, MainKey):
+def LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, MainKey, MaxTextLength = 4000):
     totalPublisherDataList = LoadTotalPublisherDataList(TotalPublisherDataJsonPath, MainKey)
     
     ## InputList 생성
@@ -40,7 +40,10 @@ def LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, MainKey):
             PublisherDataText = None
         else:
             with open(WebPageKoreanTxtPath, 'r', encoding = 'utf-8') as f:
-                PageBody = f.read() 
+                PageBody = f.read()
+                if len(PageBody) > MaxTextLength:
+                    PageBody = PageBody[:MaxTextLength] + "..."
+                    
             HomePageBody = f"[홈페이지내용발췌] {PageBody}"
             if PageBody != '':
                 PublisherDataText = PublisherName + Classification + Subcategories + HomePage + HomePageBody
@@ -174,7 +177,7 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
                 DataTemp = {MainKey: None}
             
             # DataTempJson 저장
-            DataTempJsonPath = os.path.join(DataTempPath, f"PublisherData_({DataList[i]['PublisherInformation']['Name']}).json")
+            DataTempJsonPath = os.path.join(DataTempPath, f"PublisherData_({DataList[i]['Id']})_{DataList[i]['PublisherInformation']['Name']}.json")
             with open(DataTempJsonPath, 'w', encoding = 'utf-8') as DataTempJson:
                 json.dump(DataTemp, DataTempJson, ensure_ascii = False, indent = 4)
             break
@@ -188,7 +191,7 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
     if MainKey not in DataList[-1]:
         # TextDataList 업데이트
         for i in range(len(DataList)):
-            DataTempJsonPath = os.path.join(DataTempPath, f"PublisherData_({DataList[i]['PublisherName']}).json")
+            DataTempJsonPath = os.path.join(DataTempPath, f"PublisherData_({DataList[i]['Id']})_{DataList[i]['PublisherInformation']['Name']}.json")
             with open(DataTempJsonPath, 'r', encoding = 'utf-8') as DataTempJson:
                 DataTemp = json.load(DataTempJson)
             DataList[i][MainKey] = DataTemp[MainKey]

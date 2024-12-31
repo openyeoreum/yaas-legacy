@@ -193,7 +193,11 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
             with open(DataTempJsonPath, 'w', encoding = 'utf-8') as DataTempJson:
                 json.dump(DataTemp, DataTempJson, ensure_ascii = False, indent = 4)
             break
-        
+
+##### Process 추가 후처리 #####
+
+##### Process 추가 후처리 #####
+
 ## ProcessResponse 업데이트 및 저장
 def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
     # 오리지날 DataList 불러와서 변경사항 저장
@@ -207,14 +211,13 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
             with open(DataTempJsonPath, 'r', encoding = 'utf-8') as DataTempJson:
                 DataTemp = json.load(DataTempJson)
             DataList[i][MainKey] = DataTemp[MainKey]
+            ##### Process 추가 후처리 #####
+
+            ##### Process 추가 후처리 #####
         
         # DataListJson 저장
         with open(DataJsonPath, 'w', encoding = 'utf-8') as DataListJson:
             json.dump(DataList, DataListJson, ensure_ascii = False, indent = 4)
-
-############################
-##### Process 추가 후처리 #####
-############################
 
 ################################
 ##### Process 진행 및 업데이트 #####

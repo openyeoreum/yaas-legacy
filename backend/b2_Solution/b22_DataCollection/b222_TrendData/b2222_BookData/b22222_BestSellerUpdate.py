@@ -249,25 +249,27 @@ def BookScoreCalculation(DataDic):
     else:
         CommentCountScore = CommentCount / 10 * 0.3
     # D: CommentLikeScore (20%)
-    ReviewEvaluationList = DataDic['BookAnalysis']['Review']['ReviewEvaluation']
+    CommentListScore = 0
     _CommentListScore = 0
-    for ReviewEvaluation in ReviewEvaluationList:
-        Like = ReviewEvaluation['Like']
-        Evaluation = ReviewEvaluation['Evaluation']
-        if Evaluation == '긍정':
-            evaluation = 1
-        elif Evaluation == '부정':
-            evaluation = -0.5
+    if DataDic['BookAnalysis']['Review'] is not None:
+        ReviewEvaluationList = DataDic['BookAnalysis']['Review']['ReviewEvaluation']
+        for ReviewEvaluation in ReviewEvaluationList:
+            Like = ReviewEvaluation['Like']
+            Evaluation = ReviewEvaluation['Evaluation']
+            if Evaluation == '긍정':
+                evaluation = 1
+            elif Evaluation == '부정':
+                evaluation = -0.5
+            else:
+                evaluation = 0.5
+            _CommentListScore += Like * evaluation
+        
+        if _CommentListScore >= 500:
+            CommentListScore = 500 / 5 * 0.2
+        elif _CommentListScore <= -500:
+            CommentListScore = -500 / 5 * 0.2
         else:
-            evaluation = 0.5
-        _CommentListScore += Like * evaluation
-    
-    if _CommentListScore >= 500:
-        CommentListScore = 500 / 5 * 0.2
-    elif _CommentListScore <= -500:
-        CommentListScore = -500 / 5 * 0.2
-    else:
-        CommentListScore = _CommentListScore / 5 * 0.2
+            CommentListScore = _CommentListScore / 5 * 0.2
         
     ## BookScore 합산
     BookScore = RankScore + RankHistoryScores + CommentCountScore + CommentListScore

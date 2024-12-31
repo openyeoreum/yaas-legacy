@@ -266,7 +266,7 @@ def BestsellerScraper(period):
     return BookDataList
 
 ## 교보문고 베스트셀러 스크래퍼
-def TotalBookDataUpdate(period):
+def BookDataUpdate(period = 'Weekly'):
     print(f"[ {period} 베스트셀러 도서 스크래핑 시작 ]\n")
     
     ## 베스트셀러 도서 스크래핑
@@ -311,4 +311,4 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     period = 'Weekly' ## 'Weekly', 'Monthly', 'Yearly'
     #########################################################################
-    TotalBookDataUpdate(period)
+    BookDataUpdate()

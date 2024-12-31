@@ -344,7 +344,7 @@ def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 50
     print(f"[ SaveEmaiToCSV : ({CSVFileName})까지 저장 완료 ]")
         
 ## 출판사 이메일 및 메인페이지 정보 스크래퍼
-def TotalPublisherDataUpdate():
+def PublisherDataUpdate():
     print(f"[ 출판사 이메일 및 메인페이지 정보 스크래핑 시작 ]\n")
     
     PublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData"
@@ -392,4 +392,4 @@ def TotalPublisherDataUpdate():
 
 if __name__ == "__main__":
     
-    TotalPublisherDataUpdate()
+    PublisherDataUpdate()

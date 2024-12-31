@@ -113,7 +113,7 @@ def TotalPublisherDataAddition(TotalPublisherDataJsonPath, TotalPublisherDataAdd
                 "PhoneNumber": "",
                 "HomePage": row["홈페이지"].strip() if row["홈페이지"] else "",
                 "WebPageTXTPath": "",
-                "Email": [row["이메일"].strip()] if row["이메일"] else [],
+                "Email": [row["이메일"].strip()] if row["이메일"] else "",
                 "Manager": row["담당자"].strip(),
                 "MainBooks": [],
                 "AudioBooks": []
@@ -241,32 +241,32 @@ def PublisherWebScraper(PublisherDataPath, TotalPublisherDataJsonPath):
     ## TotalPublisherDataJson 로드
     with open(TotalPublisherDataJsonPath, 'r', encoding = 'utf-8') as PublisherJson:
         TotalPublisherData = json.load(PublisherJson)
-    
-    ## SeleniumHubDrive 연결
-    Driver = SeleniumHubDrive()
-    
-    ## 출판사 홈페이지 스크래퍼
-    ScrapCounter = 0  # 카운터 변수 추가
-    for i in range(len(TotalPublisherData)):
-        if TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath'] == "" and TotalPublisherData[i]['PublisherInformation']['HomePage'] != "":
-            Id = TotalPublisherData[i]['Id']
-            PublisherName = TotalPublisherData[i]['PublisherInformation']['Name']
-            HomePage = TotalPublisherData[i]['PublisherInformation']['HomePage']
-            WebPageTXTPath = PublisherHtmlScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage)
-            TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath'] = WebPageTXTPath
-            
-            ## 10회 마다 저장
-            ScrapCounter += 1
-            if ScrapCounter % 10 == 0:
-                with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
-                    json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
+    if TotalPublisherData[-1]['PublisherInformation']['WebPageTXTPath'] == "":
+        ## SeleniumHubDrive 연결
+        Driver = SeleniumHubDrive()
 
-    if ScrapCounter % 10 != 0:
-        with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
-            json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
+        ## 출판사 홈페이지 스크래퍼
+        ScrapCounter = 0  # 카운터 변수 추가
+        for i in range(len(TotalPublisherData)):
+            if TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath'] == "" and TotalPublisherData[i]['PublisherInformation']['HomePage'] != "":
+                Id = TotalPublisherData[i]['Id']
+                PublisherName = TotalPublisherData[i]['PublisherInformation']['Name']
+                HomePage = TotalPublisherData[i]['PublisherInformation']['HomePage']
+                WebPageTXTPath = PublisherHtmlScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage)
+                TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath'] = WebPageTXTPath
 
-    ## SeleniumHubDrive 종료
-    Driver.quit()
+                ## 10회 마다 저장
+                ScrapCounter += 1
+                if ScrapCounter % 10 == 0:
+                    with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
+                        json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
+
+        if ScrapCounter % 10 != 0:
+            with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
+                json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
+
+        ## SeleniumHubDrive 종료
+        Driver.quit()
 
     return TotalPublisherDataJsonPath, TotalPublisherData
 
@@ -278,7 +278,7 @@ def ExtractingHtml(WebPageTXTPath):
     ## HTML에서 한글과 이메일 주변 텍스트 추출(태그 제거)
     soup = BeautifulSoup(content, 'html.parser')
     text = soup.get_text()
-    
+
     ## 1. 한글 추출
     KoreanPattern = re.compile('[가-힣]+')
     KoreanText = ' '.join(KoreanPattern.findall(text))
@@ -304,11 +304,7 @@ def ExtractingHtml(WebPageTXTPath):
 
 ## Name, Email 데이터를 CSV로 저장
 def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 500):
-    # 0) 폴더 존재 유무 검사
-    if os.path.exists(TotalPublisherDataCSVPath):
-        print(f"[ SaveEmaiToCSV : 이미 완료됨 ]")
-        return
-    os.makedirs(TotalPublisherDataCSVPath)
+    os.makedirs(TotalPublisherDataCSVPath, exist_ok = True)
 
     # 1) 모든 (Name, Email) 쌍을 'flatten' 형태로 수집할 리스트
     FlattenedData = []
@@ -345,7 +341,7 @@ def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 50
             for name, e in chunk:
                 writer.writerow([name, e])
 
-        print(f"[ SaveEmaiToCSV : ({CSVFileName}) 저장 완료 ]")
+    print(f"[ SaveEmaiToCSV : ({CSVFileName})까지 저장 완료 ]")
         
 ## 출판사 이메일 및 메인페이지 정보 스크래퍼
 def TotalPublisherDataUpdate():

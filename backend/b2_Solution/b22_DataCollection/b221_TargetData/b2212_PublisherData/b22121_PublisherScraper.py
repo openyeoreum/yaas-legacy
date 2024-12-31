@@ -363,23 +363,23 @@ def TotalPublisherDataUpdate():
     print(f"[ 출판사 이메일 및 메인페이지 정보 업데이트 시작 ]\n")
     ## 기존 토탈 데이터셋
     if TotalPublisherData[-1]['PublisherInformation']['Email'] != "":
-        
         print(f"[ 출판사 이메일 및 메인페이지 정보 스크래핑 & 업데이트 완료 ]\n")
-    
     else:
         for i in range(len(TotalPublisherData)):
             Id = TotalPublisherData[i]['Id']
             Name = TotalPublisherData[i]['PublisherInformation']['Name']
             WebPageTXTPath = TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath']
-            Email = TotalPublisherData[i]['PublisherInformation']['Email']
-            if Email == "":
-                if WebPageTXTPath != "None":
-                    EmailText = ExtractingHtml(WebPageTXTPath)
+            if WebPageTXTPath != "None":
+                EmailText = ExtractingHtml(WebPageTXTPath)
+                if TotalPublisherData[i]['PublisherInformation']['Email'] == "":
+                    TotalPublisherData[i]['PublisherInformation']['Email'] = EmailText
+                else:
                     TotalPublisherData[i]['PublisherInformation']['Email'] += EmailText
-                elif WebPageTXTPath == "None":
-                    TotalPublisherData[i]['PublisherInformation']['Email'] += []
-                elif WebPageTXTPath == "":
-                    break
+            elif WebPageTXTPath == "None":
+                if TotalPublisherData[i]['PublisherInformation']['Email'] == "":
+                    TotalPublisherData[i]['PublisherInformation']['Email'] = []
+            elif WebPageTXTPath == "":
+                break
         ## 출판사 이메일 업데이트 사항 저장
         with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
             json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)

@@ -258,7 +258,7 @@ def BestsellerScraper(driver, period = 'Weekly', rank = 200):
     return BookDataList
 
 ## 교보문고 베스트셀러 스크래퍼
-def BestsellerWebScraper(period):
+def BestsellerScraper(period):
     driver = SeleniumHubDrive()
     BookDataList = BestsellerScraper(driver, period) ## Daily, Weekly, Monthly
     driver.quit()
@@ -270,7 +270,7 @@ def TotalBookDataUpdate(period):
     print(f"[ {period} 베스트셀러 도서 스크래핑 시작 ]\n")
     
     ## 베스트셀러 도서 스크래핑
-    BookDataList = BestsellerWebScraper(period)
+    BookDataList = BestsellerScraper(period)
     print(f"[ TotalBookData 업데이트 시작 ]\n")
     ## 기존 토탈 데이터셋
     TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_BookData/s15221_TotalBookData/TotalBookData.json"

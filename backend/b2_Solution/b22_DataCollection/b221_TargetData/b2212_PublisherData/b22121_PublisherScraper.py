@@ -9,6 +9,7 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -16,6 +17,137 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+
+## TotalPublisherData 수집된 출판사 데이터 추가
+def TotalPublisherDataAddition(TotalPublisherDataJsonPath, TotalPublisherDataAdditionCSVPath):
+    print(f"[ TotalPublisherDataAddition : 출판사 데이터 추가 시작 ]\n")
+    # 도메인 추출 함수
+    def ExtractDomain(HomepageUrl: str) -> str:
+        if not HomepageUrl:
+            return ""
+        # 만약 http/https가 빠진 경우도 있을 수 있으니,
+        # URL을 urlparse에 넣었을 때 netloc이 없으면 path를 확인합니다.
+        parsed = urlparse(HomepageUrl)
+        
+        if parsed.netloc:  
+            return parsed.netloc.strip().lower()  # lower()로 대소문자 통일
+        else:
+            # "www.yeoreum.me" 형태처럼 스킴 없이 적힌 경우
+            # urlparse("www.yeoreum.me").netloc 은 빈 문자열, path에 "www.yeoreum.me"가 들어있음
+            return parsed.path.strip().lower()
+
+    # 1) JSON 파일 불러오기
+    with open(TotalPublisherDataJsonPath, "r", encoding = "utf-8") as TotalPublisherDataJson:
+        TotalPublisherData = json.load(TotalPublisherDataJson)
+
+    # 2) JSON 내 중복검사를 위한 자료구조 생성
+    ExistingEmails = set()
+    ExistingHomepages = set()
+
+    for entry in TotalPublisherData:
+        publisher_info = entry.get("PublisherInformation", {})
+        
+        # Email 정보 수집
+        EmailList = publisher_info.get("Email", [])
+        for email in EmailList:
+            # 공백 제거, 소문자 통일 등
+            ExistingEmails.add(email.strip().lower())
+        
+        # HomePage 정보 수집
+        homepage_str = publisher_info.get("HomePage", "").strip()
+        # 홈페이지에 http://, https:// 등이 포함될 수 있으므로 도메인만 추출
+        domain = ExtractDomain(homepage_str)
+        if domain:
+            ExistingHomepages.add(domain)
+
+    # 3) CSV 파일 읽기 및 조건에 따라 필터링
+    FilteredRows = []
+
+    with open(TotalPublisherDataAdditionCSVPath, "r", encoding = "utf-8") as TotalPublisherDataAdditionCSV:
+        TotalPublisherDataAddition = csv.DictReader(TotalPublisherDataAdditionCSV)
+        # reader.fieldnames = ['출판사','홈페이지','이메일','담당자']
+        for row in TotalPublisherDataAddition:
+            publisher = row.get("출판사", "").strip()
+            homepage = row.get("홈페이지", "").strip()
+            email = row.get("이메일", "").strip()
+            manager = row.get("담당자", "").strip()
+            
+            # (1) 홈페이지, 이메일 둘 다 없는 경우 스킵
+            if (not homepage) and (not email):
+                continue
+            
+            # 이메일/홈페이지 대소문자 통일
+            EmailLower = email.lower()
+            HomepageDomain = ExtractDomain(homepage)  # http/https 제거 후 도메인만
+            
+            # (2) 이메일이 JSON 기존 이메일과 중복되면 스킵
+            if EmailLower and (EmailLower in ExistingEmails):
+                continue
+            
+            # (3) 이메일이 없고 홈페이지만 있을 경우, 해당 홈페이지(도메인)가 기존과 중복이면 스킵
+            if (not EmailLower) and HomepageDomain and (HomepageDomain in ExistingHomepages):
+                continue
+            
+            # 조건을 통과하면 최종 리스트에 추가
+            FilteredRows.append({
+                "출판사": publisher,
+                "홈페이지": homepage,
+                "이메일": email,
+                "담당자": manager
+            })
+
+    # 4) JSON에 합치기
+    NewIdStart = max([entry["Id"] for entry in TotalPublisherData]) if TotalPublisherData else 0
+    for i, row in enumerate(FilteredRows, start=1):
+        NewId = NewIdStart + i
+        
+        NewEntry = {
+            "Id": NewId,
+            "PublisherInformation": {
+                "Name": row["출판사"],
+                "Classification": "출판사",
+                "Subcategories": "",
+                "Genre": "",
+                "Adress": "",
+                "ZipCode": "",
+                "PhoneNumber": "",
+                "HomePage": row["홈페이지"].strip() if row["홈페이지"] else "",
+                "WebPageTXTPath": "",
+                "Email": [row["이메일"].strip()] if row["이메일"] else [],
+                "Manager": row["담당자"].strip(),
+                "MainBooks": [],
+                "AudioBooks": []
+            },
+            "MarketingChannel": "",
+            "Project": [
+                {
+                    "Classification": "",
+                    "ProjectName": "",
+                    "Estimated": "",
+                    "Sample": "",
+                    "Contracted": "",
+                    "Sales": 0
+                }
+            ],
+            "TotalSales": 0,
+            "Feedback": []
+        }
+        
+        TotalPublisherData.append(NewEntry)
+
+    # 5) 최종 JSON 파일로 저장
+    with open(TotalPublisherDataJsonPath, "w", encoding = "utf-8") as TotalPublisherDataJson:
+        json.dump(TotalPublisherData, TotalPublisherDataJson, ensure_ascii = False, indent = 4)
+        
+    # 6) CSV 파일 이름 변경
+    date = datetime.now().strftime("%y%m%d")
+    NewTotalPublisherDataAdditionName = f"TotalPublisherDataAddition({date}).csv"
+    UpdatedTotalPublisherDataAdditionCSVPath = os.path.join(os.path.dirname(TotalPublisherDataAdditionCSVPath), NewTotalPublisherDataAdditionName)
+
+    os.rename(TotalPublisherDataAdditionCSVPath, UpdatedTotalPublisherDataAdditionCSVPath)
+
+    print(f"[ TotalPublisherDataAddition : 출판사 데이터 추가 완료 ]\n")
+    print(f"[ CSV 파일 이름 변경 완료 : {NewTotalPublisherDataAdditionName} ]\n")
 
 ## SeleniumHubDrive 연결
 def SeleniumHubDrive():
@@ -105,10 +237,8 @@ def PublisherHtmlScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage)
         return "None"
     
 ## 출판사 메인페이지 정보 스크래퍼
-def PublisherWebScraper(PublisherDataPath):
+def PublisherWebScraper(PublisherDataPath, TotalPublisherDataJsonPath):
     ## TotalPublisherDataJson 로드
-    TotalPublisherDataJsonName = "TotalPublisherData.json"
-    TotalPublisherDataJsonPath = os.path.join(PublisherDataPath, TotalPublisherDataJsonName)
     with open(TotalPublisherDataJsonPath, 'r', encoding = 'utf-8') as PublisherJson:
         TotalPublisherData = json.load(PublisherJson)
     
@@ -118,20 +248,20 @@ def PublisherWebScraper(PublisherDataPath):
     ## 출판사 홈페이지 스크래퍼
     ScrapCounter = 0  # 카운터 변수 추가
     for i in range(len(TotalPublisherData)):
-        if TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath'] == "":
+        if TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath'] == "" and TotalPublisherData[i]['PublisherInformation']['HomePage'] != "":
             Id = TotalPublisherData[i]['Id']
             PublisherName = TotalPublisherData[i]['PublisherInformation']['Name']
             HomePage = TotalPublisherData[i]['PublisherInformation']['HomePage']
             WebPageTXTPath = PublisherHtmlScraper(Driver, PublisherDataPath, Id, PublisherName, HomePage)
             TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath'] = WebPageTXTPath
             
-            ## 5회 마다 저장
+            ## 10회 마다 저장
             ScrapCounter += 1
-            if ScrapCounter % 5 == 0:
+            if ScrapCounter % 10 == 0:
                 with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
                     json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
 
-    if ScrapCounter % 5 != 0:
+    if ScrapCounter % 10 != 0:
         with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
             json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
 
@@ -206,7 +336,7 @@ def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 50
         CSVFilePath = os.path.join(TotalPublisherDataCSVPath, CSVFileName)
 
         # CSV 파일 쓰기
-        with open(CSVFilePath, 'w', encoding='utf-8', newline='') as csvfile:
+        with open(CSVFilePath, 'w', encoding = 'utf-8', newline = '') as csvfile:
             writer = csv.writer(csvfile)
             # 헤더 작성
             writer.writerow(["Name", "Email"])
@@ -221,10 +351,19 @@ def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 50
 def TotalPublisherDataUpdate():
     print(f"[ 출판사 이메일 및 메인페이지 정보 스크래핑 시작 ]\n")
     
-    ## 출판사 이메일 및 메인페이지 정보 스크래핑
     PublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData"
     TotalPublisherDataCSVPath = os.path.join(PublisherDataPath, "TotalPublisherDataCSV")
-    TotalPublisherDataJsonPath, TotalPublisherData = PublisherWebScraper(PublisherDataPath)
+    TotalPublisherDataJsonPath = os.path.join(PublisherDataPath, "TotalPublisherData.json")
+    TotalPublisherDataAdditionCSVPath = os.path.join(PublisherDataPath, "TotalPublisherDataAddition", "TotalPublisherDataAddition.csv")
+    
+    ## TotalPublisherData 수집된 출판사 데이터 추가(TotalPublisherDataAddition.csv가 존재할때)
+    if os.path.exists(TotalPublisherDataAdditionCSVPath):
+        TotalPublisherDataAddition(TotalPublisherDataJsonPath, TotalPublisherDataAdditionCSVPath)
+    else:
+        print(f"\n[ TotalPublisherDataAddition : 새로운 출판사 이메일 추가가 필요하면 아래 경로에 csv파일을 추가해주세요. ]\n{TotalPublisherDataAdditionCSVPath}\n")
+        
+    ## 출판사 이메일 및 메인페이지 정보 스크래핑
+    TotalPublisherDataJsonPath, TotalPublisherData = PublisherWebScraper(PublisherDataPath, TotalPublisherDataJsonPath)
     print(f"[ 출판사 이메일 및 메인페이지 정보 업데이트 시작 ]\n")
     ## 기존 토탈 데이터셋
     if TotalPublisherData[-1]['PublisherInformation']['Email'] != "":
@@ -240,9 +379,9 @@ def TotalPublisherDataUpdate():
             if Email == "":
                 if WebPageTXTPath != "None":
                     EmailText = ExtractingHtml(WebPageTXTPath)
-                    TotalPublisherData[i]['PublisherInformation']['Email'] = EmailText
+                    TotalPublisherData[i]['PublisherInformation']['Email'] += EmailText
                 elif WebPageTXTPath == "None":
-                    TotalPublisherData[i]['PublisherInformation']['Email'] = []
+                    TotalPublisherData[i]['PublisherInformation']['Email'] += []
                 elif WebPageTXTPath == "":
                     break
         ## 출판사 이메일 업데이트 사항 저장

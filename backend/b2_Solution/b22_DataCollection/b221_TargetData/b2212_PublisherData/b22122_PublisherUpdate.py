@@ -11,21 +11,33 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Open
 ##### InputList 생성 #####
 #########################
 ## totalPublisherDataList로 로드(업데이트가 필요한 부분 선정, 이중 분석 방지)
-def LoadTotalPublisherDataList(TotalPublisherDataJsonPath, MainKey):
+def LoadTotalPublisherDataList(TotalPublisherDataJsonPath, TotalPublisherDataTempPath, StartPoint = 1):
+    # TempIdList 생성
+    TempIdList = []
+    TempJsonList = []
+    if os.path.exists(TotalPublisherDataTempPath):
+        TempJsonList = os.listdir(TotalPublisherDataTempPath)
+    FileNamePattern = r"^PublisherData_\((\d+)\)_.*\.json$"
+    for TempJson in TempJsonList:
+        match = re.match(FileNamePattern, TempJson)
+        if match:
+            TempIdList.append(int(match.group(1)))
+    SortedTempIdList = sorted(TempIdList)
+    
     ## TotalPublisherDataList 로드
     with open(TotalPublisherDataJsonPath, 'r', encoding = 'utf-8') as PublisherJson:
-        TotalPublisherDataList = json.load(PublisherJson)
+        TotalPublisherDataList = json.load(PublisherJson)[StartPoint:]
     ## TotalPublisherDataList중 업데이트가 필요한 부분 선정, 이중 분석 방지
     totalPublisherDataList = []
     for PublisherData in TotalPublisherDataList:
-        if (MainKey not in PublisherData):
+        if PublisherData['Id'] not in SortedTempIdList:
             totalPublisherDataList.append(PublisherData)
     
     return totalPublisherDataList
 
 ## LoadTotalPublisherData의 inputList 치환
-def LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, MainKey, MaxTextLength = 4000):
-    totalPublisherDataList = LoadTotalPublisherDataList(TotalPublisherDataJsonPath, MainKey)
+def LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, TotalPublisherDataTempPath, MaxTextLength = 4000):
+    totalPublisherDataList = LoadTotalPublisherDataList(TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
     
     ## InputList 생성
     InputList = []
@@ -49,8 +61,8 @@ def LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, MainKey, MaxTe
                 PublisherDataText = PublisherName + Classification + Subcategories + HomePage + HomePageBody
             else:
                 PublisherDataText = None
-            
-        InputDic = {'Id': i, 'PublisherId': PublisherId, 'PublisherName': PublisherData['PublisherInformation']['Name'], 'PublisherText': PublisherDataText}
+
+        InputDic = {'Id': i+1, 'PublisherId': PublisherId, 'PublisherName': PublisherData['PublisherInformation']['Name'], 'PublisherText': PublisherDataText}
         InputList.append(InputDic)
         
     return InputList
@@ -59,7 +71,7 @@ def LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, MainKey, MaxTe
 ##### Filter 조건 #####
 ######################
 ## Process1: PublisherContextDefine의 Filter(Error 예외처리)
-def PublisherContextDefineFilter(Response):
+def PublisherContextDefineFilter(Response, CheckCount):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(Response)
@@ -76,8 +88,8 @@ def PublisherContextDefineFilter(Response):
         
     return OutputDic
 
-## Process2: PublisherContextDefine의 Filter(Error 예외처리)
-def PublisherWMWMDefineFilter(Response):
+## Process2: PublisherWMWMDefine의 Filter(Error 예외처리)
+def PublisherWMWMDefineFilter(Response, CheckCount):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(Response)
@@ -99,7 +111,7 @@ def PublisherWMWMDefineFilter(Response):
     return OutputDic
 
 ## Process3: PublisherServiceDemandFilter의 Filter(Error 예외처리)
-def PublisherServiceDemandFilter(Response):
+def PublisherServiceDemandFilter(Response, CheckCount):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(Response)
@@ -124,7 +136,7 @@ def PublisherServiceDemandFilter(Response):
 ##### Process 응답 #####
 #######################
 ## Process LLMResponse 함수
-def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount, FilterFunc, LLM, mode, MessagesReview):
+def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount, FilterFunc, CheckCount, LLM, mode, MessagesReview):
 
     ErrorCount = 0
     while True:
@@ -132,7 +144,7 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, messagesReview = MessagesReview)
         elif LLM == "Anthropic":
             Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, messagesReview = MessagesReview)
-        Filter = FilterFunc(Response)
+        Filter = FilterFunc(Response, CheckCount)
         
         if isinstance(Filter, str):
             print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
@@ -182,7 +194,7 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
                 json.dump(DataTemp, DataTempJson, ensure_ascii = False, indent = 4)
             break
         
-## ProcessResponse 업데이트
+## ProcessResponse 업데이트 및 저장
 def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
     # 오리지날 DataList 불러와서 변경사항 저장
     with open(DataJsonPath, 'r', encoding='utf-8') as DataListJson:
@@ -199,7 +211,11 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
         # DataListJson 저장
         with open(DataJsonPath, 'w', encoding = 'utf-8') as DataListJson:
             json.dump(DataList, DataListJson, ensure_ascii = False, indent = 4)
-            
+
+############################
+##### Process 추가 후처리 #####
+############################
+
 ################################
 ##### Process 진행 및 업데이트 #####
 ################################
@@ -211,37 +227,36 @@ def PublisherProcessUpdate(projectName, email, mode = "Master", MainKey = 'Publi
     TotalPublisherDataTempPath = os.path.join(TotalPublisherDataPath, 'TotalPublisherDataTemp')
     
     ## 작업이 되지 않은 부분부터 totalPublisherDataList와 InputList 형성
-    inputList = LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, MainKey)
+    InputList = LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
     
     ## PublisherProcess
-    StartPoint = 1
-    InputList = inputList[StartPoint:]
-    ProcessCount = 1
     InputCount = len(InputList)
-    i = 0
+    ProcessCount = 0
     
-    while i < InputCount:
-        ProcessCount = i+1
-        InputDic = InputList[i]
+    while ProcessCount < InputCount:
+        processCount = ProcessCount + 1
+        InputDic = InputList[ProcessCount]
         Input = InputDic['PublisherText']
+        CheckCount = 0
         OutputDicList = []
-        if Input != None:
+        
+        if Input != None: ## Input이 None이 아닐 때만 Process 진행
             ## Process1: PublisherContextDefine Response 생성
-            PublisherContextDefineResponse = ProcessResponse(projectName, email, "PublisherContextDefine", Input, ProcessCount, InputCount, PublisherContextDefineFilter, "OpenAI", mode, MessagesReview)
+            PublisherContextDefineResponse = ProcessResponse(projectName, email, "PublisherContextDefine", Input, processCount, InputCount, PublisherContextDefineFilter, CheckCount, "OpenAI", mode, MessagesReview)
             OutputDicList.append(PublisherContextDefineResponse)
             
             ## Process2: PublisherWMWMDefine Response 생성
-            PublisherWMWMDefineResponse = ProcessResponse(projectName, email, "PublisherWMWMDefine", Input, ProcessCount, InputCount, PublisherWMWMDefineFilter, "OpenAI", mode, MessagesReview)
+            PublisherWMWMDefineResponse = ProcessResponse(projectName, email, "PublisherWMWMDefine", Input, processCount, InputCount, PublisherWMWMDefineFilter, CheckCount, "OpenAI", mode, MessagesReview)
             OutputDicList.append(PublisherWMWMDefineResponse)
             
             ## Process3: PublisherCommentAnalysis Response 생성
-            PublisherServiceDemandResponse = ProcessResponse(projectName, email, "PublisherServiceDemand", Input, ProcessCount, InputCount, PublisherServiceDemandFilter, "OpenAI", mode, MessagesReview)
+            PublisherServiceDemandResponse = ProcessResponse(projectName, email, "PublisherServiceDemand", Input, processCount, InputCount, PublisherServiceDemandFilter, CheckCount, "OpenAI", mode, MessagesReview)
             OutputDicList.append(PublisherServiceDemandResponse)
             
-        ## ProcessResponse 임시저장
-        ProcessResponseTempSave(MainKey, InputDic, OutputDicList, TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
+            ## ProcessResponse 임시저장
+            ProcessResponseTempSave(MainKey, InputDic, OutputDicList, TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
         # 다음 아이템으로 이동
-        i += 1
+        ProcessCount += 1
     
     ## ProcessResponse 업데이트
     ProcessResponseUpdate(MainKey, TotalPublisherDataJsonPath, TotalPublisherDataTempPath)

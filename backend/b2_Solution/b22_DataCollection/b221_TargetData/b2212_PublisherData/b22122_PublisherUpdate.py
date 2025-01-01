@@ -207,13 +207,17 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
     if MainKey not in DataList[-1]:
         # TextDataList 업데이트
         for i in range(len(DataList)):
-            DataTempJsonPath = os.path.join(DataTempPath, f"PublisherData_({DataList[i]['Id']})_{DataList[i]['PublisherInformation']['Name']}.json")
-            with open(DataTempJsonPath, 'r', encoding = 'utf-8') as DataTempJson:
-                DataTemp = json.load(DataTempJson)
-            DataList[i][MainKey] = DataTemp[MainKey]
-            ##### Process 추가 후처리 #####
+            try:
+                DataTempJsonPath = os.path.join(DataTempPath, f"PublisherData_({DataList[i]['Id']})_{DataList[i]['PublisherInformation']['Name']}.json")
+                with open(DataTempJsonPath, 'r', encoding = 'utf-8') as DataTempJson:
+                    DataTemp = json.load(DataTempJson)
+                DataList[i][MainKey] = DataTemp[MainKey]
+                ##### Process 추가 후처리 #####
 
-            ##### Process 추가 후처리 #####
+                ##### Process 추가 후처리 #####
+            except:
+                print(f"[ DataTempJsonPath Is None : >>> PublisherData_({DataList[i]['Id']})_{DataList[i]['PublisherInformation']['Name']}.json <<< 파일 존재하지 않음 ]")
+                continue
         
         # DataListJson 저장
         with open(DataJsonPath, 'w', encoding = 'utf-8') as DataListJson:
@@ -224,6 +228,7 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
 ################################
 ## PublisherProcess 프롬프트 요청 및 결과물 Json화
 def PublisherProcessUpdate(projectName, email, mode = "Master", MainKey = 'PublisherAnalysis', MessagesReview = "on"):
+    print(f"< User: {email} | Project: {projectName} | PublisherProcessUpdate 시작 >")
     ## TotalPublisherData 경로 설정
     TotalPublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData"
     TotalPublisherDataJsonPath = os.path.join(TotalPublisherDataPath, 'TotalPublisherData.json')
@@ -263,6 +268,7 @@ def PublisherProcessUpdate(projectName, email, mode = "Master", MainKey = 'Publi
     
     ## ProcessResponse 업데이트
     ProcessResponseUpdate(MainKey, TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
+    print(f"[ User: {email} | Project: {projectName} | PublisherProcessUpdate 완료 ]\n")
 
 if __name__ == "__main__":
     

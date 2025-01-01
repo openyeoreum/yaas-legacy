@@ -287,14 +287,18 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
     if MainKey not in DataList[-1]:
         # TextDataList 업데이트
         for i in range(len(DataList)):
-            DataTempJsonPath = os.path.join(DataTempPath, f"BookData_({DataList[i]['ISBN']})_{DataList[i]['Title']}.json")
-            with open(DataTempJsonPath, 'r', encoding = 'utf-8') as DataTempJson:
-                DataTemp = json.load(DataTempJson)
-            DataList[i][MainKey] = DataTemp[MainKey]
-            ##### 추가 후처리 사항 #####
-            BookScore = BookScoreCalculation(DataList[i])
-            ##### 추가 후처리 사항 #####
-            DataList[i]['BookScore'] = BookScore
+            try:
+                DataTempJsonPath = os.path.join(DataTempPath, f"BookData_({DataList[i]['ISBN']})_{DataList[i]['Title']}.json")
+                with open(DataTempJsonPath, 'r', encoding = 'utf-8') as DataTempJson:
+                    DataTemp = json.load(DataTempJson)
+                DataList[i][MainKey] = DataTemp[MainKey]
+                ##### 추가 후처리 사항 #####
+                BookScore = BookScoreCalculation(DataList[i])
+                ##### 추가 후처리 사항 #####
+                DataList[i]['BookScore'] = BookScore
+            except:
+                print(f"[ DataTempJsonPath Is None : >>> BookData_({DataList[i]['ISBN']})_{DataList[i]['Title']}.json <<< 파일 존재하지 않음 ]")
+                continue
         
         # DataListJson 저장
         with open(DataJsonPath, 'w', encoding = 'utf-8') as DataListJson:
@@ -305,6 +309,7 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
 ################################
 ## BookProcess 프롬프트 요청 및 결과물 Json화
 def BookProcessUpdate(projectName, email, mode = "Master", MainKey = 'BookAnalysis', MessagesReview = "on"):
+    print(f"< User: {email} | Project: {projectName} | BookProcessUpdate 시작 >")
     ## TotalBookData 경로 설정
     TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_BookData/s15221_TotalBookData"
     TotalBookDataJsonPath = os.path.join(TotalBookDataPath, 'TotalBookData.json')
@@ -347,6 +352,7 @@ def BookProcessUpdate(projectName, email, mode = "Master", MainKey = 'BookAnalys
     
     ## ProcessResponse 업데이트
     ProcessResponseUpdate(MainKey, TotalBookDataJsonPath, TotalBookDataTempPath)
+    print(f"[ User: {email} | Project: {projectName} | BookProcessUpdate 완료 ]\n")
 
 if __name__ == "__main__":
     

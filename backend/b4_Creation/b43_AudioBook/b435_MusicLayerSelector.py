@@ -111,7 +111,7 @@ def MusicLayerPathGen(projectName, email, FileName):
 ## VoiceLayer에 Logo 선택 후 경로 생성
 def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = 'Storage'):
     ## MatchedMusics 파일 경로 생성
-    fileName = '[' + projectName + '_' + 'MatchedMusics].json'
+    fileName = '[' + projectName + '_MatchedMusics].json'
     MatchedMusicLayerPath = MusicLayerPathGen(projectName, email, fileName)
 
     ## MusicDataSet 불러오기
@@ -208,7 +208,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
             # SubPartChapterMusic, IndexMusic, CaptionMusic 선택
             RandomIndexMusicDic = random.sample(MatchedTitleMusic['MusicSet']['IndexMusic'], 3)
             # 초가 가장 높은 값을 1순위로 정렬
-            SortedIndexMusicDic = sorted(RandomIndexMusicDic, key = lambda x: x["Setting"]["Length"][-1] * 0.3 + x["Setting"]["Length"][0], reverse=True)
+            SortedIndexMusicDic = sorted(RandomIndexMusicDic, key = lambda x: x["Setting"]["Length"][-1] * 0.3 + x["Setting"]["Length"][0], reverse = True)
             MatchedSubPartChapterMusicDic = {'Tag': 'SubChapterPart', 'File': SortedIndexMusicDic[0]['FilePath'].split('/')[-1], 'FilePath': SortedIndexMusicDic[0]['FilePath'], 'Setting': SortedIndexMusicDic[0]['Setting']}
             MatchedMusics.append(MatchedSubPartChapterMusicDic)
             
@@ -283,8 +283,8 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
 
     ## MatchedMusics의 File과 FilePath가 일치하지 않을 경우 File 적용
     NewMatchedMusics = []
-    FilePath = None
     for MatchedMusic in MatchedMusics:
+        FilePath = MatchedMusic['FilePath']
         Tag = MatchedMusic['Tag']
         if 'File' not in MatchedMusic:
             if MatchedMusic['FilePath'] is not None:
@@ -1928,7 +1928,7 @@ def SaveMusicTemplate(projectName, email, MainLang = 'Ko'):
     ContextCompletion = {"Genre": Genre, "GenreRatio": GenreRatio, "GenderRatio": GenderRatio, "AgeRatio": AgeRatio, "PersonalityRatio": PersonalityRatio, "EmotionRatio": EmotionRatio}
     
     ## MatchedMusics 로드
-    fileName = '[' + projectName + '_' + 'MatchedMusics].json'
+    fileName = '[' + projectName + '_MatchedMusics].json'
     MatchedMusicLayerPath = MusicLayerPathGen(projectName, email, fileName)
     with open(MatchedMusicLayerPath, 'r', encoding = 'utf-8') as JsonFile:
         MatchedMusics = json.load(JsonFile)

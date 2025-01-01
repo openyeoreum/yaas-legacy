@@ -47,6 +47,17 @@
                     "Volume": 100,
                     "Direction": "뒤"
                 }
+            },
+            {
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s186_LogueMusic/5_LogueMusic.wav",
+                "Setting": {
+                    "Length": [
+                        3.00,
+                        4.00
+                    ],
+                    "Volume": 100,
+                    "Direction": "뒤"
+                }
             }
         ],
         "TitleMusics": [

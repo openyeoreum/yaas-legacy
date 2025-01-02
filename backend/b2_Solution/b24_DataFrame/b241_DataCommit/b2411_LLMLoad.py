@@ -229,8 +229,8 @@ def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = "bac
   
 ## 프롬프트 실행
 def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
-    # client = OpenAI(api_key = LoadLLMapiKey(email))
-    client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
+    # OpenAIClient = OpenAI(api_key = LoadLLMapiKey(email))
+    OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)
     else:
@@ -276,13 +276,13 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
     for _ in range(MaxAttempts):
       try:
           if promptFrame[0]["OutputFormat"] == 'json':
-            response = client.chat.completions.create(
+            response = OpenAIClient.chat.completions.create(
                 model = Model,
                 response_format = {"type": "json_object"},
                 messages = Messages,
                 temperature = Temperature)
           else:
-            response = client.chat.completions.create(
+            response = OpenAIClient.chat.completions.create(
                 model = Model,
                 messages = Messages,
                 temperature = Temperature)
@@ -376,19 +376,19 @@ def OpenAI_LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Proces
     
 ## 파인튜닝 파일 업로드 생성
 def OpenAI_LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = "Example", MaxAttempts = 100):
-    client = OpenAI(api_key = LoadLLMapiKey(email))
-    client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
+    OpenAIClient = OpenAI(api_key = LoadLLMapiKey(email))
+    OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     
     # LLMTrainingDataset 업로드
     filename, LLMTrainingDataset = OpenAI_LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = mode)
-    UploadedFile = client.files.create(
+    UploadedFile = OpenAIClient.files.create(
       file = LLMTrainingDataset,
       purpose = 'fine-tune'
     )
     time.sleep(random.randint(15, 20))
     
     for _ in range(MaxAttempts):
-      uploadedFile = client.files.retrieve(UploadedFile.id)
+      uploadedFile = OpenAIClient.files.retrieve(UploadedFile.id)
       if uploadedFile.status == "processed":
         FileId = uploadedFile.id
         # 파일이름에 FileId 붙이기
@@ -410,8 +410,8 @@ def OpenAI_LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, 
 ## 파인튜닝
 def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
     with get_db() as db:
-      client = OpenAI(api_key = LoadLLMapiKey(email))
-      client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
+      OpenAIClient = OpenAI(api_key = LoadLLMapiKey(email))
+      OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
       
       newFilename, FileId = OpenAI_LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = Mode)
 
@@ -422,7 +422,7 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
         BaseModel = "gpt-4o-mini"
       
       # FineTuning 요청
-      FineTuningJob = client.fine_tuning.jobs.create(
+      FineTuningJob = OpenAIClient.fine_tuning.jobs.create(
         training_file = FileId,
         model = BaseModel,
         hyperparameters={"n_epochs":Epochs}
@@ -431,7 +431,7 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
       
       for _ in range(MaxAttempts):
 
-        fineTuningJob = client.fine_tuning.jobs.retrieve(FineTuningJob.id)
+        fineTuningJob = OpenAIClient.fine_tuning.jobs.retrieve(FineTuningJob.id)
         if fineTuningJob.status == "succeeded":
           FineTunedModel = fineTuningJob.fine_tuned_model
           TrainedTokens = fineTuningJob.trained_tokens
@@ -471,7 +471,7 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
       jsonLine = json.dumps(fineTunedModelDic)
       file.write(jsonLine)
         
-    # client.File.delete(TrainingFile)
+    # OpenAIClient.File.delete(TrainingFile)
     
     return FineTunedModel, TrainedTokens
 
@@ -490,7 +490,7 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
 ## 프롬프트 실행
 def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
 
-    client = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
+    OpenAIClient = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
     if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)
     else:
@@ -534,14 +534,14 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
     for _ in range(MaxAttempts):
       try:
           if promptFrame[0]["OutputFormat"] == 'json':
-            response = client.messages.create(
+            response = OpenAIClient.messages.create(
                 model = Model,
                 max_tokens = 4096,
                 system = Messages[0]["content"],
                 messages = [{"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"}]
             )
           else:
-            response = client.messages.create(
+            response = OpenAIClient.messages.create(
                 model = Model,
                 max_tokens = 4096,
                 system = Messages[0]["content"],

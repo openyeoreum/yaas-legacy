@@ -157,7 +157,7 @@ def ConvertWeek(DateRange):
     return Date
 
 ## 교보문고 베스트셀러 스크래퍼
-def BestsellerScraper(driver, period = 'Weekly', rank = 200):
+def BestSellerScraper(driver, period = 'Weekly', rank = 200):
     BookDataList = []
     LastRank = 0
     EndSwitch = False
@@ -258,9 +258,9 @@ def BestsellerScraper(driver, period = 'Weekly', rank = 200):
     return BookDataList
 
 ## 교보문고 베스트셀러 스크래퍼
-def BestsellerScraper(period):
+def BestSellerScraper(period):
     driver = SeleniumHubDrive()
-    BookDataList = BestsellerScraper(driver, period) ## Daily, Weekly, Monthly
+    BookDataList = BestSellerScraper(driver, period) ## Daily, Weekly, Monthly
     driver.quit()
     
     return BookDataList
@@ -270,7 +270,7 @@ def BookDataUpdate(period = 'Weekly'):
     print(f"[ {period} 베스트셀러 도서 스크래핑 시작 ]\n")
     
     ## 베스트셀러 도서 스크래핑
-    BookDataList = BestsellerScraper(period)
+    BookDataList = BestSellerScraper(period)
     print(f"[ TotalBookData 업데이트 시작 ]\n")
     ## 기존 토탈 데이터셋
     TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_BookData/s15221_TotalBookData/TotalBookData.json"

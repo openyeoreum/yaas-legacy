@@ -1,10 +1,10 @@
 import sys
 sys.path.append("/yaas")
 
-from backend.b2_Solution.b22_DataCollection.b221_TargetData.b2212_PublisherData.b22121_PublisherScraper import PublisherDataUpdate
-from backend.b2_Solution.b22_DataCollection.b221_TargetData.b2212_PublisherData.b22122_PublisherUpdate import PublisherProcessUpdate
-from backend.b2_Solution.b22_DataCollection.b222_TrendData.b2222_BookData.b22221_BestSellerScraper import BookDataUpdate
-from backend.b2_Solution.b22_DataCollection.b222_TrendData.b2222_BookData.b22222_BestSellerUpdate import BookProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b222_TargetData.b2222_PublisherData.b22221_PublisherScraper import PublisherDataUpdate
+from backend.b2_Solution.b22_DataCollection.b222_TargetData.b2222_PublisherData.b22222_PublisherUpdate import PublisherProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b223_TrendData.b2232_BestSeller.b22321_BestSellerScraper import BookDataUpdate
+from backend.b2_Solution.b22_DataCollection.b223_TrendData.b2232_BestSeller.b22322_BestSellerUpdate import BookProcessUpdate
 
 ########################################
 ########################################

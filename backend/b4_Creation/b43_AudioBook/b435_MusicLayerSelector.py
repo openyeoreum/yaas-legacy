@@ -640,7 +640,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = '
             EndTitleLength = Length[i+2]
 
     AccumulatedTimesList[-1]['AccumulatedTime'] += LastLengthTime
-            
+
     # Mixing
     # 기존의 배경 음악과 볼륨이 10 낮은 배경 음악 준비
     OriginalMusic = TitleMusic_Audio

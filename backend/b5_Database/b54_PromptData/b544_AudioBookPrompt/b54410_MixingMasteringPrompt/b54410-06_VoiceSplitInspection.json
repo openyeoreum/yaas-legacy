@@ -41,8 +41,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(<매칭검수.json> 작성 양식)\n",
                     "Message": "{'매칭': [{'문제번호': 1, '검수': '불합격', '문제': '번째 [숫자] 문장', '수정정답': '번째 [5] 문장입니다'}, {'문제번호': 2, '검수': '합격', '문제': '니다 [숫자] 지금', '수정정답': '문장입니다 [6] 지금'}, ...]}"
@@ -101,8 +100,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(<매칭검수.json> 작성 양식)\n",
                     "Message": "{'매칭': [{'문제번호': 1, '검수': '불합격', '문제': '번째 [숫자] 문장', '수정정답': '번째 [5] 문장입니다'}, {'문제번호': 2, '검수': '합격', '문제': '니다 [숫자] 지금', '수정정답': '문장입니다 [6] 지금'}, ...]}"
@@ -161,8 +159,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(<매칭검수.json> 작성 양식)\n",
                     "Message": "{'매칭': [{'문제번호': 1, '검수': '불합격', '문제': '번째 [숫자] 문장', '수정정답': '번째 [5] 문장입니다'}, {'문제번호': 2, '검수': '합격', '문제': '니다 [숫자] 지금', '수정정답': '문장입니다 [6] 지금'}, ...]}"
@@ -180,14 +177,14 @@
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "",
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "\n\n(<매칭검수.json> 작업 시작)\n",
@@ -220,8 +217,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(<매칭검수.json> 작성 양식)\n",
                     "Message": "{'매칭': [{'문제번호': 1, '검수': '불합격', '문제': '번째 [숫자] 문장', '수정정답': '번째 [5] 문장입니다'}, {'문제번호': 2, '검수': '합격', '문제': '니다 [숫자] 지금', '수정정답': '문장입니다 [6] 지금'}, ...]}"
@@ -239,14 +235,14 @@
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "",
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "\n\n(<매칭검수.json> 작업 시작)\n",

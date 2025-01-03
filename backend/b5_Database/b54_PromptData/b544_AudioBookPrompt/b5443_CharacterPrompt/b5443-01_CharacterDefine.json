@@ -6,7 +6,20 @@
             "LongTokensModel": "gpt-4o-2024-11-20"
         },
         "ExampleFineTunedModel": {
-            "ShortTokensModel": [{"Date": "CharacterDefine-231022073805", "Model": "ft:gpt-4o-mini-0613:yeoreum::8CTTEzmS"}, {"Date": "CharacterDefine-231102055753", "Model": "ft:gpt-4o-mini-0613:yeoreum::8GJjYaiZ"}, {"Date": "CharacterDefine-231108032841", "Model": "ft:gpt-4o-mini:yeoreum::8ILpWsR7"}],
+            "ShortTokensModel": [
+                {
+                    "Date": "CharacterDefine-231022073805",
+                    "Model": "ft:gpt-4o-mini-0613:yeoreum::8CTTEzmS"
+                },
+                {
+                    "Date": "CharacterDefine-231102055753",
+                    "Model": "ft:gpt-4o-mini-0613:yeoreum::8GJjYaiZ"
+                },
+                {
+                    "Date": "CharacterDefine-231108032841",
+                    "Model": "ft:gpt-4o-mini:yeoreum::8ILpWsR7"
+                }
+            ],
             "LongTokensModel": []
         },
         "MemoryFineTunedModel": {
@@ -41,8 +54,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(<태그.json> 요소)\n",
                     "Message": "1) '말의종류': '대화', '독백', '인용', '강조' 중 선택\n2) '말하는인물': 말하는 인물의 이름, 직업 등 내용에 나타나는 명칭\n3) '말하는인물의성별': '남', '여'로 추정해서 꼭 작성\n4) '말하는인물의나이': 말하는 인물의 나이로 '유년', '청소년', '청년', '중년', '장년', '노년'으로 추정해서 꼭 작성\n5) '말하는인물의감정': 말하는 인물의 감정으로 '중립', '즐거움', '화남', '슬픔', '침착함' 중 선택\n6) '인물의역할': 말하는 인물의 역할로 '주인공', '조연', '단역' 중 선택\n7) '듣는인물': 말을 듣는 인물의 명칭"
@@ -101,8 +113,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(<태그.json> 요소)\n",
                     "Message": "1) '말의종류': '대화', '독백', '인용', '강조' 중 선택\n2) '말하는인물': 말하는 인물의 이름, 직업 등 내용에 나타나는 명칭\n3) '말하는인물의성별': '남', '여'로 추정해서 꼭 작성\n4) '말하는인물의나이': 말하는 인물의 나이로 '유년', '청소년', '청년', '중년', '장년', '노년'으로 추정해서 꼭 작성\n5) '말하는인물의감정': 말하는 인물의 감정으로 '중립', '즐거움', '화남', '슬픔', '침착함' 중 선택\n6) '인물의역할': 말하는 인물의 역할로 '주인공', '조연', '단역' 중 선택\n7) '듣는인물': 말을 듣는 인물의 명칭"
@@ -161,8 +172,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(<태그.json> 요소)\n",
                     "Message": "1) '말의종류': '대화', '독백', '인용', '강조' 중 선택\n2) '말하는인물': 말하는 인물의 이름, 직업 등 내용에 나타나는 명칭\n3) '말하는인물의성별': '남', '여'로 추정해서 꼭 작성\n4) '말하는인물의나이': 말하는 인물의 나이로 '유년', '청소년', '청년', '중년', '장년', '노년'으로 추정해서 꼭 작성\n5) '말하는인물의감정': 말하는 인물의 감정으로 '중립', '즐거움', '화남', '슬픔', '침착함' 중 선택\n6) '인물의역할': 말하는 인물의 역할로 '주인공', '조연', '단역' 중 선택\n7) '듣는인물': 말을 듣는 인물의 명칭"
@@ -180,14 +190,14 @@
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "",
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "\n\n(태깅 작업)\n",
@@ -220,8 +230,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(<태그.json> 요소)\n",
                     "Message": "1) '말의종류': '대화', '독백', '인용', '강조' 중 선택\n2) '말하는인물': 말하는 인물의 이름, 직업 등 내용에 나타나는 명칭\n3) '말하는인물의성별': '남', '여'로 추정해서 꼭 작성\n4) '말하는인물의나이': 말하는 인물의 나이로 '유년', '청소년', '청년', '중년', '장년', '노년'으로 추정해서 꼭 작성\n5) '말하는인물의감정': 말하는 인물의 감정으로 '중립', '즐거움', '화남', '슬픔', '침착함' 중 선택\n6) '인물의역할': 말하는 인물의 역할로 '주인공', '조연', '단역' 중 선택\n7) '듣는인물': 말을 듣는 인물의 명칭"
@@ -239,14 +248,14 @@
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "",
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "\n\n(태깅 작업)\n",

@@ -41,8 +41,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(양식)\n",
                     "Message": "{'발음문': '<원문>의 한국발음 변경문'}"
@@ -101,8 +100,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(양식)\n",
                     "Message": "{'발음문': '<원문>의 한국발음 변경문'}"
@@ -161,8 +159,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(양식)\n",
                     "Message": "{'발음문': '<원문>의 한국발음 변경문'}"
@@ -180,14 +177,14 @@
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "",
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "\n\n(<발음문.json>작업 시작)\n",
@@ -220,8 +217,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "(양식)\n",
                     "Message": "{'발음문': '<원문>의 한국발음 변경문'}"
@@ -239,14 +235,14 @@
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "",
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "\n\n(<발음문.json>작업 시작)\n",

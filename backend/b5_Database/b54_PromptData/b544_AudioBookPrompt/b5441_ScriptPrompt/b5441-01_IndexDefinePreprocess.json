@@ -41,8 +41,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "",
                     "Message": ""
@@ -74,7 +73,7 @@
                     "InputExampleMark": "<목차3.text>\n",
                     "InputExample": "나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n소 탄 노인 12 | 노인의 정체 17 | 신분의 굴레 22 | 안가노안 28\n기묘사화 33 | 비부 35 | 보충대 39 | 송사련 43 | 잇따른 역모 47\n불만 세력 50 | 고변 55 | 안처겸 옥사 57 | 상황의 변화 62\n동인과 서인 64 | 이이의 죽음 71\n\n2장 안씨 집안\n안가의 노력 78 | 붕당의 죄 81 | 법률의 적용 87 | 감형 92\n기묘당 선언 96 | 기묘당적 103 | 기묘당인 107 | 기묘사림 111\n기묘록보유 115 | 역모의 재규정 122 | 송사 준비 126 | 우군들 132\n\n문중일지 1 시효와 정의 135",
                     "OutputExampleMark": "\n\n<가독성 목차3.text>\n",
-                    "OutputExample":"나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n\n소 탄 노인\n노인의 정체\n신분의 굴레\n안가노안\n기묘사화\n비부\n보충대\n송사련\n잇따른 역모\n불만 세력\n고변\n안처겸 옥사\n상황의 변화\n동인과 서인\n이이의 죽음\n\n2장 안씨 집안\n\n안가의 노력\n붕당의 죄\n법률의 적용\n감형\n기묘당 선언\n기묘당적\n기묘당인\n기묘사림\n기묘록보유\n역모의 재규정\n송사 준비\n우군들\n\n문중일지 1 시효와 정의"
+                    "OutputExample": "나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n\n소 탄 노인\n노인의 정체\n신분의 굴레\n안가노안\n기묘사화\n비부\n보충대\n송사련\n잇따른 역모\n불만 세력\n고변\n안처겸 옥사\n상황의 변화\n동인과 서인\n이이의 죽음\n\n2장 안씨 집안\n\n안가의 노력\n붕당의 죄\n법률의 적용\n감형\n기묘당 선언\n기묘당적\n기묘당인\n기묘사림\n기묘록보유\n역모의 재규정\n송사 준비\n우군들\n\n문중일지 1 시효와 정의"
                 },
                 {
                     "Mark": "\n\n(목차 가독성 작업4)\n",
@@ -101,8 +100,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "",
                     "Message": ""
@@ -134,7 +132,7 @@
                     "InputExampleMark": "<목차3.text>\n",
                     "InputExample": "나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n소 탄 노인 12 | 노인의 정체 17 | 신분의 굴레 22 | 안가노안 28\n기묘사화 33 | 비부 35 | 보충대 39 | 송사련 43 | 잇따른 역모 47\n불만 세력 50 | 고변 55 | 안처겸 옥사 57 | 상황의 변화 62\n동인과 서인 64 | 이이의 죽음 71\n\n2장 안씨 집안\n안가의 노력 78 | 붕당의 죄 81 | 법률의 적용 87 | 감형 92\n기묘당 선언 96 | 기묘당적 103 | 기묘당인 107 | 기묘사림 111\n기묘록보유 115 | 역모의 재규정 122 | 송사 준비 126 | 우군들 132\n\n문중일지 1 시효와 정의 135",
                     "OutputExampleMark": "\n\n<가독성 목차3.text>\n",
-                    "OutputExample":"나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n\n소 탄 노인\n노인의 정체\n신분의 굴레\n안가노안\n기묘사화\n비부\n보충대\n송사련\n잇따른 역모\n불만 세력\n고변\n안처겸 옥사\n상황의 변화\n동인과 서인\n이이의 죽음\n\n2장 안씨 집안\n\n안가의 노력\n붕당의 죄\n법률의 적용\n감형\n기묘당 선언\n기묘당적\n기묘당인\n기묘사림\n기묘록보유\n역모의 재규정\n송사 준비\n우군들\n\n문중일지 1 시효와 정의"
+                    "OutputExample": "나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n\n소 탄 노인\n노인의 정체\n신분의 굴레\n안가노안\n기묘사화\n비부\n보충대\n송사련\n잇따른 역모\n불만 세력\n고변\n안처겸 옥사\n상황의 변화\n동인과 서인\n이이의 죽음\n\n2장 안씨 집안\n\n안가의 노력\n붕당의 죄\n법률의 적용\n감형\n기묘당 선언\n기묘당적\n기묘당인\n기묘사림\n기묘록보유\n역모의 재규정\n송사 준비\n우군들\n\n문중일지 1 시효와 정의"
                 },
                 {
                     "Mark": "\n\n(목차 가독성 작업4)\n",
@@ -161,8 +159,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "",
                     "Message": ""
@@ -180,14 +177,14 @@
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "",
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "\n\n(목차 가독성 작업)\n",
@@ -220,8 +217,7 @@
         },
         {
             "Role": "user",
-            "Request": 
-            [
+            "Request": [
                 {
                     "Mark": "",
                     "Message": ""
@@ -239,14 +235,14 @@
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "",
                     "InputExampleMark": "",
                     "InputExample": "",
                     "OutputExampleMark": "",
-                    "OutputExample":""
+                    "OutputExample": ""
                 },
                 {
                     "Mark": "\n\n(목차 가독성 작업)\n",

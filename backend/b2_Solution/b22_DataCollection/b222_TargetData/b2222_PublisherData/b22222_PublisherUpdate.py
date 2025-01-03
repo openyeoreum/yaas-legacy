@@ -238,6 +238,7 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
                 ContextDemand = OutputDicList[0]['수요']
                 ContextSupply = OutputDicList[0]['공급']
                 ContextWight = OutputDicList[0]['정보의질']
+                Context = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Supply': ContextSupply, 'Wight': ContextWight}
                 # WMWM
                 WMWMSummary = OutputDicList[1]['요약']
                 WMWMNeeds = OutputDicList[1]['욕구상태']
@@ -245,6 +246,7 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
                 WMWMMind = OutputDicList[1]['마음상태']
                 WMWMAction = OutputDicList[1]['행동상태']
                 WMWMWight = OutputDicList[1]['정보의질']
+                WMWM = {'Summary': WMWMSummary, 'Needs': WMWMNeeds, 'Wisdom': WMWMWisdom, 'Mind': WMWMMind, 'Action': WMWMAction, 'Wight': WMWMWight}
                 # ServiceDemand
                 ServiceDemandSummary = OutputDicList[2]['요약']
                 ServiceDemandTextbook = OutputDicList[2]['텍스트북']
@@ -252,8 +254,9 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
                 ServiceDemandVideobook = OutputDicList[2]['비디오북']
                 ServiceDemandETC = OutputDicList[2]['기타']
                 ServiceDemandWight = OutputDicList[2]['정보의질']
+                ServiceDemand = {'Summary': ServiceDemandSummary, 'Textbook': ServiceDemandTextbook, 'Audiobook': ServiceDemandAudiobook, 'Videobook': ServiceDemandVideobook, 'ETC': ServiceDemandETC, 'Wight': ServiceDemandWight}
    
-                DataTemp = {MainKey: {'Context': {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Supply': ContextSupply, 'Wight': ContextWight}, 'WMWM': {'Summary': WMWMSummary, 'Needs': WMWMNeeds, 'Wisdom': WMWMWisdom, 'Mind': WMWMMind, 'Action': WMWMAction, 'Wight': WMWMWight}, 'ServiceDemand': {'Summary': ServiceDemandSummary, 'Textbook': ServiceDemandTextbook, 'Audiobook': ServiceDemandAudiobook, 'Videobook': ServiceDemandVideobook, 'ETC': ServiceDemandETC, 'Wight': ServiceDemandWight}}}
+                DataTemp = {MainKey: {'Context': Context, 'WMWM': WMWM, 'ServiceDemand': ServiceDemand}}
             else:
                 DataTemp = {MainKey: None}
             

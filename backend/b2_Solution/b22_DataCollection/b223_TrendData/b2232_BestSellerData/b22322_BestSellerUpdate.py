@@ -89,39 +89,81 @@ def LoadTotalBookDataToInputList(TotalBookDataJsonPath, TotalBookDataTempPath):
 ######################
 ## Process1: BookContextDefine의 Filter(Error 예외처리)
 def BookContextDefineFilter(Response, CheckCount):
-    # Error1: json 형식이 아닐 때의 예외 처리
+    # Error1: JSON 형식 예외 처리
     try:
         outputJson = json.loads(Response)
     except json.JSONDecodeError:
         return "BookContextDefine, JSONDecode에서 오류 발생: JSONDecodeError"
-    # Error2: 딕셔너리가 "매칭독자"의 키로 시작하지 않을때의 예외처리
+
+    # Error2: "정리" 키 존재 여부 확인
     try:
-        OutputDic = outputJson['매칭독자']
-    except:
-        return "BookContextDefine, JSON에서 오류 발생: '매칭독자' 미포함"
-    # Error3: 자료의 구조가 다를 때의 예외 처리
-    if ('핵심메세지' not in OutputDic or '독자목적' not in OutputDic or '독자이유' not in OutputDic or '독자질문' not in OutputDic or '독자리뷰' not in OutputDic or '독자만족도' not in OutputDic or '독자키워드' not in OutputDic or '주제키워드' not in OutputDic):
-        return "BookContextDefine, JSON에서 오류 발생: JSONKeyError"
-        
-    return OutputDic
+        outputDic = outputJson['정리']
+    except KeyError:
+        return "BookContextDefine, JSON에서 오류 발생: '정리' 미포함"
+
+    # Error3: 주요 키 확인
+    required_keys = ['요약', '분야', '가치', '발전', '정보의질']
+    if not all(key in outputDic for key in required_keys):
+        return "BookContextDefine, JSON에서 오류 발생: 주요 키 누락"
+
+    # '가치' 검증
+    value_keys = ['충족', '달성', '해결책']
+    for value_key in value_keys:
+        if not all(sub_key in outputDic['가치'][value_key] for sub_key in ['설명', '키워드', '중요도']):
+            return f"BookContextDefine, JSON에서 오류 발생: '가치' {value_key}에 '설명', '키워드', '중요도' 미포함"
+
+    # '발전' 검증
+    development_keys = ['필요', '목표', '질문']
+    for development_key in development_keys:
+        if not all(sub_key in outputDic['발전'][development_key] for sub_key in ['설명', '키워드', '중요도']):
+            return f"BookContextDefine, JSON에서 오류 발생: '발전' {development_key}에 '설명', '키워드', '중요도' 미포함"
+
+    # '분야' 키 확인
+    if not isinstance(outputDic['분야'], list):
+        return "BookContextDefine, JSON에서 오류 발생: '분야'가 리스트 형태가 아님"
+
+    # '정보의질' 키 확인
+    if '정보의질' not in outputDic:
+        return "BookContextDefine, JSON에서 오류 발생: '정보의질' 미포함"
+
+    # 모든 검사를 통과하면 '정리' 데이터를 반환
+    return outputDic
 
 ## Process2: BookWMWMDefine의 Filter(Error 예외처리)
 def BookWMWMDefineFilter(Response, CheckCount):
-    # Error1: json 형식이 아닐 때의 예외 처리
+    # Error1: JSON 형식 예외 처리
     try:
         outputJson = json.loads(Response)
     except json.JSONDecodeError:
         return "BookWMWMDefine, JSONDecode에서 오류 발생: JSONDecodeError"
-    # Error2: 딕셔너리가 "매칭독자"의 키로 시작하지 않을때의 예외처리
+
+    # Error2: "심리" 키 존재 여부 확인
     try:
-        OutputDic = outputJson['분석']
-    except:
-        return "BookWMWMDefine, JSON에서 오류 발생: '매칭독자' 미포함"
-    # Error3: 자료의 구조가 다를 때의 예외 처리
-    if ('핵심문구' not in OutputDic or '욕구상태' not in OutputDic or '욕구상태선택이유' not in OutputDic or '이해상태' not in OutputDic or '이해상태선택이유' not in OutputDic or '마음상태' not in OutputDic or '마음상태선택이유' not in OutputDic or '행동상태' not in OutputDic or '행동상태선택이유' not in OutputDic or '정확도' not in OutputDic):
-        return "BookWMWMDefine, JSON에서 오류 발생: JSONKeyError"
-        
-    return OutputDic
+        outputDic = outputJson['심리']
+    except KeyError:
+        return "BookWMWMDefine, JSON에서 오류 발생: '심리' 미포함"
+
+    # Error3: 주요 키 확인
+    required_keys = ['요약', '욕구상태', '이해상태', '마음상태', '행동상태', '정보의질']
+    if not all(key in outputDic for key in required_keys):
+        return "BookWMWMDefine, JSON에서 오류 발생: 주요 키 누락"
+
+    # '요약' 키 확인
+    if not isinstance(outputDic['요약'], list):
+        return "BookWMWMDefine, JSON에서 오류 발생: '요약'이 리스트 형태가 아님"
+
+    # 상태별 검증
+    state_keys = ['욕구상태', '이해상태', '마음상태', '행동상태']
+    for state_key in state_keys:
+        if not all(sub_key in outputDic[state_key] for sub_key in [state_key, f'{state_key}선택이유', '중요도']):
+            return f"BookWMWMDefine, JSON에서 오류 발생: {state_key}에 '상태', '선택이유', '중요도' 미포함"
+
+    # '정보의질' 키 확인
+    if '정보의질' not in outputDic:
+        return "BookWMWMDefine, JSON에서 오류 발생: '정보의질' 미포함"
+
+    # 모든 검사를 통과하면 '심리' 데이터를 반환
+    return outputDic
 
 ## Process3: BookCommentAnalysis의 Filter(Error 예외처리)
 def BookCommentAnalysisFilter(Response, CheckCount):
@@ -136,7 +178,7 @@ def BookCommentAnalysisFilter(Response, CheckCount):
     except:
         return "BookCommentAnalysis, JSON에서 오류 발생: '리뷰평가' 미포함"
     # Error3: 자료의 구조가 다를 때의 예외 처리
-    if ('평가' not in OutputDic or '종합' not in OutputDic or '피드백' not in OutputDic):
+    if ('평가' not in OutputDic or '종합' not in OutputDic or '발전' not in OutputDic or '정보의질' not in OutputDic):
         return "BookCommentAnalysis, JSON에서 오류 발생: JSONKeyError"
     # Error4: 자료의 구조가 다를 때의 예외 처리
     if len(OutputDic['평가']) < CheckCount:
@@ -146,8 +188,8 @@ def BookCommentAnalysisFilter(Response, CheckCount):
     # '평가' 부분 리스트화
     OutputDic['평가'] = [list(item.values())[0] for item in OutputDic['평가']]
     # Error5: 자료의 구조가 다를 때의 예외 처리
-    if not isinstance(OutputDic['피드백'], list):
-        return "BookCommentAnalysis, JSON에서 오류 발생: 피드백 형식이 리스트가 아님"
+    if not isinstance(OutputDic['발전'], list):
+        return "BookCommentAnalysis, JSON에서 오류 발생: 발전 형식이 리스트가 아님"
     
     return OutputDic
 
@@ -197,21 +239,35 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
     for i in range(len(DataList)):
         if DataList[i]['ISBN'] == InputDic['ISBN']:
             if OutputDicList != []:
-                Message = OutputDicList[0]['핵심메세지']
-                Context = {"Purpose": OutputDicList[0]['독자목적'], "Reason": OutputDicList[0]['독자이유'], "Question": OutputDicList[0]['독자질문'], "Review": OutputDicList[0]['독자리뷰'], "Subject": OutputDicList[0]['주제키워드'], "Person": OutputDicList[0]['독자키워드'], "Importance": OutputDicList[0]['독자만족도']}
-                Phrases = OutputDicList[1]['핵심문구']
-                WMWM = {"Needs": OutputDicList[1]['욕구상태'], "ReasonOfNeeds": OutputDicList[1]['욕구상태선택이유'], "Wisdom": OutputDicList[1]['이해상태'], "ReasonOfWisdom": OutputDicList[1]['이해상태선택이유'], "Mind": OutputDicList[1]['마음상태'], "ReasonOfPotentialMind": OutputDicList[1]['마음상태선택이유'], "Wildness": OutputDicList[1]['행동상태'], "ReasonOfWildness": OutputDicList[1]['행동상태선택이유'], "Accuracy": OutputDicList[1]['정확도']}
+                # Context
+                ContextSummary = OutputDicList[0]['요약']
+                ContextKeyWord = OutputDicList[0]['분야']
+                ContextDemand = OutputDicList[0]['발전']
+                ContextSupply = OutputDicList[0]['가치']
+                ContextWight = OutputDicList[0]['정보의질']
+                Context = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Supply': ContextSupply, 'Wight': ContextWight}
+                # WMWM
+                WMWMSummary = OutputDicList[1]['요약']
+                WMWMNeeds = OutputDicList[1]['욕구상태']
+                WMWMWisdom = OutputDicList[1]['이해상태']
+                WMWMMind = OutputDicList[1]['마음상태']
+                WMWMAction = OutputDicList[1]['행동상태']
+                WMWMWight = OutputDicList[1]['정보의질']
+                WMWM = {'Summary': WMWMSummary, 'Needs': WMWMNeeds, 'Wisdom': WMWMWisdom, 'Mind': WMWMMind, 'Action': WMWMAction, 'Wight': WMWMWight}
+                # BookReview
                 if OutputDicList[2] is not None:
-                    ReviewPhrases = OutputDicList[2]['종합']
+                    BookReviewSummary = OutputDicList[2]['요약']
                     EvaluationList = OutputDicList[2]['평가']
-                    ReviewEvaluation = []
+                    BookReviewEvaluation = []
                     for j, Evaluation in enumerate(EvaluationList):
-                        ReviewEvaluation.append({'Evaluation': Evaluation, 'Like': InputDic['CommentLikeList'][j]})
-                    Review = {"ReviewEvaluation": ReviewEvaluation, "Feedback": OutputDicList[2]['피드백']}
+                        BookReviewEvaluation.append({'Evaluation': Evaluation, 'Like': InputDic['CommentLikeList'][j]})
+                    BookReviewPositivity = OutputDicList[2]['긍정']
+                    BookReviewNegativity = OutputDicList[2]['부정']
+                    BookReviewWight = OutputDicList[2]['정보의질']
+                    BookReview = {'Summary': BookReviewSummary, 'Evaluation': BookReviewEvaluation, 'Positivity': BookReviewPositivity, 'Negativity': BookReviewNegativity, 'Wight': BookReviewWight}
                 else:
-                    ReviewPhrases = None
-                    Review = None
-                DataTemp = {MainKey: {'Message': Message, 'Context': Context, 'Phrases': Phrases, 'WMWM': WMWM, 'ReviewPhrases': ReviewPhrases, 'Review': Review}}
+                    BookReview = None
+                DataTemp = {MainKey: {'Context': Context, 'WMWM': WMWM, 'BookReview': BookReview}}
             else:
                 DataTemp = {MainKey: None}
             

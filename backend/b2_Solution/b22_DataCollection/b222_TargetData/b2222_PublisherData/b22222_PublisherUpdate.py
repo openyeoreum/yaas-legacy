@@ -77,60 +77,114 @@ def PublisherContextDefineFilter(Response, CheckCount):
         outputJson = json.loads(Response)
     except json.JSONDecodeError:
         return "PublisherContextDefine, JSONDecode에서 오류 발생: JSONDecodeError"
-    # Error2: 딕셔너리가 "매칭독자"의 키로 시작하지 않을때의 예외처리
+    
+    # Error2: 딕셔너리가 "정리"의 키로 시작하지 않을때의 예외처리
     try:
-        OutputDic = outputJson['분석']
-    except:
-        return "PublisherContextDefine, JSON에서 오류 발생: '분석' 미포함"
+        OutputDic = outputJson['정리']
+    except KeyError:
+        return "PublisherContextDefine, JSON에서 오류 발생: '정리' 미포함"
+    
     # Error3: 자료의 구조가 다를 때의 예외 처리
-    if ('핵심슬로건' not in OutputDic or '목적' not in OutputDic or '이유' not in OutputDic or '질문' not in OutputDic or '주제' not in OutputDic or '전문가' not in OutputDic):
+    required_keys = ['요약', '분야', '수요', '공급', '정보의질']
+    if not all(key in OutputDic for key in required_keys):
         return "PublisherContextDefine, JSON에서 오류 발생: JSONKeyError"
-        
+    
+    # 수요 검증
+    demand_keys = ['필요', '목표', '질문']
+    if not all(key in outputJson['정리']['수요'] for key in demand_keys):
+        return "PublisherContextDefine, JSON에서 오류 발생: '필요', '목표', '질문' 미포함"
+    
+    # 공급 검증
+    supply_keys = ['충족', '달성', '해결책']
+    if not all(key in outputJson['정리']['공급'] for key in supply_keys):
+        return "PublisherContextDefine, JSON에서 오류 발생: '충족', '달성', '해결책' 미포함"
+    
+    # 세부 키 검증
+    for demand_key in demand_keys:
+        if not all(sub_key in outputJson['정리']['수요'][demand_key] for sub_key in ['설명', '키워드', '중요도']):
+            return f"PublisherContextDefine, JSON에서 오류 발생: 수요 {demand_key} '설명', '키워드', '중요도' 미포함"
+    
+    for supply_key in supply_keys:
+        if not all(sub_key in outputJson['정리']['공급'][supply_key] for sub_key in ['설명', '키워드', '중요도']):
+            return f"PublisherContextDefine, JSON에서 오류 발생: 공급 {supply_key} '설명', '키워드', '중요도' 미포함"
+    
     return OutputDic
 
 ## Process2: PublisherWMWMDefine의 Filter(Error 예외처리)
 def PublisherWMWMDefineFilter(Response, CheckCount):
-    # Error1: json 형식이 아닐 때의 예외 처리
+    # Error1: JSON 형식 예외 처리
     try:
         outputJson = json.loads(Response)
     except json.JSONDecodeError:
-        return "PublisherWMWMDefine, JSONDecode에서 오류 발생: JSONDecodeError"
-    # Error2: 딕셔너리가 "매칭독자"의 키로 시작하지 않을때의 예외처리
+        return "PsychologyContextValidate, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: "심리" 키 존재 여부 확인
     try:
-        OutputDic = outputJson['분석']
-    except:
-        return "PublisherWMWMDefine, JSON에서 오류 발생: '분석' 미포함"
-    # Error3: 자료의 구조가 다를 때의 예외 처리
-    if '핵심문구' not in OutputDic:
-        return "PublisherWMWMDefine, JSON에서 오류 발생: '핵심문구' 미포함"
-    if not isinstance(OutputDic['핵심문구'], list):
-        return "PublisherWMWMDefine, JSON에서 오류 발생: '핵심문구'가 리스트 형식이 아님"
-    if ('욕구상태' not in OutputDic or '욕구상태선택이유' not in OutputDic or '이해상태' not in OutputDic or '이해상태선택이유' not in OutputDic or '마음상태' not in OutputDic or '마음상태선택이유' not in OutputDic or '행동상태' not in OutputDic or '행동상태선택이유' not in OutputDic or '정확도' not in OutputDic):
-        return "PublisherWMWMDefine, JSON에서 오류 발생: JSONKeyError"
-        
-    return OutputDic
+        outputDic = outputJson['심리']
+    except KeyError:
+        return "PsychologyContextValidate, JSON에서 오류 발생: '심리' 미포함"
+
+    # Error3: 주요 키 확인
+    required_keys = ['요약', '욕구상태', '이해상태', '마음상태', '행동상태', '정보의질']
+    if not all(key in outputDic for key in required_keys):
+        return "PsychologyContextValidate, JSON에서 오류 발생: 주요 키 누락"
+
+    # 요약 키 확인
+    if not isinstance(outputDic['요약'], list):
+        return "PsychologyContextValidate, JSON에서 오류 발생: '요약'이 리스트 형태가 아님"
+
+    # 상태별 검증
+    state_keys = ['욕구상태', '이해상태', '마음상태', '행동상태']
+    for state_key in state_keys:
+        if not all(sub_key in outputDic[state_key] for sub_key in [state_key, f'{state_key}선택이유', '중요도']):
+            return f"PsychologyContextValidate, JSON에서 오류 발생: {state_key} '설명', '선택이유', '중요도' 미포함"
+    
+    # 정보의질 키 확인
+    if '정보의질' not in outputDic:
+        return "PsychologyContextValidate, JSON에서 오류 발생: '정보의질' 미포함"
+
+    # 모든 검사를 통과하면 심리 데이터를 반환
+    return outputDic
 
 ## Process3: PublisherServiceDemandFilter의 Filter(Error 예외처리)
 def PublisherServiceDemandFilter(Response, CheckCount):
-    # Error1: json 형식이 아닐 때의 예외 처리
+    # Error1: JSON 형식 예외 처리
     try:
         outputJson = json.loads(Response)
     except json.JSONDecodeError:
         return "PublisherServiceDemand, JSONDecode에서 오류 발생: JSONDecodeError"
-    # Error2: 딕셔너리가 "매칭독자"의 키로 시작하지 않을때의 예외처리
+
+    # Error2: "수요" 키 존재 여부 확인
     try:
-        OutputDic = outputJson['수요']
-    except:
-        return "PublisherServiceDemand, JSON에서 오류 발생: '분석' 미포함"
-    # Error3: 자료의 구조가 다를 때의 예외 처리
-    if '핵심문구' not in OutputDic:
-        return "PublisherServiceDemand, JSON에서 오류 발생: '핵심문구' 미포함"
-    if not isinstance(OutputDic['핵심문구'], list):
-        return "PublisherServiceDemand, JSON에서 오류 발생: '핵심문구'가 리스트 형식이 아님"
-    if ('텍스트북' not in OutputDic or '텍스트북수요정도' not in OutputDic or '오디오북' not in OutputDic or '오디오북수요정도' not in OutputDic or '비디오북' not in OutputDic or '비디오북수요정도' not in OutputDic or '기타' not in OutputDic or '기타수요정도' not in OutputDic):
-        return "PublisherServiceDemand, JSON에서 오류 발생: JSONKeyError"
-        
-    return OutputDic
+        outputDic = outputJson['수요']
+    except KeyError:
+        return "PublisherServiceDemand, JSON에서 오류 발생: '수요' 미포함"
+
+    # Error3: 주요 키 확인
+    required_keys = ['요약', '텍스트북', '오디오북', '비디오북', '기타', '정보의질']
+    if not all(key in outputDic for key in required_keys):
+        return "PublisherServiceDemand, JSON에서 오류 발생: 주요 키 누락"
+
+    # 요약 키 확인
+    if not isinstance(outputDic['요약'], list):
+        return "PublisherServiceDemand, JSON에서 오류 발생: '요약'이 리스트 형태가 아님"
+
+    # 상태별 검증
+    state_keys = ['텍스트북', '오디오북', '비디오북', '기타']
+    for state_key in state_keys:
+        if not all(sub_key in outputDic[state_key] for sub_key in ['제작필요', '제작물', '필요도']):
+            return f"PublisherServiceDemand, JSON에서 오류 발생: {state_key} '제작필요', '제작물', '필요도' 미포함"
+
+        # 제작물 키 확인
+        if not isinstance(outputDic[state_key]['제작물'], list):
+            return f"PublisherServiceDemand, JSON에서 오류 발생: {state_key} '제작물'이 리스트 형태가 아님"
+
+    # 정보의질 키 확인
+    if '정보의질' not in outputDic:
+        return "PublisherServiceDemand, JSON에서 오류 발생: '정보의질' 미포함"
+
+    # 모든 검사를 통과하면 수요 데이터를 반환
+    return outputDic
 
 #######################
 ##### Process 응답 #####
@@ -178,13 +232,28 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
     for i in range(len(DataList)):
         if DataList[i]['Id'] == InputDic['PublisherId']:
             if OutputDicList != []:
-                Slogan = OutputDicList[0]['핵심슬로건']
-                Context = {"Purpose": OutputDicList[0]['목적'], "Reason": OutputDicList[0]['이유'], "Question": OutputDicList[0]['질문'], "Subject": OutputDicList[0]['주제'], "Person": OutputDicList[0]['전문가'], "Importance": OutputDicList[0]['정확도']}
-                Phrases = OutputDicList[1]['핵심문구']
-                WMWM = {"Needs": OutputDicList[1]['욕구상태'], "ReasonOfNeeds": OutputDicList[1]['욕구상태선택이유'], "Wisdom": OutputDicList[1]['이해상태'], "ReasonOfWisdom": OutputDicList[1]['이해상태선택이유'], "Mind": OutputDicList[1]['마음상태'], "ReasonOfPotentialMind": OutputDicList[1]['마음상태선택이유'], "Wildness": OutputDicList[1]['행동상태'], "ReasonOfWildness": OutputDicList[1]['행동상태선택이유'], "Accuracy": OutputDicList[1]['정확도']}
-                DemandPhrases = OutputDicList[2]['핵심문구']
-                Demand = {"Textbook": OutputDicList[2]['텍스트북'], "TextbookDemand": OutputDicList[2]['텍스트북수요정도'], "Audiobook": OutputDicList[2]['오디오북'], "AudiobookDemand": OutputDicList[2]['오디오북수요정도'], "Videobook": OutputDicList[2]['비디오북'], "VideobookDemand": OutputDicList[2]['비디오북수요정도'], "ETC": OutputDicList[2]['기타'], "ETCDemand": OutputDicList[2]['기타수요정도']}
-                DataTemp = {MainKey: {'Slogan': Slogan, 'Context': Context, 'Phrases': Phrases, 'WMWM': WMWM, 'DemandPhrases': DemandPhrases, 'Demand': Demand}}
+                # Context
+                ContextSummary = OutputDicList[0]['요약']
+                ContextKeyWord = OutputDicList[0]['분야']
+                ContextDemand = OutputDicList[0]['수요']
+                ContextSupply = OutputDicList[0]['공급']
+                ContextWight = OutputDicList[0]['정보의질']
+                # WMWM
+                WMWMSummary = OutputDicList[1]['요약']
+                WMWMNeeds = OutputDicList[1]['욕구상태']
+                WMWMWisdom = OutputDicList[1]['이해상태']
+                WMWMMind = OutputDicList[1]['마음상태']
+                WMWMAction = OutputDicList[1]['행동상태']
+                WMWMWight = OutputDicList[1]['정보의질']
+                # ServiceDemand
+                ServiceDemandSummary = OutputDicList[2]['요약']
+                ServiceDemandTextbook = OutputDicList[2]['텍스트북']
+                ServiceDemandAudiobook = OutputDicList[2]['오디오북']
+                ServiceDemandVideobook = OutputDicList[2]['비디오북']
+                ServiceDemandETC = OutputDicList[2]['기타']
+                ServiceDemandWight = OutputDicList[2]['정보의질']
+   
+                DataTemp = {MainKey: {'Context': {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Supply': ContextSupply, 'Wight': ContextWight}, 'WMWM': {'Summary': WMWMSummary, 'Needs': WMWMNeeds, 'Wisdom': WMWMWisdom, 'Mind': WMWMMind, 'Action': WMWMAction, 'Wight': WMWMWight}, 'ServiceDemand': {'Summary': ServiceDemandSummary, 'Textbook': ServiceDemandTextbook, 'Audiobook': ServiceDemandAudiobook, 'Videobook': ServiceDemandVideobook, 'ETC': ServiceDemandETC, 'Wight': ServiceDemandWight}}}
             else:
                 DataTemp = {MainKey: None}
             

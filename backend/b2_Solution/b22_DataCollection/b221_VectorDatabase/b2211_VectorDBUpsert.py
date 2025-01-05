@@ -51,7 +51,10 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
 
     # 1) Context-Summary
     Field = "Context-Summary"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Wight'] / 100
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Weight'], str):
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Weight'].replace('점', '')) / 100
+    else:
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Weight']) / 100
     ContextSummaryText = CollectionData['CollectionAnalysis']['Context']['Summary']
     ContextSummaryVector = OpenAI_TextEmbedding(ContextSummaryText)
     UpsertEmbeddedData.append({
@@ -61,13 +64,12 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
     
     # 2) Context-KeyWord
     Field = "Context-KeyWord"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Wight'] / 100
     ContextKeyWord = CollectionData['CollectionAnalysis']['Context']['KeyWord']
     ContextKeyWordText = ", ".join(ContextKeyWord)
     ContextKeyWordVector = OpenAI_TextEmbedding(ContextKeyWordText)
@@ -78,14 +80,17 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
     
     # 3) Context-Demand-Needs-Sentence
     Field = "Context-Demand-Needs-Sentence"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['필요']['중요도'] / 100
-    ContextDemandNeedsText = CollectionData['CollectionAnalysis']['Context']['Demand']['필요']['설명']
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Demand']['Needs']['Weight'], str):
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Needs']['Weight'].replace('점', '')) / 100
+    else:
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Needs']['Weight'])
+    ContextDemandNeedsText = CollectionData['CollectionAnalysis']['Context']['Demand']['Needs']['Sentence']
     ContextDemandNeedsVector = OpenAI_TextEmbedding(ContextDemandNeedsText)
     UpsertEmbeddedData.append({
         "id" :f"{DocId}-{Field}",
@@ -94,14 +99,13 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
     
     # 4) Context-Demand-Needs-Keyword
     Field = "Context-Demand-Needs-Keyword"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['필요']['중요도'] / 100
-    ContextDemandNeedsKeyword = CollectionData['CollectionAnalysis']['Context']['Demand']['필요']['키워드']
+    ContextDemandNeedsKeyword = CollectionData['CollectionAnalysis']['Context']['Demand']['Needs']['KeyWord']
     ContextDemandNeedsKeywordText = ", ".join(ContextDemandNeedsKeyword)
     ContextDemandNeedsKeywordVector = OpenAI_TextEmbedding(ContextDemandNeedsKeywordText)
     UpsertEmbeddedData.append({
@@ -111,14 +115,17 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
 
     # 5) Context-Demand-Purpose-Sentence
     Field = "Context-Demand-Purpose-Sentence"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['목표']['중요도'] / 100
-    ContextDemandPurposeText = CollectionData['CollectionAnalysis']['Context']['Demand']['목표']['설명']
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Demand']['Purpose']['Weight'], str):
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Purpose']['Weight'].replace('점', '')) / 100
+    else:
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Purpose']['Weight'])
+    ContextDemandPurposeText = CollectionData['CollectionAnalysis']['Context']['Demand']['Purpose']['Sentence']
     ContextDemandPurposeVector = OpenAI_TextEmbedding(ContextDemandPurposeText)
     UpsertEmbeddedData.append({
         "id" :f"{DocId}-{Field}",
@@ -127,14 +134,13 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
 
     # 6) Context-Demand-Purpose-Keyword
     Field = "Context-Demand-Purpose-Keyword"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['목표']['중요도'] / 100
-    ContextDemandPurposeKeyword = CollectionData['CollectionAnalysis']['Context']['Demand']['목표']['키워드']
+    ContextDemandPurposeKeyword = CollectionData['CollectionAnalysis']['Context']['Demand']['Purpose']['KeyWord']
     ContextDemandPurposeKeywordText = ", ".join(ContextDemandPurposeKeyword)
     ContextDemandPurposeKeywordVector = OpenAI_TextEmbedding(ContextDemandPurposeKeywordText)
     UpsertEmbeddedData.append({
@@ -144,14 +150,17 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
 
     # 7) Context-Demand-Question-Sentence
     Field = "Context-Demand-Question-Sentence"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['질문']['중요도'] / 100
-    ContextDemandQuestionText = CollectionData['CollectionAnalysis']['Context']['Demand']['질문']['설명']
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Demand']['Question']['Weight'], str):
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Question']['Weight'].replace('점', '')) / 100
+    else:
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Question']['Weight'])
+    ContextDemandQuestionText = CollectionData['CollectionAnalysis']['Context']['Demand']['Question']['Sentence']
     ContextDemandQuestionVector = OpenAI_TextEmbedding(ContextDemandQuestionText)
     UpsertEmbeddedData.append({
         "id" :f"{DocId}-{Field}",
@@ -160,14 +169,13 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight * SubWight
+            "Weight": Weight
             }
         })
 
     # 8) Context-Demand-Question-Keyword
     Field = "Context-Demand-Question-Keyword"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['질문']['중요도'] / 100
-    ContextDemandQuestionKeyword = CollectionData['CollectionAnalysis']['Context']['Demand']['질문']['키워드']
+    ContextDemandQuestionKeyword = CollectionData['CollectionAnalysis']['Context']['Demand']['Question']['KeyWord']
     ContextDemandQuestionKeywordText = ", ".join(ContextDemandQuestionKeyword)
     ContextDemandQuestionKeywordVector = OpenAI_TextEmbedding(ContextDemandQuestionKeywordText)
     UpsertEmbeddedData.append({
@@ -177,14 +185,17 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
 
     # 9) Context-Supply-Satisfy-Sentence
     Field = "Context-Supply-Satisfy-Sentence"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['충족']['중요도'] / 100
-    ContextSupplySatisfyText = CollectionData['CollectionAnalysis']['Context']['Supply']['충족']['설명']
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Supply']['Satisfy']['Weight'], str):
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Satisfy']['Weight'].replace('점', '')) / 100
+    else:
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Satisfy']['Weight'])
+    ContextSupplySatisfyText = CollectionData['CollectionAnalysis']['Context']['Supply']['Satisfy']['Sentence']
     ContextSupplySatisfyVector = OpenAI_TextEmbedding(ContextSupplySatisfyText)
     UpsertEmbeddedData.append({
         "id" :f"{DocId}-{Field}",
@@ -193,14 +204,13 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
 
     # 10) Context-Supply-Satisfy-Keyword
     Field = "Context-Supply-Satisfy-Keyword"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['충족']['중요도'] / 100
-    ContextSupplySatisfyKeyword = CollectionData['CollectionAnalysis']['Context']['Supply']['충족']['키워드']
+    ContextSupplySatisfyKeyword = CollectionData['CollectionAnalysis']['Context']['Supply']['Satisfy']['KeyWord']
     ContextSupplySatisfyKeywordText = ", ".join(ContextSupplySatisfyKeyword)
     ContextSupplySatisfyKeywordVector = OpenAI_TextEmbedding(ContextSupplySatisfyKeywordText)
     UpsertEmbeddedData.append({
@@ -210,14 +220,17 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
 
     # 11) Context-Supply-Support-Sentence
     Field = "Context-Supply-Support-Sentence"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['달성']['중요도'] / 100
-    ContextSupplySupportText = CollectionData['CollectionAnalysis']['Context']['Supply']['달성']['설명']
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Supply']['Support']['Weight'], str):
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Support']['Weight'].replace('점', '')) / 100
+    else:
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Support']['Weight'])
+    ContextSupplySupportText = CollectionData['CollectionAnalysis']['Context']['Supply']['Support']['Sentence']
     ContextSupplySupportVector = OpenAI_TextEmbedding(ContextSupplySupportText)
     UpsertEmbeddedData.append({
         "id" :f"{DocId}-{Field}",
@@ -226,14 +239,13 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
 
     # 12) Context-Supply-Support-Keyword
     Field = "Context-Supply-Support-Keyword"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['달성']['중요도'] / 100
-    ContextSupplySupportKeyword = CollectionData['CollectionAnalysis']['Context']['Supply']['달성']['키워드']
+    ContextSupplySupportKeyword = CollectionData['CollectionAnalysis']['Context']['Supply']['Support']['KeyWord']
     ContextSupplySupportKeywordText = ", ".join(ContextSupplySupportKeyword)
     ContextSupplySupportKeywordVector = OpenAI_TextEmbedding(ContextSupplySupportKeywordText)
     UpsertEmbeddedData.append({
@@ -243,14 +255,17 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
 
     # 13) Context-Supply-Solution-Sentence
     Field = "Context-Supply-Solution-Sentence"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['해결책']['중요도'] / 100
-    ContextSupplySolutionText = CollectionData['CollectionAnalysis']['Context']['Supply']['해결책']['설명']
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['Weight'], str):
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['Weight'].replace('점', '')) / 100
+    else:
+        Weight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['Weight'])
+    ContextSupplySolutionText = CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['Sentence']
     ContextSupplySolutionVector = OpenAI_TextEmbedding(ContextSupplySolutionText)
     UpsertEmbeddedData.append({
         "id" :f"{DocId}-{Field}",
@@ -259,14 +274,13 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
 
     # 14) Context-Supply-Solution-Keyword
     Field = "Context-Supply-Solution-Keyword"
-    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['해결책']['중요도'] / 100
-    ContextSupplySolutionKeyword = CollectionData['CollectionAnalysis']['Context']['Supply']['해결책']['키워드']
+    ContextSupplySolutionKeyword = CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['KeyWord']
     ContextSupplySolutionKeywordText = ", ".join(ContextSupplySolutionKeyword)
     ContextSupplySolutionKeywordVector = OpenAI_TextEmbedding(ContextSupplySolutionKeywordText)
     UpsertEmbeddedData.append({
@@ -276,7 +290,7 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
             "Field": Field,
-            "Wight": Wight
+            "Weight": Weight
             }
         })
 
@@ -333,141 +347,345 @@ def UpsertCollectionData(TotalCollectionDataTempPath, CollectionName):
     print(f"[ VDBIndexUpsert: {CollectionName} | VBD에 {CollectionName}TempFile.json 리스트 업서트 완료 ]")
         
 ## Pinecone에 임베딩 데이터 검색
-def SearchEmbeddedData(CollectionData, CollectionName, Matching = 'Similarity', TopK = 50): # Matching: 'Similarity', 'Demand, 'Supply'
-    print(f"[ YaaS VDB Search: {CollectionName} | VBD에 {CollectionName}TempFile.json 리스트 업서트 완료 ]")
+def SearchEmbeddedData(CollectionData, CollectionName = 'publisher', Matching = 'similarity', TopK = 50): # CollectionName: 'entire', 'target', 'trend', 'publisher', 'book'... // Matching: 'similarity', 'demand, 'supply'
+    print(f"[ YaaS VDB Search: Collection({CollectionName}) | Matching({Matching}) | Top-K({TopK}) ]")
     
     PineConeClient = Pinecone_CreateIndex(CollectionName)
     VDBIndex = PineConeClient.Index(name = CollectionName)
-    # 검색할 필드
-    SearchFieldList = ["ContextKeyChunk", "ContextPurpose", "ContextReason", "ContextQuestion", "ContextSubject", "ContextPerson"]
+    
+    ## A. 검색 쿼리와 가중치 ##
+    # 1) Context-Summary
+    ContextSummaryQueryText = CollectionData['CollectionAnalysis']['Context']['Summary']
+    # Context-Weight
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Weight'], str):
+        ContextQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Weight'].replace('점', '')) / 100
+    else:
+        ContextQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Weight']) / 100
+
+    # 2) Context-KeyWord
+    ContextKeyWordQueryText = ", ".join(CollectionData['CollectionAnalysis']['Context']['KeyWord'])
+
+    # 3) Context-Demand-Needs-Sentence
+    ContextDemandNeedsSentenceQueryText = CollectionData['CollectionAnalysis']['Context']['Demand']['Needs']['Sentence']
+    # Context-Demand-Needs-Weight
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Demand']['Needs']['Weight'], str):
+        ContextDemandNeedsQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Needs']['Weight'].replace('점', '')) / 100
+    else:
+        ContextDemandNeedsQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Needs']['Weight']) / 100
+
+    # 4) Context-Demand-Needs-Keyword
+    ContextDemandNeedsKeywordQueryText = ", ".join(CollectionData['CollectionAnalysis']['Context']['Demand']['Needs']['KeyWord'])
+
+    # 5) Context-Demand-Purpose-Sentence
+    ContextDemandPurposeSentenceQueryText = CollectionData['CollectionAnalysis']['Context']['Demand']['Purpose']['Sentence']
+    # Context-Demand-Purpose-Weight
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Demand']['Purpose']['Weight'], str):
+        ContextDemandPurposeQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Purpose']['Weight'].replace('점', '')) / 100
+    else:
+        ContextDemandPurposeQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Purpose']['Weight']) / 100
+
+    # 6) Context-Demand-Purpose-Keyword
+    ContextDemandPurposeKeywordQueryText = ", ".join(CollectionData['CollectionAnalysis']['Context']['Demand']['Purpose']['KeyWord'])
+
+    # 7) Context-Demand-Question-Sentence
+    ContextDemandQuestionSentenceQueryText = CollectionData['CollectionAnalysis']['Context']['Demand']['Question']['Sentence']
+    # Context-Demand-Question-Weight
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Demand']['Question']['Weight'], str):
+        ContextDemandQuestionQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Question']['Weight'].replace('점', '')) / 100
+    else:
+        ContextDemandQuestionQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Demand']['Question']['Weight']) / 100
+
+    # 8) Context-Demand-Question-Keyword
+    ContextDemandQuestionKeywordQueryText = ", ".join(CollectionData['CollectionAnalysis']['Context']['Demand']['Question']['KeyWord'])
+
+    # 9) Context-Supply-Satisfy-Sentence
+    ContextSupplySatisfySentenceQueryText = CollectionData['CollectionAnalysis']['Context']['Supply']['Satisfy']['Sentence']
+    # Context-Supply-Satisfy-Weight
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Supply']['Satisfy']['Weight'], str):
+        ContextSupplySatisfyQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Satisfy']['Weight'].replace('점', '')) / 100
+    else:
+        ContextSupplySatisfyQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Satisfy']['Weight']) / 100
+
+    # 10) Context-Supply-Satisfy-Keyword
+    ContextSupplySatisfyKeywordQueryText = ", ".join(CollectionData['CollectionAnalysis']['Context']['Supply']['Satisfy']['KeyWord'])
+
+    # 11) Context-Supply-Support-Sentence
+    ContextSupplySupportSentenceQueryText = CollectionData['CollectionAnalysis']['Context']['Supply']['Support']['Sentence']
+    # Context-Supply-Support-Weight
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Supply']['Support']['Weight'], str):
+        ContextSupplySupportQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Support']['Weight'].replace('점', '')) / 100
+    else:
+        ContextSupplySupportQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Support']['Weight']) / 100
+
+    # 12) Context-Supply-Support-Keyword
+    ContextSupplySupportKeywordQueryText = ", ".join(CollectionData['CollectionAnalysis']['Context']['Supply']['Support']['KeyWord'])
+
+    # 13) Context-Supply-Solution-Sentence
+    ContextSupplySolutionSentenceQueryText = CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['Sentence']
+    # Context-Supply-Solution-Weight
+    if isinstance(CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['Weight'], str):
+        ContextSupplySolutionQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['Weight'].replace('점', '')) / 100
+    else:
+        ContextSupplySolutionQueryWeight = int(CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['Weight']) / 100
+
+    # 14) Context-Supply-Solution-Keyword
+    ContextSupplySolutionKeywordQueryText = ", ".join(CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['KeyWord'])
+
+    ## B. 검색 옵션 설정 ##
+    # Similarity = 유사도검색 : 유사한 정보/대상 검색
+    if Matching == 'similarity':
+        QueryList = [{"Field": "Context-Summary", "Text": ContextSummaryQueryText, "Weight": ContextQueryWeight}, {"Field": "Context-KeyWord", "Text": ContextKeyWordQueryText, "Weight": ContextQueryWeight}, {"Field": "Context-Demand-Needs-Sentence", "Text": ContextDemandNeedsSentenceQueryText, "Weight": ContextDemandNeedsQueryWeight}, {"Field": "Context-Demand-Needs-Keyword", "Text": ContextDemandNeedsKeywordQueryText, "Weight": ContextDemandNeedsQueryWeight}, {"Field": "Context-Demand-Purpose-Sentence", "Text": ContextDemandPurposeSentenceQueryText, "Weight": ContextDemandPurposeQueryWeight}, {"Field": "Context-Demand-Purpose-Keyword", "Text": ContextDemandPurposeKeywordQueryText, "Weight": ContextDemandPurposeQueryWeight}, {"Field": "Context-Demand-Question-Sentence", "Text": ContextDemandQuestionSentenceQueryText, "Weight": ContextDemandQuestionQueryWeight}, {"Field": "Context-Demand-Question-Keyword", "Text": ContextDemandQuestionKeywordQueryText, "Weight": ContextDemandQuestionQueryWeight}, {"Field": "Context-Supply-Satisfy-Sentence", "Text": ContextSupplySatisfySentenceQueryText, "Weight": ContextSupplySatisfyQueryWeight}, {"Field": "Context-Supply-Satisfy-Keyword", "Text": ContextSupplySatisfyKeywordQueryText, "Weight": ContextSupplySatisfyQueryWeight}, {"Field": "Context-Supply-Support-Sentence", "Text": ContextSupplySupportSentenceQueryText, "Weight": ContextSupplySupportQueryWeight}, {"Field": "Context-Supply-Support-Keyword", "Text": ContextSupplySupportKeywordQueryText, "Weight": ContextSupplySupportQueryWeight}, {"Field": "Context-Supply-Solution-Sentence", "Text": ContextSupplySolutionSentenceQueryText, "Weight": ContextSupplySolutionQueryWeight}, {"Field": "Context-Supply-Solution-Keyword", "Text": ContextSupplySolutionKeywordQueryText, "Weight": ContextSupplySolutionQueryWeight}]
+    # Demand = 수요검색 : 나에게 필요한 정보/대상 검색
+    elif Matching == 'demand':
+        QueryList = [{"Field": "Context-Summary", "Text": ContextSummaryQueryText, "Weight": ContextQueryWeight}, {"Field": "Context-KeyWord", "Text": ContextKeyWordQueryText, "Weight": ContextQueryWeight}, {"Field": "Context-Demand-Needs-Sentence", "Text": ContextDemandNeedsSentenceQueryText, "Weight": ContextDemandNeedsQueryWeight}, {"Field": "Context-Demand-Needs-Keyword", "Text": ContextDemandNeedsKeywordQueryText, "Weight": ContextDemandNeedsQueryWeight}, {"Field": "Context-Demand-Purpose-Sentence", "Text": ContextDemandPurposeSentenceQueryText, "Weight": ContextDemandPurposeQueryWeight}, {"Field": "Context-Demand-Purpose-Keyword", "Text": ContextDemandPurposeKeywordQueryText, "Weight": ContextDemandPurposeQueryWeight}, {"Field": "Context-Demand-Question-Sentence", "Text": ContextDemandQuestionSentenceQueryText, "Weight": ContextDemandQuestionQueryWeight}, {"Field": "Context-Demand-Question-Keyword", "Text": ContextDemandQuestionKeywordQueryText, "Weight": ContextDemandQuestionQueryWeight}]
+    # Supply = 공급검색 : 나를 필요로 하는 정보/대상 검색
+    elif Matching == 'supply':
+        QueryList = [{"Field": "Context-Summary", "Text": ContextSummaryQueryText, "Weight": ContextQueryWeight}, {"Field": "Context-KeyWord", "Text": ContextKeyWordQueryText, "Weight": ContextQueryWeight}, {"Field": "Context-Supply-Satisfy-Sentence", "Text": ContextSupplySatisfySentenceQueryText, "Weight": ContextSupplySatisfyQueryWeight}, {"Field": "Context-Supply-Satisfy-Keyword", "Text": ContextSupplySatisfyKeywordQueryText, "Weight": ContextSupplySatisfyQueryWeight}, {"Field": "Context-Supply-Support-Sentence", "Text": ContextSupplySupportSentenceQueryText, "Weight": ContextSupplySupportQueryWeight}, {"Field": "Context-Supply-Support-Keyword", "Text": ContextSupplySupportKeywordQueryText, "Weight": ContextSupplySupportQueryWeight}, {"Field": "Context-Supply-Solution-Sentence", "Text": ContextSupplySolutionSentenceQueryText, "Weight": ContextSupplySolutionQueryWeight}, {"Field": "Context-Supply-Solution-Keyword", "Text": ContextSupplySolutionKeywordQueryText, "Weight": ContextSupplySolutionQueryWeight}]
 
     # 검색 결과를 저장하기 위한 dict (DocId를 기준으로 저장)
-    ScoresByDoc = {}
-
-    # 각 필드에 대해 검색
-    # ScoreWeight를 동적으로 변경
-    for SearchField in SearchFieldList:
-        if SearchField == "ContextKeyChunk":
-            ContextQueryText = CollectionData['CollectionAnalysis']['Context']['Summary']
-            ScoreWeight = 1
-        elif SearchField == "ContextPurpose":
-            ContextQueryText = CollectionData['CollectionAnalysis']['Context']['목표']
-            ScoreWeight = 0.334
-        elif SearchField == "ContextReason":
-            ContextQueryText = CollectionData['CollectionAnalysis']['Context']['Reason']
-            ScoreWeight = 0.333
-        elif SearchField == "ContextQuestion":
-            ContextQueryText = CollectionData['CollectionAnalysis']['Context']['질문']
-            ScoreWeight = 0.333
-        elif SearchField == "ContextSubject":
-            subject_list = CollectionData['CollectionAnalysis']['Context']['Subject']
-            ContextQueryText = ", ".join(subject_list)
-            ScoreWeight = 0.5
-        elif SearchField == "ContextPerson":
-            person_list = CollectionData['CollectionAnalysis']['Context']['Person']
-            ContextQueryText = ", ".join(person_list)
-            ScoreWeight = 0.5
+    QueryResultList = []
+    MinScores = {}
+    ## C. 각 필드에 대한 검색 쿼리 생성 ##
+    for Query in QueryList:
+        if Query['Field'] == "Context-Summary":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Summary"
+        elif Query['Field'] == "Context-KeyWord":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-KeyWord"
+        elif Query['Field'] == "Context-Demand-Needs-Sentence":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Demand-Needs-Sentence"
+        elif Query['Field'] == "Context-Demand-Needs-Keyword":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Demand-Needs-Keyword"
+        elif Query['Field'] == "Context-Demand-Purpose-Sentence":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Demand-Purpose-Sentence"
+        elif Query['Field'] == "Context-Demand-Purpose-Keyword":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Demand-Purpose-Keyword"
+        elif Query['Field'] == "Context-Demand-Question-Sentence":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Demand-Question-Sentence"
+        elif Query['Field'] == "Context-Demand-Question-Keyword":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Demand-Question-Keyword"
+        elif Query['Field'] == "Context-Supply-Satisfy-Sentence":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Supply-Satisfy-Sentence"
+        elif Query['Field'] == "Context-Supply-Satisfy-Keyword":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Supply-Satisfy-Keyword"
+        elif Query['Field'] == "Context-Supply-Support-Sentence":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Supply-Support-Sentence"
+        elif Query['Field'] == "Context-Supply-Support-Keyword":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Supply-Support-Keyword"
+        elif Query['Field'] == "Context-Supply-Solution-Sentence":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Supply-Solution-Sentence"
+        elif Query['Field'] == "Context-Supply-Solution-Keyword":
+            QueryText = Query['Text']
+            QueryWeight = Query['Weight']
+            QueryField = "Context-Supply-Solution-Keyword"
 
         # 해당 필드의 쿼리 벡터 생성
-        ContextQueryVector = OpenAI_TextEmbedding(ContextQueryText)
+        QueryVector = OpenAI_TextEmbedding(QueryText)
 
-        # Pinecone에 쿼리 수행 (상위 TopK만 검색, 특정 필드 필터링)
-        ContextQueryResult = VDBIndex.query(
-            vector = ContextQueryVector,
+        ## D. Pinecone에 쿼리 수행 ##
+        QueryResult = VDBIndex.query(
+            vector = QueryVector,
             top_k = TopK,
             include_metadata = True,
             namespace = CollectionName,
-            filter = {"Field": SearchField}
+            filter = {"Field": QueryField}
         )
-        # print(f'ContextQueryResult["matches"] ::: {ContextQueryResult["matches"]}\n')
-        # 가장 높은 유사도 점수와 DocId를 사용
-        for match in ContextQueryResult["matches"]:
-            Collection = match["metadata"]["Collection"]
-            CollectionId = match["metadata"]["CollectionId"]
-            ContextQueryScore = match["score"] * ScoreWeight
+        # 최소값 저장
+        if QueryResult.matches:
+            # MinScore 계산 (0이 아닌 값만 고려)
+            MinScore = min(match.score for match in QueryResult.matches if match.score != 0)
+            MinScores[QueryField] = MinScore
 
-            # DocId 기준으로 점수를 누적
-            if CollectionId not in ScoresByDoc:
-                ScoresByDoc[CollectionId] = {"ContextKeyChunk": 0, "PRQScore": 0, "KeyWordScore": 0}
+        QueryResultList.append(QueryResult)
+        
+    ## E. Pinecone에 Result Score 계산 ##
+    # Count = 0
+    MaxScores = {}
+    for QueryResult in QueryResultList:
+        # 가장 높은 유사도 점수와 CollectionId를 사용
+        for Result in QueryResult["matches"]:
+            Collection = Result["metadata"]["Collection"]
+            CollectionId = Result["metadata"]["CollectionId"]
+            ResultField = Result["metadata"]["Field"]
+            try:
+                ResultWeight = Result["metadata"]["Weight"]
+            except:
+                ResultWeight = Result["metadata"]["Wight"]
+            ResultScore = Result["score"] * QueryWeight * ResultWeight
+            # Count += 1
+            # print(f"({Count}) {QueryField} ::: {ResultScore}")
 
-            if SearchField == "ContextKeyChunk":
-                ScoresByDoc[CollectionId]["ContextKeyChunk"] = max(ScoresByDoc[CollectionId]["ContextKeyChunk"],ContextQueryScore)
-            elif SearchField in ["ContextPurpose", "ContextReason", "ContextQuestion"]:
-                ScoresByDoc[CollectionId]["PRQScore"] += ContextQueryScore
-            elif SearchField in ["ContextSubject", "ContextPerson"]:
-                ScoresByDoc[CollectionId]["KeyWordScore"] += ContextQueryScore
+            # CollectionId 기준으로 점수를 누적
+            if CollectionId not in MaxScores:
+                MaxScores[CollectionId] = MinScores.copy()
 
+            if ResultField == "Context-Summary":
+                MaxScores[CollectionId]["Context-Summary"] = max(MaxScores[CollectionId]["Context-Summary"], ResultScore)
+            elif ResultField == "Context-KeyWord":
+                MaxScores[CollectionId]["Context-KeyWord"] = max(MaxScores[CollectionId]["Context-KeyWord"], ResultScore)
+            elif ResultField == "Context-Demand-Needs-Sentence":
+                MaxScores[CollectionId]["Context-Demand-Needs-Sentence"] = max(MaxScores[CollectionId]["Context-Demand-Needs-Sentence"], ResultScore)
+            elif ResultField == "Context-Demand-Needs-Keyword":
+                MaxScores[CollectionId]["Context-Demand-Needs-Keyword"] = max(MaxScores[CollectionId]["Context-Demand-Needs-Keyword"], ResultScore)
+            elif ResultField == "Context-Demand-Purpose-Sentence":
+                MaxScores[CollectionId]["Context-Demand-Purpose-Sentence"] = max(MaxScores[CollectionId]["Context-Demand-Purpose-Sentence"], ResultScore)
+            elif ResultField == "Context-Demand-Purpose-Keyword":
+                MaxScores[CollectionId]["Context-Demand-Purpose-Keyword"] = max(MaxScores[CollectionId]["Context-Demand-Purpose-Keyword"], ResultScore)
+            elif ResultField == "Context-Demand-Question-Sentence":
+                MaxScores[CollectionId]["Context-Demand-Question-Sentence"] = max(MaxScores[CollectionId]["Context-Demand-Question-Sentence"], ResultScore)
+            elif ResultField == "Context-Demand-Question-Keyword":
+                MaxScores[CollectionId]["Context-Demand-Question-Keyword"] = max(MaxScores[CollectionId]["Context-Demand-Question-Keyword"], ResultScore)
+            elif ResultField == "Context-Supply-Satisfy-Sentence":
+                MaxScores[CollectionId]["Context-Supply-Satisfy-Sentence"] = max(MaxScores[CollectionId]["Context-Supply-Satisfy-Sentence"], ResultScore)
+            elif ResultField == "Context-Supply-Satisfy-Keyword":
+                MaxScores[CollectionId]["Context-Supply-Satisfy-Keyword"] = max(MaxScores[CollectionId]["Context-Supply-Satisfy-Keyword"], ResultScore)
+            elif ResultField == "Context-Supply-Support-Sentence":
+                MaxScores[CollectionId]["Context-Supply-Support-Sentence"] = max(MaxScores[CollectionId]["Context-Supply-Support-Sentence"], ResultScore)
+            elif ResultField == "Context-Supply-Support-Keyword":
+                MaxScores[CollectionId]["Context-Supply-Support-Keyword"] = max(MaxScores[CollectionId]["Context-Supply-Support-Keyword"], ResultScore)
+            elif ResultField == "Context-Supply-Solution-Sentence":
+                MaxScores[CollectionId]["Context-Supply-Solution-Sentence"] = max(MaxScores[CollectionId]["Context-Supply-Solution-Sentence"], ResultScore)
+            elif ResultField == "Context-Supply-Solution-Keyword":
+                MaxScores[CollectionId]["Context-Supply-Solution-Keyword"] = max(MaxScores[CollectionId]["Context-Supply-Solution-Keyword"], ResultScore)
+            # print(f'MaxScores[CollectionId] ::: {MaxScores[CollectionId]}\n')
+                
     # 최종 스코어 계산
-    FinalScores = []
-    # print(f'ScoresByDoc ::: {ScoresByDoc}\n')
-    for CollectionId, scores in ScoresByDoc.items():
-        # 공식: ContextKeyChunk * PRQScore * KeyWordScore
-        ContextKeyChunkScore = scores["ContextKeyChunk"]
-        PRQScore = scores["PRQScore"]
-        KeyWordScore = scores["KeyWordScore"]
-
+    FinalResultScores = []
+    for CollectionId, Scores in MaxScores.items():
+        ContextSummaryScore = Scores["Context-Summary"]
+        ContextKeyWordScore = Scores["Context-KeyWord"]
+        ContextDemandNeedsScore = (Scores["Context-Demand-Needs-Sentence"] + Scores["Context-Demand-Needs-Keyword"]) / 2
+        ContextDemandPurposeScore = (Scores["Context-Demand-Purpose-Sentence"] + Scores["Context-Demand-Purpose-Keyword"]) / 2
+        ContextDemandQuestionScore = (Scores["Context-Demand-Question-Sentence"] + Scores["Context-Demand-Question-Keyword"]) / 2
+        ContextSupplySatisfyScore = (Scores["Context-Supply-Satisfy-Sentence"] + Scores["Context-Supply-Satisfy-Keyword"]) / 2
+        ContextSupplySupportScore = (Scores["Context-Supply-Support-Sentence"] + Scores["Context-Supply-Support-Keyword"]) / 2
+        ContextSupplySolutionScore = (Scores["Context-Supply-Solution-Sentence"] + Scores["Context-Supply-Solution-Keyword"]) / 2
+        
         # 최종 스코어 계산
-        FinalScore = ContextKeyChunkScore * PRQScore * KeyWordScore
-
-        FinalScores.append({"Collection": Collection, "CollectionId": CollectionId, "Score": FinalScore})
+        FinalResultScore = ContextSummaryScore * ContextKeyWordScore * ContextDemandNeedsScore * ContextDemandPurposeScore * ContextDemandQuestionScore * ContextSupplySatisfyScore * ContextSupplySupportScore * ContextSupplySolutionScore
+        
+        FinalResultScores.append({"Collection": Collection, "CollectionId": CollectionId, "Score": FinalResultScore})
 
     # score 내림차순(유사도 높은 순) 정렬 후 상위 10개 추출
-    FinalScores = sorted(FinalScores, key = lambda x: x["Score"], reverse = True)[:10]
+    FinalResultScores = sorted(FinalResultScores, key = lambda x: x["Score"], reverse = True)[:10]
     
-    return FinalScores
+    return FinalResultScores
 
 if __name__ == "__main__":
     CollectionName = "publisher"
     TotalCollectionDataTempPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData/TotalPublisherDataTemp"
     UpsertCollectionData(TotalCollectionDataTempPath, CollectionName)
 
-    # CollectionData = {
-    #     "CollectionAnalysis": {
-    #         "Message": "『불안사회』는 불안으로 가득 찬 현대사회에서 우리가 잃어버린 연대와 공감, 그리고 진정한 희망의 본질을 되찾고자 하는 메시지를 전달합니다.",
-    #         "Context": {
-    #             "Purpose": "현대 사회에서 느끼는 만연한 불안과 무기력에 대한 근본적인 원인을 이해하고, 이를 극복할 수 있는 철학적 통찰과 실질적인 방향을 찾고자 합니다.",
-    #             "Reason": "팬데믹, 경제적 위기, 사회적 고립 등으로 인해 불확실한 미래와 존재에 대한 불안을 느끼며, 이러한 상황에서 희망과 연대의 가치를 알고 싶어졌기 때문입니다.",
-    #             "Question": "불안 사회를 극복한 후, 제가 더 나은 삶과 더 깊은 철학적 이해를 위해 읽어야 할 철학 또는 사회학 도서를 추천해 주실 수 있을까요?",
-    #             "Review": "『불안사회』는 현대 사회를 정교하게 해부하며, 불안이란 무엇인지, 그리고 이를 극복하기 위해 우리가 무엇을 해야 하는지에 대해 깊이 있는 통찰을 제공합니다. 희망이라는 주제에 대한 새로운 관점을 제시하면서도, 읽는 내내 우리 삶에 어떤 변화가 필요한지 스스로 고민하게 만듭니다.",
-    #             "Subject": [
-    #                 "불안사회",
-    #                 "희망",
-    #                 "연대",
-    #                 "철학적통찰",
-    #                 "사회비판"
-    #             ],
-    #             "Person": [
-    #                 "불안",
-    #                 "희망",
-    #                 "연대",
-    #                 "공감",
-    #                 "철학"
-    #             ],
-    #             "Importance": 95
-    #         }}}
     
     # CollectionData = {
-    #     "CollectionAnalysis": {
-    #         "Slogan": "치매와 함께 살아가는 사회, 전문적 정보와 통찰을 제공합니다.",
-    #         "Context": {
-    #             "Purpose": "치매 관련 정보와 전문적 지식을 공유하여 치매 환자와 가족들의 삶의 질을 향상시키고, 사회적 인식을 제고하기 위함입니다.",
-    #             "Reason": "고령화 사회에서 치매가 중요한 사회적, 의료적 이슈로 부각되고 있으며, 이에 대한 이해와 대비가 필요하다는 점에서 도출되었습니다.",
-    #             "Question": "효과적인 치매 예방과 관리, 사회적 공감대를 형성하기 위해 어떤 새로운 접근법과 협력 모델을 도입할 수 있을까요?",
-    #             "Subject": [
-    #                 "치매",
-    #                 "사회적 공감",
-    #                 "전문 정보 제공",
-    #                 "치유와 미래"
-    #             ],
-    #             "Person": [
-    #                 "치매 전문의",
-    #                 "사회복지사",
-    #                 "간병 전문가",
-    #                 "치매 연구자",
-    #                 "정신건강 전문가"
-    #             ],
-    #             "Importance": "95"
-    #     }}}
+    # "CollectionAnalysis": {
+    #     "Context": {
+    #         "Summary": "'하이큐!! 매거진 2024 MAY'는 팬들을 위해 후루다테 하루이치의 새로 그린 일러스트 및 다양한 콘텐츠를 수록하여 극장판 '하이큐!! 쓰레기장의 결전'을 더욱 풍부하게 즐길 수 있게 만든 매거진입니다. 하이큐 팬들에게 특별한 정보를 제공하며 캐릭터들의 생생한 매력을 담아냅니다.",
+    #         "KeyWord": [
+    #             "만화",
+    #             "스포츠",
+    #             "극장판 관련",
+    #             "일러스트",
+    #             "팬 서비스"
+    #         ],
+    #         "Demand": {
+    #             "Needs": {
+    #                 "Sentence": "예약 및 배송 과정의 투명성과 효율성을 개선하여 소비자의 신뢰를 높일 필요가 있습니다.",
+    #                 "KeyWord": [
+    #                     "예약 시스템",
+    #                     "배송",
+    #                     "소비자 신뢰",
+    #                     "효율성",
+    #                     "투명성"
+    #                 ],
+    #                 "Weight": 85
+    #             },
+    #             "Purpose": {
+    #                 "Sentence": "차기 매거진 발매 시에는 특전 및 배송 프로세스를 사전 계획 및 관리하여 팬들의 만족도를 높이는 것이 목표입니다.",
+    #                 "KeyWord": [
+    #                     "특전 관리",
+    #                     "배송 계획",
+    #                     "팬 만족",
+    #                     "사전 준비",
+    #                     "프로세스 개선"
+    #                 ],
+    #                 "Weight": 90
+    #             },
+    #             "Question": {
+    #                 "Sentence": "특전 및 배송 관리 과정에서 팬들에게 보다 나은 경험을 제공하기 위해 어떤 방안을 도입할 수 있을까요?",
+    #                 "KeyWord": [
+    #                     "특전 방안",
+    #                     "배송 개선",
+    #                     "팬 경험",
+    #                     "관리 효율",
+    #                     "문제 해결"
+    #                 ],
+    #                 "Weight": 80
+    #             }
+    #         },
+    #         "Supply": {
+    #             "Satisfy": {
+    #                 "Sentence": "하이큐 팬들에게 새로운 일러스트와 정보로 캐릭터와 스토리에 대한 애정을 한층 강화해 줍니다.",
+    #                 "KeyWord": [
+    #                     "팬 만족",
+    #                     "새로운 정보",
+    #                     "풍부한 콘텐츠",
+    #                     "캐릭터 매력",
+    #                     "스토리 확장"
+    #                 ],
+    #                 "Weight": 90
+    #             },
+    #             "Support": {
+    #                 "Sentence": "팬들이 하이큐 세계관을 더 깊이 이해하고 극장판 경험을 확장할 수 있는 기회를 제공합니다.",
+    #                 "KeyWord": [
+    #                     "세계관",
+    #                     "이해 확장",
+    #                     "극장판",
+    #                     "몰입감",
+    #                     "팬 경험"
+    #                 ],
+    #                 "Weight": 85
+    #             },
+    #             "Solution": {
+    #                 "Sentence": "하이큐 팬들의 궁금증과 애정 어린 호기심을 충족할 수 있는 다양한 콘텐츠와 일러스트를 제공합니다.",
+    #                 "KeyWord": [
+    #                     "궁금증 해결",
+    #                     "호기심 충족",
+    #                     "다양한 콘텐츠",
+    #                     "일러스트",
+    #                     "팬 서비스"
+    #                 ],
+    #                 "Weight": 80
+    #             }
+    #         },
+    #         "Weight": 75
+    #     }
+    # }}
 
-    # FinalScores = SearchEmbeddedData(CollectionData, CollectionName)
-    # print(f'FinalScores ::: {FinalScores}\n')
+    # FinalResultScores = SearchEmbeddedData(CollectionData, CollectionName = 'publisher')
+    # print(f'FinalScores ::: {FinalResultScores}\n')

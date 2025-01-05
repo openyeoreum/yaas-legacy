@@ -237,36 +237,36 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
                 # Context-KeyWord
                 ContextKeyWord = OutputDicList[0]['분야']
                 # Context-Demand
-                ContextDemandNeeds = {"Sentence": OutputDicList[0]['발전']['필요']['설명'], "KeyWord": OutputDicList[0]['발전']['필요']['키워드'], "Wight": OutputDicList[0]['발전']['필요']['중요도']}
-                ContextDemandPurpose = {"Sentence": OutputDicList[0]['발전']['목표']['설명'], "KeyWord": OutputDicList[0]['발전']['목표']['키워드'], "Wight": OutputDicList[0]['발전']['목표']['중요도']}
-                ContextDemandQuestion = {"Sentence": OutputDicList[0]['발전']['질문']['설명'], "KeyWord": OutputDicList[0]['발전']['질문']['키워드'], "Wight": OutputDicList[0]['발전']['질문']['중요도']}
+                ContextDemandNeeds = {"Sentence": OutputDicList[0]['발전']['필요']['설명'], "KeyWord": OutputDicList[0]['발전']['필요']['키워드'], "Weight": OutputDicList[0]['발전']['필요']['중요도']}
+                ContextDemandPurpose = {"Sentence": OutputDicList[0]['발전']['목표']['설명'], "KeyWord": OutputDicList[0]['발전']['목표']['키워드'], "Weight": OutputDicList[0]['발전']['목표']['중요도']}
+                ContextDemandQuestion = {"Sentence": OutputDicList[0]['발전']['질문']['설명'], "KeyWord": OutputDicList[0]['발전']['질문']['키워드'], "Weight": OutputDicList[0]['발전']['질문']['중요도']}
                 ContextDemand = {'Needs': ContextDemandNeeds, 'Purpose': ContextDemandPurpose, 'Question': ContextDemandQuestion}
                 # Context-Supply
-                ContextSupplySatisfy = {"Sentence": OutputDicList[0]['가치']['충족']['설명'], "KeyWord": OutputDicList[0]['가치']['충족']['키워드'], "Wight": OutputDicList[0]['가치']['충족']['중요도']}
-                ContextSupplySupport = {"Sentence": OutputDicList[0]['가치']['달성']['설명'], "KeyWord": OutputDicList[0]['가치']['달성']['키워드'], "Wight": OutputDicList[0]['가치']['달성']['중요도']}
-                ContextSupplySolution = {"Sentence": OutputDicList[0]['가치']['해결책']['설명'], "KeyWord": OutputDicList[0]['가치']['해결책']['키워드'], "Wight": OutputDicList[0]['가치']['해결책']['중요도']}
+                ContextSupplySatisfy = {"Sentence": OutputDicList[0]['가치']['충족']['설명'], "KeyWord": OutputDicList[0]['가치']['충족']['키워드'], "Weight": OutputDicList[0]['가치']['충족']['중요도']}
+                ContextSupplySupport = {"Sentence": OutputDicList[0]['가치']['달성']['설명'], "KeyWord": OutputDicList[0]['가치']['달성']['키워드'], "Weight": OutputDicList[0]['가치']['달성']['중요도']}
+                ContextSupplySolution = {"Sentence": OutputDicList[0]['가치']['해결책']['설명'], "KeyWord": OutputDicList[0]['가치']['해결책']['키워드'], "Weight": OutputDicList[0]['가치']['해결책']['중요도']}
                 ContextSupply = {'Satisfy': ContextSupplySatisfy, 'Support': ContextSupplySupport, 'Solution': ContextSupplySolution}
-                # Context-Wight
-                ContextWight = OutputDicList[0]['정보의질']
+                # Context-Weight
+                ContextWeight = OutputDicList[0]['정보의질']
                 ## ContextDic ##
-                ContextDic = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Supply': ContextSupply, 'Wight': ContextWight}
+                ContextDic = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Supply': ContextSupply, 'Weight': ContextWeight}
                 #### Context ####
 
                 #### WMWM ####
                 # WMWM-Summary
                 WMWMSummary = OutputDicList[1]['요약']
                 # WMWM-Needs
-                WMWMNeeds = {"State": OutputDicList[1]['욕구상태']['욕구상태'], "Reason": OutputDicList[1]['욕구상태']['욕구상태선택이유'], "Wight": OutputDicList[1]['욕구상태']['중요도']}
+                WMWMNeeds = {"State": OutputDicList[1]['욕구상태']['욕구상태'], "Reason": OutputDicList[1]['욕구상태']['욕구상태선택이유'], "Weight": OutputDicList[1]['욕구상태']['중요도']}
                 # WMWM-Wisdom
-                WMWMWisdom = {"State": OutputDicList[1]['이해상태']['이해상태'], "Reason": OutputDicList[1]['이해상태']['이해상태선택이유'], "Wight": OutputDicList[1]['이해상태']['중요도']}
+                WMWMWisdom = {"State": OutputDicList[1]['이해상태']['이해상태'], "Reason": OutputDicList[1]['이해상태']['이해상태선택이유'], "Weight": OutputDicList[1]['이해상태']['중요도']}
                 # WMWM-Mind
-                WMWMMind = {"State": OutputDicList[1]['마음상태']['마음상태'], "Reason": OutputDicList[1]['마음상태']['마음상태선택이유'], "Wight": OutputDicList[1]['마음상태']['중요도']}
+                WMWMMind = {"State": OutputDicList[1]['마음상태']['마음상태'], "Reason": OutputDicList[1]['마음상태']['마음상태선택이유'], "Weight": OutputDicList[1]['마음상태']['중요도']}
                 # WMWM-Action
-                WMWMAction = {"State": OutputDicList[1]['행동상태']['행동상태'], "Reason": OutputDicList[1]['행동상태']['행동상태선택이유'], "Wight": OutputDicList[1]['행동상태']['중요도']}
-                # WMWM-Wight
-                WMWMWight = OutputDicList[1]['정보의질']
+                WMWMAction = {"State": OutputDicList[1]['행동상태']['행동상태'], "Reason": OutputDicList[1]['행동상태']['행동상태선택이유'], "Weight": OutputDicList[1]['행동상태']['중요도']}
+                # WMWM-Weight
+                WMWMWeight = OutputDicList[1]['정보의질']
                 ## WMWMDic ##
-                WMWMDic = {'Summary': WMWMSummary, 'Needs': WMWMNeeds, 'Wisdom': WMWMWisdom, 'Mind': WMWMMind, 'Action': WMWMAction, 'Wight': WMWMWight}
+                WMWMDic = {'Summary': WMWMSummary, 'Needs': WMWMNeeds, 'Wisdom': WMWMWisdom, 'Mind': WMWMMind, 'Action': WMWMAction, 'Weight': WMWMWeight}
                 #### WMWM ####
                 
                 #### BookReview ####
@@ -279,12 +279,12 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
                     for j, Evaluation in enumerate(EvaluationList):
                         Evaluations.append({'Evaluation': Evaluation, 'Like': InputDic['CommentLikeList'][j]})
                     # BookReview-Negativity
-                    BookReviewNegativity = {'Sentence': OutputDicList[2]['부정']['발전'], 'Keyword': OutputDicList[2]['부정']['키워드'], 'Wight': OutputDicList[2]['부정']['필요도']}
+                    BookReviewNegativity = {'Sentence': OutputDicList[2]['부정']['발전'], 'Keyword': OutputDicList[2]['부정']['키워드'], 'Weight': OutputDicList[2]['부정']['필요도']}
                     # BookReview-Positivity
-                    BookReviewPositivity = {'Sentence': OutputDicList[2]['긍정']['가치'], 'Keyword': OutputDicList[2]['긍정']['키워드'], 'Wight': OutputDicList[2]['긍정']['필요도']}
-                    BookReviewWight = OutputDicList[2]['정보의질']
+                    BookReviewPositivity = {'Sentence': OutputDicList[2]['긍정']['가치'], 'Keyword': OutputDicList[2]['긍정']['키워드'], 'Weight': OutputDicList[2]['긍정']['필요도']}
+                    BookReviewWeight = OutputDicList[2]['정보의질']
                     ## BookReviewDic ##
-                    BookReviewDic = {'Summary': BookReviewSummary, 'Evaluations': Evaluations, 'Negativity': BookReviewNegativity, 'Positivity': BookReviewPositivity, 'Wight': BookReviewWight}
+                    BookReviewDic = {'Summary': BookReviewSummary, 'Evaluations': Evaluations, 'Negativity': BookReviewNegativity, 'Positivity': BookReviewPositivity, 'Weight': BookReviewWeight}
                 else:
                     ## BookReviewDic ##
                     BookReviewDic = None

@@ -232,31 +232,61 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
     for i in range(len(DataList)):
         if DataList[i]['Id'] == InputDic['PublisherId']:
             if OutputDicList != []:
-                # Context
+                #### Context ####
+                # Context-Summary
                 ContextSummary = OutputDicList[0]['요약']
+                # Context-KeyWord
                 ContextKeyWord = OutputDicList[0]['분야']
-                ContextDemand = OutputDicList[0]['수요']
-                ContextSupply = OutputDicList[0]['공급']
+                # Context-Demand
+                ContextDemandNeeds = {"Sentence": OutputDicList[0]['수요']['필요']['설명'], "KeyWord": OutputDicList[0]['수요']['필요']['키워드'], "Wight": OutputDicList[0]['수요']['필요']['중요도']}
+                ContextDemandPurpose = {"Sentence": OutputDicList[0]['수요']['목표']['설명'], "KeyWord": OutputDicList[0]['수요']['목표']['키워드'], "Wight": OutputDicList[0]['수요']['목표']['중요도']}
+                ContextDemandQuestion = {"Sentence": OutputDicList[0]['수요']['질문']['설명'], "KeyWord": OutputDicList[0]['수요']['질문']['키워드'], "Wight": OutputDicList[0]['수요']['질문']['중요도']}
+                ContextDemand = {'Needs': ContextDemandNeeds, 'Purpose': ContextDemandPurpose, 'Question': ContextDemandQuestion}
+                # Context-Supply
+                ContextSupplySatisfy = {"Sentence": OutputDicList[0]['공급']['충족']['설명'], "KeyWord": OutputDicList[0]['공급']['충족']['키워드'], "Wight": OutputDicList[0]['공급']['충족']['중요도']}
+                ContextSupplySupport = {"Sentence": OutputDicList[0]['공급']['달성']['설명'], "KeyWord": OutputDicList[0]['공급']['달성']['키워드'], "Wight": OutputDicList[0]['공급']['달성']['중요도']}
+                ContextSupplySolution = {"Sentence": OutputDicList[0]['공급']['해결책']['설명'], "KeyWord": OutputDicList[0]['공급']['해결책']['키워드'], "Wight": OutputDicList[0]['공급']['해결책']['중요도']}
+                ContextSupply = {'Satisfy': ContextSupplySatisfy, 'Support': ContextSupplySupport, 'Solution': ContextSupplySolution}
+                # Context-Wight
                 ContextWight = OutputDicList[0]['정보의질']
-                Context = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Supply': ContextSupply, 'Wight': ContextWight}
-                # WMWM
+                ## ContextDic ##
+                ContextDic = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Supply': ContextSupply, 'Wight': ContextWight}
+                #### Context ####
+
+                #### WMWM ####
+                # WMWM-Summary
                 WMWMSummary = OutputDicList[1]['요약']
-                WMWMNeeds = OutputDicList[1]['욕구상태']
-                WMWMWisdom = OutputDicList[1]['이해상태']
-                WMWMMind = OutputDicList[1]['마음상태']
-                WMWMAction = OutputDicList[1]['행동상태']
+                # WMWM-Needs
+                WMWMNeeds = {"State": OutputDicList[1]['욕구상태']['욕구상태'], "Reason": OutputDicList[1]['욕구상태']['욕구상태선택이유'], "Wight": OutputDicList[1]['욕구상태']['중요도']}
+                # WMWM-Wisdom
+                WMWMWisdom = {"State": OutputDicList[1]['이해상태']['이해상태'], "Reason": OutputDicList[1]['이해상태']['이해상태선택이유'], "Wight": OutputDicList[1]['이해상태']['중요도']}
+                # WMWM-Mind
+                WMWMMind = {"State": OutputDicList[1]['마음상태']['마음상태'], "Reason": OutputDicList[1]['마음상태']['마음상태선택이유'], "Wight": OutputDicList[1]['마음상태']['중요도']}
+                # WMWM-Action
+                WMWMAction = {"State": OutputDicList[1]['행동상태']['행동상태'], "Reason": OutputDicList[1]['행동상태']['행동상태선택이유'], "Wight": OutputDicList[1]['행동상태']['중요도']}
+                # WMWM-Wight
                 WMWMWight = OutputDicList[1]['정보의질']
-                WMWM = {'Summary': WMWMSummary, 'Needs': WMWMNeeds, 'Wisdom': WMWMWisdom, 'Mind': WMWMMind, 'Action': WMWMAction, 'Wight': WMWMWight}
-                # ServiceDemand
+                ## WMWMDic ##
+                WMWMDic = {'Summary': WMWMSummary, 'Needs': WMWMNeeds, 'Wisdom': WMWMWisdom, 'Mind': WMWMMind, 'Action': WMWMAction, 'Wight': WMWMWight}
+                #### WMWM ####
+
+                #### ServiceDemand ####
                 ServiceDemandSummary = OutputDicList[2]['요약']
-                ServiceDemandTextbook = OutputDicList[2]['텍스트북']
-                ServiceDemandAudiobook = OutputDicList[2]['오디오북']
-                ServiceDemandVideobook = OutputDicList[2]['비디오북']
-                ServiceDemandETC = OutputDicList[2]['기타']
+                # ServiceDemand-Textbook
+                ServiceDemandTextbook = {'Needs': OutputDicList[2]['텍스트북']['제작필요'], 'Product': OutputDicList[2]['텍스트북']['제작물'], 'Wight': OutputDicList[2]['텍스트북']['필요도']}
+                # ServiceDemand-Audiobook
+                ServiceDemandAudiobook = {'Needs': OutputDicList[2]['오디오북']['제작필요'], 'Product': OutputDicList[2]['오디오북']['제작물'], 'Wight': OutputDicList[2]['오디오북']['필요도']}
+                # ServiceDemand-Videobook
+                ServiceDemandVideobook = {'Needs': OutputDicList[2]['비디오북']['제작필요'], 'Product': OutputDicList[2]['비디오북']['제작물'], 'Wight': OutputDicList[2]['비디오북']['필요도']}
+                # ServiceDemand-ETC
+                ServiceDemandETC = {'Needs': OutputDicList[2]['기타']['제작필요'], 'Product': OutputDicList[2]['기타']['제작물'], 'Wight': OutputDicList[2]['기타']['필요도']}
+                # ServiceDemand-Wight
                 ServiceDemandWight = OutputDicList[2]['정보의질']
-                ServiceDemand = {'Summary': ServiceDemandSummary, 'Textbook': ServiceDemandTextbook, 'Audiobook': ServiceDemandAudiobook, 'Videobook': ServiceDemandVideobook, 'ETC': ServiceDemandETC, 'Wight': ServiceDemandWight}
-   
-                DataTemp = {MainKey: {'Context': Context, 'WMWM': WMWM, 'ServiceDemand': ServiceDemand}}
+                ## ServiceDemandDic ##
+                ServiceDemandDic = {'Summary': ServiceDemandSummary, 'Textbook': ServiceDemandTextbook, 'Audiobook': ServiceDemandAudiobook, 'Videobook': ServiceDemandVideobook, 'ETC': ServiceDemandETC, 'Wight': ServiceDemandWight}
+                #### ServiceDemand ####
+                
+                DataTemp = {MainKey: {'Context': ContextDic, 'WMWM': WMWMDic, 'ServiceDemand': ServiceDemandDic}}
             else:
                 DataTemp = {MainKey: None}
             

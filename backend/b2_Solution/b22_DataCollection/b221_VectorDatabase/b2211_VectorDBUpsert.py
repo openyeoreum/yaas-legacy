@@ -14,7 +14,7 @@ def Pinecone_CreateIndex(CollectionName, IndexDimension = 1536):
     if not PineConeClient.has_index(CollectionName):
         PineConeClient.create_index(
             name = CollectionName,
-            dimension = 1536,
+            dimension = IndexDimension,
             metric = "cosine",
             spec = ServerlessSpec(
                 cloud = 'aws',
@@ -48,84 +48,235 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
     UpsertEmbeddedData = []
     Id = CollectionData['Id']
     DocId = f"{CollectionName}-{Id}"
+
+    # 1) Context-Summary
+    Field = "Context-Summary"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Wight'] / 100
+    ContextSummaryText = CollectionData['CollectionAnalysis']['Context']['Summary']
+    ContextSummaryVector = OpenAI_TextEmbedding(ContextSummaryText)
+    UpsertEmbeddedData.append({
+        "id" :f"{DocId}-{Field}",
+        "values": ContextSummaryVector,
+        "metadata": {
+            "Collection": f"{CollectionName}",
+            "CollectionId": f"{Id}",
+            "Field": Field,
+            "Wight": Wight
+            }
+        })
     
-    # 1) ContextKeyChunk
-    ContextKeyChunkText = next(iter(CollectionData['CollectionAnalysis'].values()))
-    ContextKeyChunkVector = OpenAI_TextEmbedding(ContextKeyChunkText)
+    # 2) Context-KeyWord
+    Field = "Context-KeyWord"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Wight'] / 100
+    ContextKeyWord = CollectionData['CollectionAnalysis']['Context']['KeyWord']
+    ContextKeyWordText = ", ".join(ContextKeyWord)
+    ContextKeyWordVector = OpenAI_TextEmbedding(ContextKeyWordText)
     UpsertEmbeddedData.append({
-        "id" :f"{DocId}-ContextKeyChunk",
-        "values": ContextKeyChunkVector,
+        "id" :f"{DocId}-{Field}",
+        "values": ContextKeyWordVector,
         "metadata": {
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
-            "Field": "ContextKeyChunk"
+            "Field": Field,
+            "Wight": Wight
             }
         })
     
-    # 2) ContextPurpose
-    ContextPurposeText = CollectionData['CollectionAnalysis']['Context']['Purpose']
-    ContextPurposeVector = OpenAI_TextEmbedding(ContextPurposeText)
+    # 3) Context-Demand-Needs-Sentence
+    Field = "Context-Demand-Needs-Sentence"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['필요']['중요도'] / 100
+    ContextDemandNeedsText = CollectionData['CollectionAnalysis']['Context']['Demand']['필요']['설명']
+    ContextDemandNeedsVector = OpenAI_TextEmbedding(ContextDemandNeedsText)
     UpsertEmbeddedData.append({
-        "id" :f"{DocId}-ContextPurpose",
-        "values": ContextPurposeVector,
+        "id" :f"{DocId}-{Field}",
+        "values": ContextDemandNeedsVector,
         "metadata": {
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
-            "Field": "ContextPurpose"
+            "Field": Field,
+            "Wight": Wight
+            }
+        })
+    
+    # 4) Context-Demand-Needs-Keyword
+    Field = "Context-Demand-Needs-Keyword"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['필요']['중요도'] / 100
+    ContextDemandNeedsKeyword = CollectionData['CollectionAnalysis']['Context']['Demand']['필요']['키워드']
+    ContextDemandNeedsKeywordText = ", ".join(ContextDemandNeedsKeyword)
+    ContextDemandNeedsKeywordVector = OpenAI_TextEmbedding(ContextDemandNeedsKeywordText)
+    UpsertEmbeddedData.append({
+        "id" :f"{DocId}-{Field}",
+        "values": ContextDemandNeedsKeywordVector,
+        "metadata": {
+            "Collection": f"{CollectionName}",
+            "CollectionId": f"{Id}",
+            "Field": Field,
+            "Wight": Wight
             }
         })
 
-    # 3) ContextReason
-    ContextReasonText = CollectionData['CollectionAnalysis']['Context']['Reason']
-    ContextReasonVector = OpenAI_TextEmbedding(ContextReasonText)
+    # 5) Context-Demand-Purpose-Sentence
+    Field = "Context-Demand-Purpose-Sentence"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['목표']['중요도'] / 100
+    ContextDemandPurposeText = CollectionData['CollectionAnalysis']['Context']['Demand']['목표']['설명']
+    ContextDemandPurposeVector = OpenAI_TextEmbedding(ContextDemandPurposeText)
     UpsertEmbeddedData.append({
-        "id" :f"{DocId}-ContextReason",
-        "values": ContextReasonVector,
+        "id" :f"{DocId}-{Field}",
+        "values": ContextDemandPurposeVector,
         "metadata": {
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
-            "Field": "ContextReason"
+            "Field": Field,
+            "Wight": Wight
             }
         })
 
-    # 4) ContextQuestion
-    ContextQuestionText = CollectionData['CollectionAnalysis']['Context']['Question']
-    ContextQuestionVector = OpenAI_TextEmbedding(ContextQuestionText)
+    # 6) Context-Demand-Purpose-Keyword
+    Field = "Context-Demand-Purpose-Keyword"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['목표']['중요도'] / 100
+    ContextDemandPurposeKeyword = CollectionData['CollectionAnalysis']['Context']['Demand']['목표']['키워드']
+    ContextDemandPurposeKeywordText = ", ".join(ContextDemandPurposeKeyword)
+    ContextDemandPurposeKeywordVector = OpenAI_TextEmbedding(ContextDemandPurposeKeywordText)
     UpsertEmbeddedData.append({
-        "id" :f"{DocId}-ContextQuestion",
-        "values": ContextQuestionVector,
+        "id" :f"{DocId}-{Field}",
+        "values": ContextDemandPurposeKeywordVector,
         "metadata": {
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
-            "Field": "ContextQuestion"
+            "Field": Field,
+            "Wight": Wight
             }
         })
 
-    # 5) ContextSubject (리스트이므로 쉼표로 join)
-    ContextSubjectList = CollectionData['CollectionAnalysis']['Context']['Subject']
-    ContextSubjectText = ", ".join(ContextSubjectList)
-    ContextSubjectVector = OpenAI_TextEmbedding(ContextSubjectText)
+    # 7) Context-Demand-Question-Sentence
+    Field = "Context-Demand-Question-Sentence"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['질문']['중요도'] / 100
+    ContextDemandQuestionText = CollectionData['CollectionAnalysis']['Context']['Demand']['질문']['설명']
+    ContextDemandQuestionVector = OpenAI_TextEmbedding(ContextDemandQuestionText)
     UpsertEmbeddedData.append({
-        "id" :f"{DocId}-ContextSubject",
-        "values": ContextSubjectVector,
+        "id" :f"{DocId}-{Field}",
+        "values": ContextDemandQuestionVector,
         "metadata": {
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
-            "Field": "ContextSubject"
+            "Field": Field,
+            "Wight": Wight * SubWight
             }
         })
 
-    # 6) ContextPerson (리스트이므로 쉼표로 join)
-    ContextPersonList = CollectionData['CollectionAnalysis']['Context']['Person']
-    ContextPersonText = ", ".join(ContextPersonList)
-    ContextPersonVector = OpenAI_TextEmbedding(ContextPersonText)
+    # 8) Context-Demand-Question-Keyword
+    Field = "Context-Demand-Question-Keyword"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Demand']['질문']['중요도'] / 100
+    ContextDemandQuestionKeyword = CollectionData['CollectionAnalysis']['Context']['Demand']['질문']['키워드']
+    ContextDemandQuestionKeywordText = ", ".join(ContextDemandQuestionKeyword)
+    ContextDemandQuestionKeywordVector = OpenAI_TextEmbedding(ContextDemandQuestionKeywordText)
     UpsertEmbeddedData.append({
-        "id" :f"{DocId}-ContextPerson",
-        "values": ContextPersonVector,
+        "id" :f"{DocId}-{Field}",
+        "values": ContextDemandQuestionKeywordVector,
         "metadata": {
             "Collection": f"{CollectionName}",
             "CollectionId": f"{Id}",
-            "Field": "ContextPerson"
+            "Field": Field,
+            "Wight": Wight
+            }
+        })
+
+    # 9) Context-Supply-Satisfy-Sentence
+    Field = "Context-Supply-Satisfy-Sentence"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['충족']['중요도'] / 100
+    ContextSupplySatisfyText = CollectionData['CollectionAnalysis']['Context']['Supply']['충족']['설명']
+    ContextSupplySatisfyVector = OpenAI_TextEmbedding(ContextSupplySatisfyText)
+    UpsertEmbeddedData.append({
+        "id" :f"{DocId}-{Field}",
+        "values": ContextSupplySatisfyVector,
+        "metadata": {
+            "Collection": f"{CollectionName}",
+            "CollectionId": f"{Id}",
+            "Field": Field,
+            "Wight": Wight
+            }
+        })
+
+    # 10) Context-Supply-Satisfy-Keyword
+    Field = "Context-Supply-Satisfy-Keyword"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['충족']['중요도'] / 100
+    ContextSupplySatisfyKeyword = CollectionData['CollectionAnalysis']['Context']['Supply']['충족']['키워드']
+    ContextSupplySatisfyKeywordText = ", ".join(ContextSupplySatisfyKeyword)
+    ContextSupplySatisfyKeywordVector = OpenAI_TextEmbedding(ContextSupplySatisfyKeywordText)
+    UpsertEmbeddedData.append({
+        "id" :f"{DocId}-{Field}",
+        "values": ContextSupplySatisfyKeywordVector,
+        "metadata": {
+            "Collection": f"{CollectionName}",
+            "CollectionId": f"{Id}",
+            "Field": Field,
+            "Wight": Wight
+            }
+        })
+
+    # 11) Context-Supply-Support-Sentence
+    Field = "Context-Supply-Support-Sentence"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['달성']['중요도'] / 100
+    ContextSupplySupportText = CollectionData['CollectionAnalysis']['Context']['Supply']['달성']['설명']
+    ContextSupplySupportVector = OpenAI_TextEmbedding(ContextSupplySupportText)
+    UpsertEmbeddedData.append({
+        "id" :f"{DocId}-{Field}",
+        "values": ContextSupplySupportVector,
+        "metadata": {
+            "Collection": f"{CollectionName}",
+            "CollectionId": f"{Id}",
+            "Field": Field,
+            "Wight": Wight
+            }
+        })
+
+    # 12) Context-Supply-Support-Keyword
+    Field = "Context-Supply-Support-Keyword"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['달성']['중요도'] / 100
+    ContextSupplySupportKeyword = CollectionData['CollectionAnalysis']['Context']['Supply']['달성']['키워드']
+    ContextSupplySupportKeywordText = ", ".join(ContextSupplySupportKeyword)
+    ContextSupplySupportKeywordVector = OpenAI_TextEmbedding(ContextSupplySupportKeywordText)
+    UpsertEmbeddedData.append({
+        "id" :f"{DocId}-{Field}",
+        "values": ContextSupplySupportKeywordVector,
+        "metadata": {
+            "Collection": f"{CollectionName}",
+            "CollectionId": f"{Id}",
+            "Field": Field,
+            "Wight": Wight
+            }
+        })
+
+    # 13) Context-Supply-Solution-Sentence
+    Field = "Context-Supply-Solution-Sentence"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['해결책']['중요도'] / 100
+    ContextSupplySolutionText = CollectionData['CollectionAnalysis']['Context']['Supply']['해결책']['설명']
+    ContextSupplySolutionVector = OpenAI_TextEmbedding(ContextSupplySolutionText)
+    UpsertEmbeddedData.append({
+        "id" :f"{DocId}-{Field}",
+        "values": ContextSupplySolutionVector,
+        "metadata": {
+            "Collection": f"{CollectionName}",
+            "CollectionId": f"{Id}",
+            "Field": Field,
+            "Wight": Wight
+            }
+        })
+
+    # 14) Context-Supply-Solution-Keyword
+    Field = "Context-Supply-Solution-Keyword"
+    Wight = CollectionData['CollectionAnalysis']['Context']['Supply']['해결책']['중요도'] / 100
+    ContextSupplySolutionKeyword = CollectionData['CollectionAnalysis']['Context']['Supply']['해결책']['키워드']
+    ContextSupplySolutionKeywordText = ", ".join(ContextSupplySolutionKeyword)
+    ContextSupplySolutionKeywordVector = OpenAI_TextEmbedding(ContextSupplySolutionKeywordText)
+    UpsertEmbeddedData.append({
+        "id" :f"{DocId}-{Field}",
+        "values": ContextSupplySolutionKeywordVector,
+        "metadata": {
+            "Collection": f"{CollectionName}",
+            "CollectionId": f"{Id}",
+            "Field": Field,
+            "Wight": Wight
             }
         })
 
@@ -182,7 +333,7 @@ def UpsertCollectionData(TotalCollectionDataTempPath, CollectionName):
     print(f"[ VDBIndexUpsert: {CollectionName} | VBD에 {CollectionName}TempFile.json 리스트 업서트 완료 ]")
         
 ## Pinecone에 임베딩 데이터 검색
-def SearchEmbeddedData(CollectionData, CollectionName, TopK = 50):
+def SearchEmbeddedData(CollectionData, CollectionName, Matching = 'Similarity', TopK = 50): # Matching: 'Similarity', 'Demand, 'Supply'
     print(f"[ YaaS VDB Search: {CollectionName} | VBD에 {CollectionName}TempFile.json 리스트 업서트 완료 ]")
     
     PineConeClient = Pinecone_CreateIndex(CollectionName)
@@ -197,16 +348,16 @@ def SearchEmbeddedData(CollectionData, CollectionName, TopK = 50):
     # ScoreWeight를 동적으로 변경
     for SearchField in SearchFieldList:
         if SearchField == "ContextKeyChunk":
-            ContextQueryText = next(iter(CollectionData['CollectionAnalysis'].values()))
+            ContextQueryText = CollectionData['CollectionAnalysis']['Context']['Summary']
             ScoreWeight = 1
         elif SearchField == "ContextPurpose":
-            ContextQueryText = CollectionData['CollectionAnalysis']['Context']['Purpose']
+            ContextQueryText = CollectionData['CollectionAnalysis']['Context']['목표']
             ScoreWeight = 0.334
         elif SearchField == "ContextReason":
             ContextQueryText = CollectionData['CollectionAnalysis']['Context']['Reason']
             ScoreWeight = 0.333
         elif SearchField == "ContextQuestion":
-            ContextQueryText = CollectionData['CollectionAnalysis']['Context']['Question']
+            ContextQueryText = CollectionData['CollectionAnalysis']['Context']['질문']
             ScoreWeight = 0.333
         elif SearchField == "ContextSubject":
             subject_list = CollectionData['CollectionAnalysis']['Context']['Subject']
@@ -267,8 +418,8 @@ def SearchEmbeddedData(CollectionData, CollectionName, TopK = 50):
 
 if __name__ == "__main__":
     CollectionName = "publisher"
-    # TotalCollectionDataTempPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData/TotalPublisherDataTemp"
-    # UpsertCollectionData(TotalCollectionDataTempPath, CollectionName)
+    TotalCollectionDataTempPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData/TotalPublisherDataTemp"
+    UpsertCollectionData(TotalCollectionDataTempPath, CollectionName)
 
     # CollectionData = {
     #     "CollectionAnalysis": {
@@ -295,28 +446,28 @@ if __name__ == "__main__":
     #             "Importance": 95
     #         }}}
     
-    CollectionData = {
-        "CollectionAnalysis": {
-            "Slogan": "치매와 함께 살아가는 사회, 전문적 정보와 통찰을 제공합니다.",
-            "Context": {
-                "Purpose": "치매 관련 정보와 전문적 지식을 공유하여 치매 환자와 가족들의 삶의 질을 향상시키고, 사회적 인식을 제고하기 위함입니다.",
-                "Reason": "고령화 사회에서 치매가 중요한 사회적, 의료적 이슈로 부각되고 있으며, 이에 대한 이해와 대비가 필요하다는 점에서 도출되었습니다.",
-                "Question": "효과적인 치매 예방과 관리, 사회적 공감대를 형성하기 위해 어떤 새로운 접근법과 협력 모델을 도입할 수 있을까요?",
-                "Subject": [
-                    "치매",
-                    "사회적 공감",
-                    "전문 정보 제공",
-                    "치유와 미래"
-                ],
-                "Person": [
-                    "치매 전문의",
-                    "사회복지사",
-                    "간병 전문가",
-                    "치매 연구자",
-                    "정신건강 전문가"
-                ],
-                "Importance": "95"
-        }}}
+    # CollectionData = {
+    #     "CollectionAnalysis": {
+    #         "Slogan": "치매와 함께 살아가는 사회, 전문적 정보와 통찰을 제공합니다.",
+    #         "Context": {
+    #             "Purpose": "치매 관련 정보와 전문적 지식을 공유하여 치매 환자와 가족들의 삶의 질을 향상시키고, 사회적 인식을 제고하기 위함입니다.",
+    #             "Reason": "고령화 사회에서 치매가 중요한 사회적, 의료적 이슈로 부각되고 있으며, 이에 대한 이해와 대비가 필요하다는 점에서 도출되었습니다.",
+    #             "Question": "효과적인 치매 예방과 관리, 사회적 공감대를 형성하기 위해 어떤 새로운 접근법과 협력 모델을 도입할 수 있을까요?",
+    #             "Subject": [
+    #                 "치매",
+    #                 "사회적 공감",
+    #                 "전문 정보 제공",
+    #                 "치유와 미래"
+    #             ],
+    #             "Person": [
+    #                 "치매 전문의",
+    #                 "사회복지사",
+    #                 "간병 전문가",
+    #                 "치매 연구자",
+    #                 "정신건강 전문가"
+    #             ],
+    #             "Importance": "95"
+    #     }}}
 
-    FinalScores = SearchEmbeddedData(CollectionData, CollectionName)
-    print(f'FinalScores ::: {FinalScores}\n')
+    # FinalScores = SearchEmbeddedData(CollectionData, CollectionName)
+    # print(f'FinalScores ::: {FinalScores}\n')

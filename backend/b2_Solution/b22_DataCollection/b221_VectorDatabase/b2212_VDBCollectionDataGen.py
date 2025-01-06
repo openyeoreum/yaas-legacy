@@ -7,106 +7,46 @@ sys.path.append("/yaas")
 
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 
-#########################
-##### InputList 생성 #####
-#########################
-## totalPublisherDataList로 로드(업데이트가 필요한 부분 선정, 이중 분석 방지)
-def LoadTotalPublisherDataList(TotalPublisherDataJsonPath, TotalPublisherDataTempPath, StartPoint = 1):
-    # TempIdList 생성
-    TempIdList = []
-    TempJsonList = []
-    if os.path.exists(TotalPublisherDataTempPath):
-        TempJsonList = os.listdir(TotalPublisherDataTempPath)
-    FileNamePattern = r"^PublisherData_\((\d+)\)_.*\.json$"
-    for TempJson in TempJsonList:
-        match = re.match(FileNamePattern, TempJson)
-        if match:
-            TempIdList.append(int(match.group(1)))
-    SortedTempIdList = sorted(TempIdList)
-    
-    ## TotalPublisherDataList 로드
-    with open(TotalPublisherDataJsonPath, 'r', encoding = 'utf-8') as PublisherJson:
-        TotalPublisherDataList = json.load(PublisherJson)[StartPoint:]
-    ## TotalPublisherDataList중 업데이트가 필요한 부분 선정, 이중 분석 방지
-    totalPublisherDataList = []
-    for PublisherData in TotalPublisherDataList:
-        if PublisherData['Id'] not in SortedTempIdList:
-            totalPublisherDataList.append(PublisherData)
-    
-    return totalPublisherDataList
-
-## LoadTotalPublisherData의 inputList 치환
-def LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, TotalPublisherDataTempPath, MaxTextLength = 4000):
-    totalPublisherDataList = LoadTotalPublisherDataList(TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
-    
-    ## InputList 생성
-    InputList = []
-    for i, PublisherData in enumerate(totalPublisherDataList):
-        PublisherId = PublisherData['Id']
-        PublisherName = f"[출판사명] {PublisherData['PublisherInformation']['Name']}\n\n"
-        Classification = f"[주요항목] {PublisherData['PublisherInformation']['Classification']}\n\n"
-        Subcategories = f"[세부항목] {PublisherData['PublisherInformation']['Subcategories']}\n\n"
-        HomePage = f"[홈페이지] {PublisherData['PublisherInformation']['HomePage']}\n\n"
-        WebPageKoreanTxtPath = f"{PublisherData['PublisherInformation']['WebPageTXTPath'].rsplit('.', 1)[0]}_Extract.txt"
-        if 'None' in WebPageKoreanTxtPath:
-            PublisherDataText = None
-        else:
-            with open(WebPageKoreanTxtPath, 'r', encoding = 'utf-8') as f:
-                PageBody = f.read()
-                if len(PageBody) > MaxTextLength:
-                    PageBody = PageBody[:MaxTextLength] + "..."
-                    
-            HomePageBody = f"[홈페이지내용발췌] {PageBody}"
-            if PageBody != '':
-                PublisherDataText = PublisherName + Classification + Subcategories + HomePage + HomePageBody
-            else:
-                PublisherDataText = None
-
-        InputDic = {'Id': i+1, 'PublisherId': PublisherId, 'PublisherName': PublisherData['PublisherInformation']['Name'], 'PublisherText': PublisherDataText}
-        InputList.append(InputDic)
-        
-    return InputList
-
 ######################
 ##### Filter 조건 #####
 ######################
-## Process1: PublisherContextDefine의 Filter(Error 예외처리)
-def PublisherContextDefineFilter(Response, CheckCount):
+## Process1: VDBCollectionDataGen의 Filter(Error 예외처리)
+def VDBCollectionDataGenFilter(Response, CheckCount):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(Response)
     except json.JSONDecodeError:
-        return "PublisherContextDefine, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "VDBCollectionDataGen, JSONDecode에서 오류 발생: JSONDecodeError"
     
     # Error2: 딕셔너리가 "정리"의 키로 시작하지 않을때의 예외처리
     try:
         OutputDic = outputJson['정리']
     except KeyError:
-        return "PublisherContextDefine, JSON에서 오류 발생: '정리' 미포함"
+        return "VDBCollectionDataGen, JSON에서 오류 발생: '정리' 미포함"
     
     # Error3: 자료의 구조가 다를 때의 예외 처리
     required_keys = ['요약', '분야', '수요', '공급', '정보의질']
     if not all(key in OutputDic for key in required_keys):
-        return "PublisherContextDefine, JSON에서 오류 발생: JSONKeyError"
+        return "VDBCollectionDataGen, JSON에서 오류 발생: JSONKeyError"
     
     # 수요 검증
     demand_keys = ['필요', '목표', '질문']
     if not all(key in outputJson['정리']['수요'] for key in demand_keys):
-        return "PublisherContextDefine, JSON에서 오류 발생: '필요', '목표', '질문' 미포함"
+        return "VDBCollectionDataGen, JSON에서 오류 발생: '필요', '목표', '질문' 미포함"
     
     # 공급 검증
     supply_keys = ['충족', '달성', '해결책']
     if not all(key in outputJson['정리']['공급'] for key in supply_keys):
-        return "PublisherContextDefine, JSON에서 오류 발생: '충족', '달성', '해결책' 미포함"
+        return "VDBCollectionDataGen, JSON에서 오류 발생: '충족', '달성', '해결책' 미포함"
     
     # 세부 키 검증
     for demand_key in demand_keys:
         if not all(sub_key in outputJson['정리']['수요'][demand_key] for sub_key in ['설명', '키워드', '중요도']):
-            return f"PublisherContextDefine, JSON에서 오류 발생: 수요 {demand_key} '설명', '키워드', '중요도' 미포함"
+            return f"VDBCollectionDataGen, JSON에서 오류 발생: 수요 {demand_key} '설명', '키워드', '중요도' 미포함"
     
     for supply_key in supply_keys:
         if not all(sub_key in outputJson['정리']['공급'][supply_key] for sub_key in ['설명', '키워드', '중요도']):
-            return f"PublisherContextDefine, JSON에서 오류 발생: 공급 {supply_key} '설명', '키워드', '중요도' 미포함"
+            return f"VDBCollectionDataGen, JSON에서 오류 발생: 공급 {supply_key} '설명', '키워드', '중요도' 미포함"
     
     return OutputDic
 
@@ -116,32 +56,32 @@ def PublisherWMWMDefineFilter(Response, CheckCount):
     try:
         outputJson = json.loads(Response)
     except json.JSONDecodeError:
-        return "PublisherWMWMDefine, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "PsychologyContextValidate, JSONDecode에서 오류 발생: JSONDecodeError"
 
     # Error2: "심리" 키 존재 여부 확인
     try:
         outputDic = outputJson['심리']
     except KeyError:
-        return "PublisherWMWMDefine, JSON에서 오류 발생: '심리' 미포함"
+        return "PsychologyContextValidate, JSON에서 오류 발생: '심리' 미포함"
 
     # Error3: 주요 키 확인
     required_keys = ['요약', '욕구상태', '이해상태', '마음상태', '행동상태', '정보의질']
     if not all(key in outputDic for key in required_keys):
-        return "PublisherWMWMDefine, JSON에서 오류 발생: 주요 키 누락"
+        return "PsychologyContextValidate, JSON에서 오류 발생: 주요 키 누락"
 
     # 요약 키 확인
     if not isinstance(outputDic['요약'], list):
-        return "PublisherWMWMDefine, JSON에서 오류 발생: '요약'이 리스트 형태가 아님"
+        return "PsychologyContextValidate, JSON에서 오류 발생: '요약'이 리스트 형태가 아님"
 
     # 상태별 검증
     state_keys = ['욕구상태', '이해상태', '마음상태', '행동상태']
     for state_key in state_keys:
         if not all(sub_key in outputDic[state_key] for sub_key in [state_key, f'{state_key}선택이유', '중요도']):
-            return f"PublisherWMWMDefine, JSON에서 오류 발생: {state_key} '설명', '선택이유', '중요도' 미포함"
+            return f"PsychologyContextValidate, JSON에서 오류 발생: {state_key} '설명', '선택이유', '중요도' 미포함"
     
     # 정보의질 키 확인
     if '정보의질' not in outputDic:
-        return "PublisherWMWMDefine, JSON에서 오류 발생: '정보의질' 미포함"
+        return "PsychologyContextValidate, JSON에서 오류 발생: '정보의질' 미포함"
 
     # 모든 검사를 통과하면 심리 데이터를 반환
     return outputDic
@@ -328,50 +268,35 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
 ################################
 ##### Process 진행 및 업데이트 #####
 ################################
-## PublisherProcess 프롬프트 요청 및 결과물 Json화
-def PublisherProcessUpdate(projectName, email, mode = "Master", MainKey = 'PublisherAnalysis', MessagesReview = "on"):
-    print(f"< User: {email} | Project: {projectName} | PublisherProcessUpdate 시작 >")
-    ## TotalPublisherData 경로 설정
-    TotalPublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData"
-    TotalPublisherDataJsonPath = os.path.join(TotalPublisherDataPath, 'TotalPublisherData.json')
-    TotalPublisherDataTempPath = os.path.join(TotalPublisherDataPath, 'TotalPublisherDataTemp')
+## VDBCollectionDataGen 프롬프트 요청 및 결과물 Json화
+def VDBCollectionDataGenUpdate(projectName, email, Input, mode = "Master", MainKey = 'PublisherAnalysis', MessagesReview = "on"):
+    print(f"< User: {email} | Project: {projectName} | VDBCollectionDataGenUpdate 시작 >")       
+    processCount = 1
+    InputCount = 1
+    CheckCount = 0
+    OutputDicList = []
+
+    ## Process1: VDBCollectionDataGen Response 생성
+    VDBCollectionDataGenResponse = ProcessResponse(projectName, email, "VDBCollectionDataGen", Input, processCount, InputCount, VDBCollectionDataGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
+    OutputDicList.append(VDBCollectionDataGenResponse)
     
-    ## 작업이 되지 않은 부분부터 totalPublisherDataList와 InputList 형성
-    InputList = LoadTotalPublisherDataToInputList(TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
+    ## Process2: PublisherWMWMDefine Response 생성
+    PublisherWMWMDefineResponse = ProcessResponse(projectName, email, "PublisherWMWMDefine", Input, processCount, InputCount, PublisherWMWMDefineFilter, CheckCount, "OpenAI", mode, MessagesReview)
+    OutputDicList.append(PublisherWMWMDefineResponse)
     
-    ## PublisherProcess
-    InputCount = len(InputList)
-    ProcessCount = 0
+    ## Process3: PublisherCommentAnalysis Response 생성
+    PublisherServiceDemandResponse = ProcessResponse(projectName, email, "PublisherServiceDemand", Input, processCount, InputCount, PublisherServiceDemandFilter, CheckCount, "OpenAI", mode, MessagesReview)
+    OutputDicList.append(PublisherServiceDemandResponse)
     
-    while ProcessCount < InputCount:
-        processCount = ProcessCount + 1
-        InputDic = InputList[ProcessCount]
-        Input = InputDic['PublisherText']
-        CheckCount = 0
-        OutputDicList = []
-        
-        if Input != None: ## Input이 None이 아닐 때만 Process 진행
-            ## Process1: PublisherContextDefine Response 생성
-            PublisherContextDefineResponse = ProcessResponse(projectName, email, "PublisherContextDefine", Input, processCount, InputCount, PublisherContextDefineFilter, CheckCount, "OpenAI", mode, MessagesReview)
-            OutputDicList.append(PublisherContextDefineResponse)
-            
-            ## Process2: PublisherWMWMDefine Response 생성
-            PublisherWMWMDefineResponse = ProcessResponse(projectName, email, "PublisherWMWMDefine", Input, processCount, InputCount, PublisherWMWMDefineFilter, CheckCount, "OpenAI", mode, MessagesReview)
-            OutputDicList.append(PublisherWMWMDefineResponse)
-            
-            ## Process3: PublisherCommentAnalysis Response 생성
-            PublisherServiceDemandResponse = ProcessResponse(projectName, email, "PublisherServiceDemand", Input, processCount, InputCount, PublisherServiceDemandFilter, CheckCount, "OpenAI", mode, MessagesReview)
-            OutputDicList.append(PublisherServiceDemandResponse)
-            
-            ## ProcessResponse 임시저장
-            ProcessResponseTempSave(MainKey, InputDic, OutputDicList, TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
-        # 다음 아이템으로 이동
-        ProcessCount += 1
+    ## ProcessResponse 임시저장
+    ProcessResponseTempSave(MainKey, InputDic, OutputDicList, TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
     
     ## ProcessResponse 업데이트
     ProcessResponseUpdate(MainKey, TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
-    print(f"[ User: {email} | Project: {projectName} | PublisherProcessUpdate 완료 ]\n")
+    print(f"[ User: {email} | Project: {projectName} | VDBCollectionDataGenUpdate 완료 ]\n")
 
+## 검색어 기반 검색 폼
+## 검색이 더 잘되도록 하기 위한 사전 작업 (빠진 데이터 보충을 위해 유사 데이터 3개 생성 후 검색, 필드별 내용 변환 등)
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
@@ -379,4 +304,4 @@ if __name__ == "__main__":
     ProjectName = '241204_개정교육과정초등교과별이해연수'
     #########################################################################
     
-    PublisherProcessUpdate(ProjectName, email)
+    VDBCollectionDataGenUpdate(ProjectName, email)

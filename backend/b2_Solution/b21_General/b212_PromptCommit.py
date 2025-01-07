@@ -23,14 +23,14 @@ def AddPromptToDB():
         PromptDataPath = GetPromptDataPath()
         
         # DataCollectionPrompt
-        demandCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataDetailPrompt/b54111-01_DemandCollectionDataDetail.json")
-        demandCollectionDataContext = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataDetailPrompt/b54111-02_DemandCollectionDataContext.json")
-        demandCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataDetailPrompt/b54111-03_DemandCollectionDataExtensionChain.json")
-        demandCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataDetailPrompt/b54111-04_DemandCollectionDataUltimateChain.json")
-        supplyCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataDetailPrompt/b54112-01_SupplyCollectionDataDetail.json")
-        supplyCollectionDataContext = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataDetailPrompt/b54112-02_SupplyCollectionDataContext.json")
-        supplyCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataDetailPrompt/b54112-03_SupplyCollectionDataExtensionChain.json")
-        supplyCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataDetailPrompt/b54112-04_SupplyCollectionDataUltimateChain.json")
+        demandCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-01_DemandCollectionDataDetail.json")
+        demandCollectionDataContext = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-02_DemandCollectionDataContext.json")
+        demandCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-03_DemandCollectionDataExtensionChain.json")
+        demandCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-04_DemandCollectionDataUltimateChain.json")
+        supplyCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-01_SupplyCollectionDataDetail.json")
+        supplyCollectionDataContext = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-02_SupplyCollectionDataContext.json")
+        supplyCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-03_SupplyCollectionDataExtensionChain.json")
+        supplyCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-04_SupplyCollectionDataUltimateChain.json")
         publisherContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-01_PublisherContextDefine.json")
         publisherWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-02_PublisherWMWMDefine.json")
         publisherServiceDemand = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-03_PublisherServiceDemand.json")
@@ -142,7 +142,7 @@ def AddPromptToDB():
             ExistingPrompt.VoiceSplit = voiceSplit
             ExistingPrompt.VoiceSplitInspection = voiceSplitInspection
             ### 아래로 추가되는 프롬프트 작성 ###
-            
+
             print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
         else:
             prompt = Prompt(

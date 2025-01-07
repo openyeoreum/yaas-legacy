@@ -6,6 +6,7 @@ sys.path.append("/yaas")
 
 from pinecone import Pinecone, ServerlessSpec
 from openai import OpenAI
+from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2212_DemandCollectionDataDetail import DemandCollectionDataDetailProcessUpdate
 
 ## Pinecone에 인덱스 생성
 def Pinecone_CreateIndex(Collection, IndexDimension = 1536):
@@ -331,9 +332,18 @@ def SearchEmbeddedData(Search, Intention, Collection, Range): # Intention: 'simi
     return FinalResults
 
 ## 검색 CollectionData 구축
-def YaaSsearch(Search, Intention, Collection, Range):
+def YaaSsearch(projectName, email, Search, Intention, Collection, Range):
     if Search['Type'] == "Search":
-        pass
+        InputDic = {"Input": Search['Term'], "Intention": Intention}
+
+        if Intention in ["Similarity", "SimilarityUltimate"]:
+            pass
+
+        if Intention in ["Demand", "DemandUltimate"]:
+            DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic)
+
+        if Intention in ["Supply", "SupplyUltimate"]:
+            pass
     
     elif Search['Type'] == "Match":
         Results = SearchEmbeddedData(Search, Intention, Collection, Range)
@@ -341,12 +351,16 @@ def YaaSsearch(Search, Intention, Collection, Range):
     return Results
 
 if __name__ == "__main__":
-    Search = {"Type": "Match", "Term": "PublisherData_(54)"} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
-    Intention = "similarity" # Similarity, Demand, DemandChain, Supply, SupplyChain
+    
+    ############################ 하이퍼 파라미터 설정 ############################
+    email = "yeoreum00128@gmail.com"
+    projectName = "우리는행복을진단한다"
+    Search = {"Type": "Search", "Term": "AI 솔루션 개발자 입니다. 지속적인 나의 발전을 위해 개발과 행보와 내용을 담은 유튜브 채널을 키우고 싶습니다."} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
+    Intention = "DemandUltimate" # Similarity, SimilarityUltimate, Demand, DemandUltimate, Supply, SupplyUltimate
     Collection = "publisher" # Entire, Target, Trend, Publisher, Book ...
     Range = 100 # 10-100
-    
-    Results = YaaSsearch(Search, Intention, Collection, Range)
+    #########################################################################
+    Results = YaaSsearch(projectName, email, Search, Intention, Collection, Range)
     
     for Result in Results:
         print(f"{Result}\n")

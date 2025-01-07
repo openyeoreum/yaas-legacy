@@ -395,13 +395,13 @@ class Prompt(Base):
     ## Yeoreum
     ## DataCollectionPrompt
     # CollectionDataGenPrompt
-    DemandCollectionDataGen = Column(JSON)
     DemandCollectionDataDetail = Column(JSON)
+    DemandCollectionDataContext = Column(JSON)
     DemandCollectionDataExtensionChain = Column(JSON)
     DemandCollectionDataUltimateChain = Column(JSON)
     
-    SupplyCollectionDataGen = Column(JSON)
     SupplyCollectionDataDetail = Column(JSON)
+    SupplyCollectionDataContext = Column(JSON)
     SupplyCollectionDataExtensionChain = Column(JSON)
     SupplyCollectionDataUltimateChain = Column(JSON)
     

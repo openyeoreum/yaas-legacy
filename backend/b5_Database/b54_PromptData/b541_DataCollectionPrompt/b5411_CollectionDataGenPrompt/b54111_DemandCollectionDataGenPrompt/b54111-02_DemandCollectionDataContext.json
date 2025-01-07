@@ -1,5 +1,5 @@
 {
-    "TaskName": "DemandCollectionDataDetail",
+    "TaskName": "DemandCollectionDataContext",
     "OpenAI": {
         "BaseModel": {
             "ShortTokensModel": "gpt-4o-mini",
@@ -30,7 +30,7 @@
         },
         "MasterModel": "claude-3-5-sonnet-latest"
     },
-    "Temperature": 0.8,
+    "Temperature": 1,
     "OutputTokensRatio": 0.5,
     "OutputFormat": "json",
     "Example": [

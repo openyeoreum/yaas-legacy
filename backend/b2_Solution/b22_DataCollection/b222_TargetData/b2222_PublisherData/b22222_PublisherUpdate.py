@@ -232,6 +232,11 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, Data
     for i in range(len(DataList)):
         if DataList[i]['Id'] == InputDic['PublisherId']:
             if OutputDicList != []:
+                #### Search ####
+                #### Search-Detail ####
+                #### Search-Context ####
+                #### Search-Extention ####
+                #### Search-Ultimate ####
                 #### Context ####
                 # Context-Summary
                 ContextSummary = OutputDicList[0]['요약']

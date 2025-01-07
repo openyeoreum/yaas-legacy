@@ -6,7 +6,8 @@ sys.path.append("/yaas")
 
 from pinecone import Pinecone, ServerlessSpec
 from openai import OpenAI
-from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2212_DemandCollectionDataDetail import DemandCollectionDataDetailProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2212_DemandCollectionDataGen import DemandCollectionDataDetailProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2213_SupplyCollectionDataGen import SupplyCollectionDataDetailProcessUpdate
 
 ## Pinecone에 인덱스 생성
 def Pinecone_CreateIndex(Collection, IndexDimension = 1536):
@@ -337,13 +338,14 @@ def YaaSsearch(projectName, email, Search, Intention, Collection, Range):
         InputDic = {"Input": Search['Term'], "Intention": Intention}
 
         if Intention in ["Similarity", "SimilarityUltimate"]:
-            pass
+            Results = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic)
+            Results = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic)
 
         if Intention in ["Demand", "DemandUltimate"]:
-            DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic)
+            Results = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic)
 
         if Intention in ["Supply", "SupplyUltimate"]:
-            pass
+            Results = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic)
     
     elif Search['Type'] == "Match":
         Results = SearchEmbeddedData(Search, Intention, Collection, Range)
@@ -355,7 +357,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    Search = {"Type": "Search", "Term": "AI 솔루션 개발자 입니다. 지속적인 나의 발전을 위해 개발과 행보와 내용을 담은 유튜브 채널을 키우고 싶습니다."} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
+    Search = {"Type": "Search", "Term": "나는 지금 몸무게가 67키로그램의 30대 남성인데, 1달만에 60키로로 빼고 싶습니다."} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
     Intention = "DemandUltimate" # Similarity, SimilarityUltimate, Demand, DemandUltimate, Supply, SupplyUltimate
     Collection = "publisher" # Entire, Target, Trend, Publisher, Book ...
     Range = 100 # 10-100

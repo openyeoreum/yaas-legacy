@@ -5,6 +5,7 @@ import time
 import sys
 sys.path.append("/yaas")
 
+from datetime import datetime
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 
 ######################
@@ -12,21 +13,31 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Open
 ######################
 ## Process1: DemandCollectionDataDetail의 Filter(Error 예외처리)
 def DemandCollectionDataDetailFilter(Response, CheckCount):
-    # Error1: json 형식이 아닐 때의 예외 처리
+    # Error1: JSON 형식이 아닐 때의 예외 처리
     try:
         OutputDic = json.loads(Response)
     except json.JSONDecodeError:
         return "DemandCollectionDataDetail, JSONDecode에서 오류 발생: JSONDecodeError"
-    
-    # Error2: 자료의 구조가 다를 때의 예외 처리
+
+    # Error2: 최상위 필수 키 존재 여부 확인
     required_keys = ['핵심목적', '필요내용', '필요목표', '필요질문', '검색어완성도', '검색어피드백']
     missing_keys = [key for key in required_keys if key not in OutputDic]
     if missing_keys:
         return f"DemandCollectionDataDetail, JSONKeyError: 누락된 키: {', '.join(missing_keys)}"
     
-    # Error3: 검색어 피드백이 리스트 형태가 아닐 때의 예외 처리
-    if not isinstance(OutputDic['검색어피드백'], list):
-        return "DemandCollectionDataDetail, JSON에서 오류 발생: '검색어피드백'이 리스트 형태가 아님"
+    # Error3: 데이터 타입 검증
+    # 핵심목적, 필요내용, 필요목표, 필요질문은 문자열이어야 함
+    for key in ['핵심목적', '필요내용', '필요목표', '필요질문']:
+        if not isinstance(OutputDic[key], str):
+            return f"DemandCollectionDataDetail, JSON에서 오류 발생: '{key}'은 문자열이 아님"
+
+    # 검색어완성도는 0-100 사이의 정수여야 함
+    if not isinstance(OutputDic['검색어완성도'], int) or not (0 <= OutputDic['검색어완성도'] <= 100):
+        return "DemandCollectionDataDetail, JSON에서 오류 발생: '검색어완성도'는 0-100 사이의 정수가 아님"
+
+    # 검색어피드백은 문자열 리스트여야 함
+    if not isinstance(OutputDic['검색어피드백'], list) or not all(isinstance(item, str) for item in OutputDic['검색어피드백']):
+        return "DemandCollectionDataDetail, JSON에서 오류 발생: '검색어피드백'은 문자열 리스트가 아님"
     
     return OutputDic
 
@@ -34,35 +45,35 @@ def DemandCollectionDataDetailFilter(Response, CheckCount):
 def DemandCollectionDataContextFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
-        outputJson = json.loads(Response)
+        OutputDic = json.loads(Response)
     except json.JSONDecodeError:
         return "DemandCollectionDataContext, JSONDecode에서 오류 발생: JSONDecodeError"
     
     # Error2: 최상위 필수 키 존재 여부 확인
     required_top_level_keys = ['핵심목적', '분야', '필요', '정보의질']
-    missing_top_keys = [key for key in required_top_level_keys if key not in outputJson]
+    missing_top_keys = [key for key in required_top_level_keys if key not in OutputDic]
     if missing_top_keys:
         return f"DemandCollectionDataContext, JSONKeyError: 누락된 최상위 키: {', '.join(missing_top_keys)}"
     
     # Error3: 데이터 타입 확인 (핵심목적, 분야, 정보의질)
-    if not isinstance(outputJson['핵심목적'], str):
+    if not isinstance(OutputDic['핵심목적'], str):
         return "DemandCollectionDataContext, JSON에서 오류 발생: '핵심목적'은 문자열이 아님"
-    if not isinstance(outputJson['분야'], list) or not all(isinstance(item, str) for item in outputJson['분야']):
+    if not isinstance(OutputDic['분야'], list) or not all(isinstance(item, str) for item in OutputDic['분야']):
         return "DemandCollectionDataContext, JSON에서 오류 발생: '분야'는 문자열 리스트가 아님"
-    if not isinstance(outputJson['정보의질'], int) or not (0 <= outputJson['정보의질'] <= 100):
+    if not isinstance(OutputDic['정보의질'], int) or not (0 <= OutputDic['정보의질'] <= 100):
         return "DemandCollectionDataContext, JSON에서 오류 발생: '정보의질'은 0-100 사이의 정수가 아님"
 
     # Error4: '필요' 키의 구조와 데이터 검증
-    if not isinstance(outputJson['필요'], dict):
+    if not isinstance(OutputDic['필요'], dict):
         return "DemandCollectionDataContext, JSON에서 오류 발생: '필요'는 딕셔너리가 아님"
     
     required_sub_keys = ['필요내용', '필요목표', '필요질문']
-    missing_sub_keys = [key for key in required_sub_keys if key not in outputJson['필요']]
+    missing_sub_keys = [key for key in required_sub_keys if key not in OutputDic['필요']]
     if missing_sub_keys:
         return f"DemandCollectionDataContext, JSONKeyError: '필요' 딕셔너리에 누락된 키: {', '.join(missing_sub_keys)}"
     
     for sub_key in required_sub_keys:
-        sub_item = outputJson['필요'][sub_key]
+        sub_item = OutputDic['필요'][sub_key]
         if not isinstance(sub_item, dict):
             return f"DemandCollectionDataContext, JSON에서 오류 발생: '{sub_key}'는 딕셔너리가 아님"
         
@@ -84,25 +95,25 @@ def DemandCollectionDataContextFilter(Response, CheckCount):
         if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
             return f"DemandCollectionDataContext, JSON에서 오류 발생: '{sub_key} > 중요도'는 0-100 사이의 정수가 아님"
 
-    return outputJson
+    return OutputDic
 
 ## Process3: DemandCollectionDataExtensionChainFilter의 Filter(Error 예외처리)
 def DemandCollectionDataExtensionChainFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
-        outputJson = json.loads(Response)
+        OutputDic = json.loads(Response)
     except json.JSONDecodeError:
         return "DemandCollectionDataExtensionChain, JSONDecode에서 오류 발생: JSONDecodeError"
     
     # Error2: 최상위 키 검사 (전문데이터1~5)
     top_level_keys = [f"전문데이터{i}" for i in range(1, 6)]
-    missing_keys = [key for key in top_level_keys if key not in outputJson]
+    missing_keys = [key for key in top_level_keys if key not in OutputDic]
     if missing_keys:
         return f"DemandCollectionDataExtensionChain, JSONKeyError: 누락된 전문데이터 키: {', '.join(missing_keys)}"
     
     # Error3: 각 전문데이터 항목에 대한 검증
     for key in top_level_keys:
-        data = outputJson[key]
+        data = OutputDic[key]
 
         # 전문데이터 내부 필수 키 확인
         required_keys = ['핵심목적', '분야', '필요', '정보의질']
@@ -147,32 +158,32 @@ def DemandCollectionDataExtensionChainFilter(Response, CheckCount):
             if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
                 return f"DemandCollectionDataExtensionChain, JSON에서 오류 발생: '{key} > 필요 > {sub_key} > 중요도'는 0-100 사이의 정수가 아님"
 
-    return outputJson
+    return OutputDic
 
 ## Process4: DemandCollectionDataExtensionChainFilter의 Filter(Error 예외처리)
 def DemandCollectionDataUltimateChainFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
-        outputJson = json.loads(Response)
+        OutputDic = json.loads(Response)
     except json.JSONDecodeError:
         return "DemandCollectionDataUltimateChain, JSONDecode에서 오류 발생: JSONDecodeError"
 
     # Error2: 최상위 필수 키 확인
     required_top_level_keys = ['최초핵심목적', '궁극적핵심목적']
     linked_data_keys = [f'연계데이터{i}' for i in range(1, 6)]
-    missing_top_keys = [key for key in required_top_level_keys + linked_data_keys if key not in outputJson]
+    missing_top_keys = [key for key in required_top_level_keys + linked_data_keys if key not in OutputDic]
     if missing_top_keys:
         return f"DemandCollectionDataUltimateChain, JSONKeyError: 누락된 최상위 키: {', '.join(missing_top_keys)}"
 
     # Error3: 데이터 타입 검증 (최초핵심목적, 궁극적핵심목적)
-    if not isinstance(outputJson['최초핵심목적'], str):
+    if not isinstance(OutputDic['최초핵심목적'], str):
         return "DemandCollectionDataUltimateChain, JSON에서 오류 발생: '최초핵심목적'은 문자열이어야 합니다"
-    if not isinstance(outputJson['궁극적핵심목적'], str):
+    if not isinstance(OutputDic['궁극적핵심목적'], str):
         return "DemandCollectionDataUltimateChain, JSON에서 오류 발생: '궁극적핵심목적'은 문자열이어야 합니다"
 
     # Error4: 연계데이터 구조 검증
     for key in linked_data_keys:
-        data = outputJson[key]
+        data = OutputDic[key]
 
         # 연계데이터 내부 필수 키 확인
         required_keys = ['핵심목적', '분야', '필요', '정보의질']
@@ -217,7 +228,7 @@ def DemandCollectionDataUltimateChainFilter(Response, CheckCount):
             if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
                 return f"DemandCollectionDataUltimateChain, JSON에서 오류 발생: '{key} > 필요 > {sub_key} > 중요도'는 0-100 사이의 정수여야 합니다"
 
-    return outputJson
+    return OutputDic
 
 #######################
 ##### Process 응답 #####
@@ -252,117 +263,105 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
 ##### ProcessResponse 업데이트 #####
 ##################################
 ## ProcessResponseTemp 저장
-def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataJsonPath, DataTempPath):
+def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataTempPath):
     # DataTempPath 폴더가 없으면 생성
     if not os.path.exists(DataTempPath):
         os.makedirs(DataTempPath)
         
-    # 오리지날 DataList 불러와서 변경사항 저장
-    with open(DataJsonPath, 'r', encoding = 'utf-8') as DataListJson:
-        DataList = json.load(DataListJson)
+    #### Search ####
+    # Search-Term
+    Term = InputDic['Input']
+    # Search-Intention
+    Intention = InputDic['Intention']
+    ## SearchDic ##
+    SearchDic = {'Term': Term, 'Intention': Intention}
+    #### Search ####
     
-    # TextDataList 업데이트
-    for i in range(len(DataList)):
-        if DataList[i]['Id'] == InputDic['PublisherId']:
-            if OutputDicList != []:
-                #### Context ####
-                # Context-Summary
-                ContextSummary = OutputDicList[0]['요약']
-                # Context-KeyWord
-                ContextKeyWord = OutputDicList[0]['분야']
-                # Context-Demand
-                ContextDemandNeeds = {"Sentence": OutputDicList[0]['수요']['필요']['설명'], "KeyWord": OutputDicList[0]['수요']['필요']['키워드'], "Weight": OutputDicList[0]['수요']['필요']['중요도']}
-                ContextDemandPurpose = {"Sentence": OutputDicList[0]['수요']['목표']['설명'], "KeyWord": OutputDicList[0]['수요']['목표']['키워드'], "Weight": OutputDicList[0]['수요']['목표']['중요도']}
-                ContextDemandQuestion = {"Sentence": OutputDicList[0]['수요']['질문']['설명'], "KeyWord": OutputDicList[0]['수요']['질문']['키워드'], "Weight": OutputDicList[0]['수요']['질문']['중요도']}
-                ContextDemand = {'Needs': ContextDemandNeeds, 'Purpose': ContextDemandPurpose, 'Question': ContextDemandQuestion}
-                # Context-Supply
-                ContextSupplySatisfy = {"Sentence": OutputDicList[0]['공급']['충족']['설명'], "KeyWord": OutputDicList[0]['공급']['충족']['키워드'], "Weight": OutputDicList[0]['공급']['충족']['중요도']}
-                ContextSupplySupport = {"Sentence": OutputDicList[0]['공급']['달성']['설명'], "KeyWord": OutputDicList[0]['공급']['달성']['키워드'], "Weight": OutputDicList[0]['공급']['달성']['중요도']}
-                ContextSupplySolution = {"Sentence": OutputDicList[0]['공급']['해결책']['설명'], "KeyWord": OutputDicList[0]['공급']['해결책']['키워드'], "Weight": OutputDicList[0]['공급']['해결책']['중요도']}
-                ContextSupply = {'Satisfy': ContextSupplySatisfy, 'Support': ContextSupplySupport, 'Solution': ContextSupplySolution}
-                # Context-Weight
-                ContextWeight = OutputDicList[0]['정보의질']
-                ## ContextDic ##
-                ContextDic = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Supply': ContextSupply, 'Weight': ContextWeight}
-                #### Context ####
-
-                #### WMWM ####
-                # WMWM-Summary
-                WMWMSummary = OutputDicList[1]['요약']
-                # WMWM-Needs
-                WMWMNeeds = {"State": OutputDicList[1]['욕구상태']['욕구상태'], "Reason": OutputDicList[1]['욕구상태']['욕구상태선택이유'], "Weight": OutputDicList[1]['욕구상태']['중요도']}
-                # WMWM-Wisdom
-                WMWMWisdom = {"State": OutputDicList[1]['이해상태']['이해상태'], "Reason": OutputDicList[1]['이해상태']['이해상태선택이유'], "Weight": OutputDicList[1]['이해상태']['중요도']}
-                # WMWM-Mind
-                WMWMMind = {"State": OutputDicList[1]['마음상태']['마음상태'], "Reason": OutputDicList[1]['마음상태']['마음상태선택이유'], "Weight": OutputDicList[1]['마음상태']['중요도']}
-                # WMWM-Action
-                WMWMAction = {"State": OutputDicList[1]['행동상태']['행동상태'], "Reason": OutputDicList[1]['행동상태']['행동상태선택이유'], "Weight": OutputDicList[1]['행동상태']['중요도']}
-                # WMWM-Weight
-                WMWMWeight = OutputDicList[1]['정보의질']
-                ## WMWMDic ##
-                WMWMDic = {'Summary': WMWMSummary, 'Needs': WMWMNeeds, 'Wisdom': WMWMWisdom, 'Mind': WMWMMind, 'Action': WMWMAction, 'Weight': WMWMWeight}
-                #### WMWM ####
-
-                #### ServiceDemand ####
-                ServiceDemandSummary = OutputDicList[2]['요약']
-                # ServiceDemand-Textbook
-                ServiceDemandTextbook = {'Needs': OutputDicList[2]['텍스트북']['제작필요'], 'Product': OutputDicList[2]['텍스트북']['제작물'], 'Weight': OutputDicList[2]['텍스트북']['필요도']}
-                # ServiceDemand-Audiobook
-                ServiceDemandAudiobook = {'Needs': OutputDicList[2]['오디오북']['제작필요'], 'Product': OutputDicList[2]['오디오북']['제작물'], 'Weight': OutputDicList[2]['오디오북']['필요도']}
-                # ServiceDemand-Videobook
-                ServiceDemandVideobook = {'Needs': OutputDicList[2]['비디오북']['제작필요'], 'Product': OutputDicList[2]['비디오북']['제작물'], 'Weight': OutputDicList[2]['비디오북']['필요도']}
-                # ServiceDemand-ETC
-                ServiceDemandETC = {'Needs': OutputDicList[2]['기타']['제작필요'], 'Product': OutputDicList[2]['기타']['제작물'], 'Weight': OutputDicList[2]['기타']['필요도']}
-                # ServiceDemand-Weight
-                ServiceDemandWeight = OutputDicList[2]['정보의질']
-                ## ServiceDemandDic ##
-                ServiceDemandDic = {'Summary': ServiceDemandSummary, 'Textbook': ServiceDemandTextbook, 'Audiobook': ServiceDemandAudiobook, 'Videobook': ServiceDemandVideobook, 'ETC': ServiceDemandETC, 'Weight': ServiceDemandWeight}
-                #### ServiceDemand ####
-                
-                DataTemp = {MainKey: {'Context': ContextDic, 'WMWM': WMWMDic, 'ServiceDemand': ServiceDemandDic}}
-            else:
-                DataTemp = {MainKey: None}
-            
-            # DataTempJson 저장
-            DataTempJsonPath = os.path.join(DataTempPath, f"PublisherData_({DataList[i]['Id']})_{DataList[i]['PublisherInformation']['Name']}.json")
-            with open(DataTempJsonPath, 'w', encoding = 'utf-8') as DataTempJson:
-                json.dump(DataTemp, DataTempJson, ensure_ascii = False, indent = 4)
-            break
-
-##### Process 추가 후처리 #####
-
-##### Process 추가 후처리 #####
-
-## ProcessResponse 업데이트 및 저장
-def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
-    # 오리지날 DataList 불러와서 변경사항 저장
-    with open(DataJsonPath, 'r', encoding='utf-8') as DataListJson:
-        DataList = json.load(DataListJson)
+    #### Detail ####
+    # Detail-Summary
+    ScarchSummary = OutputDicList[0]['핵심목적']
+    # Detail-Needs
+    DetailNeeds = OutputDicList[0]['필요내용']
+    # Detail-Purpose
+    DetailPurpose = OutputDicList[0]['필요목표']
+    # Detail-Question
+    DetailQuestion = OutputDicList[0]['필요질문']
+    # Detail-Weight
+    DetailWeight = OutputDicList[0]['검색어완성도']
+    # Detail-Feedback
+    DetailFeedback = OutputDicList[0]['검색어피드백']
+    ## DetailDic ##
+    DetailDic = {'Summary': ScarchSummary, 'Needs': DetailNeeds, 'Purpose': DetailPurpose, 'Question': DetailQuestion, 'Weight': DetailWeight, 'Feedback': DetailFeedback}
+    #### Detail ####
+    
+    #### Context ####
+    # Context-Summary
+    ContextSummary = OutputDicList[1]['핵심목적']
+    # Context-KeyWord
+    ContextKeyWord = OutputDicList[1]['분야']
+    # Context-Demand
+    ContextDemandNeeds = {"Sentence": OutputDicList[1]['필요']['필요내용']['설명'], "KeyWord": OutputDicList[1]['필요']['필요내용']['키워드'], "Weight": OutputDicList[1]['필요']['필요내용']['중요도']}
+    ContextDemandPurpose = {"Sentence": OutputDicList[1]['필요']['필요목표']['설명'], "KeyWord": OutputDicList[1]['필요']['필요목표']['키워드'], "Weight": OutputDicList[1]['필요']['필요목표']['중요도']}
+    ContextDemandQuestion = {"Sentence": OutputDicList[1]['필요']['필요질문']['설명'], "KeyWord": OutputDicList[1]['필요']['필요질문']['키워드'], "Weight": OutputDicList[1]['필요']['필요질문']['중요도']}
+    ContextDemand = {'Needs': ContextDemandNeeds, 'Purpose': ContextDemandPurpose, 'Question': ContextDemandQuestion}
+    # Context-Weight
+    ContextWeight = OutputDicList[1]['정보의질']
+    ## ContextDic ##
+    ContextDic = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Weight': ContextWeight}
+    #### Context ####
+    
+    #### ContextExtension ####
+    ContextExtensionDicList = []
+    for i in range(5):
+        # ContextExtension-Summary
+        ContextExtensionSummary = OutputDicList[2][f'전문데이터{i+1}']['핵심목적']
+        # ContextExtension-KeyWord
+        ContextExtensionKeyWord = OutputDicList[2][f'전문데이터{i+1}']['분야']
+        # ContextExtension-Demand
+        ContextExtensionDemandNeeds = {"Sentence": OutputDicList[2][f'전문데이터{i+1}']['필요']['필요내용']['설명'], "KeyWord": OutputDicList[2][f'전문데이터{i+1}']['필요']['필요내용']['키워드'], "Weight": OutputDicList[2][f'전문데이터{i+1}']['필요']['필요내용']['중요도']}
+        ContextExtensionDemandPurpose = {"Sentence": OutputDicList[2][f'전문데이터{i+1}']['필요']['필요목표']['설명'], "KeyWord": OutputDicList[2][f'전문데이터{i+1}']['필요']['필요목표']['키워드'], "Weight": OutputDicList[2][f'전문데이터{i+1}']['필요']['필요목표']['중요도']}
+        ContextExtensionDemandQuestion = {"Sentence": OutputDicList[2][f'전문데이터{i+1}']['필요']['필요질문']['설명'], "KeyWord": OutputDicList[2][f'전문데이터{i+1}']['필요']['필요질문']['키워드'], "Weight": OutputDicList[2][f'전문데이터{i+1}']['필요']['필요질문']['중요도']}
+        ContextExtensionDemand = {'Needs': ContextExtensionDemandNeeds, 'Purpose': ContextExtensionDemandPurpose, 'Question': ContextExtensionDemandQuestion}
+        # ContextExtension-Weight
+        ContextExtensionWeight = OutputDicList[2][f'전문데이터{i+1}']['정보의질']
+        ## ContextExtensionDic ##
+        ContextExtensionDic = {'Summary': ContextExtensionSummary, 'KeyWord': ContextExtensionKeyWord, 'Demand': ContextExtensionDemand, 'Weight': ContextExtensionWeight}
+        ContextExtensionDicList.append(ContextExtensionDic)
+    #### ContextExtension ####
+    
+    #### ContextUltimate ####
+    ContextUltimateDicList = []
+    for i in range(5):
+        # ContextUltimate-Summary
+        ContextUltimateSummary = OutputDicList[3][f'연계데이터{i+1}']['핵심목적']
+        # ContextUltimate-KeyWord
+        ContextUltimateKeyWord = OutputDicList[3][f'연계데이터{i+1}']['분야']
+        # ContextUltimate-Demand
+        ContextUltimateDemandNeeds = {"Sentence": OutputDicList[3][f'연계데이터{i+1}']['필요']['필요내용']['설명'], "KeyWord": OutputDicList[3][f'연계데이터{i+1}']['필요']['필요내용']['키워드'], "Weight": OutputDicList[3][f'연계데이터{i+1}']['필요']['필요내용']['중요도']}
+        ContextUltimateDemandPurpose = {"Sentence": OutputDicList[3][f'연계데이터{i+1}']['필요']['필요목표']['설명'], "KeyWord": OutputDicList[3][f'연계데이터{i+1}']['필요']['필요목표']['키워드'], "Weight": OutputDicList[3][f'연계데이터{i+1}']['필요']['필요목표']['중요도']}
+        ContextUltimateDemandQuestion = {"Sentence": OutputDicList[3][f'연계데이터{i+1}']['필요']['필요질문']['설명'], "KeyWord": OutputDicList[3][f'연계데이터{i+1}']['필요']['필요질문']['키워드'], "Weight": OutputDicList[3][f'연계데이터{i+1}']['필요']['필요질문']['중요도']}
+        ContextUltimateDemand = {'Needs': ContextUltimateDemandNeeds, 'Purpose': ContextUltimateDemandPurpose, 'Question': ContextUltimateDemandQuestion}
+        # ContextUltimate-Weight
+        ContextUltimateWeight = OutputDicList[3][f'연계데이터{i+1}']['정보의질']
+        ## ContextUltimateDic ##
+        ContextUltimateDic = {'Summary': ContextUltimateSummary, 'KeyWord': ContextUltimateKeyWord, 'Demand': ContextUltimateDemand, 'Weight': ContextUltimateWeight}
+        ContextUltimateDicList.append(ContextUltimateDic)
+    #### ContextUltimate ####
+    
+    DataTemp = {MainKey: {'Search': SearchDic, 'Detail': DetailDic, 'Context': ContextDic, 'ContextExtension': ContextExtensionDicList, 'ContextUltimate': ContextUltimateDicList}}
+    
+    # DataTempJson 저장
+    DataTempJsonPath = os.path.join(DataTempPath, f"DemandCollectionData_({datetime.now().strftime('%Y%m%d%H%M%S')})_{re.sub(r'[^가-힣a-zA-Z0-9]', '', Term)[:15]}.json")
+    with open(DataTempJsonPath, 'w', encoding = 'utf-8') as DataTempJson:
+        json.dump(DataTemp, DataTempJson, ensure_ascii = False, indent = 4)
         
-    if MainKey not in DataList[-1]:
-        # TextDataList 업데이트
-        for i in range(len(DataList)):
-            try:
-                DataTempJsonPath = os.path.join(DataTempPath, f"PublisherData_({DataList[i]['Id']})_{DataList[i]['PublisherInformation']['Name']}.json")
-                with open(DataTempJsonPath, 'r', encoding = 'utf-8') as DataTempJson:
-                    DataTemp = json.load(DataTempJson)
-                DataList[i][MainKey] = DataTemp[MainKey]
-                ##### Process 추가 후처리 #####
-
-                ##### Process 추가 후처리 #####
-            except:
-                print(f"[ DataTempJsonPath Is None : >>> PublisherData_({DataList[i]['Id']})_{DataList[i]['PublisherInformation']['Name']}.json <<< 파일 존재하지 않음 ]")
-                continue
-        
-        # DataListJson 저장
-        with open(DataJsonPath, 'w', encoding = 'utf-8') as DataListJson:
-            json.dump(DataList, DataListJson, ensure_ascii = False, indent = 4)
+    return DataTemp
 
 ################################
 ##### Process 진행 및 업데이트 #####
 ################################
 ## DemandCollectionDataDetail 프롬프트 요청 및 결과물 Json화
-def DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode = "Master", MainKey = 'DemandCollectionData', MessagesReview = "on"):
+def DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode = "Master", MainKey = 'DemandSearchAnalysis', MessagesReview = "on"):
     print(f"< User: {email} | Project: {projectName} | DemandCollectionDataDetailUpdate 시작 >")
     ## TotalPublisherData 경로 설정
     TotalDemandCollectionDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1511_DemandCollectionData/s15111_TotalDemandCollectionData"
@@ -382,10 +381,10 @@ def DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
     OutputDicList.append(DemandCollectionDataDetailResponse)
     
     ## Process2: DemandCollectionDataContext Response 생성
+    Input2 = DemandCollectionDataDetailResponse.copy()
     DeleteKeys = ['검색어완성도', '검색어피드백']
     for key in DeleteKeys:
-        del DemandCollectionDataDetailResponse[key]
-    Input2 = DemandCollectionDataDetailResponse
+        del Input2[key]
     
     DemandCollectionDataContextResponse = ProcessResponse(projectName, email, "DemandCollectionDataContext", Input2, processCount, InputCount, DemandCollectionDataContextFilter, CheckCount, "OpenAI", mode, MessagesReview)
     OutputDicList.append(DemandCollectionDataContextResponse)
@@ -402,18 +401,14 @@ def DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
         
         DemandCollectionDataUltimateChainResponse = ProcessResponse(projectName, email, "DemandCollectionDataUltimateChain", Input4, processCount, InputCount, DemandCollectionDataUltimateChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
         OutputDicList.append(DemandCollectionDataUltimateChainResponse)
-    sys.exit()
+
     ## ProcessResponse 임시저장
-    ProcessResponseTempSave(MainKey, InputDic, OutputDicList, TotalDemandCollectionDataJsonPath, TotalDemandCollectionDataTempPath)
-    
-    ## ProcessResponse 업데이트
-    ProcessResponseUpdate(MainKey, TotalDemandCollectionDataJsonPath, TotalDemandCollectionDataTempPath)
+    DataTemp = ProcessResponseTempSave(MainKey, InputDic, OutputDicList, TotalDemandCollectionDataTempPath)
+
     print(f"[ User: {email} | Project: {projectName} | DemandCollectionDataDetailUpdate 완료 ]\n")
     
-    return OutputDicList
+    return DataTemp
 
-## 검색어 기반 검색 폼
-## 검색이 더 잘되도록 하기 위한 사전 작업 (빠진 데이터 보충을 위해 유사 데이터 3개 생성 후 검색, 필드별 내용 변환 등)
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
@@ -421,4 +416,4 @@ if __name__ == "__main__":
     ProjectName = '241204_개정교육과정초등교과별이해연수'
     #########################################################################
     
-    DemandCollectionDataDetailUpdate(ProjectName, email)
+    DemandCollectionDataDetailProcessUpdate(ProjectName, email)

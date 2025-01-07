@@ -406,6 +406,17 @@ class Prompt(Base):
     
     # ScriptData
     
+    # CollectionDataGenPrompt
+    DemandCollectionDataGen = Column(JSON)
+    DemandCollectionDataDetail = Column(JSON)
+    DemandCollectionDataExtensionChain = Column(JSON)
+    DemandCollectionDataUltimateChain = Column(JSON)
+    
+    SupplyCollectionDataGen = Column(JSON)
+    SupplyCollectionDataDetail = Column(JSON)
+    SupplyCollectionDataExtensionChain = Column(JSON)
+    SupplyCollectionDataUltimateChain = Column(JSON)
+    
     ## ScriptPrompt
     ChangesAfterMeditation_Script = Column(JSON)
     SejongCityOfficeOfEducation_Poem = Column(JSON)

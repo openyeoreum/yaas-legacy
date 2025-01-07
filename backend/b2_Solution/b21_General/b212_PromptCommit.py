@@ -29,6 +29,14 @@ def AddPromptToDB():
         bestSellerContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-01_BestSellerContextDefine.json")
         bestSellerWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-02_BestSellerWMWMDefine.json")
         bestSellerCommentAnalysis = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-03_BestSellerCommentAnalysis.json")
+        demandCollectionDataGen = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54141_DemandCollectionDataGenPrompt/b54141-01_DemandCollectionDataGen.json")
+        demandCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54141_DemandCollectionDataGenPrompt/b54141-02_DemandCollectionDataDetail.json")
+        demandCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54141_DemandCollectionDataGenPrompt/b54141-03_DemandCollectionDataExtensionChain.json")
+        demandCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54141_DemandCollectionDataGenPrompt/b54141-04_DemandCollectionDataUltimateChain.json")
+        supplyCollectionDataGen = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54142_SupplyCollectionDataGenPrompt/b54142-01_SupplyCollectionDataGen.json")
+        supplyCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54142_SupplyCollectionDataGenPrompt/b54142-02_SupplyCollectionDataDetail.json")
+        supplyCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54142_SupplyCollectionDataGenPrompt/b54142-03_SupplyCollectionDataExtensionChain.json")
+        supplyCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54142_SupplyCollectionDataGenPrompt/b54142-04_SupplyCollectionDataUltimateChain.json")
         # ScriptPrompt
         changesAfterMeditation_Script = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5421_InstantScriptPrompt/b5421-01_ChangesAfterMeditation_Script.json")
         sejongCityOfficeOfEducation_Poem = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5421_InstantScriptPrompt/b5421-02_SejongCityOfficeOfEducation_Poem.json")
@@ -85,6 +93,14 @@ def AddPromptToDB():
             ExistingPrompt.BestSellerContextDefine = bestSellerContextDefine
             ExistingPrompt.BestSellerWMWMDefine = bestSellerWMWMDefine
             ExistingPrompt.BestSellerCommentAnalysis = bestSellerCommentAnalysis
+            ExistingPrompt.DemandCollectionDataGen = demandCollectionDataGen
+            ExistingPrompt.DemandCollectionDataDetail = demandCollectionDataDetail
+            ExistingPrompt.DemandCollectionDataExtensionChain = demandCollectionDataExtensionChain
+            ExistingPrompt.DemandCollectionDataUltimateChain = demandCollectionDataUltimateChain
+            ExistingPrompt.SupplyCollectionDataGen = supplyCollectionDataGen
+            ExistingPrompt.SupplyCollectionDataDetail = supplyCollectionDataDetail
+            ExistingPrompt.SupplyCollectionDataExtensionChain = supplyCollectionDataExtensionChain
+            ExistingPrompt.SupplyCollectionDataUltimateChain = supplyCollectionDataUltimateChain
             ExistingPrompt.ChangesAfterMeditation_Script = changesAfterMeditation_Script
             ExistingPrompt.SejongCityOfficeOfEducation_Poem = sejongCityOfficeOfEducation_Poem
             ExistingPrompt.BookPreprocess = bookPreprocess
@@ -136,6 +152,14 @@ def AddPromptToDB():
                 BestSellerContextDefine = bestSellerContextDefine,
                 BestSellerWMWMDefine = bestSellerWMWMDefine,
                 BestSellerCommentAnalysis = bestSellerCommentAnalysis,
+                DemandCollectionDataGen = demandCollectionDataGen,
+                DemandCollectionDataDetail = demandCollectionDataDetail,
+                DemandCollectionDataExtensionChain = demandCollectionDataExtensionChain,
+                DemandCollectionDataUltimateChain = demandCollectionDataUltimateChain,
+                SupplyCollectionDataGen = supplyCollectionDataGen,
+                SupplyCollectionDataDetail = supplyCollectionDataDetail,
+                SupplyCollectionDataExtensionChain = supplyCollectionDataExtensionChain,
+                SupplyCollectionDataUltimateChain = supplyCollectionDataUltimateChain,
                 ChangesAfterMeditation_Script = changesAfterMeditation_Script,
                 SejongCityOfficeOfEducation_Poem = sejongCityOfficeOfEducation_Poem,
                 BookPreprocess = bookPreprocess,

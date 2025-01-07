@@ -332,7 +332,7 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
 def PublisherProcessUpdate(projectName, email, mode = "Master", MainKey = 'PublisherAnalysis', MessagesReview = "on"):
     print(f"< User: {email} | Project: {projectName} | PublisherProcessUpdate 시작 >")
     ## TotalPublisherData 경로 설정
-    TotalPublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData"
+    TotalPublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TargetData/s1522_PublisherData/s15221_TotalPublisherData"
     TotalPublisherDataJsonPath = os.path.join(TotalPublisherDataPath, 'TotalPublisherData.json')
     TotalPublisherDataTempPath = os.path.join(TotalPublisherDataPath, 'TotalPublisherDataTemp')
     

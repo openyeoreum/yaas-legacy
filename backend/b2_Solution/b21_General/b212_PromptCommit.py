@@ -23,20 +23,20 @@ def AddPromptToDB():
         PromptDataPath = GetPromptDataPath()
         
         # DataCollectionPrompt
-        publisherContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-01_PublisherContextDefine.json")
-        publisherWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-02_PublisherWMWMDefine.json")
-        publisherServiceDemand = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_TargetDataPrompt/b5411-03_PublisherServiceDemand.json")
-        bestSellerContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-01_BestSellerContextDefine.json")
-        bestSellerWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-02_BestSellerWMWMDefine.json")
-        bestSellerCommentAnalysis = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TrendDataPrompt/b5412-03_BestSellerCommentAnalysis.json")
-        demandCollectionDataGen = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54141_DemandCollectionDataGenPrompt/b54141-01_DemandCollectionDataGen.json")
-        demandCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54141_DemandCollectionDataGenPrompt/b54141-02_DemandCollectionDataDetail.json")
-        demandCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54141_DemandCollectionDataGenPrompt/b54141-03_DemandCollectionDataExtensionChain.json")
-        demandCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54141_DemandCollectionDataGenPrompt/b54141-04_DemandCollectionDataUltimateChain.json")
-        supplyCollectionDataGen = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54142_SupplyCollectionDataGenPrompt/b54142-01_SupplyCollectionDataGen.json")
-        supplyCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54142_SupplyCollectionDataGenPrompt/b54142-02_SupplyCollectionDataDetail.json")
-        supplyCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54142_SupplyCollectionDataGenPrompt/b54142-03_SupplyCollectionDataExtensionChain.json")
-        supplyCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5414_CollectionDataGenPrompt/b54142_SupplyCollectionDataGenPrompt/b54142-04_SupplyCollectionDataUltimateChain.json")
+        demandCollectionDataGen = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-01_DemandCollectionDataGen.json")
+        demandCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-02_DemandCollectionDataDetail.json")
+        demandCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-03_DemandCollectionDataExtensionChain.json")
+        demandCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-04_DemandCollectionDataUltimateChain.json")
+        supplyCollectionDataGen = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-01_SupplyCollectionDataGen.json")
+        supplyCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-02_SupplyCollectionDataDetail.json")
+        supplyCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-03_SupplyCollectionDataExtensionChain.json")
+        supplyCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-04_SupplyCollectionDataUltimateChain.json")
+        publisherContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-01_PublisherContextDefine.json")
+        publisherWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-02_PublisherWMWMDefine.json")
+        publisherServiceDemand = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-03_PublisherServiceDemand.json")
+        bestSellerContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5413_TrendDataPrompt/b5413-01_BestSellerContextDefine.json")
+        bestSellerWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5413_TrendDataPrompt/b5413-02_BestSellerWMWMDefine.json")
+        bestSellerCommentAnalysis = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5413_TrendDataPrompt/b5413-03_BestSellerCommentAnalysis.json")
         # ScriptPrompt
         changesAfterMeditation_Script = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5421_InstantScriptPrompt/b5421-01_ChangesAfterMeditation_Script.json")
         sejongCityOfficeOfEducation_Poem = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5421_InstantScriptPrompt/b5421-02_SejongCityOfficeOfEducation_Poem.json")
@@ -87,12 +87,6 @@ def AddPromptToDB():
 
         # DB Commit
         if ExistingPrompt:
-            ExistingPrompt.PublisherContextDefine = publisherContextDefine
-            ExistingPrompt.PublisherWMWMDefine = publisherWMWMDefine
-            ExistingPrompt.PublisherServiceDemand = publisherServiceDemand
-            ExistingPrompt.BestSellerContextDefine = bestSellerContextDefine
-            ExistingPrompt.BestSellerWMWMDefine = bestSellerWMWMDefine
-            ExistingPrompt.BestSellerCommentAnalysis = bestSellerCommentAnalysis
             ExistingPrompt.DemandCollectionDataGen = demandCollectionDataGen
             ExistingPrompt.DemandCollectionDataDetail = demandCollectionDataDetail
             ExistingPrompt.DemandCollectionDataExtensionChain = demandCollectionDataExtensionChain
@@ -101,6 +95,12 @@ def AddPromptToDB():
             ExistingPrompt.SupplyCollectionDataDetail = supplyCollectionDataDetail
             ExistingPrompt.SupplyCollectionDataExtensionChain = supplyCollectionDataExtensionChain
             ExistingPrompt.SupplyCollectionDataUltimateChain = supplyCollectionDataUltimateChain
+            ExistingPrompt.PublisherContextDefine = publisherContextDefine
+            ExistingPrompt.PublisherWMWMDefine = publisherWMWMDefine
+            ExistingPrompt.PublisherServiceDemand = publisherServiceDemand
+            ExistingPrompt.BestSellerContextDefine = bestSellerContextDefine
+            ExistingPrompt.BestSellerWMWMDefine = bestSellerWMWMDefine
+            ExistingPrompt.BestSellerCommentAnalysis = bestSellerCommentAnalysis
             ExistingPrompt.ChangesAfterMeditation_Script = changesAfterMeditation_Script
             ExistingPrompt.SejongCityOfficeOfEducation_Poem = sejongCityOfficeOfEducation_Poem
             ExistingPrompt.BookPreprocess = bookPreprocess
@@ -146,12 +146,6 @@ def AddPromptToDB():
             print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
         else:
             prompt = Prompt(
-                PublisherContextDefine = publisherContextDefine,
-                PublisherWMWMDefine = publisherWMWMDefine,
-                PublisherServiceDemand = publisherServiceDemand,
-                BestSellerContextDefine = bestSellerContextDefine,
-                BestSellerWMWMDefine = bestSellerWMWMDefine,
-                BestSellerCommentAnalysis = bestSellerCommentAnalysis,
                 DemandCollectionDataGen = demandCollectionDataGen,
                 DemandCollectionDataDetail = demandCollectionDataDetail,
                 DemandCollectionDataExtensionChain = demandCollectionDataExtensionChain,
@@ -160,6 +154,12 @@ def AddPromptToDB():
                 SupplyCollectionDataDetail = supplyCollectionDataDetail,
                 SupplyCollectionDataExtensionChain = supplyCollectionDataExtensionChain,
                 SupplyCollectionDataUltimateChain = supplyCollectionDataUltimateChain,
+                PublisherContextDefine = publisherContextDefine,
+                PublisherWMWMDefine = publisherWMWMDefine,
+                PublisherServiceDemand = publisherServiceDemand,
+                BestSellerContextDefine = bestSellerContextDefine,
+                BestSellerWMWMDefine = bestSellerWMWMDefine,
+                BestSellerCommentAnalysis = bestSellerCommentAnalysis,
                 ChangesAfterMeditation_Script = changesAfterMeditation_Script,
                 SejongCityOfficeOfEducation_Poem = sejongCityOfficeOfEducation_Poem,
                 BookPreprocess = bookPreprocess,

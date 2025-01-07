@@ -390,7 +390,7 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
 def BookProcessUpdate(projectName, email, mode = "Master", MainKey = 'BookAnalysis', MessagesReview = "on"):
     print(f"< User: {email} | Project: {projectName} | BookProcessUpdate 시작 >")
     ## TotalBookData 경로 설정
-    TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_BookData/s15221_TotalBookData"
+    TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s153_TrendData/s1532_BookData/s15321_TotalBookData"
     TotalBookDataJsonPath = os.path.join(TotalBookDataPath, 'TotalBookData.json')
     TotalBookDataTempPath = os.path.join(TotalBookDataPath, 'TotalBookDataTemp')
     

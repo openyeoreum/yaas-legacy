@@ -394,6 +394,17 @@ class Prompt(Base):
 
     ## Yeoreum
     ## DataCollectionPrompt
+    # CollectionDataGenPrompt
+    DemandCollectionDataGen = Column(JSON)
+    DemandCollectionDataDetail = Column(JSON)
+    DemandCollectionDataExtensionChain = Column(JSON)
+    DemandCollectionDataUltimateChain = Column(JSON)
+    
+    SupplyCollectionDataGen = Column(JSON)
+    SupplyCollectionDataDetail = Column(JSON)
+    SupplyCollectionDataExtensionChain = Column(JSON)
+    SupplyCollectionDataUltimateChain = Column(JSON)
+    
     # TargetData
     PublisherContextDefine = Column(JSON)
     PublisherWMWMDefine = Column(JSON)
@@ -405,17 +416,6 @@ class Prompt(Base):
     BestSellerCommentAnalysis = Column(JSON)
     
     # ScriptData
-    
-    # CollectionDataGenPrompt
-    DemandCollectionDataGen = Column(JSON)
-    DemandCollectionDataDetail = Column(JSON)
-    DemandCollectionDataExtensionChain = Column(JSON)
-    DemandCollectionDataUltimateChain = Column(JSON)
-    
-    SupplyCollectionDataGen = Column(JSON)
-    SupplyCollectionDataDetail = Column(JSON)
-    SupplyCollectionDataExtensionChain = Column(JSON)
-    SupplyCollectionDataUltimateChain = Column(JSON)
     
     ## ScriptPrompt
     ChangesAfterMeditation_Script = Column(JSON)

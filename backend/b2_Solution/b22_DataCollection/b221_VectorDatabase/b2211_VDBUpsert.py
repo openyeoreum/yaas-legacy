@@ -338,5 +338,5 @@ def UpsertCollectionData(TotalCollectionDataTempPath, CollectionName):
 
 if __name__ == "__main__":
     CollectionName = "publisher"
-    TotalCollectionDataTempPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData/TotalPublisherDataTemp"
+    TotalCollectionDataTempPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TargetData/s1522_PublisherData/s15221_TotalPublisherData/TotalPublisherDataTemp"
     UpsertCollectionData(TotalCollectionDataTempPath, CollectionName)

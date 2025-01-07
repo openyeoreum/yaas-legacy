@@ -347,7 +347,7 @@ def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 50
 def PublisherDataUpdate():
     print(f"[ 출판사 이메일 및 메인페이지 정보 스크래핑 시작 ]\n")
     
-    PublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData"
+    PublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TargetData/s1522_PublisherData/s15221_TotalPublisherData"
     TotalPublisherDataCSVPath = os.path.join(PublisherDataPath, "TotalPublisherDataCSV")
     TotalPublisherDataJsonPath = os.path.join(PublisherDataPath, "TotalPublisherData.json")
     TotalPublisherDataAdditionCSVPath = os.path.join(PublisherDataPath, "TotalPublisherDataAddition", "TotalPublisherDataAddition.csv")

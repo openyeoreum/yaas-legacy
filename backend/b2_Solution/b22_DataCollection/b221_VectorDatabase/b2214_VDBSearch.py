@@ -45,10 +45,10 @@ def GetWeight(Weight):
 ## TempFilePaths 생성
 def GetCollectionDataPaths(Collection):
     if Collection == 'publisher' or Collection == 'Publisher':
-        TempFolderPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_TargetData/s1512_PublisherData/s15121_TotalPublisherData/TotalPublisherDataTemp"
+        TempFolderPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TargetData/s1522_PublisherData/s15221_TotalPublisherData/TotalPublisherDataTemp"
         MainKey = 'PublisherAnalysis'
     elif Collection == 'book' or Collection == 'Book':
-        TempFolderPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TrendData/s1522_BookData/s15221_TotalBookData/TotalBookDataTemp"
+        TempFolderPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s153_TrendData/s1532_BookData/s15321_TotalBookData/TotalBookDataTemp"
         MainKey = "BookAnalysis"
     ## ... 추가 예정
     

@@ -284,8 +284,12 @@ def VDBDemandCollectionDataGenUpdate(projectName, email, Input, mode = "Master",
     PublisherWMWMDefineResponse = ProcessResponse(projectName, email, "DemandCollectionDataDetail", Input, processCount, InputCount, DemandCollectionDataDetailFilter, CheckCount, "OpenAI", mode, MessagesReview)
     OutputDicList.append(PublisherWMWMDefineResponse)
     
-    ## Process3: DemandCollectionDataExtension Response 생성
-    PublisherServiceDemandResponse = ProcessResponse(projectName, email, "DemandCollectionDataExtension", Input, processCount, InputCount, DemandCollectionDataExtensionFilter, CheckCount, "OpenAI", mode, MessagesReview)
+    ## Process3: DemandCollectionDataExtensionChain Response 생성
+    PublisherServiceDemandResponse = ProcessResponse(projectName, email, "DemandCollectionDataExtensionChain", Input, processCount, InputCount, DemandCollectionDataExtensionChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
+    OutputDicList.append(PublisherServiceDemandResponse)
+    
+    ## Process4: DemandCollectionDataUltimateChain Response 생성
+    PublisherServiceDemandResponse = ProcessResponse(projectName, email, "DemandCollectionDataUltimateChain", Input, processCount, InputCount, DemandCollectionDataUltimateChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
     OutputDicList.append(PublisherServiceDemandResponse)
     
     ## ProcessResponse 임시저장

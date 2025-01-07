@@ -76,7 +76,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n(<데이터>를 정리하여 <세분화된데이터.json>을 작성해주세요)\n",
+                    "Mark": "\n\n(<데이터>를 세분화하여 <세분화된데이터.json>을 작성해주세요)\n",
                     "InputMark": "<데이터>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
@@ -135,7 +135,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n(<데이터>를 정리하여 <세분화된데이터.json>을 작성해주세요)\n",
+                    "Mark": "\n\n(<데이터>를 세분화하여 <세분화된데이터.json>을 작성해주세요)\n",
                     "InputMark": "<데이터>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
@@ -187,7 +187,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n(<데이터>를 정리하여 <세분화된데이터.json>을 작성해주세요)\n",
+                    "Mark": "\n\n(<데이터>를 세분화하여 <세분화된데이터.json>을 작성해주세요)\n",
                     "InputMark": "<데이터>\n",
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
@@ -245,7 +245,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n(<데이터>를 정리하여 <세분화된데이터.json>을 작성해주세요)\n",
+                    "Mark": "\n\n(<데이터>를 세분화하여 <세분화된데이터.json>을 작성해주세요)\n",
                     "InputMark": "<데이터>\n",
                     "InputStarter": "",
                     "InputMemory": "InputMemory",

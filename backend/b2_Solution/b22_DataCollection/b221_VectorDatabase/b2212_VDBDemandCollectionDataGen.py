@@ -10,43 +10,43 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Open
 ######################
 ##### Filter 조건 #####
 ######################
-## Process1: VDBCollectionDataGen의 Filter(Error 예외처리)
-def VDBCollectionDataGenFilter(Response, CheckCount):
+## Process1: VDBDemandCollectionDataGen의 Filter(Error 예외처리)
+def VDBDemandCollectionDataGenFilter(Response, CheckCount):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(Response)
     except json.JSONDecodeError:
-        return "VDBCollectionDataGen, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "VDBDemandCollectionDataGen, JSONDecode에서 오류 발생: JSONDecodeError"
     
     # Error2: 딕셔너리가 "정리"의 키로 시작하지 않을때의 예외처리
     try:
         OutputDic = outputJson['정리']
     except KeyError:
-        return "VDBCollectionDataGen, JSON에서 오류 발생: '정리' 미포함"
+        return "VDBDemandCollectionDataGen, JSON에서 오류 발생: '정리' 미포함"
     
     # Error3: 자료의 구조가 다를 때의 예외 처리
     required_keys = ['요약', '분야', '수요', '공급', '정보의질']
     if not all(key in OutputDic for key in required_keys):
-        return "VDBCollectionDataGen, JSON에서 오류 발생: JSONKeyError"
+        return "VDBDemandCollectionDataGen, JSON에서 오류 발생: JSONKeyError"
     
     # 수요 검증
     demand_keys = ['필요', '목표', '질문']
     if not all(key in outputJson['정리']['수요'] for key in demand_keys):
-        return "VDBCollectionDataGen, JSON에서 오류 발생: '필요', '목표', '질문' 미포함"
+        return "VDBDemandCollectionDataGen, JSON에서 오류 발생: '필요', '목표', '질문' 미포함"
     
     # 공급 검증
     supply_keys = ['충족', '달성', '해결책']
     if not all(key in outputJson['정리']['공급'] for key in supply_keys):
-        return "VDBCollectionDataGen, JSON에서 오류 발생: '충족', '달성', '해결책' 미포함"
+        return "VDBDemandCollectionDataGen, JSON에서 오류 발생: '충족', '달성', '해결책' 미포함"
     
     # 세부 키 검증
     for demand_key in demand_keys:
         if not all(sub_key in outputJson['정리']['수요'][demand_key] for sub_key in ['설명', '키워드', '중요도']):
-            return f"VDBCollectionDataGen, JSON에서 오류 발생: 수요 {demand_key} '설명', '키워드', '중요도' 미포함"
+            return f"VDBDemandCollectionDataGen, JSON에서 오류 발생: 수요 {demand_key} '설명', '키워드', '중요도' 미포함"
     
     for supply_key in supply_keys:
         if not all(sub_key in outputJson['정리']['공급'][supply_key] for sub_key in ['설명', '키워드', '중요도']):
-            return f"VDBCollectionDataGen, JSON에서 오류 발생: 공급 {supply_key} '설명', '키워드', '중요도' 미포함"
+            return f"VDBDemandCollectionDataGen, JSON에서 오류 발생: 공급 {supply_key} '설명', '키워드', '중요도' 미포함"
     
     return OutputDic
 
@@ -268,24 +268,24 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
 ################################
 ##### Process 진행 및 업데이트 #####
 ################################
-## VDBCollectionDataGen 프롬프트 요청 및 결과물 Json화
-def VDBCollectionDataGenUpdate(projectName, email, Input, mode = "Master", MainKey = 'PublisherAnalysis', MessagesReview = "on"):
-    print(f"< User: {email} | Project: {projectName} | VDBCollectionDataGenUpdate 시작 >")       
+## VDBDemandCollectionDataGen 프롬프트 요청 및 결과물 Json화
+def VDBDemandCollectionDataGenUpdate(projectName, email, Input, mode = "Master", MainKey = 'PublisherAnalysis', MessagesReview = "on"):
+    print(f"< User: {email} | Project: {projectName} | VDBDemandCollectionDataGenUpdate 시작 >")       
     processCount = 1
     InputCount = 1
     CheckCount = 0
     OutputDicList = []
 
-    ## Process1: VDBCollectionDataGen Response 생성
-    VDBCollectionDataGenResponse = ProcessResponse(projectName, email, "VDBCollectionDataGen", Input, processCount, InputCount, VDBCollectionDataGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
-    OutputDicList.append(VDBCollectionDataGenResponse)
+    ## Process1: DemandCollectionDataGen Response 생성
+    VDBDemandCollectionDataGenResponse = ProcessResponse(projectName, email, "DemandCollectionDataGen", Input, processCount, InputCount, DemandCollectionDataGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
+    OutputDicList.append(VDBDemandCollectionDataGenResponse)
     
-    ## Process2: PublisherWMWMDefine Response 생성
-    PublisherWMWMDefineResponse = ProcessResponse(projectName, email, "PublisherWMWMDefine", Input, processCount, InputCount, PublisherWMWMDefineFilter, CheckCount, "OpenAI", mode, MessagesReview)
+    ## Process2: DemandCollectionDataDetail Response 생성
+    PublisherWMWMDefineResponse = ProcessResponse(projectName, email, "DemandCollectionDataDetail", Input, processCount, InputCount, DemandCollectionDataDetailFilter, CheckCount, "OpenAI", mode, MessagesReview)
     OutputDicList.append(PublisherWMWMDefineResponse)
     
-    ## Process3: PublisherCommentAnalysis Response 생성
-    PublisherServiceDemandResponse = ProcessResponse(projectName, email, "PublisherServiceDemand", Input, processCount, InputCount, PublisherServiceDemandFilter, CheckCount, "OpenAI", mode, MessagesReview)
+    ## Process3: DemandCollectionDataExtension Response 생성
+    PublisherServiceDemandResponse = ProcessResponse(projectName, email, "DemandCollectionDataExtension", Input, processCount, InputCount, DemandCollectionDataExtensionFilter, CheckCount, "OpenAI", mode, MessagesReview)
     OutputDicList.append(PublisherServiceDemandResponse)
     
     ## ProcessResponse 임시저장
@@ -293,7 +293,7 @@ def VDBCollectionDataGenUpdate(projectName, email, Input, mode = "Master", MainK
     
     ## ProcessResponse 업데이트
     ProcessResponseUpdate(MainKey, TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
-    print(f"[ User: {email} | Project: {projectName} | VDBCollectionDataGenUpdate 완료 ]\n")
+    print(f"[ User: {email} | Project: {projectName} | VDBDemandCollectionDataGenUpdate 완료 ]\n")
 
 ## 검색어 기반 검색 폼
 ## 검색이 더 잘되도록 하기 위한 사전 작업 (빠진 데이터 보충을 위해 유사 데이터 3개 생성 후 검색, 필드별 내용 변환 등)
@@ -304,4 +304,4 @@ if __name__ == "__main__":
     ProjectName = '241204_개정교육과정초등교과별이해연수'
     #########################################################################
     
-    VDBCollectionDataGenUpdate(ProjectName, email)
+    VDBDemandCollectionDataGenUpdate(ProjectName, email)

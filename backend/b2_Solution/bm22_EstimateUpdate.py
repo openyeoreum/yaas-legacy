@@ -70,11 +70,11 @@ def EstimateSettingGen(projectName, Estimate, Estimates):
             StandardPrice = 0
             PremiumPrice = 0
         if Estimate == "AudioBook":
-            StandardPrice = 200000 * EstimateScriptLenth/10000
-            PremiumPrice = 250000 * EstimateScriptLenth/10000
+            StandardPrice = 175000 * EstimateScriptLenth/10000
+            PremiumPrice = 210000 * EstimateScriptLenth/10000
         if Estimate == "VideoBook":
             StandardPrice = 400000 * EstimateScriptLenth/10000
-            PremiumPrice = 600000 * EstimateScriptLenth/10000
+            PremiumPrice = 550000 * EstimateScriptLenth/10000
             
         if not os.path.exists(ProjectEstimateFilePath):
             projectname = ""
@@ -90,27 +90,49 @@ def EstimateSettingGen(projectName, Estimate, Estimates):
                         projectname = EstimateSetting['EstimateSetting']['ProjectName']
                         client = EstimateSetting['EstimateSetting']['Client']
                         break
-                    
-            EstimateSetting = {
-                    "ProjectName": f"{projectName}",
-                    "EstimateSetting": {
-                        "ProjectName": projectname,
-                        "Client": client,
-                        "Lenth(raw)": EstimateScriptLenth,
-                        "Lenth(estimate)": f"{math.ceil(EstimateScriptLenth/10000)*10000:,}자",
-                        "RunningTime(s)": RunningTime,
-                        "RunningTime(hms)": SecondsToHMS(RunningTime),
-                        "RunningTime(estimate)": SecondsToHMS(math.ceil(RunningTime / 1800) * 1800),
-                        "StandardPrice(raw)": StandardPrice,
-                        "StandardPrice(estimate)": f"{int(math.ceil(StandardPrice/200000)*200000):,}원",
-                        "StandardPrice(vat)": f"{int(math.ceil(StandardPrice/200000)*200000/10):,}원",
-                        "StandardPrice(estimate+vat)": f"{int(math.ceil(StandardPrice/200000)*200000*1.1):,}원",
-                        "PremiumPrice(raw)": PremiumPrice,
-                        "PremiumPrice(estimate)": f"{int(math.ceil(PremiumPrice/250000)*250000):,}원",
-                        "PremiumPrice(vat)": f"{int(math.ceil(PremiumPrice/250000)*250000/10):,}원",
-                        "PremiumPrice(estimate+vat)": f"{int(math.ceil(PremiumPrice/250000)*250000*1.1):,}원",
+            
+            if Estimate in ["TextBook", "AudioBook"]:
+                EstimateSetting = {
+                        "ProjectName": f"{projectName}",
+                        "EstimateSetting": {
+                            "ProjectName": projectname,
+                            "Client": client,
+                            "Lenth(raw)": EstimateScriptLenth,
+                            "Lenth(estimate)": f"{math.ceil(EstimateScriptLenth/10000)*10000:,}자",
+                            "RunningTime(s)": RunningTime,
+                            "RunningTime(hms)": SecondsToHMS(RunningTime),
+                            "RunningTime(estimate)": SecondsToHMS(math.ceil(RunningTime / 1800) * 1800),
+                            "StandardPrice(raw)": StandardPrice,
+                            "StandardPrice(estimate)": f"{int(math.ceil(StandardPrice/175000)*175000):,}원",
+                            "StandardPrice(vat)": f"{int(math.ceil(StandardPrice/175000)*175000/10):,}원",
+                            "StandardPrice(estimate+vat)": f"{int(math.ceil(StandardPrice/175000)*175000*1.1):,}원",
+                            "PremiumPrice(raw)": PremiumPrice,
+                            "PremiumPrice(estimate)": f"{int(math.ceil(PremiumPrice/210000)*210000):,}원",
+                            "PremiumPrice(vat)": f"{int(math.ceil(PremiumPrice/210000)*210000/10):,}원",
+                            "PremiumPrice(estimate+vat)": f"{int(math.ceil(PremiumPrice/210000)*210000*1.1):,}원",
+                        }
                     }
-                }
+            elif Estimate == "VideoBook":
+                EstimateSetting = {
+                        "ProjectName": f"{projectName}",
+                        "EstimateSetting": {
+                            "ProjectName": projectname,
+                            "Client": client,
+                            "Lenth(raw)": EstimateScriptLenth,
+                            "Lenth(estimate)": f"{math.ceil(EstimateScriptLenth/10000)*10000:,}자",
+                            "RunningTime(s)": RunningTime,
+                            "RunningTime(hms)": SecondsToHMS(RunningTime),
+                            "RunningTime(estimate)": SecondsToHMS(math.ceil(RunningTime / 1800) * 1800),
+                            "StandardPrice(raw)": StandardPrice,
+                            "StandardPrice(estimate)": f"{int(math.ceil(StandardPrice/400000)*400000):,}원",
+                            "StandardPrice(vat)": f"{int(math.ceil(StandardPrice/400000)*400000/10):,}원",
+                            "StandardPrice(estimate+vat)": f"{int(math.ceil(StandardPrice/400000)*400000*1.1):,}원",
+                            "PremiumPrice(raw)": PremiumPrice,
+                            "PremiumPrice(estimate)": f"{int(math.ceil(PremiumPrice/550000)*550000):,}원",
+                            "PremiumPrice(vat)": f"{int(math.ceil(PremiumPrice/550000)*550000/10):,}원",
+                            "PremiumPrice(estimate+vat)": f"{int(math.ceil(PremiumPrice/550000)*550000*1.1):,}원",
+                        }
+                    }
             
             ## EstimateSetting Json 파일저장
             with open(ProjectEstimateFilePath, 'w', encoding = 'utf-8') as JsonFile:

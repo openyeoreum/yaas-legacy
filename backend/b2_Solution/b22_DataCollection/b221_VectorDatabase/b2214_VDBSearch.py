@@ -69,31 +69,15 @@ def GetCollectionDataPaths(Collection):
     return MainKey, TempFilePaths
 
 ## Pinecone에 임베딩 데이터 검색
-def SearchEmbeddedData(Search, Intention, Collection, Range): # Intention: 'similarity', 'demand, 'supply' // Collection: 'entire', 'target', 'trend', 'publisher', 'book'...
+def SearchEmbeddedData(CollectionData, Intention, Collection, Range): # Intention: 'similarity', 'demand, 'supply' // Collection: 'entire', 'target', 'trend', 'publisher', 'book'...
     print(f"[ YaaS VDB ({Search['Type']}): {Search['Term']} | Intention({Intention}) | Collection({Collection}) | Range({Range}) ]")
-
-    ## A. CollectionData 선정 ##
-    # 1) Search['Type'] == "Search" : Search['Term']를 CollectionData로 생성하여 사용
-    if Search['Type'] == "Search":
-        CollectionData = Search
-    # 2) Search['Type'] == "Match" : Search['Term'] CollectionData를 찾아서 사용
-    elif Search['Type'] == "Match":
-        CollectionDataMatch = re.match(r"([A-Za-z]+)_\((\d+)\).*", Search['Term'])
-        if CollectionDataMatch:
-            InputCollection = CollectionDataMatch.group(1).replace('Data', '')
-            InputCollectionId = CollectionDataMatch.group(2)
-        InputMainKey, InputTempFilePaths = GetCollectionDataPaths(InputCollection)
-        with open(InputTempFilePaths[InputCollectionId], 'r', encoding = 'utf-8') as InputTempFile:
-            CollectionData = json.load(InputTempFile)
-            # CollectionData의 MainKey를 CollectionAnalysis로 통일
-            CollectionData['CollectionAnalysis'] = CollectionData.pop(InputMainKey)
         
-    ## B. TempFilePaths, MainKey 생성 및 Pinecone VDB 연결 ##
+    ## A. TempFilePaths, MainKey 생성 및 Pinecone VDB 연결 ##
     PineConeClient = Pinecone_CreateIndex(Collection)
     VDBIndex = PineConeClient.Index(name = Collection)
     MainKey, TempFilePaths = GetCollectionDataPaths(Collection)
     
-    ## C. 검색 쿼리와 가중치 ##
+    ## B. 검색 쿼리와 가중치 ##
     # Context-Weight
     ContextQueryWeight = GetWeight(CollectionData['CollectionAnalysis']['Context']['Weight'])
     # 1) Context-Summary
@@ -143,7 +127,7 @@ def SearchEmbeddedData(Search, Intention, Collection, Range): # Intention: 'simi
     # 14) Context-Supply-Solution-Keyword
     ContextSupplySolutionKeywordQueryText = ", ".join(CollectionData['CollectionAnalysis']['Context']['Supply']['Solution']['KeyWord'])
 
-    ## D. 검색 옵션 설정 ##
+    ## C. 검색 옵션 설정 ##
     # Similarity = 유사도검색 : 유사한 정보/대상 검색
     if Intention == 'similarity':
         QueryList = [{"Field": "Context-Summary", "Text": ContextSummaryQueryText, "Weight": ContextQueryWeight}, {"Field": "Context-KeyWord", "Text": ContextKeyWordQueryText, "Weight": ContextQueryWeight}, {"Field": "Context-Demand-Needs-Sentence", "Text": ContextDemandNeedsSentenceQueryText, "Weight": ContextDemandNeedsQueryWeight}, {"Field": "Context-Demand-Needs-Keyword", "Text": ContextDemandNeedsKeywordQueryText, "Weight": ContextDemandNeedsQueryWeight}, {"Field": "Context-Demand-Purpose-Sentence", "Text": ContextDemandPurposeSentenceQueryText, "Weight": ContextDemandPurposeQueryWeight}, {"Field": "Context-Demand-Purpose-Keyword", "Text": ContextDemandPurposeKeywordQueryText, "Weight": ContextDemandPurposeQueryWeight}, {"Field": "Context-Demand-Question-Sentence", "Text": ContextDemandQuestionSentenceQueryText, "Weight": ContextDemandQuestionQueryWeight}, {"Field": "Context-Demand-Question-Keyword", "Text": ContextDemandQuestionKeywordQueryText, "Weight": ContextDemandQuestionQueryWeight}, {"Field": "Context-Supply-Satisfy-Sentence", "Text": ContextSupplySatisfySentenceQueryText, "Weight": ContextSupplySatisfyQueryWeight}, {"Field": "Context-Supply-Satisfy-Keyword", "Text": ContextSupplySatisfyKeywordQueryText, "Weight": ContextSupplySatisfyQueryWeight}, {"Field": "Context-Supply-Support-Sentence", "Text": ContextSupplySupportSentenceQueryText, "Weight": ContextSupplySupportQueryWeight}, {"Field": "Context-Supply-Support-Keyword", "Text": ContextSupplySupportKeywordQueryText, "Weight": ContextSupplySupportQueryWeight}, {"Field": "Context-Supply-Solution-Sentence", "Text": ContextSupplySolutionSentenceQueryText, "Weight": ContextSupplySolutionQueryWeight}, {"Field": "Context-Supply-Solution-Keyword", "Text": ContextSupplySolutionKeywordQueryText, "Weight": ContextSupplySolutionQueryWeight}]
@@ -158,7 +142,7 @@ def SearchEmbeddedData(Search, Intention, Collection, Range): # Intention: 'simi
     QueryResultList = []
     MinScores = {}
     MaxScores = {}
-    ## E. 각 필드에 대한 검색 쿼리 생성 ##
+    ## D. 각 필드에 대한 검색 쿼리 생성 ##
     for Query in QueryList:
         if Query['Field'] == "Context-Summary":
             QueryText = Query['Text']
@@ -220,7 +204,7 @@ def SearchEmbeddedData(Search, Intention, Collection, Range): # Intention: 'simi
         # 해당 필드의 쿼리 벡터 생성
         QueryVector = OpenAI_TextEmbedding(QueryText)
 
-        ## F. Pinecone에 쿼리 수행 ##
+        ## E. Pinecone에 쿼리 수행 ##
         QueryResult = VDBIndex.query(
             vector = QueryVector,
             top_k = Range,
@@ -228,22 +212,22 @@ def SearchEmbeddedData(Search, Intention, Collection, Range): # Intention: 'simi
             namespace = Collection,
             filter = {"Field": QueryField}
         )
-        ## G. 최소값 저장
+        ## F. 최소값 저장
         if QueryResult.matches:
             # MinScore 계산 (0이 아닌 값)
             MinScore = min(match.score * QueryWeight for match in QueryResult.matches if match.score * QueryWeight != 0)
             MinScores[QueryField] = MinScore
             QueryResultList.append(QueryResult)
 
-    ## H. Pinecone에 Result Score 계산 ##
+    ## G. Pinecone에 Result Score 계산 ##
     for QueryResult in QueryResultList:
         # 가장 높은 유사도 점수와 CollectionId를 사용
-        for Result in QueryResult["matches"]:
+        for result in QueryResult["matches"]:
             collection = Result["metadata"]["Collection"]
-            CollectionId = Result["metadata"]["CollectionId"]
-            ResultField = Result["metadata"]["Field"]
-            ResultWeight = Result["metadata"]["Weight"] / 100
-            ResultScore = Result["score"] * QueryWeight * ResultWeight
+            CollectionId = result["metadata"]["CollectionId"]
+            ResultField = result["metadata"]["Field"]
+            ResultWeight = result["metadata"]["Weight"] / 100
+            ResultScore = result["score"] * QueryWeight * ResultWeight
 
             # CollectionId 처음 생성시 MinScores로 초기화 및 해당 CollectionId 가중치 적용
             if CollectionId not in MaxScores:
@@ -319,8 +303,8 @@ def SearchEmbeddedData(Search, Intention, Collection, Range): # Intention: 'simi
     # score 내림차순(유사도 높은 순) 정렬 후 상위 10개 추출
     FinalResultDics = sorted(FinalResultDics, key = lambda x: x["Score"], reverse = True)[:10]
     
-    ## I. 최종 결과 출력 ##
-    FinalResults = []
+    ## H. 최종 결과 출력 ##
+    Result = []
     for i, FinalResultDic in enumerate(FinalResultDics):
         collection = FinalResultDic["Collection"]
         Score = FinalResultDic["Score"]
@@ -328,27 +312,60 @@ def SearchEmbeddedData(Search, Intention, Collection, Range): # Intention: 'simi
         with open(TempFilePaths[CollectionId], 'r', encoding = 'utf-8') as TempFile:
             TempData = json.load(TempFile)
         FinalResult = {"Rank": i + 1, "Score": Score, "Collection": collection, "CollectionId": CollectionId, "CollectionAnalysis": TempData[MainKey]}
-        FinalResults.append(FinalResult)
+        Result.append(FinalResult)
     
-    return FinalResults
+    return Result
+
+## Pinecone에 CollectionData 검색 ##
+def SearchCollectionData(CollectionDataList, Intention, Collection, Range):
+    Results = []
+    for CollectionData in CollectionDataList:
+        Result = SearchEmbeddedData(CollectionData, Intention, Collection, Range)
+        Results.append(Result)
+    
+    return Results
 
 ## 검색 CollectionData 구축
-def YaaSsearch(projectName, email, Search, Intention, Collection, Range):
+def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range):
+    ## A. Search ##
     if Search['Type'] == "Search":
-        InputDic = {"Input": Search['Term'], "Intention": Intention}
+        InputDic = {"Input": Search['Term'], "Extension": Extension}
+        
+        CollectionDataList = []
+        if Intention == "Similarity":
+            Search = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic)
+            CollectionDataList.append(Search)
+            
+            Search = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic)
+            CollectionDataList.append(Search)
 
-        if Intention in ["Similarity", "SimilarityUltimate"]:
-            Results = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic)
-            Results = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic)
+        if Intention == "Demand":
+            Search = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic)
+            CollectionDataList.append(Search)
 
-        if Intention in ["Demand", "DemandUltimate"]:
-            Results = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic)
-
-        if Intention in ["Supply", "SupplyUltimate"]:
-            Results = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic)
+        if Intention == "Supply":
+            Search = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic)
+            CollectionDataList.append(Search)
+        sys.exit()
+            
+        Results = SearchCollectionData(CollectionDataList, Intention, Collection, Range)
     
+    ## B. Match ##
     elif Search['Type'] == "Match":
-        Results = SearchEmbeddedData(Search, Intention, Collection, Range)
+        
+        CollectionDataList = []
+        CollectionDataMatch = re.match(r"([A-Za-z]+)_\((\d+)\).*", Search['Term'])
+        if CollectionDataMatch:
+            InputCollection = CollectionDataMatch.group(1).replace('Data', '')
+            InputCollectionId = CollectionDataMatch.group(2)
+        InputMainKey, InputTempFilePaths = GetCollectionDataPaths(InputCollection)
+        with open(InputTempFilePaths[InputCollectionId], 'r', encoding = 'utf-8') as InputTempFile:
+            CollectionData = json.load(InputTempFile)
+            # CollectionData의 MainKey를 CollectionAnalysis로 통일
+            CollectionData['CollectionAnalysis'] = CollectionData.pop(InputMainKey)
+            CollectionDataList.append(CollectionData)
+            
+        Results = SearchCollectionData(CollectionDataList, Intention, Collection, Range)
     
     return Results
 
@@ -363,7 +380,7 @@ if __name__ == "__main__":
     Collection = "publisher" # Entire, Target, Trend, Publisher, Book ...
     Range = 100 # 10-100
     #########################################################################
-    Results = YaaSsearch(projectName, email, Search, Intention, Collection, Range)
+    Results = YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range)
     
     for Result in Results:
         print(f"{Result}\n")

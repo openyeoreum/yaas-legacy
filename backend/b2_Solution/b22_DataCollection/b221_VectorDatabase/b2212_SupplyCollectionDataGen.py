@@ -334,92 +334,116 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
 ##### ProcessResponse 업데이트 #####
 ##################################
 ## ProcessResponseTemp 저장
-def ProcessResponseTempSave(MainKey, InputDic, OutputDicList, DataTempPath):
+def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
     # DataTempPath 폴더가 없으면 생성
     if not os.path.exists(DataTempPath):
         os.makedirs(DataTempPath)
-        
+    
+    # ProcessKeyList 생성
+    ProcessKeyList = []
+    ProcessDicList = []
+    
     #### Search ####
     # Search-Term
     Term = InputDic['Input']
-    # Search-Intention
-    Intention = InputDic['Intention']
     ## SearchDic ##
-    SearchDic = {'Term': Term, 'Intention': Intention}
+    SearchDic = {'Term': Term}
+    
+    ProcessKeyList.append("Search")
     #### Search ####
     
     #### Detail ####
+    Process = "SupplyCollectionDataDetail"
     # Detail-Summary
-    ScarchSummary = OutputDicList[0]['핵심솔루션']
+    ScarchSummary = OutputDicSet[Process]['핵심솔루션']
     # Detail-Satisfy
-    DetailSatisfy = OutputDicList[0]['제안할내용']
+    DetailSatisfy = OutputDicSet[Process]['제안할내용']
     # Detail-Support
-    DetailSupport = OutputDicList[0]['제안할목표']
+    DetailSupport = OutputDicSet[Process]['제안할목표']
     # Detail-Solution
-    DetailSolution = OutputDicList[0]['제안할해결책']
+    DetailSolution = OutputDicSet[Process]['제안할해결책']
     # Detail-Weight
-    DetailWeight = OutputDicList[0]['검색어완성도']
+    DetailWeight = OutputDicSet[Process]['검색어완성도']
     # Detail-Feedback
-    DetailFeedback = OutputDicList[0]['검색어피드백']
+    DetailFeedback = OutputDicSet[Process]['검색어피드백']
     ## DetailDic ##
     DetailDic = {'Summary': ScarchSummary, 'Satisfy': DetailSatisfy, 'Support': DetailSupport, 'Solution': DetailSolution, 'Weight': DetailWeight, 'Feedback': DetailFeedback}
+    
+    ProcessKeyList.append("Detail")
+    ProcessDicList.append(DetailDic)
     #### Detail ####
     
     #### Context ####
+    Process = "SupplyCollectionDataContext"
     # Context-Summary
-    ContextSummary = OutputDicList[1]['핵심솔루션']
+    ContextSummary = OutputDicSet[Process]['핵심솔루션']
     # Context-KeyWord
-    ContextKeyWord = OutputDicList[1]['분야']
+    ContextKeyWord = OutputDicSet[Process]['분야']
     # Context-Supply
-    ContextSupplySatisfy = {"Sentence": OutputDicList[1]['제안']['제안내용']['설명'], "KeyWord": OutputDicList[1]['제안']['제안내용']['키워드'], "Weight": OutputDicList[1]['제안']['제안내용']['중요도']}
-    ContextSupplySupport = {"Sentence": OutputDicList[1]['제안']['제안할목표']['설명'], "KeyWord": OutputDicList[1]['제안']['제안할목표']['키워드'], "Weight": OutputDicList[1]['제안']['제안할목표']['중요도']}
-    ContextSupplySolution = {"Sentence": OutputDicList[1]['제안']['제안할해결책']['설명'], "KeyWord": OutputDicList[1]['제안']['제안할해결책']['키워드'], "Weight": OutputDicList[1]['제안']['제안할해결책']['중요도']}
+    ContextSupplySatisfy = {"Sentence": OutputDicSet[Process]['제안']['제안내용']['설명'], "KeyWord": OutputDicSet[Process]['제안']['제안내용']['키워드'], "Weight": OutputDicSet[Process]['제안']['제안내용']['중요도']}
+    ContextSupplySupport = {"Sentence": OutputDicSet[Process]['제안']['제안할목표']['설명'], "KeyWord": OutputDicSet[Process]['제안']['제안할목표']['키워드'], "Weight": OutputDicSet[Process]['제안']['제안할목표']['중요도']}
+    ContextSupplySolution = {"Sentence": OutputDicSet[Process]['제안']['제안할해결책']['설명'], "KeyWord": OutputDicSet[Process]['제안']['제안할해결책']['키워드'], "Weight": OutputDicSet[Process]['제안']['제안할해결책']['중요도']}
     ContextSupply = {'Satisfy': ContextSupplySatisfy, 'Support': ContextSupplySupport, 'Solution': ContextSupplySolution}
     # Context-Weight
-    ContextWeight = OutputDicList[1]['정보의질']
+    ContextWeight = OutputDicSet[Process]['정보의질']
     ## ContextDic ##
     ContextDic = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Supply': ContextSupply, 'Weight': ContextWeight}
+    
+    ProcessKeyList.append("Context")
+    ProcessDicList.append(ContextDic)
     #### Context ####
     
-    #### ContextExtension ####
-    ContextExtensionDicList = []
-    for i in range(5):
-        # ContextExtension-Summary
-        ContextExtensionSummary = OutputDicList[2][f'전문데이터{i+1}']['핵심솔루션']
-        # ContextExtension-KeyWord
-        ContextExtensionKeyWord = OutputDicList[2][f'전문데이터{i+1}']['분야']
-        # ContextExtension-Supply
-        ContextExtensionSupplySatisfy = {"Sentence": OutputDicList[2][f'전문데이터{i+1}']['제안']['제안내용']['설명'], "KeyWord": OutputDicList[2][f'전문데이터{i+1}']['제안']['제안내용']['키워드'], "Weight": OutputDicList[2][f'전문데이터{i+1}']['제안']['제안내용']['중요도']}
-        ContextExtensionSupplySupport = {"Sentence": OutputDicList[2][f'전문데이터{i+1}']['제안']['제안할목표']['설명'], "KeyWord": OutputDicList[2][f'전문데이터{i+1}']['제안']['제안할목표']['키워드'], "Weight": OutputDicList[2][f'전문데이터{i+1}']['제안']['제안할목표']['중요도']}
-        ContextExtensionSupplySolution = {"Sentence": OutputDicList[2][f'전문데이터{i+1}']['제안']['제안할해결책']['설명'], "KeyWord": OutputDicList[2][f'전문데이터{i+1}']['제안']['제안할해결책']['키워드'], "Weight": OutputDicList[2][f'전문데이터{i+1}']['제안']['제안할해결책']['중요도']}
-        ContextExtensionSupply = {'Satisfy': ContextExtensionSupplySatisfy, 'Support': ContextExtensionSupplySupport, 'Solution': ContextExtensionSupplySolution}
-        # ContextExtension-Weight
-        ContextExtensionWeight = OutputDicList[2][f'전문데이터{i+1}']['정보의질']
-        ## ContextExtensionDic ##
-        ContextExtensionDic = {'Summary': ContextExtensionSummary, 'KeyWord': ContextExtensionKeyWord, 'Supply': ContextExtensionSupply, 'Weight': ContextExtensionWeight}
-        ContextExtensionDicList.append(ContextExtensionDic)
-    #### ContextExtension ####
+    #### ContextExpertise ####
+    Process = "SupplyCollectionDataExpertiseChain"
+    if Process in OutputDicSet:
+        ContextExpertiseDicList = []
+        for i in range(5):
+            # ContextExpertise-Summary
+            ContextExpertiseSummary = OutputDicSet[Process][f'전문데이터{i+1}']['핵심솔루션']
+            # ContextExpertise-KeyWord
+            ContextExpertiseKeyWord = OutputDicSet[Process][f'전문데이터{i+1}']['분야']
+            # ContextExpertise-Supply
+            ContextExpertiseSupplySatisfy = {"Sentence": OutputDicSet[Process][f'전문데이터{i+1}']['제안']['제안내용']['설명'], "KeyWord": OutputDicSet[Process][f'전문데이터{i+1}']['제안']['제안내용']['키워드'], "Weight": OutputDicSet[Process][f'전문데이터{i+1}']['제안']['제안내용']['중요도']}
+            ContextExpertiseSupplySupport = {"Sentence": OutputDicSet[Process][f'전문데이터{i+1}']['제안']['제안할목표']['설명'], "KeyWord": OutputDicSet[Process][f'전문데이터{i+1}']['제안']['제안할목표']['키워드'], "Weight": OutputDicSet[Process][f'전문데이터{i+1}']['제안']['제안할목표']['중요도']}
+            ContextExpertiseSupplySolution = {"Sentence": OutputDicSet[Process][f'전문데이터{i+1}']['제안']['제안할해결책']['설명'], "KeyWord": OutputDicSet[Process][f'전문데이터{i+1}']['제안']['제안할해결책']['키워드'], "Weight": OutputDicSet[Process][f'전문데이터{i+1}']['제안']['제안할해결책']['중요도']}
+            ContextExpertiseSupply = {'Satisfy': ContextExpertiseSupplySatisfy, 'Support': ContextExpertiseSupplySupport, 'Solution': ContextExpertiseSupplySolution}
+            # ContextExpertise-Weight
+            ContextExpertiseWeight = OutputDicSet[Process][f'전문데이터{i+1}']['정보의질']
+            ## ContextExpertiseDic ##
+            ContextExpertiseDic = {'Summary': ContextExpertiseSummary, 'KeyWord': ContextExpertiseKeyWord, 'Supply': ContextExpertiseSupply, 'Weight': ContextExpertiseWeight}
+            ContextExpertiseDicList.append(ContextExpertiseDic)
+        
+        ProcessKeyList.append("ContextExpertise")
+        ProcessDicList.append(ContextExpertiseDicList)
+    #### ContextExpertise ####
     
     #### ContextUltimate ####
-    ContextUltimateDicList = []
-    for i in range(5):
-        # ContextUltimate-Summary
-        ContextUltimateSummary = OutputDicList[3][f'연계데이터{i+1}']['핵심솔루션']
-        # ContextUltimate-KeyWord
-        ContextUltimateKeyWord = OutputDicList[3][f'연계데이터{i+1}']['분야']
-        # ContextUltimate-Supply
-        ContextUltimateSupplySatisfy = {"Sentence": OutputDicList[3][f'연계데이터{i+1}']['제안']['제안내용']['설명'], "KeyWord": OutputDicList[3][f'연계데이터{i+1}']['제안']['제안내용']['키워드'], "Weight": OutputDicList[3][f'연계데이터{i+1}']['제안']['제안내용']['중요도']}
-        ContextUltimateSupplySupport = {"Sentence": OutputDicList[3][f'연계데이터{i+1}']['제안']['제안할목표']['설명'], "KeyWord": OutputDicList[3][f'연계데이터{i+1}']['제안']['제안할목표']['키워드'], "Weight": OutputDicList[3][f'연계데이터{i+1}']['제안']['제안할목표']['중요도']}
-        ContextUltimateSupplySolution = {"Sentence": OutputDicList[3][f'연계데이터{i+1}']['제안']['제안할해결책']['설명'], "KeyWord": OutputDicList[3][f'연계데이터{i+1}']['제안']['제안할해결책']['키워드'], "Weight": OutputDicList[3][f'연계데이터{i+1}']['제안']['제안할해결책']['중요도']}
-        ContextUltimateSupply = {'Satisfy': ContextUltimateSupplySatisfy, 'Support': ContextUltimateSupplySupport, 'Solution': ContextUltimateSupplySolution}
-        # ContextUltimate-Weight
-        ContextUltimateWeight = OutputDicList[3][f'연계데이터{i+1}']['정보의질']
-        ## ContextUltimateDic ##
-        ContextUltimateDic = {'Summary': ContextUltimateSummary, 'KeyWord': ContextUltimateKeyWord, 'Supply': ContextUltimateSupply, 'Weight': ContextUltimateWeight}
-        ContextUltimateDicList.append(ContextUltimateDic)
+    Process = "SupplyCollectionDataUltimateChain"
+    if Process in OutputDicSet:
+        ContextUltimateDicList = []
+        for i in range(5):
+            # ContextUltimate-Summary
+            ContextUltimateSummary = OutputDicSet[Process][f'연계데이터{i+1}']['핵심솔루션']
+            # ContextUltimate-KeyWord
+            ContextUltimateKeyWord = OutputDicSet[Process][f'연계데이터{i+1}']['분야']
+            # ContextUltimate-Supply
+            ContextUltimateSupplySatisfy = {"Sentence": OutputDicSet[Process][f'연계데이터{i+1}']['제안']['제안내용']['설명'], "KeyWord": OutputDicSet[Process][f'연계데이터{i+1}']['제안']['제안내용']['키워드'], "Weight": OutputDicSet[Process][f'연계데이터{i+1}']['제안']['제안내용']['중요도']}
+            ContextUltimateSupplySupport = {"Sentence": OutputDicSet[Process][f'연계데이터{i+1}']['제안']['제안할목표']['설명'], "KeyWord": OutputDicSet[Process][f'연계데이터{i+1}']['제안']['제안할목표']['키워드'], "Weight": OutputDicSet[Process][f'연계데이터{i+1}']['제안']['제안할목표']['중요도']}
+            ContextUltimateSupplySolution = {"Sentence": OutputDicSet[Process][f'연계데이터{i+1}']['제안']['제안할해결책']['설명'], "KeyWord": OutputDicSet[Process][f'연계데이터{i+1}']['제안']['제안할해결책']['키워드'], "Weight": OutputDicSet[Process][f'연계데이터{i+1}']['제안']['제안할해결책']['중요도']}
+            ContextUltimateSupply = {'Satisfy': ContextUltimateSupplySatisfy, 'Support': ContextUltimateSupplySupport, 'Solution': ContextUltimateSupplySolution}
+            # ContextUltimate-Weight
+            ContextUltimateWeight = OutputDicSet[Process][f'연계데이터{i+1}']['정보의질']
+            ## ContextUltimateDic ##
+            ContextUltimateDic = {'Summary': ContextUltimateSummary, 'KeyWord': ContextUltimateKeyWord, 'Supply': ContextUltimateSupply, 'Weight': ContextUltimateWeight}
+            ContextUltimateDicList.append(ContextUltimateDic)
+        
+        ProcessKeyList.append("ContextUltimate")
+        ProcessDicList.append(ContextUltimateDicList)
     #### ContextUltimate ####
     
-    DataTemp = {MainKey: {'Search': SearchDic, 'Detail': DetailDic, 'Context': ContextDic, 'ContextExtension': ContextExtensionDicList, 'ContextUltimate': ContextUltimateDicList}}
+    DataTemp = {MainKey: {}}
+    for i in range(len(ProcessKeyList)):
+        DataTemp[MainKey][ProcessKeyList[i]] = ProcessDicList[i]
     
     # DataTempJson 저장
     DataTempJsonPath = os.path.join(DataTempPath, f"SupplyCollectionData_({datetime.now().strftime('%Y%m%d%H%M%S')})_{re.sub(r'[^가-힣a-zA-Z0-9]', '', Term)[:15]}.json")
@@ -442,39 +466,56 @@ def SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
     ## SupplyCollectionDataDetailProcess
     InputCount = 1
     processCount = 1
-    Input1 = InputDic['Input']
-    Intention = InputDic['Intention']
+    Input = InputDic['Input']
+    Extension = InputDic['Extension']
     CheckCount = 0
-    OutputDicList = []
+    OutputDicSet = {}
 
     ## Process1: SupplyCollectionDataDetail Response 생성
-    SupplyCollectionDataDetailResponse = ProcessResponse(projectName, email, "SupplyCollectionDataDetail", Input1, processCount, InputCount, SupplyCollectionDataDetailFilter, CheckCount, "OpenAI", mode, MessagesReview)
-    OutputDicList.append(SupplyCollectionDataDetailResponse)
+    Process = "SupplyCollectionDataDetail"
+    SupplyCollectionDataDetailResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataDetailFilter, CheckCount, "OpenAI", mode, MessagesReview)
+    OutputDicSet[Process] = SupplyCollectionDataDetailResponse
     
     ## Process2: SupplyCollectionDataContext Response 생성
-    Input2 = SupplyCollectionDataDetailResponse.copy()
+    Process = "SupplyCollectionDataContext"
+    Input = SupplyCollectionDataDetailResponse.copy()
     DeleteKeys = ['검색어완성도', '검색어피드백']
     for key in DeleteKeys:
-        del Input2[key]
+        del Input[key]
     
-    SupplyCollectionDataContextResponse = ProcessResponse(projectName, email, "SupplyCollectionDataContext", Input2, processCount, InputCount, SupplyCollectionDataContextFilter, CheckCount, "OpenAI", mode, MessagesReview)
-    OutputDicList.append(SupplyCollectionDataContextResponse)
+    SupplyCollectionDataContextResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataContextFilter, CheckCount, "OpenAI", mode, MessagesReview)
+    OutputDicSet[Process] = SupplyCollectionDataContextResponse
     
     ## Process3: SupplyCollectionDataExpertiseChain Response 생성
-    Input3 = SupplyCollectionDataContextResponse
-    
-    SupplyCollectionDataExpertiseChainResponse = ProcessResponse(projectName, email, "SupplyCollectionDataExpertiseChain", Input3, processCount, InputCount, SupplyCollectionDataExpertiseChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
-    OutputDicList.append(SupplyCollectionDataExpertiseChainResponse)
-    
-    if Intention in ["SupplyUltimate", "SimilarityUltimate"]:
-        ## Process4: SupplyCollectionDataUltimateChain Response 생성
-        Input4 = SupplyCollectionDataContextResponse
+    if Extension == "Expertise":
+        Process = "SupplyCollectionDataExpertiseChain"
+        Input = SupplyCollectionDataContextResponse
         
-        SupplyCollectionDataUltimateChainResponse = ProcessResponse(projectName, email, "SupplyCollectionDataUltimateChain", Input4, processCount, InputCount, SupplyCollectionDataUltimateChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
-        OutputDicList.append(SupplyCollectionDataUltimateChainResponse)
+        SupplyCollectionDataExpertiseChainResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataExpertiseChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
+        OutputDicSet[Process] = SupplyCollectionDataExpertiseChainResponse
+    
+    ## Process4: SupplyCollectionDataUltimateChain Response 생성
+    if Extension == "Ultimate":
+        Process = "SupplyCollectionDataUltimateChain"
+        Input = SupplyCollectionDataContextResponse
+        
+        SupplyCollectionDataUltimateChainResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataUltimateChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
+        OutputDicSet[Process] = SupplyCollectionDataUltimateChainResponse
+    
+    ## Process5: SupplyCollectionDataDetailChain Response 생성
+    if Extension == "Detail":
+        Process = "SupplyCollectionDataDetailChain"
+        Input = SupplyCollectionDataContextResponse
+        pass
+    
+    ## Process6: SupplyCollectionDataRethinkingChain Response 생성
+    if Extension == "Rethinking":
+        Process = "SupplyCollectionDataRethinkingChain"
+        Input = SupplyCollectionDataContextResponse
+        pass
 
     ## ProcessResponse 임시저장
-    DataTemp = ProcessResponseTempSave(MainKey, InputDic, OutputDicList, TotalSupplyCollectionDataTempPath)
+    DataTemp = ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, TotalSupplyCollectionDataTempPath)
 
     print(f"[ User: {email} | Project: {projectName} | SupplyCollectionDataDetailUpdate 완료 ]\n")
     

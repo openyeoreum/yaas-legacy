@@ -6,8 +6,8 @@ sys.path.append("/yaas")
 
 from pinecone import Pinecone, ServerlessSpec
 from openai import OpenAI
-from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2212_DemandCollectionDataGen import DemandCollectionDataDetailProcessUpdate
-from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2213_SupplyCollectionDataGen import SupplyCollectionDataDetailProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2211_DemandCollectionDataGen import DemandCollectionDataDetailProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2212_SupplyCollectionDataGen import SupplyCollectionDataDetailProcessUpdate
 
 ## Pinecone에 인덱스 생성
 def Pinecone_CreateIndex(Collection, IndexDimension = 1536):
@@ -358,7 +358,8 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
     Search = {"Type": "Search", "Term": "나는 지금 몸무게가 67키로그램의 30대 남성인데, 1달만에 60키로로 빼고 싶습니다."} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
-    Intention = "DemandUltimate" # Similarity, SimilarityUltimate, Demand, DemandUltimate, Supply, SupplyUltimate
+    Intention = "Demand" # Similarity, Demand, Supply ...
+    Extension = "Expertise" # Expertise, Ultimate, Detail, Rethinking ...
     Collection = "publisher" # Entire, Target, Trend, Publisher, Book ...
     Range = 100 # 10-100
     #########################################################################

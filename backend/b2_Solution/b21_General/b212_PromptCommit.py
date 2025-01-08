@@ -25,11 +25,11 @@ def AddPromptToDB():
         # DataCollectionPrompt
         demandCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-01_DemandCollectionDataDetail.json")
         demandCollectionDataContext = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-02_DemandCollectionDataContext.json")
-        demandCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-03_DemandCollectionDataExtensionChain.json")
+        demandCollectionDataExpertiseChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-03_DemandCollectionDataExpertiseChain.json")
         demandCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-04_DemandCollectionDataUltimateChain.json")
         supplyCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-01_SupplyCollectionDataDetail.json")
         supplyCollectionDataContext = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-02_SupplyCollectionDataContext.json")
-        supplyCollectionDataExtensionChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-03_SupplyCollectionDataExtensionChain.json")
+        supplyCollectionDataExpertiseChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-03_SupplyCollectionDataExpertiseChain.json")
         supplyCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-04_SupplyCollectionDataUltimateChain.json")
         publisherContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-01_PublisherContextDefine.json")
         publisherWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-02_PublisherWMWMDefine.json")
@@ -89,11 +89,11 @@ def AddPromptToDB():
         if ExistingPrompt:
             ExistingPrompt.DemandCollectionDataDetail = demandCollectionDataDetail
             ExistingPrompt.DemandCollectionDataContext = demandCollectionDataContext
-            ExistingPrompt.DemandCollectionDataExtensionChain = demandCollectionDataExtensionChain
+            ExistingPrompt.DemandCollectionDataExpertiseChain = demandCollectionDataExpertiseChain
             ExistingPrompt.DemandCollectionDataUltimateChain = demandCollectionDataUltimateChain
             ExistingPrompt.SupplyCollectionDataDetail = supplyCollectionDataDetail
             ExistingPrompt.SupplyCollectionDataContext = supplyCollectionDataContext
-            ExistingPrompt.SupplyCollectionDataExtensionChain = supplyCollectionDataExtensionChain
+            ExistingPrompt.SupplyCollectionDataExpertiseChain = supplyCollectionDataExpertiseChain
             ExistingPrompt.SupplyCollectionDataUltimateChain = supplyCollectionDataUltimateChain
             ExistingPrompt.PublisherContextDefine = publisherContextDefine
             ExistingPrompt.PublisherWMWMDefine = publisherWMWMDefine
@@ -148,11 +148,11 @@ def AddPromptToDB():
             prompt = Prompt(
                 DemandCollectionDataDetail = demandCollectionDataDetail,
                 DemandCollectionDataContext = demandCollectionDataContext,
-                DemandCollectionDataExtensionChain = demandCollectionDataExtensionChain,
+                DemandCollectionDataExpertiseChain = demandCollectionDataExpertiseChain,
                 DemandCollectionDataUltimateChain = demandCollectionDataUltimateChain,
                 SupplyCollectionDataDetail = supplyCollectionDataDetail,
                 SupplyCollectionDataContext = supplyCollectionDataContext,
-                SupplyCollectionDataExtensionChain = supplyCollectionDataExtensionChain,
+                SupplyCollectionDataExpertiseChain = supplyCollectionDataExpertiseChain,
                 SupplyCollectionDataUltimateChain = supplyCollectionDataUltimateChain,
                 PublisherContextDefine = publisherContextDefine,
                 PublisherWMWMDefine = publisherWMWMDefine,

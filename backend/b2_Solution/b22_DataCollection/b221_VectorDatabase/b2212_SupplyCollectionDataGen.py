@@ -348,49 +348,52 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
     Term = InputDic['Input']
     ## SearchDic ##
     SearchDic = {'Term': Term}
-    
-    ProcessKeyList.append("Search")
+
+    ProcessKeyList.append("SupplySearch")
+    ProcessDicList.append(SearchDic)
     #### Search ####
     
     #### Detail ####
     Process = "SupplyCollectionDataDetail"
-    # Detail-Summary
-    ScarchSummary = OutputDicSet[Process]['핵심솔루션']
-    # Detail-Satisfy
-    DetailSatisfy = OutputDicSet[Process]['제안할내용']
-    # Detail-Support
-    DetailSupport = OutputDicSet[Process]['제안할목표']
-    # Detail-Solution
-    DetailSolution = OutputDicSet[Process]['제안할해결책']
-    # Detail-Weight
-    DetailWeight = OutputDicSet[Process]['검색어완성도']
-    # Detail-Feedback
-    DetailFeedback = OutputDicSet[Process]['검색어피드백']
-    ## DetailDic ##
-    DetailDic = {'Summary': ScarchSummary, 'Satisfy': DetailSatisfy, 'Support': DetailSupport, 'Solution': DetailSolution, 'Weight': DetailWeight, 'Feedback': DetailFeedback}
-    
-    ProcessKeyList.append("Detail")
-    ProcessDicList.append(DetailDic)
+    if Process in OutputDicSet:
+        # Detail-Summary
+        ScarchSummary = OutputDicSet[Process]['핵심솔루션']
+        # Detail-Satisfy
+        DetailSatisfy = OutputDicSet[Process]['제안할내용']
+        # Detail-Support
+        DetailSupport = OutputDicSet[Process]['제안할목표']
+        # Detail-Solution
+        DetailSolution = OutputDicSet[Process]['제안할해결책']
+        # Detail-Weight
+        DetailWeight = OutputDicSet[Process]['검색어완성도']
+        # Detail-Feedback
+        DetailFeedback = OutputDicSet[Process]['검색어피드백']
+        ## DetailDic ##
+        DetailDic = {'Summary': ScarchSummary, 'Satisfy': DetailSatisfy, 'Support': DetailSupport, 'Solution': DetailSolution, 'Weight': DetailWeight, 'Feedback': DetailFeedback}
+        
+        ProcessKeyList.append("SupplyDetail")
+        ProcessDicList.append(DetailDic)
     #### Detail ####
     
     #### Context ####
     Process = "SupplyCollectionDataContext"
-    # Context-Summary
-    ContextSummary = OutputDicSet[Process]['핵심솔루션']
-    # Context-KeyWord
-    ContextKeyWord = OutputDicSet[Process]['분야']
-    # Context-Supply
-    ContextSupplySatisfy = {"Sentence": OutputDicSet[Process]['제안']['제안내용']['설명'], "KeyWord": OutputDicSet[Process]['제안']['제안내용']['키워드'], "Weight": OutputDicSet[Process]['제안']['제안내용']['중요도']}
-    ContextSupplySupport = {"Sentence": OutputDicSet[Process]['제안']['제안할목표']['설명'], "KeyWord": OutputDicSet[Process]['제안']['제안할목표']['키워드'], "Weight": OutputDicSet[Process]['제안']['제안할목표']['중요도']}
-    ContextSupplySolution = {"Sentence": OutputDicSet[Process]['제안']['제안할해결책']['설명'], "KeyWord": OutputDicSet[Process]['제안']['제안할해결책']['키워드'], "Weight": OutputDicSet[Process]['제안']['제안할해결책']['중요도']}
-    ContextSupply = {'Satisfy': ContextSupplySatisfy, 'Support': ContextSupplySupport, 'Solution': ContextSupplySolution}
-    # Context-Weight
-    ContextWeight = OutputDicSet[Process]['정보의질']
-    ## ContextDic ##
-    ContextDic = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Supply': ContextSupply, 'Weight': ContextWeight}
-    
-    ProcessKeyList.append("Context")
-    ProcessDicList.append(ContextDic)
+    if Process in OutputDicSet:
+        # Context-Summary
+        ContextSummary = OutputDicSet[Process]['핵심솔루션']
+        # Context-KeyWord
+        ContextKeyWord = OutputDicSet[Process]['분야']
+        # Context-Supply
+        ContextSupplySatisfy = {"Sentence": OutputDicSet[Process]['제안']['제안내용']['설명'], "KeyWord": OutputDicSet[Process]['제안']['제안내용']['키워드'], "Weight": OutputDicSet[Process]['제안']['제안내용']['중요도']}
+        ContextSupplySupport = {"Sentence": OutputDicSet[Process]['제안']['제안할목표']['설명'], "KeyWord": OutputDicSet[Process]['제안']['제안할목표']['키워드'], "Weight": OutputDicSet[Process]['제안']['제안할목표']['중요도']}
+        ContextSupplySolution = {"Sentence": OutputDicSet[Process]['제안']['제안할해결책']['설명'], "KeyWord": OutputDicSet[Process]['제안']['제안할해결책']['키워드'], "Weight": OutputDicSet[Process]['제안']['제안할해결책']['중요도']}
+        ContextSupply = {'Satisfy': ContextSupplySatisfy, 'Support': ContextSupplySupport, 'Solution': ContextSupplySolution}
+        # Context-Weight
+        ContextWeight = OutputDicSet[Process]['정보의질']
+        ## ContextDic ##
+        ContextDic = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Supply': ContextSupply, 'Weight': ContextWeight}
+        
+        ProcessKeyList.append("SupplyContext")
+        ProcessDicList.append(ContextDic)
     #### Context ####
     
     #### ContextExpertise ####
@@ -413,7 +416,7 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
             ContextExpertiseDic = {'Summary': ContextExpertiseSummary, 'KeyWord': ContextExpertiseKeyWord, 'Supply': ContextExpertiseSupply, 'Weight': ContextExpertiseWeight}
             ContextExpertiseDicList.append(ContextExpertiseDic)
         
-        ProcessKeyList.append("ContextExpertise")
+        ProcessKeyList.append("SupplyContextExpertise")
         ProcessDicList.append(ContextExpertiseDicList)
     #### ContextExpertise ####
     
@@ -437,7 +440,7 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
             ContextUltimateDic = {'Summary': ContextUltimateSummary, 'KeyWord': ContextUltimateKeyWord, 'Supply': ContextUltimateSupply, 'Weight': ContextUltimateWeight}
             ContextUltimateDicList.append(ContextUltimateDic)
         
-        ProcessKeyList.append("ContextUltimate")
+        ProcessKeyList.append("SupplyContextUltimate")
         ProcessDicList.append(ContextUltimateDicList)
     #### ContextUltimate ####
     
@@ -446,11 +449,15 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
         DataTemp[MainKey][ProcessKeyList[i]] = ProcessDicList[i]
     
     # DataTempJson 저장
-    DataTempJsonPath = os.path.join(DataTempPath, f"SupplyCollectionData_({datetime.now().strftime('%Y%m%d%H%M%S')})_{re.sub(r'[^가-힣a-zA-Z0-9]', '', Term)[:15]}.json")
+    DateTime = datetime.now().strftime('%Y%m%d%H%M%S')
+    DataTempJsonPath = os.path.join(DataTempPath, f"SupplyCollectionData_({DateTime})_{re.sub(r'[^가-힣a-zA-Z0-9]', '', Term)[:15]}.json")
     with open(DataTempJsonPath, 'w', encoding = 'utf-8') as DataTempJson:
         json.dump(DataTemp, DataTempJson, ensure_ascii = False, indent = 4)
         
-    return DataTemp
+    # CollectionDataChain 추출
+    CollectionDataChain = DataTemp[MainKey]
+        
+    return CollectionDataChain, DateTime
 
 ################################
 ##### Process 진행 및 업데이트 #####
@@ -466,60 +473,76 @@ def SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
     ## SupplyCollectionDataDetailProcess
     InputCount = 1
     processCount = 1
-    Input = InputDic['Input']
+    Type = InputDic['Type']
     Extension = InputDic['Extension']
     CheckCount = 0
     OutputDicSet = {}
 
     ## Process1: SupplyCollectionDataDetail Response 생성
-    Process = "SupplyCollectionDataDetail"
-    SupplyCollectionDataDetailResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataDetailFilter, CheckCount, "OpenAI", mode, MessagesReview)
-    OutputDicSet[Process] = SupplyCollectionDataDetailResponse
+    if Type == "Search":
+        Process = "SupplyCollectionDataDetail"
+        Input = InputDic['Input']
+        
+        SupplyCollectionDataDetailResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataDetailFilter, CheckCount, "OpenAI", mode, MessagesReview)
+        OutputDicSet[Process] = SupplyCollectionDataDetailResponse
     
     ## Process2: SupplyCollectionDataContext Response 생성
-    Process = "SupplyCollectionDataContext"
-    Input = SupplyCollectionDataDetailResponse.copy()
-    DeleteKeys = ['검색어완성도', '검색어피드백']
-    for key in DeleteKeys:
-        del Input[key]
+    if Type == "Search":
+        Process = "SupplyCollectionDataContext"
+        Input = SupplyCollectionDataDetailResponse.copy()
+        DeleteKeys = ['검색어완성도', '검색어피드백']
+        for key in DeleteKeys:
+            del Input[key]
     
-    SupplyCollectionDataContextResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataContextFilter, CheckCount, "OpenAI", mode, MessagesReview)
-    OutputDicSet[Process] = SupplyCollectionDataContextResponse
+        SupplyCollectionDataContextResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataContextFilter, CheckCount, "OpenAI", mode, MessagesReview)
+        OutputDicSet[Process] = SupplyCollectionDataContextResponse
     
     ## Process3: SupplyCollectionDataExpertiseChain Response 생성
-    if Extension == "Expertise":
+    if  "Expertise" in Extension:
         Process = "SupplyCollectionDataExpertiseChain"
-        Input = SupplyCollectionDataContextResponse
+        if Type == "Search":
+            Input = SupplyCollectionDataContextResponse
+        elif Type == "Match":
+            Input = InputDic['Input']
         
         SupplyCollectionDataExpertiseChainResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataExpertiseChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
         OutputDicSet[Process] = SupplyCollectionDataExpertiseChainResponse
     
     ## Process4: SupplyCollectionDataUltimateChain Response 생성
-    if Extension == "Ultimate":
+    if "Ultimate" in Extension:
         Process = "SupplyCollectionDataUltimateChain"
-        Input = SupplyCollectionDataContextResponse
+        if Type == "Search":
+            Input = SupplyCollectionDataContextResponse
+        elif Type == "Match":
+            Input = InputDic['Input']
         
         SupplyCollectionDataUltimateChainResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataUltimateChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
         OutputDicSet[Process] = SupplyCollectionDataUltimateChainResponse
     
     ## Process5: SupplyCollectionDataDetailChain Response 생성
-    if Extension == "Detail":
+    if "Detail" in Extension:
         Process = "SupplyCollectionDataDetailChain"
-        Input = SupplyCollectionDataContextResponse
+        if Type == "Search":
+            Input = SupplyCollectionDataContextResponse
+        elif Type == "Match":
+            Input = InputDic['Input']
         pass
     
     ## Process6: SupplyCollectionDataRethinkingChain Response 생성
-    if Extension == "Rethinking":
+    if "Rethinking" in Extension:
         Process = "SupplyCollectionDataRethinkingChain"
-        Input = SupplyCollectionDataContextResponse
+        if Type == "Search":
+            Input = SupplyCollectionDataContextResponse
+        elif Type == "Match":
+            Input = InputDic['Input']
         pass
 
     ## ProcessResponse 임시저장
-    DataTemp = ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, TotalSupplyCollectionDataTempPath)
+    CollectionDataChain, DateTime = ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, TotalSupplyCollectionDataTempPath)
 
     print(f"[ User: {email} | Project: {projectName} | SupplyCollectionDataDetailUpdate 완료 ]\n")
     
-    return DataTemp
+    return CollectionDataChain, DateTime
 
 if __name__ == "__main__":
     

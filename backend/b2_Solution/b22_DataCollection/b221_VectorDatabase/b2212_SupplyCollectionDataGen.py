@@ -496,6 +496,9 @@ def SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
     
         SupplyCollectionDataContextResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, SupplyCollectionDataContextFilter, CheckCount, "OpenAI", mode, MessagesReview)
         OutputDicSet[Process] = SupplyCollectionDataContextResponse
+    elif Type == "Match":
+        Process = "SupplyCollectionDataContext"
+        OutputDicSet[Process] = InputDic['CollectionData']
     
     ## Process3: SupplyCollectionDataExpertiseChain Response 생성
     if  "Expertise" in Extension:
@@ -548,7 +551,5 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    ProjectName = '241204_개정교육과정초등교과별이해연수'
+    projectName = '241204_개정교육과정초등교과별이해연수'
     #########################################################################
-    
-    SupplyCollectionDataDetailProcessUpdate(ProjectName, email)

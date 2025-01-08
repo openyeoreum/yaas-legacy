@@ -478,7 +478,7 @@ def ChangeKeys(CollectionData, Intention):
             },
             '정보의질': CollectionData["Weight"]
         }
-    return str(NewCollectionData)
+    return NewCollectionData
 
 ## 검색 CollectionData 구축
 def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range, MessagesReview):
@@ -524,7 +524,7 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
 
         # 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경
         NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
-        InputDic = {"Type": Search['Type'], "Input": NewCollectionData, "Extension": Extension}
+        InputDic = {"Type": Search['Type'], "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
 
         ## B-4. CollectionDataChain 프로세스 ##
         if Intention == "Demand":
@@ -538,36 +538,33 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
         elif Intention == "Similarity":
             # 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Demand")
-            InputDic = {"Type": Search['Type'], "Input": NewCollectionData, "Extension": Extension}
+            InputDic = {"Type": Search['Type'], "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
             
             CollectionDataChain, DateTime = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
             
             # 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Supply")
-            InputDic = {"Type": Search['Type'], "Input": NewCollectionData, "Extension": Extension}
+            InputDic = {"Type": Search['Type'], "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
             
             CollectionDataChain, DateTime = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
     
     ## C. CollectionDataChainSet Search ##
-    SearchResult = SearchCollectionData(CollectionDataChainSet, DateTime, Search['Term'], Intention, Extension, Collection, Range)
+    Result = SearchCollectionData(CollectionDataChainSet, DateTime, Search['Term'], Intention, Extension, Collection, Range)
     
-    return SearchResult
+    return Result
 
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    Search = {"Type": "Match", "Term": "PublisherData_(22)"} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
+    Search = {"Type": "Search", "Term": "나는 사람들의 마음문제를 해결하는 명상 전문가 입니다. 어떻게 하면 더 많은 사람들에게 이 방법을 전할까요?"} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
     Intention = "Supply" # Demand, Supply Similarity ...
     Extension = [] # Expertise, Ultimate, Detail, Rethinking ...
     Collection = "publisher" # Entire, Target, Trend, Publisher, Book ...
     Range = 10 # 10-100
     MessagesReview = "off"
     #########################################################################
-    Results = YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range, MessagesReview)
-    
-    for Result in Results:
-        print(f"{Result}\n")
+    Result = YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range, MessagesReview)

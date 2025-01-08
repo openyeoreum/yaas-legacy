@@ -429,6 +429,9 @@ def DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
     
         DemandCollectionDataContextResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, DemandCollectionDataContextFilter, CheckCount, "OpenAI", mode, MessagesReview)
         OutputDicSet[Process] = DemandCollectionDataContextResponse
+    elif Type == "Match":
+        Process = "DemandCollectionDataContext"
+        OutputDicSet[Process] = InputDic['CollectionData']
     
     ## Process3: DemandCollectionDataExpertiseChain Response 생성
     if "Expertise" in Extension:
@@ -483,5 +486,3 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     ProjectName = '241204_개정교육과정초등교과별이해연수'
     #########################################################################
-    
-    DemandCollectionDataDetailProcessUpdate(ProjectName, email)

@@ -325,9 +325,66 @@ def SearchEmbeddedData(VDBIndex, CollectionData, Intention, Collection, Range): 
     
     return Result
 
+## Demand와 Supply를 합쳐서 Similarity로 재구조화 함수
+def RestructureSimilarity(CollectionDataChainSet, Type):
+    # SimilaritySearch 재구조화
+    NewCollectionDataChainSet = {"SimilaritySearch": CollectionDataChainSet['SimilaritySearch']}
+    # SimilarityDetail 재구조화
+    if Type == 'Search':
+        SimilarityDetail = {"Summary": f"{CollectionDataChainSet['DemandDetail']['Summary']} {CollectionDataChainSet['SupplyDetail']['Summary']}", "Needs":f"{CollectionDataChainSet['DemandDetail']['Needs']} {CollectionDataChainSet['SupplyDetail']['Needs']}", "Purpose":f"{CollectionDataChainSet['DemandDetail']['Purpose']} {CollectionDataChainSet['SupplyDetail']['Purpose']}", "Question":f"{CollectionDataChainSet['DemandDetail']['Question']} {CollectionDataChainSet['SupplyDetail']['Question']}", "Weight": (CollectionDataChainSet['DemandDetail']['Weight'] + CollectionDataChainSet['SupplyDetail']['Weight'] / 2), "Feedback": CollectionDataChainSet['DemandDetail']['Feedback'] + CollectionDataChainSet['SupplyDetail']['Feedback']}
+        NewCollectionDataChainSet['SimilarityDetail'] = SimilarityDetail
+    elif Type == 'Match':
+        NewCollectionDataChainSet['SimilarityDetail'] = CollectionDataChainSet['SimilarityDetail']
+    # SimilarityContext 재구조화
+    NewCollectionDataChainSet['SimilarityContext'] = {"Summary": f"{CollectionDataChainSet['DemandContext']['Summary']} {CollectionDataChainSet['SupplyContext']['Summary']}", "KeyWord": CollectionDataChainSet['DemandContext']['KeyWord'] + CollectionDataChainSet['SupplyContext']['KeyWord'], "Demand": CollectionDataChainSet['DemandContext']['Demand'], "Supply": CollectionDataChainSet['SupplyContext']['Supply'], 'Weight': (CollectionDataChainSet['DemandContext']['Weight'] + CollectionDataChainSet['SupplyContext']['Weight']) / 2}
+    # SimilarityContextExpertise 재구조화
+    if ('DemandContextExpertise' in CollectionDataChainSet) or ('SupplyContextExpertise' in CollectionDataChainSet):
+        SimilarityContextExpertise = []
+        for DemandContextExpertise, SupplyContextExpertise in zip(CollectionDataChainSet['DemandContextExpertise'], CollectionDataChainSet['SupplyContextExpertise']):
+            SimilarityContextExpertise.append({"Summary": f"{DemandContextExpertise['Summary']} {SupplyContextExpertise['Summary']}", "KeyWord": DemandContextExpertise['KeyWord'] + SupplyContextExpertise['KeyWord'], "Demand": DemandContextExpertise['Demand'], "Supply": SupplyContextExpertise['Supply'], 'Weight': (DemandContextExpertise['Weight'] + SupplyContextExpertise['Weight']) / 2})
+        NewCollectionDataChainSet['SimilarityContextExpertise'] = SimilarityContextExpertise
+    # SimilarityContextUltimate 재구조화
+    if ('DemandContextUltimate' in CollectionDataChainSet) or ('SupplyContextUltimate' in CollectionDataChainSet):
+        SimilarityContextUltimate = []
+        for DemandContextUltimate, SupplyContextUltimate in zip(CollectionDataChainSet['DemandContextUltimate'], CollectionDataChainSet['SupplyContextUltimate']):
+            SimilarityContextUltimate.append({"Summary": f"{DemandContextUltimate['Summary']} {SupplyContextUltimate['Summary']}", "KeyWord": DemandContextUltimate['KeyWord'] + SupplyContextUltimate['KeyWord'], "Demand": DemandContextUltimate['Demand'], "Supply": SupplyContextUltimate['Supply'], 'Weight': (DemandContextUltimate['Weight'] + SupplyContextUltimate['Weight']) / 2})
+        NewCollectionDataChainSet['SimilarityContextUltimate'] = SimilarityContextUltimate
+    # SimilarityContextDetail 재구조화
+    if ('DemandContextDetail' in CollectionDataChainSet) or ('SupplyContextDetail' in CollectionDataChainSet):
+        SimilarityContextDetail = []
+        for DemandContextDetail, SupplyContextDetail in zip(CollectionDataChainSet['DemandContextDetail'], CollectionDataChainSet['SupplyContextDetail']):
+            SimilarityContextDetail.append({"Summary": f"{DemandContextDetail['Summary']} {SupplyContextDetail['Summary']}", "KeyWord": DemandContextDetail['KeyWord'] + SupplyContextDetail['KeyWord'], "Demand": DemandContextDetail['Demand'], "Supply": SupplyContextDetail['Supply'], 'Weight': (DemandContextDetail['Weight'] + SupplyContextDetail['Weight']) / 2})
+        NewCollectionDataChainSet['SimilarityContextDetail'] = SimilarityContextDetail
+    # SimilarityContextRethinking 재구조화
+    if ('DemandContextRethinking' in CollectionDataChainSet) or ('SupplyContextRethinking' in CollectionDataChainSet):
+        SimilarityContextRethinking = []
+        for DemandContextRethinking, SupplyContextRethinking in zip(CollectionDataChainSet['DemandContextRethinking'], CollectionDataChainSet['SupplyContextRethinking']):
+            SimilarityContextRethinking.append({"Summary": f"{DemandContextRethinking['Summary']} {SupplyContextRethinking['Summary']}", "KeyWord": DemandContextRethinking['KeyWord'] + SupplyContextRethinking['KeyWord'], "Demand": DemandContextRethinking['Demand'], "Supply": SupplyContextRethinking['Supply'], 'Weight': (DemandContextRethinking['Weight'] + SupplyContextRethinking['Weight']) / 2})
+        NewCollectionDataChainSet['SimilarityContextRethinking'] = SimilarityContextRethinking
+    
+    return NewCollectionDataChainSet
+
+## SearchResult Analysis와 Search를 묶어서 재구조화 함수
+def RestructureSearchResult(SearchResult, IntentionKey):
+    if IntentionKey in SearchResult['SearchResult']:
+        # CollectionAnalysis와 CollectionSearch 추출
+        CollectionAnalysis = SearchResult['SearchResult'][IntentionKey]['CollectionAnalysis']
+        CollectionSearch = SearchResult['SearchResult'][IntentionKey]['CollectionSearch']
+        NewSupplyContextExpertise = []
+        # Analysis와 Search를 순서대로 묶기
+        for i in range(len(CollectionAnalysis)):
+            AnalysisData = CollectionAnalysis[i]
+            SearchData = CollectionSearch[i]
+            NewSupplyContextExpertise.append({
+                "CollectionAnalysis": AnalysisData,
+                "CollectionSearch": SearchData
+            })
+        # 새로 생성된 구조로 덮어쓰기
+        SearchResult['SearchResult'][IntentionKey] = NewSupplyContextExpertise
+
 ## Pinecone에 CollectionData 검색 ##
-def SearchCollectionData(CollectionDataChainSet, DateTime, Term, Intention, Extension, Collection, Range):
-    print(f"[ YaaS VDB ({Search['Type']}): {Search['Term']} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) ]")
+def SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText, Intention, Extension, Collection, Range):
+    print(f"[ YaaS VDB Search CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) ]")
     ## TotalPublisherData 경로 설정
     TotalSearchResultDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1513_SearchResultData/s15131_TotalSearchResultData"
     TotalSearchResultDataJsonPath = os.path.join(TotalSearchResultDataPath, 'TotalSearchResultData.json')
@@ -337,7 +394,11 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Term, Intention, Exte
     PineConeClient = Pinecone_CreateIndex(Collection)
     VDBIndex = PineConeClient.Index(name = Collection)
     
-    ## B. Pinecone VDB 검색 및 결과 종합 ##
+    ## B. Similarity 재구조화 ##
+    if Intention == 'Similarity':
+        CollectionDataChainSet = RestructureSimilarity(CollectionDataChainSet, Type)
+    
+    ## C. Pinecone VDB 검색 및 결과 종합 ##
     SearchResult = {"SearchCollection": Collection, "SearchRange": Range, "SearchResult": {}}
 
     # Search (Result 없음)
@@ -365,9 +426,12 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Term, Intention, Exte
         SearchResult['SearchResult'][intentionKey]['CollectionSearch'] = Result
     else:
         SearchResult['SearchResult'][intentionKey] = None
+        
+    IntentionKeyList = []
     # ContextExpertise (연속 검색)
     intentionKey = Intention + "ContextExpertise"
     if intentionKey in CollectionDataChainSet:
+        IntentionKeyList.append(intentionKey)
         CollectionDataList = CollectionDataChainSet[intentionKey]
         if intentionKey not in SearchResult['SearchResult']:
             SearchResult['SearchResult'][intentionKey] = {}
@@ -382,6 +446,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Term, Intention, Exte
     # ContextUltimate (연속 검색)
     intentionKey = Intention + "ContextUltimate"
     if intentionKey in CollectionDataChainSet:
+        IntentionKeyList.append(intentionKey)
         CollectionDataList = CollectionDataChainSet[intentionKey]
         if intentionKey not in SearchResult['SearchResult']:
             SearchResult['SearchResult'][intentionKey] = {}
@@ -396,6 +461,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Term, Intention, Exte
     # ContextDetail (연속 검색)
     intentionKey = Intention + "ContextDetail"
     if intentionKey in CollectionDataChainSet:
+        IntentionKeyList.append(intentionKey)
         CollectionDataList = CollectionDataChainSet[intentionKey]
         if intentionKey not in SearchResult['SearchResult']:
             SearchResult['SearchResult'][intentionKey] = {}
@@ -408,6 +474,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Term, Intention, Exte
     # ContextRethinking (연속 검색)
     intentionKey = Intention + "ContextRethinking"
     if intentionKey in CollectionDataChainSet:
+        IntentionKeyList.append(intentionKey)
         CollectionDataList = CollectionDataChainSet[intentionKey]
         if intentionKey not in SearchResult['SearchResult']:
             SearchResult['SearchResult'][intentionKey] = {}
@@ -417,8 +484,12 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Term, Intention, Exte
             Result = SearchEmbeddedData(VDBIndex, CollectionData, Intention, Collection, Range)
             ResultList.append(Result)
         SearchResult['SearchResult'][intentionKey]['CollectionSearch'] = ResultList
+
+    ## D. SearchResult 재구조화 ##
+    for IntentionKey in IntentionKeyList:
+        RestructureSearchResult(SearchResult, IntentionKey)
     
-    ## C. DataTempJson 저장 ##
+    ## E. DataTempJson 저장 ##
     # TotalSearchResultDataTempPath 폴더가 없으면 생성
     if not os.path.exists(TotalSearchResultDataTempPath):
         os.makedirs(TotalSearchResultDataTempPath)
@@ -482,12 +553,19 @@ def ChangeKeys(CollectionData, Intention):
 
 ## 검색 CollectionData 구축
 def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range, MessagesReview):
+    Type = Search['Type']
+    Term = Search['Term']
+    if Type == "Match":
+        TermText = Term
+    elif Type == "Search":
+        TermText = f"{Term[:20]}..."
+    print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) ]")
     ## A. Search ##
-    if Search['Type'] == "Search":
+    if Type == "Search":
         CollectionDataChainSet = {}
         
         ## A-1. InputDic 생성 ##
-        InputDic = {"Type": Search['Type'], "Input": Search['Term'], "Extension": Extension}
+        InputDic = {"Type": Type, "Input": Term, "Extension": Extension}
 
         ## A-2. CollectionDataChain 프로세스 ##
         if Intention == "Demand":
@@ -505,53 +583,61 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
             CollectionDataChainSet.update(CollectionDataChain)
     
     ## B. Match ##
-    elif Search['Type'] == "Match":
-        CollectionDataChainSet = {}
+    elif Type == "Match":
+        CollectionDataChainSet = {f"{Intention}Search": {"Term": Term}}
         
         ## B-2. Match CollectionData 불러오기 ##
-        CollectionDataMatch = re.match(r"([A-Za-z]+)_\((\d+)\).*", Search['Term'])
+        CollectionDataMatch = re.match(r"([A-Za-z]+)_\((\d+)\).*", Term)
+        InputCollection = None
         if CollectionDataMatch:
             InputCollection = CollectionDataMatch.group(1).replace('Data', '')
             InputCollectionId = CollectionDataMatch.group(2)
+        if InputCollection is None:
+            sys.exit(f"[ YaaS Gen Chain CollectionData Error: Term의 형식이 데이터명_(Id)가 아님 ((({TermText}))) ]")
         InputMainKey, InputTempFilePaths = GetCollectionDataPaths(InputCollection)
         with open(InputTempFilePaths[InputCollectionId], 'r', encoding = 'utf-8') as InputTempFile:
             CollectionData = json.load(InputTempFile)
             # CollectionData의 MainKey를 CollectionAnalysis로 통일
             CollectionData['CollectionAnalysis'] = CollectionData.pop(InputMainKey)
-            CollectionDataChainSet.update(CollectionData['CollectionAnalysis'])
+            CollectionDataChainSet.update({f"{Intention}Detail": None})
             
-        ## B-3. InputDic 생성 ##
-
-        # 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경
-        NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
-        InputDic = {"Type": Search['Type'], "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
-
-        ## B-4. CollectionDataChain 프로세스 ##
+        ## B-3. CollectionDataChain 프로세스 ##
         if Intention == "Demand":
+            # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경
+            NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
+            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
+            
             CollectionDataChain, DateTime = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
 
         elif Intention == "Supply":
+            # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경
+            NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
+            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
+            
             CollectionDataChain, DateTime = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
             
         elif Intention == "Similarity":
-            # 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
+            # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Demand")
-            InputDic = {"Type": Search['Type'], "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
+            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
             
             CollectionDataChain, DateTime = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
             
-            # 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
+            # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Supply")
-            InputDic = {"Type": Search['Type'], "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
+            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
             
             CollectionDataChain, DateTime = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
     
+    # with open(f'CollectionDataChainSet({Type}).json', 'w', encoding = 'utf-8') as CollectionDataChainSetFile:
+    #     json.dump(CollectionDataChainSet, CollectionDataChainSetFile, ensure_ascii = False, indent = 4)
+    # sys.exit()
     ## C. CollectionDataChainSet Search ##
-    Result = SearchCollectionData(CollectionDataChainSet, DateTime, Search['Term'], Intention, Extension, Collection, Range)
+    Result = SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText, Intention, Extension, Collection, Range)
     
     return Result
 
@@ -560,11 +646,11 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    Search = {"Type": "Search", "Term": "나는 사람들의 마음문제를 해결하는 명상 전문가 입니다. 어떻게 하면 더 많은 사람들에게 이 방법을 전할까요?"} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
-    Intention = "Supply" # Demand, Supply Similarity ...
+    Search = {"Type": "Match", "Term": "PublisherData_(22)"} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
+    Intention = "Similarity" # Demand, Supply Similarity ...
     Extension = ["Expertise"] # Expertise, Ultimate, Detail, Rethinking ...
     Collection = "publisher" # Entire, Target, Trend, Publisher, Book ...
     Range = 10 # 10-100
-    MessagesReview = "off"
+    MessagesReview = "on" # on, off
     #########################################################################
     Result = YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range, MessagesReview)

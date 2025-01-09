@@ -397,12 +397,16 @@ class Prompt(Base):
     # CollectionDataGenPrompt
     DemandCollectionDataDetail = Column(JSON)
     DemandCollectionDataContext = Column(JSON)
+    DemandCollectionDataExpertise = Column(JSON)
     DemandCollectionDataExpertiseChain = Column(JSON)
+    DemandCollectionDataUltimate = Column(JSON)
     DemandCollectionDataUltimateChain = Column(JSON)
     
     SupplyCollectionDataDetail = Column(JSON)
     SupplyCollectionDataContext = Column(JSON)
+    SupplyCollectionDataExpertise = Column(JSON)
     SupplyCollectionDataExpertiseChain = Column(JSON)
+    SupplyCollectionDataUltimate = Column(JSON)
     SupplyCollectionDataUltimateChain = Column(JSON)
     
     # TargetData

@@ -28,12 +28,14 @@ def DemandCollectionDataDetailFilter(Response, CheckCount):
     # Error3: 데이터 타입 검증
     # 핵심목적, 필요내용, 필요목표, 필요질문은 문자열이어야 함
     for key in ['핵심목적', '필요내용', '필요목표', '필요질문']:
+        if isinstance(OutputDic[key], list):
+            OutputDic[key] = ' '.join(OutputDic[key])
         if not isinstance(OutputDic[key], str):
             return f"DemandCollectionDataDetail, JSON에서 오류 발생: '{key}'은 문자열이 아님"
 
     # 검색어완성도는 0-100 사이의 정수여야 함
     if not isinstance(OutputDic['검색어완성도'], int) or not (0 <= OutputDic['검색어완성도'] <= 100):
-        return "DemandCollectionDataDetail, JSON에서 오류 발생: '검색어완성도'는 0-100 사이의 정수가 아님"
+        return "DemandCollectionDataDetail, JSON에서 오류 발생: '검색어완성도'가 0-100 사이의 정수가 아님"
 
     # 검색어피드백은 문자열 리스트여야 함
     if not isinstance(OutputDic['검색어피드백'], list) or not all(isinstance(item, str) for item in OutputDic['검색어피드백']):
@@ -93,74 +95,105 @@ def DemandCollectionDataContextFilter(Response, CheckCount):
         
         # 중요도 검증
         if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
-            return f"DemandCollectionDataContext, JSON에서 오류 발생: '{sub_key} > 중요도'는 0-100 사이의 정수가 아님"
+            return f"DemandCollectionDataContext, JSON에서 오류 발생: '{sub_key} > 중요도'가 0-100 사이의 정수가 아님"
 
     return OutputDic
 
-## Process3: DemandCollectionDataExpertiseChainFilter의 Filter(Error 예외처리)
+## Process3-1: DemandCollectionDataExpertiseFilter의 Filter(Error 예외처리)
+def DemandCollectionDataExpertiseFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "DemandCollectionDataExpertiseChain, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '전문분야들' not in OutputDic:
+        return "DemandCollectionDataExpertiseChain, JSONKeyError: '전문분야들' 키가 누락"
+
+    # Error3: '전문분야들' 데이터 타입 확인
+    ExpertiseList = OutputDic['전문분야들']
+    if not isinstance(ExpertiseList, list):
+        return "DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문분야들'은 리스트 형태가 아님"
+
+    # Error4: 리스트 내부 검증
+    for idx, item in enumerate(ExpertiseList):
+        # 각 항목은 딕셔너리 형태여야 함
+        if not isinstance(item, dict):
+            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문분야들[{idx}]'은 딕셔너리 형태가 아님"
+
+        # 필수 키 확인
+        required_keys = ['전문분야', '이유']
+        missing_keys = [key for key in required_keys if key not in item]
+        if missing_keys:
+            return f"DemandCollectionDataExpertiseChain, JSONKeyError: '전문분야들[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
+
+        # 데이터 타입 검증
+        if not isinstance(item['전문분야'], str):
+            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문분야들[{idx}] > 전문분야'는 문자열이 아님"
+        if not isinstance(item['이유'], str):
+            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문분야들[{idx}] > 이유'는 문자열이 아님"
+
+    return OutputDic['전문분야들']
+
+## Process3-2: DemandCollectionDataExpertiseChainFilter의 Filter(Error 예외처리)
 def DemandCollectionDataExpertiseChainFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
         OutputDic = json.loads(Response)
     except json.JSONDecodeError:
         return "DemandCollectionDataExpertiseChain, JSONDecode에서 오류 발생: JSONDecodeError"
-    
-    # Error2: 최상위 키 검사 (전문데이터1~5)
-    top_level_keys = [f"전문데이터{i}" for i in range(1, 6)]
-    missing_keys = [key for key in top_level_keys if key not in OutputDic]
+
+    # Error2: 최상위 키 확인
+    if '전문데이터' not in OutputDic:
+        return "DemandCollectionDataExpertiseChain, JSONKeyError: '전문데이터' 키가 누락되었음"
+
+    # Error3: 전문데이터 내부 필수 키 확인
+    expertise_data = OutputDic['전문데이터']
+    required_keys = ['핵심목적', '분야', '필요', '정보의질']
+    missing_keys = [key for key in required_keys if key not in expertise_data]
     if missing_keys:
-        return f"DemandCollectionDataExpertiseChain, JSONKeyError: 누락된 전문데이터 키: {', '.join(missing_keys)}"
-    
-    # Error3: 각 전문데이터 항목에 대한 검증
-    for key in top_level_keys:
-        data = OutputDic[key]
+        return f"DemandCollectionDataExpertiseChain, JSONKeyError: '전문데이터'에 누락된 키: {', '.join(missing_keys)}"
 
-        # 전문데이터 내부 필수 키 확인
-        required_keys = ['핵심목적', '분야', '필요', '정보의질']
-        missing_inner_keys = [k for k in required_keys if k not in data]
-        if missing_inner_keys:
-            return f"DemandCollectionDataExpertiseChain, JSONKeyError: '{key}'에 누락된 키: {', '.join(missing_inner_keys)}"
-        
+    # Error4: 데이터 타입 검증
+    if not isinstance(expertise_data['핵심목적'], str):
+        return "DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 핵심목적'은 문자열이어야 합니다"
+    if not isinstance(expertise_data['분야'], list) or not all(isinstance(item, str) for item in expertise_data['분야']):
+        return "DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 분야'는 문자열 리스트가 아님"
+    if not isinstance(expertise_data['정보의질'], int) or not (0 <= expertise_data['정보의질'] <= 100):
+        return "DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 정보의질'은 0-100 사이의 정수가 아님"
+
+    # Error5: '필요' 내부 구조 검증
+    if not isinstance(expertise_data['필요'], dict):
+        return "DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 필요'는 딕셔너리 형태가 아님"
+
+    required_sub_keys = ['필요내용', '필요목표', '필요질문']
+    for sub_key in required_sub_keys:
+        if sub_key not in expertise_data['필요']:
+            return f"DemandCollectionDataExpertiseChain, JSONKeyError: '전문데이터 > 필요'에 누락된 키: {sub_key}"
+        sub_item = expertise_data['필요'][sub_key]
+
+        if not isinstance(sub_item, dict):
+            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 필요 > {sub_key}'는 딕셔너리 형태가 아님"
+
+        # 내부 필수 키 확인
+        required_detail_keys = ['설명', '키워드', '중요도']
+        missing_detail_keys = [key for key in required_detail_keys if key not in sub_item]
+        if missing_detail_keys:
+            return f"DemandCollectionDataExpertiseChain, JSONKeyError: '전문데이터 > 필요 > {sub_key}'에 누락된 키: {', '.join(missing_detail_keys)}"
+
         # 데이터 타입 검증
-        if not isinstance(data['핵심목적'], str):
-            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '{key} > 핵심목적'은 문자열이 아님"
-        if not isinstance(data['분야'], list) or not all(isinstance(item, str) for item in data['분야']):
-            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '{key} > 분야'는 문자열 리스트가 아님"
-        if not isinstance(data['정보의질'], int) or not (0 <= data['정보의질'] <= 100):
-            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '{key} > 정보의질'은 0-100 사이의 정수가 아님"
+        if not isinstance(sub_item['설명'], str):
+            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 필요 > {sub_key} > 설명'은 문자열이 아님"
+        if not isinstance(sub_item['키워드'], list) or not all(isinstance(item, str) for item in sub_item['키워드']):
+            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 필요 > {sub_key} > 키워드'는 문자열 리스트가 아님"
+        if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
+            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 필요 > {sub_key} > 중요도'가 0-100 사이의 정수가 아님"
 
-        # '필요' 키 검증
-        if not isinstance(data['필요'], dict):
-            return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '{key} > 필요'는 딕셔너리가 아님"
-        
-        # '필요' 내부 구조 검증
-        required_sub_keys = ['필요내용', '필요목표', '필요질문']
-        missing_sub_keys = [sub_key for sub_key in required_sub_keys if sub_key not in data['필요']]
-        if missing_sub_keys:
-            return f"DemandCollectionDataExpertiseChain, JSONKeyError: '{key} > 필요'에 누락된 키: {', '.join(missing_sub_keys)}"
-        
-        for sub_key in required_sub_keys:
-            sub_item = data['필요'][sub_key]
-            if not isinstance(sub_item, dict):
-                return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '{key} > 필요 > {sub_key}'는 딕셔너리가 아님"
-            
-            # '필요내용', '필요목표', '필요질문' 내부 구조 검증
-            required_detail_keys = ['설명', '키워드', '중요도']
-            missing_detail_keys = [k for k in required_detail_keys if k not in sub_item]
-            if missing_detail_keys:
-                return f"DemandCollectionDataExpertiseChain, JSONKeyError: '{key} > 필요 > {sub_key}'에 누락된 키: {', '.join(missing_detail_keys)}"
-            
-            # 데이터 타입 및 값 검증
-            if not isinstance(sub_item['설명'], str):
-                return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '{key} > 필요 > {sub_key} > 설명'은 문자열이 아님"
-            if not isinstance(sub_item['키워드'], list) or not all(isinstance(item, str) for item in sub_item['키워드']):
-                return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '{key} > 필요 > {sub_key} > 키워드'는 문자열 리스트가 아님"
-            if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
-                return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '{key} > 필요 > {sub_key} > 중요도'는 0-100 사이의 정수가 아님"
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['전문데이터']
 
-    return OutputDic
-
-## Process4: DemandCollectionDataExpertiseChainFilter의 Filter(Error 예외처리)
+## Process4: DemandCollectionDataUltimateChainFilter의 Filter(Error 예외처리)
 def DemandCollectionDataUltimateChainFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
@@ -226,7 +259,7 @@ def DemandCollectionDataUltimateChainFilter(Response, CheckCount):
             if not isinstance(sub_item['키워드'], list) or not all(isinstance(item, str) for item in sub_item['키워드']):
                 return f"DemandCollectionDataUltimateChain, JSON에서 오류 발생: '{key} > 필요 > {sub_key} > 키워드'는 문자열 리스트여야 합니다"
             if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
-                return f"DemandCollectionDataUltimateChain, JSON에서 오류 발생: '{key} > 필요 > {sub_key} > 중요도'는 0-100 사이의 정수여야 합니다"
+                return f"DemandCollectionDataUltimateChain, JSON에서 오류 발생: '{key} > 필요 > {sub_key} > 중요도'가 0-100 사이의 정수여야 합니다"
 
     return OutputDic
 
@@ -245,18 +278,18 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
         Filter = FilterFunc(Response, CheckCount)
         
         if isinstance(Filter, str):
-            print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
+            print(f"Search: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
             ErrorCount += 1
-            print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
+            print(f"Search: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
                 f"오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도")
             
             if ErrorCount >= 5:
-                sys.exit(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
+                sys.exit(f"Search: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
                         f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
             time.sleep(120)
             continue
         
-        print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | JSONDecode 완료")
+        print(f"Search: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | JSONDecode 완료")
         return Filter
 
 ##################################
@@ -377,10 +410,6 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
     for i in range(len(ProcessKeyList)):
         DataTemp[MainKey][ProcessKeyList[i]] = ProcessDicList[i]
     
-    DataTemp = {MainKey: {}}
-    for i in range(len(ProcessKeyList)):
-        DataTemp[MainKey][ProcessKeyList[i]] = ProcessDicList[i]
-    
     # DataTempJson 저장
     DateTime = datetime.now().strftime('%Y%m%d%H%M%S')
     DataTempJsonPath = os.path.join(DataTempPath, f"SupplyCollectionData_({DateTime})_{re.sub(r'[^가-힣a-zA-Z0-9]', '', Term)[:15]}.json")
@@ -397,17 +426,22 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
 ################################
 ## DemandCollectionDataDetail 프롬프트 요청 및 결과물 Json화
 def DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode = "Master", MainKey = 'DemandSearchAnalysis', MessagesReview = "on"):
-    print(f"< User: {email} | Project: {projectName} | DemandCollectionDataDetailUpdate 시작 >")
+    print(f"< User: {email} | Search: {projectName} | DemandCollectionDataDetailUpdate 시작 >")
     ## TotalPublisherData 경로 설정
     TotalDemandCollectionDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1511_DemandCollectionData/s15111_TotalDemandCollectionData"
     TotalDemandCollectionDataJsonPath = os.path.join(TotalDemandCollectionDataPath, 'TotalDemandCollectionData.json')
     TotalDemandCollectionDataTempPath = os.path.join(TotalDemandCollectionDataPath, 'TotalDemandCollectionDataTemp')
     
     ## DemandCollectionDataDetailProcess
-    InputCount = 1
-    processCount = 1
     Type = InputDic['Type']
     Extension = InputDic['Extension']
+    # InputCount 계산
+    InputCount = 1
+    if Type == "Search":
+        InputCount += 1
+    if Extension != []:
+        InputCount += (len(InputDic['Extension'])) * 6
+    processCount = 1
     CheckCount = 0
     OutputDicSet = {}
 
@@ -418,6 +452,7 @@ def DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
         
         DemandCollectionDataDetailResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, DemandCollectionDataDetailFilter, CheckCount, "OpenAI", mode, MessagesReview)
         OutputDicSet[Process] = DemandCollectionDataDetailResponse
+        processCount += 1
     
     ## Process2: DemandCollectionDataContext Response 생성
     if Type == "Search":
@@ -432,17 +467,32 @@ def DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
     elif Type == "Match":
         Process = "DemandCollectionDataContext"
         OutputDicSet[Process] = InputDic['CollectionData']
+    processCount += 1
     
-    ## Process3: DemandCollectionDataExpertiseChain Response 생성
+    ## Process3-1: DemandCollectionDataExpertise Response 생성
     if "Expertise" in Extension:
-        Process = "DemandCollectionDataExpertiseChain"
+        Process = "DemandCollectionDataExpertise"
         if Type == "Search":
             Input = DemandCollectionDataContextResponse
         elif Type == "Match":
             Input = InputDic['Input']
         
-        DemandCollectionDataExpertiseChainResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, DemandCollectionDataExpertiseChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
-        OutputDicSet[Process] = DemandCollectionDataExpertiseChainResponse
+        DemandCollectionDataExpertiseResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, DemandCollectionDataExpertiseFilter, CheckCount, "OpenAI", mode, MessagesReview)
+        processCount += 1
+        
+        ## Process3-2: DemandCollectionDataExpertiseChain Response 연속 생성 및 Set로 합치기
+        Process = "DemandCollectionDataExpertiseChain"
+        DemandCollectionDataExpertiseChainResponseSet = {}
+        for i, Response in enumerate(DemandCollectionDataExpertiseResponse):
+            InputText = f'{Response}\n\n<데이터>\n{Input}'
+            DemandCollectionDataExpertiseChainResponse = ProcessResponse(projectName, email, Process, InputText, processCount, InputCount, DemandCollectionDataExpertiseChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
+            DemandCollectionDataExpertiseChainResponseSet[f'전문데이터{i+1}'] = {}
+            DemandCollectionDataExpertiseChainResponseSet[f'전문데이터{i+1}']['전문분야'] = Response
+            DemandCollectionDataExpertiseChainResponseSet[f'전문데이터{i+1}'].update(DemandCollectionDataExpertiseChainResponse)
+            processCount += 1
+
+        # 최종 Set 데이터 추가
+        OutputDicSet[Process] = DemandCollectionDataExpertiseChainResponseSet
     
     ## Process4: DemandCollectionDataUltimateChain Response 생성
     if "Ultimate" in Extension:
@@ -454,6 +504,7 @@ def DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
         
         DemandCollectionDataUltimateChainResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, DemandCollectionDataUltimateChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
         OutputDicSet[Process] = DemandCollectionDataUltimateChainResponse
+        processCount += 1
     
     ## Process5: DemandCollectionDataDetailChain Response 생성
     if "Detail" in Extension:
@@ -476,7 +527,7 @@ def DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
     ## ProcessResponse 임시저장
     CollectionDataChain, DateTime = ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, TotalDemandCollectionDataTempPath)
 
-    print(f"[ User: {email} | Project: {projectName} | DemandCollectionDataDetailUpdate 완료 ]\n")
+    print(f"[ User: {email} | Search: {projectName} | DemandCollectionDataDetailUpdate 완료 ]\n")
     
     return CollectionDataChain, DateTime
 

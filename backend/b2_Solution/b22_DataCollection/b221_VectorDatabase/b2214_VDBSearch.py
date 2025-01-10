@@ -1,11 +1,14 @@
 import os
 import re
 import json
+import time
 import sys
 sys.path.append("/yaas")
 
-from pinecone import Pinecone, ServerlessSpec
 from openai import OpenAI
+from pinecone import Pinecone, ServerlessSpec
+from tqdm import tqdm
+
 from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2211_DemandCollectionDataGen import DemandCollectionDataDetailProcessUpdate
 from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2212_SupplyCollectionDataGen import SupplyCollectionDataDetailProcessUpdate
 
@@ -69,7 +72,7 @@ def GetCollectionDataPaths(Collection):
     return MainKey, TempFilePaths
 
 ## Pinecone에 임베딩 데이터 검색
-def SearchEmbeddedData(VDBIndex, CollectionData, Intention, Collection, Range): # Intention: 'similarity', 'demand, 'supply' // Collection: 'entire', 'target', 'trend', 'publisher', 'book'...
+def SearchEmbeddedData(VDBIndex, CollectionData, Type, TermText, Intention, Collection, Range): # Intention: 'similarity', 'demand, 'supply' // Collection: 'entire', 'target', 'trend', 'publisher', 'book'...
     ## A. TempFilePaths, MainKey 생성 ##
     MainKey, TempFilePaths = GetCollectionDataPaths(Collection)
     
@@ -141,7 +144,14 @@ def SearchEmbeddedData(VDBIndex, CollectionData, Intention, Collection, Range): 
     MinScores = {}
     MaxScores = {}
     ## D. 각 필드에 대한 검색 쿼리 생성 ##
-    for Query in QueryList:
+    # Result Score 계산 TQDM 셋팅
+    UpdateTQDM = tqdm(QueryList,
+                    total = len(QueryList),
+                    desc = f'YaaS VDB Search ({Type}): {TermText}')
+
+    for Query in UpdateTQDM:
+        UpdateTQDM.set_description(f'Search: {Query["Field"]}')
+        time.sleep(0.0001)
         if Query['Field'] == "Context-Summary":
             QueryText = Query['Text']
             QueryWeight = Query['Weight']
@@ -218,7 +228,14 @@ def SearchEmbeddedData(VDBIndex, CollectionData, Intention, Collection, Range): 
             QueryResultList.append(QueryResult)
 
     ## G. Pinecone에 Result Score 계산 ##
-    for QueryResult in QueryResultList:
+    # Result Score 계산 TQDM 셋팅
+    UpdateTQDM = tqdm(QueryResultList,
+                    total = len(QueryResultList),
+                    desc = f'YaaS VDB Score Calculate ({Type}): {TermText}')
+    
+    for QueryResult in UpdateTQDM:
+        UpdateTQDM.set_description(f'Score Calculate: {QueryResult["matches"][0]["metadata"]["Field"]}')
+        time.sleep(0.0001)
         # 가장 높은 유사도 점수와 CollectionId를 사용
         for result in QueryResult["matches"]:
             collection = result["metadata"]["Collection"]
@@ -331,7 +348,7 @@ def RestructureSimilarity(CollectionDataChainSet, Type):
     NewCollectionDataChainSet = {"SimilaritySearch": CollectionDataChainSet['SimilaritySearch']}
     # SimilarityDetail 재구조화
     if Type == 'Search':
-        SimilarityDetail = {"Summary": f"{CollectionDataChainSet['DemandDetail']['Summary']} {CollectionDataChainSet['SupplyDetail']['Summary']}", "Needs":f"{CollectionDataChainSet['DemandDetail']['Needs']} {CollectionDataChainSet['SupplyDetail']['Satisfy']}", "Purpose":f"{CollectionDataChainSet['DemandDetail']['Purpose']} {CollectionDataChainSet['SupplyDetail']['Support']}", "Question":f"{CollectionDataChainSet['DemandDetail']['Question']} {CollectionDataChainSet['SupplyDetail']['Solution']}", "Weight": (CollectionDataChainSet['DemandDetail']['Weight'] + CollectionDataChainSet['SupplyDetail']['Weight'] / 2), "Feedback": CollectionDataChainSet['DemandDetail']['Feedback'] + CollectionDataChainSet['SupplyDetail']['Feedback']}
+        SimilarityDetail = {"Summary": f"{CollectionDataChainSet['DemandDetail']['Summary']} {CollectionDataChainSet['SupplyDetail']['Summary']}", "Needs":f"{CollectionDataChainSet['DemandDetail']['Needs']} {CollectionDataChainSet['SupplyDetail']['Satisfy']}", "Purpose":f"{CollectionDataChainSet['DemandDetail']['Purpose']} {CollectionDataChainSet['SupplyDetail']['Support']}", "Question":f"{CollectionDataChainSet['DemandDetail']['Question']} {CollectionDataChainSet['SupplyDetail']['Solution']}", "Weight": (CollectionDataChainSet['DemandDetail']['Weight'] + CollectionDataChainSet['SupplyDetail']['Weight']) / 2, "Feedback": CollectionDataChainSet['DemandDetail']['Feedback'] + CollectionDataChainSet['SupplyDetail']['Feedback']}
         NewCollectionDataChainSet['SimilarityDetail'] = SimilarityDetail
     elif Type == 'Match':
         NewCollectionDataChainSet['SimilarityDetail'] = CollectionDataChainSet['SimilarityDetail']
@@ -383,8 +400,8 @@ def RestructureSearchResult(SearchResult, IntentionKey):
         SearchResult['SearchResult'][IntentionKey] = NewSupplyContextExpertise
 
 ## Pinecone에 CollectionData 검색 ##
-def SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText, Intention, Extension, Collection, Range):
-    print(f"[ YaaS VDB Search CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) ]")
+def SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Intention, Extension, Collection, Range):
+    print(f"[ YaaS VDB Search CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 시작 ]")
     ## TotalPublisherData 경로 설정
     TotalSearchResultDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1513_SearchResultData/s15131_TotalSearchResultData"
     TotalSearchResultDataJsonPath = os.path.join(TotalSearchResultDataPath, 'TotalSearchResultData.json')
@@ -399,7 +416,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText,
         CollectionDataChainSet = RestructureSimilarity(CollectionDataChainSet, Type)
     
     ## C. Pinecone VDB 검색 및 결과 종합 ##
-    SearchResult = {"SearchCollection": Collection, "SearchRange": Range, "SearchResult": {}}
+    SearchResult = {"SearchType": Type, "SearchIntention": Intention, "SearchCollection": Collection, "SearchRange": Range, "SearchResult": {}}
 
     # Search (Result 없음)
     intentionKey = Intention + "Search"
@@ -422,7 +439,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText,
         if intentionKey not in SearchResult['SearchResult']:
             SearchResult['SearchResult'][intentionKey] = {}
         SearchResult['SearchResult'][intentionKey]['CollectionAnalysis'] = CollectionData
-        Result = SearchEmbeddedData(VDBIndex, CollectionData, Intention, Collection, Range)
+        Result = SearchEmbeddedData(VDBIndex, CollectionData, Type, TermText, Intention, Collection, Range)
         SearchResult['SearchResult'][intentionKey]['CollectionSearch'] = Result
     else:
         SearchResult['SearchResult'][intentionKey] = None
@@ -438,7 +455,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText,
         SearchResult['SearchResult'][intentionKey]['CollectionAnalysis'] = CollectionDataList
         ResultList = []
         for CollectionData in CollectionDataList:
-            Result = SearchEmbeddedData(VDBIndex, CollectionData, Intention, Collection, Range)
+            Result = SearchEmbeddedData(VDBIndex, CollectionData, Type, TermText, Intention, Collection, Range)
             ResultList.append(Result)
         SearchResult['SearchResult'][intentionKey]['CollectionSearch'] = ResultList
     else:
@@ -453,7 +470,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText,
         SearchResult['SearchResult'][intentionKey]['CollectionAnalysis'] = CollectionDataList
         ResultList = []
         for CollectionData in CollectionDataList:
-            Result = SearchEmbeddedData(VDBIndex, CollectionData, Intention, Collection, Range)
+            Result = SearchEmbeddedData(VDBIndex, CollectionData, Type, TermText, Intention, Collection, Range)
             ResultList.append(Result)
         SearchResult['SearchResult'][intentionKey]['CollectionSearch'] = ResultList
     else:
@@ -468,7 +485,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText,
         SearchResult['SearchResult'][intentionKey]['CollectionAnalysis'] = CollectionDataList
         ResultList = []
         for CollectionData in CollectionDataList:
-            Result = SearchEmbeddedData(VDBIndex, CollectionData, Intention, Collection, Range)
+            Result = SearchEmbeddedData(VDBIndex, CollectionData, Type, TermText, Intention, Collection, Range)
             ResultList.append(Result)
         SearchResult['SearchResult'][intentionKey]['CollectionSearch'] = ResultList
     # ContextRethinking (연속 검색)
@@ -481,7 +498,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText,
         SearchResult['SearchResult'][intentionKey]['CollectionAnalysis'] = CollectionDataList
         ResultList = []
         for CollectionData in CollectionDataList:
-            Result = SearchEmbeddedData(VDBIndex, CollectionData, Intention, Collection, Range)
+            Result = SearchEmbeddedData(VDBIndex, CollectionData, Type, TermText, Intention, Collection, Range)
             ResultList.append(Result)
         SearchResult['SearchResult'][intentionKey]['CollectionSearch'] = ResultList
 
@@ -495,9 +512,11 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText,
         os.makedirs(TotalSearchResultDataTempPath)
         
     # DataTempJson 저장
-    DataTempJsonPath = os.path.join(TotalSearchResultDataTempPath, f"SearchResultData_({DateTime})_{re.sub(r'[^가-힣a-zA-Z0-9]', '', Term)[:15]}.json")
+    DataTempJsonPath = os.path.join(TotalSearchResultDataTempPath, f"SearchResultData_({DateTime})_{TermText}.json")
     with open(DataTempJsonPath, 'w', encoding = 'utf-8') as DataTempJson:
         json.dump(SearchResult, DataTempJson, ensure_ascii = False, indent = 4)
+
+    print(f"[ YaaS VDB Search CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 완료 ]")
         
     return SearchResult
 
@@ -553,24 +572,34 @@ def ChangeKeys(CollectionData, Intention):
 
 ## 검색 CollectionData 구축
 def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range, MessagesReview):
-    Type = Search['Type']
-    Term = Search['Term']
+    ## A. 검색어 검사 ##Type = Search['Type'] ##
+    ## A-1. Match, Search 검색어 패턴 검사
+    MatchPattern = r'^([A-Za-z]+_\(\d+\))'
+    if re.match(MatchPattern, Search):
+        Type = "Match"
+    else:
+        Type = "Search"
+    
+    ## A-2. 요약 검색어 생성
+    Term = Search
     if Type == "Match":
-        TermText = Term
+        TermText = f"[{Term}]"
     elif Type == "Search":
-        TermText = f"{Term[:20]}..."
-    print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) ]")
-    ## A. Search ##
+        TermText = f"[{Term[:20]}]"
+    
+    ## B. Search ##
+    print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 시작 ]")
     if Type == "Search":
+        ## B-1. Search: Similarity CollectionDataChain 프로세스 ##
         if Intention == "Similarity":
             CollectionDataChainSet = {f"SimilaritySearch": {"Term": Term}}
         else:
             CollectionDataChainSet = {}
         
-        ## A-1. InputDic 생성 ##
-        InputDic = {"Type": Type, "Input": Term, "Extension": Extension}
+        # InputDic 생성
+        InputDic = {"Type": Type, "Input": Term, "Extension": Extension, "TermText": TermText}
 
-        ## A-2. CollectionDataChain 프로세스 ##
+        ## B-2. Search: Demand, Supply CollectionDataChain 프로세스 ##
         if Intention == "Demand":
             CollectionDataChain, DateTime = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
@@ -585,21 +614,22 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
             CollectionDataChain, DateTime = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
     
-    ## B. Match ##
+    ## C. Match ##
     elif Type == "Match":
+        ## C-1. Match: Similarity CollectionDataChain 프로세스 ##
         if Intention == "Similarity":
             CollectionDataChainSet = {f"SimilaritySearch": {"Term": Term}}
         else:
             CollectionDataChainSet = {}
         
-        ## B-2. Match CollectionData 불러오기 ##
+        # Match CollectionData 불러오기
         CollectionDataMatch = re.match(r"([A-Za-z]+)_\((\d+)\).*", Term)
         InputCollection = None
         if CollectionDataMatch:
             InputCollection = CollectionDataMatch.group(1).replace('Data', '')
             InputCollectionId = CollectionDataMatch.group(2)
         if InputCollection is None:
-            sys.exit(f"[ YaaS Gen Chain CollectionData Error: Term의 형식이 데이터명_(Id)가 아님 ((({TermText}))) ]")
+            sys.exit(f"[ YaaS Gen Chain CollectionData Error: 데이터명_(Id)가 존재하지 않음 ((({TermText}))) ]")
         InputMainKey, InputTempFilePaths = GetCollectionDataPaths(InputCollection)
         with open(InputTempFilePaths[InputCollectionId], 'r', encoding = 'utf-8') as InputTempFile:
             CollectionData = json.load(InputTempFile)
@@ -607,11 +637,11 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
             CollectionData['CollectionAnalysis'] = CollectionData.pop(InputMainKey)
             CollectionDataChainSet.update({f"{Intention}Detail": None})
             
-        ## B-3. CollectionDataChain 프로세스 ##
+        ## C-2. Match: Demand, Supply CollectionDataChain 프로세스 ##
         if Intention == "Demand":
             # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
-            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
+            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
             
             CollectionDataChain, DateTime = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
@@ -619,7 +649,7 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
         elif Intention == "Supply":
             # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
-            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
+            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
             
             CollectionDataChain, DateTime = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
@@ -627,14 +657,14 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
         elif Intention == "Similarity":
             # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Demand")
-            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
+            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
             
             CollectionDataChain, DateTime = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
             
             # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Supply")
-            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData}
+            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
             
             CollectionDataChain, DateTime = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
@@ -642,8 +672,9 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
     # with open(f'CollectionDataChainSet({Type}).json', 'w', encoding = 'utf-8') as CollectionDataChainSetFile:
     #     json.dump(CollectionDataChainSet, CollectionDataChainSetFile, ensure_ascii = False, indent = 4)
     # sys.exit()
-    ## C. CollectionDataChainSet Search ##
-    Result = SearchCollectionData(CollectionDataChainSet, DateTime, Type, Term, TermText, Intention, Extension, Collection, Range)
+    ## D. CollectionDataChainSet Search ##
+    print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 완료 ]\n")
+    Result = SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Intention, Extension, Collection, Range)
     
     return Result
 
@@ -652,11 +683,11 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    Search = {"Type": "Search", "Term": "내가 운영하는 명상센터의 회원을 모집하기 위해서 홍보 전략을 세우고 싶습니다."} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
-    Intention = "Similarity" # Demand, Supply Similarity ...
+    Search = "나는 아침형 인간이 되어서 더욱 생산적인 생활을 하고 싶습니다. 지금은 개발자로서 밤 생활에 너무 익숙해져 있습니다." # Search: SearchTerm, Match: PublisherData_(Id)
+    Intention = "Supply" # Demand, Supply, Similarity ...
     Extension = ["Expertise"] # Expertise, Ultimate, Detail, Rethinking ...
     Collection = "publisher" # Entire, Target, Trend, Publisher, Book ...
     Range = 10 # 10-100
-    MessagesReview = "on" # on, off
+    MessagesReview = "off" # on, off
     #########################################################################
     Result = YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range, MessagesReview)

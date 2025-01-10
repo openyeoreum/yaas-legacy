@@ -284,18 +284,18 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
         Filter = FilterFunc(Response, CheckCount)
         
         if isinstance(Filter, str):
-            print(f"Search: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
+            print(f"Chain: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
             ErrorCount += 1
-            print(f"Search: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
+            print(f"Chain: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
                 f"오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도")
             
             if ErrorCount >= 5:
-                sys.exit(f"Search: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
+                sys.exit(f"Chain: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
                         f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
             time.sleep(120)
             continue
         
-        print(f"Search: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | JSONDecode 완료")
+        print(f"Chain: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | JSONDecode 완료")
         return Filter
 
 ##################################
@@ -314,6 +314,7 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
     #### Search ####
     # Search-Term
     Term = InputDic['Input']
+    TermText = InputDic['TermText']
     ## SearchDic ##
     SearchDic = {'Term': Term}
 
@@ -418,7 +419,7 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
     
     # DataTempJson 저장
     DateTime = datetime.now().strftime('%Y%m%d%H%M%S')
-    DataTempJsonPath = os.path.join(DataTempPath, f"SupplyCollectionData_({DateTime})_{re.sub(r'[^가-힣a-zA-Z0-9]', '', Term)[:15]}.json")
+    DataTempJsonPath = os.path.join(DataTempPath, f"SupplyCollectionData_({DateTime})_{TermText}.json")
     with open(DataTempJsonPath, 'w', encoding = 'utf-8') as DataTempJson:
         json.dump(DataTemp, DataTempJson, ensure_ascii = False, indent = 4)
         
@@ -432,7 +433,7 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
 ################################
 ## SupplyCollectionDataDetail 프롬프트 요청 및 결과물 Json화
 def SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode = "Master", MainKey = 'SupplySearchAnalysis', MessagesReview = "on"):
-    print(f"< User: {email} | Search: {projectName} | SupplyCollectionDataDetailUpdate 시작 >")
+    print(f"< User: {email} | Chain: {projectName} | SupplyCollectionDataDetailUpdate 시작 >")
     ## TotalPublisherData 경로 설정
     TotalSupplyCollectionDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1512_SupplyCollectionData/s15121_TotalSupplyCollectionData"
     TotalSupplyCollectionDataJsonPath = os.path.join(TotalSupplyCollectionDataPath, 'TotalSupplyCollectionData.json')
@@ -545,7 +546,7 @@ def SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
     ## ProcessResponse 임시저장
     CollectionDataChain, DateTime = ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, TotalSupplyCollectionDataTempPath)
 
-    print(f"[ User: {email} | Search: {projectName} | SupplyCollectionDataDetailUpdate 완료 ]\n")
+    print(f"[ User: {email} | Chain: {projectName} | SupplyCollectionDataDetailUpdate 완료 ]")
     
     return CollectionDataChain, DateTime
 

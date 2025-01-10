@@ -412,7 +412,7 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
     
     # DataTempJson 저장
     DateTime = datetime.now().strftime('%Y%m%d%H%M%S')
-    DataTempJsonPath = os.path.join(DataTempPath, f"SupplyCollectionData_({DateTime})_{re.sub(r'[^가-힣a-zA-Z0-9]', '', Term)[:15]}.json")
+    DataTempJsonPath = os.path.join(DataTempPath, f"DemandCollectionData_({DateTime})_{re.sub(r'[^가-힣a-zA-Z0-9]', '', Term)[:15]}.json")
     with open(DataTempJsonPath, 'w', encoding = 'utf-8') as DataTempJson:
         json.dump(DataTemp, DataTempJson, ensure_ascii = False, indent = 4)
         

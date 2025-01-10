@@ -331,7 +331,7 @@ def RestructureSimilarity(CollectionDataChainSet, Type):
     NewCollectionDataChainSet = {"SimilaritySearch": CollectionDataChainSet['SimilaritySearch']}
     # SimilarityDetail 재구조화
     if Type == 'Search':
-        SimilarityDetail = {"Summary": f"{CollectionDataChainSet['DemandDetail']['Summary']} {CollectionDataChainSet['SupplyDetail']['Summary']}", "Needs":f"{CollectionDataChainSet['DemandDetail']['Needs']} {CollectionDataChainSet['SupplyDetail']['Needs']}", "Purpose":f"{CollectionDataChainSet['DemandDetail']['Purpose']} {CollectionDataChainSet['SupplyDetail']['Purpose']}", "Question":f"{CollectionDataChainSet['DemandDetail']['Question']} {CollectionDataChainSet['SupplyDetail']['Question']}", "Weight": (CollectionDataChainSet['DemandDetail']['Weight'] + CollectionDataChainSet['SupplyDetail']['Weight'] / 2), "Feedback": CollectionDataChainSet['DemandDetail']['Feedback'] + CollectionDataChainSet['SupplyDetail']['Feedback']}
+        SimilarityDetail = {"Summary": f"{CollectionDataChainSet['DemandDetail']['Summary']} {CollectionDataChainSet['SupplyDetail']['Summary']}", "Needs":f"{CollectionDataChainSet['DemandDetail']['Needs']} {CollectionDataChainSet['SupplyDetail']['Satisfy']}", "Purpose":f"{CollectionDataChainSet['DemandDetail']['Purpose']} {CollectionDataChainSet['SupplyDetail']['Support']}", "Question":f"{CollectionDataChainSet['DemandDetail']['Question']} {CollectionDataChainSet['SupplyDetail']['Solution']}", "Weight": (CollectionDataChainSet['DemandDetail']['Weight'] + CollectionDataChainSet['SupplyDetail']['Weight'] / 2), "Feedback": CollectionDataChainSet['DemandDetail']['Feedback'] + CollectionDataChainSet['SupplyDetail']['Feedback']}
         NewCollectionDataChainSet['SimilarityDetail'] = SimilarityDetail
     elif Type == 'Match':
         NewCollectionDataChainSet['SimilarityDetail'] = CollectionDataChainSet['SimilarityDetail']
@@ -562,7 +562,10 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
     print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) ]")
     ## A. Search ##
     if Type == "Search":
-        CollectionDataChainSet = {}
+        if Intention == "Similarity":
+            CollectionDataChainSet = {f"SimilaritySearch": {"Term": Term}}
+        else:
+            CollectionDataChainSet = {}
         
         ## A-1. InputDic 생성 ##
         InputDic = {"Type": Type, "Input": Term, "Extension": Extension}
@@ -584,7 +587,10 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
     
     ## B. Match ##
     elif Type == "Match":
-        CollectionDataChainSet = {f"{Intention}Search": {"Term": Term}}
+        if Intention == "Similarity":
+            CollectionDataChainSet = {f"SimilaritySearch": {"Term": Term}}
+        else:
+            CollectionDataChainSet = {}
         
         ## B-2. Match CollectionData 불러오기 ##
         CollectionDataMatch = re.match(r"([A-Za-z]+)_\((\d+)\).*", Term)
@@ -646,7 +652,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    Search = {"Type": "Match", "Term": "PublisherData_(22)"} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
+    Search = {"Type": "Search", "Term": "내가 운영하는 명상센터의 회원을 모집하기 위해서 홍보 전략을 세우고 싶습니다."} # Type: Search, Match // Term: SearchTerm, PublisherData_(Id)
     Intention = "Similarity" # Demand, Supply Similarity ...
     Extension = ["Expertise"] # Expertise, Ultimate, Detail, Rethinking ...
     Collection = "publisher" # Entire, Target, Trend, Publisher, Book ...

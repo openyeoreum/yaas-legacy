@@ -317,12 +317,12 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
             print(f"Chain: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
             ErrorCount += 1
             print(f"Chain: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
-                f"오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도")
+                f"오류횟수 {ErrorCount}회, 10초 후 프롬프트 재시도")
             
-            if ErrorCount >= 5:
+            if ErrorCount >= 10:
                 sys.exit(f"Chain: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
                         f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
-            time.sleep(120)
+            time.sleep(10)
             continue
         
         print(f"Chain: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | JSONDecode 완료")
@@ -524,7 +524,7 @@ def SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
             InputText = f'{Response}\n\n<데이터>\n{Input}\n'
             SupplyCollectionDataExpertiseChainResponse = ProcessResponse(projectName, email, Process, InputText, processCount, InputCount, SupplyCollectionDataExpertiseChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
             SupplyCollectionDataExpertiseChainResponseSet[f'전문데이터{i+1}'] = {}
-            SupplyCollectionDataExpertiseChainResponse['핵심솔루션'] = f"{Response['핵심솔루션']}  {SupplyCollectionDataExpertiseChainResponse['핵심솔루션']}"
+            SupplyCollectionDataExpertiseChainResponse['핵심솔루션'] = f"{Response['전문분야']}  {SupplyCollectionDataExpertiseChainResponse['핵심솔루션']}"
             SupplyCollectionDataExpertiseChainResponseSet[f'전문데이터{i+1}'].update(SupplyCollectionDataExpertiseChainResponse)
             processCount += 1
 

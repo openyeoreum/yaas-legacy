@@ -204,12 +204,12 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
             print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
             ErrorCount += 1
             print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
-                f"오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도")
+                f"오류횟수 {ErrorCount}회, 10초 후 프롬프트 재시도")
             
-            if ErrorCount >= 5:
+            if ErrorCount >= 10:
                 sys.exit(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | "
                         f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
-            time.sleep(120)
+            time.sleep(10)
             continue
         
         print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | JSONDecode 완료")

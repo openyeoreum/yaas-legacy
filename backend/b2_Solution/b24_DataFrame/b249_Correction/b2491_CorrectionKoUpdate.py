@@ -617,9 +617,9 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                     
                 # 2분 대기 이후 다시 코드 실행
                 ErrorCount += 1
-                print((f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도"))
-                time.sleep(120)
-                if ErrorCount == 5:
+                print((f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회, 10초 후 프롬프트 재시도"))
+                time.sleep(10)
+                if ErrorCount >= 10:
                     sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
 
                     

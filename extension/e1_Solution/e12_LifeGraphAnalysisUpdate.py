@@ -187,9 +187,9 @@ def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", 
             if isinstance(Filter, str):
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
                 ErrorCount += 1
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도")
-                time.sleep(120)
-                if ErrorCount == 5:
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount}회, 10초 후 프롬프트 재시도")
+                time.sleep(10)
+                if ErrorCount >= 10:
                     sys.exit(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                 continue
             else:
@@ -231,9 +231,9 @@ def LifeGraphAnalysisProcess(projectName, email, Process = "LifeGraphAnalysis", 
             if isinstance(Filter, str):
                 print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | {Filter}")
                 ErrorCount += 1
-                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount}회, 2분 후 프롬프트 재시도")
-                time.sleep(120)
-                if ErrorCount == 5:
+                print(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount}회, 10초 후 프롬프트 재시도")
+                time.sleep(10)
+                if ErrorCount >= 10:
                     sys.exit(f"Project: {projectName} | Process: {Process} {ProcessCount}/{InputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                 continue
             else:

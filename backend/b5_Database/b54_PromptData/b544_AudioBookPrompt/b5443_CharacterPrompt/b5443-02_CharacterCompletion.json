@@ -18,7 +18,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "o1"
+        "MasterModel": "o1-mini"
     },
     "ANTHROPIC": {
         "BaseModel": {

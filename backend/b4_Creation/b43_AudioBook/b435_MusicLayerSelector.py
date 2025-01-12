@@ -285,6 +285,7 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
     NewMatchedMusics = []
     for MatchedMusic in MatchedMusics:
         FilePath = MatchedMusic['FilePath']
+        Setting = MatchedMusic['Setting']
         Tag = MatchedMusic['Tag']
         if 'File' not in MatchedMusic:
             if MatchedMusic['FilePath'] is not None:
@@ -322,10 +323,11 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
                         TitleMusicDataFile = MusicSet['FilePath'].split('/')[-1]
                         if File == TitleMusicDataFile:
                             FilePath = MusicSet['FilePath']
+                            Setting = MusicSet['Setting']
                             TitleMusicDataFound = True  # 찾았다는 표시
                             break
         
-        NewMatchedMusic = {'Tag': MatchedMusic['Tag'], 'File': File, 'FilePath': FilePath, 'Setting': MatchedMusic['Setting']}
+        NewMatchedMusic = {'Tag': MatchedMusic['Tag'], 'File': File, 'FilePath': FilePath, 'Setting': Setting}
         NewMatchedMusics.append(NewMatchedMusic)
 
     ## NewMatchedMusics 파일 저장

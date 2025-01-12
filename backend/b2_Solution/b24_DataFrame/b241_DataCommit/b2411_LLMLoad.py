@@ -276,16 +276,27 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
     for _ in range(MaxAttempts):
       try:
           if promptFrame[0]["OutputFormat"] == 'json':
-            response = OpenAIClient.chat.completions.create(
-                model = Model,
-                response_format = {"type": "json_object"},
-                messages = Messages,
-                temperature = Temperature)
+            if 'o1' in Model:
+              response = OpenAIClient.chat.completions.create(
+                  model = Model,
+                  response_format = {"type": "json_object"},
+                  messages = Messages)
+            else:
+              response = OpenAIClient.chat.completions.create(
+                  model = Model,
+                  response_format = {"type": "json_object"},
+                  messages = Messages,
+                  temperature = Temperature)
           else:
-            response = OpenAIClient.chat.completions.create(
-                model = Model,
-                messages = Messages,
-                temperature = Temperature)
+            if 'o1' in Model:
+              response = OpenAIClient.chat.completions.create(
+                  model = Model,
+                  messages = Messages)
+            else:
+              response = OpenAIClient.chat.completions.create(
+                  model = Model,
+                  messages = Messages,
+                  temperature = Temperature)
           Response = response.choices[0].message.content
           Usage = {'Input': response.usage.prompt_tokens,
                    'Output': response.usage.completion_tokens,

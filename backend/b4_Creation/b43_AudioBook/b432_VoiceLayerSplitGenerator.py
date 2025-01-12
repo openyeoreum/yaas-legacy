@@ -1593,7 +1593,10 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
             if _Matched['CharacterTag'] == 'Narrator':
                 BeforeNarratorName = _Matched['ActorName']
                 AfterNarratorName = MatchedVoiceActor['Name']
-                _Matched['ActorName'] = AfterNarratorName
+                try:
+                    _Matched['ActorName'] = AfterNarratorName
+                except UnboundLocalError:
+                    sys.exit(f'[ (({CloneVoiceName})) b572-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/backend/b5_Database/b57_RelationalDatabase/b572_Character/b572-01_VoiceDataSet.json')
                 _Matched['ApiSetting'] = MatchedVoiceActor['ApiSetting']
                 
         ## AudioBook_Edit 변경
@@ -2195,6 +2198,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     _ActorChunk = _ActorChunk.strip()
                     _ActorChunk = _ActorChunk.replace('.,', ',').replace(',~.', ',').replace('..', '.')
                     _ActorChunk = re.sub(r'^[\.,~]+', '', _ActorChunk)  # 앞부분의 ',', '.', '~' 제거
+                    
                     if _tag not in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
                         if i in [1, 2]:
                             modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '', _ActorChunk)
@@ -2345,7 +2349,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             ## 끝에서부터 3개의 문자에서 '.', ',', ' '가 있으면 이를 제거 후 마지막에 '.' 표기
             def ModifyELChunk(chunk):
                 # 1. Chunk 마지막 3개의 글자 중에 . 과 , 이 포함되어 있으면 이를 모두 삭제하고 .하나만 표기
-                chunk = chunk[:-3] + chunk[-3:].replace('.', '').replace(',', '') + '.'
+                chunk = chunk[:-3] + chunk[-3:].replace('.', '').replace(',', '').replace('~.', '').replace('~,', '') + '.'
                 # 2. ~.은 ,로 변경
                 chunk = chunk.replace('~.', ',')
                 # 3. Chunk의 마지막 3개를 제외하고 .이 포함되면 이를 모두 삭제
@@ -2353,6 +2357,10 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 # 4. ~,는 .로 변경
                 chunk = chunk.replace('~,', '.\n')
                 chunk = chunk.replace('.\n ', '.\n')
+                # 5. Chunk 시작 부분에 ", "가 존재하면 이를 제거
+                if chunk.startswith(", "):
+                    chunk = chunk[2:]
+                
                 return chunk
             ## 끝에서부터 3개의 문자에서 '.', ',', ' '가 있으면 이를 제거 후 마지막에 ',' 표기
             def ModifyTCChunk(chunk):

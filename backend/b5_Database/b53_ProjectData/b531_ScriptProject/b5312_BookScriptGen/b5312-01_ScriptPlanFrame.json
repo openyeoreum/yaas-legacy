@@ -1,0 +1,52 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "책, 메거진",
+        "Language": "Ko",
+        "TaskName": "",
+        "Completion": "No"
+    },
+    {
+        "ScriptPlan": {
+            "Background": "",
+            "Subject": "",
+            "ConceptKeyword": [],
+            "TargetKeyword": [],
+            "ReaderDemand": {
+                "Needs": {
+                    "Sentence": "",
+                    "KeyWord": [],
+                    "Weight": 0
+                },
+                "Purpose": {
+                    "Sentence": "",
+                    "KeyWord": [],
+                    "Weight": 0
+                },
+                "Question": {
+                    "Sentence": "",
+                    "KeyWord": [],
+                    "Weight": 0
+                }
+            },
+            "AuthorSupply": {
+                "Satisfy": {
+                    "Sentence": "",
+                    "KeyWord": [],
+                    "Weight": 0
+                },
+                "Support": {
+                    "Sentence": "",
+                    "KeyWord": [],
+                    "Weight": 0
+                },
+                "Solution": {
+                    "Sentence": "",
+                    "KeyWord": [],
+                    "Weight": 0
+                }
+            },
+            "Weight": 0
+        }
+    }
+]

@@ -682,8 +682,8 @@ if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = "오디오북제작자동화솔루션"
-    Search = "나는 오디오북 자동 제작 AI솔루션 대표입니다. 우리회사의 오디오북 솔루션은 100권의 고품질 오디오북을 탄생시킬 만큼 매우 성능이 뛰어납니다. 나는 이 오디오북 솔루션을 적극적으로 알리고 싶은데 어떻게 해야 할지 잘 모르겠습니다." # Search: SearchTerm, Match: PublisherData_(Id)
+    projectName = "오디오북제작자동화솔루션의새로운활용"
+    Search = "나는 오디오북 자동 제작 AI솔루션 대표입니다. 우리회사의 오디오북 솔루션은 100권의 고품질 오디오북을 탄생시키고 의뢰인들을 만족시킬 만큼 성능과 효율성이 뛰어납니다. 오디오북 솔루션은 고품질 TTS, 음악, 효과음, 스크립트 제작 자동화의 기능을 모두 담고 있습니다. 나는 이 오디오북 솔루션의 새로운 활용방안을 고민하고 있습니다. 좋은 해결책을 얻고 싶습니다." # Search: SearchTerm, Match: PublisherData_(Id)
     Intention = "Similarity" # Demand, Supply, Similarity ...
     Extension = ["Expertise", "Ultimate"] # Expertise, Ultimate, Detail, Rethink ...
     Collection = "publisher" # Entire, Target, Trend, Publisher, Book ...

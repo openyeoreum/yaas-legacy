@@ -391,7 +391,7 @@ def InitBookPreprocess(projectName, email):
         project = GetProject(projectName, email)
         project.BookPreprocessFrame[0]["PageCount"] = 0
         project.BookPreprocessFrame[0]["Completion"] = "No"
-        project.BookPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-00_BookPreprocessFrame.json")[1]
+        project.BookPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-00_BookPreprocessFrame.json")[1]
 
         flag_modified(project, "BookPreprocessFrame")
         
@@ -476,7 +476,7 @@ def InitIndexFrame(projectName, email):
         project = GetProject(projectName, email)
         project.IndexFrame[0]["IndexCount"] = 0
         project.IndexFrame[0]["Completion"] = "No"
-        project.IndexFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-01_IndexFrame.json")[1]
+        project.IndexFrame[1] = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-01_IndexFrame.json")[1]
         
         flag_modified(project, "IndexFrame")
         
@@ -559,7 +559,7 @@ def InitDuplicationPreprocess(projectName, email):
         project = GetProject(projectName, email)
         project.DuplicationPreprocessFrame[0]["PreprocessCount"] = 0
         project.DuplicationPreprocessFrame[0]["Completion"] = "No"
-        project.DuplicationPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_DuplicationPreprocessFrame.json")[1]
+        project.DuplicationPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-02_DuplicationPreprocessFrame.json")[1]
 
         flag_modified(project, "DuplicationPreprocessFrame")
         
@@ -643,7 +643,7 @@ def InitPronunciationPreprocess(projectName, email):
         project = GetProject(projectName, email)
         project.PronunciationPreprocessFrame[0]["PreprocessCount"] = 0
         project.PronunciationPreprocessFrame[0]["Completion"] = "No"
-        project.PronunciationPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_PronunciationPreprocessFrame.json")[1]
+        project.PronunciationPreprocessFrame[1] = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-03_PronunciationPreprocessFrame.json")[1]
 
         flag_modified(project, "PronunciationPreprocessFrame")
         
@@ -795,8 +795,8 @@ def InitBodyFrame(projectName, email):
         project.BodyFrame[0]["BodyCount"] = 0
         project.BodyFrame[0]["ChunkCount"] = 0
         project.BodyFrame[0]["Completion"] = "No"
-        project.BodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_BodyFrame.json")[1]
-        project.BodyFrame[2] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_BodyFrame.json")[2]
+        project.BodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-04_BodyFrame.json")[1]
+        project.BodyFrame[2] = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-04_BodyFrame.json")[2]
         
         flag_modified(project, "BodyFrame")
         
@@ -948,8 +948,8 @@ def InitHalfBodyFrame(projectName, email):
         project.HalfBodyFrame[0]["BodyCount"] = 0
         project.HalfBodyFrame[0]["ChunkCount"] = 0
         project.HalfBodyFrame[0]["Completion"] = "No"
-        project.HalfBodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_BodyFrame.json")[1]
-        project.HalfBodyFrame[2] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_BodyFrame.json")[2]
+        project.HalfBodyFrame[1] = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-04_BodyFrame.json")[1]
+        project.HalfBodyFrame[2] = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-04_BodyFrame.json")[2]
         
         flag_modified(project, "HalfBodyFrame")
         
@@ -1036,7 +1036,7 @@ def InitCaptionCompletion(projectName, email):
         project = GetProject(projectName, email)
         project.CaptionFrame[0]["CaptionCount"] = 0
         project.CaptionFrame[0]["Completion"] = "No"
-        project.CaptionFrame[1] = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-05_CaptionFrame.json")[1]
+        project.CaptionFrame[1] = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-05_CaptionFrame.json")[1]
 
         flag_modified(project, "CaptionFrame")
         
@@ -1128,7 +1128,7 @@ def InitContextDefine(projectName, email):
         project.ContextDefine[0]["ContextChunkCount"] = 0
         project.ContextDefine[0]["ContextCount"] = 0
         project.ContextDefine[0]["Completion"] = "No"
-        project.ContextDefine[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-01_ContextDefine.json")[1]
+        project.ContextDefine[1] = LoadJsonFrame(ProjectDataPath + "/b5332_Context/b5332-01_ContextDefine.json")[1]
         
         flag_modified(project, "ContextDefine")
         
@@ -1248,8 +1248,8 @@ def InitContextCompletion(projectName, email):
         project.ContextCompletion[0]["ContextChunkCount"] = 0
         project.ContextCompletion[0]["ContextCount"] = 0
         project.ContextCompletion[0]["Completion"] = "No"
-        project.ContextCompletion[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-02_ContextCompletion.json")[1]
-        project.ContextCompletion[2] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-02_ContextCompletion.json")[2]
+        project.ContextCompletion[1] = LoadJsonFrame(ProjectDataPath + "/b5332_Context/b5332-02_ContextCompletion.json")[1]
+        project.ContextCompletion[2] = LoadJsonFrame(ProjectDataPath + "/b5332_Context/b5332-02_ContextCompletion.json")[2]
 
         flag_modified(project, "ContextCompletion")
         
@@ -1372,8 +1372,8 @@ def InitWMWMDefine(projectName, email):
         project.WMWMDefine[0]["WMWMChunkCount"] = 0
         project.WMWMDefine[0]["WMWMCount"] = 0
         project.WMWMDefine[0]["Completion"] = "No"
-        project.WMWMDefine[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_WMWMDefine.json")[1]
-        project.WMWMDefine[2] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_WMWMDefine.json")[2]
+        project.WMWMDefine[1] = LoadJsonFrame(ProjectDataPath + "/b5332_Context/b5332-03_WMWMDefine.json")[1]
+        project.WMWMDefine[2] = LoadJsonFrame(ProjectDataPath + "/b5332_Context/b5332-03_WMWMDefine.json")[2]
 
         flag_modified(project, "WMWMDefine")
         
@@ -1534,7 +1534,7 @@ def InitWMWMMatching(projectName, email):
         project.WMWMMatching[0]["WMWMBodyCount"] = 0
         project.WMWMMatching[0]["WMWMIndexCount"] = 0
         project.WMWMMatching[0]["Completion"] = "No"
-        project.WMWMMatching[1] = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-04_WMWMMatching.json")[1]
+        project.WMWMMatching[1] = LoadJsonFrame(ProjectDataPath + "/b5332_Context/b5332-04_WMWMMatching.json")[1]
 
         flag_modified(project, "WMWMMatching")
         
@@ -1626,7 +1626,7 @@ def InitCharacterDefine(projectName, email):
         project.CharacterDefine[0]["CharacterChunkCount"] = 0
         project.CharacterDefine[0]["CharacterCount"] = 0
         project.CharacterDefine[0]["Completion"] = "No"
-        project.CharacterDefine[1] = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-01_CharacterDefine.json")[1]
+        project.CharacterDefine[1] = LoadJsonFrame(ProjectDataPath + "/b5333_Character/b5333-01_CharacterDefine.json")[1]
         
         flag_modified(project, "CharacterDefine")
         
@@ -1748,8 +1748,8 @@ def InitCharacterCompletion(projectName, email):
         project.CharacterCompletion[0]["CharacterChunkCount"] = 0
         project.CharacterCompletion[0]["CharacterCount"] = 0
         project.CharacterCompletion[0]["Completion"] = "No"
-        project.CharacterCompletion[1] = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-02_CharacterCompletion.json")[1]
-        project.CharacterCompletion[2] = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-02_CharacterCompletion.json")[2]
+        project.CharacterCompletion[1] = LoadJsonFrame(ProjectDataPath + "/b5333_Character/b5333-02_CharacterCompletion.json")[1]
+        project.CharacterCompletion[2] = LoadJsonFrame(ProjectDataPath + "/b5333_Character/b5333-02_CharacterCompletion.json")[2]
 
         flag_modified(project, "CharacterCompletion")
         
@@ -1831,7 +1831,7 @@ def InitSoundMatching(projectName, email):
         project = GetProject(projectName, email)
         project.SoundMatching[0]["BodyCount"] = 0
         project.SoundMatching[0]["Completion"] = "No"
-        project.SoundMatching[1] = LoadJsonFrame(ProjectDataPath + "/b535_Sound/b535-01_SoundMatching.json")[1]
+        project.SoundMatching[1] = LoadJsonFrame(ProjectDataPath + "/b5335_Sound/b5335-01_SoundMatching.json")[1]
         
         flag_modified(project, "SoundMatching")
         
@@ -1915,7 +1915,7 @@ def InitSFXMatching(projectName, email):
         project = GetProject(projectName, email)
         project.SFXMatching[0]["BodyCount"] = 0
         project.SFXMatching[0]["Completion"] = "No"
-        project.SFXMatching[1] = LoadJsonFrame(ProjectDataPath + "/b536_SFX/b536-01_SFXMatching.json")[1]
+        project.SFXMatching[1] = LoadJsonFrame(ProjectDataPath + "/b5336_SFX/b5336-01_SFXMatching.json")[1]
 
         flag_modified(project, "SFXMatching")
         
@@ -2029,7 +2029,7 @@ def InitCorrectionKo(projectName, email):
         project.CorrectionKo[0]["IndexCount"] = 0
         project.CorrectionKo[0]["ChunkCount"] = 0
         project.CorrectionKo[0]["Completion"] = "No"
-        project.CorrectionKo[1] = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-01_CorrectionKo.json")[1]
+        project.CorrectionKo[1] = LoadJsonFrame(ProjectDataPath + "/b5338_Correction/b5338-01_CorrectionKo.json")[1]
 
         flag_modified(project, "CorrectionKo")
         
@@ -2134,7 +2134,7 @@ def InitSelectionGenerationKo(projectName, email):
         project = GetProject(projectName, email)
         project.SelectionGenerationKo[0]["IndexCount"] = 0
         project.SelectionGenerationKo[0]["Completion"] = "No"
-        project.SelectionGenerationKo[1] = LoadJsonFrame(ProjectDataPath + "/b539_SelectionGeneration/b539-01_SelectionGenerationKo.json")[1]
+        project.SelectionGenerationKo[1] = LoadJsonFrame(ProjectDataPath + "/b5339_SelectionGeneration/b5339-01_SelectionGenerationKo.json")[1]
 
         flag_modified(project, "SelectionGenerationKo")
         

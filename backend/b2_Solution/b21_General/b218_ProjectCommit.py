@@ -9,7 +9,7 @@ from backend.b2_Solution.b21_General.b211_GetDBtable import GetProjectsStorage
 
 def GetProjectDataPath():
     RootPath = "/yaas"
-    DataPath = "backend/b5_Database/b53_ProjectData"
+    DataPath = "backend/b5_Database/b53_ProjectData/b533_AudioBookProject"
     return os.path.join(RootPath, DataPath)
 
 def LoadJsonFrame(filepath):
@@ -102,34 +102,33 @@ def AddProjectToDB(projectName, email):
         # JSON 데이터 불러오기
         ProjectDataPath = GetProjectDataPath()
         
-        scriptGenFrame = LoadJsonFrame(ProjectDataPath + "/b530_ScriptGen/b530-00_ScriptGenFrame.json")
-        bookPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-00_BookPreprocessFrame.json")
-        indexFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-01_IndexFrame.json")
-        duplicationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-02_DuplicationPreprocessFrame.json")
-        pronunciationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-03_PronunciationPreprocessFrame.json")
-        bodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_BodyFrame.json")
-        halfBodyFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-04_BodyFrame.json")
-        captionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-05_CaptionFrame.json")
-        phargraphTransitionFrame = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-06_PhargraphTransitionFrame.json")
-        bodyContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-07_BodyContextTags.json")
-        wMWMContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-08_WMWMContextTags.json")
-        characterContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-09_CharacterContextTags.json")
-        soundContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-10_SoundContextTags.json")
-        sFXContextTags = LoadJsonFrame(ProjectDataPath + "/b531_Script/b531-11_SFXContextTags.json")
-        contextDefine = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-01_ContextDefine.json")
-        contextCompletion = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-02_ContextCompletion.json")
-        wMWMDefine = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-03_WMWMDefine.json")
-        wMWMMatching = LoadJsonFrame(ProjectDataPath + "/b532_Context/b532-04_WMWMMatching.json")
-        characterDefine = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-01_CharacterDefine.json")
-        characterCompletion = LoadJsonFrame(ProjectDataPath + "/b533_Character/b533-02_CharacterCompletion.json")
-        soundMatching = LoadJsonFrame(ProjectDataPath + "/b535_Sound/b535-01_SoundMatching.json")
-        sFXMatching = LoadJsonFrame(ProjectDataPath + "/b536_SFX/b536-01_SFXMatching.json")
-        translationKo = LoadJsonFrame(ProjectDataPath + "/b537_Translation/b537-01_TranslationKo.json")
-        translationEn = LoadJsonFrame(ProjectDataPath + "/b537_Translation/b537-02_TranslationEn.json")
-        correctionKo = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-01_CorrectionKo.json")
-        correctionEn = LoadJsonFrame(ProjectDataPath + "/b538_Correction/b538-02_CorrectionEn.json")
-        selectionGenerationKo = LoadJsonFrame(ProjectDataPath + "/b539_SelectionGeneration/b539-01_SelectionGenerationKo.json")
-        mixingMasteringKo = LoadJsonFrame(ProjectDataPath + "/b5310_MixingMastering/b5310-01_MixingMasteringKo.json")
+        bookPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-00_BookPreprocessFrame.json")
+        indexFrame = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-01_IndexFrame.json")
+        duplicationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-02_DuplicationPreprocessFrame.json")
+        pronunciationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-03_PronunciationPreprocessFrame.json")
+        bodyFrame = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-04_BodyFrame.json")
+        halfBodyFrame = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-04_BodyFrame.json")
+        captionFrame = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-05_CaptionFrame.json")
+        phargraphTransitionFrame = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-06_PhargraphTransitionFrame.json")
+        bodyContextTags = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-07_BodyContextTags.json")
+        wMWMContextTags = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-08_WMWMContextTags.json")
+        characterContextTags = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-09_CharacterContextTags.json")
+        soundContextTags = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-10_SoundContextTags.json")
+        sFXContextTags = LoadJsonFrame(ProjectDataPath + "/b5331_Script/b5331-11_SFXContextTags.json")
+        contextDefine = LoadJsonFrame(ProjectDataPath + "/b5332_Context/b5332-01_ContextDefine.json")
+        contextCompletion = LoadJsonFrame(ProjectDataPath + "/b5332_Context/b5332-02_ContextCompletion.json")
+        wMWMDefine = LoadJsonFrame(ProjectDataPath + "/b5332_Context/b5332-03_WMWMDefine.json")
+        wMWMMatching = LoadJsonFrame(ProjectDataPath + "/b5332_Context/b5332-04_WMWMMatching.json")
+        characterDefine = LoadJsonFrame(ProjectDataPath + "/b5333_Character/b5333-01_CharacterDefine.json")
+        characterCompletion = LoadJsonFrame(ProjectDataPath + "/b5333_Character/b5333-02_CharacterCompletion.json")
+        soundMatching = LoadJsonFrame(ProjectDataPath + "/b5335_Sound/b5335-01_SoundMatching.json")
+        sFXMatching = LoadJsonFrame(ProjectDataPath + "/b5336_SFX/b5336-01_SFXMatching.json")
+        translationKo = LoadJsonFrame(ProjectDataPath + "/b5337_Translation/b5337-01_TranslationKo.json")
+        translationEn = LoadJsonFrame(ProjectDataPath + "/b5337_Translation/b5337-02_TranslationEn.json")
+        correctionKo = LoadJsonFrame(ProjectDataPath + "/b5338_Correction/b5338-01_CorrectionKo.json")
+        correctionEn = LoadJsonFrame(ProjectDataPath + "/b5338_Correction/b5338-02_CorrectionEn.json")
+        selectionGenerationKo = LoadJsonFrame(ProjectDataPath + "/b5339_SelectionGeneration/b5339-01_SelectionGenerationKo.json")
+        mixingMasteringKo = LoadJsonFrame(ProjectDataPath + "/b53310_MixingMastering/b53310-01_MixingMasteringKo.json")
         ### 아래로 추가되는 데이터프레임 작성 ###
 
         ExistingProject = db.query(Project).filter(Project.UserId == user.UserId, Project.ProjectName == projectName).first()
@@ -163,7 +162,6 @@ def AddProjectToDB(projectName, email):
             ExistingProject.Music1Path = music1FolderPath
             ExistingProject.Music2Path = music2FolderPath
             ExistingProject.MasterAudioBookPath = masterAudioBookPath
-            ExistingProject.ScriptGenFrame = scriptGenFrame
             ExistingProject.BookPreprocessFrame = bookPreprocessFrame
             ExistingProject.IndexFrame = indexFrame
             ExistingProject.DuplicationPreprocessFrame = duplicationPreprocessFrame
@@ -222,7 +220,6 @@ def AddProjectToDB(projectName, email):
                 Music1Path = music1FolderPath,
                 Music2Path = music2FolderPath,
                 MasterAudioBookPath = masterAudioBookPath,
-                ScriptGenFrame = scriptGenFrame,
                 BookPreprocessFrame = bookPreprocessFrame,
                 IndexFrame = indexFrame,
                 DuplicationPreprocessFrame = duplicationPreprocessFrame,

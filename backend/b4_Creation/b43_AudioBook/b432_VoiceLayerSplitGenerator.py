@@ -458,9 +458,9 @@ def VoiceLayerPathGen(projectName, email, FileName, Folder):
 
     # 최종 경로 생성
     if Folder == "Mixed":
-        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", FileName)
+        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_audiobook", f"{projectName}_mixed_audiobook_file", "VoiceLayers", FileName)
     if Folder == "Master":
-        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_master_audiobook_file", FileName)
+        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_audiobook", f"{projectName}_master_audiobook_file", FileName)
     # print(voiceLayerPath)
 
     return LayerPath

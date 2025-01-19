@@ -29,10 +29,10 @@ def SecondsToHMS(seconds):
 
 ### SciptFile의 EstimateSetting ###
 def EstimateSettingGen(projectName, Estimate, Estimates):
-    ScriptFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
+    ScriptFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script/{projectName}_master_script_file"
     ScriptFile = f"{projectName}_Script.txt"
     ProjectScriptFilePath = os.path.join(ScriptFilePath, ScriptFile)
-    EstimateFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_estimate_file"
+    EstimateFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_estimate/{projectName}_master_estimate_file"
     EstimateFile = f"[{projectName}_{Estimate}Estimate_Setting].json"
     ProjectEstimateFilePath = os.path.join(EstimateFilePath, EstimateFile)
     RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s141_RunningTimeData"
@@ -83,9 +83,9 @@ def EstimateSettingGen(projectName, Estimate, Estimates):
             ## 사전 작업된 EstimateSetting에서 프로젝트 이름, 클라이언트 이름 불러오기
             for estimate in Estimates:
                 estimate_file = f"[{projectName}_{estimate}Estimate_Setting].json"
-                Project_estimate_file_path = os.path.join(EstimateFilePath, estimate_file)
-                if os.path.exists(Project_estimate_file_path):
-                    with open(Project_estimate_file_path, 'r', encoding = 'utf-8') as JsonFile:
+                Project_EstimateFilePath = os.path.join(EstimateFilePath, estimate_file)
+                if os.path.exists(Project_EstimateFilePath):
+                    with open(Project_EstimateFilePath, 'r', encoding = 'utf-8') as JsonFile:
                         EstimateSetting = json.load(JsonFile)
                         projectname = EstimateSetting['EstimateSetting']['ProjectName']
                         client = EstimateSetting['EstimateSetting']['Client']

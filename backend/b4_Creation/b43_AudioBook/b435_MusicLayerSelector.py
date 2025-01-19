@@ -78,11 +78,11 @@ def VoiceLayerPathGen(projectName, email, FileName, Folder = 'Mixed'):
 
     # 최종 경로 생성
     if Folder == "Mixed":
-        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", FileName)
+        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_audiobook", f"{projectName}_mixed_audiobook_file", "VoiceLayers", FileName)
     if Folder == "DeNoiseMixed":
-        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "VoiceLayers", f"{projectName}_DeNoiseVoiceLayer", "DeNoiseVoiceLayer", FileName)
+        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_audiobook", f"{projectName}_mixed_audiobook_file", "VoiceLayers", f"{projectName}_DeNoiseVoiceLayer", "DeNoiseVoiceLayer", FileName)
     if Folder == "Master":
-        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_master_audiobook_file", FileName)
+        LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_audiobook", f"{projectName}_master_audiobook_file", FileName)
     # print(voiceLayerPath)
 
     return LayerPath
@@ -103,7 +103,7 @@ def MusicLayerPathGen(projectName, email, FileName):
     BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage'
 
     # 최종 경로 생성
-    LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_mixed_audiobook_file", "MusicLayers", "Music1", FileName)
+    LayerPath = os.path.join(BasePath, UserFolderName, StorageFolderName, projectName, f"{projectName}_audiobook", f"{projectName}_mixed_audiobook_file", "MusicLayers", "Music1", FileName)
     # print(voiceLayerPath)
 
     return LayerPath
@@ -1891,7 +1891,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
 ## 오디오북 러닝타임 기록 ##
 def SaveAudiobookRunningTime(projectName, FileRunningTimeList):
     # BodyScript의 개수 구하기
-    BodyScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file/{projectName}_Body.txt"
+    BodyScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script/{projectName}_master_script_file/{projectName}_Body.txt"
     with open(BodyScriptPath, 'r', encoding='utf-8') as Textfile:
         BodyScript = Textfile.read()
         BodyScript = unicodedata.normalize('NFC', BodyScript)

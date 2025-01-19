@@ -119,7 +119,7 @@ def FindDataframeFilePaths(email, projectName, userStoragePath):
         username = user.UserName
 
         # 데이터프레임 파일 경로 구성
-        expectedFilePath = os.path.join(userStoragePath, f"{username}_user", f"{username}_storage", projectName, f"{projectName}_dataframe_file")
+        expectedFilePath = os.path.join(userStoragePath, f"{username}_user", f"{username}_storage", projectName, f"{projectName}_audiobook", f"{projectName}_dataframe_audiobook_file")
         normalizedFilePath = unicodedata.normalize('NFC', expectedFilePath)
 
         # 파일 존재 여부 확인

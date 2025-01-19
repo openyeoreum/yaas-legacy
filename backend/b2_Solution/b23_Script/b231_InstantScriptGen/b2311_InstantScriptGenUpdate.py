@@ -361,7 +361,7 @@ def ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, Script
 ## 프롬프트 요청 및 결과물 Json을 ScriptGen에 업데이트
 def ScriptGenUpdate(projectName, email, DataFramePath, ScriptConfig, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script_file"
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script/{projectName}_master_script_file"
     IndexTextFilePath = TextDirPath + f'/{projectName}_Index.txt'
     RawIndexTextFilePath = TextDirPath + f'/{projectName}_Index(Raw).txt'
     BodyTextFilePath = TextDirPath + f'/{projectName}_Body.txt'

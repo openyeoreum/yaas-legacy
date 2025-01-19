@@ -150,46 +150,60 @@ class Project(Base):
     ProjectPath = Column(Text)
 
     ## Files
+    # EstimateFile
+    EstimatePath = Column(Text)
+    MasterEstimatePath = Column(Text)
+    
     # ScriptFile
     ScriptPath = Column(Text)
+    ScriptDataFramePath = Column(Text)
+    MasterScriptPath = Column(Text)
     
     IndexFile = Column(Text)
     CharacterFile = Column(Text)
     BodyFile = Column(Text)
     
-    # DataFrameFile
-    DataFramePath = Column(Text)
-    DataSetPath = Column(Text)
+    # TextBookFile
+    TextbookPath = Column(Text)
+    TextbookDataFramePath = Column(Text)
+    MixedTextBookPath = Column(Text)
+    MasterTextBookPath = Column(Text)
     
-    # MixedAudioBookFile
+    # AudioBookFile
+    AudiobookPath = Column(Text)
+    AudiobookDataFramePath = Column(Text)
+    AudiobookDataSetPath = Column(Text)
     MixedAudioBookPath = Column(Text)
-
     VoiceLayersPath = Column(Text)
     # NarratorPath = Column(Text)
     # Character1Path = Column(Text)
     # Character2Path = Column(Text)
     # Character3Path = Column(Text)
     # Character4Path = Column(Text)
-    
     SFXLayersPath = Column(Text)
     SFX1Path = Column(Text)
     SFX2Path = Column(Text)
     SFX3Path = Column(Text)
     SFX4Path = Column(Text)
     SFX5Path = Column(Text)
-    
     SoundLayersPath = Column(Text)
     BackgoundSoundPath = Column(Text)
     CaptionSoundPath = Column(Text)
-    
     MusicLayersPath = Column(Text)
     Music1Path = Column(Text)
     Music2Path = Column(Text)
-    
-    # MasterAudioBookFile
     MasterAudioBookPath = Column(Text)
     
-    AudioBookFile = Column(Text)
+    # VideoBookFile
+    VideobookPath = Column(Text)
+    VideobookDataFramePath = Column(Text)
+    MixedVideoBookPath = Column(Text)
+    MasterVideoBookPath = Column(Text)
+    
+    # MarketingFile
+    MarketingPath = Column(Text)
+    MarketingDataFramePath = Column(Text)
+    MasterMarketingPath = Column(Text)
     
     ## Process
     # Text
@@ -276,46 +290,60 @@ class ProjectHistory(Base):
     ProjectPath = Column(Text)
 
     ## Files
+    # EstimateFile
+    EstimatePath = Column(Text)
+    MasterEstimatePath = Column(Text)
+    
     # ScriptFile
     ScriptPath = Column(Text)
+    ScriptDataFramePath = Column(Text)
+    MasterScriptPath = Column(Text)
     
     IndexFile = Column(Text)
     CharacterFile = Column(Text)
     BodyFile = Column(Text)
-
-    # DataFrameFile
-    DataFramePath = Column(Text)
-    DataSetPath = Column(Text)
-
-    # MixedAudioBookFile
+    
+    # TextBookFile
+    TextbookPath = Column(Text)
+    TextbookDataFramePath = Column(Text)
+    MixedTextBookPath = Column(Text)
+    MasterTextBookPath = Column(Text)
+    
+    # AudioBookFile
+    AudiobookPath = Column(Text)
+    AudiobookDataFramePath = Column(Text)
+    AudiobookDataSetPath = Column(Text)
     MixedAudioBookPath = Column(Text)
-
     VoiceLayersPath = Column(Text)
     # NarratorPath = Column(Text)
     # Character1Path = Column(Text)
     # Character2Path = Column(Text)
     # Character3Path = Column(Text)
     # Character4Path = Column(Text)
-    
     SFXLayersPath = Column(Text)
     SFX1Path = Column(Text)
     SFX2Path = Column(Text)
     SFX3Path = Column(Text)
     SFX4Path = Column(Text)
     SFX5Path = Column(Text)
-    
     SoundLayersPath = Column(Text)
     BackgoundSoundPath = Column(Text)
     CaptionSoundPath = Column(Text)
-    
-    MusicLayersFolderPath = Column(Text)
+    MusicLayersPath = Column(Text)
     Music1Path = Column(Text)
     Music2Path = Column(Text)
-    
-    # MasterAudioBookFile
     MasterAudioBookPath = Column(Text)
     
-    AudioBookFile = Column(Text)
+    # VideoBookFile
+    VideobookPath = Column(Text)
+    VideobookDataFramePath = Column(Text)
+    MixedVideoBookPath = Column(Text)
+    MasterVideoBookPath = Column(Text)
+    
+    # MarketingFile
+    MarketingPath = Column(Text)
+    MarketingDataFramePath = Column(Text)
+    MasterMarketingPath = Column(Text)
     
     ## Process
     # ScriptGen

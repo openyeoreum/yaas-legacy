@@ -1063,28 +1063,3 @@ if __name__ == "__main__":
     VoiceLayerPath = "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/테스트(가)_0_연우(중간톤, 피치다운).wav"
     LanguageCode = "ko-KR"
     #########################################################################
-    
-    ## 검수 프로세스 테스트 코드 ##
-    from openai import OpenAI
-    client = OpenAI()
-
-    audio_file = open("/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/240925_불멸의지혜/240925_불멸의지혜_mixed_audiobook_file/VoiceLayers/240925_불멸의지혜_31_이나(일반)M.wav", "rb")
-    transcription = client.audio.transcriptions.create(
-        file=audio_file,
-        model="whisper-1", 
-        response_format="verbose_json",
-        timestamp_granularities=["word"],
-    )
-    print(transcription.words)
-    
-    Words = transcription.words
-    Sentence = ''
-    for i in range(len(Words) - 1):
-        pause = Words[i+1]['start'] - Words[i]['end']
-        if pause == 0:
-            Sentence += Words[i]['word'] + ' '
-        else:
-            Sentence += Words[i]['word'] + f'({pause}) '
-    Sentence += Words[-1]['word'] + f"({transcription.duration - Words[-1]['end']})"
-            
-    print(f"\n\nSentence: {Sentence}")

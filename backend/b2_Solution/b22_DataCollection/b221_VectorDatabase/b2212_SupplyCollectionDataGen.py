@@ -461,9 +461,9 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
 ################################
 ##### Process 진행 및 업데이트 #####
 ################################
-## SupplyCollectionDataDetail 프롬프트 요청 및 결과물 Json화
-def SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode = "Master", MainKey = 'SupplySearchAnalysis', MessagesReview = "on"):
-    print(f"< User: {email} | Chain: {projectName} | SupplyCollectionDataDetailUpdate 시작 >")
+## SupplyCollectionData 프롬프트 요청 및 결과물 Json화
+def SupplyCollectionDataProcessUpdate(projectName, email, InputDic, mode = "Master", MainKey = 'SupplySearchAnalysis', MessagesReview = "on"):
+    print(f"< User: {email} | Chain: {projectName} | SupplyCollectionDataUpdate 시작 >")
     ## TotalPublisherData 경로 설정
     TotalSupplyCollectionDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1512_SupplyCollectionData/s15121_TotalSupplyCollectionData"
     TotalSupplyCollectionDataJsonPath = os.path.join(TotalSupplyCollectionDataPath, 'TotalSupplyCollectionData.json')
@@ -577,7 +577,7 @@ def SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, mode =
     ## ProcessResponse 임시저장
     CollectionDataChain, DateTime = ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, TotalSupplyCollectionDataTempPath)
 
-    print(f"[ User: {email} | Chain: {projectName} | SupplyCollectionDataDetailUpdate 완료 ]")
+    print(f"[ User: {email} | Chain: {projectName} | SupplyCollectionDataUpdate 완료 ]")
     
     return CollectionDataChain, DateTime
 

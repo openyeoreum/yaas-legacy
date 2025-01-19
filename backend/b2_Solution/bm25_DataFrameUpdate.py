@@ -58,6 +58,7 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
     EmailNormalized = unicodedata.normalize('NFC', email)
     ProjectNameNormalized = unicodedata.normalize('NFC', projectName)
     ProcessNormalized = unicodedata.normalize('NFC', Process)
+    print(DataFramePath)
     DataFramePathNormalized = unicodedata.normalize('NFC', DataFramePath)
     
     # 정규 표현식으로 파일명에서 생성날짜와 프로세스 이름 추출
@@ -165,8 +166,7 @@ def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesRe
     ############################ 하이퍼 파라미터 설정 ############################
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
-    RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
-    RawDataSetPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_dataset_file/"
+    RawDataSetPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file/"
     
     ### existedDataFrameMode는 개발과정에서 지속적인 데이터베이스 포멧에 따라 필요, 프로덕트에서는 필요없음.
     existedDataFrameMode = "on" # <- 개발 후 off #

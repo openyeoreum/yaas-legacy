@@ -713,7 +713,7 @@ def ResponseJsonText(projectName, email, responseJson):
         username = user.UserName
         
     # 문자열 정규화
-    _baseFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{username}_user/{username}_storage/{projectName}/{projectName}_dataframe_file/{email}_{projectName}_21_responseJson"
+    _baseFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{username}_user/{username}_storage/{projectName}/{projectName}_audiobook/{projectName}_dataframe_audiobook_file/{email}_{projectName}_21_responseJson"
     baseFilePathNFCNormalized = unicodedata.normalize('NFC', _baseFilePath)
     baseFilePathNFDNormalized = unicodedata.normalize('NFD', _baseFilePath)
     

@@ -9,16 +9,16 @@ from openai import OpenAI
 from pinecone import Pinecone, ServerlessSpec
 from tqdm import tqdm
 
-from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2211_DemandCollectionDataGen import DemandCollectionDataDetailProcessUpdate
-from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2212_SupplyCollectionDataGen import SupplyCollectionDataDetailProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2211_DemandCollectionDataGen import DemandCollectionDataProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2212_SupplyCollectionDataGen import SupplyCollectionDataProcessUpdate
 
 ## Pinecone에 인덱스 생성
-def Pinecone_CreateIndex(Collection, IndexDimension = 1536):
+def Pinecone_CreateIndex(Name, IndexDimension = 1536):
     PineConeClient = Pinecone(api_key = os.getenv("PINECONE_API_KEY"))
     # Pinecone 인덱스 생성
     if not PineConeClient.has_index(Collection):
         PineConeClient.create_index(
-            name = Collection,
+            name = Name,
             dimension = IndexDimension,
             metric = "cosine",
             spec = ServerlessSpec(
@@ -400,7 +400,7 @@ def RestructureSearchResult(SearchResult, IntentionKey):
         SearchResult['SearchResult'][IntentionKey] = NewSupplyContextExpertise
 
 ## Pinecone에 CollectionData 검색 ##
-def SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Intention, Extension, Collection, Range):
+def SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Intention, Extension, Collection, Range, Name = 'collection'):
     print(f"[ YaaS VDB Search CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 시작 ]")
     ## TotalPublisherData 경로 설정
     TotalSearchResultDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1513_SearchResultData/s15131_TotalSearchResultData"
@@ -408,8 +408,8 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Inten
     TotalSearchResultDataTempPath = os.path.join(TotalSearchResultDataPath, 'TotalSearchResultDataTemp')
     
     ## A. Pinecone VDB 연결 ##
-    PineConeClient = Pinecone_CreateIndex(Collection)
-    VDBIndex = PineConeClient.Index(name = Collection)
+    PineConeClient = Pinecone_CreateIndex(Name)
+    VDBIndex = PineConeClient.Index(Name)
     
     ## B. Similarity 재구조화 ##
     if Intention == 'Similarity':
@@ -505,6 +505,8 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Inten
     ## D. SearchResult 재구조화 ##
     for IntentionKey in IntentionKeyList:
         RestructureSearchResult(SearchResult, IntentionKey)
+        
+    ## E. SearchResult 재구성 ##
     
     ## E. DataTempJson 저장 ##
     # TotalSearchResultDataTempPath 폴더가 없으면 생성
@@ -570,7 +572,7 @@ def ChangeKeys(CollectionData, Intention):
         }
     return NewCollectionData
 
-## 검색 CollectionData 구축
+## CollectionData 검색
 def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range, MessagesReview):
     ## A. 검색어 검사 ##Type = Search['Type'] ##
     ## A-1. Match, Search 검색어 패턴 검사
@@ -601,17 +603,17 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
 
         ## B-2. Search: Demand, Supply CollectionDataChain 프로세스 ##
         if Intention == "Demand":
-            CollectionDataChain, DateTime = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+            CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
 
         elif Intention == "Supply":
-            CollectionDataChain, DateTime = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+            CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
             
         elif Intention == "Similarity":
-            CollectionDataChain, DateTime = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+            CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
-            CollectionDataChain, DateTime = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+            CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
     
     ## C. Match ##
@@ -643,7 +645,7 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
             InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
             
-            CollectionDataChain, DateTime = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+            CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
 
         elif Intention == "Supply":
@@ -651,7 +653,7 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
             InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
             
-            CollectionDataChain, DateTime = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+            CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
             
         elif Intention == "Similarity":
@@ -659,14 +661,14 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Demand")
             InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
             
-            CollectionDataChain, DateTime = DemandCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+            CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
             
             # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
             NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Supply")
             InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
             
-            CollectionDataChain, DateTime = SupplyCollectionDataDetailProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+            CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
             CollectionDataChainSet.update(CollectionDataChain)
     
     # with open(f'CollectionDataChainSet({Type}).json', 'w', encoding = 'utf-8') as CollectionDataChainSetFile:

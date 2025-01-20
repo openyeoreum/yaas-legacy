@@ -6,6 +6,7 @@ import sys
 sys.path.append("/yaas")
 
 from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2214_VDBUpsert import UpsertCollectionData
 
 #########################
 ##### InputList 생성 #####
@@ -432,6 +433,9 @@ def BookProcessUpdate(projectName, email, mode = "Master", MainKey = 'BookAnalys
     ## ProcessResponse 업데이트
     ProcessResponseUpdate(MainKey, TotalBookDataJsonPath, TotalBookDataTempPath)
     print(f"[ User: {email} | Project: {projectName} | BookProcessUpdate 완료 ]\n")
+    
+    ## ProcessResponse 업서트
+    UpsertCollectionData(TotalBookDataTempPath, "book")
 
 if __name__ == "__main__":
     

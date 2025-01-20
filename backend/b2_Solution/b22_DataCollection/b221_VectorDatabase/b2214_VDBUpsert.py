@@ -8,12 +8,12 @@ from pinecone import Pinecone, ServerlessSpec
 from openai import OpenAI
 
 ## Pinecone에 인덱스 생성
-def Pinecone_CreateIndex(CollectionName, IndexDimension = 1536):
+def Pinecone_CreateIndex(Name, IndexDimension = 1536):
     PineConeClient = Pinecone(api_key = os.getenv("PINECONE_API_KEY"))
     # Pinecone 인덱스 생성
     if not PineConeClient.has_index(CollectionName):
         PineConeClient.create_index(
-            name = CollectionName,
+            name = Name,
             dimension = IndexDimension,
             metric = "cosine",
             spec = ServerlessSpec(
@@ -43,10 +43,10 @@ def GetWeight(Weight):
     return (int(Weight.replace('점', '')) if isinstance(Weight, str) else int(Weight)) / 100
 
 ## Pinecone에 임베딩 데이터 업서트
-def UpsertEmbeddedData(CollectionData, CollectionName, LastId):
+def UpsertEmbeddedData(CollectionData, CollectionName, LastId, Name = 'collection'):
     ## Pinecone에 인덱스 생성
-    PineConeClient = Pinecone_CreateIndex(CollectionName)
-    VDBIndex = PineConeClient.Index(CollectionName)
+    PineConeClient = Pinecone_CreateIndex(Name)
+    VDBIndex = PineConeClient.Index(Name)
 
     # Pinecone에 임베딩 데이터 업서트
     UpsertEmbeddedData = []

@@ -6,8 +6,9 @@ import sys
 sys.path.append("/yaas")
 
 from b2_Solution.bm21_GeneralUpdate import AccountUpdate, SolutionProjectUpdate
-from backend.b2_Solution.bm22_EstimateUpdate import SolutionEstimateUpdate
-from backend.b2_Solution.bm23_DataCollectionUpdate import SolutionDataCollectionUpdate
+from backend.b2_Solution.bm22_DataCollectionUpdate import SolutionDataCollectionUpsert
+# from backend.b2_Solution.bm23_ScriptUpdate import SolutionScriptUpdate
+from backend.b2_Solution.bm24_EstimateUpdate import SolutionEstimateUpdate
 from backend.b2_Solution.bm25_DataFrameUpdate import SolutionDataFrameUpdate
 from backend.b4_Creation.bm28_AudioBookUpdate import CreationAudioBookUpdate
 
@@ -31,7 +32,7 @@ def LoadYaaSConfig(ProjectName):
     return YaasConfig, ConfigPath
 
 ## YaaSConfig 설정
-def YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing):
+def YaasConfigUpdate(StartProjectName, MainLang, Translations, DataCollection, Script, Estimate, TextBook, AudioBook, Marketing):
 
     ## YaaSConfig 로드
     YaasConfig, ConfigPath = LoadYaaSConfig(StartProjectName)
@@ -47,16 +48,8 @@ def YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCol
         ProjectName = StartProjectName
         MainLang = MainLang
         Translations = Translations
-        
-        ### Step3-2 : EstimateConfig 설정 ###
-        if Estimate == [] or Estimate == [""] or Estimate == ["None"]:
-            EstimateConfig = {}
-        else:
-            EstimateConfig = {
-                "Estimate": Estimate
-                }
             
-        ### Step3-3 : DataCollectionConfig 설정 ###
+        ### Step3-2 : DataCollectionConfig 설정 ###
         if DataCollection == [] or DataCollection == [""] or DataCollection == ["None"]:
             DataCollectionConfig = {}
         else:
@@ -64,11 +57,19 @@ def YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCol
                 "DataCollection": DataCollection
                 }
             
-        ### Step3-4 : ScriptConfig 설정 ###
+        ### Step3-3 : ScriptConfig 설정 ###
         if Script == [] or Script == [""] or Script == ["None"]:
             ScriptConfig = {}
         else:
             ScriptConfig = {"Script": Script}
+            
+        ### Step3-4 : EstimateConfig 설정 ###
+        if Estimate == [] or Estimate == [""] or Estimate == ["None"]:
+            EstimateConfig = {}
+        else:
+            EstimateConfig = {
+                "Estimate": Estimate
+                }
             
         ### Step3-5 : TextBookConfig 설정 ###
         if TextBook == [] or TextBook == [""] or TextBook == ["None"]:
@@ -126,22 +127,24 @@ def YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCol
 
 ##############################################################################################
 ##############################################################################################
-### Step4-8 : 'Estimate', 'DataCollection', 'Script', 'TextBook', 'AudioBook', 'Marketing' ###
+### Step4-8 : 'DataCollection', 'Script', 'Estimate', 'TextBook', 'AudioBook', 'Marketing' ###
 ##############################################################################################
 ##############################################################################################
 
 
-### Step4 : EstimateUpdate 업데이트 ###
-def EstimateUpdate(email, ProjectName, Estimate):
-    
-    ### Step4-1 : AudioBook 데이터 프레임 ###
-    SolutionEstimateUpdate(ProjectName, email, Estimate)
-    
-### Step5 : DataCollectionUpdate 업데이트 ###
+### Step4 : DataCollectionUpdate 업데이트 ###
 def DataCollectionUpdate(email, ProjectName, DataCollection):
     
-    ### Step5-1 : AudioBook 데이터 프레임 ###
-    SolutionDataCollectionUpdate(ProjectName, email, DataCollection)
+    ### Step4-1 : AudioBook 데이터 프레임 ###
+    SolutionDataCollectionUpsert(ProjectName, email, DataCollection)
+
+### Step5 : ScriptUpdate 업데이트 ###
+
+### Step6 : EstimateUpdate 업데이트 ###
+def EstimateUpdate(email, ProjectName, Estimate):
+    
+    ### Step6-1 : AudioBook 데이터 프레임 ###
+    SolutionEstimateUpdate(ProjectName, email, Estimate)
 
 ### Step8 : AudioBook 업데이트 ###
 def AudioBookUpdate(email, ProjectName, Translations, IndexMode, BookGenre, Narrator, CloneVoiceName, ReadingStyle, VoiceReverbe, MainLang, Intro, AudiobookSplitting, MusicDB, EndMusicVolume, Macro, Bracket, VolumeEqual, Account, VoiceEnhance, VoiceFileGen, Bitrate, MessagesReview):
@@ -155,25 +158,25 @@ def AudioBookUpdate(email, ProjectName, Translations, IndexMode, BookGenre, Narr
 
 ###############################################################################################################
 ###############################################################################################################
-### Main2 : YaaS에서 통합으로 'Estimate', 'DataCollection', 'Script', 'TextBook', 'AudioBook', 'Marketing' 제작 ###
+### Main2 : YaaS에서 통합으로 'DataCollection', 'Script', 'Estimate', 'TextBook', 'AudioBook', 'Marketing' 제작 ###
 ###############################################################################################################
 ###############################################################################################################
 
 
 ### Main2 : YaaS 실행 ###
-def YaaS(email, ProjectName, MainLang, Translations, EstimateConfig, DataCollectionConfig, ScriptConfig, TextBookConfig, AudioBookConfig, MarketingConfig, MessagesReview, Account):
+def YaaS(email, ProjectName, MainLang, Translations, DataCollectionConfig, ScriptConfig, EstimateConfig, TextBookConfig, AudioBookConfig, MarketingConfig, MessagesReview, Account):
     
-    ### Step4 : Estimate 업데이트 ###
-    if EstimateConfig != {}:
-        EstimateUpdate(email, ProjectName, EstimateConfig['Estimate'])
-    
-    ### Step5 : DataCollection 업데이트 ###
+    ### Step4 : DataCollection 업데이트 ###
     if DataCollectionConfig != {}:
         DataCollectionUpdate(email, ProjectName, DataCollectionConfig['DataCollection'])
     
-    ### Step6 : Script 업데이트 ###
+    ### Step5 : Script 업데이트 ###
     if ScriptConfig != {}:
         pass
+    
+    ### Step6 : Estimate 업데이트 ###
+    if EstimateConfig != {}:
+        EstimateUpdate(email, ProjectName, EstimateConfig['Estimate'])
         
     ### Step7 : TextBook 업데이트 ###
     if TextBookConfig != {}:
@@ -205,7 +208,7 @@ def YaaSMultiprocessingExit(projectNameList, MultiProcess):
             process.terminate()
 
 ### Main1-2 : YaaS Multiprocessing 실행 ###
-def YaaSMultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing, MessagesReview, Account):
+def YaaSMultiProcessing(User, ProjectNameList, MainLang, Translations, DataCollection, Script, Estimate, TextBook, AudioBook, Marketing, MessagesReview, Account):
 
     ## ProjectNameList NFC 정규화
     StartProjectName = unicodedata.normalize("NFC", ProjectNameList["StartProjectName"])
@@ -235,12 +238,12 @@ def YaaSMultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate,
             SolutionProjectUpdate(User['email'], projectName)
             ### Step3 : 프로젝트 Config 설정 ###
             if projectName == StartProjectName:
-                YaasConfigUpdate(StartProjectName, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing)
+                YaasConfigUpdate(StartProjectName, MainLang, Translations, DataCollection, Script, Estimate, TextBook, AudioBook, Marketing)
             ## Config 불러오기
             YaasConfig, ConfigPath = LoadYaaSConfig(projectName)
             
             try:
-                Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["ProjectName"], YaasConfig["MainLang"], YaasConfig["Translations"], YaasConfig["EstimateConfig"], YaasConfig["DataCollectionConfig"], YaasConfig["ScriptConfig"], YaasConfig["TextBookConfig"], YaasConfig["AudioBookConfig"], YaasConfig["MarketingConfig"], MessagesReview, Account))
+                Process = multiprocessing.Process(target = YaaS, args = (YaasConfig["email"], YaasConfig["ProjectName"], YaasConfig["MainLang"], YaasConfig["Translations"], YaasConfig["DataCollectionConfig"], YaasConfig["ScriptConfig"], YaasConfig["EstimateConfig"], YaasConfig["TextBookConfig"], YaasConfig["AudioBookConfig"], YaasConfig["MarketingConfig"], MessagesReview, Account))
             except KeyError:
                 YaaSMultiprocessingExit(projectNameList, MultiProcess)
                 sys.exit(f'\n\n[ (({projectName}))는 처음 시작하는 (StartProject) 입니다 ]\n[ >>> ((ProjectNameList = {{"StartProjectName": "{projectName}", "ContinueProjectNameList": [...]}})) <<< 와 같이 StartProjectName 에서 시작하세요 ]\n\n')
@@ -266,9 +269,10 @@ if __name__ == "__main__":
     MainLang = "Ko" # 'Ko', 'En', 'Ja', 'Zh', 'Es' ... 중 메인이 되는 언어를 선택
     Translations = [] # 'En', 'Ja', 'Zh', 'Es' ... 중 다중 선택
     
-    Estimate = [] # [], 'TextBook', 'AudioBook', 'VideoBook' ... 중 필요한 견적을 다중 선택
     DataCollection = [] # [], 'Book', 'Meditation', 'Architect' ... 중 데이터 수집이 필요한 도메인을 다중 선택
+    # Search = 
     Script = [] # [], 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 다중 선택
+    Estimate = [] # [], 'TextBook', 'AudioBook', 'VideoBook' ... 중 필요한 견적을 다중 선택
     TextBook = [] # [], 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
     AudioBook = "감산준(낭독)" # '', '클로닝성우이름', '성우이름(특성)' ... 중 선택
     Marketing = [] # [] 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택
@@ -278,4 +282,4 @@ if __name__ == "__main__":
 
     #########################################################################
 
-    YaaSMultiProcessing(User, ProjectNameList, MainLang, Translations, Estimate, DataCollection, Script, TextBook, AudioBook, Marketing, MessagesReview, Account)
+    YaaSMultiProcessing(User, ProjectNameList, MainLang, Translations, DataCollection, Script, Estimate, TextBook, AudioBook, Marketing, MessagesReview, Account)

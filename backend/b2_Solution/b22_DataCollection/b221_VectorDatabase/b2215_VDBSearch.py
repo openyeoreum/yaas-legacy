@@ -589,100 +589,120 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
         TermText = f"[{Term}]"
     elif Type == "Search":
         TermText = f"[{Term[:20]}]"
-    
+
     ## B. Search ##
     print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 시작 ]")
-    if Type == "Search":
-        ## B-1. Search: Similarity CollectionDataChain 프로세스 ##
-        if Intention == "Similarity":
-            CollectionDataChainSet = {f"SimilaritySearch": {"Term": Term}}
-        else:
-            CollectionDataChainSet = {}
+    ## B-1. Search 존재 여부 확인 ##
+    TotalSearchResultDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1513_SearchResultData/s15131_TotalSearchResultData"
+    TotalSearchResultDataTempPath = os.path.join(TotalSearchResultDataPath, 'TotalSearchResultDataTemp')
+    
+    # 검색어 포함 파일 여부 확인
+    ExistingSearchResultDatas = os.listdir(TotalSearchResultDataTempPath)
+    MatchedSearchResultData = [FileName for FileName in ExistingSearchResultDatas if TermText in FileName and "_Filtered.json" in FileName]
+    
+    ## 기존 검색결과가 존재할 경우
+    if MatchedSearchResultData:
+        FilePath = os.path.join(TotalSearchResultDataTempPath, MatchedSearchResultData[0])
+        print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 동일한 검색 결과가 이미 존재함 ]\n")
+    
+        with open(FilePath, 'r', encoding = 'utf-8') as FilteredSearchJson:
+            FilteredSearchResult = json.load(FilteredSearchJson)
+            
+        return FilteredSearchResult
+    
+    ## 기존 검색결과가 존재하지 않는 경우
+    else:
+        if Type == "Search":
+            ## B-1. Search: Similarity CollectionDataChain 프로세스 ##
+            if Intention == "Similarity":
+                CollectionDataChainSet = {f"SimilaritySearch": {"Term": Term}}
+            else:
+                CollectionDataChainSet = {}
+            
+            # InputDic 생성
+            InputDic = {"Type": Type, "Input": Term, "Extension": Extension, "TermText": TermText}
+
+            ## B-2. Search: Demand, Supply CollectionDataChain 프로세스 ##
+            if Intention == "Demand":
+                CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+                CollectionDataChainSet.update(CollectionDataChain)
+
+            elif Intention == "Supply":
+                CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+                CollectionDataChainSet.update(CollectionDataChain)
+                
+            elif Intention == "Similarity":
+                CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+                CollectionDataChainSet.update(CollectionDataChain)
+                CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+                CollectionDataChainSet.update(CollectionDataChain)
         
-        # InputDic 생성
-        InputDic = {"Type": Type, "Input": Term, "Extension": Extension, "TermText": TermText}
-
-        ## B-2. Search: Demand, Supply CollectionDataChain 프로세스 ##
-        if Intention == "Demand":
-            CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
-            CollectionDataChainSet.update(CollectionDataChain)
-
-        elif Intention == "Supply":
-            CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
-            CollectionDataChainSet.update(CollectionDataChain)
+        ## C. Match ##
+        elif Type == "Match":
+            ## C-1. Match: Similarity CollectionDataChain 프로세스 ##
+            if Intention == "Similarity":
+                CollectionDataChainSet = {f"SimilaritySearch": {"Term": Term}}
+            else:
+                CollectionDataChainSet = {}
             
-        elif Intention == "Similarity":
-            CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
-            CollectionDataChainSet.update(CollectionDataChain)
-            CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
-            CollectionDataChainSet.update(CollectionDataChain)
-    
-    ## C. Match ##
-    elif Type == "Match":
-        ## C-1. Match: Similarity CollectionDataChain 프로세스 ##
-        if Intention == "Similarity":
-            CollectionDataChainSet = {f"SimilaritySearch": {"Term": Term}}
-        else:
-            CollectionDataChainSet = {}
+            # Match CollectionData 불러오기
+            CollectionDataMatch = re.match(r"([A-Za-z]+)_\((\d+)\).*", Term)
+            InputCollection = None
+            if CollectionDataMatch:
+                InputCollection = CollectionDataMatch.group(1).replace('Data', '')
+                InputCollectionId = CollectionDataMatch.group(2)
+            if InputCollection is None:
+                sys.exit(f"[ YaaS Gen Chain CollectionData Error: 데이터명_(Id)가 존재하지 않음 ((({TermText}))) ]")
+            InputMainKey, InputTempFilePaths = GetCollectionDataPaths(InputCollection)
+            with open(InputTempFilePaths[InputCollectionId], 'r', encoding = 'utf-8') as InputTempFile:
+                CollectionData = json.load(InputTempFile)
+                # CollectionData의 MainKey를 CollectionAnalysis로 통일
+                CollectionData['CollectionAnalysis'] = CollectionData.pop(InputMainKey)
+                CollectionDataChainSet.update({f"{Intention}Detail": None})
+                
+            ## C-2. Match: Demand, Supply CollectionDataChain 프로세스 ##
+            if Intention == "Demand":
+                # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경
+                NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
+                InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
+                
+                CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+                CollectionDataChainSet.update(CollectionDataChain)
+
+            elif Intention == "Supply":
+                # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경
+                NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
+                InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
+                
+                CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+                CollectionDataChainSet.update(CollectionDataChain)
+                
+            elif Intention == "Similarity":
+                # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
+                NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Demand")
+                InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
+                
+                CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+                CollectionDataChainSet.update(CollectionDataChain)
+                
+                # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
+                NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Supply")
+                InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
+                
+                CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
+                CollectionDataChainSet.update(CollectionDataChain)
         
-        # Match CollectionData 불러오기
-        CollectionDataMatch = re.match(r"([A-Za-z]+)_\((\d+)\).*", Term)
-        InputCollection = None
-        if CollectionDataMatch:
-            InputCollection = CollectionDataMatch.group(1).replace('Data', '')
-            InputCollectionId = CollectionDataMatch.group(2)
-        if InputCollection is None:
-            sys.exit(f"[ YaaS Gen Chain CollectionData Error: 데이터명_(Id)가 존재하지 않음 ((({TermText}))) ]")
-        InputMainKey, InputTempFilePaths = GetCollectionDataPaths(InputCollection)
-        with open(InputTempFilePaths[InputCollectionId], 'r', encoding = 'utf-8') as InputTempFile:
-            CollectionData = json.load(InputTempFile)
-            # CollectionData의 MainKey를 CollectionAnalysis로 통일
-            CollectionData['CollectionAnalysis'] = CollectionData.pop(InputMainKey)
-            CollectionDataChainSet.update({f"{Intention}Detail": None})
-            
-        ## C-2. Match: Demand, Supply CollectionDataChain 프로세스 ##
-        if Intention == "Demand":
-            # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경
-            NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
-            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
-            
-            CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
-            CollectionDataChainSet.update(CollectionDataChain)
-
-        elif Intention == "Supply":
-            # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경
-            NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], Intention)
-            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
-            
-            CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
-            CollectionDataChainSet.update(CollectionDataChain)
-            
-        elif Intention == "Similarity":
-            # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
-            NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Demand")
-            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
-            
-            CollectionDataChain, DateTime = DemandCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
-            CollectionDataChainSet.update(CollectionDataChain)
-            
-            # InputDic 생성 및 기존 영어로 되어 있던 딕셔너리 키를 한글 키로 변경 'Similarity'의 경우 두번 변환
-            NewCollectionData = ChangeKeys(CollectionData['CollectionAnalysis']['Context'], "Supply")
-            InputDic = {"Type": Type, "Input": str(NewCollectionData), "Extension": Extension, "CollectionData": NewCollectionData, "TermText": TermText}
-            
-            CollectionDataChain, DateTime = SupplyCollectionDataProcessUpdate(projectName, email, InputDic, MessagesReview = MessagesReview)
-            CollectionDataChainSet.update(CollectionDataChain)
-    
-    # with open(f'CollectionDataChainSet({Type}).json', 'w', encoding = 'utf-8') as CollectionDataChainSetFile:
-    #     json.dump(CollectionDataChainSet, CollectionDataChainSetFile, ensure_ascii = False, indent = 4)
-    # sys.exit()
-    ## D. CollectionDataChainSet Search ##
-    print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 완료 ]\n")
-    Result, DataTempJsonPath = SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Intention, Extension, Collection, Range)
-    
-    ## E. SearchCollectionDataFilterProcess ##
-    FilteredSearchResult = SearchCollectionDataFilterProcessUpdate(projectName, email, Result, Intention, Extension, DataTempJsonPath)
-    
-    return FilteredSearchResult
+        # with open(f'CollectionDataChainSet({Type}).json', 'w', encoding = 'utf-8') as CollectionDataChainSetFile:
+        #     json.dump(CollectionDataChainSet, CollectionDataChainSetFile, ensure_ascii = False, indent = 4)
+        # sys.exit()
+        ## D. CollectionDataChainSet Search ##
+        print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 완료 ]\n")
+        Result, DataTempJsonPath = SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Intention, Extension, Collection, Range)
+        
+        ## E. SearchCollectionDataFilterProcess ##
+        FilteredSearchResult = SearchCollectionDataFilterProcessUpdate(projectName, email, Result, Intention, Extension, DataTempJsonPath)
+        
+        return FilteredSearchResult
 
 if __name__ == "__main__":
     
@@ -697,3 +717,4 @@ if __name__ == "__main__":
     MessagesReview = "on" # on, off
     #########################################################################
     Result = YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range, MessagesReview)
+    print(Result)

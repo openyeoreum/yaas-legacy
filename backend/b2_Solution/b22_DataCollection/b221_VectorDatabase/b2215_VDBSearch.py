@@ -521,7 +521,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Inten
 
     print(f"[ YaaS VDB Search CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 완료 ]")
         
-    return SearchResult, DataTempJsonPath
+    return DataTempJsonPath
 
 ## Match 데이터 키값의 한글화
 def ChangeKeys(CollectionData, Intention):
@@ -588,7 +588,7 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
     if Type == "Match":
         TermText = f"[{Term}]"
     elif Type == "Search":
-        TermText = f"[{Term[:20]}]"
+        TermText = f"[{Term[:20]}등 {len(Term)}자]"
 
     ## B. Search ##
     print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 시작 ]")
@@ -697,12 +697,10 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
         # sys.exit()
         ## D. CollectionDataChainSet Search ##
         print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 완료 ]\n")
-        Result, DataTempJsonPath = SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Intention, Extension, Collection, Range)
+        DataTempJsonPath = SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Intention, Extension, Collection, Range)
         
         ## E. SearchCollectionDataFilterProcess ##
-        FilteredSearchResult = SearchCollectionDataFilterProcessUpdate(projectName, email, Result, Intention, Extension, DataTempJsonPath)
-        
-        return FilteredSearchResult
+        FilteredSearchResult = SearchCollectionDataFilterProcessUpdate(projectName, email, Intention, Extension, DataTempJsonPath)
 
 if __name__ == "__main__":
     
@@ -717,4 +715,3 @@ if __name__ == "__main__":
     MessagesReview = "on" # on, off
     #########################################################################
     Result = YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Range, MessagesReview)
-    print(Result)

@@ -14,7 +14,7 @@ from backend.b2_Solution.b22_DataCollection.b223_TrendData.b2232_BestSellerData.
 ########################################
 
 ### 솔루션에 데이터컬렉션 진행 및 업데이트 ###
-def SolutionDataCollectionUpsert(ProjectName, email, DataCollection):
+def SolutionDataCollectionUpsert(ProjectName, email, DataCollection, MessagesReview):
 
     #####################################
     ### 01_TargetDataCollectionUpsert ###
@@ -25,7 +25,7 @@ def SolutionDataCollectionUpsert(ProjectName, email, DataCollection):
     ### 01-02_Publisher ###
     if 'Publisher' in DataCollection:
         PublisherDataUpdate()
-        PublisherProcessUpdate(ProjectName, email)
+        PublisherProcessUpdate(ProjectName, email, MessagesReview = MessagesReview)
 
     ### 01-03_Education ###
 
@@ -40,7 +40,7 @@ def SolutionDataCollectionUpsert(ProjectName, email, DataCollection):
     ### 02-02_BestSeller ###
     if 'BestSeller' in DataCollection:
         BookDataUpdate()
-        BookProcessUpdate(ProjectName, email)
+        BookProcessUpdate(ProjectName, email, MessagesReview = MessagesReview)
     
     ###############################
     ### 03_ScriptDataCollection ###
@@ -53,5 +53,10 @@ def SolutionDataCollectionUpsert(ProjectName, email, DataCollection):
 ########################################
 
 ### 솔루션에 데이터컬렉션 진행 및 업데이트 ###
-def SolutionDataCollectionSearch(ProjectName, email, DataCollection):
-    Result = YaaSsearch(ProjectName, email, Search, Intention, Extension, Collection, Range, MessagesReview)
+def SolutionDataCollectionSearch(ProjectName, email, Search, Intention, Extension, Collection, Range, MessagesReview):
+
+    ###############################
+    ### 01_DataCollectionSearch ###
+    ###############################
+    
+    YaaSsearch(ProjectName, email, Search, Intention, Extension, Collection, Range, MessagesReview = MessagesReview)

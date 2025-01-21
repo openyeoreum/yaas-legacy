@@ -12,7 +12,9 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Open
 ##### Input 생성 #####
 #####################
 ## SearchResultScoreFilter InputList 생성
-def SearchResultScoreFilterToInputList(OrginSearchResult, Intention, Extension, MinScore = 35e-7):
+def SearchResultScoreFilterToInputList(Intention, Extension, DataTempJsonPath, MinScore = 35e-7):
+    with open(DataTempJsonPath, 'r', encoding = 'utf-8') as DataTempJson:
+        OrginSearchResult = json.load(DataTempJson)
     SearchResult = OrginSearchResult['SearchResult']
     ## Intention과 Extension에 따라서 데이터 분리
     extension = [""] + Extension
@@ -242,7 +244,7 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
 ##### ProcessResponse 업데이트 #####
 ##################################
 ## ProcessResponseTemp 저장
-def ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResult, Intention, Extension, FilteredDataTempJsonPath):
+def ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResult, Intention, Extension, FilteredDataTempJsonPath, TopScoreDataTempJsonPath):
     ## SearchResultData 재구성
     FilteredSearchResultData = {}
     ## 기본 데이터
@@ -250,13 +252,19 @@ def ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResu
     FilteredSearchResultData['SearchIntention'] = OrginSearchResult['SearchIntention']
     FilteredSearchResultData['SearchCollection'] = OrginSearchResult['SearchCollection']
     FilteredSearchResultData['SearchRange'] = OrginSearchResult['SearchRange']
+    TopScoreFilteredSearchResultData = FilteredSearchResultData.copy()
     
     ## SearchResult 재구성
     SearchResult = {}
     ## SearchResult 기본 데이터
     SearchResult[f'{Intention}Search'] = FilteredSearchResult[f'{Intention}Search']
     SearchResult[f'{Intention}Detail'] = FilteredSearchResult[f'{Intention}Detail']
+    TopScoreSearchResult = SearchResult.copy()
     
+    ## 가장 높은 CollectionSearchTotalScore를 가진 Context 저장용 변수
+    TopScoreContext = None
+    TopScore = float('-inf')
+
     ## Context, ContextExpertise, ContextUltimate 재구성
     for ext in Extension:
         IntentionContext = FilteredSearchResult[f'{Intention}Context{ext}']
@@ -265,6 +273,13 @@ def ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResu
             for OutputDic in OutputDicList:
                 if OutputDic['SearchResultKey'] == f"{Intention}Context{ext}":
                     IntentionContext['CollectionSearch'] += OutputDic['CollectionSearch']
+                    CollectionSearchScore = [CollectionSearch['TotalScore'] for CollectionSearch in IntentionContext['CollectionSearch']]
+                    IntentionContext['CollectionSearchTotalScore'] = sum(CollectionSearchScore)
+
+                    ## 최상위 점수를 가진 CollectionSearch 비교
+                    if IntentionContext['CollectionSearchTotalScore'] > TopScore:
+                        TopScore = IntentionContext['CollectionSearchTotalScore']
+                        TopScoreContext = {'Key': f'{Intention}Context{ext}', 'Value': IntentionContext}
         
         elif isinstance(IntentionContext, list):
             for i in range(len(IntentionContext)):
@@ -272,14 +287,30 @@ def ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResu
                 for OutputDic in OutputDicList:
                     if OutputDic['SearchResultKey'] == f"{Intention}Context{ext}" and OutputDic['CollectionSearchId'] == i:
                         IntentionContext[i]['CollectionSearch'] += OutputDic['CollectionSearch']
-        
+                        CollectionSearchScore = [CollectionSearch['TotalScore'] for CollectionSearch in IntentionContext[i]['CollectionSearch']]
+                        IntentionContext[i]['CollectionSearchTotalScore'] = sum(CollectionSearchScore)
+
+                        ## 최상위 점수를 가진 CollectionSearch 비교
+                        if IntentionContext[i]['CollectionSearchTotalScore'] > TopScore:
+                            TopScore = IntentionContext[i]['CollectionSearchTotalScore']
+                            TopScoreContext = {'Key': f'{Intention}Context{ext}', 'Value': IntentionContext[i]}
+
         SearchResult[f'{Intention}Context{ext}'] = IntentionContext
     
-    FilteredSearchResultData['SearchResult'] = SearchResult
     
-    with open(FilteredDataTempJsonPath, 'w', encoding = 'utf-8') as SearchResultJson:
+    FilteredSearchResultData['SearchResult'] = SearchResult
+
+    ## 필터링된 검색 결과 저장
+    with open(FilteredDataTempJsonPath, 'w', encoding='utf-8') as SearchResultJson:
         json.dump(FilteredSearchResultData, SearchResultJson, ensure_ascii = False, indent = 4)
-            
+
+    ## 가장 높은 TotalScore를 가진 CollectionSearch 저장
+    if TopScoreContext:
+        TopScoreSearchResult[TopScoreContext['Key']] = TopScoreContext['Value']
+        TopScoreFilteredSearchResultData['SearchResult'] = TopScoreSearchResult
+        with open(TopScoreDataTempJsonPath, 'w', encoding='utf-8') as TopScoreJson:
+            json.dump(TopScoreFilteredSearchResultData, TopScoreJson, ensure_ascii = False, indent = 4)
+
     return FilteredSearchResultData
 
 ################################
@@ -368,14 +399,15 @@ def InputDicToOutputDic(InputDic, Response, Intention):
     return OutputDic
 
 ## SearchCollectionData 프롬프트 요청 및 결과물 Json화
-def SearchCollectionDataFilterProcessUpdate(projectName, email, SearchResult, Intention, Extension, DataTempJsonPath, mode = "Master", MainKey = 'SearchCollectionDataFilter', MessagesReview = "on"):
+def SearchCollectionDataFilterProcessUpdate(projectName, email, Intention, Extension, DataTempJsonPath, mode = "Master", MainKey = 'SearchCollectionDataFilter', MessagesReview = "on"):
     print(f"< User: {email} | Filter: {projectName} | SearchCollectionDataFilterUpdate 시작 >")
     
     ## TotalPublisherData 경로 설정
     FilteredDataTempJsonPath = DataTempJsonPath.replace("].json", "]_Filtered.json")
+    TopScoreDataTempJsonPath = DataTempJsonPath.replace("].json", "]_TopScore.json")
     
     ## SearchCollectionDataDetailProcess
-    OrginSearchResult, FilteredSearchResult, extension, InputList = SearchResultScoreFilterToInputList(SearchResult, Intention, Extension)
+    OrginSearchResult, FilteredSearchResult, extension, InputList = SearchResultScoreFilterToInputList(Intention, Extension, DataTempJsonPath)
 
     ## Mark 설정
     if Intention == "Demand":
@@ -425,7 +457,7 @@ def SearchCollectionDataFilterProcessUpdate(projectName, email, SearchResult, In
         OutputDicList.append(OutputDic)
 
     ## ProcessResponse 임시저장
-    FilteredSearchResultData = ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResult, Intention, extension, FilteredDataTempJsonPath)
+    FilteredSearchResultData = ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResult, Intention, extension, FilteredDataTempJsonPath, TopScoreDataTempJsonPath)
 
     print(f"[ User: {email} | Filter: {projectName} | SearchCollectionDataUpdate 완료 ]")
     
@@ -445,4 +477,4 @@ if __name__ == "__main__":
     #########################################################################
     SearchResult = None
     DataTempJsonPath = '/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1513_SearchResultData/s15131_TotalSearchResultData/TotalSearchResultDataTemp/SearchResultData_(20250111021236)_[나는 오디오북 자동 제작 AI솔루션 ].json'
-    FilteredSearchResultData = SearchCollectionDataFilterProcessUpdate(projectName, email, SearchResult, Intention, Extension, DataTempJsonPath)
+    FilteredSearchResultData = SearchCollectionDataFilterProcessUpdate(projectName, email, Intention, Extension, DataTempJsonPath)

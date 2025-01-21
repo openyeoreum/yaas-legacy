@@ -2,22 +2,22 @@
     "TaskName": "CharacterDefine",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-4o-2024-11-20-mini",
-            "LongTokensModel": "gpt-4o-2024-11-20"
+            "ShortTokensModel": "chatgpt-4o-latest-mini",
+            "LongTokensModel": "chatgpt-4o-latest"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [
                 {
                     "Date": "CharacterDefine-231022073805",
-                    "Model": "ft:gpt-4o-2024-11-20-mini-0613:yeoreum::8CTTEzmS"
+                    "Model": "ft:chatgpt-4o-latest-mini-0613:yeoreum::8CTTEzmS"
                 },
                 {
                     "Date": "CharacterDefine-231102055753",
-                    "Model": "ft:gpt-4o-2024-11-20-mini-0613:yeoreum::8GJjYaiZ"
+                    "Model": "ft:chatgpt-4o-latest-mini-0613:yeoreum::8GJjYaiZ"
                 },
                 {
                     "Date": "CharacterDefine-231108032841",
-                    "Model": "ft:gpt-4o-2024-11-20-mini:yeoreum::8ILpWsR7"
+                    "Model": "ft:chatgpt-4o-latest-mini:yeoreum::8ILpWsR7"
                 }
             ],
             "LongTokensModel": []

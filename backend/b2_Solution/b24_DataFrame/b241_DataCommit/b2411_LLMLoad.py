@@ -428,9 +428,9 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
 
       # 토큰수별 모델 선정
       if ModelTokens == "Short":
-        BaseModel = "gpt-4o-2024-11-20-mini"
+        BaseModel = "chatgpt-4o-latest-mini"
       elif ModelTokens == "Long":
-        BaseModel = "gpt-4o-2024-11-20-mini"
+        BaseModel = "chatgpt-4o-latest-mini"
       
       # FineTuning 요청
       FineTuningJob = OpenAIClient.fine_tuning.jobs.create(

@@ -2,8 +2,8 @@
     "TaskName": "CharacterPostCompletionLiteraty",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-4o-2024-11-20-mini",
-            "LongTokensModel": "gpt-4o-2024-11-20"
+            "ShortTokensModel": "chatgpt-4o-latest-mini",
+            "LongTokensModel": "chatgpt-4o-latest"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],

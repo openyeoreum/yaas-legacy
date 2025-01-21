@@ -422,7 +422,7 @@ class Prompt(Base):
 
     ## Yeoreum
     ## DataCollectionPrompt
-    # CollectionDataGenPrompt
+    # SearchCollectionDataGenPrompt
     DemandCollectionDataDetail = Column(JSON)
     DemandCollectionDataContext = Column(JSON)
     DemandCollectionDataExpertise = Column(JSON)
@@ -436,6 +436,11 @@ class Prompt(Base):
     SupplyCollectionDataExpertiseChain = Column(JSON)
     SupplyCollectionDataUltimate = Column(JSON)
     SupplyCollectionDataUltimateChain = Column(JSON)
+    
+    # SearchFilterPrompt
+    DemandSearchCollectionDataFilter = Column(JSON)
+    SupplySearchCollectionDataFilter = Column(JSON)
+    SimilaritySearchCollectionDataFilter = Column(JSON)
     
     # TargetData
     PublisherContextDefine = Column(JSON)

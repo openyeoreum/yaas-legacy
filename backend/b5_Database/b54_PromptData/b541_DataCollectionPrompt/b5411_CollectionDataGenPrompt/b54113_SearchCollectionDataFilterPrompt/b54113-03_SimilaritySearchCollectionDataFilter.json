@@ -1,0 +1,270 @@
+{
+    "TaskName": "SimilaritySearchCollectionDataFilter",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "chatgpt-4o-latest-mini",
+            "LongTokensModel": "chatgpt-4o-latest"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "chatgpt-4o-latest"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-5-haiku-latest",
+            "LongTokensModel": "claude-3-5-sonnet-latest"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-5-sonnet-latest"
+    },
+    "Temperature": 1,
+    "OutputTokensRatio": 0.5,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "<유사검색결과>에서 [유사 매칭대상]와 가장 유사한 데이터를 [유사 검색결과]에서 엄격하게 선별하여 <선별된유사검색결과.json>를 작성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<선별된유사검색결과.json> 작성 방법)\n",
+                    "Message": "1. <유사검색결과>의 [유사 매칭대상]과 [유사 검색결과]는 모두 1) - 요약정보 -, 2) - 수요정보 -, 3) - 공급정보 - 로 구성되어 있습니다.\n2. [유사 매칭대상]과 [유사 검색결과]는 모두 자신의 전체적인 정보를 - 요약정보 -에 작성하고, 필요로 하는 정보를 - 수요정보 -, 자신에 제안하는 정보를 - 공급정보 - 에 작성했습니다. [유사 매칭대상]은 자신과 가장 유사한 대상(또는 정보 등)의 데이터를 찾고 있습니다.\n3. [유사 검색결과]는 그 유사한 대상(또는 정보 등)의 예비 데이터 리스트입니다. 그러나 이는 부정확한 경우가 있음으로 이 중에서 [유사 매칭대상]과 가장 유사한 대상을 [유사 검색결과]에서 엄격하게 선별해야 합니다.\n4. 따라서 [유사 검색결과]에서 [유사 매칭대상]과 가장 유사할 수 있는 데이터들을 엄격하게 선별하여, 선별된 데이터들의 '데이터번호', '선별이유', '연결키워드', '매칭점수'를 리스트로 작성하여 <선별된유사검색결과.json>를 완성합니다.\n5. 선별하는 데이터의 수는 제한이 없습니다. 따라서 1개일 수도 있고, 여러 개일 수도 있습니다.\n6. <선별된공급검색결과.json> 내에는 [유사 매칭대상], [유사 검색결과], [데이터번호: n]등의 표현은 사용하지 않습니다."
+                },
+                {
+                    "Mark": "\n\n(<선별된유사검색결과.json>의 구조 및 내용)\n",
+                    "Message": "{'선별': [{'데이터번호': '선별된 데이터의 번호 작성', '선별이유': '선별 이유에 대해서 2-3문장의 길이로 작성', '연결키워드': ['유사 매칭대상과', '선별된 유사 검색결과를', '연결할 수 있는', '공통된 키워드를', '추측하여 3-5개 작성'], '상생키워드': ['유사 매칭대상과', '선별된 유사 검색결과가', '함께 상생할 수 있는', '키워드를', '추측하여 3-5개 작성'], '매칭점수': '매칭 점수를 0-100점까지 숫자로 표기'}]}"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n([유사 매칭대상]와 가장 유사한 대상의 데이터를 [유사 검색결과]에서 엄격하게 선별하여 <선별된유사검색결과.json>를 작성해주세요)\n",
+                    "InputMark": "<유사검색결과>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n<선별된유사검색결과.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "<유사검색결과>에서 [유사 매칭대상]와 가장 유사한 데이터를 [유사 검색결과]에서 엄격하게 선별하여 <선별된유사검색결과.json>를 작성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<선별된유사검색결과.json> 작성 방법)\n",
+                    "Message": "1. <유사검색결과>의 [유사 매칭대상]과 [유사 검색결과]는 모두 1) - 요약정보 -, 2) - 수요정보 -, 3) - 공급정보 - 로 구성되어 있습니다.\n2. [유사 매칭대상]과 [유사 검색결과]는 모두 자신의 전체적인 정보를 - 요약정보 -에 작성하고, 필요로 하는 정보를 - 수요정보 -, 자신에 제안하는 정보를 - 공급정보 - 에 작성했습니다. [유사 매칭대상]은 자신과 가장 유사한 대상(또는 정보 등)의 데이터를 찾고 있습니다.\n3. [유사 검색결과]는 그 유사한 대상(또는 정보 등)의 예비 데이터 리스트입니다. 그러나 이는 부정확한 경우가 있음으로 이 중에서 [유사 매칭대상]과 가장 유사한 대상을 [유사 검색결과]에서 엄격하게 선별해야 합니다.\n4. 따라서 [유사 검색결과]에서 [유사 매칭대상]과 가장 유사할 수 있는 데이터들을 엄격하게 선별하여, 선별된 데이터들의 '데이터번호', '선별이유', '연결키워드', '매칭점수'를 리스트로 작성하여 <선별된유사검색결과.json>를 완성합니다.\n5. 선별하는 데이터의 수는 제한이 없습니다. 따라서 1개일 수도 있고, 여러 개일 수도 있습니다.\n6. <선별된공급검색결과.json> 내에는 [유사 매칭대상], [유사 검색결과], [데이터번호: n]등의 표현은 사용하지 않습니다."
+                },
+                {
+                    "Mark": "\n\n(<선별된유사검색결과.json>의 구조 및 내용)\n",
+                    "Message": "{'선별': [{'데이터번호': '선별된 데이터의 번호 작성', '선별이유': '선별 이유에 대해서 2-3문장의 길이로 작성', '연결키워드': ['유사 매칭대상과', '선별된 유사 검색결과를', '연결할 수 있는', '공통된 키워드를', '추측하여 3-5개 작성'], '상생키워드': ['유사 매칭대상과', '선별된 유사 검색결과가', '함께 상생할 수 있는', '키워드를', '추측하여 3-5개 작성'], '매칭점수': '매칭 점수를 0-100점까지 숫자로 표기'}]}"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n([유사 매칭대상]와 가장 유사한 대상의 데이터를 [유사 검색결과]에서 엄격하게 선별하여 <선별된유사검색결과.json>를 작성해주세요)\n",
+                    "InputMark": "<유사검색결과>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n<선별된유사검색결과.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "<유사검색결과>에서 [유사 매칭대상]와 가장 유사한 데이터를 [유사 검색결과]에서 엄격하게 선별하여 <선별된유사검색결과.json>를 작성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<선별된유사검색결과.json> 작성 방법)\n",
+                    "Message": "1. <유사검색결과>의 [유사 매칭대상]과 [유사 검색결과]는 모두 1) - 요약정보 -, 2) - 수요정보 -, 3) - 공급정보 - 로 구성되어 있습니다.\n2. [유사 매칭대상]과 [유사 검색결과]는 모두 자신의 전체적인 정보를 - 요약정보 -에 작성하고, 필요로 하는 정보를 - 수요정보 -, 자신에 제안하는 정보를 - 공급정보 - 에 작성했습니다. [유사 매칭대상]은 자신과 가장 유사한 대상(또는 정보 등)의 데이터를 찾고 있습니다.\n3. [유사 검색결과]는 그 유사한 대상(또는 정보 등)의 예비 데이터 리스트입니다. 그러나 이는 부정확한 경우가 있음으로 이 중에서 [유사 매칭대상]과 가장 유사한 대상을 [유사 검색결과]에서 엄격하게 선별해야 합니다.\n4. 따라서 [유사 검색결과]에서 [유사 매칭대상]과 가장 유사할 수 있는 데이터들을 엄격하게 선별하여, 선별된 데이터들의 '데이터번호', '선별이유', '연결키워드', '매칭점수'를 리스트로 작성하여 <선별된유사검색결과.json>를 완성합니다.\n5. 선별하는 데이터의 수는 제한이 없습니다. 따라서 1개일 수도 있고, 여러 개일 수도 있습니다.\n6. <선별된공급검색결과.json> 내에는 [유사 매칭대상], [유사 검색결과], [데이터번호: n]등의 표현은 사용하지 않습니다."
+                },
+                {
+                    "Mark": "\n\n(<선별된유사검색결과.json>의 구조 및 내용)\n",
+                    "Message": "{'선별': [{'데이터번호': '선별된 데이터의 번호 작성', '선별이유': '선별 이유에 대해서 2-3문장의 길이로 작성', '연결키워드': ['유사 매칭대상과', '선별된 유사 검색결과를', '연결할 수 있는', '공통된 키워드를', '추측하여 3-5개 작성'], '상생키워드': ['유사 매칭대상과', '선별된 유사 검색결과가', '함께 상생할 수 있는', '키워드를', '추측하여 3-5개 작성'], '매칭점수': '매칭 점수를 0-100점까지 숫자로 표기'}]}"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n([유사 매칭대상]와 가장 유사한 대상의 데이터를 [유사 검색결과]에서 엄격하게 선별하여 <선별된유사검색결과.json>를 작성해주세요)\n",
+                    "InputMark": "<유사검색결과>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n<선별된유사검색결과.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "<유사검색결과>에서 [유사 매칭대상]와 가장 유사한 데이터를 [유사 검색결과]에서 엄격하게 선별하여 <선별된유사검색결과.json>를 작성하는 작업을 진행합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<선별된유사검색결과.json> 작성 방법)\n",
+                    "Message": "1. <유사검색결과>의 [유사 매칭대상]과 [유사 검색결과]는 모두 1) - 요약정보 -, 2) - 수요정보 -, 3) - 공급정보 - 로 구성되어 있습니다.\n2. [유사 매칭대상]과 [유사 검색결과]는 모두 자신의 전체적인 정보를 - 요약정보 -에 작성하고, 필요로 하는 정보를 - 수요정보 -, 자신에 제안하는 정보를 - 공급정보 - 에 작성했습니다. [유사 매칭대상]은 자신과 가장 유사한 대상(또는 정보 등)의 데이터를 찾고 있습니다.\n3. [유사 검색결과]는 그 유사한 대상(또는 정보 등)의 예비 데이터 리스트입니다. 그러나 이는 부정확한 경우가 있음으로 이 중에서 [유사 매칭대상]과 가장 유사한 대상을 [유사 검색결과]에서 엄격하게 선별해야 합니다.\n4. 따라서 [유사 검색결과]에서 [유사 매칭대상]과 가장 유사할 수 있는 데이터들을 엄격하게 선별하여, 선별된 데이터들의 '데이터번호', '선별이유', '연결키워드', '매칭점수'를 리스트로 작성하여 <선별된유사검색결과.json>를 완성합니다.\n5. 선별하는 데이터의 수는 제한이 없습니다. 따라서 1개일 수도 있고, 여러 개일 수도 있습니다.\n6. <선별된공급검색결과.json> 내에는 [유사 매칭대상], [유사 검색결과], [데이터번호: n]등의 표현은 사용하지 않습니다."
+                },
+                {
+                    "Mark": "\n\n(<선별된유사검색결과.json>의 구조 및 내용)\n",
+                    "Message": "{'선별': [{'데이터번호': '선별된 데이터의 번호 작성', '선별이유': '선별 이유에 대해서 2-3문장의 길이로 작성', '연결키워드': ['유사 매칭대상과', '선별된 유사 검색결과를', '연결할 수 있는', '공통된 키워드를', '추측하여 3-5개 작성'], '상생키워드': ['유사 매칭대상과', '선별된 유사 검색결과가', '함께 상생할 수 있는', '키워드를', '추측하여 3-5개 작성'], '매칭점수': '매칭 점수를 0-100점까지 숫자로 표기'}]}"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n([유사 매칭대상]와 가장 유사한 대상의 데이터를 [유사 검색결과]에서 엄격하게 선별하여 <선별된유사검색결과.json>를 작성해주세요)\n",
+                    "InputMark": "<유사검색결과>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n<선별된유사검색결과.json>\n",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

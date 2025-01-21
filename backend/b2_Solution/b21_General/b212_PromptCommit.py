@@ -35,6 +35,9 @@ def AddPromptToDB():
         supplyCollectionDataExpertiseChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-03-2_SupplyCollectionDataExpertiseChain.json")
         supplyCollectionDataUltimate = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-04-1_SupplyCollectionDataUltimate.json")
         supplyCollectionDataUltimateChain = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54112_SupplyCollectionDataGenPrompt/b54112-04-2_SupplyCollectionDataUltimateChain.json")
+        demandSearchCollectionDataFilter = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54113_SearchCollectionDataFilterPrompt/b54113-01_DemandSearchCollectionDataFilter.json")
+        supplySearchCollectionDataFilter = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54113_SearchCollectionDataFilterPrompt/b54113-02_SupplySearchCollectionDataFilter.json")
+        similaritySearchCollectionDataFilter = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54113_SearchCollectionDataFilterPrompt/b54113-03_SimilaritySearchCollectionDataFilter.json")
         publisherContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-01_PublisherContextDefine.json")
         publisherWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-02_PublisherWMWMDefine.json")
         publisherServiceDemand = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5412_TargetDataPrompt/b5412-03_PublisherServiceDemand.json")
@@ -103,6 +106,9 @@ def AddPromptToDB():
             ExistingPrompt.SupplyCollectionDataExpertiseChain = supplyCollectionDataExpertiseChain
             ExistingPrompt.SupplyCollectionDataUltimate = supplyCollectionDataUltimate
             ExistingPrompt.SupplyCollectionDataUltimateChain = supplyCollectionDataUltimateChain
+            ExistingPrompt.DemandSearchCollectionDataFilter = demandSearchCollectionDataFilter
+            ExistingPrompt.SupplySearchCollectionDataFilter = supplySearchCollectionDataFilter
+            ExistingPrompt.SimilaritySearchCollectionDataFilter = similaritySearchCollectionDataFilter
             ExistingPrompt.PublisherContextDefine = publisherContextDefine
             ExistingPrompt.PublisherWMWMDefine = publisherWMWMDefine
             ExistingPrompt.PublisherServiceDemand = publisherServiceDemand
@@ -166,6 +172,9 @@ def AddPromptToDB():
                 SupplyCollectionDataExpertiseChain = supplyCollectionDataExpertiseChain,
                 SupplyCollectionDataUltimate = supplyCollectionDataUltimate,
                 SupplyCollectionDataUltimateChain = supplyCollectionDataUltimateChain,
+                DemandSearchCollectionDataFilter = demandSearchCollectionDataFilter,
+                SupplySearchCollectionDataFilter = supplySearchCollectionDataFilter,
+                SimilaritySearchCollectionDataFilter = similaritySearchCollectionDataFilter,
                 PublisherContextDefine = publisherContextDefine,
                 PublisherWMWMDefine = publisherWMWMDefine,
                 PublisherServiceDemand = publisherServiceDemand,

@@ -11,6 +11,7 @@ from tqdm import tqdm
 
 from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2211_DemandCollectionDataGen import DemandCollectionDataProcessUpdate
 from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2212_SupplyCollectionDataGen import SupplyCollectionDataProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2213_SearchCollectionDataFilter import SearchCollectionDataFilterProcessUpdate
 
 ## Pinecone에 인덱스 생성
 def Pinecone_CreateIndex(Name, IndexDimension = 1536):
@@ -520,7 +521,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Inten
 
     print(f"[ YaaS VDB Search CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 완료 ]")
         
-    return SearchResult
+    return SearchResult, DataTempJsonPath
 
 ## Match 데이터 키값의 한글화
 def ChangeKeys(CollectionData, Intention):
@@ -676,9 +677,12 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
     # sys.exit()
     ## D. CollectionDataChainSet Search ##
     print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 완료 ]\n")
-    Result = SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Intention, Extension, Collection, Range)
+    Result, DataTempJsonPath = SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Intention, Extension, Collection, Range)
     
-    return Result
+    ## E. SearchCollectionDataFilterProcess ##
+    FilteredSearchResult = SearchCollectionDataFilterProcessUpdate(projectName, email, Result, Intention, Extension, DataTempJsonPath)
+    
+    return FilteredSearchResult
 
 if __name__ == "__main__":
     

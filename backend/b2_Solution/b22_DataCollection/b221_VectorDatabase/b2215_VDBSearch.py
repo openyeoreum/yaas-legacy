@@ -17,7 +17,7 @@ from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2213_SearchColl
 def Pinecone_CreateIndex(Name, IndexDimension = 1536):
     PineConeClient = Pinecone(api_key = os.getenv("PINECONE_API_KEY"))
     # Pinecone 인덱스 생성
-    if not PineConeClient.has_index(Collection):
+    if not PineConeClient.has_index(Name):
         PineConeClient.create_index(
             name = Name,
             dimension = IndexDimension,
@@ -50,6 +50,7 @@ def GetWeight(Weight):
 
 ## TempFilePaths 생성
 def GetCollectionDataPaths(Collection):
+    print(Collection)
     if Collection == 'publisher' or Collection == 'Publisher':
         TempFolderPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TargetData/s1522_PublisherData/s15221_TotalPublisherData/TotalPublisherDataTemp"
         MainKey = 'PublisherAnalysis'

@@ -11,7 +11,7 @@ from openai import OpenAI
 def Pinecone_CreateIndex(Name, IndexDimension = 1536):
     PineConeClient = Pinecone(api_key = os.getenv("PINECONE_API_KEY"))
     # Pinecone 인덱스 생성
-    if not PineConeClient.has_index(CollectionName):
+    if not PineConeClient.has_index(Name):
         PineConeClient.create_index(
             name = Name,
             dimension = IndexDimension,

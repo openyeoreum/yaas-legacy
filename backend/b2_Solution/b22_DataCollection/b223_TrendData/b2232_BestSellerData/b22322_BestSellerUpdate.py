@@ -388,8 +388,8 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
 ##### Process 진행 및 업데이트 #####
 ################################
 ## BookProcess 프롬프트 요청 및 결과물 Json화
-def BookProcessUpdate(projectName, email, mode = "Master", MainKey = 'BookAnalysis', MessagesReview = "on"):
-    print(f"< User: {email} | Project: {projectName} | BookProcessUpdate 시작 >")
+def BookDataProcessUpdate(projectName, email, mode = "Master", MainKey = 'BookAnalysis', MessagesReview = "on"):
+    print(f"< User: {email} | Project: {projectName} | BookDataProcessUpdate 시작 >")
     ## TotalBookData 경로 설정
     TotalBookDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s153_TrendData/s1532_BookData/s15321_TotalBookData"
     TotalBookDataJsonPath = os.path.join(TotalBookDataPath, 'TotalBookData.json')
@@ -432,10 +432,10 @@ def BookProcessUpdate(projectName, email, mode = "Master", MainKey = 'BookAnalys
     
     ## ProcessResponse 업데이트
     ProcessResponseUpdate(MainKey, TotalBookDataJsonPath, TotalBookDataTempPath)
-    print(f"[ User: {email} | Project: {projectName} | BookProcessUpdate 완료 ]\n")
+    print(f"[ User: {email} | Project: {projectName} | BookDataProcessUpdate 완료 ]\n")
     
     ## ProcessResponse 업서트
-    UpsertCollectionData(TotalBookDataTempPath, "book")
+    UpsertCollectionData(TotalBookDataTempPath, "Book")
 
 if __name__ == "__main__":
     
@@ -444,4 +444,4 @@ if __name__ == "__main__":
     ProjectName = '241204_개정교육과정초등교과별이해연수'
     #########################################################################
     
-    BookProcessUpdate(ProjectName, email)
+    BookDataProcessUpdate(ProjectName, email)

@@ -50,7 +50,6 @@ def GetWeight(Weight):
 
 ## TempFilePaths 생성
 def GetCollectionDataPaths(Collection):
-    print(Collection)
     if Collection == 'publisher' or Collection == 'Publisher':
         TempFolderPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TargetData/s1522_PublisherData/s15221_TotalPublisherData/TotalPublisherDataTemp"
         MainKey = 'PublisherAnalysis'
@@ -67,8 +66,8 @@ def GetCollectionDataPaths(Collection):
         # 정규 표현식을 이용해 파일명 매칭
         match = TempFileNamePatternRegex.match(TempFileName)
         if match:
-            DataId = match.group(1)  # 번호 추출
-            TempFileFullPath = os.path.join(TempFolderPath, TempFileName)  # 전체 경로 생성
+            DataId = match.group(1) # 번호 추출
+            TempFileFullPath = os.path.join(TempFolderPath, TempFileName) # 전체 경로 생성
             TempFilePaths[DataId] = TempFileFullPath
             
     return MainKey, TempFilePaths
@@ -219,8 +218,11 @@ def SearchEmbeddedData(VDBIndex, CollectionData, Type, TermText, Intention, Coll
             vector = QueryVector,
             top_k = Range,
             include_metadata = True,
-            namespace = Collection,
-            filter = {"Field": QueryField}
+            namespace = 'collection',
+            filter = {
+                "Collection": Collection,
+                "Field": QueryField
+            }
         )
         ## F. 최소값 저장
         if QueryResult.matches:
@@ -520,7 +522,7 @@ def SearchCollectionData(CollectionDataChainSet, DateTime, Type, TermText, Inten
     with open(DataTempJsonPath, 'w', encoding = 'utf-8') as DataTempJson:
         json.dump(SearchResult, DataTempJson, ensure_ascii = False, indent = 4)
 
-    print(f"[ YaaS VDB Search CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 완료 ]")
+    print(f"[ YaaS VDB Search CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 완료 ]\n")
         
     return DataTempJsonPath
 
@@ -587,9 +589,9 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
     ## A-2. 요약 검색어 생성
     Term = Search
     if Type == "Match":
-        TermText = f"[{Term}]"
+        TermText = f"[{projectName}_{Intention}: {Term}]"
     elif Type == "Search":
-        TermText = f"[{Term[:20]}등 {len(Term)}자]"
+        TermText = f"[{projectName}_{Intention}: {Term[:20]}등 {len(Term)}자]"
 
     ## B. Search ##
     print(f"[ YaaS Gen Chain CollectionData ({Type}): {TermText} | Intention({Intention}) | Extension({Extension}) | Collection({Collection}) | Range({Range}) 시작 ]")
@@ -702,6 +704,8 @@ def YaaSsearch(projectName, email, Search, Intention, Extension, Collection, Ran
         
         ## E. SearchCollectionDataFilterProcess ##
         FilteredSearchResult = SearchCollectionDataFilterProcessUpdate(projectName, email, Intention, Extension, DataTempJsonPath)
+        
+    return FilteredSearchResult, Type
 
 if __name__ == "__main__":
     

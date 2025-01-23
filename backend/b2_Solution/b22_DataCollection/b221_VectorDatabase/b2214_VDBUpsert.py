@@ -63,8 +63,8 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId, Name = 'collectio
         "id" :f"{DocId}-{Field}",
         "values": ContextSummaryVector,
         "metadata": {
-            "Collection": f"{CollectionName}",
-            "CollectionId": f"{Id}",
+            "Collection": CollectionName,
+            "CollectionId": Id,
             "Field": Field,
             "Weight": Weight
             }
@@ -285,7 +285,7 @@ def UpsertEmbeddedData(CollectionData, CollectionName, LastId, Name = 'collectio
         })
 
     # Pinecone에 업서트
-    VDBIndex.upsert(vectors = UpsertEmbeddedData, namespace = CollectionName)
+    VDBIndex.upsert(vectors = UpsertEmbeddedData, namespace = Name)
     VDBStatus = VDBIndex.describe_index_stats()
     
     # Pinecone에 업서트 로딩에 따라서 달리 출력(로딩이 조금 늦음..)
@@ -328,7 +328,7 @@ def UpsertCollectionData(TotalCollectionDataTempPath, CollectionName):
             CollectionDataTempFile = json.load(CollectionDataTempJson)
         # VDB에 이미 업서트 되었는지 확인
         if 'VDB' not in CollectionDataTempFile:
-            CollectionData = {'Id': Id, 'CollectionAnalysis': CollectionDataTempFile['PublisherAnalysis']}   
+            CollectionData = {'Id': Id, 'CollectionAnalysis': CollectionDataTempFile[f'{CollectionName}Analysis']}   
             UpsertEmbeddedData(CollectionData, CollectionName, LastId)
             CollectionDataTempFile['VDB'] = CollectionName
             with open(CollectionDataTempFilePath, 'w', encoding='utf-8') as CollectionDataTempJson:
@@ -337,6 +337,6 @@ def UpsertCollectionData(TotalCollectionDataTempPath, CollectionName):
     print(f"[ VDBIndexUpsert: {CollectionName} | VBD에 {CollectionName}TempFile.json 리스트 업서트 완료 ]")
 
 if __name__ == "__main__":
-    CollectionName = "publisher"
+    CollectionName = "Book"
     TotalCollectionDataTempPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TargetData/s1522_PublisherData/s15221_TotalPublisherData/TotalPublisherDataTemp"
     UpsertCollectionData(TotalCollectionDataTempPath, CollectionName)

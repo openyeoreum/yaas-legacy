@@ -11,8 +11,14 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Open
 #####################
 ##### Input 생성 #####
 #####################
+## ContextToInput 생성 필요시 프롬프트 생성 ## 필터 말고 원본 파일?
+def ContextToInput(FilteredSearchResult, Type):
+    return ContextData
+
 ## Process1-1: DemandScriptPlan의 Input
-def DemandCollectionDataToScriptPlanInput(ContextData):
+def DemandCollectionDataToScriptPlanInput(FilteredSearchResult, Type):
+    ContextData = ContextToInput(FilteredSearchResult, Type)
+    
     CollectionAnalysis = ContextData['CollectionAnalysis']
     Summary = CollectionAnalysis['Summary']
     KeyWord = CollectionAnalysis['KeyWord']
@@ -27,7 +33,9 @@ def DemandCollectionDataToScriptPlanInput(ContextData):
     return Input
 
 ## Process1-2: SupplyScriptPlan의 Input
-def SupplyCollectionDataToScriptPlanInput(ContextData):
+def SupplyCollectionDataToScriptPlanInput(FilteredSearchResult, Type):
+    ContextData = ContextToInput(FilteredSearchResult, Type)
+    
     CollectionAnalysis = ContextData['CollectionAnalysis']
     Summary = CollectionAnalysis['Summary']
     KeyWord = CollectionAnalysis['KeyWord']
@@ -41,19 +49,19 @@ def SupplyCollectionDataToScriptPlanInput(ContextData):
     
     return Input
 
-## Process2: TitleAndIndexs의 Input   
+## Process2: TitleAndIndexGen의 Input   
 
-## Process3: SummaryOfIndexs의 Input
+## Process3: SummaryOfIndexGen의 Input
 
-## Process4-1: ScriptIntroduction의 Input
+## Process4: ScriptIntroductionGenGen의 Input
 
-## Process4-2: ShortScriptGen의 Input
+## Process5: ShortScriptGen의 Input
 
-## Process5-1: MergeScripts의 Input
+## Process6: ShortScriptMerge의 Input
 
-## Process5-2: LongScriptGen의 Input
+## Process7: LongScriptGen의 Input
 
-## Process6: ScriptEditing의 Input
+## Process8: LongScriptEdit의 Input
 
 ######################
 ##### Filter 조건 #####
@@ -180,158 +188,158 @@ def SupplyScriptPlanFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
 
-## Process2: TitleAndIndexs의 Filter(Error 예외처리)
-def TitleAndIndexsFilter(Response, CheckCount):
+## Process2: TitleAndIndexGen의 Filter(Error 예외처리)
+def TitleAndIndexGenFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
         OutputDic = json.loads(Response)
     except json.JSONDecodeError:
-        return "TitleAndIndexs, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "TitleAndIndexGen, JSONDecode에서 오류 발생: JSONDecodeError"
 
     # Error2: 최상위 필수 키 확인
     required_top_keys = ['글쓰기형태', '제목부제형태', '제목', '부제', '메인목차']
     missing_top_keys = [key for key in required_top_keys if key not in OutputDic]
     if missing_top_keys:
-        return f"TitleAndIndexs, JSONKeyError: 누락된 최상위 키: {', '.join(missing_top_keys)}"
+        return f"TitleAndIndexGen, JSONKeyError: 누락된 최상위 키: {', '.join(missing_top_keys)}"
 
     # Error3: 최상위 키 데이터 타입 검증
     valid_writing_styles = {'열거형', '결론우선형', '공감형'}
     valid_title_styles = {'신조어', '성과강조', '문제해결', '호기심', '숫자임팩트', '스토리메타포', '트렌드접목', '고민언급', '키워드감성', '비전도전'}
 
     if not isinstance(OutputDic['글쓰기형태'], str) or OutputDic['글쓰기형태'] not in valid_writing_styles:
-        return "TitleAndIndexs, JSON에서 오류 발생: '글쓰기형태'는 ['열거형', '결론우선형', '공감형'] 중 하나여야 합니다"
+        return "TitleAndIndexGen, JSON에서 오류 발생: '글쓰기형태'는 ['열거형', '결론우선형', '공감형'] 중 하나여야 합니다"
 
     if not isinstance(OutputDic['제목부제형태'], str) or OutputDic['제목부제형태'] not in valid_title_styles:
-        return "TitleAndIndexs, JSON에서 오류 발생: '제목부제형태'는 ['신조어', '성과강조', '문제해결', '호기심', '숫자임팩트', '스토리메타포', '트렌드접목', '고민언급', '키워드감성', '비전도전'] 중 하나여야 합니다"
+        return "TitleAndIndexGen, JSON에서 오류 발생: '제목부제형태'는 ['신조어', '성과강조', '문제해결', '호기심', '숫자임팩트', '스토리메타포', '트렌드접목', '고민언급', '키워드감성', '비전도전'] 중 하나여야 합니다"
 
     if not isinstance(OutputDic['제목'], str):
-        return "TitleAndIndexs, JSON에서 오류 발생: '제목'은 문자열이어야 합니다"
+        return "TitleAndIndexGen, JSON에서 오류 발생: '제목'은 문자열이어야 합니다"
 
     if not isinstance(OutputDic['부제'], str):
-        return "TitleAndIndexs, JSON에서 오류 발생: '부제'는 문자열이어야 합니다"
+        return "TitleAndIndexGen, JSON에서 오류 발생: '부제'는 문자열이어야 합니다"
 
     # Error4: '메인목차' 리스트 검증
     if not isinstance(OutputDic['메인목차'], list):
-        return "TitleAndIndexs, JSON에서 오류 발생: '메인목차'는 리스트여야 합니다"
+        return "TitleAndIndexGen, JSON에서 오류 발생: '메인목차'는 리스트여야 합니다"
 
     if len(OutputDic['메인목차']) != 10:
-        return "TitleAndIndexs, JSON에서 오류 발생: '메인목차'는 정확히 10개의 항목을 포함해야 합니다"
+        return "TitleAndIndexGen, JSON에서 오류 발생: '메인목차'는 정확히 10개의 항목을 포함해야 합니다"
 
     for idx, item in enumerate(OutputDic['메인목차']):
         if not isinstance(item, dict):
-            return f"TitleAndIndexs, JSON에서 오류 발생: '메인목차[{idx}]'은 딕셔너리 형태여야 합니다"
+            return f"TitleAndIndexGen, JSON에서 오류 발생: '메인목차[{idx}]'은 딕셔너리 형태여야 합니다"
 
         required_keys = ['순번', '목차']
         missing_keys = [key for key in required_keys if key not in item]
         if missing_keys:
-            return f"TitleAndIndexs, JSONKeyError: '메인목차[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
+            return f"TitleAndIndexGen, JSONKeyError: '메인목차[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
         if not isinstance(item['순번'], str) or not item['순번'].isdigit():
-            return f"TitleAndIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 순번'은 숫자로 된 문자열이어야 합니다"
+            return f"TitleAndIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 순번'은 숫자로 된 문자열이어야 합니다"
 
         if not isinstance(item['목차'], str):
-            return f"TitleAndIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 목차'는 문자열이어야 합니다"
+            return f"TitleAndIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 목차'는 문자열이어야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
 
-## Process3: SummaryOfIndexs의 Filter(Error 예외처리)
-def SummaryOfIndexsFilter(Response, CheckCount):
+## Process3: SummaryOfIndexGen의 Filter(Error 예외처리)
+def SummaryOfIndexGenFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
         OutputDic = json.loads(Response)
     except json.JSONDecodeError:
-        return "SummaryOfIndexs, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "SummaryOfIndexGen, JSONDecode에서 오류 발생: JSONDecodeError"
 
     # Error2: 최상위 키 확인
     if '메인목차' not in OutputDic:
-        return "SummaryOfIndexs, JSONKeyError: '메인목차' 키가 누락되었습니다"
+        return "SummaryOfIndexGen, JSONKeyError: '메인목차' 키가 누락되었습니다"
 
     # Error3: '메인목차' 데이터 타입 검증
     if not isinstance(OutputDic['메인목차'], list):
-        return "SummaryOfIndexs, JSON에서 오류 발생: '메인목차'는 리스트 형태여야 합니다"
+        return "SummaryOfIndexGen, JSON에서 오류 발생: '메인목차'는 리스트 형태여야 합니다"
 
     for idx, main_item in enumerate(OutputDic['메인목차']):
         # 각 항목이 딕셔너리인지 확인
         if not isinstance(main_item, dict):
-            return f"SummaryOfIndexs, JSON에서 오류 발생: '메인목차[{idx}]'은 딕셔너리 형태여야 합니다"
+            return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}]'은 딕셔너리 형태여야 합니다"
 
         # 필수 키 확인
         required_main_keys = ['순번', '메인목차', '서브목차', '전체요약']
         missing_main_keys = [key for key in required_main_keys if key not in main_item]
         if missing_main_keys:
-            return f"SummaryOfIndexs, JSONKeyError: '메인목차[{idx}]'에 누락된 키: {', '.join(missing_main_keys)}"
+            return f"SummaryOfIndexGen, JSONKeyError: '메인목차[{idx}]'에 누락된 키: {', '.join(missing_main_keys)}"
 
         # 데이터 타입 검증
         if not isinstance(main_item['순번'], str) or not main_item['순번'].isdigit():
-            return f"SummaryOfIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 순번'은 숫자로 된 문자열이어야 합니다"
+            return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 순번'은 숫자로 된 문자열이어야 합니다"
         if not isinstance(main_item['메인목차'], str):
-            return f"SummaryOfIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 메인목차'는 문자열이어야 합니다"
+            return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 메인목차'는 문자열이어야 합니다"
         if not isinstance(main_item['전체요약'], str):
-            return f"SummaryOfIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 전체요약'은 문자열이어야 합니다"
+            return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 전체요약'은 문자열이어야 합니다"
 
         # Error4: '서브목차' 리스트 검증
         if not isinstance(main_item['서브목차'], list):
-            return f"SummaryOfIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차'는 리스트 형태여야 합니다"
+            return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차'는 리스트 형태여야 합니다"
 
         if len(main_item['서브목차']) < 5:
-            return f"SummaryOfIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차'는 최소 5개 이상의 항목을 포함해야 합니다"
+            return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차'는 최소 5개 이상의 항목을 포함해야 합니다"
 
         for sub_idx, sub_item in enumerate(main_item['서브목차']):
             # 각 서브목차가 딕셔너리인지 확인
             if not isinstance(sub_item, dict):
-                return f"SummaryOfIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차[{sub_idx}]'은 딕셔너리 형태여야 합니다"
+                return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차[{sub_idx}]'은 딕셔너리 형태여야 합니다"
 
             # 필수 키 확인
             required_sub_keys = ['서브목차', '키워드', '요약']
             missing_sub_keys = [key for key in required_sub_keys if key not in sub_item]
             if missing_sub_keys:
-                return f"SummaryOfIndexs, JSONKeyError: '메인목차[{idx}] > 서브목차[{sub_idx}]'에 누락된 키: {', '.join(missing_sub_keys)}"
+                return f"SummaryOfIndexGen, JSONKeyError: '메인목차[{idx}] > 서브목차[{sub_idx}]'에 누락된 키: {', '.join(missing_sub_keys)}"
 
             # 데이터 타입 검증
             if not isinstance(sub_item['서브목차'], str):
-                return f"SummaryOfIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차[{sub_idx}] > 서브목차'는 문자열이어야 합니다"
+                return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차[{sub_idx}] > 서브목차'는 문자열이어야 합니다"
             if not isinstance(sub_item['키워드'], list) or not all(isinstance(kw, str) for kw in sub_item['키워드']):
-                return f"SummaryOfIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차[{sub_idx}] > 키워드'는 문자열 리스트여야 합니다"
+                return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차[{sub_idx}] > 키워드'는 문자열 리스트여야 합니다"
             if not isinstance(sub_item['요약'], str):
-                return f"SummaryOfIndexs, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차[{sub_idx}] > 요약'은 문자열이어야 합니다"
+                return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 서브목차[{sub_idx}] > 요약'은 문자열이어야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
 
-## Process4-1: ScriptIntroduction의 Filter(Error 예외처리)
-def ScriptIntroductionFilter(Response, CheckCount):
+## Process4: ScriptIntroductionGen의 Filter(Error 예외처리)
+def ScriptIntroductionGenFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
         OutputDic = json.loads(Response)
     except json.JSONDecodeError:
-        return "ScriptIntroduction, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "ScriptIntroductionGen, JSONDecode에서 오류 발생: JSONDecodeError"
 
     # Error2: 최상위 필수 키 확인
     if '도입내용' not in OutputDic:
-        return "ScriptIntroduction, JSONKeyError: '도입내용' 키가 누락되었습니다"
+        return "ScriptIntroductionGen, JSONKeyError: '도입내용' 키가 누락되었습니다"
 
     # Error3: '도입내용'이 딕셔너리인지 확인
     if not isinstance(OutputDic['도입내용'], dict):
-        return "ScriptIntroduction, JSON에서 오류 발생: '도입내용'은 딕셔너리 형태여야 합니다"
+        return "ScriptIntroductionGen, JSON에서 오류 발생: '도입내용'은 딕셔너리 형태여야 합니다"
 
     # 필수 키 확인
     required_keys = ['참고요소', '도입']
     missing_keys = [key for key in required_keys if key not in OutputDic['도입내용']]
     if missing_keys:
-        return f"ScriptIntroduction, JSONKeyError: '도입내용'에 누락된 키: {', '.join(missing_keys)}"
+        return f"ScriptIntroductionGen, JSONKeyError: '도입내용'에 누락된 키: {', '.join(missing_keys)}"
 
     # Error4: 데이터 타입 검증
     if not isinstance(OutputDic['도입내용']['참고요소'], list) or not all(isinstance(item, str) for item in OutputDic['도입내용']['참고요소']):
-        return "ScriptIntroduction, JSON에서 오류 발생: '도입내용 > 참고요소'는 문자열 리스트여야 합니다"
+        return "ScriptIntroductionGen, JSON에서 오류 발생: '도입내용 > 참고요소'는 문자열 리스트여야 합니다"
 
     if not isinstance(OutputDic['도입내용']['도입'], str):
-        return "ScriptIntroduction, JSON에서 오류 발생: '도입내용 > 도입'은 문자열이어야 합니다"
+        return "ScriptIntroductionGen, JSON에서 오류 발생: '도입내용 > 도입'은 문자열이어야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
 
-## Process4-2: ShortScriptGen의 Filter(Error 예외처리)
+## Process5: ShortScriptGen의 Filter(Error 예외처리)
 def ShortScriptGenFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
@@ -364,33 +372,33 @@ def ShortScriptGenFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
 
-## Process5-1: MergeScripts의 Filter(Error 예외처리)
-def MergeScriptsFilter(Response, CheckCount):
+## Process6: ShortScriptMerge의 Filter(Error 예외처리)
+def ShortScriptMergeFilter(Response, CheckCount):
     # Error1: JSON 형식이 아닐 때의 예외 처리
     try:
         OutputDic = json.loads(Response)
     except json.JSONDecodeError:
-        return "MergeScripts, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "ShortScriptMerge, JSONDecode에서 오류 발생: JSONDecodeError"
     
     return OutputDic
 
-## Process5-2: LongScriptGen의 Filter(Error 예외처리)
-def ScriptEditingFilter(Response, CheckCount):
+## Process7: LongScriptGen의 Filter(Error 예외처리)
+def LongScriptGenFilter(Response, CheckCount):
     # Error1: JSON 형식이 아닐 때의 예외 처리
     try:
         OutputDic = json.loads(Response)
     except json.JSONDecodeError:
-        return "ScriptEditing, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "LongScriptGen, JSONDecode에서 오류 발생: JSONDecodeError"
     
     return OutputDic
 
-## Process6: ScriptEditing의 Filter(Error 예외처리)
-def ScriptEditingFilter(Response, CheckCount):
+## Process8: LongScriptEdit의 Filter(Error 예외처리)
+def LongScriptEditFilter(Response, CheckCount):
     # Error1: JSON 형식이 아닐 때의 예외 처리
     try:
         OutputDic = json.loads(Response)
     except json.JSONDecodeError:
-        return "ScriptEditing, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "LongScriptEdit, JSONDecode에서 오류 발생: JSONDecodeError"
     
     return OutputDic
 
@@ -398,12 +406,12 @@ def ScriptEditingFilter(Response, CheckCount):
 ##### Process 응답 #####
 #######################
 ## Process LLMResponse 함수
-def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount, FilterFunc, CheckCount, LLM, mode, MessagesReview):
+def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount, FilterFunc, CheckCount, LLM, mode, MessagesReview, input2 = ""):
 
     ErrorCount = 0
     while True:
         if LLM == "OpenAI":
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, Input2 = input2, messagesReview = MessagesReview)
         elif LLM == "Anthropic":
             Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, messagesReview = MessagesReview)
         Filter = FilterFunc(Response, CheckCount)
@@ -426,8 +434,8 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
 ##################################
 ##### ProcessResponse 업데이트 #####
 ##################################
-## ProcessResponseTemp 저장
-def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
+## ProcessDataFrame 저장
+def ProcessDataFrameSave(MainKey, InputDic, OutputDicSet, DataTempPath):
     # DataTempPath 폴더가 없으면 생성
     if not os.path.exists(DataTempPath):
         os.makedirs(DataTempPath)
@@ -553,6 +561,10 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
         
     return CollectionDataChain, DateTime
 
+##############################
+##### ProcessEdit 업데이트 #####
+##############################
+
 ################################
 ##### Process 진행 및 업데이트 #####
 ################################
@@ -560,10 +572,9 @@ def ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, DataTempPath):
 def BookScriptGenProcessUpdate(projectName, email, InputDic, mode = "Master", MainKey = 'BookScriptGen', MessagesReview = "on"):
     print(f"< User: {email} | Gen: {projectName} | BookScriptGenUpdate 시작 >")
     ## TotalPublisherData 경로 설정
-    ProjectScriptFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script/{projectName}_master_script_file/"
-    TotalBookScriptJsonPath = os.path.join(TotalBookScriptPath, 'TotalBookScript.json')
-    TotalBookScriptTempPath = os.path.join(TotalBookScriptPath, 'TotalBookScriptTemp')
-    TotalBookScriptProjectPath = os.path.join(TotalBookScriptPath, projectName)
+    ProjectScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script"
+    ProjectDataFrameScriptPath = os.path.join(ProjectScriptPath, f'{projectName}_dataframe_script_file')
+    ProjectMasterScriptPath = os.path.join(ProjectScriptPath, f'{projectName}_master_script_file')
     
     ## BookScriptDetailProcess
     CollectionData = InputDic['CollectionData']

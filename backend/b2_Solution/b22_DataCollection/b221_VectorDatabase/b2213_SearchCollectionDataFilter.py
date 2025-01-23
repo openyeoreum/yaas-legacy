@@ -18,6 +18,8 @@ def SearchResultScoreFilterToInputList(Intention, Extension, DataTempJsonPath, M
     SearchResult = OrginSearchResult['SearchResult']
     ## Intention과 Extension에 따라서 데이터 분리
     extension = [""] + Extension
+    if extension == ["", ""]:
+        extension = [""]
     ## Extension 별로 input 생성
     InputList = []
     for ext in extension:
@@ -311,7 +313,7 @@ def ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResu
         with open(TopScoreDataTempJsonPath, 'w', encoding='utf-8') as TopScoreJson:
             json.dump(TopScoreFilteredSearchResultData, TopScoreJson, ensure_ascii = False, indent = 4)
 
-    return FilteredSearchResultData
+    return TopScoreFilteredSearchResultData
 
 ################################
 ##### Process 진행 및 업데이트 #####
@@ -457,11 +459,11 @@ def SearchCollectionDataFilterProcessUpdate(projectName, email, Intention, Exten
         OutputDicList.append(OutputDic)
 
     ## ProcessResponse 임시저장
-    FilteredSearchResultData = ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResult, Intention, extension, FilteredDataTempJsonPath, TopScoreDataTempJsonPath)
+    TopScoreFilteredSearchResultData = ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResult, Intention, extension, FilteredDataTempJsonPath, TopScoreDataTempJsonPath)
 
     print(f"[ User: {email} | Filter: {projectName} | SearchCollectionDataUpdate 완료 ]")
     
-    return FilteredSearchResultData
+    return TopScoreFilteredSearchResultData
 
 if __name__ == "__main__":
     

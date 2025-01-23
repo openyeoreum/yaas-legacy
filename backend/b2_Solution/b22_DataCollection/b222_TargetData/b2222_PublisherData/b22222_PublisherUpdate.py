@@ -335,8 +335,8 @@ def ProcessResponseUpdate(MainKey, DataJsonPath, DataTempPath):
 ##### Process 진행 및 업데이트 #####
 ################################
 ## PublisherProcess 프롬프트 요청 및 결과물 Json화
-def PublisherProcessUpdate(projectName, email, mode = "Master", MainKey = 'PublisherAnalysis', MessagesReview = "on"):
-    print(f"< User: {email} | Project: {projectName} | PublisherProcessUpdate 시작 >")
+def PublisherDataProcessUpdate(projectName, email, mode = "Master", MainKey = 'PublisherAnalysis', MessagesReview = "on"):
+    print(f"< User: {email} | Project: {projectName} | PublisherDataProcessUpdate 시작 >")
     ## TotalPublisherData 경로 설정
     TotalPublisherDataPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s152_TargetData/s1522_PublisherData/s15221_TotalPublisherData"
     TotalPublisherDataJsonPath = os.path.join(TotalPublisherDataPath, 'TotalPublisherData.json')
@@ -376,10 +376,10 @@ def PublisherProcessUpdate(projectName, email, mode = "Master", MainKey = 'Publi
     
     ## ProcessResponse 업데이트
     ProcessResponseUpdate(MainKey, TotalPublisherDataJsonPath, TotalPublisherDataTempPath)
-    print(f"[ User: {email} | Project: {projectName} | PublisherProcessUpdate 완료 ]\n")
+    print(f"[ User: {email} | Project: {projectName} | PublisherDataProcessUpdate 완료 ]\n")
     
     ## ProcessResponse 업서트
-    UpsertCollectionData(TotalPublisherDataTempPath, "publisher")
+    UpsertCollectionData(TotalPublisherDataTempPath, "Publisher")
 
 if __name__ == "__main__":
     
@@ -388,4 +388,4 @@ if __name__ == "__main__":
     ProjectName = '241204_개정교육과정초등교과별이해연수'
     #########################################################################
     
-    PublisherProcessUpdate(ProjectName, email)
+    PublisherDataProcessUpdate(ProjectName, email)

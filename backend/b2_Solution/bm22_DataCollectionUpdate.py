@@ -3,9 +3,9 @@ sys.path.append("/yaas")
 
 from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2215_VDBSearch import YaaSsearch
 from backend.b2_Solution.b22_DataCollection.b222_TargetData.b2222_PublisherData.b22221_PublisherScraper import PublisherDataUpdate
-from backend.b2_Solution.b22_DataCollection.b222_TargetData.b2222_PublisherData.b22222_PublisherUpdate import PublisherProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b222_TargetData.b2222_PublisherData.b22222_PublisherUpdate import PublisherDataProcessUpdate
 from backend.b2_Solution.b22_DataCollection.b223_TrendData.b2232_BestSellerData.b22321_BestSellerScraper import BookDataUpdate
-from backend.b2_Solution.b22_DataCollection.b223_TrendData.b2232_BestSellerData.b22322_BestSellerUpdate import BookProcessUpdate
+from backend.b2_Solution.b22_DataCollection.b223_TrendData.b2232_BestSellerData.b22322_BestSellerUpdate import BookDataProcessUpdate
 
 ########################################
 ########################################
@@ -25,7 +25,7 @@ def SolutionDataCollectionUpsert(ProjectName, email, DataCollection, MessagesRev
     ### 01-02_Publisher ###
     if 'Publisher' in DataCollection:
         PublisherDataUpdate()
-        PublisherProcessUpdate(ProjectName, email, MessagesReview = MessagesReview)
+        PublisherDataProcessUpdate(ProjectName, email, MessagesReview = MessagesReview)
 
     ### 01-03_Education ###
 
@@ -38,9 +38,9 @@ def SolutionDataCollectionUpsert(ProjectName, email, DataCollection, MessagesRev
     ### 02-01_Influencer ###
     
     ### 02-02_BestSeller ###
-    if 'BestSeller' in DataCollection:
+    if 'Book' in DataCollection:
         BookDataUpdate()
-        BookProcessUpdate(ProjectName, email, MessagesReview = MessagesReview)
+        BookDataProcessUpdate(ProjectName, email, MessagesReview = MessagesReview)
     
     ###############################
     ### 03_ScriptDataCollection ###

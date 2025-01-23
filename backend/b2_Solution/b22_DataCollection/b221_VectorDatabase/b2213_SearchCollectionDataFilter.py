@@ -12,52 +12,43 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Open
 ##### Input 생성 #####
 #####################
 ## SearchResultScoreFilter InputList 생성
-def SearchResultScoreFilterToInputList(Intention, Extension, DataTempJsonPath, MinScore = 35e-7):
-    with open(DataTempJsonPath, 'r', encoding = 'utf-8') as DataTempJson:
-        OrginSearchResult = json.load(DataTempJson)
+def SearchResultScoreFilterToInputList(Intention, Extension, DataTempJsonPath, MinScore=35e-7):
+    ## 1) 원본 데이터를 로드
+    with open(DataTempJsonPath, 'r', encoding='utf-8') as f:
+        OrginSearchResult = json.load(f)
     SearchResult = OrginSearchResult['SearchResult']
-    ## Intention과 Extension에 따라서 데이터 분리
+
+    # Extension 전처리
     extension = [""] + Extension
     if extension == ["", ""]:
         extension = [""]
-    ## Extension 별로 input 생성
-    InputList = []
-    for ext in extension:
-        if SearchResult[f"{Intention}Context{ext}"] != None:
-            Context = SearchResult[f"{Intention}Context{ext}"]
-            if isinstance(Context, dict):
-                CollectionAnalysis = Context['CollectionAnalysis']
-                ContextCollectionSearch = Context['CollectionSearch']
-                NewContextCollectionSearch = []
-                for CollectionSearch in ContextCollectionSearch:
-                    if CollectionSearch['Score'] >= MinScore:
-                        NewContextCollectionSearch.append(CollectionSearch)
-                Context['CollectionSearch'] = NewContextCollectionSearch
+
+    ## 2) 함수: 주어진 MinScore로 필터링하여 InputList 생성
+    def InputListGen(SearchResult, Intention, extension, min_score):
+        InputListLocal = []
+        
+        for ext in extension:
+            context_key = f"{Intention}Context{ext}"
+            if context_key in SearchResult and SearchResult[context_key] is not None:
+                Context = SearchResult[context_key]
                 
-                if NewContextCollectionSearch != []:
-                    SearchContextCollectionList = []
-                    for newContextCollectionSearch in NewContextCollectionSearch:
-                        Rank = newContextCollectionSearch['Rank']
-                        Score = newContextCollectionSearch['Score']
-                        Collection = newContextCollectionSearch['Collection']
-                        SearchCollectionId = newContextCollectionSearch['CollectionId']
-                        SearchContext = newContextCollectionSearch['CollectionAnalysis']['Context']
-                        SearchContextCollection = {'Rank': Rank, 'Score': Score, 'Collection': Collection, 'CollectionId': SearchCollectionId, 'CollectionAnalysis': SearchContext}
-                        SearchContextCollectionList.append(SearchContextCollection)
-                    InputDic = {'SearchId': None, 'Extension': ext, 'CollectionAnalysis': CollectionAnalysis, 'CollectionSearch': SearchContextCollectionList}
-                    InputList.append(InputDic)
+                # (A) Context가 dict인 경우
+                if isinstance(Context, dict):
+                    # 필드가 존재하지 않을 경우를 대비하여 get 사용
+                    CollectionAnalysis = Context.get('CollectionAnalysis')
+                    ContextCollectionSearch = Context.get('CollectionSearch', [])
                     
-            elif isinstance(Context, list):
-                for i in range(len(Context)):
-                    CollectionAnalysis = Context[i]['CollectionAnalysis']
-                    ContextCollectionSearch = Context[i]['CollectionSearch']
-                    NewContextCollectionSearch = []
-                    for CollectionSearch in ContextCollectionSearch:
-                        if CollectionSearch['Score'] >= MinScore:
-                            NewContextCollectionSearch.append(CollectionSearch)
-                    Context[i]['CollectionSearch'] = NewContextCollectionSearch
+                    # min_score 기준 필터
+                    NewContextCollectionSearch = [
+                        cs for cs in ContextCollectionSearch
+                        if cs['Score'] >= min_score
+                    ]
                     
-                    if NewContextCollectionSearch != []:
+                    # 반영
+                    Context['CollectionSearch'] = NewContextCollectionSearch
+                    
+                    # 필터링 후 남은 결과가 있다면 InputDic 생성
+                    if NewContextCollectionSearch:
                         SearchContextCollectionList = []
                         for newContextCollectionSearch in NewContextCollectionSearch:
                             Rank = newContextCollectionSearch['Rank']
@@ -65,12 +56,106 @@ def SearchResultScoreFilterToInputList(Intention, Extension, DataTempJsonPath, M
                             Collection = newContextCollectionSearch['Collection']
                             SearchCollectionId = newContextCollectionSearch['CollectionId']
                             SearchContext = newContextCollectionSearch['CollectionAnalysis']['Context']
-                            SearchContextCollection = {'Rank': Rank, 'Score': Score, 'Collection': Collection, 'CollectionId': SearchCollectionId, 'CollectionAnalysis': SearchContext}
+                            
+                            SearchContextCollection = {
+                                'Rank': Rank,
+                                'Score': Score,
+                                'Collection': Collection,
+                                'CollectionId': SearchCollectionId,
+                                'CollectionAnalysis': SearchContext
+                            }
                             SearchContextCollectionList.append(SearchContextCollection)
-                        InputDic = {'SearchId': i, 'Extension': ext, 'CollectionAnalysis': CollectionAnalysis, 'CollectionSearch': SearchContextCollectionList}
-                        InputList.append(InputDic)
-    
-    return OrginSearchResult, SearchResult, extension, InputList
+                        
+                        InputDic = {
+                            'SearchId': None,
+                            'Extension': ext,
+                            'CollectionAnalysis': CollectionAnalysis,
+                            'CollectionSearch': SearchContextCollectionList
+                        }
+                        InputListLocal.append(InputDic)
+                
+                # (B) Context가 list인 경우
+                elif isinstance(Context, list):
+                    for i, item in enumerate(Context):
+                        CollectionAnalysis = item.get('CollectionAnalysis')
+                        ContextCollectionSearch = item.get('CollectionSearch', [])
+                        
+                        # min_score 기준 필터
+                        NewContextCollectionSearch = [
+                            cs for cs in ContextCollectionSearch
+                            if cs['Score'] >= min_score
+                        ]
+                        
+                        # 반영
+                        item['CollectionSearch'] = NewContextCollectionSearch
+                        
+                        # 필터링 후 남은 결과가 있다면 InputDic 생성
+                        if NewContextCollectionSearch:
+                            SearchContextCollectionList = []
+                            for newContextCollectionSearch in NewContextCollectionSearch:
+                                Rank = newContextCollectionSearch['Rank']
+                                Score = newContextCollectionSearch['Score']
+                                Collection = newContextCollectionSearch['Collection']
+                                SearchCollectionId = newContextCollectionSearch['CollectionId']
+                                SearchContext = newContextCollectionSearch['CollectionAnalysis']['Context']
+                                
+                                SearchContextCollection = {
+                                    'Rank': Rank,
+                                    'Score': Score,
+                                    'Collection': Collection,
+                                    'CollectionId': SearchCollectionId,
+                                    'CollectionAnalysis': SearchContext
+                                }
+                                SearchContextCollectionList.append(SearchContextCollection)
+                            
+                            InputDic = {
+                                'SearchId': i,
+                                'Extension': ext,
+                                'CollectionAnalysis': CollectionAnalysis,
+                                'CollectionSearch': SearchContextCollectionList
+                            }
+                            InputListLocal.append(InputDic)
+                            
+        return InputListLocal
+
+    ## 3) 1차 필터링 (MinScore=35e-7)
+    InputList = InputListGen(SearchResult, Intention, extension, MinScore)
+
+    # 전체 필터링된 Document 수(= CollectionSearch 수) 합계를 계산
+    TotalCollections = sum(len(dic['CollectionSearch']) for dic in InputList)
+
+    ## 4) 결과가 10개 미만이면, 상위 10번째 점수로 재필터링
+    SearchQuality = "Good"
+    if TotalCollections < 10:
+        SearchQuality = "Bad"
+        # (A) 전체 스코어를 수집하여 상위 10번째 점수를 구함
+        with open(DataTempJsonPath, 'r', encoding='utf-8') as f:
+            OrginSearchResult = json.load(f)
+        SearchResult = OrginSearchResult['SearchResult']
+
+        AllScores = []
+        for ext in extension:
+            context_key = f"{Intention}Context{ext}"
+            if context_key in SearchResult and SearchResult[context_key] is not None:
+                context = SearchResult[context_key]
+                
+                if isinstance(context, dict):
+                    if 'CollectionSearch' in context:
+                        for ColSearch in context['CollectionSearch']:
+                            AllScores.append(ColSearch['Score'])
+                elif isinstance(context, list):
+                    for item in context:
+                        if 'CollectionSearch' in item:
+                            for ColSearch in item['CollectionSearch']:
+                                AllScores.append(ColSearch['Score'])
+        
+        AllScores.sort(reverse = True)
+        fallbackMinScore = AllScores[9]  # 상위 10번째
+
+        # (B) 다시 필터링
+        InputList = InputListGen(SearchResult, Intention, extension, fallbackMinScore)
+
+    return OrginSearchResult, SearchResult, extension, InputList, SearchQuality
 
 ######################
 ##### Filter 조건 #####
@@ -246,10 +331,11 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
 ##### ProcessResponse 업데이트 #####
 ##################################
 ## ProcessResponseTemp 저장
-def ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResult, Intention, Extension, FilteredDataTempJsonPath, TopScoreDataTempJsonPath):
+def ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResult, Intention, Extension, SearchQuality, FilteredDataTempJsonPath, TopScoreDataTempJsonPath):
     ## SearchResultData 재구성
     FilteredSearchResultData = {}
     ## 기본 데이터
+    FilteredSearchResultData['SearchQuality'] = SearchQuality
     FilteredSearchResultData['SearchType'] = OrginSearchResult['SearchType']
     FilteredSearchResultData['SearchIntention'] = OrginSearchResult['SearchIntention']
     FilteredSearchResultData['SearchCollection'] = OrginSearchResult['SearchCollection']
@@ -409,7 +495,7 @@ def SearchCollectionDataFilterProcessUpdate(projectName, email, Intention, Exten
     TopScoreDataTempJsonPath = DataTempJsonPath.replace("].json", "]_TopScore.json")
     
     ## SearchCollectionDataDetailProcess
-    OrginSearchResult, FilteredSearchResult, extension, InputList = SearchResultScoreFilterToInputList(Intention, Extension, DataTempJsonPath)
+    OrginSearchResult, FilteredSearchResult, extension, InputList, SearchQuality = SearchResultScoreFilterToInputList(Intention, Extension, DataTempJsonPath)
 
     ## Mark 설정
     if Intention == "Demand":
@@ -459,7 +545,7 @@ def SearchCollectionDataFilterProcessUpdate(projectName, email, Intention, Exten
         OutputDicList.append(OutputDic)
 
     ## ProcessResponse 임시저장
-    TopScoreFilteredSearchResultData = ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResult, Intention, extension, FilteredDataTempJsonPath, TopScoreDataTempJsonPath)
+    TopScoreFilteredSearchResultData = ProcessResponseTempSave(OutputDicList, OrginSearchResult, FilteredSearchResult, Intention, extension, SearchQuality, FilteredDataTempJsonPath, TopScoreDataTempJsonPath)
 
     print(f"[ User: {email} | Filter: {projectName} | SearchCollectionDataUpdate 완료 ]")
     
@@ -473,10 +559,9 @@ if __name__ == "__main__":
     Search = "나는 오디오북 자동 제작 AI솔루션 대표입니다. 우리회사의 오디오북 솔루션은 100권의 고품질 오디오북을 탄생시키고 의뢰인들을 만족시킬 만큼 성능과 효율성이 뛰어납니다. 오디오북 솔루션은 고품질 TTS, 음악, 효과음, 스크립트 제작 자동화의 기능을 모두 담고 있습니다. 나는 이 오디오북 솔루션의 새로운 활용방안을 고민하고 있습니다. 좋은 해결책을 얻고 싶습니다." # Search: SearchTerm, Match: PublisherData_(Id)
     Intention = "Similarity" # Demand, Supply, Similarity ...
     Extension = ["Expertise", "Ultimate"] # Expertise, Ultimate, Detail, Rethink ...
-    Collection = "publisher" # Entire, Target, Trend, Publisher, Book ...
+    Collection = "Book" # Entire, Target, Trend, Publisher, Book ...
     Range = 10 # 10-100
     MessagesReview = "on" # on, off
     #########################################################################
-    SearchResult = None
-    DataTempJsonPath = '/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1513_SearchResultData/s15131_TotalSearchResultData/TotalSearchResultDataTemp/SearchResultData_(20250111021236)_[나는 오디오북 자동 제작 AI솔루션 ].json'
+    DataTempJsonPath = '/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1513_SearchResultData/s15131_TotalSearchResultData/TotalSearchResultDataTemp/SearchResultData_(20250123125342)_[250121_테스트_Similarity: 나는 오디오북 자동 제작 AI솔루션 등 204자].json'
     FilteredSearchResultData = SearchCollectionDataFilterProcessUpdate(projectName, email, Intention, Extension, DataTempJsonPath)

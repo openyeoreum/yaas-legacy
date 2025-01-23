@@ -11,13 +11,8 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Open
 #####################
 ##### Input 생성 #####
 #####################
-## ContextToInput 생성 필요시 프롬프트 생성 ## 필터 말고 원본 파일?
-def ContextToInput(FilteredSearchResult, Type):
-    return ContextData
-
 ## Process1-1: DemandScriptPlan의 Input
-def DemandCollectionDataToScriptPlanInput(FilteredSearchResult, Type):
-    ContextData = ContextToInput(FilteredSearchResult, Type)
+def DemandCollectionDataToScriptPlanInput(ContextData):
     
     CollectionAnalysis = ContextData['CollectionAnalysis']
     Summary = CollectionAnalysis['Summary']
@@ -33,8 +28,7 @@ def DemandCollectionDataToScriptPlanInput(FilteredSearchResult, Type):
     return Input
 
 ## Process1-2: SupplyScriptPlan의 Input
-def SupplyCollectionDataToScriptPlanInput(FilteredSearchResult, Type):
-    ContextData = ContextToInput(FilteredSearchResult, Type)
+def SupplyCollectionDataToScriptPlanInput(ContextData):
     
     CollectionAnalysis = ContextData['CollectionAnalysis']
     Summary = CollectionAnalysis['Summary']

@@ -454,9 +454,18 @@ class Prompt(Base):
     
     # ScriptData
     
-    ## ScriptPrompt
+    ## InstantScriptPrompt
     ChangesAfterMeditation_Script = Column(JSON)
     SejongCityOfficeOfEducation_Poem = Column(JSON)
+    
+    ## BookScriptPrompt
+    DemandScriptPlan = Column(JSON)
+    SupplyScriptPlan = Column(JSON)
+    SimilarityScriptPlan = Column(JSON)
+    TitleAndIndexGen = Column(JSON)
+    SummaryOfIndexGen = Column(JSON)
+    ScriptIntroductionGen = Column(JSON)
+    ShortScriptGen = Column(JSON)
     
     ## TextBookPrompt
     

@@ -44,9 +44,17 @@ def AddPromptToDB():
         bestSellerContextDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5413_TrendDataPrompt/b5413-01_BestSellerContextDefine.json")
         bestSellerWMWMDefine = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5413_TrendDataPrompt/b5413-02_BestSellerWMWMDefine.json")
         bestSellerCommentAnalysis = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5413_TrendDataPrompt/b5413-03_BestSellerCommentAnalysis.json")
-        # ScriptPrompt
+        # InstantScriptPrompt
         changesAfterMeditation_Script = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5421_InstantScriptPrompt/b5421-01_ChangesAfterMeditation_Script.json")
         sejongCityOfficeOfEducation_Poem = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5421_InstantScriptPrompt/b5421-02_SejongCityOfficeOfEducation_Poem.json")
+        # BookScriptPrompt
+        demandScriptPlan = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5422-01_DemandScriptPlan.json")
+        supplyScriptPlan = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-02_SupplyScriptPlan.json")
+        similarityScriptPlan = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-03_SimilarityScriptPlan.json")
+        titleAndIndexGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-04_TitleAndIndexGen.json")
+        summaryOfIndexGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-05_SummaryOfIndexGen.json")
+        scriptIntroductionGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-06_ScriptIntroductionGen.json")
+        shortScriptGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-07_ShortScriptGen.json")
         # TextBookPrompt
         # AudioBookPrompt
         bookPreprocess = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b5441_ScriptPrompt/b5441-00_BookPreprocess.json")
@@ -117,6 +125,13 @@ def AddPromptToDB():
             ExistingPrompt.BestSellerCommentAnalysis = bestSellerCommentAnalysis
             ExistingPrompt.ChangesAfterMeditation_Script = changesAfterMeditation_Script
             ExistingPrompt.SejongCityOfficeOfEducation_Poem = sejongCityOfficeOfEducation_Poem
+            ExistingPrompt.DemandScriptPlan = demandScriptPlan
+            ExistingPrompt.SupplyScriptPlan = supplyScriptPlan
+            ExistingPrompt.SimilarityScriptPlan = similarityScriptPlan
+            ExistingPrompt.TitleAndIndexGen = titleAndIndexGen
+            ExistingPrompt.SummaryOfIndexGen = summaryOfIndexGen
+            ExistingPrompt.ScriptIntroductionGen = scriptIntroductionGen
+            ExistingPrompt.ShortScriptGen = shortScriptGen
             ExistingPrompt.BookPreprocess = bookPreprocess
             ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
             ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
@@ -183,6 +198,13 @@ def AddPromptToDB():
                 BestSellerCommentAnalysis = bestSellerCommentAnalysis,
                 ChangesAfterMeditation_Script = changesAfterMeditation_Script,
                 SejongCityOfficeOfEducation_Poem = sejongCityOfficeOfEducation_Poem,
+                DemandScriptPlan = demandScriptPlan,
+                SupplyScriptPlan = supplyScriptPlan,
+                SimilarityScriptPlan = similarityScriptPlan,
+                TitleAndIndexGen = titleAndIndexGen,
+                SummaryOfIndexGen = summaryOfIndexGen,
+                ScriptIntroductionGen = scriptIntroductionGen,
+                ShortScriptGen = shortScriptGen,
                 BookPreprocess = bookPreprocess,
                 IndexDefinePreprocess = indexDefinePreprocess,
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,

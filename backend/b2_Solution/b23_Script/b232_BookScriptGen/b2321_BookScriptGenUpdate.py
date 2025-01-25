@@ -11,36 +11,180 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Open
 #####################
 ##### Input 생성 #####
 #####################
+## Process1: SearchResult 불러오기
+def LoadSearchResult(TotalSearchResultDataTempPath, ProjectName, Intention):
+    # 파일명 패턴 정규식 (검색한시간을 추출하기 위해 사용)
+    pattern = re.compile(r"SearchResultData_\((\d{14})\)_\[" + re.escape(ProjectName) + r"_" + re.escape(Intention) + r": (.*?)\]\.json")
+    Files = os.listdir(TotalSearchResultDataTempPath)
+
+    # 필터링된 파일 목록을 저장
+    MatchingSearchResult = []
+    for File in Files:
+        Match = pattern.match(File)
+        if Match:
+            SearchTime = Match.group(1)
+            MatchingSearchResult.append((SearchTime, File))
+
+    # 검색한시간을 기준으로 정렬
+    MatchingSearchResult.sort(key = lambda x: x[0], reverse = True)
+    print(f"[ LastestSearchResult: {MatchingSearchResult} ]")
+    LastestSearchResult = MatchingSearchResult[0][1]
+    LastestSearchResultPath = os.path.join(TotalSearchResultDataTempPath, LastestSearchResult)
+    LastestTopScoreSearchResultPath = LastestSearchResultPath.replace('].json', ']_TopScore.json')
+
+    # SearchResult, TopScoreSearchResultPath 로드
+    with open(LastestSearchResultPath, "r", encoding="utf-8") as f:
+        SearchResultJson = json.load(f)
+    with open(LastestTopScoreSearchResultPath, "r", encoding="utf-8") as f:
+        TopScoreSearchResultJson = json.load(f)
+    
+
+    return SearchResultJson, TopScoreSearchResultJson
+
 ## Process1-1: DemandScriptPlan의 Input
-def DemandCollectionDataToScriptPlanInput(ContextData):
+def DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention):
+    SearchResultJson, TopScoreSearchResultJson = LoadSearchResult(TotalSearchResultDataTempPath, ProjectName, Intention)
     
-    CollectionAnalysis = ContextData['CollectionAnalysis']
-    Summary = CollectionAnalysis['Summary']
-    KeyWord = CollectionAnalysis['KeyWord']
-    DemandNeedsSentence = CollectionAnalysis['Demand']['Needs']['Sentence']
-    DemandNeedsKeyWord = CollectionAnalysis['Demand']['Needs']['KeyWord']
-    DemandPurposeSentence = CollectionAnalysis['Demand']['Purpose']['Sentence']
-    DemandPurposeKeyWord = CollectionAnalysis['Demand']['Purpose']['KeyWord']
-    DemandQuestionSentence = CollectionAnalysis['Demand']['Question']['Sentence']
-    DemandQuestionKeyWord = CollectionAnalysis['Demand']['Question']['KeyWord']
-    Input = '[핵심목적]\n' + Summary + '\n\n[분야]\n-' + '-\n'.join(KeyWord) + '\n\n[필요내용]\n' + DemandNeedsSentence + '\n[필요내용-키워드]\n-' + '-\n'.join(DemandNeedsKeyWord) + '\n\n[필요목표]\n' + DemandPurposeSentence + '\n[필요목표-키워드]\n-' + '-\n'.join(DemandPurposeKeyWord) + '\n\n[필요질문]\n' + DemandQuestionSentence + '\n[필요질문-키워드]\n-' + '-\n'.join(DemandQuestionKeyWord)
+    SearchResult = SearchResultJson['SearchResult']
+    Term = SearchResult[f'{Intention}Search']['Term']
+    SimilarityDetail = SearchResult[f'{Intention}Detail']['Summary']
     
+    NomalContextKey = f'{Intention}Context'
+    NormalCollectionAnalysis = SearchResult[NomalContextKey]['CollectionAnalysis']
+    NormalSummary = NormalCollectionAnalysis['Summary']
+    NormalKeyWord = NormalCollectionAnalysis['KeyWord']
+    NormalDemandNeedsSentence = NormalCollectionAnalysis['Demand']['Needs']['Sentence']
+    NormalDemandNeedsKeyWord = NormalCollectionAnalysis['Demand']['Needs']['KeyWord']
+    NormalDemandPurposeSentence = NormalCollectionAnalysis['Demand']['Purpose']['Sentence']
+    NormalDemandPurposeKeyWord = NormalCollectionAnalysis['Demand']['Purpose']['KeyWord']
+    NormalDemandQuestionSentence = NormalCollectionAnalysis['Demand']['Question']['Sentence']
+    NormalDemandQuestionKeyWord = NormalCollectionAnalysis['Demand']['Question']['KeyWord']
+    
+    AdvacedContextKey = list(TopScoreSearchResultJson['SearchResult'].keys())[2]
+    if NomalContextKey != AdvacedContextKey:
+        AdvancedCollectionAnalysis = TopScoreSearchResultJson['SearchResult'][AdvacedContextKey]['CollectionAnalysis']
+        AdvancedSummary = AdvancedCollectionAnalysis['Summary']
+        AdvancedKeyWord = AdvancedCollectionAnalysis['KeyWord']
+        AdvancedDemandNeedsSentence = AdvancedCollectionAnalysis['Demand']['Needs']['Sentence']
+        AdvancedDemandNeedsKeyWord = AdvancedCollectionAnalysis['Demand']['Needs']['KeyWord']
+        AdvancedDemandPurposeSentence = AdvancedCollectionAnalysis['Demand']['Purpose']['Sentence']
+        AdvancedDemandPurposeKeyWord = AdvancedCollectionAnalysis['Demand']['Purpose']['KeyWord']
+        AdvancedDemandQuestionSentence = AdvancedCollectionAnalysis['Demand']['Question']['Sentence']
+        AdvancedDemandQuestionKeyWord = AdvancedCollectionAnalysis['Demand']['Question']['KeyWord']
+        
+        FrontInput = f"[최초의도]\n{Term}\n{SimilarityDetail}\n\n"
+    
+        BackInput = f"[핵심목적]\n일반: {NormalSummary}\n심화: {AdvancedSummary}\n\n[분야]\n일반: {', '.join(NormalKeyWord)}\n심화: {', '.join(AdvancedKeyWord)}\n\n[필요내용]\n일반: {NormalDemandNeedsSentence}\n심화: {AdvancedDemandNeedsSentence}\n\n[필요내용-키워드]\n일반: {', '.join(NormalDemandNeedsKeyWord)}\n심화: {', '.join(AdvancedDemandNeedsKeyWord)}\n\n[필요목표]\n일반: {NormalDemandPurposeSentence}\n심화: {AdvancedDemandPurposeSentence}\n\n[필요목표-키워드]\n일반: {', '.join(NormalDemandPurposeKeyWord)}\n심화: {', '.join(AdvancedDemandPurposeKeyWord)}\n\n[필요질문]\n일반: {NormalDemandQuestionSentence}\n심화: {AdvancedDemandQuestionSentence}\n\n[필요질문-키워드]\n일반: {', '.join(NormalDemandQuestionKeyWord)}\n심화: {', '.join(AdvancedDemandQuestionKeyWord)}"
+
+    else:
+        FrontInput = f"[최초의도]\n{Term}\n{SimilarityDetail}\n\n"
+
+        BackInput = f"[핵심목적]\n{NormalSummary}\n\n[분야]\n{', '.join(NormalKeyWord)}\n\n[필요내용]\n{NormalDemandNeedsSentence}\n\n[필요내용-키워드]\n{', '.join(NormalDemandNeedsKeyWord)}\n\n[필요목표]\n{NormalDemandPurposeSentence}\n\n[필요목표-키워드]\n{', '.join(NormalDemandPurposeKeyWord)}\n\n[필요질문]\n{NormalDemandQuestionSentence}\n\n[필요질문-키워드]\n{', '.join(NormalDemandQuestionKeyWord)}"
+
+    ## Intention에 따라 Input 결정
+    if Intention == 'Demand':
+        Input = FrontInput + BackInput
+    elif Intention == 'Similarity':
+        Input = BackInput
+
     return Input
 
 ## Process1-2: SupplyScriptPlan의 Input
-def SupplyCollectionDataToScriptPlanInput(ContextData):
+def SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention):
+    SearchResultJson, TopScoreSearchResultJson = LoadSearchResult(TotalSearchResultDataTempPath, ProjectName, Intention)
     
-    CollectionAnalysis = ContextData['CollectionAnalysis']
-    Summary = CollectionAnalysis['Summary']
-    KeyWord = CollectionAnalysis['KeyWord']
-    SupplyNeedsSentence = CollectionAnalysis['Supply']['Satisfy']['Sentence']
-    SupplyNeedsKeyWord = CollectionAnalysis['Supply']['Satisfy']['KeyWord']
-    SupplyPurposeSentence = CollectionAnalysis['Supply']['Support']['Sentence']
-    SupplyPurposeKeyWord = CollectionAnalysis['Supply']['Support']['KeyWord']
-    SupplyQuestionSentence = CollectionAnalysis['Supply']['Solution']['Sentence']
-    SupplyQuestionKeyWord = CollectionAnalysis['Supply']['Solution']['KeyWord']
-    Input = '[핵심솔루션]\n' + Summary + '\n\n[분야]\n-' + '-\n'.join(KeyWord) + '\n\n[제안내용]\n' + SupplyNeedsSentence + '\n[제안내용-키워드]\n-' + '-\n'.join(SupplyNeedsKeyWord) + '\n\n[제안할목표]\n' + SupplyPurposeSentence + '\n[제안할목표-키워드]\n-' + '-\n'.join(SupplyPurposeKeyWord) + '\n\n[제안할해결책]\n' + SupplyQuestionSentence + '\n[제안할해결책-키워드]\n-' + '-\n'.join(SupplyQuestionKeyWord)
+    SearchResult = SearchResultJson['SearchResult']
+    Term = SearchResult[f'{Intention}Search']['Term']
+    SimilarityDetail = SearchResult[f'{Intention}Detail']['Summary']
     
+    NomalContextKey = f'{Intention}Context'
+    NormalCollectionAnalysis = SearchResult[NomalContextKey]['CollectionAnalysis']
+    NormalSummary = NormalCollectionAnalysis['Summary']
+    NormalKeyWord = NormalCollectionAnalysis['KeyWord']
+    NormalSupplySatisfySentence = NormalCollectionAnalysis['Supply']['Satisfy']['Sentence']
+    NormalSupplySatisfyKeyWord = NormalCollectionAnalysis['Supply']['Satisfy']['KeyWord']
+    NormalSupplySupportSentence = NormalCollectionAnalysis['Supply']['Support']['Sentence']
+    NormalSupplySupportKeyWord = NormalCollectionAnalysis['Supply']['Support']['KeyWord']
+    NormalSupplySolutionSentence = NormalCollectionAnalysis['Supply']['Solution']['Sentence']
+    NormalSupplySolutionKeyWord = NormalCollectionAnalysis['Supply']['Solution']['KeyWord']
+    
+    AdvacedContextKey = list(TopScoreSearchResultJson['SearchResult'].keys())[2]
+    if NomalContextKey != AdvacedContextKey:
+        AdvancedCollectionAnalysis = TopScoreSearchResultJson['SearchResult'][AdvacedContextKey]['CollectionAnalysis']
+        AdvancedSummary = AdvancedCollectionAnalysis['Summary']
+        AdvancedKeyWord = AdvancedCollectionAnalysis['KeyWord']
+        AdvancedSupplySatisfySentence = AdvancedCollectionAnalysis['Supply']['Satisfy']['Sentence']
+        AdvancedSupplySatisfyKeyWord = AdvancedCollectionAnalysis['Supply']['Satisfy']['KeyWord']
+        AdvancedSupplySupportSentence = AdvancedCollectionAnalysis['Supply']['Support']['Sentence']
+        AdvancedSupplySupportKeyWord = AdvancedCollectionAnalysis['Supply']['Support']['KeyWord']
+        AdvancedSupplySolutionSentence = AdvancedCollectionAnalysis['Supply']['Solution']['Sentence']
+        AdvancedSupplySolutionKeyWord = AdvancedCollectionAnalysis['Supply']['Solution']['KeyWord']
+    
+        Input = f"""[최초의도]
+{Term}
+{SimilarityDetail}
+
+[핵심목적]
+일반: {NormalSummary}
+심화: {AdvancedSummary}
+
+[분야]
+일반: {', '.join(NormalKeyWord)}
+심화: {', '.join(AdvancedKeyWord)}
+
+[필요내용]
+일반: {NormalSupplySatisfySentence}
+심화: {AdvancedSupplySatisfySentence}
+
+[필요내용-키워드]
+일반: {', '.join(NormalSupplySatisfyKeyWord)}
+심화: {', '.join(AdvancedSupplySatisfyKeyWord)}
+
+[필요목표]
+일반: {NormalSupplySupportSentence}
+심화: {AdvancedSupplySupportSentence}
+
+[필요목표-키워드]
+일반: {', '.join(NormalSupplySupportKeyWord)}
+심화: {', '.join(AdvancedSupplySupportKeyWord)}
+
+[필요질문]
+일반: {NormalSupplySolutionSentence}
+심화: {AdvancedSupplySolutionSentence}
+
+[필요질문-키워드]
+일반: {', '.join(NormalSupplySolutionKeyWord)}
+심화: {', '.join(AdvancedSupplySolutionKeyWord)}
+"""
+    else:
+        Input = f"""[최초의도]
+{Term} {SimilarityDetail}
+
+[핵심목적]
+{NormalSummary}
+
+[분야]
+{', '.join(NormalKeyWord)}
+
+[필요내용]
+{NormalSupplySatisfySentence}
+
+[필요내용-키워드]
+{', '.join(NormalSupplySatisfyKeyWord)}
+
+[필요목표]
+{NormalSupplySupportSentence}
+
+[필요목표-키워드]
+{', '.join(NormalSupplySupportKeyWord)}
+
+[필요질문]
+{NormalSupplySolutionSentence}
+
+[필요질문-키워드]
+{', '.join(NormalSupplySolutionKeyWord)}
+"""
+
     return Input
 
 ## Process2: TitleAndIndexGen의 Input   
@@ -60,124 +204,63 @@ def SupplyCollectionDataToScriptPlanInput(ContextData):
 ######################
 ##### Filter 조건 #####
 ######################
-## Process1-1: DemandScriptPlan의 Filter(Error 예외처리)
-def DemandScriptPlanFilter(Response, CheckCount):
+## Process1: ScriptPlan의 Filter(Error 예외처리)
+def ScriptPlanFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
         OutputDic = json.loads(Response)
     except json.JSONDecodeError:
-        return "DemandScriptPlan, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "ScriptPlan, JSONDecode에서 오류 발생: JSONDecodeError"
 
     # Error2: 최상위 필수 키 확인
     required_top_keys = ['배경', '주제', '범위', '개념키워드', '독자키워드', '가치', '정보의질']
     missing_top_keys = [key for key in required_top_keys if key not in OutputDic]
     if missing_top_keys:
-        return f"DemandScriptPlan, JSONKeyError: 누락된 최상위 키: {', '.join(missing_top_keys)}"
+        return f"ScriptPlan, JSONKeyError: 누락된 최상위 키: {', '.join(missing_top_keys)}"
 
     # Error3: 최상위 키 데이터 타입 검증
     if not isinstance(OutputDic['배경'], str):
-        return "DemandScriptPlan, JSON에서 오류 발생: '배경'은 문자열이어야 합니다"
+        return "ScriptPlan, JSON에서 오류 발생: '배경'은 문자열이어야 합니다"
     if not isinstance(OutputDic['주제'], str):
-        return "DemandScriptPlan, JSON에서 오류 발생: '주제'은 문자열이어야 합니다"
+        return "ScriptPlan, JSON에서 오류 발생: '주제'은 문자열이어야 합니다"
     if not isinstance(OutputDic['범위'], str):
-        return "DemandScriptPlan, JSON에서 오류 발생: '범위'은 문자열이어야 합니다"
+        return "ScriptPlan, JSON에서 오류 발생: '범위'은 문자열이어야 합니다"
     if not isinstance(OutputDic['개념키워드'], list) or not all(isinstance(item, str) for item in OutputDic['개념키워드']):
-        return "DemandScriptPlan, JSON에서 오류 발생: '개념키워드'는 문자열 리스트여야 합니다"
+        return "ScriptPlan, JSON에서 오류 발생: '개념키워드'는 문자열 리스트여야 합니다"
     if not isinstance(OutputDic['독자키워드'], list) or not all(isinstance(item, str) for item in OutputDic['독자키워드']):
-        return "DemandScriptPlan, JSON에서 오류 발생: '독자키워드'는 문자열 리스트여야 합니다"
+        return "ScriptPlan, JSON에서 오류 발생: '독자키워드'는 문자열 리스트여야 합니다"
     if not isinstance(OutputDic['정보의질'], int) or not (0 <= OutputDic['정보의질'] <= 100):
-        return "DemandScriptPlan, JSON에서 오류 발생: '정보의질'은 0-100 사이의 정수여야 합니다"
+        return "ScriptPlan, JSON에서 오류 발생: '정보의질'은 0-100 사이의 정수여야 합니다"
 
     # Error4: '가치' 키 구조 검증
     if not isinstance(OutputDic['가치'], dict):
-        return "DemandScriptPlan, JSON에서 오류 발생: '가치'는 딕셔너리 형태여야 합니다"
+        return "ScriptPlan, JSON에서 오류 발생: '가치'는 딕셔너리 형태여야 합니다"
 
     # '가치' 내부 필수 키 확인
     required_sub_keys = ['글이전해줄핵심가치', '글이전해줄핵심포인트들', '글이전해줄핵심비전']
     for sub_key in required_sub_keys:
         if sub_key not in OutputDic['가치']:
-            return f"DemandScriptPlan, JSONKeyError: '가치'에 누락된 키: {sub_key}"
+            return f"ScriptPlan, JSONKeyError: '가치'에 누락된 키: {sub_key}"
 
         sub_item = OutputDic['가치'][sub_key]
 
         # 각 항목은 딕셔너리 형태여야 함
         if not isinstance(sub_item, dict):
-            return f"DemandScriptPlan, JSON에서 오류 발생: '가치 > {sub_key}'는 딕셔너리 형태여야 합니다"
+            return f"ScriptPlan, JSON에서 오류 발생: '가치 > {sub_key}'는 딕셔너리 형태여야 합니다"
 
         # 내부 필수 키 확인
         required_detail_keys = ['설명', '키워드', '중요도']
         missing_detail_keys = [key for key in required_detail_keys if key not in sub_item]
         if missing_detail_keys:
-            return f"DemandScriptPlan, JSONKeyError: '가치 > {sub_key}'에 누락된 키: {', '.join(missing_detail_keys)}"
+            return f"ScriptPlan, JSONKeyError: '가치 > {sub_key}'에 누락된 키: {', '.join(missing_detail_keys)}"
 
         # 데이터 타입 검증
         if not isinstance(sub_item['설명'], str):
-            return f"DemandScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 설명'은 문자열이어야 합니다"
+            return f"ScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 설명'은 문자열이어야 합니다"
         if not isinstance(sub_item['키워드'], list) or not all(isinstance(item, str) for item in sub_item['키워드']):
-            return f"DemandScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 키워드'는 문자열 리스트여야 합니다"
+            return f"ScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 키워드'는 문자열 리스트여야 합니다"
         if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
-            return f"DemandScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 중요도'는 0-100 사이의 정수여야 합니다"
-
-    # 모든 조건을 만족하면 JSON 반환
-    return OutputDic
-
-## Process1-2: SupplyScriptPlan의 Filter(Error 예외처리)
-def SupplyScriptPlanFilter(Response, CheckCount):
-    # Error1: JSON 형식 예외 처리
-    try:
-        OutputDic = json.loads(Response)
-    except json.JSONDecodeError:
-        return "SupplyScriptPlan, JSONDecode에서 오류 발생: JSONDecodeError"
-
-    # Error2: 최상위 필수 키 확인
-    required_top_keys = ['배경', '주제', '범위', '개념키워드', '독자키워드', '가치', '정보의질']
-    missing_top_keys = [key for key in required_top_keys if key not in OutputDic]
-    if missing_top_keys:
-        return f"SupplyScriptPlan, JSONKeyError: 누락된 최상위 키: {', '.join(missing_top_keys)}"
-
-    # Error3: 최상위 키 데이터 타입 검증
-    if not isinstance(OutputDic['배경'], str):
-        return "SupplyScriptPlan, JSON에서 오류 발생: '배경'은 문자열이어야 합니다"
-    if not isinstance(OutputDic['주제'], str):
-        return "SupplyScriptPlan, JSON에서 오류 발생: '주제'은 문자열이어야 합니다"
-    if not isinstance(OutputDic['범위'], str):
-        return "SupplyScriptPlan, JSON에서 오류 발생: '범위'은 문자열이어야 합니다"
-    if not isinstance(OutputDic['개념키워드'], list) or not all(isinstance(item, str) for item in OutputDic['개념키워드']):
-        return "SupplyScriptPlan, JSON에서 오류 발생: '개념키워드'는 문자열 리스트여야 합니다"
-    if not isinstance(OutputDic['독자키워드'], list) or not all(isinstance(item, str) for item in OutputDic['독자키워드']):
-        return "SupplyScriptPlan, JSON에서 오류 발생: '독자키워드'는 문자열 리스트여야 합니다"
-    if not isinstance(OutputDic['정보의질'], int) or not (0 <= OutputDic['정보의질'] <= 100):
-        return "SupplyScriptPlan, JSON에서 오류 발생: '정보의질'은 0-100 사이의 정수여야 합니다"
-
-    # Error4: '가치' 키 구조 검증
-    if not isinstance(OutputDic['가치'], dict):
-        return "SupplyScriptPlan, JSON에서 오류 발생: '가치'는 딕셔너리 형태여야 합니다"
-
-    # '가치' 내부 필수 키 확인
-    required_sub_keys = ['글이전해줄핵심가치', '글이전해줄핵심포인트들', '글이전해줄핵심비전']
-    for sub_key in required_sub_keys:
-        if sub_key not in OutputDic['가치']:
-            return f"SupplyScriptPlan, JSONKeyError: '가치'에 누락된 키: {sub_key}"
-
-        sub_item = OutputDic['가치'][sub_key]
-
-        # 각 항목은 딕셔너리 형태여야 함
-        if not isinstance(sub_item, dict):
-            return f"SupplyScriptPlan, JSON에서 오류 발생: '가치 > {sub_key}'는 딕셔너리 형태여야 합니다"
-
-        # 내부 필수 키 확인
-        required_detail_keys = ['설명', '키워드', '중요도']
-        missing_detail_keys = [key for key in required_detail_keys if key not in sub_item]
-        if missing_detail_keys:
-            return f"SupplyScriptPlan, JSONKeyError: '가치 > {sub_key}'에 누락된 키: {', '.join(missing_detail_keys)}"
-
-        # 데이터 타입 검증
-        if not isinstance(sub_item['설명'], str):
-            return f"SupplyScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 설명'은 문자열이어야 합니다"
-        if not isinstance(sub_item['키워드'], list) or not all(isinstance(item, str) for item in sub_item['키워드']):
-            return f"SupplyScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 키워드'는 문자열 리스트여야 합니다"
-        if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
-            return f"SupplyScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 중요도'는 0-100 사이의 정수여야 합니다"
+            return f"ScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 중요도'는 0-100 사이의 정수여야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
@@ -428,259 +511,190 @@ def ProcessResponse(projectName, email, Process, Input, ProcessCount, InputCount
 ##################################
 ##### ProcessResponse 업데이트 #####
 ##################################
-## ProcessDataFrame 저장
-def ProcessDataFrameSave(MainKey, InputDic, OutputDicSet, DataTempPath):
-    # DataTempPath 폴더가 없으면 생성
-    if not os.path.exists(DataTempPath):
-        os.makedirs(DataTempPath)
+## Process DataFrame Completion 및 InputCount 확인
+def ProcessDataFrameCheck(ScriptEditPath):
+    ## Process Edit 불러오기
+    with open(ScriptEditPath, 'r', encoding = 'utf-8') as DataFrameJson:
+        ScriptEditFrame = json.load(DataFrameJson)
+    
+    ## Completion 및 ProcessCount 확인
+    Completion = ScriptEditFrame[0]['Completion']
+    InputCount = ScriptEditFrame[0]['ProcessCount']
+    
+    return Completion, InputCount
 
-    # ProcessKeyList 생성
-    ProcessKeyList = []
-    ProcessDicList = []
+## Process1: ScriptPlanProcess DataFrame 저장
+def ScriptPlanProcessDataFrameSave(email, ProjectName, BookScriptGenDataFramePath, ProjectDataFrameScriptPath, DemandScriptPlanResponse, Process, InputCount, TotalInputCount, ProcessNumber):
+    ## ScriptPlanFrame 불러오기
+    ScriptPlanFramePath = os.path.join(BookScriptGenDataFramePath, "b5312-01_ScriptPlanFrame.json") 
+    with open(ScriptPlanFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        ScriptPlanFrame = json.load(DataFrameJson)
+    
+    ## ScriptPlanFrame 업데이트
+    ScriptPlanFrame[0]['ProjectName'] = ProjectName
+    ScriptPlanFrame[0]['TaskName'] = Process
+    
+    ## ScriptPlanFrame 첫번째 데이터 프레임 복사
+    ScriptPlan = ScriptPlanFrame[1][0].copy()
+    ScriptPlan['Background'] = DemandScriptPlanResponse['배경']
+    ScriptPlan['Subject'] = DemandScriptPlanResponse['주제']
+    ScriptPlan['Range'] = DemandScriptPlanResponse['범위']
+    ScriptPlan['ConceptKeyword'] = DemandScriptPlanResponse['개념키워드']
+    ScriptPlan['TargetKeyword'] = DemandScriptPlanResponse['독자키워드']
 
-    #### Search ####
-    # Search-Term
-    Term = InputDic['Input']
-    TermText = InputDic['TermText']
-    ## SearchDic ##
-    SearchDic = {'Term': Term}
+    ScriptPlan['Supply']['Value']['Sentence'] = DemandScriptPlanResponse['가치']['글이전해줄핵심가치']['설명']
+    ScriptPlan['Supply']['Value']['KeyWord'] = DemandScriptPlanResponse['가치']['글이전해줄핵심가치']['키워드']
+    ScriptPlan['Supply']['Value']['Weight'] = DemandScriptPlanResponse['가치']['글이전해줄핵심가치']['중요도']
+
+    ScriptPlan['Supply']['Points']['Sentence'] = DemandScriptPlanResponse['가치']['글이전해줄핵심포인트들']['설명']
+    ScriptPlan['Supply']['Points']['KeyWord'] = DemandScriptPlanResponse['가치']['글이전해줄핵심포인트들']['키워드']
+    ScriptPlan['Supply']['Points']['Weight'] = DemandScriptPlanResponse['가치']['글이전해줄핵심포인트들']['중요도']
+
+    ScriptPlan['Supply']['Vision']['Sentence'] = DemandScriptPlanResponse['가치']['글이전해줄핵심비전']['설명']
+    ScriptPlan['Supply']['Vision']['KeyWord'] = DemandScriptPlanResponse['가치']['글이전해줄핵심비전']['키워드']
+    ScriptPlan['Supply']['Vision']['Weight'] = DemandScriptPlanResponse['가치']['글이전해줄핵심비전']['중요도']
+
+    ScriptPlan['Weight'] = DemandScriptPlanResponse['정보의질']
     
-    ProcessKeyList.append("DemandSearch")
-    ProcessDicList.append(SearchDic)
-    #### Search ####
+    ## ScriptPlanFrame 데이터 프레임 업데이트
+    ScriptPlanFrame[1].append(ScriptPlan)
     
-    #### Detail ####
-    Process = "BookScriptDetail"
-    if Process in OutputDicSet:
-        # Detail-Summary
-        ScarchSummary = OutputDicSet[Process]['핵심목적']
-        # Detail-Needs
-        DetailNeeds = OutputDicSet[Process]['필요내용']
-        # Detail-Purpose
-        DetailPurpose = OutputDicSet[Process]['필요목표']
-        # Detail-Question
-        DetailQuestion = OutputDicSet[Process]['필요질문']
-        # Detail-Weight
-        DetailWeight = OutputDicSet[Process]['검색어완성도']
-        # Detail-Feedback
-        DetailFeedback = OutputDicSet[Process]['검색어피드백']
-        ## DetailDic ##
-        DetailDic = {'Summary': ScarchSummary, 'Needs': DetailNeeds, 'Purpose': DetailPurpose, 'Question': DetailQuestion, 'Weight': DetailWeight, 'Feedback': DetailFeedback}
-        
-        ProcessKeyList.append("DemandDetail")
-        ProcessDicList.append(DetailDic)
-    #### Detail ####
+    ## ScriptPlanFrame ProcessCount 및 Completion 업데이트
+    ScriptPlanFrame[0]['ProcessCount'] = InputCount
+    if InputCount == TotalInputCount:
+        ScriptPlanFrame[0]['Completion'] = 'Yes'
     
-    #### Context ####
-    Process = "BookScriptContext"
-    if Process in OutputDicSet:
-        # Context-Summary
-        ContextSummary = OutputDicSet[Process]['핵심목적']
-        # Context-KeyWord
-        ContextKeyWord = OutputDicSet[Process]['분야']
-        # Context-Demand
-        ContextDemandNeeds = {"Sentence": OutputDicSet[Process]['필요']['필요내용']['설명'], "KeyWord": OutputDicSet[Process]['필요']['필요내용']['키워드'], "Weight": OutputDicSet[Process]['필요']['필요내용']['중요도']}
-        ContextDemandPurpose = {"Sentence": OutputDicSet[Process]['필요']['필요목표']['설명'], "KeyWord": OutputDicSet[Process]['필요']['필요목표']['키워드'], "Weight": OutputDicSet[Process]['필요']['필요목표']['중요도']}
-        ContextDemandQuestion = {"Sentence": OutputDicSet[Process]['필요']['필요질문']['설명'], "KeyWord": OutputDicSet[Process]['필요']['필요질문']['키워드'], "Weight": OutputDicSet[Process]['필요']['필요질문']['중요도']}
-        ContextDemand = {'Needs': ContextDemandNeeds, 'Purpose': ContextDemandPurpose, 'Question': ContextDemandQuestion}
-        # Context-Weight
-        ContextWeight = OutputDicSet[Process]['정보의질']
-        ## ContextDic ##
-        ContextDic = {'Summary': ContextSummary, 'KeyWord': ContextKeyWord, 'Demand': ContextDemand, 'Weight': ContextWeight}
-        
-        ProcessKeyList.append("DemandContext")
-        ProcessDicList.append(ContextDic)
-    #### Context ####
+    ## ScriptPlanFrame 저장
+    ProjectDataFrameScriptPalnPath = os.path.join(ProjectDataFrameScriptPath, f'{email}_{ProjectName}_{ProcessNumber}_{Process}DataFrame.json')
+    with open(ProjectDataFrameScriptPalnPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(ScriptPlanFrame, DataFrameJson, indent = 4, ensure_ascii = False)
     
-    #### ContextExpertise ####
-    Process = "BookScriptExpertiseChain"
-    if Process in OutputDicSet:
-        ContextExpertiseDicList = []
-        for i in range(5):
-            # ContextExpertise-Summary
-            ContextExpertiseSummary = OutputDicSet[Process][f'전문데이터{i+1}']['핵심목적']
-            # ContextExpertise-KeyWord
-            ContextExpertiseKeyWord = OutputDicSet[Process][f'전문데이터{i+1}']['분야']
-            # ContextExpertise-Demand
-            ContextExpertiseDemandNeeds = {"Sentence": OutputDicSet[Process][f'전문데이터{i+1}']['필요']['필요내용']['설명'], "KeyWord": OutputDicSet[Process][f'전문데이터{i+1}']['필요']['필요내용']['키워드'], "Weight": OutputDicSet[Process][f'전문데이터{i+1}']['필요']['필요내용']['중요도']}
-            ContextExpertiseDemandPurpose = {"Sentence": OutputDicSet[Process][f'전문데이터{i+1}']['필요']['필요목표']['설명'], "KeyWord": OutputDicSet[Process][f'전문데이터{i+1}']['필요']['필요목표']['키워드'], "Weight": OutputDicSet[Process][f'전문데이터{i+1}']['필요']['필요목표']['중요도']}
-            ContextExpertiseDemandQuestion = {"Sentence": OutputDicSet[Process][f'전문데이터{i+1}']['필요']['필요질문']['설명'], "KeyWord": OutputDicSet[Process][f'전문데이터{i+1}']['필요']['필요질문']['키워드'], "Weight": OutputDicSet[Process][f'전문데이터{i+1}']['필요']['필요질문']['중요도']}
-            ContextExpertiseDemand = {'Needs': ContextExpertiseDemandNeeds, 'Purpose': ContextExpertiseDemandPurpose, 'Question': ContextExpertiseDemandQuestion}
-            # ContextExpertise-Weight
-            ContextExpertiseWeight = OutputDicSet[Process][f'전문데이터{i+1}']['정보의질']
-            ## ContextExpertiseDic ##
-            ContextExpertiseDic = {'Summary': ContextExpertiseSummary, 'KeyWord': ContextExpertiseKeyWord, 'Demand': ContextExpertiseDemand, 'Weight': ContextExpertiseWeight}
-            ContextExpertiseDicList.append(ContextExpertiseDic)
-            
-        ProcessKeyList.append("DemandContextExpertise")
-        ProcessDicList.append(ContextExpertiseDicList)
-    #### ContextExpertise ####
-    
-    #### ContextUltimate ####
-    Process = "BookScriptUltimateChain"
-    if Process in OutputDicSet:
-        ContextUltimateDicList = []
-        for i in range(5):
-            # ContextUltimate-Summary
-            ContextUltimateSummary = OutputDicSet[Process][f'연계데이터{i+1}']['핵심목적']
-            # ContextUltimate-KeyWord
-            ContextUltimateKeyWord = OutputDicSet[Process][f'연계데이터{i+1}']['분야']
-            # ContextUltimate-Demand
-            ContextUltimateDemandNeeds = {"Sentence": OutputDicSet[Process][f'연계데이터{i+1}']['필요']['필요내용']['설명'], "KeyWord": OutputDicSet[Process][f'연계데이터{i+1}']['필요']['필요내용']['키워드'], "Weight": OutputDicSet[Process][f'연계데이터{i+1}']['필요']['필요내용']['중요도']}
-            ContextUltimateDemandPurpose = {"Sentence": OutputDicSet[Process][f'연계데이터{i+1}']['필요']['필요목표']['설명'], "KeyWord": OutputDicSet[Process][f'연계데이터{i+1}']['필요']['필요목표']['키워드'], "Weight": OutputDicSet[Process][f'연계데이터{i+1}']['필요']['필요목표']['중요도']}
-            ContextUltimateDemandQuestion = {"Sentence": OutputDicSet[Process][f'연계데이터{i+1}']['필요']['필요질문']['설명'], "KeyWord": OutputDicSet[Process][f'연계데이터{i+1}']['필요']['필요질문']['키워드'], "Weight": OutputDicSet[Process][f'연계데이터{i+1}']['필요']['필요질문']['중요도']}
-            ContextUltimateDemand = {'Needs': ContextUltimateDemandNeeds, 'Purpose': ContextUltimateDemandPurpose, 'Question': ContextUltimateDemandQuestion}
-            # ContextUltimate-Weight
-            ContextUltimateWeight = OutputDicSet[Process][f'연계데이터{i+1}']['정보의질']
-            ## ContextUltimateDic ##
-            ContextUltimateDic = {'Summary': ContextUltimateSummary, 'KeyWord': ContextUltimateKeyWord, 'Demand': ContextUltimateDemand, 'Weight': ContextUltimateWeight}
-            ContextUltimateDicList.append(ContextUltimateDic)
-            
-        ProcessKeyList.append("DemandContextUltimate")
-        ProcessDicList.append(ContextUltimateDicList)
-    #### ContextUltimate ####
-    
-    DataTemp = {MainKey: {}}
-    for i in range(len(ProcessKeyList)):
-        DataTemp[MainKey][ProcessKeyList[i]] = ProcessDicList[i]
-    
-    # DataTempJson 저장
-    DateTime = datetime.now().strftime('%Y%m%d%H%M%S')
-    DataTempJsonPath = os.path.join(DataTempPath, f"BookScript_({DateTime})_{TermText}.json")
-    with open(DataTempJsonPath, 'w', encoding = 'utf-8') as DataTempJson:
-        json.dump(DataTemp, DataTempJson, ensure_ascii = False, indent = 4)
-        
-    # CollectionDataChain 추출
-    CollectionDataChain = DataTemp[MainKey]
-        
-    return CollectionDataChain, DateTime
+    return ProjectDataFrameScriptPalnPath
 
 ##############################
 ##### ProcessEdit 업데이트 #####
 ##############################
+## Process Edit Feedback 확인
+def ProcessEditFeedbackCheck(ScriptEditPath):
+    ## Feedback 확인 함수
+    def FeedbackCheck(Edit):
+        for Key, Value in Edit.items():
+            if Key == "Feedback" and isinstance(Value, str) and Value != "":
+                return True  # 'Feedback' 값이 비어있지 않으면 True 반환
+            if isinstance(Value, dict):  # 값이 또 다른 딕셔너리인 경우 재귀 탐색
+                if FeedbackCheck(Value):
+                    return True
+            elif isinstance(Value, list):  # 값이 리스트라면 리스트 내부의 딕셔너리도 검사
+                for item in Value:
+                    if isinstance(item, dict) and FeedbackCheck(item):
+                        return True
+        return False  # 모든 'Feedback' 값이 빈 문자열이면 False 반환
+    
+    ## Feedback 확인
+    with open(ScriptEditPath, 'r', encoding = 'utf-8') as DataFrameJson:
+        ScriptEditFrame = json.load(DataFrameJson)
+    ScriptProcess = ScriptEditFrame[1]
+    
+    FeedbackIdList = [] 
+    for Process in ScriptProcess:
+        
+        
+    return None
+
+## Process Edit Completion 및 ProcessCount 확인
+def ProcessEditCompletionCheck(ScriptEditPath):
+    ## Process Edit 불러오기
+    with open(ScriptEditPath, 'r', encoding = 'utf-8') as DataFrameJson:
+        ScriptEditFrame = json.load(DataFrameJson)
+    
+    ## Completion 및 ProcessCount 확인
+    Completion = ScriptEditFrame[0]['Completion']
+    ProcessCount = ScriptEditFrame[0]['ProcessCount']
+    
+    return Completion, ProcessCount
+        
+## Process Edit 저장
+def ScriptPlanProcessEditSave(ProjectName, ProjectDataFrameScriptPalnPath, ScriptEditPath, Process):
+    ## ScriptPlanFrame 불러온 뒤 Completion 확인
+    with open(ProjectDataFrameScriptPalnPath, 'r', encoding = 'utf-8') as DataFrameJson:
+        ScriptPlanFrame = json.load(DataFrameJson)
+        
+    if ScriptPlanFrame[2]['Completion'] == 'Yes':
+        ## ScriptEdit이 존재할때
+        if os.path.exists(ScriptEditPath):
+            ## ScriptEditPath 업데이트
+            with open(ScriptEditPath, 'r', encoding = 'utf-8') as DataFrameJson:
+                ScriptPlanFrame = json.load(DataFrameJson)
+                
+    for i in range(len(ScriptPlanFrame))
+            
+        
+    
+    return None
 
 ################################
 ##### Process 진행 및 업데이트 #####
 ################################
 ## BookScript 프롬프트 요청 및 결과물 Json화
-def BookScriptGenProcessUpdate(projectName, email, InputDic, mode = "Master", MainKey = 'BookScriptGen', MessagesReview = "on"):
+def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", MessagesReview = "on"):
     print(f"< User: {email} | Gen: {projectName} | BookScriptGenUpdate 시작 >")
-    ## TotalPublisherData 경로 설정
+    ## SearchResultData 경로
+    TotalSearchResultDataTempPath = "/yaas/storage/s1_Yeoreum/s15_DataCollectionStorage/s151_SearchData/s1513_SearchResultData/s15131_TotalSearchResultData/TotalSearchResultDataTemp"
+    
+    ## projectName_script 경로 설정
     ProjectScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script"
     ProjectDataFrameScriptPath = os.path.join(ProjectScriptPath, f'{projectName}_dataframe_script_file')
     ProjectMasterScriptPath = os.path.join(ProjectScriptPath, f'{projectName}_master_script_file')
+    ScriptEditPath = os.path.join(ProjectMasterScriptPath, f'[{projectName}_Script_Edit].json')
     
-    ## BookScriptDetailProcess
-    CollectionData = InputDic['CollectionData']
-    Type = InputDic['Type']
+    ## BookScriptGenDataFrame 경로
+    BookScriptGenDataFramePath = "/yaas/backend/b5_Database/b53_ProjectData/b531_ScriptProject/b5312_BookScriptGen"
+    
+    ## Process1: ScriptPlan Response 생성
     # InputCount 계산
-    InputCount = 8
-    processCount = 1
-    CheckCount = 0
-    OutputDicSet = {}
-
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    TotalInputCount = 1 # 인풋의 전체 카운트
+    InputCount = 1 # 현재 인풋 카운트
     ## Process1-1: DemandScriptPlan Response 생성
-    if Type == "Search":
-        Process = "BookScriptDetail"
-        Input = InputDic['Input']
+    if Intention == "Demand":
+        Process = "DemandScriptPlan"
+        ## Input 생성
+        Input = DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
         
-        BookScriptDetailResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, BookScriptDetailFilter, CheckCount, "OpenAI", mode, MessagesReview)
-        OutputDicSet[Process] = BookScriptDetailResponse
-        processCount += 1
-    
-    ## Process2: BookScriptContext Response 생성
-    if Type == "Search":
-        Process = "BookScriptContext"
-        Input = BookScriptDetailResponse.copy()
-        DeleteKeys = ['검색어완성도', '검색어피드백']
-        for key in DeleteKeys:
-            del Input[key]
-    
-        BookScriptContextResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, BookScriptContextFilter, CheckCount, "OpenAI", mode, MessagesReview)
-        OutputDicSet[Process] = BookScriptContextResponse
-    elif Type == "Match":
-        Process = "BookScriptContext"
-        OutputDicSet[Process] = InputDic['CollectionData']
-    processCount += 1
-    
-    ## Process3-1: BookScriptExpertise Response 생성
-    if "Expertise" in Extension:
-        Process = "BookScriptExpertise"
-        if Type == "Search":
-            Input = BookScriptContextResponse
-        elif Type == "Match":
-            Input = InputDic['Input']
+        ## Response 생성
+        ScriptPlanResponse = ProcessResponse(projectName, email, Process, Input, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview)
         
-        BookScriptExpertiseResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, BookScriptExpertiseFilter, CheckCount, "OpenAI", mode, MessagesReview)
-        processCount += 1
+    ## Process1-2: SupplyScriptPlan Response 생성
+    if Intention == "Supply":
+        Process = "SupplyScriptPlan"
+        ## Input 생성
+        Input = SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
         
-        ## Process3-2: BookScriptExpertiseChain Response 연속 생성 및 Set로 합치기
-        Process = "BookScriptExpertiseChain"
-        BookScriptExpertiseChainResponseSet = {}
-        for i, Response in enumerate(BookScriptExpertiseResponse):
-            InputText = f'{Response}\n\n<데이터>\n{Input}\n'
-            BookScriptExpertiseChainResponse = ProcessResponse(projectName, email, Process, InputText, processCount, InputCount, BookScriptExpertiseChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
-            BookScriptExpertiseChainResponseSet[f'전문데이터{i+1}'] = {}
-            BookScriptExpertiseChainResponse['핵심목적'] = f"{Response['전문분야']}  {BookScriptExpertiseChainResponse['핵심목적']}"
-            BookScriptExpertiseChainResponseSet[f'전문데이터{i+1}'].update(BookScriptExpertiseChainResponse)
-            processCount += 1
-
-        # 최종 Set 데이터 추가
-        OutputDicSet[Process] = BookScriptExpertiseChainResponseSet
-
-    ## Process4-1: BookScriptUltimate Response 생성
-    if "Ultimate" in Extension:
-        Process = "BookScriptUltimate"
-        if Type == "Search":
-            Input = BookScriptContextResponse
-        elif Type == "Match":
-            Input = InputDic['Input']
+        ## Response 생성
+        ScriptPlanResponse = ProcessResponse(projectName, email, Process, Input, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview)
         
-        BookScriptUltimateResponse = ProcessResponse(projectName, email, Process, Input, processCount, InputCount, BookScriptUltimateFilter, CheckCount, "OpenAI", mode, MessagesReview)
-        processCount += 1
+    ## Process1-3: SimilarityScriptPlan Response 생성
+    if Intention == "Similarity":
+        Process = "SimilarityScriptPlan"
+        ## Input 생성
+        Input1 = SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
+        Input2 = DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
         
-        ## Process4-2: BookScriptUltimateChain Response 연속 생성 및 Set로 합치기
-        Process = "BookScriptUltimateChain"
-        BookScriptUltimateChainResponseSet = {}
-        for i, Response in enumerate(BookScriptUltimateResponse):
-            InputText = f'{Input}\n\n<새로운 핵심목적 메모>\n{Response}\n'
-            BookScriptUltimateChainResponse = ProcessResponse(projectName, email, Process, InputText, processCount, InputCount, BookScriptUltimateChainFilter, CheckCount, "OpenAI", mode, MessagesReview)
-            BookScriptUltimateChainResponseSet[f'연계데이터{i+1}'] = {}
-            BookScriptUltimateChainResponse['핵심목적'] = f"{Response['핵심목적']}  {BookScriptUltimateChainResponse['핵심목적']}"
-            BookScriptUltimateChainResponseSet[f'연계데이터{i+1}'].update(BookScriptUltimateChainResponse)
-            processCount += 1
-
-        # 최종 Set 데이터 추가
-        OutputDicSet[Process] = BookScriptUltimateChainResponseSet
-    
-    ## Process5: BookScriptDetailChain Response 생성
-    if "Detail" in Extension:
-        Process = "BookScriptDetailChain"
-        if Type == "Search":
-            Input = BookScriptContextResponse
-        elif Type == "Match":
-            Input = InputDic['Input']
-        pass
-    
-    ## Process6: BookScriptRethinkingChain Response 생성
-    if "Rethinking" in Extension:
-        Process = "BookScriptRethinkingChain"
-        if Type == "Search":
-            Input = BookScriptContextResponse
-        elif Type == "Match":
-            Input = InputDic['Input']
-        pass
-
-    ## ProcessResponse 임시저장
-    CollectionDataChain, DateTime = ProcessResponseTempSave(MainKey, InputDic, OutputDicSet, TotalBookScriptTempPath)
+        ## Response 생성
+        ScriptPlanResponse = ProcessResponse(projectName, email, Process, Input1, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2)
+        
+    ## DataFrame 및 Edit 저장
+    ProjectDataFrameScriptPalnPath = ScriptPlanProcessDataFrameSave(email, ProjectName, BookScriptGenDataFramePath, ProjectDataFrameScriptPath, ScriptPlanResponse, Process, InputCount, TotalInputCount, '01')
+    ScriptPlanProcessEditSave(ProjectName, ProjectDataFrameScriptPalnPath, ScriptEditPath, Process)
 
     print(f"[ User: {email} | Chain: {projectName} | BookScriptGenUpdate 완료 ]")
-    
-    return CollectionDataChain, DateTime
 
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    ProjectName = '241204_개정교육과정초등교과별이해연수'
+    ProjectName = '250121_테스트'
     #########################################################################
+    Intention = "Similarity"
+    # JSON 파일 경로
+    BookScriptGenProcessUpdate(ProjectName, email, Intention)

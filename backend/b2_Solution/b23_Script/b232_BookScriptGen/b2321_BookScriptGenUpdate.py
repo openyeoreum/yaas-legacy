@@ -560,7 +560,7 @@ def ScriptPlanProcessDataFrameSave(email, ProjectName, BookScriptGenDataFramePat
     ScriptPlanFrame[1].append(ScriptPlan)
     
     ## ScriptPlanFrame ProcessCount 및 Completion 업데이트
-    ScriptPlanFrame[0]['ProcessCount'] = InputCount
+    ScriptPlanFrame[0]['InputCount'] = InputCount
     if InputCount == TotalInputCount:
         ScriptPlanFrame[0]['Completion'] = 'Yes'
     
@@ -574,63 +574,144 @@ def ScriptPlanProcessDataFrameSave(email, ProjectName, BookScriptGenDataFramePat
 ##############################
 ##### ProcessEdit 업데이트 #####
 ##############################
-## Process Edit Feedback 확인
-def ProcessEditFeedbackCheck(ScriptEditPath):
-    ## Feedback 확인 함수
-    def FeedbackCheck(Edit):
-        for Key, Value in Edit.items():
-            if Key == "Feedback" and isinstance(Value, str) and Value != "":
-                return True  # 'Feedback' 값이 비어있지 않으면 True 반환
-            if isinstance(Value, dict):  # 값이 또 다른 딕셔너리인 경우 재귀 탐색
-                if FeedbackCheck(Value):
-                    return True
-            elif isinstance(Value, list):  # 값이 리스트라면 리스트 내부의 딕셔너리도 검사
-                for item in Value:
-                    if isinstance(item, dict) and FeedbackCheck(item):
-                        return True
-        return False  # 모든 'Feedback' 값이 빈 문자열이면 False 반환
-    
-    ## Feedback 확인
-    with open(ScriptEditPath, 'r', encoding = 'utf-8') as DataFrameJson:
-        ScriptEditFrame = json.load(DataFrameJson)
-    ScriptProcess = ScriptEditFrame[1]
-    
-    FeedbackIdList = [] 
-    for Process in ScriptProcess:
-        
-        
-    return None
-
 ## Process Edit Completion 및 ProcessCount 확인
 def ProcessEditCompletionCheck(ScriptEditPath):
     ## Process Edit 불러오기
-    with open(ScriptEditPath, 'r', encoding = 'utf-8') as DataFrameJson:
-        ScriptEditFrame = json.load(DataFrameJson)
+    with open(ScriptEditPath, 'r', encoding = 'utf-8') as ScriptEditJson:
+        ScriptEdit = json.load(ScriptEditJson)
     
     ## Completion 및 ProcessCount 확인
-    Completion = ScriptEditFrame[0]['Completion']
-    ProcessCount = ScriptEditFrame[0]['ProcessCount']
+    Completion = ScriptEdit[0]['Completion']
+    ProcessCount = ScriptEdit[0]['InputCount']
     
     return Completion, ProcessCount
+
+## Process Edit Prompt 확인
+def ProcessEditPromptCheck(ScriptEditPath, Process):
+    
+    ## 빈 Prompt 제거 함수
+    def CleanPrompts(Edit):
+        if isinstance(Edit, dict):
+            NewDict = {}
+            for key, value in Edit.items():
+                if isinstance(value, str):
+                    NewValue = value.replace("<prompt: >", "").strip()
+                    if NewValue:  # 값이 비어있지 않다면 추가
+                        NewDict[key] = NewValue
+                elif isinstance(value, dict):
+                    NewValue = CleanPrompts(value)
+                    if NewValue:  # 빈 딕셔너리는 추가하지 않음
+                        NewDict[key] = NewValue
+                elif isinstance(value, list):
+                    cleaned_list = [CleanPrompts(item) if isinstance(item, dict) else item.replace("<prompt: >", "").strip() for item in value]
+                    cleaned_list = [item for item in cleaned_list if item]  # 빈 값 제거
+                    if cleaned_list:  # 리스트가 비어 있지 않다면 추가
+                        NewDict[key] = cleaned_list
+            return NewDict
+
+        elif isinstance(Edit, list):
+            cleaned_list = [CleanPrompts(item) if isinstance(item, dict) else item.replace("<prompt: >", "").strip() for item in Edit]
+            return [item for item in cleaned_list if item]  # 빈 값 제거
+
+        elif isinstance(Edit, str):
+            return Edit.replace("<prompt: >", "").strip()
+
+        return Edit
+
+    ## Prompt 확인 함수
+    def PromptCheck(Edit):
+        if isinstance(Edit, dict):
+            for key, value in Edit.items():
+                if isinstance(value, str) and "<prompt:" in value:
+                    return True  # '<prompt: ...>'이 포함된 문자열이면 True 반환
+                if isinstance(value, dict) and PromptCheck(value):
+                    return True
+                if isinstance(value, list):
+                    for item in value:
+                        if isinstance(item, str) and "<prompt:" in item:
+                            return True
+                        if isinstance(item, dict) and PromptCheck(item):
+                            return True
+        elif isinstance(Edit, list):
+            for item in Edit:
+                if isinstance(item, str) and "<prompt:" in item:
+                    return True
+                if isinstance(item, dict) and PromptCheck(item):
+                    return True
+        return False  # '<prompt: ...>'이 없으면 False 반환
+    
+    PromptList = []
+    if os.path.exists(ScriptEditPath):
+        ## ScriptEdit 불러오기
+        with open(ScriptEditPath, 'r', encoding='utf-8') as ScriptEditJson:
+            ScriptEdit = json.load(ScriptEditJson)
+        ScriptEditProcess = ScriptEdit.get(Process, [])
         
+        ## '<prompt: ...>' 확인
+        for i, ProcessDic in enumerate(ScriptEditProcess):
+            CleanedProcessDic = CleanPrompts(ProcessDic)  # 빈 '<prompt: >' 삭제 후 데이터 정리
+            if PromptCheck(CleanedProcessDic):  # '<prompt: ...>'이 있는 경우만 리스트에 추가
+                PromptList.append({'PromptId': i + 1, 'PromptData': CleanedProcessDic})
+        
+    return PromptList
+
 ## Process Edit 저장
-def ScriptPlanProcessEditSave(ProjectName, ProjectDataFrameScriptPalnPath, ScriptEditPath, Process):
-    ## ScriptPlanFrame 불러온 뒤 Completion 확인
-    with open(ProjectDataFrameScriptPalnPath, 'r', encoding = 'utf-8') as DataFrameJson:
-        ScriptPlanFrame = json.load(DataFrameJson)
+def ScriptPlanProcessEditSave(ProjectDataFramePath, ScriptEditPath, Process, InputCount):
         
-    if ScriptPlanFrame[2]['Completion'] == 'Yes':
+    ## ProcessDic 재구조화 함수
+    def RestructureProcessDic(ProcessDic):
+        def ModifyValues(data):
+            if isinstance(data, dict):
+                NewDict = {}
+                for key, value in data.items():
+                    if key == "Weight":
+                        continue  # 'Weight' 키 제거
+                    
+                    if isinstance(value, dict) or isinstance(value, list):
+                        NewValue = ModifyValues(value)  # 재귀 처리
+                    elif isinstance(value, str):
+                        NewValue = value + "<prompt: >"
+                    else:
+                        NewValue = value
+                    
+                    NewDict[key] = NewValue
+                return NewDict
+            elif isinstance(data, list):
+                if len(data) > 0:
+                    data[-1] = "<prompt: >"  # 리스트의 마지막 요소 변경
+                return data
+            else:
+                return data
+
+        return ModifyValues(ProcessDic)
+    
+    ## ScriptDataFrame 불러온 뒤 Completion 확인
+    with open(ProjectDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        ScriptDataFrame = json.load(DataFrameJson)
+    ## ScriptEdit 재구조화 후 저장
+    ScriptEdit = {}
+    if ScriptDataFrame[0]['Completion'] == 'Yes':
         ## ScriptEdit이 존재할때
         if os.path.exists(ScriptEditPath):
-            ## ScriptEditPath 업데이트
-            with open(ScriptEditPath, 'r', encoding = 'utf-8') as DataFrameJson:
-                ScriptPlanFrame = json.load(DataFrameJson)
-                
-    for i in range(len(ScriptPlanFrame))
-            
+            ## ScriptEdit 업데이트
+            with open(ScriptEditPath, 'r', encoding = 'utf-8') as ScriptEditJson:
+                ScriptEdit = json.load(ScriptEditJson)
         
+        ## ScriptEdit 업데이트
+        ScriptEdit[Process] = []
+        for i in range(InputCount, len(ScriptDataFrame)):
+            ProcessDic = ScriptDataFrame[1][i]
+            ReStructureProcessDic = RestructureProcessDic(ProcessDic)
+            ScriptEdit[Process].append(ReStructureProcessDic)
+        
+        ## ScriptEdit 저장
+        with open(ScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
+            json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
+            
+        return True
     
-    return None
+    else:
+        return False
 
 ################################
 ##### Process 진행 및 업데이트 #####
@@ -655,37 +736,38 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
     TotalInputCount = 1 # 인풋의 전체 카운트
     InputCount = 1 # 현재 인풋 카운트
+    Process = "ScriptPlan"
+    IntentionProcess = Intention + Process
+    PromptList = ProcessEditPromptCheck(ScriptEditPath, Process)
+    #### PromptList의 결과에 따라서 1. 최초 프롬프트 진행 2. 피드백 프롬프트 진행 3. 완료 후 넘어가기 ####
     ## Process1-1: DemandScriptPlan Response 생성
     if Intention == "Demand":
-        Process = "DemandScriptPlan"
         ## Input 생성
         Input = DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
         
         ## Response 생성
-        ScriptPlanResponse = ProcessResponse(projectName, email, Process, Input, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview)
+        ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, Input, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview)
         
     ## Process1-2: SupplyScriptPlan Response 생성
     if Intention == "Supply":
-        Process = "SupplyScriptPlan"
         ## Input 생성
         Input = SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
         
         ## Response 생성
-        ScriptPlanResponse = ProcessResponse(projectName, email, Process, Input, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview)
+        ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, Input, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview)
         
     ## Process1-3: SimilarityScriptPlan Response 생성
     if Intention == "Similarity":
-        Process = "SimilarityScriptPlan"
         ## Input 생성
         Input1 = SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
         Input2 = DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
         
         ## Response 생성
-        ScriptPlanResponse = ProcessResponse(projectName, email, Process, Input1, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2)
+        ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, Input1, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2)
         
     ## DataFrame 및 Edit 저장
     ProjectDataFrameScriptPalnPath = ScriptPlanProcessDataFrameSave(email, ProjectName, BookScriptGenDataFramePath, ProjectDataFrameScriptPath, ScriptPlanResponse, Process, InputCount, TotalInputCount, '01')
-    ScriptPlanProcessEditSave(ProjectName, ProjectDataFrameScriptPalnPath, ScriptEditPath, Process)
+    ScriptPlanProcessEditSave(ProjectDataFrameScriptPalnPath, ScriptEditPath, Process, InputCount)
 
     print(f"[ User: {email} | Chain: {projectName} | BookScriptGenUpdate 완료 ]")
 

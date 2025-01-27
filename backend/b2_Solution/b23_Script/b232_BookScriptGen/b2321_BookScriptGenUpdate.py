@@ -454,12 +454,12 @@ def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCo
 ##### ProcessResponse 업데이트 #####
 ##################################
 ## Process DataFrame Completion 및 InputCount 확인
-def ProcessDataFrameCheck(ScriptEditPath, InputCount, DataFrameCompletion):
-    if not os.path.isfile(ScriptEditPath):
+def ProcessDataFrameCheck(ProjectDataFramePath, InputCount, DataFrameCompletion):
+    if not os.path.exists(ProjectDataFramePath):
         return InputCount, DataFrameCompletion
     else:
         ## Process Edit 불러오기
-        with open(ScriptEditPath, 'r', encoding = 'utf-8') as DataFrameJson:
+        with open(ProjectDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
             ScriptEditFrame = json.load(DataFrameJson)
         
         ## Completion 및 ProcessCount 확인
@@ -481,6 +481,7 @@ def ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, Proj
     
     ## ScriptPlanFrame 첫번째 데이터 프레임 복사
     ScriptPlan = ScriptPlanFrame[1][0].copy()
+    ScriptPlan['PlanId'] = InputCount
     ScriptPlan['Background'] = ScriptPlanResponse['배경']
     ScriptPlan['Subject'] = ScriptPlanResponse['주제']
     ScriptPlan['Range'] = ScriptPlanResponse['범위']
@@ -555,30 +556,21 @@ def ProcessEditSave(ProjectDataFramePath, ScriptEditPath, Process, TotalInputCou
     ScriptEdit = {}
     if ScriptDataFrame[0]['Completion'] == 'Yes':
         ## ScriptEdit이 존재할때
-        if os.path.exists(ScriptEditPath):
+        if not os.path.exists(ScriptEditPath):
             ## ScriptEdit 업데이트
-            with open(ScriptEditPath, 'r', encoding = 'utf-8') as ScriptEditJson:
-                ScriptEdit = json.load(ScriptEditJson)
-            if Process in ScriptEdit and len(ScriptEdit[Process]) == TotalInputCount:
-                return True
-        
-        ## ScriptEdit 업데이트
-        ScriptEdit[Process] = []
-        for i in range(1, TotalInputCount):
-            ProcessDic = ScriptDataFrame[1][i]
-            ReStructureProcessDic = RestructureProcessDic(ProcessDic)
-            ScriptEdit[Process].append(ReStructureProcessDic)
-        
-        ## ScriptEdit 저장
-        with open(ScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
-            json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
-        return True
-    
-    else:
-        return False
+            ScriptEdit[Process] = []
+            ScriptEdit[f"{Process}Completion"] = '완료 후 Completion'
+            for i in range(1, TotalInputCount + 1):
+                ProcessDic = ScriptDataFrame[1][i]
+                ReStructureProcessDic = RestructureProcessDic(ProcessDic)
+                ScriptEdit[Process].append(ReStructureProcessDic)
+            
+            ## ScriptEdit 저장
+            with open(ScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
+                json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
 
 ## Process Edit Prompt 확인
-def ProcessEditPromptCheck(ScriptEditPath, Process):
+def ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount):
     
     ## 빈 Prompt 제거 함수
     def CleanPrompts(Edit):
@@ -633,24 +625,28 @@ def ProcessEditPromptCheck(ScriptEditPath, Process):
     
     ## EditCheck
     EditCheck = False
+    EditCompletion = False
     promptCheck = False
     PromptInputList = []
+    ScriptEditProcess = []
     if os.path.exists(ScriptEditPath):
         ## ScriptEdit 불러오기
         with open(ScriptEditPath, 'r', encoding='utf-8') as ScriptEditJson:
             ScriptEdit = json.load(ScriptEditJson)
-        if Process in ScriptEdit:
+        if Process in ScriptEdit and len(ScriptEdit[Process]) == TotalInputCount:
             EditCheck = True
-        ScriptEditProcess = ScriptEdit.get(Process, [])
+            ScriptEditProcess = ScriptEdit[Process]
         
-        ## '<prompt: ...>' 확인
-        for i, ProcessDic in enumerate(ScriptEditProcess):
-            CleanedProcessDic = CleanPrompts(ProcessDic)  # 빈 '<prompt: >' 삭제 후 데이터 정리
-            if PromptCheck(CleanedProcessDic):  # '<prompt: ...>'이 있는 경우만 리스트에 추가
-                PromptInputList.append({'PromptId': i + 1, 'PromptData': CleanedProcessDic})
-                promptCheck = True
+            ## '<prompt: ...>' 확인
+            for i, ProcessDic in enumerate(ScriptEditProcess):
+                CleanedProcessDic = CleanPrompts(ProcessDic)  # 빈 '<prompt: >' 삭제 후 데이터 정리
+                if PromptCheck(CleanedProcessDic):  # '<prompt: ...>'이 있는 경우만 리스트에 추가
+                    PromptInputList.append({'PromptId': i + 1, 'PromptData': CleanedProcessDic})
+                    promptCheck = True
+        if ScriptEdit[f"{Process}Completion"] == 'Completion':
+            EditCompletion = True
         
-    return EditCheck, promptCheck, PromptInputList
+    return EditCheck, EditCompletion, promptCheck, PromptInputList
 
 ## Process Edit Prompt 결과 업데이트
 
@@ -669,6 +665,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     ProjectMasterScriptPath = os.path.join(ProjectScriptPath, f'{projectName}_master_script_file')
     ScriptEditPath = os.path.join(ProjectMasterScriptPath, f'[{projectName}_Script_Edit].json')
 
+
     ### Process1: ScriptPlan Response 생성 ###
     ## Process 경로
     BookScriptGenDataFramePath = "/yaas/backend/b5_Database/b53_ProjectData/b531_ScriptProject/b5312_BookScriptGen"
@@ -686,13 +683,17 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     
     InputCount = 1 # 인풋 카운트 초기화
     DataFrameCompletion = 'No' # 데이터프레임 완성 초기화
-    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ScriptEditPath, InputCount, DataFrameCompletion) # 현재의 인풋 카운트
-    EditCheck, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process)
-    
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameScriptPalnPath, InputCount, DataFrameCompletion) # 현재의 인풋 카운트
+    EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
+    print(f"InputCount: {InputCount}")
+    print(f"EditCheck: {EditCheck}")
+    print(f"EditCompletion: {EditCompletion}")
+    print(f"PromptCheck: {PromptCheck}")
+    print(f"PromptInputList: {PromptInputList}")
     ## Process 진행
     if not EditCheck:
         if DataFrameCompletion == 'No':
-            for inputCount in range(InputCount, TotalInputCount):
+            for inputCount in range(InputCount, TotalInputCount + 1):
                 ## Process1-1: DemandScriptPlan Response 생성
                 if Intention == "Demand":
                     ## Input 생성
@@ -722,14 +723,21 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameScriptPalnPath, ScriptPlanResponse, Process, inputCount, TotalInputCount)
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameScriptPalnPath, ScriptEditPath, Process, TotalInputCount)
-    # else:
-    #     ## FeedbackPrompt Response 생성
-    #     if PromptCheck:
-    #         for PromptInput in PromptInputList:
-    #             ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, PromptInput, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2)
-                
-                
-            
+        sys.exit(f"[ {projectName}_Script_Edit 생성 완료: (({Process}))을 검수한 뒤 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+    if EditCheck:
+        ## FeedbackPrompt Response 생성
+        if PromptCheck:
+            for PromptInput in PromptInputList:
+                print(f"PromptInput: {PromptInput}\n\n")
+                ## 1. 수정 프로세스 진행, 2. 수정 사항으로 ScriptEdit 변경 후 다시 <prompt: > 적용
+                # ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, PromptInput, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2)
+    
+            sys.exit(f"[ {projectName}_Script_Edit 수정 완료: (({Process}))을 검수한 뒤 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+        if not EditCompletion:
+            sys.exit(f"[ {projectName}_Script_Edit: (({Process}))을 검수한 뒤 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+
+
+
 
     print(f"[ User: {email} | Chain: {projectName} | BookScriptGenUpdate 완료 ]")
 

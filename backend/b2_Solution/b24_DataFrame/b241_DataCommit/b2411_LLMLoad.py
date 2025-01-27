@@ -308,7 +308,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
             print(f"LifeGraphName: {projectName} | Process: {Process} | OpenAI_LLMresponse 완료")
           
           if messagesReview == "on":
-            LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = root, PromptFramePath = PromptFramePath, MODE = Mode, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+            LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = root, PromptFramePath = PromptFramePath, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
 
           return Response, Usage, Model
       
@@ -596,7 +596,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
             print(f"LifeGraphName: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 완료")
           
           if messagesReview == "on":
-            LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+            LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
 
           return JsonResponse, Usage, Model
       

@@ -47,7 +47,7 @@ def DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, Project
     
     SearchResult = SearchResultJson['SearchResult']
     Term = SearchResult[f'{Intention}Search']['Term']
-    SimilarityDetail = SearchResult[f'{Intention}Detail']['Summary']
+    NormalDetail = SearchResult[f'{Intention}Detail']['Summary']
     
     NomalContextKey = f'{Intention}Context'
     NormalCollectionAnalysis = SearchResult[NomalContextKey]['CollectionAnalysis']
@@ -72,14 +72,14 @@ def DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, Project
         AdvancedDemandQuestionSentence = AdvancedCollectionAnalysis['Demand']['Question']['Sentence']
         AdvancedDemandQuestionKeyWord = AdvancedCollectionAnalysis['Demand']['Question']['KeyWord']
         
-        FrontInput = f"[최초의도]\n{Term}\n{SimilarityDetail}\n\n"
+        FrontInput = f"[최초의도]\n{Term}\n{NormalDetail}\n\n[핵심목적]\n일반: {NormalSummary}\n심화: {AdvancedSummary}\n\n[분야]\n일반: {', '.join(NormalKeyWord)}\n심화: {', '.join(AdvancedKeyWord)}\n\n"
     
-        BackInput = f"[핵심목적]\n일반: {NormalSummary}\n심화: {AdvancedSummary}\n\n[분야]\n일반: {', '.join(NormalKeyWord)}\n심화: {', '.join(AdvancedKeyWord)}\n\n[필요내용]\n일반: {NormalDemandNeedsSentence}\n심화: {AdvancedDemandNeedsSentence}\n\n[필요내용-키워드]\n일반: {', '.join(NormalDemandNeedsKeyWord)}\n심화: {', '.join(AdvancedDemandNeedsKeyWord)}\n\n[필요목표]\n일반: {NormalDemandPurposeSentence}\n심화: {AdvancedDemandPurposeSentence}\n\n[필요목표-키워드]\n일반: {', '.join(NormalDemandPurposeKeyWord)}\n심화: {', '.join(AdvancedDemandPurposeKeyWord)}\n\n[필요질문]\n일반: {NormalDemandQuestionSentence}\n심화: {AdvancedDemandQuestionSentence}\n\n[필요질문-키워드]\n일반: {', '.join(NormalDemandQuestionKeyWord)}\n심화: {', '.join(AdvancedDemandQuestionKeyWord)}"
+        BackInput = f"[필요내용]\n일반: {NormalDemandNeedsSentence}\n심화: {AdvancedDemandNeedsSentence}\n\n[필요내용-키워드]\n일반: {', '.join(NormalDemandNeedsKeyWord)}\n심화: {', '.join(AdvancedDemandNeedsKeyWord)}\n\n[필요목표]\n일반: {NormalDemandPurposeSentence}\n심화: {AdvancedDemandPurposeSentence}\n\n[필요목표-키워드]\n일반: {', '.join(NormalDemandPurposeKeyWord)}\n심화: {', '.join(AdvancedDemandPurposeKeyWord)}\n\n[필요질문]\n일반: {NormalDemandQuestionSentence}\n심화: {AdvancedDemandQuestionSentence}\n\n[필요질문-키워드]\n일반: {', '.join(NormalDemandQuestionKeyWord)}\n심화: {', '.join(AdvancedDemandQuestionKeyWord)}"
 
     else:
-        FrontInput = f"[최초의도]\n{Term}\n{SimilarityDetail}\n\n"
+        FrontInput = f"[최초의도]\n{Term}\n{NormalDetail}\n\n[핵심목적]\n{NormalSummary}\n\n[분야]\n{', '.join(NormalKeyWord)}\n\n"
 
-        BackInput = f"[핵심목적]\n{NormalSummary}\n\n[분야]\n{', '.join(NormalKeyWord)}\n\n[필요내용]\n{NormalDemandNeedsSentence}\n\n[필요내용-키워드]\n{', '.join(NormalDemandNeedsKeyWord)}\n\n[필요목표]\n{NormalDemandPurposeSentence}\n\n[필요목표-키워드]\n{', '.join(NormalDemandPurposeKeyWord)}\n\n[필요질문]\n{NormalDemandQuestionSentence}\n\n[필요질문-키워드]\n{', '.join(NormalDemandQuestionKeyWord)}"
+        BackInput = f"[필요내용]\n{NormalDemandNeedsSentence}\n\n[필요내용-키워드]\n{', '.join(NormalDemandNeedsKeyWord)}\n\n[필요목표]\n{NormalDemandPurposeSentence}\n\n[필요목표-키워드]\n{', '.join(NormalDemandPurposeKeyWord)}\n\n[필요질문]\n{NormalDemandQuestionSentence}\n\n[필요질문-키워드]\n{', '.join(NormalDemandQuestionKeyWord)}"
 
     ## Intention에 따라 Input 결정
     if Intention == 'Demand':
@@ -95,7 +95,7 @@ def SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, Project
     
     SearchResult = SearchResultJson['SearchResult']
     Term = SearchResult[f'{Intention}Search']['Term']
-    SimilarityDetail = SearchResult[f'{Intention}Detail']['Summary']
+    NormalDetail = SearchResult[f'{Intention}Detail']['Summary']
     
     NomalContextKey = f'{Intention}Context'
     NormalCollectionAnalysis = SearchResult[NomalContextKey]['CollectionAnalysis']
@@ -120,12 +120,10 @@ def SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, Project
         AdvancedSupplySolutionSentence = AdvancedCollectionAnalysis['Supply']['Solution']['Sentence']
         AdvancedSupplySolutionKeyWord = AdvancedCollectionAnalysis['Supply']['Solution']['KeyWord']
     
-        Input = f"[최초의도]\n{Term}\n{SimilarityDetail}\n\n[핵심목적]\n일반: {NormalSummary}\n심화: {AdvancedSummary}\n\n[분야]\n일반: {', '.join(NormalKeyWord)}\n심화: {', '.join(AdvancedKeyWord)}\n\n[필요내용]\n일반: {NormalSupplySatisfySentence}\n심화: {AdvancedSupplySatisfySentence}\n\n[필요내용-키워드]\n일반: {', '.join(NormalSupplySatisfyKeyWord)}\n심화: {', '.join(AdvancedSupplySatisfyKeyWord)}\n\n[필요목표]\n일반: {NormalSupplySupportSentence}\n심화: {AdvancedSupplySupportSentence}\n\n[필요목표-키워드]\n일반: {', '.join(NormalSupplySupportKeyWord)}\n심화: {', '.join(AdvancedSupplySupportKeyWord)}\n\n[필요질문]\n일반: {NormalSupplySolutionSentence}\n심화: {AdvancedSupplySolutionSentence}\n\n[필요질문-키워드]\n일반: {', '.join(NormalSupplySolutionKeyWord)}\n심화: {', '.join(AdvancedSupplySolutionKeyWord)}"
-
-
+        Input = f"[최초의도]\n{Term}\n{NormalDetail}\n\n[핵심솔루션]\n일반: {NormalSummary}\n심화: {AdvancedSummary}\n\n[분야]\n일반: {', '.join(NormalKeyWord)}\n심화: {', '.join(AdvancedKeyWord)}\n\n[제안내용]\n일반: {NormalSupplySatisfySentence}\n심화: {AdvancedSupplySatisfySentence}\n\n[제안내용-키워드]\n일반: {', '.join(NormalSupplySatisfyKeyWord)}\n심화: {', '.join(AdvancedSupplySatisfyKeyWord)}\n\n[제안할목표]\n일반: {NormalSupplySupportSentence}\n심화: {AdvancedSupplySupportSentence}\n\n[제안할목표-키워드]\n일반: {', '.join(NormalSupplySupportKeyWord)}\n심화: {', '.join(AdvancedSupplySupportKeyWord)}\n\n[제안할해결책]\n일반: {NormalSupplySolutionSentence}\n심화: {AdvancedSupplySolutionSentence}\n\n[제안할해결책-키워드]\n일반: {', '.join(NormalSupplySolutionKeyWord)}\n심화: {', '.join(AdvancedSupplySolutionKeyWord)}"
 
     else:
-        Input = f"[최초의도]\n{Term} {SimilarityDetail}\n\n[핵심목적]\n{NormalSummary}\n\n[분야]\n{', '.join(NormalKeyWord)}\n\n[필요내용]\n{NormalSupplySatisfySentence}\n\n[필요내용-키워드]\n{', '.join(NormalSupplySatisfyKeyWord)}\n\n[필요목표]\n{NormalSupplySupportSentence}\n\n[필요목표-키워드]\n{', '.join(NormalSupplySupportKeyWord)}\n\n[필요질문]\n{NormalSupplySolutionSentence}\n\n[필요질문-키워드]\n{', '.join(NormalSupplySolutionKeyWord)}"
+        Input = f"[최초의도]\n{Term} {NormalDetail}\n\n[핵심솔루션]\n{NormalSummary}\n\n[분야]\n{', '.join(NormalKeyWord)}\n\n[제안내용]\n{NormalSupplySatisfySentence}\n\n[제안내용-키워드]\n{', '.join(NormalSupplySatisfyKeyWord)}\n\n[제안할목표]\n{NormalSupplySupportSentence}\n\n[제안할목표-키워드]\n{', '.join(NormalSupplySupportKeyWord)}\n\n[제안할해결책]\n{NormalSupplySolutionSentence}\n\n[제안할해결책-키워드]\n{', '.join(NormalSupplySolutionKeyWord)}"
 
     return Input
 
@@ -426,28 +424,27 @@ def LongScriptEditFilter(Response, CheckCount):
 #######################
 ## Process LLMResponse 함수
 def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCount, FilterFunc, CheckCount, LLM, mode, MessagesReview, input2 = ""):
-
     ErrorCount = 0
     while True:
         if LLM == "OpenAI":
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, messagesReview = MessagesReview)
         elif LLM == "Anthropic":
-            Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, messagesReview = MessagesReview)
+            Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, messagesReview = MessagesReview)
         Filter = FilterFunc(Response, CheckCount)
         
         if isinstance(Filter, str):
-            print(f"Chain: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | {Filter}")
+            print(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | {Filter}")
             ErrorCount += 1
-            print(f"Chain: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
+            print(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
                 f"오류횟수 {ErrorCount}회, 10초 후 프롬프트 재시도")
             
             if ErrorCount >= 10:
-                sys.exit(f"Chain: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
+                sys.exit(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
                         f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
             time.sleep(10)
             continue
         
-        print(f"Chain: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | JSONDecode 완료")
+        print(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | JSONDecode 완료")
         return Filter
 
 ##################################
@@ -739,7 +736,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
 
 
 
-    print(f"[ User: {email} | Chain: {projectName} | BookScriptGenUpdate 완료 ]")
+    print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")
 
 if __name__ == "__main__":
     

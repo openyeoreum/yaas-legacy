@@ -51,10 +51,11 @@ def AddPromptToDB():
         demandScriptPlan = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5422-01_DemandScriptPlan.json")
         supplyScriptPlan = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-02_SupplyScriptPlan.json")
         similarityScriptPlan = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-03_SimilarityScriptPlan.json")
-        titleAndIndexGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-04_TitleAndIndexGen.json")
-        summaryOfIndexGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-05_SummaryOfIndexGen.json")
-        scriptIntroductionGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-06_ScriptIntroductionGen.json")
-        shortScriptGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-07_ShortScriptGen.json")
+        scriptPlanFeedback = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-04_ScriptPlanFeedback.json")
+        titleAndIndexGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-05_TitleAndIndexGen.json")
+        summaryOfIndexGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-06_SummaryOfIndexGen.json")
+        scriptIntroductionGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-07_ScriptIntroductionGen.json")
+        shortScriptGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-08_ShortScriptGen.json")
         # TextBookPrompt
         # AudioBookPrompt
         bookPreprocess = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b5441_ScriptPrompt/b5441-00_BookPreprocess.json")
@@ -128,6 +129,7 @@ def AddPromptToDB():
             ExistingPrompt.DemandScriptPlan = demandScriptPlan
             ExistingPrompt.SupplyScriptPlan = supplyScriptPlan
             ExistingPrompt.SimilarityScriptPlan = similarityScriptPlan
+            ExistingPrompt.ScriptPlanFeedback = scriptPlanFeedback
             ExistingPrompt.TitleAndIndexGen = titleAndIndexGen
             ExistingPrompt.SummaryOfIndexGen = summaryOfIndexGen
             ExistingPrompt.ScriptIntroductionGen = scriptIntroductionGen
@@ -201,6 +203,7 @@ def AddPromptToDB():
                 DemandScriptPlan = demandScriptPlan,
                 SupplyScriptPlan = supplyScriptPlan,
                 SimilarityScriptPlan = similarityScriptPlan,
+                ScriptPlanFeedback = scriptPlanFeedback,
                 TitleAndIndexGen = titleAndIndexGen,
                 SummaryOfIndexGen = summaryOfIndexGen,
                 ScriptIntroductionGen = scriptIntroductionGen,

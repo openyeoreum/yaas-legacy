@@ -205,6 +205,63 @@ def ScriptPlanFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
 
+## Process1: ScriptPlanFeedback의 Filter(Error 예외처리)
+def ScriptPlanFeedbackFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "ScriptPlanFeedback, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 필수 키 확인
+    required_top_keys = ['배경', '주제', '범위', '개념키워드', '독자키워드', '가치']
+    missing_top_keys = [key for key in required_top_keys if key not in OutputDic]
+    if missing_top_keys:
+        return f"ScriptPlanFeedback, JSONKeyError: 누락된 최상위 키: {', '.join(missing_top_keys)}"
+
+    # Error3: 최상위 키 데이터 타입 검증
+    if not isinstance(OutputDic['배경'], str):
+        return "ScriptPlanFeedback, JSON에서 오류 발생: '배경'은 문자열이어야 합니다"
+    if not isinstance(OutputDic['주제'], str):
+        return "ScriptPlanFeedback, JSON에서 오류 발생: '주제'은 문자열이어야 합니다"
+    if not isinstance(OutputDic['범위'], str):
+        return "ScriptPlanFeedback, JSON에서 오류 발생: '범위'은 문자열이어야 합니다"
+    if not isinstance(OutputDic['개념키워드'], list) or not all(isinstance(item, str) for item in OutputDic['개념키워드']):
+        return "ScriptPlanFeedback, JSON에서 오류 발생: '개념키워드'는 문자열 리스트여야 합니다"
+    if not isinstance(OutputDic['독자키워드'], list) or not all(isinstance(item, str) for item in OutputDic['독자키워드']):
+        return "ScriptPlanFeedback, JSON에서 오류 발생: '독자키워드'는 문자열 리스트여야 합니다"
+
+    # Error4: '가치' 키 구조 검증
+    if not isinstance(OutputDic['가치'], dict):
+        return "ScriptPlanFeedback, JSON에서 오류 발생: '가치'는 딕셔너리 형태여야 합니다"
+
+    # '가치' 내부 필수 키 확인
+    required_sub_keys = ['글이전해줄핵심가치', '글이전해줄핵심포인트들', '글이전해줄핵심비전']
+    for sub_key in required_sub_keys:
+        if sub_key not in OutputDic['가치']:
+            return f"ScriptPlanFeedback, JSONKeyError: '가치'에 누락된 키: {sub_key}"
+
+        sub_item = OutputDic['가치'][sub_key]
+
+        # 각 항목은 딕셔너리 형태여야 함
+        if not isinstance(sub_item, dict):
+            return f"ScriptPlanFeedback, JSON에서 오류 발생: '가치 > {sub_key}'는 딕셔너리 형태여야 합니다"
+
+        # 내부 필수 키 확인
+        required_detail_keys = ['설명', '키워드']
+        missing_detail_keys = [key for key in required_detail_keys if key not in sub_item]
+        if missing_detail_keys:
+            return f"ScriptPlanFeedback, JSONKeyError: '가치 > {sub_key}'에 누락된 키: {', '.join(missing_detail_keys)}"
+
+        # 데이터 타입 검증
+        if not isinstance(sub_item['설명'], str):
+            return f"ScriptPlanFeedback, JSON에서 오류 발생: '가치 > {sub_key} > 설명'은 문자열이어야 합니다"
+        if not isinstance(sub_item['키워드'], list) or not all(isinstance(item, str) for item in sub_item['키워드']):
+            return f"ScriptPlanFeedback, JSON에서 오류 발생: '가치 > {sub_key} > 키워드'는 문자열 리스트여야 합니다"
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic
+
 ## Process2: TitleAndIndexGen의 Filter(Error 예외처리)
 def TitleAndIndexGenFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
@@ -513,39 +570,108 @@ def ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, Proj
     
     return ProjectDataFrameScriptPalnPath
 
+################################################
+##### ProcessFeedback Input 생성 및 Edit 저장 #####
+################################################
+## Prompt 벨류값 수정 함수
+def PromptToModify(Value):
+    if isinstance(Value, list):
+        # 리스트 내부의 각 요소 처리
+        return [
+            value.replace("<prompt:", "<수정:").replace("<수정: >", "").strip() 
+            if isinstance(value, str) else value
+            for value in Value
+        ]
+    elif isinstance(Value, str):
+        # 문자열 처리
+        return Value.replace("<prompt:", "<수정:").replace("<수정: >", "").strip()
+
+## ProcessDic 재구조화 함수
+def RestructureProcessDic(ProcessDic):
+    def ModifyValues(data):
+        if isinstance(data, dict):
+            NewDict = {}
+            for key, value in data.items():
+                if key == "Weight":
+                    continue  # 'Weight' 키 제거
+                
+                if isinstance(value, dict) or isinstance(value, list):
+                    NewValue = ModifyValues(value)  # 재귀 처리
+                elif isinstance(value, str):
+                    NewValue = value + "<prompt: >"
+                else:
+                    NewValue = value
+                
+                NewDict[key] = NewValue
+            return NewDict
+        elif isinstance(data, list):
+            if len(data) > 0:
+                data[-1] = "<prompt: >"  # 리스트의 마지막 요소 변경
+            return data
+        else:
+            return data
+
+    return ModifyValues(ProcessDic)
+
+## Feedback1~3: ScriptPlanFeedback Input 생성
+def ScriptPlanFeedbackInput(PromptInputDic):
+    PromptInput = PromptInputDic['PromptData']
+    ## PromptInput 생성
+    PromptModifyInput = {
+        '배경': PromptToModify(PromptInput['Background']),
+        '주제': PromptToModify(PromptInput['Subject']),
+        '범위': PromptToModify(PromptInput['Range']),
+        '개념키워드': PromptToModify(PromptInput['ConceptKeyword']),
+        '독자키워드': PromptToModify(PromptInput['TargetKeyword']),
+        '가치': {
+            '글이전해줄핵심가치': {
+                '설명': PromptToModify(PromptInput['Supply']['Value']['Sentence']),
+                '키워드': PromptToModify(PromptInput['Supply']['Value']['KeyWord'])
+            },
+            '글이전해줄핵심포인트들': {
+                '설명': PromptToModify(PromptInput['Supply']['Points']['Sentence']),
+                '키워드': PromptToModify(PromptInput['Supply']['Points']['KeyWord'])
+            },
+            '글이전해줄핵심비전': {
+                '설명': PromptToModify(PromptInput['Supply']['Vision']['Sentence']),
+                '키워드': PromptToModify(PromptInput['Supply']['Vision']['KeyWord'])
+            }
+        }
+    }
+    
+    return PromptModifyInput
+
+## Feedback1~3: ScriptPlanFeedback Edit 저장
+def ScriptPlanFeedbackEditUpdate(ScriptEditPath, Process, EditCount, Response):
+    ## ScriptEdit 불러오기
+    with open(ScriptEditPath, 'r', encoding = 'utf-8') as ScriptEditJson:
+        ScriptEdit = json.load(ScriptEditJson)
+    
+    ## ScriptEdit 업데이트
+    ProcessDic = ScriptEdit[Process][EditCount]
+    ProcessDic['Background'] = Response['배경']
+    ProcessDic['Subject'] = Response['주제']
+    ProcessDic['Range'] = Response['범위']
+    ProcessDic['ConceptKeyword'] = Response['개념키워드']
+    ProcessDic['TargetKeyword'] = Response['독자키워드']
+    ProcessDic['Supply']['Value']['Sentence'] = Response['가치']['글이전해줄핵심가치']['설명']
+    ProcessDic['Supply']['Value']['KeyWord'] = Response['가치']['글이전해줄핵심가치']['키워드']
+    ProcessDic['Supply']['Points']['Sentence'] = Response['가치']['글이전해줄핵심포인트들']['설명']
+    ProcessDic['Supply']['Points']['KeyWord'] = Response['가치']['글이전해줄핵심포인트들']['키워드']
+    ProcessDic['Supply']['Vision']['Sentence'] = Response['가치']['글이전해줄핵심비전']['설명']
+    ProcessDic['Supply']['Vision']['KeyWord'] = Response['가치']['글이전해줄핵심비전']['키워드']
+    ReStructureProcessDic = RestructureProcessDic(ProcessDic)
+    ScriptEdit[Process][EditCount] = ReStructureProcessDic
+    
+    ## ScriptEdit 저장
+    with open(ScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
+        json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
+
 ##############################
 ##### ProcessEdit 업데이트 #####
 ##############################
 ## Process Edit 저장
 def ProcessEditSave(ProjectDataFramePath, ScriptEditPath, Process, TotalInputCount):
-        
-    ## ProcessDic 재구조화 함수
-    def RestructureProcessDic(ProcessDic):
-        def ModifyValues(data):
-            if isinstance(data, dict):
-                NewDict = {}
-                for key, value in data.items():
-                    if key == "Weight":
-                        continue  # 'Weight' 키 제거
-                    
-                    if isinstance(value, dict) or isinstance(value, list):
-                        NewValue = ModifyValues(value)  # 재귀 처리
-                    elif isinstance(value, str):
-                        NewValue = value + "<prompt: >"
-                    else:
-                        NewValue = value
-                    
-                    NewDict[key] = NewValue
-                return NewDict
-            elif isinstance(data, list):
-                if len(data) > 0:
-                    data[-1] = "<prompt: >"  # 리스트의 마지막 요소 변경
-                return data
-            else:
-                return data
-
-        return ModifyValues(ProcessDic)
-    
     ## ScriptDataFrame 불러온 뒤 Completion 확인
     with open(ProjectDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         ScriptDataFrame = json.load(DataFrameJson)
@@ -718,16 +844,29 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                     
                 ## DataFrame 저장
                 ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameScriptPalnPath, ScriptPlanResponse, Process, inputCount, TotalInputCount)
+                
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameScriptPalnPath, ScriptEditPath, Process, TotalInputCount)
         sys.exit(f"[ {projectName}_Script_Edit 생성 완료: (({Process}))을 검수한 뒤 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
     if EditCheck:
         ## FeedbackPrompt Response 생성
         if PromptCheck:
-            for PromptInput in PromptInputList:
-                print(f"PromptInput: {PromptInput}\n\n")
-                ## 1. 수정 프로세스 진행, 2. 수정 사항으로 ScriptEdit 변경 후 다시 <prompt: > 적용
-                # ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, PromptInput, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2)
+            FeedbackProcess = "ScriptPlanFeedback"
+            TotalInputCount = len(PromptInputList)
+            for PromptInputDic in PromptInputList:
+                inputCount = PromptInputDic['PromptId']
+                EditCount = PromptInputDic['PromptId'] - 1
+
+                ## PromptInput 생성
+                FeedbackPromptInput = ScriptPlanFeedbackInput(PromptInputDic)
+
+                ## Response 생성
+                ScriptPlanFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, ScriptPlanFeedbackFilter, CheckCount, "OpenAI", mode, MessagesReview)
+
+                ## Edit 업데이트
+                ScriptPlanFeedbackEditUpdate(ScriptEditPath, Process, EditCount, ScriptPlanFeedbackResponse)
+                    ## 1. Input수정 한글화, prompt를 수정으로 변경, 2. 수정 프로세스 진행, 3. 수정 사항으로 ScriptEdit 변경 후 다시 <prompt: > 적용
+                    # ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, PromptInput, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2)
     
             sys.exit(f"[ {projectName}_Script_Edit 수정 완료: (({Process}))을 검수한 뒤 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
         if not EditCompletion:

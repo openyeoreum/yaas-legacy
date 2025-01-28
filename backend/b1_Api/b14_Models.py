@@ -462,6 +462,7 @@ class Prompt(Base):
     DemandScriptPlan = Column(JSON)
     SupplyScriptPlan = Column(JSON)
     SimilarityScriptPlan = Column(JSON)
+    ScriptPlanFeedback = Column(JSON)
     TitleAndIndexGen = Column(JSON)
     SummaryOfIndexGen = Column(JSON)
     ScriptIntroductionGen = Column(JSON)

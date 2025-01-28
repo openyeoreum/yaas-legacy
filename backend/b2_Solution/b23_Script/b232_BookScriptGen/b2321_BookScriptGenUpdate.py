@@ -808,11 +808,11 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     DataFrameCompletion = 'No' # 데이터프레임 완성 초기화
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameScriptPalnPath, InputCount, DataFrameCompletion) # 현재의 인풋 카운트
     EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
-    print(f"InputCount: {InputCount}")
-    print(f"EditCheck: {EditCheck}")
-    print(f"EditCompletion: {EditCompletion}")
-    print(f"PromptCheck: {PromptCheck}")
-    print(f"PromptInputList: {PromptInputList}")
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    # print(f"PromptCheck: {PromptCheck}")
+    # print(f"PromptInputList: {PromptInputList}")
     ## Process 진행
     if not EditCheck:
         if DataFrameCompletion == 'No':

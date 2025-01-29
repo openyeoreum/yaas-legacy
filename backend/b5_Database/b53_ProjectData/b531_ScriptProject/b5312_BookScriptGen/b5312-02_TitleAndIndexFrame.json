@@ -9,9 +9,53 @@
     },
     [
         {
-            "IndexId": 0,
-            "IndexTag": "Title, SubTitle, Part 등의 IndexTag",
-            "Index": "Index 내용"
+            "MainIndexId": 0,
+            "Type": "열거형, 결론우선형, 공감형 중 1개 선택",
+            "TitleType": "신조어, 성과강조, 문제해결, 호기심, 숫자임팩트, 스토리메타포, 트렌드접목, 고민언급, 키워드감성, 비전도전 중 1개 선택",
+            "Title": "도서의 제목 작성",
+            "SubTitle": "도서의 부제 작성",
+            "MainIndex": [
+                {
+                    "IndexId": 1,
+                    "Index": "글쓰기형태와"
+                },
+                {
+                    "IndexId": 2,
+                    "Index": "작성된 제목과"
+                },
+                {
+                    "IndexId": 3,
+                    "Index": "부제를 바탕으로"
+                },
+                {
+                    "IndexId": 4,
+                    "Index": "도서의"
+                },
+                {
+                    "IndexId": 5,
+                    "Index": "전체 내용을"
+                },
+                {
+                    "IndexId": 6,
+                    "Index": "전개하는"
+                },
+                {
+                    "IndexId": 7,
+                    "Index": "고도로"
+                },
+                {
+                    "IndexId": 8,
+                    "Index": "창의적인"
+                },
+                {
+                    "IndexId": 9,
+                    "Index": "메인목차"
+                },
+                {
+                    "IndexId": 10,
+                    "Index": "10개 작성"
+                }
+            ]
         }
     ]
 ]

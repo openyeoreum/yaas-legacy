@@ -33,10 +33,10 @@ def LoadSearchResult(TotalSearchResultDataTempPath, ProjectName, Intention):
     LastestTopScoreSearchResultPath = LastestSearchResultPath.replace('].json', ']_TopScore.json')
 
     # SearchResult, TopScoreSearchResultPath 로드
-    with open(LastestSearchResultPath, "r", encoding="utf-8") as f:
-        SearchResultJson = json.load(f)
-    with open(LastestTopScoreSearchResultPath, "r", encoding="utf-8") as f:
-        TopScoreSearchResultJson = json.load(f)
+    with open(LastestSearchResultPath, "r", encoding = "utf-8") as SearchResult_json:
+        SearchResultJson = json.load(SearchResult_json)
+    with open(LastestTopScoreSearchResultPath, "r", encoding = "utf-8") as TopScoreSearchResult_json:
+        TopScoreSearchResultJson = json.load(TopScoreSearchResult_json)
     
 
     return SearchResultJson, TopScoreSearchResultJson
@@ -127,7 +127,12 @@ def SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, Project
 
     return Input
 
-## Process2: TitleAndIndexGen의 Input   
+## Process2-8: Process의 InputList
+def ProcessInputList(ScriptEditPath, BeforeProcess):
+    with open(ScriptEditPath, "r", encoding = "utf-8") as ScriptEditJson:
+        InputList = json.load(ScriptEditJson)[BeforeProcess]
+    
+    return InputList
 
 ## Process3: SummaryOfIndexGen의 Input
 
@@ -508,7 +513,11 @@ def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCo
 ##### ProcessResponse 업데이트 #####
 ##################################
 ## Process DataFrame Completion 및 InputCount 확인
-def ProcessDataFrameCheck(ProjectDataFramePath, InputCount, DataFrameCompletion):
+def ProcessDataFrameCheck(ProjectDataFramePath):
+    ## DataFrameCompletion 초기화
+    DataFrameCompletion = 'No'
+    ## InputCount 초기화
+    InputCount = 1 
     if not os.path.exists(ProjectDataFramePath):
         return InputCount, DataFrameCompletion
     else:
@@ -753,7 +762,7 @@ def ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount):
     PromptInputList = []
     ScriptEditProcess = []
     if os.path.exists(ScriptEditPath):
-        ## ScriptEdit 불러오기
+        ## '...Edit.json 여부' 확인
         with open(ScriptEditPath, 'r', encoding='utf-8') as ScriptEditJson:
             ScriptEdit = json.load(ScriptEditJson)
         if Process in ScriptEdit and len(ScriptEdit[Process]) == TotalInputCount:
@@ -766,8 +775,13 @@ def ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount):
                 if PromptCheck(CleanedProcessDic):  # '<prompt: ...>'이 있는 경우만 리스트에 추가
                     PromptInputList.append({'PromptId': i + 1, 'PromptData': CleanedProcessDic})
                     promptCheck = True
-        if ScriptEdit[f"{Process}Completion"] == 'Completion':
-            EditCompletion = True
+                    
+            ## 'ProcessCompletion' 확인
+            if ScriptEdit[f"{Process}Completion"] == 'Completion':
+                ScriptEdit[Process] = CleanPrompts(ScriptEdit[Process])
+                with open(ScriptEditPath, 'w', encoding='utf-8') as ScriptEditJson:
+                    json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
+                EditCompletion = True
         
     return EditCheck, EditCompletion, promptCheck, PromptInputList
 
@@ -787,26 +801,25 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     ProjectDataFrameScriptPath = os.path.join(ProjectScriptPath, f'{projectName}_dataframe_script_file')
     ProjectMasterScriptPath = os.path.join(ProjectScriptPath, f'{projectName}_master_script_file')
     ScriptEditPath = os.path.join(ProjectMasterScriptPath, f'[{projectName}_Script_Edit].json')
-
-
-    ### Process1: ScriptPlan Response 생성 ###
-    ## Process 경로
+    
     BookScriptGenDataFramePath = "/yaas/backend/b5_Database/b53_ProjectData/b531_ScriptProject/b5312_BookScriptGen"
+
+    #########################################
+    ### Process1: ScriptPlan Response 생성 ###
+    #########################################
+
     ## Process 설정
     ProcessNumber = '01'
     Process = "ScriptPlan"
     IntentionProcess = Intention + Process
 
     ## ScriptPlan 경로 생성
-    ProjectDataFrameScriptPalnPath = os.path.join(ProjectDataFrameScriptPath, f'{email}_{ProjectName}_{ProcessNumber}_{Process}DataFrame.json')
+    ProjectDataFrameScriptPalnPath = os.path.join(ProjectDataFrameScriptPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    TotalInputCount = 1 ## len(InputList)# 인풋의 전체 카운트
-    
-    InputCount = 1 # 인풋 카운트 초기화
-    DataFrameCompletion = 'No' # 데이터프레임 완성 초기화
-    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameScriptPalnPath, InputCount, DataFrameCompletion) # 현재의 인풋 카운트
+    TotalInputCount = 1 # TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameScriptPalnPath)
     EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
     # print(f"InputCount: {InputCount}")
     # print(f"EditCheck: {EditCheck}")
@@ -820,7 +833,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 ## Process1-1: DemandScriptPlan Response 생성
                 if Intention == "Demand":
                     ## Input 생성
-                    Input = DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
+                    Input = DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, projectName, Intention)
                     
                     ## Response 생성
                     ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, Input, inputCount, TotalInputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview)
@@ -828,7 +841,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 ## Process1-2: SupplyScriptPlan Response 생성
                 if Intention == "Supply":
                     ## Input 생성
-                    Input = SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
+                    Input = SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, projectName, Intention)
                     
                     ## Response 생성
                     ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, Input, inputCount, TotalInputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview)
@@ -836,18 +849,18 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 ## Process1-3: SimilarityScriptPlan Response 생성
                 if Intention == "Similarity":
                     ## Input 생성
-                    Input1 = SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
-                    Input2 = DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention)
+                    Input1 = SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, projectName, Intention)
+                    Input2 = DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, projectName, Intention)
                     
                     ## Response 생성
                     ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, Input1, inputCount, TotalInputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2)
                     
                 ## DataFrame 저장
-                ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameScriptPalnPath, ScriptPlanResponse, Process, inputCount, TotalInputCount)
+                ScriptPlanProcessDataFrameSave(projectName, BookScriptGenDataFramePath, ProjectDataFrameScriptPalnPath, ScriptPlanResponse, Process, inputCount, TotalInputCount)
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameScriptPalnPath, ScriptEditPath, Process, TotalInputCount)
-        sys.exit(f"[ {projectName}_Script_Edit 생성 완료: (({Process}))을 검수한 뒤 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+        sys.exit(f"[ {projectName}_Script_Edit 생성 완료: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
     if EditCheck:
         ## FeedbackPrompt Response 생성
         if PromptCheck:
@@ -868,11 +881,33 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                     ## 1. Input수정 한글화, prompt를 수정으로 변경, 2. 수정 프로세스 진행, 3. 수정 사항으로 ScriptEdit 변경 후 다시 <prompt: > 적용
                     # ScriptPlanResponse = ProcessResponse(projectName, email, IntentionProcess, PromptInput, InputCount, InputCount, ScriptPlanFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2)
     
-            sys.exit(f"[ {projectName}_Script_Edit 수정 완료: (({Process}))을 검수한 뒤 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 수정 완료: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
         if not EditCompletion:
-            sys.exit(f"[ {projectName}_Script_Edit: (({Process}))을 검수한 뒤 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
 
-
+    ###############################################
+    ### Process2: TitleAndIndexGen Response 생성 ###
+    ###############################################
+    
+    ## Process 설정
+    ProcessNumber = '02'
+    BeforeProcess = Process
+    Process = "TitleAndIndexGen"
+    
+    ## TitleAndIndexGen 경로 생성
+    ProjectDataFrameTitleAndIndexPath = os.path.join(ProjectDataFrameScriptPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+    
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = ProcessInputList(ScriptEditPath, BeforeProcess)
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTitleAndIndexPath)
+    EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
+    print(f"InputCount: {InputCount}")
+    print(f"EditCheck: {EditCheck}")
+    print(f"EditCompletion: {EditCompletion}")
+    print(f"PromptCheck: {PromptCheck}")
+    print(f"PromptInputList: {PromptInputList}")
 
 
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")

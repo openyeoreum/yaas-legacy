@@ -762,7 +762,7 @@ def ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount):
     PromptInputList = []
     ScriptEditProcess = []
     if os.path.exists(ScriptEditPath):
-        ## '...Edit.json 여부' 확인
+        ## '[...Edit].json' 확인
         with open(ScriptEditPath, 'r', encoding='utf-8') as ScriptEditJson:
             ScriptEdit = json.load(ScriptEditJson)
         if Process in ScriptEdit and len(ScriptEdit[Process]) == TotalInputCount:

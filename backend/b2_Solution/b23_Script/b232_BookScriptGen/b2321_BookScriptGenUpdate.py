@@ -127,10 +127,28 @@ def SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, Project
 
     return Input
 
-## Process2-8: Process의 InputList
-def ProcessInputList(ScriptEditPath, BeforeProcess):
+## Process2: TitleAndIndexGen의 InputList
+def EditToTitleAndIndexGenInputList(ScriptEditPath, BeforeProcess):
     with open(ScriptEditPath, "r", encoding = "utf-8") as ScriptEditJson:
-        InputList = json.load(ScriptEditJson)[BeforeProcess]
+        ScriptEditList = json.load(ScriptEditJson)[BeforeProcess]
+    
+    InputList = []
+    for i, ScriptEdit in enumerate(ScriptEditList):
+        Background = ScriptEdit['Background']
+        Subject = ScriptEdit['Subject']
+        Range = ScriptEdit['Range']
+        ConceptKeyword = ScriptEdit['ConceptKeyword']
+        TargetKeyword = ScriptEdit['TargetKeyword']
+        SupplyValueSentence = ScriptEdit['Supply']['Value']['Sentence']
+        SupplyValueKeyword = ScriptEdit['Supply']['Value']['KeyWord']
+        SupplyPointSentence = ScriptEdit['Supply']['Points']['Sentence']
+        SupplyPointKeyword = ScriptEdit['Supply']['Points']['KeyWord']
+        SupplyVisionSentence = ScriptEdit['Supply']['Vision']['Sentence']
+        SupplyVisionKeyword = ScriptEdit['Supply']['Vision']['KeyWord']
+        
+        Input = f"[배경]\n{Background}\n\n[주제]\n{Subject}\n\n[범위]\n{Range}\n\n[개념키워드]\n{', '.join(ConceptKeyword)}\n\n[독자키워드]\n{', '.join(TargetKeyword)}\n\n[글이전해줄핵심가치]\n{SupplyValueSentence}\n\n[글이전해줄핵심가치-키워드]\n{', '.join(SupplyValueKeyword)}\n\n[글이전해줄핵심포인트들]\n{SupplyPointSentence}\n\n[글이전해줄핵심포인트들-키워드]\n{', '.join(SupplyPointKeyword)}\n\n[글이전해줄핵심비전]\n{SupplyVisionSentence}\n\n[글이전해줄핵심비전-키워드]\n{', '.join(SupplyVisionKeyword)}"
+        
+        InputList.append({'Id': i+1, 'Input': Input})
     
     return InputList
 
@@ -579,6 +597,19 @@ def ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, Proj
     
     return ProjectDataFrameScriptPalnPath
 
+def TitleAndIndexGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameTitleAndIndexPath, TitleAndIndexGenResponse, Process, inputCount, TotalInputCount):
+    ## TitleAndIndexGenFrame 불러오기
+    TitleAndIndexFramePath = os.path.join(BookScriptGenDataFramePath, "b5312-02_TitleAndIndexFrame.json")
+    with open(TitleAndIndexFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        TitleAndIndexFrame = json.load(DataFrameJson)
+        
+    ## TitleAndIndexFrame 업데이트
+    TitleAndIndexFrame[0]['ProjectName'] = ProjectName
+    TitleAndIndexFrame[0]['TaskName'] = Process
+    
+    ## TitleAndIndexFrame 첫번째 데이터 프레임 복사
+    
+
 ################################################
 ##### ProcessFeedback Input 생성 및 Edit 저장 #####
 ################################################
@@ -899,15 +930,28 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = ProcessInputList(ScriptEditPath, BeforeProcess)
+    InputList = EditToTitleAndIndexGenInputList(ScriptEditPath, BeforeProcess)
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTitleAndIndexPath)
     EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
-    print(f"InputCount: {InputCount}")
-    print(f"EditCheck: {EditCheck}")
-    print(f"EditCompletion: {EditCompletion}")
-    print(f"PromptCheck: {PromptCheck}")
-    print(f"PromptInputList: {PromptInputList}")
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    # print(f"PromptCheck: {PromptCheck}")
+    # print(f"PromptInputList: {PromptInputList}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList[i]['Id']
+                Input = InputList[i]['Input']
+    
+                ## Response 생성
+                TitleAndIndexGenResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TitleAndIndexGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## DataFrame 저장
+                TitleAndIndexGenProcessDataFrameSave(projectName, BookScriptGenDataFramePath, ProjectDataFrameTitleAndIndexPath, TitleAndIndexGenResponse, Process, inputCount, TotalInputCount)
 
 
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")

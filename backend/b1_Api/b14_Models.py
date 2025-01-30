@@ -464,9 +464,13 @@ class Prompt(Base):
     SimilarityScriptPlan = Column(JSON)
     ScriptPlanFeedback = Column(JSON)
     TitleAndIndexGen = Column(JSON)
+    TitleAndIndexGenFeedback = Column(JSON)
     SummaryOfIndexGen = Column(JSON)
+    SummaryOfIndexGenFeedback = Column(JSON)
     ScriptIntroductionGen = Column(JSON)
+    ScriptIntroductionGenFeedback = Column(JSON)
     ShortScriptGen = Column(JSON)
+    ShortScriptGenFeedback = Column(JSON)
     
     ## TextBookPrompt
     

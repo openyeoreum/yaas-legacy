@@ -167,7 +167,7 @@ def EditToTitleAndIndexGenInputList(ScriptEditPath, BeforeProcess):
 ######################
 ##### Filter 조건 #####
 ######################
-## Process1: ScriptPlan의 Filter(Error 예외처리)
+## Process1~3: ScriptPlan의 Filter(Error 예외처리)
 def ScriptPlanFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
@@ -228,7 +228,7 @@ def ScriptPlanFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
 
-## Process1: ScriptPlanFeedback의 Filter(Error 예외처리)
+## Process4: ScriptPlanFeedback의 Filter(Error 예외처리)
 def ScriptPlanFeedbackFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
@@ -285,7 +285,7 @@ def ScriptPlanFeedbackFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
 
-## Process2: TitleAndIndexGen의 Filter(Error 예외처리)
+## Process5~6: TitleAndIndexGen의 Filter(Error 예외처리)
 def TitleAndIndexGenFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
@@ -331,8 +331,8 @@ def TitleAndIndexGenFilter(Response, CheckCount):
         if missing_keys:
             return f"TitleAndIndexGen, JSONKeyError: '메인목차[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
-        if not isinstance(item['순번'], str) or not item['순번'].isdigit():
-            return f"TitleAndIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 순번'은 숫자로 된 문자열이어야 합니다"
+        if (not isinstance(item['순번'], (int, str))) or (isinstance(item['순번'], str) and not item['순번'].isdigit()):
+            return f"TitleAndIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 순번'은 정수 또는 숫자로 된 문자열이어야 합니다"
 
         if not isinstance(item['목차'], str):
             return f"TitleAndIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 목차'는 문자열이어야 합니다"
@@ -549,7 +549,7 @@ def ProcessDataFrameCheck(ProjectDataFramePath):
         
         return InputCount, DataFrameCompletion
 
-## Process1: ScriptPlanProcess DataFrame 저장
+## Process1~3: ScriptPlanProcess DataFrame 저장
 def ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameScriptPalnPath, ScriptPlanResponse, Process, InputCount, TotalInputCount):
     ## ScriptPlanFrame 불러오기
     ScriptPlanFramePath = os.path.join(BookScriptGenDataFramePath, "b5312-01_ScriptPlanFrame.json") 
@@ -704,6 +704,26 @@ def ScriptPlanFeedbackInput(PromptInputDic):
     
     return PromptModifyInput
 
+## Feedback5: TitleAndIndexGenFeedback Input 생성
+def TitleAndIndexGenFeedbackInput(PromptInputDic):
+    PromptInput = PromptInputDic['PromptData']
+    ## PromptInput 생성
+    PromptModifyInput = {
+        '글쓰기형태': PromptToModify(PromptInput['Type']),
+        '제목부제형태': PromptToModify(PromptInput['TitleType']),
+        '제목': PromptToModify(PromptInput['Title']),
+        '부제': PromptToModify(PromptInput['SubTitle']),
+        '메인목차': [
+            {
+                '순번': PromptToModify(PromptInput['MainIndex'][i]['IndexId']),
+                '목차': PromptToModify(PromptInput['MainIndex'][i]['Index'])
+            }
+            for i in range(len(PromptInput['MainIndex']))
+        ]
+    }
+    
+    return PromptModifyInput
+
 ## Feedback1~3: ScriptPlanFeedback Edit 저장
 def ScriptPlanFeedbackEditUpdate(ScriptEditPath, Process, EditCount, Response):
     ## ScriptEdit 불러오기
@@ -723,6 +743,30 @@ def ScriptPlanFeedbackEditUpdate(ScriptEditPath, Process, EditCount, Response):
     ProcessDic['Supply']['Points']['KeyWord'] = Response['가치']['글이전해줄핵심포인트들']['키워드']
     ProcessDic['Supply']['Vision']['Sentence'] = Response['가치']['글이전해줄핵심비전']['설명']
     ProcessDic['Supply']['Vision']['KeyWord'] = Response['가치']['글이전해줄핵심비전']['키워드']
+    ReStructureProcessDic = RestructureProcessDic(ProcessDic)
+    ScriptEdit[Process][EditCount] = ReStructureProcessDic
+    
+    ## ScriptEdit 저장
+    with open(ScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
+        json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
+        
+## Feedback5: TitleAndIndexGenFeedback Edit 저장
+def TitleAndIndexGenFeedbackEditUpdate(ScriptEditPath, Process, EditCount, Response):
+    ## ScriptEdit 불러오기
+    with open(ScriptEditPath, 'r', encoding = 'utf-8') as ScriptEditJson:
+        ScriptEdit = json.load(ScriptEditJson)
+    
+    ## ScriptEdit 업데이트
+    ProcessDic = ScriptEdit[Process][EditCount]
+    ProcessDic['Type'] = Response['글쓰기형태']
+    ProcessDic['TitleType'] = Response['제목부제형태']
+    ProcessDic['Title'] = Response['제목']
+    ProcessDic['SubTitle'] = Response['부제']
+    ProcessDic['MainIndex'] = []
+    for MainIndex in Response['메인목차']:
+        IndexId = int(MainIndex['순번'])
+        Index = MainIndex['목차']
+        ProcessDic['MainIndex'].append({'IndexId': IndexId, 'Index': Index})
     ReStructureProcessDic = RestructureProcessDic(ProcessDic)
     ScriptEdit[Process][EditCount] = ReStructureProcessDic
     
@@ -767,28 +811,48 @@ def ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount):
         if isinstance(Edit, dict):
             NewDict = {}
             for key, value in Edit.items():
+                # 숫자나 ID 관련 필드는 그대로 유지
+                if "Id" in key:  # ID 관련 키들 보존
+                    NewDict[key] = value
+                
                 if isinstance(value, str):
+                    # 문자열에서 빈 prompt 태그 제거
                     NewValue = value.replace("<prompt: >", "").strip()
-                    if NewValue:  # 값이 비어있지 않다면 추가
+                    if NewValue:  # 값이 비어있지 않으면 추가
                         NewDict[key] = NewValue
                 elif isinstance(value, dict):
+                    # 중첩된 딕셔너리 처리
                     NewValue = CleanPrompts(value)
-                    if NewValue:  # 빈 딕셔너리는 추가하지 않음
+                    if NewValue:  # 빈 딕셔너리가 아니면 추가
                         NewDict[key] = NewValue
                 elif isinstance(value, list):
-                    cleaned_list = [CleanPrompts(item) if isinstance(item, dict) else item.replace("<prompt: >", "").strip() for item in value]
-                    cleaned_list = [item for item in cleaned_list if item]  # 빈 값 제거
-                    if cleaned_list:  # 리스트가 비어 있지 않다면 추가
+                    # 리스트 내부 요소 처리
+                    cleaned_list = []
+                    for item in value:
+                        if isinstance(item, dict):
+                            cleaned_dict = CleanPrompts(item)
+                            if cleaned_dict:  # 빈 딕셔너리가 아니면 추가
+                                cleaned_list.append(cleaned_dict)
+                        elif isinstance(item, str):
+                            cleaned_str = item.replace("<prompt: >", "").strip()
+                            if cleaned_str:  # 빈 문자열이 아니면 추가
+                                cleaned_list.append(cleaned_str)
+                        else:
+                            cleaned_list.append(item)
+                    if cleaned_list:  # 리스트가 비어있지 않으면 추가
                         NewDict[key] = cleaned_list
+                else:
+                    # 다른 타입의 값은 그대로 유지
+                    NewDict[key] = value
             return NewDict
-
         elif isinstance(Edit, list):
-            cleaned_list = [CleanPrompts(item) if isinstance(item, dict) else item.replace("<prompt: >", "").strip() for item in Edit]
-            return [item for item in cleaned_list if item]  # 빈 값 제거
-
+            # 리스트 처리
+            return [CleanPrompts(item) if isinstance(item, dict) else 
+                   item.replace("<prompt: >", "").strip() if isinstance(item, str) 
+                   else item for item in Edit if item]
         elif isinstance(Edit, str):
+            # 문자열 처리
             return Edit.replace("<prompt: >", "").strip()
-
         return Edit
 
     ## Prompt 확인 함수
@@ -963,11 +1027,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTitleAndIndexPath)
     EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
-    print(f"InputCount: {InputCount}")
-    print(f"EditCheck: {EditCheck}")
-    print(f"EditCompletion: {EditCompletion}")
-    print(f"PromptCheck: {PromptCheck}")
-    print(f"PromptInputList: {PromptInputList}")
+    
     ## Process 진행
     if not EditCheck:
         if DataFrameCompletion == 'No':
@@ -997,6 +1057,18 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 EditCount = PromptInputDic['PromptId'] - 1
                 
                 ## PromptInput 생성
+                FeedbackPromptInput = TitleAndIndexGenFeedbackInput(PromptInputDic)
+                
+                ## Response 생성
+                TitleAndIndexGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, TitleAndIndexGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## Edit 업데이트
+                TitleAndIndexGenFeedbackEditUpdate(ScriptEditPath, Process, EditCount, TitleAndIndexGenFeedbackResponse)
+
+            sys.exit(f"[ {projectName}_Script_Edit -> {Process} 수정 완료: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+            
+        if not EditCompletion:
+            sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
 
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")
 

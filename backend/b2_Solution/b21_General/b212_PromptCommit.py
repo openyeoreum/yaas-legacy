@@ -53,9 +53,13 @@ def AddPromptToDB():
         similarityScriptPlan = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-03_SimilarityScriptPlan.json")
         scriptPlanFeedback = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-04_ScriptPlanFeedback.json")
         titleAndIndexGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-05_TitleAndIndexGen.json")
-        summaryOfIndexGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-06_SummaryOfIndexGen.json")
-        scriptIntroductionGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-07_ScriptIntroductionGen.json")
-        shortScriptGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-08_ShortScriptGen.json")
+        titleAndIndexGenFeedback = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-06_TitleAndIndexGenFeedback.json")
+        summaryOfIndexGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-07_SummaryOfIndexGen.json")
+        summaryOfIndexGenFeedback = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-08_SummaryOfIndexGenFeedback.json")
+        scriptIntroductionGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-09_ScriptIntroductionGen.json")
+        scriptIntroductionGenFeedback = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-10_ScriptIntroductionGenFeedback.json")
+        shortScriptGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-11_ShortScriptGen.json")
+        shortScriptGenFeedback = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-12_ShortScriptGenFeedback.json")
         # TextBookPrompt
         # AudioBookPrompt
         bookPreprocess = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b5441_ScriptPrompt/b5441-00_BookPreprocess.json")
@@ -131,9 +135,13 @@ def AddPromptToDB():
             ExistingPrompt.SimilarityScriptPlan = similarityScriptPlan
             ExistingPrompt.ScriptPlanFeedback = scriptPlanFeedback
             ExistingPrompt.TitleAndIndexGen = titleAndIndexGen
+            ExistingPrompt.TitleAndIndexGenFeedback = titleAndIndexGenFeedback
             ExistingPrompt.SummaryOfIndexGen = summaryOfIndexGen
+            ExistingPrompt.SummaryOfIndexGenFeedback = summaryOfIndexGenFeedback
             ExistingPrompt.ScriptIntroductionGen = scriptIntroductionGen
+            ExistingPrompt.ScriptIntroductionGenFeedback = scriptIntroductionGenFeedback
             ExistingPrompt.ShortScriptGen = shortScriptGen
+            ExistingPrompt.ShortScriptGenFeedback = shortScriptGenFeedback
             ExistingPrompt.BookPreprocess = bookPreprocess
             ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
             ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
@@ -205,9 +213,13 @@ def AddPromptToDB():
                 SimilarityScriptPlan = similarityScriptPlan,
                 ScriptPlanFeedback = scriptPlanFeedback,
                 TitleAndIndexGen = titleAndIndexGen,
+                TitleAndIndexGenFeedback = titleAndIndexGenFeedback,
                 SummaryOfIndexGen = summaryOfIndexGen,
+                SummaryOfIndexGenFeedback = summaryOfIndexGenFeedback,
                 ScriptIntroductionGen = scriptIntroductionGen,
+                ScriptIntroductionGenFeedback = scriptIntroductionGenFeedback,
                 ShortScriptGen = shortScriptGen,
+                ShortScriptGenFeedback = shortScriptGenFeedback,
                 BookPreprocess = bookPreprocess,
                 IndexDefinePreprocess = indexDefinePreprocess,
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,

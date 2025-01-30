@@ -2,14 +2,14 @@
     "TaskName": "CharacterCompletion",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "chatgpt-4o-latest-mini",
+            "ShortTokensModel": "gpt-4o-mini",
             "LongTokensModel": "chatgpt-4o-latest"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [
                 {
                     "Date": "CharacterCompletion-231104034753",
-                    "Model": "ft:chatgpt-4o-latest-mini-0613:yeoreum::8H4qi78e"
+                    "Model": "ft:gpt-4o-mini-0613:yeoreum::8H4qi78e"
                 }
             ],
             "LongTokensModel": []

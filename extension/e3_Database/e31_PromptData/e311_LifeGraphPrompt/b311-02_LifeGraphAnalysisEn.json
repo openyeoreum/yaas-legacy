@@ -2,8 +2,8 @@
     "TaskName": "LifeGraphAnalysis",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "chatgpt-4o-latest-mini",
-            "LongTokensModel": "chatgpt-4o-latest-mini"
+            "ShortTokensModel": "gpt-4o-mini",
+            "LongTokensModel": "gpt-4o-mini"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -13,7 +13,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "chatgpt-4o-latest-mini"
+        "MasterModel": "gpt-4o-mini"
     },
     "ANTHROPIC": {
         "BaseModel": {

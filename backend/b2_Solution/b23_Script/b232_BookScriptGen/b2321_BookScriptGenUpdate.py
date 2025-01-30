@@ -11,7 +11,7 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import Open
 #####################
 ##### Input 생성 #####
 #####################
-## Process1: SearchResult 불러오기
+## Process1~3: SearchResult 불러오기
 def LoadSearchResult(TotalSearchResultDataTempPath, ProjectName, Intention):
     # 파일명 패턴 정규식 (검색한시간을 추출하기 위해 사용)
     pattern = re.compile(r"SearchResultData_\((\d{14})\)_\[" + re.escape(ProjectName) + r"_" + re.escape(Intention) + r": (.*?)\]\.json")
@@ -41,7 +41,7 @@ def LoadSearchResult(TotalSearchResultDataTempPath, ProjectName, Intention):
 
     return SearchResultJson, TopScoreSearchResultJson
 
-## Process1-1: DemandScriptPlan의 Input
+## Process1, 3: DemandScriptPlan의 Input
 def DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention):
     SearchResultJson, TopScoreSearchResultJson = LoadSearchResult(TotalSearchResultDataTempPath, ProjectName, Intention)
     
@@ -89,7 +89,7 @@ def DemandCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, Project
 
     return Input
 
-## Process1-2: SupplyScriptPlan의 Input
+## Process2, 3: SupplyScriptPlan의 Input
 def SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, ProjectName, Intention):
     SearchResultJson, TopScoreSearchResultJson = LoadSearchResult(TotalSearchResultDataTempPath, ProjectName, Intention)
     
@@ -127,7 +127,7 @@ def SupplyCollectionDataToScriptPlanInput(TotalSearchResultDataTempPath, Project
 
     return Input
 
-## Process2: TitleAndIndexGen의 InputList
+## Process5: TitleAndIndexGen의 InputList
 def EditToTitleAndIndexGenInputList(ScriptEditPath, BeforeProcess):
     with open(ScriptEditPath, "r", encoding = "utf-8") as ScriptEditJson:
         ScriptEditList = json.load(ScriptEditJson)[BeforeProcess]
@@ -152,7 +152,49 @@ def EditToTitleAndIndexGenInputList(ScriptEditPath, BeforeProcess):
     
     return InputList
 
-## Process3: SummaryOfIndexGen의 Input
+## Process7: SummaryOfIndexGen의 Input
+def EditToSummaryOfIndexGenInputList(ScriptEditPath, BeforeProcess):
+    with open(ScriptEditPath, "r", encoding = "utf-8") as ScriptEditJson:
+        ScriptEditList = json.load(ScriptEditJson)[BeforeProcess]
+        
+    InputList = []
+    for i, ScriptEdit in enumerate(ScriptEditList):
+        Type = ScriptEdit['Type']
+        TitleType = ScriptEdit['TitleType']
+        Title = ScriptEdit['Title']
+        SubTitle = ScriptEdit['SubTitle']
+        MainIndex = []
+        for MainIndexDic in ScriptEdit['MainIndex']:
+            MainIndex.append(f"순번: {MainIndexDic['IndexId']}\n메인목차: {MainIndexDic['Index']}")
+        
+        ## MainIndex에서 2개씩 메인목차 부분에 이번에 진행할 서브목차 표기
+        SelectedMainIndexId = []
+        InputId = 1
+        for j in range(len(MainIndex)):
+            SelectedMainIndexId.append(j + 1)
+            if j % 2 != 0:
+                mainIndex = MainIndex.copy()
+                MainIndexText = ''
+                for k in range(len(MainIndex)):
+                    if k + 1 in SelectedMainIndexId:
+                        mainIndex[k] = MainIndex[k] + '\n서브목차: * 지금 작성할 서브목차 *\n\n'
+                    else:
+                        mainIndex[k] = MainIndex[k] + '\n\n'
+                    MainIndexText += mainIndex[k]
+                        
+            
+                Input = f"[글쓰기형태]\n{Type}\n\n[제목부제형태]\n{TitleType}\n\n[제목]\n{Title}\n\n[부제]\n{SubTitle}\n\n[메인목차]\n{MainIndexText}"
+                
+                if SelectedMainIndexId[0] == 1:
+                    Caution = f"\n\n※ 작성사항 ※\n- 첫번째 작업입니다.\n- 따라서, <목차별내용요약.json>의 구조대로 순번 {SelectedMainIndexId[0]}, {SelectedMainIndexId[1]}번을 작성해 주세요.\n\n"
+                else:
+                    Caution = f"\n\n※ 작성사항 ※\n- 순번 1~{SelectedMainIndexId[0] - 1} 까지는 작업이 완료되었습니다.\n- 따라서, 아래의 순번 {SelectedMainIndexId[0] - 2}, {SelectedMainIndexId[0] - 1}번과 내용이 자연스럽게 이어지도록 <목차별내용요약.json>의 구조대로 순번 {SelectedMainIndexId[0]}, {SelectedMainIndexId[1]}번을 작성해 주세요.\n\n"
+
+                InputList.append({'Id': InputId, 'Input': Input, 'Caution': Caution})
+                SelectedMainIndexId = []
+                InputId += 1
+    
+    return InputList
 
 ## Process4: ScriptIntroductionGenGen의 Input
 
@@ -503,13 +545,13 @@ def LongScriptEditFilter(Response, CheckCount):
 ##### Process 응답 #####
 #######################
 ## Process LLMResponse 함수
-def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCount, FilterFunc, CheckCount, LLM, mode, MessagesReview, input2 = ""):
+def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCount, FilterFunc, CheckCount, LLM, mode, MessagesReview, input2 = "", memoryCounter = ""):
     ErrorCount = 0
     while True:
         if LLM == "OpenAI":
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
         elif LLM == "Anthropic":
-            Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, messagesReview = MessagesReview)
+            Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
         Filter = FilterFunc(Response, CheckCount)
         
         if isinstance(Filter, str):
@@ -595,6 +637,7 @@ def ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, Proj
     with open(ProjectDataFrameScriptPalnPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(ScriptPlanFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
+## Process5: TitleAndIndexGenProcess DataFrame 저장
 def TitleAndIndexGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameTitleAndIndexPath, TitleAndIndexGenResponse, Process, InputCount, TotalInputCount):
     ## TitleAndIndexGenFrame 불러오기
     TitleAndIndexFramePath = os.path.join(BookScriptGenDataFramePath, "b5312-02_TitleAndIndexFrame.json")
@@ -629,6 +672,17 @@ def TitleAndIndexGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath
     ## TitleAndIndexFrame 저장
     with open(ProjectDataFrameTitleAndIndexPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TitleAndIndexFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
+## Process7: SummaryOfIndexGenProcess DataFrame 저장
+def SummaryOfIndexGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameSummaryOfIndexPath, SummaryOfIndexGenResponse, Process, InputCount, TotalInputCount):
+    ## SummaryOfIndexGenFrame 불러오기
+    SummaryOfIndexFramePath = os.path.join(BookScriptGenDataFramePath, "b5312-03_SummaryOfIndexFrame.json")
+    with open(SummaryOfIndexFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        SummaryOfIndexFrame = json.load(DataFrameJson)
+        
+    ## SummaryOfIndexFrame 업데이트
+    SummaryOfIndexFrame[0]['ProjectName'] = ProjectName
+    SummaryOfIndexFrame[0]['TaskName'] = Process
 
 ################################################
 ##### ProcessFeedback Input 생성 및 Edit 저장 #####
@@ -1015,7 +1069,6 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     
     ## Process 설정
     ProcessNumber = '02'
-    BeforeProcess = Process
     Process = "TitleAndIndexGen"
     
     ## TitleAndIndexGen 경로 생성
@@ -1023,7 +1076,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = EditToTitleAndIndexGenInputList(ScriptEditPath, BeforeProcess)
+    InputList = EditToTitleAndIndexGenInputList(ScriptEditPath, "ScriptPlan")
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTitleAndIndexPath)
     EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
@@ -1034,8 +1087,6 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
             for i in range(InputCount - 1, TotalInputCount):
                 ## Input 생성
                 inputCount = InputList[i]['Id']
-                print(f"InputCount: {inputCount}")
-                print(f"TotalInputCount: {TotalInputCount}")
                 Input = InputList[i]['Input']
     
                 ## Response 생성
@@ -1069,6 +1120,46 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
             
         if not EditCompletion:
             sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+            
+    ################################################
+    ### Process3: SummaryOfIndexGen Response 생성 ###
+    ################################################
+    
+    ## Process 설정
+    ProcessNumber = '03'
+    Process = "SummaryOfIndexGen"
+    
+    ## SummaryOfIndexGen 경로 생성
+    ProjectDataFrameSummaryOfIndexPath = os.path.join(ProjectDataFrameScriptPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+    
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList1 = InputList
+    InputList2 = EditToSummaryOfIndexGenInputList(ScriptEditPath, "TitleAndIndexGen")
+    TotalInputCount = len(InputList2) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameSummaryOfIndexPath)
+    EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
+    
+    ## Process 진행
+    SummaryOfIndexGenResponse = ""
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList2[i]['Id']
+                Input1 = InputList1[0]['Input']
+                Input2 = InputList2[i]['Input']
+                Caution = InputList2[i]['Caution'] + json.dumps(SummaryOfIndexGenResponse, indent = 4, ensure_ascii = False)
+    
+                ## Response 생성
+                SummaryOfIndexGenResponse = ProcessResponse(projectName, email, Process, Input1, inputCount, TotalInputCount, SummaryOfIndexGenFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2, memoryCounter = Caution)
+                
+                ## DataFrame 저장
+                SummaryOfIndexGenProcessDataFrameSave(projectName, BookScriptGenDataFramePath, ProjectDataFrameSummaryOfIndexPath, SummaryOfIndexGenResponse, Process, inputCount, TotalInputCount)
+
+        # ## Edit 저장
+        # ProcessEditSave(ProjectDataFrameSummaryOfIndexPath, ScriptEditPath, Process, TotalInputCount)
+        # sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
 
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")
 

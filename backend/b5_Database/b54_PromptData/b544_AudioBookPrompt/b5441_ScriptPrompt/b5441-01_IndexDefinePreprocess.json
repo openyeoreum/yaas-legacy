@@ -2,7 +2,7 @@
     "TaskName": "IndexDefinePreprocess",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "chatgpt-4o-latest-mini",
+            "ShortTokensModel": "gpt-4o-mini",
             "LongTokensModel": "chatgpt-4o-latest"
         },
         "ExampleFineTunedModel": {

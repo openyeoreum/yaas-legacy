@@ -649,8 +649,8 @@ def ProcessDataFrameCheck(ProjectDataFramePath):
 ## Process1~3: ScriptPlanProcess DataFrame 저장
 def ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameScriptPalnPath, ScriptPlanResponse, Process, InputCount, TotalInputCount):
     ## ScriptPlanFrame 불러오기
-    if os.path.exists(BookScriptGenDataFramePath):
-        ScriptPlanFramePath = BookScriptGenDataFramePath
+    if os.path.exists(ProjectDataFrameScriptPalnPath):
+        ScriptPlanFramePath = ProjectDataFrameScriptPalnPath
     else:
         ScriptPlanFramePath = os.path.join(BookScriptGenDataFramePath, "b5312-01_ScriptPlanFrame.json") 
     with open(ScriptPlanFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
@@ -698,8 +698,8 @@ def ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, Proj
 ## Process5: TitleAndIndexGenProcess DataFrame 저장
 def TitleAndIndexGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameTitleAndIndexPath, TitleAndIndexGenResponse, Process, InputCount, TotalInputCount):
     ## TitleAndIndexGenFrame 불러오기
-    if os.path.exists(TitleAndIndexGenResponse):
-        TitleAndIndexFramePath = TitleAndIndexGenResponse
+    if os.path.exists(ProjectDataFrameTitleAndIndexPath):
+        TitleAndIndexFramePath = ProjectDataFrameTitleAndIndexPath
     else:
         TitleAndIndexFramePath = os.path.join(BookScriptGenDataFramePath, "b5312-02_TitleAndIndexFrame.json")
     with open(TitleAndIndexFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
@@ -775,9 +775,9 @@ def SummaryOfIndexGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePat
     with open(ProjectDataFrameSummaryOfIndexPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(SummaryOfIndexFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
-################################################
-##### ProcessFeedback Input 생성 및 Edit 저장 #####
-################################################
+#####################################
+##### ProcessFeedback Input 생성 #####
+#####################################
 ## Prompt 벨류값 수정 함수
 def PromptToModify(Value):
     if isinstance(Value, list):
@@ -911,6 +911,9 @@ def SummaryOfIndexGenFeedbackInputAndExtension(PromptInputDic, ScriptEditPath, P
     
     return PromptModifyInput
 
+####################################
+##### ProcessFeedback Edit 저장 #####
+####################################
 ## Feedback1~3: ScriptPlanFeedback Edit 저장
 def ScriptPlanFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, EditCount, Response):
     ## ScriptEdit 불러오기
@@ -992,6 +995,8 @@ def SummaryOfIndexGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, 
         Keyword = subIndex['키워드']
         Summary = subIndex['요약']
         ProcessDic['SubIndex'].append({'SubIndexId': SubIndexId, 'SubIndex': SubIndex, 'Keyword': Keyword, 'Summary': Summary})
+    ReStructureProcessDic = RestructureProcessDic(ProcessDic)
+    ScriptEdit[Process][EditCount] = ReStructureProcessDic
     
     ## ScriptEdit 저장
     with open(ScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
@@ -1373,6 +1378,10 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
             
         if not EditCompletion:
             sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+
+    #############################################
+    ### Process4: ScriptShortGen Response 생성 ###
+    #############################################
 
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")
 

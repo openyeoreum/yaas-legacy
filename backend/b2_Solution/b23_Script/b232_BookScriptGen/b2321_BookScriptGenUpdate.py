@@ -148,7 +148,7 @@ def EditToTitleAndIndexGenInputList(ScriptEditPath, BeforeProcess):
         
         Input = f"[배경]\n{Background}\n\n[주제]\n{Subject}\n\n[범위]\n{Range}\n\n[개념키워드]\n{', '.join(ConceptKeyword)}\n\n[독자키워드]\n{', '.join(TargetKeyword)}\n\n[글이전해줄핵심가치]\n{SupplyValueSentence}\n\n[글이전해줄핵심가치-키워드]\n{', '.join(SupplyValueKeyword)}\n\n[글이전해줄핵심포인트들]\n{SupplyPointSentence}\n\n[글이전해줄핵심포인트들-키워드]\n{', '.join(SupplyPointKeyword)}\n\n[글이전해줄핵심비전]\n{SupplyVisionSentence}\n\n[글이전해줄핵심비전-키워드]\n{', '.join(SupplyVisionKeyword)}"
         
-        InputList.append({'Id': i+1, 'Input': Input})
+        InputList.append({'Id': i + 1, 'Input': Input})
     
     return InputList
 
@@ -197,46 +197,37 @@ def EditToSummaryOfIndexGenInputList(ScriptEditPath, BeforeProcess):
     return InputList
 
 ## Process9: ScriptIntroduction의 InputList
-def EditToScriptIntroductionInputList(ScriptEditPath, BeforeProcess):
+def EditToScriptIntroductionInputList(ScriptEditPath, BeforeProcess1, BeforeProcess2):
     with open(ScriptEditPath, "r", encoding = "utf-8") as ScriptEditJson:
-        ScriptEditList = json.load(ScriptEditJson)[BeforeProcess]
-        
+        ScriptEditList = json.load(ScriptEditJson)
+    ScriptEditList1 = ScriptEditList[BeforeProcess1]
+    ScriptEditList2 = ScriptEditList[BeforeProcess2]
+    
     InputList = []
-    for i, ScriptEdit in enumerate(ScriptEditList):
-        Type = ScriptEdit['Type']
-        TitleType = ScriptEdit['TitleType']
+    for i, ScriptEdit in enumerate(ScriptEditList1):
         Title = ScriptEdit['Title']
         SubTitle = ScriptEdit['SubTitle']
         MainIndex = []
         for MainIndexDic in ScriptEdit['MainIndex']:
-            MainIndex.append(f"순번: {MainIndexDic['IndexId']}\n메인목차: {MainIndexDic['Index']}")
-        
-        ## MainIndex에서 2개씩 메인목차 부분에 이번에 진행할 서브목차 표기
-        SelectedMainIndexId = []
-        InputId = 1
-        for j in range(len(MainIndex)):
-            SelectedMainIndexId.append(j + 1)
-            if j % 2 != 0:
-                mainIndex = MainIndex.copy()
-                MainIndexText = ''
-                for k in range(len(MainIndex)):
-                    if k + 1 in SelectedMainIndexId:
-                        mainIndex[k] = MainIndex[k] + '\n서브목차: * 지금 작성할 서브목차 *\n\n'
-                    else:
-                        mainIndex[k] = MainIndex[k] + '\n\n'
-                    MainIndexText += mainIndex[k]
-                        
-            
-                Input = f"[글쓰기형태]\n{Type}\n\n[제목부제형태]\n{TitleType}\n\n[제목]\n{Title}\n\n[부제]\n{SubTitle}\n\n[메인목차]\n{MainIndexText}"
-                
-                if SelectedMainIndexId[0] == 1:
-                    Caution = f"\n\n※ 작성사항 ※\n- 첫번째 작업입니다.\n- 따라서, <목차별내용요약.json>의 구조대로 순번 {SelectedMainIndexId[0]}, {SelectedMainIndexId[1]}번을 작성해 주세요.\n\n"
-                else:
-                    Caution = f"\n\n※ 작성사항 ※\n- 순번 1~{SelectedMainIndexId[0] - 1} 까지는 작업이 완료되었습니다.\n- 따라서, 아래의 순번 {SelectedMainIndexId[0] - 2}, {SelectedMainIndexId[0] - 1}번과 내용이 자연스럽게 이어지도록 <목차별내용요약.json>의 구조대로 순번 {SelectedMainIndexId[0]}, {SelectedMainIndexId[1]}번을 작성해 주세요.\n\n"
+            MainIndex.append(f"파트{MainIndexDic['IndexId']}: {MainIndexDic['Index']}")
+        JoinedMainIndex = '\n'.join(MainIndex)
+        InputText1 = f"[도서제목] {Title}\n[부제] {SubTitle}\n\n\n[목차]\n{JoinedMainIndex}\n"
+    
+    InputText2 = ''
+    for j, ScriptEdit in enumerate(ScriptEditList2):
+        IndexId = ScriptEdit['IndexId']
+        Index = ScriptEdit['Index']
+        SubIndex = []
+        for SubIndexDic in ScriptEdit['SubIndex']:
+            SubIndex.append(f"파트{IndexId} 챕터순번: {SubIndexDic['SubIndexId']}\n챕터명: {SubIndexDic['SubIndex']}\n챕터키워드: {', '.join(SubIndexDic['Keyword'])}\n챕터요약: {SubIndexDic['Summary']}")
+        JoinedSubIndex = '\n\n'.join(SubIndex)
+        InputText2 += f"\n\n[파트{IndexId}: {Index}]\n\n{JoinedSubIndex}"
 
-                InputList.append({'Id': InputId, 'Input': Input, 'Caution': Caution})
-                SelectedMainIndexId = []
-                InputId += 1
+    Input = InputText1 + InputText2
+    print(Input)
+    sys.exit()
+    
+    InputList.append({'Id': i + 1, 'Input': Input})
     
     return InputList
 
@@ -1426,15 +1417,9 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = EditToScriptIntroductionInputList(ScriptEditPath, "SummaryOfIndexGen")
+    
+    InputList = EditToScriptIntroductionInputList(ScriptEditPath, "TitleAndIndexGen", "SummaryOfIndexGen")
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
-    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameSummaryOfIndexPath)
-    EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount, NumProcesses = 2)
-    # print(f"InputCount: {InputCount}")
-    # print(f"EditCheck: {EditCheck}")
-    # print(f"EditCompletion: {EditCompletion}")
-    # print(f"PromptCheck: {PromptCheck}")
-    # print(f"PromptInputList: {PromptInputList}")
 
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")
 
@@ -1443,6 +1428,6 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     ProjectName = '250121_테스트'
-    #########################################################################
     Intention = "Similarity"
-    BookScriptGenProcessUpdate(ProjectName, email, Intention)
+    #########################################################################
+    # BookScriptGenProcessUpdate(ProjectName, email, Intention)

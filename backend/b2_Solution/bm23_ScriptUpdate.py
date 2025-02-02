@@ -12,16 +12,25 @@ from backend.b2_Solution.b23_Script.b232_BookScriptGen.b2321_BookScriptGenUpdate
 ### 솔루션에 북스크립트 업데이트 ###
 def SolutionScriptUpdate(ProjectName, email, Script, Intention, MessagesReview):
     
-    ########################
-    ### 01_BookScriptGen ###
-    ########################
+    #######################
+    ### 01_ScriptUpload ###
+    #######################
     
     if Script == [] or Script == [""] or Script == ["None"]:
-        # ScriptUpload()
+        # ScriptUpload(ProjectName, email)
         pass
+    
+    ########################
+    ### 02_BookScriptGen ###
+    ########################
         
     elif  "BookScript" in Script:
         BookScriptGenProcessUpdate(ProjectName, email, Intention, MessagesReview = MessagesReview)
 
-    # else:
+    ###########################
+    ### 03_InstantScriptGen ###
+    ###########################
+
+    else:
         # InstantScriptGenProcessUpdate(ProjectName, email, Script)
+        pass

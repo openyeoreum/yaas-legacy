@@ -302,16 +302,16 @@ if __name__ == "__main__":
     # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240919_암을이기는천연항암제요약', '240812_룰루레몬스토리', '240815_노유파', '240908_나무스토리텔링', '240910_AI미래시나리오2030', '240925_불멸의지혜', '241005_그해여름필립로커웨이에서일어난소설같은일', '241009_책갈피와책수레', '241010_틈틈이낭만', '241024_오성삼유튜브', '241024_서울장애인가족지원센터당선작13선', '241029_누가정부창업지원을받는가', '241116_베이버터와다섯개의빛', '241118_세종교육청우리반오디오북새움중1학년8반', '241118_세종교육청우리반오디오북아름초5학년5반', '241118_세종교육청우리반오디오북아름초1학년1반', '241127_엄마의첫공부', '241128_끌리는이들에겐이유가있다', '241204_개정교육과정초등교과별이해연수', '241210_공부하듯주식해서보화찾기요약', '241210_끌리는이들에겐이유가있다요약', '241210_나는외식창업에적합한사람인가요약', '241226_법이사라진내멋대로마을을지켜줘', '250111_프로스트와베타', '250131_정년그깊은독백'
 
     User = {"email": "yeoreum00128@gmail.com", "name": "yeoreum", "password": "0128"}
-    ProjectNameList = {"StartProjectName": "250201_멘진", "ContinueProjectNameList": []}
+    ProjectNameList = {"StartProjectName": "250202_정년그깊은독백", "ContinueProjectNameList": []}
     MainLang = "Ko" # 'Ko', 'En', 'Ja', 'Zh', 'Es' ... 중 메인이 되는 언어를 선택
     
     Estimate = [] # [], 'TextBook', 'AudioBook', 'VideoBook' ... 중 필요한 견적을 다중 선택
     DataCollection = [] # [], 'Book', 'Meditation', 'Architect' ... 중 데이터 수집이 필요한 도메인을 다중 선택
-    Search = {"Search": "나는 2016년 알파고와 이세돌 대국 이후 10년간 AI에 대해서 연구하고 앞으로의 우리 삶이 어떻게 변화될 것인지에 대해서 매우 깊게 고찰하였습니다. 그래서 앞으로 AI가 세상 모든 곳에 존재하는 시대에 어떠한 생물학적 또는 유전적 인자를 가진 사람이 탄생하며 세상을 지배하게 되는지에 대해서 다음과 같은 도서의 제목과 목차를 고안하게 되었습니다.\nMENGENE(멘진): 인간의 진화는 더 이상 자연의 선택이 아니다. AI의 선택이다.\n\n파트1 인간의 삶 모든 곳에 존재하는 AI\n\n파트2 AI의 선택인자는 데이터\n\n파트3 궁극적인 선택인자: 솔직한 데이터\n\n파트4 인간은 솔직한 존재\n\n파트5 인간의 솔직한 유전 인자: 멘진\n\n파트6 당신은 어디까지 솔직할 수 있는가?", "Intention": "Similarity", "Collection": "Publisher"} # Search: "", Search: SearchTerm, Match: PublisherData_(Id) // # Intention: Demand, Supply, Similarity ... // Extension: Expertise, Ultimate, Detail, Rethink ... // Collection: Entire, Target, Trend, Publisher, Book ... // Range: 10-100
-    Script = ['BookScript'] # ScriptUpload: [] // BookScriptGen: 'BookScript' // InstantScriptGen: 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 다중 선택
+    Search = {"Search": "", "Intention": "Similarity", "Collection": "Publisher"} # Search: "", Search: SearchTerm, Match: PublisherData_(Id) // # Intention: Demand, Supply, Similarity ... // Extension: Expertise, Ultimate, Detail, Rethink ... // Collection: Entire, Target, Trend, Publisher, Book ... // Range: 10-100
+    Script = [] # ScriptUpload: [] // BookScriptGen: 'BookScript' // InstantScriptGen: 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 다중 선택
     Translation = [] # 'En', 'Ja', 'Zh', 'Es' ... 중 다중 선택
     TextBook = [] # [], 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
-    AudioBook = "" # '', '클로닝성우이름', '성우이름(특성)' ... 중 선택
+    AudioBook = "성온훈(낭독)" # '', '클로닝성우이름', '성우이름(특성)' ... 중 선택
     Marketing = [] # [] 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택
     
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력

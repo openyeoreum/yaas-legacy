@@ -158,6 +158,7 @@ class Project(Base):
     ScriptPath = Column(Text)
     ScriptDataFramePath = Column(Text)
     MasterScriptPath = Column(Text)
+    UploadScriptPath = Column(Text)
     
     IndexFile = Column(Text)
     CharacterFile = Column(Text)

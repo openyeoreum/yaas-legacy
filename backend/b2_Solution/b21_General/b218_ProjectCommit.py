@@ -38,7 +38,8 @@ def AddProjectToDB(projectName, email):
         # script
         scriptPath = os.path.join(projectPath, f"{projectName}_script")
         scriptDataFramePath = os.path.join(scriptPath, f"{projectName}_dataframe_script_file")
-        masterScriptPath = os.path.join(scriptPath, f"{projectName}_master_script_file") # scriptPath = os.path.join(projectPath, f"{projectName}_script/{projectName}_master_script_file")
+        masterScriptPath = os.path.join(scriptPath, f"{projectName}_master_script_file")
+        uploadScriptPath = os.path.join(scriptPath, f"{projectName}_upload_script_file")
         
         # textbook
         textbookPath = os.path.join(projectPath, f"{projectName}_textbook")
@@ -92,6 +93,7 @@ def AddProjectToDB(projectName, email):
             os.makedirs(scriptPath, exist_ok = True)
             os.makedirs(scriptDataFramePath, exist_ok = True)
             os.makedirs(masterScriptPath, exist_ok = True)
+            os.makedirs(uploadScriptPath, exist_ok = True)
             os.makedirs(textbookPath, exist_ok = True)
             os.makedirs(textbookDataFramePath, exist_ok = True)
             os.makedirs(mixedTextBookPath, exist_ok = True)
@@ -172,6 +174,7 @@ def AddProjectToDB(projectName, email):
             ExistingProject.ScriptPath = scriptPath
             ExistingProject.ScriptDataFramePath = scriptDataFramePath
             ExistingProject.MasterScriptPath = masterScriptPath
+            ExistingProject.UploadScriptPath = uploadScriptPath
             ExistingProject.TextbookPath = textbookPath
             ExistingProject.TextbookDataFramePath = textbookDataFramePath
             ExistingProject.MixedTextBookPath = mixedTextBookPath
@@ -246,6 +249,7 @@ def AddProjectToDB(projectName, email):
                 ScriptPath = scriptPath,
                 ScriptDataFramePath = scriptDataFramePath,
                 MasterScriptPath = masterScriptPath,
+                UploadScriptPath = uploadScriptPath,
                 TextbookPath = textbookPath,
                 TextbookDataFramePath = textbookDataFramePath,
                 MixedTextBookPath = mixedTextBookPath,

@@ -16,7 +16,7 @@ from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2413_DataSetCommit impor
 # IndexText 로드
 def LoadIndexText(projectName, email):
     # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script/{projectName}_master_script_file"
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     RawIndexTextFilePath = TextDirPath + f'/{projectName}_Index(Raw).txt'
     RawBodyTextFilePath = TextDirPath + f'/{projectName}_Body(Raw).txt'
     
@@ -25,6 +25,8 @@ def LoadIndexText(projectName, email):
     
     if indexText is None:
       ## [ Script Generation 프로세스 ] 인 경우 ##
+      print(f"RawIndexTextFilePath: {RawIndexTextFilePath}")
+      print(f"RawBodyTextFilePath: {RawBodyTextFilePath}")
       if os.path.exists(RawIndexTextFilePath) and os.path.exists(RawBodyTextFilePath):
         sys.exit(f"\n\n[ ((({projectName}_Index(Raw).txt))), ((({projectName}_Body(Raw).txt))) 파일을 완성한뒤 파일이름 뒤에  -> (Raw) <- 를 제거해 주세요. ]\n({TextDirPath})\n\n1. 타이틀과 로그 부분을 작성\n2. 추가로 필요한 내용 작성\n3. 낭독이 바뀌는 부분에 \"...\" 쌍따옴표 처리\n\n4. 목차(_Index)파일과 본문(_Body) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n5. 본문(_Body)파일 내 쌍따옴표(“대화문”의 완성) 개수 일치 * _Body(검수용) 파일 확인\n6. 캡션 등의 줄바꿈 및 캡션이 아닌 일반 문장은 마지막 온점(.)처리\n\n7. {projectName}_Index(Raw).txt, {projectName}_Body(Raw).txt 파일명에 -> (Raw) <- 를 제거\n\n")
       ## [ General Script 프로세스 ] 인 경우 ##

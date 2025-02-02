@@ -152,7 +152,7 @@ def EditToTitleAndIndexGenInputList(ScriptEditPath, BeforeProcess):
     
     return InputList
 
-## Process7: SummaryOfIndexGen의 Input
+## Process7: SummaryOfIndexGen의 InputList
 def EditToSummaryOfIndexGenInputList(ScriptEditPath, BeforeProcess):
     with open(ScriptEditPath, "r", encoding = "utf-8") as ScriptEditJson:
         ScriptEditList = json.load(ScriptEditJson)[BeforeProcess]
@@ -196,15 +196,49 @@ def EditToSummaryOfIndexGenInputList(ScriptEditPath, BeforeProcess):
     
     return InputList
 
-## Process4: ScriptIntroductionGenGen의 Input
+## Process9: ScriptIntroduction의 InputList
+def EditToScriptIntroductionInputList(ScriptEditPath, BeforeProcess):
+    with open(ScriptEditPath, "r", encoding = "utf-8") as ScriptEditJson:
+        ScriptEditList = json.load(ScriptEditJson)[BeforeProcess]
+        
+    InputList = []
+    for i, ScriptEdit in enumerate(ScriptEditList):
+        Type = ScriptEdit['Type']
+        TitleType = ScriptEdit['TitleType']
+        Title = ScriptEdit['Title']
+        SubTitle = ScriptEdit['SubTitle']
+        MainIndex = []
+        for MainIndexDic in ScriptEdit['MainIndex']:
+            MainIndex.append(f"순번: {MainIndexDic['IndexId']}\n메인목차: {MainIndexDic['Index']}")
+        
+        ## MainIndex에서 2개씩 메인목차 부분에 이번에 진행할 서브목차 표기
+        SelectedMainIndexId = []
+        InputId = 1
+        for j in range(len(MainIndex)):
+            SelectedMainIndexId.append(j + 1)
+            if j % 2 != 0:
+                mainIndex = MainIndex.copy()
+                MainIndexText = ''
+                for k in range(len(MainIndex)):
+                    if k + 1 in SelectedMainIndexId:
+                        mainIndex[k] = MainIndex[k] + '\n서브목차: * 지금 작성할 서브목차 *\n\n'
+                    else:
+                        mainIndex[k] = MainIndex[k] + '\n\n'
+                    MainIndexText += mainIndex[k]
+                        
+            
+                Input = f"[글쓰기형태]\n{Type}\n\n[제목부제형태]\n{TitleType}\n\n[제목]\n{Title}\n\n[부제]\n{SubTitle}\n\n[메인목차]\n{MainIndexText}"
+                
+                if SelectedMainIndexId[0] == 1:
+                    Caution = f"\n\n※ 작성사항 ※\n- 첫번째 작업입니다.\n- 따라서, <목차별내용요약.json>의 구조대로 순번 {SelectedMainIndexId[0]}, {SelectedMainIndexId[1]}번을 작성해 주세요.\n\n"
+                else:
+                    Caution = f"\n\n※ 작성사항 ※\n- 순번 1~{SelectedMainIndexId[0] - 1} 까지는 작업이 완료되었습니다.\n- 따라서, 아래의 순번 {SelectedMainIndexId[0] - 2}, {SelectedMainIndexId[0] - 1}번과 내용이 자연스럽게 이어지도록 <목차별내용요약.json>의 구조대로 순번 {SelectedMainIndexId[0]}, {SelectedMainIndexId[1]}번을 작성해 주세요.\n\n"
 
-## Process5: ShortScriptGen의 Input
-
-## Process6: ShortScriptMerge의 Input
-
-## Process7: LongScriptGen의 Input
-
-## Process8: LongScriptEdit의 Input
+                InputList.append({'Id': InputId, 'Input': Input, 'Caution': Caution})
+                SelectedMainIndexId = []
+                InputId += 1
+    
+    return InputList
 
 ######################
 ##### Filter 조건 #####
@@ -1382,6 +1416,25 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     #############################################
     ### Process4: ScriptShortGen Response 생성 ###
     #############################################
+    
+    ## Process 설정
+    ProcessNumber = '04'
+    Process = "ScriptIntroduction"
+    
+    ## ScriptShortGen 경로 생성
+    ProjectDataFrameSummaryOfIndexPath = os.path.join(ProjectDataFrameScriptPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+    
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = EditToScriptIntroductionInputList(ScriptEditPath, "SummaryOfIndexGen")
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameSummaryOfIndexPath)
+    EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount, NumProcesses = 2)
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    # print(f"PromptCheck: {PromptCheck}")
+    # print(f"PromptInputList: {PromptInputList}")
 
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")
 
@@ -1392,5 +1445,4 @@ if __name__ == "__main__":
     ProjectName = '250121_테스트'
     #########################################################################
     Intention = "Similarity"
-    # JSON 파일 경로
     BookScriptGenProcessUpdate(ProjectName, email, Intention)

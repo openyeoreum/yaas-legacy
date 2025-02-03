@@ -1592,7 +1592,10 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         for _Matched in MatchedActors:
             if _Matched['CharacterTag'] == 'Narrator':
                 BeforeNarratorName = _Matched['ActorName']
-                AfterNarratorName = MatchedVoiceActor['Name']
+                try:
+                    AfterNarratorName = MatchedVoiceActor['Name']
+                except UnboundLocalError:
+                    sys.exit(f'[ (({CloneVoiceName})) b572-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/backend/b5_Database/b57_RelationalDatabase/b572_Character/b572-01_VoiceDataSet.json')
                 try:
                     _Matched['ActorName'] = AfterNarratorName
                 except UnboundLocalError:
@@ -1799,6 +1802,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             '] [', '] (', ') [', ') (',
             ']  [', ']  (', ')  [', ')  ('
         ]
+        DeleteEditList = []
         for i in range(len(MatchedChunks)):
             _Edit = MatchedChunks[i]
             EditId = _Edit['EditId']
@@ -1923,6 +1927,14 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 New_Edit = {"EditId": EditId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": NewActorChunk}
                 MatchedChunks[i] = New_Edit
             ### D. EditGenerationKoChunks에 Edit내 Chunk의 개수 및 텍스트 길이 적정히 조정하기 ###
+            
+            ### E. EditGenerationKoChunks에 Edit내 ActorChunk 비어있는 경우 삭제 ###
+            if MatchedChunks[i]['ActorChunk'] == []:
+                DeleteEditList.append(i)
+
+        for j in sorted(DeleteEditList, reverse = True):
+            del MatchedChunks[j]
+        ### E. EditGenerationKoChunks에 Edit내 ActorChunk 비어있는 경우 삭제 ###
 
     ## 모든 인물 전체 히스토리 불러오기 (Modify 검사 용도)
     GenerationKoChunkAllHistory = []
@@ -2187,17 +2199,22 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     EditId += 1
                 else:
                     EditGenerationKoChunks.remove(NewGenerationKoChunk)
-            
-            ## 빈 ActorChunk 삭제 및 목차 및 문장 끝 후처리
+
+            ## 빈 Edit 및 ActorChunk 삭제 및 목차 및 문장 끝 후처리
             for i in range(len(EditGenerationKoChunks)):
                 _tag = EditGenerationKoChunks[i]['Tag']
                 # 'ActorChunk'를 역순으로 순회합니다
                 for j in reversed(range(len(EditGenerationKoChunks[i]['ActorChunk']))):
                     # 문장 끝 후처리
                     _ActorChunk = EditGenerationKoChunks[i]['ActorChunk'][j]
+                    # 대괄호와 괄호로 둘러싸인 내용을 쉼표로 처리 등, 대괄호[] 및 괄호()의 후처리
+                    _ActorChunk = re.sub(r'\[(.*?)\]', r', \1,', _ActorChunk)
+                    _ActorChunk = re.sub(r'\((.*?)\)', r', \1,', _ActorChunk)
+                    _ActorChunk = _ActorChunk.replace(' , ', ', ')
+                    _ActorChunk = _ActorChunk.replace('[', '').replace(']', '').replace('(', '').replace(')', '')
                     _ActorChunk = _ActorChunk.strip()
                     _ActorChunk = _ActorChunk.replace('.,', ',').replace(',~.', ',').replace('..', '.')
-                    _ActorChunk = re.sub(r'^[\.,~]+', '', _ActorChunk)  # 앞부분의 ',', '.', '~' 제거
+                    _ActorChunk = re.sub(r'^[\.,~]+', '', _ActorChunk) # 앞부분의 ',', '.', '~' 제거
                     
                     if _tag not in ['Title', 'Logue', 'Part', 'Chapter', 'Index']:
                         if i in [1, 2]:
@@ -2212,13 +2229,14 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         modified_ActorChunk = re.sub(r'[\.,~\s]{1,3}$', '', _ActorChunk)
                         modified_ActorChunk = modified_ActorChunk.strip()
                         modified_ActorChunk = f'[{modified_ActorChunk}]'
+                    modified_ActorChunk = modified_ActorChunk.replace('[[', '[').replace(']]', ']')
                     EditGenerationKoChunks[i]['ActorChunk'][j] = modified_ActorChunk
                     # 빈 ActorChunk 삭제
                     if extract_text(EditGenerationKoChunks[i]['ActorChunk'][j]) == '':
                         del EditGenerationKoChunks[i]['ActorChunk'][j]
                         del EditGenerationKoChunks[i]['Pause'][j]
                         del EditGenerationKoChunks[i]['EndTime'][j]
-            
+                        
             ## Index 정렬(Part:1 - Chapter:2 - Index:3 으로 태그 순서 정렬)
             def SorIndexTags(EditGenerationKoChunks):
                 # Part, Chapter, Index 태그에 대한 우선순위를 정의합니다.
@@ -2275,18 +2293,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     else:
                         chunk['ActorName'] = NarratorActorName
             #### ReadingStyle: NarratorOnly와 AllCharacters의 설정 ####
-            
-            #### EditGenerationKoChunks 안에 대괄호[] 및 괄호()의 후처리 ####
-            for chunk in EditGenerationKoChunks:
-                for actorchunk in chunk['ActorChunk']:
-                    actorchunk['Chunk'] = actorchunk['Chunk'].replace('[[', '[').replace(']]', ']')
-                    # 대괄호와 괄호로 둘러싸인 내용을 쉼표로 처리
-                    actorchunk['Chunk'] = re.sub(r'\[(.*?)\]', r', \1,', actorchunk['Chunk'])
-                    actorchunk['Chunk'] = re.sub(r'\((.*?)\)', r', \1,', actorchunk['Chunk'])
-                    actorchunk['Chunk'] = actorchunk['Chunk'].replace(' , ', ', ')
-                    actorchunk['Chunk'] = actorchunk['Chunk'].replace('[', '').replace(']', '').replace('(', '').replace(')', '')
-            #### EditGenerationKoChunks 안에 대괄호[] 및 괄호()의 후처리 ####
-            
+
             # MatchedActors, MatchedChunks 저장 (Dic 저장 후 다시 List로 변환)
             fileName = projectName + '_' + 'MatchedVoices.json'
             MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName, 'Mixed')

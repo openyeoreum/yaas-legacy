@@ -111,9 +111,11 @@ def SFXMatchingFilter(Input, responseData, memoryCounter):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
-        OutputDic = [{key: value} for key, value in outputJson.items()]
+        OutputDic = outputJson['효과음태그']
     except json.JSONDecodeError:
         return "JSONDecode에서 오류 발생: JSONDecodeError"
+    except KeyError:
+        return "JSON에서 오류 발생: KeyError MainKey가 '효과음태그'가 아님"
     # Error2: 결과가 list가 아닐 때의 예외 처리
     if not isinstance(OutputDic, list):
         return "JSONType에서 오류 발생: JSONTypeError"

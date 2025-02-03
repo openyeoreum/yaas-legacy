@@ -197,7 +197,7 @@ def EditToSummaryOfIndexGenInputList(ScriptEditPath, BeforeProcess):
     return InputList
 
 ## Process9: ScriptIntroduction의 InputList
-def EditToScriptIntroductionInputList(ScriptEditPath, BeforeProcess1, BeforeProcess2):
+def EditToScriptIntroductionGenInputList(ScriptEditPath, BeforeProcess1, BeforeProcess2):
     with open(ScriptEditPath, "r", encoding = "utf-8") as ScriptEditJson:
         ScriptEditList = json.load(ScriptEditJson)
     ScriptEditList1 = ScriptEditList[BeforeProcess1]
@@ -224,8 +224,6 @@ def EditToScriptIntroductionInputList(ScriptEditPath, BeforeProcess1, BeforeProc
         InputText2 += f"\n\n[파트{IndexId}: {Index}]\n\n{JoinedSubIndex}"
 
     Input = InputText1 + InputText2
-    print(Input)
-    sys.exit()
     
     InputList.append({'Id': i + 1, 'Input': Input})
     
@@ -799,6 +797,40 @@ def SummaryOfIndexGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePat
     ## SummaryOfIndexFrame 저장
     with open(ProjectDataFrameSummaryOfIndexPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(SummaryOfIndexFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+        
+## Process9: ScriptIntroductionGenProcess DataFrame 저장
+def ScriptIntroductionGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameScriptIntroductionGenPath, ScriptIntroductionGenResponse, Process, InputCount, TotalInputCount):
+    ## ScriptIntroductionGenFrame 불러오기
+    if os.path.exists(ProjectDataFrameScriptIntroductionGenPath):
+        ScriptIntroductionFramePath = ProjectDataFrameScriptIntroductionGenPath
+    else:
+        ScriptIntroductionFramePath = os.path.join(BookScriptGenDataFramePath, "b5312-03_ScriptIntroductionFrame.json")
+    with open(ScriptIntroductionFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        ScriptIntroductionFrame = json.load(DataFrameJson)
+        
+    ## ScriptIntroductionFrame 업데이트
+    ScriptIntroductionFrame[0]['ProjectName'] = ProjectName
+    ScriptIntroductionFrame[0]['TaskName'] = Process
+    
+    ## ScriptIntroductionFrame 첫번째 데이터 프레임 복사
+    for i, Response in range(len(ScriptIntroductionGenResponse)):
+        ScriptIntroduction = ScriptIntroductionFrame[1][0].copy()
+
+        ScriptIntroduction['IntroductionId'] = i + 1
+        ScriptIntroduction['Reference'] = Response['메인목차']
+        ScriptIntroduction['Introduction'] = Response['전체요약']
+    
+        ## SummaryOfIndexFrame 데이터 프레임 업데이트
+        ScriptIntroductionFrame[1].append(ScriptIntroduction)
+        
+    ## SummaryOfIndexFrame ProcessCount 및 Completion 업데이트
+    ScriptIntroductionFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        ScriptIntroductionFrame[0]['Completion'] = 'Yes'
+        
+    ## SummaryOfIndexFrame 저장
+    with open(ProjectDataFrameScriptIntroductionGenPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(ScriptIntroductionFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 #####################################
 ##### ProcessFeedback Input 생성 #####
@@ -1255,7 +1287,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
             TotalInputCount = len(PromptInputList)
             for PromptInputDic in PromptInputList:
                 inputCount = PromptInputDic['PromptId']
-                EditCount = PromptInputDic['PromptId'] - 1
+                EditCount = inputCount - 1
 
                 ## PromptInput 생성
                 FeedbackPromptInput = ScriptPlanFeedbackInput(PromptInputDic)
@@ -1317,7 +1349,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
             TotalInputCount = len(PromptInputList)
             for PromptInputDic in PromptInputList:
                 inputCount = PromptInputDic['PromptId']
-                EditCount = PromptInputDic['PromptId'] - 1
+                EditCount = inputCount - 1
                 
                 ## PromptInput 생성
                 FeedbackPromptInput = TitleAndIndexGenFeedbackInput(PromptInputDic)
@@ -1410,16 +1442,49 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     
     ## Process 설정
     ProcessNumber = '04'
-    Process = "ScriptIntroduction"
+    Process = "ScriptIntroductionGen"
     
-    ## ScriptShortGen 경로 생성
-    ProjectDataFrameSummaryOfIndexPath = os.path.join(ProjectDataFrameScriptPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+    ## ScriptIntroductionGen 경로 생성
+    ProjectDataFrameScriptIntroductionGenPath = os.path.join(ProjectDataFrameScriptPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
     
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
     
-    InputList = EditToScriptIntroductionInputList(ScriptEditPath, "TitleAndIndexGen", "SummaryOfIndexGen")
+    InputList = EditToScriptIntroductionGenInputList(ScriptEditPath, "TitleAndIndexGen", "SummaryOfIndexGen")
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameScriptIntroductionGenPath)
+    EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
+    print(f"InputCount: {InputCount}")
+    print(f"EditCheck: {EditCheck}")
+    print(f"EditCompletion: {EditCompletion}")
+    print(f"PromptCheck: {PromptCheck}")
+    print(f"PromptInputList: {PromptInputList}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                inputCount = InputList[i]['Id']
+                Input = InputList[i]['Input']
+                
+                ## Response 생성
+                ScriptIntroductionGenResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, ScriptIntroductionGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## DataFrame 저장
+                ScriptIntroductionGenProcessDataFrameSave(projectName, BookScriptGenDataFramePath, ProjectDataFrameScriptIntroductionGenPath, ScriptIntroductionGenResponse, Process, inputCount, TotalInputCount)
+                
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameScriptIntroductionGenPath, ScriptEditPath, Process)
+        sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+        
+    if EditCheck:
+        ## FeedbackPrompt Response 생성
+        if PromptCheck:
+            FeedbackProcess = Process + "Feedback"
+            TotalInputCount = len(PromptInputList)
+            for PromptInputDic in PromptInputList:
+                inputCount = PromptInputDic['PromptId']
+                EditCount = inputCount - 1
+                
 
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")
 

@@ -1,0 +1,17 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "Book",
+        "Language": "Ko",
+        "TaskName": "ScriptIntroductionGen",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "IntroductionId": 0,
+            "Reference": ["<도서도입내용.json>작성을 위한", "참고 요소를 보고", "참고할 요소 2-3가지를 선택하여 작성"],
+            "Introduction": "<도서제목및목차와요약>과 선택한 참고 요소를 바탕으로 한글 4,000자 분량으로 작성"
+        }
+    ]
+]

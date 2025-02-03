@@ -97,6 +97,19 @@
                     "Volume": 100,
                     "Direction": "None"
                 }
+            },
+            {
+                "LogoId": 7,
+                "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s182_LogoMusic/7_Logo_에세이(성온화).wav",
+                "Logo": {
+                    "Language": "Ko",
+                    "Genre": "에세이"
+                },
+                "Setting": {
+                    "Length": 0.00,
+                    "Volume": 100,
+                    "Direction": "None"
+                }
             }
         ]
     }

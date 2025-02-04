@@ -554,7 +554,7 @@ def ScriptIntroductionGenFilter(Response, CheckCount):
         return "ScriptIntroductionGen, JSON에서 오류 발생: '도입내용 > 도입'은 문자열이어야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
-    return OutputDic
+    return OutputDic['도입내용']
 
 ## Process5: ShortScriptGen의 Filter(Error 예외처리)
 def ShortScriptGenFilter(Response, CheckCount):
@@ -804,7 +804,7 @@ def ScriptIntroductionGenProcessDataFrameSave(ProjectName, BookScriptGenDataFram
     if os.path.exists(ProjectDataFrameScriptIntroductionGenPath):
         ScriptIntroductionFramePath = ProjectDataFrameScriptIntroductionGenPath
     else:
-        ScriptIntroductionFramePath = os.path.join(BookScriptGenDataFramePath, "b5312-03_ScriptIntroductionFrame.json")
+        ScriptIntroductionFramePath = os.path.join(BookScriptGenDataFramePath, "b5312-04_ScriptIntroductionFrame.json")
     with open(ScriptIntroductionFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         ScriptIntroductionFrame = json.load(DataFrameJson)
         
@@ -813,15 +813,14 @@ def ScriptIntroductionGenProcessDataFrameSave(ProjectName, BookScriptGenDataFram
     ScriptIntroductionFrame[0]['TaskName'] = Process
     
     ## ScriptIntroductionFrame 첫번째 데이터 프레임 복사
-    for i, Response in range(len(ScriptIntroductionGenResponse)):
-        ScriptIntroduction = ScriptIntroductionFrame[1][0].copy()
+    ScriptIntroduction = ScriptIntroductionFrame[1][0].copy()
 
-        ScriptIntroduction['IntroductionId'] = i + 1
-        ScriptIntroduction['Reference'] = Response['메인목차']
-        ScriptIntroduction['Introduction'] = Response['전체요약']
-    
-        ## SummaryOfIndexFrame 데이터 프레임 업데이트
-        ScriptIntroductionFrame[1].append(ScriptIntroduction)
+    ScriptIntroduction['IntroductionId'] = InputCount
+    ScriptIntroduction['Reference'] = ScriptIntroductionGenResponse['참고요소']
+    ScriptIntroduction['Introduction'] = ScriptIntroductionGenResponse['도입']
+
+    ## SummaryOfIndexFrame 데이터 프레임 업데이트
+    ScriptIntroductionFrame[1].append(ScriptIntroduction)
         
     ## SummaryOfIndexFrame ProcessCount 및 Completion 업데이트
     ScriptIntroductionFrame[0]['InputCount'] = InputCount
@@ -965,6 +964,26 @@ def SummaryOfIndexGenFeedbackInputAndExtension(PromptInputDic, ScriptEditPath, P
             ]
         }
         PromptModifyInput += f"{Mark}\n\n{json.dumps(promptModifyInput, indent = 4, ensure_ascii = False)}\n\n"
+    
+    return PromptModifyInput
+
+## Feedback9: TitleAndIndexGenFeedback Input 생성
+def ScriptIntroductionGenFeedbackInput(PromptInputDic):
+    PromptInput = PromptInputDic['PromptData']
+    ## PromptModifyInput 생성
+    PromptModifyInput = {
+        '글쓰기형태': PromptToModify(PromptInput['Type']),
+        '제목부제형태': PromptToModify(PromptInput['TitleType']),
+        '제목': PromptToModify(PromptInput['Title']),
+        '부제': PromptToModify(PromptInput['SubTitle']),
+        '메인목차': [
+            {
+                '순번': PromptToModify(PromptInput['MainIndex'][i]['IndexId']),
+                '목차': PromptToModify(PromptInput['MainIndex'][i]['Index'])
+            }
+            for i in range(len(PromptInput['MainIndex']))
+        ]
+    }
     
     return PromptModifyInput
 
@@ -1484,6 +1503,9 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
             for PromptInputDic in PromptInputList:
                 inputCount = PromptInputDic['PromptId']
                 EditCount = inputCount - 1
+                
+                ## PromptInput 생성 및 앞/뒤 예시 확장
+                FeedbackPromptInput = ScriptIntroductionGenFeedbackInput(PromptInputDic, ScriptEditPath, Process)
                 
 
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")

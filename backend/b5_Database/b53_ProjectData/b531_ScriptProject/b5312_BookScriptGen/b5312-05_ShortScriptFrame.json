@@ -1,0 +1,19 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "Book",
+        "Language": "Ko",
+        "TaskName": "ShortScriptGen",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "IndexId": 0,
+            "Index": "메인목차를 그대로 작성",
+            "SubIndexId": 0,
+            "SubIndex": "서브목차를 그대로 작성",
+            "ShortScript": "공백 포함 한글 4,000~8,000자 분량의 초안 작성"
+        }
+    ]
+]

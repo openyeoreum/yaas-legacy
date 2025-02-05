@@ -277,7 +277,7 @@ def ShortScriptGenInput(InputDic, BeforeResponse):
         Input2 = f"\n[직전내용]\n파트: 서문\n챕터: 들어가며\n\n서문 들어가며 초안: {BeforeResponse['Introduction']}\n\n\n[초안내용 요약]\n{InputDic['Input']}"
     # 주번째 Input은 BeforeResponse 내용 추가
     else:
-        Input2 = f"\n[직전내용]\n{BeforeResponse['파트순번']}: {BeforeResponse['파트명']}\n챕터{BeforeResponse['챕터순번']}: {BeforeResponse['챕터명']}\n\n파트{BeforeResponse['파트순번']}의 챕터{BeforeResponse['챕터순번']} 초안: {BeforeResponse['초안']}\n\n[초안내용 요약]{InputDic['Input']}"
+        Input2 = f"\n[직전내용]\n파트{BeforeResponse['파트순번']}: {BeforeResponse['파트명']}\n챕터{BeforeResponse['챕터순번']}: {BeforeResponse['챕터명']}\n\n파트{BeforeResponse['파트순번']}의 챕터{BeforeResponse['챕터순번']} 초안: {BeforeResponse['초안']}\n\n[초안내용 요약]{InputDic['Input']}"
         
     return Input1, Input2
 
@@ -1614,11 +1614,6 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameShortScriptGenPath)
     EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
-    print(f"InputCount: {InputCount}")
-    print(f"EditCheck: {EditCheck}")
-    print(f"EditCompletion: {EditCompletion}")
-    print(f"PromptCheck: {PromptCheck}")
-    print(f"PromptInputList: {PromptInputList}")
     ## Process 진행
     if not EditCheck:
         if DataFrameCompletion == 'No':

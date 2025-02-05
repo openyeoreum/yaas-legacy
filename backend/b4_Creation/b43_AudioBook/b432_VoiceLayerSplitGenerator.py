@@ -1784,7 +1784,41 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                         break
             
             return ChunkText
-        
+
+        # 문장 앞부분과 끝부분 괄호가 다를 경우 이를 일치해주는 함수
+        def FixSameBrackets(ChunkText):
+            if not ChunkText:
+                
+                return ChunkText
+
+            # 첫 번째 괄호 스타일 확인
+            if ChunkText.startswith('['):
+                OpeningBracket, ClosingBracket = '[', ']'
+            elif ChunkText.startswith('('):
+                OpeningBracket, ClosingBracket = '(', ')'
+            else:
+                
+                return ChunkText  # 수정할 괄호가 없음
+
+            Result = ''
+            CurrentPosition = 0
+            InBracket = False
+            for i, Char in enumerate(ChunkText):
+                if i < CurrentPosition:
+                    continue
+                    
+                if Char in '([' and not InBracket:
+                    Result += OpeningBracket
+                    InBracket = True
+                elif Char in ')]' and InBracket:
+                    Result += ClosingBracket
+                    InBracket = False
+                else:
+                    Result += Char
+                CurrentPosition = i + 1
+                
+            return Result
+
         PausePatterns = [
             r'\)\s*(\d+\.\d+)\s*\[',  # ) 숫자 [
             r'\]\s*(\d+\.\d+)\s*\[',  # ] 숫자 [
@@ -1832,6 +1866,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     chunk_count += 1
                 else:
                     ChunkText = FixBrackets(ChunkText)
+                    ChunkText = FixSameBrackets(ChunkText)
                     SplitedChunkTexts = []
                     # 일반 Chunk, 대괄호 Chunk, Pause 찾기
                     AllMatches = []

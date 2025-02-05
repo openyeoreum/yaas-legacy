@@ -470,7 +470,7 @@ def SummaryOfIndexGenFilter(Response, CheckCount):
     return OutputDic['메인목차']
 
 ## Process8: SummaryOfIndexGenFeedback의 Filter(Error 예외처리)
-def SummaryOfIndexGenFeedback(Response, CheckCount):
+def SummaryOfIndexGenFeedbackFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
         OutputDic = json.loads(Response)
@@ -532,29 +532,25 @@ def ScriptIntroductionGenFilter(Response, CheckCount):
     except json.JSONDecodeError:
         return "ScriptIntroductionGen, JSONDecode에서 오류 발생: JSONDecodeError"
 
-    # Error2: 최상위 필수 키 확인
-    if '도입내용' not in OutputDic:
-        return "ScriptIntroductionGen, JSONKeyError: '도입내용' 키가 누락되었습니다"
-
-    # Error3: '도입내용'이 딕셔너리인지 확인
-    if not isinstance(OutputDic['도입내용'], dict):
+    # Error2: OutputDic이 딕셔너리인지 확인
+    if not isinstance(OutputDic, dict):
         return "ScriptIntroductionGen, JSON에서 오류 발생: '도입내용'은 딕셔너리 형태여야 합니다"
 
     # 필수 키 확인
-    required_keys = ['참고요소', '도입']
-    missing_keys = [key for key in required_keys if key not in OutputDic['도입내용']]
+    required_keys = ['도입내용참고요소', '도입내용']
+    missing_keys = [key for key in required_keys if key not in OutputDic]
     if missing_keys:
-        return f"ScriptIntroductionGen, JSONKeyError: '도입내용'에 누락된 키: {', '.join(missing_keys)}"
+        return f"ScriptIntroductionGen, JSONKeyError: OutputDic에 누락된 키: {', '.join(missing_keys)}"
 
     # Error4: 데이터 타입 검증
-    if not isinstance(OutputDic['도입내용']['참고요소'], list) or not all(isinstance(item, str) for item in OutputDic['도입내용']['참고요소']):
-        return "ScriptIntroductionGen, JSON에서 오류 발생: '도입내용 > 참고요소'는 문자열 리스트여야 합니다"
+    if not isinstance(OutputDic['도입내용참고요소'], list) or not all(isinstance(item, str) for item in OutputDic['도입내용참고요소']):
+        return "ScriptIntroductionGen, JSON에서 오류 발생: '도입내용참고요소'는 문자열 리스트여야 합니다"
 
-    if not isinstance(OutputDic['도입내용']['도입'], str):
-        return "ScriptIntroductionGen, JSON에서 오류 발생: '도입내용 > 도입'은 문자열이어야 합니다"
+    if not isinstance(OutputDic['도입내용'], str):
+        return "ScriptIntroductionGen, JSON에서 오류 발생: '도입내용'은 문자열이어야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
-    return OutputDic['도입내용']
+    return OutputDic
 
 ## Process5: ShortScriptGen의 Filter(Error 예외처리)
 def ShortScriptGenFilter(Response, CheckCount):
@@ -816,8 +812,8 @@ def ScriptIntroductionGenProcessDataFrameSave(ProjectName, BookScriptGenDataFram
     ScriptIntroduction = ScriptIntroductionFrame[1][0].copy()
 
     ScriptIntroduction['IntroductionId'] = InputCount
-    ScriptIntroduction['Reference'] = ScriptIntroductionGenResponse['참고요소']
-    ScriptIntroduction['Introduction'] = ScriptIntroductionGenResponse['도입']
+    ScriptIntroduction['Reference'] = ScriptIntroductionGenResponse['도입내용참고요소']
+    ScriptIntroduction['Introduction'] = ScriptIntroductionGenResponse['도입내용']
 
     ## SummaryOfIndexFrame 데이터 프레임 업데이트
     ScriptIntroductionFrame[1].append(ScriptIntroduction)
@@ -972,19 +968,10 @@ def ScriptIntroductionGenFeedbackInput(PromptInputDic):
     PromptInput = PromptInputDic['PromptData']
     ## PromptModifyInput 생성
     PromptModifyInput = {
-        '글쓰기형태': PromptToModify(PromptInput['Type']),
-        '제목부제형태': PromptToModify(PromptInput['TitleType']),
-        '제목': PromptToModify(PromptInput['Title']),
-        '부제': PromptToModify(PromptInput['SubTitle']),
-        '메인목차': [
-            {
-                '순번': PromptToModify(PromptInput['MainIndex'][i]['IndexId']),
-                '목차': PromptToModify(PromptInput['MainIndex'][i]['Index'])
-            }
-            for i in range(len(PromptInput['MainIndex']))
-        ]
+        '도입내용참고요소': PromptToModify(PromptInput['Reference']),
+        '도입내용': PromptToModify(PromptInput['Introduction']),
     }
-    
+
     return PromptModifyInput
 
 ####################################
@@ -1074,6 +1061,26 @@ def SummaryOfIndexGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, 
     ReStructureProcessDic = RestructureProcessDic(ProcessDic)
     ScriptEdit[Process][EditCount] = ReStructureProcessDic
     
+    ## ScriptEdit 저장
+    with open(ScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
+        json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
+        
+## Feedback9: ScriptIntroductionGenFeedback Edit 저장
+def ScriptIntroductionGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, EditCount, Response):
+    ## ScriptEdit 불러오기
+    with open(ScriptEditPath, 'r', encoding = 'utf-8') as ScriptEditJson:
+        ScriptEdit = json.load(ScriptEditJson)
+    ## Feedback 이전 ScriptEdit 저장
+    with open(ModifiedScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
+        json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
+    
+    ## ScriptEdit 업데이트
+    ProcessDic = ScriptEdit[Process][EditCount]
+    ProcessDic['Reference'] = Response['도입내용참고요소']
+    ProcessDic['Introduction'] = Response['도입내용']
+    ReStructureProcessDic = RestructureProcessDic(ProcessDic)
+    ScriptEdit[Process][EditCount] = ReStructureProcessDic
+
     ## ScriptEdit 저장
     with open(ScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
         json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
@@ -1402,11 +1409,6 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     TotalInputCount = len(InputList2) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameSummaryOfIndexPath)
     EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount, NumProcesses = 2)
-    # print(f"InputCount: {InputCount}")
-    # print(f"EditCheck: {EditCheck}")
-    # print(f"EditCompletion: {EditCompletion}")
-    # print(f"PromptCheck: {PromptCheck}")
-    # print(f"PromptInputList: {PromptInputList}")
     ## Process 진행
     SummaryOfIndexGenResponse = None
     if not EditCheck:
@@ -1445,7 +1447,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 FeedbackPromptInput = SummaryOfIndexGenFeedbackInputAndExtension(PromptInputDic, ScriptEditPath, Process)
                 
                 ## Response 생성
-                SummaryOfIndexGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, SummaryOfIndexGenFeedback, CheckCount, "OpenAI", mode, MessagesReview)
+                SummaryOfIndexGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, SummaryOfIndexGenFeedbackFilter, CheckCount, "OpenAI", mode, MessagesReview)
                 
                 ## Edit 업데이트
                 SummaryOfIndexGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, "TitleAndIndexGen", EditCount, SummaryOfIndexGenFeedbackResponse)
@@ -1473,11 +1475,6 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameScriptIntroductionGenPath)
     EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
-    print(f"InputCount: {InputCount}")
-    print(f"EditCheck: {EditCheck}")
-    print(f"EditCompletion: {EditCompletion}")
-    print(f"PromptCheck: {PromptCheck}")
-    print(f"PromptInputList: {PromptInputList}")
     ## Process 진행
     if not EditCheck:
         if DataFrameCompletion == 'No':
@@ -1505,8 +1502,13 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 EditCount = inputCount - 1
                 
                 ## PromptInput 생성 및 앞/뒤 예시 확장
-                FeedbackPromptInput = ScriptIntroductionGenFeedbackInput(PromptInputDic, ScriptEditPath, Process)
+                FeedbackPromptInput = ScriptIntroductionGenFeedbackInput(PromptInputDic)
                 
+                ## Response 생성
+                ScriptIntroductionGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, ScriptIntroductionGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## Edit 업데이트
+                ScriptIntroductionGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, EditCount, ScriptIntroductionGenFeedbackResponse)
 
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")
 

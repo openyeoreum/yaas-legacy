@@ -200,7 +200,7 @@ def DemandSearchCollectionDataFilterFilter(Response, CheckCount):
         if not isinstance(item['상생키워드'], list) or not all(isinstance(kw, str) for kw in item['상생키워드']):
             return f"DemandSearchCollectionDataFilter, JSON에서 오류 발생: '선별[{idx}] > 상생키워드'는 문자열 리스트여야 합니다"
 
-        if not isinstance(item['매칭점수'], int) or not (0 <= item['매칭점수'] <= 100):
+        if (not isinstance(item['매칭점수'], (int, str))) or (isinstance(item['매칭점수'], str) and not item['매칭점수'].isdigit()) or (isinstance(item['매칭점수'], (int, str)) and (int(item['매칭점수']) < 0 or int(item['매칭점수']) > 100)):
             return f"DemandSearchCollectionDataFilter, JSON에서 오류 발생: '선별[{idx}] > 매칭점수'는 0-100 사이의 정수여야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
@@ -246,7 +246,7 @@ def SupplySearchCollectionDataFilterFilter(Response, CheckCount):
         if not isinstance(item['상생키워드'], list) or not all(isinstance(kw, str) for kw in item['상생키워드']):
             return f"SupplySearchCollectionDataFilter, JSON에서 오류 발생: '선별[{idx}] > 상생키워드'는 문자열 리스트여야 합니다"
 
-        if not isinstance(item['매칭점수'], int) or not (0 <= item['매칭점수'] <= 100):
+        if (not isinstance(item['매칭점수'], (int, str))) or (isinstance(item['매칭점수'], str) and not item['매칭점수'].isdigit()) or (isinstance(item['매칭점수'], (int, str)) and (int(item['매칭점수']) < 0 or int(item['매칭점수']) > 100)):
             return f"SupplySearchCollectionDataFilter, JSON에서 오류 발생: '선별[{idx}] > 매칭점수'는 0-100 사이의 정수여야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
@@ -292,7 +292,7 @@ def SimilaritySearchCollectionDataFilterFilter(Response, CheckCount):
         if not isinstance(item['상생키워드'], list) or not all(isinstance(kw, str) for kw in item['상생키워드']):
             return f"SimilaritySearchCollectionDataFilter, JSON에서 오류 발생: '선별[{idx}] > 상생키워드'는 문자열 리스트여야 합니다"
 
-        if not isinstance(item['매칭점수'], int) or not (0 <= item['매칭점수'] <= 100):
+        if (not isinstance(item['매칭점수'], (int, str))) or (isinstance(item['매칭점수'], str) and not item['매칭점수'].isdigit()) or (isinstance(item['매칭점수'], (int, str)) and (int(item['매칭점수']) < 0 or int(item['매칭점수']) > 100)):
             return f"SimilaritySearchCollectionDataFilter, JSON에서 오류 발생: '선별[{idx}] > 매칭점수'는 0-100 사이의 정수여야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환

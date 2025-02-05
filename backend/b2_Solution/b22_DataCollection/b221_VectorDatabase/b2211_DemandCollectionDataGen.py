@@ -33,8 +33,8 @@ def DemandCollectionDataDetailFilter(Response, CheckCount):
         if not isinstance(OutputDic[key], str):
             return f"DemandCollectionDataDetail, JSON에서 오류 발생: '{key}'은 문자열이 아님"
 
-    # 검색어완성도는 0-100 사이의 정수여야 함
-    if not isinstance(OutputDic['검색어완성도'], int) or not (0 <= OutputDic['검색어완성도'] <= 100):
+    # 검색어완성도는 0-100 사이의 정수여야 함  
+    if (not isinstance(OutputDic['검색어완성도'], (int, str))) or (isinstance(OutputDic['검색어완성도'], str) and not OutputDic['검색어완성도'].isdigit()) or (isinstance(OutputDic['검색어완성도'], (int, str)) and (int(OutputDic['검색어완성도']) < 0 or int(OutputDic['검색어완성도']) > 100)):
         return "DemandCollectionDataDetail, JSON에서 오류 발생: '검색어완성도'가 0-100 사이의 정수가 아님"
 
     # 검색어피드백은 문자열 리스트여야 함
@@ -62,7 +62,7 @@ def DemandCollectionDataContextFilter(Response, CheckCount):
         return "DemandCollectionDataContext, JSON에서 오류 발생: '핵심목적'은 문자열이 아님"
     if not isinstance(OutputDic['분야'], list) or not all(isinstance(item, str) for item in OutputDic['분야']):
         return "DemandCollectionDataContext, JSON에서 오류 발생: '분야'는 문자열 리스트가 아님"
-    if not isinstance(OutputDic['정보의질'], int) or not (0 <= OutputDic['정보의질'] <= 100):
+    if (not isinstance(OutputDic['정보의질'], (int, str))) or (isinstance(OutputDic['정보의질'], str) and not OutputDic['정보의질'].isdigit()) or (isinstance(OutputDic['정보의질'], (int, str)) and (int(OutputDic['정보의질']) < 0 or int(OutputDic['정보의질']) > 100)):
         return "DemandCollectionDataContext, JSON에서 오류 발생: '정보의질'은 0-100 사이의 정수가 아님"
 
     # Error4: '필요' 키의 구조와 데이터 검증
@@ -94,7 +94,7 @@ def DemandCollectionDataContextFilter(Response, CheckCount):
             return f"DemandCollectionDataContext, JSON에서 오류 발생: '{sub_key} > 키워드'는 문자열 리스트가 아님"
         
         # 중요도 검증
-        if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
+        if (not isinstance(sub_item['중요도'], (int, str))) or (isinstance(sub_item['중요도'], str) and not sub_item['중요도'].isdigit()) or (isinstance(sub_item['중요도'], (int, str)) and (int(sub_item['중요도']) < 0 or int(sub_item['중요도']) > 100)):
             return f"DemandCollectionDataContext, JSON에서 오류 발생: '{sub_key} > 중요도'가 0-100 사이의 정수가 아님"
 
     return OutputDic
@@ -162,7 +162,7 @@ def DemandCollectionDataExpertiseChainFilter(Response, CheckCount):
         return "DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 핵심목적'은 문자열이어야 합니다"
     if not isinstance(expertise_data['분야'], list) or not all(isinstance(item, str) for item in expertise_data['분야']):
         return "DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 분야'는 문자열 리스트가 아님"
-    if not isinstance(expertise_data['정보의질'], int) or not (0 <= expertise_data['정보의질'] <= 100):
+    if (not isinstance(expertise_data['정보의질'], (int, str))) or (isinstance(expertise_data['정보의질'], str) and not expertise_data['정보의질'].isdigit()) or (isinstance(expertise_data['정보의질'], (int, str)) and (int(expertise_data['정보의질']) < 0 or int(expertise_data['정보의질']) > 100)):
         return "DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 정보의질'은 0-100 사이의 정수가 아님"
 
     # Error5: '필요' 내부 구조 검증
@@ -189,7 +189,7 @@ def DemandCollectionDataExpertiseChainFilter(Response, CheckCount):
             return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 필요 > {sub_key} > 설명'은 문자열이 아님"
         if not isinstance(sub_item['키워드'], list) or not all(isinstance(item, str) for item in sub_item['키워드']):
             return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 필요 > {sub_key} > 키워드'는 문자열 리스트가 아님"
-        if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
+        if (not isinstance(sub_item['중요도'], (int, str))) or (isinstance(sub_item['중요도'], str) and not sub_item['중요도'].isdigit()) or (isinstance(sub_item['중요도'], (int, str)) and (int(sub_item['중요도']) < 0 or int(sub_item['중요도']) > 100)):
             return f"DemandCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 필요 > {sub_key} > 중요도'가 0-100 사이의 정수가 아님"
 
     return OutputDic['전문데이터']
@@ -258,7 +258,7 @@ def DemandCollectionDataUltimateChainFilter(Response, CheckCount):
         return "DemandCollectionDataUltimateChainFilter, JSON에서 오류 발생: '핵심목적'은 문자열이어야 합니다"
     if not isinstance(OutputDic['분야'], list) or not all(isinstance(item, str) for item in OutputDic['분야']):
         return "DemandCollectionDataUltimateChainFilter, JSON에서 오류 발생: '분야'는 문자열 리스트여야 합니다"
-    if not isinstance(OutputDic['정보의질'], int) or not (0 <= OutputDic['정보의질'] <= 100):
+    if (not isinstance(OutputDic['정보의질'], (int, str))) or (isinstance(OutputDic['정보의질'], str) and not OutputDic['정보의질'].isdigit()) or (isinstance(OutputDic['정보의질'], (int, str)) and (int(OutputDic['정보의질']) < 0 or int(OutputDic['정보의질']) > 100)):
         return "DemandCollectionDataUltimateChainFilter, JSON에서 오류 발생: '정보의질'은 0-100 사이의 정수여야 합니다"
 
     # Error4: '필요' 키 구조 검증
@@ -288,7 +288,7 @@ def DemandCollectionDataUltimateChainFilter(Response, CheckCount):
             return f"DemandCollectionDataUltimateChainFilter, JSON에서 오류 발생: '필요 > {sub_key} > 설명'은 문자열이어야 합니다"
         if not isinstance(sub_item['키워드'], list) or not all(isinstance(item, str) for item in sub_item['키워드']):
             return f"DemandCollectionDataUltimateChainFilter, JSON에서 오류 발생: '필요 > {sub_key} > 키워드'는 문자열 리스트여야 합니다"
-        if not isinstance(sub_item['중요도'], int) or not (0 <= sub_item['중요도'] <= 100):
+        if (not isinstance(sub_item['중요도'], (int, str))) or (isinstance(sub_item['중요도'], str) and not sub_item['중요도'].isdigit()) or (isinstance(sub_item['중요도'], (int, str)) and (int(sub_item['중요도']) < 0 or int(sub_item['중요도']) > 100)):
             return f"DemandCollectionDataUltimateChainFilter, JSON에서 오류 발생: '필요 > {sub_key} > 중요도'는 0-100 사이의 정수여야 합니다"
 
     return OutputDic

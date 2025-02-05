@@ -261,11 +261,18 @@ def EditToShortScriptGenInputList(ScriptEditPath, BeforeProcess1, BeforeProcess2
     return InputList
 
 ## Process11: ScriptIntroductionGenResponse 불러오기
-def LoadScriptIntroductionGenResponse(ScriptEditPath, Process):
-    with open(ScriptEditPath, "r", encoding = "utf-8") as ScriptEditJson:
-        ScriptIntroductionGenResponse = json.load(ScriptEditJson)[Process][0]
+def LoadScriptIntroductionGenResponse(ProjectDataFramePath, Process):
+    with open(ProjectDataFramePath, "r", encoding = "utf-8") as ScriptDataFrameJson:
+        ScriptIntroductionGenResponse = json.load(ScriptDataFrameJson)[1][-1]
     
     return ScriptIntroductionGenResponse
+
+## Process11: LoadShortScriptGenResponse 불러오기
+def LoadShortScriptGenResponse(ProjectDataFramePath, Process):
+    with open(ProjectDataFramePath, "r", encoding = "utf-8") as ScriptDataFrameJson:
+        ShortScriptGenResponse = json.load(ScriptDataFrameJson)[1][-1]
+    
+    return ShortScriptGenResponse
 
 ## Process11: ShortScriptGen의 Input
 def ShortScriptGenInput(InputDic, BeforeResponse):
@@ -277,7 +284,7 @@ def ShortScriptGenInput(InputDic, BeforeResponse):
         Input2 = f"\n[직전내용]\n파트: 서문\n챕터: 들어가며\n\n서문 들어가며 초안: {BeforeResponse['Introduction']}\n\n\n[초안내용 요약]\n{InputDic['Input']}"
     # 주번째 Input은 BeforeResponse 내용 추가
     else:
-        Input2 = f"\n[직전내용]\n파트{BeforeResponse['파트순번']}: {BeforeResponse['파트명']}\n챕터{BeforeResponse['챕터순번']}: {BeforeResponse['챕터명']}\n\n파트{BeforeResponse['파트순번']}의 챕터{BeforeResponse['챕터순번']} 초안: {BeforeResponse['초안']}\n\n[초안내용 요약]{InputDic['Input']}"
+        Input2 = f"\n[직전내용]\n파트{BeforeResponse['IndexId']}: {BeforeResponse['Index']}\n챕터{BeforeResponse['SubIndexId']}: {BeforeResponse['SubIndex']}\n\n파트{BeforeResponse['IndexId']}의 챕터{BeforeResponse['SubIndexId']} 초안: {BeforeResponse['ShortScript']}\n\n[초안내용 요약]{InputDic['Input']}"
         
     return Input1, Input2
 
@@ -712,7 +719,7 @@ def ProcessDataFrameCheck(ProjectDataFramePath):
             ScriptEditFrame = json.load(DataFrameJson)
         
         ## InputCount 및 DataFrameCompletion 확인
-        InputCount = ScriptEditFrame[0]['InputCount']
+        InputCount = ScriptEditFrame[0]['InputCount'] + 1
         DataFrameCompletion = ScriptEditFrame[0]['Completion']
         
         return InputCount, DataFrameCompletion
@@ -898,7 +905,7 @@ def ShortScriptGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, 
 
     ShortScript['IndexId'] = int(ShortScriptGenResponse['파트순번'])
     ShortScript['Index'] = ShortScriptGenResponse['파트명']
-    ShortScript['SubIndexId'] = ShortScriptGenResponse['챕터순번']
+    ShortScript['SubIndexId'] = int(ShortScriptGenResponse['챕터순번'])
     ShortScript['SubIndex'] = ShortScriptGenResponse['챕터명']
     ShortScript['ShortScript'] = ShortScriptGenResponse['초안']
 
@@ -1597,6 +1604,11 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 ## Edit 업데이트
                 ScriptIntroductionGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, EditCount, ScriptIntroductionGenFeedbackResponse)
                 
+            sys.exit(f"[ {projectName}_Script_Edit -> {Process} 수정 완료: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+            
+        if not EditCompletion:
+            sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+                
     #############################################
     ### Process5: ShortScriptGen Response 생성 ###
     #############################################
@@ -1614,15 +1626,20 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameShortScriptGenPath)
     EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
+    print(f"InputCount: {InputCount}")
+    print(f"EditCheck: {EditCheck}")
+    print(f"EditCompletion: {EditCompletion}")
+    print(f"PromptCheck: {PromptCheck}")
+    print(f"PromptInputList: {PromptInputList}")
     ## Process 진행
     if not EditCheck:
         if DataFrameCompletion == 'No':
             for i in range(InputCount - 1, TotalInputCount):
                 inputCount = InputList[i]['Id']
                 if inputCount == 1:
-                    BeforeResponse = LoadScriptIntroductionGenResponse(ScriptEditPath, "ScriptIntroductionGen")
+                    BeforeResponse = LoadScriptIntroductionGenResponse(ProjectDataFrameScriptIntroductionGenPath, "ScriptIntroductionGen")
                 else:
-                    BeforeResponse = ShortScriptGenResponse
+                    BeforeResponse = LoadShortScriptGenResponse(ProjectDataFrameShortScriptGenPath, "ShortScriptGen")
                 Input1, Input2 = ShortScriptGenInput(InputList[i], BeforeResponse)
                 
                 ## Response 생성

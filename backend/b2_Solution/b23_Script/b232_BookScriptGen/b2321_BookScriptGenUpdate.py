@@ -719,10 +719,10 @@ def ProcessDataFrameCheck(ProjectDataFramePath):
             ScriptEditFrame = json.load(DataFrameJson)
         
         ## InputCount 및 DataFrameCompletion 확인
-        InputCount = ScriptEditFrame[0]['InputCount'] + 1
+        NextInputCount = ScriptEditFrame[0]['InputCount'] + 1
         DataFrameCompletion = ScriptEditFrame[0]['Completion']
         
-        return InputCount, DataFrameCompletion
+        return NextInputCount, DataFrameCompletion
 
 ## Process1~3: ScriptPlanProcess DataFrame 저장
 def ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, ProjectDataFrameScriptPalnPath, ScriptPlanResponse, Process, InputCount, TotalInputCount):
@@ -1626,11 +1626,6 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameShortScriptGenPath)
     EditCheck, EditCompletion, PromptCheck, PromptInputList = ProcessEditPromptCheck(ScriptEditPath, Process, TotalInputCount)
-    print(f"InputCount: {InputCount}")
-    print(f"EditCheck: {EditCheck}")
-    print(f"EditCompletion: {EditCompletion}")
-    print(f"PromptCheck: {PromptCheck}")
-    print(f"PromptInputList: {PromptInputList}")
     ## Process 진행
     if not EditCheck:
         if DataFrameCompletion == 'No':
@@ -1651,6 +1646,15 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameShortScriptGenPath, ScriptEditPath, Process)
         sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+        
+    if EditCheck:
+        ## FeedbackPrompt Response 생성
+        if PromptCheck:
+            FeedbackProcess = Process + "Feedback"
+            TotalInputCount = len(PromptInputList)
+            for PromptInputDic in PromptInputList:
+                inputCount = PromptInputDic['PromptId']
+                EditCount = inputCount - 1
     
     
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")

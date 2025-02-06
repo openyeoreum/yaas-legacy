@@ -9,6 +9,7 @@
     },
     [
         {
+            "ScriptId": 0,
             "IndexId": 0,
             "Index": "메인목차를 그대로 작성",
             "SubIndexId": 0,

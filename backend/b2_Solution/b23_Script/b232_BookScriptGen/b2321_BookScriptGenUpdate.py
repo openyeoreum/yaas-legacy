@@ -903,6 +903,7 @@ def ShortScriptGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, 
     ## ShortScriptFrame 첫번째 데이터 프레임 복사
     ShortScript = ShortScriptFrame[1][0].copy()
 
+    ShortScript['ScriptId'] = InputCount
     ShortScript['IndexId'] = int(ShortScriptGenResponse['파트순번'])
     ShortScript['Index'] = ShortScriptGenResponse['파트명']
     ShortScript['SubIndexId'] = int(ShortScriptGenResponse['챕터순번'])
@@ -1066,6 +1067,51 @@ def ScriptIntroductionGenFeedbackInput(PromptInputDic):
         '도입내용': PromptToModify(PromptInput['Introduction']),
     }
 
+    return PromptModifyInput
+
+## Feedback11: ShortScriptGenFeedback Input 생성 및 앞/뒤 예시 확장
+def ShortScriptGenFeedbackInputAndExtension(PromptInputDic, ScriptEditPath, Process1, Process2):
+    with open(ScriptEditPath, 'r', encoding = 'utf-8') as ScriptEditJson:
+        ScriptEdit = json.load(ScriptEditJson)
+    ScriptIntroductionGen = ScriptEdit[Process1][0]
+    ShortScriptGen = ScriptEdit[Process2]
+
+    ## PromptInputList 생성 (앞/뒤 예시 확장)
+    PromptId = PromptInputDic['PromptId']
+    PromptInput = PromptInputDic['PromptData']
+    PromptInputList = []
+    for i in range(len(ShortScriptGen)):
+        if PromptId == ShortScriptGen[i]['ScriptId']:
+            if PromptId == 1:
+                ShortScriptIntroduction = {
+                    'IndexId': 0,
+                    'Index': '서문',
+                    'SubIndexId': 0,
+                    'SubIndex': '들어가며',
+                    'ShortScript': ScriptIntroductionGen['Introduction']
+                }
+                PromptInputList.append({'Mark': '[수정 부분의 앞 부분 참고]', 'PromptInput': ShortScriptIntroduction})
+            else:
+                PromptInputList.append({'Mark': '[수정 부분의 앞 부분 참고]', 'PromptInput': ShortScriptGen[i-1]})
+            PromptInputList.append({'Mark': '\n[** 수정 부분 **]', 'PromptInput': PromptInput})
+            if i < len(ShortScriptGen) - 1:
+                PromptInputList.append({'Mark': '[수정 부분의 뒷 부분 참고]', 'PromptInput': ShortScriptGen[i+1]})
+            break
+        
+    ## PromptModifyInput 생성
+    PromptModifyInput = ''
+    for PromptInputDic in PromptInputList:
+        Mark = PromptInputDic['Mark']
+        PromptInput = PromptInputDic['PromptInput']
+        promptModifyInput = {
+            '파트순번': PromptToModify(PromptInput['IndexId']),
+            '파트명': PromptToModify(PromptInput['Index']),
+            '챕터순번': PromptToModify(PromptInput['SubIndexId']),
+            '챕터명': PromptToModify(PromptInput['SubIndex']),
+            '초안': PromptToModify(PromptInput['ShortScript'])
+        }
+        PromptModifyInput += f"{Mark}\n\n{json.dumps(promptModifyInput, indent = 4, ensure_ascii = False)}\n\n"
+    
     return PromptModifyInput
 
 ####################################
@@ -1656,6 +1702,11 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 inputCount = PromptInputDic['PromptId']
                 EditCount = inputCount - 1
     
+                ## PromptInput 생성 및 앞/뒤 예시 확장
+                FeedbackPromptInput = ShortScriptGenFeedbackInputAndExtension(PromptInputDic, ScriptEditPath, "ScriptIntroductionGen", Process)
+                
+                ## Response 생성
+                ShortScriptGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, ShortScriptGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
     
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")
 

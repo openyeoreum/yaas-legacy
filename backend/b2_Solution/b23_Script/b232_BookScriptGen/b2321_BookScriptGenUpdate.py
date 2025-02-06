@@ -1741,12 +1741,13 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
             for PromptInputDic in PromptInputList:
                 inputCount = PromptInputDic['PromptId']
                 EditCount = inputCount - 1
+                Caution = "<도서초안.json>의 [** 수정 부분 **]을 꼼꼼하게 살펴본 후, <수정: ... >사항에 따라서 기존[** 수정 부분 **]과 유사한 분량과 동일한 구조로 수정해서 <수정된도서초안.json>를 작성하세요."
     
                 ## PromptInput 생성 및 앞/뒤 예시 확장
                 FeedbackPromptInput = ShortScriptGenFeedbackInputAndExtension(PromptInputDic, ScriptEditPath, "ScriptIntroductionGen", Process)
                 
                 ## Response 생성
-                ShortScriptGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, ShortScriptGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                ShortScriptGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, ShortScriptGenFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = Caution)
                 
                 ## Edit 업데이트
                 ShortScriptGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, "SummaryOfIndexGen", "TitleAndIndexGen", EditCount, ShortScriptGenFeedbackResponse)

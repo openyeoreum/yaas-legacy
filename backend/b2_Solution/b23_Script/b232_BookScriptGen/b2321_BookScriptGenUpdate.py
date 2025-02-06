@@ -1224,6 +1224,38 @@ def ScriptIntroductionGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPa
     ## ScriptEdit 저장
     with open(ScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
         json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
+        
+## Feedback11: ShortScriptGenFeedback Edit 저장
+def ShortScriptGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, BeforeProcess, EditCount, Response):
+    ## ScriptEdit 불러오기
+    with open(ScriptEditPath, 'r', encoding = 'utf-8') as ScriptEditJson:
+        ScriptEdit = json.load(ScriptEditJson)
+    ## Feedback 이전 ScriptEdit 저장
+    with open(ModifiedScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
+        json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
+
+    ## BeforeScriptEdit 업데이트
+    BeforeProcessDic = ScriptEdit[BeforeProcess][0]['MainIndex'][EditCount]
+    BeforeProcessDic['Index'] = Response['메인목차']
+
+    ## ScriptEdit 업데이트
+    ProcessDic = ScriptEdit[Process][EditCount]
+    ProcessDic['IndexId'] = int(Response['순번'])
+    ProcessDic['Index'] = Response['메인목차']
+    ProcessDic['Summary'] = Response['전체요약']
+    ProcessDic['SubIndex'] = []
+    for idx, subIndex in enumerate(Response['서브목차']):
+        SubIndexId = idx + 1
+        SubIndex = subIndex['서브목차']
+        Keyword = subIndex['키워드']
+        Summary = subIndex['요약']
+        ProcessDic['SubIndex'].append({'SubIndexId': SubIndexId, 'SubIndex': SubIndex, 'Keyword': Keyword, 'Summary': Summary})
+    ReStructureProcessDic = RestructureProcessDic(ProcessDic)
+    ScriptEdit[Process][EditCount] = ReStructureProcessDic
+    
+    ## ScriptEdit 저장
+    with open(ScriptEditPath, 'w', encoding = 'utf-8') as ScriptEditJson:
+        json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
 
 ##############################
 ##### ProcessEdit 업데이트 #####
@@ -1707,6 +1739,14 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 
                 ## Response 생성
                 ShortScriptGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, ShortScriptGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## Edit 업데이트
+                ShortScriptGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, BeforeProcess, EditCount, Response)
+                
+            sys.exit(f"[ {projectName}_Script_Edit -> {Process} 수정 완료: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
+            
+        if not EditCompletion:
+            sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
     
     print(f"[ User: {email} | Project: {projectName} | BookScriptGenUpdate 완료 ]")
 

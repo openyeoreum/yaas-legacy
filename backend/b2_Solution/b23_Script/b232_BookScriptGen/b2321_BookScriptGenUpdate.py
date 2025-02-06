@@ -492,7 +492,7 @@ def SummaryOfIndexGenFilter(Response, CheckCount):
             return f"SummaryOfIndexGen, JSONKeyError: '메인목차[{idx}]'에 누락된 키: {', '.join(missing_main_keys)}"
 
         # 데이터 타입 검증
-        if not isinstance(main_item['순번'], str) or not main_item['순번'].isdigit():
+        if (not isinstance(main_item['순번'], (int, str))) or (isinstance(main_item['순번'], str) and not main_item['순번'].isdigit()):
             return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 순번'은 숫자로 된 문자열이어야 합니다"
         if not isinstance(main_item['메인목차'], str):
             return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 메인목차'는 문자열이어야 합니다"
@@ -626,13 +626,13 @@ def ShortScriptGenFilter(Response, CheckCount):
         return f"ShortScriptGen, JSONKeyError: 누락된 키: {', '.join(missing_keys)}"
 
     # Error3: 데이터 타입 검증
-    if not isinstance(OutputDic['파트순번'], str) or not OutputDic['파트순번'].isdigit():
+    if (not isinstance(OutputDic['파트순번'], (int, str))) or (isinstance(OutputDic['파트순번'], str) and not OutputDic['파트순번'].isdigit()):
         return "ShortScriptGen, JSON에서 오류 발생: '파트순번'은 숫자로 된 문자열이어야 합니다"
     
     if not isinstance(OutputDic['파트명'], str):
         return "ShortScriptGen, JSON에서 오류 발생: '파트명'은 문자열이어야 합니다"
 
-    if not isinstance(OutputDic['챕터순번'], str) or not OutputDic['챕터순번'].isdigit():
+    if (not isinstance(OutputDic['챕터순번'], (int, str))) or (isinstance(OutputDic['챕터순번'], str) and not OutputDic['챕터순번'].isdigit()):
         return "ShortScriptGen, JSON에서 오류 발생: '챕터순번'은 숫자로 된 문자열이어야 합니다"
     
     if not isinstance(OutputDic['챕터명'], str):
@@ -1226,7 +1226,7 @@ def ScriptIntroductionGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPa
         json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
         
 ## Feedback11: ShortScriptGenFeedback Edit 저장
-def ShortScriptGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, BeforeProcess, EditCount, Response):
+def ShortScriptGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, BeforeProcess1, BeforeProcess2, EditCount, Response):
     ## ScriptEdit 불러오기
     with open(ScriptEditPath, 'r', encoding = 'utf-8') as ScriptEditJson:
         ScriptEdit = json.load(ScriptEditJson)
@@ -1235,21 +1235,29 @@ def ShortScriptGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Pro
         json.dump(ScriptEdit, ScriptEditJson, indent = 4, ensure_ascii = False)
 
     ## BeforeScriptEdit 업데이트
-    BeforeProcessDic = ScriptEdit[BeforeProcess][0]['MainIndex'][EditCount]
-    BeforeProcessDic['Index'] = Response['메인목차']
+    # BeforeProcess1 업데이트
+    for i in range(len(ScriptEdit[BeforeProcess1])):
+        if ScriptEdit[BeforeProcess1][i]['IndexId'] == int(Response['파트순번']):
+            ScriptEdit[BeforeProcess1][i]['Index'] = Response['파트명']
+            for j in range(len(ScriptEdit[BeforeProcess1][i]['SubIndex'])):
+                if ScriptEdit[BeforeProcess1][i]['SubIndex'][j]['SubIndexId'] == int(Response['챕터순번']):
+                    ScriptEdit[BeforeProcess1][i]['SubIndex'][j]['SubIndex'] = Response['챕터명']
+                    break
+            break
+        
+    # BeforeProcess2 업데이트
+    for i in range(len(ScriptEdit[BeforeProcess2][0]['MainIndex'])):
+        if ScriptEdit[BeforeProcess2][0]['MainIndex'][i]['IndexId'] == int(Response['파트순번']):
+            ScriptEdit[BeforeProcess2][0]['MainIndex'][i]['Index'] = Response['파트명']
+            break
 
     ## ScriptEdit 업데이트
     ProcessDic = ScriptEdit[Process][EditCount]
-    ProcessDic['IndexId'] = int(Response['순번'])
-    ProcessDic['Index'] = Response['메인목차']
-    ProcessDic['Summary'] = Response['전체요약']
-    ProcessDic['SubIndex'] = []
-    for idx, subIndex in enumerate(Response['서브목차']):
-        SubIndexId = idx + 1
-        SubIndex = subIndex['서브목차']
-        Keyword = subIndex['키워드']
-        Summary = subIndex['요약']
-        ProcessDic['SubIndex'].append({'SubIndexId': SubIndexId, 'SubIndex': SubIndex, 'Keyword': Keyword, 'Summary': Summary})
+    ProcessDic['IndexId'] = int(Response['파트순번'])
+    ProcessDic['Index'] = Response['파트명']
+    ProcessDic['SubIndexId'] = int(Response['챕터순번'])
+    ProcessDic['SubIndex'] = Response['챕터명']
+    ProcessDic['ShortScript'] = Response['초안']
     ReStructureProcessDic = RestructureProcessDic(ProcessDic)
     ScriptEdit[Process][EditCount] = ReStructureProcessDic
     
@@ -1741,7 +1749,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 ShortScriptGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, ShortScriptGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
                 
                 ## Edit 업데이트
-                ShortScriptGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, BeforeProcess, EditCount, Response)
+                ShortScriptGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, "SummaryOfIndexGen", "TitleAndIndexGen", EditCount, ShortScriptGenFeedbackResponse)
                 
             sys.exit(f"[ {projectName}_Script_Edit -> {Process} 수정 완료: (({Process}))을 검수한 뒤 직접 수정, 또는 수정 사항을 ((<prompt: >))에 작성, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{ScriptEditPath}")
             

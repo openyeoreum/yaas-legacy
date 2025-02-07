@@ -318,6 +318,8 @@ def ScriptPlanFilter(Response, CheckCount):
         return "ScriptPlan, JSON에서 오류 발생: '독자키워드'는 문자열 리스트여야 합니다"
     if (not isinstance(OutputDic['정보의질'], (int, str))) or (isinstance(OutputDic['정보의질'], str) and not OutputDic['정보의질'].isdigit()) or (isinstance(OutputDic['정보의질'], (int, str)) and (int(OutputDic['정보의질']) < 0 or int(OutputDic['정보의질']) > 100)):
         return "ScriptPlan, JSON에서 오류 발생: '정보의질'은 0-100 사이의 정수여야 합니다"
+    else:
+        OutputDic['정보의질'] = int(OutputDic['정보의질'])
 
     # Error4: '가치' 키 구조 검증
     if not isinstance(OutputDic['가치'], dict):
@@ -348,6 +350,8 @@ def ScriptPlanFilter(Response, CheckCount):
             return f"ScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 키워드'는 문자열 리스트여야 합니다"
         if (not isinstance(sub_item['중요도'], (int, str))) or (isinstance(sub_item['중요도'], str) and not sub_item['중요도'].isdigit()) or (isinstance(sub_item['중요도'], (int, str)) and (int(sub_item['중요도']) < 0 or int(sub_item['중요도']) > 100)):
             return f"ScriptPlan, JSON에서 오류 발생: '가치 > {sub_key} > 중요도'는 0-100 사이의 정수여야 합니다"
+        else:
+            sub_item['중요도'] = int(sub_item['중요도'])
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
@@ -455,8 +459,10 @@ def TitleAndIndexGenFilter(Response, CheckCount):
         if missing_keys:
             return f"TitleAndIndexGen, JSONKeyError: '메인목차[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
-        if (not isinstance(item['순번'], (int, str))) or (isinstance(item['중순번요도'], str) and not item['순번'].isdigit()):
+        if (not isinstance(item['순번'], (int, str))) or (isinstance(item['순번'], str) and not item['순번'].isdigit()):
             return f"TitleAndIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 순번'은 정수 또는 숫자로 된 문자열이어야 합니다"
+        else:
+            item['순번'] = int(item['순번'])
 
         if not isinstance(item['목차'], str):
             return f"TitleAndIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 목차'는 문자열이어야 합니다"
@@ -494,6 +500,8 @@ def SummaryOfIndexGenFilter(Response, CheckCount):
         # 데이터 타입 검증
         if (not isinstance(main_item['순번'], (int, str))) or (isinstance(main_item['순번'], str) and not main_item['순번'].isdigit()):
             return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 순번'은 숫자로 된 문자열이어야 합니다"
+        else:
+            main_item['순번'] = int(main_item['순번'])
         if not isinstance(main_item['메인목차'], str):
             return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차[{idx}] > 메인목차'는 문자열이어야 합니다"
         if not isinstance(main_item['전체요약'], str):
@@ -549,6 +557,8 @@ def SummaryOfIndexGenFeedbackFilter(Response, CheckCount):
     # 데이터 타입 검증
     if (not isinstance(OutputDic['순번'], (int, str))) or (isinstance(OutputDic['순번'], str) and not OutputDic['순번'].isdigit()):
         return f"SummaryOfIndexGen, JSON에서 오류 발생: '순번'은 숫자로 된 문자열이어야 합니다"
+    else:
+        OutputDic['순번'] = int(OutputDic['순번'])
     if not isinstance(OutputDic['메인목차'], str):
         return f"SummaryOfIndexGen, JSON에서 오류 발생: '메인목차'는 문자열이어야 합니다"
     if not isinstance(OutputDic['전체요약'], str):
@@ -628,12 +638,16 @@ def ShortScriptGenFilter(Response, CheckCount):
     # Error3: 데이터 타입 검증
     if (not isinstance(OutputDic['파트순번'], (int, str))) or (isinstance(OutputDic['파트순번'], str) and not OutputDic['파트순번'].isdigit()):
         return "ShortScriptGen, JSON에서 오류 발생: '파트순번'은 숫자로 된 문자열이어야 합니다"
+    else:
+        OutputDic['파트순번'] = int(OutputDic['파트순번'])
     
     if not isinstance(OutputDic['파트명'], str):
         return "ShortScriptGen, JSON에서 오류 발생: '파트명'은 문자열이어야 합니다"
 
     if (not isinstance(OutputDic['챕터순번'], (int, str))) or (isinstance(OutputDic['챕터순번'], str) and not OutputDic['챕터순번'].isdigit()):
         return "ShortScriptGen, JSON에서 오류 발생: '챕터순번'은 숫자로 된 문자열이어야 합니다"
+    else:
+        OutputDic['챕터순번'] = int(OutputDic['챕터순번'])
     
     if not isinstance(OutputDic['챕터명'], str):
         return "ShortScriptGen, JSON에서 오류 발생: '챕터명'은 문자열이어야 합니다"

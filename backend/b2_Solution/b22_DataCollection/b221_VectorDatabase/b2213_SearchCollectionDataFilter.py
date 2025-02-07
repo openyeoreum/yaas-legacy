@@ -202,6 +202,8 @@ def DemandSearchCollectionDataFilterFilter(Response, CheckCount):
 
         if (not isinstance(item['매칭점수'], (int, str))) or (isinstance(item['매칭점수'], str) and not item['매칭점수'].isdigit()) or (isinstance(item['매칭점수'], (int, str)) and (int(item['매칭점수']) < 0 or int(item['매칭점수']) > 100)):
             return f"DemandSearchCollectionDataFilter, JSON에서 오류 발생: '선별[{idx}] > 매칭점수'는 0-100 사이의 정수여야 합니다"
+        else:
+            item['매칭점수'] = int(item['매칭점수'])
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['선별']
@@ -248,6 +250,8 @@ def SupplySearchCollectionDataFilterFilter(Response, CheckCount):
 
         if (not isinstance(item['매칭점수'], (int, str))) or (isinstance(item['매칭점수'], str) and not item['매칭점수'].isdigit()) or (isinstance(item['매칭점수'], (int, str)) and (int(item['매칭점수']) < 0 or int(item['매칭점수']) > 100)):
             return f"SupplySearchCollectionDataFilter, JSON에서 오류 발생: '선별[{idx}] > 매칭점수'는 0-100 사이의 정수여야 합니다"
+        else:
+            item['매칭점수'] = int(item['매칭점수'])
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['선별']
@@ -294,6 +298,8 @@ def SimilaritySearchCollectionDataFilterFilter(Response, CheckCount):
 
         if (not isinstance(item['매칭점수'], (int, str))) or (isinstance(item['매칭점수'], str) and not item['매칭점수'].isdigit()) or (isinstance(item['매칭점수'], (int, str)) and (int(item['매칭점수']) < 0 or int(item['매칭점수']) > 100)):
             return f"SimilaritySearchCollectionDataFilter, JSON에서 오류 발생: '선별[{idx}] > 매칭점수'는 0-100 사이의 정수여야 합니다"
+        else:
+            item['매칭점수'] = int(item['매칭점수'])
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['선별']

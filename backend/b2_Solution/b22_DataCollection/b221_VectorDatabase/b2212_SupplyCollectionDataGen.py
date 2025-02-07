@@ -36,6 +36,8 @@ def SupplyCollectionDataDetailFilter(Response, CheckCount):
     # 검색어완성도는 0-100 사이의 정수여야 함
     if (not isinstance(OutputDic['검색어완성도'], (int, str))) or (isinstance(OutputDic['검색어완성도'], str) and not OutputDic['검색어완성도'].isdigit()) or (isinstance(OutputDic['검색어완성도'], (int, str)) and (int(OutputDic['검색어완성도']) < 0 or int(OutputDic['검색어완성도']) > 100)):
         return "SupplyCollectionDataDetail, JSON에서 오류 발생: '검색어완성도'가 0-100 사이의 정수가 아님"
+    else:
+        OutputDic['검색어완성도'] = int(OutputDic['검색어완성도'])
 
     # 검색어피드백은 문자열 리스트여야 함
     if not isinstance(OutputDic['검색어피드백'], list) or not all(isinstance(item, str) for item in OutputDic['검색어피드백']):
@@ -70,6 +72,8 @@ def SupplyCollectionDataContextFilter(Response, CheckCount):
     # 정보의질은 0-100 사이의 정수여야 함
     if (not isinstance(OutputDic['정보의질'], (int, str))) or (isinstance(OutputDic['정보의질'], str) and not OutputDic['정보의질'].isdigit()) or (isinstance(OutputDic['정보의질'], (int, str)) and (int(OutputDic['정보의질']) < 0 or int(OutputDic['정보의질']) > 100)):
         return "SupplyCollectionDataContext, JSON에서 오류 발생: '정보의질'은 0-100 사이의 정수가 아님"
+    else:
+        OutputDic['정보의질'] = int(OutputDic['정보의질'])
 
     # Error4: '제안' 키의 구조 검증
     if not isinstance(OutputDic['제안'], dict):
@@ -100,6 +104,8 @@ def SupplyCollectionDataContextFilter(Response, CheckCount):
             return f"SupplyCollectionDataContext, JSON에서 오류 발생: '제안 > {sub_key} > 키워드'는 문자열 리스트가 아님"
         if (not isinstance(sub_item['중요도'], (int, str))) or (isinstance(sub_item['중요도'], str) and not sub_item['중요도'].isdigit()) or (isinstance(sub_item['중요도'], (int, str)) and (int(sub_item['중요도']) < 0 or int(sub_item['중요도']) > 100)):
             return f"SupplyCollectionDataContext, JSON에서 오류 발생: '제안 > {sub_key} > 중요도'가 0-100 사이의 정수가 아님"
+        else:
+            sub_item['중요도'] = int(sub_item['중요도'])
 
     # 모든 조건을 만족하면 파싱된 JSON 반환
     return OutputDic
@@ -169,6 +175,8 @@ def SupplyCollectionDataExpertiseChainFilter(Response, CheckCount):
         return "SupplyCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 분야'는 문자열 리스트가 아님"
     if (not isinstance(expertise_data['정보의질'], (int, str))) or (isinstance(expertise_data['정보의질'], str) and not expertise_data['정보의질'].isdigit()) or (isinstance(expertise_data['정보의질'], (int, str)) and (int(expertise_data['정보의질']) < 0 or int(expertise_data['정보의질']) > 100)):
         return "SupplyCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 정보의질'은 0-100 사이의 정수가 아님"
+    else:
+        expertise_data['정보의질'] = int(expertise_data['정보의질'])
 
     # Error5: '제안' 내부 구조 검증
     if not isinstance(expertise_data['제안'], dict):
@@ -196,6 +204,8 @@ def SupplyCollectionDataExpertiseChainFilter(Response, CheckCount):
             return f"SupplyCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 제안 > {sub_key} > 키워드'는 문자열 리스트가 아님"
         if (not isinstance(sub_item['중요도'], (int, str))) or (isinstance(sub_item['중요도'], str) and not sub_item['중요도'].isdigit()) or (isinstance(sub_item['중요도'], (int, str)) and (int(sub_item['중요도']) < 0 or int(sub_item['중요도']) > 100)):
             return f"SupplyCollectionDataExpertiseChain, JSON에서 오류 발생: '전문데이터 > 제안 > {sub_key} > 중요도'가 0-100 사이의 정수가 아님"
+        else:
+            sub_item['중요도'] = int(sub_item['중요도'])
 
     return OutputDic['전문데이터']
 
@@ -265,6 +275,8 @@ def SupplyCollectionDataUltimateChainFilter(Response, CheckCount):
         return "SupplyCollectionDataUltimateChainFilter의, JSON에서 오류 발생: '분야'는 문자열 리스트여야 합니다"
     if (not isinstance(OutputDic['정보의질'], (int, str))) or (isinstance(OutputDic['정보의질'], str) and not OutputDic['정보의질'].isdigit()) or (isinstance(OutputDic['정보의질'], (int, str)) and (int(OutputDic['정보의질']) < 0 or int(OutputDic['정보의질']) > 100)):
         return "SupplyCollectionDataUltimateChainFilter의, JSON에서 오류 발생: '정보의질'은 0-100 사이의 정수여야 합니다"
+    else:
+        OutputDic['정보의질'] = int(OutputDic['정보의질'])
 
     # Error4: '제안' 키 구조 검증
     if not isinstance(OutputDic['제안'], dict):
@@ -296,6 +308,8 @@ def SupplyCollectionDataUltimateChainFilter(Response, CheckCount):
             return f"SupplyCollectionDataUltimateChainFilter의, JSON에서 오류 발생: '제안 > {sub_key} > 키워드'는 문자열 리스트여야 합니다"
         if (not isinstance(sub_item['중요도'], (int, str))) or (isinstance(sub_item['중요도'], str) and not sub_item['중요도'].isdigit()) or (isinstance(sub_item['중요도'], (int, str)) and (int(sub_item['중요도']) < 0 or int(sub_item['중요도']) > 100)):
             return f"SupplyCollectionDataUltimateChainFilter의, JSON에서 오류 발생: '제안 > {sub_key} > 중요도'는 0-100 사이의 정수여야 합니다"
+        else:
+            sub_item['중요도'] = int(sub_item['중요도'])
 
     return OutputDic
 

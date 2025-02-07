@@ -352,35 +352,35 @@ def RestructureSimilarity(CollectionDataChainSet, Type):
     NewCollectionDataChainSet = {"SimilaritySearch": CollectionDataChainSet['SimilaritySearch']}
     # SimilarityDetail 재구조화
     if Type == 'Search':
-        SimilarityDetail = {"Summary": f"{CollectionDataChainSet['DemandDetail']['Summary']} {CollectionDataChainSet['SupplyDetail']['Summary']}", "Needs":f"{CollectionDataChainSet['DemandDetail']['Needs']} {CollectionDataChainSet['SupplyDetail']['Satisfy']}", "Purpose":f"{CollectionDataChainSet['DemandDetail']['Purpose']} {CollectionDataChainSet['SupplyDetail']['Support']}", "Question":f"{CollectionDataChainSet['DemandDetail']['Question']} {CollectionDataChainSet['SupplyDetail']['Solution']}", "Weight": (CollectionDataChainSet['DemandDetail']['Weight'] + CollectionDataChainSet['SupplyDetail']['Weight']) / 2, "Feedback": CollectionDataChainSet['DemandDetail']['Feedback'] + CollectionDataChainSet['SupplyDetail']['Feedback']}
+        SimilarityDetail = {"Summary": f"{CollectionDataChainSet['DemandDetail']['Summary']} {CollectionDataChainSet['SupplyDetail']['Summary']}", "Needs":f"{CollectionDataChainSet['DemandDetail']['Needs']} {CollectionDataChainSet['SupplyDetail']['Satisfy']}", "Purpose":f"{CollectionDataChainSet['DemandDetail']['Purpose']} {CollectionDataChainSet['SupplyDetail']['Support']}", "Question":f"{CollectionDataChainSet['DemandDetail']['Question']} {CollectionDataChainSet['SupplyDetail']['Solution']}", "Weight": (int(CollectionDataChainSet['DemandDetail']['Weight']) + int(CollectionDataChainSet['SupplyDetail']['Weight'])) / 2, "Feedback": CollectionDataChainSet['DemandDetail']['Feedback'] + CollectionDataChainSet['SupplyDetail']['Feedback']}
         NewCollectionDataChainSet['SimilarityDetail'] = SimilarityDetail
     elif Type == 'Match':
         NewCollectionDataChainSet['SimilarityDetail'] = CollectionDataChainSet['SimilarityDetail']
     # SimilarityContext 재구조화
-    NewCollectionDataChainSet['SimilarityContext'] = {"Summary": f"{CollectionDataChainSet['DemandContext']['Summary']} {CollectionDataChainSet['SupplyContext']['Summary']}", "KeyWord": CollectionDataChainSet['DemandContext']['KeyWord'] + CollectionDataChainSet['SupplyContext']['KeyWord'], "Demand": CollectionDataChainSet['DemandContext']['Demand'], "Supply": CollectionDataChainSet['SupplyContext']['Supply'], 'Weight': (CollectionDataChainSet['DemandContext']['Weight'] + CollectionDataChainSet['SupplyContext']['Weight']) / 2}
+    NewCollectionDataChainSet['SimilarityContext'] = {"Summary": f"{CollectionDataChainSet['DemandContext']['Summary']} {CollectionDataChainSet['SupplyContext']['Summary']}", "KeyWord": CollectionDataChainSet['DemandContext']['KeyWord'] + CollectionDataChainSet['SupplyContext']['KeyWord'], "Demand": CollectionDataChainSet['DemandContext']['Demand'], "Supply": CollectionDataChainSet['SupplyContext']['Supply'], 'Weight': (int(CollectionDataChainSet['DemandContext']['Weight']) + int(CollectionDataChainSet['SupplyContext']['Weight'])) / 2}
     # SimilarityContextExpertise 재구조화
     if ('DemandContextExpertise' in CollectionDataChainSet) or ('SupplyContextExpertise' in CollectionDataChainSet):
         SimilarityContextExpertise = []
         for DemandContextExpertise, SupplyContextExpertise in zip(CollectionDataChainSet['DemandContextExpertise'], CollectionDataChainSet['SupplyContextExpertise']):
-            SimilarityContextExpertise.append({"Summary": f"{DemandContextExpertise['Summary']} {SupplyContextExpertise['Summary']}", "KeyWord": DemandContextExpertise['KeyWord'] + SupplyContextExpertise['KeyWord'], "Demand": DemandContextExpertise['Demand'], "Supply": SupplyContextExpertise['Supply'], 'Weight': (DemandContextExpertise['Weight'] + SupplyContextExpertise['Weight']) / 2})
+            SimilarityContextExpertise.append({"Summary": f"{DemandContextExpertise['Summary']} {SupplyContextExpertise['Summary']}", "KeyWord": DemandContextExpertise['KeyWord'] + SupplyContextExpertise['KeyWord'], "Demand": DemandContextExpertise['Demand'], "Supply": SupplyContextExpertise['Supply'], 'Weight': (int(DemandContextExpertise['Weight']) + int(SupplyContextExpertise['Weight'])) / 2})
         NewCollectionDataChainSet['SimilarityContextExpertise'] = SimilarityContextExpertise
     # SimilarityContextUltimate 재구조화
     if ('DemandContextUltimate' in CollectionDataChainSet) or ('SupplyContextUltimate' in CollectionDataChainSet):
         SimilarityContextUltimate = []
         for DemandContextUltimate, SupplyContextUltimate in zip(CollectionDataChainSet['DemandContextUltimate'], CollectionDataChainSet['SupplyContextUltimate']):
-            SimilarityContextUltimate.append({"Summary": f"{DemandContextUltimate['Summary']} {SupplyContextUltimate['Summary']}", "KeyWord": DemandContextUltimate['KeyWord'] + SupplyContextUltimate['KeyWord'], "Demand": DemandContextUltimate['Demand'], "Supply": SupplyContextUltimate['Supply'], 'Weight': (DemandContextUltimate['Weight'] + SupplyContextUltimate['Weight']) / 2})
+            SimilarityContextUltimate.append({"Summary": f"{DemandContextUltimate['Summary']} {SupplyContextUltimate['Summary']}", "KeyWord": DemandContextUltimate['KeyWord'] + SupplyContextUltimate['KeyWord'], "Demand": DemandContextUltimate['Demand'], "Supply": SupplyContextUltimate['Supply'], 'Weight': (int(DemandContextUltimate['Weight']) + int(SupplyContextUltimate['Weight'])) / 2})
         NewCollectionDataChainSet['SimilarityContextUltimate'] = SimilarityContextUltimate
     # SimilarityContextDetail 재구조화
     if ('DemandContextDetail' in CollectionDataChainSet) or ('SupplyContextDetail' in CollectionDataChainSet):
         SimilarityContextDetail = []
         for DemandContextDetail, SupplyContextDetail in zip(CollectionDataChainSet['DemandContextDetail'], CollectionDataChainSet['SupplyContextDetail']):
-            SimilarityContextDetail.append({"Summary": f"{DemandContextDetail['Summary']} {SupplyContextDetail['Summary']}", "KeyWord": DemandContextDetail['KeyWord'] + SupplyContextDetail['KeyWord'], "Demand": DemandContextDetail['Demand'], "Supply": SupplyContextDetail['Supply'], 'Weight': (DemandContextDetail['Weight'] + SupplyContextDetail['Weight']) / 2})
+            SimilarityContextDetail.append({"Summary": f"{DemandContextDetail['Summary']} {SupplyContextDetail['Summary']}", "KeyWord": DemandContextDetail['KeyWord'] + SupplyContextDetail['KeyWord'], "Demand": DemandContextDetail['Demand'], "Supply": SupplyContextDetail['Supply'], 'Weight': (int(DemandContextDetail['Weight']) + int(SupplyContextDetail['Weight'])) / 2})
         NewCollectionDataChainSet['SimilarityContextDetail'] = SimilarityContextDetail
     # SimilarityContextRethinking 재구조화
     if ('DemandContextRethinking' in CollectionDataChainSet) or ('SupplyContextRethinking' in CollectionDataChainSet):
         SimilarityContextRethinking = []
         for DemandContextRethinking, SupplyContextRethinking in zip(CollectionDataChainSet['DemandContextRethinking'], CollectionDataChainSet['SupplyContextRethinking']):
-            SimilarityContextRethinking.append({"Summary": f"{DemandContextRethinking['Summary']} {SupplyContextRethinking['Summary']}", "KeyWord": DemandContextRethinking['KeyWord'] + SupplyContextRethinking['KeyWord'], "Demand": DemandContextRethinking['Demand'], "Supply": SupplyContextRethinking['Supply'], 'Weight': (DemandContextRethinking['Weight'] + SupplyContextRethinking['Weight']) / 2})
+            SimilarityContextRethinking.append({"Summary": f"{DemandContextRethinking['Summary']} {SupplyContextRethinking['Summary']}", "KeyWord": DemandContextRethinking['KeyWord'] + SupplyContextRethinking['KeyWord'], "Demand": DemandContextRethinking['Demand'], "Supply": SupplyContextRethinking['Supply'], 'Weight': (int(DemandContextRethinking['Weight']) + int(SupplyContextRethinking['Weight'])) / 2})
         NewCollectionDataChainSet['SimilarityContextRethinking'] = SimilarityContextRethinking
     
     return NewCollectionDataChainSet

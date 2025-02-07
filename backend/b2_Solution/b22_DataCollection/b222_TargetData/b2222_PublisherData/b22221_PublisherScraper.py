@@ -312,13 +312,14 @@ def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 50
     for item in TotalPublisherData:
         name = item["PublisherInformation"].get("Name", "")
         email = item["PublisherInformation"].get("Email", "")
+        if email == ['']:
+            email = []
 
         # 이메일이 비어있지 않은 경우만 처리
         if email:
             # 하나의 Name에 여러 이메일이 있을 경우 -> 각각 flatten_data에 추가
             for e_mail in email:
                 FlattenedData.append((name, e_mail))
-
     # 2) 최대 500행씩 CSV 저장
     # FlattenedData는 이미 (Name, Email) 쌍으로 '한 행에 들어갈 데이터'가 준비된 상태
     for start_idx in range(0, len(FlattenedData), ChunkSize):

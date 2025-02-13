@@ -886,10 +886,8 @@ def CarefullySelectedCharacter(projectName, email, DataFramePath, messagesReview
             NewCharacterCount += 1
     
     CharacterList = [Narrator] + NewCharacter
-    print("오케이1")
     # 대화가 이어지는 Character는 나누기
     CharacterList = DividedIntoContinuousConversation(ResponseJson, CharacterList)
-    print("오케이2")
     # CharacterList에 Voice 데이터 참가
     for Character in CharacterList:
         for i in range(len(SelectedCharacters)):

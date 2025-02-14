@@ -269,7 +269,7 @@ def PronunciationPreprocessResponseJson(projectName, email, DataFramePath, messa
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 PronunciationPreprocess에 업데이트
-def PronunciationPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+def PronunciationPreprocessUpdate(projectName, email, mainLang, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 02-2_PronunciationPreprocessUpdate 시작 >")
     # PronunciationPreprocess의 Count값 가져오기
     ContinueCount, Completion = PronunciationPreprocessCountLoad(projectName, email)

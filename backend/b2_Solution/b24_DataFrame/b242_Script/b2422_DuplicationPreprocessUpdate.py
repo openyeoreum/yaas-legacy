@@ -26,7 +26,7 @@ def CleanText(text):
     return re.sub(r'[\s\W]+', '', text)
 
 ## 본문을 목차별로 나누기 (따옴표 개수 누락 및 내부 문장 길이 검사, 목차 누락 검사)
-def PreprocessAndSplitScripts(bodyText, indexFrame):
+def PreprocessAndSplitScripts(bodyText, indexFrame, mainLang):
     ## 1. 따옴표 개수 검사 및 문장 길이 검사
     # ', "의 여러 형태를 통일
     bodyText = bodyText.replace('‘', "'").replace('’', "'").replace('“', '"').replace('”', '"')
@@ -38,10 +38,11 @@ def PreprocessAndSplitScripts(bodyText, indexFrame):
     #     print("[ 전체 따옴표 개수가 홀수입니다. ]")
     
     # 외따옴표 내부 문장의 길이 검토
-    for ScriptInQuotes in singleQuotesScripts:
-        ScriptInQuotesTokens = re.sub(r'\s+', ' ', ScriptInQuotes).strip().split()
-        if len(ScriptInQuotesTokens) > 100:
-            sys.exit(f"[ 외따옴표 내부의 문장이 너무 길어(단어수, {len(ScriptInQuotesTokens)}) 확인 필요: {' '.join(ScriptInQuotesTokens[:6])} ... {' '.join(ScriptInQuotesTokens[6:])}]\n")
+    if mainLang != "En":
+        for ScriptInQuotes in singleQuotesScripts:
+            ScriptInQuotesTokens = re.sub(r'\s+', ' ', ScriptInQuotes).strip().split()
+            if len(ScriptInQuotesTokens) > 100:
+                sys.exit(f"[ 외따옴표 내부의 문장이 너무 길어(단어수, {len(ScriptInQuotesTokens)}) 확인 필요: {' '.join(ScriptInQuotesTokens[:6])} ... {' '.join(ScriptInQuotesTokens[6:])}]\n")
             
     # 쌍따옴표 내부 문장의 길이 검토
     for ScriptInQuotes in doubleQuotesScripts:
@@ -121,11 +122,11 @@ def SplitIntoSentencesAndTokens(SplitedScripts):
     return ScriptsDicList
 
 ## ScriptsDicList inputList 치환
-def ScriptsDicListToInputList(projectName, email):
+def ScriptsDicListToInputList(projectName, email, mainLang):
     indexFrame, bodyText = LoadIndexBody(projectName, email)
 
     # Raw Text를 ScriptsDicList로 치환
-    SplitedScripts = PreprocessAndSplitScripts(bodyText, indexFrame)
+    SplitedScripts = PreprocessAndSplitScripts(bodyText, indexFrame, mainLang)
     ScriptsDicList = SplitIntoSentencesAndTokens(SplitedScripts)
 
     # Raw Text를 ScriptsDicList로 치환 확인
@@ -305,12 +306,12 @@ def DuplicationPreprocessOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## DuplicationPreprocess 프롬프트 요청 및 결과물 Json화
-def DuplicationPreprocessProcess(projectName, email, DataFramePath, Process = "DuplicationPreprocess",  memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def DuplicationPreprocessProcess(projectName, email, mainLang, DataFramePath, Process = "DuplicationPreprocess",  memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, "DuplicationPreprocess")
 
     OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '02-1', DataFramePath)
-    inputList = ScriptsDicListToInputList(projectName, email)
+    inputList = ScriptsDicListToInputList(projectName, email, mainLang)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:
         return OutputMemoryDicsFile
@@ -437,9 +438,9 @@ def DuplicationPreprocessProcess(projectName, email, DataFramePath, Process = "D
 ##### 데이터 치환 및 DB 업데이트 #####
 ################################
 ## 데이터 치환
-def DuplicationPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   
+def DuplicationPreprocessResponseJson(projectName, email, mainLang, DataFramePath, messagesReview = 'off', mode = "Memory"):   
     # 데이터 치환
-    outputMemoryDics = DuplicationPreprocessProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)
+    outputMemoryDics = DuplicationPreprocessProcess(projectName, email, mainLang, DataFramePath, MessagesReview = messagesReview, Mode = mode)
     
     responseJson = []
     DuplicationDicList = []
@@ -457,7 +458,7 @@ def DuplicationPreprocessResponseJson(projectName, email, DataFramePath, message
     return responseJson
 
 ## 프롬프트 요청 및 결과물 Json을 DuplicationPreprocess에 업데이트
-def DuplicationPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
+def DuplicationPreprocessUpdate(projectName, email, mainLang, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 02-1_DuplicationPreprocessUpdate 시작 >")
     # DuplicationPreprocess의 Count값 가져오기
     ContinueCount, Completion = DuplicationPreprocessCountLoad(projectName, email)
@@ -469,7 +470,7 @@ def DuplicationPreprocessUpdate(projectName, email, DataFramePath, MessagesRevie
             AddExistedDataSetToDB(projectName, email, "DuplicationPreprocess", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 02-1_DuplicationPreprocessUpdate는 ExistedDuplicationPreprocess으로 대처됨 ]\n")
         else:
-            responseJson = DuplicationPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
+            responseJson = DuplicationPreprocessResponseJson(projectName, email, mainLang, DataFramePath, messagesReview = MessagesReview, mode = Mode)
             
             # ResponseJson을 ContinueCount로 슬라이스
             ResponseJson = responseJson[ContinueCount:]

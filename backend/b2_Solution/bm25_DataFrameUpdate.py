@@ -162,7 +162,7 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
 ###################################
 
 ### 솔루션에 프로젝트 데이터 프레임 진행 및 업데이트 ###
-def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesReview = "on", bookGenre = "Auto", Translations = []):
+def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", messagesReview = "on", bookGenre = "Auto", Translations = []):
     ############################ 하이퍼 파라미터 설정 ############################
     userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
@@ -244,7 +244,7 @@ def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesRe
         recentFile, existedDataSet1 = LoadExistedDataSets(projectName, email, "IndexDefinePreprocess", RawDataSetPath)
         recentFile, existedDataSet2 = LoadExistedDataSets(projectName, email, "IndexDefine", RawDataSetPath)
     mode = "Master" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning", "Master"
-    IndexFrameUpdate(projectName, email, MessagesReview = messagesReview, Mode = mode, IndexMode = indexMode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
+    IndexFrameUpdate(projectName, email, mainLang, MessagesReview = messagesReview, Mode = mode, IndexMode = indexMode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
     
     if existedDataFrame == None:
         updatedIndexFrame = UpdatedIndexFrame(projectName, email)
@@ -266,7 +266,7 @@ def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesRe
         existedDataFrame = LoadexistedDataFrame(projectName, email, "DuplicationPreprocess", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "DuplicationPreprocess", RawDataSetPath)
     mode = "Master"
-    DuplicationPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    DuplicationPreprocessUpdate(projectName, email, mainLang, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
 
     if existedDataFrame == None:
         updatedDuplicationPreprocess = UpdatedDuplicationPreprocess(projectName, email)
@@ -277,16 +277,16 @@ def SolutionDataFrameUpdate(email, projectName, indexMode = "Define", messagesRe
     existedDataSet = None
 
 
-    ##################################
+    ####################################
     ### 02-2_PronunciationPreprocess ###
-    ##################################
+    ####################################
     InitPronunciationPreprocess(projectName, email)
     InitRawDataSet(projectName, email, "PronunciationPreprocess")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "PronunciationPreprocess", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "PronunciationPreprocess", RawDataSetPath)
     mode = "Master"
-    PronunciationPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
+    PronunciationPreprocessUpdate(projectName, email, mainLang, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
 
     if existedDataFrame == None:
         updatedPronunciationPreprocess = UpdatedPronunciationPreprocess(projectName, email)

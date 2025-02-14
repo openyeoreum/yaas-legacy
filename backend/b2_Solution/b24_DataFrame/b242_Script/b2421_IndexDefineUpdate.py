@@ -189,7 +189,7 @@ def IndexDefineDivision(projectName, email, maxTokens = 4000, mode = "Example", 
       return responseJson
 
 # 프롬프트 요청 및 결과물 Json을 IndexFrame에 업데이트
-def IndexFrameUpdate(projectName, email, MessagesReview = "off", Mode = "Example", IndexMode = "Define", ExistedDataFrame = None, ExistedDataSet1 = None, ExistedDataSet2 = None):
+def IndexFrameUpdate(projectName, email, mainLang, MessagesReview = "off", Mode = "Example", IndexMode = "Define", ExistedDataFrame = None, ExistedDataSet1 = None, ExistedDataSet2 = None):
     print(f"< User: {email} | Project: {projectName} | 01_IndexFrameUpdate 시작 >")
     # IndexFrame의 Count값 가져오기
     IndexCount, Completion = IndexFrameCountLoad(projectName, email)

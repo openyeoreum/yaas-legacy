@@ -499,7 +499,10 @@ def EditGenerationKoChunksToList(EditGenerationKoChunks):
         EndTime = []
         for i in range(len(ActorChunk)):
             # print(f'{ActorChunk[i]}\n')
-            _ActorChunk.append(ActorChunk[i]['Chunk'])
+            try:
+                _ActorChunk.append(ActorChunk[i]['Chunk'])
+            except KeyError:
+                sys.exit(f"[ Edit에서 해당 부분의 딕셔너리 키 ((ModifiedChunk)) >>> ((Chunk)) 로 변경해 주세요. ]\n{ActorChunk[i]}")
             Pause.append(ActorChunk[i]['Pause'])
             EndTime.append(ActorChunk[i]['EndTime'])
         EditGenerationKoListChunks.append({"EditId": EditId, "Tag": Tag, "ActorName": ActorName, "ActorChunk": _ActorChunk, "Pause": Pause, "EndTime": EndTime})

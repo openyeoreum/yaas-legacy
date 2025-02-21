@@ -59580,7 +59580,7 @@
             },
             {
                 "CharacterId": 267,
-                "Name": "성중후(낭독)",
+                "Name": "최한결(낭독)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
                 "Quilty": 0,
                 "Grade": [
@@ -59766,1057 +59766,7 @@
                     "TypeCastContext": {}
                 },
                 "ApiSetting": {
-                    "name": "성중후(낭독)",
-                    "Api": "ElevenLabs",
-                    "voice_id": "CVxBiM1qjeOzIQJexI5f",
-                    "stability": [
-                        0.95
-                    ],
-                    "similarity_boost": [
-                        0.6
-                    ],
-                    "style": [
-                        0
-                    ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
-                    "Volume": 4,
-                    "Speed": 1.0,
-                    "Pitch": 0
-                }
-            },
-            {
-                "CharacterId": 267,
-                "Name": "성후근(낭독)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
-                "Quilty": 0,
-                "Grade": [
-                    "Main"
-                ],
-                "Context": {
-                    "Genre": [
-                        {
-                            "index": "문학",
-                            "Score": 0
-                        },
-                        {
-                            "index": "비문학",
-                            "Score": 0
-                        },
-                        {
-                            "index": "아동",
-                            "Score": 0
-                        },
-                        {
-                            "index": "시",
-                            "Score": 0
-                        },
-                        {
-                            "index": "학술",
-                            "Score": 0
-                        }
-                    ],
-                    "Gender": [
-                        {
-                            "index": "남",
-                            "Score": 0
-                        },
-                        {
-                            "index": "여",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중성",
-                            "Score": 0
-                        }
-                    ],
-                    "Age": [
-                        {
-                            "index": "유년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청소년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "장년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "노년",
-                            "Score": 0
-                        }
-                    ],
-                    "Personality": [
-                        {
-                            "index": "외향적",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중립적",
-                            "Score": 0
-                        },
-                        {
-                            "index": "내향적",
-                            "Score": 0
-                        }
-                    ],
-                    "Atmosphere": [
-                        {
-                            "index": "행복",
-                            "Score": 0
-                        },
-                        {
-                            "index": "즐거움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "평온",
-                            "Score": 0
-                        },
-                        {
-                            "index": "무감정",
-                            "Score": 0
-                        },
-                        {
-                            "index": "피곤",
-                            "Score": 0
-                        },
-                        {
-                            "index": "슬픔",
-                            "Score": 0
-                        },
-                        {
-                            "index": "두려움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "놀람",
-                            "Score": 0
-                        }
-                    ]
-                },
-                "Voice": {
-                    "Language": [
-                        "ko"
-                    ],
-                    "Gender": [
-                        "남"
-                    ],
-                    "Age": [
-                        {
-                            "index": "유년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청소년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "장년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "노년",
-                            "Score": 0
-                        }
-                    ],
-                    "Role": [
-                        {
-                            "index": "낭독",
-                            "Score": 0
-                        },
-                        {
-                            "index": "대화",
-                            "Score": 0
-                        }
-                    ],
-                    "Emotion": [
-                        {
-                            "index": "즐거움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "침착함",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중립",
-                            "Score": 0
-                        },
-                        {
-                            "index": "슬픔",
-                            "Score": 0
-                        },
-                        {
-                            "index": "화남",
-                            "Score": 0
-                        }
-                    ],
-                    "TypeCastContext": {}
-                },
-                "ApiSetting": {
-                    "name": "성후근(낭독)",
-                    "Api": "ElevenLabs",
-                    "voice_id": "NZN6X3n0yWCYNRJyPpXn",
-                    "stability": [
-                        0.95
-                    ],
-                    "similarity_boost": [
-                        0.6
-                    ],
-                    "style": [
-                        0
-                    ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
-                    "Volume": 4,
-                    "Speed": 1.0,
-                    "Pitch": 0
-                }
-            },
-            {
-                "CharacterId": 267,
-                "Name": "성후근(낭독)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
-                "Quilty": 0,
-                "Grade": [
-                    "Main"
-                ],
-                "Context": {
-                    "Genre": [
-                        {
-                            "index": "문학",
-                            "Score": 0
-                        },
-                        {
-                            "index": "비문학",
-                            "Score": 0
-                        },
-                        {
-                            "index": "아동",
-                            "Score": 0
-                        },
-                        {
-                            "index": "시",
-                            "Score": 0
-                        },
-                        {
-                            "index": "학술",
-                            "Score": 0
-                        }
-                    ],
-                    "Gender": [
-                        {
-                            "index": "남",
-                            "Score": 0
-                        },
-                        {
-                            "index": "여",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중성",
-                            "Score": 0
-                        }
-                    ],
-                    "Age": [
-                        {
-                            "index": "유년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청소년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "장년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "노년",
-                            "Score": 0
-                        }
-                    ],
-                    "Personality": [
-                        {
-                            "index": "외향적",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중립적",
-                            "Score": 0
-                        },
-                        {
-                            "index": "내향적",
-                            "Score": 0
-                        }
-                    ],
-                    "Atmosphere": [
-                        {
-                            "index": "행복",
-                            "Score": 0
-                        },
-                        {
-                            "index": "즐거움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "평온",
-                            "Score": 0
-                        },
-                        {
-                            "index": "무감정",
-                            "Score": 0
-                        },
-                        {
-                            "index": "피곤",
-                            "Score": 0
-                        },
-                        {
-                            "index": "슬픔",
-                            "Score": 0
-                        },
-                        {
-                            "index": "두려움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "놀람",
-                            "Score": 0
-                        }
-                    ]
-                },
-                "Voice": {
-                    "Language": [
-                        "ko"
-                    ],
-                    "Gender": [
-                        "남"
-                    ],
-                    "Age": [
-                        {
-                            "index": "유년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청소년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "장년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "노년",
-                            "Score": 0
-                        }
-                    ],
-                    "Role": [
-                        {
-                            "index": "낭독",
-                            "Score": 0
-                        },
-                        {
-                            "index": "대화",
-                            "Score": 0
-                        }
-                    ],
-                    "Emotion": [
-                        {
-                            "index": "즐거움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "침착함",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중립",
-                            "Score": 0
-                        },
-                        {
-                            "index": "슬픔",
-                            "Score": 0
-                        },
-                        {
-                            "index": "화남",
-                            "Score": 0
-                        }
-                    ],
-                    "TypeCastContext": {}
-                },
-                "ApiSetting": {
-                    "name": "성후근(낭독)",
-                    "Api": "ElevenLabs",
-                    "voice_id": "NZN6X3n0yWCYNRJyPpXn",
-                    "stability": [
-                        0.9
-                    ],
-                    "similarity_boost": [
-                        0.6
-                    ],
-                    "style": [
-                        0
-                    ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
-                    "Volume": 2,
-                    "Speed": 1.0,
-                    "Pitch": 0
-                }
-            },
-            {
-                "CharacterId": 267,
-                "Name": "성기현(낭독)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
-                "Quilty": 0,
-                "Grade": [
-                    "Main"
-                ],
-                "Context": {
-                    "Genre": [
-                        {
-                            "index": "문학",
-                            "Score": 0
-                        },
-                        {
-                            "index": "비문학",
-                            "Score": 0
-                        },
-                        {
-                            "index": "아동",
-                            "Score": 0
-                        },
-                        {
-                            "index": "시",
-                            "Score": 0
-                        },
-                        {
-                            "index": "학술",
-                            "Score": 0
-                        }
-                    ],
-                    "Gender": [
-                        {
-                            "index": "남",
-                            "Score": 0
-                        },
-                        {
-                            "index": "여",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중성",
-                            "Score": 0
-                        }
-                    ],
-                    "Age": [
-                        {
-                            "index": "유년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청소년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "장년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "노년",
-                            "Score": 0
-                        }
-                    ],
-                    "Personality": [
-                        {
-                            "index": "외향적",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중립적",
-                            "Score": 0
-                        },
-                        {
-                            "index": "내향적",
-                            "Score": 0
-                        }
-                    ],
-                    "Atmosphere": [
-                        {
-                            "index": "행복",
-                            "Score": 0
-                        },
-                        {
-                            "index": "즐거움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "평온",
-                            "Score": 0
-                        },
-                        {
-                            "index": "무감정",
-                            "Score": 0
-                        },
-                        {
-                            "index": "피곤",
-                            "Score": 0
-                        },
-                        {
-                            "index": "슬픔",
-                            "Score": 0
-                        },
-                        {
-                            "index": "두려움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "놀람",
-                            "Score": 0
-                        }
-                    ]
-                },
-                "Voice": {
-                    "Language": [
-                        "ko"
-                    ],
-                    "Gender": [
-                        "남"
-                    ],
-                    "Age": [
-                        {
-                            "index": "유년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청소년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "장년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "노년",
-                            "Score": 0
-                        }
-                    ],
-                    "Role": [
-                        {
-                            "index": "낭독",
-                            "Score": 0
-                        },
-                        {
-                            "index": "대화",
-                            "Score": 0
-                        }
-                    ],
-                    "Emotion": [
-                        {
-                            "index": "즐거움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "침착함",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중립",
-                            "Score": 0
-                        },
-                        {
-                            "index": "슬픔",
-                            "Score": 0
-                        },
-                        {
-                            "index": "화남",
-                            "Score": 0
-                        }
-                    ],
-                    "TypeCastContext": {}
-                },
-                "ApiSetting": {
-                    "name": "성기현(낭독)",
-                    "Api": "ElevenLabs",
-                    "voice_id": "yBfIe0XHLSjmJgXRnVQd",
-                    "stability": [
-                        0.9
-                    ],
-                    "similarity_boost": [
-                        0.6
-                    ],
-                    "style": [
-                        0
-                    ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
-                    "Volume": 3,
-                    "Speed": 0.98,
-                    "Pitch": -0.4
-                }
-            },
-            {
-                "CharacterId": 267,
-                "Name": "성기현(감정)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
-                "Quilty": 0,
-                "Grade": [
-                    "Main"
-                ],
-                "Context": {
-                    "Genre": [
-                        {
-                            "index": "문학",
-                            "Score": 0
-                        },
-                        {
-                            "index": "비문학",
-                            "Score": 0
-                        },
-                        {
-                            "index": "아동",
-                            "Score": 0
-                        },
-                        {
-                            "index": "시",
-                            "Score": 0
-                        },
-                        {
-                            "index": "학술",
-                            "Score": 0
-                        }
-                    ],
-                    "Gender": [
-                        {
-                            "index": "남",
-                            "Score": 0
-                        },
-                        {
-                            "index": "여",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중성",
-                            "Score": 0
-                        }
-                    ],
-                    "Age": [
-                        {
-                            "index": "유년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청소년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "장년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "노년",
-                            "Score": 0
-                        }
-                    ],
-                    "Personality": [
-                        {
-                            "index": "외향적",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중립적",
-                            "Score": 0
-                        },
-                        {
-                            "index": "내향적",
-                            "Score": 0
-                        }
-                    ],
-                    "Atmosphere": [
-                        {
-                            "index": "행복",
-                            "Score": 0
-                        },
-                        {
-                            "index": "즐거움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "평온",
-                            "Score": 0
-                        },
-                        {
-                            "index": "무감정",
-                            "Score": 0
-                        },
-                        {
-                            "index": "피곤",
-                            "Score": 0
-                        },
-                        {
-                            "index": "슬픔",
-                            "Score": 0
-                        },
-                        {
-                            "index": "두려움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "놀람",
-                            "Score": 0
-                        }
-                    ]
-                },
-                "Voice": {
-                    "Language": [
-                        "ko"
-                    ],
-                    "Gender": [
-                        "남"
-                    ],
-                    "Age": [
-                        {
-                            "index": "유년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청소년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "장년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "노년",
-                            "Score": 0
-                        }
-                    ],
-                    "Role": [
-                        {
-                            "index": "낭독",
-                            "Score": 0
-                        },
-                        {
-                            "index": "대화",
-                            "Score": 0
-                        }
-                    ],
-                    "Emotion": [
-                        {
-                            "index": "즐거움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "침착함",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중립",
-                            "Score": 0
-                        },
-                        {
-                            "index": "슬픔",
-                            "Score": 0
-                        },
-                        {
-                            "index": "화남",
-                            "Score": 0
-                        }
-                    ],
-                    "TypeCastContext": {}
-                },
-                "ApiSetting": {
-                    "name": "성기현(감정)",
-                    "Api": "ElevenLabs",
-                    "voice_id": "yBfIe0XHLSjmJgXRnVQd",
-                    "stability": [
-                        0.55
-                    ],
-                    "similarity_boost": [
-                        0.75
-                    ],
-                    "style": [
-                        0
-                    ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
-                    "Volume": 3,
-                    "Speed": 1,
-                    "Pitch": -0.4
-                }
-            },
-            {
-                "CharacterId": 267,
-                "Name": "최고급(낭독)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
-                "Quilty": 0,
-                "Grade": [
-                    "Main"
-                ],
-                "Context": {
-                    "Genre": [
-                        {
-                            "index": "문학",
-                            "Score": 0
-                        },
-                        {
-                            "index": "비문학",
-                            "Score": 0
-                        },
-                        {
-                            "index": "아동",
-                            "Score": 0
-                        },
-                        {
-                            "index": "시",
-                            "Score": 0
-                        },
-                        {
-                            "index": "학술",
-                            "Score": 0
-                        }
-                    ],
-                    "Gender": [
-                        {
-                            "index": "남",
-                            "Score": 0
-                        },
-                        {
-                            "index": "여",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중성",
-                            "Score": 0
-                        }
-                    ],
-                    "Age": [
-                        {
-                            "index": "유년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청소년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "장년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "노년",
-                            "Score": 0
-                        }
-                    ],
-                    "Personality": [
-                        {
-                            "index": "외향적",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중립적",
-                            "Score": 0
-                        },
-                        {
-                            "index": "내향적",
-                            "Score": 0
-                        }
-                    ],
-                    "Atmosphere": [
-                        {
-                            "index": "행복",
-                            "Score": 0
-                        },
-                        {
-                            "index": "즐거움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "평온",
-                            "Score": 0
-                        },
-                        {
-                            "index": "무감정",
-                            "Score": 0
-                        },
-                        {
-                            "index": "피곤",
-                            "Score": 0
-                        },
-                        {
-                            "index": "슬픔",
-                            "Score": 0
-                        },
-                        {
-                            "index": "두려움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "놀람",
-                            "Score": 0
-                        }
-                    ]
-                },
-                "Voice": {
-                    "Language": [
-                        "ko"
-                    ],
-                    "Gender": [
-                        "남"
-                    ],
-                    "Age": [
-                        {
-                            "index": "유년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청소년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "청년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "장년",
-                            "Score": 0
-                        },
-                        {
-                            "index": "노년",
-                            "Score": 0
-                        }
-                    ],
-                    "Role": [
-                        {
-                            "index": "낭독",
-                            "Score": 0
-                        },
-                        {
-                            "index": "대화",
-                            "Score": 0
-                        }
-                    ],
-                    "Emotion": [
-                        {
-                            "index": "즐거움",
-                            "Score": 0
-                        },
-                        {
-                            "index": "침착함",
-                            "Score": 0
-                        },
-                        {
-                            "index": "중립",
-                            "Score": 0
-                        },
-                        {
-                            "index": "슬픔",
-                            "Score": 0
-                        },
-                        {
-                            "index": "화남",
-                            "Score": 0
-                        }
-                    ],
-                    "TypeCastContext": {}
-                },
-                "ApiSetting": {
-                    "name": "최고급(낭독)",
+                    "name": "최한결(낭독)",
                     "Api": "ElevenLabs",
                     "voice_id": "JgEELqVSkOZJkjZAGzyX",
                     "stability": [
@@ -60840,7 +59790,7 @@
             },
             {
                 "CharacterId": 267,
-                "Name": "성부활(낭독)",
+                "Name": "최한결(연기)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
                 "Quilty": 0,
                 "Grade": [
@@ -61026,7 +59976,217 @@
                     "TypeCastContext": {}
                 },
                 "ApiSetting": {
-                    "name": "성부활(낭독)",
+                    "name": "최한결(연기)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "JgEELqVSkOZJkjZAGzyX",
+                    "stability": [
+                        0.40
+                    ],
+                    "similarity_boost": [
+                        0.75
+                    ],
+                    "style": [
+                        0.01
+                    ],
+                    "models": {
+                        "Ko": "eleven_multilingual_v2",
+                        "En": "eleven_turbo_v2_5",
+                        "Zh": "eleven_multilingual_v2"
+                    },
+                    "Volume": 5,
+                    "Speed": 0.98,
+                    "Pitch": -0.3
+                }
+            },
+            {
+                "CharacterId": 267,
+                "Name": "신승우(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
+                "Quilty": 0,
+                "Grade": [
+                    "Main"
+                ],
+                "Context": {
+                    "Genre": [
+                        {
+                            "index": "문학",
+                            "Score": 0
+                        },
+                        {
+                            "index": "비문학",
+                            "Score": 0
+                        },
+                        {
+                            "index": "아동",
+                            "Score": 0
+                        },
+                        {
+                            "index": "시",
+                            "Score": 0
+                        },
+                        {
+                            "index": "학술",
+                            "Score": 0
+                        }
+                    ],
+                    "Gender": [
+                        {
+                            "index": "남",
+                            "Score": 0
+                        },
+                        {
+                            "index": "여",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중성",
+                            "Score": 0
+                        }
+                    ],
+                    "Age": [
+                        {
+                            "index": "유년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청소년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "장년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "노년",
+                            "Score": 0
+                        }
+                    ],
+                    "Personality": [
+                        {
+                            "index": "외향적",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중립적",
+                            "Score": 0
+                        },
+                        {
+                            "index": "내향적",
+                            "Score": 0
+                        }
+                    ],
+                    "Atmosphere": [
+                        {
+                            "index": "행복",
+                            "Score": 0
+                        },
+                        {
+                            "index": "즐거움",
+                            "Score": 0
+                        },
+                        {
+                            "index": "평온",
+                            "Score": 0
+                        },
+                        {
+                            "index": "무감정",
+                            "Score": 0
+                        },
+                        {
+                            "index": "피곤",
+                            "Score": 0
+                        },
+                        {
+                            "index": "슬픔",
+                            "Score": 0
+                        },
+                        {
+                            "index": "두려움",
+                            "Score": 0
+                        },
+                        {
+                            "index": "놀람",
+                            "Score": 0
+                        }
+                    ]
+                },
+                "Voice": {
+                    "Language": [
+                        "ko"
+                    ],
+                    "Gender": [
+                        "남"
+                    ],
+                    "Age": [
+                        {
+                            "index": "유년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청소년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "장년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "노년",
+                            "Score": 0
+                        }
+                    ],
+                    "Role": [
+                        {
+                            "index": "낭독",
+                            "Score": 0
+                        },
+                        {
+                            "index": "대화",
+                            "Score": 0
+                        }
+                    ],
+                    "Emotion": [
+                        {
+                            "index": "즐거움",
+                            "Score": 0
+                        },
+                        {
+                            "index": "침착함",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중립",
+                            "Score": 0
+                        },
+                        {
+                            "index": "슬픔",
+                            "Score": 0
+                        },
+                        {
+                            "index": "화남",
+                            "Score": 0
+                        }
+                    ],
+                    "TypeCastContext": {}
+                },
+                "ApiSetting": {
+                    "name": "신승우(낭독)",
                     "Api": "ElevenLabs",
                     "voice_id": "8xqDiScWrtT6gTW430Ur",
                     "stability": [
@@ -61050,7 +60210,7 @@
             },
             {
                 "CharacterId": 267,
-                "Name": "성부활(감정)",
+                "Name": "신승우(연기)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
                 "Quilty": 0,
                 "Grade": [
@@ -61236,14 +60396,14 @@
                     "TypeCastContext": {}
                 },
                 "ApiSetting": {
-                    "name": "성부활(감정)",
+                    "name": "신승우(연기)",
                     "Api": "ElevenLabs",
                     "voice_id": "8xqDiScWrtT6gTW430Ur",
                     "stability": [
                         0.3
                     ],
                     "similarity_boost": [
-                        0.8
+                        0.85
                     ],
                     "style": [
                         0.01
@@ -61256,6 +60416,426 @@
                     "Volume": 4,
                     "Speed": 0.96,
                     "Pitch": -0.4
+                }
+            },
+            {
+                "CharacterId": 267,
+                "Name": "성기훈(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
+                "Quilty": 0,
+                "Grade": [
+                    "Main"
+                ],
+                "Context": {
+                    "Genre": [
+                        {
+                            "index": "문학",
+                            "Score": 0
+                        },
+                        {
+                            "index": "비문학",
+                            "Score": 0
+                        },
+                        {
+                            "index": "아동",
+                            "Score": 0
+                        },
+                        {
+                            "index": "시",
+                            "Score": 0
+                        },
+                        {
+                            "index": "학술",
+                            "Score": 0
+                        }
+                    ],
+                    "Gender": [
+                        {
+                            "index": "남",
+                            "Score": 0
+                        },
+                        {
+                            "index": "여",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중성",
+                            "Score": 0
+                        }
+                    ],
+                    "Age": [
+                        {
+                            "index": "유년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청소년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "장년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "노년",
+                            "Score": 0
+                        }
+                    ],
+                    "Personality": [
+                        {
+                            "index": "외향적",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중립적",
+                            "Score": 0
+                        },
+                        {
+                            "index": "내향적",
+                            "Score": 0
+                        }
+                    ],
+                    "Atmosphere": [
+                        {
+                            "index": "행복",
+                            "Score": 0
+                        },
+                        {
+                            "index": "즐거움",
+                            "Score": 0
+                        },
+                        {
+                            "index": "평온",
+                            "Score": 0
+                        },
+                        {
+                            "index": "무감정",
+                            "Score": 0
+                        },
+                        {
+                            "index": "피곤",
+                            "Score": 0
+                        },
+                        {
+                            "index": "슬픔",
+                            "Score": 0
+                        },
+                        {
+                            "index": "두려움",
+                            "Score": 0
+                        },
+                        {
+                            "index": "놀람",
+                            "Score": 0
+                        }
+                    ]
+                },
+                "Voice": {
+                    "Language": [
+                        "ko"
+                    ],
+                    "Gender": [
+                        "남"
+                    ],
+                    "Age": [
+                        {
+                            "index": "유년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청소년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "장년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "노년",
+                            "Score": 0
+                        }
+                    ],
+                    "Role": [
+                        {
+                            "index": "낭독",
+                            "Score": 0
+                        },
+                        {
+                            "index": "대화",
+                            "Score": 0
+                        }
+                    ],
+                    "Emotion": [
+                        {
+                            "index": "즐거움",
+                            "Score": 0
+                        },
+                        {
+                            "index": "침착함",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중립",
+                            "Score": 0
+                        },
+                        {
+                            "index": "슬픔",
+                            "Score": 0
+                        },
+                        {
+                            "index": "화남",
+                            "Score": 0
+                        }
+                    ],
+                    "TypeCastContext": {}
+                },
+                "ApiSetting": {
+                    "name": "성기훈(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "yBfIe0XHLSjmJgXRnVQd",
+                    "stability": [
+                        0.9
+                    ],
+                    "similarity_boost": [
+                        0.5
+                    ],
+                    "style": [
+                        0
+                    ],
+                    "models": {
+                        "Ko": "eleven_multilingual_v2",
+                        "En": "eleven_turbo_v2_5",
+                        "Zh": "eleven_multilingual_v2"
+                    },
+                    "Volume": 2,
+                    "Speed": 1,
+                    "Pitch": -0.2
+                }
+            },
+            {
+                "CharacterId": 267,
+                "Name": "성기훈(연기)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
+                "Quilty": 0,
+                "Grade": [
+                    "Main"
+                ],
+                "Context": {
+                    "Genre": [
+                        {
+                            "index": "문학",
+                            "Score": 0
+                        },
+                        {
+                            "index": "비문학",
+                            "Score": 0
+                        },
+                        {
+                            "index": "아동",
+                            "Score": 0
+                        },
+                        {
+                            "index": "시",
+                            "Score": 0
+                        },
+                        {
+                            "index": "학술",
+                            "Score": 0
+                        }
+                    ],
+                    "Gender": [
+                        {
+                            "index": "남",
+                            "Score": 0
+                        },
+                        {
+                            "index": "여",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중성",
+                            "Score": 0
+                        }
+                    ],
+                    "Age": [
+                        {
+                            "index": "유년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청소년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "장년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "노년",
+                            "Score": 0
+                        }
+                    ],
+                    "Personality": [
+                        {
+                            "index": "외향적",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중립적",
+                            "Score": 0
+                        },
+                        {
+                            "index": "내향적",
+                            "Score": 0
+                        }
+                    ],
+                    "Atmosphere": [
+                        {
+                            "index": "행복",
+                            "Score": 0
+                        },
+                        {
+                            "index": "즐거움",
+                            "Score": 0
+                        },
+                        {
+                            "index": "평온",
+                            "Score": 0
+                        },
+                        {
+                            "index": "무감정",
+                            "Score": 0
+                        },
+                        {
+                            "index": "피곤",
+                            "Score": 0
+                        },
+                        {
+                            "index": "슬픔",
+                            "Score": 0
+                        },
+                        {
+                            "index": "두려움",
+                            "Score": 0
+                        },
+                        {
+                            "index": "놀람",
+                            "Score": 0
+                        }
+                    ]
+                },
+                "Voice": {
+                    "Language": [
+                        "ko"
+                    ],
+                    "Gender": [
+                        "남"
+                    ],
+                    "Age": [
+                        {
+                            "index": "유년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청소년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "청년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "장년",
+                            "Score": 0
+                        },
+                        {
+                            "index": "노년",
+                            "Score": 0
+                        }
+                    ],
+                    "Role": [
+                        {
+                            "index": "낭독",
+                            "Score": 0
+                        },
+                        {
+                            "index": "대화",
+                            "Score": 0
+                        }
+                    ],
+                    "Emotion": [
+                        {
+                            "index": "즐거움",
+                            "Score": 0
+                        },
+                        {
+                            "index": "침착함",
+                            "Score": 0
+                        },
+                        {
+                            "index": "중립",
+                            "Score": 0
+                        },
+                        {
+                            "index": "슬픔",
+                            "Score": 0
+                        },
+                        {
+                            "index": "화남",
+                            "Score": 0
+                        }
+                    ],
+                    "TypeCastContext": {}
+                },
+                "ApiSetting": {
+                    "name": "성기훈(연기)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "yBfIe0XHLSjmJgXRnVQd",
+                    "stability": [
+                        0.45
+                    ],
+                    "similarity_boost": [
+                        0.75
+                    ],
+                    "style": [
+                        0.01
+                    ],
+                    "models": {
+                        "Ko": "eleven_multilingual_v2",
+                        "En": "eleven_turbo_v2_5",
+                        "Zh": "eleven_multilingual_v2"
+                    },
+                    "Volume": 2,
+                    "Speed": 1,
+                    "Pitch": -0.2
                 }
             }
         ],

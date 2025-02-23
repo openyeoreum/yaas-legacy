@@ -388,14 +388,14 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang):
             NeuterVoice = HighestScoreVoice
             VoiceDataSetCharacters.append(NeuterVoice)
 
-    # ### 테스트 후 삭제 ###
-    # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
-    # with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
-    # with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ###
+    ### 테스트 후 삭제 ###
+    with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
+    with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ###
         
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
@@ -434,10 +434,11 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang):
         for name in sorted(GroupedData.keys()):
             SortedMatchedActors.extend(GroupedData[name])
                 
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    sys.exit()
     
     return SortedMatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters
     

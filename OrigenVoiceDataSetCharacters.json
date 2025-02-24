@@ -214,20 +214,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -454,20 +440,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "Narrator",
-        "Score": {
-            "ContextScore": 0.006074845584150389,
-            "Narrator": 0.017356701669001114,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -686,20 +658,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 2.2028896140478518e-06,
-            "Narrator": 2.014070504272322e-06,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -926,20 +884,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004276327573576832,
-            "Narrator": 0.004276327573576832,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -1158,20 +1102,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003848694816219149,
-            "Narrator": 0.003848694816219149,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -1390,20 +1320,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0018140850379804523,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -1621,20 +1537,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0013998931947719405,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -1861,20 +1763,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.009078276340420955,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -2100,20 +1988,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.005339241747407427,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -2331,20 +2205,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0016113903306860132,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -2562,20 +2422,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -2792,20 +2638,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -3022,20 +2854,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 6.781299880628935e-05,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 1.1392583799456611e-05,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 8.137559856754721e-06,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -3252,20 +3070,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 2.3736294989679113e-11,
-            "Narrator": 0.0,
-            "NarratorActor": 4.882894969305417e-11,
-            "Character1": 6.836052957027584e-12,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 4.882894969305417e-12,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -3493,20 +3297,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "Character2",
-        "Score": {
-            "ContextScore": 0.002999101873964896,
-            "Narrator": 0.00428443124852128,
-            "NarratorActor": 0.042844312485212796,
-            "Character1": 0.00856886249704256,
-            "Character2": 0.00856886249704256,
-            "Character4": 0.0008568862497042559,
-            "Character5": 0.0,
-            "Character6": 0.00856886249704256,
-            "Character7": 0.00856886249704256,
-            "Character8": 0.00856886249704256,
-            "Character9": 0.00856886249704256
         }
     },
     {
@@ -3734,20 +3524,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0032279177206195925,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -3964,20 +3740,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 1.588664634189971e-07,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -4194,20 +3956,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 4.00424763091762e-07,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -4425,20 +4173,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 5.880861387562395e-07,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -4656,20 +4390,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 1.6962025580784386e-09,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -4896,20 +4616,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.001404998504416425,
-            "Narrator": 0.002007140720594893,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -5136,20 +4842,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0015611094493515837,
-            "Narrator": 0.002230156356216548,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -5368,20 +5060,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003509691901320971,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0026533270773986544,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0018952336267133245,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -5601,20 +5279,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0021674922750870014,
-            "Narrator": 0.0019507430475783013,
-            "NarratorActor": 0.005852229142734904,
-            "Character1": 0.0011704458285469808,
-            "Character2": 0.0011704458285469808,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0011704458285469808,
-            "Character7": 0.0011704458285469808,
-            "Character8": 0.0011704458285469808,
-            "Character9": 0.0011704458285469808
         }
     },
     {
@@ -5841,20 +5505,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.005844201023439536,
-            "Narrator": 0.012523287907370435,
-            "NarratorActor": 0.05009315162948174,
-            "Character1": 0.00534326950714472,
-            "Character2": 0.00534326950714472,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.00534326950714472,
-            "Character7": 0.00534326950714472,
-            "Character8": 0.00534326950714472,
-            "Character9": 0.00534326950714472
         }
     },
     {
@@ -6081,20 +5731,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003809949801809774,
-            "Narrator": 0.003135044408346328,
-            "NarratorActor": 0.013933530703761458,
-            "Character1": 0.003030542928068117,
-            "Character2": 0.0027867061407522917,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0027867061407522917,
-            "Character7": 0.00296087527454931,
-            "Character8": 0.0027867061407522917,
-            "Character9": 0.0027867061407522917
         }
     },
     {
@@ -6321,20 +5957,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004083549641147357,
-            "Narrator": 0.005833642344496225,
-            "NarratorActor": 0.029168211722481123,
-            "Character1": 0.005833642344496225,
-            "Character2": 0.005833642344496225,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.005833642344496225,
-            "Character7": 0.005833642344496225,
-            "Character8": 0.005833642344496225,
-            "Character9": 0.005833642344496225
         }
     },
     {
@@ -6561,20 +6183,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0019014874044533192,
-            "Narrator": 0.0019558156160091288,
-            "NarratorActor": 0.010865642311161825,
-            "Character1": 0.0023632772026776967,
-            "Character2": 0.002173128462232365,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.002173128462232365,
-            "Character7": 0.0023089489911218876,
-            "Character8": 0.002173128462232365,
-            "Character9": 0.002173128462232365
         }
     },
     {
@@ -6802,20 +6410,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 4.895737767123287e-09,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 3.289935779506849e-09,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 2.3499541282191775e-09,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -7043,20 +6637,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003877225157297757,
-            "Narrator": 0.0031904024151478685,
-            "NarratorActor": 0.028359132579092165,
-            "Character1": 0.006168111335952546,
-            "Character2": 0.005671826515818434,
-            "Character4": 0.0007089783144773042,
-            "Character5": 0.0,
-            "Character6": 0.005671826515818434,
-            "Character7": 0.006026315673057085,
-            "Character8": 0.005671826515818434,
-            "Character9": 0.005671826515818434
         }
     },
     {
@@ -7273,20 +6853,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.006169346787776059,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -7503,20 +7069,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "Caption",
-        "Score": {
-            "ContextScore": 0.006633031743715367,
-            "Narrator": 0.016108791377594463,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -7735,20 +7287,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.006064834209435434,
-            "Narrator": 0.012996073305933073,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -7971,20 +7509,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.006832314131095488,
-            "Narrator": 0.00976044875870784,
-            "NarratorActor": 0.03904179503483136,
-            "Character1": 0.007808359006966273,
-            "Character2": 0.007808359006966273,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.007808359006966273,
-            "Character7": 0.007808359006966273,
-            "Character8": 0.007808359006966273,
-            "Character9": 0.007808359006966273
         }
     },
     {
@@ -8200,20 +7724,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "Character9",
-        "Score": {
-            "ContextScore": 0.004619426724159903,
-            "Narrator": 0.0,
-            "NarratorActor": 0.03167606896566791,
-            "Character1": 0.0063352137931335815,
-            "Character2": 0.0063352137931335815,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0063352137931335815,
-            "Character7": 0.0063352137931335815,
-            "Character8": 0.0063352137931335815,
-            "Character9": 0.0063352137931335815
         }
     },
     {
@@ -8432,20 +7942,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.006112814734886704,
-            "Narrator": 0.011003066522796067,
-            "NarratorActor": 0.036676888409320214,
-            "Character1": 0.0050823688224343735,
-            "Character2": 0.004715599938341171,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.004715599938341171,
-            "Character7": 0.0049775777126934585,
-            "Character8": 0.004715599938341171,
-            "Character9": 0.004715599938341171
         }
     },
     {
@@ -8665,20 +8161,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.006876916576747541,
-            "Narrator": 0.010610099861267635,
-            "NarratorActor": 0.03536699953755878,
-            "Character1": 0.004951379935258229,
-            "Character2": 0.004126149946048524,
-            "Character4": 0.001237844983814557,
-            "Character5": 0.0,
-            "Character6": 0.004126149946048524,
-            "Character7": 0.00471559993834117,
-            "Character8": 0.004126149946048524,
-            "Character9": 0.004126149946048524
         }
     },
     {
@@ -8905,20 +8387,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.007480752046733242,
-            "Narrator": 0.010473052865426538,
-            "NarratorActor": 0.04189221146170615,
-            "Character1": 0.005984601637386594,
-            "Character2": 0.005984601637386594,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.005984601637386594,
-            "Character7": 0.005984601637386594,
-            "Character8": 0.005984601637386594,
-            "Character9": 0.005984601637386594
         }
     },
     {
@@ -9137,20 +8605,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004312083034193199,
-            "Narrator": 0.005544106758248399,
-            "NarratorActor": 0.018480355860827996,
-            "Character1": 0.003696071172165599,
-            "Character2": 0.003696071172165599,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.003696071172165599,
-            "Character7": 0.003696071172165599,
-            "Character8": 0.003696071172165599,
-            "Character9": 0.003696071172165599
         }
     },
     {
@@ -9368,20 +8822,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "Character6",
-        "Score": {
-            "ContextScore": 0.00467113716811059,
-            "Narrator": 0.0,
-            "NarratorActor": 0.03843678584045286,
-            "Character1": 0.008360000920298497,
-            "Character2": 0.007687357168090572,
-            "Character4": 0.000427075398227254,
-            "Character5": 0.0,
-            "Character6": 0.007687357168090572,
-            "Character7": 0.008167816991096232,
-            "Character8": 0.007687357168090572,
-            "Character9": 0.007687357168090572
         }
     },
     {
@@ -9599,20 +9039,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003298494389943126,
-            "Narrator": 0.0,
-            "NarratorActor": 0.030157662993765728,
-            "Character1": 0.006559291701144046,
-            "Character2": 0.006031532598753146,
-            "Character4": 0.0006031532598753145,
-            "Character5": 0.0,
-            "Character6": 0.006031532598753146,
-            "Character7": 0.006408503386175216,
-            "Character8": 0.006031532598753146,
-            "Character9": 0.006031532598753146
         }
     },
     {
@@ -9831,20 +9257,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.005586380170418157,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.015961086201194734,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -10062,20 +9474,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "Character5",
-        "Score": {
-            "ContextScore": 0.006566708216901737,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.018762023476862108,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -10290,20 +9688,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -10521,20 +9905,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0020189864284707393,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -10753,20 +10123,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.00038768441658701164,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 8.141372748327244e-05,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 5.8152662488051744e-05,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -10985,20 +10341,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003036068775064249,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0010626240712724871,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0007590171937660623,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -11218,20 +10560,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -11451,20 +10779,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -11682,20 +10996,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.002654290233946127,
-            "Narrator": 0.0024267796424650304,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -11912,20 +11212,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 4.269616607824579e-06,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -12142,20 +11428,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0009965391015677228,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -12373,20 +11645,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0032561598090422826,
-            "Narrator": 0.0,
-            "NarratorActor": 0.005954120793677317,
-            "Character1": 0.0011908241587354634,
-            "Character2": 0.0011908241587354634,
-            "Character4": 0.00029770603968386585,
-            "Character5": 0.0,
-            "Character6": 0.0011908241587354634,
-            "Character7": 0.0011908241587354634,
-            "Character8": 0.0011908241587354634,
-            "Character9": 0.0011908241587354634
         }
     },
     {
@@ -12605,20 +11863,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.006367451745225181,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -12837,20 +12081,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.005419249639869979,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -13067,20 +12297,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -13302,20 +12518,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0023901797610840518,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -13534,20 +12736,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0022573919965793825,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -13765,20 +12953,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0013628241121395961,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0006307928747617558,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -13997,20 +13171,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0006224344195583943,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0001707248693645881,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -14228,20 +13388,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0004661623526636939,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0004262055795782345,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -14459,20 +13605,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0005329041461831737,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.00048722664793890175,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -14690,20 +13822,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0006693406294329205,
-            "Narrator": 0.00032128350212780186,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -14921,20 +14039,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0007251190152189974,
-            "Narrator": 0.00034805712730511874,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -15153,20 +14257,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0025800879106361086,
-            "Narrator": 0.002686977266933891,
-            "NarratorActor": 0.008956590889779636,
-            "Character1": 0.0017913181779559268,
-            "Character2": 0.0017913181779559268,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0017913181779559268,
-            "Character7": 0.0017913181779559268,
-            "Character8": 0.0017913181779559268,
-            "Character9": 0.0017913181779559268
         }
     },
     {
@@ -15384,20 +14474,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.002202892971846917,
-            "Narrator": 0.0,
-            "NarratorActor": 0.015860829397297802,
-            "Character1": 0.003449730393912272,
-            "Character2": 0.0031721658794595605,
-            "Character4": 0.0007049257509910134,
-            "Character5": 0.0,
-            "Character6": 0.0031721658794595605,
-            "Character7": 0.003370426246925783,
-            "Character8": 0.0031721658794595605,
-            "Character9": 0.0031721658794595605
         }
     },
     {
@@ -15615,20 +14691,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.002390122918611317,
-            "Narrator": 0.002489142296668072,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -15848,20 +14910,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0021126287070156098,
-            "Narrator": 0.0022001518963062567,
-            "NarratorActor": 0.00733383965435419,
-            "Character1": 0.0015808498810496808,
-            "Character2": 0.0014667679308708376,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0014667679308708376,
-            "Character7": 0.0015482550381414398,
-            "Character8": 0.0014667679308708376,
-            "Character9": 0.0014667679308708376
         }
     },
     {
@@ -16080,20 +15128,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.005976235132195756,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -16312,20 +15346,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0028553659998386675,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -16553,20 +15573,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.006863794162138634,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -16785,20 +15791,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0038635903839300437,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -17017,20 +16009,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0020658901011726912,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -17249,20 +16227,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0005958767030033482,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0008716824912506123,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -17481,20 +16445,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.000880663792642688,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0012681558614054708,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -17721,20 +16671,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0039603175704587025,
-            "Narrator": 0.005657596529226718,
-            "NarratorActor": 0.016972789587680153,
-            "Character1": 0.0033945579175360305,
-            "Character2": 0.0033945579175360305,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0033945579175360305,
-            "Character7": 0.0033945579175360305,
-            "Character8": 0.0033945579175360305,
-            "Character9": 0.0033945579175360305
         }
     },
     {
@@ -17951,20 +16887,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003223858506652054,
-            "Narrator": 0.0038686302079824647,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -18191,20 +17113,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0035714230599546543,
-            "Narrator": 0.0029387709750484017,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -18423,20 +17331,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0029701439364269323,
-            "Narrator": 0.001188057574570773,
-            "NarratorActor": 0.021385036342273914,
-            "Character1": 0.004651245404444576,
-            "Character2": 0.004277007268454783,
-            "Character4": 0.0006110010383506832,
-            "Character5": 0.0,
-            "Character6": 0.004277007268454783,
-            "Character7": 0.004544320222733206,
-            "Character8": 0.004277007268454783,
-            "Character9": 0.004277007268454783
         }
     },
     {
@@ -18655,20 +17549,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0030725627571289472,
-            "Narrator": 0.0012641401057901954,
-            "NarratorActor": 0.028443152380279394,
-            "Character1": 0.005688630476055879,
-            "Character2": 0.005688630476055879,
-            "Character4": 0.0010666182142604775,
-            "Character5": 0.0,
-            "Character6": 0.005688630476055879,
-            "Character7": 0.005688630476055879,
-            "Character8": 0.005688630476055879,
-            "Character9": 0.005688630476055879
         }
     },
     {
@@ -18886,20 +17766,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0012525092227327129,
-            "Narrator": 0.0,
-            "NarratorActor": 0.01431439111694529,
-            "Character1": 0.000343545386806687,
-            "Character2": 0.0011451512893556235,
-            "Character4": 0.00011451512893556232,
-            "Character5": 0.0,
-            "Character6": 0.0011451512893556235,
-            "Character7": 0.0005725756446778118,
-            "Character8": 0.0011451512893556235,
-            "Character9": 0.0011451512893556235
         }
     },
     {
@@ -19116,20 +17982,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0029974238980987485,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -19346,20 +18198,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0032828008443766773,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -19578,20 +18416,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0013878011214973312,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0007105541742066336,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0005075386958618811,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -19809,20 +18633,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0033623396563624217,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -20039,20 +18849,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0021571620473646845,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -20269,20 +19065,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004140196160896208,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -20500,20 +19282,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003653114259614301,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -20732,20 +19500,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004728415775604235,
-            "Narrator": 0.008105855615321546,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -20964,20 +19718,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0049730248390911815,
-            "Narrator": 0.011366913917922702,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -21196,20 +19936,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0049730248390911815,
-            "Narrator": 0.011366913917922702,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -21428,20 +20154,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.001745340340244739,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -21658,20 +20370,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0028565197171245885,
-            "Narrator": 0.0,
-            "NarratorActor": 0.007712603236236388,
-            "Character1": 0.0013882685825225497,
-            "Character2": 0.0015425206472472776,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0015425206472472776,
-            "Character7": 0.0014323406010153293,
-            "Character8": 0.0015425206472472776,
-            "Character9": 0.0015425206472472776
         }
     },
     {
@@ -21888,20 +20586,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004412864656864757,
-            "Narrator": 0.0,
-            "NarratorActor": 0.027801047338247967,
-            "Character1": 0.005004188520884635,
-            "Character2": 0.0055602094676495935,
-            "Character4": 0.00039715781911782807,
-            "Character5": 0.0,
-            "Character6": 0.0055602094676495935,
-            "Character7": 0.005163051648531767,
-            "Character8": 0.0055602094676495935,
-            "Character9": 0.0055602094676495935
         }
     },
     {
@@ -22119,20 +20803,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0017168934420814228,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0017659475404266062,
-            "Character1": 0.000270778622865413,
-            "Character2": 0.0003531895080853213,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0003531895080853213,
-            "Character7": 0.0002943245900711011,
-            "Character8": 0.0003531895080853213,
-            "Character9": 0.0003531895080853213
         }
     },
     {
@@ -22350,20 +21020,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.001019798047754583,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 2.447515314610999e-05,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 1.748225224722142e-05,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -22581,20 +21237,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.001316517925797017,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0006450937836405383,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.00046078127402895594,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -22811,20 +21453,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.001998623145226013,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0034262111061017365,
-            "Character1": 0.0006852422212203472,
-            "Character2": 0.0006852422212203472,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0006852422212203472,
-            "Character7": 0.0006852422212203472,
-            "Character8": 0.0006852422212203472,
-            "Character9": 0.0006852422212203472
         }
     },
     {
@@ -23042,20 +21670,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0022799087311435816,
-            "Narrator": 0.0,
-            "NarratorActor": 0.003126731974139769,
-            "Character1": 0.0006253463948279539,
-            "Character2": 0.0006253463948279539,
-            "Character4": 0.00010422439913799231,
-            "Character5": 0.0,
-            "Character6": 0.0006253463948279539,
-            "Character7": 0.0006253463948279539,
-            "Character8": 0.0006253463948279539,
-            "Character9": 0.0006253463948279539
         }
     },
     {
@@ -23273,20 +21887,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003185578835325107,
-            "Narrator": 0.0,
-            "NarratorActor": 0.002229905184727575,
-            "Character1": 0.0004459810369455149,
-            "Character2": 0.0004459810369455149,
-            "Character4": 6.371157670650213e-05,
-            "Character5": 0.0,
-            "Character6": 0.0004459810369455149,
-            "Character7": 0.0004459810369455149,
-            "Character8": 0.0004459810369455149,
-            "Character9": 0.0004459810369455149
         }
     },
     {
@@ -23504,20 +22104,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.00013270617107272233,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 7.43154558007245e-05,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 5.3082468429088925e-05,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -23736,20 +22322,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.00013270617107272233,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 7.43154558007245e-05,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 5.3082468429088925e-05,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -23967,20 +22539,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0017700137773536716,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0015930123996183046,
-            "Character1": 0.00031860247992366095,
-            "Character2": 0.00031860247992366095,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.00031860247992366095,
-            "Character7": 0.00031860247992366095,
-            "Character8": 0.00031860247992366095,
-            "Character9": 0.00031860247992366095
         }
     },
     {
@@ -24200,20 +22758,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004082356543830207,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.005598660402967142,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -24432,20 +22976,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004082356543830207,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0017495813759272315,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -24673,20 +23203,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004535951715366898,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0023327751679029763,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -24903,20 +23419,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0028262660774045793,
-            "Narrator": 0.00258401469934133,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -25133,20 +23635,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004265101088010958,
-            "Narrator": 0.003899520994752877,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -25366,20 +23854,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004014236123482872,
-            "Narrator": 0.005161160730192265,
-            "NarratorActor": 0.015483482190576795,
-            "Character1": 0.003096696438115359,
-            "Character2": 0.003096696438115359,
-            "Character4": 0.00034407738201281757,
-            "Character5": 0.0,
-            "Character6": 0.003096696438115359,
-            "Character7": 0.003096696438115359,
-            "Character8": 0.003096696438115359,
-            "Character9": 0.003096696438115359
         }
     },
     {
@@ -25596,20 +24070,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "Character8",
-        "Score": {
-            "ContextScore": 0.004014236123482872,
-            "Narrator": 0.0,
-            "NarratorActor": 0.03612812511134585,
-            "Character1": 0.00722562502226917,
-            "Character2": 0.00722562502226917,
-            "Character4": 0.0008028472246965744,
-            "Character5": 0.0,
-            "Character6": 0.00722562502226917,
-            "Character7": 0.00722562502226917,
-            "Character8": 0.00722562502226917,
-            "Character9": 0.00722562502226917
         }
     },
     {
@@ -25828,20 +24288,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "Character1",
-        "Score": {
-            "ContextScore": 0.005804379888599654,
-            "Narrator": 0.0,
-            "NarratorActor": 0.07462774142485269,
-            "Character1": 0.01492554828497054,
-            "Character2": 0.01492554828497054,
-            "Character4": 0.0014925548284970538,
-            "Character5": 0.0,
-            "Character6": 0.01492554828497054,
-            "Character7": 0.01492554828497054,
-            "Character8": 0.01492554828497054,
-            "Character9": 0.01492554828497054
         }
     },
     {
@@ -26059,20 +24505,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003582001350192511,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -26290,20 +24722,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.003371295388416481,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -26522,20 +24940,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0077415411804966925,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -26762,20 +25166,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.006882324623282853,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -26994,20 +25384,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0026088751882646925,
-            "Narrator": 0.0012298983030390694,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -27225,20 +25601,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0017256972685763623,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -27457,20 +25819,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.00013270617107272233,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 9.099851730700958e-05,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -27689,20 +26037,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0028327593830791285,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -27921,20 +26255,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0030216100086177373,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -28152,20 +26472,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0020789665295550095,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -28384,20 +26690,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.002238887031828472,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -28615,20 +26907,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -28846,20 +27124,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -29077,20 +27341,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.001786247732330976,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -29308,20 +27558,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.001786247732330976,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -29539,20 +27775,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0020425459468651334,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.002363517452801083,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -29770,20 +27992,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0019223961852848318,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0022244870144010197,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -30001,20 +28209,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -30232,20 +28426,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -30463,20 +28643,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0027107852391323375,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.005646178398078498,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -30693,20 +28859,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.00038634865689346265,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0015453946275738502,
-            "Character1": 0.00020752442141705989,
-            "Character2": 0.0001766165288655829,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0001766165288655829,
-            "Character7": 0.00019869359497378078,
-            "Character8": 0.0001766165288655829,
-            "Character9": 0.0001766165288655829
         }
     },
     {
@@ -30925,20 +29077,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0013474149675737177,
-            "Narrator": 0.000538965987029487,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -31156,20 +29294,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0004312293697015659,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.00018629108771107643,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0001330650626507689,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -31387,20 +29511,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0009476356822160796,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0005458381529564618,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0003898843949689013,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -31618,20 +29728,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0027158383411603356,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -31849,20 +29945,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.002885578237482857,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -32080,20 +30162,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.004760590198890347,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -32311,20 +30379,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.005289544665433718,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -32543,20 +30597,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0038388850097361596,
-            "Narrator": 0.0054841214424802285,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -32774,20 +30814,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0015878481172897352,
-            "Narrator": 0.0007621670962990727,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -33005,20 +31031,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0014657059544212938,
-            "Narrator": 0.0007035388581222208,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -33235,20 +31247,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0008686017097957572,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -33463,20 +31461,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 4.5730961916231936e-07,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -33695,20 +31679,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 6.288007263481893e-07,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 1.5091217432356544e-07,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -33926,20 +31896,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0018516465609112562,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -34157,20 +32113,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0014761981577455807,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -34389,20 +32331,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0012916733880273827,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -34621,20 +32549,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.001710983671409212,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -34853,20 +32767,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0015969180933152645,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -35085,20 +32985,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0019486690457136855,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0015589352365709484,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -35317,20 +33203,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0018091557393916378,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.00028946491830266207,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -35549,20 +33421,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0018091557393916378,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0014473245915133102,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -35781,20 +33639,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0031528571524798337,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -36013,20 +33857,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0009714335715251361,
-            "Narrator": 0.0005329007020937888,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -36243,20 +34073,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0017746664173197042,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0032451043059560304,
-            "Character1": 0.0006490208611912061,
-            "Character2": 0.0006490208611912061,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0006490208611912061,
-            "Character7": 0.0006490208611912061,
-            "Character8": 0.0006490208611912061,
-            "Character9": 0.0006490208611912061
         }
     },
     {
@@ -36473,20 +34289,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0017414888239120178,
-            "Narrator": 0.0011941637649682407,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -36703,20 +34505,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0018866128925713525,
-            "Narrator": 0.0012936774120489273,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -36934,20 +34722,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0013969121820529126,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0008046214168624774,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0005747295834731982,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -37165,20 +34939,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0009984753338097307,
-            "Narrator": 0.0006846688003266724,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -37396,20 +35156,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0011957424623737717,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.000737943919636385,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -37627,20 +35373,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0011807956815940996,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0009716261608545735,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -37858,20 +35590,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0007323922582039352,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0006026542010363811,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -38089,20 +35807,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0008097406210417233,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0008328760673572013,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -38320,20 +36024,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0008567155881207012,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0010574318116232655,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -38551,20 +36241,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0009709443332034615,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0015978969597862684,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -38782,20 +36458,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 1.0952075380268342e-06,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -39013,20 +36675,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -39244,20 +36892,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0008674213601854998,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -39475,20 +37109,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0013371495208987433,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -39706,20 +37326,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0014679389980176594,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0018789619174626043,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -39934,20 +37540,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0023404065197931753,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -40165,20 +37757,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0014909527715292687,
-            "Narrator": 0.0010734859955010736,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -40396,20 +37974,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.002490604031388008,
-            "Narrator": 0.0017932349025993658,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -40627,20 +38191,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0013230806055620464,
-            "Narrator": 0.00035723176350175255,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -40855,20 +38405,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0010790498062939336,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -41087,20 +38623,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0007995562991501501,
-            "Narrator": 0.0008041251922881509,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -41319,20 +38841,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.00181055952506798,
-            "Narrator": 0.0010139133340380687,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -41550,20 +39058,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0010619955950597778,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0014867938330836888,
-            "Character1": 0.00032709464327841155,
-            "Character2": 0.00029735876661673776,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.00029735876661673776,
-            "Character7": 0.0003185986785179333,
-            "Character8": 0.00029735876661673776,
-            "Character9": 0.00029735876661673776
         }
     },
     {
@@ -41781,20 +39275,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.001489964627930498,
-            "Narrator": 0.0,
-            "NarratorActor": 0.004469893883791493,
-            "Character1": 0.0008045808990824688,
-            "Character2": 0.0008939787767582988,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0008939787767582988,
-            "Character7": 0.0008301231498469918,
-            "Character8": 0.0008939787767582988,
-            "Character9": 0.0008939787767582988
         }
     },
     {
@@ -42010,20 +39490,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0014302634167823848,
-            "Narrator": 0.0,
-            "NarratorActor": 0.007437369767268402,
-            "Character1": 0.0007666211913953583,
-            "Character2": 0.0006865264400555446,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0006865264400555446,
-            "Character7": 0.0007437369767268402,
-            "Character8": 0.0006865264400555446,
-            "Character9": 0.0006865264400555446
         }
     },
     {
@@ -42242,20 +39708,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.00012909497473568922,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0004721187647476634,
-            "Character1": 9.442375294953269e-05,
-            "Character2": 9.442375294953269e-05,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 9.442375294953269e-05,
-            "Character7": 9.442375294953269e-05,
-            "Character8": 9.442375294953269e-05,
-            "Character9": 9.442375294953269e-05
         }
     },
     {
@@ -42474,20 +39926,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0028399359225648162,
-            "Narrator": 0.0,
-            "NarratorActor": 0.023368615591390484,
-            "Character1": 0.004673723118278098,
-            "Character2": 0.004673723118278098,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.004673723118278098,
-            "Character7": 0.004673723118278098,
-            "Character8": 0.004673723118278098,
-            "Character9": 0.004673723118278098
         }
     },
     {
@@ -42706,20 +40144,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0018524600749874874,
-            "Narrator": 0.0,
-            "NarratorActor": 0.016672140674887388,
-            "Character1": 0.003667870948475225,
-            "Character2": 0.0033344281349774775,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0033344281349774775,
-            "Character7": 0.0035726015731901545,
-            "Character8": 0.0033344281349774775,
-            "Character9": 0.0033344281349774775
         }
     },
     {
@@ -42936,20 +40360,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0010502193541512717,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0010802256214127368,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -43166,20 +40576,6 @@
             "last_pitch": [
                 -2
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.001195231156089871,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -43398,20 +40794,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0003244405079261672,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -43630,20 +41012,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.00048723750536954635,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -43860,20 +41228,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0004881303023978361,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.00020083075298653826,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -44089,20 +41443,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0004881303023978361,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0009037383884394221,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -44320,20 +41660,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.002233271210900415,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -44548,20 +41874,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.002233271210900415,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -44780,20 +42092,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 1.4451140157340672e-06,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -45011,20 +42309,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 4.328224060433141e-06,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 1.8697927941071173e-06,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 1.3355662815050838e-06,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -45242,20 +42526,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 4.150954480429011e-06,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 1.129059618676691e-06,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 8.064711561976364e-07,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -45474,20 +42744,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 3.6124560621001386e-07,
-            "Narrator": 1.1559859398720441e-07,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -45702,20 +42958,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 1.9953998024954413e-06,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -45933,20 +43175,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 2.094885218059414e-06,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -46164,20 +43392,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0012590260160537075,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -46393,20 +43607,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "Character4",
-        "Score": {
-            "ContextScore": 0.0033004976198675413,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0048281565182062315,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -46624,20 +43824,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 4.214532072450161e-07,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -46855,20 +44041,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 4.214532072450161e-07,
-            "Narrator": 2.36013796057209e-07,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -47087,20 +44259,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.00115095582890107,
-            "Narrator": 0.0,
-            "NarratorActor": 0.005524587978725136,
-            "Character1": 0.0012154093553195296,
-            "Character2": 0.0011049175957450268,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0011049175957450268,
-            "Character7": 0.001183840281155386,
-            "Character8": 0.0011049175957450268,
-            "Character9": 0.0011049175957450268
         }
     },
     {
@@ -47318,20 +44476,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0007167910005095748,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0008028059205707238,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -47550,20 +44694,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -47782,20 +44912,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 2.167336930093379e-06,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -48013,20 +45129,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0002897189761804311,
-            "Narrator": 0.00018542014475547586,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -48244,20 +45346,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.00011846826367198124,
-            "Narrator": 1.8954922187516995e-05,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -48476,20 +45564,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 4.073622645113545e-06,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 1.7598049826890517e-06,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 1.2570035590636082e-06,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -48706,20 +45780,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -48938,20 +45998,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -49169,20 +46215,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -49398,20 +46430,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -49629,20 +46647,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -49860,20 +46864,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -50091,20 +47081,6 @@
                 -2,
                 -1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -50323,20 +47299,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -50555,20 +47517,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -50787,20 +47735,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -51019,20 +47953,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -51253,20 +48173,6 @@
                 0,
                 1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -51487,20 +48393,6 @@
                 0,
                 1
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -51719,20 +48611,6 @@
                 0,
                 1
             ]
-        },
-        "Choice": "TertiaryNarrator",
-        "Score": {
-            "ContextScore": 0.005356585582248688,
-            "Narrator": 0.0,
-            "NarratorActor": 0.07652265117498126,
-            "Character1": 0.015304530234996252,
-            "Character2": 0.015304530234996252,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.015304530234996252,
-            "Character7": 0.015304530234996252,
-            "Character8": 0.015304530234996252,
-            "Character9": 0.015304530234996252
         }
     },
     {
@@ -51951,20 +48829,6 @@
                 0,
                 1
             ]
-        },
-        "Choice": "SecondaryNarrator",
-        "Score": {
-            "ContextScore": 0.005890280589719243,
-            "Narrator": 0.0,
-            "NarratorActor": 0.08414686556741777,
-            "Character1": 0.016829373113483554,
-            "Character2": 0.016829373113483554,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.016829373113483554,
-            "Character7": 0.016829373113483554,
-            "Character8": 0.016829373113483554,
-            "Character9": 0.016829373113483554
         }
     },
     {
@@ -52183,20 +49047,6 @@
                 0,
                 1
             ]
-        },
-        "Choice": "Character7",
-        "Score": {
-            "ContextScore": 0.004247070702685712,
-            "Narrator": 0.0,
-            "NarratorActor": 0.03640346316587753,
-            "Character1": 0.00813010677371265,
-            "Character2": 0.007280692633175506,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.007280692633175506,
-            "Character7": 0.007887417019273466,
-            "Character8": 0.007280692633175506,
-            "Character9": 0.007280692633175506
         }
     },
     {
@@ -52407,20 +49257,6 @@
             "Volume": 0,
             "Speed": 1,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -52631,20 +49467,6 @@
             "Volume": 8,
             "Speed": 1,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -52855,20 +49677,6 @@
             "Volume": 8,
             "Speed": 1,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -53079,20 +49887,6 @@
             "Volume": 0,
             "Speed": 1,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -53303,20 +50097,6 @@
             "Volume": 0,
             "Speed": 1,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -53527,20 +50307,6 @@
             "Volume": 0,
             "Speed": 1,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -53767,20 +50533,6 @@
                 -1,
                 0
             ]
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0019396366751706987,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0009975274329449306,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -53991,20 +50743,6 @@
             "Volume": 0,
             "Speed": 1,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -54215,20 +50953,6 @@
             "Volume": -4,
             "Speed": 1.1,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -54439,20 +51163,6 @@
             "Volume": -4,
             "Speed": 1.1,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -54663,20 +51373,6 @@
             "Volume": 3,
             "Speed": 1.1,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -54887,20 +51583,6 @@
             "Volume": 3,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -55111,20 +51793,6 @@
             "Volume": 3,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -55335,20 +52003,6 @@
             "Volume": 3,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -55559,20 +52213,6 @@
             "Volume": 2,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -55783,20 +52423,6 @@
             "Volume": 2,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -56007,20 +52633,6 @@
             "Volume": 2,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -56231,20 +52843,6 @@
             "Volume": 2,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -56455,20 +53053,6 @@
             "Volume": 2,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -56679,20 +53263,6 @@
             "Volume": 3,
             "Speed": 1.02,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -56903,20 +53473,6 @@
             "Volume": 2,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -57127,20 +53683,6 @@
             "Volume": 2,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -57351,20 +53893,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -57575,20 +54103,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -57799,20 +54313,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -58023,20 +54523,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -58247,20 +54733,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -58471,20 +54943,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -58695,20 +55153,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -58919,20 +55363,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -59143,20 +55573,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -59367,20 +55783,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -59591,20 +55993,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -59815,20 +56203,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -60039,20 +56413,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -60263,20 +56623,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -60487,20 +56833,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -60711,20 +57043,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -60935,20 +57253,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -61159,20 +57463,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -61383,20 +57673,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -61607,20 +57883,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -61831,20 +58093,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -62055,20 +58303,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -62279,20 +58513,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -62503,20 +58723,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -62727,20 +58933,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -62951,20 +59143,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -63175,20 +59353,6 @@
             "Volume": 4,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -63399,20 +59563,6 @@
             "Volume": 4,
             "Speed": 0.95,
             "Pitch": -0.4
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -63623,20 +59773,6 @@
             "Volume": 5,
             "Speed": 0.98,
             "Pitch": -0.3
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -63847,20 +59983,6 @@
             "Volume": 2,
             "Speed": 1,
             "Pitch": -0.4
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -64071,20 +60193,6 @@
             "Volume": 4,
             "Speed": 0.96,
             "Pitch": -0.4
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -64295,20 +60403,6 @@
             "Volume": 2,
             "Speed": 1,
             "Pitch": -0.2
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -64519,20 +60613,6 @@
             "Volume": 2,
             "Speed": 1,
             "Pitch": -0.2
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -64743,20 +60823,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -64967,20 +61033,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -65191,20 +61243,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     },
     {
@@ -65415,20 +61453,6 @@
             "Volume": 0,
             "Speed": 1.0,
             "Pitch": 0
-        },
-        "Choice": "No",
-        "Score": {
-            "ContextScore": 0.0,
-            "Narrator": 0.0,
-            "NarratorActor": 0.0,
-            "Character1": 0.0,
-            "Character2": 0.0,
-            "Character4": 0.0,
-            "Character5": 0.0,
-            "Character6": 0.0,
-            "Character7": 0.0,
-            "Character8": 0.0,
-            "Character9": 0.0
         }
     }
 ]

@@ -95,7 +95,8 @@ def AddPromptToDB():
         # translationBodyEs = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b5447_TranslationPrompt/b5447-12_TranslationBodyEs.json")
         correctionKo = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b5448_CorrectionPrompt/b5448-01_CorrectionKo.json")
         # correctionEn = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b5448_CorrectionPrompt/b5448-02_CorrectionEn.json")
-        sentsSpliting = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b54410_MixingMasteringPrompt/b54410-02_SentsSpliting.json")
+        actorMatching = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b54410_MixingMasteringPrompt/b54410-01_ActorMatching.json")
+        sentsSpliting = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b54410_MixingMasteringPrompt/b54410-03_SentsSpliting.json")
         voiceInspection = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b54410_MixingMasteringPrompt/b54410-04_VoiceInspection.json")
         voiceSplit = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b54410_MixingMasteringPrompt/b54410-05_VoiceSplit.json")
         voiceSplitInspection = LoadJsonFrame(PromptDataPath + "/b544_AudioBookPrompt/b54410_MixingMasteringPrompt/b54410-06_VoiceSplitInspection.json")
@@ -176,6 +177,7 @@ def AddPromptToDB():
             # ExistingPrompt.TranslationEn = translationEn
             ExistingPrompt.CorrectionKo = correctionKo
             # ExistingPrompt.CorrectionEn = correctionEn
+            ExistingPrompt.ActorMatching = actorMatching
             ExistingPrompt.SentsSpliting = sentsSpliting
             ExistingPrompt.VoiceInspection = voiceInspection
             ExistingPrompt.VoiceSplit = voiceSplit
@@ -253,6 +255,7 @@ def AddPromptToDB():
                 # TranslationBodyEs = translationBodyEs,
                 CorrectionKo = correctionKo,
                 # CorrectionEn = correctionEn,
+                ActorMatching = actorMatching,
                 SentsSpliting = sentsSpliting,
                 VoiceInspection = voiceInspection,
                 VoiceSplit = voiceSplit,

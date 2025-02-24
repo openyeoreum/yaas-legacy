@@ -15,6 +15,7 @@ import pyloudnorm as pyln
 import sys
 sys.path.append("/yaas")
 
+from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from tqdm import tqdm
 from time import sleep
 from collections import OrderedDict
@@ -62,6 +63,7 @@ def LoadSelectionGenerationKoChunks(projectName, email, MainLang):
     
     project = GetProject(projectName, email)
     CharacterCompletion = project.CharacterCompletion[2]['CheckedCharacterTags'][1:]
+    CharacterChunks = project.CharacterCompletion[1]['CharacterCompletions'][1:]
     
     ## MainLang의 언어별 SelectionGenerationKoChunks 불러오기
     if MainLang == 'Ko':
@@ -102,11 +104,42 @@ def LoadSelectionGenerationKoChunks(projectName, email, MainLang):
                     Voice['CharacterTag'] = 'TertiaryNarrator'
                 SelectionGenerationChunks.append({'Tag': Tag, 'Chunk': Chunk, 'Voice': Voice})
     
-    return VoiceDataSetCharacters, CharacterCompletion, SelectionGenerationBookContext, SelectionGenerationChunks
+    return VoiceDataSetCharacters, CharacterCompletion, CharacterChunks, SelectionGenerationBookContext, SelectionGenerationChunks
 
 #############################
 ##### MatchedActors 생성 #####
 #############################
+# ActorMatching Process (Tag를 활용해서 Actor 매칭)
+def ActorMatchingInput(character, voiceDataSetCharacters):
+    
+    return None
+
+def ActorMatchingFilter():
+    return None
+
+# ActorMatching Process (Tag를 활용해서 Actor 매칭)
+def ActorMatchingProcess(projectName, email, character, voiceDataSetCharacters, Process = "ActorMatching", MessagesReview = "off"):
+    # ActorMatchingProcess
+    Input = ActorMatchingInput(character, voiceDataSetCharacters)
+    ErrorCount = 0
+    while 10 >= ErrorCount:
+        # Response 생성
+        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = "", messagesReview = MessagesReview)
+        Filter = ActorMatchingFilter(Response)
+        
+        if isinstance(Filter, str):
+            print(f"Project: {projectName} | Process: {Process} | {Filter}")
+            ErrorCount += 1
+            if ErrorCount == 3:
+                return 'Retry'
+        else:
+            ResponseJson = Filter
+            print(f"Project: {projectName} | Process: {Process} | JSONDecode 완료")
+            break
+        
+    #
+    return None
+
 # NarratorSet에서 ContextScore 계산
 def ContextScoreCal(VoiceDataSetCharacters, SelectionGenerationKoBookContext):
     # print(SelectionGenerationKoBookContext)
@@ -122,35 +155,35 @@ def ContextScoreCal(VoiceDataSetCharacters, SelectionGenerationKoBookContext):
         QuiltyScore = QuiltyScore
         # Genre 스코어 계산
         CharacterGenre = Character['Context']['Genre']
-        GenreScore = 0
+        GenreScore = 1
         for NGenre in CharacterGenre:
             if NGenre['index'] in BookGenre['GenreRatio']:
                 GenreScore += (BookGenre['GenreRatio'][NGenre['index']] * NGenre['Score'])
         GenreScore = GenreScore / 1000
         # Gender 스코어 계산
         CharacterGender = Character['Context']['Gender']
-        GenderScore = 0
+        GenderScore = 1
         for NGender in CharacterGender:
             if NGender['index'] in BookGender['GenderRatio']:
                 GenderScore += (BookGender['GenderRatio'][NGender['index']] * NGender['Score'])
         GenderScore = GenderScore / 1000
         # Age 스코어 계산
         CharacterAge = Character['Context']['Age']
-        AgeScore = 0
+        AgeScore = 1
         for NAge in CharacterAge:
             if NAge['index'] in BookAge['AgeRatio']:
                 AgeScore += (BookAge['AgeRatio'][NAge['index']] * NAge['Score'])
         AgeScore = AgeScore / 1000
         # Personality 스코어 계산
         CharacterPersonality = Character['Context']['Personality']
-        PersonalityScore = 0
+        PersonalityScore = 1
         for NPersonality in CharacterPersonality:
             if NPersonality['index'] in BookPersonality['PersonalityRatio']:
                 PersonalityScore += (BookPersonality['PersonalityRatio'][NPersonality['index']] * NPersonality['Score'])
         PersonalityScore = PersonalityScore / 1000
         # Atmosphere 스코어 계산
         CharacterAtmosphere = Character['Context']['Atmosphere']
-        AtmosphereScore = 0
+        AtmosphereScore = 1
         for NAtmosphere in CharacterAtmosphere:
             if NAtmosphere['index'] in BookAtmosphere['Emotion']:
                 # KeyError에 대한 대처 (프롬프트 실수 또는 기타의 비중이 커서 EmotionRatio에 index 항목이 없는 경우)
@@ -355,15 +388,57 @@ def ActorChunkSetting(RawChunk):
 
 # 낭독 ActorMatching
 def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang):
-    voiceDataSetCharacters, CharacterCompletion, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, MainLang)
+    voiceDataSetCharacters, CharacterCompletion, CharacterChunks, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, MainLang)
     
-    # CharacterTags 구하기 (케릭터 태그와 성별 선정)
+    ### 테스트 후 삭제 ###
+    with open('CharacterCompletion.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(CharacterCompletion, json_file, ensure_ascii = False, indent = 4)
+    with open('OrigenVoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(voiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ###
+    
+    # 1,2 Characters 선정&점수계산으로 MatchedActors 생성
+    MatchedActors = []
+    
+    # 2-1 .CharacterInfos 구하기 (케릭터 ID, 태그, 이름, 성별, 연령, 감정, 인물의 특징 선정)
+    CharacterInfos = []
+    for Character in CharacterCompletion:
+        # EmotionText 선별
+        Emotion = list(Character['Emotion'].items())[:2]
+        # 각 항목을 "키 값%" 형식으로 변환한 후, 콤마와 공백(", ")로 연결합니다.
+        EmotionText = ", ".join([f"{key} {int(value)}%" for key, value in Emotion])
+        
+        # CharacterChunkText 선별
+        ChunkIds = Character['MainCharacterList'][0]['ChunkIds']
+        if len(ChunkIds) < 5:
+            CharacterChunkIds = ChunkIds
+        else:
+            CharacterChunkIds = random.sample(ChunkIds, 5)
+        
+        SelectedCharacterChunks = []
+        for CharacterChunkId in CharacterChunkIds:
+            for CharacterChunk in CharacterChunks:
+                if CharacterChunkId == CharacterChunk['CharacterChunkId']:
+                    SelectedCharacterChunks.append(CharacterChunk['Chunk'])
+        CharacterChunkText = ", ".join(SelectedCharacterChunks)
+        print(CharacterChunkText)
+        sys.exit()
+        
+        CharacterInfos.append({'CharacterId': Character['CharacterId'], 'CharacterTag': Character['CharacterTag'], 'CharacterName': Character['MainCharacterList'][0]['MainCharacter'], 'CharacterGender': Character['Gender'], 'CharacterAge': Character['Age'], 'CharacterEmotion': EmotionText, 'CharacterChunk': CharacterChunkText})
+    
+    # 1. MatchedActors 우선 Tags Prompt 매칭
+    for character in CharacterInfos:
+        ActorMatchingProcess(projectName, email, character, voiceDataSetCharacters)
+    # 1-1 Character Completion에서 태그 요소를 추가할 수 있도록 추가 데이터 형성
+    # 1-2 ActorMatchingProcess는 Tag기반 Narrator부터 Character까지 매칭(매칭될 인물이 없으면 없다고 표시 + 어떠한 인물이 필요하다고 표시)
+    # 1-3 매칭된 캐릭터는 MatchedActors에는 우선 추가, VoiceDataSetCharacters에서는 Choice를 CharacterTag로 변경
+
+    # 2-1 .CharacterTags 구하기 (케릭터 태그와 성별 선정)
     CharacterTags = []
     for Character in CharacterCompletion:
         CharacterTags.append({'CharacterTag': Character['CharacterTag'], 'CharacterGender': Character['Gender']})
-    
-    # Characters 점수계산 및 MatchedActors 생성
-    MatchedActors = []
+
+    # 2-2. MatchedActors 나머지 Context, Voice 점수 매칭
     VoiceDataSetCharacters = ContextScoreCal(voiceDataSetCharacters, SelectionGenerationKoBookContext)
     for character in CharacterTags:
         CharacterTag = character['CharacterTag']
@@ -388,14 +463,14 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang):
             NeuterVoice = HighestScoreVoice
             VoiceDataSetCharacters.append(NeuterVoice)
 
-    # ### 테스트 후 삭제 ###
-    # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
-    # with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
-    # with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ###
+    ### 테스트 후 삭제 ###
+    with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
+    with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ###
         
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
@@ -434,10 +509,11 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang):
         for name in sorted(GroupedData.keys()):
             SortedMatchedActors.extend(GroupedData[name])
                 
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    sys.exit()
     
     return SortedMatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters
     

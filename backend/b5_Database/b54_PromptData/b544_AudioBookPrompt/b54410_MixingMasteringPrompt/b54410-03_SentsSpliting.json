@@ -1,5 +1,5 @@
 {
-    "TaskName": "VoiceSplit",
+    "TaskName": "SentsSpliting",
     "OpenAI": {
         "BaseModel": {
             "ShortTokensModel": "gpt-4o-mini",

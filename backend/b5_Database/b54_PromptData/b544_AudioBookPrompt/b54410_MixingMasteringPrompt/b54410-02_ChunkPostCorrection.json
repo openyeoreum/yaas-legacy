@@ -86,7 +86,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "<발음문.json>",
+            "OutputMark": "\n<발음문.json>\n",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -145,7 +145,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "<발음문.json>",
+            "OutputMark": "\n<발음문.json>\n",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -201,7 +201,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "<발음문.json>",
+            "OutputMark": "\n<발음문.json>\n",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
@@ -259,7 +259,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "<발음문.json>",
+            "OutputMark": "\n<발음문.json>\n",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",

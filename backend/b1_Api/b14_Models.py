@@ -537,6 +537,7 @@ class Prompt(Base):
     # SelectionGenerationEs = Column(JSON)
     
     # MixingMasteringPrompt
+    ActorMatching = Column(JSON)
     ChunkPostCorrection = Column(JSON)
     SentsSpliting = Column(JSON)
     VoiceInspection = Column(JSON)

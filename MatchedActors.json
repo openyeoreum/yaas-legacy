@@ -1,9 +1,9 @@
 [
     {
         "CharacterTag": "Narrator",
-        "ActorName": "범수(중간톤)",
+        "ActorName": "연우(중간톤)",
         "ApiSetting": {
-            "name": "범수",
+            "name": "연우",
             "Api": "TypeCast",
             "emotion_tone_preset": {
                 "emotion_tone_preset": [
@@ -30,7 +30,7 @@
             ],
             "tempo": 1.0,
             "pitch": 0,
-            "neuter_pitch": 1,
+            "neuter_pitch": 0,
             "max_seconds": 60,
             "force_length": 0,
             "last_pitch": [
@@ -42,18 +42,15 @@
     },
     {
         "CharacterTag": "Caption",
-        "ActorName": "주호(일반톤, 피치다운)",
+        "ActorName": "미선(일반, 피치다운)",
         "ApiSetting": {
-            "name": "주호",
+            "name": "미선",
             "Api": "TypeCast",
             "emotion_tone_preset": {
                 "emotion_tone_preset": [
                     "normal-1",
-                    "normal-2"
-                ],
-                "neuter_emotion_tone_preset": [
-                    "normal-3",
-                    "normal-4"
+                    "normal-2",
+                    "normal-3"
                 ],
                 "emotion_prompt": "None"
             },
@@ -67,21 +64,87 @@
             ],
             "tempo": 1.0,
             "pitch": -1,
-            "neuter_pitch": 0,
             "max_seconds": 60,
             "force_length": 0,
             "last_pitch": [
                 -2,
-                -1,
-                0
+                -1
             ]
         }
     },
     {
         "CharacterTag": "SecondaryNarrator",
-        "ActorName": "영규(슬픔)",
+        "ActorName": "근혁(일반, 피치다운)",
         "ApiSetting": {
-            "name": "영규",
+            "name": "근혁",
+            "Api": "TypeCast",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "normal-1",
+                    "normal-2",
+                    "normal-3"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 120,
+            "speed_x": [
+                1.08
+            ],
+            "tempo": 1.0,
+            "pitch": -1,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                -2,
+                -1,
+                0,
+                1
+            ]
+        }
+    },
+    {
+        "CharacterTag": "TertiaryNarrator",
+        "ActorName": "근혁(일반)",
+        "ApiSetting": {
+            "name": "근혁",
+            "Api": "TypeCast",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "normal-1",
+                    "normal-2",
+                    "normal-3"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 120,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": 0,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                -2,
+                -1,
+                0,
+                1
+            ]
+        }
+    },
+    {
+        "CharacterTag": "Character1",
+        "ActorName": "수호(슬픔)",
+        "ApiSetting": {
+            "name": "수호",
             "Api": "TypeCast",
             "emotion_tone_preset": {
                 "emotion_tone_preset": [
@@ -106,22 +169,128 @@
             "force_length": 0,
             "last_pitch": [
                 -2,
+                -1,
+                0
+            ]
+        }
+    },
+    {
+        "CharacterTag": "Character2",
+        "ActorName": "김건(슬픔)",
+        "ApiSetting": {
+            "name": "김건",
+            "Api": "TypeCast",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "sad-1",
+                    "sad-2",
+                    "sad-3",
+                    "sad-4"
+                ],
+                "neuter_emotion_tone_preset": [
+                    "normal-1",
+                    "normal-2",
+                    "normal-3",
+                    "normal-4"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 120,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": 0,
+            "neuter_pitch": 0,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                -2,
+                -1,
+                0
+            ]
+        }
+    },
+    {
+        "CharacterTag": "Character4",
+        "ActorName": "중현(중간톤)",
+        "ApiSetting": {
+            "name": "중현",
+            "Api": "TypeCast",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "tonemid-2",
+                    "tonemid-4"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 120,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": 0,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                -2,
                 -1
             ]
         }
     },
     {
-        "CharacterTag": "TertiaryNarrator",
-        "ActorName": "지훈(톤업)",
+        "CharacterTag": "Character5",
+        "ActorName": "가희(절규)",
+        "ApiSetting": {
+            "name": "가희",
+            "Api": "TypeCast",
+            "emotion_tone_preset": {
+                "emotion_tone_preset": [
+                    "scream-1",
+                    "scream-2",
+                    "scream-3"
+                ],
+                "emotion_prompt": "None"
+            },
+            "emotion_prompt": {
+                "emotion_tone_preset": "emotion_prompt",
+                "emotion_prompt": "None"
+            },
+            "volume": 120,
+            "speed_x": [
+                1.05
+            ],
+            "tempo": 1.0,
+            "pitch": 0,
+            "max_seconds": 60,
+            "force_length": 0,
+            "last_pitch": [
+                -2,
+                -1,
+                0
+            ]
+        }
+    },
+    {
+        "CharacterTag": "Character6",
+        "ActorName": "지훈(슬픔)",
         "ApiSetting": {
             "name": "지훈",
             "Api": "TypeCast",
             "emotion_tone_preset": {
                 "emotion_tone_preset": [
-                    "toneup-1",
-                    "toneup-2",
-                    "toneup-3",
-                    "toneup-4"
+                    "sad-1",
+                    "sad-2",
+                    "sad-3",
+                    "sad-4"
                 ],
                 "emotion_prompt": "None"
             },
@@ -144,39 +313,7 @@
         }
     },
     {
-        "CharacterTag": "Character1",
-        "ActorName": "세진(일반, 피치다운)",
-        "ApiSetting": {
-            "name": "세진",
-            "Api": "TypeCast",
-            "emotion_tone_preset": {
-                "emotion_tone_preset": [
-                    "normal-1",
-                    "normal-2",
-                    "normal-3"
-                ],
-                "emotion_prompt": "None"
-            },
-            "emotion_prompt": {
-                "emotion_tone_preset": "emotion_prompt",
-                "emotion_prompt": "None"
-            },
-            "volume": 120,
-            "speed_x": [
-                1.1
-            ],
-            "tempo": 1.0,
-            "pitch": -1,
-            "max_seconds": 60,
-            "force_length": 0,
-            "last_pitch": [
-                -2,
-                -1
-            ]
-        }
-    },
-    {
-        "CharacterTag": "Character2",
+        "CharacterTag": "Character7",
         "ActorName": "근혁(톤업)",
         "ApiSetting": {
             "name": "근혁",
@@ -210,107 +347,7 @@
         }
     },
     {
-        "CharacterTag": "Character4",
-        "ActorName": "서준(기쁨)",
-        "ApiSetting": {
-            "name": "서준",
-            "Api": "TypeCast",
-            "emotion_tone_preset": {
-                "emotion_tone_preset": [
-                    "happy-1",
-                    "happy-2",
-                    "happy-3",
-                    "happy-4"
-                ],
-                "emotion_prompt": "None"
-            },
-            "emotion_prompt": {
-                "emotion_tone_preset": "emotion_prompt",
-                "emotion_prompt": "None"
-            },
-            "volume": 120,
-            "speed_x": [
-                1.05
-            ],
-            "tempo": 1.0,
-            "pitch": 0,
-            "max_seconds": 60,
-            "force_length": 0,
-            "last_pitch": [
-                -2
-            ]
-        }
-    },
-    {
-        "CharacterTag": "Character5",
-        "ActorName": "시연(일반, 피치다운)",
-        "ApiSetting": {
-            "name": "시연",
-            "Api": "TypeCast",
-            "emotion_tone_preset": {
-                "emotion_tone_preset": [
-                    "normal-1",
-                    "normal-2",
-                    "normal-3"
-                ],
-                "emotion_prompt": "None"
-            },
-            "emotion_prompt": {
-                "emotion_tone_preset": "emotion_prompt",
-                "emotion_prompt": "None"
-            },
-            "volume": 120,
-            "speed_x": [
-                1.05
-            ],
-            "tempo": 1.0,
-            "pitch": -1,
-            "max_seconds": 60,
-            "force_length": 0,
-            "last_pitch": [
-                -2,
-                -1,
-                0
-            ]
-        }
-    },
-    {
-        "CharacterTag": "Character6",
-        "ActorName": "손석구(일반)",
-        "ApiSetting": {
-            "name": "만년대리",
-            "Api": "TypeCast",
-            "emotion_tone_preset": {
-                "emotion_tone_preset": [
-                    "normal-1",
-                    "normal-2",
-                    "normal-3",
-                    "normal-4"
-                ],
-                "emotion_prompt": "None"
-            },
-            "emotion_prompt": {
-                "emotion_tone_preset": "emotion_prompt",
-                "emotion_prompt": "None"
-            },
-            "volume": 120,
-            "speed_x": [
-                1.08
-            ],
-            "tempo": 1.0,
-            "pitch": 0,
-            "max_seconds": 60,
-            "force_length": 0,
-            "last_pitch": [
-                -2,
-                -1,
-                0,
-                1
-            ]
-        }
-    },
-    {
-        "CharacterTag": "Character7",
+        "CharacterTag": "Character8",
         "ActorName": "수호(중간톤)",
         "ApiSetting": {
             "name": "수호",
@@ -342,15 +379,13 @@
         }
     },
     {
-        "CharacterTag": "Character8",
-        "ActorName": "창배(일반)",
+        "CharacterTag": "Character9",
+        "ActorName": "지훈(일반)",
         "ApiSetting": {
-            "name": "창배",
+            "name": "지훈",
             "Api": "TypeCast",
             "emotion_tone_preset": {
                 "emotion_tone_preset": [
-                    "normal-1",
-                    "normal-2",
                     "normal-3",
                     "normal-4"
                 ],
@@ -371,40 +406,6 @@
             "last_pitch": [
                 -2,
                 -1
-            ]
-        }
-    },
-    {
-        "CharacterTag": "Character9",
-        "ActorName": "현우(일반, 피치다운)",
-        "ApiSetting": {
-            "name": "현우",
-            "Api": "TypeCast",
-            "emotion_tone_preset": {
-                "emotion_tone_preset": [
-                    "normal-1",
-                    "normal-2",
-                    "normal-3",
-                    "normal-4"
-                ],
-                "emotion_prompt": "None"
-            },
-            "emotion_prompt": {
-                "emotion_tone_preset": "emotion_prompt",
-                "emotion_prompt": "None"
-            },
-            "volume": 120,
-            "speed_x": [
-                1.05
-            ],
-            "tempo": 1.0,
-            "pitch": -1,
-            "max_seconds": 60,
-            "force_length": 0,
-            "last_pitch": [
-                -2,
-                -1,
-                0
             ]
         }
     }

@@ -111,7 +111,7 @@ def LoadSelectionGenerationKoChunks(projectName, email, MainLang):
 #############################
 ### ActorMatching Process (Tag를 활용해서 Actor 매칭) ###
 ## ActorMatching Input
-def ActorMatchingInput(CharacterInfo, voiceDataSetCharacters):
+def ActorMatchingInput(CharacterInfo, voiceDataSetCharacters, Grade):
     # <인물정보> 생성
     if 'Narrator' == CharacterInfo['CharacterTag']:
         CharacterRole = '낭독'
@@ -143,7 +143,7 @@ def ActorMatchingInput(CharacterInfo, voiceDataSetCharacters):
             if emotionData['Score'] > 6:
                 Emotion.append(emotionData['index'])
         
-        if voiceDataSet['Quilty'] > 8 and CharacterGender in Gender and CharacterAge in Age and CharacterRole in Role and any(item in Emotion for item in CharacterEmotionList):
+        if Grade in voiceDataSet['Grade'] and voiceDataSet['Quilty'] > 8 and CharacterGender in Gender and CharacterAge in Age and CharacterRole in Role and any(item in Emotion for item in CharacterEmotionList):
             VoiceActorInfoListText += f"[번호] {voiceDataSet['CharacterId']}\n[낭독실력] {voiceDataSet['Quilty']}\n[이름] {voiceDataSet['Name']}\n[성별] {', '.join(Gender)}\n[연령] {', '.join(Age)}\n[감정] {', '.join(Emotion)}\n[성우의 특징] {voiceDataSet['Voice']['Feature']}\n\n\n"
     
     InputText = BookCharacterInfoText + VoiceActorInfoListText
@@ -173,9 +173,15 @@ def ActorMatchingFilter(Response):
         return f"ActorMatchingFilter, JSONKeyError: '선정성우'에 누락된 키: {', '.join(missing_keys)}"
 
     # 데이터 타입 검증
-    if (not isinstance(OutputDic['선정성우']['번호'], (int, str))) or (isinstance(OutputDic['선정성우']['번호'], str) and not OutputDic['선정성우']['번호'].isdigit()):
-        return "ActorMatchingFilter, JSON에서 오류 발생: '선정성우 > 번호'는 문자열이어야 합니다"
-    else: OutputDic['선정성우']['번호'] = int(OutputDic['선정성우']['번호'])
+    if not isinstance(OutputDic['선정성우']['번호'], (int, str)):
+        return "ActorMatchingFilter, JSON에서 오류 발생: '선정성우 > 번호'는 숫자나 '없음'이어야 합니다"
+    elif isinstance(OutputDic['선정성우']['번호'], str):
+        # '없음'이 아니면서 숫자 형태가 아니라면 오류 반환
+        if OutputDic['선정성우']['번호'] != '없음' and not OutputDic['선정성우']['번호'].isdigit():
+            return "ActorMatchingFilter, JSON에서 오류 발생: '선정성우 > 번호'는 숫자 문자열이거나 '없음'이어야 합니다"
+        # '없음'이 아니면 정수로 변환
+        elif OutputDic['선정성우']['번호'] != '없음':
+            OutputDic['선정성우']['번호'] = int(OutputDic['선정성우']['번호'])
 
     if not isinstance(OutputDic['선정성우']['이름'], str):
         return "ActorMatchingFilter, JSON에서 오류 발생: '선정성우 > 이름'은 문자열이어야 합니다"
@@ -190,9 +196,9 @@ def ActorMatchingFilter(Response):
     return OutputDic['선정성우']
 
 ## ActorMatching Process (Tag를 활용해서 Actor 매칭)
-def ActorMatchingProcess(projectName, email, CharacterInfo, voiceDataSetCharacters, Process = "ActorMatching", MessagesReview = "off"):
+def ActorMatchingProcess(projectName, email, CharacterInfo, voiceDataSetCharacters, Grade, Process = "ActorMatching", MessagesReview = "off"):
     # ActorMatchingProcess
-    Input = ActorMatchingInput(CharacterInfo, voiceDataSetCharacters)
+    Input = ActorMatchingInput(CharacterInfo, voiceDataSetCharacters, Grade)
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
@@ -220,12 +226,12 @@ def ActorMatchingProcess(projectName, email, CharacterInfo, voiceDataSetCharacte
             OutputDic = {'ActorId': ResponseJson['번호'], 'ActorName': ResponseJson['이름'], 'ApiSetting': ApiSetting, 'ReasonOfChoice': ResponseJson['선정기준'], 'Choice': Choice}
             return OutputDic
         
-def ActorMatchingResponseJson(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, messagesReview):
+def ActorMatchingResponseJson(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, Grade, messagesReview):
     ## 1. Characters 프롬프트 선정
     retryCount = 0
     while True:
         ## 1. ActorMatching Prompt Process
-        OutputDic = ActorMatchingProcess(projectName, email, CharacterInfo, VoiceDataSetCharacters, MessagesReview = messagesReview)
+        OutputDic = ActorMatchingProcess(projectName, email, CharacterInfo, VoiceDataSetCharacters, Grade, MessagesReview = messagesReview)
         if OutputDic == 'Retry':
             retryCount += 1
             if retryCount >= 3:
@@ -400,7 +406,7 @@ def ActorMatchingProcessOrHighestScoreVoiceCal(projectName, email, CharacterInfo
     # CharacterTag가 "Narrator"일 경우
     if CharacterTag == "Narrator":
         if not os.path.exists(MatchedVoicesFilePath):
-            HighestScoreVoice, ActorsNeeded = ActorMatchingResponseJson(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, messagesReview)
+            HighestScoreVoice, ActorsNeeded = ActorMatchingResponseJson(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, 'Main', messagesReview)
         else:
             HighestScoreVoice = 'No'
         if HighestScoreVoice == 'No':
@@ -417,7 +423,7 @@ def ActorMatchingProcessOrHighestScoreVoiceCal(projectName, email, CharacterInfo
     # CharacterTag가 "CharacterN"일 경우
     else:
         if not os.path.exists(MatchedVoicesFilePath):
-            HighestScoreVoice, ActorsNeeded = ActorMatchingResponseJson(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, messagesReview)
+            HighestScoreVoice, ActorsNeeded = ActorMatchingResponseJson(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, 'Actor', messagesReview)
         else:
             HighestScoreVoice = 'No'
         if HighestScoreVoice == 'No':
@@ -513,6 +519,7 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, messages
     ActorsNeededFileName = f"{projectName}_ActorsNeeded.json"
     MatchedVoicesFilePath = os.path.join(VoiceLayerPath, MatchedVoicesFileName)
     ActorsNeededFilePath = os.path.join(VoiceLayerPath, ActorsNeededFileName)
+    
     # ### 테스트 후 삭제 ###
     # with open('CharacterCompletion.json', 'w', encoding = 'utf-8') as json_file:
     #     json.dump(CharacterCompletion, json_file, ensure_ascii = False, indent = 4)
@@ -577,6 +584,10 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, messages
             NeuterVoice = HighestScoreVoice
             VoiceDataSetCharacters.append(NeuterVoice)
 
+    # ActorsNeeded 저장
+    if not os.path.exists(ActorsNeededFilePath) and ActorsNeeded != []:
+        with open(ActorsNeededFilePath, 'w', encoding = 'utf-8') as json_file:
+            json.dump(ActorsNeeded, json_file, ensure_ascii = False, indent = 4)
     # ### 테스트 후 삭제 ###
     # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
     #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
@@ -616,22 +627,20 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, messages
         # name 값을 기준으로 그룹화(API 변경 횟수 절감)
         GroupedData = defaultdict(list)
         for Actor in MatchedActors:
-            name = Actor["ApiSetting"]["name"]
+            try:
+                name = Actor["ApiSetting"]["name"]
+            except TypeError:
+                sys.exit(f"[ b572-01_VoiceDataSet에 낭독할 성우가 부족함, 아래 경로의 ActorsNeededFileName을 보고 성우를 생성해주세요. ]\n{ActorsNeededFilePath}")
             GroupedData[name].append(Actor)
         # 정렬된 그룹을 기반으로 최종 리스트 재구성
         SortedMatchedActors = []
         for name in sorted(GroupedData.keys()):
             SortedMatchedActors.extend(GroupedData[name])
                 
-    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
-    ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    
-    # ActorsNeeded 저장
-    if not os.path.exists(ActorsNeededFilePath) and ActorsNeeded != []:
-        with open(ActorsNeededFilePath, 'w', encoding = 'utf-8') as json_file:
-            json.dump(ActorsNeeded, json_file, ensure_ascii = False, indent = 4)
+    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
+    # with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
+    # ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
     
     return SortedMatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters
     

@@ -95,6 +95,25 @@ def YaasConfigUpdate(StartProjectName, MainLang, Estimate, DataCollection, Searc
         ### Step3-8 : AudioBookConfig 설정 ###
         if AudioBook == "" or AudioBook == "None":
             AudioBookConfig = {}
+        elif AudioBook == "Auto":
+            AudioBookConfig = {
+                "IndexMode": "Define",
+                "BookGenre": "Auto",
+                "Narrator": "VoiceActor",
+                "CloneVoiceName": "",
+                "ReadingStyle": "NarratorOnly",
+                "VoiceEnhance": "off",
+                "VoiceReverbe": "on",
+                "Intro": "off",
+                "AudiobookSplitting": "Auto",
+                "MusicDB": "Template",
+                "EndMusicVolume": -10,
+                "VoiceFileGen": "off",
+                "Bitrate": "320k",
+                "Macro": "Auto",
+                "Bracket": "Auto",
+                "VolumeEqual": "Mastering"
+                }
         else:
             CloneVoiceName = AudioBook
             if "(" in CloneVoiceName and ")" in CloneVoiceName:
@@ -311,7 +330,7 @@ if __name__ == "__main__":
     Script = [] # ScriptUpload: [] // BookScriptGen: 'BookScript' // InstantScriptGen: 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 다중 선택
     Translation = [] # 'En', 'Ja', 'Zh', 'Es' ... 중 다중 선택
     TextBook = [] # [], 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
-    AudioBook = "최한결(낭독)" # '', '클로닝성우이름', '성우이름(특성)' ... 중 선택
+    AudioBook = "최한결(낭독)" # '', 'Auto', '클로닝성우이름', '성우이름(특성)' ... 중 선택
     Marketing = [] # [] 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택
     
     MessagesReview = "on" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력

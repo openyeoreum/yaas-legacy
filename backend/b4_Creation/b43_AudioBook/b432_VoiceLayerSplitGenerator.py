@@ -109,18 +109,90 @@ def LoadSelectionGenerationKoChunks(projectName, email, MainLang):
 #############################
 ##### MatchedActors 생성 #####
 #############################
-# ActorMatching Process (Tag를 활용해서 Actor 매칭)
-def ActorMatchingInput(character, voiceDataSetCharacters):
+### ActorMatching Process (Tag를 활용해서 Actor 매칭) ###
+## ActorMatching Input
+def ActorMatchingInput(CharacterInfo, voiceDataSetCharacters):
+    # <인물정보> 생성
+    if 'Narrator' == CharacterInfo['CharacterTag']:
+        CharacterRole = '낭독'
+    else:
+        CharacterRole = '대화'
+        
+    CharacterName = CharacterInfo['CharacterName']
+    CharacterGender = CharacterInfo['CharacterGender']
+    CharacterAge = CharacterInfo['CharacterAge']
+    CharacterEmotion = CharacterInfo['CharacterEmotion']
+    CharacterEmotionList = CharacterInfo['CharacterEmotionList']
+    CharacterChunk = CharacterInfo['CharacterChunk']
+    BookCharacterInfoText = f"[이름] {CharacterName}\n[성별] {CharacterGender}\n[연령] {CharacterAge}\n[감정] {CharacterEmotion}\n[주요 문구] {CharacterChunk}"
     
-    return None
+    # <성우리스트> 생성
+    VoiceActorInfoListText = '\n\n\n<성우리스트>\n'
+    for voiceDataSet in voiceDataSetCharacters:
+        Gender = voiceDataSet['Voice']['Gender']
+        Age = []
+        for ageData in voiceDataSet['Voice']['Age']:
+            if ageData['Score'] > 7:
+                Age.append(ageData['index'])
+        Role = []
+        for roleData in voiceDataSet['Voice']['Role']:
+            if roleData['Score'] > 7:
+                Role.append(roleData['index'])
+        Emotion = []
+        for emotionData in voiceDataSet['Voice']['Emotion']:
+            if emotionData['Score'] > 6:
+                Emotion.append(emotionData['index'])
+        
+        if voiceDataSet['Quilty'] > 8 and CharacterGender in Gender and CharacterAge in Age and CharacterRole in Role and any(item in Emotion for item in CharacterEmotionList):
+            VoiceActorInfoListText += f"[번호] {voiceDataSet['CharacterId']}\n[낭독실력] {voiceDataSet['Quilty']}\n[이름] {voiceDataSet['Name']}\n[성별] {', '.join(Gender)}\n[연령] {', '.join(Age)}\n[감정] {', '.join(Emotion)}\n[성우의 특징] {voiceDataSet['Voice']['Feature']}\n\n\n"
+    
+    InputText = BookCharacterInfoText + VoiceActorInfoListText
 
-def ActorMatchingFilter():
-    return None
+    return InputText
 
-# ActorMatching Process (Tag를 활용해서 Actor 매칭)
-def ActorMatchingProcess(projectName, email, character, voiceDataSetCharacters, Process = "ActorMatching", MessagesReview = "off"):
+## ActorMatching 필터
+def ActorMatchingFilter(Response):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "ActorMatchingFilter, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '선정성우' not in OutputDic:
+        return "ActorMatchingFilter, JSONKeyError: '선정성우' 키가 누락되었습니다"
+
+    # Error3: '선정성우' 데이터 타입 검증
+    if not isinstance(OutputDic['선정성우'], dict):
+        return "ActorMatchingFilter, JSON에서 오류 발생: '선정성우'는 딕셔너리 형태여야 합니다"
+
+    # 필수 키 확인
+    required_keys = ['번호', '이름', '선정기준', '선정적합여부']
+    missing_keys = [key for key in required_keys if key not in OutputDic['선정성우']]
+    if missing_keys:
+        return f"ActorMatchingFilter, JSONKeyError: '선정성우'에 누락된 키: {', '.join(missing_keys)}"
+
+    # 데이터 타입 검증
+    if (not isinstance(OutputDic['선정성우']['번호'], (int, str))) or (isinstance(OutputDic['선정성우']['번호'], str) and not OutputDic['선정성우']['번호'].isdigit()):
+        return "ActorMatchingFilter, JSON에서 오류 발생: '선정성우 > 번호'는 문자열이어야 합니다"
+    else: OutputDic['선정성우']['번호'] = int(OutputDic['선정성우']['번호'])
+
+    if not isinstance(OutputDic['선정성우']['이름'], str):
+        return "ActorMatchingFilter, JSON에서 오류 발생: '선정성우 > 이름'은 문자열이어야 합니다"
+
+    if not isinstance(OutputDic['선정성우']['선정기준'], str):
+        return "ActorMatchingFilter, JSON에서 오류 발생: '선정성우 > 선정기준'은 문자열이어야 합니다"
+
+    if not isinstance(OutputDic['선정성우']['선정적합여부'], str) or OutputDic['선정성우']['선정적합여부'] not in ['여', '부']:
+        return "ActorMatchingFilter, JSON에서 오류 발생: '선정성우 > 선정적합여부'는 '여' 또는 '부' 중 하나여야 합니다"
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['선정성우']
+
+## ActorMatching Process (Tag를 활용해서 Actor 매칭)
+def ActorMatchingProcess(projectName, email, CharacterInfo, voiceDataSetCharacters, Process = "ActorMatching", MessagesReview = "off"):
     # ActorMatchingProcess
-    Input = ActorMatchingInput(character, voiceDataSetCharacters)
+    Input = ActorMatchingInput(CharacterInfo, voiceDataSetCharacters)
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
@@ -135,12 +207,45 @@ def ActorMatchingProcess(projectName, email, character, voiceDataSetCharacters, 
         else:
             ResponseJson = Filter
             print(f"Project: {projectName} | Process: {Process} | JSONDecode 완료")
-            break
+            # Choice&ApiSetting
+            if ResponseJson['선정적합여부'] == '여':
+                Choice = 'Yes'
+                for voiceDataSet in voiceDataSetCharacters:
+                    if ResponseJson['번호'] == voiceDataSet['CharacterId'] and ResponseJson['이름'] in voiceDataSet['Name']:
+                        ApiSetting = voiceDataSet['ApiSetting']
+            else:
+                Choice = 'No'
+                ApiSetting = 'None'
+            
+            OutputDic = {'ActorId': ResponseJson['번호'], 'ActorName': ResponseJson['이름'], 'ApiSetting': ApiSetting, 'ReasonOfChoice': ResponseJson['선정기준'], 'Choice': Choice}
+            return OutputDic
         
-    #
-    return None
+def ActorMatchingResponseJson(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, messagesReview):
+    ## 1. Characters 프롬프트 선정
+    retryCount = 0
+    while True:
+        ## 1. ActorMatching Prompt Process
+        OutputDic = ActorMatchingProcess(projectName, email, CharacterInfo, VoiceDataSetCharacters, MessagesReview = messagesReview)
+        if OutputDic == 'Retry':
+            retryCount += 1
+            if retryCount >= 3:
+                sys.exit(f"[ ActorMatchingProcess 3회 재시도 실패: {projectName}, {CharacterInfo['CharacterName']} ]")
+            print(f"[ ActorMatchingProcess 재시도 ({retryCount}/3): 10초 후 재시작 ]") 
+            time.sleep(10)
+        else:
+            if OutputDic['Choice'] == 'Yes':
+                ## 1. Characters 프롬프트 선정 결과가 있으면 해당 결과를 MatchedActor로 지정
+                ChoiceCharacterId = OutputDic['ActorId']
+                for VoiceData in VoiceDataSetCharacters:
+                    if VoiceData['CharacterId'] == ChoiceCharacterId:
+                        VoiceData['Choice'] = CharacterTag
+                        ProcessChoicedVoiceData = VoiceData
+                        return ProcessChoicedVoiceData, ActorsNeeded
+            else:
+                ActorsNeeded.append({'Role': CharacterTag, 'Name': CharacterInfo['CharacterName'], 'Gender': CharacterInfo['CharacterGender'], 'Emotion': CharacterInfo['CharacterEmotionList'], 'Prompt': OutputDic['ReasonOfChoice'], 'TextToPreview': CharacterInfo['CharacterChunk']})
+                return 'No', ActorsNeeded
 
-# NarratorSet에서 ContextScore 계산
+## NarratorSet에서 ContextScore 계산
 def ContextScoreCal(VoiceDataSetCharacters, SelectionGenerationKoBookContext):
     # print(SelectionGenerationKoBookContext)
     BookGenre = SelectionGenerationKoBookContext['Vector']['ContextCompletion']['Genre']
@@ -217,7 +322,7 @@ def ContextScoreCal(VoiceDataSetCharacters, SelectionGenerationKoBookContext):
     
     return VoiceDataSetCharacters
 
-# NarratorSet에서 VoiceScore 계산
+## NarratorSet에서 VoiceScore 계산
 def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
     for Character in CharacterCompletion:
         if Character['CharacterTag'] == CharacterTag:
@@ -263,9 +368,8 @@ def VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag):
                 
     return VoiceDataSetCharacters
 
-# 최고 점수 캐릭터 선정
-def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
-    
+## 최고 점수 캐릭터 선정
+def ActorMatchingProcessOrHighestScoreVoiceCal(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, CharacterGender, MatchedVoicesFilePath, messagesReview):
     def _highestScoreVoice(VoiceDataSetCharacters, CheckCharacterTag, CharacterTag, CharacterGender, Grade):
         highestScore = 0  # 최고 점수를 매우 낮은 값으로 초기화
         highestScoreVoices = []  # 최고 점수를 가진 데이터들을 저장할 리스트
@@ -295,14 +399,29 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
     TertiaryVoice = "None"
     # CharacterTag가 "Narrator"일 경우
     if CharacterTag == "Narrator":
-        HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Main")
+        if not os.path.exists(MatchedVoicesFilePath):
+            HighestScoreVoice, ActorsNeeded = ActorMatchingResponseJson(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, messagesReview)
+        else:
+            HighestScoreVoice = 'No'
+        if HighestScoreVoice == 'No':
+            HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Main")
         CaptionVoice = _highestScoreVoice(VoiceDataSetCharacters, 'Caption', CharacterTag, CharacterGender, "Caption")
-        SecondaryVoice = _highestScoreVoice(VoiceDataSetCharacters, 'SecondaryNarrator', 'NarratorActor', CharacterGender, "Actor")
+        if HighestScoreVoice['SecondaryVoice'] != "None":
+            for VoiceData in VoiceDataSetCharacters:
+                if VoiceData['Name'] == HighestScoreVoice['SecondaryVoice']:
+                    SecondaryVoice = VoiceData
+        else:
+            SecondaryVoice = _highestScoreVoice(VoiceDataSetCharacters, 'SecondaryNarrator', 'NarratorActor', CharacterGender, "Actor")
         TertiaryVoice = _highestScoreVoice(VoiceDataSetCharacters, 'TertiaryNarrator', 'NarratorActor', CharacterGender, "Actor")
     
     # CharacterTag가 "CharacterN"일 경우
     else:
-        HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Actor")
+        if not os.path.exists(MatchedVoicesFilePath):
+            HighestScoreVoice, ActorsNeeded = ActorMatchingResponseJson(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, messagesReview)
+        else:
+            HighestScoreVoice = 'No'
+        if HighestScoreVoice == 'No':
+            HighestScoreVoice = _highestScoreVoice(VoiceDataSetCharacters, CharacterTag, CharacterTag, CharacterGender, "Actor")
 
     # CharacterGender가 '남', '여'가 아닐 경우 (중성캐릭터의 나레이터 대체)
     NeuterCharacterTag = "None"
@@ -337,7 +456,7 @@ def HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender):
                 HighestScoreVoice = ModifiedVoiceData
                 break
 
-    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NeuterActorName, NeuterCharacterTag
+    return VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NeuterActorName, NeuterCharacterTag, ActorsNeeded
 
 # 낭독 TextSetting
 def ActorChunkSetting(RawChunk):
@@ -387,26 +506,29 @@ def ActorChunkSetting(RawChunk):
     return ActorChunk
 
 # 낭독 ActorMatching
-def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang):
+def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, messagesReview):
     voiceDataSetCharacters, CharacterCompletion, CharacterChunks, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, MainLang)
+    VoiceLayerPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_audiobook/{projectName}_mixed_audiobook_file/VoiceLayers"
+    MatchedVoicesFileName = f"{projectName}_MatchedVoices.json"
+    ActorsNeededFileName = f"{projectName}_ActorsNeeded.json"
+    MatchedVoicesFilePath = os.path.join(VoiceLayerPath, MatchedVoicesFileName)
+    ActorsNeededFilePath = os.path.join(VoiceLayerPath, ActorsNeededFileName)
+    # ### 테스트 후 삭제 ###
+    # with open('CharacterCompletion.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(CharacterCompletion, json_file, ensure_ascii = False, indent = 4)
+    # with open('OrigenVoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(voiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    # ### 테스트 후 삭제 ###
     
-    ### 테스트 후 삭제 ###
-    with open('CharacterCompletion.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(CharacterCompletion, json_file, ensure_ascii = False, indent = 4)
-    with open('OrigenVoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(voiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
-    ### 테스트 후 삭제 ###
-    
-    # 1,2 Characters 선정&점수계산으로 MatchedActors 생성
-    MatchedActors = []
-    
-    # 2-1 .CharacterInfos 구하기 (케릭터 ID, 태그, 이름, 성별, 연령, 감정, 인물의 특징 선정)
+    ## 1,2 Characters 프롬프트 선정 & 점수계산으로 MatchedActors 생성
+    # 1,2 통합 CharacterInfos 생성 (케릭터 ID, 태그, 이름, 성별, 연령, 감정, 인물의 특징 선정)
     CharacterInfos = []
     for Character in CharacterCompletion:
         # EmotionText 선별
         Emotion = list(Character['Emotion'].items())[:2]
         # 각 항목을 "키 값%" 형식으로 변환한 후, 콤마와 공백(", ")로 연결합니다.
         EmotionText = ", ".join([f"{key} {int(value)}%" for key, value in Emotion])
+        EmotionList = [key for key, value in Emotion]
         
         # CharacterChunkText 선별
         ChunkIds = Character['MainCharacterList'][0]['ChunkIds']
@@ -414,39 +536,31 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang):
             CharacterChunkIds = ChunkIds
         else:
             CharacterChunkIds = random.sample(ChunkIds, 5)
-        
         SelectedCharacterChunks = []
         for CharacterChunkId in CharacterChunkIds:
             for CharacterChunk in CharacterChunks:
-                if CharacterChunkId == CharacterChunk['CharacterChunkId']:
+                if CharacterChunkId == CharacterChunk['ChunkId']:
                     SelectedCharacterChunks.append(CharacterChunk['Chunk'])
         CharacterChunkText = ", ".join(SelectedCharacterChunks)
-        print(CharacterChunkText)
-        sys.exit()
         
-        CharacterInfos.append({'CharacterId': Character['CharacterId'], 'CharacterTag': Character['CharacterTag'], 'CharacterName': Character['MainCharacterList'][0]['MainCharacter'], 'CharacterGender': Character['Gender'], 'CharacterAge': Character['Age'], 'CharacterEmotion': EmotionText, 'CharacterChunk': CharacterChunkText})
+        CharacterInfos.append({'CharacterId': Character['CharacterId'], 'CharacterTag': Character['CharacterTag'], 'CharacterName': Character['MainCharacterList'][0]['MainCharacter'], 'CharacterGender': Character['Gender'], 'CharacterAge': Character['Age'], 'CharacterEmotion': EmotionText, 'CharacterEmotionList': EmotionList, 'CharacterChunk': CharacterChunkText})
     
-    # 1. MatchedActors 우선 Tags Prompt 매칭
-    for character in CharacterInfos:
-        ActorMatchingProcess(projectName, email, character, voiceDataSetCharacters)
-    # 1-1 Character Completion에서 태그 요소를 추가할 수 있도록 추가 데이터 형성
-    # 1-2 ActorMatchingProcess는 Tag기반 Narrator부터 Character까지 매칭(매칭될 인물이 없으면 없다고 표시 + 어떠한 인물이 필요하다고 표시)
-    # 1-3 매칭된 캐릭터는 MatchedActors에는 우선 추가, VoiceDataSetCharacters에서는 Choice를 CharacterTag로 변경
-
-    # 2-1 .CharacterTags 구하기 (케릭터 태그와 성별 선정)
-    CharacterTags = []
-    for Character in CharacterCompletion:
-        CharacterTags.append({'CharacterTag': Character['CharacterTag'], 'CharacterGender': Character['Gender']})
-
-    # 2-2. MatchedActors 나머지 Context, Voice 점수 매칭
+    ## 1,2 통합 MatchedActors 매칭
+    ActorsNeeded = []
+    MatchedActors = []
     VoiceDataSetCharacters = ContextScoreCal(voiceDataSetCharacters, SelectionGenerationKoBookContext)
-    for character in CharacterTags:
-        CharacterTag = character['CharacterTag']
-        CharacterGender = character['CharacterGender']
+    for CharacterInfo in CharacterInfos:
+        CharacterTag = CharacterInfo['CharacterTag']
+        CharacterGender = CharacterInfo['CharacterGender']
+        CharacterChunk = CharacterInfo['CharacterChunk']
+        
+        ## 1,2 통합 ActorMatching Prompt Process Or ActorMatching Cal Process 
         VoiceDataSetCharacters = VoiceScoreCal(CharacterCompletion, VoiceDataSetCharacters, CharacterTag)
-        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NeuterActorName, NeuterCharacterTag = HighestScoreVoiceCal(VoiceDataSetCharacters, CharacterTag, CharacterGender)
+        VoiceDataSetCharacters, HighestScoreVoice, CaptionVoice, SecondaryVoice, TertiaryVoice, NeuterActorName, NeuterCharacterTag, ActorsNeeded = ActorMatchingProcessOrHighestScoreVoiceCal(projectName, email, CharacterInfo, ActorsNeeded, VoiceDataSetCharacters, CharacterTag, CharacterGender, MatchedVoicesFilePath, messagesReview)
         MatchedActor = {'CharacterTag': CharacterTag, 'ActorName': HighestScoreVoice['Name'], 'ApiSetting': HighestScoreVoice['ApiSetting']}
         MatchedActors.append(MatchedActor)
+        
+        ## 1,2 공통 Caption, SecondaryNarrator, TertiaryNarrator, NeuterCharacter 추가
         if CaptionVoice != "None":
             CaptionActor = {'CharacterTag': 'Caption', 'ActorName': CaptionVoice['Name'], 'ApiSetting': CaptionVoice['ApiSetting']}
             MatchedActors.append(CaptionActor)
@@ -463,14 +577,14 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang):
             NeuterVoice = HighestScoreVoice
             VoiceDataSetCharacters.append(NeuterVoice)
 
-    ### 테스트 후 삭제 ###
-    with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
-    with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
-    with open('CharacterTags.json', 'w', encoding = 'utf-8') as json_file:
-        json.dump(CharacterTags, json_file, ensure_ascii = False, indent = 4)
-    ### 테스트 후 삭제 ###
+    # ### 테스트 후 삭제 ###
+    # with open('VoiceDataSetCharacters.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(VoiceDataSetCharacters, json_file, ensure_ascii = False, indent = 4)
+    # with open('MatchedActors.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(MatchedActors, json_file, ensure_ascii = False, indent = 4)
+    # with open('CharacterInfos.json', 'w', encoding = 'utf-8') as json_file:
+    #     json.dump(CharacterInfos, json_file, ensure_ascii = False, indent = 4)
+    # ### 테스트 후 삭제 ###
         
     # SelectionGenerationKoChunks의 MatchedActors 삽입
     for GenerationKoChunks in SelectionGenerationKoChunks:
@@ -513,7 +627,11 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang):
     with open('SelectionGenerationKoChunks.json', 'w', encoding = 'utf-8') as json_file:
         json.dump(SelectionGenerationKoChunks, json_file, ensure_ascii = False, indent = 4)
     ### 테스트 후 삭제 ### 이 부분에서 Text 수정 UI를 만들어야 함 ###
-    sys.exit()
+    
+    # ActorsNeeded 저장
+    if not os.path.exists(ActorsNeededFilePath) and ActorsNeeded != []:
+        with open(ActorsNeededFilePath, 'w', encoding = 'utf-8') as json_file:
+            json.dump(ActorsNeeded, json_file, ensure_ascii = False, indent = 4)
     
     return SortedMatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters
     
@@ -1663,9 +1781,15 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         VoiceActos = VoiceDataSet[1]['CharactersKo']
         
         ## VoiceActor 매칭
+        MatchedSecondaryVoiceActor = 'None'
         for VoiceActor in VoiceActos:
             if VoiceActor['Name'] == CloneVoiceName:
                 MatchedVoiceActor = VoiceActor
+                if VoiceActor['SecondaryVoice'] != 'None':
+                    for VoiceActor in VoiceActos:
+                        if VoiceActor['Name'] == MatchedVoiceActor['SecondaryVoice']:
+                            MatchedSecondaryVoiceActor = VoiceActor
+                            break
                 
         ## MatchedVoices 변경
         for _Matched in MatchedActors:
@@ -1680,12 +1804,31 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                 except UnboundLocalError:
                     sys.exit(f'[ (({CloneVoiceName})) b572-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/backend/b5_Database/b57_RelationalDatabase/b572_Character/b572-01_VoiceDataSet.json')
                 _Matched['ApiSetting'] = MatchedVoiceActor['ApiSetting']
+            if _Matched['CharacterTag'] == 'SecondaryNarrator':
+                if MatchedSecondaryVoiceActor != 'None':
+                    BeforeSecondaryNarratorName = _Matched['ActorName']
+                    try:
+                        AfterSecondaryNarratorName = MatchedSecondaryVoiceActor['Name']
+                    except UnboundLocalError:
+                        sys.exit(f'[ (({CloneVoiceName}의 SecondaryVoice인 {MatchedSecondaryVoiceActor["Name"]})) b572-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/backend/b5_Database/b57_RelationalDatabase/b572_Character/b572-01_VoiceDataSet.json')
+                    try:
+                        _Matched['ActorName'] = AfterSecondaryNarratorName
+                    except UnboundLocalError:
+                        sys.exit(f'[ (({CloneVoiceName}의 SecondaryVoice인 {MatchedSecondaryVoiceActor["Name"]})) b572-01_VoiceDataSet에 성우가 존재하지 않음 ]\n/yaas/backend/b5_Database/b57_RelationalDatabase/b572_Character/b572-01_VoiceDataSet.json')
+                    _Matched['ApiSetting'] = MatchedSecondaryVoiceActor['ApiSetting']
                 
         ## AudioBook_Edit 변경
         if BeforeNarratorName != AfterNarratorName:
             for _Edit in SelectionGenerationKoChunks:
                 if _Edit['ActorName'] == BeforeNarratorName:
                     _Edit['ActorName'] = AfterNarratorName
+                elif _Edit['ActorName'] == AfterNarratorName:
+                    _Edit['ActorName'] = BeforeNarratorName
+                if MatchedSecondaryVoiceActor != 'None':
+                    if _Edit['ActorName'] == BeforeSecondaryNarratorName:
+                        _Edit['ActorName'] = AfterSecondaryNarratorName
+                    elif _Edit['ActorName'] == AfterSecondaryNarratorName:
+                        _Edit['ActorName'] = BeforeSecondaryNarratorName
         
         return MatchedActors, SelectionGenerationKoChunks
 
@@ -1694,7 +1837,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
 
 ## 프롬프트 요청 및 결과물 VoiceLayerGenerator
 def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", VoiceEnhance = 'off', VoiceFileGen = 'on', MessagesReview = "off"):
-    MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang)
+    MatchedActors, SelectionGenerationKoChunks, VoiceDataSetCharacters = ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, MessagesReview)
 
     ## Modify 시간에 맞추어 폴더 생성 및 이전 끊긴 히스토리 합치기 ##
     BaseModifyFolder = f"[{projectName}_Modified]"

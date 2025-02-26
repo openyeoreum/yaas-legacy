@@ -36,7 +36,7 @@ from firebase_admin import db
 from reportlab.lib.pagesizes import portrait
 from reportlab.pdfgen import canvas
 
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse
+from backend.b2_Solution.b25_DataFrame.b251_DataCommit.b2511_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse
 
 #########################
 ##### InputList 생성 #####

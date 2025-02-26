@@ -5,7 +5,7 @@ import time
 import sys
 sys.path.append("/yaas")
 
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from backend.b2_Solution.b25_DataFrame.b251_DataCommit.b2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from backend.b2_Solution.b22_DataCollection.b221_VectorDatabase.b2214_VDBUpsert import UpsertCollectionData
 
 #########################

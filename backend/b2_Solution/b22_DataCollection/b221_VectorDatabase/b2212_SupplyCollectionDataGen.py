@@ -6,7 +6,7 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
-from backend.b2_Solution.b24_DataFrame.b241_DataCommit.b2411_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from backend.b2_Solution.b25_DataFrame.b251_DataCommit.b2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 
 ######################
 ##### Filter 조건 #####

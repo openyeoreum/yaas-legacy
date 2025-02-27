@@ -1,0 +1,20 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "Book",
+        "Language": "En",
+        "Translation": "Ko",
+        "TaskName": "IndexDefine",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    {
+        "IndexTags": [
+            {
+                "IndexId": 0,
+                "IndexTag": "None",
+                "Index": "None"
+            }
+        ]
+    }
+]

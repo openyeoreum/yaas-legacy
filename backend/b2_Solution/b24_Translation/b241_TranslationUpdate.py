@@ -705,6 +705,31 @@ def ProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process):
         ## TranslationEdit 저장
         with open(TranslationEditPath, 'w', encoding = 'utf-8') as TranslationEditJson:
             json.dump(TranslationEdit, TranslationEditJson, indent = 4, ensure_ascii = False)
+            
+## Process Edit 저장
+def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process):
+    ## TranslationDataFrame 불러온 뒤 Completion 확인
+    with open(ProjectDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        TranslationDataFrame = json.load(DataFrameJson)
+    ## TranslationEdit 저장
+    if TranslationDataFrame[0]['Completion'] == 'Yes':
+        ## TranslationEdit이 존재할때
+        if os.path.exists(TranslationEditPath):
+            with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+                TranslationEdit = json.load(TranslationEditJson)
+
+        if not Process in TranslationEdit:
+            ## TranslationEdit 업데이트
+            TranslationEdit[Process] = []
+            TranslationEdit[f"{Process}Completion"] = 'Completion'
+            TranslationDataList = TranslationDataFrame[1]
+            for i in range(1, len(TranslationDataList)):
+                ProcessDic = TranslationDataList[i]
+                TranslationEdit[Process].append(ProcessDic)
+            
+            ## TranslationEdit 저장
+            with open(TranslationEditPath, 'w', encoding = 'utf-8') as TranslationEditJson:
+                json.dump(TranslationEdit, TranslationEditJson, indent = 4, ensure_ascii = False)
 
 ## Process Edit Prompt 확인
 def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumProcesses = 1):
@@ -796,7 +821,6 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, mode = "
     ## 최종 설정된 Translation 불러오기 및 MainLangCode, TranslationLangCode 설정
     Translation = LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath)
     MainLangCode, TranslationLangCode = LanguageCodeGen(MainLang, Translation)
-    print(f"MainLangCode: {MainLangCode} | TranslationLangCode: {TranslationLangCode}")
 
     ####################################################
     ### Process1: TranslationBodySplit Response 생성 ##
@@ -817,8 +841,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, mode = "
     TranslationBodySplitProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationBodySplitPath, TranslationBodySplitResult, Process, len(TranslationBodySplitResult), len(TranslationBodySplitResult))
 
     ## Edit 저장
-    with open(ProjectDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
-        TranslationDataFrame = json.load(DataFrameJson)
+    BodySplitProcessEditSave(ProjectDataFrameTranslationBodySplitPath, TranslationEditPath, Process)
+    
+    sys.exit()
 
 if __name__ == "__main__":
     

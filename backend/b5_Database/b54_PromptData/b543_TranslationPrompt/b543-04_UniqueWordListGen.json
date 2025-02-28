@@ -1,0 +1,270 @@
+{
+    "TaskName": "UniqueWordListGen",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-4o-mini",
+            "LongTokensModel": "o3-mini"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "o3-mini"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-5-haiku-latest",
+            "LongTokensModel": "claude-3-5-sonnet-latest"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-5-sonnet-latest"
+    },
+    "Temperature": 1,
+    "OutputTokensRatio": 1,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 도서 번역 전문가 입니다. <도서내용>은 도서 전체를 4,000자로 나눈 부분들 중 한 부분입니다.\n도서 번역이란 <도서내용>을 하나씩 연계적으로 번역하는 과정으로 각각의 <도서내용>에서 고유명사의 일관된 번역이 매우 중요합니다. 따라서 지금 <도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악하여 <고유명사메모장.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<고유명사메모장.json>의 구조 및 내용)\n",
+                    "Message": "{'고유명사': [{'번호': 1, '원문': '선택된 고유명사를 [원문언어]그대로 원문을 작성', '번역': '선택된 고유명사를 [번역언어]에 따라 번역된 번역문을 작성', '선택이유': '해당 고유명사를 선택한 이유를 작성'}, {'번호': 2, '원문': '선택된 고유명사를 [원문언어]그대로 원문을 작성', '번역': '선택된 고유명사를 [번역언어]에 따라 번역된 번역문을 작성', '선택이유': '해당 고유명사를 선택한 이유를 작성'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<고유명사메모장.json> 완성 절차)\n",
+                    "Message": "1. <도서내용>은 도서 내용이 작성된 언어인 [원문언어]와 원문을 번역할 [번역언어] 그리고 원문의 내용인 [원문내용]으로 구성되어 있습니다.\n2. 도서 번역이란 <도서내용>을 하나씩 연계적으로 번역하는 과정으로 각각의 <도서내용>에서 고유명사의 일관된 번역이 매우 중요합니다.\n3. 따라서 <도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악한 뒤 하나씩 '원문', '번역', '선택이유'을 작성하여 <고유명사메모장.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악하여 <고유명사메모장.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<고유명사메모장.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 도서 번역 전문가 입니다. <도서내용>은 도서 전체를 4,000자로 나눈 부분들 중 한 부분입니다.\n도서 번역이란 <도서내용>을 하나씩 연계적으로 번역하는 과정으로 각각의 <도서내용>에서 고유명사의 일관된 번역이 매우 중요합니다. 따라서 지금 <도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악하여 <고유명사메모장.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<고유명사메모장.json>의 구조 및 내용)\n",
+                    "Message": "{'고유명사': [{'번호': 1, '원문': '선택된 고유명사를 [원문언어]그대로 원문을 작성', '번역': '선택된 고유명사를 [번역언어]에 따라 번역된 번역문을 작성', '선택이유': '해당 고유명사를 선택한 이유를 작성'}, {'번호': 2, '원문': '선택된 고유명사를 [원문언어]그대로 원문을 작성', '번역': '선택된 고유명사를 [번역언어]에 따라 번역된 번역문을 작성', '선택이유': '해당 고유명사를 선택한 이유를 작성'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<고유명사메모장.json> 완성 절차)\n",
+                    "Message": "1. <도서내용>은 도서 내용이 작성된 언어인 [원문언어]와 원문을 번역할 [번역언어] 그리고 원문의 내용인 [원문내용]으로 구성되어 있습니다.\n2. 도서 번역이란 <도서내용>을 하나씩 연계적으로 번역하는 과정으로 각각의 <도서내용>에서 고유명사의 일관된 번역이 매우 중요합니다.\n3. 따라서 <도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악한 뒤 하나씩 '원문', '번역', '선택이유'을 작성하여 <고유명사메모장.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악하여 <고유명사메모장.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<고유명사메모장.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 도서 번역 전문가 입니다. <도서내용>은 도서 전체를 4,000자로 나눈 부분들 중 한 부분입니다.\n도서 번역이란 <도서내용>을 하나씩 연계적으로 번역하는 과정으로 각각의 <도서내용>에서 고유명사의 일관된 번역이 매우 중요합니다. 따라서 지금 <도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악하여 <고유명사메모장.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<고유명사메모장.json>의 구조 및 내용)\n",
+                    "Message": "{'고유명사': [{'번호': 1, '원문': '선택된 고유명사를 [원문언어]그대로 원문을 작성', '번역': '선택된 고유명사를 [번역언어]에 따라 번역된 번역문을 작성', '선택이유': '해당 고유명사를 선택한 이유를 작성'}, {'번호': 2, '원문': '선택된 고유명사를 [원문언어]그대로 원문을 작성', '번역': '선택된 고유명사를 [번역언어]에 따라 번역된 번역문을 작성', '선택이유': '해당 고유명사를 선택한 이유를 작성'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<고유명사메모장.json> 완성 절차)\n",
+                    "Message": "1. <도서내용>은 도서 내용이 작성된 언어인 [원문언어]와 원문을 번역할 [번역언어] 그리고 원문의 내용인 [원문내용]으로 구성되어 있습니다.\n2. 도서 번역이란 <도서내용>을 하나씩 연계적으로 번역하는 과정으로 각각의 <도서내용>에서 고유명사의 일관된 번역이 매우 중요합니다.\n3. 따라서 <도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악한 뒤 하나씩 '원문', '번역', '선택이유'을 작성하여 <고유명사메모장.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악하여 <고유명사메모장.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<고유명사메모장.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 도서 번역 전문가 입니다. <도서내용>은 도서 전체를 4,000자로 나눈 부분들 중 한 부분입니다.\n도서 번역이란 <도서내용>을 하나씩 연계적으로 번역하는 과정으로 각각의 <도서내용>에서 고유명사의 일관된 번역이 매우 중요합니다. 따라서 지금 <도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악하여 <고유명사메모장.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<고유명사메모장.json>의 구조 및 내용)\n",
+                    "Message": "{'고유명사': [{'번호': 1, '원문': '선택된 고유명사를 [원문언어]그대로 원문을 작성', '번역': '선택된 고유명사를 [번역언어]에 따라 번역된 번역문을 작성', '선택이유': '해당 고유명사를 선택한 이유를 작성'}, {'번호': 2, '원문': '선택된 고유명사를 [원문언어]그대로 원문을 작성', '번역': '선택된 고유명사를 [번역언어]에 따라 번역된 번역문을 작성', '선택이유': '해당 고유명사를 선택한 이유를 작성'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<고유명사메모장.json> 완성 절차)\n",
+                    "Message": "1. <도서내용>은 도서 내용이 작성된 언어인 [원문언어]와 원문을 번역할 [번역언어] 그리고 원문의 내용인 [원문내용]으로 구성되어 있습니다.\n2. 도서 번역이란 <도서내용>을 하나씩 연계적으로 번역하는 과정으로 각각의 <도서내용>에서 고유명사의 일관된 번역이 매우 중요합니다.\n3. 따라서 <도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악한 뒤 하나씩 '원문', '번역', '선택이유'을 작성하여 <고유명사메모장.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악하여 <고유명사메모장.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<고유명사메모장.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

@@ -1,0 +1,270 @@
+{
+    "TaskName": "TranslationBodySummary.",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-4o-mini",
+            "LongTokensModel": "o3-mini"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "o3-mini"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-5-haiku-latest",
+            "LongTokensModel": "claude-3-5-sonnet-latest"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-5-sonnet-latest"
+    },
+    "Temperature": 1,
+    "OutputTokensRatio": 1,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 도서 요약 전문가 입니다. <도서내용>은 내용이 작성된 언어인 [언어]와 직전에 요약된 [직전요약] 그리고 현재 내용 목차의 제목인 [현재목차] 마지막으로 현재 내용 8,000자를 작성한 [현재내용]으로 이루어져 있습니다. <도서내용>에서 [직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준의 <현재내용요약.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재내용요약.json>의 구조 및 내용)\n",
+                    "Message": "{'현재내용요약': {'요약': '[직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준으로 요약하여 작성'}}"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>을 보고 [직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준으로 요약하여 <현재내용요약.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재내용요약.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 도서 요약 전문가 입니다. <도서내용>은 내용이 작성된 언어인 [언어]와 직전에 요약된 [직전요약] 그리고 현재 내용 목차의 제목인 [현재목차] 마지막으로 현재 내용 8,000자를 작성한 [현재내용]으로 이루어져 있습니다. <도서내용>에서 [직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준의 <현재내용요약.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재내용요약.json>의 구조 및 내용)\n",
+                    "Message": "{'현재내용요약': {'요약': '[직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준으로 요약하여 작성'}}"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>을 보고 [직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준으로 요약하여 <현재내용요약.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재내용요약.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 도서 요약 전문가 입니다. <도서내용>은 내용이 작성된 언어인 [언어]와 직전에 요약된 [직전요약] 그리고 현재 내용 목차의 제목인 [현재목차] 마지막으로 현재 내용 8,000자를 작성한 [현재내용]으로 이루어져 있습니다. <도서내용>에서 [직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준의 <현재내용요약.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재내용요약.json>의 구조 및 내용)\n",
+                    "Message": "{'현재내용요약': {'요약': '[직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준으로 요약하여 작성'}}"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>을 보고 [직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준으로 요약하여 <현재내용요약.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재내용요약.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 도서 요약 전문가 입니다. <도서내용>은 내용이 작성된 언어인 [언어]와 직전에 요약된 [직전요약] 그리고 현재 내용 목차의 제목인 [현재목차] 마지막으로 현재 내용 8,000자를 작성한 [현재내용]으로 이루어져 있습니다. <도서내용>에서 [직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준의 <현재내용요약.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재내용요약.json>의 구조 및 내용)\n",
+                    "Message": "{'현재내용요약': {'요약': '[직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준으로 요약하여 작성'}}"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>을 보고 [직전요약]에 이어서 [현재내용]의 핵심이 잘 나타나도록 1,000자 수준으로 요약하여 <현재내용요약.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재내용요약.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

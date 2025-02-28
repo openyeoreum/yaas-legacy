@@ -40,7 +40,13 @@ def AddProjectToDB(projectName, email):
         scriptDataFramePath = os.path.join(scriptPath, f"{projectName}_dataframe_script_file")
         masterScriptPath = os.path.join(scriptPath, f"{projectName}_master_script_file")
         uploadScriptPath = os.path.join(scriptPath, f"{projectName}_upload_script_file")
-        
+
+        # translation
+        translationPath = os.path.join(projectPath, f"{projectName}_translation")
+        translationDataFramePath = os.path.join(translationPath, f"{projectName}_dataframe_translation_file")
+        masterTranslationPath = os.path.join(translationPath, f"{projectName}_master_translation_file")
+        uploadTranslationPath = os.path.join(translationPath, f"{projectName}_upload_translation_file")
+
         # textbook
         textbookPath = os.path.join(projectPath, f"{projectName}_textbook")
         textbookDataFramePath = os.path.join(textbookPath, f"{projectName}_dataframe_textbook_file")
@@ -94,6 +100,10 @@ def AddProjectToDB(projectName, email):
             os.makedirs(scriptDataFramePath, exist_ok = True)
             os.makedirs(masterScriptPath, exist_ok = True)
             os.makedirs(uploadScriptPath, exist_ok = True)
+            os.makedirs(translationPath, exist_ok = True)
+            os.makedirs(translationDataFramePath, exist_ok = True)
+            os.makedirs(masterTranslationPath, exist_ok = True)
+            os.makedirs(uploadTranslationPath, exist_ok = True)
             os.makedirs(textbookPath, exist_ok = True)
             os.makedirs(textbookDataFramePath, exist_ok = True)
             os.makedirs(mixedTextBookPath, exist_ok = True)
@@ -175,6 +185,10 @@ def AddProjectToDB(projectName, email):
             ExistingProject.ScriptDataFramePath = scriptDataFramePath
             ExistingProject.MasterScriptPath = masterScriptPath
             ExistingProject.UploadScriptPath = uploadScriptPath
+            ExistingProject.TranslationPath = translationPath
+            ExistingProject.TranslationDataFramePath = translationDataFramePath
+            ExistingProject.MasterTranslationPath = masterTranslationPath
+            ExistingProject.UploadTranslationPath = uploadTranslationPath
             ExistingProject.TextbookPath = textbookPath
             ExistingProject.TextbookDataFramePath = textbookDataFramePath
             ExistingProject.MixedTextBookPath = mixedTextBookPath
@@ -250,6 +264,10 @@ def AddProjectToDB(projectName, email):
                 ScriptDataFramePath = scriptDataFramePath,
                 MasterScriptPath = masterScriptPath,
                 UploadScriptPath = uploadScriptPath,
+                TranslationPath = translationPath,
+                TranslationDataFramePath = translationDataFramePath,
+                MasterTranslationPath = masterTranslationPath,
+                UploadTranslationPath = uploadTranslationPath,
                 TextbookPath = textbookPath,
                 TextbookDataFramePath = textbookDataFramePath,
                 MixedTextBookPath = mixedTextBookPath,

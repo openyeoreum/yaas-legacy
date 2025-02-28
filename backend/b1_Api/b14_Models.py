@@ -164,6 +164,12 @@ class Project(Base):
     CharacterFile = Column(Text)
     BodyFile = Column(Text)
     
+    # TranslationFile
+    TranslationPath = Column(Text)
+    TranslationDataFramePath = Column(Text)
+    MasterTranslationPath = Column(Text)
+    UploadTranslationPath = Column(Text)
+    
     # TextBookFile
     TextbookPath = Column(Text)
     TextbookDataFramePath = Column(Text)
@@ -303,7 +309,13 @@ class ProjectHistory(Base):
     IndexFile = Column(Text)
     CharacterFile = Column(Text)
     BodyFile = Column(Text)
-    
+
+    # TranslationFile
+    TranslationPath = Column(Text)
+    TranslationDataFramePath = Column(Text)
+    MasterTranslationPath = Column(Text)
+    UploadTranslationPath = Column(Text)
+
     # TextBookFile
     TextbookPath = Column(Text)
     TextbookDataFramePath = Column(Text)
@@ -472,6 +484,16 @@ class Prompt(Base):
     ScriptIntroductionGenFeedback = Column(JSON)
     ShortScriptGen = Column(JSON)
     ShortScriptGenFeedback = Column(JSON)
+    
+    # TranslationPrompt
+    TranslationIndexDefine = Column(JSON)
+    TranslationBodySummary = Column(JSON)
+    WordListGen = Column(JSON)
+    UniqueWordListGen = Column(JSON)
+    WordListPostprocessing = Column(JSON)
+    IndexTranslation = Column(JSON)
+    BodyTranslation = Column(JSON)
+    TranslationEditing = Column(JSON)
     
     ## TextBookPrompt
     

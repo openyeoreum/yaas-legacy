@@ -1,0 +1,270 @@
+{
+    "TaskName": "IndexTranslation",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-4o-mini",
+            "LongTokensModel": "o3-mini"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "o3-mini"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-5-haiku-latest",
+            "LongTokensModel": "claude-3-5-sonnet-latest"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-5-sonnet-latest"
+    },
+    "Temperature": 1,
+    "OutputTokensRatio": 1,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 목차 번역을 담당하고 있는 도서 번역 전문가 입니다. <도서전체목차>는 [원문언어]와 [번역언어] 그리고 도서 전체의 [전체목차원문]과 지금까지 번역된 [번역된목차]으로 이루어진 정보입니다. 그리고 <현재목차정보>는 도서의 [현재목차원문]과 현재 목차의 [내용앞부분요약]이 포함된 정보입니다.\n지금 <도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 번역하여 <현재목차번역.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재목차번역.json>의 구조 및 내용)\n",
+                    "Message": "{'현재목차번역': {'현재목차원문': '[현재목치원문]을 그대로 작성', '현재목차번역': '[현재목차원문]을 [번역언어]로 번역하여 작성', '번역이유': '현재목차번역으로 번역한 적절한 이유를 작성'}}"
+                },
+                {
+                    "Mark": "\n\n(<현재목차번역.json> 완성 절차)\n",
+                    "Message": "1. 목차 번역은 짧고 핵심적이면서도 장기적으로 기억에 남기 쉽도록 이루어져야 합니다.\n2. <도서전체목차>는 번역전 원문의 언어인 [원문언어]와 번역할 언어인 [번역언어] 그리고 도서 전체의 [전체목차원문]과 지금까지 번역된 [번역된목차]으로 이루어진 정보입니다.\n3. <현재목차정보>는 지금 번역할 도서의 [현재목차원문]과 현재목차번역에 참고할 현재 목차의 [내용앞부분요약]이 포함된 정보입니다.\n4. <도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 [번역언어]로 번역한뒤, '현재목차원문', '현재목차번역', '번역이유'를 작성하여 <현재목차번역.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 [번역언어]로 번역하여 <현재목차번역.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서전체목차>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재목차번역.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 목차 번역을 담당하고 있는 도서 번역 전문가 입니다. <도서전체목차>는 [원문언어]와 [번역언어] 그리고 도서 전체의 [전체목차원문]과 지금까지 번역된 [번역된목차]으로 이루어진 정보입니다. 그리고 <현재목차정보>는 도서의 [현재목차원문]과 현재 목차의 [내용앞부분요약]이 포함된 정보입니다.\n지금 <도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 번역하여 <현재목차번역.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재목차번역.json>의 구조 및 내용)\n",
+                    "Message": "{'현재목차번역': {'현재목차원문': '[현재목치원문]을 그대로 작성', '현재목차번역': '[현재목차원문]을 [번역언어]로 번역하여 작성', '번역이유': '현재목차번역으로 번역한 적절한 이유를 작성'}}"
+                },
+                {
+                    "Mark": "\n\n(<현재목차번역.json> 완성 절차)\n",
+                    "Message": "1. 목차 번역은 짧고 핵심적이면서도 장기적으로 기억에 남기 쉽도록 이루어져야 합니다.\n2. <도서전체목차>는 번역전 원문의 언어인 [원문언어]와 번역할 언어인 [번역언어] 그리고 도서 전체의 [전체목차원문]과 지금까지 번역된 [번역된목차]으로 이루어진 정보입니다.\n3. <현재목차정보>는 지금 번역할 도서의 [현재목차원문]과 현재목차번역에 참고할 현재 목차의 [내용앞부분요약]이 포함된 정보입니다.\n4. <도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 [번역언어]로 번역한뒤, '현재목차원문', '현재목차번역', '번역이유'를 작성하여 <현재목차번역.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 [번역언어]로 번역하여 <현재목차번역.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서전체목차>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재목차번역.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 목차 번역을 담당하고 있는 도서 번역 전문가 입니다. <도서전체목차>는 [원문언어]와 [번역언어] 그리고 도서 전체의 [전체목차원문]과 지금까지 번역된 [번역된목차]으로 이루어진 정보입니다. 그리고 <현재목차정보>는 도서의 [현재목차원문]과 현재 목차의 [내용앞부분요약]이 포함된 정보입니다.\n지금 <도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 번역하여 <현재목차번역.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재목차번역.json>의 구조 및 내용)\n",
+                    "Message": "{'현재목차번역': {'현재목차원문': '[현재목치원문]을 그대로 작성', '현재목차번역': '[현재목차원문]을 [번역언어]로 번역하여 작성', '번역이유': '현재목차번역으로 번역한 적절한 이유를 작성'}}"
+                },
+                {
+                    "Mark": "\n\n(<현재목차번역.json> 완성 절차)\n",
+                    "Message": "1. 목차 번역은 짧고 핵심적이면서도 장기적으로 기억에 남기 쉽도록 이루어져야 합니다.\n2. <도서전체목차>는 번역전 원문의 언어인 [원문언어]와 번역할 언어인 [번역언어] 그리고 도서 전체의 [전체목차원문]과 지금까지 번역된 [번역된목차]으로 이루어진 정보입니다.\n3. <현재목차정보>는 지금 번역할 도서의 [현재목차원문]과 현재목차번역에 참고할 현재 목차의 [내용앞부분요약]이 포함된 정보입니다.\n4. <도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 [번역언어]로 번역한뒤, '현재목차원문', '현재목차번역', '번역이유'를 작성하여 <현재목차번역.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 [번역언어]로 번역하여 <현재목차번역.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서전체목차>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재목차번역.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 목차 번역을 담당하고 있는 도서 번역 전문가 입니다. <도서전체목차>는 [원문언어]와 [번역언어] 그리고 도서 전체의 [전체목차원문]과 지금까지 번역된 [번역된목차]으로 이루어진 정보입니다. 그리고 <현재목차정보>는 도서의 [현재목차원문]과 현재 목차의 [내용앞부분요약]이 포함된 정보입니다.\n지금 <도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 번역하여 <현재목차번역.json>을 완성하는 작업이 필요합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재목차번역.json>의 구조 및 내용)\n",
+                    "Message": "{'현재목차번역': {'현재목차원문': '[현재목치원문]을 그대로 작성', '현재목차번역': '[현재목차원문]을 [번역언어]로 번역하여 작성', '번역이유': '현재목차번역으로 번역한 적절한 이유를 작성'}}"
+                },
+                {
+                    "Mark": "\n\n(<현재목차번역.json> 완성 절차)\n",
+                    "Message": "1. 목차 번역은 짧고 핵심적이면서도 장기적으로 기억에 남기 쉽도록 이루어져야 합니다.\n2. <도서전체목차>는 번역전 원문의 언어인 [원문언어]와 번역할 언어인 [번역언어] 그리고 도서 전체의 [전체목차원문]과 지금까지 번역된 [번역된목차]으로 이루어진 정보입니다.\n3. <현재목차정보>는 지금 번역할 도서의 [현재목차원문]과 현재목차번역에 참고할 현재 목차의 [내용앞부분요약]이 포함된 정보입니다.\n4. <도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 [번역언어]로 번역한뒤, '현재목차원문', '현재목차번역', '번역이유'를 작성하여 <현재목차번역.json>을 완성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서전체목차>와 <현재목차정보>를 보고 [현재목차]를 [번역언어]로 번역하여 <현재목차번역.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서전체목차>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재목차번역.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

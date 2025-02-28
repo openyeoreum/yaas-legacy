@@ -1,0 +1,270 @@
+{
+    "TaskName": "TranslationEditing",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-4o-mini",
+            "LongTokensModel": "o3-mini"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "o3-mini"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-5-haiku-latest",
+            "LongTokensModel": "claude-3-5-sonnet-latest"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-5-sonnet-latest"
+    },
+    "Temperature": 1,
+    "OutputTokensRatio": 1,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 전문 편집자 입니다. <단어장>과 <이전편집내용>을 보고 <현재편집전내용>을 교열, 윤문 과정을 통해 매우 부드럽고 세련되게 편집하여 <현재편집내용.json>을 완성해주세요."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재편집내용.json>의 구조 및 내용)\n",
+                    "Message": "{'편집내용': {'내용': '<현재편집전내용>을 교열, 윤문 과정을 통해 작성'}}"
+                },
+                {
+                    "Mark": "\n\n(<현재편집내용.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <현재편집전내용>은 도서 내용 중 현재 [목자체목]과 편집해야할 [편집전내용]이 작성되어 있습니다.\n2. <이전편집내용>을 참고해야 하는 이유는, 편집과정에서 도서 내용 전체의 어조, 어투, 맥락, 문맥, 표현을 일관성 있게 유지하기 위해서 입니다. 즉 <이전편집내용>과 <현재편집전내용>은 한 사람의 편집자가 작업한 결과물로 이어져야 합니다.\n3. <단어장>에 포함된 단어들은 글에서 고유한 성격을 지니고 있는 단어, 명사들로서 이는 글 전체의 내용을 일관성 있게 유지하기 위해서 최대한 변경하지 않습니다.\n4. 편집은 <현재편집전내용>을 보다 전문적인 편집자의 작업을 통해서 더욱 완성도가 높은 글로서 재탄생 하는 작업입니다.\n5. 편집은 <현재편집전내용>을 교열, 윤문하는 작업으로 교열은 문장 구조와 문법을 현대적이고 세련되게 다듬으며, 윤문은 표현과 스타일을 최적화하여 '내용'을 완성하는 작업입니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<단어장>과 <이전편집내용>을 보고 <현재편집전내용>을 교열, 윤문 과정을 통해 매우 부드럽고 세련되게 편집하여 <현재편집내용.json>을 완성해주세요.)\n\n",
+                    "InputMark": "<단어장>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재편집내용.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 전문 편집자 입니다. <단어장>과 <이전편집내용>을 보고 <현재편집전내용>을 교열, 윤문 과정을 통해 매우 부드럽고 세련되게 편집하여 <현재편집내용.json>을 완성해주세요."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재편집내용.json>의 구조 및 내용)\n",
+                    "Message": "{'편집내용': {'내용': '<현재편집전내용>을 교열, 윤문 과정을 통해 작성'}}"
+                },
+                {
+                    "Mark": "\n\n(<현재편집내용.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <현재편집전내용>은 도서 내용 중 현재 [목자체목]과 편집해야할 [편집전내용]이 작성되어 있습니다.\n2. <이전편집내용>을 참고해야 하는 이유는, 편집과정에서 도서 내용 전체의 어조, 어투, 맥락, 문맥, 표현을 일관성 있게 유지하기 위해서 입니다. 즉 <이전편집내용>과 <현재편집전내용>은 한 사람의 편집자가 작업한 결과물로 이어져야 합니다.\n3. <단어장>에 포함된 단어들은 글에서 고유한 성격을 지니고 있는 단어, 명사들로서 이는 글 전체의 내용을 일관성 있게 유지하기 위해서 최대한 변경하지 않습니다.\n4. 편집은 <현재편집전내용>을 보다 전문적인 편집자의 작업을 통해서 더욱 완성도가 높은 글로서 재탄생 하는 작업입니다.\n5. 편집은 <현재편집전내용>을 교열, 윤문하는 작업으로 교열은 문장 구조와 문법을 현대적이고 세련되게 다듬으며, 윤문은 표현과 스타일을 최적화하여 '내용'을 완성하는 작업입니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<단어장>과 <이전편집내용>을 보고 <현재편집전내용>을 교열, 윤문 과정을 통해 매우 부드럽고 세련되게 편집하여 <현재편집내용.json>을 완성해주세요.)\n\n",
+                    "InputMark": "<단어장>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재편집내용.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 전문 편집자 입니다. <단어장>과 <이전편집내용>을 보고 <현재편집전내용>을 교열, 윤문 과정을 통해 매우 부드럽고 세련되게 편집하여 <현재편집내용.json>을 완성해주세요."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재편집내용.json>의 구조 및 내용)\n",
+                    "Message": "{'편집내용': {'내용': '<현재편집전내용>을 교열, 윤문 과정을 통해 작성'}}"
+                },
+                {
+                    "Mark": "\n\n(<현재편집내용.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <현재편집전내용>은 도서 내용 중 현재 [목자체목]과 편집해야할 [편집전내용]이 작성되어 있습니다.\n2. <이전편집내용>을 참고해야 하는 이유는, 편집과정에서 도서 내용 전체의 어조, 어투, 맥락, 문맥, 표현을 일관성 있게 유지하기 위해서 입니다. 즉 <이전편집내용>과 <현재편집전내용>은 한 사람의 편집자가 작업한 결과물로 이어져야 합니다.\n3. <단어장>에 포함된 단어들은 글에서 고유한 성격을 지니고 있는 단어, 명사들로서 이는 글 전체의 내용을 일관성 있게 유지하기 위해서 최대한 변경하지 않습니다.\n4. 편집은 <현재편집전내용>을 보다 전문적인 편집자의 작업을 통해서 더욱 완성도가 높은 글로서 재탄생 하는 작업입니다.\n5. 편집은 <현재편집전내용>을 교열, 윤문하는 작업으로 교열은 문장 구조와 문법을 현대적이고 세련되게 다듬으며, 윤문은 표현과 스타일을 최적화하여 '내용'을 완성하는 작업입니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<단어장>과 <이전편집내용>을 보고 <현재편집전내용>을 교열, 윤문 과정을 통해 매우 부드럽고 세련되게 편집하여 <현재편집내용.json>을 완성해주세요.)\n\n",
+                    "InputMark": "<단어장>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재편집내용.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "나는 전문 편집자 입니다. <단어장>과 <이전편집내용>을 보고 <현재편집전내용>을 교열, 윤문 과정을 통해 매우 부드럽고 세련되게 편집하여 <현재편집내용.json>을 완성해주세요."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<현재편집내용.json>의 구조 및 내용)\n",
+                    "Message": "{'편집내용': {'내용': '<현재편집전내용>을 교열, 윤문 과정을 통해 작성'}}"
+                },
+                {
+                    "Mark": "\n\n(<현재편집내용.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <현재편집전내용>은 도서 내용 중 현재 [목자체목]과 편집해야할 [편집전내용]이 작성되어 있습니다.\n2. <이전편집내용>을 참고해야 하는 이유는, 편집과정에서 도서 내용 전체의 어조, 어투, 맥락, 문맥, 표현을 일관성 있게 유지하기 위해서 입니다. 즉 <이전편집내용>과 <현재편집전내용>은 한 사람의 편집자가 작업한 결과물로 이어져야 합니다.\n3. <단어장>에 포함된 단어들은 글에서 고유한 성격을 지니고 있는 단어, 명사들로서 이는 글 전체의 내용을 일관성 있게 유지하기 위해서 최대한 변경하지 않습니다.\n4. 편집은 <현재편집전내용>을 보다 전문적인 편집자의 작업을 통해서 더욱 완성도가 높은 글로서 재탄생 하는 작업입니다.\n5. 편집은 <현재편집전내용>을 교열, 윤문하는 작업으로 교열은 문장 구조와 문법을 현대적이고 세련되게 다듬으며, 윤문은 표현과 스타일을 최적화하여 '내용'을 완성하는 작업입니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<단어장>과 <이전편집내용>을 보고 <현재편집전내용>을 교열, 윤문 과정을 통해 매우 부드럽고 세련되게 편집하여 <현재편집내용.json>을 완성해주세요.)\n\n",
+                    "InputMark": "<단어장>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<현재편집내용.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

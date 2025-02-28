@@ -76,7 +76,7 @@ def YaasConfigUpdate(StartProjectName, MainLang, Estimate, DataCollection, Searc
                 }
 
         ### Step3-5 : ScriptConfig 설정 ###
-        if Script == [] or Script == [""] or Script == ["None"]:
+        if Script == "" or Script == "None":
             ScriptConfig = {}
         else:
             ScriptConfig = {"Script": Script}
@@ -91,7 +91,7 @@ def YaasConfigUpdate(StartProjectName, MainLang, Estimate, DataCollection, Searc
                 }
             
         ### Step3-7 : TextBookConfig 설정 ###
-        if TextBook == [] or TextBook == [""] or TextBook == ["None"]:
+        if TextBook == "" or TextBook == "None":
             TextBookConfig = {}
         else:
             TextBookConfig = {"TextBook": TextBook}
@@ -236,7 +236,7 @@ def YaaS(email, ProjectName, MainLang, EstimateConfig, DataCollectionConfig, Sea
     
     ### Step7 : Script 업데이트 ###
     if ScriptConfig != {}:
-        ScriptUpdate(email, ProjectName, ScriptConfig['Script'], SearchConfig['Intention'], MessagesReview)
+        ScriptUpdate(email, ProjectName, ScriptConfig['Script'], ScriptConfig['Intention'], MessagesReview)
     
     ### Step8 : Translation 업데이트 ###
     if TranslationConfig != {}:
@@ -336,7 +336,7 @@ if __name__ == "__main__":
     DataCollection = [] # [], 'Book', 'Meditation', 'Architect' ... 중 데이터 수집이 필요한 도메인을 다중 선택
     Search = {"Search": "", "Intention": "Similarity", "Collection": "Book"} # Search: "", Search: SearchTerm, Match: PublisherData_(Id) // # Intention: Demand, Supply, Similarity ... // Extension: Expertise, Ultimate, Detail, Rethink ... // Collection: Entire, Target, Trend, Publisher, Book ... // Range: 10-100
     Script = "" # ScriptUpload: '' // BookScriptGen: 'BookScript' // InstantScriptGen: 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 선택
-    Translation = "En" # '', 'En', 'Ja', 'Zh', 'Es' ... 중 원문언어를 선택
+    Translation = "En" # '', 'Auto', 'En', 'Ja', 'Zh', 'Es' ... 중 원문언어를 선택
     TextBook = "" # '', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
     AudioBook = "최한결(낭독)" # '', 'Auto', '클로닝성우이름', '성우이름(특성)' ... 중 선택
     Marketing = [] # [] 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택

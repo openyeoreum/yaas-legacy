@@ -60,6 +60,15 @@ def AddPromptToDB():
         scriptIntroductionGenFeedback = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-10_ScriptIntroductionGenFeedback.json")
         shortScriptGen = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-11_ShortScriptGen.json")
         shortScriptGenFeedback = LoadJsonFrame(PromptDataPath + "/b542_ScriptPrompt/b5422_BookScriptPrompt/b5423-12_ShortScriptGenFeedback.json")
+        # TranslationPrompt
+        translationIndexDefine = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-01_TranslationIndexDefine.json")
+        TranslationBodySummary = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-02_TranslationBodySummary.json")
+        WordListGen = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-03_WordListGen.json")
+        UniqueWordListGen = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-04_UniqueWordListGen.json")
+        WordListPostprocessing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-05_WordListPostprocessing.json")
+        IndexTranslation = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-06_IndexTranslation.json")
+        BodyTranslation = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-07_BodyTranslation.json")
+        TranslationEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-08_TranslationEditing.json")
         # TextBookPrompt
         # AudioBookPrompt
         bookPreprocess = LoadJsonFrame(PromptDataPath + "/b545_AudioBookPrompt/b5451_ScriptPrompt/b5451-00_BookPreprocess.json")
@@ -143,6 +152,14 @@ def AddPromptToDB():
             ExistingPrompt.ScriptIntroductionGenFeedback = scriptIntroductionGenFeedback
             ExistingPrompt.ShortScriptGen = shortScriptGen
             ExistingPrompt.ShortScriptGenFeedback = shortScriptGenFeedback
+            ExistingPrompt.TranslationIndexDefine = translationIndexDefine
+            ExistingPrompt.TranslationBodySummary = TranslationBodySummary
+            ExistingPrompt.WordListGen = WordListGen
+            ExistingPrompt.UniqueWordListGen = UniqueWordListGen
+            ExistingPrompt.WordListPostprocessing = WordListPostprocessing
+            ExistingPrompt.IndexTranslation = IndexTranslation
+            ExistingPrompt.BodyTranslation = BodyTranslation
+            ExistingPrompt.TranslationEditing = TranslationEditing
             ExistingPrompt.BookPreprocess = bookPreprocess
             ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
             ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
@@ -222,6 +239,14 @@ def AddPromptToDB():
                 ScriptIntroductionGenFeedback = scriptIntroductionGenFeedback,
                 ShortScriptGen = shortScriptGen,
                 ShortScriptGenFeedback = shortScriptGenFeedback,
+                TranslationIndexDefine = translationIndexDefine,
+                TranslationBodySummary = TranslationBodySummary,
+                WordListGen = WordListGen,
+                UniqueWordListGen = UniqueWordListGen,
+                WordListPostprocessing = WordListPostprocessing,
+                IndexTranslation = IndexTranslation,
+                BodyTranslation = BodyTranslation,
+                TranslationEditing = TranslationEditing,
                 BookPreprocess = bookPreprocess,
                 IndexDefinePreprocess = indexDefinePreprocess,
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,

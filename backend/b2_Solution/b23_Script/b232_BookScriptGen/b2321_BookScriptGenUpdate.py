@@ -150,6 +150,7 @@ def EditToTitleAndIndexGenInputList(ScriptEditPath, BeforeProcess):
         Input = f"[배경]\n{Background}\n\n[주제]\n{Subject}\n\n[범위]\n{Range}\n\n[개념키워드]\n{', '.join(ConceptKeyword)}\n\n[독자키워드]\n{', '.join(TargetKeyword)}\n\n[글이전해줄핵심가치]\n{SupplyValueSentence}\n\n[글이전해줄핵심가치-키워드]\n{', '.join(SupplyValueKeyword)}\n\n[글이전해줄핵심포인트들]\n{SupplyPointSentence}\n\n[글이전해줄핵심포인트들-키워드]\n{', '.join(SupplyPointKeyword)}\n\n[글이전해줄핵심비전]\n{SupplyVisionSentence}\n\n[글이전해줄핵심비전-키워드]\n{', '.join(SupplyVisionKeyword)}"
         
         InputList.append({'Id':InputId, 'Input': Input})
+        InputId += 1
     
     return InputList
 

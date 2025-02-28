@@ -1,0 +1,18 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "Book",
+        "MainLang": "Ko",
+        "Translation": "",
+        "TaskName": "TranslationBodySummary",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "BodyId": 0,
+            "BodySummary": "None"
+        }
+    ]
+
+]

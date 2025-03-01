@@ -87,7 +87,8 @@ def YaasConfigUpdate(StartProjectName, MainLang, Estimate, DataCollection, Searc
         else:
             TranslationConfig = {
                 "MainLang": MainLang,
-                "Translation": Translation
+                "Translation": Translation,
+                "EditMode": "Auto"
                 }
             
         ### Step3-7 : TextBookConfig 설정 ###
@@ -194,10 +195,10 @@ def ScriptUpdate(email, ProjectName, Script, Intention, MessagesReview):
     SolutionScriptUpdate(ProjectName, email, Script, Intention, MessagesReview)
 
 ### Step8 : Translation 업데이트 ###
-def TranslationUpdate(email, ProjectName, MainLang, Translation, MessagesReview):
+def TranslationUpdate(email, ProjectName, MainLang, Translation, EditMode, MessagesReview):
     
     ### Step8-1 : Translation 번역 ###
-    SolutionTranslationUpdate(ProjectName, email, MainLang, Translation, MessagesReview)
+    SolutionTranslationUpdate(ProjectName, email, MainLang, Translation, EditMode, MessagesReview)
 
 ### Step9 : TextBook 업데이트 ###
 
@@ -240,7 +241,7 @@ def YaaS(email, ProjectName, MainLang, EstimateConfig, DataCollectionConfig, Sea
     
     ### Step8 : Translation 업데이트 ###
     if TranslationConfig != {}:
-        TranslationUpdate(email, ProjectName, TranslationConfig['MainLang'], TranslationConfig['Translation'], MessagesReview)
+        TranslationUpdate(email, ProjectName, TranslationConfig['MainLang'], TranslationConfig['Translation'], TranslationConfig['EditMode'], MessagesReview)
         
     ### Step9 : TextBook 업데이트 ###
     if TextBookConfig != {}:

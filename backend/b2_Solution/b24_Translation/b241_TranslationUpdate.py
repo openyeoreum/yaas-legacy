@@ -27,10 +27,10 @@ def LoadTranslationIndex(projectName, UploadTranslationFilePath):
     return TranslationIndex
 
 ## Load2: TranslationSplitBody 불러오기
-def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, TranslationEditPath, Process, MaxLength):
+def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess):
     # TranslationIndex 불러오기
     with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
-        TranslationIndex = json.load(TranslationEditJson)[Process]
+        TranslationIndex = json.load(TranslationEditJson)[BeforeProcess]
     # TranslationBody 경로 설정
     TranslationBodyFileName = f"{projectName}_Body(Translation).txt"
     TranslationBodyFilePath = os.path.join(UploadTranslationFilePath, TranslationBodyFileName)
@@ -41,7 +41,16 @@ def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, Translation
             TranslationBody = TranslationBodyFile.read()
     else:
         sys.exit(f"\n\n[ ((({projectName}_Index(Translation).txt))), ((({projectName}_Body(Translation).txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({UploadTranslationFilePath})\n\n1. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n3. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차는 <제목>의 형태로 괄호처리 권장\n3. 본문((_Body(Translation)))파일 내 쌍따옴표(“대화문”의 완성) 개수 일치\n\n")
+        
+    return TranslationIndex, TranslationBody, TranslationBodyFilePath
 
+########################################
+##### TranslationBodySplit Process #####
+########################################
+## Process1: TranslationBodySplit Process
+def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess, MaxLength):
+    TranslationIndex, TranslationBody, TranslationBodyFilePath = LoadTranslationSplitBody(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess)
+    
     ## Load2-1: BodyLines과 TranslationIndex 위치 찾기
     BodyLines = TranslationBody.splitlines()
     IndexPositions = []
@@ -118,7 +127,7 @@ def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, Translation
     else:
         sys.exit(f"TranslationSplitBody 길이 불일치 오류 발생: Project: {projectName} | Process: TranslationBodySplit | SplitBodyLengthError\n[ 분할 전후 텍스트 수가 다름 (분할전: {OriginalCount} != 분할후: {SplitCount}) ]")
 
-## Load2: MaxLength 이상인 경우 분할
+## MaxLength 이상인 경우 분할 함수
 def SplitBySentence(SectionText, MaxLength):
     # Define sentence delimiters
     SentenceDelimiters = ['. ', '! ', '? ', '.\n', '!\n', '?\n']
@@ -195,7 +204,6 @@ def LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath):
         Translation = TranslationIndexDefine['Translation']
         
     return Translation
-    
 
 #####################
 ##### Input 생성 #####
@@ -296,6 +304,23 @@ def TranslationBodySummaryAddInput(ProjectDataFrameTranslationBodySummaryPath, T
     
     
     return AddInput
+
+## Process3,4: WordListGen의 InputList
+def WordListGenInputList(TranslationEditPath, BeforeProcess):
+    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+        TranslationEditList = json.load(TranslationEditJson)[BeforeProcess]
+        
+    InputId = 1
+    InputList = []
+    for i, TranslationEdit in enumerate(TranslationEditList):
+        Body = TranslationEdit['Body']
+        
+        Input = f"[원문내용]\n{Body}\n\n"
+        
+        InputList.append({"Id": InputId, "Input": Input})
+        InputId += 1
+        
+    return InputList
 
 ######################
 ##### Filter 조건 #####
@@ -742,11 +767,85 @@ def TranslationBodySummaryProcessDataFrameSave(ProjectName, MainLang, Translatio
     with open(ProjectDataFrameTranslationBodySummaryPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TranslationBodySummaryFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
+## Process3: WordListGenProcess DataFrame 저장
+def WordListGenProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, WordListGenResponse, Process, InputCount, TotalInputCount):
+    ## WordListGenGenFrame 불러오기
+    if os.path.exists(ProjectDataFrameWordListGenPath):
+        WordListGenFramePath = ProjectDataFrameWordListGenPath
+    else:
+        WordListGenFramePath = os.path.join(TranslationDataFramePath, "b532-03_WordListGenFrame.json")
+    with open(WordListGenFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        WordListGenFrame = json.load(DataFrameJson)
+        
+    ## WordListGenFrame 업데이트
+    WordListGenFrame[0]['ProjectName'] = ProjectName
+    WordListGenFrame[0]['MainLang'] = MainLang.capitalize()
+    WordListGenFrame[0]['Translation'] = Translation.capitalize()
+    WordListGenFrame[0]['TaskName'] = Process
+    
+    for Response in WordListGenResponse:
+        ## WordListGenFrame 첫번째 데이터 프레임 복사
+        WordListGen = WordListGenFrame[1][0].copy()
+        WordListGen['BodyId'] = InputCount
+        WordListGen['WordId'] = Response['번호']
+        WordListGen['Word'] = Response['원문']
+        WordListGen['Translation'] = Response['번역']
+        WordListGen['Reason'] = Response['선택이유']
+
+        ## WordListGenFrame 데이터 프레임 업데이트
+        WordListGenFrame[1].append(WordListGen)
+        
+    ## WordListGenFrame ProcessCount 및 Completion 업데이트
+    WordListGenFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        WordListGenFrame[0]['Completion'] = 'Yes'
+        
+    ## WordListGenFrame 저장
+    with open(ProjectDataFrameWordListGenPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(WordListGenFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+        
+## Process4: UniqueWordListGenProcess DataFrame 저장
+def UniqueWordListGenProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, WordListGenResponse, Process, InputCount, TotalInputCount):
+    ## WordListGenGenFrame 불러오기
+    if os.path.exists(ProjectDataFrameWordListGenPath):
+        WordListGenFramePath = ProjectDataFrameWordListGenPath
+    else:
+        WordListGenFramePath = os.path.join(TranslationDataFramePath, "b532-04_UniqueWordListGenFrame.json")
+    with open(WordListGenFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        WordListGenFrame = json.load(DataFrameJson)
+        
+    ## WordListGenFrame 업데이트
+    WordListGenFrame[0]['ProjectName'] = ProjectName
+    WordListGenFrame[0]['MainLang'] = MainLang.capitalize()
+    WordListGenFrame[0]['Translation'] = Translation.capitalize()
+    WordListGenFrame[0]['TaskName'] = Process
+    
+    for Response in WordListGenResponse:
+        ## WordListGenFrame 첫번째 데이터 프레임 복사
+        WordListGen = WordListGenFrame[1][0].copy()
+        WordListGen['BodyId'] = InputCount
+        WordListGen['WordId'] = Response['번호']
+        WordListGen['Word'] = Response['원문']
+        WordListGen['Translation'] = Response['번역']
+        WordListGen['Reason'] = Response['선택이유']
+
+        ## WordListGenFrame 데이터 프레임 업데이트
+        WordListGenFrame[1].append(WordListGen)
+        
+    ## WordListGenFrame ProcessCount 및 Completion 업데이트
+    WordListGenFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        WordListGenFrame[0]['Completion'] = 'Yes'
+        
+    ## WordListGenFrame 저장
+    with open(ProjectDataFrameWordListGenPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(WordListGenFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
 ##############################
 ##### ProcessEdit 업데이트 #####
 ##############################
 ## Process Edit 저장
-def ProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process):
+def ProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process, EditMode):
     ## TranslationDataFrame 불러온 뒤 Completion 확인
     with open(ProjectDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationDataFrame = json.load(DataFrameJson)
@@ -761,7 +860,10 @@ def ProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process):
             TranslationEdit = {}
         ## TranslationEdit 업데이트
         TranslationEdit[Process] = []
-        TranslationEdit[f"{Process}Completion"] = '완료 후 Completion'
+        if EditMode == "Manual":
+            TranslationEdit[f"{Process}Completion"] = '완료 후 Completion'
+        elif EditMode == "Auto":
+            TranslationEdit[f"{Process}Completion"] = 'Completion'
         TranslationDataList = TranslationDataFrame[1]
         for i in range(1, len(TranslationDataList)):
             ProcessDic = TranslationDataList[i]
@@ -797,7 +899,7 @@ def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process)
                 json.dump(TranslationEdit, TranslationEditJson, indent = 4, ensure_ascii = False)
 
 ## Process Edit Prompt 확인
-def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumProcesses = 1):
+def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumProcesses = 1, OutputCountKey = None):
     ## EditCheck
     EditCheck = False
     EditCompletion = False
@@ -816,12 +918,20 @@ def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumPro
                     EditCompletion = True
         
         else:
-            if Process in TranslationEdit and len(TranslationEdit[Process]) == TotalInputCount * NumProcesses:
-                EditCheck = True
+            if OutputCountKey:
+                if Process in TranslationEdit and TranslationEdit[Process][-1][OutputCountKey] == TotalInputCount * NumProcesses:
+                    EditCheck = True
 
-                ## 'ProcessCompletion' 확인
-                if TranslationEdit[f"{Process}Completion"] == 'Completion':
-                    EditCompletion = True
+                    ## 'ProcessCompletion' 확인
+                    if TranslationEdit[f"{Process}Completion"] == 'Completion':
+                        EditCompletion = True
+            else:
+                if Process in TranslationEdit and len(TranslationEdit[Process]) == TotalInputCount * NumProcesses:
+                    EditCheck = True
+
+                    ## 'ProcessCompletion' 확인
+                    if TranslationEdit[f"{Process}Completion"] == 'Completion':
+                        EditCompletion = True
         
     return EditCheck, EditCompletion
 
@@ -829,7 +939,7 @@ def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumPro
 ##### Process 진행 및 업데이트 #####
 ################################
 ## Translation 프롬프트 요청 및 결과물 Json화
-def TranslationProcessUpdate(projectName, email, MainLang, Translation, mode = "Master", MessagesReview = "on"):
+def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode, mode = "Master", MessagesReview = "on"):
     print(f"< User: {email} | Translation: {projectName} ({Translation}) >>> ({MainLang}) | TranslationUpdate 시작 >")
     ## projectName_translation 경로 설정
     ProjectTranslationPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_translation"
@@ -875,13 +985,15 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, mode = "
                 TranslationIndexDefineProcessDataFrameSave(projectName, MainLang, TranslationDataFramePath, ProjectDataFrameTranslationIndexDefinePath, TranslationIndexDefineResponse, Process, inputCount, TotalInputCount)
 
         ## Edit 저장
-        ProcessEditSave(ProjectDataFrameTranslationIndexDefinePath, TranslationEditPath, Process)
-        sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+        ProcessEditSave(ProjectDataFrameTranslationIndexDefinePath, TranslationEditPath, Process, EditMode)
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
-    if EditCheck:
-        if not EditCompletion:
-            ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-            sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
     ## 최종 설정된 Translation 불러오기 및 MainLangCode, TranslationLangCode 설정
     Translation = LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath)
@@ -899,7 +1011,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, mode = "
     ProjectDataFrameTranslationBodySplitPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
     ## Result 생성
-    TranslationBodySplitResult = LoadTranslationSplitBody(projectName, UploadTranslationFilePath, TranslationEditPath, "TranslationIndexDefine", 4000)
+    TranslationBodySplitResult = TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, "TranslationIndexDefine", 4000)
     
     ## DataFrame 저장
     TranslationBodySplitProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationBodySplitPath, TranslationBodySplitResult, Process, len(TranslationBodySplitResult), len(TranslationBodySplitResult))
@@ -949,17 +1061,105 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, mode = "
                 TranslationBodySummaryProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationBodySummaryPath, TranslationBodySummaryResponse, Process, inputCount, TotalInputCount)
                 
         ## Edit 저장
-        ProcessEditSave(ProjectDataFrameTranslationBodySummaryPath, TranslationEditPath, Process)
-        sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
-        
-    if EditCheck:
-        if not EditCompletion:
-            ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-            sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+        ProcessEditSave(ProjectDataFrameTranslationBodySummaryPath, TranslationEditPath, Process, EditMode)
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+    
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
-    ####################################################
-    ### Process3: TranslationBodySummary Response 생성 ##
-    ####################################################
+    #########################################
+    ### Process3: WordListGen Response 생성 ##
+    #########################################
+    
+    ## Process 설정
+    ProcessNumber = '03'
+    Process = "WordListGen"
+
+    ## WordListGen 경로 생성
+    ProjectDataFrameWordListGenPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = WordListGenInputList(TranslationEditPath, "TranslationBodySplit")
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameWordListGenPath)
+    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, OutputCountKey = 'BodyId')
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList[i]['Id']
+                Input = InputList[i]['Input']
+                
+                ## Response 생성
+                WordListGenResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, WordListGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## DataFrame 저장
+                WordListGenProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, WordListGenResponse, Process, inputCount, TotalInputCount)
+                
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameWordListGenPath, TranslationEditPath, Process, EditMode)
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+    
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
+    ###############################################
+    ### Process4: UniqueWordListGen Response 생성 ##
+    ###############################################
+    
+    ## Process 설정
+    ProcessNumber = '04'
+    Process = "UniqueWordListGen"
+
+    ## UniqueWordListGen 경로 생성
+    ProjectDataFrameUniqueWordListGenPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = WordListGenInputList(TranslationEditPath, "TranslationBodySplit")
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameUniqueWordListGenPath)
+    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, OutputCountKey = 'BodyId')
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList[i]['Id']
+                Input = InputList[i]['Input']
+                
+                ## Response 생성
+                UniqueWordListGenResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, UniqueWordListGenFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## DataFrame 저장
+                UniqueWordListGenProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameUniqueWordListGenPath, UniqueWordListGenResponse, Process, inputCount, TotalInputCount)
+                
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameUniqueWordListGenPath, TranslationEditPath, Process, EditMode)
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+    
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
     sys.exit("\n\n여기까지 완료!")
 

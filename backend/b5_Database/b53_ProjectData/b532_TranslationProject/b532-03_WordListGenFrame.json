@@ -1,0 +1,21 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "Book",
+        "MainLang": "Ko",
+        "Translation": "",
+        "TaskName": "WordListGen",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "BodyId": 0,
+            "WordId": 0,
+            "Word": "None",
+            "Translation": "None",
+            "Reason": "None"
+        }
+    ]
+
+]

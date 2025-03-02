@@ -306,7 +306,7 @@ def TranslationBodySummaryAddInput(ProjectDataFrameTranslationBodySummaryPath, T
     return AddInput
 
 ## Process3,4: WordListGen의 InputList
-def WordListGenInputList(TranslationEditPath, BeforeProcess):
+def WordListGenInputList(TranslationEditPath, MainLangCode, TranslationLangCode, BeforeProcess):
     with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
         TranslationEditList = json.load(TranslationEditJson)[BeforeProcess]
         
@@ -315,9 +315,91 @@ def WordListGenInputList(TranslationEditPath, BeforeProcess):
     for i, TranslationEdit in enumerate(TranslationEditList):
         Body = TranslationEdit['Body']
         
-        Input = f"[원문내용]\n{Body}\n\n"
+        Input = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n[원문내용]\n{Body}\n\n"
         
         InputList.append({"Id": InputId, "Input": Input})
+        InputId += 1
+        
+    return InputList
+
+## Process5: WordListPostprocessing의 InputList
+def WordListPostprocessingInputList(TranslationEditPath, MainLangCode, TranslationLangCode, BeforeProcess1, BeforeProcess2, BeforeProcess3):
+## OrganizedBodyList 함수
+    def OrganizedBodyListGen(WordList, BodyList):
+        # 1. 동일한 Word별로 모아 중복 Translation 제거
+        OrganizedWordDict = {}
+
+        for WordIDic in WordList:
+            word = WordIDic['Word']
+            translation = WordIDic['Translation']
+
+            if word not in OrganizedWordDict:
+                OrganizedWordDict[word] = []
+
+            if translation not in OrganizedWordDict[word]:
+                OrganizedWordDict[word].append(translation)
+
+        # 딕셔너리를 리스트 형태로 변환
+        OrganizedWordList = [{'Word': word, 'Translation': translations} 
+                            for word, translations in OrganizedWordDict.items()]
+
+        # 2. 각 Body에 포함된 단어 찾기
+        OrganizedBodyList = []
+
+        for BodyDic in BodyList:
+            BodyId = BodyDic['BodyId']
+            Body = BodyDic['Body']
+
+            # 이 Body에 포함된 단어 찾기 및 등장 위치 기록
+            WordPositions = []
+
+            for wordDic in OrganizedWordList:
+                word = wordDic['Word']
+
+                # 단어가 문단에 포함되어 있는지 확인
+                position = Body.find(word)
+                if position != -1:
+                    WordPositions.append({'Word': word, 'Translation': wordDic['Translation'], 'Position': position})
+
+            # 등장 위치에 따라 정렬
+            WordPositions.sort(key=lambda x: x['Position'])
+
+            # Position 정보 제거 후 최종 리스트 생성
+            IncludedWords = [{
+                'Word': item['Word'],
+                'Translation': item['Translation']
+            } for item in WordPositions]
+
+            # 포함된 단어가 있는 경우만 결과에 추가
+            if IncludedWords:
+                OrganizedBodyList.append({'BodyId': BodyId, 'Body': Body, 'OrganizedWordList': IncludedWords})
+
+        return OrganizedBodyList
+    
+    ## BodyList, WordList 불러오기
+    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+        TranslationEditList = json.load(TranslationEditJson)
+    BodyList = TranslationEditList[BeforeProcess1]
+    WordList = TranslationEditList[BeforeProcess2] + TranslationEditList[BeforeProcess3]
+    OrganizedBodyList = OrganizedBodyListGen(WordList, BodyList)
+    
+    ## TranslationIndexDefineFrame 저장
+    with open('/yaas/OrganizedBodyList.json', 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(OrganizedBodyList, DataFrameJson, indent = 4, ensure_ascii = False)
+    
+    InputId = 1
+    InputList = []
+    for i, OrganizedDic in enumerate(OrganizedBodyList):
+        Body = OrganizedDic['Body']
+        WordsText = ''
+        for j, WordDic in enumerate(OrganizedDic['OrganizedWordList']):
+            Word = WordDic['Word']
+            Translation = WordDic['Translation']
+            WordsText += f"[번호] {j+1}\n[원문] {Word}\n[번역] {', '.join(Translation)}\n\n"
+        
+        Input = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n[원문내용]\n{Body}\n\n\n<단어장>\n{WordsText}\n"
+        
+        InputList.append({"Id": InputId, "Input": Input, "InputLength": len(OrganizedDic['OrganizedWordList'])})
         InputId += 1
         
     return InputList
@@ -506,13 +588,17 @@ def WordListPostprocessingFilter(Response, CheckCount):
     if not isinstance(OutputDic['정리된단어장'], list):
         return "WordListPostprocessing, JSON에서 오류 발생: '정리된단어장'은 리스트 형태여야 합니다"
 
+    # Error4: '정리된단어장' 데이터 수 확인
+    if len(OutputDic['정리된단어장']) != CheckCount:
+        return f"WordListPostprocessing, JSON에서 오류 발생: '정리된단어장' 데이터 수가 ((기존단어장: {CheckCount})) ((정리된단어장: {len(OutputDic['정리된단어장'])})) 다릅니다"
+    
     for idx, item in enumerate(OutputDic['정리된단어장']):
         # 각 항목이 딕셔너리인지 확인
         if not isinstance(item, dict):
             return f"WordListPostprocessing, JSON에서 오류 발생: '정리된단어장[{idx}]'는 딕셔너리 형태여야 합니다"
 
         # 필수 키 확인
-        required_keys = ['번호', '원문', '번역', '선택이유']
+        required_keys = ['번호', '원문', '번역', '정리방법']
         missing_keys = [key for key in required_keys if key not in item]
         if missing_keys:
             return f"WordListPostprocessing, JSONKeyError: '정리된단어장[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
@@ -527,11 +613,12 @@ def WordListPostprocessingFilter(Response, CheckCount):
         if not isinstance(item['번역'], str):
             return f"WordListPostprocessing, JSON에서 오류 발생: '정리된단어장[{idx}] > 번역'은 문자열이어야 합니다"
 
-        if not isinstance(item['선택이유'], str):
-            return f"WordListPostprocessing, JSON에서 오류 발생: '정리된단어장[{idx}] > 선택이유'는 문자열이어야 합니다"
+        if item['정리방법'] not in ['적합', '삭제', '선택', '수정']:
+            return f"WordListPostprocessing, JSON에서 오류 발생: '정리된단어장[{idx}] > 정리방법'은 '적합', '삭제', '선택', '수정' 중 하나여야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['정리된단어장']
+
 
 ## Process6: IndexTranslation의 Filter(Error 예외처리)
 def IndexTranslationFilter(Response, CheckCount):
@@ -841,6 +928,43 @@ def UniqueWordListGenProcessDataFrameSave(ProjectName, MainLang, Translation, Tr
     with open(ProjectDataFrameWordListGenPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(WordListGenFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
+## Process5: WordListPostprocessingProcess DataFrame 저장
+def WordListPostprocessingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, WordListGenResponse, Process, InputCount, TotalInputCount):
+    ## WordListGenGenFrame 불러오기
+    if os.path.exists(ProjectDataFrameWordListGenPath):
+        WordListGenFramePath = ProjectDataFrameWordListGenPath
+    else:
+        WordListGenFramePath = os.path.join(TranslationDataFramePath, "b532-05_WordListPostprocessingFrame.json")
+    with open(WordListGenFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        WordListGenFrame = json.load(DataFrameJson)
+        
+    ## WordListGenFrame 업데이트
+    WordListGenFrame[0]['ProjectName'] = ProjectName
+    WordListGenFrame[0]['MainLang'] = MainLang.capitalize()
+    WordListGenFrame[0]['Translation'] = Translation.capitalize()
+    WordListGenFrame[0]['TaskName'] = Process
+    
+    for Response in WordListGenResponse:
+        ## WordListGenFrame 첫번째 데이터 프레임 복사
+        WordListGen = WordListGenFrame[1][0].copy()
+        WordListGen['BodyId'] = InputCount
+        WordListGen['WordId'] = Response['번호']
+        WordListGen['Word'] = Response['원문']
+        WordListGen['Translation'] = Response['번역']
+        WordListGen['Processing'] = Response['정리방법']
+
+        ## WordListGenFrame 데이터 프레임 업데이트
+        WordListGenFrame[1].append(WordListGen)
+        
+    ## WordListGenFrame ProcessCount 및 Completion 업데이트
+    WordListGenFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        WordListGenFrame[0]['Completion'] = 'Yes'
+        
+    ## WordListGenFrame 저장
+    with open(ProjectDataFrameWordListGenPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(WordListGenFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
 ##############################
 ##### ProcessEdit 업데이트 #####
 ##############################
@@ -916,7 +1040,6 @@ def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumPro
                 ## 'ProcessCompletion' 확인
                 if TranslationEdit[f"{Process}Completion"] == 'Completion':
                     EditCompletion = True
-        
         else:
             if OutputCountKey:
                 if Process in TranslationEdit and TranslationEdit[Process][-1][OutputCountKey] == TotalInputCount * NumProcesses:
@@ -1084,7 +1207,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
 
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = WordListGenInputList(TranslationEditPath, "TranslationBodySplit")
+    InputList = WordListGenInputList(TranslationEditPath, MainLangCode, TranslationLangCode, "TranslationBodySplit")
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameWordListGenPath)
     EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, OutputCountKey = 'BodyId')
@@ -1129,7 +1252,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
 
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = WordListGenInputList(TranslationEditPath, "TranslationBodySplit")
+    InputList = WordListGenInputList(TranslationEditPath, MainLangCode, TranslationLangCode, "TranslationBodySplit")
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameUniqueWordListGenPath)
     EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, OutputCountKey = 'BodyId')
@@ -1161,7 +1284,62 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
-    sys.exit("\n\n여기까지 완료!")
+    ####################################################
+    ### Process5: WordListPostprocessing Response 생성 ##
+    ####################################################
+    
+    ## Process 설정
+    ProcessNumber = '05'
+    Process = "WordListPostprocessing"
+
+    ## WordListPostprocessing 경로 생성
+    ProjectDataFrameWordListPostprocessingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = WordListPostprocessingInputList(TranslationEditPath, MainLangCode, TranslationLangCode, "TranslationBodySplit", "WordListGen", "UniqueWordListGen")
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameWordListPostprocessingPath)
+    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, OutputCountKey = 'BodyId')
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList[i]['Id']
+                Input = InputList[i]['Input']
+                CheckCount = InputList[i]['InputLength']
+                
+                ## Response 생성
+                WordListPostprocessingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, WordListPostprocessingFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## DataFrame 저장
+                WordListPostprocessingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListPostprocessingPath, WordListPostprocessingResponse, Process, inputCount, TotalInputCount)
+                
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameWordListPostprocessingPath, TranslationEditPath, Process, EditMode)
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+    
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
+    ####################################################
+    ### Process6: WordListPostprocessing Response 생성 ##
+    ####################################################
+    
+    ## Process 설정
+    ProcessNumber = '06'
+    Process = "WordListPostprocessing"
+
+    ## WordListPostprocessing 경로 생성
+    ProjectDataFrameWordListPostprocessingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
 if __name__ == "__main__":
     

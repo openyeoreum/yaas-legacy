@@ -4,17 +4,16 @@
         "Content": "Book",
         "MainLang": "Ko",
         "Translation": "",
-        "TaskName": "UniqueWordListGen",
+        "TaskName": "IndexTranslation",
         "InputCount": 0,
         "Completion": "No"
     },
     [
         {
             "IndexId": 0,
-            "BodyId": 0,
-            "WordId": 0,
-            "Word": "None",
-            "Translation": "None",
+            "Index": "None",
+            "IndexTag": "None",
+            "IndexTranslation": "None",
             "Reason": "None"
         }
     ]

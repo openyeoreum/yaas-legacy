@@ -414,21 +414,27 @@ def IndexTranslationInputList(TranslationEditPath, BeforeProcess1, BeforeProcess
         TranslationEditList = json.load(TranslationEditJson)
     TranslationIndexDefine = TranslationEditList[BeforeProcess1]
     TranslationBodySummary = TranslationEditList[BeforeProcess2]
-        
+    
+    ## 전체목차원문 생성
+    IndexText = ''
+    for i, TranslationIndex in enumerate(TranslationIndexDefine):
+        IndexTag = TranslationIndex['IndexTag']
+        Index = TranslationIndex['Index']
+        IndexText += f"{IndexTag}: {Index}\n"
+    
+    ## InputList 생성
     InputId = 1
     InputList = []
-    IndexText = ''
     for i, TranslationIndex in enumerate(TranslationIndexDefine):
         IndexId = TranslationIndex['IndexId']
         IndexTag = TranslationIndex['IndexTag']
         Index = TranslationIndex['Index']
-        IndexText += f"{IndexTag}: {Index}\n"
         BodySummary = ''
         for TranslationBody in TranslationBodySummary:
-            if TranslationBody['IndexId'] == Index['IndexId']:
+            if TranslationBody['IndexId'] == TranslationIndex['IndexId']:
                 BodySummary += TranslationBody['BodySummary']
         
-        Input = f"[현재목차원문]\n{Index}\n\n[원문본문내용요약]\n{BodySummary}\n\n"
+        Input = f"<현재목차정보>\n[현재목차원문]\n{Index}\n\n[원문본문내용요약]\n{BodySummary}\n\n"
         
         InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "IndexText": IndexText, "Input": Input})
         InputId += 1
@@ -439,14 +445,14 @@ def IndexTranslationInputList(TranslationEditPath, BeforeProcess1, BeforeProcess
 def IndexTranslationAddInput(ProjectDataFrameIndexTranslationPath, IndexText, MainLangCode, TranslationLangCode):
     if os.path.exists(ProjectDataFrameIndexTranslationPath):
         with open(ProjectDataFrameIndexTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
-            IndexTranslation = json.load(TranslationDataFrame)[1]
+            IndexTranslation = json.load(TranslationDataFrame)[1][1:]
         IndexTranslationText = ''
         for IndexTranslationDic in IndexTranslation:
-            IndexTranslationText += f"{IndexTranslationDic['IndexTag']}: {IndexTranslationDic['Translation']}\n"
-        AddInput = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n\n[전체목차원문]\n{IndexText}\n\n[현재까지번역된목차]\n{IndexTranslationText}\n\n"
+            IndexTranslationText += f"{IndexTranslationDic['IndexTag']}: {IndexTranslationDic['IndexTranslation']}\n"
+        AddInput = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n\n[전체목차원문]\n{IndexText}\n\n[현재까지번역된목차]\n{IndexTranslationText}\n\n\n"
     
     else:
-        AddInput = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n\n[전체목차원문]\n{IndexText}\n\n[현재까지번역된목차]\nNone\n\n"
+        AddInput = f"※ 첫번째 Title 번역은 도서에서 가장 중요함으로, 목차 내용의 전체를 포괄하며, 핵심적이면서도 현대의 사람들이 도서에 큰 관심을 보일 수 있도록 창의적이고 후킹이 강하도록 번역해주세요.\n\n[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n\n[전체목차원문]\n{IndexText}\n\n[현재까지번역된목차]\nNone\n\n\n"
 
     return AddInput
 
@@ -807,7 +813,7 @@ def ProcessDataFrameCheck(ProjectDataFramePath):
 
 ## Process1: TranslationIndexDefineProcess DataFrame 저장
 def TranslationIndexDefineProcessDataFrameSave(ProjectName, MainLang, TranslationDataFramePath, ProjectDataFrameTranslationIndexDefinePath, TranslationIndexDefineResponse, Process, InputCount, TotalInputCount):
-    ## TranslationIndexDefineGenFrame 불러오기
+    ## TranslationIndexDefineFrame 불러오기
     if os.path.exists(ProjectDataFrameTranslationIndexDefinePath):
         TranslationIndexDefineFramePath = ProjectDataFrameTranslationIndexDefinePath
     else:
@@ -842,7 +848,7 @@ def TranslationIndexDefineProcessDataFrameSave(ProjectName, MainLang, Translatio
         
 ## Process1: TranslationBodySplitProcess DataFrame 저장
 def TranslationBodySplitProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationBodySplitPath, TranslationBodySplitResult, Process, InputCount, TotalInputCount):
-    ## TranslationBodySplitGenFrame 불러오기
+    ## TranslationBodySplitFrame 불러오기
     if not os.path.exists(ProjectDataFrameTranslationBodySplitPath):
         TranslationBodySplitFramePath = os.path.join(TranslationDataFramePath, "b532-01_TranslationBodySplitFrame.json")
         with open(TranslationBodySplitFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
@@ -868,7 +874,7 @@ def TranslationBodySplitProcessDataFrameSave(ProjectName, MainLang, Translation,
 
 ## Process2: TranslationBodySummaryProcess DataFrame 저장
 def TranslationBodySummaryProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationBodySummaryPath, TranslationBodySummaryResponse, Process, InputCount, IndexId, TotalInputCount):
-    ## TranslationBodySummaryGenFrame 불러오기
+    ## TranslationBodySummaryFrame 불러오기
     if os.path.exists(ProjectDataFrameTranslationBodySummaryPath):
         TranslationBodySummaryFramePath = ProjectDataFrameTranslationBodySummaryPath
     else:
@@ -903,7 +909,7 @@ def TranslationBodySummaryProcessDataFrameSave(ProjectName, MainLang, Translatio
 
 ## Process3: WordListGenProcess DataFrame 저장
 def WordListGenProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, WordListGenResponse, Process, InputCount, IndexId, TotalInputCount):
-    ## WordListGenGenFrame 불러오기
+    ## WordListGenFrame 불러오기
     if os.path.exists(ProjectDataFrameWordListGenPath):
         WordListGenFramePath = ProjectDataFrameWordListGenPath
     else:
@@ -940,80 +946,117 @@ def WordListGenProcessDataFrameSave(ProjectName, MainLang, Translation, Translat
         json.dump(WordListGenFrame, DataFrameJson, indent = 4, ensure_ascii = False)
         
 ## Process4: UniqueWordListGenProcess DataFrame 저장
-def UniqueWordListGenProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, WordListGenResponse, Process, InputCount, IndexId, TotalInputCount):
-    ## WordListGenGenFrame 불러오기
-    if os.path.exists(ProjectDataFrameWordListGenPath):
-        WordListGenFramePath = ProjectDataFrameWordListGenPath
+def UniqueWordListGenProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameUniqueWordListGenPath, UniqueWordListGenResponse, Process, InputCount, IndexId, TotalInputCount):
+    ## UniqueWordListGenFrame 불러오기
+    if os.path.exists(ProjectDataFrameUniqueWordListGenPath):
+        UniqueWordListGenFramePath = ProjectDataFrameUniqueWordListGenPath
     else:
-        WordListGenFramePath = os.path.join(TranslationDataFramePath, "b532-04_UniqueWordListGenFrame.json")
-    with open(WordListGenFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
-        WordListGenFrame = json.load(DataFrameJson)
+        UniqueWordListGenFramePath = os.path.join(TranslationDataFramePath, "b532-04_UniqueWordListGenFrame.json")
+    with open(UniqueWordListGenFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        UniqueWordListGenFrame = json.load(DataFrameJson)
         
-    ## WordListGenFrame 업데이트
-    WordListGenFrame[0]['ProjectName'] = ProjectName
-    WordListGenFrame[0]['MainLang'] = MainLang.capitalize()
-    WordListGenFrame[0]['Translation'] = Translation.capitalize()
-    WordListGenFrame[0]['TaskName'] = Process
+    ## UniqueWordListGenFrame 업데이트
+    UniqueWordListGenFrame[0]['ProjectName'] = ProjectName
+    UniqueWordListGenFrame[0]['MainLang'] = MainLang.capitalize()
+    UniqueWordListGenFrame[0]['Translation'] = Translation.capitalize()
+    UniqueWordListGenFrame[0]['TaskName'] = Process
     
-    for Response in WordListGenResponse:
-        ## WordListGenFrame 첫번째 데이터 프레임 복사
-        WordListGen = WordListGenFrame[1][0].copy()
-        WordListGen['IndexId'] = IndexId
-        WordListGen['BodyId'] = InputCount
-        WordListGen['WordId'] = Response['번호']
-        WordListGen['Word'] = Response['원문']
-        WordListGen['Translation'] = Response['번역']
-        WordListGen['Reason'] = Response['선택이유']
+    for Response in UniqueWordListGenResponse:
+        ## UniqueWordListGenFrame 첫번째 데이터 프레임 복사
+        UniqueWordListGen = UniqueWordListGenFrame[1][0].copy()
+        UniqueWordListGen['IndexId'] = IndexId
+        UniqueWordListGen['BodyId'] = InputCount
+        UniqueWordListGen['WordId'] = Response['번호']
+        UniqueWordListGen['Word'] = Response['원문']
+        UniqueWordListGen['Translation'] = Response['번역']
+        UniqueWordListGen['Reason'] = Response['선택이유']
 
-        ## WordListGenFrame 데이터 프레임 업데이트
-        WordListGenFrame[1].append(WordListGen)
+        ## UniqueWordListGenFrame 데이터 프레임 업데이트
+        UniqueWordListGenFrame[1].append(UniqueWordListGen)
         
-    ## WordListGenFrame ProcessCount 및 Completion 업데이트
-    WordListGenFrame[0]['InputCount'] = InputCount
+    ## UniqueWordListGenFrame ProcessCount 및 Completion 업데이트
+    UniqueWordListGenFrame[0]['InputCount'] = InputCount
     if InputCount == TotalInputCount:
-        WordListGenFrame[0]['Completion'] = 'Yes'
+        UniqueWordListGenFrame[0]['Completion'] = 'Yes'
         
-    ## WordListGenFrame 저장
-    with open(ProjectDataFrameWordListGenPath, 'w', encoding = 'utf-8') as DataFrameJson:
-        json.dump(WordListGenFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+    ## UniqueWordListGenFrame 저장
+    with open(ProjectDataFrameUniqueWordListGenPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(UniqueWordListGenFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ## Process5: WordListPostprocessingProcess DataFrame 저장
-def WordListPostprocessingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, WordListGenResponse, Process, InputCount, IndexId, TotalInputCount):
-    ## WordListGenGenFrame 불러오기
-    if os.path.exists(ProjectDataFrameWordListGenPath):
-        WordListGenFramePath = ProjectDataFrameWordListGenPath
+def WordListPostprocessingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListPostprocessingPath, WordListPostprocessingResponse, Process, InputCount, IndexId, TotalInputCount):
+    ## WordListPostprocessingFrame 불러오기
+    if os.path.exists(ProjectDataFrameWordListPostprocessingPath):
+        WordListPostprocessingFramePath = ProjectDataFrameWordListPostprocessingPath
     else:
-        WordListGenFramePath = os.path.join(TranslationDataFramePath, "b532-05_WordListPostprocessingFrame.json")
-    with open(WordListGenFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
-        WordListGenFrame = json.load(DataFrameJson)
+        WordListPostprocessingFramePath = os.path.join(TranslationDataFramePath, "b532-05_WordListPostprocessingFrame.json")
+    with open(WordListPostprocessingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        WordListPostprocessingFrame = json.load(DataFrameJson)
         
-    ## WordListGenFrame 업데이트
-    WordListGenFrame[0]['ProjectName'] = ProjectName
-    WordListGenFrame[0]['MainLang'] = MainLang.capitalize()
-    WordListGenFrame[0]['Translation'] = Translation.capitalize()
-    WordListGenFrame[0]['TaskName'] = Process
+    ## WordListPostprocessingFrame 업데이트
+    WordListPostprocessingFrame[0]['ProjectName'] = ProjectName
+    WordListPostprocessingFrame[0]['MainLang'] = MainLang.capitalize()
+    WordListPostprocessingFrame[0]['Translation'] = Translation.capitalize()
+    WordListPostprocessingFrame[0]['TaskName'] = Process
     
-    for Response in WordListGenResponse:
-        ## WordListGenFrame 첫번째 데이터 프레임 복사
-        WordListGen = WordListGenFrame[1][0].copy()
-        WordListGen['IndexId'] = IndexId
-        WordListGen['BodyId'] = InputCount
-        WordListGen['WordId'] = Response['번호']
-        WordListGen['Word'] = Response['원문']
-        WordListGen['Translation'] = Response['번역']
-        WordListGen['Processing'] = Response['정리방법']
+    for Response in WordListPostprocessingResponse:
+        ## WordListPostprocessingFrame 첫번째 데이터 프레임 복사
+        WordListPostprocessing = WordListPostprocessingFrame[1][0].copy()
+        WordListPostprocessing['IndexId'] = IndexId
+        WordListPostprocessing['BodyId'] = InputCount
+        WordListPostprocessing['WordId'] = Response['번호']
+        WordListPostprocessing['Word'] = Response['원문']
+        WordListPostprocessing['Translation'] = Response['번역']
+        WordListPostprocessing['Processing'] = Response['정리방법']
 
-        ## WordListGenFrame 데이터 프레임 업데이트
-        WordListGenFrame[1].append(WordListGen)
+        ## WordListPostprocessingFrame 데이터 프레임 업데이트
+        WordListPostprocessingFrame[1].append(WordListPostprocessing)
         
-    ## WordListGenFrame ProcessCount 및 Completion 업데이트
-    WordListGenFrame[0]['InputCount'] = InputCount
+    ## WordListPostprocessingFrame ProcessCount 및 Completion 업데이트
+    WordListPostprocessingFrame[0]['InputCount'] = InputCount
     if InputCount == TotalInputCount:
-        WordListGenFrame[0]['Completion'] = 'Yes'
+        WordListPostprocessingFrame[0]['Completion'] = 'Yes'
         
-    ## WordListGenFrame 저장
-    with open(ProjectDataFrameWordListGenPath, 'w', encoding = 'utf-8') as DataFrameJson:
-        json.dump(WordListGenFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+    ## WordListPostprocessingFrame 저장
+    with open(ProjectDataFrameWordListPostprocessingPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(WordListPostprocessingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
+## Process6: IndexTranslationProcess DataFrame 저장
+def IndexTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameIndexTranslationPath, IndexTranslationResponse, Process, InputCount, IndexId, IndexTag, TotalInputCount):
+    ## IndexTranslationFrame 불러오기
+    if os.path.exists(ProjectDataFrameIndexTranslationPath):
+        IndexTranslationFramePath = ProjectDataFrameIndexTranslationPath
+    else:
+        IndexTranslationFramePath = os.path.join(TranslationDataFramePath, "b532-06_IndexTranslationFrame.json")
+    with open(IndexTranslationFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        IndexTranslationFrame = json.load(DataFrameJson)
+        
+    ## IndexTranslationFrame 업데이트
+    IndexTranslationFrame[0]['ProjectName'] = ProjectName
+    IndexTranslationFrame[0]['MainLang'] = MainLang.capitalize()
+    IndexTranslationFrame[0]['Translation'] = Translation.capitalize()
+    IndexTranslationFrame[0]['TaskName'] = Process
+    
+
+    ## IndexTranslationFrame 첫번째 데이터 프레임 복사
+    IndexTranslation = IndexTranslationFrame[1][0].copy()
+    IndexTranslation['IndexId'] = IndexId
+    IndexTranslation['IndexTag'] = IndexTag
+    IndexTranslation['Index'] = IndexTranslationResponse['현재목차원문']
+    IndexTranslation['IndexTranslation'] = IndexTranslationResponse['현재목차번역']
+    IndexTranslation['Reason'] = IndexTranslationResponse['번역이유']
+
+    ## IndexTranslationFrame 데이터 프레임 업데이트
+    IndexTranslationFrame[1].append(IndexTranslation)
+        
+    ## IndexTranslationFrame ProcessCount 및 Completion 업데이트
+    IndexTranslationFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        IndexTranslationFrame[0]['Completion'] = 'Yes'
+        
+    ## IndexTranslationFrame 저장
+    with open(ProjectDataFrameIndexTranslationPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(IndexTranslationFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ##############################
 ##### ProcessEdit 업데이트 #####
@@ -1371,7 +1414,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 WordListPostprocessingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, WordListPostprocessingFilter, CheckCount, "OpenAI", mode, MessagesReview)
                 
                 ## DataFrame 저장
-                WordListPostprocessingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListPostprocessingPath, WordListPostprocessingResponse, Process, IndexId, inputCount, TotalInputCount)
+                WordListPostprocessingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListPostprocessingPath, WordListPostprocessingResponse, Process, inputCount, IndexId, TotalInputCount)
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameWordListPostprocessingPath, TranslationEditPath, Process, EditMode)
@@ -1411,12 +1454,22 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 ## Input 생성
                 inputCount = InputList[i]['Id']
                 IndexId = InputList[i]['IndexId']
+                IndexTag = InputList[i]['IndexTag']
                 IndexText = InputList[i]['IndexText']
                 Input1 = IndexTranslationAddInput(ProjectDataFrameIndexTranslationPath, IndexText, MainLangCode, TranslationLangCode)
                 Input2 = InputList[i]['Input']
                 Input = Input1 + Input2
+
+                ## Response 생성
+                IndexTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, IndexTranslationFilter, CheckCount, "OpenAI", mode, MessagesReview)
                 
-                print(Input)
+                ## DataFrame 저장
+                IndexTranslationProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameIndexTranslationPath, IndexTranslationResponse, Process, inputCount, IndexId, IndexTag, TotalInputCount)
+                
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameIndexTranslationPath, TranslationEditPath, Process, EditMode)
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
 if __name__ == "__main__":
     

@@ -1281,7 +1281,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
         ProcessEditSave(ProjectDataFrameTranslationBodySummaryPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
-    
+
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
@@ -1327,7 +1327,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
         ProcessEditSave(ProjectDataFrameWordListGenPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
-    
+
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
@@ -1373,7 +1373,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
         ProcessEditSave(ProjectDataFrameUniqueWordListGenPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
-    
+
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
@@ -1420,7 +1420,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
         ProcessEditSave(ProjectDataFrameWordListPostprocessingPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
-    
+
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
@@ -1470,6 +1470,12 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
         ProcessEditSave(ProjectDataFrameIndexTranslationPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
 if __name__ == "__main__":
     

@@ -1499,7 +1499,7 @@ def ProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process, EditMode
         with open(TranslationEditPath, 'w', encoding = 'utf-8') as TranslationEditJson:
             json.dump(TranslationEdit, TranslationEditJson, indent = 4, ensure_ascii = False)
             
-## Process Edit 저장
+## BodySplitProcess Edit 저장
 def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process):
     ## TranslationDataFrame 불러온 뒤 Completion 확인
     with open(ProjectDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
@@ -1523,6 +1523,53 @@ def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process)
             ## TranslationEdit 저장
             with open(TranslationEditPath, 'w', encoding = 'utf-8') as TranslationEditJson:
                 json.dump(TranslationEdit, TranslationEditJson, indent = 4, ensure_ascii = False)
+
+## ProcessEditText 저장
+def ProcessEditTextSave(ProjectName, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2):
+    ## TranslationEdit 불러오기
+    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+        TranslationEdit = json.load(TranslationEditJson)
+    TranslationBodyEdit = TranslationEdit[Process2]
+    TranslationIndexEdit = TranslationEdit[Process1]
+        
+    ## TranslationEdit을 Index, Body Text파일로 저장
+    EditIndexFileName = f"{ProjectName}_Index.txt"
+    EditIndexFilePath = os.path.join(ProjectMasterTranslationPath, EditIndexFileName)
+    EditBodyFileName = f"{ProjectName}_Body.txt"
+    EditBodyFilePath = os.path.join(ProjectMasterTranslationPath, EditBodyFileName)
+    
+    # Index 파일 생성  
+    with open(EditIndexFilePath, 'w', encoding='utf-8') as indexFile:
+        for ProcessDic in TranslationIndexEdit:
+            IndexTag = ProcessDic['IndexTag']
+            Index = ProcessDic['IndexTranslation']
+            if IndexTag == "Title":
+                IndexText = f"<{Index}>\n\n"
+            elif IndexTag == "Logue":
+                IndexText = f"\n<{Index}>\n\n"
+            elif IndexTag in ["Part", "Chapter"]:
+                IndexText = f"\n<{Index}>\n\n"
+            else:
+                IndexText = f"<{Index}>\n"
+            indexFile.write(IndexText)
+    
+    # Body 파일 생성
+    CurrentIndex = None
+    with open(EditBodyFilePath, 'w', encoding='utf-8') as bodyFile:
+        for i, ProcessDic in enumerate(TranslationBodyEdit):
+            # 새로운 Index인지 확인
+            if ProcessDic['Index'] != CurrentIndex:
+                CurrentIndex = ProcessDic['Index']
+                # 새 Index 작성
+                if i != 0:
+                    bodyFile.write(f"\n\n\n<{ProcessDic['Index']}>\n\n\n")
+                else:
+                    bodyFile.write(f"<{ProcessDic['Index']}>\n\n\n")
+            
+            # Body 내용 작성
+            BodyText = ProcessDic['Body'].replace('\n\n\n\n', '\n\n')
+            BodyText = BodyText.replace('\n\n\n', '\n\n')
+            bodyFile.write(f"{BodyText}")
 
 ## Process Edit Prompt 확인
 def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumProcesses = 1, OutputCountKey = None):
@@ -2029,6 +2076,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameBodyTranslationPath, TranslationEditPath, Process, EditMode)
+        ## EditText 저장
+        ProcessEditTextSave(projectName, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 

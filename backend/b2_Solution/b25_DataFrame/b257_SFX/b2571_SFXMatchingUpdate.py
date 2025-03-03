@@ -386,7 +386,7 @@ def SFXDicToSFXChunk(SFXDics):
 
 # SFXCorrectionChunk 합성
 def ApplyTagsToChunk(Chunk, SFXPoint, SFXTag, CorrectionPoint, CorrectionTag):
-    # CorrectionPoint와 CorrectionTag가 None이면 빈 리스트로 처리
+    # CorrectionPoint와 CorrectionTag가 None이면 빈 리스트로'[]' 처리
     CorrectionPoint = [] if CorrectionPoint is None else CorrectionPoint
     CorrectionTag = [] if CorrectionTag is None else CorrectionTag
 

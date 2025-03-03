@@ -67,8 +67,9 @@ def AddPromptToDB():
         UniqueWordListGen = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-04_UniqueWordListGen.json")
         WordListPostprocessing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-05_WordListPostprocessing.json")
         IndexTranslation = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-06_IndexTranslation.json")
-        BodyTranslation = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-07_BodyTranslation.json")
-        TranslationEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-08_TranslationEditing.json")
+        BodyTranslationPreprocessing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-07_BodyTranslationPreprocessing.json")
+        BodyTranslation = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-08_BodyTranslation.json")
+        TranslationEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-09_TranslationEditing.json")
         # TextBookPrompt
         # AudioBookPrompt
         bookPreprocess = LoadJsonFrame(PromptDataPath + "/b545_AudioBookPrompt/b5451_ScriptPrompt/b5451-00_BookPreprocess.json")
@@ -158,6 +159,7 @@ def AddPromptToDB():
             ExistingPrompt.UniqueWordListGen = UniqueWordListGen
             ExistingPrompt.WordListPostprocessing = WordListPostprocessing
             ExistingPrompt.IndexTranslation = IndexTranslation
+            ExistingPrompt.BodyTranslationPreprocessing = BodyTranslationPreprocessing
             ExistingPrompt.BodyTranslation = BodyTranslation
             ExistingPrompt.TranslationEditing = TranslationEditing
             ExistingPrompt.BookPreprocess = bookPreprocess
@@ -245,6 +247,7 @@ def AddPromptToDB():
                 UniqueWordListGen = UniqueWordListGen,
                 WordListPostprocessing = WordListPostprocessing,
                 IndexTranslation = IndexTranslation,
+                BodyTranslationPreprocessing = BodyTranslationPreprocessing,
                 BodyTranslation = BodyTranslation,
                 TranslationEditing = TranslationEditing,
                 BookPreprocess = bookPreprocess,

@@ -492,6 +492,7 @@ class Prompt(Base):
     UniqueWordListGen = Column(JSON)
     WordListPostprocessing = Column(JSON)
     IndexTranslation = Column(JSON)
+    BodyTranslationPreprocessing = Column(JSON)
     BodyTranslation = Column(JSON)
     TranslationEditing = Column(JSON)
     

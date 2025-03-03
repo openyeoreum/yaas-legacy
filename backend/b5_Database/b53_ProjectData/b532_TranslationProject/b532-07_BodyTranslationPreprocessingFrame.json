@@ -1,0 +1,29 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "Book",
+        "MainLang": "Ko",
+        "Translation": "",
+        "TaskName": "BodyTranslationPreprocessing",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "IndexId": 0,
+            "IndexTag": "None",
+            "Index": "None",
+            "BodyId": 0,
+            "Body": "None",
+            "ModifiedWord": [
+                {
+                    "WordId": 0,
+                    "Word": "None",
+                    "Translation": "None",
+                    "Reason": "None"
+                }
+            ]
+        }
+    ]
+
+]

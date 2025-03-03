@@ -568,6 +568,7 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
     ## 전체 도서목차 생성
     with open(ProjectDataFrameIndexTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
         IndexTranslation = json.load(TranslationDataFrame)[1]
+    ## 최상위 태그로 목차를 구성함으로써 매우 긴 목차를 줄이기 위함
     # 태그 우선순위 정의 (순서대로 높은 우선순위)
     PriorityIndexTags = ['Part', 'Chapter', 'Index']
 
@@ -593,7 +594,7 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
         if len(BodyTranslation) <= 2:
             BeforeBodyTranslation = BodyTranslation[-1]['Body']
         else:
-            BeforeBodyTranslation = BodyTranslation[-2]['Body'] + BodyTranslation[-1]['Body']
+            BeforeBodyTranslation = BodyTranslation[-2]['Body'] + '\n\n' + BodyTranslation[-1]['Body']
         
         AddInput = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n\n[도서전체목차]\n{IndexText}\n\n[이전번역문]\n{BeforeBodyTranslation}\n\n\n"
     else:
@@ -1276,6 +1277,8 @@ def BodyTranslationPreprocessingProcessDataFrameSave(ProjectName, MainLang, Tran
             Match = re.search(Pattern, TranslationBody)
             if Match:
                 TranslationBody = TranslationBody.replace(Match.group(0), f'{{{OriginalWord}->{ModifiedWord}}}')
+    # 추가 코드 - 남아 있는 모든 {n: ...->...}를 {...->...}로 처리
+    TranslationBody = re.sub(r'\{\d+:\s*', '{', TranslationBody)
 
     ## BodyTranslationPreprocessingFrame 첫번째 데이터 프레임 복사
     BodyTranslationPreprocessing = BodyTranslationPreprocessingFrame[1][0].copy()

@@ -434,6 +434,9 @@ class Prompt(Base):
     PromptDate = Column(DateTime, default=SeoulNow)
 
     ## Yeoreum
+    ## GeneralPrompt
+    JsonParsing = Column(JSON)
+    
     ## DataCollectionPrompt
     # SearchCollectionDataGenPrompt
     DemandCollectionDataDetail = Column(JSON)

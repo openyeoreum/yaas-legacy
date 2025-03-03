@@ -22,6 +22,8 @@ def AddPromptToDB():
         # JSON 데이터 불러오기
         PromptDataPath = GetPromptDataPath()
         
+        # GeneralPrompt
+        jsonParsing = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5410_GeneralPrompt/b5412-01_JsonParsingPrompt.json")
         # DataCollectionPrompt
         demandCollectionDataDetail = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-01_DemandCollectionDataDetail.json")
         demandCollectionDataContext = LoadJsonFrame(PromptDataPath + "/b541_DataCollectionPrompt/b5411_CollectionDataGenPrompt/b54111_DemandCollectionDataGenPrompt/b54111-02_DemandCollectionDataContext.json")
@@ -118,6 +120,7 @@ def AddPromptToDB():
 
         # DB Commit
         if ExistingPrompt:
+            ExistingPrompt.JsonParsing = jsonParsing
             ExistingPrompt.DemandCollectionDataDetail = demandCollectionDataDetail
             ExistingPrompt.DemandCollectionDataContext = demandCollectionDataContext
             ExistingPrompt.DemandCollectionDataExpertise = demandCollectionDataExpertise
@@ -206,6 +209,7 @@ def AddPromptToDB():
             print(f"[ General | AddPromptToDB 변경사항 업데이트 ]")
         else:
             prompt = Prompt(
+                JsonParsing = jsonParsing,
                 DemandCollectionDataDetail = demandCollectionDataDetail,
                 DemandCollectionDataContext = demandCollectionDataContext,
                 DemandCollectionDataExpertise = demandCollectionDataExpertise,

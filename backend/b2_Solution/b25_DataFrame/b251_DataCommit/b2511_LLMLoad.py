@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import time
 import random
@@ -190,7 +191,7 @@ def LLMmessages(Process, Input, Model, Root = "backend", promptFramePath = "", O
           "content": MemoryFineTuning[2]["OutputMark"] + MemoryFineTuning[2]["OutputStarter"] + str(Output)
         }
       ]
-    
+
     encoding = tiktoken.get_encoding("cl100k_base")
     # print(f'messages: {messages}')
     InputTokens = len(encoding.encode(str(Input)))
@@ -237,7 +238,6 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
         promptFrame = [json.load(promptFrameJson)]
 
-    
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'gpt', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
     if Mode == "Master":
@@ -497,6 +497,52 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
 ##################################
 ##### ANTHROPIC LLM Response #####
 ##################################
+## JsonParsing의 Filter(Error 예외처리)
+def JsonParsingFilter(Response, RawResponse):
+    # Error1: JSON 형식 예외 처리
+    try:
+        TestResponse = json.loads(Response)
+    except json.JSONDecodeError:
+        return "BodyTranslation, JSONDecode에서 오류 발생: JSONDecodeError"
+    # Error2: Json 내용 동일성 확인
+    # 1단계: 백슬래시로 시작하는 모든 이스케이프 시퀀스(백슬래시와 그 다음 한 글자)를 제거합니다.
+    Response_no_escape = re.sub(r'\\.', '', Response)
+    RawResponse_no_escape = re.sub(r'\\.', '', RawResponse)
+
+    # 2단계: 나머지 특수문자, 공백, 줄바꿈 등을 제거하여 알파벳(다국어 포함)과 숫자만 남깁니다.
+    Response_clean = re.sub(r'[\W_]+', '', Response_no_escape)
+    RawResponse_clean = re.sub(r'[\W_]+', '', RawResponse_no_escape)
+
+    ResponseLength = len(Response_clean)
+    RawResponseLength = len(RawResponse_clean)
+    if ResponseLength != RawResponseLength:
+        return f"BodyTranslation, JSONDecode에서 오류 발생: Json 내용의 텍스트 수가 다름 Response({ResponseLength}), RawResponse({RawResponseLength})"
+    
+    return Response
+
+## Json파싱 오류 해결
+def JsonParsingProcess(projectName, email, RawResponse, FilterFunc):
+    Process = "JsonParsing"
+    ErrorCount = 0
+    while True:
+        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
+
+        FilteredResponse = FilterFunc(Response, RawResponse)
+        
+        if 'JSONDecode에서 오류 발생:' in FilteredResponse:
+            print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/10 | {FilteredResponse}")
+            ErrorCount += 1
+            print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/10 | "
+                f"오류횟수 {ErrorCount}회, 10초 후 프롬프트 재시도")
+            
+            if ErrorCount >= 10:
+                sys.exit(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/10 | "
+                        f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+            time.sleep(10)
+            continue
+        
+        print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/10 | JSONDecode 완료")
+        return FilteredResponse
 
 ## 프롬프트 실행
 def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
@@ -563,26 +609,26 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
                    'Output': response.usage.output_tokens,
                    'Total': response.usage.input_tokens + response.usage.output_tokens}
           
-          # Response Mode 전처리 ([...]와 {...}중 하나로 전처리)
+          # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
           if promptFrame[0]["OutputFormat"] == 'json':
               Response = Response.replace('\n', '\\n')
-              start_index_bracket = Response.find('[')
-              start_index_brace = Response.find('{')
-              if start_index_bracket != -1 and start_index_brace != -1:
-                  start_index = min(start_index_bracket, start_index_brace)
-              elif start_index_bracket != -1:
-                  start_index = start_index_bracket
-              elif start_index_brace != -1:
-                  start_index = start_index_brace
+              StartIndexBracket = Response.find('[')
+              StartIndexBrace = Response.find('{')
+              if StartIndexBracket != -1 and StartIndexBrace != -1:
+                  StartIndex = min(StartIndexBracket, StartIndexBrace)
+              elif StartIndexBracket != -1:
+                  StartIndex = StartIndexBracket
+              elif StartIndexBrace != -1:
+                  StartIndex = StartIndexBrace
               else:
-                  start_index = -1
-              if start_index != -1:
-                  if Response[start_index] == '[':
-                      end_index = Response.rfind(']')
+                  StartIndex = -1
+              if StartIndex != -1:
+                  if Response[StartIndex] == '[':
+                      EndIndex = Response.rfind(']')
                   else:
-                      end_index = Response.rfind('}')
-                  if end_index != -1:
-                      JsonResponse = Response[start_index:end_index+1]
+                      EndIndex = Response.rfind('}')
+                  if EndIndex != -1:
+                      JsonResponse = Response[StartIndex:EndIndex+1]
                   else:
                       JsonResponse = Response
               else:
@@ -591,12 +637,19 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
               JsonResponse = Response
           
           if isinstance(email, str):
-            print(f"Project: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 완료")
+              print(f"Project: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 완료")
           else:
-            print(f"LifeGraphName: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 완료")
+              print(f"LifeGraphName: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 완료")
           
           if messagesReview == "on":
-            LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+
+          ## Response Mode 전처리2: JsonParsing의 재구조화
+          try:
+              TestResponse = json.loads(JsonResponse)
+          except json.JSONDecodeError:
+              print(f"Project: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 파싱오류 | JsonParsingProcess 시작")
+              JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
 
           return JsonResponse, Usage, Model
       

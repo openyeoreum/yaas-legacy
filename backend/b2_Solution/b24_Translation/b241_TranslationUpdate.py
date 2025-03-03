@@ -1453,7 +1453,7 @@ def TranslationEditingProcessDataFrameSave(ProjectName, MainLang, Translation, T
     TranslationEditing['IndexTag'] = IndexTag
     TranslationEditing['Index'] = Index
     TranslationEditing['BodyId'] = BodyId
-    TranslationEditing['Body'] = TranslationEditingResponse['내용']
+    TranslationEditing['Body'] = TranslationEditingResponse['내용'].replace('{', '').replace('}', '')
 
     ## TranslationEditingFrame 데이터 프레임 업데이트
     TranslationEditingFrame[1].append(TranslationEditing)

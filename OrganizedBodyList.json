@@ -7,8 +7,9 @@
             {
                 "Word": "JAMES ALLEN",
                 "Translation": [
-                    "제임스 앨런",
-                    "제임스 알렌"
+                    "JAMES ALLEN",
+                    "제임스 알렌",
+                    "제임스 앨런"
                 ]
             },
             {
@@ -20,6 +21,7 @@
             {
                 "Word": "From Passion to Peace",
                 "Translation": [
+                    "From Passion to Peace",
                     "열정에서 평화로"
                 ]
             }
@@ -30,12 +32,6 @@
         "BodyId": 2,
         "Body": "THIS little volume (the result of meditation and experience) is not intended as an exhaustive treatise on the much-written-upon subject of the power of thought. It is suggestive rather than explanatory, its object being to stimulate men and women to the discovery and perception of the truth that—\n\n\"They themselves are makers of themselves.\"\n\nby virtue of the thoughts, which they choose and encourage; that mind is the master-weaver, both of the inner garment of character and the outer garment of circumstance, and that, as they may have hitherto woven in ignorance and pain they may now weave in enlightenment and happiness.\nJAMES ALLEN.\nBROAD PARK AVENUE,\nILFRACOMBE,\nENGLAND\n\n\n\n",
         "OrganizedWordList": [
-            {
-                "Word": "volume",
-                "Translation": [
-                    "소책자"
-                ]
-            },
             {
                 "Word": "meditation",
                 "Translation": [
@@ -63,7 +59,8 @@
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -73,22 +70,9 @@
                 ]
             },
             {
-                "Word": "makers",
-                "Translation": [
-                    "창조자"
-                ]
-            },
-            {
-                "Word": "maker",
-                "Translation": [
-                    "창조자"
-                ]
-            },
-            {
                 "Word": "virtue",
                 "Translation": [
-                    "덕",
-                    "미덕"
+                    "덕"
                 ]
             },
             {
@@ -104,26 +88,9 @@
                 ]
             },
             {
-                "Word": "master-weaver",
-                "Translation": [
-                    "명수"
-                ]
-            },
-            {
-                "Word": "master",
-                "Translation": [
-                    "주인"
-                ]
-            },
-            {
-                "Word": "inner garment",
-                "Translation": [
-                    "내면 옷자락"
-                ]
-            },
-            {
                 "Word": "character",
                 "Translation": [
+                    "성격",
                     "인격"
                 ]
             },
@@ -134,14 +101,9 @@
                 ]
             },
             {
-                "Word": "outer garment",
-                "Translation": [
-                    "겉옷"
-                ]
-            },
-            {
                 "Word": "circumstance",
                 "Translation": [
+                    "환경",
                     "상황"
                 ]
             },
@@ -149,12 +111,6 @@
                 "Word": "ignorance",
                 "Translation": [
                     "무지"
-                ]
-            },
-            {
-                "Word": "pain",
-                "Translation": [
-                    "고통"
                 ]
             },
             {
@@ -172,8 +128,9 @@
             {
                 "Word": "JAMES ALLEN",
                 "Translation": [
-                    "제임스 앨런",
-                    "제임스 알렌"
+                    "JAMES ALLEN",
+                    "제임스 알렌",
+                    "제임스 앨런"
                 ]
             },
             {
@@ -185,7 +142,7 @@
             {
                 "Word": "ILFRACOMBE",
                 "Translation": [
-                    "일프라컴"
+                    "일프라콤브"
                 ]
             },
             {
@@ -210,7 +167,7 @@
             {
                 "Word": "As a man thinketh in his heart so is he",
                 "Translation": [
-                    "사람이 마음속에서 생각하는 대로 그는 된다"
+                    "사람이 마음속에서 생각하는 대로 그 사람이다"
                 ]
             },
             {
@@ -228,12 +185,20 @@
             {
                 "Word": "circumstance",
                 "Translation": [
+                    "환경",
                     "상황"
+                ]
+            },
+            {
+                "Word": "life",
+                "Translation": [
+                    "삶"
                 ]
             },
             {
                 "Word": "character",
                 "Translation": [
+                    "성격",
                     "인격"
                 ]
             },
@@ -246,7 +211,8 @@
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -274,15 +240,9 @@
                 ]
             },
             {
-                "Word": "fruit",
+                "Word": "the mind",
                 "Translation": [
-                    "열매"
-                ]
-            },
-            {
-                "Word": "Thought",
-                "Translation": [
-                    "사고"
+                    "정신"
                 ]
             },
             {
@@ -292,9 +252,9 @@
                 ]
             },
             {
-                "Word": "pain",
+                "Word": "purity",
                 "Translation": [
-                    "고통"
+                    "순수함"
                 ]
             },
             {
@@ -307,6 +267,12 @@
                 "Word": "law",
                 "Translation": [
                     "법칙"
+                ]
+            },
+            {
+                "Word": "cause and effect",
+                "Translation": [
+                    "인과"
                 ]
             },
             {
@@ -328,27 +294,15 @@
                 ]
             },
             {
-                "Word": "armoury",
-                "Translation": [
-                    "무기고"
-                ]
-            },
-            {
-                "Word": "weapon",
-                "Translation": [
-                    "무기"
-                ]
-            },
-            {
-                "Word": "tool",
-                "Translation": [
-                    "도구"
-                ]
-            },
-            {
                 "Word": "heaven",
                 "Translation": [
                     "천국"
+                ]
+            },
+            {
+                "Word": "heavenly mansions",
+                "Translation": [
+                    "천상의 저택"
                 ]
             },
             {
@@ -360,26 +314,7 @@
             {
                 "Word": "Divine Perfection",
                 "Translation": [
-                    "신적 완전함",
-                    "신성한 완전함"
-                ]
-            },
-            {
-                "Word": "beast",
-                "Translation": [
-                    "짐승"
-                ]
-            },
-            {
-                "Word": "maker",
-                "Translation": [
-                    "창조자"
-                ]
-            },
-            {
-                "Word": "master",
-                "Translation": [
-                    "주인"
+                    "신성한 완전성"
                 ]
             }
         ]
@@ -402,38 +337,22 @@
                 ]
             },
             {
-                "Word": "fruit",
-                "Translation": [
-                    "열매"
-                ]
-            },
-            {
                 "Word": "man",
                 "Translation": [
                     "인간"
                 ]
             },
             {
-                "Word": "master",
-                "Translation": [
-                    "주인"
-                ]
-            },
-            {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
-                ]
-            },
-            {
-                "Word": "moulder",
-                "Translation": [
-                    "형성자"
+                    "생각",
+                    "사고"
                 ]
             },
             {
                 "Word": "character",
                 "Translation": [
+                    "성격",
                     "인격"
                 ]
             },
@@ -441,12 +360,6 @@
                 "Word": "act",
                 "Translation": [
                     "행위"
-                ]
-            },
-            {
-                "Word": "maker",
-                "Translation": [
-                    "창조자"
                 ]
             },
             {
@@ -470,13 +383,13 @@
             {
                 "Word": "Power",
                 "Translation": [
-                    "능력"
+                    "힘"
                 ]
             },
             {
                 "Word": "Intelligence",
                 "Translation": [
-                    "지성"
+                    "지능"
                 ]
             },
             {
@@ -492,16 +405,16 @@
                 ]
             },
             {
-                "Word": "will",
+                "Word": "agency",
                 "Translation": [
-                    "의지"
+                    "활동력"
                 ]
             },
             {
                 "Word": "weakness",
                 "Translation": [
-                    "약점",
-                    "약함"
+                    "약함",
+                    "약점"
                 ]
             },
             {
@@ -509,6 +422,12 @@
                 "Translation": [
                     "법칙",
                     "법"
+                ]
+            },
+            {
+                "Word": "intelligence",
+                "Translation": [
+                    "지능"
                 ]
             },
             {
@@ -530,21 +449,34 @@
                 ]
             },
             {
+                "Word": "life",
+                "Translation": [
+                    "삶"
+                ]
+            },
+            {
                 "Word": "circumstance",
                 "Translation": [
+                    "환경",
                     "상황"
                 ]
             },
             {
                 "Word": "circumstances",
                 "Translation": [
-                    "상황"
+                    "환경"
                 ]
             },
             {
-                "Word": "Wisdom",
+                "Word": "cause and effect",
                 "Translation": [
-                    "지혜"
+                    "인과"
+                ]
+            },
+            {
+                "Word": "knowledge",
+                "Translation": [
+                    "지식"
                 ]
             },
             {
@@ -567,6 +499,12 @@
         "Body": "MAN'S mind may be likened to a garden, which may be intelligently cultivated or allowed to run wild; but whether cultivated or neglected, it must, and will, bring forth. If no useful seeds are put into it, then an abundance of useless weed-seeds will fall therein, and will continue to produce their kind.\n\nJust as a gardener cultivates his plot, keeping it free from weeds, and growing the flowers and fruits which he requires, so may a man tend the garden of his mind, weeding out all the wrong, useless, and impure thoughts, and cultivating toward perfection the flowers and fruits of right, useful, and pure thoughts. By pursuing this process, a man sooner or later discovers that he is the master-gardener of his soul, the director of his life. He also reveals, within himself, the laws of thought, and understands, with ever-increasing accuracy, how the thought-forces and mind elements operate in the shaping of his character, circumstances, and destiny.\n\nThought and character are one, and as character can only manifest and discover itself through environment and circumstance, the outer conditions of a person's life will always be found to be harmoniously related to his inner state. This does not mean that a man's circumstances at any given time are an indication of his entire character, but that those circumstances are so intimately connected with some vital thought-element within himself that, for the time being, they are indispensable to his development.\n\nEvery man is where he is by the law of his being; the thoughts which he has built into his character have brought him there, and in the arrangement of his life there is no element of chance, but all is the result of a law which cannot err. This is just as true of those who feel \"out of harmony\" with their surroundings as of those who are contented with them.\n\nAs a progressive and evolving being, man is where he is that he may learn that he may grow; and as he learns the spiritual lesson which any circumstance contains for him, it passes away and gives place to other circumstances.\n\nMan is buffeted by circumstances so long as he believes himself to be the creature of outside conditions, but when he realizes that he is a creative power, and that he may command the hidden soil and seeds of his being out of which circumstances grow, he then becomes the rightful master of himself.\n\nThat circumstances grow out of thought every man knows who has for any length of time practised self-control and self-purification, for he will have noticed that the alteration in his circumstances has been in exact ratio with his altered mental condition. So true is this that when a man earnestly applies himself to remedy the defects in his character, and makes swift and marked progress, he passes rapidly through a succession of vicissitudes.\n\nThe soul attracts that which it secretly harbours; that which it loves, and also that which it fears; it reaches the height of its cherished aspirations; it falls to the level of its unchastened desires,—and circumstances are the means by which the soul receives its own.\n\nEvery thought-seed sown or allowed to fall into the mind, and to take root there, produces its own, blossoming sooner or later into act, and bearing its own fruitage of opportunity and circumstance. Good thoughts bear good fruit, bad thoughts bad fruit.\n",
         "OrganizedWordList": [
             {
+                "Word": "MAN'S mind",
+                "Translation": [
+                    "인간의 마음"
+                ]
+            },
+            {
                 "Word": "mind",
                 "Translation": [
                     "마음"
@@ -576,12 +514,6 @@
                 "Word": "garden",
                 "Translation": [
                     "정원"
-                ]
-            },
-            {
-                "Word": "will",
-                "Translation": [
-                    "의지"
                 ]
             },
             {
@@ -609,27 +541,34 @@
                 ]
             },
             {
-                "Word": "fruit",
-                "Translation": [
-                    "열매"
-                ]
-            },
-            {
                 "Word": "man",
                 "Translation": [
                     "인간"
                 ]
             },
             {
-                "Word": "garden of his mind",
+                "Word": "impure",
                 "Translation": [
-                    "마음의 정원"
+                    "불순한"
+                ]
+            },
+            {
+                "Word": "impure thoughts",
+                "Translation": [
+                    "불순한 생각"
+                ]
+            },
+            {
+                "Word": "pure",
+                "Translation": [
+                    "순수한"
                 ]
             },
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -639,15 +578,9 @@
                 ]
             },
             {
-                "Word": "master",
-                "Translation": [
-                    "주인"
-                ]
-            },
-            {
                 "Word": "master-gardener",
                 "Translation": [
-                    "영혼의 정원사"
+                    "주인 정원사"
                 ]
             },
             {
@@ -659,7 +592,13 @@
             {
                 "Word": "director of his life",
                 "Translation": [
-                    "인생의 주도자"
+                    "인생의 감독"
+                ]
+            },
+            {
+                "Word": "life",
+                "Translation": [
+                    "삶"
                 ]
             },
             {
@@ -683,12 +622,13 @@
             {
                 "Word": "mind elements",
                 "Translation": [
-                    "마음의 구성 요소"
+                    "마음의 요소"
                 ]
             },
             {
                 "Word": "character",
                 "Translation": [
+                    "성격",
                     "인격"
                 ]
             },
@@ -701,25 +641,20 @@
             {
                 "Word": "circumstance",
                 "Translation": [
+                    "환경",
                     "상황"
                 ]
             },
             {
                 "Word": "circumstances",
                 "Translation": [
-                    "상황"
+                    "환경"
                 ]
             },
             {
                 "Word": "destiny",
                 "Translation": [
                     "운명"
-                ]
-            },
-            {
-                "Word": "Thought",
-                "Translation": [
-                    "사고"
                 ]
             },
             {
@@ -747,12 +682,6 @@
                 ]
             },
             {
-                "Word": "harmony",
-                "Translation": [
-                    "조화"
-                ]
-            },
-            {
                 "Word": "progress",
                 "Translation": [
                     "진보"
@@ -767,7 +696,7 @@
             {
                 "Word": "creative power",
                 "Translation": [
-                    "창조적 힘"
+                    "창조력"
                 ]
             },
             {
@@ -779,8 +708,20 @@
             {
                 "Word": "self-control",
                 "Translation": [
-                    "자기 통제",
-                    "자제"
+                    "자제력",
+                    "자기 통제"
+                ]
+            },
+            {
+                "Word": "self-purification",
+                "Translation": [
+                    "자기 정화"
+                ]
+            },
+            {
+                "Word": "love",
+                "Translation": [
+                    "사랑"
                 ]
             },
             {
@@ -790,15 +731,27 @@
                 ]
             },
             {
-                "Word": "aspirations",
+                "Word": "aspiration",
                 "Translation": [
                     "열망"
                 ]
             },
             {
-                "Word": "opportunity",
+                "Word": "desire",
                 "Translation": [
-                    "기회"
+                    "욕망"
+                ]
+            },
+            {
+                "Word": "thought-seed",
+                "Translation": [
+                    "사고의 씨앗"
+                ]
+            },
+            {
+                "Word": "the mind",
+                "Translation": [
+                    "정신"
                 ]
             }
         ]
@@ -809,19 +762,20 @@
         "Body": "\nThe outer world of circumstance shapes itself to the inner world of thought, and both pleasant and unpleasant external conditions are factors, which make for the ultimate good of the individual. As the reaper of his own harvest, man learns both by suffering and bliss.\n\nFollowing the inmost desires, aspirations, thoughts, by which he allows himself to be dominated, (pursuing the will-o'-the-wisps of impure imaginings or steadfastly walking the highway of strong and high endeavour), a man at last arrives at their fruition and fulfilment in the outer conditions of his life. The laws of growth and adjustment everywhere obtains.\n\nA man does not come to the almshouse or the jail by the tyranny of fate or circumstance, but by the pathway of grovelling thoughts and base desires. Nor does a pure-minded man fall suddenly into crime by stress of any mere external force; the criminal thought had long been secretly fostered in the heart, and the hour of opportunity revealed its gathered power. Circumstance does not make the man; it reveals him to himself No such conditions can exist as descending into vice and its attendant sufferings apart from vicious inclinations, or ascending into virtue and its pure happiness without the continued cultivation of virtuous aspirations; and man, therefore, as the lord and master of thought, is the maker of himself the shaper and author of environment. Even at birth the soul comes to its own and through every step of its earthly pilgrimage it attracts those combinations of conditions which reveal itself, which are the reflections of its own purity and, impurity, its strength and weakness.\n\nMen do not attract that which they want, but that which they are. Their whims, fancies, and ambitions are thwarted at every step, but their inmost thoughts and desires are fed with their own food, be it foul or clean. The \"divinity that shapes our ends\" is in ourselves; it is our very self. Only himself manacles man: thought and action are the gaolers of Fate—they imprison, being base; they are also the angels of Freedom—they liberate, being noble. Not what he wishes and prays for does a man get, but what he justly earns. His wishes and prayers are only gratified and answered when they harmonize with his thoughts and actions.\n\nIn the light of this truth, what, then, is the meaning of \"fighting against circumstances?\" It means that a man is continually revolting against an effect without, while all the time he is nourishing and preserving its cause in his heart. That cause may take the form of a conscious vice or an unconscious weakness; but whatever it is, it stubbornly retards the efforts of its possessor, and thus calls aloud for remedy.\n\nMen are anxious to improve their circumstances, but are unwilling to improve themselves; they therefore remain bound. The man who does not shrink from self-crucifixion can never fail to accomplish the object upon which his heart is set. This is as true of earthly as of heavenly things. Even the man whose sole object is to acquire wealth must be prepared to make great personal sacrifices before he can accomplish his object; and how much more so he who would realize a strong and well-poised life?\n\nHere is a man who is wretchedly poor. He is extremely anxious that his surroundings and home comforts should be improved, yet all the time he shirks his work, and considers he is justified in trying to deceive his employer on the ground of the insufficiency of his wages. ",
         "OrganizedWordList": [
             {
-                "Word": "outer world of circumstance",
+                "Word": "outer world",
                 "Translation": [
-                    "외부 환경"
+                    "외부 세계"
                 ]
             },
             {
                 "Word": "circumstance",
                 "Translation": [
+                    "환경",
                     "상황"
                 ]
             },
             {
-                "Word": "inner world of thought",
+                "Word": "inner world",
                 "Translation": [
                     "내면 세계"
                 ]
@@ -829,7 +783,14 @@
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
+                ]
+            },
+            {
+                "Word": "external conditions",
+                "Translation": [
+                    "외부 조건"
                 ]
             },
             {
@@ -845,12 +806,6 @@
                 ]
             },
             {
-                "Word": "harvest",
-                "Translation": [
-                    "수확"
-                ]
-            },
-            {
                 "Word": "man",
                 "Translation": [
                     "인간"
@@ -863,7 +818,13 @@
                 ]
             },
             {
-                "Word": "aspirations",
+                "Word": "desire",
+                "Translation": [
+                    "욕망"
+                ]
+            },
+            {
+                "Word": "aspiration",
                 "Translation": [
                     "열망"
                 ]
@@ -875,27 +836,27 @@
                 ]
             },
             {
-                "Word": "will",
-                "Translation": [
-                    "의지"
-                ]
-            },
-            {
                 "Word": "will-o'-the-wisps",
                 "Translation": [
-                    "도깨비불"
+                    "헛불"
                 ]
             },
             {
-                "Word": "highway of strong and high endeavour",
+                "Word": "impure",
                 "Translation": [
-                    "고귀하고 강인한 노력의 대로"
+                    "불순한"
                 ]
             },
             {
-                "Word": "fruit",
+                "Word": "pure",
                 "Translation": [
-                    "열매"
+                    "순수한"
+                ]
+            },
+            {
+                "Word": "life",
+                "Translation": [
+                    "삶"
                 ]
             },
             {
@@ -911,33 +872,9 @@
                 ]
             },
             {
-                "Word": "adjustment",
-                "Translation": [
-                    "조절"
-                ]
-            },
-            {
-                "Word": "almshouse",
-                "Translation": [
-                    "구제소"
-                ]
-            },
-            {
-                "Word": "jail",
-                "Translation": [
-                    "감옥"
-                ]
-            },
-            {
                 "Word": "mind",
                 "Translation": [
                     "마음"
-                ]
-            },
-            {
-                "Word": "opportunity",
-                "Translation": [
-                    "기회"
                 ]
             },
             {
@@ -947,46 +884,27 @@
                 ]
             },
             {
+                "Word": "Circumstance",
+                "Translation": [
+                    "상황"
+                ]
+            },
+            {
                 "Word": "vice",
                 "Translation": [
-                    "악덕"
-                ]
-            },
-            {
-                "Word": "sufferings",
-                "Translation": [
-                    "고난"
-                ]
-            },
-            {
-                "Word": "vicious inclinations",
-                "Translation": [
-                    "악한 성향"
+                    "악"
                 ]
             },
             {
                 "Word": "virtue",
                 "Translation": [
-                    "덕",
-                    "미덕"
+                    "덕"
                 ]
             },
             {
                 "Word": "happiness",
                 "Translation": [
                     "행복"
-                ]
-            },
-            {
-                "Word": "master",
-                "Translation": [
-                    "주인"
-                ]
-            },
-            {
-                "Word": "maker",
-                "Translation": [
-                    "창조자"
                 ]
             },
             {
@@ -1002,6 +920,18 @@
                 ]
             },
             {
+                "Word": "purity",
+                "Translation": [
+                    "순수함"
+                ]
+            },
+            {
+                "Word": "impurity",
+                "Translation": [
+                    "불순함"
+                ]
+            },
+            {
                 "Word": "strength",
                 "Translation": [
                     "힘"
@@ -1010,20 +940,14 @@
             {
                 "Word": "weakness",
                 "Translation": [
-                    "약점",
-                    "약함"
+                    "약함",
+                    "약점"
                 ]
             },
             {
                 "Word": "divinity that shapes our ends",
                 "Translation": [
-                    "우리 결말을 결정하는 신성"
-                ]
-            },
-            {
-                "Word": "action",
-                "Translation": [
-                    "행동"
+                    "우리 결말을 형성하는 신성"
                 ]
             },
             {
@@ -1033,9 +957,9 @@
                 ]
             },
             {
-                "Word": "Freedom",
+                "Word": "actions",
                 "Translation": [
-                    "자유"
+                    "행동"
                 ]
             },
             {
@@ -1047,7 +971,7 @@
             {
                 "Word": "circumstances",
                 "Translation": [
-                    "상황"
+                    "환경"
                 ]
             },
             {
@@ -1066,6 +990,12 @@
                 "Word": "sacrifice",
                 "Translation": [
                     "희생"
+                ]
+            },
+            {
+                "Word": "poise",
+                "Translation": [
+                    "침착, 단정함"
                 ]
             }
         ]
@@ -1088,12 +1018,6 @@
                 ]
             },
             {
-                "Word": "true prosperity",
-                "Translation": [
-                    "참된 번영"
-                ]
-            },
-            {
                 "Word": "prosperity",
                 "Translation": [
                     "번영"
@@ -1114,19 +1038,14 @@
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
                 "Word": "thoughts",
                 "Translation": [
                     "생각"
-                ]
-            },
-            {
-                "Word": "pain",
-                "Translation": [
-                    "고통"
                 ]
             },
             {
@@ -1138,14 +1057,7 @@
             {
                 "Word": "gluttony",
                 "Translation": [
-                    "탐식",
-                    "과식"
-                ]
-            },
-            {
-                "Word": "will",
-                "Translation": [
-                    "의지"
+                    "탐식"
                 ]
             },
             {
@@ -1155,9 +1067,9 @@
                 ]
             },
             {
-                "Word": "viands",
+                "Word": "desire",
                 "Translation": [
-                    "진미"
+                    "욕망"
                 ]
             },
             {
@@ -1167,15 +1079,9 @@
                 ]
             },
             {
-                "Word": "healthy life",
+                "Word": "life",
                 "Translation": [
-                    "건강한 삶"
-                ]
-            },
-            {
-                "Word": "employer of labour",
-                "Translation": [
-                    "고용주"
+                    "삶"
                 ]
             },
             {
@@ -1185,21 +1091,16 @@
                 ]
             },
             {
-                "Word": "bankrupt",
-                "Translation": [
-                    "파산"
-                ]
-            },
-            {
                 "Word": "circumstance",
                 "Translation": [
+                    "환경",
                     "상황"
                 ]
             },
             {
                 "Word": "circumstances",
                 "Translation": [
-                    "상황"
+                    "환경"
                 ]
             },
             {
@@ -1212,12 +1113,6 @@
                 "Word": "truth",
                 "Translation": [
                     "진리"
-                ]
-            },
-            {
-                "Word": "action",
-                "Translation": [
-                    "행동"
                 ]
             },
             {
@@ -1239,6 +1134,12 @@
                 ]
             },
             {
+                "Word": "Circumstance",
+                "Translation": [
+                    "상황"
+                ]
+            },
+            {
                 "Word": "happiness",
                 "Translation": [
                     "행복"
@@ -1257,21 +1158,9 @@
                 ]
             },
             {
-                "Word": "honest",
+                "Word": "knowledge",
                 "Translation": [
-                    "정직한"
-                ]
-            },
-            {
-                "Word": "privations",
-                "Translation": [
-                    "궁핍"
-                ]
-            },
-            {
-                "Word": "dishonest",
-                "Translation": [
-                    "부정직한"
+                    "지식"
                 ]
             },
             {
@@ -1283,20 +1172,13 @@
             {
                 "Word": "virtue",
                 "Translation": [
-                    "덕",
-                    "미덕"
+                    "덕"
                 ]
             },
             {
                 "Word": "vice",
                 "Translation": [
-                    "악덕"
-                ]
-            },
-            {
-                "Word": "sufferings",
-                "Translation": [
-                    "고난"
+                    "악"
                 ]
             },
             {
@@ -1306,19 +1188,19 @@
                 ]
             },
             {
-                "Word": "vanity",
+                "Word": "impure",
                 "Translation": [
-                    "허영"
+                    "불순한"
+                ]
+            },
+            {
+                "Word": "pure",
+                "Translation": [
+                    "순수한"
                 ]
             },
             {
                 "Word": "the Great Law",
-                "Translation": [
-                    "위대한 법칙"
-                ]
-            },
-            {
-                "Word": "Great Law",
                 "Translation": [
                     "대법칙"
                 ]
@@ -1338,15 +1220,21 @@
         "Body": "Possessed of such knowledge, he will then know, looking back upon his past ignorance and blindness, that his life is, and always was, justly ordered, and that all his past experiences, good and bad, were the equitable outworking of his evolving, yet unevolved self.\n\nGood thoughts and actions can never produce bad results; bad thoughts and actions can never produce good results. This is but saying that nothing can come from corn but corn, nothing from nettles but nettles. Men understand this law in the natural world, and work with it; but few understand it in the mental and moral world (though its operation there is just as simple and undeviating), and they, therefore, do not co-operate with it.\n\nSuffering is always the effect of wrong thought in some direction. It is an indication that the individual is out of harmony with himself, with the Law of his being. The sole and supreme use of suffering is to purify, to burn out all that is useless and impure. Suffering ceases for him who is pure. There could be no object in burning gold after the dross had been removed, and a perfectly pure and enlightened being could not suffer.\n\nThe circumstances, which a man encounters with suffering, are the result of his own mental in harmony. The circumstances, which a man encounters with blessedness, are the result of his own mental harmony. Blessedness, not material possessions, is the measure of right thought; wretchedness, not lack of material possessions, is the measure of wrong thought. A man may be cursed and rich; he may be blessed and poor. Blessedness and riches are only joined together when the riches are rightly and wisely used; and the poor man only descends into wretchedness when he regards his lot as a burden unjustly imposed.\n\nIndigence and indulgence are the two extremes of wretchedness. They are both equally unnatural and the result of mental disorder. A man is not rightly conditioned until he is a happy, healthy, and prosperous being; and happiness, health, and prosperity are the result of a harmonious adjustment of the inner with the outer, of the man with his surroundings.\n\nA man only begins to be a man when he ceases to whine and revile, and commences to search for the hidden justice which regulates his life. And as he adapts his mind to that regulating factor, he ceases to accuse others as the cause of his condition, and builds himself up in strong and noble thoughts; ceases to kick against circumstances, but begins to use them as aids to his more rapid progress, and as a means of discovering the hidden powers and possibilities within himself.\n\nLaw, not confusion, is the dominating principle in the universe; justice, not injustice, is the soul and substance of life; and righteousness, not corruption, is the moulding and moving force in the spiritual government of the world. This being so, man has but to right himself to find that the universe is right; and during the process of putting himself right he will find that as he alters his thoughts towards things and other people, things and other people will alter towards him.\n\nThe proof of this truth is in every person, and it therefore admits of easy investigation by systematic introspection and self-analysis. Let a man radically alter his thoughts, and he will be astonished at the rapid transformation it will effect in the material conditions of his life. ",
         "OrganizedWordList": [
             {
-                "Word": "will",
+                "Word": "knowledge",
                 "Translation": [
-                    "의지"
+                    "지식"
                 ]
             },
             {
                 "Word": "ignorance",
                 "Translation": [
                     "무지"
+                ]
+            },
+            {
+                "Word": "life",
+                "Translation": [
+                    "삶"
                 ]
             },
             {
@@ -1358,7 +1246,8 @@
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -1374,7 +1263,7 @@
                 ]
             },
             {
-                "Word": "action",
+                "Word": "actions",
                 "Translation": [
                     "행동"
                 ]
@@ -1383,12 +1272,6 @@
                 "Word": "law",
                 "Translation": [
                     "법칙"
-                ]
-            },
-            {
-                "Word": "harmony",
-                "Translation": [
-                    "조화"
                 ]
             },
             {
@@ -1405,21 +1288,28 @@
                 ]
             },
             {
-                "Word": "enlightened being",
+                "Word": "impure",
                 "Translation": [
-                    "깨달은 존재"
+                    "불순한"
+                ]
+            },
+            {
+                "Word": "pure",
+                "Translation": [
+                    "순수한"
                 ]
             },
             {
                 "Word": "circumstance",
                 "Translation": [
+                    "환경",
                     "상황"
                 ]
             },
             {
                 "Word": "circumstances",
                 "Translation": [
-                    "상황"
+                    "환경"
                 ]
             },
             {
@@ -1429,39 +1319,29 @@
                 ]
             },
             {
-                "Word": "blessedness",
-                "Translation": [
-                    "복"
-                ]
-            },
-            {
                 "Word": "mental harmony",
                 "Translation": [
+                    "정신조화",
                     "정신적 조화"
                 ]
             },
             {
                 "Word": "Blessedness",
                 "Translation": [
-                    "축복"
+                    "복"
                 ]
             },
             {
-                "Word": "material possessions",
+                "Word": "right thought",
                 "Translation": [
-                    "물질적 소유물"
+                    "바른 생각",
+                    "바른 사고"
                 ]
             },
             {
                 "Word": "wretchedness",
                 "Translation": [
                     "비참함"
-                ]
-            },
-            {
-                "Word": "indulgence",
-                "Translation": [
-                    "방종"
                 ]
             },
             {
@@ -1489,9 +1369,9 @@
                 ]
             },
             {
-                "Word": "adjustment",
+                "Word": "hidden justice",
                 "Translation": [
-                    "조절"
+                    "숨겨진 정의"
                 ]
             },
             {
@@ -1519,12 +1399,6 @@
                 ]
             },
             {
-                "Word": "the universe",
-                "Translation": [
-                    "우주"
-                ]
-            },
-            {
                 "Word": "soul",
                 "Translation": [
                     "영혼"
@@ -1541,6 +1415,12 @@
                 "Translation": [
                     "진리"
                 ]
+            },
+            {
+                "Word": "transformation",
+                "Translation": [
+                    "변화"
+                ]
             }
         ]
     },
@@ -1552,7 +1432,8 @@
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -1564,6 +1445,7 @@
             {
                 "Word": "circumstance",
                 "Translation": [
+                    "환경",
                     "상황"
                 ]
             },
@@ -1574,21 +1456,33 @@
                 ]
             },
             {
-                "Word": "habits",
-                "Translation": [
-                    "습관"
-                ]
-            },
-            {
                 "Word": "circumstances",
                 "Translation": [
-                    "상황"
+                    "환경"
                 ]
             },
             {
                 "Word": "disease",
                 "Translation": [
                     "질병"
+                ]
+            },
+            {
+                "Word": "impure",
+                "Translation": [
+                    "불순한"
+                ]
+            },
+            {
+                "Word": "impure thoughts",
+                "Translation": [
+                    "불순한 생각"
+                ]
+            },
+            {
+                "Word": "pure",
+                "Translation": [
+                    "순수한"
                 ]
             },
             {
@@ -1616,41 +1510,16 @@
                 ]
             },
             {
-                "Word": "failure",
-                "Translation": [
-                    "실패"
-                ]
-            },
-            {
-                "Word": "indigence",
-                "Translation": [
-                    "빈곤"
-                ]
-            },
-            {
-                "Word": "dishonest",
-                "Translation": [
-                    "부정직한"
-                ]
-            },
-            {
-                "Word": "honest",
-                "Translation": [
-                    "정직한"
-                ]
-            },
-            {
                 "Word": "self-control",
                 "Translation": [
-                    "자기 통제",
-                    "자제"
+                    "자제력",
+                    "자기 통제"
                 ]
             },
             {
                 "Word": "self-reliance",
                 "Translation": [
-                    "자립",
-                    "자기 신뢰"
+                    "자립"
                 ]
             },
             {
@@ -1662,19 +1531,26 @@
             {
                 "Word": "character",
                 "Translation": [
+                    "성격",
                     "인격"
                 ]
             },
             {
-                "Word": "will",
+                "Word": "Nature",
                 "Translation": [
-                    "의지"
+                    "자연"
                 ]
             },
             {
                 "Word": "wretchedness",
                 "Translation": [
                     "비참함"
+                ]
+            },
+            {
+                "Word": "kaleidoscope",
+                "Translation": [
+                    "만화경"
                 ]
             },
             {
@@ -1690,27 +1566,21 @@
                 ]
             },
             {
-                "Word": "master",
-                "Translation": [
-                    "주인"
-                ]
-            },
-            {
                 "Word": "Chance",
                 "Translation": [
                     "우연"
                 ]
             },
             {
-                "Word": "human Will",
+                "Word": "Circumstance",
                 "Translation": [
-                    "인간의 의지"
+                    "상황"
                 ]
             },
             {
-                "Word": "deathless Soul",
+                "Word": "Will",
                 "Translation": [
-                    "불멸의 영혼"
+                    "의지"
                 ]
             },
             {
@@ -1729,8 +1599,13 @@
             {
                 "Word": "body",
                 "Translation": [
-                    "신체",
                     "몸"
+                ]
+            },
+            {
+                "Word": "the mind",
+                "Translation": [
+                    "정신"
                 ]
             },
             {
@@ -1748,13 +1623,20 @@
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
                 "Word": "thoughts",
                 "Translation": [
                     "생각"
+                ]
+            },
+            {
+                "Word": "the body",
+                "Translation": [
+                    "몸"
                 ]
             },
             {
@@ -1770,6 +1652,12 @@
                 ]
             },
             {
+                "Word": "beauty",
+                "Translation": [
+                    "아름다움"
+                ]
+            },
+            {
                 "Word": "health",
                 "Translation": [
                     "건강"
@@ -1778,25 +1666,14 @@
             {
                 "Word": "circumstance",
                 "Translation": [
+                    "환경",
                     "상황"
                 ]
             },
             {
                 "Word": "circumstances",
                 "Translation": [
-                    "상황"
-                ]
-            },
-            {
-                "Word": "will",
-                "Translation": [
-                    "의지"
-                ]
-            },
-            {
-                "Word": "Thought",
-                "Translation": [
-                    "사고"
+                    "환경"
                 ]
             },
             {
@@ -1806,13 +1683,31 @@
                 ]
             },
             {
-                "Word": "habit",
+                "Word": "impure",
                 "Translation": [
-                    "습관"
+                    "불순한"
                 ]
             },
             {
-                "Word": "habits",
+                "Word": "impure thoughts",
+                "Translation": [
+                    "불순한 생각"
+                ]
+            },
+            {
+                "Word": "pure",
+                "Translation": [
+                    "순수한"
+                ]
+            },
+            {
+                "Word": "nervous system",
+                "Translation": [
+                    "신경계"
+                ]
+            },
+            {
+                "Word": "habit",
                 "Translation": [
                     "습관"
                 ]
@@ -1824,9 +1719,15 @@
                 ]
             },
             {
+                "Word": "life",
+                "Translation": [
+                    "삶"
+                ]
+            },
+            {
                 "Word": "defiled mind",
                 "Translation": [
-                    "더럽혀진 마음"
+                    "더럽혀진 정신"
                 ]
             },
             {
@@ -1836,21 +1737,15 @@
                 ]
             },
             {
-                "Word": "action",
-                "Translation": [
-                    "행동"
-                ]
-            },
-            {
                 "Word": "diet",
                 "Translation": [
                     "식단"
                 ]
             },
             {
-                "Word": "saint",
+                "Word": "desire",
                 "Translation": [
-                    "성자"
+                    "욕망"
                 ]
             },
             {
@@ -1860,21 +1755,9 @@
                 ]
             },
             {
-                "Word": "malevolent microbe",
-                "Translation": [
-                    "악의 미생물"
-                ]
-            },
-            {
                 "Word": "chance",
                 "Translation": [
                     "우연"
-                ]
-            },
-            {
-                "Word": "countenance",
-                "Translation": [
-                    "얼굴"
                 ]
             },
             {
@@ -1884,9 +1767,10 @@
                 ]
             },
             {
-                "Word": "philosopher",
+                "Word": "serenity",
                 "Translation": [
-                    "철학자"
+                    "고요, 평온",
+                    "고요함"
                 ]
             },
             {
@@ -1905,7 +1789,8 @@
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -1921,9 +1806,15 @@
                 ]
             },
             {
+                "Word": "life",
+                "Translation": [
+                    "삶"
+                ]
+            },
+            {
                 "Word": "vice",
                 "Translation": [
-                    "악덕"
+                    "악"
                 ]
             },
             {
@@ -1935,14 +1826,8 @@
             {
                 "Word": "weakness",
                 "Translation": [
-                    "약점",
-                    "약함"
-                ]
-            },
-            {
-                "Word": "failure",
-                "Translation": [
-                    "실패"
+                    "약함",
+                    "약점"
                 ]
             },
             {
@@ -1955,6 +1840,12 @@
                 "Word": "power",
                 "Translation": [
                     "힘"
+                ]
+            },
+            {
+                "Word": "power evolving universe",
+                "Translation": [
+                    "힘이 진화하는 우주"
                 ]
             },
             {
@@ -1976,18 +1867,6 @@
                 ]
             },
             {
-                "Word": "ideal",
-                "Translation": [
-                    "이상"
-                ]
-            },
-            {
-                "Word": "nature",
-                "Translation": [
-                    "자연"
-                ]
-            },
-            {
                 "Word": "thought-forces",
                 "Translation": [
                     "사고의 힘"
@@ -2000,10 +1879,16 @@
                 ]
             },
             {
+                "Word": "royal road",
+                "Translation": [
+                    "왕도"
+                ]
+            },
+            {
                 "Word": "self-control",
                 "Translation": [
-                    "자기 통제",
-                    "자제"
+                    "자제력",
+                    "자기 통제"
                 ]
             },
             {
@@ -2015,6 +1900,7 @@
             {
                 "Word": "character",
                 "Translation": [
+                    "성격",
                     "인격"
                 ]
             },
@@ -2025,21 +1911,9 @@
                 ]
             },
             {
-                "Word": "will",
-                "Translation": [
-                    "의지"
-                ]
-            },
-            {
                 "Word": "resolution",
                 "Translation": [
                     "결심"
-                ]
-            },
-            {
-                "Word": "energy",
-                "Translation": [
-                    "에너지"
                 ]
             },
             {
@@ -2063,7 +1937,7 @@
             {
                 "Word": "aimlessness",
                 "Translation": [
-                    "무목적"
+                    "목적 없음"
                 ]
             },
             {
@@ -2073,21 +1947,9 @@
                 ]
             },
             {
-                "Word": "master",
-                "Translation": [
-                    "주인"
-                ]
-            },
-            {
                 "Word": "achievement",
                 "Translation": [
                     "성취"
-                ]
-            },
-            {
-                "Word": "Thought",
-                "Translation": [
-                    "사고"
                 ]
             },
             {
@@ -2097,9 +1959,9 @@
                 ]
             },
             {
-                "Word": "fruit",
+                "Word": "knowledge",
                 "Translation": [
-                    "열매"
+                    "지식"
                 ]
             }
         ]
@@ -2118,7 +1980,8 @@
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -2134,22 +1997,40 @@
                 ]
             },
             {
-                "Word": "individual responsibility",
+                "Word": "poise",
                 "Translation": [
-                    "개인적 책임"
+                    "침착, 단정함"
+                ]
+            },
+            {
+                "Word": "responsibility",
+                "Translation": [
+                    "책임"
                 ]
             },
             {
                 "Word": "weakness",
                 "Translation": [
-                    "약점",
-                    "약함"
+                    "약함",
+                    "약점"
                 ]
             },
             {
                 "Word": "strength",
                 "Translation": [
                     "힘"
+                ]
+            },
+            {
+                "Word": "purity",
+                "Translation": [
+                    "순수함"
+                ]
+            },
+            {
+                "Word": "impurity",
+                "Translation": [
+                    "불순함"
                 ]
             },
             {
@@ -2171,12 +2052,6 @@
                 ]
             },
             {
-                "Word": "will",
-                "Translation": [
-                    "의지"
-                ]
-            },
-            {
                 "Word": "effort",
                 "Translation": [
                     "노력"
@@ -2191,6 +2066,7 @@
             {
                 "Word": "oppressor",
                 "Translation": [
+                    "압제자",
                     "억압자"
                 ]
             },
@@ -2219,15 +2095,15 @@
                 ]
             },
             {
-                "Word": "action",
-                "Translation": [
-                    "행동"
-                ]
-            },
-            {
                 "Word": "law",
                 "Translation": [
                     "법칙"
+                ]
+            },
+            {
+                "Word": "oppressed",
+                "Translation": [
+                    "피억압자"
                 ]
             },
             {
@@ -2245,19 +2121,14 @@
             {
                 "Word": "Compassion",
                 "Translation": [
+                    "자비",
                     "연민"
                 ]
             },
             {
-                "Word": "indulgence",
+                "Word": "animal indulgence",
                 "Translation": [
-                    "방종"
-                ]
-            },
-            {
-                "Word": "selfishness",
-                "Translation": [
-                    "이기심"
+                    "동물적 탐닉"
                 ]
             },
             {
@@ -2304,22 +2175,16 @@
                 ]
             },
             {
-                "Word": "will",
-                "Translation": [
-                    "의지"
-                ]
-            },
-            {
                 "Word": "confused animal thoughts",
                 "Translation": [
-                    "혼란스러운 동물적 생각",
-                    "혼란스러운 동물적 생각들"
+                    "혼란스러운 동물적 사고"
                 ]
             },
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -2349,43 +2214,25 @@
             {
                 "Word": "self-reliance",
                 "Translation": [
-                    "자립",
-                    "자기 신뢰"
+                    "자립"
                 ]
             },
             {
-                "Word": "dishonest",
+                "Word": "knowledge",
                 "Translation": [
-                    "부정직한"
+                    "지식"
                 ]
             },
             {
-                "Word": "honest",
+                "Word": "life",
                 "Translation": [
-                    "정직한"
-                ]
-            },
-            {
-                "Word": "Teachers of the ages",
-                "Translation": [
-                    "시대의 위대한 스승들"
-                ]
-            },
-            {
-                "Word": "nature",
-                "Translation": [
-                    "자연"
-                ]
-            },
-            {
-                "Word": "vanity",
-                "Translation": [
-                    "허영"
+                    "삶"
                 ]
             },
             {
                 "Word": "character",
                 "Translation": [
+                    "성격",
                     "인격"
                 ]
             },
@@ -2408,28 +2255,40 @@
                 ]
             },
             {
+                "Word": "pure",
+                "Translation": [
+                    "순수한"
+                ]
+            },
+            {
                 "Word": "holy aspirations",
                 "Translation": [
                     "거룩한 열망"
                 ]
             },
             {
-                "Word": "aspirations",
+                "Word": "aspiration",
                 "Translation": [
                     "열망"
                 ]
             },
             {
-                "Word": "blessedness",
+                "Word": "self-control",
                 "Translation": [
-                    "복"
+                    "자제력",
+                    "자기 통제"
                 ]
             },
             {
-                "Word": "self-control",
+                "Word": "purity",
                 "Translation": [
-                    "자기 통제",
-                    "자제"
+                    "순수함"
+                ]
+            },
+            {
+                "Word": "impurity",
+                "Translation": [
+                    "불순함"
                 ]
             },
             {
@@ -2441,8 +2300,8 @@
             {
                 "Word": "weakness",
                 "Translation": [
-                    "약점",
-                    "약함"
+                    "약함",
+                    "약점"
                 ]
             },
             {
@@ -2452,15 +2311,10 @@
                 ]
             },
             {
-                "Word": "watchfulness",
+                "Word": "right thought",
                 "Translation": [
-                    "경계심"
-                ]
-            },
-            {
-                "Word": "failure",
-                "Translation": [
-                    "실패"
+                    "바른 생각",
+                    "바른 사고"
                 ]
             },
             {
@@ -2479,14 +2333,7 @@
             {
                 "Word": "dreamers",
                 "Translation": [
-                    "꿈꾸는 이들",
                     "꿈꾸는 자들"
-                ]
-            },
-            {
-                "Word": "dream",
-                "Translation": [
-                    "꿈"
                 ]
             },
             {
@@ -2496,7 +2343,7 @@
                 ]
             },
             {
-                "Word": "vision",
+                "Word": "visions",
                 "Translation": [
                     "비전"
                 ]
@@ -2508,63 +2355,9 @@
                 ]
             },
             {
-                "Word": "ideal",
+                "Word": "ideals",
                 "Translation": [
                     "이상"
-                ]
-            },
-            {
-                "Word": "realities",
-                "Translation": [
-                    "현실"
-                ]
-            },
-            {
-                "Word": "sculptor",
-                "Translation": [
-                    "조각가"
-                ]
-            },
-            {
-                "Word": "pain",
-                "Translation": [
-                    "고통"
-                ]
-            },
-            {
-                "Word": "painter",
-                "Translation": [
-                    "화가"
-                ]
-            },
-            {
-                "Word": "poet",
-                "Translation": [
-                    "시인"
-                ]
-            },
-            {
-                "Word": "prophet",
-                "Translation": [
-                    "예언자"
-                ]
-            },
-            {
-                "Word": "sage",
-                "Translation": [
-                    "현자"
-                ]
-            },
-            {
-                "Word": "makers",
-                "Translation": [
-                    "창조자"
-                ]
-            },
-            {
-                "Word": "maker",
-                "Translation": [
-                    "창조자"
                 ]
             },
             {
@@ -2583,12 +2376,6 @@
                 "Word": "heaven",
                 "Translation": [
                     "천국"
-                ]
-            },
-            {
-                "Word": "will",
-                "Translation": [
-                    "의지"
                 ]
             },
             {
@@ -2616,15 +2403,34 @@
                 ]
             },
             {
+                "Word": "beauty",
+                "Translation": [
+                    "아름다움"
+                ]
+            },
+            {
                 "Word": "mind",
                 "Translation": [
                     "마음"
                 ]
             },
             {
+                "Word": "love",
+                "Translation": [
+                    "사랑"
+                ]
+            },
+            {
+                "Word": "pure",
+                "Translation": [
+                    "순수한"
+                ]
+            },
+            {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -2646,7 +2452,13 @@
                 ]
             },
             {
-                "Word": "aspirations",
+                "Word": "desire",
+                "Translation": [
+                    "욕망"
+                ]
+            },
+            {
+                "Word": "aspiration",
                 "Translation": [
                     "열망"
                 ]
@@ -2691,13 +2503,14 @@
             {
                 "Word": "circumstance",
                 "Translation": [
+                    "환경",
                     "상황"
                 ]
             },
             {
                 "Word": "circumstances",
                 "Translation": [
-                    "상황"
+                    "환경"
                 ]
             },
             {
@@ -2707,15 +2520,21 @@
                 ]
             },
             {
-                "Word": "act",
+                "Word": "intelligence",
                 "Translation": [
-                    "행위"
+                    "지능"
                 ]
             },
             {
-                "Word": "action",
+                "Word": "life",
                 "Translation": [
-                    "행동"
+                    "삶"
+                ]
+            },
+            {
+                "Word": "act",
+                "Translation": [
+                    "행위"
                 ]
             },
             {
@@ -2725,21 +2544,15 @@
                 ]
             },
             {
-                "Word": "harmony",
-                "Translation": [
-                    "조화"
-                ]
-            },
-            {
                 "Word": "growth",
                 "Translation": [
                     "성장"
                 ]
             },
             {
-                "Word": "master",
+                "Word": "the mind",
                 "Translation": [
-                    "주인"
+                    "정신"
                 ]
             }
         ]
@@ -2758,6 +2571,7 @@
             {
                 "Word": "character",
                 "Translation": [
+                    "성격",
                     "인격"
                 ]
             },
@@ -2765,12 +2579,6 @@
                 "Word": "act",
                 "Translation": [
                     "행위"
-                ]
-            },
-            {
-                "Word": "destinies",
-                "Translation": [
-                    "운명"
                 ]
             },
             {
@@ -2786,15 +2594,16 @@
                 ]
             },
             {
-                "Word": "will",
+                "Word": "love",
                 "Translation": [
-                    "의지"
+                    "사랑"
                 ]
             },
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -2810,13 +2619,25 @@
                 ]
             },
             {
-                "Word": "Stanton Kirkham Davis",
+                "Word": "desire",
                 "Translation": [
-                    "스탠턴 커컴 데이비스"
+                    "욕망"
                 ]
             },
             {
-                "Word": "ideal",
+                "Word": "aspiration",
+                "Translation": [
+                    "열망"
+                ]
+            },
+            {
+                "Word": "Stanton Kirkham Davis",
+                "Translation": [
+                    "스탠턴 커크햄 데이비스"
+                ]
+            },
+            {
+                "Word": "ideals",
                 "Translation": [
                     "이상"
                 ]
@@ -2825,18 +2646,6 @@
                 "Word": "spirit",
                 "Translation": [
                     "정신"
-                ]
-            },
-            {
-                "Word": "master",
-                "Translation": [
-                    "주인"
-                ]
-            },
-            {
-                "Word": "dream",
-                "Translation": [
-                    "꿈"
                 ]
             },
             {
@@ -2852,21 +2661,15 @@
                 ]
             },
             {
-                "Word": "saint",
-                "Translation": [
-                    "성자"
-                ]
-            },
-            {
-                "Word": "failure",
-                "Translation": [
-                    "실패"
-                ]
-            },
-            {
                 "Word": "experience",
                 "Translation": [
                     "경험"
+                ]
+            },
+            {
+                "Word": "knowledge",
+                "Translation": [
+                    "지식"
                 ]
             },
             {
@@ -2900,13 +2703,7 @@
                 ]
             },
             {
-                "Word": "fruit",
-                "Translation": [
-                    "열매"
-                ]
-            },
-            {
-                "Word": "vision",
+                "Word": "visions",
                 "Translation": [
                     "비전"
                 ]
@@ -2915,6 +2712,12 @@
                 "Word": "mind",
                 "Translation": [
                     "마음"
+                ]
+            },
+            {
+                "Word": "life",
+                "Translation": [
+                    "삶"
                 ]
             }
         ]
@@ -2927,14 +2730,19 @@
             {
                 "Word": "CALMNESS",
                 "Translation": [
-                    "평온",
-                    "침착함"
+                    "평온"
                 ]
             },
             {
                 "Word": "mind",
                 "Translation": [
                     "마음"
+                ]
+            },
+            {
+                "Word": "wisdom",
+                "Translation": [
+                    "지혜"
                 ]
             },
             {
@@ -2946,14 +2754,20 @@
             {
                 "Word": "self-control",
                 "Translation": [
-                    "자기 통제",
-                    "자제"
+                    "자제력",
+                    "자기 통제"
                 ]
             },
             {
                 "Word": "experience",
                 "Translation": [
                     "경험"
+                ]
+            },
+            {
+                "Word": "knowledge",
+                "Translation": [
+                    "지식"
                 ]
             },
             {
@@ -2965,7 +2779,8 @@
             {
                 "Word": "thought",
                 "Translation": [
-                    "생각"
+                    "생각",
+                    "사고"
                 ]
             },
             {
@@ -2981,9 +2796,15 @@
                 ]
             },
             {
-                "Word": "action",
+                "Word": "cause and effect",
                 "Translation": [
-                    "행동"
+                    "인과"
+                ]
+            },
+            {
+                "Word": "poise",
+                "Translation": [
+                    "침착, 단정함"
                 ]
             },
             {
@@ -3005,27 +2826,41 @@
                 ]
             },
             {
-                "Word": "will",
-                "Translation": [
-                    "의지"
-                ]
-            },
-            {
                 "Word": "prosperity",
                 "Translation": [
                     "번영"
                 ]
             },
             {
+                "Word": "equanimity",
+                "Translation": [
+                    "평정심"
+                ]
+            },
+            {
+                "Word": "love",
+                "Translation": [
+                    "사랑"
+                ]
+            },
+            {
+                "Word": "life",
+                "Translation": [
+                    "삶"
+                ]
+            },
+            {
                 "Word": "character",
                 "Translation": [
+                    "성격",
                     "인격"
                 ]
             },
             {
-                "Word": "fruit",
+                "Word": "serenity",
                 "Translation": [
-                    "열매"
+                    "고요, 평온",
+                    "고요함"
                 ]
             },
             {
@@ -3035,27 +2870,33 @@
                 ]
             },
             {
-                "Word": "ocean of Truth",
+                "Word": "desire",
                 "Translation": [
-                    "진리의 바다"
+                    "욕망"
                 ]
             },
             {
-                "Word": "Truth",
+                "Word": "ocean of Truth",
                 "Translation": [
-                    "진리"
+                    "진리의 대양"
                 ]
             },
             {
                 "Word": "Eternal Calm",
                 "Translation": [
-                    "영원한 평정"
+                    "영원한 평온"
                 ]
             },
             {
                 "Word": "happiness",
                 "Translation": [
                     "행복"
+                ]
+            },
+            {
+                "Word": "anxiety",
+                "Translation": [
+                    "불안"
                 ]
             },
             {
@@ -3083,58 +2924,27 @@
                 ]
             },
             {
+                "Word": "isles of Blessedness",
+                "Translation": [
+                    "복의 섬들"
+                ]
+            },
+            {
                 "Word": "Blessedness",
                 "Translation": [
-                    "축복"
-                ]
-            },
-            {
-                "Word": "ideal",
-                "Translation": [
-                    "이상"
-                ]
-            },
-            {
-                "Word": "helm of thought",
-                "Translation": [
-                    "생각의 키"
-                ]
-            },
-            {
-                "Word": "bark of your soul",
-                "Translation": [
-                    "영혼의 범선"
+                    "복"
                 ]
             },
             {
                 "Word": "Master",
                 "Translation": [
-                    "내면의 주인",
-                    "주인"
-                ]
-            },
-            {
-                "Word": "Self-control",
-                "Translation": [
-                    "자기 통제"
+                    "내면의 주인"
                 ]
             },
             {
                 "Word": "Right Thought",
                 "Translation": [
-                    "옳은 생각"
-                ]
-            },
-            {
-                "Word": "Thought",
-                "Translation": [
-                    "사고"
-                ]
-            },
-            {
-                "Word": "master",
-                "Translation": [
-                    "주인"
+                    "옳은 사고"
                 ]
             }
         ]

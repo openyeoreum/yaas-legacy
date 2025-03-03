@@ -1009,14 +1009,15 @@ def WordListPostprocessingProcessDataFrameSave(ProjectName, MainLang, Translatio
     WordListPostprocessingFrame[0]['TaskName'] = Process
     
     for Response in WordListPostprocessingResponse:
-        ## WordListPostprocessingFrame 첫번째 데이터 프레임 복사
-        WordListPostprocessing = WordListPostprocessingFrame[1][0].copy()
-        WordListPostprocessing['IndexId'] = IndexId
-        WordListPostprocessing['BodyId'] = InputCount
-        WordListPostprocessing['WordId'] = Response['번호']
-        WordListPostprocessing['Word'] = Response['원문']
-        WordListPostprocessing['Translation'] = Response['번역']
-        WordListPostprocessing['Processing'] = Response['정리방법']
+        if Response['정리방법'] != '삭제':
+            ## WordListPostprocessingFrame 첫번째 데이터 프레임 복사
+            WordListPostprocessing = WordListPostprocessingFrame[1][0].copy()
+            WordListPostprocessing['IndexId'] = IndexId
+            WordListPostprocessing['BodyId'] = InputCount
+            WordListPostprocessing['WordId'] = Response['번호']
+            WordListPostprocessing['Word'] = Response['원문']
+            WordListPostprocessing['Translation'] = Response['번역']
+            WordListPostprocessing['Processing'] = Response['정리방법']
 
         ## WordListPostprocessingFrame 데이터 프레임 업데이트
         WordListPostprocessingFrame[1].append(WordListPostprocessing)

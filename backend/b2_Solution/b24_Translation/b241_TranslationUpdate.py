@@ -602,6 +602,96 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
         
     return AddInput
 
+## Process9: TranslationEditing의 InputList
+def TranslationEditingInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2):
+    ## BracketedBodyGen 함수
+    def BracketedBodyGen(OriginalBody, TranslationBody):
+        # OriginalBody에서 {원문->번역어} 형태의 패턴 추출
+        TranslationPairs = re.findall(r'\{(.*?)->(.*?)\}', OriginalBody)
+        
+        # 번역된 단어의 길이를 기준으로 내림차순 정렬 (긴 단어부터 처리)
+        # 이는 한 단어가 다른 단어의 부분 문자열인 경우 중첩 괄호 문제를 방지
+        TranslationPairs.sort(key=lambda x: len(x[1]), reverse=True)
+        
+        # 번역된 텍스트의 복사본 생성
+        BracketedBody = TranslationBody
+        
+        # 각 번역 쌍에 대해 번역된 단어를 {번역된 단어} 형태로
+        for OriginalWord, TranslatedWord in TranslationPairs:
+            BracketedBody = BracketedBody.replace(TranslatedWord, f'{{{TranslatedWord}}}')
+        
+        BracketedBody = BracketedBody.replace('{{{{', '{').replace('}}}}', '}')
+        BracketedBody = BracketedBody.replace('{{{', '{').replace('}}}', '}')
+        BracketedBody = BracketedBody.replace('{{', '{').replace('}}', '}')
+        
+        return BracketedBody
+    
+    ## BodyTranslationPreprocessingList, BodyTranslationList 불러오기
+    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+        TranslationEditList = json.load(TranslationEditJson)
+    
+    BodyTranslationPreprocessingList = TranslationEditList[BeforeProcess1]
+    BodyTranslationList = TranslationEditList[BeforeProcess2]
+        
+    InputId = 1
+    InputList = []
+    for i, BodyTranslation in enumerate(BodyTranslationList):
+        IndexId = BodyTranslation['IndexId']
+        IndexTag = BodyTranslation['IndexTag']
+        Index = BodyTranslation['Index']
+        BodyId = BodyTranslation['BodyId']
+        TranslationBody = BodyTranslation['Body']
+        for BodyTranslationPreprocessing in BodyTranslationPreprocessingList:
+            if BodyTranslationPreprocessing['BodyId'] == BodyId:
+                OriginalBody = BodyTranslationPreprocessing['Body']
+                BracketedBody = BracketedBodyGen(OriginalBody, TranslationBody)
+        
+        Input = f"<현재편집전내용>\n[편집할내용의목차]\n{IndexTag}: {Index}\n\n[편집할내용]\n{BracketedBody}\n\n"
+        
+        InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Input": Input})
+        InputId += 1
+    
+    return InputList
+
+## Process9: TranslationEditing의 추가 Input
+def TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDataFrameIndexTranslationPath):
+    ## 전체 도서목차 생성
+    with open(ProjectDataFrameIndexTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
+        IndexTranslation = json.load(TranslationDataFrame)[1]
+    ## 최상위 태그로 목차를 구성함으로써 매우 긴 목차를 줄이기 위함
+    # 태그 우선순위 정의 (순서대로 높은 우선순위)
+    PriorityIndexTags = ['Part', 'Chapter', 'Index']
+
+    # 각 우선순위 태그에 대해 확인
+    for indexTag in PriorityIndexTags:
+        # 해당 태그가 존재하면 그것이 최상위 태그
+        if any(item['IndexTag'] == indexTag for item in IndexTranslation):
+            MainIndexTag = indexTag
+            break
+    else:  # for 루프가 break 없이 완료된 경우
+        MainIndexTag = 'Index'
+        
+    IndexText = ''
+    for IndexTranslationDic in IndexTranslation:
+        if IndexTranslationDic['IndexTag'] in ['Title', MainIndexTag]:
+            IndexText += f"{IndexTranslationDic['IndexTag']}: {IndexTranslationDic['IndexTranslation']}\n"
+    
+    ## <현재편집전내용> 생성
+    if os.path.exists(ProjectDataFrameTranslationEditingPath):
+        with open(ProjectDataFrameTranslationEditingPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
+            TranslationEditing = json.load(TranslationDataFrame)[1]
+        ## Body번역이 1번 진행된 경우는 이전번역문을 1개만 제시
+        if len(TranslationEditing) <= 2:
+            BeforeTranslationEditing = TranslationEditing[-1]['Body']
+        else:
+            BeforeTranslationEditing = TranslationEditing[-2]['Body'] + '\n\n' + TranslationEditing[-1]['Body']
+        
+        AddInput = f"[도서전체목차]\n{IndexText}\n\n[이전편집내용]\n{BeforeTranslationEditing}\n\n\n"
+    else:
+        AddInput = f"[도서전체목차]\n{IndexText}\n\n[이전편집내용]\nNone\n\n\n"
+        
+    return AddInput
+
 ######################
 ##### Filter 조건 #####
 ######################
@@ -1341,6 +1431,42 @@ def BodyTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, Tran
     with open(ProjectDataFrameBodyTranslationPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(BodyTranslationFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
+## Process9: TranslationEditingProcess DataFrame 저장
+def TranslationEditingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
+    ## TranslationEditingFrame 불러오기
+    if os.path.exists(ProjectDataFrameTranslationEditingPath):
+        TranslationEditingFramePath = ProjectDataFrameTranslationEditingPath
+    else:
+        TranslationEditingFramePath = os.path.join(TranslationDataFramePath, "b532-09_TranslationEditingFrame.json")
+    with open(TranslationEditingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        TranslationEditingFrame = json.load(DataFrameJson)
+        
+    ## TranslationEditingFrame 업데이트
+    TranslationEditingFrame[0]['ProjectName'] = ProjectName
+    TranslationEditingFrame[0]['MainLang'] = MainLang.capitalize()
+    TranslationEditingFrame[0]['Translation'] = Translation.capitalize()
+    TranslationEditingFrame[0]['TaskName'] = Process
+    
+    ## TranslationEditingFrame 첫번째 데이터 프레임 복사
+    TranslationEditing = TranslationEditingFrame[1][0].copy()
+    TranslationEditing['IndexId'] = IndexId
+    TranslationEditing['IndexTag'] = IndexTag
+    TranslationEditing['Index'] = Index
+    TranslationEditing['BodyId'] = BodyId
+    TranslationEditing['Body'] = TranslationEditingResponse['내용']
+
+    ## TranslationEditingFrame 데이터 프레임 업데이트
+    TranslationEditingFrame[1].append(TranslationEditing)
+        
+    ## TranslationEditingFrame ProcessCount 및 Completion 업데이트
+    TranslationEditingFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        TranslationEditingFrame[0]['Completion'] = 'Yes'
+        
+    ## TranslationEditingFrame 저장
+    with open(ProjectDataFrameTranslationEditingPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(TranslationEditingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
 ##############################
 ##### ProcessEdit 업데이트 #####
 ##############################
@@ -1860,7 +1986,58 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
+    ################################################
+    ### Process9: TranslationEditing Response 생성 ##
+    ################################################
+
+    ## Process 설정
+    ProcessNumber = '09'
+    Process = "TranslationEditing"
+
+    ## TranslationEditing 경로 생성
+    ProjectDataFrameTranslationEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = TranslationEditingInputList(TranslationEditPath, "BodyTranslationPreprocessing", "BodyTranslation")
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationEditingPath)
+    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList[i]['Id']
+                IndexId = InputList[i]['IndexId']
+                IndexTag = InputList[i]['IndexTag']
+                Index = InputList[i]['Index']
+                BodyId = InputList[i]['BodyId']
+                Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDataFrameIndexTranslationPath)
+                Input2 = InputList[i]['Input']
+                Input = Input1 + Input2
                 
+                ## Response 생성
+                TranslationEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Anthropic", mode, MessagesReview)
+                
+                ## DataFrame 저장
+                TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameBodyTranslationPath, TranslationEditPath, Process, EditMode)
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################

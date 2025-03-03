@@ -611,6 +611,10 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
           
           # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
           if promptFrame[0]["OutputFormat"] == 'json':
+              pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'
+              match = re.search(pattern, Response, re.DOTALL)
+              if match:
+                  Response = match.group(1).strip()
               Response = Response.replace('\n', '\\n')
               StartIndexBracket = Response.find('[')
               StartIndexBrace = Response.find('{')

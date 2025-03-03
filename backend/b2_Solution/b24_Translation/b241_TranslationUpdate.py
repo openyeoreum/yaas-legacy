@@ -326,7 +326,7 @@ def WordListGenInputList(TranslationEditPath, MainLangCode, TranslationLangCode,
 
 ## Process5: WordListPostprocessing의 InputList
 def WordListPostprocessingInputList(TranslationEditPath, MainLangCode, TranslationLangCode, BeforeProcess1, BeforeProcess2, BeforeProcess3):
-## OrganizedBodyList 함수
+    ## OrganizedBodyList 함수
     def OrganizedBodyListGen(WordList, BodyList):
         # 1. 동일한 Word별로 모아 중복 Translation 제거
         OrganizedWordDict = {}
@@ -409,11 +409,12 @@ def WordListPostprocessingInputList(TranslationEditPath, MainLangCode, Translati
     return InputList
 
 ## Process6: IndexTranslation의 InputList
-def IndexTranslationInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2):
+def IndexTranslationInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2, BeforeProcess3):
     with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
         TranslationEditList = json.load(TranslationEditJson)
     TranslationIndexDefine = TranslationEditList[BeforeProcess1]
     TranslationBodySummary = TranslationEditList[BeforeProcess2]
+    TranslationWordList = TranslationEditList[BeforeProcess3]
     
     ## 전체목차원문 생성
     IndexText = ''
@@ -433,8 +434,16 @@ def IndexTranslationInputList(TranslationEditPath, BeforeProcess1, BeforeProcess
         for TranslationBody in TranslationBodySummary:
             if TranslationBody['IndexId'] == TranslationIndex['IndexId']:
                 BodySummary += TranslationBody['BodySummary']
+        WordList = ''
+        ExistWordList = []
+        for TranslationWord in TranslationWordList:
+            if TranslationWord['Word'].lower() not in ExistWordList and TranslationWord['IndexId'] == TranslationIndex['IndexId'] and TranslationWord["Processing"] != '삭제' and TranslationWord["Word"].lower() in Index.lower():
+                WordList += f"{TranslationWord['Word']} -> {TranslationWord['Translation']}\n"
+                ExistWordList.append(TranslationWord['Word'].lower())
+        if WordList == '':
+            WordList = 'None'
         
-        Input = f"<현재목차정보>\n[현재목차원문]\n{Index}\n\n[원문본문내용요약]\n{BodySummary}\n\n"
+        Input = f"<현재목차정보>\n[현재목차원문]\n{Index}\n\n[원문본문내용요약]\n{BodySummary}\n\n[본문단어번역]\n{WordList}\n\n"
         
         InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "IndexText": IndexText, "Input": Input})
         InputId += 1
@@ -1440,7 +1449,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
     
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = IndexTranslationInputList(TranslationEditPath, "TranslationIndexDefine", "TranslationBodySummary")
+    InputList = IndexTranslationInputList(TranslationEditPath, "TranslationIndexDefine", "TranslationBodySummary", "WordListPostprocessing")
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameIndexTranslationPath)
     EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, OutputCountKey = 'BodyId')

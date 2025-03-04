@@ -199,9 +199,9 @@ def LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath):
         TranslationIndexDefine = json.load(TranslationIndexDefineJson)
     
     if Translation in ['auto', 'Auto']:
-        Translation = TranslationIndexDefine['Translation']
+        Translation = TranslationIndexDefine[0]['Translation']
     elif Translation.lower() not in ['en', 'zh', 'es', 'fr', 'de', 'it', 'ja', 'ko', 'pt', 'ru', 'ar', 'nl', 'sv', 'no', 'da', 'fi', 'pl', 'tr', 'el', 'cs', 'hu', 'ro', 'sk', 'uk', 'hi', 'id', 'ms', 'th', 'vi', 'he', 'bg', 'ca']:
-        Translation = TranslationIndexDefine['Translation']
+        Translation = TranslationIndexDefine[0]['Translation']
         
     return Translation
 
@@ -1271,7 +1271,7 @@ def WordListPostprocessingProcessDataFrameSave(ProjectName, MainLang, Translatio
         WordListPostprocessingFramePath = os.path.join(TranslationDataFramePath, "b532-05_WordListPostprocessingFrame.json")
     with open(WordListPostprocessingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         WordListPostprocessingFrame = json.load(DataFrameJson)
-        
+
     ## WordListPostprocessingFrame 업데이트
     WordListPostprocessingFrame[0]['ProjectName'] = ProjectName
     WordListPostprocessingFrame[0]['MainLang'] = MainLang.capitalize()
@@ -1289,8 +1289,8 @@ def WordListPostprocessingProcessDataFrameSave(ProjectName, MainLang, Translatio
             WordListPostprocessing['Translation'] = Response['번역']
             WordListPostprocessing['Processing'] = Response['정리방법']
 
-        ## WordListPostprocessingFrame 데이터 프레임 업데이트
-        WordListPostprocessingFrame[1].append(WordListPostprocessing)
+            ## WordListPostprocessingFrame 데이터 프레임 업데이트
+            WordListPostprocessingFrame[1].append(WordListPostprocessing)
         
     ## WordListPostprocessingFrame ProcessCount 및 Completion 업데이트
     WordListPostprocessingFrame[0]['InputCount'] = InputCount
@@ -1525,7 +1525,7 @@ def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process)
                 json.dump(TranslationEdit, TranslationEditJson, indent = 4, ensure_ascii = False)
 
 ## ProcessEditText 저장
-def ProcessEditTextSave(ProjectName, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2):
+def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2):
     ## TranslationEdit 불러오기
     with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
         TranslationEdit = json.load(TranslationEditJson)
@@ -1533,9 +1533,9 @@ def ProcessEditTextSave(ProjectName, ProjectMasterTranslationPath, TranslationEd
     TranslationIndexEdit = TranslationEdit[Process1]
         
     ## TranslationEdit을 Index, Body Text파일로 저장
-    EditIndexFileName = f"{ProjectName}_Index.txt"
+    EditIndexFileName = f"{ProjectName}_Index({MainLang}).txt"
     EditIndexFilePath = os.path.join(ProjectMasterTranslationPath, EditIndexFileName)
-    EditBodyFileName = f"{ProjectName}_Body.txt"
+    EditBodyFileName = f"{ProjectName}_Body({MainLang}).txt"
     EditBodyFilePath = os.path.join(ProjectMasterTranslationPath, EditBodyFileName)
     
     # Index 파일 생성  
@@ -2075,9 +2075,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
 
         ## Edit 저장
-        ProcessEditSave(ProjectDataFrameBodyTranslationPath, TranslationEditPath, Process, EditMode)
+        ProcessEditSave(ProjectDataFrameTranslationEditingPath, TranslationEditPath, Process, EditMode)
         ## EditText 저장
-        ProcessEditTextSave(projectName, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
+        ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 

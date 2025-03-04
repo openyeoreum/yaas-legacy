@@ -649,11 +649,12 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
               LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
 
           ## Response Mode 전처리2: JsonParsing의 재구조화
-          try:
-              TestResponse = json.loads(JsonResponse)
-          except json.JSONDecodeError:
-              print(f"Project: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 파싱오류 | JsonParsingProcess 시작")
-              JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
+          if ":" in JsonResponse and "{" in JsonResponse and "}" in JsonResponse:
+              try:
+                  TestResponse = json.loads(JsonResponse)
+              except json.JSONDecodeError:
+                  print(f"Project: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 파싱오류 | JsonParsingProcess 시작")
+                  JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
 
           return JsonResponse, Usage, Model
       

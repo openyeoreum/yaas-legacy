@@ -1082,7 +1082,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     musicLayerPath = MusicLayerPathGen(projectName, email, '')
 
     # Voice 폴더 내의 모든 .wav 파일 목록 추출
-    VoiceRawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav')]
+    VoiceRawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav') and '_Speed' not in f]
     # Voice 모든 .wav 파일 목록의 노멀라이즈
     VoiceRawFiles = [unicodedata.normalize('NFC', s) for s in VoiceRawFiles]
     
@@ -1588,7 +1588,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
         CombinedSoundFilePaths = []
 
     ## _Speed.wav 파일 모두 삭제 (Clone Voice 속도 조절시) ##
-    if CloneVoiceSpeed != 1:
+    if CloneVoiceSpeed != 1 or CloneVoicePitch != 0:
         for _SpeedFile in _SpeedRemoveList:
             os.remove(_SpeedFile)
     ## _Speed.wav 파일 모두 삭제 (Clone Voice 속도 조절시) ##

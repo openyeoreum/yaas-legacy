@@ -1182,7 +1182,7 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
     # normalizeVoiceLayerFileName = unicodedata.normalize('NFC', VoiceLayerFileName)
     voiceLayerPath = VoiceLayerPathGen(projectName, email, '', 'Mixed')
     # 폴더 내의 모든 .wav 파일 목록 추출
-    RawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav')]
+    RawFiles = [f for f in os.listdir(voiceLayerPath) if f.endswith('.wav') and '_Speed' not in f]
     # 모든 .wav 파일 목록의 노멀라이즈
     RawFiles = [unicodedata.normalize('NFC', s) for s in RawFiles]
     # # VoiceLayer 파일이 생성되었을 경우 해당 파일명을 RawFiles 리스트에서 삭제
@@ -1204,7 +1204,6 @@ def VoiceGenerator(projectName, email, EditGenerationKoChunks, MatchedChunksPath
         if VoiceFileMatch == None:
             normalizeRawFile = unicodedata.normalize('NFC', RawFiles[i])
             VoiceFileMatch = re.match(VoiceFilePattern, normalizeRawFile)
-        
         if VoiceFileMatch:
             editid, actorname, _ = VoiceFileMatch.groups()
         for j in range(len(EditGenerationKoChunks)):

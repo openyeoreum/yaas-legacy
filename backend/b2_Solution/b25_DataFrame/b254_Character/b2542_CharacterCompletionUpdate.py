@@ -243,8 +243,11 @@ def CharacterPostCompletionFilter(inputIdList, responseData, memoryCounter):
     if MisMatchCharactersDic['MissRatio'] >= 0.05:
         return f"INPUT, OUTPUT [n] 갯수 불일치 오류 발생: MissRatio({MisMatchCharactersDic['MissRatio']}), MisMatchOUTPUT({MisMatchCharactersDic['MisMatch']})"
     else:
-        OutputDic[0]['메인성우']['담당인물번호'] += MisMatchCharactersDic['MisMatch']
-        OutputDic, OutputDicIdList = RemoveDuplicates(OutputDic, Duplicate)
+        try:
+            OutputDic[0]['메인성우']['담당인물번호'] += MisMatchCharactersDic['MisMatch']
+            OutputDic, OutputDicIdList = RemoveDuplicates(OutputDic, Duplicate)
+        except:
+            return f"JSON에서 오류 발생: JSONKeyError Response에 '메인성우'가 없음"
     # Error6: 변형된 outputIdList와 inputIdList의 불일치 할때
     if inputIdList != OutputDicIdList:
         return f"INPUT, OUTPUT 불일치 오류 발생: InputIdList({inputIdList}), OutputDicIdList({OutputDicIdList})"

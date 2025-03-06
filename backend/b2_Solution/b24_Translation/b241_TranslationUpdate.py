@@ -692,6 +692,37 @@ def TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDa
         
     return AddInput
 
+## Process10: TranslationProofreading의 InputList
+def TranslationProofreadingInputList(TranslationEditPath, BeforeProcess):
+    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+        TranslationEditList = json.load(TranslationEditJson)[BeforeProcess]
+        
+    InputId = 1
+    InputList = []
+    for i, TranslationEdit in enumerate(TranslationEditList):
+        IndexId = TranslationEdit['IndexId']
+        IndexTag = TranslationEdit['IndexTag']
+        Index = TranslationEdit['Index']
+        BodyId = TranslationEdit['BodyId']
+        Body = TranslationEdit['Body']
+        
+        Input = f"<교정할도서내용>\n{Body}\n\n"
+        
+        InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": Body, "Input": Input})
+        InputId += 1
+    
+    return InputList
+    
+def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath):
+    if os.path.exists(ProjectDataFrameTranslationProofreadingPath):
+        with open(ProjectDataFrameTranslationProofreadingPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
+            TranslationProofreading = json.load(TranslationDataFrame)[1]
+        AddInput = f"\n{TranslationProofreading[-1]['Body']}\n\n"
+    else:
+        AddInput = f"\nNone\n\n"
+        
+    return AddInput
+
 ######################
 ##### Filter 조건 #####
 ######################
@@ -1024,6 +1055,44 @@ def BodyTranslationFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['현재번역문']
 
+## Process8: BodyTranslationCheck의 Filter(Error 예외처리)
+def BodyTranslationCheckFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "BodyTranslationCheck, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '도서내용어조체크' not in OutputDic:
+        return "BodyTranslationCheck, JSONKeyError: '도서내용어조체크' 키가 누락되었습니다"
+
+    # Error3: '도서내용어조체크' 데이터 타입 검증
+    if not isinstance(OutputDic['도서내용어조체크'], dict):
+        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크'는 딕셔너리 형태여야 합니다"
+
+    # 필수 키 확인
+    required_keys = ['이전도서내용어조', '현재도서내용어조', '격식일치여부']
+    missing_keys = [key for key in required_keys if key not in OutputDic['도서내용어조체크']]
+    if missing_keys:
+        return f"BodyTranslationCheck, JSONKeyError: '도서내용어조체크'에 누락된 키: {', '.join(missing_keys)}"
+
+    # 데이터 타입 및 값 검증
+    formal_levels = ['격식어조', '비격식어조']
+    match_status = ['일치', '비일치']
+
+    if OutputDic['도서내용어조체크']['이전도서내용어조'] not in formal_levels:
+        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 이전도서내용어조'는 '격식어조' 또는 '비격식어조' 중 하나여야 합니다"
+
+    if OutputDic['도서내용어조체크']['현재도서내용어조'] not in formal_levels:
+        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 현재도서내용어조'는 '격식어조' 또는 '비격식어조' 중 하나여야 합니다"
+
+    if OutputDic['도서내용어조체크']['격식일치여부'] not in match_status:
+        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 격식일치여부'는 '일치' 또는 '비일치' 중 하나여야 합니다"
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic
+
 ## Process9: TranslationEditing의 Filter(Error 예외처리)
 def TranslationEditingFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
@@ -1050,6 +1119,229 @@ def TranslationEditingFilter(Response, CheckCount):
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['편집내용']
+
+## Process10: TranslationProofreading의 Filter(Error 예외처리)
+def TranslationProofreadingFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "TranslationProofreading, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '교정' not in OutputDic:
+        return "TranslationProofreading, JSONKeyError: '교정' 키가 누락되었습니다"
+
+    # Error3: '교정' 데이터 타입 검증
+    if not isinstance(OutputDic['교정'], dict):
+        return "TranslationProofreading, JSON에서 오류 발생: '교정'은 딕셔너리 형태여야 합니다"
+
+    # 필수 키 확인
+    if '도서내용' not in OutputDic['교정']:
+        return "TranslationProofreading, JSONKeyError: '교정'에 '도서내용' 키가 누락되었습니다"
+
+    # 데이터 타입 검증
+    if not isinstance(OutputDic['교정']['도서내용'], str):
+        return "TranslationProofreading, JSON에서 오류 발생: '교정 > 도서내용'은 문자열이어야 합니다"
+    
+    # Error4: '도서내용'의 값에서 줄바꿈과 쌍따옴표 포함 여부 확인
+    invalid_chars = ['"', '“', '”', ' ', '\n']
+    for char in invalid_chars:
+        if char in OutputDic['교정']['도서내용']:
+            return f"TranslationProofreading, JSON에서 오류 발생: '교정 > 도서내용'에 허용되지 않은 문자({char})가 포함되었습니다"
+        
+    # Error5: 교정 전후 '도서내용' 일치 확인
+    EditCheckCount = re.sub(r'[^a-zA-Z0-9\u0080-\uFFFF]', '', OutputDic['교정']['도서내용'])
+    if EditCheckCount != CheckCount:
+        return f"TranslationProofreading, JSON에서 오류 발생: '교정내용({len(EditCheckCount)}) != 도서내용({len(CheckCount)})'이 교정 전후로 일치하지 않습니다"
+    
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['교정']
+
+## Process11: TranslationDialogueAnalysis의 Filter(Error 예외처리)
+def TranslationDialogueAnalysisFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "TranslationDialogueAnalysis, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '대화문' not in OutputDic:
+        return "TranslationDialogueAnalysis, JSONKeyError: '대화문' 키가 누락되었습니다"
+
+    # Error3: '대화문' 데이터 타입 검증
+    if not isinstance(OutputDic['대화문'], list):
+        return "TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문'은 리스트 형태여야 합니다"
+
+    for idx, item in enumerate(OutputDic['대화문']):
+        # 각 항목이 딕셔너리인지 확인
+        if not isinstance(item, dict):
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}]'는 딕셔너리 형태여야 합니다"
+
+        # 필수 키 확인
+        required_keys = ['번호', '말하는인물', '성별', '연령', '감정', '말하는인물성격특성', '상황', '듣는인물', '대답']
+        missing_keys = [key for key in required_keys if key not in item]
+        if missing_keys:
+            return f"TranslationDialogueAnalysis, JSONKeyError: '대화문[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
+
+        # 데이터 타입 검증
+        if not isinstance(item['번호'], str):
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 번호'는 문자열이어야 합니다"
+
+        if not isinstance(item['말하는인물'], str):
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 말하는인물'은 문자열이어야 합니다"
+
+        if item['성별'] not in ['남', '여']:
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 성별'은 '남' 또는 '여' 중 하나여야 합니다"
+
+        if item['연령'] not in ['유년', '청소년', '청년', '중년', '장년', '노년']:
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 연령'은 유효한 연령값이 아닙니다"
+
+        if item['감정'] not in ['중립', '즐거움', '화남', '슬픔', '침착함']:
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 감정'은 유효한 감정값이 아닙니다"
+
+        if not isinstance(item['말하는인물성격특성'], str):
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 말하는인물성격특성'은 문자열이어야 합니다"
+
+        if not isinstance(item['상황'], str):
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 상황'은 문자열이어야 합니다"
+
+        if not isinstance(item['듣는인물'], str):
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 듣는인물'은 문자열이어야 합니다"
+
+        if not isinstance(item['대답'], str):
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 대답'은 문자열이어야 합니다"
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['대화문']
+
+## Process12: TranslationDialogueEditing의 Filter(Error 예외처리)
+def TranslationDialogueEditingFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "TranslationDialogueEditing, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '대화문편집' not in OutputDic:
+        return "TranslationDialogueEditing, JSONKeyError: '대화문편집' 키가 누락되었습니다"
+
+    # Error3: '대화문편집' 데이터 타입 검증
+    if not isinstance(OutputDic['대화문편집'], list):
+        return "TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집'은 리스트 형태여야 합니다"
+
+    for idx, item in enumerate(OutputDic['대화문편집']):
+        # 각 항목이 딕셔너리인지 확인
+        if not isinstance(item, dict):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}]'는 딕셔너리 형태여야 합니다"
+
+        # 필수 키 확인
+        required_keys = ['번호', '편집된대화문', '이유']
+        missing_keys = [key for key in required_keys if key not in item]
+        if missing_keys:
+            return f"TranslationDialogueEditing, JSONKeyError: '대화문편집[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
+
+        # 데이터 타입 검증
+        if not isinstance(item['번호'], str):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 번호'는 문자열이어야 합니다"
+
+        if not isinstance(item['편집된대화문'], str):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 편집된대화문'은 문자열이어야 합니다"
+
+        if not isinstance(item['이유'], str):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 이유'는 문자열이어야 합니다"
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['대화문편집']
+
+## Process13: TranslationDialoguePostprocessing의 Filter(Error 예외처리)
+def TranslationDialoguePostprocessingFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "TranslationDialoguePostprocessing, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '대화문구수정' not in OutputDic:
+        return "TranslationDialoguePostprocessing, JSONKeyError: '대화문구수정' 키가 누락되었습니다"
+
+    # Error3: '대화문구수정' 데이터 타입 검증
+    if not isinstance(OutputDic['대화문구수정'], list):
+        return "TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정'은 리스트 형태여야 합니다"
+
+    for idx, item in enumerate(OutputDic['대화문구수정']):
+        # 각 항목이 딕셔너리인지 확인
+        if not isinstance(item, dict):
+            return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}]'는 딕셔너리 형태여야 합니다"
+
+        # 필수 키 확인
+        required_keys = ['번호', '이름', '대화문구', '수정이유']
+        missing_keys = [key for key in required_keys if key not in item]
+        if missing_keys:
+            return f"TranslationDialoguePostprocessing, JSONKeyError: '대화문구수정[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
+
+        # 데이터 타입 검증
+        if not isinstance(item['번호'], str):
+            return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 번호'는 문자열이어야 합니다"
+
+        if not isinstance(item['이름'], str):
+            return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 이름'은 문자열이어야 합니다"
+
+        if not isinstance(item['대화문구'], str):
+            return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 대화문구'는 문자열이어야 합니다"
+
+        if not isinstance(item['수정이유'], str):
+            return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 수정이유'는 문자열이어야 합니다"
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['대화문구수정']
+
+## Process14: AfterTranslationBodySummary의 Filter(Error 예외처리)
+def AfterTranslationBodySummaryFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "AfterTranslationBodySummary, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '현재내용요약' not in OutputDic:
+        return "AfterTranslationBodySummary, JSONKeyError: '현재내용요약' 키가 누락되었습니다"
+
+    # Error3: '현재내용요약' 데이터 타입 검증
+    if not isinstance(OutputDic['현재내용요약'], dict):
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약'은 딕셔너리 형태여야 합니다"
+
+    # 필수 키 확인
+    required_keys = ['핵심문구', '요약', '중요도']
+    missing_keys = [key for key in required_keys if key not in OutputDic['현재내용요약']]
+    if missing_keys:
+        return f"AfterTranslationBodySummary, JSONKeyError: '현재내용요약'에 누락된 키: {', '.join(missing_keys)}"
+
+    # 데이터 타입 검증
+    if not isinstance(OutputDic['현재내용요약']['핵심문구'], list):
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구'는 리스트 형태여야 합니다"
+    
+    if not all(isinstance(item, str) for item in OutputDic['현재내용요약']['핵심문구']):
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구' 리스트의 모든 요소는 문자열이어야 합니다"
+
+    if not (1 <= len(OutputDic['현재내용요약']['핵심문구']) <= 3):
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구'는 1~3개여야 합니다"
+
+    if not isinstance(OutputDic['현재내용요약']['요약'], str):
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 요약'은 문자열이어야 합니다"
+
+    if not isinstance(OutputDic['현재내용요약']['중요도'], int):
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 중요도'는 정수여야 합니다"
+
+    if not (0 <= OutputDic['현재내용요약']['중요도'] <= 1000):
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 중요도'는 0~1000 사이의 정수여야 합니다"
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['현재내용요약']
 
 #######################
 ##### Process 응답 #####
@@ -1478,6 +1770,45 @@ def TranslationEditingProcessDataFrameSave(ProjectName, MainLang, Translation, T
     ## TranslationEditingFrame 저장
     with open(ProjectDataFrameTranslationEditingPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TranslationEditingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
+## Process10: TranslationProofreadingProcess DataFrame 저장
+def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationProofreadingPath, TranslationProofreadingResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
+    ## TranslationProofreadingFrame 불러오기
+    if os.path.exists(ProjectDataFrameTranslationProofreadingPath):
+        TranslationProofreadingFramePath = ProjectDataFrameTranslationProofreadingPath
+    else:
+        TranslationProofreadingFramePath = os.path.join(TranslationDataFramePath, "b532-10_TranslationProofreadingFrame.json")
+    with open(TranslationProofreadingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        TranslationProofreadingFrame = json.load(DataFrameJson)
+        
+    ## TranslationProofreadingFrame 업데이트
+    TranslationProofreadingFrame[0]['ProjectName'] = ProjectName
+    TranslationProofreadingFrame[0]['MainLang'] = MainLang.capitalize()
+    TranslationProofreadingFrame[0]['Translation'] = Translation.capitalize()
+    TranslationProofreadingFrame[0]['TaskName'] = Process
+    
+    ## TranslationProofreadingFrame 첫번째 데이터 프레임 복사
+    TranslationProofreading = TranslationProofreadingFrame[1][0].copy()
+    TranslationProofreading['IndexId'] = IndexId
+    TranslationProofreading['IndexTag'] = IndexTag
+    TranslationProofreading['Index'] = Index
+    TranslationProofreading['BodyId'] = BodyId
+    TranslationProofreadingBody = TranslationProofreadingResponse['도서내용']
+    TranslationProofreadingBody = TranslationProofreadingBody.replace('"', '@').replace('“', '@').replace('”', '@')
+    TranslationProofreadingBody = TranslationProofreadingBody.replace('\n', '/')
+    TranslationProofreading['Body'] = TranslationProofreadingBody
+
+    ## TranslationProofreadingFrame 데이터 프레임 업데이트
+    TranslationProofreadingFrame[1].append(TranslationProofreading)
+        
+    ## TranslationProofreadingFrame ProcessCount 및 Completion 업데이트
+    TranslationProofreadingFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        TranslationProofreadingFrame[0]['Completion'] = 'Yes'
+        
+    ## TranslationProofreadingFrame 저장
+    with open(ProjectDataFrameTranslationProofreadingPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(TranslationProofreadingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ##############################
 ##### ProcessEdit 업데이트 #####
@@ -2098,6 +2429,74 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
+    #############################################
+    ### Process10: TranslationProofreading 생성 ##
+    #############################################
+
+    ## Process 설정
+    ProcessNumber = '10'
+    Process = "TranslationProofreading"
+
+    ## TranslationProofreading 경로 생성
+    ProjectDataFrameTranslationProofreadingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = TranslationProofreadingInputList(TranslationEditPath, "TranslationEditing")
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationProofreadingPath)
+    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList[i]['Id']
+                IndexId = InputList[i]['IndexId']
+                IndexTag = InputList[i]['IndexTag']
+                Index = InputList[i]['Index']
+                BodyId = InputList[i]['BodyId']
+                CheckCount = re.sub(r'[^a-zA-Z0-9\u0080-\uFFFF]', '', InputList[i]['Body'])
+                Input1 = TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
+                Input2 = InputList[i]['Input']
+                Input = Input1 + Input2
+                
+                ## Response 생성
+                TranslationProofreadingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationProofreadingFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## DataFrame 저장
+                TranslationProofreadingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationProofreadingPath, TranslationProofreadingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameTranslationProofreadingPath, TranslationEditPath, Process, EditMode)
+        ## EditText 저장
+        ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
+    #################################################
+    ### Process11: TranslationDialogueAnalysis 생성 ##
+    #################################################
+    
+    ################################################
+    ### Process12: TranslationDialogueEditing 생성 ##
+    ################################################
+    
+    #######################################################
+    ### Process13: TranslationDialoguePostprocessing 생성 ##
+    #######################################################
+    
+    #################################################
+    ### Process14: AfterTranslationBodySummary 생성 ##
+    #################################################
+    
+    ############################################
+    ### Process15: TranslationCatchphrase 생성 ##
+    ############################################
 
 if __name__ == "__main__":
     

@@ -497,7 +497,13 @@ class Prompt(Base):
     IndexTranslation = Column(JSON)
     BodyTranslationPreprocessing = Column(JSON)
     BodyTranslation = Column(JSON)
+    BodyTranslationCheck = Column(JSON)
     TranslationEditing = Column(JSON)
+    TranslationProofreading = Column(JSON)
+    TranslationDialogueAnalysis = Column(JSON)
+    TranslationDialogueEditing = Column(JSON)
+    TranslationDialoguePostprocessing = Column(JSON)
+    AfterTranslationBodySummary = Column(JSON)
     
     ## TextBookPrompt
     

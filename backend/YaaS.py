@@ -82,7 +82,7 @@ def YaasConfigUpdate(StartProjectName, MainLang, Estimate, DataCollection, Searc
             ScriptConfig = {"Script": Script}
             
         ### Step3-6 : TranslationConfig 설정 ###
-        if Translation == [] or Translation == [""] or Translation == ["None"]:
+        if Translation == "" or Translation == "None":
             TranslationConfig = {}
         else:
             TranslationConfig = {

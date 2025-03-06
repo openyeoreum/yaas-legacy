@@ -1,0 +1,270 @@
+{
+    "TaskName": "TranslationDialoguePostprocessing.",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-4o-mini",
+            "LongTokensModel": "o3-mini"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "o3-mini"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-5-haiku-latest",
+            "LongTokensModel": "claude-3-5-sonnet-latest"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-5-sonnet-latest"
+    },
+    "Temperature": 1,
+    "OutputTokensRatio": 1,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "당신은 매우 유능한 도서 전문 편집자 입니다. <도서내용>에는 인물의 대화문들이   {n이름: 대회문구}   로 표기되어 있습니다. <도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여, 어색한 대화문구를 수정하여 <대화내용수정.json>을 완성합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<대화내용수정.json>의 구조 및 내용)\n",
+                    "Message": "{'대화문구수정': [{'번호': '대화문의 순번 n을 그대로 작성', '이름': '말하는 인물의 이름을 그대로 작성, 수정이 필요하면 수정된 이름을 작성', '대화문구': '편집 이유를 작성', '수정이유': '수정 이유를 작성'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<대화내용수정.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <도서내용>은 내용의 맥락 참조를 위한 [참고: 이전내용]과 대화내용 수정의 대상인 [수정: 현재내용]으로 이루어져 있습니다. <대화내용수정.json>은 [수정: 현재내용]에서만 이루어집니다.\n2. 대화내용수정은 <도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여, 어색한 대화문구를 수정하는 것입니다. n은 도서 전체에서 해당 대화문의 순번입니다.\n3. 대화내용수정 첫번째, 맥락을 자세히 파악하여 '이름'이 잘못 기입된 경우는 그 '이름'을 맞게끔 수정합니다. 여기서 '이름'의 수정은 이름의 표기적 차이를 수정하는 것이 아니라 다른 인물로 잘못 표기되어 있는 이름을 수정하는 것입니다. 잘 기입되어 있으면 수정하지 않습니다.\n4. 대화내용수정 두번째, 맥락을 자세히 파악하여 '대화문구'의 어투가 어색하게 되어 있는 경우 그 어투나 감정표현 등을 수정하여 '대화문구'를 수정하는 것입니다. 어투나 감정표현 이외의   그 대화 내용 자체는   수정의 대상이 아니며, <도서내용> 속에서 맥락상 어색한 '대화문구'를 수정하는 것입니다. 잘 작성되어 있으면 수정하지 않습니다.\n5. <도서내용>은 이미 잘 작성되어 있을 가능성이 높습니다. 따라서 적극적인 수정보다는 꼭 필요한 수정만 이행하며, 수정할 사항이 없으면 '대화문구수정': [] 와 같이 빈리스트로 <대화내용수정.json>을 완성합니다. 대화문구수정 리스트에는 이름과 대화문구가 모두 수정되지 않은 대화문은 작성하지 않고, 이름과 대화문구 중 하나라도 수정된 대화문만 '번호', '이름', '대화문구', '수정이유'로 작성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여 <대화내용수정.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<대화내용수정.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "당신은 매우 유능한 도서 전문 편집자 입니다. <도서내용>에는 인물의 대화문들이   {n이름: 대회문구}   로 표기되어 있습니다. <도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여, 어색한 대화문구를 수정하여 <대화내용수정.json>을 완성합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<대화내용수정.json>의 구조 및 내용)\n",
+                    "Message": "{'대화문구수정': [{'번호': '대화문의 순번 n을 그대로 작성', '이름': '말하는 인물의 이름을 그대로 작성, 수정이 필요하면 수정된 이름을 작성', '대화문구': '편집 이유를 작성', '수정이유': '수정 이유를 작성'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<대화내용수정.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <도서내용>은 내용의 맥락 참조를 위한 [참고: 이전내용]과 대화내용 수정의 대상인 [수정: 현재내용]으로 이루어져 있습니다. <대화내용수정.json>은 [수정: 현재내용]에서만 이루어집니다.\n2. 대화내용수정은 <도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여, 어색한 대화문구를 수정하는 것입니다. n은 도서 전체에서 해당 대화문의 순번입니다.\n3. 대화내용수정 첫번째, 맥락을 자세히 파악하여 '이름'이 잘못 기입된 경우는 그 '이름'을 맞게끔 수정합니다. 여기서 '이름'의 수정은 이름의 표기적 차이를 수정하는 것이 아니라 다른 인물로 잘못 표기되어 있는 이름을 수정하는 것입니다. 잘 기입되어 있으면 수정하지 않습니다.\n4. 대화내용수정 두번째, 맥락을 자세히 파악하여 '대화문구'의 어투가 어색하게 되어 있는 경우 그 어투나 감정표현 등을 수정하여 '대화문구'를 수정하는 것입니다. 어투나 감정표현 이외의   그 대화 내용 자체는   수정의 대상이 아니며, <도서내용> 속에서 맥락상 어색한 '대화문구'를 수정하는 것입니다. 잘 작성되어 있으면 수정하지 않습니다.\n5. <도서내용>은 이미 잘 작성되어 있을 가능성이 높습니다. 따라서 적극적인 수정보다는 꼭 필요한 수정만 이행하며, 수정할 사항이 없으면 '대화문구수정': [] 와 같이 빈리스트로 <대화내용수정.json>을 완성합니다. 대화문구수정 리스트에는 이름과 대화문구가 모두 수정되지 않은 대화문은 작성하지 않고, 이름과 대화문구 중 하나라도 수정된 대화문만 '번호', '이름', '대화문구', '수정이유'로 작성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여 <대화내용수정.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<대화내용수정.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "당신은 매우 유능한 도서 전문 편집자 입니다. <도서내용>에는 인물의 대화문들이   {n이름: 대회문구}   로 표기되어 있습니다. <도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여, 어색한 대화문구를 수정하여 <대화내용수정.json>을 완성합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<대화내용수정.json>의 구조 및 내용)\n",
+                    "Message": "{'대화문구수정': [{'번호': '대화문의 순번 n을 그대로 작성', '이름': '말하는 인물의 이름을 그대로 작성, 수정이 필요하면 수정된 이름을 작성', '대화문구': '편집 이유를 작성', '수정이유': '수정 이유를 작성'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<대화내용수정.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <도서내용>은 내용의 맥락 참조를 위한 [참고: 이전내용]과 대화내용 수정의 대상인 [수정: 현재내용]으로 이루어져 있습니다. <대화내용수정.json>은 [수정: 현재내용]에서만 이루어집니다.\n2. 대화내용수정은 <도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여, 어색한 대화문구를 수정하는 것입니다. n은 도서 전체에서 해당 대화문의 순번입니다.\n3. 대화내용수정 첫번째, 맥락을 자세히 파악하여 '이름'이 잘못 기입된 경우는 그 '이름'을 맞게끔 수정합니다. 여기서 '이름'의 수정은 이름의 표기적 차이를 수정하는 것이 아니라 다른 인물로 잘못 표기되어 있는 이름을 수정하는 것입니다. 잘 기입되어 있으면 수정하지 않습니다.\n4. 대화내용수정 두번째, 맥락을 자세히 파악하여 '대화문구'의 어투가 어색하게 되어 있는 경우 그 어투나 감정표현 등을 수정하여 '대화문구'를 수정하는 것입니다. 어투나 감정표현 이외의   그 대화 내용 자체는   수정의 대상이 아니며, <도서내용> 속에서 맥락상 어색한 '대화문구'를 수정하는 것입니다. 잘 작성되어 있으면 수정하지 않습니다.\n5. <도서내용>은 이미 잘 작성되어 있을 가능성이 높습니다. 따라서 적극적인 수정보다는 꼭 필요한 수정만 이행하며, 수정할 사항이 없으면 '대화문구수정': [] 와 같이 빈리스트로 <대화내용수정.json>을 완성합니다. 대화문구수정 리스트에는 이름과 대화문구가 모두 수정되지 않은 대화문은 작성하지 않고, 이름과 대화문구 중 하나라도 수정된 대화문만 '번호', '이름', '대화문구', '수정이유'로 작성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여 <대화내용수정.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<대화내용수정.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "당신은 매우 유능한 도서 전문 편집자 입니다. <도서내용>에는 인물의 대화문들이   {n이름: 대회문구}   로 표기되어 있습니다. <도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여, 어색한 대화문구를 수정하여 <대화내용수정.json>을 완성합니다."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<대화내용수정.json>의 구조 및 내용)\n",
+                    "Message": "{'대화문구수정': [{'번호': '대화문의 순번 n을 그대로 작성', '이름': '말하는 인물의 이름을 그대로 작성, 수정이 필요하면 수정된 이름을 작성', '대화문구': '편집 이유를 작성', '수정이유': '수정 이유를 작성'}, ...]}"
+                },
+                {
+                    "Mark": "\n\n(<대화내용수정.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <도서내용>은 내용의 맥락 참조를 위한 [참고: 이전내용]과 대화내용 수정의 대상인 [수정: 현재내용]으로 이루어져 있습니다. <대화내용수정.json>은 [수정: 현재내용]에서만 이루어집니다.\n2. 대화내용수정은 <도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여, 어색한 대화문구를 수정하는 것입니다. n은 도서 전체에서 해당 대화문의 순번입니다.\n3. 대화내용수정 첫번째, 맥락을 자세히 파악하여 '이름'이 잘못 기입된 경우는 그 '이름'을 맞게끔 수정합니다. 여기서 '이름'의 수정은 이름의 표기적 차이를 수정하는 것이 아니라 다른 인물로 잘못 표기되어 있는 이름을 수정하는 것입니다. 잘 기입되어 있으면 수정하지 않습니다.\n4. 대화내용수정 두번째, 맥락을 자세히 파악하여 '대화문구'의 어투가 어색하게 되어 있는 경우 그 어투나 감정표현 등을 수정하여 '대화문구'를 수정하는 것입니다. 어투나 감정표현 이외의   그 대화 내용 자체는   수정의 대상이 아니며, <도서내용> 속에서 맥락상 어색한 '대화문구'를 수정하는 것입니다. 잘 작성되어 있으면 수정하지 않습니다.\n5. <도서내용>은 이미 잘 작성되어 있을 가능성이 높습니다. 따라서 적극적인 수정보다는 꼭 필요한 수정만 이행하며, 수정할 사항이 없으면 '대화문구수정': [] 와 같이 빈리스트로 <대화내용수정.json>을 완성합니다. 대화문구수정 리스트에는 이름과 대화문구가 모두 수정되지 않은 대화문은 작성하지 않고, 이름과 대화문구 중 하나라도 수정된 대화문만 '번호', '이름', '대화문구', '수정이유'로 작성합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<도서내용>에 서술되어 있는 내용과 각각의 {n이름: 대회문구}를 꼼꼼하게 분석하여 <대화내용수정.json>을 완성해주세요)\n\n",
+                    "InputMark": "<도서내용>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<대화내용수정.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

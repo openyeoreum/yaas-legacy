@@ -1,0 +1,270 @@
+{
+    "TaskName": "TranslationProofreading.",
+    "OpenAI": {
+        "BaseModel": {
+            "ShortTokensModel": "gpt-4o-mini",
+            "LongTokensModel": "o3-mini"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "o3-mini"
+    },
+    "ANTHROPIC": {
+        "BaseModel": {
+            "ShortTokensModel": "claude-3-5-haiku-latest",
+            "LongTokensModel": "claude-3-5-sonnet-latest"
+        },
+        "ExampleFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MemoryFineTunedModel": {
+            "ShortTokensModel": [],
+            "LongTokensModel": []
+        },
+        "MasterModel": "claude-3-5-sonnet-latest"
+    },
+    "Temperature": 1,
+    "OutputTokensRatio": 1,
+    "OutputFormat": "json",
+    "Example": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "당신은 도서 교정 전문가 입니다. <교정할도서내용>을 대화문 쌍따옴표 처리, 강조 처리, 뛰어쓰기 교정, 문단 줄바꿈 교정을 통해서 <교정도서내용.json>으로 완성해주세요."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<교정도서내용.json>의 구조 및 내용)\n",
+                    "Message": "{'교정': {'도서내용': '<교정할도서내용>을 읽고 대화문 쌍따옴표 처리, 강조 부분 처리, 띄어쓰기 교정, 문단 줄바꿈을 완벽하게 수행하여 <교정도서내용.json>으로 완성'}}"
+                },
+                {
+                    "Mark": "\n\n(<교정도서내용.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <이전교정도서내용>은 교정이 완료된 <교정할도서내용>의 앞부분으로 <교정할도서내용>을 <교정도서내용.json>으로 완성할 때 참고자료 입니다.\n2. 교정은 <교정할도서내용>을 자세하게 읽고 대화문 쌍따옴표 처리, 강조 부분 처리, 뛰어쓰기 교정, 문단 줄바꿈을 완벽하게 처리하여 <교정도서내용.json>으로 완성하는 것입니다.\n3. 대화문 쌍따옴표 처리는 <교정할도서내용>에서 대화가 이루어지고 있는데도 쌍따옴표가 누락된 부분을   @대화@   형태로 교정하는 것입니다. 즉, 쌍따옴표 대신 @ 을 표기함으로써 쌍따옴표를 대신합니다. 대화문이 연달아 존재할때 동일한 인물이 대화하는 것은   @동일한 인물의 대화@   형태로 한번만 쌍따옴표를 처리하고, 대화가 오고가거나 나뉘는 경우는   @대회@ @대회@   씩으로 쌍따옴표를 처리합니다.\n4. 강조 처리는 <교정할도서내용>에서 독자에게 강조가 필요한 매우 중요한 명사 또는 단어에   **단어   형태로 교정하는 것입니다. 강조의 대상은 문장이 아닌 단어입니다.\n5. 뛰어쓰기 교정은 <교정할도서내용>에서 뛰어쓰기가 잘못된 부분을 교정하는 것입니다.\n6. 문단 줄바꿈 교정은 <교정할도서내용>에서 문장과 문장의 줄바꿈을   문장/문장   형태로 교정하는 것입니다. 즉, 줄바꿈을 줄을 바꾸지 않고 / 을 표기함으로써 줄바꿈을 대신합니다. 기본 단락 구분은 / 처럼 한번 표기하고, 의미 전환이나 큰 변화가 존재하는 곳은 // 처럼 두번 표기합니다.\n7. 교정의 표기를 명확히 하기 위해 쌍따옴표 -> @대화@, 강조 -> **단어, 줄바꿈 -> 문장/문장 으로 표기함이 중요합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<교정할도서내용>에서 대화문 쌍따옴표 처리, 강조 부분 처리, 뛰어쓰기 교정, 문단 줄바꿈을 완벽하게 처리하여 <교정도서내용.json>으로 완성해주세요.)\n\n",
+                    "InputMark": "<이전교정도서내용>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<교정도서내용.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "ExampleFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "당신은 도서 교정 전문가 입니다. <교정할도서내용>을 대화문 쌍따옴표 처리, 강조 처리, 뛰어쓰기 교정, 문단 줄바꿈 교정을 통해서 <교정도서내용.json>으로 완성해주세요."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<교정도서내용.json>의 구조 및 내용)\n",
+                    "Message": "{'교정': {'도서내용': '<교정할도서내용>을 읽고 대화문 쌍따옴표 처리, 강조 부분 처리, 띄어쓰기 교정, 문단 줄바꿈을 완벽하게 수행하여 <교정도서내용.json>으로 완성'}}"
+                },
+                {
+                    "Mark": "\n\n(<교정도서내용.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <이전교정도서내용>은 교정이 완료된 <교정할도서내용>의 앞부분으로 <교정할도서내용>을 <교정도서내용.json>으로 완성할 때 참고자료 입니다.\n2. 교정은 <교정할도서내용>을 자세하게 읽고 대화문 쌍따옴표 처리, 강조 부분 처리, 뛰어쓰기 교정, 문단 줄바꿈을 완벽하게 처리하여 <교정도서내용.json>으로 완성하는 것입니다.\n3. 대화문 쌍따옴표 처리는 <교정할도서내용>에서 대화가 이루어지고 있는데도 쌍따옴표가 누락된 부분을   @대화@   형태로 교정하는 것입니다. 즉, 쌍따옴표 대신 @ 을 표기함으로써 쌍따옴표를 대신합니다. 대화문이 연달아 존재할때 동일한 인물이 대화하는 것은   @동일한 인물의 대화@   형태로 한번만 쌍따옴표를 처리하고, 대화가 오고가거나 나뉘는 경우는   @대회@ @대회@   씩으로 쌍따옴표를 처리합니다.\n4. 강조 처리는 <교정할도서내용>에서 독자에게 강조가 필요한 매우 중요한 명사 또는 단어에   **단어   형태로 교정하는 것입니다. 강조의 대상은 문장이 아닌 단어입니다.\n5. 뛰어쓰기 교정은 <교정할도서내용>에서 뛰어쓰기가 잘못된 부분을 교정하는 것입니다.\n6. 문단 줄바꿈 교정은 <교정할도서내용>에서 문장과 문장의 줄바꿈을   문장/문장   형태로 교정하는 것입니다. 즉, 줄바꿈을 줄을 바꾸지 않고 / 을 표기함으로써 줄바꿈을 대신합니다. 기본 단락 구분은 / 처럼 한번 표기하고, 의미 전환이나 큰 변화가 존재하는 곳은 // 처럼 두번 표기합니다.\n7. 교정의 표기를 명확히 하기 위해 쌍따옴표 -> @대화@, 강조 -> **단어, 줄바꿈 -> 문장/문장 으로 표기함이 중요합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<교정할도서내용>에서 대화문 쌍따옴표 처리, 강조 부분 처리, 뛰어쓰기 교정, 문단 줄바꿈을 완벽하게 처리하여 <교정도서내용.json>으로 완성해주세요.)\n\n",
+                    "InputMark": "<이전교정도서내용>\n",
+                    "Input": "INPUT",
+                    "InputMark2": "",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<교정도서내용.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "Output": "OUTPUT"
+        }
+    ],
+    "Memory": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "당신은 도서 교정 전문가 입니다. <교정할도서내용>을 대화문 쌍따옴표 처리, 강조 처리, 뛰어쓰기 교정, 문단 줄바꿈 교정을 통해서 <교정도서내용.json>으로 완성해주세요."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<교정도서내용.json>의 구조 및 내용)\n",
+                    "Message": "{'교정': {'도서내용': '<교정할도서내용>을 읽고 대화문 쌍따옴표 처리, 강조 부분 처리, 띄어쓰기 교정, 문단 줄바꿈을 완벽하게 수행하여 <교정도서내용.json>으로 완성'}}"
+                },
+                {
+                    "Mark": "\n\n(<교정도서내용.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <이전교정도서내용>은 교정이 완료된 <교정할도서내용>의 앞부분으로 <교정할도서내용>을 <교정도서내용.json>으로 완성할 때 참고자료 입니다.\n2. 교정은 <교정할도서내용>을 자세하게 읽고 대화문 쌍따옴표 처리, 강조 부분 처리, 뛰어쓰기 교정, 문단 줄바꿈을 완벽하게 처리하여 <교정도서내용.json>으로 완성하는 것입니다.\n3. 대화문 쌍따옴표 처리는 <교정할도서내용>에서 대화가 이루어지고 있는데도 쌍따옴표가 누락된 부분을   @대화@   형태로 교정하는 것입니다. 즉, 쌍따옴표 대신 @ 을 표기함으로써 쌍따옴표를 대신합니다. 대화문이 연달아 존재할때 동일한 인물이 대화하는 것은   @동일한 인물의 대화@   형태로 한번만 쌍따옴표를 처리하고, 대화가 오고가거나 나뉘는 경우는   @대회@ @대회@   씩으로 쌍따옴표를 처리합니다.\n4. 강조 처리는 <교정할도서내용>에서 독자에게 강조가 필요한 매우 중요한 명사 또는 단어에   **단어   형태로 교정하는 것입니다. 강조의 대상은 문장이 아닌 단어입니다.\n5. 뛰어쓰기 교정은 <교정할도서내용>에서 뛰어쓰기가 잘못된 부분을 교정하는 것입니다.\n6. 문단 줄바꿈 교정은 <교정할도서내용>에서 문장과 문장의 줄바꿈을   문장/문장   형태로 교정하는 것입니다. 즉, 줄바꿈을 줄을 바꾸지 않고 / 을 표기함으로써 줄바꿈을 대신합니다. 기본 단락 구분은 / 처럼 한번 표기하고, 의미 전환이나 큰 변화가 존재하는 곳은 // 처럼 두번 표기합니다.\n7. 교정의 표기를 명확히 하기 위해 쌍따옴표 -> @대화@, 강조 -> **단어, 줄바꿈 -> 문장/문장 으로 표기함이 중요합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<교정할도서내용>에서 대화문 쌍따옴표 처리, 강조 부분 처리, 뛰어쓰기 교정, 문단 줄바꿈을 완벽하게 처리하여 <교정도서내용.json>으로 완성해주세요.)\n\n",
+                    "InputMark": "<이전교정도서내용>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<교정도서내용.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ],
+    "MemoryFineTuning": [
+        {
+            "Role": "system",
+            "Mark": "(역할 및 업무)\n",
+            "Message": "당신은 도서 교정 전문가 입니다. <교정할도서내용>을 대화문 쌍따옴표 처리, 강조 처리, 뛰어쓰기 교정, 문단 줄바꿈 교정을 통해서 <교정도서내용.json>으로 완성해주세요."
+        },
+        {
+            "Role": "user",
+            "Request": [
+                {
+                    "Mark": "(<교정도서내용.json>의 구조 및 내용)\n",
+                    "Message": "{'교정': {'도서내용': '<교정할도서내용>을 읽고 대화문 쌍따옴표 처리, 강조 부분 처리, 띄어쓰기 교정, 문단 줄바꿈을 완벽하게 수행하여 <교정도서내용.json>으로 완성'}}"
+                },
+                {
+                    "Mark": "\n\n(<교정도서내용.json>의 완성 절차 및 방법)\n",
+                    "Message": "1. <이전교정도서내용>은 교정이 완료된 <교정할도서내용>의 앞부분으로 <교정할도서내용>을 <교정도서내용.json>으로 완성할 때 참고자료 입니다.\n2. 교정은 <교정할도서내용>을 자세하게 읽고 대화문 쌍따옴표 처리, 강조 부분 처리, 뛰어쓰기 교정, 문단 줄바꿈을 완벽하게 처리하여 <교정도서내용.json>으로 완성하는 것입니다.\n3. 대화문 쌍따옴표 처리는 <교정할도서내용>에서 대화가 이루어지고 있는데도 쌍따옴표가 누락된 부분을   @대화@   형태로 교정하는 것입니다. 즉, 쌍따옴표 대신 @ 을 표기함으로써 쌍따옴표를 대신합니다. 대화문이 연달아 존재할때 동일한 인물이 대화하는 것은   @동일한 인물의 대화@   형태로 한번만 쌍따옴표를 처리하고, 대화가 오고가거나 나뉘는 경우는   @대회@ @대회@   씩으로 쌍따옴표를 처리합니다.\n4. 강조 처리는 <교정할도서내용>에서 독자에게 강조가 필요한 매우 중요한 명사 또는 단어에   **단어   형태로 교정하는 것입니다. 강조의 대상은 문장이 아닌 단어입니다.\n5. 뛰어쓰기 교정은 <교정할도서내용>에서 뛰어쓰기가 잘못된 부분을 교정하는 것입니다.\n6. 문단 줄바꿈 교정은 <교정할도서내용>에서 문장과 문장의 줄바꿈을   문장/문장   형태로 교정하는 것입니다. 즉, 줄바꿈을 줄을 바꾸지 않고 / 을 표기함으로써 줄바꿈을 대신합니다. 기본 단락 구분은 / 처럼 한번 표기하고, 의미 전환이나 큰 변화가 존재하는 곳은 // 처럼 두번 표기합니다.\n7. 교정의 표기를 명확히 하기 위해 쌍따옴표 -> @대화@, 강조 -> **단어, 줄바꿈 -> 문장/문장 으로 표기함이 중요합니다."
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "",
+                    "InputExampleMark": "",
+                    "InputExample": "",
+                    "OutputExampleMark": "",
+                    "OutputExample": ""
+                },
+                {
+                    "Mark": "\n\n\n(<교정할도서내용>에서 대화문 쌍따옴표 처리, 강조 부분 처리, 뛰어쓰기 교정, 문단 줄바꿈을 완벽하게 처리하여 <교정도서내용.json>으로 완성해주세요.)\n\n",
+                    "InputMark": "<이전교정도서내용>\n",
+                    "InputStarter": "",
+                    "InputMemory": "InputMemory",
+                    "Input": "INPUT",
+                    "InputEnder": "",
+                    "InputMark2": "",
+                    "InputMemory2": "InputMemory2",
+                    "Input2": "INPUT2"
+                }
+            ]
+        },
+        {
+            "Role": "assistant",
+            "OutputMark": "\n\n<교정도서내용.json>",
+            "MemoryCounter": "MemoryCounter",
+            "OutputStarter": "",
+            "OutputMemory": "OutputMemory",
+            "Output": "OUTPUT",
+            "OutputEnder": "OutputEnder"
+        }
+    ]
+}

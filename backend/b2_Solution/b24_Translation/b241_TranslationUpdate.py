@@ -747,7 +747,7 @@ def TranslationIndexDefineFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic
 
-## Process2: TranslationBodySummary의 Filter(Error 예외처리)
+## Process2, 14: TranslationBodySummary의 Filter(Error 예외처리)
 def TranslationBodySummaryFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
@@ -764,10 +764,21 @@ def TranslationBodySummaryFilter(Response, CheckCount):
         return "TranslationBodySummary, JSON에서 오류 발생: '현재내용요약'은 딕셔너리 형태여야 합니다"
 
     # 필수 키 확인
-    if '요약' not in OutputDic['현재내용요약']:
-        return "TranslationBodySummary, JSONKeyError: '현재내용요약'에 '요약' 키가 누락되었습니다"
+    required_keys = ['핵심문구', '요약']
+    missing_keys = [key for key in required_keys if key not in OutputDic['현재내용요약']]
+    if missing_keys:
+        return f"TranslationBodySummary, JSONKeyError: '현재내용요약'에 누락된 키: {', '.join(missing_keys)}"
 
     # 데이터 타입 검증
+    if not isinstance(OutputDic['현재내용요약']['핵심문구'], list):
+        return "TranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구'는 리스트 형태여야 합니다"
+    
+    if not all(isinstance(item, str) for item in OutputDic['현재내용요약']['핵심문구']):
+        return "TranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구' 리스트의 모든 요소는 문자열이어야 합니다"
+
+    if not (1 <= len(OutputDic['현재내용요약']['핵심문구']) <= 3):
+        return "TranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구'는 1~3개여야 합니다"
+
     if not isinstance(OutputDic['현재내용요약']['요약'], str):
         return "TranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 요약'은 문자열이어야 합니다"
 
@@ -1172,6 +1183,7 @@ def TranslationBodySummaryProcessDataFrameSave(ProjectName, MainLang, Translatio
 
     TranslationBodySummary['IndexId'] = IndexId
     TranslationBodySummary['BodyId'] = InputCount
+    TranslationBodySummary['MainText'] = TranslationBodySummaryResponse['핵심문구']
     TranslationBodySummary['BodySummary'] = TranslationBodySummaryResponse['요약']
 
     ## TranslationBodySummaryFrame 데이터 프레임 업데이트
@@ -1725,7 +1737,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 ## 현재내용의 길이가 1000자 초과인 경우만 요약
                 if len(Input2) <= 1000:
                     Body = InputList[i]['Body']
-                    TranslationBodySummaryResponse = {"요약": Body}
+                    TranslationBodySummaryResponse = {"요약": Body, "핵심문구": ['None']}
                 else:
                     ## Response 생성
                     TranslationBodySummaryResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationBodySummaryFilter, CheckCount, "OpenAI", mode, MessagesReview)

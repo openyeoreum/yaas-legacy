@@ -600,23 +600,23 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     existedDataFrame = None
     
     
-    #################################
-    ### 27-30_SelectionGeneration ###
-    #################################
-    if Translations != []:
-        for Translation in Translations:
-            if Translation == 'En':
-                ProcessNumber = '17'
-                Process = 'TranslationEn'
-            if Translation == 'Ja':
-                ProcessNumber = '18'
-                Process = 'TranslationJa'
-            if Translation == 'Zh':
-                ProcessNumber = '19'
-                Process = 'TranslationZh'
-            if Translation == 'Es':
-                ProcessNumber = '20'
-                Process = 'TranslationEs'
+    # #################################
+    # ### 27-30_SelectionGeneration ###
+    # #################################
+    # if Translations != []:
+    #     for Translation in Translations:
+    #         if Translation == 'En':
+    #             ProcessNumber = '17'
+    #             Process = 'TranslationEn'
+    #         if Translation == 'Ja':
+    #             ProcessNumber = '18'
+    #             Process = 'TranslationJa'
+    #         if Translation == 'Zh':
+    #             ProcessNumber = '19'
+    #             Process = 'TranslationZh'
+    #         if Translation == 'Es':
+    #             ProcessNumber = '20'
+    #             Process = 'TranslationEs'
 
 if __name__ == "__main__":
 

@@ -71,7 +71,13 @@ def AddPromptToDB():
         IndexTranslation = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-06_IndexTranslation.json")
         BodyTranslationPreprocessing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-07_BodyTranslationPreprocessing.json")
         BodyTranslation = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-08_BodyTranslation.json")
+        BodyTranslationCheck = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-08_BodyTranslationCheck.json")
         TranslationEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-09_TranslationEditing.json")
+        TranslationProofreading = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-10_TranslationProofreading.json")
+        TranslationDialogueAnalysis = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-11_TranslationDialogueAnalysis.json")
+        TranslationDialogueEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-12_TranslationDialogueEditing.json")
+        TranslationDialoguePostprocessing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-13_TranslationDialoguePostprocessing.json")
+        AfterTranslationBodySummary = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-14_AfterTranslationBodySummary.json")
         # TextBookPrompt
         # AudioBookPrompt
         bookPreprocess = LoadJsonFrame(PromptDataPath + "/b545_AudioBookPrompt/b5451_ScriptPrompt/b5451-00_BookPreprocess.json")
@@ -164,7 +170,13 @@ def AddPromptToDB():
             ExistingPrompt.IndexTranslation = IndexTranslation
             ExistingPrompt.BodyTranslationPreprocessing = BodyTranslationPreprocessing
             ExistingPrompt.BodyTranslation = BodyTranslation
+            ExistingPrompt.BodyTranslationCheck = BodyTranslationCheck
             ExistingPrompt.TranslationEditing = TranslationEditing
+            ExistingPrompt.TranslationProofreading = TranslationProofreading
+            ExistingPrompt.TranslationDialogueAnalysis = TranslationDialogueAnalysis
+            ExistingPrompt.TranslationDialogueEditing = TranslationDialogueEditing
+            ExistingPrompt.TranslationDialoguePostprocessing = TranslationDialoguePostprocessing
+            ExistingPrompt.AfterTranslationBodySummary = AfterTranslationBodySummary
             ExistingPrompt.BookPreprocess = bookPreprocess
             ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
             ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
@@ -253,7 +265,13 @@ def AddPromptToDB():
                 IndexTranslation = IndexTranslation,
                 BodyTranslationPreprocessing = BodyTranslationPreprocessing,
                 BodyTranslation = BodyTranslation,
+                BodyTranslationCheck = BodyTranslationCheck,
                 TranslationEditing = TranslationEditing,
+                TranslationProofreading = TranslationProofreading,
+                TranslationDialogueAnalysis = TranslationDialogueAnalysis,
+                TranslationDialogueEditing = TranslationDialogueEditing,
+                TranslationDialoguePostprocessing = TranslationDialoguePostprocessing,
+                AfterTranslationBodySummary = AfterTranslationBodySummary,
                 BookPreprocess = bookPreprocess,
                 IndexDefinePreprocess = indexDefinePreprocess,
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,

@@ -24,7 +24,7 @@ def SolutionScriptUpdate(ProjectName, email, Script, Intention, MessagesReview):
     ### 02_BookScriptGen ###
     ########################
         
-    elif  "BookScript" == Script:
+    elif Script == "BookScript":
         BookScriptGenProcessUpdate(ProjectName, email, Intention, MessagesReview = MessagesReview)
 
     ###########################

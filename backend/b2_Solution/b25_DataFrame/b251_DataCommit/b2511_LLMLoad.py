@@ -523,7 +523,7 @@ def JsonParsingFilter(Response, RawResponse):
 ## Json파싱 오류 해결
 def JsonParsingProcess(projectName, email, RawResponse, FilterFunc):
     Process = "JsonParsing"
-    ErrorCount = 0
+    ErrorCount = 1
     while True:
         Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
 

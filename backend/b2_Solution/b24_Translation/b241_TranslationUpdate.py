@@ -602,6 +602,18 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
         
     return AddInput
 
+## Process8: BodyTranslationCheck의 Input
+def BodyTranslationCheckInput(ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
+    if os.path.exists(ProjectDataFrameBodyTranslationPath):
+        with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
+            BodyTranslation = json.load(TranslationDataFrame)[1]
+        BeforeBodyTranslation = BodyTranslation[-1]['Body']
+        CurrentBodyTranslation = BodyTranslationResponse['번역문']
+        
+        CheckInput = f"{BeforeBodyTranslation}\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n"
+        
+    return CheckInput
+
 ## Process9: TranslationEditing의 InputList
 def TranslationEditingInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2):
     ## BracketedBodyGen 함수
@@ -1078,20 +1090,20 @@ def BodyTranslationCheckFilter(Response, CheckCount):
         return f"BodyTranslationCheck, JSONKeyError: '도서내용어조체크'에 누락된 키: {', '.join(missing_keys)}"
 
     # 데이터 타입 및 값 검증
-    formal_levels = ['격식어조', '비격식어조']
-    match_status = ['일치', '비일치']
+    valid_tone_types = ['격식어조', '비격식어조']
+    valid_match_status = ['일치', '불일치']
 
-    if OutputDic['도서내용어조체크']['이전도서내용어조'] not in formal_levels:
+    if OutputDic['도서내용어조체크']['이전도서내용어조'] not in valid_tone_types:
         return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 이전도서내용어조'는 '격식어조' 또는 '비격식어조' 중 하나여야 합니다"
 
-    if OutputDic['도서내용어조체크']['현재도서내용어조'] not in formal_levels:
+    if OutputDic['도서내용어조체크']['현재도서내용어조'] not in valid_tone_types:
         return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 현재도서내용어조'는 '격식어조' 또는 '비격식어조' 중 하나여야 합니다"
 
-    if OutputDic['도서내용어조체크']['격식일치여부'] not in match_status:
-        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 격식일치여부'는 '일치' 또는 '비일치' 중 하나여야 합니다"
+    if OutputDic['도서내용어조체크']['격식일치여부'] not in valid_match_status:
+        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 격식일치여부'는 '일치' 또는 '불일치' 중 하나여야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
-    return OutputDic
+    return OutputDic['도서내용어조체크']
 
 ## Process9: TranslationEditing의 Filter(Error 예외처리)
 def TranslationEditingFilter(Response, CheckCount):
@@ -2349,7 +2361,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
     ## Process 진행
     if not EditCheck:
         if DataFrameCompletion == 'No':
-            for i in range(InputCount - 1, TotalInputCount):
+            i = InputCount - 1
+            while i < TotalInputCount:
                 ## Input 생성
                 inputCount = InputList[i]['Id']
                 IndexId = InputList[i]['IndexId']
@@ -2363,9 +2376,21 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 ## Response 생성
                 BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "Anthropic", mode, MessagesReview)
                 
+                ######################################
+                ### Process8: BodyTranslationCheck ###
+                ######################################
+                if inputCount >= 2:
+                    CheckProcess = "BodyTranslationCheck"
+                    CheckInput = BodyTranslationCheckInput(ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                    if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
+                        # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                        continue
+                
                 ## DataFrame 저장
                 BodyTranslationProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
-                
+                i += 1  # 다음 인덱스로 이동
+            
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameBodyTranslationPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":

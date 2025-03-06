@@ -530,18 +530,18 @@ def JsonParsingProcess(projectName, email, RawResponse, FilterFunc):
         FilteredResponse = FilterFunc(Response, RawResponse)
         
         if 'JSONDecode에서 오류 발생:' in FilteredResponse:
-            print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/10 | {FilteredResponse}")
+            print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/2 | {FilteredResponse}")
             ErrorCount += 1
-            print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/10 | "
-                f"오류횟수 {ErrorCount}회, 10초 후 프롬프트 재시도")
+            print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/2 | "
+                f"오류횟수 {ErrorCount}회, 3초 후 프롬프트 재시도")
             
-            if ErrorCount >= 10:
-                sys.exit(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/10 | "
+            if ErrorCount >= 2:
+                sys.exit(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/2 | "
                         f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
             time.sleep(10)
             continue
         
-        print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/10 | JSONDecode 완료")
+        print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/2 | JSONDecode 완료")
         return FilteredResponse
 
 ## 프롬프트 실행

@@ -211,40 +211,40 @@ def LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath):
 ## Language Code 생성
 def LanguageCodeGen(MainLang, Translation):
     def LanguageCode(Lang):
-        # 언어 코드와 해당 언어명을 딕셔너리로 정의
+        # 언어 코드와 해당 언어명, 격식체 구분 여부를 딕셔너리로 정의
         LanguageDict = {
-            "en": "English - English - 영어",
-            "zh": "Chinese - 中文 - 중국어",
-            "es": "Spanish - Español - 스페인어",
-            "fr": "French - Français - 프랑스어",
-            "de": "German - Deutsch - 독일어",
-            "it": "Italian - Italiano - 이탈리아어",
-            "ja": "Japanese - 日本語 - 일본어",
-            "ko": "Korean - 한국어 - 한국어",
-            "pt": "Portuguese - Português - 포르투갈어",
-            "ru": "Russian - Русский - 러시아어",
-            "ar": "Arabic - العربية - 아랍어",
-            "nl": "Dutch - Nederlands - 네덜란드어",
-            "sv": "Swedish - Svenska - 스웨덴어",
-            "no": "Norwegian - Norsk - 노르웨이어",
-            "da": "Danish - Dansk - 덴마크어",
-            "fi": "Finnish - Suomi - 핀란드어",
-            "pl": "Polish - Polski - 폴란드어",
-            "tr": "Turkish - Türkçe - 터키어",
-            "el": "Greek - Ελληνικά - 그리스어",
-            "cs": "Czech - Čeština - 체코어",
-            "hu": "Hungarian - Magyar - 헝가리어",
-            "ro": "Romanian - Română - 루마니아어",
-            "sk": "Slovak - Slovenčina - 슬로바키아어",
-            "uk": "Ukrainian - Українська - 우크라이나어",
-            "hi": "Hindi - हिन्दी - 힌디어",
-            "id": "Indonesian - Bahasa Indonesia - 인도네시아어",
-            "ms": "Malay - Bahasa Melayu - 말레이어",
-            "th": "Thai - ไทย - 태국어",
-            "vi": "Vietnamese - Tiếng Việt - 베트남어",
-            "he": "Hebrew - עברית - 히브리어",
-            "bg": "Bulgarian - Български - 불가리아어",
-            "ca": "Catalan - Català - 카탈루냐어"
+            "en": {"code": "English - English - 영어", "toneDistinction": "No"},
+            "zh": {"code": "Chinese - 中文 - 중국어", "toneDistinction": "No"},
+            "es": {"code": "Spanish - Español - 스페인어", "toneDistinction": "Yes"},
+            "fr": {"code": "French - Français - 프랑스어", "toneDistinction": "Yes"},
+            "de": {"code": "German - Deutsch - 독일어", "toneDistinction": "Yes"},
+            "it": {"code": "Italian - Italiano - 이탈리아어", "toneDistinction": "Yes"},
+            "ja": {"code": "Japanese - 日本語 - 일본어", "toneDistinction": "Yes"},
+            "ko": {"code": "Korean - 한국어 - 한국어", "toneDistinction": "Yes"},
+            "pt": {"code": "Portuguese - Português - 포르투갈어", "toneDistinction": "Yes"},
+            "ru": {"code": "Russian - Русский - 러시아어", "toneDistinction": "Yes"},
+            "ar": {"code": "Arabic - العربية - 아랍어", "toneDistinction": "No"},
+            "nl": {"code": "Dutch - Nederlands - 네덜란드어", "toneDistinction": "Yes"},
+            "sv": {"code": "Swedish - Svenska - 스웨덴어", "toneDistinction": "No"},
+            "no": {"code": "Norwegian - Norsk - 노르웨이어", "toneDistinction": "No"},
+            "da": {"code": "Danish - Dansk - 덴마크어", "toneDistinction": "No"},
+            "fi": {"code": "Finnish - Suomi - 핀란드어", "toneDistinction": "Yes"},
+            "pl": {"code": "Polish - Polski - 폴란드어", "toneDistinction": "Yes"},
+            "tr": {"code": "Turkish - Türkçe - 터키어", "toneDistinction": "Yes"},
+            "el": {"code": "Greek - Ελληνικά - 그리스어", "toneDistinction": "Yes"},
+            "cs": {"code": "Czech - Čeština - 체코어", "toneDistinction": "Yes"},
+            "hu": {"code": "Hungarian - Magyar - 헝가리어", "toneDistinction": "Yes"},
+            "ro": {"code": "Romanian - Română - 루마니아어", "toneDistinction": "Yes"},
+            "sk": {"code": "Slovak - Slovenčina - 슬로바키아어", "toneDistinction": "Yes"},
+            "uk": {"code": "Ukrainian - Українська - 우크라이나어", "toneDistinction": "Yes"},
+            "hi": {"code": "Hindi - हिन्दी - 힌디어", "toneDistinction": "Yes"},
+            "id": {"code": "Indonesian - Bahasa Indonesia - 인도네시아어", "toneDistinction": "No"},
+            "ms": {"code": "Malay - Bahasa Melayu - 말레이어", "toneDistinction": "No"},
+            "th": {"code": "Thai - ไทย - 태국어", "toneDistinction": "Yes"},
+            "vi": {"code": "Vietnamese - Tiếng Việt - 베트남어", "toneDistinction": "Yes"},
+            "he": {"code": "Hebrew - עברית - 히브리어", "toneDistinction": "Yes"},
+            "bg": {"code": "Bulgarian - Български - 불가리아어", "toneDistinction": "Yes"},
+            "ca": {"code": "Catalan - Català - 카탈루냐어", "toneDistinction": "Yes"}
         }
         
         # 입력된 언어 코드를 소문자로 변환하여 처리
@@ -254,12 +254,15 @@ def LanguageCodeGen(MainLang, Translation):
         return LanguageDict.get(LangCode)
     
     # Main Language Code
-    MainLangCode = LanguageCode(MainLang)
+    MainLangCode = LanguageCode(MainLang)["code"]
     
-    # Translation Language Code
-    TranslationLangCode = LanguageCode(Translation)
+    # TTranslation Language Code
+    TranslationLangCode = LanguageCode(Translation)["code"]
     
-    return MainLangCode, TranslationLangCode
+    # ToneDistinction
+    ToneDistinction = LanguageCode(Translation)["toneDistinction"]
+    
+    return MainLangCode, TranslationLangCode, ToneDistinction
 
 ## Process1: TranslationIndexDefine의 InputList
 def TranslationIndexDefineInputList(projectName, UploadTranslationFilePath):
@@ -274,7 +277,7 @@ def TranslationIndexDefineInputList(projectName, UploadTranslationFilePath):
     
     return InputList
 
-## Process2: TranslationBodySummary의 InputList
+## Process2, 14: TranslationBodySummary의 InputList
 def TranslationBodySummaryInputList(TranslationEditPath, BeforeProcess):
     with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
         TranslationEditList = json.load(TranslationEditJson)[BeforeProcess]
@@ -288,12 +291,12 @@ def TranslationBodySummaryInputList(TranslationEditPath, BeforeProcess):
         
         Input = f"[현재목차]\n{Index}\n\n[현재내용]\n{Body}\n\n"
         
-        InputList.append({"Id": InputId, "IndexId": IndexId, "Input": Input, "Body": Body})
+        InputList.append({"Id": InputId, "IndexId": IndexId, "Index": Index, "Body": Body, "Input": Input})
         InputId += 1
     
     return InputList
 
-## Process2: TranslationBodySummary의 추가 Input
+## Process2, 14: TranslationBodySummary의 추가 Input
 def TranslationBodySummaryAddInput(ProjectDataFrameTranslationBodySummaryPath, TranslationLangCode):
     if os.path.exists(ProjectDataFrameTranslationBodySummaryPath):
         with open(ProjectDataFrameTranslationBodySummaryPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
@@ -611,8 +614,10 @@ def BodyTranslationCheckInput(ProjectDataFrameBodyTranslationPath, BodyTranslati
         CurrentBodyTranslation = BodyTranslationResponse['번역문']
         
         CheckInput = f"{BeforeBodyTranslation}\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n"
+        Index = max(-len(BodyTranslation), -3)
+        BeforeCheck = BodyTranslation[Index]['Body']
         
-    return CheckInput
+    return CheckInput, BeforeCheck
 
 ## Process9: TranslationEditing의 InputList
 def TranslationEditingInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2):
@@ -1712,7 +1717,7 @@ def BodyTranslationPreprocessingProcessDataFrameSave(ProjectName, MainLang, Tran
         json.dump(BodyTranslationPreprocessingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ## Process8: BodyTranslationProcess DataFrame 저장
-def BodyTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
+def BodyTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse, BodyTranslationCheckResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
     ## BodyTranslationFrame 불러오기
     if os.path.exists(ProjectDataFrameBodyTranslationPath):
         BodyTranslationFramePath = ProjectDataFrameBodyTranslationPath
@@ -1734,6 +1739,7 @@ def BodyTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, Tran
     BodyTranslation['Index'] = Index
     BodyTranslation['BodyId'] = BodyId
     BodyTranslation['Body'] = BodyTranslationResponse['번역문']
+    BodyTranslation['Tone'] = BodyTranslationCheckResponse['현재도서내용어조']
 
     ## BodyTranslationFrame 데이터 프레임 업데이트
     BodyTranslationFrame[1].append(BodyTranslation)
@@ -1821,6 +1827,43 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
     ## TranslationProofreadingFrame 저장
     with open(ProjectDataFrameTranslationProofreadingPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TranslationProofreadingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
+## Process14: AfterTranslationBodySummaryProcess DataFrame 저장
+def AfterTranslationBodySummaryProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameAfterTranslationBodySummaryPath, AfterTranslationBodySummaryResponse, Process, InputCount, IndexId, TotalInputCount):
+    ## AfterTranslationBodySummaryFrame 불러오기
+    if os.path.exists(ProjectDataFrameAfterTranslationBodySummaryPath):
+        AfterTranslationBodySummaryFramePath = ProjectDataFrameAfterTranslationBodySummaryPath
+    else:
+        AfterTranslationBodySummaryFramePath = os.path.join(TranslationDataFramePath, "b532-02_AfterTranslationBodySummaryFrame.json")
+    with open(AfterTranslationBodySummaryFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        AfterTranslationBodySummaryFrame = json.load(DataFrameJson)
+        
+    ## AfterTranslationBodySummaryFrame 업데이트
+    AfterTranslationBodySummaryFrame[0]['ProjectName'] = ProjectName
+    AfterTranslationBodySummaryFrame[0]['MainLang'] = MainLang.capitalize()
+    AfterTranslationBodySummaryFrame[0]['Translation'] = Translation.capitalize()
+    AfterTranslationBodySummaryFrame[0]['TaskName'] = Process
+    
+    ## AfterTranslationBodySummaryFrame 첫번째 데이터 프레임 복사
+    AfterTranslationBodySummary = AfterTranslationBodySummaryFrame[1][0].copy()
+
+    AfterTranslationBodySummary['IndexId'] = IndexId
+    AfterTranslationBodySummary['BodyId'] = InputCount
+    AfterTranslationBodySummary['MainText'] = AfterTranslationBodySummaryResponse['핵심문구']
+    AfterTranslationBodySummary['BodySummary'] = AfterTranslationBodySummaryResponse['요약']
+    AfterTranslationBodySummary['Score'] = AfterTranslationBodySummaryResponse['중요도']
+
+    ## AfterTranslationBodySummaryFrame 데이터 프레임 업데이트
+    AfterTranslationBodySummaryFrame[1].append(AfterTranslationBodySummary)
+        
+    ## AfterTranslationBodySummaryFrame ProcessCount 및 Completion 업데이트
+    AfterTranslationBodySummaryFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        AfterTranslationBodySummaryFrame[0]['Completion'] = 'Yes'
+        
+    ## AfterTranslationBodySummaryFrame 저장
+    with open(ProjectDataFrameAfterTranslationBodySummaryPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(AfterTranslationBodySummaryFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ##############################
 ##### ProcessEdit 업데이트 #####
@@ -2024,7 +2067,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
 
     ## 최종 설정된 Translation 불러오기 및 MainLangCode, TranslationLangCode 설정
     Translation = LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath)
-    MainLangCode, TranslationLangCode = LanguageCodeGen(MainLang, Translation)
+    MainLangCode, TranslationLangCode, ToneDistinction = LanguageCodeGen(MainLang, Translation)
 
     ##################################################
     ### Process1: TranslationBodySplit Response 생성 ##
@@ -2078,7 +2121,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 Input = Input1 + Input2
 
                 ## 현재내용의 길이가 1000자 초과인 경우만 요약
-                if len(Input2) <= 1000:
+                if len(Input2) <= 500:
                     Body = InputList[i]['Body']
                     TranslationBodySummaryResponse = {"요약": Body, "핵심문구": ['None']}
                 else:
@@ -2359,6 +2402,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
     # print(f"EditCheck: {EditCheck}")
     # print(f"EditCompletion: {EditCompletion}")
     ## Process 진행
+    MemoryCounter = ''
     if not EditCheck:
         if DataFrameCompletion == 'No':
             i = InputCount - 1
@@ -2374,21 +2418,32 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 Input = Input1 + Input2
                 
                 ## Response 생성
-                BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "Anthropic", mode, MessagesReview)
+                BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "Anthropic", mode, MessagesReview, memoryCounter = MemoryCounter)
                 
                 ######################################
                 ### Process8: BodyTranslationCheck ###
                 ######################################
-                if inputCount >= 2:
+                if inputCount >= 4 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
-                    CheckInput = BodyTranslationCheckInput(ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    CheckInput, BeforeCheck = BodyTranslationCheckInput(ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
+                        if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
+                            if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
+                                pass
+                        elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
+                            pass
+                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
+                            MemoryCounter = '\n※ 참고! [원문]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 번역해주세요.'
+                            continue
                         # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
-                        continue
+                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
+                            MemoryCounter = '\n※ 참고! [원문]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등의)로 번역해주세요.'
+                            continue
+                MemoryCounter = ''
                 
                 ## DataFrame 저장
-                BodyTranslationProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                BodyTranslationProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
                 i += 1  # 다음 인덱스로 이동
             
         ## Edit 저장
@@ -2518,6 +2573,56 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
     #################################################
     ### Process14: AfterTranslationBodySummary 생성 ##
     #################################################
+    
+    ## Process 설정
+    ProcessNumber = '14'
+    Process = "AfterTranslationBodySummary"
+
+    ## AfterTranslationBodySummary 경로 생성
+    ProjectDataFrameAfterTranslationBodySummaryPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = TranslationBodySummaryInputList(TranslationEditPath, "TranslationEditing")
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameAfterTranslationBodySummaryPath)
+    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList[i]['Id']
+                IndexId = InputList[i]['IndexId']
+                Input1 = TranslationBodySummaryAddInput(ProjectDataFrameAfterTranslationBodySummaryPath, MainLangCode)
+                Input2 = InputList[i]['Input']
+                Input = Input1 + Input2
+
+                ## 현재내용의 길이가 1000자 초과인 경우만 요약
+                if len(Input2) <= 500:
+                    Body = InputList[i]['Body']
+                    AfterTranslationBodySummaryResponse = {"요약": Body, "핵심문구": ['None']}
+                else:
+                    ## Response 생성
+                    AfterTranslationBodySummaryResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AfterTranslationBodySummaryFilter, CheckCount, "Anthropic", mode, MessagesReview)
+
+                ## DataFrame 저장
+                AfterTranslationBodySummaryProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameAfterTranslationBodySummaryPath, AfterTranslationBodySummaryResponse, Process, inputCount, IndexId, TotalInputCount)
+                
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameAfterTranslationBodySummaryPath, TranslationEditPath, Process, EditMode)
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
     
     ############################################
     ### Process15: TranslationCatchphrase 생성 ##

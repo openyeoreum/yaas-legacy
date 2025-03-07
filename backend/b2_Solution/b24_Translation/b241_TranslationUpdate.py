@@ -748,13 +748,15 @@ def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
 def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
     ## 대화문 마킹 함수
     DialogueCounter = [1]
-    Pattern = r'(“([^”]+)”|"([^"]+)")'
+    Pattern = r'("([^"]+)"|"([^"]+)")'
+    
     def ReplaceDialogue(Match):
-        # 그룹2: “…” 패턴, 그룹3: "…" 패턴
+        # 그룹2: "…" 패턴, 그룹3: "…" 패턴
         DialogueText = Match.group(2) if Match.group(2) is not None else Match.group(3)
         replacement = f"{{{DialogueCounter[0]}대화: {DialogueText}}}"
         DialogueCounter[0] += 1
         return replacement
+    
     ## 전체 도서내용에 대화문 마킹 생성
     with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
         TranslationEditList = json.load(TranslationEditJson)[BeforeProcess]
@@ -765,12 +767,15 @@ def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
         IndexId = TranslationEdit['IndexId']
         Body = TranslationEdit['Body']
         
+        # 대화문 패턴이 발견되었는지 확인
+        DialogueCheck = re.search(Pattern, Body) is not None
+        
         # 정규표현식을 사용하여 다양한 쌍따옴표를 찾고 변경
         Body_modified = re.sub(Pattern, ReplaceDialogue, Body)
         
         Input = f"<작업: 현재도서내용>\n{Body_modified}\n\n"
         
-        InputList.append({"Id": InputId, "IndexId": IndexId, "Body": Body, "Input": Input})
+        InputList.append({"Id": InputId, "IndexId": IndexId, "Body": Body, "Input": Input, "DialogueCheck": DialogueCheck})
         InputId += 1
     
     return InputList
@@ -779,13 +784,14 @@ def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
 def TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath):
     if os.path.exists(ProjectDataFrameTranslationDialogueAnalysisPath):
         with open(ProjectDataFrameTranslationDialogueAnalysisPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
-            DialogueMarkBody = json.load(TranslationDataFrame)[1][-1]
-        AddInput = f"<참고: 직전도서내용>\n{DialogueMarkBody}\n\n\n"
+            TranslationDialogueAnalysis = json.load(TranslationDataFrame)[1][-1]
+            DialogueMarkBody = TranslationDialogueAnalysis['DialogueMarkBody']
+        AddInput = f"\n{DialogueMarkBody}\n\n\n"
     
     else:
-        AddInput = f"<참고: 직전도서내용>\nNone\n\n\n"
+        AddInput = f"\nNone\n\n\n"
     
-    return AddInput
+    return AddInput, DialogueMarkBody
 
 ######################
 ##### Filter 조건 #####
@@ -1886,7 +1892,7 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
         json.dump(TranslationProofreadingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ## Process11: TranslationDialogueAnalysis DataFrame 저장
-def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, TranslationDialogueAnalysisResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
+def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, DialogueMarkBody, TranslationDialogueAnalysisResponse, Process, InputCount, BodyId, TotalInputCount):
     ## TranslationDialogueAnalysisFrame 불러오기
     if os.path.exists(ProjectDataFrameTranslationDialogueAnalysisPath):
         TranslationDialogueAnalysisFramePath = ProjectDataFrameTranslationDialogueAnalysisPath
@@ -1903,16 +1909,14 @@ def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Trans
     
     ## TranslationDialogueAnalysisFrame 첫번째 데이터 프레임 복사
     TranslationDialogueAnalysis = TranslationDialogueAnalysisFrame[1][0].copy()
-    TranslationDialogueAnalysis['IndexId'] = IndexId
-    TranslationDialogueAnalysis['IndexTag'] = IndexTag
-    TranslationDialogueAnalysis['Index'] = Index
     TranslationDialogueAnalysis['BodyId'] = BodyId
-    TranslationProofreadedBody = TranslationDialogueAnalysisResponse['도서내용']
-    TranslationDialogueAnalysis['ProofreadedBody'] = TranslationProofreadedBody
-    TranslationBody = TranslationProofreadedBody.replace('@', '"')
-    TranslationBody = TranslationBody.replace('_', " ")
-    TranslationBody = TranslationBody.replace('/', "\n")
-    TranslationDialogueAnalysis['Body'] = TranslationBody
+    
+    # DialogueMarkBody에서 {n대화: ...} -> {n이름: ...}으로 변경
+    for TranslationDialogue in TranslationDialogueAnalysisResponse['대화문']:
+        DialogueMarkBody = DialogueMarkBody.replace(f"{TranslationDialogue['번호']}대화:", f"{TranslationDialogue['번호']}{TranslationDialogue['이름']}:")
+        
+    TranslationDialogueAnalysis['DialogueMarkBody'] = DialogueMarkBody
+    TranslationDialogueAnalysis['Dialogue'] = TranslationDialogueAnalysisResponse['대화문']
 
     ## TranslationDialogueAnalysisFrame 데이터 프레임 업데이트
     TranslationDialogueAnalysisFrame[1].append(TranslationDialogueAnalysis)
@@ -2107,7 +2111,7 @@ def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumPro
 ##### Process 진행 및 업데이트 #####
 ################################
 ## Translation 프롬프트 요청 및 결과물 Json화
-def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode, mode = "Master", MessagesReview = "on"):
+def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenre, EditMode, mode = "Master", MessagesReview = "on"):
     print(f"< User: {email} | Translation: {projectName} ({Translation}) >>> ({MainLang}) | TranslationUpdate 시작 >")
     ## projectName_translation 경로 설정
     ProjectTranslationPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_translation"
@@ -2687,51 +2691,57 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
+    
     #################################################
     ### Process11: TranslationDialogueAnalysis 생성 ##
     #################################################
+    if BookGenre == 'Fiction':
 
-    ## Process 설정
-    ProcessNumber = '11'
-    Process = "TranslationDialogueAnalysis"
+        ## Process 설정
+        ProcessNumber = '11'
+        Process = "TranslationDialogueAnalysis"
 
-    ## TranslationDialogueAnalysis 경로 생성
-    ProjectDataFrameTranslationDialogueAnalysisPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+        ## TranslationDialogueAnalysis 경로 생성
+        ProjectDataFrameTranslationDialogueAnalysisPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
-    ## Process Count 계산 및 Check
-    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = TranslationDialogueAnalysisInputList(TranslationEditPath, "TranslationBodySplit")
-    TotalInputCount = len(InputList) # 인풋의 전체 카운트
-    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueAnalysisPath)
-    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
-    # print(f"InputCount: {InputCount}")
-    # print(f"EditCheck: {EditCheck}")
-    # print(f"EditCompletion: {EditCompletion}")
-    ## Process 진행
-    if not EditCheck:
-        if DataFrameCompletion == 'No':
-            i = InputCount - 1
-            while i < TotalInputCount:
-                ## Input 생성
-                inputCount = InputList[i]['Id']
-                IndexId = InputList[i]['IndexId']
-                Body = InputList[i]['Body']
-                Input1 = TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath)
-                Input2 = InputList[i]['Input']
-                Input = Input1 + Input2
-                
-                ## Response 생성
-                TranslationDialogueAnalysisResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueAnalysisFilter, CheckCount, "Anthropic", mode, MessagesReview, memoryCounter = MemoryCounter)
-                
-                ## DataFrame 저장
-                TranslationDialogueAnalysisProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, TranslationDialogueAnalysisResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
-                
-        ## Edit 저장
-        ProcessEditSave(ProjectDataFrameTranslationDialogueAnalysisPath, TranslationEditPath, Process, EditMode)
-        ## EditText 저장
-        ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
-        if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+        ## Process Count 계산 및 Check
+        CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+        InputList = TranslationDialogueAnalysisInputList(TranslationEditPath, "TranslationBodySplit")
+        TotalInputCount = len(InputList) # 인풋의 전체 카운트
+        InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueAnalysisPath)
+        EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+        # print(f"InputCount: {InputCount}")
+        # print(f"EditCheck: {EditCheck}")
+        # print(f"EditCompletion: {EditCompletion}")
+        ## Process 진행
+        if not EditCheck:
+            if DataFrameCompletion == 'No':
+                i = InputCount - 1
+                while i < TotalInputCount:
+                    ## Body내에 대화문이 있는지 체크
+                    if InputList[i]['DialogueCheck']:
+                        ## Input 생성
+                        inputCount = InputList[i]['Id']
+                        IndexId = InputList[i]['IndexId']
+                        Body = InputList[i]['Body']
+                        Input1, DialogueMarkBody = TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath)
+                        Input2 = InputList[i]['Input']
+                        Input = Input1 + Input2
+                        
+                        ## Response 생성
+                        TranslationDialogueAnalysisResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueAnalysisFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
+                    else:
+                        TranslationDialogueAnalysisResponse = {'대화문': []}
+                        
+                    ## DataFrame 저장
+                    TranslationDialogueAnalysisProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, DialogueMarkBody, TranslationDialogueAnalysisResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                    
+            ## Edit 저장
+            ProcessEditSave(ProjectDataFrameTranslationDialogueAnalysisPath, TranslationEditPath, Process, EditMode)
+            ## EditText 저장
+            ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
+            if EditMode == "Manual":
+                sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
     
     
     ################################################

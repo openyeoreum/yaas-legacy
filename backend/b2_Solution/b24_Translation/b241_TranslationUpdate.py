@@ -2478,6 +2478,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
     # print(f"EditCheck: {EditCheck}")
     # print(f"EditCompletion: {EditCompletion}")
     ## Process 진행
+    MemoryCounter = ''
     if not EditCheck:
         if DataFrameCompletion == 'No':
             for i in range(InputCount - 1, TotalInputCount):
@@ -2492,8 +2493,30 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 Input = Input1 + Input2
                 
                 ## Response 생성
-                TranslationEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Anthropic", mode, MessagesReview)
-                
+                TranslationEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Anthropic", mode, MessagesReview, memoryCounter = MemoryCounter)
+
+                ######################################
+                ### Process8: BodyTranslationCheck ###
+                ######################################
+                if inputCount >= 4 and ToneDistinction == 'Yes':
+                    CheckProcess = "BodyTranslationCheck"
+                    CheckInput, BeforeCheck = BodyTranslationCheckInput(ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
+                    BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                    if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
+                        if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
+                            if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
+                                pass
+                        elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
+                            pass
+                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
+                            MemoryCounter = '\n※ 참고! [원문]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 번역해주세요.'
+                            continue
+                        # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
+                            MemoryCounter = '\n※ 참고! [원문]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등의)로 번역해주세요.'
+                            continue
+                MemoryCounter = ''
+
                 ## DataFrame 저장
                 TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
 

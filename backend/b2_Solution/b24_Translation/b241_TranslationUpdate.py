@@ -1171,9 +1171,11 @@ def TranslationProofreadingFilter(Response, CheckCount):
     # 가장 앞자리 확인 후 전처리
     if OutputDic['교정']['도서내용'][0] not in ['\\', '@', '_']:
         OutputDic['교정']['도서내용'] = '_' + OutputDic['교정']['도서내용']
-        
+    
     # Error5: 교정 전후 '도서내용' 일치 확인
     EditCheckCount = re.sub(r'[^a-zA-Z0-9\u0080-\uFFFF]', '', OutputDic['교정']['도서내용'])
+    # print(f"\n\n\n\n\n\n\n\n\n\nCheckCount: {CheckCount}")
+    # print(f"\n\n\n\n\n\n\n\n\n\nEditCheckCount: {EditCheckCount}\n\n\n\n\n\n\n\n\n\n")
     if EditCheckCount != CheckCount:
         return f"TranslationProofreading, JSON에서 오류 발생: '교정내용({len(EditCheckCount)}) != 도서내용({len(CheckCount)})'이 교정 전후로 일치하지 않습니다"
     
@@ -2598,6 +2600,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
     #################################################
     ### Process11: TranslationDialogueAnalysis 생성 ##
     #################################################
+    
+    
     
     ################################################
     ### Process12: TranslationDialogueEditing 생성 ##

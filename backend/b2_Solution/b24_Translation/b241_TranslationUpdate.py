@@ -260,7 +260,7 @@ def LanguageCodeGen(MainLang, Translation):
     TranslationLangCode = LanguageCode(Translation)["code"]
     
     # ToneDistinction
-    ToneDistinction = LanguageCode(Translation)["toneDistinction"]
+    ToneDistinction = LanguageCode(MainLang)["toneDistinction"]
     
     return MainLangCode, TranslationLangCode, ToneDistinction
 
@@ -1754,7 +1754,7 @@ def BodyTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, Tran
         json.dump(BodyTranslationFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ## Process9: TranslationEditingProcess DataFrame 저장
-def TranslationEditingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
+def TranslationEditingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, BodyTranslationCheckResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
     ## TranslationEditingFrame 불러오기
     if os.path.exists(ProjectDataFrameTranslationEditingPath):
         TranslationEditingFramePath = ProjectDataFrameTranslationEditingPath
@@ -1776,6 +1776,7 @@ def TranslationEditingProcessDataFrameSave(ProjectName, MainLang, Translation, T
     TranslationEditing['Index'] = Index
     TranslationEditing['BodyId'] = BodyId
     TranslationEditing['Body'] = TranslationEditingResponse['내용'].replace('{', '').replace('}', '')
+    TranslationEditing['Tone'] = BodyTranslationCheckResponse['현재도서내용어조']    
 
     ## TranslationEditingFrame 데이터 프레임 업데이트
     TranslationEditingFrame[1].append(TranslationEditing)
@@ -2423,6 +2424,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 ######################################
                 ### Process8: BodyTranslationCheck ###
                 ######################################
+                BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
                 if inputCount >= 4 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
                     CheckInput, BeforeCheck = BodyTranslationCheckInput(ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
@@ -2498,6 +2500,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 ######################################
                 ### Process8: BodyTranslationCheck ###
                 ######################################
+                BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
+                print(f"\n\n\n\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\ninputCount: {inputCount}")
+                print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
                 if inputCount >= 4 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
                     CheckInput, BeforeCheck = BodyTranslationCheckInput(ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
@@ -2518,7 +2523,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 MemoryCounter = ''
 
                 ## DataFrame 저장
-                TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationEditingPath, TranslationEditPath, Process, EditMode)

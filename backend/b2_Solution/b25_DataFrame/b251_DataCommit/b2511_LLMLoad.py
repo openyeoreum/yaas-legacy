@@ -538,7 +538,7 @@ def JsonParsingProcess(projectName, email, RawResponse, FilterFunc):
             if ErrorCount >= 2:
                 print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/2 | "
                         f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
-                break
+                return Response
             time.sleep(10)
             continue
         

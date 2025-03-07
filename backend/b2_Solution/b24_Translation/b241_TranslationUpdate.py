@@ -726,7 +726,7 @@ def TranslationProofreadingInputList(TranslationEditPath, BeforeProcess):
         BodyId = TranslationEdit['BodyId']
         Body = TranslationEdit['Body']
         
-        Input = f"<교정할도서내용>\n{Body}\n\n"
+        Input = f"<작업: 교정할도서내용>\n{Body}\n\n"
         
         InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": Body, "Input": Input})
         InputId += 1
@@ -1164,11 +1164,13 @@ def TranslationProofreadingFilter(Response, CheckCount):
     if not isinstance(OutputDic['교정']['도서내용'], str):
         return "TranslationProofreading, JSON에서 오류 발생: '교정 > 도서내용'은 문자열이어야 합니다"
     
-    # Error4: '도서내용'의 값에서 줄바꿈과 쌍따옴표 포함 여부 확인
-    invalid_chars = ['"', '“', '”', ' ', '\n']
-    for char in invalid_chars:
-        if char in OutputDic['교정']['도서내용']:
-            return f"TranslationProofreading, JSON에서 오류 발생: '교정 > 도서내용'에 허용되지 않은 문자({char})가 포함되었습니다"
+    # '도서내용'의 값에서 줄바꿈과 쌍따옴표 후처리
+    OutputDic['교정']['도서내용'] = OutputDic['교정']['도서내용'].replace('\n', '/')
+    OutputDic['교정']['도서내용'] = OutputDic['교정']['도서내용'].replace('\"', '@').replace('"', '@').replace('“', '@').replace('”', '@')
+    OutputDic['교정']['도서내용'] = OutputDic['교정']['도서내용'].replace(' ', '_')
+    # 가장 앞자리 확인 후 전처리
+    if OutputDic['교정']['도서내용'][0] not in ['\\', '@', '_']:
+        OutputDic['교정']['도서내용'] = '_' + OutputDic['교정']['도서내용']
         
     # Error5: 교정 전후 '도서내용' 일치 확인
     EditCheckCount = re.sub(r'[^a-zA-Z0-9\u0080-\uFFFF]', '', OutputDic['교정']['도서내용'])
@@ -1815,10 +1817,12 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
     TranslationProofreading['IndexTag'] = IndexTag
     TranslationProofreading['Index'] = Index
     TranslationProofreading['BodyId'] = BodyId
-    TranslationProofreadingBody = TranslationProofreadingResponse['도서내용']
-    TranslationProofreadingBody = TranslationProofreadingBody.replace('"', '@').replace('“', '@').replace('”', '@')
-    TranslationProofreadingBody = TranslationProofreadingBody.replace('\n', '/')
-    TranslationProofreading['Body'] = TranslationProofreadingBody
+    TranslationProofreadedBody = TranslationProofreadingResponse['도서내용']
+    TranslationProofreading['ProofreadedBody'] = TranslationProofreadedBody
+    TranslationBody = TranslationProofreadedBody.replace('@', '"')
+    TranslationBody = TranslationBody.replace('_', " ")
+    TranslationBody = TranslationBody.replace('/', "\n")
+    TranslationProofreading['Body'] = TranslationBody
 
     ## TranslationProofreadingFrame 데이터 프레임 업데이트
     TranslationProofreadingFrame[1].append(TranslationProofreading)
@@ -2437,6 +2441,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                             if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                 pass
                         elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
+                            BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                             pass
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
                             MemoryCounter = '\n※ 참고! [원문]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 번역해주세요.'
@@ -2515,6 +2520,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                             if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                 pass
                         elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
+                            BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                             pass
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
                             MemoryCounter = '\n※ 참고! [원문]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 번역해주세요.'
@@ -2614,7 +2620,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
 
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = TranslationBodySummaryInputList(TranslationEditPath, "TranslationEditing")
+    InputList = TranslationBodySummaryInputList(TranslationEditPath, "TranslationProofreading")
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameAfterTranslationBodySummaryPath)
     EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)

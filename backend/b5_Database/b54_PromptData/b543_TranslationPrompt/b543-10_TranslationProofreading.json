@@ -1,5 +1,5 @@
 {
-    "TaskName": "TranslationProofreading.",
+    "TaskName": "TranslationProofreading",
     "OpenAI": {
         "BaseModel": {
             "ShortTokensModel": "gpt-4o-mini",

@@ -1,5 +1,5 @@
 {
-    "TaskName": "TranslationBodySummary.",
+    "TaskName": "TranslationBodySummary",
     "OpenAI": {
         "BaseModel": {
             "ShortTokensModel": "gpt-4o-mini",

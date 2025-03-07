@@ -504,6 +504,8 @@ class Prompt(Base):
     TranslationDialogueEditing = Column(JSON)
     TranslationDialoguePostprocessing = Column(JSON)
     AfterTranslationBodySummary = Column(JSON)
+    AuthorResearch = Column(JSON)
+    TranslationCatchphrase = Column(JSON)
     
     ## TextBookPrompt
     

@@ -510,8 +510,10 @@ def JsonParsingFilter(Response, RawResponse):
     RawResponse_no_escape = re.sub(r'\\.', '', RawResponse)
 
     # 2단계: 나머지 특수문자, 공백, 줄바꿈 등을 제거하여 알파벳(다국어 포함)과 숫자만 남깁니다.
-    Response_clean = re.sub(r'[\W_]+', '', Response_no_escape)
-    RawResponse_clean = re.sub(r'[\W_]+', '', RawResponse_no_escape)
+    Response_clean = re.sub(r'[^\w\d]', '', Response_no_escape, flags = re.UNICODE)
+    Response_clean = Response_clean.replace('_', '')
+    RawResponse_clean = re.sub(r'[^\w\d]', '', RawResponse_no_escape, flags = re.UNICODE)
+    RawResponse_clean = RawResponse_clean.replace('_', '')
 
     ResponseLength = len(Response_clean)
     RawResponseLength = len(RawResponse_clean)

@@ -199,7 +199,7 @@ def ScriptUpdate(email, ProjectName, Script, Intention, MessagesReview):
 def TranslationUpdate(email, ProjectName, MainLang, Translation, BookGenre, EditMode, MessagesReview):
     
     ### Step8-1 : Translation 번역 ###
-    SolutionTranslationUpdate(ProjectName, email, MainLang, BookGenre, Translation, EditMode, MessagesReview)
+    SolutionTranslationUpdate(ProjectName, email, MainLang, Translation, BookGenre, EditMode, MessagesReview)
 
 ### Step9 : TextBook 업데이트 ###
 

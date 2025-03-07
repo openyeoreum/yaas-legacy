@@ -499,6 +499,7 @@ class Prompt(Base):
     BodyTranslation = Column(JSON)
     BodyTranslationCheck = Column(JSON)
     TranslationEditing = Column(JSON)
+    TranslationRefinement = Column(JSON)
     TranslationProofreading = Column(JSON)
     TranslationDialogueAnalysis = Column(JSON)
     TranslationDialogueEditing = Column(JSON)

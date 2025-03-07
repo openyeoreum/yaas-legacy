@@ -73,6 +73,7 @@ def AddPromptToDB():
         bodyTranslation = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-08_BodyTranslation.json")
         bodyTranslationCheck = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-08_BodyTranslationCheck.json")
         translationEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-09_TranslationEditing.json")
+        translationRefinement = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-09_TranslationRefinement.json")
         translationProofreading = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-10_TranslationProofreading.json")
         translationDialogueAnalysis = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-11_TranslationDialogueAnalysis.json")
         translationDialogueEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-12_TranslationDialogueEditing.json")
@@ -174,6 +175,7 @@ def AddPromptToDB():
             ExistingPrompt.BodyTranslation = bodyTranslation
             ExistingPrompt.BodyTranslationCheck = bodyTranslationCheck
             ExistingPrompt.TranslationEditing = translationEditing
+            ExistingPrompt.TranslationRefinement = translationRefinement
             ExistingPrompt.TranslationProofreading = translationProofreading
             ExistingPrompt.TranslationDialogueAnalysis = translationDialogueAnalysis
             ExistingPrompt.TranslationDialogueEditing = translationDialogueEditing
@@ -271,6 +273,7 @@ def AddPromptToDB():
                 BodyTranslation = bodyTranslation,
                 BodyTranslationCheck = bodyTranslationCheck,
                 TranslationEditing = translationEditing,
+                TranslationRefinement = translationRefinement,
                 TranslationProofreading = translationProofreading,
                 TranslationDialogueAnalysis = translationDialogueAnalysis,
                 TranslationDialogueEditing = translationDialogueEditing,

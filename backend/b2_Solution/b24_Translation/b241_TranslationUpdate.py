@@ -606,12 +606,15 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
     return AddInput
 
 ## Process8: BodyTranslationCheck의 Input
-def BodyTranslationCheckInput(ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
+def BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
     if os.path.exists(ProjectDataFrameBodyTranslationPath):
         with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
             BodyTranslation = json.load(TranslationDataFrame)[1]
         BeforeBodyTranslation = BodyTranslation[-1]['Body']
-        CurrentBodyTranslation = BodyTranslationResponse['번역문']
+        if Process == 'BodyTranslation':
+            CurrentBodyTranslation = BodyTranslationResponse['번역문']
+        elif Process == 'TranslationEditing':
+            CurrentBodyTranslation = BodyTranslationResponse['내용']
         
         CheckInput = f"{BeforeBodyTranslation}\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n"
         Index = max(-len(BodyTranslation), -3)
@@ -2425,9 +2428,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 ### Process8: BodyTranslationCheck ###
                 ######################################
                 BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
-                if inputCount >= 4 and ToneDistinction == 'Yes':
+                if inputCount >= 5 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
-                    CheckInput, BeforeCheck = BodyTranslationCheckInput(ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
@@ -2501,11 +2504,11 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, EditMode
                 ### Process8: BodyTranslationCheck ###
                 ######################################
                 BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
-                print(f"\n\n\n\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\ninputCount: {inputCount}")
-                print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
-                if inputCount >= 4 and ToneDistinction == 'Yes':
+                # print(f"\n\n\n\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\ninputCount: {inputCount}")
+                # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
+                if inputCount >= 5 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
-                    CheckInput, BeforeCheck = BodyTranslationCheckInput(ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
+                    CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':

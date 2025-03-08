@@ -7,7 +7,7 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
-from backend.b2_Solution.b25_DataFrame.b251_DataCommit.b2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from backend.b2_Solution.b25_DataFrame.b251_DataCommit.b2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse
 
 ##########################################
 ##### Translation Index, Body 불러오기 #####
@@ -1478,6 +1478,8 @@ def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCo
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
         elif LLM == "Anthropic":
             Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
+        elif LLM == "Google":
+            Response, Usage, Model = GOOGLE_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
         Filter = FilterFunc(Response, CheckCount)
         
         if isinstance(Filter, str):
@@ -1903,7 +1905,7 @@ def TranslationRefinementProcessDataFrameSave(ProjectName, MainLang, Translation
     if os.path.exists(ProjectDataFrameTranslationRefinementPath):
         TranslationRefinementFramePath = ProjectDataFrameTranslationRefinementPath
     else:
-        TranslationRefinementFramePath = os.path.join(TranslationDataFramePath, "b532-10_TranslationRefinementFrame.json")
+        TranslationRefinementFramePath = os.path.join(TranslationDataFramePath, "b532-09_TranslationRefinementFrame.json")
     with open(TranslationRefinementFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationRefinementFrame = json.load(DataFrameJson)
         
@@ -2208,7 +2210,7 @@ def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumPro
 ##### Process 진행 및 업데이트 #####
 ################################
 ## Translation 프롬프트 요청 및 결과물 Json화
-def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenre, EditMode, mode = "Master", MessagesReview = "on"):
+def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenre, EditMode, TranslationQuality, mode = "Master", MessagesReview = "on"):
     print(f"< User: {email} | Translation: {projectName} ({Translation}) >>> ({MainLang}) | TranslationUpdate 시작 >")
     ## projectName_translation 경로 설정
     ProjectTranslationPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_translation"
@@ -2665,6 +2667,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '09'
     Process = "TranslationEditing"
+    ProofreadingBeforeProcess = Process
 
     ## TranslationEditing 경로 생성
     ProjectDataFrameTranslationEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
@@ -2714,11 +2717,11 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                             pass
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 번역해주세요.'
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 편집해주세요.'
                             continue
                         # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등의)로 번역해주세요.'
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등의)로 편집해주세요.'
                             continue
                 MemoryCounter = ''
 
@@ -2741,82 +2744,85 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ##########################################
     ### Process9: TranslationRefinement 생성 ##
     ##########################################
+    if TranslationQuality == 'Refinement':
 
-    ## Process 설정
-    ProcessNumber = '09'
-    Process = "TranslationRefinement"
+        ## Process 설정
+        ProcessNumber = '09'
+        Process = "TranslationRefinement"
+        ProofreadingBeforeProcess = Process
 
-    ## TranslationRefinement 경로 생성
-    ProjectDataFrameTranslationRefinementPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+        ## TranslationRefinement 경로 생성
+        ProjectDataFrameTranslationRefinementPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
-    ## Process Count 계산 및 Check
-    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = TranslationEditingInputList(TranslationEditPath, "BodyTranslationPreprocessing", "TranslationEditing")
-    TotalInputCount = len(InputList) # 인풋의 전체 카운트
-    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationRefinementPath)
-    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
-    # print(f"InputCount: {InputCount}")
-    # print(f"EditCheck: {EditCheck}")
-    # print(f"EditCompletion: {EditCompletion}")
-    ## Process 진행
-    MemoryCounter = ''
-    if not EditCheck:
-        if DataFrameCompletion == 'No':
-            for i in range(InputCount - 1, TotalInputCount):
-                ## Input 생성
-                inputCount = InputList[i]['Id']
-                IndexId = InputList[i]['IndexId']
-                IndexTag = InputList[i]['IndexTag']
-                Index = InputList[i]['Index']
-                BodyId = InputList[i]['BodyId']
-                Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationRefinementPath, ProjectDataFrameIndexTranslationPath)
-                Input2 = InputList[i]['Input']
-                Input = Input1 + Input2
-                
-                ## Response 생성
-                TranslationRefinementResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Anthropic", mode, MessagesReview, memoryCounter = MemoryCounter)
+        ## Process Count 계산 및 Check
+        CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+        InputList = TranslationEditingInputList(TranslationEditPath, "BodyTranslationPreprocessing", "TranslationEditing")
+        TotalInputCount = len(InputList) # 인풋의 전체 카운트
+        InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationRefinementPath)
+        EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+        # print(f"InputCount: {InputCount}")
+        # print(f"EditCheck: {EditCheck}")
+        # print(f"EditCompletion: {EditCompletion}")
+        ## Process 진행
+        MemoryCounter = ''
+        if not EditCheck:
+            if DataFrameCompletion == 'No':
+                for i in range(InputCount - 1, TotalInputCount):
+                    ## Input 생성
+                    inputCount = InputList[i]['Id']
+                    IndexId = InputList[i]['IndexId']
+                    IndexTag = InputList[i]['IndexTag']
+                    Index = InputList[i]['Index']
+                    BodyId = InputList[i]['BodyId']
+                    Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationRefinementPath, ProjectDataFrameIndexTranslationPath)
+                    Input2 = InputList[i]['Input']
+                    Input = Input1 + Input2
+                    
+                    
+                    ## Response 생성
+                    TranslationRefinementResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
 
-                ######################################
-                ### Process8: BodyTranslationCheck ###
-                ######################################
-                BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
-                # print(f"\n\n\n\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\ninputCount: {inputCount}")
-                # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
-                if inputCount >= 5 and ToneDistinction == 'Yes':
-                    CheckProcess = "BodyTranslationCheck"
-                    CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
-                    BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
-                    if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
-                        if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
-                            if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
+                    ######################################
+                    ### Process8: BodyTranslationCheck ###
+                    ######################################
+                    BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
+                    # print(f"\n\n\n\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\ninputCount: {inputCount}")
+                    # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
+                    if inputCount >= 5 and ToneDistinction == 'Yes':
+                        CheckProcess = "BodyTranslationCheck"
+                        CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
+                        BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                        if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
+                            if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
+                                if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
+                                    pass
+                            elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
+                                BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                                 pass
-                        elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
-                            BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
-                            pass
-                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 번역해주세요.'
-                            continue
-                        # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
-                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등의)로 번역해주세요.'
-                            continue
-                MemoryCounter = ''
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 편집해주세요.'
+                                continue
+                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등의)로 편집해주세요.'
+                                continue
+                    MemoryCounter = ''
 
-                ## DataFrame 저장
-                TranslationRefinementProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                    ## DataFrame 저장
+                    TranslationRefinementProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
 
-        ## Edit 저장
-        ProcessEditSave(ProjectDataFrameTranslationRefinementPath, TranslationEditPath, Process, EditMode)
-        ## EditText 저장
-        ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
+            ## Edit 저장
+            ProcessEditSave(ProjectDataFrameTranslationRefinementPath, TranslationEditPath, Process, EditMode)
+            ## EditText 저장
+            ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
+            if EditMode == "Manual":
+                sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
-
-    if EditMode == "Manual":
-        if EditCheck:
-            if not EditCompletion:
-                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            if EditCheck:
+                if not EditCompletion:
+                    ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                    sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
     #############################################
     ### Process10: TranslationProofreading 생성 ##
@@ -2831,7 +2837,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
 
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = TranslationProofreadingInputList(TranslationEditPath, "TranslationRefinement")
+    InputList = TranslationProofreadingInputList(TranslationEditPath, ProofreadingBeforeProcess)
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationProofreadingPath)
     EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)

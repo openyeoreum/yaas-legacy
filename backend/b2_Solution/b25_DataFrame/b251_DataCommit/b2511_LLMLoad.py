@@ -10,6 +10,7 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from openai import OpenAI
+from google import genai
 from backend.b1_Api.b13_Database import get_db
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User, Prompt
@@ -550,7 +551,7 @@ def JsonParsingProcess(projectName, email, RawResponse, FilterFunc):
 ## 프롬프트 실행
 def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
 
-    OpenAIClient = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
+    AnthropicAIClient = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
     if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)
     else:
@@ -594,14 +595,14 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
     for _ in range(MaxAttempts):
       try:
           if promptFrame[0]["OutputFormat"] == 'json':
-            response = OpenAIClient.messages.create(
+            response = AnthropicAIClient.messages.create(
                 model = Model,
                 max_tokens = 4096,
                 system = Messages[0]["content"],
                 messages = [{"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"}]
             )
           else:
-            response = OpenAIClient.messages.create(
+            response = AnthropicAIClient.messages.create(
                 model = Model,
                 max_tokens = 4096,
                 system = Messages[0]["content"],
@@ -666,6 +667,99 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
             print(f"Project: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse에서 오류 발생\n\n{e}")
           else:
             print(f"LifeGraphName: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse에서 오류 발생\n\n{e}")
+          time.sleep(random.uniform(5, 10))
+          continue
+
+###############################
+##### GOOGLE LLM Response #####
+###############################
+
+## 프롬프트 실행
+def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+
+    GoogleAIClient = genai.Client(api_key= os.getenv("GEMINI_API_KEY"), http_options={'api_version':'v1alpha'})
+    if PromptFramePath == "":
+      promptFrame = GetPromptFrame(Process)
+    else:
+      with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
+        promptFrame = [json.load(promptFrameJson)]
+
+    
+    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+
+    Model = promptFrame[0]["GOOGLE"]["MasterModel"]
+    
+    for _ in range(MaxAttempts):
+      try:
+          if promptFrame[0]["OutputFormat"] == 'json':
+            response = GoogleAIClient.models.generate_content(
+                model = Model,
+                contents = [f"{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"]
+            )
+          else:
+            response = GoogleAIClient.models.generate_content(
+                model = Model,
+                contents = [f"{Messages[1]['content']}\n\n{Messages[2]['content']}"]
+            )
+          Response = response.text
+          Usage = {'Input': response.usage_metadata.prompt_token_count,
+                   'Output': response.usage_metadata.candidates_token_count,
+                   'Total': response.usage_metadata.total_token_count}
+          
+          # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
+          if promptFrame[0]["OutputFormat"] == 'json':
+              pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'
+              match = re.search(pattern, Response, re.DOTALL)
+              if match:
+                  Response = match.group(1).strip()
+              Response = Response.replace('\n', '\\n')
+              StartIndexBracket = Response.find('[')
+              StartIndexBrace = Response.find('{')
+              if StartIndexBracket != -1 and StartIndexBrace != -1:
+                  StartIndex = min(StartIndexBracket, StartIndexBrace)
+              elif StartIndexBracket != -1:
+                  StartIndex = StartIndexBracket
+              elif StartIndexBrace != -1:
+                  StartIndex = StartIndexBrace
+              else:
+                  StartIndex = -1
+              if StartIndex != -1:
+                  if Response[StartIndex] == '[':
+                      EndIndex = Response.rfind(']')
+                  else:
+                      EndIndex = Response.rfind('}')
+                  if EndIndex != -1:
+                      JsonResponse = Response[StartIndex:EndIndex+1]
+                  else:
+                      JsonResponse = Response
+              else:
+                  JsonResponse = Response
+          else:
+              JsonResponse = Response
+          
+          if isinstance(email, str):
+              print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse 완료")
+          else:
+              print(f"LifeGraphName: {projectName} | Process: {Process} | GOOGLE_LLMresponse 완료")
+          
+          if messagesReview == "on":
+              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+
+          ## Response Mode 전처리2: JsonParsing의 재구조화
+          if ":" in JsonResponse and "{" in JsonResponse and "}" in JsonResponse:
+              try:
+                  TestResponse = json.loads(JsonResponse)
+              except json.JSONDecodeError:
+                  print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse 파싱오류 | JsonParsingProcess 시작")
+                  JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
+
+          return JsonResponse, Usage, Model
+      
+      except Exception as e:
+          if isinstance(email, str):
+            print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse에서 오류 발생\n\n{e}")
+          else:
+            print(f"LifeGraphName: {projectName} | Process: {Process} | GOOGLE_LLMresponse에서 오류 발생\n\n{e}")
           time.sleep(random.uniform(5, 10))
           continue
 

@@ -35,6 +35,9 @@
         },
         "MasterModel": "claude-3-5-sonnet-latest"
     },
+    "GOOGLE":{
+        "MasterModel": "gemini-2.0-flash-thinking-exp"
+    },
     "Temperature": 0.4,
     "OutputTokensRatio": 0.5,
     "OutputFormat": "json",

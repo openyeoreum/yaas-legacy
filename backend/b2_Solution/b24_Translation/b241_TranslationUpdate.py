@@ -1347,6 +1347,10 @@ def TranslationDialogueAnalysisFilter(Response, CheckCount):
 
         if not isinstance(item['대답'], str):
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 대답'은 문자열이어야 합니다"
+    
+    # Error4: '대화문' 개수 검증
+    if len(OutputDic['대화문']) != CheckCount:
+        return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문' 데이터 수가 ((마킹대화문: {CheckCount})) ((분석된대화문: {len(OutputDic['대화문'])})) 다릅니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['대화문']
@@ -2922,8 +2926,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     IndexId = InputList[i]['IndexId']
                     BodyId = InputList[i]['BodyId']
                     MarkBody = InputList[i]['MarkBody']
+                    CheckCount = InputList[i]['DialogueCount']
                     ## Body내에 대화문이 있는지 체크
-                    if InputList[i]['DialogueCount'] > 0:
+                    if CheckCount > 0:
                         ## Input 생성
                         Input1 = TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath)
                         Input2 = InputList[i]['Input']

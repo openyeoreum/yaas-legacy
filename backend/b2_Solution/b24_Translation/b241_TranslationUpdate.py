@@ -817,11 +817,11 @@ def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
         DialogueCheck = re.search(Pattern, Body) is not None
         
         # 정규표현식을 사용하여 다양한 쌍따옴표를 찾고 변경
-        Body_modified = re.sub(Pattern, ReplaceDialogue, Body)
+        MarkBody = re.sub(Pattern, ReplaceDialogue, Body)
         
-        Input = f"<작업: 현재도서내용>\n{Body_modified}\n\n"
+        Input = f"<작업: 현재도서내용>\n{MarkBody}\n\n"
         
-        InputList.append({"Id": InputId, "IndexId": IndexId, "Body": Body, "Input": Input, "DialogueCheck": DialogueCheck})
+        InputList.append({"Id": InputId, "IndexId": IndexId, "MarkBody": MarkBody, "Input": Input, "DialogueCheck": DialogueCheck})
         InputId += 1
     
     return InputList
@@ -837,7 +837,7 @@ def TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnaly
     else:
         AddInput = f"\nNone\n\n\n"
     
-    return AddInput, DialogueMarkBody
+    return AddInput
 
 ######################
 ##### Filter 조건 #####
@@ -2909,8 +2909,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         ## Input 생성
                         inputCount = InputList[i]['Id']
                         IndexId = InputList[i]['IndexId']
-                        Body = InputList[i]['Body']
-                        Input1, DialogueMarkBody = TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath)
+                        MarkBody = InputList[i]['MarkBody']
+                        Input1 = TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath)
                         Input2 = InputList[i]['Input']
                         Input = Input1 + Input2
                         
@@ -2920,7 +2920,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         TranslationDialogueAnalysisResponse = {'대화문': []}
                         
                     ## DataFrame 저장
-                    TranslationDialogueAnalysisProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, DialogueMarkBody, TranslationDialogueAnalysisResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                    TranslationDialogueAnalysisProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
                     
             ## Edit 저장
             ProcessEditSave(ProjectDataFrameTranslationDialogueAnalysisPath, TranslationEditPath, Process, EditMode)

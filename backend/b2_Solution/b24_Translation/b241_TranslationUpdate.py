@@ -1970,7 +1970,7 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
         ## InputList 위에서 분할한 Body를 다시 합치기
         NewTranslationProofreadingFrame = []
         TempTranslationProofreadingDic = {}
-        for TranslationProofreading in TranslationProofreadingFrame:
+        for TranslationProofreading in TranslationProofreadingFrame[1]:
             bodyId = TranslationProofreading["BodyId"]
             # 새로운 BodyId인 경우 딕셔너리에 저장
             if bodyId not in TempTranslationProofreadingDic:
@@ -1982,7 +1982,7 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
         # 정렬된 결과를 새 리스트에 추가
         for bodyId in sorted(TempTranslationProofreadingDic.keys()):
             NewTranslationProofreadingFrame.append(TempTranslationProofreadingDic[bodyId])
-            TranslationProofreadingFrame = NewTranslationProofreadingFrame
+            TranslationProofreadingFrame[1] = NewTranslationProofreadingFrame
             
         TranslationProofreadingFrame[0]['Completion'] = 'Yes'
         

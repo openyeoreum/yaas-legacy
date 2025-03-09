@@ -1315,7 +1315,7 @@ def TranslationDialogueAnalysisFilter(Response, CheckCount):
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}]'는 딕셔너리 형태여야 합니다"
 
         # 필수 키 확인
-        required_keys = ['번호', '말하는인물', '성별', '연령', '감정', '말하는인물성격특성', '상황', '듣는인물', '듣는인물대답']
+        required_keys = ['번호', '말하는인물', '성별', '연령', '감정', '말하는인물성격특성', '상황', '대화상대', '대화상대대답']
         missing_keys = [key for key in required_keys if key not in item]
         if missing_keys:
             return f"TranslationDialogueAnalysis, JSONKeyError: '대화문[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
@@ -1345,11 +1345,11 @@ def TranslationDialogueAnalysisFilter(Response, CheckCount):
         if not isinstance(item['상황'], str):
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 상황({item['상황']})'은 문자열이어야 합니다"
 
-        if not isinstance(item['듣는인물'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 듣는인물({item['듣는인물']})'은 문자열이어야 합니다"
+        if not isinstance(item['대화상대'], str):
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 대화상대({item['대화상대']})'은 문자열이어야 합니다"
 
-        if not isinstance(item['듣는인물대답'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 대답({item['듣는인물대답']})'은 문자열이어야 합니다"
+        if not isinstance(item['대화상대대답'], str):
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 대답({item['대화상대대답']})'은 문자열이어야 합니다"
     
     # Error4: '대화문' 개수 검증
     if len(OutputDic['대화문']) != CheckCount:

@@ -1336,7 +1336,7 @@ def TranslationDialogueAnalysisFilter(Response, CheckCount):
         if item['연령'] not in ['유년', '청소년', '청년', '중년', '장년', '노년']:
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 연령({item['연령']})'은 유효한 연령값이 아닙니다"
 
-        if item['감정'] not in ['중립', '즐거움', '화남', '슬픔', '침착함']:
+        if item['감정'] not in ['중립', '즐거움', '화남', '슬픔', '침착', '침착함']:
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 감정({item['감정']})'은 유효한 감정값이 아닙니다"
 
         if not isinstance(item['말하는인물성격특성'], str):

@@ -3042,6 +3042,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         Input1 = TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath)
                         Input2 = InputList[i]['Input']
                         Input = Input1 + Input2
+                        MemoryCounter = f'\n※ 참고! <대화문정리.json>로 완성될 대화문은 <작업: 현재도서내용>의 {{n대화: ...}} {CheckCount}개 입니다.'
 
                         ## Response 생성
                         TranslationDialogueAnalysisResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueAnalysisFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)

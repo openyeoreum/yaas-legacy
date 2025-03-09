@@ -1321,32 +1321,35 @@ def TranslationDialogueAnalysisFilter(Response, CheckCount):
             return f"TranslationDialogueAnalysis, JSONKeyError: '대화문[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
         # 데이터 타입 검증
-        if not isinstance(item['번호'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 번호'는 문자열이어야 합니다"
+        if not isinstance(item['번호'], (str, int)):
+            if isinstance(item['번호'], str):
+                DialogueNum = re.sub(r'\D', '', item['번호'])
+                item['번호'] = int(DialogueNum)
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 번호({item['번호']})'는 문자열 또는 정수여야 합니다"
 
         if not isinstance(item['말하는인물'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 말하는인물'은 문자열이어야 합니다"
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 말하는인물({item['말하는인물']})'은 문자열이어야 합니다"
 
         if item['성별'] not in ['남', '여']:
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 성별'은 '남' 또는 '여' 중 하나여야 합니다"
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 성별({item['성별']})'은 '남' 또는 '여' 중 하나여야 합니다"
 
         if item['연령'] not in ['유년', '청소년', '청년', '중년', '장년', '노년']:
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 연령'은 유효한 연령값이 아닙니다"
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 연령({item['연령']})'은 유효한 연령값이 아닙니다"
 
         if item['감정'] not in ['중립', '즐거움', '화남', '슬픔', '침착함']:
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 감정'은 유효한 감정값이 아닙니다"
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 감정({item['감정']})'은 유효한 감정값이 아닙니다"
 
         if not isinstance(item['말하는인물성격특성'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 말하는인물성격특성'은 문자열이어야 합니다"
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 말하는인물성격특성({item['말하는인물성격특성']})'은 문자열이어야 합니다"
 
         if not isinstance(item['상황'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 상황'은 문자열이어야 합니다"
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 상황({item['상황']})'은 문자열이어야 합니다"
 
         if not isinstance(item['듣는인물'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 듣는인물'은 문자열이어야 합니다"
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 듣는인물({item['듣는인물']})'은 문자열이어야 합니다"
 
         if not isinstance(item['대답'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 대답'은 문자열이어야 합니다"
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 대답({item['대답']})'은 문자열이어야 합니다"
     
     # Error4: '대화문' 개수 검증
     if len(OutputDic['대화문']) != CheckCount:
@@ -2006,7 +2009,7 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
         json.dump(TranslationProofreadingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ## Process11: TranslationDialogueAnalysis DataFrame 저장
-def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, DialogueMarkBody, TranslationDialogueAnalysisResponse, Process, InputCount, BodyId, TotalInputCount):
+def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, InputCount, BodyId, TotalInputCount):
     ## TranslationDialogueAnalysisFrame 불러오기
     if os.path.exists(ProjectDataFrameTranslationDialogueAnalysisPath):
         TranslationDialogueAnalysisFramePath = ProjectDataFrameTranslationDialogueAnalysisPath
@@ -2026,11 +2029,12 @@ def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Trans
     TranslationDialogueAnalysis['BodyId'] = BodyId
     
     # DialogueMarkBody에서 {n대화: ...} -> {n이름: ...}으로 변경
-    for TranslationDialogue in TranslationDialogueAnalysisResponse['대화문']:
-        DialogueMarkBody = DialogueMarkBody.replace(f"{TranslationDialogue['번호']}대화:", f"{TranslationDialogue['번호']}{TranslationDialogue['이름']}:")
+    DialogueMarkBody = MarkBody
+    for TranslationDialogue in TranslationDialogueAnalysisResponse:
+        DialogueMarkBody = DialogueMarkBody.replace(f"{TranslationDialogue['번호']}대화:", f"{TranslationDialogue['번호']}{TranslationDialogue['말하는인물']}:")
         
     TranslationDialogueAnalysis['DialogueMarkBody'] = DialogueMarkBody
-    TranslationDialogueAnalysis['Dialogue'] = TranslationDialogueAnalysisResponse['대화문']
+    TranslationDialogueAnalysis['Dialogue'] = TranslationDialogueAnalysisResponse
 
     ## TranslationDialogueAnalysisFrame 데이터 프레임 업데이트
     TranslationDialogueAnalysisFrame[1].append(TranslationDialogueAnalysis)
@@ -2937,7 +2941,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         ## Response 생성
                         TranslationDialogueAnalysisResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueAnalysisFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
                     else:
-                        TranslationDialogueAnalysisResponse = {'대화문': []}
+                        TranslationDialogueAnalysisResponse = []
                         
                     ## DataFrame 저장
                     TranslationDialogueAnalysisProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, inputCount, BodyId, TotalInputCount)

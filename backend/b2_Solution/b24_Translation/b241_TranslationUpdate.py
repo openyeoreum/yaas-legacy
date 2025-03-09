@@ -7,6 +7,7 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
+from langdetect import detect_langs, DetectorFactory
 from backend.b2_Solution.b25_DataFrame.b251_DataCommit.b2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse
 
 ##########################################
@@ -206,9 +207,9 @@ def LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath):
         
     return Translation
 
-#####################
-##### Input 생성 #####
-#####################
+##########################
+##### 언어감지 관련 함수 #####
+##########################
 ## Language Code 생성
 def LanguageCodeGen(MainLang, Translation):
     def LanguageCode(Lang):
@@ -264,6 +265,89 @@ def LanguageCodeGen(MainLang, Translation):
     ToneDistinction = LanguageCode(MainLang)["toneDistinction"]
     
     return MainLangCode, TranslationLangCode, ToneDistinction
+
+## 언어 감지 함수
+def LanguageDetection(Body):
+    # 결과 재현성을 위해 시드 설정
+    DetectorFactory.seed = 0
+    if not Body or len(Body.strip()) == 0:
+        return []
+    
+    DetectedLanguages = set()  # 중복 없이 저장하기 위해 set 사용
+    
+    # 1단계: 특수 문자셋 언어 감지 (명확한 패턴이 있는 언어)
+    LanguagePatterns = {
+        "ko": r'[가-힣]+',                     # 한국어
+        "ja": r'[\u3040-\u309F\u30A0-\u30FF]+',  # 일본어 (히라가나, 가타카나)
+        "zh": r'[\u4E00-\u9FFF]+',             # 중국어 (하지만 일본어 한자와 겹침)
+        "ru": r'[А-Яа-я]+',                   # 러시아어
+        "el": r'[Α-Ωα-ω]+',                   # 그리스어
+        "ar": r'[\u0600-\u06FF]+',             # 아랍어
+        "th": r'[\u0E00-\u0E7F]+',             # 태국어
+        "he": r'[\u0590-\u05FF]+',             # 히브리어
+        "hi": r'[\u0900-\u097F]+',             # 힌디어
+    }
+    
+    # 특수 문자셋 기반 언어 감지
+    HasJaSpecific = re.search(r'[\u3040-\u309F\u30A0-\u30FF]', Body)  # 히라가나, 가타카나 확인
+    HasZhChars = re.search(r'[\u4E00-\u9FFF]', Body)  # 한자 확인
+    
+    # 일본어 특화 문자가 있으면 일본어로 판단
+    if HasJaSpecific:
+        DetectedLanguages.add("ja")
+        
+    # 한자가 있지만 일본어 특화 문자가 없으면 중국어로 판단
+    elif HasZhChars:
+        DetectedLanguages.add("zh")
+    
+    # 나머지 언어는 그대로 패턴 검사
+    for lang_code, pattern in LanguagePatterns.items():
+        if lang_code not in ["ja", "zh"] and re.search(pattern, Body):
+            DetectedLanguages.add(lang_code)
+    
+    # 2단계: 라틴 알파벳 기반 언어 감지 (langdetect 라이브러리 활용)
+    # 라틴 알파벳만 포함된 텍스트 길이가 충분한지 확인
+    LatinBody = re.sub(r'[^a-zA-Z\s]', '', Body)
+    
+    # 영어 단어 패턴 확인 (짧은 단어도 포함)
+    if re.search(r'\b[a-zA-Z]{2,}\b', Body):
+        DetectedLanguages.add("en")
+        
+    if len(LatinBody.strip()) >= 10:  # 최소 10자 이상의 라틴 텍스트가 있는 경우에만 분석
+        try:
+            # 텍스트의 일부만 분석 (너무 긴 경우)
+            SampleBody = Body[:3000] if len(Body) > 3000 else Body
+            LangResults = detect_langs(SampleBody)
+            
+            # 확률이 높은 언어만 선택 (threshold: 0.3)
+            for lang in LangResults:
+                if lang.prob > 0.3:
+                    DetectedLanguages.add(lang.lang)
+        except:
+            # langdetect가 실패할 경우, 간단한 휴리스틱 적용
+            # 영어 단어 패턴 확인
+            if re.search(r'\b[a-zA-Z]{2,}\b', Body):
+                DetectedLanguages.add("en")
+                
+            # 특수 문자나 특정 조합을 기반으로 라틴 알파벳 기반 언어 추정
+            LatinSpecialChars = {
+                "fr": r'[àâçéèêëîïôùûüÿ]|Bonjour',  # 프랑스어
+                "es": r'[áéíóúüñ¿¡]|Hola',           # 스페인어
+                "de": r'[äöüß]|Guten|Hallo',         # 독일어
+                "it": r'[àèéìíîòóù]|Ciao',           # 이탈리아어
+                "pt": r'[áàâãçéêíóôõú]|Olá',         # 포르투갈어
+            }
+            
+            for lang_code, pattern in LatinSpecialChars.items():
+                if re.search(pattern, Body):
+                    DetectedLanguages.add(lang_code)
+    
+    # 결과를 리스트로 변환
+    return list(DetectedLanguages)
+
+#####################
+##### Input 생성 #####
+#####################
 
 ## Process1: TranslationIndexDefine의 InputList
 def TranslationIndexDefineInputList(projectName, UploadTranslationFilePath):
@@ -607,6 +691,7 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
 
 ## Process8: BodyTranslationCheck의 Input
 def BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
+    ## 이전번역문과 현재번역문 비교 Input 생성
     if os.path.exists(ProjectDataFrameBodyTranslationPath):
         with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
             BodyTranslation = json.load(TranslationDataFrame)[1]
@@ -620,7 +705,16 @@ def BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, Body
         Index = max(-len(BodyTranslation), -3)
         BeforeCheck = BodyTranslation[Index]['Body']
         
-    return CheckInput, BeforeCheck
+        ## 이전번역문과 현재번역문 언어 동일성 체크
+        BeforeBodyLang = LanguageDetection(BeforeBodyTranslation)
+        CurrentBodyLang = LanguageDetection(CurrentBodyTranslation)
+        if sorted(BeforeBodyLang) == sorted(CurrentBodyLang):
+            LangCheck = True
+        else:
+            LangCheck = False
+        
+        
+    return LangCheck, CheckInput, BeforeCheck
 
 ## Process9: TranslationEditing의 InputList
 def TranslationEditingInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2):
@@ -806,7 +900,7 @@ def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
         def ReplaceDialogue(Match):
             # 그룹2: "…" 패턴, 그룹3: "…" 패턴
             DialogueText = Match.group(2) if Match.group(2) is not None else Match.group(3)
-            replacement = f"{{{DialogueCounter[0]}대화: {DialogueText}}}"
+            replacement = f"{{{DialogueCounter[0]} 대화: {DialogueText}}}"
             DialogueCounter[0] += 1
             return replacement
         
@@ -843,6 +937,7 @@ def TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnaly
         with open(ProjectDataFrameTranslationDialogueAnalysisPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
             TranslationDialogueAnalysis = json.load(TranslationDataFrame)[1][-1]
             DialogueMarkBody = TranslationDialogueAnalysis['DialogueMarkBody']
+            DialogueMarkBody = re.sub(r'{\d+\s', '{', DialogueMarkBody)
         AddInput = f"\n{DialogueMarkBody}\n\n\n"
     
     else:
@@ -1271,13 +1366,17 @@ def TranslationProofreadingFilter(Response, CheckCount):
     if not isinstance(OutputDic['교정']['도서내용'], str):
         return "TranslationProofreading, JSON에서 오류 발생: '교정 > 도서내용'은 문자열이어야 합니다"
     
+    # Error5: 따옴표 후처리 및 개수 확인
     # '도서내용'의 값에서 줄바꿈과 쌍따옴표 후처리
     OutputDic['교정']['도서내용'] = OutputDic['교정']['도서내용'].replace('\"', '"').replace('“', '"').replace('”', '"').replace('\'', '"').replace('‘', "'").replace('’', "'")
+    if OutputDic['교정']['도서내용'].count('"') % 2 != 0:
+        return f"TranslationProofreading, JSON에서 오류 발생: '교정 > 도서내용'의 따옴표 개수가 홀수입니다"
+    
     # 가장 앞자리 확인 후 전처리
     if OutputDic['교정']['도서내용'][0] not in ['\n', ' ',]:
         OutputDic['교정']['도서내용'] = ' ' + OutputDic['교정']['도서내용']
     
-    # Error5: 교정 전후 '도서내용' 일치 확인
+    # Error6: 교정 전후 '도서내용' 일치 확인
     CheckCount = re.sub(r'\\.', '', OutputDic['교정']['도서내용'])
     CheckCount = re.sub(r'[^\w\d]', '', CheckCount, flags = re.UNICODE)
     CheckCount = CheckCount.replace('_', '')
@@ -1322,10 +1421,10 @@ def TranslationDialogueAnalysisFilter(Response, CheckCount):
 
         # 데이터 타입 검증
         if not isinstance(item['번호'], (str, int)):
-            if isinstance(item['번호'], str):
-                DialogueNum = re.sub(r'\D', '', item['번호'])
-                item['번호'] = int(DialogueNum)
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 번호({item['번호']})'는 문자열 또는 정수여야 합니다"
+        if isinstance(item['번호'], str):
+            DialogueNum = re.sub(r'\D', '', item['번호'])
+            item['번호'] = int(DialogueNum)
 
         if not isinstance(item['말하는인물'], str):
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 말하는인물({item['말하는인물']})'은 문자열이어야 합니다"
@@ -2031,7 +2130,7 @@ def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Trans
     # DialogueMarkBody에서 {n대화: ...} -> {n이름: ...}으로 변경
     DialogueMarkBody = MarkBody
     for TranslationDialogue in TranslationDialogueAnalysisResponse:
-        DialogueMarkBody = DialogueMarkBody.replace(f"{TranslationDialogue['번호']}대화:", f"{TranslationDialogue['번호']}{TranslationDialogue['말하는인물']}:")
+        DialogueMarkBody = DialogueMarkBody.replace(f"{TranslationDialogue['번호']} 대화:", f"{TranslationDialogue['번호']} {TranslationDialogue['말하는인물']}:")
         
     TranslationDialogueAnalysis['DialogueMarkBody'] = DialogueMarkBody
     TranslationDialogueAnalysis['Dialogue'] = TranslationDialogueAnalysisResponse
@@ -2646,7 +2745,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
                 if inputCount >= 5 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
-                    CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    if not LangCheck:
+                        continue
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
@@ -2727,7 +2828,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
                 if inputCount >= 5 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
-                    CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
+                    LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
+                    if not LangCheck:
+                        continue
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
@@ -2812,7 +2915,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
                     if inputCount >= 5 and ToneDistinction == 'Yes':
                         CheckProcess = "BodyTranslationCheck"
-                        CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
+                        LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
+                        if not LangCheck:
+                            continue
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                         if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                             if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':

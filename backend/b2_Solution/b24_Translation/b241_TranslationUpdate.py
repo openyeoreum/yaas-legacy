@@ -766,6 +766,19 @@ def TranslationEditingInputList(TranslationEditPath, BeforeProcess1, BeforeProce
         
         return TranslationBodyResult
     
+    ## BracketedBody {단어}의 {n 단어}로 숫자 부여 함수
+    def NumberBracedWords(BracketedBody):
+        counter = 0  # 번호를 위한 변수
+        # 매칭된 그룹을 순서대로 대체하는 함수
+        def replacer(match):
+            nonlocal counter
+            counter += 1
+            # 매칭된 단어(match.group(1)) 앞에 번호를 추가합니다.
+            return "{" + str(counter) + " " + match.group(1) + "}"
+        # 정규표현식을 사용하여 {} 내부의 내용을 찾아 replacer 함수로 대체
+        return re.sub(r'\{([^{}]+)\}', replacer, BracketedBody)
+    
+    
     ## BodyTranslationPreprocessingList, BodyTranslationList 불러오기
     with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
         TranslationEditList = json.load(TranslationEditJson)
@@ -785,13 +798,27 @@ def TranslationEditingInputList(TranslationEditPath, BeforeProcess1, BeforeProce
             if BodyTranslationPreprocessing['BodyId'] == BodyId:
                 OriginalBody = BodyTranslationPreprocessing['Body']
                 BracketedBody = BracketedBodyGen(OriginalBody, TranslationBody)
-                
-        Input = f"<현재편집할내용>\n[편집할내용의목차]\n{IndexTag}: {Index}\n\n\n[*편집할내용]\n{BracketedBody}\n\n"
+                BracketedBody = NumberBracedWords(BracketedBody)
         
-        InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Input": Input})
+        InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "BracketedBody": BracketedBody})
         InputId += 1
     
     return InputList
+
+## Process9: BodyTranslationWordCheck의 후처리
+def WordBracketCheckInput(IndexTag, Index, BracketedBody, BodyTranslationWordCheckResponse):
+    for RemoveBracket in BodyTranslationWordCheckResponse:
+        RemoveBracketWord = "{" + f"{RemoveBracket['번호']} {RemoveBracket['단어']}" + "}"
+        Word = RemoveBracket['단어']
+        BracketedBody = BracketedBody.replace(RemoveBracketWord, Word)
+        print(f"{RemoveBracketWord} -> {Word}")
+    
+    WordCheckBracketedBody = re.sub(r'\{\d+\s+([^{}]+)\}', r'{\1}', BracketedBody)
+    print(WordCheckBracketedBody)
+    
+    CheckInput = f"<현재편집할내용>\n[편집할내용의목차]\n{IndexTag}: {Index}\n\n\n[*편집할내용]\n{WordCheckBracketedBody}\n\n"
+
+    return CheckInput
 
 ## Process9: TranslationEditing의 추가 Input
 def TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDataFrameIndexTranslationPath):
@@ -1315,6 +1342,52 @@ def BodyTranslationCheckFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['도서내용어조체크']
 
+## Process8: BodyTranslationWordCheck의 Filter(Error 예외처리)
+def BodyTranslationWordCheckFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "BodyTranslationWordCheck, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '괄호제거단어' not in OutputDic:
+        return "BodyTranslationWordCheck, JSONKeyError: '괄호제거단어' 키가 누락되었습니다"
+
+    # Error3: '괄호제거단어' 데이터 타입 검증
+    if not isinstance(OutputDic['괄호제거단어'], list):
+        return "BodyTranslationWordCheck, JSON에서 오류 발생: '괄호제거단어'는 리스트 형태여야 합니다"
+
+    for idx, item in enumerate(OutputDic['괄호제거단어']):
+        # 각 항목이 딕셔너리인지 확인
+        if not isinstance(item, dict):
+            return f"BodyTranslationWordCheck, JSON에서 오류 발생: '괄호제거단어[{idx}]'는 딕셔너리 형태여야 합니다"
+
+        # 필수 키 확인
+        required_keys = ['번호', '단어', '제거이유']
+        missing_keys = [key for key in required_keys if key not in item]
+        if missing_keys:
+            return f"BodyTranslationWordCheck, JSONKeyError: '괄호제거단어[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
+
+        # 데이터 타입 검증
+        if not isinstance(item['번호'], int):
+            return f"BodyTranslationWordCheck, JSON에서 오류 발생: '괄호제거단어[{idx}] > 번호'는 정수여야 합니다"
+
+        if not isinstance(item['단어'], str):
+            return f"BodyTranslationWordCheck, JSON에서 오류 발생: '괄호제거단어[{idx}] > 단어'는 문자열이어야 합니다"
+
+        if not isinstance(item['제거이유'], str):
+            return f"BodyTranslationWordCheck, JSON에서 오류 발생: '괄호제거단어[{idx}] > 제거이유'는 문자열이어야 합니다"
+
+    # Error4: '괄호제거단어' 존재 여부 확인
+    for item in OutputDic['괄호제거단어']:
+        RemoveBracketWord = "{" + f"{item['번호']} {item['단어']}" + "}"
+        if RemoveBracketWord not in CheckCount:
+            return f"BodyTranslationWordCheck, JSON에서 오류 발생: '괄호제거단어'에 있는 단어가 번역문에 존재하지 않습니다"
+    
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['괄호제거단어']
+
 ## Process9: TranslationEditing의 Filter(Error 예외처리)
 def TranslationEditingFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
@@ -1377,7 +1450,7 @@ def TranslationProofreadingFilter(Response, CheckCount):
         OutputDic['교정']['도서내용'] = ' ' + OutputDic['교정']['도서내용']
     
     # Error6: 교정 전후 '도서내용' 일치 확인
-    CheckCount = re.sub(r'\\.', '', OutputDic['교정']['도서내용'])
+    CheckCount = re.sub(r'\\.', '', CheckCount)
     CheckCount = re.sub(r'[^\w\d]', '', CheckCount, flags = re.UNICODE)
     CheckCount = CheckCount.replace('_', '')
     
@@ -2813,8 +2886,14 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 IndexTag = InputList[i]['IndexTag']
                 Index = InputList[i]['Index']
                 BodyId = InputList[i]['BodyId']
+                BracketedBody = InputList[i]['BracketedBody']
+                
+                ##########################################
+                ### Process8: BodyTranslationWordCheck ###
+                ##########################################
+                BodyTranslationWordCheckResponse = ProcessResponse(projectName, email, "BodyTranslationWordCheck", BracketedBody, inputCount, TotalInputCount, BodyTranslationWordCheckFilter, BracketedBody, "OpenAI", mode, MessagesReview)
                 Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDataFrameIndexTranslationPath)
-                Input2 = InputList[i]['Input']
+                Input2 = WordBracketCheckInput(IndexTag, Index, BracketedBody, BodyTranslationWordCheckResponse)
                 Input = Input1 + Input2
                 
                 ## Response 생성
@@ -2899,10 +2978,15 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     IndexTag = InputList[i]['IndexTag']
                     Index = InputList[i]['Index']
                     BodyId = InputList[i]['BodyId']
-                    Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationRefinementPath, ProjectDataFrameIndexTranslationPath)
-                    Input2 = InputList[i]['Input']
-                    Input = Input1 + Input2
+                    BracketedBody = InputList[i]['BracketedBody']
                     
+                    ##########################################
+                    ### Process8: BodyTranslationWordCheck ###
+                    ##########################################
+                    BodyTranslationWordCheckResponse = ProcessResponse(projectName, email, "BodyTranslationWordCheck", BracketedBody, inputCount, TotalInputCount, BodyTranslationWordCheckFilter, BracketedBody, "OpenAI", mode, MessagesReview)
+                    Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationRefinementPath, ProjectDataFrameIndexTranslationPath)
+                    Input2 = WordBracketCheckInput(IndexTag, Index, BracketedBody, BodyTranslationWordCheckResponse)
+                    Input = Input1 + Input2
                     
                     ## Response 생성
                     TranslationRefinementResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)

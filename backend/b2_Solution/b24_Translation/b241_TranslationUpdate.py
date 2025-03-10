@@ -2849,7 +2849,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
                 if inputCount >= 5 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
-                    _, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    _, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
@@ -2952,7 +2952,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
                 if inputCount >= 5 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
-                    LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, InputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
+                    LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
                     if not LangCheck:
                         MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는  {MainLangCode}  , 단 하나의 언어만 사용해서 편집합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                         continue
@@ -3059,7 +3059,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
                     if inputCount >= 5 and ToneDistinction == 'Yes':
                         CheckProcess = "BodyTranslationCheck"
-                        LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, InputCount, TotalInputCount, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
+                        LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
                         if not LangCheck:
                             MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는 ({MainLangCode}), 단 하나의 언어만 사용해서 편집합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             continue

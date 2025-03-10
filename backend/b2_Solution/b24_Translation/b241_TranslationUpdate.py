@@ -2048,7 +2048,7 @@ def BodyTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, Tran
     BodyTranslation['IndexTag'] = IndexTag
     BodyTranslation['Index'] = Index
     BodyTranslation['BodyId'] = BodyId
-    BodyTranslation['Body'] = re.sub(r'\{[^{}]*->([^{}]*)\}', r'\1', BodyTranslationResponse['번역문'])
+    BodyTranslation['Body'] = re.sub(r'\{[^{}]*->([^{}]*)\}', r'\1', BodyTranslationResponse['번역문']).replace('{', '').replace('}', '')
     BodyTranslation['Tone'] = BodyTranslationCheckResponse['현재도서내용어조']
 
     ## BodyTranslationFrame 데이터 프레임 업데이트

@@ -714,8 +714,9 @@ def BodyTranslationCheckInput(ProjectName, Process, InputCount, TotalInputCount,
         ## 이전번역문과 현재번역문 언어 동일성 체크
         LangCheck = False
         if Process in ['TranslationEditing', 'TranslationRefinement']:
-            BeforeBodyLang = LanguageDetection(BeforeBodyTranslation)
-            CurrentBodyLang = LanguageDetection(CurrentBodyTranslation)
+            BeforeBodyLang = sorted(LanguageDetection(BeforeBodyTranslation))
+            CurrentBodyLang = sorted(LanguageDetection(CurrentBodyTranslation))
+            
             ## 예외처리(한국어 글에 (중국어 설명)이 있는 경우)
             if BeforeBodyLang == ['ko', 'zh']:
                 BeforeBodyLang = ['ko']
@@ -723,14 +724,14 @@ def BodyTranslationCheckInput(ProjectName, Process, InputCount, TotalInputCount,
                 CurrentBodyLang = ['ko']
             
             ## 이전번역문과 현재번역문 언어 동일성 확인
-            if sorted(BeforeBodyLang) == sorted(CurrentBodyLang):
+            if set(BeforeBodyLang) == set(CurrentBodyLang):
                 LangCheck = True
                 print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
-                    f"{sorted(BeforeBodyLang)} == {sorted(CurrentBodyLang)}, 동일 언어 체크 완료")
+                    f"{BeforeBodyLang} == {CurrentBodyLang}, 동일 언어 체크 완료")
             else:
                 LangCheck = False
                 print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
-                    f"{sorted(BeforeBodyLang)} =! {sorted(CurrentBodyLang)}, 동일 언어 체크 재시도")
+                    f"{BeforeBodyLang} =! {CurrentBodyLang}, 동일 언어 체크 재시도")
         
     return LangCheck, CheckInput, BeforeCheck
 

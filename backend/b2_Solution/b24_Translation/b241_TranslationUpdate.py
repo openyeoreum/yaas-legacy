@@ -651,7 +651,7 @@ def BodyTranslationInputList(TranslationEditPath, BeforeProcess):
     return InputList
 
 ## Process8: BodyTranslation의 추가 Input
-def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFrameIndexTranslationPath, MainLangCode, TranslationLangCode):
+def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFrameIndexTranslationPath, MainLangCode, TranslationLangCode, Tone):
     ## 전체 도서목차 생성
     with open(ProjectDataFrameIndexTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
         IndexTranslation = json.load(TranslationDataFrame)[1]
@@ -685,7 +685,13 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
         
         AddInput = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n\n[도서전체목차]\n{IndexText}\n\n[이전번역문]\n{BeforeBodyTranslation}\n\n\n"
     else:
-        AddInput = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n\n[도서전체목차]\n{IndexText}\n\n[이전번역문]\nNone\n\n\n"
+        if Tone == 'Auto':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없음"
+        if Tone == 'Formal':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없습니다. 완성 절차 및 방법에 따라서, *원문의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 번역을 시작해주세요."
+        elif Tone == 'Informal':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없다. 완성 절차 및 방법에 따라서, *원문의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 번역을 시작하세요."
+        AddInput = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n\n[도서전체목차]\n{IndexText}\n\n[이전번역문]\n{StartBodyTranslation}\n\n\n"
         
     return AddInput
 
@@ -811,17 +817,16 @@ def WordBracketCheckInput(IndexTag, Index, BracketedBody, BodyTranslationWordChe
         RemoveBracketWord = "{" + f"{RemoveBracket['번호']} {RemoveBracket['단어']}" + "}"
         Word = RemoveBracket['단어']
         BracketedBody = BracketedBody.replace(RemoveBracketWord, Word)
-        print(f"{RemoveBracketWord} -> {Word}")
+        # print(f"{RemoveBracketWord} -> {Word}")
     
     WordCheckBracketedBody = re.sub(r'\{\d+\s+([^{}]+)\}', r'{\1}', BracketedBody)
-    print(WordCheckBracketedBody)
     
     CheckInput = f"<현재편집할내용>\n[편집할내용의목차]\n{IndexTag}: {Index}\n\n\n[*편집할내용]\n{WordCheckBracketedBody}\n\n"
 
     return CheckInput
 
 ## Process9: TranslationEditing의 추가 Input
-def TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDataFrameIndexTranslationPath):
+def TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDataFrameIndexTranslationPath, Tone):
     ## 전체 도서목차 생성
     with open(ProjectDataFrameIndexTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
         IndexTranslation = json.load(TranslationDataFrame)[1]
@@ -855,7 +860,13 @@ def TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDa
         
         AddInput = f"[도서전체목차]\n{IndexText}\n\n[이전편집내용]\n{BeforeTranslationEditing}\n\n\n"
     else:
-        AddInput = f"[도서전체목차]\n{IndexText}\n\n[이전편집내용]\nNone\n\n\n"
+        if Tone == 'Auto':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없음"
+        if Tone == 'Formal':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없습니다. 완성 절차 및 방법에 따라서, *편집할내용의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 편집을 시작해주세요."
+        elif Tone == 'Informal':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없다. 완성 절차 및 방법에 따라서, *편집할내용의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 편집을 시작하세요."
+        AddInput = f"[도서전체목차]\n{IndexText}\n\n[이전편집내용]\n{StartBodyTranslation}\n\n\n"
         
     return AddInput
 
@@ -2401,7 +2412,7 @@ def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumPro
 ##### Process 진행 및 업데이트 #####
 ################################
 ## Translation 프롬프트 요청 및 결과물 Json화
-def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenre, EditMode, TranslationQuality, mode = "Master", MessagesReview = "on"):
+def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenre, Tone, TranslationQuality, EditMode, mode = "Master", MessagesReview = "on"):
     print(f"< User: {email} | Translation: {projectName} ({Translation}) >>> ({MainLang}) | TranslationUpdate 시작 >")
     ## projectName_translation 경로 설정
     ProjectTranslationPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_translation"
@@ -2757,7 +2768,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = InputList[i]['Input']
                 
                 ## Response 생성
-                BodyTranslationPreprocessingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationPreprocessingFilter, CheckCount, "Anthropic", mode, MessagesReview)
+                BodyTranslationPreprocessingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationPreprocessingFilter, CheckCount, "OpenAI", mode, MessagesReview)
                 
                 ## DataFrame 저장
                 BodyTranslationPreprocessingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPreprocessingPath, BodyTranslationPreprocessingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TranslationBody, TotalInputCount)
@@ -2794,7 +2805,14 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     # print(f"EditCheck: {EditCheck}")
     # print(f"EditCompletion: {EditCompletion}")
     ## Process 진행
-    MemoryCounter = ''
+    
+    if Tone == 'Auto':
+        MemoryCounter = ''
+    elif Tone == 'Formal':
+        MemoryCounter = '\n※ 참고! [*원문]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 번역해주세요.'
+    elif Tone == 'Informal':
+        MemoryCounter = '\n※ 참고! [*원문]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 번역해주세요.'
+        
     if not EditCheck:
         if DataFrameCompletion == 'No':
             i = InputCount - 1
@@ -2805,7 +2823,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 IndexTag = InputList[i]['IndexTag']
                 Index = InputList[i]['Index']
                 BodyId = InputList[i]['BodyId']
-                Input1 = BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFrameIndexTranslationPath, MainLangCode, TranslationLangCode)
+                Input1 = BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFrameIndexTranslationPath, MainLangCode, TranslationLangCode, Tone)
                 Input2 = InputList[i]['Input']
                 Input = Input1 + Input2
                 
@@ -2830,13 +2848,22 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                             pass
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
-                            MemoryCounter = '\n※ 참고! [*원문]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 번역해주세요.'
+                            MemoryCounter = '\n※ 참고! [*원문]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 번역해주세요.'
                             continue
                         # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
-                            MemoryCounter = '\n※ 참고! [*원문]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등의)로 번역해주세요.'
+                            MemoryCounter = '\n※ 참고! [*원문]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 번역해주세요.'
                             continue
-                MemoryCounter = ''
+                        
+                if inputCount <= 4:
+                    if Tone == 'Auto':
+                        MemoryCounter = ''
+                    elif Tone == 'Formal':
+                        MemoryCounter = '\n※ 참고! [*원문]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 번역해주세요.'
+                    elif Tone == 'Informal':
+                        MemoryCounter = '\n※ 참고! [*원문]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 번역해주세요.'
+                else:
+                    MemoryCounter = ''
                 
                 ## DataFrame 저장
                 BodyTranslationProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
@@ -2875,7 +2902,14 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     # print(f"EditCheck: {EditCheck}")
     # print(f"EditCompletion: {EditCompletion}")
     ## Process 진행
-    MemoryCounter = ''
+
+    if Tone == 'Auto':
+        MemoryCounter = ''
+    elif Tone == 'Formal':
+        MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 편집해주세요.'
+    elif Tone == 'Informal':
+        MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 편집해주세요.'
+
     if not EditCheck:
         if DataFrameCompletion == 'No':
             i = InputCount - 1
@@ -2892,7 +2926,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ### Process8: BodyTranslationWordCheck ###
                 ##########################################
                 BodyTranslationWordCheckResponse = ProcessResponse(projectName, email, "BodyTranslationWordCheck", BracketedBody, inputCount, TotalInputCount, BodyTranslationWordCheckFilter, BracketedBody, "OpenAI", mode, MessagesReview)
-                Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDataFrameIndexTranslationPath)
+                Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDataFrameIndexTranslationPath, Tone)
                 Input2 = WordBracketCheckInput(IndexTag, Index, BracketedBody, BodyTranslationWordCheckResponse)
                 Input = Input1 + Input2
                 
@@ -2919,13 +2953,22 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                             pass
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 편집해주세요.'
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 편집해주세요.'
                             continue
                         # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등의)로 편집해주세요.'
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 편집해주세요.'
                             continue
-                MemoryCounter = ''
+
+                if inputCount <= 4:
+                    if Tone == 'Auto':
+                        MemoryCounter = ''
+                    elif Tone == 'Formal':
+                        MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 편집해주세요.'
+                    elif Tone == 'Informal':
+                        MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 편집해주세요.'
+                else:
+                    MemoryCounter = ''
 
                 ## DataFrame 저장
                 TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
@@ -2967,7 +3010,14 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         # print(f"EditCheck: {EditCheck}")
         # print(f"EditCompletion: {EditCompletion}")
         ## Process 진행
-        MemoryCounter = ''
+        
+        if Tone == 'Auto':
+            MemoryCounter = ''
+        elif Tone == 'Formal':
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 편집해주세요.'
+        elif Tone == 'Informal':
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 편집해주세요.'
+            
         if not EditCheck:
             if DataFrameCompletion == 'No':
                 i = InputCount - 1
@@ -2984,7 +3034,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     ### Process8: BodyTranslationWordCheck ###
                     ##########################################
                     BodyTranslationWordCheckResponse = ProcessResponse(projectName, email, "BodyTranslationWordCheck", BracketedBody, inputCount, TotalInputCount, BodyTranslationWordCheckFilter, BracketedBody, "OpenAI", mode, MessagesReview)
-                    Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationRefinementPath, ProjectDataFrameIndexTranslationPath)
+                    Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationRefinementPath, ProjectDataFrameIndexTranslationPath, Tone)
                     Input2 = WordBracketCheckInput(IndexTag, Index, BracketedBody, BodyTranslationWordCheckResponse)
                     Input = Input1 + Input2
                     
@@ -3011,13 +3061,22 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                                 BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                                 pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등의)로 편집해주세요.'
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 편집해주세요.'
                                 continue
                             # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등의)로 편집해주세요.'
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 편집해주세요.'
                                 continue
-                    MemoryCounter = ''
+
+                    if inputCount <= 4:
+                        if Tone == 'Auto':
+                            MemoryCounter = ''
+                        elif Tone == 'Formal':
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 편집해주세요.'
+                        elif Tone == 'Informal':
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 편집해주세요.'
+                    else:
+                        MemoryCounter = ''
 
                     ## DataFrame 저장
                     TranslationRefinementProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
@@ -3194,7 +3253,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     AfterTranslationBodySummaryResponse = {"요약": Body, "핵심문구": ['None']}
                 else:
                     ## Response 생성
-                    AfterTranslationBodySummaryResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AfterTranslationBodySummaryFilter, CheckCount, "Anthropic", mode, MessagesReview)
+                    AfterTranslationBodySummaryResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AfterTranslationBodySummaryFilter, CheckCount, "OpenAI", mode, MessagesReview)
 
                 ## DataFrame 저장
                 AfterTranslationBodySummaryProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameAfterTranslationBodySummaryPath, AfterTranslationBodySummaryResponse, Process, inputCount, IndexId, TotalInputCount)

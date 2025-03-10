@@ -2828,7 +2828,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = Input1 + Input2
                 
                 ## Response 생성
-                BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
+                BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
                 
                 ######################################
                 ### Process8: BodyTranslationCheck ###
@@ -2974,8 +2974,6 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationEditingPath, TranslationEditPath, Process, EditMode)
-        ## EditText 저장
-        ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 

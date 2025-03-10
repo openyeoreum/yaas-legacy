@@ -2828,7 +2828,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = Input1 + Input2
                 
                 ## Response 생성
-                BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "Anthropic", mode, MessagesReview, memoryCounter = MemoryCounter)
+                BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
                 
                 ######################################
                 ### Process8: BodyTranslationCheck ###

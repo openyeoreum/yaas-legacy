@@ -1702,6 +1702,11 @@ def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCo
             print(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
                 f"오류횟수 {ErrorCount}회, 10초 후 프롬프트 재시도")
             
+            ## Error 3회시 해당 프로세스 사용 안함 예외처리
+            if Process in ['TranslationProofreading'] and ErrorCount >= 3:
+                print(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | ErrorPass 완료")
+                return "ErrorPass"
+            
             if ErrorCount >= 10:
                 sys.exit(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
                         f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
@@ -3136,6 +3141,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 IndexTag = InputList[i]['IndexTag']
                 Index = InputList[i]['Index']
                 BodyId = InputList[i]['BodyId']
+                Body = InputList[i]['Body']
                 Input1 = TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
                 Input2 = InputList[i]['Input']
                 Input = Input1 + Input2
@@ -3143,6 +3149,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 
                 ## Response 생성
                 TranslationProofreadingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationProofreadingFilter, InputList[i]['Body'], "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
+                
+                ## ErrorPass 예외처리
+                if TranslationProofreadingResponse == "ErrorPass":
+                    TranslationProofreadingResponse = {'도서내용': ' ' + Body}
                 
                 ## DataFrame 저장
                 TranslationProofreadingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationProofreadingPath, TranslationProofreadingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)

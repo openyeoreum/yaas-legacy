@@ -2836,9 +2836,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
                 if inputCount >= 5 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
-                    LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
-                    if not LangCheck:
-                        continue
+                    _, CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':

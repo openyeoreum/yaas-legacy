@@ -696,7 +696,7 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
     return AddInput
 
 ## Process8: BodyTranslationCheck의 Input
-def BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
+def BodyTranslationCheckInput(ProjectName, Process, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
     ## 이전번역문과 현재번역문 비교 Input 생성
     if os.path.exists(ProjectDataFrameBodyTranslationPath):
         with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
@@ -712,13 +712,25 @@ def BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, Body
         BeforeCheck = BodyTranslation[Index]['Body']
         
         ## 이전번역문과 현재번역문 언어 동일성 체크
-        BeforeBodyLang = LanguageDetection(BeforeBodyTranslation)
-        CurrentBodyLang = LanguageDetection(CurrentBodyTranslation)
-        if sorted(BeforeBodyLang) == sorted(CurrentBodyLang):
-            LangCheck = True
-        else:
-            LangCheck = False
-        
+        LangCheck = False
+        if Process in ['TranslationEditing', 'TranslationRefinement']:
+            BeforeBodyLang = LanguageDetection(BeforeBodyTranslation)
+            CurrentBodyLang = LanguageDetection(CurrentBodyTranslation)
+            ## 예외처리(한국어 글에 (중국어 설명)이 있는 경우)
+            if BeforeBodyLang == ['ko', 'zh']:
+                BeforeBodyLang = ['ko']
+            if CurrentBodyLang == ['ko', 'zh']:
+                CurrentBodyLang = ['ko']
+            
+            ## 이전번역문과 현재번역문 언어 동일성 확인
+            if sorted(BeforeBodyLang) == sorted(CurrentBodyLang):
+                LangCheck = True
+                print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
+                    f"{sorted(BeforeBodyLang)} == {sorted(CurrentBodyLang)}, 동일 언어 체크 완료")
+            else:
+                LangCheck = False
+                print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
+                    f"{sorted(BeforeBodyLang)} =! {sorted(CurrentBodyLang)}, 동일 언어 체크 재시도")
         
     return LangCheck, CheckInput, BeforeCheck
 
@@ -2836,7 +2848,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
                 if inputCount >= 5 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
-                    _, CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    _, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
@@ -2939,8 +2951,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
                 if inputCount >= 5 and ToneDistinction == 'Yes':
                     CheckProcess = "BodyTranslationCheck"
-                    LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
+                    LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, InputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
                     if not LangCheck:
+                        MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는  {MainLangCode}  , 단 하나의 언어만 사용해서 편집합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                         continue
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
@@ -3045,8 +3058,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
                     if inputCount >= 5 and ToneDistinction == 'Yes':
                         CheckProcess = "BodyTranslationCheck"
-                        LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(Process, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
+                        LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, InputCount, TotalInputCount, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
                         if not LangCheck:
+                            MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는 ({MainLangCode}), 단 하나의 언어만 사용해서 편집합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             continue
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                         if BodyTranslationCheckResponse['격식일치여부'] == '불일치':

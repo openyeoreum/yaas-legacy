@@ -2509,7 +2509,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ## 현재내용의 길이가 1000자 초과인 경우만 요약
                 if len(Input2) <= 500:
                     Body = InputList[i]['Body']
-                    TranslationBodySummaryResponse = {"요약": Body, "핵심문구": ['None']}
+                    TranslationBodySummaryResponse = {"요약": Body, "핵심문구": ['None'], "중요도": 900}
                 else:
                     ## Response 생성
                     TranslationBodySummaryResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationBodySummaryFilter, CheckCount, "OpenAI", mode, MessagesReview)
@@ -3236,7 +3236,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ## 현재내용의 길이가 1000자 초과인 경우만 요약
                 if len(Input2) <= 500:
                     Body = InputList[i]['Body']
-                    AfterTranslationBodySummaryResponse = {"요약": Body, "핵심문구": ['None']}
+                    AfterTranslationBodySummaryResponse = {"요약": Body, "핵심문구": ['None'], "중요도": 900}
                 else:
                     ## Response 생성
                     AfterTranslationBodySummaryResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationBodySummaryFilter, CheckCount, "OpenAI", mode, MessagesReview)

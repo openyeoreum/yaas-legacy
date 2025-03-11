@@ -1057,34 +1057,43 @@ def TranslationBodySummaryFilter(Response, CheckCount):
     try:
         OutputDic = json.loads(Response)
     except json.JSONDecodeError:
-        return "TranslationBodySummary, JSONDecode에서 오류 발생: JSONDecodeError"
+        return "AfterTranslationBodySummary, JSONDecode에서 오류 발생: JSONDecodeError"
 
     # Error2: 최상위 키 확인
     if '현재내용요약' not in OutputDic:
-        return "TranslationBodySummary, JSONKeyError: '현재내용요약' 키가 누락되었습니다"
+        return "AfterTranslationBodySummary, JSONKeyError: '현재내용요약' 키가 누락되었습니다"
 
     # Error3: '현재내용요약' 데이터 타입 검증
     if not isinstance(OutputDic['현재내용요약'], dict):
-        return "TranslationBodySummary, JSON에서 오류 발생: '현재내용요약'은 딕셔너리 형태여야 합니다"
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약'은 딕셔너리 형태여야 합니다"
 
     # 필수 키 확인
-    required_keys = ['핵심문구', '요약']
+    required_keys = ['핵심문구', '요약', '중요도']
     missing_keys = [key for key in required_keys if key not in OutputDic['현재내용요약']]
     if missing_keys:
-        return f"TranslationBodySummary, JSONKeyError: '현재내용요약'에 누락된 키: {', '.join(missing_keys)}"
+        return f"AfterTranslationBodySummary, JSONKeyError: '현재내용요약'에 누락된 키: {', '.join(missing_keys)}"
 
     # 데이터 타입 검증
     if not isinstance(OutputDic['현재내용요약']['핵심문구'], list):
-        return "TranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구'는 리스트 형태여야 합니다"
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구'는 리스트 형태여야 합니다"
     
     if not all(isinstance(item, str) for item in OutputDic['현재내용요약']['핵심문구']):
-        return "TranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구' 리스트의 모든 요소는 문자열이어야 합니다"
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구' 리스트의 모든 요소는 문자열이어야 합니다"
 
     if not (1 <= len(OutputDic['현재내용요약']['핵심문구']) <= 3):
-        return "TranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구'는 1~3개여야 합니다"
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구'는 1~3개여야 합니다"
 
     if not isinstance(OutputDic['현재내용요약']['요약'], str):
-        return "TranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 요약'은 문자열이어야 합니다"
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 요약'은 문자열이어야 합니다"
+
+    if not isinstance(OutputDic['현재내용요약']['중요도'], (str, int)):
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 중요도'는 정수여야 합니다"
+    if isinstance(OutputDic['현재내용요약']['중요도'], str):
+        ImportanceNum = re.sub(r'\D', '', OutputDic['현재내용요약']['중요도'])
+        OutputDic['현재내용요약']['중요도'] = int(ImportanceNum)
+
+    if not (0 <= OutputDic['현재내용요약']['중요도'] <= 1000):
+        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 중요도'는 0~1000 사이의 정수여야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['현재내용요약']
@@ -1636,50 +1645,6 @@ def TranslationDialoguePostprocessingFilter(Response, CheckCount):
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['대화문구수정']
-
-## Process14: AfterTranslationBodySummary의 Filter(Error 예외처리)
-def AfterTranslationBodySummaryFilter(Response, CheckCount):
-    # Error1: JSON 형식 예외 처리
-    try:
-        OutputDic = json.loads(Response)
-    except json.JSONDecodeError:
-        return "AfterTranslationBodySummary, JSONDecode에서 오류 발생: JSONDecodeError"
-
-    # Error2: 최상위 키 확인
-    if '현재내용요약' not in OutputDic:
-        return "AfterTranslationBodySummary, JSONKeyError: '현재내용요약' 키가 누락되었습니다"
-
-    # Error3: '현재내용요약' 데이터 타입 검증
-    if not isinstance(OutputDic['현재내용요약'], dict):
-        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약'은 딕셔너리 형태여야 합니다"
-
-    # 필수 키 확인
-    required_keys = ['핵심문구', '요약', '중요도']
-    missing_keys = [key for key in required_keys if key not in OutputDic['현재내용요약']]
-    if missing_keys:
-        return f"AfterTranslationBodySummary, JSONKeyError: '현재내용요약'에 누락된 키: {', '.join(missing_keys)}"
-
-    # 데이터 타입 검증
-    if not isinstance(OutputDic['현재내용요약']['핵심문구'], list):
-        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구'는 리스트 형태여야 합니다"
-    
-    if not all(isinstance(item, str) for item in OutputDic['현재내용요약']['핵심문구']):
-        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구' 리스트의 모든 요소는 문자열이어야 합니다"
-
-    if not (1 <= len(OutputDic['현재내용요약']['핵심문구']) <= 3):
-        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 핵심문구'는 1~3개여야 합니다"
-
-    if not isinstance(OutputDic['현재내용요약']['요약'], str):
-        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 요약'은 문자열이어야 합니다"
-
-    if not isinstance(OutputDic['현재내용요약']['중요도'], int):
-        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 중요도'는 정수여야 합니다"
-
-    if not (0 <= OutputDic['현재내용요약']['중요도'] <= 1000):
-        return "AfterTranslationBodySummary, JSON에서 오류 발생: '현재내용요약 > 중요도'는 0~1000 사이의 정수여야 합니다"
-
-    # 모든 조건을 만족하면 JSON 반환
-    return OutputDic['현재내용요약']
 
 #######################
 ##### Process 응답 #####
@@ -2255,7 +2220,7 @@ def AfterTranslationBodySummaryProcessDataFrameSave(ProjectName, MainLang, Trans
     if os.path.exists(ProjectDataFrameAfterTranslationBodySummaryPath):
         AfterTranslationBodySummaryFramePath = ProjectDataFrameAfterTranslationBodySummaryPath
     else:
-        AfterTranslationBodySummaryFramePath = os.path.join(TranslationDataFramePath, "b532-02_AfterTranslationBodySummaryFrame.json")
+        AfterTranslationBodySummaryFramePath = os.path.join(TranslationDataFramePath, "b532-14_AfterTranslationBodySummaryFrame.json")
     with open(AfterTranslationBodySummaryFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         AfterTranslationBodySummaryFrame = json.load(DataFrameJson)
         
@@ -3274,7 +3239,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     AfterTranslationBodySummaryResponse = {"요약": Body, "핵심문구": ['None']}
                 else:
                     ## Response 생성
-                    AfterTranslationBodySummaryResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AfterTranslationBodySummaryFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                    AfterTranslationBodySummaryResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationBodySummaryFilter, CheckCount, "OpenAI", mode, MessagesReview)
 
                 ## DataFrame 저장
                 AfterTranslationBodySummaryProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameAfterTranslationBodySummaryPath, AfterTranslationBodySummaryResponse, Process, inputCount, IndexId, TotalInputCount)

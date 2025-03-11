@@ -1,0 +1,18 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "Book",
+        "MainLang": "Ko",
+        "Translation": "",
+        "TaskName": "AfterTranslationBodySummaryFrame",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "IndexId": 0,
+            "BodyId": 0,
+            "BodySummary": "None"
+        }
+    ]
+]

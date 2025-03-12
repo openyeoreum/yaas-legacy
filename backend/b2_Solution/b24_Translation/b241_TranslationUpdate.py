@@ -146,32 +146,56 @@ def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, Translation
     # else:
     #     sys.exit(f"\n\n[ ((({projectName}_Index(Translation).txt))), ((({projectName}_Body(Translation).txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({UploadTranslationFilePath})\n\n1. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n3. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차는 <제목>의 형태로 괄호처리 권장\n3. 본문((_Body(Translation)))파일 내 쌍따옴표(“대화문”의 완성) 개수 일치\n\n")
         
-    return TranslationIndex, TranslationBody, TranslationBodyFilePath
+    return TranslationEditPath, TranslationIndex, TranslationBody, TranslationBodyFilePath
 
 ########################################
 ##### TranslationBodySplit Process #####
 ########################################
 ## Process1: TranslationBodySplit Process
 def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess, MaxLength):
-    TranslationIndex, TranslationBody, TranslationBodyFilePath = LoadTranslationSplitBody(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess)
-    
-    ## Load2-1: BodyLines과 TranslationIndex 위치 찾기
+    TranslationEditPath, TranslationIndex, TranslationBody, TranslationBodyFilePath = LoadTranslationSplitBody(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess)
+
+    ## Load1-1: BodyLines과 TranslationIndex 위치 찾기 (수정됨)
     BodyLines = TranslationBody.splitlines()
     IndexPositions = []
     CurrentIndexIdx = 0
+    UpdatedTranslationIndex = TranslationIndex.copy()  # TranslationIndex의 복사본 생성
+
     for lineNum, BodyLine in enumerate(BodyLines):
         # 현재 처리 중인 목차 항목 가져오기
         if CurrentIndexIdx < len(TranslationIndex):
             CurrentIndex = TranslationIndex[CurrentIndexIdx]
-            # 현재 줄이 목차 항목과 정확히 일치하는지 확인
+            
+            # 기본 비교: 정확히 일치하는지 확인
             if BodyLine.strip() == CurrentIndex["Index"].strip():
                 # 일치하는 줄을 찾았으므로 위치 기록
                 IndexPositions.append((lineNum, CurrentIndex))
-                # 다음 목차 항목으로 이동
                 CurrentIndexIdx += 1
-    ## Load2-2: Index와 Body 불일치로 이한 인덱스 누락 확인
+            
+            # 추가 비교: BodyLine이 <목차> 형태이고 CurrentIndex가 목차 형태인 경우
+            elif BodyLine.strip().startswith('<') and BodyLine.strip().endswith('>'):
+                # 앵글 브래킷 제거하여 비교
+                body_content = BodyLine.strip()[1:-1]  # '<목차>' -> '목차'
+                index_content = CurrentIndex["Index"].strip()
+                
+                if body_content == index_content:
+                    # BodyLine 형식에 맞게 CurrentIndex["Index"] 업데이트
+                    UpdatedTranslationIndex[CurrentIndexIdx]["Index"] = BodyLine.strip()
+                    
+                    # 일치하는 줄을 찾았으므로 위치 기록
+                    IndexPositions.append((lineNum, CurrentIndex))
+                    CurrentIndexIdx += 1
+
+    ## Load1-2: Index와 Body 불일치로 인한 인덱스 누락 확인
     if CurrentIndexIdx != len(TranslationIndex):
-        sys.exit(f"Index 불일치 오류 발생: Project: {projectName} | Process: TranslationBodySplit | IndexMatchingError\n[ 아래 _Body(Translation).txt 또는 Edit에서 해당 목차 부분 확인 >> ((({CurrentIndex['Index']}))) ]\n\n{TranslationBodyFilePath}\n\n{TranslationEditPath}")
+        sys.exit(f"Index 불일치 오류 발생: Project: {projectName} | Process: TranslationBodySplit | IndexMatchingError\n[ 아래 _Body(Translation).txt 또는 Edit에서 해당 목차 부분부터 확인 >> ((({CurrentIndex['Index']}))) ]\n\n{TranslationBodyFilePath}\n\n{TranslationEditPath}")
+
+    ## 수정된 TranslationIndex 저장
+    with open(TranslationEditPath, 'r', encoding='utf-8') as TranslationEditJson:
+        TranslationEditIndex = json.load(TranslationEditJson)[BeforeProcess]
+    
+    with open(TranslationEditPath, 'w', encoding='utf-8') as TranslationEditJson:
+        json.dump(TranslationEditIndex, TranslationEditJson, ensure_ascii = False, indent = 4)
 
     ## Load2-3: SplitedTranslationBody 생성
     SplitedTranslationBody = []

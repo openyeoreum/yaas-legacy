@@ -1,19 +1,121 @@
 import os
 import re
-import regex
 import json
+import base64
 import time
 import sys
 sys.path.append("/yaas")
 
-from datetime import datetime
+from mistralai import Mistral
 from langdetect import detect_langs, DetectorFactory
 from backend.b2_Solution.b25_DataFrame.b251_DataCommit.b2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse
 
-##########################################
-##### Translation Index, Body 불러오기 #####
-##########################################
-## Load1: TranslationIndex 불러오기
+###############################################
+##### Translation PDF, Index, Body 불러오기 #####
+###############################################
+## Load1-1: TranslationPDF 경로 불러오기
+def LoadTranslationPDFPath(projectName, UploadTranslationFilePath):
+    # TranslationPDF 경로 설정
+    TranslationPDFFileName = f"{projectName}(Translation).pdf"
+    TranslationPDFFilePath = os.path.join(UploadTranslationFilePath, TranslationPDFFileName)
+    
+    # TranslationPDF 불러오기
+    if os.path.exists(TranslationPDFFilePath):
+        OCRDirectoryPath = os.path.join(UploadTranslationFilePath, f"{projectName}_OCR")
+        os.makedirs(OCRDirectoryPath, exist_ok = True)
+    else:
+        sys.exit(f"\n\n[ ((({projectName}(Translation).pdf))) 또는 ((({projectName}_Index(Translation).txt))), ((({projectName}_Body(Translation).txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({UploadTranslationFilePath})\n\n1. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n3. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차는 <제목>의 형태로 괄호처리 권장\n3. 본문((_Body(Translation)))파일 내 쌍따옴표(“대화문”의 완성) 개수 일치\n\n")
+        
+    return TranslationPDFFileName, TranslationPDFFilePath, OCRDirectoryPath
+
+## Load1-2: TranslationPDF OCR
+def OCRTranslationPDF(projectName, UploadTranslationFilePath):
+    ## TranslationBody 경로 설정
+    TranslationBodyFileName = f"{projectName}_Body(Translation).txt"
+    TranslationBodyFilePath = os.path.join(UploadTranslationFilePath, TranslationBodyFileName)
+    
+    ## TranslationIndex 경로 설정
+    TranslationIndexFileName = f"{projectName}_Index(Translation).txt"
+    TranslationIndexFilePath = os.path.join(UploadTranslationFilePath, TranslationIndexFileName)
+    
+    ## TranslationIndex 존재확인
+    if not os.path.exists(TranslationIndexFilePath):
+        ## TranslationBody 존재확인
+        if not os.path.exists(TranslationBodyFilePath):
+            ## 환경 변수에서 API 키를 불러오고 클라이언트 초기화
+            MistralClient = Mistral(api_key = os.getenv("MISTRAL_API_KEY"))
+
+            ## OCR할 PDF 파일 경로 설정
+            TranslationPDFFileName, TranslationPDFFilePath, OCRDirectoryPath = LoadTranslationPDFPath(projectName, UploadTranslationFilePath)
+
+            ## PDF 파일을 OCR 용도로 업로드
+            with open(TranslationPDFFilePath, "rb") as TranslationPDFFile:
+                UploadedPDF = MistralClient.files.upload(
+                    file = {
+                        "file_name": TranslationPDFFileName,
+                        "content": TranslationPDFFile,
+                    },
+                    purpose = "ocr"
+                )
+
+            ## 업로드된 파일의 서명된 URL을 받아옴
+            SignedURL = MistralClient.files.get_signed_url(file_id=UploadedPDF.id)
+
+            ## 서명된 URL을 이용하여 OCR 처리 수행 (이미지 데이터 포함)
+            OCRresponse = MistralClient.ocr.process(
+                model = "mistral-ocr-latest",
+                document = {
+                    "type": "document_url",
+                    "document_url": SignedURL.url,
+                },
+                include_image_base64 = True
+            )
+
+            ## 전체 OCR 응답을 JSON 형식으로 저장
+            OCRresponseJson = json.dumps(OCRresponse.model_dump(), indent = 4, ensure_ascii = False)
+            OCRresponseJsonFileName = os.path.join(OCRDirectoryPath, f"{projectName}_OCR.json")
+            with open(OCRresponseJsonFileName, "w", encoding = "utf-8") as f:
+                f.write(OCRresponseJson)
+
+            ## 각 페이지별로 markdown 텍스트와 이미지 저장
+            OCRTextFilePath = os.path.join(UploadTranslationFilePath, f"{projectName}_Body(Translation).txt")
+            with open(OCRTextFilePath, "w", encoding = "utf-8") as OCRTextFile:
+                for BookPage in OCRresponse.pages:
+                    # 페이지 번호 (예: 1, 2, …)를 사용하여 파일명 생성
+                    BookPageIndex = BookPage.index
+
+                    # 페이지의 markdown 텍스트 저장 (있을 경우)
+                    if hasattr(BookPage, "markdown") and BookPage.markdown:
+                        # 현재 페이지의 markdown 텍스트를 작성하고, 끝에 두 줄바꿈 추가
+                        OCRTextFile.write(BookPage.markdown + f"\n\n@({BookPageIndex + 2})@\n\n")
+                    
+                    # 페이지 내 이미지가 존재할 경우 저장
+                    if hasattr(BookPage, "images") and BookPage.images:
+                        for Image in BookPage.images:
+                            # 이미지 객체에서 id와 base64 문자열 추출 (딕셔너리 대신 속성 접근)
+                            ImageId = Image.id
+                            ImageBase64str = Image.image_base64
+                            if ImageBase64str:
+                                # "data:image/jpeg;base64," 접두사가 있으면 제거
+                                prefix = "data:image/jpeg;base64,"
+                                if ImageBase64str.startswith(prefix):
+                                    ImageBase64str = ImageBase64str[len(prefix):]
+                                try:
+                                    ImageData = base64.b64decode(ImageBase64str)
+                                except Exception as e:
+                                    print(f"페이지 {BookPageIndex}의 이미지 {ImageId} 디코딩 실패: {e}")
+                                    continue
+                                # 저장할 이미지 파일 경로 (예: 프로젝트명과 페이지 번호를 포함하여 생성)
+                                ImageFilePath = os.path.join(OCRDirectoryPath, f"{projectName}_Image({BookPageIndex}).jpeg")
+                                with open(ImageFilePath, "wb") as ImageFile:
+                                    ImageFile.write(ImageData)
+                                print(f"페이지 {BookPageIndex}의 이미지 ({f'{projectName}_Image({BookPageIndex}).jpeg'})가 저장되었습니다.")
+
+            sys.exit(f"\n\n[ ((({projectName}_Index(Translation).txt)))을 ((({projectName}_Body(Translation).txt))) 파일에 따라서 완성해주세요. ]\n({TranslationBodyFilePath})\n\n1. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n3. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차는 <제목>의 형태로 괄호처리 권장\n3. 본문((_Body(Translation)))파일 내 쌍따옴표(“대화문”의 완성) 개수 일치\n\n")
+        else:
+            sys.exit(f"\n\n[ ((({projectName}_Index(Translation).txt)))을 ((({projectName}_Body(Translation).txt))) 파일에 따라서 완성해주세요. ]\n({TranslationBodyFilePath})\n\n1. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n3. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차는 <제목>의 형태로 괄호처리 권장\n3. 본문((_Body(Translation)))파일 내 쌍따옴표(“대화문”의 완성) 개수 일치\n\n")
+
+## Load2: TranslationIndex 불러오기
 def LoadTranslationIndex(projectName, UploadTranslationFilePath):
     # TranslationIndex 경로 설정
     TranslationIndexFileName = f"{projectName}_Index(Translation).txt"
@@ -23,12 +125,12 @@ def LoadTranslationIndex(projectName, UploadTranslationFilePath):
     if os.path.exists(TranslationIndexFilePath):
         with open(TranslationIndexFilePath, "r") as TranslationIndexFile:
             TranslationIndex = TranslationIndexFile.read()
-    else:
-        sys.exit(f"\n\n[ ((({projectName}_Index(Translation).txt))), ((({projectName}_Body(Translation).txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({UploadTranslationFilePath})\n\n1. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n3. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차는 <제목>의 형태로 괄호처리 권장\n3. 본문((_Body(Translation)))파일 내 쌍따옴표(“대화문”의 완성) 개수 일치\n\n")
-        
+    # else:
+    #     sys.exit(f"\n\n[ ((({projectName}_Index(Translation).txt))), ((({projectName}_Body(Translation).txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({UploadTranslationFilePath})\n\n1. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n3. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차는 <제목>의 형태로 괄호처리 권장\n3. 본문((_Body(Translation)))파일 내 쌍따옴표(“대화문”의 완성) 개수 일치\n\n")
+    
     return TranslationIndex
 
-## Load2: TranslationSplitBody 불러오기
+## Load3: TranslationSplitBody 불러오기
 def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess):
     # TranslationIndex 불러오기
     with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
@@ -41,8 +143,8 @@ def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, Translation
     if os.path.exists(TranslationBodyFilePath):
         with open(TranslationBodyFilePath, "r") as TranslationBodyFile:
             TranslationBody = TranslationBodyFile.read()
-    else:
-        sys.exit(f"\n\n[ ((({projectName}_Index(Translation).txt))), ((({projectName}_Body(Translation).txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({UploadTranslationFilePath})\n\n1. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n3. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차는 <제목>의 형태로 괄호처리 권장\n3. 본문((_Body(Translation)))파일 내 쌍따옴표(“대화문”의 완성) 개수 일치\n\n")
+    # else:
+    #     sys.exit(f"\n\n[ ((({projectName}_Index(Translation).txt))), ((({projectName}_Body(Translation).txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({UploadTranslationFilePath})\n\n1. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n3. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차는 <제목>의 형태로 괄호처리 권장\n3. 본문((_Body(Translation)))파일 내 쌍따옴표(“대화문”의 완성) 개수 일치\n\n")
         
     return TranslationIndex, TranslationBody, TranslationBodyFilePath
 
@@ -1014,9 +1116,9 @@ def TranslationIndexDefineFilter(Response, CheckCount):
         return f"TranslationIndexDefine, JSONKeyError: 누락된 최상위 키: {', '.join(missing_top_keys)}"
 
     # Error3: '언어태그' 데이터 검증
-    valid_language_tags = {'en', 'zh', 'es', 'ca'}
+    valid_language_tags = {'en', 'zh', 'es', 'fr', 'de', 'it', 'ja', 'ko', 'pt', 'ru', 'ar', 'nl', 'sv', 'no', 'da', 'fi', 'pl', 'tr', 'el', 'cs', 'hu', 'ro', 'sk', 'uk', 'hi', 'id', 'ms', 'th', 'vi', 'he', 'bg', 'ca'}
     if not isinstance(OutputDic['언어태그'], str) or OutputDic['언어태그'] not in valid_language_tags:
-        return "TranslationIndexDefine, JSON에서 오류 발생: '언어태그'는 ['en', 'zh', 'es', 'ca'] 중 하나여야 합니다"
+        return "TranslationIndexDefine, JSON에서 오류 발생: '언어태그'는 유효한 언어 태그 중 하나여야 합니다"
 
     # Error4: '목차리스트' 데이터 타입 검증
     if not isinstance(OutputDic['목차리스트'], list):
@@ -2405,7 +2507,14 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     TranslationEditPath = os.path.join(ProjectMasterTranslationPath, f'[{projectName}_Translation_Edit].json')
     
     TranslationDataFramePath = "/yaas/backend/b5_Database/b53_ProjectData/b532_TranslationProject"
-    
+
+    ########################
+    ### Process0: PDF OCR ##
+    ########################
+
+    ## 파일 업로드 확인
+    OCRTranslationPDF(projectName, UploadTranslationFilePath)
+
     ####################################################
     ### Process1: TranslationIndexDefine Response 생성 ##
     ####################################################

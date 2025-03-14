@@ -146,14 +146,14 @@ def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, Translation
     # else:
     #     sys.exit(f"\n\n[ ((({projectName}_Index(Translation).txt))), ((({projectName}_Body(Translation).txt))) 파일을 완성하여 아래 경로에 복사해주세요. ]\n({UploadTranslationFilePath})\n\n1. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차 일치, 목차에는 온점(.)이 들어갈 수 없으며, 하나의 목차는 줄바꿈이 일어나면 안됨\n3. 목차((_Index(Translation)))파일과 본문((_Body(Translation))) 파일의 목차는 <제목>의 형태로 괄호처리 권장\n3. 본문((_Body(Translation)))파일 내 쌍따옴표(“대화문”의 완성) 개수 일치\n\n")
         
-    return TranslationEditPath, TranslationIndex, TranslationBody, TranslationBodyFilePath
+    return TranslationIndex, TranslationBody, TranslationBodyFilePath
 
 ########################################
 ##### TranslationBodySplit Process #####
 ########################################
 ## Process1: TranslationBodySplit Process
-def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess, MaxLength):
-    TranslationEditPath, TranslationIndex, TranslationBody, TranslationBodyFilePath = LoadTranslationSplitBody(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess)
+def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess, ProjectDataFrameTranslationIndexDefinePath, MaxLength):
+    TranslationIndex, TranslationBody, TranslationBodyFilePath = LoadTranslationSplitBody(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess)
 
     ## Load1-1: BodyLines과 TranslationIndex 위치 찾기 (수정됨)
     BodyLines = TranslationBody.splitlines()
@@ -191,9 +191,16 @@ def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, Translat
         sys.exit(f"Index 불일치 오류 발생: Project: {projectName} | Process: TranslationBodySplit | IndexMatchingError\n[ 아래 _Body(Translation).txt 또는 Edit에서 해당 목차 부분부터 확인 >> ((({CurrentIndex['Index']}))) ]\n\n{TranslationBodyFilePath}\n\n{TranslationEditPath}")
 
     ## 수정된 TranslationIndex 저장
+    # Dataframe 저장
+    with open(ProjectDataFrameTranslationIndexDefinePath, 'r', encoding='utf-8') as IndexDataFrameJson:
+        TranslationEditIndex = json.load(IndexDataFrameJson)
+        TranslationEditIndex[1] = UpdatedTranslationIndex
+    with open(ProjectDataFrameTranslationIndexDefinePath, 'w', encoding='utf-8') as IndexDataFrameJson:
+        json.dump(TranslationEditIndex, IndexDataFrameJson, ensure_ascii = False, indent = 4)
+    # Edit 저장
     with open(TranslationEditPath, 'r', encoding='utf-8') as TranslationEditJson:
-        TranslationEditIndex = json.load(TranslationEditJson)[BeforeProcess]
-    
+        TranslationEditIndex = json.load(TranslationEditJson)
+        TranslationEditIndex[BeforeProcess] = UpdatedTranslationIndex
     with open(TranslationEditPath, 'w', encoding='utf-8') as TranslationEditJson:
         json.dump(TranslationEditIndex, TranslationEditJson, ensure_ascii = False, indent = 4)
 
@@ -1432,6 +1439,9 @@ def BodyTranslationPreprocessingFilter(Response, CheckCount):
 
         if not isinstance(item['수정이유'], str):
             return f"BodyTranslationPreprocessing, JSON에서 오류 발생: '수정된번역단어[{idx}] > 수정이유'는 문자열이어야 합니다"
+        ## '수정된번역단어' 후처리
+        if item['수정이유'] == '삭제':
+            item['수정된번역단어'] = ''
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['수정된번역단어']
@@ -2109,6 +2119,8 @@ def BodyTranslationPreprocessingProcessDataFrameSave(ProjectName, MainLang, Tran
                 TranslationBody = TranslationBody.replace(Match.group(0), f'{{{OriginalWord}->{ModifiedWord}}}')
     # 추가 코드 - 남아 있는 모든 {n: ...->...}를 {...->...}로 처리
     TranslationBody = re.sub(r'\{\d+:\s*', '{', TranslationBody)
+    # 번역 단어가 비어있는 경우 {원단어->}를 원단어만 남기도록 처리
+    TranslationBody = re.sub(r'\{([^{}]+?)->\}', r'\1', TranslationBody)
 
     ## BodyTranslationPreprocessingFrame 첫번째 데이터 프레임 복사
     BodyTranslationPreprocessing = BodyTranslationPreprocessingFrame[1][0].copy()
@@ -2600,7 +2612,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ProjectDataFrameTranslationBodySplitPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
     ## Result 생성
-    TranslationBodySplitResult = TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, "TranslationIndexDefine", 4000)
+    TranslationBodySplitResult = TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, "TranslationIndexDefine", ProjectDataFrameTranslationIndexDefinePath, 4000)
     
     ## DataFrame 저장
     TranslationBodySplitProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationBodySplitPath, TranslationBodySplitResult, Process, len(TranslationBodySplitResult), len(TranslationBodySplitResult))

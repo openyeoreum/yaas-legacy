@@ -851,9 +851,9 @@ def BodyTranslationCheckInput(ProjectName, Process, InputCount, TotalInputCount,
             CurrentBodyLang = sorted(LanguageDetection(CurrentBodyTranslation))
             
             ## 예외처리(한국어 글에 (중국어 설명)이 있는 경우)
-            if BeforeBodyLang in [['ko', 'zh'], ['ko', 'en']]:
+            if sorted(BeforeBodyLang) in [sorted(['ko' 'zh']), sorted(['ko', 'en'])]:
                 BeforeBodyLang = ['ko']
-            if CurrentBodyLang in [['ko', 'zh'], ['ko', 'en']]:
+            if sorted(CurrentBodyLang) in [sorted(['ko' 'zh']), sorted(['ko', 'en'])]:
                 CurrentBodyLang = ['ko']
             
             ## 이전번역문과 현재번역문 언어 동일성 확인

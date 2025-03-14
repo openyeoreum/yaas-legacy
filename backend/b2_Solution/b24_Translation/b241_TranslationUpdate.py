@@ -1107,7 +1107,6 @@ def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
         
         # 대화문 마킹 처리
         MarkBody = MarkDialogues(Body)
-        
         Input = f"<작업: 현재도서내용>\n{MarkBody}\n\n"
         
         InputList.append({"Id": InputId, "IndexId": IndexId, "BodyId": BodyId, "MarkBody": MarkBody, "Input": Input, "DialogueCount": DialogueCount})
@@ -1128,6 +1127,49 @@ def TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnaly
         AddInput = f"\nNone\n\n\n"
     
     return AddInput
+
+## Process12: TranslationDialogueEditing의 InputList
+def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
+    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+        TranslationEditList = json.load(TranslationEditJson)[BeforeProcess]
+        
+    ## 대화문 모두 합치기
+    TranslationDialogueList = []
+    Id = 1
+    for TranslationEdit in TranslationEditList:
+        BodyId = TranslationEdit['BodyId']
+        DialogueMarkBody = TranslationEdit['DialogueMarkBody']
+        for Dialogue in TranslationEdit['Dialogue']:
+            DialogueId = Dialogue['번호']
+            Name = Dialogue['말하는인물']
+            dialogue = "None"
+            DialogueMarkPattern = r'\{' + str(DialogueId) + r'\s+' + re.escape(Name) + r'\s*:\s*(.*?)\}'
+            DialogueMarkPatternMatch = re.search(DialogueMarkPattern, DialogueMarkBody, re.DOTALL)
+            dialogue = DialogueMarkPatternMatch.group(1).strip()
+            Gender = Dialogue['성별']
+            Age = Dialogue['연령']
+            Emotion = Dialogue['감정']
+            Character = Dialogue['말하는인물성격특성']
+            Situation = Dialogue['상황']
+            PartnerName = Dialogue['대화상대']
+            PartnerDialogue = Dialogue['대화상대대답']
+            DialogueDic = {"Id": Id, "BodyId": BodyId, "DialogueId": DialogueId, "Name": Name, "Dialogue": dialogue, "Gender": Gender, "Age": Age, "Emotion": Emotion, "Character": Character, "Situation": Situation, "PartnerName": PartnerName, "PartnerDialogue": PartnerDialogue}
+            TranslationDialogueList.append(DialogueDic)
+            Id += 1
+            
+    ## 동일한 이름 기준으로 그룹화
+    GroupedSameName = {}
+    for DialogueDic in TranslationDialogueList:
+        Name = DialogueDic["Name"]
+        if Name not in GroupedSameName:
+            GroupedSameName[Name] = []
+        GroupedSameName[Name].append(DialogueDic)
+
+    # GroupedSameName 딕셔너리를 원하는 결과 리스트 형태로 변환하기
+    TranslationDialogueGroupedList = [{"Name": Name, "Dialogue": DialogueDic} for Name, DialogueDic in GroupedSameName.items()]
+    
+    with open("/yaas/TranslationDialogueGroupedList.json", "w", encoding="utf-8") as file:
+        json.dump(TranslationDialogueGroupedList, file, ensure_ascii = False, indent = 4)
 
 ######################
 ##### Filter 조건 #####
@@ -2314,6 +2356,35 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
 
 ## Process11: TranslationDialogueAnalysis DataFrame 저장
 def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, InputCount, BodyId, TotalInputCount):
+    ## 대화 마커 수정 함수, 이상한 에러 방지!!
+    def FixDialogueMarkBody(DialogueMarkBody, TranslationDialogueAnalysisResponse):
+        # 대화 응답 데이터를 번호를 키로 하는 딕셔너리로 변환 (빠른 조회를 위함)
+        DialogueMap = {item['번호']: item for item in TranslationDialogueAnalysisResponse}
+        # 수정된 결과를 저장할 변수
+        NewDialogueMarkBody = DialogueMarkBody
+        # DialogueMarkBody에서 대화 마커 패턴 찾기
+        MarkPattern = r'\{(\d+) ([^:]+):'
+        # 모든 패턴 찾기
+        Matches = list(re.finditer(MarkPattern, DialogueMarkBody))
+        # 뒤에서부터 처리 (앞에서부터 치환하면 위치가 바뀔 수 있음)
+        for Match in reversed(Matches):
+            Number = int(Match.group(1))  # 대화 번호
+            CurrentCharacter = Match.group(2)  # 현재 캐릭터 이름
+            
+            # 해당 번호에 맞는 올바른 캐릭터 찾기
+            if Number in DialogueMap:
+                CorrectCharacter = DialogueMap[Number]['말하는인물']
+                # 캐릭터 이름이 다르면 수정
+                if CurrentCharacter != CorrectCharacter:
+                    print(f"불일치 발견: 번호 {Number}, 현재 '{CurrentCharacter}', 정확한 값 '{CorrectCharacter}'")
+                    # 대체할 텍스트 구성
+                    OldMark = '{' + f"{Number} {CurrentCharacter}:"
+                    NewMark = '{' + f"{Number} {CorrectCharacter}:"
+                    # 치환 (한 번만)
+                    NewDialogueMarkBody = NewDialogueMarkBody.replace(OldMark, NewMark, 1)
+        
+        return NewDialogueMarkBody
+    
     ## TranslationDialogueAnalysisFrame 불러오기
     if os.path.exists(ProjectDataFrameTranslationDialogueAnalysisPath):
         TranslationDialogueAnalysisFramePath = ProjectDataFrameTranslationDialogueAnalysisPath
@@ -2335,8 +2406,8 @@ def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Trans
     # DialogueMarkBody에서 {n대화: ...} -> {n이름: ...}으로 변경
     DialogueMarkBody = MarkBody
     for TranslationDialogue in TranslationDialogueAnalysisResponse:
-        DialogueMarkBody = DialogueMarkBody.replace(f"{TranslationDialogue['번호']} 대화:", f"{TranslationDialogue['번호']} {TranslationDialogue['말하는인물']}:")
-        
+        DialogueMarkBody = DialogueMarkBody.replace("{" + f"{TranslationDialogue['번호']} 대화:", "{" + f"{TranslationDialogue['번호']} {TranslationDialogue['말하는인물']}:")
+    DialogueMarkBody = FixDialogueMarkBody(DialogueMarkBody, TranslationDialogueAnalysisResponse)
     TranslationDialogueAnalysis['DialogueMarkBody'] = DialogueMarkBody
     TranslationDialogueAnalysis['Dialogue'] = TranslationDialogueAnalysisResponse
 
@@ -3322,7 +3393,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         TranslationDialogueAnalysisResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueAnalysisFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
                     else:
                         TranslationDialogueAnalysisResponse = []
-                        
+
                     ## DataFrame 저장
                     TranslationDialogueAnalysisProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, inputCount, BodyId, TotalInputCount)
                     
@@ -3342,6 +3413,25 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ################################################
     ### Process12: TranslationDialogueEditing 생성 ##
     ################################################
+    if BookGenre == 'Fiction':
+
+        ## Process 설정
+        ProcessNumber = '12'
+        Process = "TranslationDialogueEditing"
+
+        ## TranslationDialogueEditing 경로 생성
+        ProjectDataFrameTranslationDialogueEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+
+        ## Process Count 계산 및 Check
+        CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+        InputList = TranslationDialogueEditingInputList(TranslationEditPath, "TranslationDialogueAnalysis")
+        TotalInputCount = len(InputList) # 인풋의 전체 카운트
+        InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueEditingPath)
+        EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+        # print(f"InputCount: {InputCount}")
+        # print(f"EditCheck: {EditCheck}")
+        # print(f"EditCompletion: {EditCompletion}")
+        ## Process 진행
     
     #######################################################
     ### Process13: TranslationDialoguePostprocessing 생성 ##

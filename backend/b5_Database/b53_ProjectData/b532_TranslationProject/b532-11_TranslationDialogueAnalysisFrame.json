@@ -10,12 +10,9 @@
     },
     [
         {
-            "IndexId": 0,
-            "IndexTag": "None",
-            "Index": "None",
             "BodyId": 0,
-            "ProofreadedBody": "None",
-            "Body": "None"
+            "DialogueMarkBody": "None",
+            "Dialogue": []
         }
     ]
 ]

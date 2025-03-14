@@ -89,7 +89,7 @@ def YaasConfigUpdate(StartProjectName, MainLang, Estimate, DataCollection, Searc
                 "MainLang": MainLang,
                 "Translation": Translation,
                 "BookGenre": "NonFiction",
-                "Tone": "InFormal",
+                "Tone": "Informal",
                 "TranslationQuality": "Refinement",
                 "EditMode": "Auto",
                 }

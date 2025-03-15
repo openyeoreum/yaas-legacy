@@ -1069,6 +1069,7 @@ def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
     return AddInput
 
 ## Process11: TranslationDialogueEditing의 InputList
+## Process11: TranslationDialogueEditing의 InputList
 def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
     def CountDialogues(Pattern, Body):
         # 텍스트에서 대화문 패턴 찾기
@@ -1178,6 +1179,42 @@ def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
         
         return MarkBody
     
+    # 새로 추가된 함수: 원본 텍스트를 유지하면서 대화문만 마킹
+    def MarkDialoguesPreserveText(Pattern, Body):
+        # 대화문이 없으면 원본 텍스트 그대로 반환
+        if not re.search(Pattern, Body):
+            return Body
+        
+        # 모든 대화문 위치 찾기
+        DialogueMatches = list(re.finditer(Pattern, Body))
+        
+        # 원본 텍스트 복사
+        OrginMarkBody = Body
+        
+        # 텍스트 변경에 따른 오프셋 추적
+        offset = 0
+        
+        # 각 대화문 처리
+        for i, Match in enumerate(DialogueMatches, 1):
+            # 원본 위치 및 텍스트 가져오기 (오프셋 적용)
+            start = Match.start() + offset
+            end = Match.end() + offset
+            original = OrginMarkBody[start:end]
+            
+            # 대화문 텍스트 추출
+            DialogueText = Match.group(2) if Match.group(2) is not None else Match.group(3)
+            
+            # 마킹된 버전 생성
+            marked = f"{{{i} 대화: {DialogueText}}}"
+            
+            # 텍스트 교체
+            OrginMarkBody = OrginMarkBody[:start] + marked + OrginMarkBody[end:]
+            
+            # 길이 변화에 따른 오프셋 업데이트
+            offset += len(marked) - len(original)
+        
+        return OrginMarkBody
+    
     ## 대화문 마킹 함수
     Pattern = r'("([^"]+)"|"([^"]+)")'
     ## 전체 도서내용에 대화문 마킹 생성
@@ -1196,8 +1233,10 @@ def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
         # 대화문 마킹 처리
         MarkBody = MarkDialogues(Pattern, Body)
         MarkBody = MarkBody.replace('... ...', '...')
+        # 원본 텍스트를 유지하면서 대화문만 마킹 처리
+        OrginMarkBody = MarkDialoguesPreserveText(Pattern, Body)
         Input = f"<작업: 대화중심편집내용>\n{MarkBody}\n\n"
-        InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": Body, "MarkBody": MarkBody, "Input": Input, "DialogueCount": DialogueCount})
+        InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": OrginMarkBody, "MarkBody": MarkBody, "Input": Input, "DialogueCount": DialogueCount})
         InputId += 1
    
     return InputList
@@ -1211,7 +1250,7 @@ def TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditin
             # 결과를 저장할 리스트
             CollectedContents = []
             Count = 0
-            MaxItems = 5
+            MaxItems = 7
             
             # 데이터의 인덱스 1의 리스트를 역순으로 순회
             for i in range(len(TranslationDialogue)-1, -1, -1):
@@ -1226,7 +1265,7 @@ def TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditin
             # 수집된 내용이 있으면 역순으로 정렬하여 합치기 (최신 항목이 마지막에 오도록)
             if CollectedContents:
                 CollectedContents.reverse()
-                AddInput = "\n" + "\n...\n".join(CollectedContents) + "\n\n\n"
+                AddInput = "\n" + "\n\n...\n\n".join(CollectedContents) + "\n\n\n"
             else:
                 AddInput = f"\n{TranslationDialogue[-1]['Body']}\n\n\n"
     else:
@@ -2431,14 +2470,16 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
     for TranslationDialogue in TranslationDialogueEditingResponse:
         TranslationDialogueId = TranslationDialogue['번호']
         TranslationEditedDialogueText = TranslationDialogue['편집대화내용']
-        # 원본 패턴을 찾아서 편집된 내용으로 대체
-        DialoguePattern = f"{{{TranslationDialogueId}대화: (.*)}}"
+        # 원본 패턴을 찾아서 편집된 내용으로 대체 (비탐욕적 매칭 사용)
+        DialoguePattern = f"{{{TranslationDialogueId} 대화: ([^}}]*)}}"
         # 원본 대화 내용 추출 후 할당
         DialogueMatch = re.search(DialoguePattern, DialogueBody)
-        TranslationOrginDialogueText = DialogueMatch.group(1) if DialogueMatch else ""
-        Body = Body.replace(TranslationOrginDialogueText, TranslationEditedDialogueText)
-        # 편집된 내용으로 대체
-        DialogueBody = re.sub(DialoguePattern, TranslationEditedDialogueText, DialogueBody)
+        TranslationOrginDialogueText = DialogueMatch.group(1)
+        print(f'\n{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}} ->>> "{TranslationEditedDialogueText}"\n')
+        # Body에서 패턴 전체를 편집된 내용으로 대체
+        Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f'"{TranslationEditedDialogueText}"')
+        # DialogueBody에서도 패턴 대체
+        DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), TranslationEditedDialogueText, DialogueBody)
     
     TranslationDialogueEditing['Body'] = Body
     TranslationDialogueEditing['DialogueBody'] = DialogueBody

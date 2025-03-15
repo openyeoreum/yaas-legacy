@@ -1068,8 +1068,8 @@ def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
         
     return AddInput
 
-## Process11: TranslationDialogueAnalysis의 InputList
-def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
+## Process11: TranslationDialogueEditing의 InputList
+def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
     def CountDialogues(Pattern, Body):
         # 텍스트에서 대화문 패턴 찾기
         DialogueMatches = re.findall(Pattern, Body)
@@ -1187,6 +1187,8 @@ def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
     InputList = []
     for TranslationEdit in TranslationEditList:
         IndexId = TranslationEdit['IndexId']
+        IndexTag = TranslationEdit['IndexTag']
+        Index = TranslationEdit['Index']
         BodyId = TranslationEdit['BodyId']
         Body = TranslationEdit['Body']
         # 해당 항목의 대화문 개수 카운트
@@ -1194,23 +1196,41 @@ def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
         # 대화문 마킹 처리
         MarkBody = MarkDialogues(Pattern, Body)
         MarkBody = MarkBody.replace('... ...', '...')
-        Input = f"<작업: 현재도서내용>\n{MarkBody}\n\n"
-        InputList.append({"Id": InputId, "IndexId": IndexId, "BodyId": BodyId, "Body": Body, "MarkBody": MarkBody, "Input": Input, "DialogueCount": DialogueCount})
+        Input = f"<작업: 대화중심편집내용>\n{MarkBody}\n\n"
+        InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": Body, "MarkBody": MarkBody, "Input": Input, "DialogueCount": DialogueCount})
         InputId += 1
    
     return InputList
 
-## Process11: TranslationDialogueAnalysis의 추가 Input
-def TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath):
-    if os.path.exists(ProjectDataFrameTranslationDialogueAnalysisPath):
-        with open(ProjectDataFrameTranslationDialogueAnalysisPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
-            TranslationDialogueAnalysis = json.load(TranslationDataFrame)[1][-1]
-            DialogueMarkBody = TranslationDialogueAnalysis['DialogueMarkBody']
-            DialogueMarkBody = re.sub(r'{\d+\s', '{', DialogueMarkBody)
-        AddInput = f"\n{DialogueMarkBody}\n\n\n"
-    
+## Process11: TranslationDialogueEditing의 추가 Input
+def TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditingPath):
+    if os.path.exists(ProjectDataFrameTranslationDialogueEditingPath):
+        with open(ProjectDataFrameTranslationDialogueEditingPath, 'r', encoding='utf-8') as TranslationDataFrame:
+            TranslationDialogue = json.load(TranslationDataFrame)[1]
+            
+            # 결과를 저장할 리스트
+            CollectedContents = []
+            Count = 0
+            MaxItems = 5
+            
+            # 데이터의 인덱스 1의 리스트를 역순으로 순회
+            for i in range(len(TranslationDialogue)-1, -1, -1):
+                # 아이템이 존재하고 DialogueBody가 비어있지 않은 경우
+                if i >= 0 and TranslationDialogue[i]['DialogueBody'] != '' and TranslationDialogue[i]['DialogueBody'] != 'None':
+                    CollectedContents.append(TranslationDialogue[i]['DialogueBody'])
+                    Count += 1
+                    # 최대 항목 수에 도달하면 중단
+                    if Count >= MaxItems:
+                        break
+            
+            # 수집된 내용이 있으면 역순으로 정렬하여 합치기 (최신 항목이 마지막에 오도록)
+            if CollectedContents:
+                CollectedContents.reverse()
+                AddInput = "\n" + "\n...\n".join(CollectedContents) + "\n\n\n"
+            else:
+                AddInput = f"\n{TranslationDialogue[-1]['Body']}\n\n\n"
     else:
-        AddInput = f"\nNone\n\n\n"
+        AddInput = "\n※ 첫번째 대화 내용으로 이전내용이 없습니다.\n\n\n"
     
     return AddInput
 
@@ -1719,72 +1739,7 @@ def TranslationProofreadingFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['교정']
 
-## Process11: TranslationDialogueAnalysis의 Filter(Error 예외처리)
-def TranslationDialogueAnalysisFilter(Response, CheckCount):
-    # Error1: JSON 형식 예외 처리
-    try:
-        OutputDic = json.loads(Response)
-    except json.JSONDecodeError:
-        return "TranslationDialogueAnalysis, JSONDecode에서 오류 발생: JSONDecodeError"
-
-    # Error2: 최상위 키 확인
-    if '대화문' not in OutputDic:
-        return "TranslationDialogueAnalysis, JSONKeyError: '대화문' 키가 누락되었습니다"
-
-    # Error3: '대화문' 데이터 타입 검증
-    if not isinstance(OutputDic['대화문'], list):
-        return "TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문'은 리스트 형태여야 합니다"
-
-    for idx, item in enumerate(OutputDic['대화문']):
-        # 각 항목이 딕셔너리인지 확인
-        if not isinstance(item, dict):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}]'는 딕셔너리 형태여야 합니다"
-
-        # 필수 키 확인
-        required_keys = ['번호', '말하는인물', '성별', '연령', '감정', '말하는인물성격특성', '상황', '대화상대', '대화상대대답']
-        missing_keys = [key for key in required_keys if key not in item]
-        if missing_keys:
-            return f"TranslationDialogueAnalysis, JSONKeyError: '대화문[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
-
-        # 데이터 타입 검증
-        if not isinstance(item['번호'], (str, int)):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 번호({item['번호']})'는 문자열 또는 정수여야 합니다"
-        if isinstance(item['번호'], str):
-            DialogueNum = re.sub(r'\D', '', item['번호'])
-            item['번호'] = int(DialogueNum)
-
-        if not isinstance(item['말하는인물'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 말하는인물({item['말하는인물']})'은 문자열이어야 합니다"
-
-        if item['성별'] not in ['남', '여']:
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 성별({item['성별']})'은 '남' 또는 '여' 중 하나여야 합니다"
-
-        if item['연령'] not in ['유년', '청소년', '청년', '중년', '장년', '노년']:
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 연령({item['연령']})'은 유효한 연령값이 아닙니다"
-
-        if item['감정'] not in ['중립', '즐거움', '화남', '슬픔', '침착', '침착함']:
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 감정({item['감정']})'은 유효한 감정값이 아닙니다"
-
-        if not isinstance(item['말하는인물성격특성'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 말하는인물성격특성({item['말하는인물성격특성']})'은 문자열이어야 합니다"
-
-        if not isinstance(item['상황'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 상황({item['상황']})'은 문자열이어야 합니다"
-
-        if not isinstance(item['대화상대'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 대화상대({item['대화상대']})'은 문자열이어야 합니다"
-
-        if not isinstance(item['대화상대대답'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문[{idx}] > 대답({item['대화상대대답']})'은 문자열이어야 합니다"
-    
-    # Error4: '대화문' 개수 검증
-    if len(OutputDic['대화문']) != CheckCount:
-        return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화문' 데이터 수가 ((마킹대화문: {CheckCount})) ((분석된대화문: {len(OutputDic['대화문'])})) 다릅니다"
-
-    # 모든 조건을 만족하면 JSON 반환
-    return OutputDic['대화문']
-
-## Process12: TranslationDialogueEditing의 Filter(Error 예외처리)
+## Process11: TranslationDialogueEditing의 Filter(Error 예외처리)
 def TranslationDialogueEditingFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
@@ -1793,79 +1748,131 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
         return "TranslationDialogueEditing, JSONDecode에서 오류 발생: JSONDecodeError"
 
     # Error2: 최상위 키 확인
-    if '대화문편집' not in OutputDic:
-        return "TranslationDialogueEditing, JSONKeyError: '대화문편집' 키가 누락되었습니다"
+    if '대화내용' not in OutputDic:
+        return "TranslationDialogueEditing, JSONKeyError: '대화내용' 키가 누락되었습니다"
 
-    # Error3: '대화문편집' 데이터 타입 검증
-    if not isinstance(OutputDic['대화문편집'], list):
-        return "TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집'은 리스트 형태여야 합니다"
+    # Error3: '대화내용' 데이터 타입 검증
+    if not isinstance(OutputDic['대화내용'], list):
+        return "TranslationDialogueEditing, JSON에서 오류 발생: '대화내용'은 리스트 형태여야 합니다"
 
-    for idx, item in enumerate(OutputDic['대화문편집']):
+    for idx, item in enumerate(OutputDic['대화내용']):
         # 각 항목이 딕셔너리인지 확인
         if not isinstance(item, dict):
-            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}]'는 딕셔너리 형태여야 합니다"
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}]'는 딕셔너리 형태여야 합니다"
 
         # 필수 키 확인
-        required_keys = ['번호', '편집된대화문', '이유']
+        required_keys = ['번호', '인물', '인물특징', '대화상황', '편집대화내용', '편집이유']
         missing_keys = [key for key in required_keys if key not in item]
         if missing_keys:
-            return f"TranslationDialogueEditing, JSONKeyError: '대화문편집[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
+            return f"TranslationDialogueEditing, JSONKeyError: '대화내용[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
         # 데이터 타입 검증
         if not isinstance(item['번호'], str):
-            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 번호'는 문자열이어야 합니다"
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 번호'는 문자열이어야 합니다"
 
-        if not isinstance(item['편집된대화문'], str):
-            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 편집된대화문'은 문자열이어야 합니다"
+        if not isinstance(item['인물'], str):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 인물'은 문자열이어야 합니다"
 
-        if not isinstance(item['이유'], str):
-            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 이유'는 문자열이어야 합니다"
+        if not isinstance(item['인물특징'], str):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 인물특징'은 문자열이어야 합니다"
 
+        if not isinstance(item['대화상황'], str):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 대화상황'은 문자열이어야 합니다"
+
+        if not isinstance(item['편집대화내용'], str):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 편집대화내용'은 문자열이어야 합니다"
+
+        if not isinstance(item['편집이유'], str):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 편집이유'는 문자열이어야 합니다"
+    # Error3: '대화내용' 리스트 개수 확인
+    if len(OutputDic['대화내용']) != CheckCount:
+        return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용' 데이터 수가 ((기존대화: {CheckCount})) ((편집대화: {len(OutputDic['대화내용'])})) 다릅니다"
+        
     # 모든 조건을 만족하면 JSON 반환
-    return OutputDic['대화문편집']
+    return OutputDic['대화내용']
 
-## Process13: TranslationDialoguePostprocessing의 Filter(Error 예외처리)
-def TranslationDialoguePostprocessingFilter(Response, CheckCount):
-    # Error1: JSON 형식 예외 처리
-    try:
-        OutputDic = json.loads(Response)
-    except json.JSONDecodeError:
-        return "TranslationDialoguePostprocessing, JSONDecode에서 오류 발생: JSONDecodeError"
+# ## Process12: TranslationDialogueEditing의 Filter(Error 예외처리)
+# def TranslationDialogueEditingFilter(Response, CheckCount):
+#     # Error1: JSON 형식 예외 처리
+#     try:
+#         OutputDic = json.loads(Response)
+#     except json.JSONDecodeError:
+#         return "TranslationDialogueEditing, JSONDecode에서 오류 발생: JSONDecodeError"
 
-    # Error2: 최상위 키 확인
-    if '대화문구수정' not in OutputDic:
-        return "TranslationDialoguePostprocessing, JSONKeyError: '대화문구수정' 키가 누락되었습니다"
+#     # Error2: 최상위 키 확인
+#     if '대화문편집' not in OutputDic:
+#         return "TranslationDialogueEditing, JSONKeyError: '대화문편집' 키가 누락되었습니다"
 
-    # Error3: '대화문구수정' 데이터 타입 검증
-    if not isinstance(OutputDic['대화문구수정'], list):
-        return "TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정'은 리스트 형태여야 합니다"
+#     # Error3: '대화문편집' 데이터 타입 검증
+#     if not isinstance(OutputDic['대화문편집'], list):
+#         return "TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집'은 리스트 형태여야 합니다"
 
-    for idx, item in enumerate(OutputDic['대화문구수정']):
-        # 각 항목이 딕셔너리인지 확인
-        if not isinstance(item, dict):
-            return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}]'는 딕셔너리 형태여야 합니다"
+#     for idx, item in enumerate(OutputDic['대화문편집']):
+#         # 각 항목이 딕셔너리인지 확인
+#         if not isinstance(item, dict):
+#             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}]'는 딕셔너리 형태여야 합니다"
 
-        # 필수 키 확인
-        required_keys = ['번호', '이름', '대화문구', '수정이유']
-        missing_keys = [key for key in required_keys if key not in item]
-        if missing_keys:
-            return f"TranslationDialoguePostprocessing, JSONKeyError: '대화문구수정[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
+#         # 필수 키 확인
+#         required_keys = ['번호', '편집된대화문', '이유']
+#         missing_keys = [key for key in required_keys if key not in item]
+#         if missing_keys:
+#             return f"TranslationDialogueEditing, JSONKeyError: '대화문편집[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
-        # 데이터 타입 검증
-        if not isinstance(item['번호'], str):
-            return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 번호'는 문자열이어야 합니다"
+#         # 데이터 타입 검증
+#         if not isinstance(item['번호'], str):
+#             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 번호'는 문자열이어야 합니다"
 
-        if not isinstance(item['이름'], str):
-            return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 이름'은 문자열이어야 합니다"
+#         if not isinstance(item['편집된대화문'], str):
+#             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 편집된대화문'은 문자열이어야 합니다"
 
-        if not isinstance(item['대화문구'], str):
-            return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 대화문구'는 문자열이어야 합니다"
+#         if not isinstance(item['이유'], str):
+#             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 이유'는 문자열이어야 합니다"
 
-        if not isinstance(item['수정이유'], str):
-            return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 수정이유'는 문자열이어야 합니다"
+#     # 모든 조건을 만족하면 JSON 반환
+#     return OutputDic['대화문편집']
 
-    # 모든 조건을 만족하면 JSON 반환
-    return OutputDic['대화문구수정']
+# ## Process13: TranslationDialoguePostprocessing의 Filter(Error 예외처리)
+# def TranslationDialoguePostprocessingFilter(Response, CheckCount):
+#     # Error1: JSON 형식 예외 처리
+#     try:
+#         OutputDic = json.loads(Response)
+#     except json.JSONDecodeError:
+#         return "TranslationDialoguePostprocessing, JSONDecode에서 오류 발생: JSONDecodeError"
+
+#     # Error2: 최상위 키 확인
+#     if '대화문구수정' not in OutputDic:
+#         return "TranslationDialoguePostprocessing, JSONKeyError: '대화문구수정' 키가 누락되었습니다"
+
+#     # Error3: '대화문구수정' 데이터 타입 검증
+#     if not isinstance(OutputDic['대화문구수정'], list):
+#         return "TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정'은 리스트 형태여야 합니다"
+
+#     for idx, item in enumerate(OutputDic['대화문구수정']):
+#         # 각 항목이 딕셔너리인지 확인
+#         if not isinstance(item, dict):
+#             return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}]'는 딕셔너리 형태여야 합니다"
+
+#         # 필수 키 확인
+#         required_keys = ['번호', '이름', '대화문구', '수정이유']
+#         missing_keys = [key for key in required_keys if key not in item]
+#         if missing_keys:
+#             return f"TranslationDialoguePostprocessing, JSONKeyError: '대화문구수정[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
+
+#         # 데이터 타입 검증
+#         if not isinstance(item['번호'], str):
+#             return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 번호'는 문자열이어야 합니다"
+
+#         if not isinstance(item['이름'], str):
+#             return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 이름'은 문자열이어야 합니다"
+
+#         if not isinstance(item['대화문구'], str):
+#             return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 대화문구'는 문자열이어야 합니다"
+
+#         if not isinstance(item['수정이유'], str):
+#             return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 수정이유'는 문자열이어야 합니다"
+
+#     # 모든 조건을 만족하면 JSON 반환
+#     return OutputDic['대화문구수정']
 
 #######################
 ##### Process 응답 #####
@@ -2397,74 +2404,57 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
     with open(ProjectDataFrameTranslationProofreadingPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TranslationProofreadingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
-## Process11: TranslationDialogueAnalysis DataFrame 저장
-def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, InputCount, BodyId, TotalInputCount):
-    ## 대화 마커 수정 함수, 이상한 에러 방지!!
-    def FixDialogueMarkBody(DialogueMarkBody, TranslationDialogueAnalysisResponse):
-        # 대화 응답 데이터를 번호를 키로 하는 딕셔너리로 변환 (빠른 조회를 위함)
-        DialogueMap = {item['번호']: item for item in TranslationDialogueAnalysisResponse}
-        # 수정된 결과를 저장할 변수
-        NewDialogueMarkBody = DialogueMarkBody
-        # DialogueMarkBody에서 대화 마커 패턴 찾기
-        MarkPattern = r'\{(\d+) ([^:]+):'
-        # 모든 패턴 찾기
-        Matches = list(re.finditer(MarkPattern, DialogueMarkBody))
-        # 뒤에서부터 처리 (앞에서부터 치환하면 위치가 바뀔 수 있음)
-        for Match in reversed(Matches):
-            Number = int(Match.group(1))  # 대화 번호
-            CurrentCharacter = Match.group(2)  # 현재 캐릭터 이름
-            
-            # 해당 번호에 맞는 올바른 캐릭터 찾기
-            if Number in DialogueMap:
-                CorrectCharacter = DialogueMap[Number]['말하는인물']
-                # 캐릭터 이름이 다르면 수정
-                if CurrentCharacter != CorrectCharacter:
-                    print(f"불일치 발견: 번호 {Number}, 현재 '{CurrentCharacter}', 정확한 값 '{CorrectCharacter}'")
-                    # 대체할 텍스트 구성
-                    OldMark = '{' + f"{Number} {CurrentCharacter}:"
-                    NewMark = '{' + f"{Number} {CorrectCharacter}:"
-                    # 치환 (한 번만)
-                    NewDialogueMarkBody = NewDialogueMarkBody.replace(OldMark, NewMark, 1)
-        
-        return NewDialogueMarkBody
-    
-    ## TranslationDialogueAnalysisFrame 불러오기
-    if os.path.exists(ProjectDataFrameTranslationDialogueAnalysisPath):
-        TranslationDialogueAnalysisFramePath = ProjectDataFrameTranslationDialogueAnalysisPath
+## Process11: TranslationDialogueEditing DataFrame 저장
+def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueEditingPath, MarkBody, TranslationDialogueEditingResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, Body, TotalInputCount):
+    if os.path.exists(ProjectDataFrameTranslationDialogueEditingPath):
+        TranslationDialogueEditingFramePath = ProjectDataFrameTranslationDialogueEditingPath
     else:
-        TranslationDialogueAnalysisFramePath = os.path.join(TranslationDataFramePath, "b532-11_TranslationDialogueAnalysisFrame.json")
-    with open(TranslationDialogueAnalysisFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
-        TranslationDialogueAnalysisFrame = json.load(DataFrameJson)
+        TranslationDialogueEditingFramePath = os.path.join(TranslationDataFramePath, "b532-11_TranslationDialogueEditingFrame.json")
+    with open(TranslationDialogueEditingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        TranslationDialogueEditingFrame = json.load(DataFrameJson)
         
-    ## TranslationDialogueAnalysisFrame 업데이트
-    TranslationDialogueAnalysisFrame[0]['ProjectName'] = ProjectName
-    TranslationDialogueAnalysisFrame[0]['MainLang'] = MainLang.capitalize()
-    TranslationDialogueAnalysisFrame[0]['Translation'] = Translation.capitalize()
-    TranslationDialogueAnalysisFrame[0]['TaskName'] = Process
+    ## TranslationDialogueEditingFrame 업데이트
+    TranslationDialogueEditingFrame[0]['ProjectName'] = ProjectName
+    TranslationDialogueEditingFrame[0]['MainLang'] = MainLang.capitalize()
+    TranslationDialogueEditingFrame[0]['Translation'] = Translation.capitalize()
+    TranslationDialogueEditingFrame[0]['TaskName'] = Process
     
-    ## TranslationDialogueAnalysisFrame 첫번째 데이터 프레임 복사
-    TranslationDialogueAnalysis = TranslationDialogueAnalysisFrame[1][0].copy()
-    TranslationDialogueAnalysis['BodyId'] = BodyId
+    ## TranslationDialogueEditingFrame 첫번째 데이터 프레임 복사
+    TranslationDialogueEditing = TranslationDialogueEditingFrame[1][0].copy()
+    TranslationDialogueEditing['IndexId'] = IndexId
+    TranslationDialogueEditing['IndexTag'] = IndexTag
+    TranslationDialogueEditing['Index'] = Index
+    TranslationDialogueEditing['BodyId'] = BodyId
     
-    # DialogueMarkBody에서 {n대화: ...} -> {n이름: ...}으로 변경
-    DialogueMarkBody = MarkBody
-    for TranslationDialogue in TranslationDialogueAnalysisResponse:
-        DialogueMarkBody = DialogueMarkBody.replace("{" + f"{TranslationDialogue['번호']} 대화:", "{" + f"{TranslationDialogue['번호']} {TranslationDialogue['말하는인물']}:")
-    DialogueMarkBody = FixDialogueMarkBody(DialogueMarkBody, TranslationDialogueAnalysisResponse)
-    TranslationDialogueAnalysis['DialogueMarkBody'] = DialogueMarkBody
-    TranslationDialogueAnalysis['Dialogue'] = TranslationDialogueAnalysisResponse
+    # DialogueBody에서 {n대화: 대화내용} -> 편집대화내용으로 변경
+    DialogueBody = MarkBody
+    for TranslationDialogue in TranslationDialogueEditingResponse:
+        TranslationDialogueId = TranslationDialogue['번호']
+        TranslationEditedDialogueText = TranslationDialogue['편집대화내용']
+        # 원본 패턴을 찾아서 편집된 내용으로 대체
+        DialoguePattern = f"{{{TranslationDialogueId}대화: (.*)}}"
+        # 원본 대화 내용 추출 후 할당
+        DialogueMatch = re.search(DialoguePattern, DialogueBody)
+        TranslationOrginDialogueText = DialogueMatch.group(1) if DialogueMatch else ""
+        Body = Body.replace(TranslationOrginDialogueText, TranslationEditedDialogueText)
+        # 편집된 내용으로 대체
+        DialogueBody = re.sub(DialoguePattern, TranslationEditedDialogueText, DialogueBody)
+    
+    TranslationDialogueEditing['Body'] = Body
+    TranslationDialogueEditing['DialogueBody'] = DialogueBody
+    TranslationDialogueEditing['EditedDialogue'] = TranslationDialogueEditingResponse
 
-    ## TranslationDialogueAnalysisFrame 데이터 프레임 업데이트
-    TranslationDialogueAnalysisFrame[1].append(TranslationDialogueAnalysis)
+    ## TranslationDialogueEditingFrame 데이터 프레임 업데이트
+    TranslationDialogueEditingFrame[1].append(TranslationDialogueEditing)
         
-    ## TranslationDialogueAnalysisFrame ProcessCount 및 Completion 업데이트
-    TranslationDialogueAnalysisFrame[0]['InputCount'] = InputCount
+    ## TranslationDialogueEditingFrame ProcessCount 및 Completion 업데이트
+    TranslationDialogueEditingFrame[0]['InputCount'] = InputCount
     if InputCount == TotalInputCount:
-        TranslationDialogueAnalysisFrame[0]['Completion'] = 'Yes'
+        TranslationDialogueEditingFrame[0]['Completion'] = 'Yes'
         
-    ## TranslationDialogueAnalysisFrame 저장
-    with open(ProjectDataFrameTranslationDialogueAnalysisPath, 'w', encoding = 'utf-8') as DataFrameJson:
-        json.dump(TranslationDialogueAnalysisFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+    ## TranslationDialogueEditingFrame 저장
+    with open(ProjectDataFrameTranslationDialogueEditingPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(TranslationDialogueEditingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ## Process14: AfterTranslationBodySummaryProcess DataFrame 저장
 def AfterTranslationBodySummaryProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameAfterTranslationBodySummaryPath, AfterTranslationBodySummaryResponse, Process, InputCount, IndexId, TotalInputCount):
@@ -3407,22 +3397,22 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
     #################################################
-    ### Process11: TranslationDialogueAnalysis 생성 ##
+    ### Process11: TranslationDialogueEditing 생성 ##
     #################################################
     if BookGenre == 'Fiction':
 
         ## Process 설정
         ProcessNumber = '11'
-        Process = "TranslationDialogueAnalysis"
+        Process = "TranslationDialogueEditing"
 
-        ## TranslationDialogueAnalysis 경로 생성
-        ProjectDataFrameTranslationDialogueAnalysisPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+        ## TranslationDialogueEditing 경로 생성
+        ProjectDataFrameTranslationDialogueEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
         ## Process Count 계산 및 Check
         CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-        InputList = TranslationDialogueAnalysisInputList(TranslationEditPath, "TranslationProofreading")
+        InputList = TranslationDialogueEditingInputList(TranslationEditPath, "TranslationProofreading")
         TotalInputCount = len(InputList) # 인풋의 전체 카운트
-        InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueAnalysisPath)
+        InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueEditingPath)
         EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
         # print(f"InputCount: {InputCount}")
         # print(f"EditCheck: {EditCheck}")
@@ -3433,27 +3423,30 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 for i in range(InputCount - 1, TotalInputCount):
                     inputCount = InputList[i]['Id']
                     IndexId = InputList[i]['IndexId']
+                    IndexTag = InputList[i]['IndexTag']
+                    Index = InputList[i]['Index']
                     BodyId = InputList[i]['BodyId']
+                    Body = InputList[i]['Body']
                     MarkBody = InputList[i]['MarkBody']
                     CheckCount = InputList[i]['DialogueCount']
                     ## Body내에 대화문이 있는지 체크
                     if CheckCount > 0:
                         ## Input 생성
-                        Input1 = TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath)
+                        Input1 = TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditingPath)
                         Input2 = InputList[i]['Input']
                         Input = Input1 + Input2
-                        MemoryCounter = f'\n※ 참고! <대화문정리.json>로 완성될 대화문은 <작업: 현재도서내용>의 {{n대화: ...}} {CheckCount}개 입니다.'
+                        MemoryCounter = f'\n※ 참고! <대화내용편집.json>으로 완성될 대화문은 <작업: 대화중심편집내용>의 {{n대화: 대화내용}} {CheckCount}개 입니다.'
 
                         ## Response 생성
-                        TranslationDialogueAnalysisResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueAnalysisFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
+                        TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
                     else:
-                        TranslationDialogueAnalysisResponse = []
+                        TranslationDialogueEditingResponse = []
 
                     ## DataFrame 저장
-                    TranslationDialogueAnalysisProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, inputCount, BodyId, TotalInputCount)
+                    TranslationDialogueEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueEditingPath, MarkBody, TranslationDialogueEditingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, Body, TotalInputCount)
                     
             ## Edit 저장
-            ProcessEditSave(ProjectDataFrameTranslationDialogueAnalysisPath, TranslationEditPath, Process, EditMode)
+            ProcessEditSave(ProjectDataFrameTranslationDialogueEditingPath, TranslationEditPath, Process, EditMode)
             ## EditText 저장
             ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
             if EditMode == "Manual":

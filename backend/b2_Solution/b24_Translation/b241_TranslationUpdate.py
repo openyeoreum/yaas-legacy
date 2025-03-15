@@ -1250,7 +1250,7 @@ def TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditin
             # 결과를 저장할 리스트
             CollectedContents = []
             Count = 0
-            MaxItems = 7
+            MaxItems = 6
             
             # 데이터의 인덱스 1의 리스트를 역순으로 순회
             for i in range(len(TranslationDialogue)-1, -1, -1):
@@ -2479,7 +2479,7 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
         # Body에서 패턴 전체를 편집된 내용으로 대체
         Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f'"{TranslationEditedDialogueText}"')
         # DialogueBody에서도 패턴 대체
-        DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), TranslationEditedDialogueText, DialogueBody)
+        DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), f'"{TranslationEditedDialogueText}"', DialogueBody)
     
     TranslationDialogueEditing['Body'] = Body
     TranslationDialogueEditing['DialogueBody'] = DialogueBody

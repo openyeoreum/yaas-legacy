@@ -3086,6 +3086,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                             if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                 pass
+                            else:
+                                continue
                         elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                             BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                             pass
@@ -3194,6 +3196,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                             if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                 pass
+                            else:
+                                continue
                         elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                             BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                             pass
@@ -3303,6 +3307,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                                 if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                     pass
+                                else:
+                                    continue
                             elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                                 BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                                 pass

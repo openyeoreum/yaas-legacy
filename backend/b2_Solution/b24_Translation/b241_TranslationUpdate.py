@@ -1072,8 +1072,8 @@ def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
 def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
     def CountDialogues(Pattern, Body):
         # 텍스트에서 대화문 패턴 찾기
-        matches = re.findall(Pattern, Body)
-        return len(matches)
+        DialogueMatches = re.findall(Pattern, Body)
+        return len(DialogueMatches)
     
     def MarkDialogues(Pattern, Body):
         # 대화문이 없으면 빈 문자열 반환
@@ -1081,100 +1081,100 @@ def TranslationDialogueAnalysisInputList(TranslationEditPath, BeforeProcess):
             return ''
         
         # 모든 대화문 위치 찾기
-        matches = list(re.finditer(Pattern, Body))
-        
+        DialogueMatches = list(re.finditer(Pattern, Body))
+
         # 결과를 저장할 리스트
-        result_segments = []
+        DialogueSegments = []
         DialogueCounter = 1
         
         # 연속된 대화 그룹 식별
         i = 0
-        while i < len(matches):
+        while i < len(DialogueMatches):
             # 현재 대화 위치
-            curr_match = matches[i]
-            start_pos = curr_match.start()
-            end_pos = curr_match.end()
+            CurrentMatch = DialogueMatches[i]
+            StartPosition = CurrentMatch.start()
+            EndPosition = CurrentMatch.end()
             
             # 현재 대화 그룹의 마지막 위치
-            group_end_pos = end_pos
+            GroupEndPosition = EndPosition
             
             # 대화 그룹 및 원본 텍스트 범위 저장
-            group_dialogues = []
-            original_text = Body[start_pos:end_pos]
+            GroupDialogues = []
+            OriginalDialogueText = Body[StartPosition:EndPosition]
             
             # 첫 번째 대화 추가
-            dialogue_text = curr_match.group(2) if curr_match.group(2) is not None else curr_match.group(3)
-            group_dialogues.append((DialogueCounter, dialogue_text, original_text))
+            DialogueText = CurrentMatch.group(2) if CurrentMatch.group(2) is not None else CurrentMatch.group(3)
+            GroupDialogues.append((DialogueCounter, DialogueText, OriginalDialogueText))
             DialogueCounter += 1
             
             # 인접한 대화 찾기 (50자 이내)
             j = i + 1
-            while j < len(matches) and matches[j].start() - group_end_pos < 50:
-                next_match = matches[j]
-                next_dialogue = next_match.group(2) if next_match.group(2) is not None else next_match.group(3)
-                next_original = Body[matches[j].start():matches[j].end()]
+            while j < len(DialogueMatches) and DialogueMatches[j].start() - GroupEndPosition < 50:
+                NextMatch = DialogueMatches[j]
+                NextDialogue = NextMatch.group(2) if NextMatch.group(2) is not None else NextMatch.group(3)
+                NextOriginal = Body[DialogueMatches[j].start():DialogueMatches[j].end()]
                 
                 # 대화 사이 텍스트 보존
-                between_text = Body[group_end_pos:matches[j].start()]
-                original_text += between_text + next_original
+                BetweenText = Body[GroupEndPosition:DialogueMatches[j].start()]
+                OriginalDialogueText += BetweenText + NextOriginal
                 
                 # 대화 정보 저장
-                group_dialogues.append((DialogueCounter, next_dialogue, next_original))
+                GroupDialogues.append((DialogueCounter, NextDialogue, NextOriginal))
                 DialogueCounter += 1
                 
                 # 그룹 끝 위치 업데이트
-                group_end_pos = matches[j].end()
+                GroupEndPosition = DialogueMatches[j].end()
                 j += 1
             
             # 대화 그룹 전체 텍스트 (원본)
-            dialogue_block = Body[start_pos:group_end_pos]
+            DialogueBlock = Body[StartPosition:GroupEndPosition]
             
             # 앞쪽 텍스트
-            text_before = Body[:start_pos].strip()
+            TextBefore = Body[:StartPosition].strip()
             # 뒤쪽 텍스트
-            text_after = Body[group_end_pos:].strip()
+            TextAfter = Body[GroupEndPosition:].strip()
             
             # 앞쪽 최대 2문장 추출 (마침표, 느낌표, 물음표로 구분)
-            sentences_before = re.findall(r'[^.!?]*[.!?](?:\s|$)', text_before)
-            if not sentences_before and text_before:
-                sentences_before = [text_before]
+            SentencesBefore = re.findall(r'[^.!?]*[.!?](?:\s|$)', TextBefore)
+            if not SentencesBefore and TextBefore:
+                SentencesBefore = [TextBefore]
             
-            sentences_before = [s.strip() for s in sentences_before if s.strip()]
+            SentencesBefore = [s.strip() for s in SentencesBefore if s.strip()]
             
-            if len(sentences_before) > 2:
-                context_before = ['...'] + sentences_before[-2:]
+            if len(SentencesBefore) > 2:
+                ContextBefore = ['...'] + SentencesBefore[-2:]
             else:
-                context_before = sentences_before
+                ContextBefore = SentencesBefore
             
             # 뒤쪽 최대 2문장 추출
-            sentences_after = re.findall(r'[^.!?]*[.!?](?:\s|$)', text_after)
-            if not sentences_after and text_after:
-                sentences_after = [text_after]
+            SentencesAfter = re.findall(r'[^.!?]*[.!?](?:\s|$)', TextAfter)
+            if not SentencesAfter and TextAfter:
+                SentencesAfter = [TextAfter]
             
-            sentences_after = [s.strip() for s in sentences_after if s.strip()]
+            SentencesAfter = [s.strip() for s in SentencesAfter if s.strip()]
             
-            if len(sentences_after) > 2:
-                context_after = sentences_after[:2] + ['...']
+            if len(SentencesAfter) > 2:
+                ContextAfter = SentencesAfter[:2] + ['...']
             else:
-                context_after = sentences_after
+                ContextAfter = SentencesAfter
             
             # 대화문 번호 매기기 및 마킹
-            marked_block = dialogue_block
-            for counter, dialog, original in group_dialogues:
+            MarkedBlock = DialogueBlock
+            for Counter, Dialog, Original in GroupDialogues:
                 # 원본 대화문을 마킹된 형식으로 교체
-                marked_block = marked_block.replace(original, f"{{{counter} 대화: {dialog}}}", 1)
+                MarkedBlock = MarkedBlock.replace(Original, f"{{{Counter} 대화: {Dialog}}}", 1)
             
             # 최종 결과 조합
-            result = ' '.join(context_before) + ' ' + marked_block + ' ' + ' '.join(context_after)
-            result = result.strip()
+            Result = ' '.join(ContextBefore) + ' ' + MarkedBlock + ' ' + ' '.join(ContextAfter)
+            Result = Result.strip()
             
-            result_segments.append(result)
+            DialogueSegments.append(Result)
             
             # 다음 그룹으로 이동
             i = j
-            
-            MarkBody = ' '.join(result_segments)
-            MarkBody = MarkBody.replace('... ...', '...')
+        
+        MarkBody = ' '.join(DialogueSegments)
+        MarkBody = MarkBody.replace('... ...', '...')
         
         return MarkBody
     

@@ -1800,7 +1800,7 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}]'는 딕셔너리 형태여야 합니다"
 
         # 필수 키 확인
-        required_keys = ['번호', '인물', '인물특징', '대화상황', '편집대화내용', '편집이유']
+        required_keys = ['번호', '대화문구분', '인물', '인물특징', '대화상황', '편집대화내용', '편집이유']
         missing_keys = [key for key in required_keys if key not in item]
         if missing_keys:
             return f"TranslationDialogueEditing, JSONKeyError: '대화내용[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
@@ -1808,6 +1808,9 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
         # 데이터 타입 검증
         if not isinstance(item['번호'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 번호'는 문자열이어야 합니다"
+
+        if item['대화문구분'] not in ['맞음', '아님']:
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 대화문구분'은 '맞음' 또는 '아님' 중 하나여야 합니다"
 
         if not isinstance(item['인물'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 인물'은 문자열이어야 합니다"
@@ -1823,7 +1826,8 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
 
         if not isinstance(item['편집이유'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 편집이유'는 문자열이어야 합니다"
-    # Error3: '대화내용' 리스트 개수 확인
+
+    # Error4: '대화내용' 리스트 개수 확인
     if len(OutputDic['대화내용']) != CheckCount:
         return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용' 데이터 수가 ((기존대화: {CheckCount})) ((편집대화: {len(OutputDic['대화내용'])})) 다릅니다"
         
@@ -2469,17 +2473,24 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
     DialogueBody = MarkBody
     for TranslationDialogue in TranslationDialogueEditingResponse:
         TranslationDialogueId = TranslationDialogue['번호']
+        TranslationDialogueName = TranslationDialogue['인물']
         TranslationEditedDialogueText = TranslationDialogue['편집대화내용']
         # 원본 패턴을 찾아서 편집된 내용으로 대체 (비탐욕적 매칭 사용)
         DialoguePattern = f"{{{TranslationDialogueId} 대화: ([^}}]*)}}"
         # 원본 대화 내용 추출 후 할당
         DialogueMatch = re.search(DialoguePattern, DialogueBody)
         TranslationOrginDialogueText = DialogueMatch.group(1)
-        print(f'\n{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}} ->>> "{TranslationEditedDialogueText}"\n')
-        # Body에서 패턴 전체를 편집된 내용으로 대체
-        Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f'"{TranslationEditedDialogueText}"')
-        # DialogueBody에서도 패턴 대체
-        DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), f'"{TranslationEditedDialogueText}"', DialogueBody)
+        if '맞음' in TranslationDialogue['대화문구분']:
+            print(f'\n{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}} ->>> "{TranslationEditedDialogueText}"\n')
+            # Body에서 패턴 전체를 편집된 내용으로 대체
+            Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f'"{TranslationEditedDialogueText}"')
+            # DialogueBody에서도 패턴 대체
+            DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), f'{{{TranslationDialogueName}: {TranslationOrginDialogueText}}}', DialogueBody)
+        else:
+            # Body에서 패턴 전체를 본래 내용으로 대체
+            Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f"'{TranslationOrginDialogueText}'")
+            # DialogueBody에서도 패턴 해제
+            DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), f"'{TranslationOrginDialogueText}'", DialogueBody)
     
     TranslationDialogueEditing['Body'] = Body
     TranslationDialogueEditing['DialogueBody'] = DialogueBody

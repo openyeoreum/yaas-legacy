@@ -3214,7 +3214,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             ErrorCount = 0
             while i < TotalInputCount:
                 if ErrorCount >= 3:
-                    sys.exit(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+                    sys.exit(f"Project: {projectName} | Process: {Process}-BodyTranslationWordCheck {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                 ## Input 생성
                 inputCount = InputList[i]['Id']
                 IndexId = InputList[i]['IndexId']
@@ -3244,7 +3244,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     CheckProcess = "BodyTranslationCheck"
                     LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
                     if not LangCheck:
-                        MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는  {MainLangCode}  , 단 하나의 언어만 사용해서 편집합니다. 이 외의 언어는 일체 작성하지 않습니다.'
+                        MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는  {MainLangCode}  , 단 하나의 언어만 사용해서 전체를 편집합니다. 다른 언어가 존재하면 ({MainLangCode})로 번역도 함께 진행합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                         ErrorCount += 1
                         continue
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
@@ -3333,7 +3333,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ErrorCount = 0
                 while i < TotalInputCount:
                     if ErrorCount >= 3:
-                        sys.exit(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+                        sys.exit(f"Project: {projectName} | Process: {Process}-BodyTranslationWordCheck {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                     ## Input 생성
                     inputCount = InputList[i]['Id']
                     IndexId = InputList[i]['IndexId']
@@ -3363,7 +3363,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         CheckProcess = "BodyTranslationCheck"
                         LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
                         if not LangCheck:
-                            MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는 ({MainLangCode}), 단 하나의 언어만 사용해서 편집합니다. 이 외의 언어는 일체 작성하지 않습니다.'
+                            MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는 ({MainLangCode}), 단 하나의 언어만 사용해서 전체를 편집합니다. 다른 언어가 존재하면 ({MainLangCode})로 번역도 함께 진행합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             ErrorCount += 1
                             continue
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
@@ -3515,7 +3515,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         Input1 = TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditingPath)
                         Input2 = InputList[i]['Input']
                         Input = Input1 + Input2
-                        MemoryCounter = f'\n※ 참고! <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount}개 입니다.'
+                        MemoryCounter = f'\n※ 주의사항: <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount}개 입니다.\n※ 주의사항: 특수한 경우 이외에는 \'현재말의높임법\' 표기에 따라서 이에 맞는 말의 높임법대로 \'편집대화내용\'이 작성되어야 합니다.'
 
                         ## Response 생성
                         TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
@@ -3537,15 +3537,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
-    
-    #######################################################
-    ### Process13: TranslationDialoguePostprocessing 생성 ##
-    #######################################################
-    
-    #################################################
-    ### Process14: AfterTranslationBodySummary 생성 ##
-    #################################################
-    
+        
     ## Process 설정
     ProcessNumber = '14'
     Process = "AfterTranslationBodySummary"

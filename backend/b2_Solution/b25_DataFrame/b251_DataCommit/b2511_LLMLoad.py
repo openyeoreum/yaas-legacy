@@ -536,19 +536,19 @@ def JsonParsingProcess(projectName, email, RawResponse, FilterFunc):
         FilteredResponse = FilterFunc(Response, RawResponse)
         
         if 'JSONDecode에서 오류 발생:' in FilteredResponse:
-            print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/3 | {FilteredResponse}")
+            print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/5 | {FilteredResponse}")
             ErrorCount += 1
-            print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/3 | "
+            print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/5 | "
                 f"오류횟수 {ErrorCount}회, 3초 후 프롬프트 재시도")
             
-            if ErrorCount >= 3:
-                print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/3 | "
+            if ErrorCount >= 5:
+                print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/5 | "
                         f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                 return Response
             time.sleep(10)
             continue
         
-        print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/3 | JSONDecode 완료")
+        print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/5 | JSONDecode 완료")
         return FilteredResponse
 
 ## 프롬프트 실행
@@ -772,7 +772,6 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "backen
 
 ## 프롬프트 실행
 def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
-
     DeepSeekClient = OpenAI(api_key = os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
     if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)

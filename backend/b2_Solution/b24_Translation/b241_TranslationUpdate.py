@@ -1069,7 +1069,6 @@ def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
     return AddInput
 
 ## Process11: TranslationDialogueEditing의 InputList
-## Process11: TranslationDialogueEditing의 InputList
 def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
     def CountDialogues(Pattern, Body):
         # 텍스트에서 대화문 패턴 찾기
@@ -2496,7 +2495,7 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
         DialogueMatch = re.search(DialoguePattern, DialogueBody)
         TranslationOrginDialogueText = DialogueMatch.group(1)
         if '맞음' in TranslationDialogue['대화문구분']:
-            print(f'\n{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}} ->>> "{TranslationEditedDialogueText}"\n')
+            print(f'\n{TranslationDialogueId}. 대화 변화: {{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}} ->>> {{{TranslationDialogueName}({TranslationDialogueTone}): {TranslationEditedDialogueText}}}\n')
             # Body에서 패턴 전체를 편집된 내용으로 대체
             Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f'"{TranslationEditedDialogueText}"')
             # DialogueBody에서도 패턴 대체

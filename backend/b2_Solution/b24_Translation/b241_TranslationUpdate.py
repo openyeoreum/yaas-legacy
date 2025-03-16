@@ -1800,12 +1800,12 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}]'는 딕셔너리 형태여야 합니다"
 
         # 필수 키 확인
-        required_keys = ['번호', '대화문구분', '인물', '인물특징', '대화상황', '편집대화내용', '편집이유']
+        required_keys = ['번호', '대화문구분', '인물', '인물특징', '상대인물', '말의높임법', '대화상황', '편집대화내용', '편집이유']
         missing_keys = [key for key in required_keys if key not in item]
         if missing_keys:
             return f"TranslationDialogueEditing, JSONKeyError: '대화내용[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
-        # 데이터 타입 검증
+        # 데이터 타입 및 유효한 값 검증
         if not isinstance(item['번호'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 번호'는 문자열이어야 합니다"
 
@@ -1817,6 +1817,12 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
 
         if not isinstance(item['인물특징'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 인물특징'은 문자열이어야 합니다"
+
+        if not isinstance(item['상대인물'], str):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 상대인물'은 문자열이어야 합니다"
+
+        if item['말의높임법'] not in ['존댓말', '반말', '']:
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 말의높임법'은 '존댓말' 또는 '반말' 중 하나여야 합니다"
 
         if not isinstance(item['대화상황'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 대화상황'은 문자열이어야 합니다"
@@ -1944,8 +1950,7 @@ def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCo
                 return "ErrorPass"
             
             if ErrorCount >= 10:
-                sys.exit(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
-                        f"오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+                sys.exit(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
             time.sleep(10)
             continue
         
@@ -2474,6 +2479,7 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
     for TranslationDialogue in TranslationDialogueEditingResponse:
         TranslationDialogueId = TranslationDialogue['번호']
         TranslationDialogueName = TranslationDialogue['인물']
+        TranslationDialogueTone = TranslationDialogue['말의높임법']
         TranslationEditedDialogueText = TranslationDialogue['편집대화내용']
         # 원본 패턴을 찾아서 편집된 내용으로 대체 (비탐욕적 매칭 사용)
         DialoguePattern = f"{{{TranslationDialogueId} 대화: ([^}}]*)}}"
@@ -2485,7 +2491,7 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
             # Body에서 패턴 전체를 편집된 내용으로 대체
             Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f'"{TranslationEditedDialogueText}"')
             # DialogueBody에서도 패턴 대체
-            DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), f'{{{TranslationDialogueName}: {TranslationOrginDialogueText}}}', DialogueBody)
+            DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), f'{{{TranslationDialogueName}({TranslationDialogueTone}): {TranslationOrginDialogueText}}}', DialogueBody)
         else:
             # Body에서 패턴 전체를 본래 내용으로 대체
             Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f"'{TranslationOrginDialogueText}'")
@@ -3199,7 +3205,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     if not EditCheck:
         if DataFrameCompletion == 'No':
             i = InputCount - 1
+            ErrorCount = 0
             while i < TotalInputCount:
+                if ErrorCount >= 3:
+                    sys.exit(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                 ## Input 생성
                 inputCount = InputList[i]['Id']
                 IndexId = InputList[i]['IndexId']
@@ -3230,25 +3239,30 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
                     if not LangCheck:
                         MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는  {MainLangCode}  , 단 하나의 언어만 사용해서 편집합니다. 이 외의 언어는 일체 작성하지 않습니다.'
+                        ErrorCount += 1
                         continue
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
+                        ErrorCount += 1
                         continue
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                             if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                 pass
                             else:
+                                ErrorCount += 1
                                 continue
                         elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                             BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                             pass
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 편집해주세요.'
+                            ErrorCount += 1
                             continue
                         # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 편집해주세요.'
+                            ErrorCount += 1
                             continue
 
                 if inputCount <= 4:
@@ -3276,9 +3290,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
-    ##########################################
-    ### Process9: TranslationRefinement 생성 ##
-    ##########################################
+    ###########################################
+    ### Process9: TranslationRefinement 생성 ###
+    ###########################################
     if TranslationQuality == 'Refinement':
 
         ## Process 설정
@@ -3310,7 +3324,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         if not EditCheck:
             if DataFrameCompletion == 'No':
                 i = InputCount - 1
+                ErrorCount = 0
                 while i < TotalInputCount:
+                    if ErrorCount >= 3:
+                        sys.exit(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                     ## Input 생성
                     inputCount = InputList[i]['Id']
                     IndexId = InputList[i]['IndexId']
@@ -3341,25 +3358,30 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
                         if not LangCheck:
                             MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는 ({MainLangCode}), 단 하나의 언어만 사용해서 편집합니다. 이 외의 언어는 일체 작성하지 않습니다.'
+                            ErrorCount += 1
                             continue
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                         if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
+                            ErrorCount += 1
                             continue
                         if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                             if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                                 if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                     pass
                                 else:
+                                    ErrorCount += 1
                                     continue
                             elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                                 BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                                 pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 격식체(습니다. 입니다. 합니다. ... 등)로 편집해주세요.'
+                                ErrorCount += 1
                                 continue
                             # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 비격식체(이다. 한다. 있다. ... 등)로 편집해주세요.'
+                                ErrorCount += 1
                                 continue
 
                     if inputCount <= 4:
@@ -3490,7 +3512,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryCounter = f'\n※ 참고! <대화내용편집.json>으로 완성될 대화문은 <작업: 대화중심편집내용>의 {{n대화: 대화내용}} {CheckCount}개 입니다.'
 
                         ## Response 생성
-                        TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
+                        TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
                     else:
                         TranslationDialogueEditingResponse = []
 

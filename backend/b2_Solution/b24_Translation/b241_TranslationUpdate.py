@@ -1800,7 +1800,10 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}]'는 딕셔너리 형태여야 합니다"
 
         # 필수 키 확인
-        required_keys = ['번호', '대화문구분', '인물', '인물특징', '상대인물', '말의높임법', '대화상황', '편집대화내용', '편집이유']
+        required_keys = [
+            '번호', '대화문구분', '인물', '인물특징', '상대인물', 
+            '이전내용에서말의높임법', '현재말의높임법', '대화상황', '편집대화내용', '편집이유'
+        ]
         missing_keys = [key for key in required_keys if key not in item]
         if missing_keys:
             return f"TranslationDialogueEditing, JSONKeyError: '대화내용[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
@@ -1821,8 +1824,11 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
         if not isinstance(item['상대인물'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 상대인물'은 문자열이어야 합니다"
 
-        if item['말의높임법'] not in ['존댓말', '반말', '']:
-            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 말의높임법'은 '존댓말' 또는 '반말' 중 하나여야 합니다"
+        if item['이전내용에서말의높임법'] not in ['존댓말', '반말', '없음', '']:
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 이전내용에서말의높임법'은 '존댓말', '반말', '없음' 중 하나여야 합니다"
+
+        if item['현재말의높임법'] not in ['존댓말', '반말', '없음', '']:
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 현재말의높임법'은 '존댓말', '반말', '없음' 중 하나여야 합니다"
 
         if not isinstance(item['대화상황'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 대화상황'은 문자열이어야 합니다"
@@ -2479,7 +2485,7 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
     for TranslationDialogue in TranslationDialogueEditingResponse:
         TranslationDialogueId = TranslationDialogue['번호']
         TranslationDialogueName = TranslationDialogue['인물']
-        TranslationDialogueTone = TranslationDialogue['말의높임법']
+        TranslationDialogueTone = TranslationDialogue['현재말의높임법']
         TranslationEditedDialogueText = TranslationDialogue['편집대화내용']
         # 원본 패턴을 찾아서 편집된 내용으로 대체 (비탐욕적 매칭 사용)
         DialoguePattern = f"{{{TranslationDialogueId} 대화: ([^}}]*)}}"
@@ -2491,7 +2497,7 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
             # Body에서 패턴 전체를 편집된 내용으로 대체
             Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f'"{TranslationEditedDialogueText}"')
             # DialogueBody에서도 패턴 대체
-            DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), f'{{{TranslationDialogueName}({TranslationDialogueTone}): {TranslationOrginDialogueText}}}', DialogueBody)
+            DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), f'{{{TranslationDialogueName}({TranslationDialogueTone}): {TranslationEditedDialogueText}}}', DialogueBody)
         else:
             # Body에서 패턴 전체를 본래 내용으로 대체
             Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f"'{TranslationOrginDialogueText}'")

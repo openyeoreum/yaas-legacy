@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 
 from mistralai import Mistral
 from langdetect import detect_langs, DetectorFactory
-from backend.b2_Solution.b25_DataFrame.b251_DataCommit.b2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse
+from backend.b2_Solution.b25_DataFrame.b251_DataCommit.b2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse, DEEPSEEK_LLMresponse
 
 ###############################################
 ##### Translation PDF, Index, Body 불러오기 #####
@@ -1942,7 +1942,10 @@ def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCo
             Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
         elif LLM == "Google":
             Response, Usage, Model = GOOGLE_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
+        elif LLM == "DeepSeek":
+            Response, Usage, Model = DEEPSEEK_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
         Filter = FilterFunc(Response, CheckCount)
+            
         
         if isinstance(Filter, str):
             print(f"Project: {projectName} | Process: {Process} {InputCount}/{TotalInputCount} | {Filter}")
@@ -3457,7 +3460,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 MemoryCounter = '\n※ 참고! 교정 작업의 대상은 <**작업: 교정할도서내용> 입니다. <교정도서내용.json>에 <참고: 이전교정도서내용>은 포함하지 마세요.'
                 
                 ## Response 생성
-                TranslationProofreadingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationProofreadingFilter, InputList[i]['Body'], "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
+                TranslationProofreadingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationProofreadingFilter, InputList[i]['Body'], "DeepSeek", mode, MessagesReview, memoryCounter = MemoryCounter)
                 
                 ## ErrorPass 예외처리
                 if TranslationProofreadingResponse == "ErrorPass":

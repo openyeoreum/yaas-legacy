@@ -697,12 +697,12 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "backen
           if promptFrame[0]["OutputFormat"] == 'json':
             response = GoogleAIClient.models.generate_content(
                 model = Model,
-                contents = [f"{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"]
+                contents = [f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"]
             )
           else:
             response = GoogleAIClient.models.generate_content(
                 model = Model,
-                contents = [f"{Messages[1]['content']}\n\n{Messages[2]['content']}"]
+                contents = [f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}"]
             )
           Response = response.text
           Usage = {'Input': response.usage_metadata.prompt_token_count,
@@ -763,6 +763,107 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "backen
             print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse에서 오류 발생\n\n{e}")
           else:
             print(f"LifeGraphName: {projectName} | Process: {Process} | GOOGLE_LLMresponse에서 오류 발생\n\n{e}")
+          time.sleep(random.uniform(5, 10))
+          continue
+        
+#################################
+##### DEEPSEEK LLM Response #####
+#################################
+
+## 프롬프트 실행
+def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "backend", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+
+    DeepSeekClient = OpenAI(api_key = os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
+    if PromptFramePath == "":
+      promptFrame = GetPromptFrame(Process)
+    else:
+      with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
+        promptFrame = [json.load(promptFrameJson)]
+
+    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+
+    Model = 'deepseek-reasoner'
+    # Model = promptFrame[0]["DEEPSEEK"]["MasterModel"]
+    
+    for _ in range(MaxAttempts):
+      try:
+          if promptFrame[0]["OutputFormat"] == 'json':
+            response = DeepSeekClient.chat.completions.create(
+                model = Model,
+                messages = [
+                    {"role": "system", "content": f"{Messages[0]['content']}"},
+                    {"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}\n```json"},
+                ],
+                stream = False
+            )
+          else:
+            response = DeepSeekClient.chat.completions.create(
+                model = Model,
+                messages = [
+                    {"role": "system", "content": f"{Messages[0]['content']}"},
+                    {"role": "user", "content": f"{Messages[1]['content']}\n\n{Messages[2]['content']}"},
+                ],
+                stream = False
+            )
+          Response = response.choices[0].message.content
+          Usage = {'Input': response.usage.prompt_tokens,
+                  'Output': response.usage.completion_tokens,
+                  'Total': response.usage.total_tokens }
+          
+          # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
+          if promptFrame[0]["OutputFormat"] == 'json':
+              pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'
+              match = re.search(pattern, Response, re.DOTALL)
+              if match:
+                  Response = match.group(1).strip()
+              Response = Response.replace('\n', '\\n')
+              StartIndexBracket = Response.find('[')
+              StartIndexBrace = Response.find('{')
+              if StartIndexBracket != -1 and StartIndexBrace != -1:
+                  StartIndex = min(StartIndexBracket, StartIndexBrace)
+              elif StartIndexBracket != -1:
+                  StartIndex = StartIndexBracket
+              elif StartIndexBrace != -1:
+                  StartIndex = StartIndexBrace
+              else:
+                  StartIndex = -1
+              if StartIndex != -1:
+                  if Response[StartIndex] == '[':
+                      EndIndex = Response.rfind(']')
+                  else:
+                      EndIndex = Response.rfind('}')
+                  if EndIndex != -1:
+                      JsonResponse = Response[StartIndex:EndIndex+1]
+                  else:
+                      JsonResponse = Response
+              else:
+                  JsonResponse = Response
+          else:
+              JsonResponse = Response
+          
+          if isinstance(email, str):
+              print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 완료")
+          else:
+              print(f"LifeGraphName: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 완료")
+          
+          if messagesReview == "on":
+              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+
+          ## Response Mode 전처리2: JsonParsing의 재구조화
+          if ":" in JsonResponse and "{" in JsonResponse and "}" in JsonResponse:
+              try:
+                  TestResponse = json.loads(JsonResponse)
+              except json.JSONDecodeError:
+                  print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 파싱오류 | JsonParsingProcess 시작")
+                  JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
+
+          return JsonResponse, Usage, Model
+      
+      except Exception as e:
+          if isinstance(email, str):
+            print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse에서 오류 발생\n\n{e}")
+          else:
+            print(f"LifeGraphName: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse에서 오류 발생\n\n{e}")
           time.sleep(random.uniform(5, 10))
           continue
 

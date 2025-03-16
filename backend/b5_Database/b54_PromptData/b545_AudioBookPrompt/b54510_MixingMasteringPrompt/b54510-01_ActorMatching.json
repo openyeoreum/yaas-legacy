@@ -34,6 +34,9 @@
     "GOOGLE":{
         "MasterModel": "gemini-2.0-flash-thinking-exp"
     },
+    "DEEPSEEK":{
+        "MasterModel": "deepseek-reasoner"
+    },
     "Temperature": 0.7,
     "OutputTokensRatio": 1,
     "OutputFormat": "json",

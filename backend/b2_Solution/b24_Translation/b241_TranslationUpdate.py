@@ -1068,7 +1068,9 @@ def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
         
     return AddInput
 
-## Process11: TranslationDialogueEditing의 InputList
+## Process11: TranslationDialogueAnalysis의 InputList
+
+## Process12: TranslationDialogueEditing의 InputList
 def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
     def CountDialogues(Pattern, Body):
         # 텍스트에서 대화문 패턴 찾기
@@ -1240,7 +1242,7 @@ def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
    
     return InputList
 
-## Process11: TranslationDialogueEditing의 추가 Input
+## Process12: TranslationDialogueEditing의 추가 Input
 def TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditingPath):
     if os.path.exists(ProjectDataFrameTranslationDialogueEditingPath):
         with open(ProjectDataFrameTranslationDialogueEditingPath, 'r', encoding='utf-8') as TranslationDataFrame:
@@ -1777,7 +1779,15 @@ def TranslationProofreadingFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['교정']
 
-## Process11: TranslationDialogueEditing의 Filter(Error 예외처리)
+## Process11: TranslationDialogueAnalysis의 Filter(Error 예외처리)
+def TranslationDialogueAnalysisFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "TranslationDialogueAnalysis, JSONDecode에서 오류 발생: JSONDecodeError"
+
+## Process12: TranslationDialogueEditing의 Filter(Error 예외처리)
 def TranslationDialogueEditingFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
     try:
@@ -1844,46 +1854,6 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
         
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['대화내용']
-
-# ## Process12: TranslationDialogueEditing의 Filter(Error 예외처리)
-# def TranslationDialogueEditingFilter(Response, CheckCount):
-#     # Error1: JSON 형식 예외 처리
-#     try:
-#         OutputDic = json.loads(Response)
-#     except json.JSONDecodeError:
-#         return "TranslationDialogueEditing, JSONDecode에서 오류 발생: JSONDecodeError"
-
-#     # Error2: 최상위 키 확인
-#     if '대화문편집' not in OutputDic:
-#         return "TranslationDialogueEditing, JSONKeyError: '대화문편집' 키가 누락되었습니다"
-
-#     # Error3: '대화문편집' 데이터 타입 검증
-#     if not isinstance(OutputDic['대화문편집'], list):
-#         return "TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집'은 리스트 형태여야 합니다"
-
-#     for idx, item in enumerate(OutputDic['대화문편집']):
-#         # 각 항목이 딕셔너리인지 확인
-#         if not isinstance(item, dict):
-#             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}]'는 딕셔너리 형태여야 합니다"
-
-#         # 필수 키 확인
-#         required_keys = ['번호', '편집된대화문', '이유']
-#         missing_keys = [key for key in required_keys if key not in item]
-#         if missing_keys:
-#             return f"TranslationDialogueEditing, JSONKeyError: '대화문편집[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
-
-#         # 데이터 타입 검증
-#         if not isinstance(item['번호'], str):
-#             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 번호'는 문자열이어야 합니다"
-
-#         if not isinstance(item['편집된대화문'], str):
-#             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 편집된대화문'은 문자열이어야 합니다"
-
-#         if not isinstance(item['이유'], str):
-#             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화문편집[{idx}] > 이유'는 문자열이어야 합니다"
-
-#     # 모든 조건을 만족하면 JSON 반환
-#     return OutputDic['대화문편집']
 
 # ## Process13: TranslationDialoguePostprocessing의 Filter(Error 예외처리)
 # def TranslationDialoguePostprocessingFilter(Response, CheckCount):
@@ -2460,7 +2430,9 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
     with open(ProjectDataFrameTranslationProofreadingPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TranslationProofreadingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
-## Process11: TranslationDialogueEditing DataFrame 저장
+## Process11: TranslationDialogueAnalysis DataFrame 저장
+
+## Process12: TranslationDialogueEditing DataFrame 저장
 def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueEditingPath, MarkBody, TranslationDialogueEditingResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, Body, TotalInputCount):
     if os.path.exists(ProjectDataFrameTranslationDialogueEditingPath):
         TranslationDialogueEditingFramePath = ProjectDataFrameTranslationDialogueEditingPath
@@ -3482,13 +3454,26 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
     #################################################
-    ### Process11: TranslationDialogueEditing 생성 ##
+    ### Process12: TranslationDialogueAnalysis 생성 ##
     #################################################
-    
+
     if BookGenre == 'Fiction':
 
         ## Process 설정
         ProcessNumber = '11'
+        Process = "TranslationDialogueAnalysis"
+
+        ## TranslationDialogueEditing 경로 생성
+        ProjectDataFrameTranslationDialogueEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+
+    ################################################
+    ### Process12: TranslationDialogueEditing 생성 ##
+    ################################################
+    
+    if BookGenre == 'Fiction':
+
+        ## Process 설정
+        ProcessNumber = '12'
         Process = "TranslationDialogueEditing"
 
         ## TranslationDialogueEditing 경로 생성

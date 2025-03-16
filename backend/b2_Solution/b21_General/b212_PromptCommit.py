@@ -76,8 +76,8 @@ def AddPromptToDB():
         translationEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-09_TranslationEditing.json")
         translationRefinement = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-09_TranslationRefinement.json")
         translationProofreading = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-10_TranslationProofreading.json")
-        translationDialogueEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-11_TranslationDialogueEditing.json")
-        # translationDialogueEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-12_TranslationDialogueEditing(Remove).json")
+        translationDialogueAnalysis = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-11_TranslationDialogueAnalysis.json")
+        translationDialogueEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-12_TranslationDialogueEditing.json")
         # translationDialoguePostprocessing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-13_TranslationDialoguePostprocessing(Remove).json")
         afterTranslationBodySummary = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-14_AfterTranslationBodySummary.json")
         authorResearch = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-15_AuthorResearch.json")
@@ -179,8 +179,8 @@ def AddPromptToDB():
             ExistingPrompt.TranslationEditing = translationEditing
             ExistingPrompt.TranslationRefinement = translationRefinement
             ExistingPrompt.TranslationProofreading = translationProofreading
+            ExistingPrompt.TranslationDialogueAnalysis = translationDialogueAnalysis
             ExistingPrompt.TranslationDialogueEditing = translationDialogueEditing
-            # ExistingPrompt.TranslationDialogueEditing = translationDialogueEditing
             # ExistingPrompt.TranslationDialoguePostprocessing = translationDialoguePostprocessing
             ExistingPrompt.AfterTranslationBodySummary = afterTranslationBodySummary
             ExistingPrompt.AuthorResearch = authorResearch
@@ -278,8 +278,8 @@ def AddPromptToDB():
                 TranslationEditing = translationEditing,
                 TranslationRefinement = translationRefinement,
                 TranslationProofreading = translationProofreading,
+                TranslationDialogueAnalysis = translationDialogueAnalysis,
                 TranslationDialogueEditing = translationDialogueEditing,
-                # TranslationDialogueEditing = translationDialogueEditing,
                 # TranslationDialoguePostprocessing = translationDialoguePostprocessing,
                 AfterTranslationBodySummary = afterTranslationBodySummary,
                 AuthorResearch = authorResearch,

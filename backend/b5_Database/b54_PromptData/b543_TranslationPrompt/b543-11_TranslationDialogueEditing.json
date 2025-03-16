@@ -34,6 +34,9 @@
     "GOOGLE":{
         "MasterModel": "gemini-2.0-flash-thinking-exp"
     },
+    "DEEPSEEK":{
+        "MasterModel": "deepseek-reasoner"
+    },
     "Temperature": 1,
     "OutputTokensRatio": 1,
     "OutputFormat": "json",
@@ -80,7 +83,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>의 내용을 바탕으로 {n 대화: 대화내용}을 하나씩 편집하여 <대화내용편집.json>을 완성해주세요.)\n\n",
+                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>을 바탕으로 {n 대화: 대화내용}을 하나씩 편집하여 <대화내용편집.json>을 완성해주세요.)\n\n",
                     "InputMark": "<참고: 이전내용>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
@@ -139,7 +142,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>의 내용을 바탕으로 {n 대화: 대화내용}을 하나씩 편집하여 <대화내용편집.json>을 완성해주세요.)\n\n",
+                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>을 바탕으로 {n 대화: 대화내용}을 하나씩 편집하여 <대화내용편집.json>을 완성해주세요.)\n\n",
                     "InputMark": "<참고: 이전내용>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
@@ -191,7 +194,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>의 내용을 바탕으로 {n 대화: 대화내용}을 하나씩 편집하여 <대화내용편집.json>을 완성해주세요.)\n\n",
+                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>을 바탕으로 {n 대화: 대화내용}을 하나씩 편집하여 <대화내용편집.json>을 완성해주세요.)\n\n",
                     "InputMark": "<참고: 이전내용>\n",
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
@@ -249,7 +252,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>의 내용을 바탕으로 {n 대화: 대화내용}을 하나씩 편집하여 <대화내용편집.json>을 완성해주세요.)\n\n",
+                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>을 바탕으로 {n 대화: 대화내용}을 하나씩 편집하여 <대화내용편집.json>을 완성해주세요.)\n\n",
                     "InputMark": "<참고: 이전내용>\n",
                     "InputStarter": "",
                     "InputMemory": "InputMemory",

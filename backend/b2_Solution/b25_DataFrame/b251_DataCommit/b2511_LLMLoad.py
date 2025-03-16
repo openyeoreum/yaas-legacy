@@ -781,8 +781,7 @@ def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "back
 
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
-    Model = 'deepseek-reasoner'
-    # Model = promptFrame[0]["DEEPSEEK"]["MasterModel"]
+    Model = promptFrame[0]["DEEPSEEK"]["MasterModel"]
     
     for _ in range(MaxAttempts):
       try:

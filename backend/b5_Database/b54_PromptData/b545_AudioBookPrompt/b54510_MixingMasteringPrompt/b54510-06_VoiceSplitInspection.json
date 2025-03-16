@@ -13,7 +13,8 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-4o-2024-11-20"
+        "MasterModel": "gpt-4o-2024-11-20",
+        "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
         "BaseModel": {

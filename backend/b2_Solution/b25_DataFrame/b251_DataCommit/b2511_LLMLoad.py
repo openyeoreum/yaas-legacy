@@ -243,6 +243,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
 
     if Mode == "Master":
       Model = promptFrame[0]["OpenAI"]["MasterModel"]
+      ReasoningEffort = promptFrame[0]["OpenAI"]["ReasoningEffort"]
     else:
       if TotalTokens < 14000:
         if Mode in ["Example", "Memory"]:
@@ -280,6 +281,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
             if 'o3-mini' in Model:
               response = OpenAIClient.chat.completions.create(
                   model = Model,
+                  reasoning_effort = ReasoningEffort,
                   response_format = {"type": "json_object"},
                   messages = Messages)
             else:
@@ -292,6 +294,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
             if 'o3-mini' in Model:
               response = OpenAIClient.chat.completions.create(
                   model = Model,
+                  reasoning_effort = ReasoningEffort,
                   messages = Messages)
             else:
               response = OpenAIClient.chat.completions.create(

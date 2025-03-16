@@ -13,7 +13,8 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "o3-mini"
+        "MasterModel": "o3-mini",
+        "ReasoningEffort": "high"
     },
     "ANTHROPIC": {
         "BaseModel": {

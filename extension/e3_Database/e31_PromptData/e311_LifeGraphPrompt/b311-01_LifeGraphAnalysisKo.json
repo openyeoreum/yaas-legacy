@@ -13,7 +13,8 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-4o-mini"
+        "MasterModel": "gpt-4o-mini",
+        "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
         "BaseModel": {

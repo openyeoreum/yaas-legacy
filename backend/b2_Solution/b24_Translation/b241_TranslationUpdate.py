@@ -1235,7 +1235,7 @@ def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
         MarkBody = MarkBody.replace('... ...', '...')
         # 원본 텍스트를 유지하면서 대화문만 마킹 처리
         OrginMarkBody = MarkDialoguesPreserveText(Pattern, Body)
-        Input = f"<작업: 대화중심편집내용>\n{MarkBody}\n\n"
+        Input = f"<**작업: 대화중심편집내용>\n{MarkBody}\n\n"
         InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": OrginMarkBody, "MarkBody": MarkBody, "Input": Input, "DialogueCount": DialogueCount})
         InputId += 1
    
@@ -2480,7 +2480,7 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
     TranslationDialogueEditing['Index'] = Index
     TranslationDialogueEditing['BodyId'] = BodyId
     
-    # DialogueBody에서 {n대화: 대화내용} -> 편집대화내용으로 변경
+    # DialogueBody에서 {n 대화: 대화내용} -> 편집대화내용으로 변경
     DialogueBody = MarkBody
     for TranslationDialogue in TranslationDialogueEditingResponse:
         TranslationDialogueId = TranslationDialogue['번호']
@@ -3515,10 +3515,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         Input1 = TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditingPath)
                         Input2 = InputList[i]['Input']
                         Input = Input1 + Input2
-                        MemoryCounter = f'\n※ 참고! <대화내용편집.json>으로 완성될 대화문은 <작업: 대화중심편집내용>의 {{n대화: 대화내용}} {CheckCount}개 입니다.'
+                        MemoryCounter = f'\n※ 참고! <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount}개 입니다.'
 
                         ## Response 생성
-                        TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
+                        TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
                     else:
                         TranslationDialogueEditingResponse = []
 

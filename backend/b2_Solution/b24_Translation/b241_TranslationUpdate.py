@@ -3134,8 +3134,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     CheckProcess = "BodyTranslationCheck"
                     _, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
-                    if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
-                        continue
+                    if BeforeCheck != '모름':
+                        if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
+                            continue
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                             if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
@@ -3248,9 +3249,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         ErrorCount += 1
                         continue
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
-                    if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
-                        ErrorCount += 1
-                        continue
+                    if BeforeCheck != '모름':
+                        if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
+                            ErrorCount += 1
+                            continue
                     if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                             if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
@@ -3367,9 +3369,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             ErrorCount += 1
                             continue
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
-                        if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
-                            ErrorCount += 1
-                            continue
+                        if BeforeCheck != '모름':
+                            if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
+                                ErrorCount += 1
+                                continue
                         if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
                             if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                                 if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
@@ -3479,6 +3482,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     #################################################
     ### Process11: TranslationDialogueEditing 생성 ##
     #################################################
+    
     if BookGenre == 'Fiction':
 
         ## Process 설정

@@ -502,7 +502,7 @@ class Prompt(Base):
     TranslationEditing = Column(JSON)
     TranslationRefinement = Column(JSON)
     TranslationProofreading = Column(JSON)
-    translationDialogueAnalysis = Column(JSON)
+    TranslationDialogueAnalysis = Column(JSON)
     TranslationDialogueEditing = Column(JSON)
     # TranslationDialoguePostprocessing = Column(JSON)
     AfterTranslationBodySummary = Column(JSON)

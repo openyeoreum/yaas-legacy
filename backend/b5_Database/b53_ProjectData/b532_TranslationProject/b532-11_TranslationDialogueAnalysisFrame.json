@@ -13,9 +13,16 @@
             "BodyId": 0,
             "Body": "None",
             "DialogueBody": "None",
-            "AnalyzedDialogue": [],
-            "BodyCharacterList": [],
-            "BookCharacterList": []
+            "BodyCharacterList": []
+        }
+    ],
+    [
+        {
+            "CharacterId": 0,
+            "CharacterName": "None",
+            "CharacterRole": "None",
+            "CharacterGender": "None",
+            "CharacterAge": 0
         }
     ]
 ]

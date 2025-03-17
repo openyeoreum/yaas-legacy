@@ -1068,8 +1068,8 @@ def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
         
     return AddInput
 
-## Process11, 12: TranslationDialogueEditing, Analysis의 InputList
-def TranslationDialogueInputList(TranslationEditPath, BeforeProcess):
+## Process11: TranslationDialogueEditing, Analysis의 InputList
+def TranslationDialogueAnalysisInputList(projectName, Process, ProjectDataFrameTranslationProofreadingPath, TranslationEditPath, BeforeProcess):
     def CountDialogues(Pattern, Body):
         # 텍스트에서 대화문 패턴 찾기
         DialogueMatches = re.findall(Pattern, Body)
@@ -1158,6 +1158,7 @@ def TranslationDialogueInputList(TranslationEditPath, BeforeProcess):
             MarkedBlock = DialogueBlock
             for Counter, Dialog, Original in GroupDialogues:
                 # 원본 대화문을 마킹된 형식으로 교체
+                Dialog = Dialog.replace('\n', " ")
                 MarkedBlock = MarkedBlock.replace(Original, f"{{{Counter} 대화: {Dialog}}}", 1)
             
             # 최종 결과 조합
@@ -1200,6 +1201,7 @@ def TranslationDialogueInputList(TranslationEditPath, BeforeProcess):
             DialogueText = Match.group(2) if Match.group(2) is not None else Match.group(3)
             
             # 마킹된 버전 생성
+            DialogueText = DialogueText.replace("\n", " ")
             marked = f"{{{i} 대화: {DialogueText}}}"
             
             # 텍스트 교체
@@ -1223,6 +1225,10 @@ def TranslationDialogueInputList(TranslationEditPath, BeforeProcess):
         Index = TranslationEdit['Index']
         BodyId = TranslationEdit['BodyId']
         Body = TranslationEdit['Body'].replace('“', '"').replace('”', '"').replace('‘', "'").replace('’', "'")
+        if Body.count('"') % 2 != 0:
+            QuoteChar = '"'
+            ErrorMessage = f"Project: {projectName} | Process: {Process}-InputList | 오류: (('BodyId': {BodyId})) 의 문단에서 '{QuoteChar}' 개수가 홀수 (({Body.count(QuoteChar)})) 개 입니다. 아래 경로 > {BeforeProcess} > 'BodyId': {BodyId}의 'Body'를 확인 후 '{QuoteChar}'를 추가/삭제하여 수정해주세요.\n{ProjectDataFrameTranslationProofreadingPath}"
+            sys.exit(ErrorMessage)
         # 해당 항목의 대화문 개수 카운트
         DialogueCount = CountDialogues(Pattern, Body)
         # 대화문 마킹 처리
@@ -1233,7 +1239,6 @@ def TranslationDialogueInputList(TranslationEditPath, BeforeProcess):
         Input = f"<**작업: 대화중심편집내용>\n{OrginMarkBody}\n\n"
         InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": OrginMarkBody, "MarkBody": MarkBody, "Input": Input, "DialogueCount": DialogueCount})
         InputId += 1
-   
     return InputList
 
 ## Process11: TranslationDialogueAnalysis의 추가 Input
@@ -1829,10 +1834,10 @@ def TranslationDialogueAnalysisFilter(Response, CheckCount):
         if item['대화문여부'] not in ['맞음', '아님']:
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 대화문여부'는 '맞음' 또는 '아님' 중 하나여야 합니다"
 
-        if item['동일인물존재여부'] not in ['있음', '없음']:
+        if item['동일인물존재여부'] not in ['있음', '없음', '']:
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 동일인물존재여부'는 '있음' 또는 '없음' 중 하나여야 합니다"
 
-        if not (isinstance(item['인물번호'], (str, int)) and (isinstance(item['인물번호'], int) or item['인물번호'].isdigit() or item['인물번호'] == '없음')):
+        if not (isinstance(item['인물번호'], (str, int)) and (isinstance(item['인물번호'], int) or item['인물번호'].isdigit() or item['인물번호'] in ['없음', ''])):
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 인물번호'는 정수, 숫자형 문자열 또는 '없음'이어야 합니다"
         if isinstance(item['인물번호'], str):
             if item['인물번호'].isdigit():
@@ -1842,7 +1847,8 @@ def TranslationDialogueAnalysisFilter(Response, CheckCount):
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 인물이름'은 문자열이어야 합니다"
         
         if item['인물이름'] == '없음':
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 인물이름'은 '없음'이 아니어야 합니다"
+            if item['대화문여부'] == '맞음':
+                return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 인물이름'은 '없음'이 아니어야 합니다"
 
         if not isinstance(item['역할'], str):
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 역할'은 문자열이어야 합니다"
@@ -1886,19 +1892,16 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
 
         # 필수 키 확인
         required_keys = [
-            '번호', '대화문구분', '인물', '인물특징', '상대인물', 
-            '이전내용에서말의높임법', '현재말의높임법', '대화상황', '편집대화내용', '편집이유'
+            '번호', '인물', '인물특징', '대화상황', '상대인물',
+            '이전내용에서말의높임법', '현재말의높임법', '편집대화내용', '편집이유'
         ]
         missing_keys = [key for key in required_keys if key not in item]
         if missing_keys:
             return f"TranslationDialogueEditing, JSONKeyError: '대화내용[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
         # 데이터 타입 및 유효한 값 검증
-        if not isinstance(item['번호'], str):
-            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 번호'는 문자열이어야 합니다"
-
-        if item['대화문구분'] not in ['맞음', '아님']:
-            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 대화문구분'은 '맞음' 또는 '아님' 중 하나여야 합니다"
+        if not isinstance(item['번호'], (str, int)):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 번호'는 문자열 또는 정수이어야 합니다"
 
         if not isinstance(item['인물'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 인물'은 문자열이어야 합니다"
@@ -1906,23 +1909,23 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
         if not isinstance(item['인물특징'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 인물특징'은 문자열이어야 합니다"
 
+        if not isinstance(item['대화상황'], str):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 대화상황'은 문자열이어야 합니다"
+
         if not isinstance(item['상대인물'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 상대인물'은 문자열이어야 합니다"
 
-        if item['이전내용에서말의높임법'] not in ['존댓말', '반말', '없음', '']:
+        if item['이전내용에서말의높임법'] not in ['존댓말', '반말', '없음']:
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 이전내용에서말의높임법'은 '존댓말', '반말', '없음' 중 하나여야 합니다"
 
-        if item['현재말의높임법'] not in ['존댓말', '반말', '없음', '']:
+        if item['현재말의높임법'] not in ['존댓말', '반말', '없음']:
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 현재말의높임법'은 '존댓말', '반말', '없음' 중 하나여야 합니다"
-
-        if not isinstance(item['대화상황'], str):
-            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 대화상황'은 문자열이어야 합니다"
 
         if not isinstance(item['편집대화내용'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 편집대화내용'은 문자열이어야 합니다"
 
         if not isinstance(item['편집이유'], str):
-            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 편집이유'는 문자열이어야 합니다"
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 편집이유'은 문자열이어야 합니다"
 
     # Error4: '대화내용' 리스트 개수 확인
     if len(OutputDic['대화내용']) != CheckCount:
@@ -3671,7 +3674,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         
         ## Process Count 계산 및 Check
         CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-        InputList = TranslationDialogueInputList(TranslationEditPath, "TranslationProofreading")
+        InputList = TranslationDialogueAnalysisInputList(projectName, Process, ProjectDataFrameTranslationProofreadingPath, TranslationEditPath, "TranslationProofreading")
         TotalInputCount = len(InputList) # 인풋의 전체 카운트
         InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueAnalysisPath)
         EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
@@ -3714,29 +3717,29 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
 
-    # ################################################
-    # ### Process12: TranslationDialogueEditing 생성 ##
-    # ################################################
+    ################################################
+    ### Process12: TranslationDialogueEditing 생성 ##
+    ################################################
     
-    # if BookGenre == 'Fiction':
+    if BookGenre == 'Fiction':
 
-    #     ## Process 설정
-    #     ProcessNumber = '12'
-    #     Process = "TranslationDialogueEditing"
+        ## Process 설정
+        ProcessNumber = '12'
+        Process = "TranslationDialogueEditing"
 
-    #     ## TranslationDialogueEditing 경로 생성
-    #     ProjectDataFrameTranslationDialogueEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+        ## TranslationDialogueEditing 경로 생성
+        ProjectDataFrameTranslationDialogueEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
-    #     ## Process Count 계산 및 Check
-    #     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    #     InputList = TranslationDialogueInputList(TranslationEditPath, "TranslationProofreading")
-    #     TotalInputCount = len(InputList) # 인풋의 전체 카운트
-    #     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueEditingPath)
-    #     EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
-    #     # print(f"InputCount: {InputCount}")
-    #     # print(f"EditCheck: {EditCheck}")
-    #     # print(f"EditCompletion: {EditCompletion}")
-    #     ## Process 진행
+        ## Process Count 계산 및 Check
+        CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+        InputList = TranslationDialogueAnalysisInputList(TranslationEditPath, "TranslationProofreading")
+        TotalInputCount = len(InputList) # 인풋의 전체 카운트
+        InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueEditingPath)
+        EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+        # print(f"InputCount: {InputCount}")
+        # print(f"EditCheck: {EditCheck}")
+        # print(f"EditCompletion: {EditCompletion}")
+        ## Process 진행
     #     if not EditCheck:
     #         if DataFrameCompletion == 'No':
     #             for i in range(InputCount - 1, TotalInputCount):

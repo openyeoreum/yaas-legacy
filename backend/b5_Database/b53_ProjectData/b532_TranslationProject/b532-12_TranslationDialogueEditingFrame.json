@@ -16,7 +16,8 @@
             "BodyId": 0,
             "Body": "None",
             "DialogueBody": "None",
-            "EditedDialogue": []
+            "EditedDialogue": [],
+            "BodyCharacterList": []
         }
     ]
 ]

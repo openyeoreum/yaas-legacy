@@ -1239,12 +1239,13 @@ def TranslationDialogueAnalysisInputList(projectName, Process, ProjectDataFrameT
         Input = f"<**작업: 대화중심편집내용>\n{OrginMarkBody}\n\n"
         InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": OrginMarkBody, "MarkBody": MarkBody, "Input": Input, "DialogueCount": DialogueCount})
         InputId += 1
+        
     return InputList
 
 ## Process11: TranslationDialogueAnalysis의 추가 Input
-def TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueEditingPath):
-    if os.path.exists(ProjectDataFrameTranslationDialogueEditingPath):
-        with open(ProjectDataFrameTranslationDialogueEditingPath, 'r', encoding='utf-8') as TranslationDataFrame:
+def TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath):
+    if os.path.exists(ProjectDataFrameTranslationDialogueAnalysisPath):
+        with open(ProjectDataFrameTranslationDialogueAnalysisPath, 'r', encoding='utf-8') as TranslationDataFrame:
             TranslationDialogueSet = json.load(TranslationDataFrame)
             TranslationDialogue = TranslationDialogueSet[1]
             
@@ -1291,9 +1292,118 @@ def TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueEditi
     return AddInput
 
 ## Process12: TranslationDialogueEditing의 InputList
-# def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
+def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2):
+    def NumberDialogues(Text):
+        Counter = 1
+        Pattern = r'\{([^:]+): ([^\}]+)\}'
+        
+        def ReplaceDialogue(Match):
+            nonlocal Counter
+            Result = f"{{{Counter} {Match.group(1)}: {Match.group(2)}}}"
+            Counter += 1
+            return Result
+        
+        return re.sub(Pattern, ReplaceDialogue, Text)
+    
+    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+        TranslationEditList = json.load(TranslationEditJson)
+    TranslationProofreading = TranslationEditList[BeforeProcess1]
+    TranslationDialogueAnalysis = TranslationEditList[BeforeProcess2]
+    
+    InputId = 1
+    InputList = []
+    for i in range(len(TranslationProofreading)):
+        IndexId = TranslationProofreading[i]['IndexId']
+        IndexTag = TranslationProofreading[i]['IndexTag']
+        Index = TranslationProofreading[i]['Index']
+        BodyId = TranslationProofreading[i]['BodyId']
+        Body = TranslationDialogueAnalysis[i]['Body']
+        NumberingBody = NumberDialogues(Body)
+        DialogueBody = TranslationDialogueAnalysis[i]['DialogueBody']
+        NumberingDialogueBody = NumberDialogues(DialogueBody)
+        DialogueCount = len(TranslationDialogueAnalysis[i]['BodyCharacterList'])
+        CheckCharacterList = [character['CharacterName'] for character in TranslationDialogueAnalysis[i]['BodyCharacterList']]
+        CharacterList = list(set(character['CharacterName'] for character in TranslationDialogueAnalysis[i]['BodyCharacterList']))
+        Input = f"<**작업: 대화중심편집내용>\n{DialogueBody}\n\n"
+        InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": NumberingBody, "MarkBody": NumberingDialogueBody, "Input": Input, "DialogueCount": DialogueCount, "CharacterList": CharacterList, "CheckCharacterList": CheckCharacterList})
+        InputId += 1
+        
+    return InputList
 
-## Process12: TranslationDialogueAnalysis의 추가 Input
+## Process12: TranslationDialogueEditing의 추가 Input
+def TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditingPath, CharacterList):
+    if os.path.exists(ProjectDataFrameTranslationDialogueEditingPath):
+        with open(ProjectDataFrameTranslationDialogueEditingPath, 'r', encoding='utf-8') as TranslationDataFrame:
+            TranslationDialogue = json.load(TranslationDataFrame)[1]
+        
+            ## <참고: 이전내용>을 CharacterList에 따라서 추가
+            BeforeMarkBodys = []
+            Count = 0
+            MaxCount = 6
+            # 데이터의 인덱스 1의 리스트를 역순으로 순회
+            for i in range(len(TranslationDialogue)-1, -1, -1):
+                # 아이템이 존재하고 DialogueBody가 비어있지 않은 경우
+                if i >= 0 and TranslationDialogue[i]['DialogueBody'] != '' and TranslationDialogue[i]['DialogueBody'] != 'None':
+                    BodyId = TranslationDialogue[i]['BodyId']
+                    DialogueBody = TranslationDialogue[i]['DialogueBody']
+                    BeforeMarkBodys.append({"BodyId": BodyId, "DialogueBody": DialogueBody})
+                    Count += 1
+                    # 최대 항목 수에 도달하면 중단
+                    if Count >= MaxCount:
+                        break
+            
+            CharacterMarkBodys = []
+            for Character in CharacterList:
+                for i in range(len(TranslationDialogue)):
+                    if Character in TranslationDialogue[i]['BodyCharacterList']:
+                        BodyId = TranslationDialogue[i]['BodyId']
+                        DialogueBody = TranslationDialogue[i]['DialogueBody']
+                        CharacterMarkBodys.append({"BodyId": BodyId, "DialogueBody": DialogueBody})
+            
+            # 1. CharacterMarkBodys의 개수가 MaxCount를 넘으면 BodyId 역순으로 정렬한 뒤 MaxCount만큼만 남긴다
+            if len(CharacterMarkBodys) > MaxCount:
+                # BodyId 기준으로 역순 정렬
+                CharacterMarkBodys.sort(key=lambda x: x["BodyId"], reverse=True)
+                # MaxCount만큼만 유지
+                CharacterMarkBodys = CharacterMarkBodys[:MaxCount]
+            # 2. CharacterMarkBodys의 개수가 MaxCount를 넘지 않으면 BeforeMarkBodys에서 추가
+            else:
+                # BeforeMarkBodys에서 BodyId 값이 가장 큰 것부터 사용하기 위해 정렬
+                BeforeMarkBodys.sort(key=lambda x: x["BodyId"], reverse=True)
+                
+                # CharacterMarkBodys에 이미 있는 BodyId 목록 생성
+                ExistingBodyIds = [Body["BodyId"] for Body in CharacterMarkBodys]
+                
+                # BeforeMarkBodys에서 하나씩 추가
+                for Body in BeforeMarkBodys:
+                    # 이미 CharacterMarkBodys에 있는 BodyId는 건너뛴다
+                    if Body["BodyId"] not in ExistingBodyIds:
+                        CharacterMarkBodys.append(Body)
+                        ExistingBodyIds.append(Body["BodyId"])
+                        
+                        # MaxCount에 도달하면 중단
+                        if len(CharacterMarkBodys) >= MaxCount:
+                            break
+
+            # 중복된 BodyId를 가진 딕셔너리를 하나만 남김
+            UniqueBodyDictionary = {}
+            for Body in CharacterMarkBodys:
+                UniqueBodyDictionary[Body["BodyId"]] = Body
+            SortedBodies = sorted(UniqueBodyDictionary.values(), key=lambda x: x["BodyId"])
+            CharacterMarkBodyList = [Body["DialogueBody"] for Body in SortedBodies]
+
+            BodyText = TranslationDialogue[-1]['Body']
+            # 3. 최종적으로 CharacterMarkBodys를 BodyId 정순으로 정렬 (오름차순)
+            if CharacterMarkBodyList:
+                BeforeMarkBodyText = "\n\n...\n\n".join(CharacterMarkBodyList)
+
+                AddInput = f"<참고: 이전내용>\n{BeforeMarkBodyText}\n\n\n"
+            else:
+                AddInput = f"<참고: 이전내용>\n{BodyText}\n\n\n"
+    else:
+        AddInput = "<참고: 이전내용>\n첫번째 대화 내용으로 이전내용이 없습니다.\n\n\n"
+    
+    return AddInput
 
 ######################
 ##### Filter 조건 #####
@@ -1933,8 +2043,13 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 편집이유'은 문자열이어야 합니다"
 
     # Error4: '대화내용' 리스트 개수 확인
-    if len(OutputDic['대화내용']) != CheckCount:
-        return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용' 데이터 수가 ((기존대화: {CheckCount})) ((편집대화: {len(OutputDic['대화내용'])})) 다릅니다"
+    if len(OutputDic['대화내용']) != CheckCount['CheckCount']:
+        return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용' 데이터 수가 ((기존대화문: {CheckCount['CheckCount']})) ((편집대화문: {len(OutputDic['대화내용'])})) 다릅니다"
+    
+    # Error5: '대화내용' 이름 리스트 확인
+    for i, CharacterName in enumerate(CheckCount['CheckList']):
+        if CharacterName != OutputDic['대화내용'][i]['인물']:
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{i}] > 인물'이 ((기존대화문: {CharacterName})) ((편집대화문: {OutputDic['대화내용'][i]['인물']}))와 다릅니다"
         
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['대화내용']
@@ -2620,7 +2735,7 @@ def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Trans
         json.dump(TranslationDialogueAnalysisFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ## Process12: TranslationDialogueEditing DataFrame 저장
-def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueEditingPath, MarkBody, TranslationDialogueEditingResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, Body, TotalInputCount):
+def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueEditingPath, MarkBody, TranslationDialogueEditingResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, Body, CharacterList, TotalInputCount):
     if os.path.exists(ProjectDataFrameTranslationDialogueEditingPath):
         TranslationDialogueEditingFramePath = ProjectDataFrameTranslationDialogueEditingPath
     else:
@@ -2649,25 +2764,39 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
         TranslationDialogueTone = TranslationDialogue['현재말의높임법']
         TranslationEditedDialogueText = TranslationDialogue['편집대화내용']
         # 원본 패턴을 찾아서 편집된 내용으로 대체 (비탐욕적 매칭 사용)
-        DialoguePattern = f"{{{TranslationDialogueId} 대화: ([^}}]*)}}"
+        DialoguePattern = f"{{{TranslationDialogueId} {TranslationDialogueName}: ([^}}]*)}}"
         # 원본 대화 내용 추출 후 할당
         DialogueMatch = re.search(DialoguePattern, DialogueBody)
         TranslationOrginDialogueText = DialogueMatch.group(1)
-        if '맞음' in TranslationDialogue['대화문구분']:
-            print(f'\n{TranslationDialogueId}. 대화 변화: {{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}} ->>> {{{TranslationDialogueName}({TranslationDialogueTone}): {TranslationEditedDialogueText}}}\n')
-            # Body에서 패턴 전체를 편집된 내용으로 대체
-            Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f'"{TranslationEditedDialogueText}"')
-            # DialogueBody에서도 패턴 대체
-            DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), f'{{{TranslationDialogueName}({TranslationDialogueTone}): {TranslationEditedDialogueText}}}', DialogueBody)
+        
+        ## 원래 대화문 글자 개수에 따라서 변경 여부를 결정
+        # 조건1. 원본 대화문 글자 개수가 100개 이하인 경우
+        # 조건2. 원본 대화문과 편집 대화문의 글자 개수 비율이 0.6-1.7 사이인 경우
+        if len(TranslationOrginDialogueText) > 100:
+            # 원본 텍스트와 편집된 텍스트의 길이 비율 계산
+            if len(TranslationOrginDialogueText) > 0:  # 0으로 나누기 방지
+                Ratio = len(TranslationEditedDialogueText) / len(TranslationOrginDialogueText)
+                # 비율이 0.6-1.7 범위 내에 있는지 확인
+                if 0.6 <= Ratio <= 1.7:
+                    ReplaceDialogueText = TranslationEditedDialogueText
+                else:
+                    ReplaceDialogueText = TranslationOrginDialogueText
+            else:
+                ReplaceDialogueText = TranslationOrginDialogueText
         else:
-            # Body에서 패턴 전체를 본래 내용으로 대체
-            Body = Body.replace(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}", f"'{TranslationOrginDialogueText}'")
-            # DialogueBody에서도 패턴 해제
-            DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} 대화: {TranslationOrginDialogueText}}}"), f"'{TranslationOrginDialogueText}'", DialogueBody)
+            ReplaceDialogueText = TranslationEditedDialogueText
+        
+        ## 대화문 편집대화문으로 변경
+        print(f'\n{TranslationDialogueId}. 대화 변화: {{{TranslationDialogueId} {TranslationDialogueName}: {TranslationOrginDialogueText}}} ->>> {{{TranslationDialogueName}({TranslationDialogueTone}): {ReplaceDialogueText}}}\n')
+        # Body에서 패턴 전체를 편집된 내용으로 대체
+        Body = Body.replace(f"{{{TranslationDialogueId} {TranslationDialogueName}: {TranslationOrginDialogueText}}}", f'"{ReplaceDialogueText}"')
+        # DialogueBody에서도 패턴 대체
+        DialogueBody = re.sub(re.escape(f"{{{TranslationDialogueId} {TranslationDialogueName}: {TranslationOrginDialogueText}}}"), f'{{{TranslationDialogueName}({TranslationDialogueTone}): {ReplaceDialogueText}}}', DialogueBody)
     
     TranslationDialogueEditing['Body'] = Body
     TranslationDialogueEditing['DialogueBody'] = DialogueBody
     TranslationDialogueEditing['EditedDialogue'] = TranslationDialogueEditingResponse
+    TranslationDialogueEditing['BodyCharacterList'] = CharacterList
 
     ## TranslationDialogueEditingFrame 데이터 프레임 업데이트
     TranslationDialogueEditingFrame[1].append(TranslationDialogueEditing)
@@ -3718,13 +3847,15 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     TranslationDialogueAnalysisProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, inputCount, BodyId, Body, TotalInputCount)
                     
             ## Edit 저장
-            ProcessEditSave(ProjectDataFrameTranslationDialogueAnalysisPath, TranslationEditPath, Process, "Manual")
-            sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}\n\n1. TranslationDialogueAnalysis와 TranslationDialogueAnalysisCharacter를 비교하여, 미비한 인물 부분을 수정합니다. 이 경우 'Body'와 'DialogueBody'와 'BodyCharacterList'를 모두 수정해야 합니다.\n2. {{인물이름: 대화내용}} 중에 잘못된 표기나 괄호 묶음을 수정합니다. 이 경우 'Body'와 'DialogueBody' 모두 수정해야 합니다.\n\n")
-
-        if EditCheck:
-            if not EditCompletion:
-                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+            ProcessEditSave(ProjectDataFrameTranslationDialogueAnalysisPath, TranslationEditPath, Process, EditMode)
+            if EditMode == "Manual":
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}\n\n1. TranslationDialogueAnalysis와 TranslationDialogueAnalysisCharacter를 비교하여, 미비한 인물 부분을 수정합니다. 이 경우 'Body'와 'DialogueBody'와 'BodyCharacterList'를 모두 수정해야 합니다.\n2. {{인물이름: 대화내용}} 중에 잘못된 표기나 괄호 묶음을 수정합니다. 이 경우 'Body'와 'DialogueBody' 모두 수정해야 합니다.\n\n")
+
+        if EditMode == "Manual":
+            if EditCheck:
+                if not EditCompletion:
+                    ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                    sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}\n\n1. TranslationDialogueAnalysis와 TranslationDialogueAnalysisCharacter를 비교하여, 미비한 인물 부분을 수정합니다. 이 경우 'Body'와 'DialogueBody'와 'BodyCharacterList'를 모두 수정해야 합니다.\n2. {{인물이름: 대화내용}} 중에 잘못된 표기나 괄호 묶음을 수정합니다. 이 경우 'Body'와 'DialogueBody' 모두 수정해야 합니다.\n\n")
 
     ################################################
     ### Process12: TranslationDialogueEditing 생성 ##
@@ -3741,51 +3872,52 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
 
         ## Process Count 계산 및 Check
         CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-        InputList = TranslationDialogueEditingInputList(TranslationEditPath, "TranslationDialogueAnalysis")
+        InputList = TranslationDialogueEditingInputList(TranslationEditPath, "TranslationProofreading", "TranslationDialogueAnalysis")
         TotalInputCount = len(InputList) # 인풋의 전체 카운트
         InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueEditingPath)
         EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
         # print(f"InputCount: {InputCount}")
         # print(f"EditCheck: {EditCheck}")
         # print(f"EditCompletion: {EditCompletion}")
-        ## Process 진행
-    #     if not EditCheck:
-    #         if DataFrameCompletion == 'No':
-    #             for i in range(InputCount - 1, TotalInputCount):
-    #                 inputCount = InputList[i]['Id']
-    #                 IndexId = InputList[i]['IndexId']
-    #                 IndexTag = InputList[i]['IndexTag']
-    #                 Index = InputList[i]['Index']
-    #                 BodyId = InputList[i]['BodyId']
-    #                 Body = InputList[i]['Body']
-    #                 MarkBody = InputList[i]['MarkBody']
-    #                 CheckCount = InputList[i]['DialogueCount']
-    #                 ## Body내에 대화문이 있는지 체크
-    #                 if CheckCount > 0:
-    #                     ## Input 생성
-    #                     Input1 = TranslationDialogueAddInput(ProjectDataFrameTranslationDialogueEditingPath)
-    #                     Input2 = InputList[i]['Input']
-    #                     Input = Input1 + Input2
-    #                     MemoryCounter = f'\n※ 주의사항: <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount}개 입니다.\n※ 주의사항: 특수한 경우 이외에는 \'현재말의높임법\' 표기에 따라서 이에 맞는 말의 높임법대로 \'편집대화내용\'이 작성되어야 합니다.'
+        # Process 진행
+        if not EditCheck:
+            if DataFrameCompletion == 'No':
+                for i in range(InputCount - 1, TotalInputCount):
+                    inputCount = InputList[i]['Id']
+                    IndexId = InputList[i]['IndexId']
+                    IndexTag = InputList[i]['IndexTag']
+                    Index = InputList[i]['Index']
+                    BodyId = InputList[i]['BodyId']
+                    Body = InputList[i]['Body']
+                    MarkBody = InputList[i]['MarkBody']
+                    CheckCount = {"CheckCount": InputList[i]['DialogueCount'], "CheckList": InputList[i]['CheckCharacterList']}
+                    CharacterList = InputList[i]['CharacterList']
+                    # Body내에 대화문이 있는지 체크
+                    if CheckCount['CheckCount'] > 0:
+                        ## Input 생성
+                        Input1 = TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditingPath, CharacterList)
+                        Input2 = InputList[i]['Input']
+                        Input = Input1 + Input2
+                        MemoryCounter = f"\n※ 주의사항: <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount['CheckCount']}개 입니다.\n※ 주의사항: 특수한 경우 이외에는 \'현재말의높임법\' 표기에 따라서 이에 맞는 말의 높임법대로 '편집대화내용'이 작성되어야 합니다."
 
-    #                     ## Response 생성
-    #                     TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
-    #                 else:
-    #                     TranslationDialogueEditingResponse = []
+                        ## Response 생성
+                        TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
+                    else:
+                        TranslationDialogueEditingResponse = []
 
-    #                 ## DataFrame 저장
-    #                 TranslationDialogueEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueEditingPath, MarkBody, TranslationDialogueEditingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, Body, TotalInputCount)
+                    ## DataFrame 저장
+                    TranslationDialogueEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueEditingPath, MarkBody, TranslationDialogueEditingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, Body, CharacterList, TotalInputCount)
                     
-    #         ## Edit 저장
-    #         ProcessEditSave(ProjectDataFrameTranslationDialogueEditingPath, TranslationEditPath, Process, EditMode)
-    #         if EditMode == "Manual":
-    #             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+            ## Edit 저장
+            ProcessEditSave(ProjectDataFrameTranslationDialogueEditingPath, TranslationEditPath, Process, EditMode)
+            if EditMode == "Manual":
+                sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
-    # if EditMode == "Manual":
-    #     if EditCheck:
-    #         if not EditCompletion:
-    #             ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-    #             sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     #################################################
     ### Process14: AfterTranslationBodySummary 생성 ##

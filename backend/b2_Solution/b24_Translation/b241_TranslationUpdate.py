@@ -1442,9 +1442,12 @@ def TranslationIndexDefineFilter(Response, CheckCount):
         if missing_keys:
             return f"TranslationIndexDefine, JSONKeyError: '목차리스트[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
-        # 데이터 타입 검증
-        if not isinstance(item['번호'], int):
-            return f"TranslationIndexDefine, JSON에서 오류 발생: '목차리스트[{idx}] > 번호'는 정수여야 합니다"
+        # 데이터 타입 및 유효한 값 검증
+        if not (isinstance(item['번호'], (str, int)) and (isinstance(item['번호'], int) or item['번호'].isdigit())):
+            return f"TranslationIndexDefine, JSON에서 오류 발생: '목차리스트[{idx}] > 번호'는 문자열 또는 정수여야 합니다"
+        if isinstance(item['번호'], str):
+            if item['번호'].isdigit():
+                item['번호'] = int(item['번호'])
 
         if idx == 0:
             if item['목차태그'] != 'Title':
@@ -1534,9 +1537,12 @@ def WordListGenFilter(Response, CheckCount):
         if missing_keys:
             return f"WordListGen, JSONKeyError: '단어장[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
-        # 데이터 타입 검증
-        if not isinstance(item['번호'], int):
-            return f"WordListGen, JSON에서 오류 발생: '단어장[{idx}] > 번호'는 정수여야 합니다"
+        # 데이터 타입 및 유효한 값 검증
+        if not (isinstance(item['번호'], (str, int)) and (isinstance(item['번호'], int) or item['번호'].isdigit())):
+            return f"WordListGen, JSON에서 오류 발생: '단어장[{idx}] > 번호'는 문자열 또는 정수여야 합니다"
+        if isinstance(item['번호'], str):
+            if item['번호'].isdigit():
+                item['번호'] = int(item['번호'])
 
         if not isinstance(item['원문'], str):
             return f"WordListGen, JSON에서 오류 발생: '단어장[{idx}] > 원문'은 문자열이어야 합니다"
@@ -1577,9 +1583,12 @@ def UniqueWordListGenFilter(Response, CheckCount):
         if missing_keys:
             return f"UniqueWordListGen, JSONKeyError: '고유명사[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
-        # 데이터 타입 검증
-        if not isinstance(item['번호'], int):
-            return f"UniqueWordListGen, JSON에서 오류 발생: '고유명사[{idx}] > 번호'는 정수여야 합니다"
+        # 데이터 타입 및 유효한 값 검증
+        if not (isinstance(item['번호'], (str, int)) and (isinstance(item['번호'], int) or item['번호'].isdigit())):
+            return f"UniqueWordListGen, JSON에서 오류 발생: '고유명사[{idx}] > 번호'는 문자열 또는 정수여야 합니다"
+        if isinstance(item['번호'], str):
+            if item['번호'].isdigit():
+                item['번호'] = int(item['번호'])
 
         if not isinstance(item['원문'], str):
             return f"UniqueWordListGen, JSON에서 오류 발생: '고유명사[{idx}] > 원문'은 문자열이어야 합니다"
@@ -1624,9 +1633,12 @@ def WordListPostprocessingFilter(Response, CheckCount):
         if missing_keys:
             return f"WordListPostprocessing, JSONKeyError: '정리된단어장[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
-        # 데이터 타입 검증
-        if not isinstance(item['번호'], int):
-            return f"WordListPostprocessing, JSON에서 오류 발생: '정리된단어장[{idx}] > 번호'는 정수여야 합니다"
+        # 데이터 타입 및 유효한 값 검증
+        if not (isinstance(item['번호'], (str, int)) and (isinstance(item['번호'], int) or item['번호'].isdigit())):
+            return f"WordListPostprocessing, JSON에서 오류 발생: '정리된단어장[{idx}] > 번호'는 문자열 또는 정수여야 합니다"
+        if isinstance(item['번호'], str):
+            if item['번호'].isdigit():
+                item['번호'] = int(item['번호'])
 
         if not isinstance(item['원문'], str):
             return f"WordListPostprocessing, JSON에서 오류 발생: '정리된단어장[{idx}] > 원문'은 문자열이어야 합니다"
@@ -1703,9 +1715,12 @@ def BodyTranslationPreprocessingFilter(Response, CheckCount):
         if missing_keys:
             return f"BodyTranslationPreprocessing, JSONKeyError: '수정된번역단어[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
-        # 데이터 타입 검증
-        if not isinstance(item['번호'], int):
-            return f"BodyTranslationPreprocessing, JSON에서 오류 발생: '수정된번역단어[{idx}] > 번호'는 정수여야 합니다"
+        # 데이터 타입 및 유효한 값 검증
+        if not (isinstance(item['번호'], (str, int)) and (isinstance(item['번호'], int) or item['번호'].isdigit())):
+            return f"BodyTranslationPreprocessing, JSON에서 오류 발생: '수정된번역단어[{idx}] > 번호'는 문자열 또는 정수여야 합니다"
+        if isinstance(item['번호'], str):
+            if item['번호'].isdigit():
+                item['번호'] = int(item['번호'])
 
         if not isinstance(item['원단어'], str):
             return f"BodyTranslationPreprocessing, JSON에서 오류 발생: '수정된번역단어[{idx}] > 원단어'는 문자열이어야 합니다"
@@ -1814,9 +1829,12 @@ def BodyTranslationWordCheckFilter(Response, CheckCount):
         if missing_keys:
             return f"BodyTranslationWordCheck, JSONKeyError: '괄호제거단어[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
-        # 데이터 타입 검증
-        if not isinstance(item['번호'], int):
-            return f"BodyTranslationWordCheck, JSON에서 오류 발생: '괄호제거단어[{idx}] > 번호'는 정수여야 합니다"
+        # 데이터 타입 및 유효한 값 검증
+        if not (isinstance(item['번호'], (str, int)) and (isinstance(item['번호'], int) or item['번호'].isdigit())):
+            return f"BodyTranslationWordCheck, JSON에서 오류 발생: '괄호제거단어[{idx}] > 번호'는 문자열 또는 정수여야 합니다"
+        if isinstance(item['번호'], str):
+            if item['번호'].isdigit():
+                item['번호'] = int(item['번호'])
 
         if not isinstance(item['단어'], str):
             return f"BodyTranslationWordCheck, JSON에서 오류 발생: '괄호제거단어[{idx}] > 단어'는 문자열이어야 합니다"
@@ -2015,8 +2033,11 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
             return f"TranslationDialogueEditing, JSONKeyError: '대화내용[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
         # 데이터 타입 및 유효한 값 검증
-        if not isinstance(item['번호'], (str, int)):
-            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 번호'는 문자열 또는 정수이어야 합니다"
+        if not (isinstance(item['번호'], (str, int)) and (isinstance(item['번호'], int) or item['번호'].isdigit())):
+            return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 번호'는 문자열 또는 정수여야 합니다"
+        if isinstance(item['번호'], str):
+            if item['번호'].isdigit():
+                item['번호'] = int(item['번호'])
 
         if not isinstance(item['인물'], str):
             return f"TranslationDialogueEditing, JSON에서 오류 발생: '대화내용[{idx}] > 인물'은 문자열이어야 합니다"
@@ -2053,49 +2074,6 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
         
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['대화내용']
-
-# ## Process13: TranslationDialoguePostprocessing의 Filter(Error 예외처리)
-# def TranslationDialoguePostprocessingFilter(Response, CheckCount):
-#     # Error1: JSON 형식 예외 처리
-#     try:
-#         OutputDic = json.loads(Response)
-#     except json.JSONDecodeError:
-#         return "TranslationDialoguePostprocessing, JSONDecode에서 오류 발생: JSONDecodeError"
-
-#     # Error2: 최상위 키 확인
-#     if '대화문구수정' not in OutputDic:
-#         return "TranslationDialoguePostprocessing, JSONKeyError: '대화문구수정' 키가 누락되었습니다"
-
-#     # Error3: '대화문구수정' 데이터 타입 검증
-#     if not isinstance(OutputDic['대화문구수정'], list):
-#         return "TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정'은 리스트 형태여야 합니다"
-
-#     for idx, item in enumerate(OutputDic['대화문구수정']):
-#         # 각 항목이 딕셔너리인지 확인
-#         if not isinstance(item, dict):
-#             return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}]'는 딕셔너리 형태여야 합니다"
-
-#         # 필수 키 확인
-#         required_keys = ['번호', '이름', '대화문구', '수정이유']
-#         missing_keys = [key for key in required_keys if key not in item]
-#         if missing_keys:
-#             return f"TranslationDialoguePostprocessing, JSONKeyError: '대화문구수정[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
-
-#         # 데이터 타입 검증
-#         if not isinstance(item['번호'], str):
-#             return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 번호'는 문자열이어야 합니다"
-
-#         if not isinstance(item['이름'], str):
-#             return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 이름'은 문자열이어야 합니다"
-
-#         if not isinstance(item['대화문구'], str):
-#             return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 대화문구'는 문자열이어야 합니다"
-
-#         if not isinstance(item['수정이유'], str):
-#             return f"TranslationDialoguePostprocessing, JSON에서 오류 발생: '대화문구수정[{idx}] > 수정이유'는 문자열이어야 합니다"
-
-#     # 모든 조건을 만족하면 JSON 반환
-#     return OutputDic['대화문구수정']
 
 #######################
 ##### Process 응답 #####
@@ -2770,9 +2748,25 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
         TranslationOrginDialogueText = DialogueMatch.group(1)
         
         ## 원래 대화문 글자 개수에 따라서 변경 여부를 결정
-        # 조건1. 원본 대화문 글자 개수가 100개 이하인 경우
+        # 조건1. 원본 대화문 글자 개수가 100개(한글기준) 이하인 경우 (언어별로 다르게 해야함)
         # 조건2. 원본 대화문과 편집 대화문의 글자 개수 비율이 0.6-1.7 사이인 경우
-        if len(TranslationOrginDialogueText) > 100:
+        # 언어별 최대 토큰 길이 설정
+        if MainLang == 'ko':
+            MaxTokenLength = 100  # 한국어: 100자
+        elif MainLang == 'en':
+            MaxTokenLength = 250  # 영어: 250자 (알파벳 기준)
+        elif MainLang == 'zh':
+            MaxTokenLength = 80   # 중국어: 80자 (한자 기준)
+        elif MainLang == 'es':
+            MaxTokenLength = 250  # 스페인어: 250자
+        elif MainLang == 'fr':
+            MaxTokenLength = 250  # 프랑스어: 250자
+        elif MainLang == 'ja':
+            MaxTokenLength = 80   # 일본어: 80자 (한자/가나 혼합)
+        else:
+            MaxTokenLength = 150  # 기타 언어: 기본값
+            
+        if len(TranslationOrginDialogueText) > MaxTokenLength:
             # 원본 텍스트와 편집된 텍스트의 길이 비율 계산
             if len(TranslationOrginDialogueText) > 0:  # 0으로 나누기 방지
                 Ratio = len(TranslationEditedDialogueText) / len(TranslationOrginDialogueText)
@@ -2919,9 +2913,9 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
     TranslationIndexEdit = TranslationEdit[Process1]
         
     ## TranslationEdit을 Index, Body Text파일로 저장
-    EditIndexFileName = f"{ProjectName}_Index({MainLang}).txt"
+    EditIndexFileName = f"{ProjectName}_Index({MainLang}-{Process2}).txt"
     EditIndexFilePath = os.path.join(ProjectMasterTranslationPath, EditIndexFileName)
-    EditBodyFileName = f"{ProjectName}_Body({MainLang}).txt"
+    EditBodyFileName = f"{ProjectName}_Body({MainLang}-{Process2}).txt"
     EditBodyFilePath = os.path.join(ProjectMasterTranslationPath, EditBodyFileName)
     
     # Index 파일 생성  
@@ -3910,6 +3904,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     
             ## Edit 저장
             ProcessEditSave(ProjectDataFrameTranslationDialogueEditingPath, TranslationEditPath, Process, EditMode)
+            ## EditText 저장
+            ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
             if EditMode == "Manual":
                 sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 

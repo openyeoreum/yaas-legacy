@@ -1068,7 +1068,7 @@ def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
         
     return AddInput
 
-## Process11: TranslationDialogueEditing, Analysis의 InputList
+## Process11: TranslationDialogueEditing의 InputList
 def TranslationDialogueAnalysisInputList(projectName, Process, ProjectDataFrameTranslationProofreadingPath, TranslationEditPath, BeforeProcess):
     def CountDialogues(Pattern, Body):
         # 텍스트에서 대화문 패턴 찾기
@@ -1289,6 +1289,11 @@ def TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueEditi
         AddInput = "미리 찾은 인물이 없습니다.\n\n\n<참고: 이전내용>\n첫번째 대화 내용으로 이전내용이 없습니다.\n\n\n"
     
     return AddInput
+
+## Process12: TranslationDialogueEditing의 InputList
+# def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
+
+## Process12: TranslationDialogueAnalysis의 추가 Input
 
 ######################
 ##### Filter 조건 #####
@@ -2732,6 +2737,12 @@ def ProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process, EditMode
             TranslationEdit = {}
         ## TranslationEdit 업데이트
         TranslationEdit[Process] = []
+        
+        ## Process에서 추가 데이터가 존재하는 경우 예외 저장
+        # TranslationDialogueAnalysis
+        if Process == 'TranslationDialogueAnalysis':
+            TranslationEdit[Process + 'Character'] = TranslationDataFrame[2]
+            
         if EditMode == "Manual":
             TranslationEdit[f"{Process}Completion"] = '완료 후 Completion'
         elif EditMode == "Auto":
@@ -2740,7 +2751,7 @@ def ProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process, EditMode
         for i in range(1, len(TranslationDataList)):
             ProcessDic = TranslationDataList[i]
             TranslationEdit[Process].append(ProcessDic)
-        
+            
         ## TranslationEdit 저장
         with open(TranslationEditPath, 'w', encoding = 'utf-8') as TranslationEditJson:
             json.dump(TranslationEdit, TranslationEditJson, indent = 4, ensure_ascii = False)
@@ -2912,13 +2923,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationIndexDefinePath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     ## 최종 설정된 Translation 불러오기 및 MainLangCode, TranslationLangCode 설정
     Translation = LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath)
@@ -2989,13 +3000,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationBodySummaryPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     #########################################
     ### Process3: WordListGen Response 생성 ##
@@ -3035,13 +3046,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameWordListGenPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     ###############################################
     ### Process4: UniqueWordListGen Response 생성 ##
@@ -3081,13 +3092,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameUniqueWordListGenPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     ####################################################
     ### Process5: WordListPostprocessing Response 생성 ##
@@ -3128,13 +3139,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameWordListPostprocessingPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     ##############################################
     ### Process6: IndexTranslation Response 생성 ##
@@ -3178,13 +3189,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameIndexTranslationPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     ##########################################################
     ### Process7: BodyTranslationPreprocessing Response 생성 ##
@@ -3228,13 +3239,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameBodyTranslationPreprocessingPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     #############################################
     ### Process8: BodyTranslation Response 생성 ##
@@ -3327,13 +3338,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameBodyTranslationPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     ################################################
     ### Process9: TranslationEditing Response 생성 ##
@@ -3459,13 +3470,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationEditingPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     ###########################################
     ### Process9: TranslationRefinement 생성 ###
@@ -3592,13 +3603,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             ## Edit 저장
             ProcessEditSave(ProjectDataFrameTranslationRefinementPath, TranslationEditPath, Process, EditMode)
             if EditMode == "Manual":
-                sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
         if EditMode == "Manual":
             if EditCheck:
                 if not EditCompletion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                    sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                    sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     #############################################
     ### Process10: TranslationProofreading 생성 ##
@@ -3651,13 +3662,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## EditText 저장
         ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     #################################################
     ### Process11: TranslationDialogueAnalysis 생성 ##
@@ -3707,15 +3718,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     TranslationDialogueAnalysisProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, inputCount, BodyId, Body, TotalInputCount)
                     
             ## Edit 저장
-            ProcessEditSave(ProjectDataFrameTranslationDialogueAnalysisPath, TranslationEditPath, Process, EditMode)
-            if EditMode == "Manual":
-                sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            ProcessEditSave(ProjectDataFrameTranslationDialogueAnalysisPath, TranslationEditPath, Process, "Manual")
+            sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}\n\n1. TranslationDialogueAnalysis와 TranslationDialogueAnalysisCharacter를 비교하여, 미비한 인물 부분을 수정합니다. 이 경우 'Body'와 'DialogueBody'와 'BodyCharacterList'를 모두 수정해야 합니다.\n2. {{인물이름: 대화내용}} 중에 잘못된 표기나 괄호 묶음을 수정합니다. 이 경우 'Body'와 'DialogueBody' 모두 수정해야 합니다.\n\n")
 
-    if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}\n\n1. TranslationDialogueAnalysis와 TranslationDialogueAnalysisCharacter를 비교하여, 미비한 인물 부분을 수정합니다. 이 경우 'Body'와 'DialogueBody'와 'BodyCharacterList'를 모두 수정해야 합니다.\n2. {{인물이름: 대화내용}} 중에 잘못된 표기나 괄호 묶음을 수정합니다. 이 경우 'Body'와 'DialogueBody' 모두 수정해야 합니다.\n\n")
 
     ################################################
     ### Process12: TranslationDialogueEditing 생성 ##
@@ -3732,7 +3741,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
 
         ## Process Count 계산 및 Check
         CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-        InputList = TranslationDialogueAnalysisInputList(TranslationEditPath, "TranslationProofreading")
+        InputList = TranslationDialogueEditingInputList(TranslationEditPath, "TranslationDialogueAnalysis")
         TotalInputCount = len(InputList) # 인풋의 전체 카운트
         InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueEditingPath)
         EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
@@ -3770,13 +3779,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     #         ## Edit 저장
     #         ProcessEditSave(ProjectDataFrameTranslationDialogueEditingPath, TranslationEditPath, Process, EditMode)
     #         if EditMode == "Manual":
-    #             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+    #             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     # if EditMode == "Manual":
     #     if EditCheck:
     #         if not EditCompletion:
     #             ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-    #             sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+    #             sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     #################################################
     ### Process14: AfterTranslationBodySummary 생성 ##
@@ -3823,13 +3832,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameAfterTranslationBodySummaryPath, TranslationEditPath, Process, EditMode)
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     if EditMode == "Manual":
         if EditCheck:
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n{TranslationEditPath}")
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
     
     ############################################

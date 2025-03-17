@@ -1222,7 +1222,7 @@ def TranslationDialogueInputList(TranslationEditPath, BeforeProcess):
         IndexTag = TranslationEdit['IndexTag']
         Index = TranslationEdit['Index']
         BodyId = TranslationEdit['BodyId']
-        Body = TranslationEdit['Body']
+        Body = TranslationEdit['Body'].replace('“', '"').replace('”', '"').replace('‘', "'").replace('’', "'")
         # 해당 항목의 대화문 개수 카운트
         DialogueCount = CountDialogues(Pattern, Body)
         # 대화문 마킹 처리
@@ -1230,7 +1230,7 @@ def TranslationDialogueInputList(TranslationEditPath, BeforeProcess):
         MarkBody = MarkBody.replace('... ...', '...')
         # 원본 텍스트를 유지하면서 대화문만 마킹 처리
         OrginMarkBody = MarkDialoguesPreserveText(Pattern, Body)
-        Input = f"<**작업: 대화중심편집내용>\n{MarkBody}\n\n"
+        Input = f"<**작업: 대화중심편집내용>\n{OrginMarkBody}\n\n"
         InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": OrginMarkBody, "MarkBody": MarkBody, "Input": Input, "DialogueCount": DialogueCount})
         InputId += 1
    

@@ -3692,8 +3692,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         
                     ## DataFrame 저장
                     TranslationDialogueAnalysisProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, inputCount, BodyId, Body, TotalInputCount)
-                    if TranslationDialogueAnalysisResponse != []:
-                        sys.exit()
+                    
             ## Edit 저장
             ProcessEditSave(ProjectDataFrameTranslationDialogueAnalysisPath, TranslationEditPath, Process, EditMode)
             if EditMode == "Manual":

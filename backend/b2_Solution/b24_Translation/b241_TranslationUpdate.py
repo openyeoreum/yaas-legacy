@@ -2556,7 +2556,7 @@ def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Trans
             if not SameCharacterExistenceOrNotCheck:
                 NewCharacterId = len(TranslationDialogueAnalysisFrame[2])
                 TranslationDialogueAnalysisFrame[2].append({'CharacterId': NewCharacterId, 'CharacterName': TranslationDialogueName, 'CharacterRole': TranslationDialogueRole, 'CharacterGender': TranslationDialogueGender, 'CharacterAge': TranslationDialogueAge})
-            BodyCharacterList.append({"DialogueId": NewCharacterId, 'CharacterId': CharacterId, 'CharacterName': TranslationDialogueName, 'CharacterRole': TranslationDialogueRole, 'CharacterGender': TranslationDialogueGender, 'CharacterAge': TranslationDialogueAge})
+            BodyCharacterList.append({"DialogueId": TranslationDialogueId, 'CharacterId': CharacterId, 'CharacterName': TranslationDialogueName, 'CharacterRole': TranslationDialogueRole, 'CharacterGender': TranslationDialogueGender, 'CharacterAge': TranslationDialogueAge})
                 
         ## 대화문이 아닌 경우
         else:

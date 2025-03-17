@@ -83,7 +83,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>과 <미리찾은인물>을 바탕으로 {n 대화: 대화내용}을 하나씩 분석하여 <대화내용분석.json>을 완성해주세요.)\n\n",
+                    "Mark": "\n\n\n(<미리찾은인물>과 <참고: 이전내용>과 <**작업: 대화중심편집내용>을 바탕으로 {n 대화: 대화내용}을 하나씩 분석하여 <대화내용분석.json>을 완성해주세요.)\n\n",
                     "InputMark": "<참고: 이전내용>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
@@ -93,7 +93,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n\n<대화내용분석.json>",
+            "OutputMark": "\n\n<미리찾은인물>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -142,7 +142,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>과 <미리찾은인물>을 바탕으로 {n 대화: 대화내용}을 하나씩 분석하여 <대화내용분석.json>을 완성해주세요.)\n\n",
+                    "Mark": "\n\n\n(<미리찾은인물>과 <참고: 이전내용>과 <**작업: 대화중심편집내용>을 바탕으로 {n 대화: 대화내용}을 하나씩 분석하여 <대화내용분석.json>을 완성해주세요.)\n\n",
                     "InputMark": "<참고: 이전내용>\n",
                     "Input": "INPUT",
                     "InputMark2": "",
@@ -152,7 +152,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n\n<대화내용분석.json>",
+            "OutputMark": "\n\n<미리찾은인물>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -194,7 +194,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>과 <미리찾은인물>을 바탕으로 {n 대화: 대화내용}을 하나씩 분석하여 <대화내용분석.json>을 완성해주세요.)\n\n",
+                    "Mark": "\n\n\n(<미리찾은인물>과 <참고: 이전내용>과 <**작업: 대화중심편집내용>을 바탕으로 {n 대화: 대화내용}을 하나씩 분석하여 <대화내용분석.json>을 완성해주세요.)\n\n",
                     "InputMark": "<참고: 이전내용>\n",
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
@@ -208,7 +208,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n\n<대화내용분석.json>",
+            "OutputMark": "\n\n<미리찾은인물>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
@@ -252,7 +252,7 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n\n(<참고: 이전내용>과 <**작업: 대화중심편집내용>과 <미리찾은인물>을 바탕으로 {n 대화: 대화내용}을 하나씩 분석하여 <대화내용분석.json>을 완성해주세요.)\n\n",
+                    "Mark": "\n\n\n(<미리찾은인물>과 <참고: 이전내용>과 <**작업: 대화중심편집내용>을 바탕으로 {n 대화: 대화내용}을 하나씩 분석하여 <대화내용분석.json>을 완성해주세요.)\n\n",
                     "InputMark": "<참고: 이전내용>\n",
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
@@ -266,7 +266,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n\n<대화내용분석.json>",
+            "OutputMark": "\n\n<미리찾은인물>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",

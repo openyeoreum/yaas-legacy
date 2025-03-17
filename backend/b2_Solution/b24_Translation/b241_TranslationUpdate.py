@@ -1068,10 +1068,8 @@ def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath)
         
     return AddInput
 
-## Process11: TranslationDialogueAnalysis의 InputList
-
-## Process12: TranslationDialogueEditing의 InputList
-def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
+## Process11, 12: TranslationDialogueEditing, Analysis의 InputList
+def TranslationDialogueInputList(TranslationEditPath, BeforeProcess):
     def CountDialogues(Pattern, Body):
         # 텍스트에서 대화문 패턴 찾기
         DialogueMatches = re.findall(Pattern, Body)
@@ -1242,35 +1240,50 @@ def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess):
    
     return InputList
 
-## Process12: TranslationDialogueEditing의 추가 Input
-def TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditingPath):
+## Process11: TranslationDialogueAnalysis의 추가 Input
+def TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueEditingPath):
     if os.path.exists(ProjectDataFrameTranslationDialogueEditingPath):
         with open(ProjectDataFrameTranslationDialogueEditingPath, 'r', encoding='utf-8') as TranslationDataFrame:
             TranslationDialogue = json.load(TranslationDataFrame)[1]
             
-            # 결과를 저장할 리스트
-            CollectedContents = []
-            Count = 0
-            MaxItems = 6
+            ## <미리찾은인물> 추가 Input 생성
+            BookCharacterText = ''
+            BookCharacterList = TranslationDialogue[-1]['BookCharacterList']
+            for BookCharacter in BookCharacterList:
+                CharacterId = BookCharacter['CharacterId']
+                CharacterName = BookCharacter['CharacterName']
+                CharacterRole = BookCharacter['CharacterRole']
+                CharacterGender = BookCharacter['CharacterGender']
+                CharacterAge = BookCharacter['CharacterAge']
+                BookCharacterText += f"[{CharacterId}] {CharacterName}/{CharacterRole}/{CharacterGender}/{CharacterAge}\n\n"
+            if BookCharacterText == '':
+                BookCharacterText = "미리 찾은 인물이 없습니다.\n\n"
             
+            ## <참고: 이전내용> 추가 Input 생성
+            BeforeMarkBodys = []
+            Count = 0
+            MaxCount = 6
             # 데이터의 인덱스 1의 리스트를 역순으로 순회
             for i in range(len(TranslationDialogue)-1, -1, -1):
                 # 아이템이 존재하고 DialogueBody가 비어있지 않은 경우
                 if i >= 0 and TranslationDialogue[i]['DialogueBody'] != '' and TranslationDialogue[i]['DialogueBody'] != 'None':
-                    CollectedContents.append(TranslationDialogue[i]['DialogueBody'])
+                    BeforeMarkBodys.append(TranslationDialogue[i]['DialogueBody'])
                     Count += 1
                     # 최대 항목 수에 도달하면 중단
-                    if Count >= MaxItems:
+                    if Count >= MaxCount:
                         break
             
+            BodyText = TranslationDialogue[-1]['Body']
             # 수집된 내용이 있으면 역순으로 정렬하여 합치기 (최신 항목이 마지막에 오도록)
-            if CollectedContents:
-                CollectedContents.reverse()
-                AddInput = "\n" + "\n\n...\n\n".join(CollectedContents) + "\n\n\n"
+            if BeforeMarkBodys:
+                BeforeMarkBodys.reverse()
+                BeforeMarkBodyText = "\n\n...\n\n".join(BeforeMarkBodys)
+                
+                AddInput = f"{BookCharacterText}\n\n\n<참고: 이전내용>\n{BeforeMarkBodyText}\n\n\n"
             else:
-                AddInput = f"\n{TranslationDialogue[-1]['Body']}\n\n\n"
+                AddInput = f"{BookCharacterText}\n\n\n<참고: 이전내용>\n{BodyText}\n\n\n"
     else:
-        AddInput = "\n※ 첫번째 대화 내용으로 이전내용이 없습니다.\n\n\n"
+        AddInput = "미리 찾은 인물이 없습니다.\n\n\n<참고: 이전내용>\n첫번째 대화 내용으로 이전내용이 없습니다.\n\n\n"
     
     return AddInput
 
@@ -2437,7 +2450,7 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
     if os.path.exists(ProjectDataFrameTranslationDialogueEditingPath):
         TranslationDialogueEditingFramePath = ProjectDataFrameTranslationDialogueEditingPath
     else:
-        TranslationDialogueEditingFramePath = os.path.join(TranslationDataFramePath, "b532-11_TranslationDialogueEditingFrame.json")
+        TranslationDialogueEditingFramePath = os.path.join(TranslationDataFramePath, "b532-12_TranslationDialogueEditingFrame.json")
     with open(TranslationDialogueEditingFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TranslationDialogueEditingFrame = json.load(DataFrameJson)
         
@@ -3188,6 +3201,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             i = InputCount - 1
             ErrorCount = 0
             while i < TotalInputCount:
+                ## LangCheck, BodyTranslationCheck이 3번 이상 일치가 되지 않으면 코드종료
                 if ErrorCount >= 3:
                     sys.exit(f"Project: {projectName} | Process: {Process}-BodyTranslationWordCheck {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                 ## Input 생성
@@ -3221,7 +3235,11 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     if not LangCheck:
                         MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는  {MainLangCode}  , 단 하나의 언어만 사용해서 전체를 편집합니다. 다른 언어가 존재하면 ({MainLangCode})로 번역도 함께 진행합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                         ErrorCount += 1
-                        continue
+                        ## LangCheck의 경우는 3번 이상 일치가 되지 않으면 pass
+                        if ErrorCount >= 3:
+                            pass
+                        else:
+                            continue
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     if BeforeCheck != '모름':
                         if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
@@ -3260,6 +3278,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ## DataFrame 저장
                 TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
                 i += 1  # 다음 인덱스로 이동
+                ErrorCount = 0
 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationEditingPath, TranslationEditPath, Process, EditMode)
@@ -3308,6 +3327,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 i = InputCount - 1
                 ErrorCount = 0
                 while i < TotalInputCount:
+                    ## LangCheck, BodyTranslationCheck이 3번 이상 일치가 되지 않으면 코드종료
                     if ErrorCount >= 3:
                         sys.exit(f"Project: {projectName} | Process: {Process}-BodyTranslationWordCheck {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                     ## Input 생성
@@ -3341,7 +3361,11 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         if not LangCheck:
                             MemoryCounter = f'\n※ 참고! [*편집할내용]을 편집할때는 ({MainLangCode}), 단 하나의 언어만 사용해서 전체를 편집합니다. 다른 언어가 존재하면 ({MainLangCode})로 번역도 함께 진행합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             ErrorCount += 1
-                            continue
+                            ## LangCheck의 경우는 3번 이상 일치가 되지 않으면 pass
+                            if ErrorCount >= 3:
+                                pass
+                            else:
+                                continue
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                         if BeforeCheck != '모름':
                             if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
@@ -3380,6 +3404,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     ## DataFrame 저장
                     TranslationRefinementProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
                     i += 1  # 다음 인덱스로 이동
+                    ErrorCount = 0
 
             ## Edit 저장
             ProcessEditSave(ProjectDataFrameTranslationRefinementPath, TranslationEditPath, Process, EditMode)
@@ -3463,8 +3488,33 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ProcessNumber = '11'
         Process = "TranslationDialogueAnalysis"
 
-        ## TranslationDialogueEditing 경로 생성
-        ProjectDataFrameTranslationDialogueEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+        ## TranslationDialogueAnalysis 경로 생성
+        ProjectDataFrameTranslationDialogueAnalysisPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+        
+        ## Process Count 계산 및 Check
+        CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+        InputList = TranslationDialogueInputList(TranslationEditPath, "TranslationProofreading")
+        TotalInputCount = len(InputList) # 인풋의 전체 카운트
+        InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueAnalysisPath)
+        EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+        # print(f"InputCount: {InputCount}")
+        # print(f"EditCheck: {EditCheck}")
+        # print(f"EditCompletion: {EditCompletion}")
+        ## Process 진행
+        if not EditCheck:
+            if DataFrameCompletion == 'No':
+                for i in range(InputCount - 1, TotalInputCount):
+                    inputCount = InputList[i]['Id']
+                    BodyId = InputList[i]['BodyId']
+                    MarkBody = InputList[i]['MarkBody']
+                    CheckCount = InputList[i]['DialogueCount']
+                    ## Body내에 대화문이 있는지 체크
+                    if CheckCount > 0:
+                        ## Input 생성
+                        Input1 = TranslationDialogueAnalysisAddInput(ProjectDataFrameTranslationDialogueAnalysisPath)
+                        Input2 = InputList[i]['Input']
+                        Input = Input1 + Input2
+                        MemoryCounter = f'\n※ 주의사항: <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount}개 입니다.'
 
     ################################################
     ### Process12: TranslationDialogueEditing 생성 ##
@@ -3481,7 +3531,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
 
         ## Process Count 계산 및 Check
         CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-        InputList = TranslationDialogueEditingInputList(TranslationEditPath, "TranslationProofreading")
+        InputList = TranslationDialogueInputList(TranslationEditPath, "TranslationProofreading")
         TotalInputCount = len(InputList) # 인풋의 전체 카운트
         InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationDialogueEditingPath)
         EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
@@ -3503,7 +3553,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     ## Body내에 대화문이 있는지 체크
                     if CheckCount > 0:
                         ## Input 생성
-                        Input1 = TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditingPath)
+                        Input1 = TranslationDialogueAddInput(ProjectDataFrameTranslationDialogueEditingPath)
                         Input2 = InputList[i]['Input']
                         Input = Input1 + Input2
                         MemoryCounter = f'\n※ 주의사항: <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount}개 입니다.\n※ 주의사항: 특수한 경우 이외에는 \'현재말의높임법\' 표기에 따라서 이에 맞는 말의 높임법대로 \'편집대화내용\'이 작성되어야 합니다.'

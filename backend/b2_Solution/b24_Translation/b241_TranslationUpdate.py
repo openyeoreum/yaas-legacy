@@ -1134,11 +1134,8 @@ def TranslationDialogueInputList(TranslationEditPath, BeforeProcess):
             # 뒤쪽 텍스트
             TextAfter = Body[GroupEndPosition:].strip()
             
-            # 앞쪽 최대 2문장 추출 (마침표, 느낌표, 물음표로 구분)
-            SentencesBefore = re.findall(r'[^.!?]*[.!?](?:\s|$)', TextBefore)
-            if not SentencesBefore and TextBefore:
-                SentencesBefore = [TextBefore]
-            
+            # 앞쪽 최대 2문장 추출 (마침표, 느낌표, 물음표, 줄바꿈으로 구분)
+            SentencesBefore = re.split(r'(?<=[.!?])\s+|\n+', TextBefore)
             SentencesBefore = [s.strip() for s in SentencesBefore if s.strip()]
             
             if len(SentencesBefore) > 2:
@@ -1146,10 +1143,9 @@ def TranslationDialogueInputList(TranslationEditPath, BeforeProcess):
             else:
                 ContextBefore = SentencesBefore
             
-            # 뒤쪽 최대 2문장 추출
-            SentencesAfter = re.findall(r'[^.!?]*[.!?](?:\s|$)', TextAfter)
-            if not SentencesAfter and TextAfter:
-                SentencesAfter = [TextAfter]
+            # 뒤쪽 최대 2문장 추출 (마침표, 느낌표, 물음표, 줄바꿈으로 구분)
+            SentencesAfter = re.split(r'(?<=[.!?])\s+|\n+', TextAfter)
+            SentencesAfter = [s.strip() for s in SentencesAfter if s.strip()]
             
             SentencesAfter = [s.strip() for s in SentencesAfter if s.strip()]
             
@@ -1825,8 +1821,10 @@ def TranslationDialogueAnalysisFilter(Response, CheckCount):
             return f"TranslationDialogueAnalysis, JSONKeyError: '대화내용분석[{idx}]'에 누락된 키: {', '.join(missing_keys)}"
 
         # 데이터 타입 및 유효한 값 검증
-        if not isinstance(item['번호'], str):
-            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 번호'는 문자열이어야 합니다"
+        if not (isinstance(item['번호'], int) or (isinstance(item['번호'], str) and item['번호'].isdigit())):
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 번호'는 숫자형(또는 숫자 문자열)이어야 합니다"
+        if isinstance(item['번호'], str):
+            item['번호'] = int(item['번호'])
 
         if item['대화문여부'] not in ['맞음', '아님']:
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 대화문여부'는 '맞음' 또는 '아님' 중 하나여야 합니다"
@@ -1842,6 +1840,9 @@ def TranslationDialogueAnalysisFilter(Response, CheckCount):
 
         if not isinstance(item['인물이름'], str):
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 인물이름'은 문자열이어야 합니다"
+        
+        if item['인물이름'] == '없음':
+            return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 인물이름'은 '없음'이 아니어야 합니다"
 
         if not isinstance(item['역할'], str):
             return f"TranslationDialogueAnalysis, JSON에서 오류 발생: '대화내용분석[{idx}] > 역할'은 문자열이어야 합니다"
@@ -2539,8 +2540,8 @@ def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Trans
         
         ## 대화문이 맞는 경우
         if TranslationDialogueExistenceOrNot == '맞음':
-            DialogueBody = DialogueBody.replace(f"{{{TranslationDialogueId} 대화: ", f"{{{TranslationDialogueId} {TranslationDialogueName}: ")
-            Body = Body.replace(f"{{{TranslationDialogueId} 대화: ", f"{{{TranslationDialogueId} {TranslationDialogueName}: ")
+            DialogueBody = DialogueBody.replace(f"{{{TranslationDialogueId} 대화: ", f"{{{TranslationDialogueName}: ")
+            Body = Body.replace(f"{{{TranslationDialogueId} 대화: ", f"{{{TranslationDialogueName}: ")
             ## 동일인물이 있는 경우
             SameCharacterExistenceOrNotCheck = False
             for i in range(len(TranslationDialogueAnalysisFrame[2])):
@@ -2573,20 +2574,29 @@ def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Trans
     
     ## 앞선 모든 DialogueBody와 Body와 BodyCharacterList에 변경된 이름 적용
     for i in range(len(TranslationDialogueAnalysisFrame[1])):
+        ## DialogueBody, Body 이름 업데이트
         BeforeDialogueBody = TranslationDialogueAnalysisFrame[1][i]['DialogueBody']
         BeforeBody = TranslationDialogueAnalysisFrame[1][i]['Body']
         BeforeBodyCharacterList = TranslationDialogueAnalysisFrame[1][i]['BodyCharacterList']
-        for Character in TranslationDialogueAnalysisFrame[2]:
-            dialoguePattern = r"(\{" + re.escape(str(Character['CharacterId'])) + r")\s*.*?:"
-            NameReplacement = r"\1 " + Character['CharacterName'] + ":"
-            BeforeDialogueBody = re.sub(dialoguePattern, NameReplacement, BeforeDialogueBody)
-            BeforeBody = re.sub(dialoguePattern, NameReplacement, BeforeBody)
-            for j in range(len(BeforeBodyCharacterList)):
-                if BeforeBodyCharacterList[j]['CharacterId'] == Character['CharacterId']:
-                    BeforeBodyCharacterList[j]['CharacterName'] = Character['CharacterName']
-                    BeforeBodyCharacterList[j]['CharacterRole'] = Character['CharacterRole']
-                    BeforeBodyCharacterList[j]['CharacterGender'] = Character['CharacterGender']
-                    BeforeBodyCharacterList[j]['CharacterAge'] = Character['CharacterAge']
+        ## BodyCharacterList 이름 업데이트
+        for j in range(len(TranslationDialogueAnalysisFrame[2])):
+            for k in range(len(BeforeBodyCharacterList)):
+                ## CharacterName으로 업데이트
+                if BeforeBodyCharacterList[k]['CharacterName'] == TranslationDialogueAnalysisFrame[2][j]['CharacterName']:
+                    BeforeBodyCharacterList[k]['CharacterId'] = TranslationDialogueAnalysisFrame[2][j]['CharacterId']
+                    BeforeBodyCharacterList[k]['CharacterName'] = TranslationDialogueAnalysisFrame[2][j]['CharacterName']
+                    BeforeBodyCharacterList[k]['CharacterRole'] = TranslationDialogueAnalysisFrame[2][j]['CharacterRole']
+                    BeforeBodyCharacterList[k]['CharacterGender'] = TranslationDialogueAnalysisFrame[2][j]['CharacterGender']
+                    BeforeBodyCharacterList[k]['CharacterAge'] = TranslationDialogueAnalysisFrame[2][j]['CharacterAge']
+                ## CharacterId로 업데이트
+                if BeforeBodyCharacterList[k]['CharacterId'] == TranslationDialogueAnalysisFrame[2][j]['CharacterId']:
+                    BeforeDialogueBody = re.sub(f"{{{BeforeBodyCharacterList[k]['CharacterName']}: ", f"{{{TranslationDialogueAnalysisFrame[2][j]['CharacterName']}: ", BeforeDialogueBody)
+                    BeforeBody = re.sub(f"{{{BeforeBodyCharacterList[k]['CharacterName']}: ", f"{{{TranslationDialogueAnalysisFrame[2][j]['CharacterName']}: ", BeforeBody)
+                    BeforeBodyCharacterList[k]['CharacterId'] = TranslationDialogueAnalysisFrame[2][j]['CharacterId']
+                    BeforeBodyCharacterList[k]['CharacterName'] = TranslationDialogueAnalysisFrame[2][j]['CharacterName']
+                    BeforeBodyCharacterList[k]['CharacterRole'] = TranslationDialogueAnalysisFrame[2][j]['CharacterRole']
+                    BeforeBodyCharacterList[k]['CharacterGender'] = TranslationDialogueAnalysisFrame[2][j]['CharacterGender']
+                    BeforeBodyCharacterList[k]['CharacterAge'] = TranslationDialogueAnalysisFrame[2][j]['CharacterAge']
         ## 수정된 DialogueBody와 Body와 BodyCharacterList를 프레임에 저장
         TranslationDialogueAnalysisFrame[1][i]['DialogueBody'] = BeforeDialogueBody
         TranslationDialogueAnalysisFrame[1][i]['Body'] = BeforeBody

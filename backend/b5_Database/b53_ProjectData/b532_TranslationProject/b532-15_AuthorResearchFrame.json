@@ -1,0 +1,24 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "Book",
+        "MainLang": "Ko",
+        "Translation": "",
+        "TaskName": "AuthorResearch",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "Author": "None",
+            "Birth": "None",
+            "Nationality": "None",
+            "Major": "None",
+            "Degree": "None",
+            "MajorCareer": "None",
+            "RepresentativeWorks": "None",
+            "ThoughtsAndInfluence": "None",
+            "OtherInterestingFacts": "None"
+        }
+    ]
+]

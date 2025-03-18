@@ -479,15 +479,15 @@ def LanguageDetection(Body):
     return list(DetectedLanguages)
 
 #####################
-##### Input 생성 #####
+##### Input Response 생성 #####
 #####################
 
 ## Process1: TranslationIndexDefine의 InputList
 def TranslationIndexDefineInputList(projectName, UploadTranslationFilePath):
     IndexTranslation = LoadTranslationIndex(projectName, UploadTranslationFilePath)
-    InputList = []
-    
+
     InputId = 1
+    InputList = []
     Input = IndexTranslation
     
     InputDic = {"Id": InputId, "Input": Input}
@@ -1418,6 +1418,68 @@ def TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditin
     
     return AddInput
 
+## Process15: AuthorResearch의 InputList
+def AuthorResearchInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2, BeforeProcess3, MainLangCode):
+    def TruncateTextAtSentenceEnd(Text, MaxChars = 2000):
+        if len(Text) <= MaxChars:
+            return Text
+        Candidate = Text[:MaxChars]
+        LastDot = Candidate.rfind('.')
+        LastExclam = Candidate.rfind('!')
+        LastQuestion = Candidate.rfind('?')
+        LastPunc = max(LastDot, LastExclam, LastQuestion)
+        if LastPunc != -1:
+            return Candidate[:LastPunc+1]
+        return Candidate
+
+    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+        TranslationEditList = json.load(TranslationEditJson)
+    TranslationBodySplit = TranslationEditList[BeforeProcess1]
+    IndexTranslation = TranslationEditList[BeforeProcess2]
+    AfterTranslationBodySummary = TranslationEditList[BeforeProcess3]
+
+    ## 1. 원어앞부분 생성
+    BookIntroductionText = TruncateTextAtSentenceEnd(TranslationBodySplit[0]['Body'], 2000)
+    
+    ## 2. 도서제목, 도서목차 생성
+    BookContents = ''
+    for Index in IndexTranslation:
+        if Index['IndexTag'] == 'Title':
+            BookTitle = Index['IndexTranslation']
+        else:
+            BookContents += f"\n{Index['IndexTag']}: {Index['IndexTranslation']}"
+    
+    ## 3. 도서핵심내용요약, 도서주요문구모음 생성
+    BookSummaryItems = []
+    TotalChars = 0
+    # Score가 높은 순으로 정렬하여, 8000자 이하가 되도록 선택
+    for Item in sorted(AfterTranslationBodySummary, key=lambda x: x['Score'], reverse=True):
+        SummaryLength = len(Item['BodySummary'])
+        if TotalChars + SummaryLength <= 3000:
+            BookSummaryItems.append(Item)
+            TotalChars += SummaryLength
+
+    BookSummary = sorted(BookSummaryItems, key=lambda x: x['BodyId'])
+
+    # BookSummary에 추가된 딕셔너리의 MainText만 추출하여 MainTextList 생성
+    MainTextList = []
+    for Item in BookSummary:
+        MainTextList.extend(Item['MainText'])
+
+    # BookSummary와 MainText 텍스트화
+    BookSummaryText = "\n".join(item["BodySummary"] for item in BookSummary)
+    MainText = ', '.join(MainTextList)
+    
+    ## InputList 생성
+    InputId = 1
+    InputList = []
+    Input = f"[원어앞부분]\n{BookIntroductionText}\n\n[도서제목]\n{BookTitle}\n\n[도서목차]\n{BookContents}\n\n[도서핵심내용요약]\n{BookSummaryText}\n\n[도서주요문구모음]\n{MainText}\n\n[작가정보.json 작성언어, 꼭 해당 언어로 작성]\n{MainLangCode}\n\n"
+
+    InputDic = {"Id": InputId, "Input": Input}
+    InputList.append(InputDic)
+    
+    return InputList
+
 ######################
 ##### Filter 조건 #####
 ######################
@@ -2087,6 +2149,62 @@ def TranslationDialogueEditingFilter(Response, CheckCount):
         
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['대화내용']
+
+## Process15: AuthorResearch의 Filter(Error 예외처리)
+def AuthorResearchFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "AuthorResearch, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '작가정보' not in OutputDic:
+        return "AuthorResearch, JSONKeyError: '작가정보' 키가 누락되었습니다"
+
+    # Error3: '작가정보' 데이터 타입 검증
+    if not isinstance(OutputDic['작가정보'], dict):
+        return "AuthorResearch, JSON에서 오류 발생: '작가정보'는 딕셔너리 형태여야 합니다"
+
+    required_keys = [
+        '이름', '출생', '국적', '전공', '학위', '주요경력', '대표저서', '사상및영향력', '기타흥미로운요소서술'
+    ]
+    missing_keys = [key for key in required_keys if key not in OutputDic['작가정보']]
+    if missing_keys:
+        return f"AuthorResearch, JSONKeyError: '작가정보'에 누락된 키: {', '.join(missing_keys)}"
+
+    item = OutputDic['작가정보']
+
+    # 각 필드의 데이터 타입 검증
+    if not isinstance(item['이름'], str):
+        return "AuthorResearch, JSON에서 오류 발생: '이름'은 문자열이어야 합니다"
+
+    if not isinstance(item['출생'], str):
+        return "AuthorResearch, JSON에서 오류 발생: '출생'은 문자열이어야 합니다"
+    
+    if not isinstance(item['국적'], str):
+        return "AuthorResearch, JSON에서 오류 발생: '국적'은 문자열이어야 합니다"
+
+    if not isinstance(item['전공'], str):
+        return "AuthorResearch, JSON에서 오류 발생: '전공'은 문자열이어야 합니다"
+
+    if not isinstance(item['학위'], str):
+        return "AuthorResearch, JSON에서 오류 발생: '학위'는 문자열이어야 합니다"
+
+    if not isinstance(item['주요경력'], str):
+        return "AuthorResearch, JSON에서 오류 발생: '주요경력'은 문자열이어야 합니다"
+
+    if not isinstance(item['대표저서'], str):
+        return "AuthorResearch, JSON에서 오류 발생: '대표저서'는 문자열이어야 합니다"
+
+    if not isinstance(item['사상및영향력'], str):
+        return "AuthorResearch, JSON에서 오류 발생: '사상및영향력'은 문자열이어야 합니다"
+
+    if not isinstance(item['기타흥미로운요소서술'], str):
+        return "AuthorResearch, JSON에서 오류 발생: '기타흥미로운요소서술'는 문자열이어야 합니다"
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['작가정보']
 
 #######################
 ##### Process 응답 #####
@@ -2853,6 +2971,46 @@ def AfterTranslationBodySummaryProcessDataFrameSave(ProjectName, MainLang, Trans
     ## AfterTranslationBodySummaryFrame 저장
     with open(ProjectDataFrameAfterTranslationBodySummaryPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(AfterTranslationBodySummaryFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
+## Process15: AuthorResearchProcess DataFrame 저장
+def AuthorResearchProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameAuthorResearchPath, AuthorResearchResponse, Process, InputCount, TotalInputCount):
+    ## AuthorResearchFrame 불러오기
+    if os.path.exists(ProjectDataFrameAuthorResearchPath):
+        AuthorResearchFramePath = ProjectDataFrameAuthorResearchPath
+    else:
+        AuthorResearchFramePath = os.path.join(TranslationDataFramePath, "b532-15_AuthorResearchFrame.json")
+    with open(AuthorResearchFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        AuthorResearchFrame = json.load(DataFrameJson)
+        
+    ## AuthorResearchFrame 업데이트
+    AuthorResearchFrame[0]['ProjectName'] = ProjectName
+    AuthorResearchFrame[0]['MainLang'] = MainLang.capitalize()
+    AuthorResearchFrame[0]['Translation'] = Translation.capitalize()
+    AuthorResearchFrame[0]['TaskName'] = Process
+    
+    ## AuthorResearchFrame 첫번째 데이터 프레임 복사
+    AuthorResearch = AuthorResearchFrame[1][0].copy()
+    AuthorResearch['Author'] = AuthorResearchResponse['이름']
+    AuthorResearch['Birth'] = AuthorResearchResponse['출생']
+    AuthorResearch['Nationality'] = AuthorResearchResponse['국적']
+    AuthorResearch['Major'] = AuthorResearchResponse['전공']
+    AuthorResearch['Degree'] = AuthorResearchResponse['학위']
+    AuthorResearch['MajorCareer'] = AuthorResearchResponse['주요경력']
+    AuthorResearch['RepresentativeWorks'] = AuthorResearchResponse['대표저서']
+    AuthorResearch['ThoughtsAndInfluence'] = AuthorResearchResponse['사상및영향력']
+    AuthorResearch['OtherInterestingFacts'] = AuthorResearchResponse['기타흥미로운요소서술']
+
+    ## AuthorResearchFrame 데이터 프레임 업데이트
+    AuthorResearchFrame[1].append(AuthorResearch)
+        
+    ## AuthorResearchFrame ProcessCount 및 Completion 업데이트
+    AuthorResearchFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        AuthorResearchFrame[0]['Completion'] = 'Yes'
+        
+    ## AuthorResearchFrame 저장
+    with open(ProjectDataFrameAuthorResearchPath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(AuthorResearchFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
 ##############################
 ##### ProcessEdit 업데이트 #####
@@ -3650,9 +3808,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
     print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
-    ###########################################
-    ### Process9: TranslationRefinement 생성 ###
-    ###########################################
+    ####################################################
+    ### Process9: TranslationRefinement Response 생성 ###
+    ####################################################
     if TranslationQuality == 'Refinement':
 
         ## Process 설정
@@ -3787,9 +3945,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
         print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
-    #############################################
-    ### Process10: TranslationProofreading 생성 ##
-    #############################################
+    ######################################################
+    ### Process10: TranslationProofreading Response 생성 ##
+    ######################################################
 
     ## Process 설정
     ProcessNumber = '10'
@@ -3850,9 +4008,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
     print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
-    #################################################
-    ### Process11: TranslationDialogueAnalysis 생성 ##
-    #################################################
+    ##########################################################
+    ### Process11: TranslationDialogueAnalysis Response 생성 ##
+    ##########################################################
 
     if BookGenre == 'Fiction':
 
@@ -3912,9 +4070,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}\n\n1. TranslationDialogueAnalysis와 TranslationDialogueAnalysisCharacter를 비교하여, 미비한 인물 부분을 수정합니다. 이 경우 'Body'와 'DialogueBody'와 'BodyCharacterList'를 모두 수정해야 합니다.\n2. {{인물이름: 대화내용}} 중에 잘못된 표기나 괄호 묶음을 수정합니다. 이 경우 'Body'와 'DialogueBody' 모두 수정해야 합니다.\n\n")
         print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
         
-    ################################################
-    ### Process12: TranslationDialogueEditing 생성 ##
-    ################################################
+    #########################################################
+    ### Process12: TranslationDialogueEditing Response 생성 ##
+    #########################################################
     
     if BookGenre == 'Fiction':
 
@@ -3980,9 +4138,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
     print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
-    #################################################
-    ### Process14: AfterTranslationBodySummary 생성 ##
-    #################################################
+    ##########################################################
+    ### Process14: AfterTranslationBodySummary Response 생성 ##
+    ##########################################################
 
     ## Process 설정
     ProcessNumber = '14'
@@ -4037,9 +4195,54 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
     print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
-    ############################################
-    ### Process15: TranslationCatchphrase 생성 ##
-    ############################################
+    #############################################
+    ### Process15: AuthorResearch Response 생성 ##
+    #############################################
+    
+    ## Process 설정
+    ProcessNumber = '15'
+    Process = "AuthorResearch"
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
+    ## AuthorResearch 경로 생성
+    ProjectDataFrameAuthorResearchPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+    
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = AuthorResearchInputList(TranslationEditPath, "TranslationBodySplit", "IndexTranslation", "AfterTranslationBodySummary", MainLangCode)
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameAuthorResearchPath)
+    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList[i]['Id']
+                Input = InputList[i]['Input']
+                
+                ## Response 생성
+                AuthorResearchResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AuthorResearchFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## DataFrame 저장
+                AuthorResearchProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameAuthorResearchPath, AuthorResearchResponse, Process, inputCount, TotalInputCount)
+                
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameAuthorResearchPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
 
 if __name__ == "__main__":
     

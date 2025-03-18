@@ -3000,19 +3000,19 @@ def TranslationDialogueEditingProcessDataFrameSave(ProjectName, MainLang, Transl
         # 조건2. 원본 대화문과 편집 대화문의 글자 개수 비율이 0.6-1.7 사이인 경우
         # 언어별 최대 토큰 길이 설정
         if MainLang == 'ko':
-            MaxTokenLength = 100  # 한국어: 100자
+            MaxTokenLength = 150  # 한국어: 100자
         elif MainLang == 'en':
-            MaxTokenLength = 250  # 영어: 250자 (알파벳 기준)
+            MaxTokenLength = 350  # 영어: 250자 (알파벳 기준)
         elif MainLang == 'zh':
-            MaxTokenLength = 80   # 중국어: 80자 (한자 기준)
+            MaxTokenLength = 120   # 중국어: 80자 (한자 기준)
         elif MainLang == 'es':
-            MaxTokenLength = 250  # 스페인어: 250자
+            MaxTokenLength = 350  # 스페인어: 250자
         elif MainLang == 'fr':
-            MaxTokenLength = 250  # 프랑스어: 250자
+            MaxTokenLength = 350  # 프랑스어: 250자
         elif MainLang == 'ja':
-            MaxTokenLength = 80   # 일본어: 80자 (한자/가나 혼합)
+            MaxTokenLength = 120   # 일본어: 80자 (한자/가나 혼합)
         else:
-            MaxTokenLength = 150  # 기타 언어: 기본값
+            MaxTokenLength = 200  # 기타 언어: 기본값
             
         if len(TranslationOrginDialogueText) > MaxTokenLength:
             # 원본 텍스트와 편집된 텍스트의 길이 비율 계산
@@ -4480,7 +4480,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = InputList[i]['Input']
                 
                 ## Response 생성
-                TranslationCatchphraseResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationCatchphraseFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                TranslationCatchphraseResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationCatchphraseFilter, CheckCount, "Google", mode, MessagesReview)
                 
                 ## DataFrame 저장
                 TranslationCatchphraseProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationCatchphrasePath, TranslationCatchphraseResponse, Process, inputCount, TotalInputCount)

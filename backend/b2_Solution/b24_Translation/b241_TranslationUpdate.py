@@ -1067,8 +1067,10 @@ def TranslationProofreadingInputList(TranslationEditPath, BeforeProcess):
             Input = f"\n<**작업: 교정할도서내용>\n{Body}\n\n"
             InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": Body, "Input": Input})
             InputId += 1
+            
+        InputListLength = BodyId
 
-    return InputList
+    return InputList, InputListLength
 
 ## Process10: TranslationProofreading의 추가 Input
 def TranslationProofreadingAddInput(ProjectDataFrameTranslationProofreadingPath):
@@ -1473,7 +1475,65 @@ def AuthorResearchInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2,
     ## InputList 생성
     InputId = 1
     InputList = []
-    Input = f"[원어앞부분]\n{BookIntroductionText}\n\n[도서제목]\n{BookTitle}\n\n[도서목차]\n{BookContents}\n\n[도서핵심내용요약]\n{BookSummaryText}\n\n[도서주요문구모음]\n{MainText}\n\n[작가정보.json 작성언어, 꼭 해당 언어로 작성]\n{MainLangCode}\n\n"
+    Input = f"[원어앞부분]\n{BookIntroductionText}\n\n[도서제목]{BookTitle}\n\n[도서목차]\n{BookContents}\n\n[도서핵심내용요약]\n{BookSummaryText}\n\n[도서주요문구모음]\n{MainText}\n\n[작가정보.json 작성언어, 꼭 해당 언어로 작성]\n{MainLangCode}\n\n"
+
+    InputDic = {"Id": InputId, "Input": Input}
+    InputList.append(InputDic)
+    
+    return InputList
+
+## Process15: AuthorResearch의 InputList
+def TranslationCatchphraseInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2, BeforeProcess3, MainLangCode):
+    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+        TranslationEditList = json.load(TranslationEditJson)
+    IndexTranslation = TranslationEditList[BeforeProcess1]
+    AfterTranslationBodySummary = TranslationEditList[BeforeProcess2]
+    AuthorResearch = TranslationEditList[BeforeProcess3]
+    ## 1. 저자 생성
+    Author = AuthorResearch[0]['Author']
+    Birth = AuthorResearch[0]['Birth']
+    Nationality = AuthorResearch[0]['Nationality']
+    Major = AuthorResearch[0]['Major']
+    Degree = AuthorResearch[0]['Degree']
+    MajorCareer = AuthorResearch[0]['MajorCareer']
+    RepresentativeWorks = AuthorResearch[0]['RepresentativeWorks']
+    ThoughtsAndInfluence = AuthorResearch[0]['ThoughtsAndInfluence']
+    OtherInterestingFacts = AuthorResearch[0]['OtherInterestingFacts']
+    AuthorText = f"이름: {Author}\n출생: {Birth}\n국적: {Nationality}\n전공: {Major}\n학위: {Degree}\n주요경력: {MajorCareer}\n대표작: {RepresentativeWorks}\n사상 및 영향력: {ThoughtsAndInfluence}\n기타 흥미로운 사실: {OtherInterestingFacts}\n"
+    
+    ## 2. 도서제목, 도서목차 생성
+    BookContents = ''
+    for Index in IndexTranslation:
+        if Index['IndexTag'] == 'Title':
+            BookTitle = Index['IndexTranslation']
+        else:
+            BookContents += f"\n{Index['IndexTag']}: {Index['IndexTranslation']}"
+    
+    ## 3. 도서핵심내용요약, 도서주요문구모음 생성
+    BookSummaryItems = []
+    TotalChars = 0
+    # Score가 높은 순으로 정렬하여, 8000자 이하가 되도록 선택
+    for Item in sorted(AfterTranslationBodySummary, key=lambda x: x['Score'], reverse=True):
+        SummaryLength = len(Item['BodySummary'])
+        if TotalChars + SummaryLength <= 6000:
+            BookSummaryItems.append(Item)
+            TotalChars += SummaryLength
+
+    BookSummary = sorted(BookSummaryItems, key=lambda x: x['BodyId'])
+
+    # BookSummary에 추가된 딕셔너리의 MainText만 추출하여 MainTextList 생성
+    MainTextList = []
+    for Item in BookSummary:
+        MainTextList.extend(Item['MainText'])
+
+    # BookSummary와 MainText 텍스트화
+    BookSummaryText = "\n".join(item["BodySummary"] for item in BookSummary)
+    MainText = ', '.join(MainTextList)
+    
+    ## InputList 생성
+    InputId = 1
+    InputList = []
+    Input = f"[저자]\n{AuthorText}\n\n[도서제목]\n{BookTitle}\n\n[도서목차]{BookContents}\n\n[도서핵심내용요약]\n{BookSummaryText}\n\n[도서주요문구모음]\n{MainText}\n\n[도서카피모음.json 작성언어, 꼭 해당 언어로 작성]\n{MainLangCode}\n\n"
 
     InputDic = {"Id": InputId, "Input": Input}
     InputList.append(InputDic)
@@ -2205,6 +2265,63 @@ def AuthorResearchFilter(Response, CheckCount):
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['작가정보']
+
+## Process16: TranslationCatchphrase의 Filter(Error 예외처리)
+def TranslationCatchphraseFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "TranslationCatchphrase, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '도서카피모음' not in OutputDic:
+        return "TranslationCatchphrase, JSONKeyError: '도서카피모음' 키가 누락되었습니다"
+
+    # Error3: '도서카피모음' 데이터 타입 검증
+    if not isinstance(OutputDic['도서카피모음'], dict):
+        return "TranslationCatchphrase, JSON에서 오류 발생: '도서카피모음'은 딕셔너리 형태여야 합니다"
+
+    required_keys = [
+        '부제', '표지카피1', '표지카피2', '표지카피3', '띠지카피',
+        '도서핵심메세지', '역자서문', '책소개', '출판사서평'
+    ]
+    missing_keys = [key for key in required_keys if key not in OutputDic['도서카피모음']]
+    if missing_keys:
+        return f"TranslationCatchphrase, JSONKeyError: '도서카피모음'에 누락된 키: {', '.join(missing_keys)}"
+
+    item = OutputDic['도서카피모음']
+
+    # 각 필드의 데이터 타입 검증
+    if not isinstance(item['부제'], str) or len(item['부제']) > 40:
+        return "TranslationCatchphrase, JSON에서 오류 발생: '부제'는 20자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item['표지카피1'], str) or len(item['표지카피1']) > 60:
+        return "TranslationCatchphrase, JSON에서 오류 발생: '표지카피1'은 30자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item['표지카피2'], str) or len(item['표지카피2']) > 200:
+        return "TranslationCatchphrase, JSON에서 오류 발생: '표지카피2'는 100자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item['표지카피3'], str) or len(item['표지카피3']) > 400:
+        return "TranslationCatchphrase, JSON에서 오류 발생: '표지카피3'은 200자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item['띠지카피'], str) or len(item['띠지카피']) > 60:
+        return "TranslationCatchphrase, JSON에서 오류 발생: '띠지카피'는 30자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item['도서핵심메세지'], str) or len(item['도서핵심메세지']) > 400:
+        return "TranslationCatchphrase, JSON에서 오류 발생: '도서핵심메세지'는 200자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item['역자서문'], str) or len(item['역자서문']) > 5000:
+        return "TranslationCatchphrase, JSON에서 오류 발생: '역자서문'은 2500자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item['책소개'], str) or len(item['책소개']) > 3000:
+        return "TranslationCatchphrase, JSON에서 오류 발생: '책소개'는 1500자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item['출판사서평'], str) or len(item['출판사서평']) > 1600:
+        return "TranslationCatchphrase, JSON에서 오류 발생: '출판사서평'은 800자 내외의 문자열이어야 합니다"
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['도서카피모음']
 
 #######################
 ##### Process 응답 #####
@@ -3012,6 +3129,46 @@ def AuthorResearchProcessDataFrameSave(ProjectName, MainLang, Translation, Trans
     with open(ProjectDataFrameAuthorResearchPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(AuthorResearchFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
+## Process16: TranslationCatchphraseProcess DataFrame 저장
+def TranslationCatchphraseProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationCatchphrasePath, TranslationCatchphraseResponse, Process, InputCount, TotalInputCount):
+    ## TranslationCatchphraseFrame 불러오기
+    if os.path.exists(ProjectDataFrameTranslationCatchphrasePath):
+        TranslationCatchphraseFramePath = ProjectDataFrameTranslationCatchphrasePath
+    else:
+        TranslationCatchphraseFramePath = os.path.join(TranslationDataFramePath, "b532-16_TranslationCatchphraseFrame.json")
+    with open(TranslationCatchphraseFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        TranslationCatchphraseFrame = json.load(DataFrameJson)
+        
+    ## TranslationCatchphraseFrame 업데이트
+    TranslationCatchphraseFrame[0]['ProjectName'] = ProjectName
+    TranslationCatchphraseFrame[0]['MainLang'] = MainLang.capitalize()
+    TranslationCatchphraseFrame[0]['Translation'] = Translation.capitalize()
+    TranslationCatchphraseFrame[0]['TaskName'] = Process
+    
+    ## TranslationCatchphraseFrame 첫번째 데이터 프레임 복사
+    TranslationCatchphrase = TranslationCatchphraseFrame[1][0].copy()
+    TranslationCatchphrase['Subtitle'] = TranslationCatchphraseResponse['부제']
+    TranslationCatchphrase['CoverCopy1'] = TranslationCatchphraseResponse['표지카피1']
+    TranslationCatchphrase['CoverCopy2'] = TranslationCatchphraseResponse['표지카피2']
+    TranslationCatchphrase['CoverCopy3'] = TranslationCatchphraseResponse['표지카피3']
+    TranslationCatchphrase['BandCopy'] = TranslationCatchphraseResponse['띠지카피']
+    TranslationCatchphrase['BookCoreMessage'] = TranslationCatchphraseResponse['도서핵심메세지']
+    TranslationCatchphrase['TranslatorPreface'] = TranslationCatchphraseResponse['역자서문']
+    TranslationCatchphrase['BookIntroduction'] = TranslationCatchphraseResponse['책소개']
+    TranslationCatchphrase['PublisherReview'] = TranslationCatchphraseResponse['출판사서평']
+
+    ## TranslationCatchphraseFrame 데이터 프레임 업데이트
+    TranslationCatchphraseFrame[1].append(TranslationCatchphrase)
+        
+    ## TranslationCatchphraseFrame ProcessCount 및 Completion 업데이트
+    TranslationCatchphraseFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        TranslationCatchphraseFrame[0]['Completion'] = 'Yes'
+        
+    ## TranslationCatchphraseFrame 저장
+    with open(ProjectDataFrameTranslationCatchphrasePath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(TranslationCatchphraseFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
 ##############################
 ##### ProcessEdit 업데이트 #####
 ##############################
@@ -3078,49 +3235,96 @@ def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process)
 ## ProcessEditText 저장
 def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2):
     ## TranslationEdit 불러오기
-    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+    with open(TranslationEditPath, 'r', encoding='utf-8') as TranslationEditJson:
         TranslationEdit = json.load(TranslationEditJson)
     TranslationBodyEdit = TranslationEdit[Process2]
     TranslationIndexEdit = TranslationEdit[Process1]
         
-    ## TranslationEdit을 Index, Body Text파일로 저장
+    ## TranslationEdit을 Index, Body Text 파일로 저장할 경로 설정
     EditIndexFileName = f"{ProjectName}_Index({MainLang}-{Process2}).txt"
     EditIndexFilePath = os.path.join(ProjectMasterTranslationPath, EditIndexFileName)
     EditBodyFileName = f"{ProjectName}_Body({MainLang}-{Process2}).txt"
     EditBodyFilePath = os.path.join(ProjectMasterTranslationPath, EditBodyFileName)
     
-    # Index 파일 생성  
-    with open(EditIndexFilePath, 'w', encoding='utf-8') as indexFile:
-        for ProcessDic in TranslationIndexEdit:
-            IndexTag = ProcessDic['IndexTag']
-            Index = ProcessDic['IndexTranslation']
-            if IndexTag == "Title":
-                IndexText = f"<{Index}>\n\n"
-            elif IndexTag == "Logue":
-                IndexText = f"\n<{Index}>\n\n"
-            elif IndexTag in ["Part", "Chapter"]:
-                IndexText = f"\n<{Index}>\n\n"
-            else:
-                IndexText = f"<{Index}>\n"
-            indexFile.write(IndexText)
-    
-    # Body 파일 생성
-    CurrentIndex = None
-    with open(EditBodyFilePath, 'w', encoding='utf-8') as bodyFile:
-        for i, ProcessDic in enumerate(TranslationBodyEdit):
-            # 새로운 Index인지 확인
-            if ProcessDic['Index'] != CurrentIndex:
-                CurrentIndex = ProcessDic['Index']
-                # 새 Index 작성
-                if i != 0:
-                    bodyFile.write(f"\n\n\n<{ProcessDic['Index']}>\n\n\n")
+    # Index 파일이 존재하지 않을 때만 생성
+    if not os.path.exists(EditIndexFilePath):
+        with open(EditIndexFilePath, 'w', encoding='utf-8') as indexFile:
+            for ProcessDic in TranslationIndexEdit:
+                IndexTag = ProcessDic['IndexTag']
+                Index = ProcessDic['IndexTranslation']
+                if IndexTag == "Title":
+                    IndexText = f"<{Index}>\n\n"
+                elif IndexTag == "Logue":
+                    IndexText = f"\n<{Index}>\n\n"
+                elif IndexTag in ["Part", "Chapter"]:
+                    IndexText = f"\n<{Index}>\n\n"
                 else:
-                    bodyFile.write(f"<{ProcessDic['Index']}>\n\n\n")
+                    IndexText = f"<{Index}>\n"
+                indexFile.write(IndexText)
+    else:
+        print(f"[{ProjectName} Index 파일 {EditIndexFilePath}이(가) 이미 존재합니다.]")
+    
+    # Body 파일이 존재하지 않을 때만 생성
+    if not os.path.exists(EditBodyFilePath):
+        CurrentIndex = None
+        with open(EditBodyFilePath, 'w', encoding='utf-8') as bodyFile:
+            for i, ProcessDic in enumerate(TranslationBodyEdit):
+                # 새로운 Index인지 확인
+                if ProcessDic['Index'] != CurrentIndex:
+                    CurrentIndex = ProcessDic['Index']
+                    # 새 Index 작성
+                    if i != 0:
+                        bodyFile.write(f"\n\n\n<{ProcessDic['Index']}>\n\n\n")
+                    else:
+                        bodyFile.write(f"<{ProcessDic['Index']}>\n\n\n")
+                
+                # Body 내용 작성
+                BodyText = ProcessDic['Body'].replace('\n\n\n\n', '\n\n')
+                BodyText = BodyText.replace('\n\n\n', '\n\n')
+                bodyFile.write(f"{BodyText}")
+    else:
+        print(f"[{ProjectName} Body 파일 {EditBodyFilePath}이(가) 이미 존재합니다.]")
+
+## BookCopyText 저장
+def BookCopyTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2):
+    ## TranslationEdit 불러오기
+    with open(TranslationEditPath, 'r', encoding='utf-8') as TranslationEditJson:
+        TranslationEdit = json.load(TranslationEditJson)
+    AuthorResearch = TranslationEdit[Process1]
+    TranslationBookCopy = TranslationEdit[Process2]
+        
+    ## TranslationEdit을 BookCopy Text 파일로 저장할 경로 설정
+    EditBookCopyFileName = f"{ProjectName}_BookCopy({MainLang}).txt"
+    EditBookCopyFilePath = os.path.join(ProjectMasterTranslationPath, EditBookCopyFileName)
+    
+    # Index 파일이 존재하지 않을 때만 생성
+    if not os.path.exists(EditBookCopyFilePath):
+        with open(EditBookCopyFilePath, 'w', encoding='utf-8') as BookCopyFile:
+            Author = AuthorResearch[0]['Author']
+            Birth = AuthorResearch[0]['Birth']
+            Nationality = AuthorResearch[0]['Nationality']
+            Major = AuthorResearch[0]['Major']
+            Degree = AuthorResearch[0]['Degree']
+            MajorCareer = AuthorResearch[0]['MajorCareer']
+            RepresentativeWorks = AuthorResearch[0]['RepresentativeWorks']
+            ThoughtsAndInfluence = AuthorResearch[0]['ThoughtsAndInfluence']
+            OtherInterestingFacts = AuthorResearch[0]['OtherInterestingFacts']
+            OtherInterestingFacts = re.sub(r'(?<!^)(\d+\))', r'\n\1', OtherInterestingFacts).strip()
             
-            # Body 내용 작성
-            BodyText = ProcessDic['Body'].replace('\n\n\n\n', '\n\n')
-            BodyText = BodyText.replace('\n\n\n', '\n\n')
-            bodyFile.write(f"{BodyText}")
+            Subtitle = TranslationBookCopy[0]['Subtitle']
+            CoverCopy1 = TranslationBookCopy[0]['CoverCopy1']
+            CoverCopy2 = TranslationBookCopy[0]['CoverCopy2']
+            CoverCopy3 = TranslationBookCopy[0]['CoverCopy3']
+            BandCopy = TranslationBookCopy[0]['BandCopy']
+            BookCoreMessage = TranslationBookCopy[0]['BookCoreMessage']
+            TranslatorPreface = TranslationBookCopy[0]['TranslatorPreface']
+            BookIntroduction = TranslationBookCopy[0]['BookIntroduction']
+            PublisherReview = TranslationBookCopy[0]['PublisherReview']
+            
+            BookCopyText = f"<저자소개>\n\n[이름]\n{Author}\n\n[출생]\n{Birth}\n\n[국적]\n{Nationality}\n\n[전공]\n{Major}\n\n[학위]\n{Degree}\n\n[주요경력]\n{MajorCareer}\n\n[대표저서]\n{RepresentativeWorks}\n\n[사상 및 영향력]\n{ThoughtsAndInfluence}\n\n[기타 흥미로운 요소]\n{OtherInterestingFacts}\n\n\n<도서문구>\n\n[부제]\n{Subtitle}\n\n[표지카피1]\n{CoverCopy1}\n\n[표지카피2]\n{CoverCopy2}\n\n[표지카피3]\n{CoverCopy3}\n\n[띠지카피]\n{BandCopy}\n\n[핵심메세지]\n{BookCoreMessage}\n\n[역자 서문]\n{TranslatorPreface}\n\n[책소개]\n{BookIntroduction}\n\n[출판사 서평]\n{PublisherReview}"
+            BookCopyFile.write(BookCopyText)
+    else:
+        print(f"[{ProjectName} BookCopy 파일 {EditBookCopyFilePath}이(가) 이미 존재합니다.]")
 
 ## Process Edit Prompt 확인
 def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumProcesses = 1, OutputCountKey = None):
@@ -3708,11 +3912,11 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             i = InputCount - 1
             ErrorCount = 0
             while i < TotalInputCount:
+                inputCount = InputList[i]['Id']
                 ## LangCheck, BodyTranslationCheck이 3번 이상 일치가 되지 않으면 코드종료
                 if ErrorCount >= 3:
-                    sys.exit(f"Project: {projectName} | Process: {Process}-BodyTranslationWordCheck {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+                    sys.exit(f"Project: {projectName} | Process: {Process}-BodyTranslationWordCheck {inputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                 ## Input 생성
-                inputCount = InputList[i]['Id']
                 IndexId = InputList[i]['IndexId']
                 IndexTag = InputList[i]['IndexTag']
                 Index = InputList[i]['Index']
@@ -3845,11 +4049,11 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 i = InputCount - 1
                 ErrorCount = 0
                 while i < TotalInputCount:
+                    inputCount = InputList[i]['Id']
                     ## LangCheck, BodyTranslationCheck이 3번 이상 일치가 되지 않으면 코드종료
                     if ErrorCount >= 3:
-                        sys.exit(f"Project: {projectName} | Process: {Process}-BodyTranslationWordCheck {InputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+                        sys.exit(f"Project: {projectName} | Process: {Process}-BodyTranslationWordCheck {inputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
                     ## Input 생성
-                    inputCount = InputList[i]['Id']
                     IndexId = InputList[i]['IndexId']
                     IndexTag = InputList[i]['IndexTag']
                     Index = InputList[i]['Index']
@@ -3959,10 +4163,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
 
     ## Process Count 계산 및 Check
     CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = TranslationProofreadingInputList(TranslationEditPath, ProofreadingBeforeProcess)
+    InputList, InputListLength = TranslationProofreadingInputList(TranslationEditPath, ProofreadingBeforeProcess)
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationProofreadingPath)
-    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, InputListLength)
     # print(f"InputCount: {InputCount}")
     # print(f"EditCheck: {EditCheck}")
     # print(f"EditCompletion: {EditCompletion}")
@@ -3998,6 +4202,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         
         ## EditText 저장
         ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -4128,15 +4333,16 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             
             ## EditText 저장
             ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
+            
             if EditMode == "Manual":
                 sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
-    if EditMode == "Manual":
-        if EditCheck:
-            if not EditCompletion:
-                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+        if EditMode == "Manual":
+            if EditCheck:
+                if not EditCompletion:
+                    ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                    sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ##########################################################
     ### Process14: AfterTranslationBodySummary Response 생성 ##
@@ -4225,7 +4431,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = InputList[i]['Input']
                 
                 ## Response 생성
-                AuthorResearchResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AuthorResearchFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                AuthorResearchResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AuthorResearchFilter, CheckCount, "Anthropic", mode, MessagesReview)
                 
                 ## DataFrame 저장
                 AuthorResearchProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameAuthorResearchPath, AuthorResearchResponse, Process, inputCount, TotalInputCount)
@@ -4233,6 +4439,58 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameAuthorResearchPath, TranslationEditPath, Process, EditMode)
         print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+
+    #####################################################
+    ### Process16: TranslationCatchphrase Response 생성 ##
+    #####################################################
+    
+    ## Process 설정
+    ProcessNumber = '16'
+    Process = "TranslationCatchphrase"
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
+    ## TranslationCatchphrase 경로 생성
+    ProjectDataFrameTranslationCatchphrasePath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+    
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = TranslationCatchphraseInputList(TranslationEditPath, "IndexTranslation", "AfterTranslationBodySummary", "AuthorResearch", MainLangCode)
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationCatchphrasePath)
+    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList[i]['Id']
+                Input = InputList[i]['Input']
+                
+                ## Response 생성
+                TranslationCatchphraseResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationCatchphraseFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                
+                ## DataFrame 저장
+                TranslationCatchphraseProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationCatchphrasePath, TranslationCatchphraseResponse, Process, inputCount, TotalInputCount)
+                
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameTranslationCatchphrasePath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
+        ## BookCopyText 저장
+        BookCopyTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "AuthorResearch", "TranslationCatchphrase")
         
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")

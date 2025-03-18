@@ -1,0 +1,24 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "Book",
+        "MainLang": "Ko",
+        "Translation": "",
+        "TaskName": "TranslationCatchphrase",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "Subtitle": "None",
+            "CoverCopy1": "None",
+            "CoverCopy2": "None",
+            "CoverCopy3": "None",
+            "BandCopy": "None",
+            "BookCoreMessage": "None",
+            "TranslatorPreface": "None",
+            "BookIntroduction": "None",
+            "PublisherReview": "None"
+        }
+    ]
+]

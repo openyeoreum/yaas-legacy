@@ -3016,7 +3016,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '01'
     Process = "TranslationIndexDefine"
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## TranslationIndexDefine 경로 생성
     ProjectDataFrameTranslationIndexDefinePath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3042,9 +3043,11 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 
                 ## DataFrame 저장
                 TranslationIndexDefineProcessDataFrameSave(projectName, MainLang, TranslationDataFramePath, ProjectDataFrameTranslationIndexDefinePath, TranslationIndexDefineResponse, Process, inputCount, TotalInputCount)
-
+                
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationIndexDefinePath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3053,7 +3056,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     ## 최종 설정된 Translation 불러오기 및 MainLangCode, TranslationLangCode 설정
     Translation = LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath)
     MainLangCode, TranslationLangCode, ToneDistinction = LanguageCodeGen(MainLang, Translation)
@@ -3085,7 +3089,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '02'
     Process = "TranslationBodySummary"
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## TranslationBodySummary 경로 생성
     ProjectDataFrameTranslationBodySummaryPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3122,6 +3127,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationBodySummaryPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3130,7 +3137,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     #########################################
     ### Process3: WordListGen Response 생성 ##
     #########################################
@@ -3138,7 +3146,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '03'
     Process = "WordListGen"
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## WordListGen 경로 생성
     ProjectDataFrameWordListGenPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3168,6 +3177,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameWordListGenPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3176,7 +3187,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     ###############################################
     ### Process4: UniqueWordListGen Response 생성 ##
     ###############################################
@@ -3184,7 +3196,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '04'
     Process = "UniqueWordListGen"
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## UniqueWordListGen 경로 생성
     ProjectDataFrameUniqueWordListGenPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3214,6 +3227,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameUniqueWordListGenPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3222,7 +3237,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     ####################################################
     ### Process5: WordListPostprocessing Response 생성 ##
     ####################################################
@@ -3230,7 +3246,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '05'
     Process = "WordListPostprocessing"
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## WordListPostprocessing 경로 생성
     ProjectDataFrameWordListPostprocessingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3261,6 +3278,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameWordListPostprocessingPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3269,7 +3288,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     ##############################################
     ### Process6: IndexTranslation Response 생성 ##
     ##############################################
@@ -3277,7 +3297,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '06'
     Process = "IndexTranslation"
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## IndexTranslation 경로 생성
     ProjectDataFrameIndexTranslationPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
     
@@ -3311,6 +3332,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameIndexTranslationPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3319,7 +3342,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     ##########################################################
     ### Process7: BodyTranslationPreprocessing Response 생성 ##
     ##########################################################
@@ -3327,7 +3351,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '07'
     Process = "BodyTranslationPreprocessing"
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## BodyTranslationPreprocessing 경로 생성
     ProjectDataFrameBodyTranslationPreprocessingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
     
@@ -3361,6 +3386,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameBodyTranslationPreprocessingPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3369,7 +3396,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     #############################################
     ### Process8: BodyTranslation Response 생성 ##
     #############################################
@@ -3377,7 +3405,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '08'
     Process = "BodyTranslation"
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## BodyTranslation 경로 생성
     ProjectDataFrameBodyTranslationPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3460,6 +3489,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameBodyTranslationPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3468,7 +3499,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     ################################################
     ### Process9: TranslationEditing Response 생성 ##
     ################################################
@@ -3477,7 +3509,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ProcessNumber = '09'
     Process = "TranslationEditing"
     ProofreadingBeforeProcess = Process
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## TranslationEditing 경로 생성
     ProjectDataFrameTranslationEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3592,6 +3625,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationEditingPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3600,7 +3635,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     ###########################################
     ### Process9: TranslationRefinement 생성 ###
     ###########################################
@@ -3610,7 +3646,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ProcessNumber = '09'
         Process = "TranslationRefinement"
         ProofreadingBeforeProcess = Process
-
+        print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+        
         ## TranslationRefinement 경로 생성
         ProjectDataFrameTranslationRefinementPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3725,6 +3762,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
 
             ## Edit 저장
             ProcessEditSave(ProjectDataFrameTranslationRefinementPath, TranslationEditPath, Process, EditMode)
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+            
             if EditMode == "Manual":
                 sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3733,7 +3772,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 if not EditCompletion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                     sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     #############################################
     ### Process10: TranslationProofreading 생성 ##
     #############################################
@@ -3741,7 +3781,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '10'
     Process = "TranslationProofreading"
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## TranslationProofreading 경로 생성
     ProjectDataFrameTranslationProofreadingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3782,6 +3823,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationProofreadingPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         ## EditText 저장
         ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
         if EditMode == "Manual":
@@ -3792,7 +3835,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     #################################################
     ### Process11: TranslationDialogueAnalysis 생성 ##
     #################################################
@@ -3802,7 +3846,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Process 설정
         ProcessNumber = '11'
         Process = "TranslationDialogueAnalysis"
-
+        print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+        
         ## TranslationDialogueAnalysis 경로 생성
         ProjectDataFrameTranslationDialogueAnalysisPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
         
@@ -3842,6 +3887,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     
             ## Edit 저장
             ProcessEditSave(ProjectDataFrameTranslationDialogueAnalysisPath, TranslationEditPath, Process, EditMode)
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+            
             if EditMode == "Manual":
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}\n\n1. TranslationDialogueAnalysis와 TranslationDialogueAnalysisCharacter를 비교하여, 미비한 인물 부분을 수정합니다. 이 경우 'Body'와 'DialogueBody'와 'BodyCharacterList'를 모두 수정해야 합니다.\n2. {{인물이름: 대화내용}} 중에 잘못된 표기나 괄호 묶음을 수정합니다. 이 경우 'Body'와 'DialogueBody' 모두 수정해야 합니다.\n\n")
 
@@ -3850,7 +3897,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 if not EditCompletion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                     sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}\n\n1. TranslationDialogueAnalysis와 TranslationDialogueAnalysisCharacter를 비교하여, 미비한 인물 부분을 수정합니다. 이 경우 'Body'와 'DialogueBody'와 'BodyCharacterList'를 모두 수정해야 합니다.\n2. {{인물이름: 대화내용}} 중에 잘못된 표기나 괄호 묶음을 수정합니다. 이 경우 'Body'와 'DialogueBody' 모두 수정해야 합니다.\n\n")
-
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+        
     ################################################
     ### Process12: TranslationDialogueEditing 생성 ##
     ################################################
@@ -3860,7 +3908,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ## Process 설정
         ProcessNumber = '12'
         Process = "TranslationDialogueEditing"
-
+        print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+        
         ## TranslationDialogueEditing 경로 생성
         ProjectDataFrameTranslationDialogueEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3904,6 +3953,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     
             ## Edit 저장
             ProcessEditSave(ProjectDataFrameTranslationDialogueEditingPath, TranslationEditPath, Process, EditMode)
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+            
             ## EditText 저장
             ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
             if EditMode == "Manual":
@@ -3914,7 +3965,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    
     #################################################
     ### Process14: AfterTranslationBodySummary 생성 ##
     #################################################
@@ -3922,7 +3974,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '14'
     Process = "AfterTranslationBodySummary"
-
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
     ## AfterTranslationBodySummary 경로 생성
     ProjectDataFrameAfterTranslationBodySummaryPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
@@ -3959,6 +4012,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameAfterTranslationBodySummaryPath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
 
@@ -3967,7 +4022,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
+    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ############################################
     ### Process15: TranslationCatchphrase 생성 ##

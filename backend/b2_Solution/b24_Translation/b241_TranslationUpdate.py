@@ -3895,7 +3895,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryCounter = f"\n※ 주의사항: <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount['CheckCount']}개 입니다.\n※ 주의사항: 특수한 경우 이외에는 \'현재말의높임법\' 표기에 따라서 이에 맞는 말의 높임법대로 '편집대화내용'이 작성되어야 합니다."
 
                         ## Response 생성
-                        TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
+                        TranslationDialogueEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
                     else:
                         TranslationDialogueEditingResponse = []
 

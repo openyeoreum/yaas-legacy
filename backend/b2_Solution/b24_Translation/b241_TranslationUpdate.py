@@ -646,14 +646,27 @@ def IndexTranslationInputList(TranslationEditPath, BeforeProcess1, BeforeProcess
     ## InputList 생성
     InputId = 1
     InputList = []
+    MaxTokenLength = 8000
     for i, TranslationIndex in enumerate(TranslationIndexDefine):
         IndexId = TranslationIndex['IndexId']
         IndexTag = TranslationIndex['IndexTag']
         Index = TranslationIndex['Index']
         BodySummary = ''
         for TranslationBody in TranslationBodySummary:
-            if TranslationBody['IndexId'] == TranslationIndex['IndexId']:
-                BodySummary += TranslationBody['BodySummary']
+            # 현재 목차에 해당하는 본문 요약 찾기 (IndexId로 매칭, MaxTokenLength 초과 시 중단)
+            if TranslationBody['IndexId'] == IndexId:
+                AdditionalText = TranslationBody['BodySummary']
+                CurrentTokens = len(BodySummary.split())
+                AdditionalTokens = len(AdditionalText.split())
+                if CurrentTokens + AdditionalTokens > MaxTokenLength:
+                    RemainingTokens = MaxTokenLength - CurrentTokens
+                    Tokens = AdditionalText.split()
+                    # 허용된 토큰만 추가
+                    BodySummary += " " + " ".join(Tokens[:RemainingTokens])
+                    # 최대 토큰 길이에 도달하였으므로 반복 종료
+                    break
+                else:
+                    BodySummary += " " + AdditionalText
         WordList = ''
         ExistWordList = []
         for TranslationWord in TranslationWordList:

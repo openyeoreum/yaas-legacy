@@ -1324,7 +1324,7 @@ def TranslationDialogueEditingInputList(TranslationEditPath, BeforeProcess1, Bef
         DialogueCount = len(TranslationDialogueAnalysis[i]['BodyCharacterList'])
         CheckCharacterList = [character['CharacterName'] for character in TranslationDialogueAnalysis[i]['BodyCharacterList']]
         CharacterList = list(set(character['CharacterName'] for character in TranslationDialogueAnalysis[i]['BodyCharacterList']))
-        Input = f"<**작업: 대화중심편집내용>\n{DialogueBody}\n\n"
+        Input = f"<**작업: 대화중심편집내용>\n{NumberingDialogueBody}\n\n"
         InputList.append({"Id": InputId, "IndexId": IndexId, "IndexTag": IndexTag, "Index": Index, "BodyId": BodyId, "Body": NumberingBody, "MarkBody": NumberingDialogueBody, "Input": Input, "DialogueCount": DialogueCount, "CharacterList": CharacterList, "CheckCharacterList": CheckCharacterList})
         InputId += 1
         
@@ -1397,11 +1397,11 @@ def TranslationDialogueEditingAddInput(ProjectDataFrameTranslationDialogueEditin
             if CharacterMarkBodyList:
                 BeforeMarkBodyText = "\n\n...\n\n".join(CharacterMarkBodyList)
 
-                AddInput = f"<참고: 이전내용>\n{BeforeMarkBodyText}\n\n\n"
+                AddInput = f"\n{BeforeMarkBodyText}\n\n\n"
             else:
-                AddInput = f"<참고: 이전내용>\n{BodyText}\n\n\n"
+                AddInput = f"\n{BodyText}\n\n\n"
     else:
-        AddInput = "<참고: 이전내용>\n첫번째 대화 내용으로 이전내용이 없습니다.\n\n\n"
+        AddInput = "\n첫번째 대화 내용으로 이전내용이 없습니다.\n\n\n"
     
     return AddInput
 
@@ -3833,7 +3833,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryCounter = f'\n※ 주의사항: <대화내용편집.json>으로 완성될 대화문은 <**작업: 대화중심편집내용>의 {{n 대화: 대화내용}} {CheckCount}개 입니다.'
 
                         ## Response 생성
-                        TranslationDialogueAnalysisResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueAnalysisFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
+                        TranslationDialogueAnalysisResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationDialogueAnalysisFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
                     else:
                         TranslationDialogueAnalysisResponse = []
                         

@@ -14,7 +14,7 @@
             "LongTokensModel": []
         },
         "MasterModel": "o3-mini",
-        "ReasoningEffort": "medium"
+        "ReasoningEffort": "high"
     },
     "ANTHROPIC": {
         "BaseModel": {

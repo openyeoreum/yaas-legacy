@@ -3441,7 +3441,7 @@ def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumPro
 ##### Process 진행 및 업데이트 #####
 ################################
 ## Translation 프롬프트 요청 및 결과물 Json화
-def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenre, Tone, BodyLength, TranslationQuality, EditMode, mode = "Master", MessagesReview = "on"):
+def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenre, Tone, BodyLength, Editing, Refinement, KinfolkStyleRefinement, EditMode, mode = "Master", MessagesReview = "on"):
     print(f"< User: {email} | Translation: {projectName} ({Translation}) >>> ({MainLang}) | TranslationUpdate 시작 >")
     ## projectName_translation 경로 설정
     ProjectTranslationPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_translation"
@@ -3954,143 +3954,143 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ################################################
     ### Process9: TranslationEditing Response 생성 ##
     ################################################
+    if Editing == 'on':
+        ## Process 설정
+        ProcessNumber = '09'
+        Process = "TranslationEditing"
+        ProofreadingBeforeProcess = Process
+        print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+        
+        ## TranslationEditing 경로 생성
+        ProjectDataFrameTranslationEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
-    ## Process 설정
-    ProcessNumber = '09'
-    Process = "TranslationEditing"
-    ProofreadingBeforeProcess = Process
-    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
-    
-    ## TranslationEditing 경로 생성
-    ProjectDataFrameTranslationEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+        ## Process Count 계산 및 Check
+        CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+        InputList = TranslationEditingInputList(TranslationEditPath, "BodyTranslationPreprocessing", "BodyTranslation")
+        TotalInputCount = len(InputList) # 인풋의 전체 카운트
+        InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationEditingPath)
+        EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+        # print(f"InputCount: {InputCount}")
+        # print(f"EditCheck: {EditCheck}")
+        # print(f"EditCompletion: {EditCompletion}")
+        ## Process 진행
 
-    ## Process Count 계산 및 Check
-    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
-    InputList = TranslationEditingInputList(TranslationEditPath, "BodyTranslationPreprocessing", "BodyTranslation")
-    TotalInputCount = len(InputList) # 인풋의 전체 카운트
-    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationEditingPath)
-    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
-    # print(f"InputCount: {InputCount}")
-    # print(f"EditCheck: {EditCheck}")
-    # print(f"EditCompletion: {EditCompletion}")
-    ## Process 진행
+        if Tone == 'Auto':
+            MemoryCounter = ''
+        elif Tone == 'Formal':
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
+        elif Tone == 'Informal':
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
 
-    if Tone == 'Auto':
-        MemoryCounter = ''
-    elif Tone == 'Formal':
-        MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
-    elif Tone == 'Informal':
-        MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+        if not EditCheck:
+            if DataFrameCompletion == 'No':
+                i = InputCount - 1
+                ErrorCount = 0
+                while i < TotalInputCount:
+                    inputCount = InputList[i]['Id']
+                    ## LangCheck, BodyTranslationCheck이 3번 이상 일치가 되지 않으면 코드종료
+                    if ErrorCount >= 3:
+                        sys.exit(f"Project: {projectName} | Process: {Process}-BodyTranslationWordCheck {inputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
+                    ## Input 생성
+                    IndexId = InputList[i]['IndexId']
+                    IndexTag = InputList[i]['IndexTag']
+                    Index = InputList[i]['Index']
+                    BodyId = InputList[i]['BodyId']
+                    BracketedBody = InputList[i]['BracketedBody']
+                    
+                    ##########################################
+                    ### Process8: BodyTranslationWordCheck ###
+                    ##########################################
+                    BodyTranslationWordCheckResponse = ProcessResponse(projectName, email, "BodyTranslationWordCheck", BracketedBody, inputCount, TotalInputCount, BodyTranslationWordCheckFilter, BracketedBody, "OpenAI", mode, MessagesReview)
+                    Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDataFrameIndexTranslationPath, Tone)
+                    Input2 = WordBracketCheckInput(IndexTag, Index, BracketedBody, BodyTranslationWordCheckResponse)
+                    Input = Input1 + Input2
+                    
+                    ## Response 생성
+                    TranslationEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Anthropic", mode, MessagesReview, memoryCounter = MemoryCounter)
 
-    if not EditCheck:
-        if DataFrameCompletion == 'No':
-            i = InputCount - 1
-            ErrorCount = 0
-            while i < TotalInputCount:
-                inputCount = InputList[i]['Id']
-                ## LangCheck, BodyTranslationCheck이 3번 이상 일치가 되지 않으면 코드종료
-                if ErrorCount >= 3:
-                    sys.exit(f"Project: {projectName} | Process: {Process}-BodyTranslationWordCheck {inputCount}/{TotalInputCount} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
-                ## Input 생성
-                IndexId = InputList[i]['IndexId']
-                IndexTag = InputList[i]['IndexTag']
-                Index = InputList[i]['Index']
-                BodyId = InputList[i]['BodyId']
-                BracketedBody = InputList[i]['BracketedBody']
-                
-                ##########################################
-                ### Process8: BodyTranslationWordCheck ###
-                ##########################################
-                BodyTranslationWordCheckResponse = ProcessResponse(projectName, email, "BodyTranslationWordCheck", BracketedBody, inputCount, TotalInputCount, BodyTranslationWordCheckFilter, BracketedBody, "OpenAI", mode, MessagesReview)
-                Input1 = TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDataFrameIndexTranslationPath, Tone)
-                Input2 = WordBracketCheckInput(IndexTag, Index, BracketedBody, BodyTranslationWordCheckResponse)
-                Input = Input1 + Input2
-                
-                ## Response 생성
-                TranslationEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Anthropic", mode, MessagesReview, memoryCounter = MemoryCounter)
-
-                ######################################
-                ### Process8: BodyTranslationCheck ###
-                ######################################
-                BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
-                # print(f"\n\n\n\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\ninputCount: {inputCount}")
-                # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
-                if inputCount >= 5 and ToneDistinction == 'Yes':
-                    CheckProcess = "BodyTranslationCheck"
-                    LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
-                    if not LangCheck:
-                        MemoryCounter = ''
-                        if BeforeCheck == '격식어조':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
-                        elif BeforeCheck == '비격식어조':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
-                        MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                        ErrorCount += 1
-                        ## LangCheck의 경우는 3번 이상 일치가 되지 않으면 pass
-                        if ErrorCount >= 3:
-                            pass
-                        else:
-                            continue
-                    BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
-                    if BeforeCheck != '모름':
-                        if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
+                    ######################################
+                    ### Process8: BodyTranslationCheck ###
+                    ######################################
+                    BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
+                    # print(f"\n\n\n\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\ninputCount: {inputCount}")
+                    # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
+                    if inputCount >= 5 and ToneDistinction == 'Yes':
+                        CheckProcess = "BodyTranslationCheck"
+                        LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
+                        if not LangCheck:
+                            MemoryCounter = ''
+                            if BeforeCheck == '격식어조':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
+                            elif BeforeCheck == '비격식어조':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                            MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             ErrorCount += 1
-                            continue
-                    if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
-                        if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
-                            if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
+                            ## LangCheck의 경우는 3번 이상 일치가 되지 않으면 pass
+                            if ErrorCount >= 3:
                                 pass
                             else:
+                                continue
+                        BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                        if BeforeCheck != '모름':
+                            if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
                                 ErrorCount += 1
                                 continue
-                        elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
-                            BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
-                            pass
-                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
+                        if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
+                            if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
+                                if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
+                                    pass
+                                else:
+                                    ErrorCount += 1
+                                    continue
+                            elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
+                                BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
+                                pass
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
+                                MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
+                                ErrorCount += 1
+                                continue
+                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                                MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
+                                ErrorCount += 1
+                                continue
+
+                    if inputCount <= 4:
+                        if Tone == 'Auto':
+                            MemoryCounter = ''
+                        elif Tone == 'Formal':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
-                            MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                            ErrorCount += 1
-                            continue
-                        # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
-                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
+                        elif Tone == 'Informal':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
-                            MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                            ErrorCount += 1
-                            continue
-
-                if inputCount <= 4:
-                    if Tone == 'Auto':
+                    else:
                         MemoryCounter = ''
-                    elif Tone == 'Formal':
-                        MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
-                    elif Tone == 'Informal':
-                        MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
-                else:
-                    MemoryCounter = ''
 
-                ## DataFrame 저장
-                TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
-                i += 1  # 다음 인덱스로 이동
-                ErrorCount = 0
+                    ## DataFrame 저장
+                    TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                    i += 1  # 다음 인덱스로 이동
+                    ErrorCount = 0
 
-        ## Edit 저장
-        ProcessEditSave(ProjectDataFrameTranslationEditingPath, TranslationEditPath, Process, EditMode)
-        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
-        
+            ## Edit 저장
+            ProcessEditSave(ProjectDataFrameTranslationEditingPath, TranslationEditPath, Process, EditMode)
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+            
+            if EditMode == "Manual":
+                sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+
         if EditMode == "Manual":
-            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-
-    if EditMode == "Manual":
-        if EditCheck:
-            if not EditCompletion:
-                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+            if EditCheck:
+                if not EditCompletion:
+                    ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                    sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ####################################################
     ### Process9: TranslationRefinement Response 생성 ###
     ####################################################
-    if TranslationQuality == 'Refinement':
+    if Refinement == 'on':
 
         ## Process 설정
         ProcessNumber = '09'
@@ -4227,7 +4227,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ################################################################
     ### Process9: TranslationKinfolkStyleRefinement Response 생성 ###
     ################################################################
-    if TranslationQuality == 'KinfolkStyleRefinement':
+    if KinfolkStyleRefinement == 'on':
 
         ## Process 설정
         ProcessNumber = '09'

@@ -75,10 +75,10 @@ def AddPromptToDB():
         bodyTranslationWordCheck = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-08_BodyTranslationWordCheck.json")
         translationEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-09_TranslationEditing.json")
         translationRefinement = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-09_TranslationRefinement.json")
+        translationKinfolkStyleRefinement = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-09_TranslationKinfolkStyleRefinement.json")
         translationProofreading = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-10_TranslationProofreading.json")
         translationDialogueAnalysis = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-11_TranslationDialogueAnalysis.json")
         translationDialogueEditing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-12_TranslationDialogueEditing.json")
-        # translationDialoguePostprocessing = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-13_TranslationDialoguePostprocessing(Remove).json")
         afterTranslationBodySummary = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-14_AfterTranslationBodySummary.json")
         authorResearch = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-15_AuthorResearch.json")
         translationCatchphrase = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-16_TranslationCatchphrase.json")
@@ -178,6 +178,7 @@ def AddPromptToDB():
             ExistingPrompt.BodyTranslationWordCheck = bodyTranslationWordCheck
             ExistingPrompt.TranslationEditing = translationEditing
             ExistingPrompt.TranslationRefinement = translationRefinement
+            ExistingPrompt.TranslationKinfolkStyleRefinement = translationKinfolkStyleRefinement
             ExistingPrompt.TranslationProofreading = translationProofreading
             ExistingPrompt.TranslationDialogueAnalysis = translationDialogueAnalysis
             ExistingPrompt.TranslationDialogueEditing = translationDialogueEditing
@@ -277,6 +278,7 @@ def AddPromptToDB():
                 BodyTranslationWordCheck = bodyTranslationWordCheck,
                 TranslationEditing = translationEditing,
                 TranslationRefinement = translationRefinement,
+                TranslationKinfolkStyleRefinement = translationKinfolkStyleRefinement,
                 TranslationProofreading = translationProofreading,
                 TranslationDialogueAnalysis = translationDialogueAnalysis,
                 TranslationDialogueEditing = translationDialogueEditing,

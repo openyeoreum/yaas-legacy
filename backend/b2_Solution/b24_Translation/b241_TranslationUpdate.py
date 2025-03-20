@@ -1960,7 +1960,7 @@ def BodyTranslationCheckFilter(Response, CheckCount):
         return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크'는 딕셔너리 형태여야 합니다"
 
     # 필수 키 확인
-    required_keys = ['이전도서내용어조', '현재도서내용어조', '격식일치여부']
+    required_keys = ['이전도서내용어조', '현재도서내용어조', '어조일치여부']
     missing_keys = [key for key in required_keys if key not in OutputDic['도서내용어조체크']]
     if missing_keys:
         return f"BodyTranslationCheck, JSONKeyError: '도서내용어조체크'에 누락된 키: {', '.join(missing_keys)}"
@@ -1975,8 +1975,8 @@ def BodyTranslationCheckFilter(Response, CheckCount):
     if OutputDic['도서내용어조체크']['현재도서내용어조'] not in valid_tone_types:
         return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 현재도서내용어조'는 '격식체', '평서체', '비격식체', '모름' 중 하나여야 합니다"
 
-    if OutputDic['도서내용어조체크']['격식일치여부'] not in valid_match_status:
-        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 격식일치여부'는 '일치' 또는 '불일치' 중 하나여야 합니다"
+    if OutputDic['도서내용어조체크']['어조일치여부'] not in valid_match_status:
+        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 어조일치여부'는 '일치' 또는 '불일치' 중 하나여야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['도서내용어조체크']
@@ -3914,7 +3914,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     if BeforeCheck != '모름':
                         if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
                             continue
-                    if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
+                    if BodyTranslationCheckResponse['어조일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                             if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                 pass
@@ -4053,7 +4053,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
                                 ErrorCount += 1
                                 continue
-                        if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
+                        if BodyTranslationCheckResponse['어조일치여부'] == '불일치':
                             if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                                 if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                     pass
@@ -4202,7 +4202,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
                                 ErrorCount += 1
                                 continue
-                        if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
+                        if BodyTranslationCheckResponse['어조일치여부'] == '불일치':
                             if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                                 if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                     pass
@@ -4352,7 +4352,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
                                 ErrorCount += 1
                                 continue
-                        if BodyTranslationCheckResponse['격식일치여부'] == '불일치':
+                        if BodyTranslationCheckResponse['어조일치여부'] == '불일치':
                             if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                                 if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                     pass

@@ -835,8 +835,10 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
             StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없음"
         if Tone == 'Formal':
             StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없습니다. 완성 절차 및 방법에 따라서, *원문의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 번역을 시작해주세요."
+        elif Tone == 'Normal':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없다. 완성 절차 및 방법에 따라서, *원문의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역을 시작하세요."
         elif Tone == 'Informal':
-            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없다. 완성 절차 및 방법에 따라서, *원문의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역을 시작하세요."
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없어. 완성 절차 및 방법에 따라서, *원문의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 번역을 시작해줘."
         AddInput = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n\n[도서전체목차]\n{IndexText}\n\n[이전번역문]\n{StartBodyTranslation}\n\n\n"
         
     return AddInput
@@ -1037,8 +1039,10 @@ def TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDa
             StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없음"
         if Tone == 'Formal':
             StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없습니다. 완성 절차 및 방법에 따라서, *편집할내용의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 편집을 시작해주세요."
+        elif Tone == 'Normal':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없다. 완성 절차 및 방법에 따라서, *편집할내용의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 편집을 시작하세요."
         elif Tone == 'Informal':
-            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없다. 완성 절차 및 방법에 따라서, *편집할내용의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 편집을 시작하세요."
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없어. 완성 절차 및 방법에 따라서, *편집할내용의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 편집을 시작하세요."
         AddInput = f"[도서전체목차]\n{IndexText}\n\n[이전편집내용]\n{StartBodyTranslation}\n\n\n"
         
     return AddInput
@@ -1061,8 +1065,10 @@ def TranslationKinfolkStyleRefinementAddInput(ProjectDataFrameTranslationKinfolk
             StartBodyTranslation = "현재 책의 가장 앞부분이라서 직전에 편집된 글이 없음"
         if Tone == 'Formal':
             StartBodyTranslation = "현재 책의 가장 앞부분이라서 직전에 편집된 글이 없습니다. 완성 절차 및 방법에 따라서, **편집내용-편집대상의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 편집을 시작해주세요."
-        elif Tone == 'Informal':
+        elif Tone == 'Normal':
             StartBodyTranslation = "현재 책의 가장 앞부분이라서 직전에 편집된 글이 없다. 완성 절차 및 방법에 따라서, **편집내용-편집대상의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 편집을 시작하세요."
+        elif Tone == 'Informal':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없어. 완성 절차 및 방법에 따라서, **편집내용-편집대상의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 편집을 시작해줘."
         AddInput = f"\n{StartBodyTranslation}\n\n\n"
         
     return AddInput
@@ -1960,14 +1966,14 @@ def BodyTranslationCheckFilter(Response, CheckCount):
         return f"BodyTranslationCheck, JSONKeyError: '도서내용어조체크'에 누락된 키: {', '.join(missing_keys)}"
 
     # 데이터 타입 및 값 검증
-    valid_tone_types = ['격식어조', '비격식어조']
+    valid_tone_types = ['격식체', '평서체', '비격식체', '모름']
     valid_match_status = ['일치', '불일치']
 
     if OutputDic['도서내용어조체크']['이전도서내용어조'] not in valid_tone_types:
-        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 이전도서내용어조'는 '격식어조' 또는 '비격식어조' 중 하나여야 합니다"
+        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 이전도서내용어조'는 '격식체', '평서체', '비격식체', '모름' 중 하나여야 합니다"
 
     if OutputDic['도서내용어조체크']['현재도서내용어조'] not in valid_tone_types:
-        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 현재도서내용어조'는 '격식어조' 또는 '비격식어조' 중 하나여야 합니다"
+        return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 현재도서내용어조'는 '격식체', '평서체', '비격식체', '모름' 중 하나여야 합니다"
 
     if OutputDic['도서내용어조체크']['격식일치여부'] not in valid_match_status:
         return "BodyTranslationCheck, JSON에서 오류 발생: '도서내용어조체크 > 격식일치여부'는 '일치' 또는 '불일치' 중 하나여야 합니다"
@@ -3875,8 +3881,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         MemoryCounter = ''
     elif Tone == 'Formal':
         MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 번역해주세요.'
+    elif Tone == 'Normal':
+        MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역해주세요.'
     elif Tone == 'Informal':
-        MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역해주세요.'
+        MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 번역해주세요.'
         
     if not EditCheck:
         if DataFrameCompletion == 'No':
@@ -3915,12 +3923,15 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                             BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                             pass
-                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
+                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식체':
                             MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 번역해주세요.'
                             continue
                         # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
-                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
-                            MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역해주세요.'
+                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '평서체':
+                            MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역해주세요.'
+                            continue
+                        elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식체':
+                            MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 번역해주세요.'
                             continue
                         
                 if inputCount <= 4:
@@ -3928,8 +3939,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryCounter = ''
                     elif Tone == 'Formal':
                         MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 번역해주세요.'
+                    elif Tone == 'Normal':
+                        MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역해주세요.'
                     elif Tone == 'Informal':
-                        MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역해주세요.'
+                        MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 번역해주세요.'
                 else:
                     MemoryCounter = ''
                 
@@ -3979,8 +3992,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             MemoryCounter = ''
         elif Tone == 'Formal':
             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
+        elif Tone == 'Normal':
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
         elif Tone == 'Informal':
-            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
 
         if not EditCheck:
             if DataFrameCompletion == 'No':
@@ -4020,10 +4035,12 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
                         if not LangCheck:
                             MemoryCounter = ''
-                            if BeforeCheck == '격식어조':
+                            if BeforeCheck == '격식체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
-                            elif BeforeCheck == '비격식어조':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                            elif BeforeCheck == '평서체':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                            elif BeforeCheck == '비격식체':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
                             MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             ErrorCount += 1
                             ## LangCheck의 경우는 3번 이상 일치가 되지 않으면 pass
@@ -4046,14 +4063,20 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                                 BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                                 pass
-                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                                 ErrorCount += 1
                                 continue
                             # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
-                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '평서체':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                                MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
+                                ErrorCount += 1
+                                continue
+                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식체':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                                 ErrorCount += 1
                                 continue
@@ -4063,8 +4086,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             MemoryCounter = ''
                         elif Tone == 'Formal':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
+                        elif Tone == 'Normal':
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                         elif Tone == 'Informal':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
                     else:
                         MemoryCounter = ''
 
@@ -4116,8 +4141,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             MemoryCounter = ''
         elif Tone == 'Formal':
             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
+        elif Tone == 'Normal':
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
         elif Tone == 'Informal':
-            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
             
         if not EditCheck:
             if DataFrameCompletion == 'No':
@@ -4157,10 +4184,12 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
                         if not LangCheck:
                             MemoryCounter = ''
-                            if BeforeCheck == '격식어조':
+                            if BeforeCheck == '격식체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
-                            elif BeforeCheck == '비격식어조':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                            elif BeforeCheck == '평서체':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                            elif BeforeCheck == '비격식체':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
                             MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             ErrorCount += 1
                             ## LangCheck의 경우는 3번 이상 일치가 되지 않으면 pass
@@ -4183,14 +4212,20 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                                 BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                                 pass
-                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                                 ErrorCount += 1
                                 continue
                             # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
-                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '평서체':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                                MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
+                                ErrorCount += 1
+                                continue
+                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식체':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                                 ErrorCount += 1
                                 continue
@@ -4200,8 +4235,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             MemoryCounter = ''
                         elif Tone == 'Formal':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
+                        elif Tone == 'Normal':
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                         elif Tone == 'Informal':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
                     else:
                         MemoryCounter = ''
 
@@ -4253,8 +4290,11 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             MemoryCounter = ''
         elif Tone == 'Formal':
             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
-        elif Tone == 'Informal':
+        elif Tone == 'Normal':
             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+        elif Tone == 'Informal':
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요. 서술문을 반말인 구어체로 작성하는 겁니다.'
+
             
         if not EditCheck:
             if DataFrameCompletion == 'No':
@@ -4294,10 +4334,12 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationKinfolkStyleRefinementPath, TranslationKinfolkStyleRefinementResponse)
                         if not LangCheck:
                             MemoryCounter = ''
-                            if BeforeCheck == '격식어조':
+                            if BeforeCheck == '격식체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
-                            elif BeforeCheck == '비격식어조':
+                            elif BeforeCheck == '평서체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                            elif BeforeCheck == '비격식체':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
                             MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             ErrorCount += 1
                             ## LangCheck의 경우는 3번 이상 일치가 되지 않으면 pass
@@ -4320,14 +4362,20 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                                 BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                                 pass
-                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식어조':
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                                 ErrorCount += 1
                                 continue
                             # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
-                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식어조':
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '평서체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                                MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
+                                ErrorCount += 1
+                                continue
+                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                            elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식체':
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                                 ErrorCount += 1
                                 continue
@@ -4337,8 +4385,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             MemoryCounter = ''
                         elif Tone == 'Formal':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
-                        elif Tone == 'Informal':
+                        elif Tone == 'Normal':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
+                        elif Tone == 'Informal':
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요. 서술문을 반말인 구어체로 작성하는 겁니다.'
                     else:
                         MemoryCounter = ''
 

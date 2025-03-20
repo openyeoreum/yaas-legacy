@@ -88,13 +88,13 @@ def YaasConfigUpdate(StartProjectName, MainLang, Estimate, DataCollection, Searc
             TranslationConfig = {
                 "MainLang": MainLang,
                 "Translation": Translation,
-                "BookGenre": "NonFiction",
-                "Tone": "Informal",
-                "BodyLength": 3000,
-                "Editing": "on",
-                "Refinement": "off",
-                "KinfolkStyleRefinement": "on",
-                "EditMode": "Auto",
+                "BookGenre": "NonFiction", # "NonFiction", "Fiction"
+                "Tone": "Informal", # "Informal", "Normal", "Formal"
+                "BodyLength": 3000, # 2000, 3000, 4000
+                "Editing": "on", # "on", "off"
+                "Refinement": "off", # "on", "off"
+                "KinfolkStyleRefinement": "on", # "on", "off
+                "EditMode": "Auto", # "Auto", "Manual"
                 }
             
         ### Step3-7 : TextBookConfig 설정 ###
@@ -110,14 +110,14 @@ def YaasConfigUpdate(StartProjectName, MainLang, Estimate, DataCollection, Searc
             AudioBookConfig = {
                 "IndexMode": "Define",
                 "BookGenre": "Auto",
-                "Narrator": "VoiceActor",
+                "Narrator": "VoiceActor", # "VoiceActor", "VoiceClone"
                 "CloneVoiceName": "",
-                "ReadingStyle": "NarratorOnly",
+                "ReadingStyle": "NarratorOnly", # "NarratorOnly", "AllCharacters"
                 "VoiceEnhance": "off",
                 "VoiceReverbe": "on",
-                "Intro": "off",
-                "AudiobookSplitting": "Auto",
-                "MusicDB": "Template",
+                "Intro": "off", # "on", "off"
+                "AudiobookSplitting": "Auto", # "Auto", "Manual"
+                "MusicDB": "Template", # "Template", "Database"
                 "EndMusicVolume": -10,
                 "VoiceFileGen": "off",
                 "Bitrate": "320k",

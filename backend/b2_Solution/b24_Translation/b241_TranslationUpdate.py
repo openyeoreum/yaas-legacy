@@ -838,13 +838,13 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
         elif Tone == 'Normal':
             StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없다. 완성 절차 및 방법에 따라서, *원문의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역을 시작하세요."
         elif Tone == 'Informal':
-            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없어. 완성 절차 및 방법에 따라서, *원문의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 번역을 시작해줘."
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없어. 완성 절차 및 방법에 따라서, *원문의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 번역을 시작해줘."
         AddInput = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n\n[도서전체목차]\n{IndexText}\n\n[이전번역문]\n{StartBodyTranslation}\n\n\n"
         
     return AddInput
 
 ## Process8: BodyTranslationCheck의 Input
-def BodyTranslationCheckInput(ProjectName, Process, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
+def BodyTranslationCheckAndBodyToneEditingInput(ProjectName, Process, ToneCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
     ## 이전번역문과 현재번역문 비교 Input 생성
     if os.path.exists(ProjectDataFrameBodyTranslationPath):
         with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
@@ -855,13 +855,16 @@ def BodyTranslationCheckInput(ProjectName, Process, InputCount, TotalInputCount,
         else:
             CurrentBodyTranslation = BodyTranslationResponse['내용']
         
-        CheckInput = f"{BeforeBodyTranslation}\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n"
+        ## CheckInput 생성
+        CheckInput = f"{BeforeBodyTranslation}\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n\n"
         Index = max(-len(BodyTranslation), -3)
         BeforeCheck = BodyTranslation[Index]['Tone']
-        
-        ## 이전번역문과 현재번역문 언어 동일성 체크
+        ## ToneEditInput 생성
+        ToneEditInput = f"[이전도서어조]\n{ToneCode}\n\n[이전도서내용]\n{BeforeBodyTranslation}\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n\n"
+        ## LanguageEditInput 생성
+                
         LangCheck = False
-        if Process in ['TranslationEditing', 'TranslationRefinement']:
+        if Process in ['TranslationEditing', 'TranslationRefinement', 'TranslationKinfolkStyleRefinement']:
             BeforeBodyLang = sorted(LanguageDetection(BeforeBodyTranslation))
             CurrentBodyLang = sorted(LanguageDetection(CurrentBodyTranslation))
             
@@ -881,7 +884,41 @@ def BodyTranslationCheckInput(ProjectName, Process, InputCount, TotalInputCount,
                 print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
                     f"{BeforeBodyLang} =! {CurrentBodyLang}, 동일 언어 체크 재시도")
         
-    return LangCheck, CheckInput, BeforeCheck
+    return LangCheck, CheckInput, ToneEditInput, BeforeCheck
+
+## Process8: BodyLanguageEditing의 Input
+def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
+    ## 이전번역문과 현재번역문 비교 Input 생성
+    FirstLangCheck = False
+    CurrentBodyTranslation = re.sub(r'\{[^{}]*->([^{}]*)\}', r'\1', BodyTranslationResponse['번역문']).replace('{', '').replace('}', '')
+    CurrentBodyLang = sorted(LanguageDetection(CurrentBodyTranslation))
+    if os.path.exists(ProjectDataFrameBodyTranslationPath):
+        with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
+            BodyTranslation = json.load(TranslationDataFrame)[1]
+        BeforeBodyTranslation = BodyTranslation[-1]['Body']
+
+        ## LanguageEditInput 생성
+        LanguageEditInput = f"{MainLangCode}\n\n<이전도서내용>\n{BeforeBodyTranslation}\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n\n"
+        
+        ## 이전번역문과 현재번역문 언어 동일성 체크
+        if CurrentBodyLang == [MainLang.lower()]:
+            FirstLangCheck = True
+        if not FirstLangCheck:
+            print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
+                    f"CurrentBodyLang: {CurrentBodyLang} != MainLang: [{MainLang.lower()}] | BodyLanguageEditing 시작")
+            
+    else:
+        ## LanguageEditInput 생성
+        LanguageEditInput = f"{MainLangCode}\n\n<이전도서내용>\n현재 책의 가장 앞부분이라서 이전도서내용이 없음\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n\n"
+        
+        ## 이전번역문과 현재번역문 언어 동일성 체크
+        if CurrentBodyLang == [MainLang.lower()]:
+            FirstLangCheck = True
+        if not FirstLangCheck:
+            print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
+                    f"CurrentBodyLang: {CurrentBodyLang} != MainLang: [{MainLang.lower()}] | BodyLanguageEditing 시작")
+        
+    return FirstLangCheck, LanguageEditInput
 
 ## Process9: TranslationEditing의 InputList
 def TranslationEditingInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2):
@@ -1042,7 +1079,7 @@ def TranslationEditingAddInput(ProjectDataFrameTranslationEditingPath, ProjectDa
         elif Tone == 'Normal':
             StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없다. 완성 절차 및 방법에 따라서, *편집할내용의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 편집을 시작하세요."
         elif Tone == 'Informal':
-            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없어. 완성 절차 및 방법에 따라서, *편집할내용의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 편집을 시작하세요."
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없어. 완성 절차 및 방법에 따라서, *편집할내용의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 편집을 시작하세요."
         AddInput = f"[도서전체목차]\n{IndexText}\n\n[이전편집내용]\n{StartBodyTranslation}\n\n\n"
         
     return AddInput
@@ -1068,7 +1105,7 @@ def TranslationKinfolkStyleRefinementAddInput(ProjectDataFrameTranslationKinfolk
         elif Tone == 'Normal':
             StartBodyTranslation = "현재 책의 가장 앞부분이라서 직전에 편집된 글이 없다. 완성 절차 및 방법에 따라서, **편집내용-편집대상의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 편집을 시작하세요."
         elif Tone == 'Informal':
-            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없어. 완성 절차 및 방법에 따라서, **편집내용-편집대상의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 편집을 시작해줘."
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전번역문이 없어. 완성 절차 및 방법에 따라서, **편집내용-편집대상의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 편집을 시작해줘."
         AddInput = f"\n{StartBodyTranslation}\n\n\n"
         
     return AddInput
@@ -1980,6 +2017,82 @@ def BodyTranslationCheckFilter(Response, CheckCount):
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['도서내용어조체크']
+
+## Process8: BodyToneEditing의 Filter(Error 예외처리)
+def BodyToneEditingFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "BodyToneEditing, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '어조일치' not in OutputDic:
+        return "BodyToneEditing, JSONKeyError: '어조일치' 키가 누락되었습니다"
+
+    # Error3: '어조일치' 데이터 타입 검증
+    if not isinstance(OutputDic['어조일치'], dict):
+        return "BodyToneEditing, JSON에서 오류 발생: '어조일치'는 딕셔너리 형태여야 합니다"
+
+    required_keys = ['이전도서어조', '어조일치현재도서내용']
+    missing_keys = [key for key in required_keys if key not in OutputDic['어조일치']]
+    if missing_keys:
+        return f"BodyToneEditing, JSONKeyError: '어조일치'에 누락된 키: {', '.join(missing_keys)}"
+
+    item = OutputDic['어조일치']
+
+    # '이전도서어조' 값 검증 ('격식체', '평서체', '비격식체' 중 하나여야 함)
+    valid_tones = ['격식체', '평서체', '비격식체']
+    if item['이전도서어조'] not in valid_tones:
+        return f"BodyToneEditing, JSON에서 오류 발생: '이전도서어조'는 '격식체', '평서체', '비격식체' 중 하나여야 합니다"
+
+    if not item['이전도서어조'] in CheckCount:
+        return f"BodyToneEditing, JSON에서 오류 발생: '이전도서어조'는 {CheckCount}가 되어야 합니다"
+    
+    # '어조일치현재도서내용' 값 검증 (문자열이어야 함)
+    if not isinstance(item['어조일치현재도서내용'], str):
+        return "BodyToneEditing, JSON에서 오류 발생: '어조일치현재도서내용'은 문자열이어야 합니다"
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['어조일치']['어조일치현재도서내용']
+
+## Process8: BodyLanguageEditing의 Filter(Error 예외처리)
+def BodyLanguageEditingFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "BodyLanguageEditing, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '완벽번역' not in OutputDic:
+        return "BodyLanguageEditing, JSONKeyError: '완벽번역' 키가 누락되었습니다"
+
+    # Error3: '완벽번역' 데이터 타입 검증
+    if not isinstance(OutputDic['완벽번역'], dict):
+        return "BodyLanguageEditing, JSON에서 오류 발생: '완벽번역'은 딕셔너리 형태여야 합니다"
+
+    required_keys = ['번역문']
+    missing_keys = [key for key in required_keys if key not in OutputDic['완벽번역']]
+    if missing_keys:
+        return f"BodyLanguageEditing, JSONKeyError: '완벽번역'에 누락된 키: {', '.join(missing_keys)}"
+
+    item = OutputDic['완벽번역']
+
+    # '번역문' 값 검증 (문자열이어야 함)
+    if not isinstance(item['번역문'], str):
+        return "BodyLanguageEditing, JSON에서 오류 발생: '번역문'은 문자열이어야 합니다"
+
+    # '번역문'에 불필요한 언어가 포함되어 있는지 확인 (번역어(원어), 발음(원어)만 허용)
+    allowed_pattern = r'\([^\(\)]{1,20}\)'  # 괄호 안의 단어만 허용
+    cleaned_content = re.sub(allowed_pattern, '', item['번역문'])  # 괄호 속 단어를 제외한 문장 검사
+
+    # 번역언어 외의 언어가 포함되었는지 확인 (예: 한글 텍스트에 영어 문장이 많다면 오류)
+    if re.search(r'[ㄱ-ㅎ가-힣]+.*[a-zA-Z]+|[a-zA-Z]+.*[ㄱ-ㅎ가-힣]+', cleaned_content):
+        return "BodyLanguageEditing, JSON에서 오류 발생: '번역문'에는 번역언어 이외의 언어가 포함될 수 없습니다. 괄호를 활용한 번역어(원어), 발음(원어)만 허용됩니다."
+
+    # 모든 조건을 만족하면 JSON 반환
+    return OutputDic['완벽번역']
 
 ## Process8: BodyTranslationWordCheck의 Filter(Error 예외처리)
 def BodyTranslationWordCheckFilter(Response, CheckCount):
@@ -3881,10 +3994,13 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         MemoryCounter = ''
     elif Tone == 'Formal':
         MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 번역해주세요.'
+        ToneCode = '**격식체 ->>> (((습니다. 입니다. 합니다. ... 등)))'
     elif Tone == 'Normal':
         MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역해주세요.'
+        ToneCode = '**평서체 ->>> (((이다. 한다. 있다. ... 등)))'
     elif Tone == 'Informal':
-        MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 번역해주세요.'
+        MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 번역해주세요.'
+        ToneCode = '**비격식체 ->>> (((이었어. 했어. 있어. ... 등)))'
         
     if not EditCheck:
         if DataFrameCompletion == 'No':
@@ -3903,36 +4019,50 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ## Response 생성
                 BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
                 
-                ######################################
-                ### Process8: BodyTranslationCheck ###
-                ######################################
+                #######################################################
+                ### Process8: BodyTranslationCheck, BodyToneEditing ###
+                #######################################################
                 BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
                 if inputCount >= 5 and ToneDistinction == 'Yes':
+                    
+                    ## BodyTranslationCheck, BodyToneEditing ##
                     CheckProcess = "BodyTranslationCheck"
-                    _, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    ToneEditProcess = "BodyToneEditing"
+                    _, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                    
                     if BeforeCheck != '모름':
                         if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
-                            continue
+                            BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                            BodyTranslationResponse = {'번역문': BodyToneEditingResponse}
+                            pass
                     if BodyTranslationCheckResponse['어조일치여부'] == '불일치':
                         if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                             if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                 pass
                             else:
-                                continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                BodyTranslationResponse = {'번역문': BodyToneEditingResponse}
+                                pass
                         elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                             BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                             pass
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식체':
                             MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 번역해주세요.'
-                            continue
-                        # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                            BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                            BodyTranslationResponse = {'번역문': BodyToneEditingResponse}
+                            pass
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '평서체':
                             MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역해주세요.'
-                            continue
+                            BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                            BodyTranslationResponse = {'번역문': BodyToneEditingResponse}
+                            pass
                         elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식체':
-                            MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 번역해주세요.'
-                            continue
+                            MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 번역해주세요.'
+                            BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                            BodyTranslationResponse = {'번역문': BodyToneEditingResponse}
+                            pass
                         
                 if inputCount <= 4:
                     if Tone == 'Auto':
@@ -3942,9 +4072,18 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     elif Tone == 'Normal':
                         MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 번역해주세요.'
                     elif Tone == 'Informal':
-                        MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 번역해주세요.'
+                        MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 번역해주세요.'
                 else:
                     MemoryCounter = ''
+                    
+                #####################################
+                ### Process8: BodyLanguageEditing ###
+                #####################################
+                LanguageEditingProcess = "BodyLanguageEditing"
+                FirstLangCheck, LanguageEditInput = BodyLanguageEditingInput(projectName, Process, MainLang, MainLangCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                
+                if not FirstLangCheck:
+                    BodyTranslationResponse = ProcessResponse(projectName, email, LanguageEditingProcess, LanguageEditInput, inputCount, TotalInputCount, BodyLanguageEditingFilter, CheckCount, "OpenAI", mode, MessagesReview)
                 
                 ## DataFrame 저장
                 BodyTranslationProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
@@ -3995,7 +4134,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         elif Tone == 'Normal':
             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
         elif Tone == 'Informal':
-            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
 
         if not EditCheck:
             if DataFrameCompletion == 'No':
@@ -4024,15 +4163,20 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     ## Response 생성
                     TranslationEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Anthropic", mode, MessagesReview, memoryCounter = MemoryCounter)
 
-                    ######################################
-                    ### Process8: BodyTranslationCheck ###
-                    ######################################
+                    #######################################################
+                    ### Process8: BodyTranslationCheck, BodyToneEditing ###
+                    #######################################################
                     BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
                     # print(f"\n\n\n\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\ninputCount: {inputCount}")
                     # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
                     if inputCount >= 5 and ToneDistinction == 'Yes':
+                        
+                        ## BodyTranslationCheck, BodyToneEditing ##
                         CheckProcess = "BodyTranslationCheck"
-                        LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
+                        ToneEditProcess = "BodyToneEditing"
+                        LangCheck, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, InputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
+                        BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                        
                         if not LangCheck:
                             MemoryCounter = ''
                             if BeforeCheck == '격식체':
@@ -4040,7 +4184,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             elif BeforeCheck == '평서체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                             elif BeforeCheck == '비격식체':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
                             MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             ErrorCount += 1
                             ## LangCheck의 경우는 3번 이상 일치가 되지 않으면 pass
@@ -4051,35 +4195,38 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                         if BeforeCheck != '모름':
                             if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
-                                ErrorCount += 1
-                                continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationEditingResponse = {'내용': BodyToneEditingResponse}
+                                pass
                         if BodyTranslationCheckResponse['어조일치여부'] == '불일치':
                             if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                                 if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                     pass
                                 else:
-                                    ErrorCount += 1
-                                    continue
+                                    BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                    TranslationEditingResponse = {'내용': BodyToneEditingResponse}
+                                    pass
                             elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                                 BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                                 pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                                ErrorCount += 1
-                                continue
-                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationEditingResponse = {'내용': BodyToneEditingResponse}
+                                pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '평서체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                                ErrorCount += 1
-                                continue
-                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationEditingResponse = {'내용': BodyToneEditingResponse}
+                                pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식체':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                                ErrorCount += 1
-                                continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationEditingResponse = {'내용': BodyToneEditingResponse}
+                                pass
 
                     if inputCount <= 4:
                         if Tone == 'Auto':
@@ -4089,7 +4236,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         elif Tone == 'Normal':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                         elif Tone == 'Informal':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
                     else:
                         MemoryCounter = ''
 
@@ -4144,7 +4291,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         elif Tone == 'Normal':
             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
         elif Tone == 'Informal':
-            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
             
         if not EditCheck:
             if DataFrameCompletion == 'No':
@@ -4173,15 +4320,20 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     ## Response 생성
                     TranslationRefinementResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
 
-                    ######################################
-                    ### Process8: BodyTranslationCheck ###
-                    ######################################
+                    #######################################################
+                    ### Process8: BodyTranslationCheck, BodyToneEditing ###
+                    #######################################################
                     BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
                     # print(f"\n\n\n\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\ninputCount: {inputCount}")
                     # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
                     if inputCount >= 5 and ToneDistinction == 'Yes':
+                        
+                        ## BodyTranslationCheck, BodyToneEditing ##
                         CheckProcess = "BodyTranslationCheck"
-                        LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
+                        ToneEditProcess = "BodyToneEditing"
+                        LangCheck, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, InputCount, TotalInputCount, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
+                        BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                        
                         if not LangCheck:
                             MemoryCounter = ''
                             if BeforeCheck == '격식체':
@@ -4189,7 +4341,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             elif BeforeCheck == '평서체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                             elif BeforeCheck == '비격식체':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
                             MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             ErrorCount += 1
                             ## LangCheck의 경우는 3번 이상 일치가 되지 않으면 pass
@@ -4200,35 +4352,38 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                         if BeforeCheck != '모름':
                             if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
-                                ErrorCount += 1
-                                continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationRefinementResponse = {'내용': BodyToneEditingResponse}
+                                pass
                         if BodyTranslationCheckResponse['어조일치여부'] == '불일치':
                             if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                                 if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                     pass
                                 else:
-                                    ErrorCount += 1
-                                    continue
+                                    BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                    TranslationRefinementResponse = {'내용': BodyToneEditingResponse}
+                                    pass
                             elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                                 BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                                 pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                                ErrorCount += 1
-                                continue
-                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationRefinementResponse = {'내용': BodyToneEditingResponse}
+                                pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '평서체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                                ErrorCount += 1
-                                continue
-                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationRefinementResponse = {'내용': BodyToneEditingResponse}
+                                pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식체':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                                ErrorCount += 1
-                                continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationRefinementResponse = {'내용': BodyToneEditingResponse}
+                                pass
 
                     if inputCount <= 4:
                         if Tone == 'Auto':
@@ -4238,7 +4393,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         elif Tone == 'Normal':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                         elif Tone == 'Informal':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
                     else:
                         MemoryCounter = ''
 
@@ -4293,7 +4448,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         elif Tone == 'Normal':
             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
         elif Tone == 'Informal':
-            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요. 서술문을 반말인 구어체로 작성하는 겁니다.'
+            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요. 서술문을 반말인 구어체로 작성하는 겁니다.'
 
             
         if not EditCheck:
@@ -4323,15 +4478,20 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     ## Response 생성
                     TranslationKinfolkStyleRefinementResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
 
-                    ######################################
-                    ### Process8: BodyTranslationCheck ###
-                    ######################################
+                    #######################################################
+                    ### Process8: BodyTranslationCheck, BodyToneEditing ###
+                    #######################################################
                     BodyTranslationCheckResponse = {'현재도서내용어조': '모름'}
                     # print(f"\n\n\n\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\ninputCount: {inputCount}")
                     # print(f"ToneDistinction: {ToneDistinction}\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n\n\n")
                     if inputCount >= 5 and ToneDistinction == 'Yes':
+                        
+                        ## BodyTranslationCheck, BodyToneEditing ##
                         CheckProcess = "BodyTranslationCheck"
-                        LangCheck, CheckInput, BeforeCheck = BodyTranslationCheckInput(projectName, Process, inputCount, TotalInputCount, ProjectDataFrameTranslationKinfolkStyleRefinementPath, TranslationKinfolkStyleRefinementResponse)
+                        ToneEditProcess = "BodyToneEditing"
+                        LangCheck, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, InputCount, TotalInputCount, ProjectDataFrameTranslationKinfolkStyleRefinementPath, TranslationKinfolkStyleRefinementResponse)
+                        BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                        
                         if not LangCheck:
                             MemoryCounter = ''
                             if BeforeCheck == '격식체':
@@ -4339,7 +4499,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                             elif BeforeCheck == '평서체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                             elif BeforeCheck == '비격식체':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
                             MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
                             ErrorCount += 1
                             ## LangCheck의 경우는 3번 이상 일치가 되지 않으면 pass
@@ -4350,35 +4510,38 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                         if BeforeCheck != '모름':
                             if (BodyTranslationCheckResponse['이전도서내용어조'] == '모름' and BodyTranslationCheckResponse['현재도서내용어조'] == '모름') or (BodyTranslationCheckResponse['이전도서내용어조'] != BeforeCheck and BodyTranslationCheckResponse['현재도서내용어조'] != BeforeCheck):
-                                ErrorCount += 1
-                                continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationKinfolkStyleRefinementResponse = {'내용': BodyToneEditingResponse}
+                                pass
                         if BodyTranslationCheckResponse['어조일치여부'] == '불일치':
                             if BodyTranslationCheckResponse['이전도서내용어조'] == '모름':
                                 if BodyTranslationCheckResponse['현재도서내용어조'] == BeforeCheck:
                                     pass
                                 else:
-                                    ErrorCount += 1
-                                    continue
+                                    BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                    TranslationKinfolkStyleRefinementResponse = {'내용': BodyToneEditingResponse}
+                                    pass
                             elif BodyTranslationCheckResponse['현재도서내용어조'] == '모름':
                                 BodyTranslationCheckResponse['현재도서내용어조'] = BeforeCheck
                                 pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '격식체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                                ErrorCount += 1
-                                continue
-                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationKinfolkStyleRefinementResponse = {'내용': BodyToneEditingResponse}
+                                pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '평서체':
                                 MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                                ErrorCount += 1
-                                continue
-                            # Check가 False인 경우, 현재 반복을 다시 실행하기 위해 continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationKinfolkStyleRefinementResponse = {'내용': BodyToneEditingResponse}
+                                pass
                             elif BodyTranslationCheckResponse['이전도서내용어조'] == '비격식체':
-                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요.'
+                                MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
                                 MemoryCounter += f'\n※ 참고! [*편집할내용]을 편집할때는 ((({MainLangCode}))), 단 하나의 언어만 사용해서 전체를 작성합니다. 다른 언어가 존재하면 ((({MainLangCode})))로 번역해야 합니다. 이 외의 언어는 일체 작성하지 않습니다.'
-                                ErrorCount += 1
-                                continue
+                                BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview)
+                                TranslationKinfolkStyleRefinementResponse = {'내용': BodyToneEditingResponse}
+                                pass
 
                     if inputCount <= 4:
                         if Tone == 'Auto':
@@ -4388,7 +4551,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         elif Tone == 'Normal':
                             MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요. 그렇다고 서술문을 (했어. 이었어. ... 등)의 구어체로 작성하면 안됩니다.'
                         elif Tone == 'Informal':
-                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))은 반말로 작성해주세요. 서술문을 반말인 구어체로 작성하는 겁니다.'
+                            MemoryCounter = '\n※ 참고! [*편집할내용]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요. 서술문을 반말인 구어체로 작성하는 겁니다.'
                     else:
                         MemoryCounter = ''
 

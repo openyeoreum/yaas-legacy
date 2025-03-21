@@ -889,7 +889,7 @@ def BodyTranslationCheckAndBodyToneEditingInput(ProjectName, Process, ToneCode, 
 
 ## Process8: BodyLanguageEditing의 Input
 def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
-    def OneLanguageWordCheck(CurrentBodyTranslation):
+    def FindMixedLanguageWords(CurrentBodyTranslation):
         def GetScript(Char):
             if not Char.isalpha():
                 return 'NonAlpha'
@@ -923,22 +923,26 @@ def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, Input
             except ValueError:
                 return 'Unknown'
         
-        # 각 문자의 스크립트 확인
-        CharScripts = []
-        for Char in CurrentBodyTranslation:
-            if Char.isspace():  # 공백은 건너뛰기
-                continue
-            Script = GetScript(Char)
-            if Script != 'NonAlpha':
-                CharScripts.append(Script)
+        # 텍스트를 단어로 분리
+        words = re.findall(r'\b\w+\b', CurrentBodyTranslation)
+        MixedLanguageWords = []
         
-        # 알파벳 문자가 없는 경우 True 반환 (단일 언어로 간주)
-        if not CharScripts:
-            return True
+        for word in words:
+            # 각 단어의 문자 스크립트 확인
+            CharScripts = []
+            for char in word:
+                if not char.isalpha():
+                    continue
+                script = GetScript(char)
+                if script != 'NonAlpha' and script != 'Unknown':
+                    CharScripts.append(script)
             
-        # 단어가 단일 스크립트만 포함하는지 확인
-        UniqueScripts = set(CharScripts)
-        return len(UniqueScripts) <= 1  # 1개 이하의 언어면 True, 그 이상이면 False
+            # 단어에 여러 언어가 포함되어 있는지 확인
+            UniqueScripts = set(CharScripts)
+            if len(UniqueScripts) > 1:
+                MixedLanguageWords.append(word)
+        
+        return MixedLanguageWords, len(MixedLanguageWords) == 0
     
     ## 이전번역문과 현재번역문 비교 Input 생성
     FirstLangCheck = False
@@ -972,9 +976,15 @@ def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, Input
             print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | CurrentBodyLang: {CurrentBodyLang} != MainLang: [{MainLang.lower()}] | BodyLanguageEditing 시작")
     
     ## 이전번역문과 현재번역문 비교 Input 생성
-    SecondLangCheck = OneLanguageWordCheck(CurrentBodyTranslation)
+    MixedWords, SecondLangCheck = FindMixedLanguageWords(CurrentBodyTranslation)
     if not SecondLangCheck:
-        print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | OneLanguageWordCheck 번역문 한단어에 여러국가 언어가 존재 | BodyLanguageEditing 시작")
+        # 최대 5개 단어까지만 출력 
+        examples = ", ".join(MixedWords[:5])
+        if len(MixedWords) > 5:
+            examples += f" 외 {len(MixedWords)-5}개"
+            
+        print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
+            f"OneLanguageWordCheck 번역문에 다국어 언어 혼합 단어 발견: {examples} | BodyLanguageEditing 시작")
         
     FinalLangCheck = FirstLangCheck and SecondLangCheck
 

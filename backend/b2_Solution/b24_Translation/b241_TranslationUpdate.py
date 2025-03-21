@@ -400,7 +400,7 @@ def LanguageCodeGen(MainLang, Translation):
     return MainLangCode, TranslationLangCode, ToneDistinction
 
 ## 언어 감지 함수
-def LanguageDetection(Body):
+def LanguageDetection(Body, DetectionLength = 10):
     # 결과 재현성을 위해 시드 설정
     DetectorFactory.seed = 0
     if not Body or len(Body.strip()) == 0:
@@ -446,7 +446,7 @@ def LanguageDetection(Body):
     if re.search(r'\b[a-zA-Z]{2,}\b', Body):
         DetectedLanguages.add("en")
         
-    if len(LatinBody.strip()) >= 10:  # 최소 10자 이상의 라틴 텍스트가 있는 경우에만 분석
+    if len(LatinBody.strip()) >= DetectionLength:  # 최소 10자 이상의 라틴 텍스트가 있는 경우에만 분석
         try:
             # 텍스트의 일부만 분석 (너무 긴 경우)
             SampleBody = Body[:3000] if len(Body) > 3000 else Body
@@ -891,7 +891,7 @@ def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, Input
     ## 이전번역문과 현재번역문 비교 Input 생성
     FirstLangCheck = False
     CurrentBodyTranslation = re.sub(r'\{[^{}]*->([^{}]*)\}', r'\1', BodyTranslationResponse['번역문']).replace('{', '').replace('}', '')
-    CurrentBodyLang = sorted(LanguageDetection(CurrentBodyTranslation))
+    CurrentBodyLang = sorted(LanguageDetection(CurrentBodyTranslation, DetectionLength = 3))
     if os.path.exists(ProjectDataFrameBodyTranslationPath):
         with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
             BodyTranslation = json.load(TranslationDataFrame)[1]
@@ -2083,12 +2083,8 @@ def BodyLanguageEditingFilter(Response, CheckCount):
     if not isinstance(item['번역문'], str):
         return "BodyLanguageEditing, JSON에서 오류 발생: '번역문'은 문자열이어야 합니다"
 
-    # '번역문'에 불필요한 언어가 포함되어 있는지 확인 (번역어(원어), 발음(원어)만 허용)
-    allowed_pattern = r'\([^\(\)]{1,20}\)'  # 괄호 안의 단어만 허용
-    cleaned_content = re.sub(allowed_pattern, '', item['번역문'])  # 괄호 속 단어를 제외한 문장 검사
-
     # Error4: '번역문'에 불필요한 언어가 포함되어 있는지 확인 (번역어(원어), 발음(원어)만 허용)
-    ResponseLang = sorted(LanguageDetection(OutputDic['완벽번역']['번역문']))
+    ResponseLang = sorted(LanguageDetection(OutputDic['완벽번역']['번역문'], DetectionLength = 3))
     LangDetection = any(Lang not in CheckCount for Lang in ResponseLang)
     # 번역언어 외의 언어가 포함되었는지 확인 (예: 한글 텍스트에 영어 문장이 많다면 오류)
     if LangDetection:

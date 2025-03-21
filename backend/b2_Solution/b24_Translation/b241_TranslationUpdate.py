@@ -891,7 +891,6 @@ def BodyTranslationCheckAndBodyToneEditingInput(ProjectName, Process, ToneCode, 
 def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
     def OneLanguageWordCheck(CurrentBodyTranslation):
         def GetScript(Char):
-            """문자의 스크립트(언어 체계)를 결정합니다"""
             if not Char.isalpha():
                 return 'NonAlpha'
                 
@@ -942,11 +941,11 @@ def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, Input
         return len(UniqueScripts) <= 1  # 1개 이하의 언어면 True, 그 이상이면 False
     
     ## 이전번역문과 현재번역문 비교 Input 생성
+    FirstLangCheck = False
     CurrentBodyTranslation = re.sub(r'\{[^{}]*->([^{}]*)\}', r'\1', BodyTranslationResponse['번역문']).replace('{', '').replace('}', '')
-    FirstLangCheck = OneLanguageWordCheck(CurrentBodyTranslation)
-    if not FirstLangCheck:
-        print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | OneLanguageWordCheck 번역문에 하나의 단어에 여러국가 언어가 존재 | BodyLanguageEditing 시작")
     CurrentBodyLang = sorted(LanguageDetection(CurrentBodyTranslation, DetectionLength = 3))
+    
+    ## DataFrameBodyTranslationPath가 존재하는 경우
     if os.path.exists(ProjectDataFrameBodyTranslationPath):
         with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
             BodyTranslation = json.load(TranslationDataFrame)[1]
@@ -971,8 +970,15 @@ def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, Input
             FirstLangCheck = True
         if not FirstLangCheck:
             print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | CurrentBodyLang: {CurrentBodyLang} != MainLang: [{MainLang.lower()}] | BodyLanguageEditing 시작")
+    
+    ## 이전번역문과 현재번역문 비교 Input 생성
+    SecondLangCheck = OneLanguageWordCheck(CurrentBodyTranslation)
+    if not SecondLangCheck:
+        print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | OneLanguageWordCheck 번역문 한단어에 여러국가 언어가 존재 | BodyLanguageEditing 시작")
         
-    return FirstLangCheck, LanguageEditInput, CurrentBodyLang
+    FinalLangCheck = FirstLangCheck and SecondLangCheck
+
+    return FinalLangCheck, LanguageEditInput, CurrentBodyLang
 
 ## Process9: TranslationEditing의 InputList
 def TranslationEditingInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2):
@@ -4133,9 +4139,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ### Process8: BodyLanguageEditing ###
                 #####################################
                 LanguageEditingProcess = "BodyLanguageEditing"
-                FirstLangCheck, LanguageEditInput, CurrentBodyLang = BodyLanguageEditingInput(projectName, Process, MainLang, MainLangCode, inputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                FinalLangCheck, LanguageEditInput, CurrentBodyLang = BodyLanguageEditingInput(projectName, Process, MainLang, MainLangCode, inputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                 
-                if not FirstLangCheck:
+                if not FinalLangCheck:
                     BodyTranslationResponse = ProcessResponse(projectName, email, LanguageEditingProcess, LanguageEditInput, inputCount, TotalInputCount, BodyLanguageEditingFilter, CurrentBodyLang, "OpenAI", mode, MessagesReview)
                 
                 ## DataFrame 저장

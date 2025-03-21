@@ -984,7 +984,7 @@ def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, Input
             examples += f" 외 {len(MixedWords)-5}개"
             
         print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
-            f"OneLanguageWordCheck 번역문에 다국어 언어 혼합 단어 발견: {examples} | BodyLanguageEditing 시작")
+            f"OneLanguageWordCheck: 번역문에 다국어 혼합 단어 발견 (({examples})) | BodyLanguageEditing 시작")
         
     FinalLangCheck = FirstLangCheck and SecondLangCheck
 
@@ -2153,12 +2153,12 @@ def BodyLanguageEditingFilter(Response, CheckCount):
     if not isinstance(item['번역문'], str):
         return "BodyLanguageEditing, JSON에서 오류 발생: '번역문'은 문자열이어야 합니다"
 
-    # Error4: '번역문'에 불필요한 언어가 포함되어 있는지 확인 (번역어(원어), 발음(원어)만 허용)
-    ResponseLang = sorted(LanguageDetection(OutputDic['완벽번역']['번역문'], DetectionLength = 3))
-    LangDetection = any(Lang not in CheckCount for Lang in ResponseLang)
-    # 번역언어 외의 언어가 포함되었는지 확인 (예: 한글 텍스트에 영어 문장이 많다면 오류)
-    if LangDetection:
-        return "BodyLanguageEditing, JSON에서 오류 발생: '번역문'에는 번역언어 이외의 언어가 포함될 수 없습니다. 괄호를 활용한 번역어(원어), 발음(원어)만 허용됩니다."
+    # # Error4: '번역문'에 불필요한 언어가 포함되어 있는지 확인 (번역어(원어), 발음(원어)만 허용)
+    # ResponseLang = sorted(LanguageDetection(OutputDic['완벽번역']['번역문'], DetectionLength = 3))
+    # LangDetection = any(Lang not in CheckCount for Lang in ResponseLang)
+    # # 번역언어 외의 언어가 포함되었는지 확인 (예: 한글 텍스트에 영어 문장이 많다면 오류)
+    # if LangDetection:
+    #     return f"BodyLanguageEditing, JSON에서 오류 발생: '번역문'에는 번역언어 이외의 언어가 포함될 수 없습니다. 번역교정전(({CheckCount})), 번역교정후(({ResponseLang}))"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['완벽번역']

@@ -918,7 +918,7 @@ def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, Input
             print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
                     f"CurrentBodyLang: {CurrentBodyLang} != MainLang: [{MainLang.lower()}] | BodyLanguageEditing 시작")
         
-    return FirstLangCheck, LanguageEditInput
+    return FirstLangCheck, LanguageEditInput, CurrentBodyLang
 
 ## Process9: TranslationEditing의 InputList
 def TranslationEditingInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2):
@@ -2087,8 +2087,11 @@ def BodyLanguageEditingFilter(Response, CheckCount):
     allowed_pattern = r'\([^\(\)]{1,20}\)'  # 괄호 안의 단어만 허용
     cleaned_content = re.sub(allowed_pattern, '', item['번역문'])  # 괄호 속 단어를 제외한 문장 검사
 
+    # Error4: '번역문'에 불필요한 언어가 포함되어 있는지 확인 (번역어(원어), 발음(원어)만 허용)
+    ResponseLang = sorted(LanguageDetection(OutputDic['완벽번역']['번역문']))
+    LangDetection = any(Lang not in CheckCount for Lang in ResponseLang)
     # 번역언어 외의 언어가 포함되었는지 확인 (예: 한글 텍스트에 영어 문장이 많다면 오류)
-    if re.search(r'[ㄱ-ㅎ가-힣]+.*[a-zA-Z]+|[a-zA-Z]+.*[ㄱ-ㅎ가-힣]+', cleaned_content):
+    if LangDetection:
         return "BodyLanguageEditing, JSON에서 오류 발생: '번역문'에는 번역언어 이외의 언어가 포함될 수 없습니다. 괄호를 활용한 번역어(원어), 발음(원어)만 허용됩니다."
 
     # 모든 조건을 만족하면 JSON 반환
@@ -4080,10 +4083,10 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ### Process8: BodyLanguageEditing ###
                 #####################################
                 LanguageEditingProcess = "BodyLanguageEditing"
-                FirstLangCheck, LanguageEditInput = BodyLanguageEditingInput(projectName, Process, MainLang, MainLangCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                FirstLangCheck, LanguageEditInput, CurrentBodyLang = BodyLanguageEditingInput(projectName, Process, MainLang, MainLangCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                 
                 if not FirstLangCheck:
-                    BodyTranslationResponse = ProcessResponse(projectName, email, LanguageEditingProcess, LanguageEditInput, inputCount, TotalInputCount, BodyLanguageEditingFilter, CheckCount, "OpenAI", mode, MessagesReview)
+                    BodyTranslationResponse = ProcessResponse(projectName, email, LanguageEditingProcess, LanguageEditInput, inputCount, TotalInputCount, BodyLanguageEditingFilter, CurrentBodyLang, "OpenAI", mode, MessagesReview)
                 
                 ## DataFrame 저장
                 BodyTranslationProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)

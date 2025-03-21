@@ -4079,7 +4079,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 ### Process8: BodyLanguageEditing ###
                 #####################################
                 LanguageEditingProcess = "BodyLanguageEditing"
-                FirstLangCheck, LanguageEditInput, CurrentBodyLang = BodyLanguageEditingInput(projectName, Process, MainLang, MainLangCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                FirstLangCheck, LanguageEditInput, CurrentBodyLang = BodyLanguageEditingInput(projectName, Process, MainLang, MainLangCode, inputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                 
                 if not FirstLangCheck:
                     BodyTranslationResponse = ProcessResponse(projectName, email, LanguageEditingProcess, LanguageEditInput, inputCount, TotalInputCount, BodyLanguageEditingFilter, CurrentBodyLang, "OpenAI", mode, MessagesReview)

@@ -3,6 +3,7 @@ import re
 import json
 import base64
 import time
+import unicodedata
 import sys
 sys.path.append("/yaas")
 
@@ -888,9 +889,63 @@ def BodyTranslationCheckAndBodyToneEditingInput(ProjectName, Process, ToneCode, 
 
 ## Process8: BodyLanguageEditing의 Input
 def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
+    def OneLanguageWordCheck(CurrentBodyTranslation):
+        def GetScript(Char):
+            """문자의 스크립트(언어 체계)를 결정합니다"""
+            if not Char.isalpha():
+                return 'NonAlpha'
+                
+            try:
+                Name = unicodedata.name(Char)
+                
+                # 스크립트별 분류
+                if 'LATIN' in Name:
+                    return 'Latin'  # 영어, 로마자 등
+                elif 'HANGUL' in Name:
+                    return 'Hangul'  # 한글
+                elif any(x in Name for x in ['CJK', 'IDEOGRAPH']):
+                    return 'CJK'  # 중국어, 일본 한자 등
+                elif 'HIRAGANA' in Name or 'KATAKANA' in Name:
+                    return 'Japanese'  # 일본어
+                elif 'THAI' in Name:
+                    return 'Thai'  # 태국어
+                elif 'ARABIC' in Name:
+                    return 'Arabic'  # 아랍어
+                elif 'CYRILLIC' in Name:
+                    return 'Cyrillic'  # 러시아어 등
+                elif 'DEVANAGARI' in Name:
+                    return 'Devanagari'  # 힌디어 등
+                elif 'GREEK' in Name:
+                    return 'Greek'  # 그리스어
+                elif 'HEBREW' in Name:
+                    return 'Hebrew'  # 히브리어
+                else:
+                    return 'Other'
+            except ValueError:
+                return 'Unknown'
+        
+        # 각 문자의 스크립트 확인
+        CharScripts = []
+        for Char in CurrentBodyTranslation:
+            if Char.isspace():  # 공백은 건너뛰기
+                continue
+            Script = GetScript(Char)
+            if Script != 'NonAlpha':
+                CharScripts.append(Script)
+        
+        # 알파벳 문자가 없는 경우 True 반환 (단일 언어로 간주)
+        if not CharScripts:
+            return True
+            
+        # 단어가 단일 스크립트만 포함하는지 확인
+        UniqueScripts = set(CharScripts)
+        return len(UniqueScripts) <= 1  # 1개 이하의 언어면 True, 그 이상이면 False
+    
     ## 이전번역문과 현재번역문 비교 Input 생성
-    FirstLangCheck = False
     CurrentBodyTranslation = re.sub(r'\{[^{}]*->([^{}]*)\}', r'\1', BodyTranslationResponse['번역문']).replace('{', '').replace('}', '')
+    FirstLangCheck = OneLanguageWordCheck(CurrentBodyTranslation)
+    if not FirstLangCheck:
+        print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | OneLanguageWordCheck 번역문에 하나의 단어에 여러국가 언어가 존재 | BodyLanguageEditing 시작")
     CurrentBodyLang = sorted(LanguageDetection(CurrentBodyTranslation, DetectionLength = 3))
     if os.path.exists(ProjectDataFrameBodyTranslationPath):
         with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
@@ -915,8 +970,7 @@ def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, Input
         if CurrentBodyLang == [MainLang.lower()]:
             FirstLangCheck = True
         if not FirstLangCheck:
-            print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | "
-                    f"CurrentBodyLang: {CurrentBodyLang} != MainLang: [{MainLang.lower()}] | BodyLanguageEditing 시작")
+            print(f"Project: {ProjectName} | Process: {Process} {InputCount}/{TotalInputCount} | CurrentBodyLang: {CurrentBodyLang} != MainLang: [{MainLang.lower()}] | BodyLanguageEditing 시작")
         
     return FirstLangCheck, LanguageEditInput, CurrentBodyLang
 

@@ -542,7 +542,7 @@ Korean - 한국어 - 한국어
 sympathie -> 공감, obéissance -> 복종, instruction -> 지도
 
 번역예시2: 두개의 언어가 섞여있는 잘못된 경우 번역
-im중요성ance -> 중요성, import도입ation -> 도입, th주장èse-> 주장
+im중요성ance -> 중요성, import도입ation -> 도입, th주장èse-> 주장, ex행위ment -> 정확함, ex행위ment -> 정확함
 
 번역예시3: 번역이 일부만 된 경우 추론적으로 번역
 socio논리s -> 사회적 논리, 논리법칙 de 모방 -> 논리법칙의 모방, é에테르rées -> 가벼운 에테르

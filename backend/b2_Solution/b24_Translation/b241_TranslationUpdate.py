@@ -3761,7 +3761,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         TranslationEdit = json.load(TranslationEditJson)
     EditCompletion = False
     if Process + 'Completion' in TranslationEdit:
-        if TranslationEdit[Process + 'Completion'] != 'Completion':
+        if TranslationEdit[Process + 'Completion'] == 'Completion':
             EditCompletion = True
     if not EditCompletion:
         ## Result 생성

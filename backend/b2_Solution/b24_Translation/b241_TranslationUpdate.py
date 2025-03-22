@@ -156,7 +156,7 @@ def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, Translation
 def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess, ProjectDataFrameTranslationIndexDefinePath, MaxLength):
     TranslationIndex, TranslationBody, TranslationBodyFilePath = LoadTranslationSplitBody(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess)
 
-    ## Load1-1: BodyLines과 TranslationIndex 위치 찾기 (수정됨)
+    ## Load1-1: BodyLines와 TranslationIndex 위치 찾기 (수정됨)
     BodyLines = TranslationBody.splitlines()
     IndexPositions = []
     CurrentIndexIdx = 0
@@ -225,15 +225,15 @@ def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, Translat
         SectionLines = BodyLines[StartLine:NextStartLine]
         SectionText = "\n".join(SectionLines)
         
-        # 섹션이 4,000자를 초과하는지 확인
+        # 섹션이 MaxLength(2,000, 3,000, 4,000)자를 초과하는지 확인
         if len(SectionText) <= MaxLength:
-            SplitedTranslationBody.append({"IndexId": IndexId, "IndexTag": IndexTag, "Index": IndexText, "BodyId": BodyId, "Body": SectionText})
+            SplitedTranslationBody.append({"IndexId": IndexId, "IndexTag": IndexTag, "Index": IndexText, "BodyId": BodyId, "Body": SectionText, 'FinalEnding': '\n'})
             BodyId += 1
         else:
-            # 섹션이 4,000자를 초과하면 문장 단위로 추가 분할
-            SubSections = SplitBySentence(SectionText, MaxLength)
-            for sub_text in SubSections:
-                SplitedTranslationBody.append({"IndexId": IndexId, "IndexTag": IndexTag, "Index": IndexText, "BodyId": BodyId, "Body": sub_text})
+            # 섹션이 MaxLength(2,000, 3,000, 4,000)자를 초과하면 문장 단위로 추가 분할
+            SubSections = SplitBySentence(TranslationBodyFilePath, projectName, IndexText, SectionText, MaxLength)
+            for SubText in SubSections:
+                SplitedTranslationBody.append({"IndexId": IndexId, "IndexTag": IndexTag, "Index": IndexText, "BodyId": BodyId, "Body": SubText['CurrentSegment'], 'FinalEnding': SubText['FinalEnding']})
                 BodyId += 1
     
     ## Load2-4: 분할 전/후 최종 글자수 일치 확인
@@ -261,73 +261,111 @@ def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, Translat
     if OriginalCount == SplitCount:
         return SplitedTranslationBody
     else:
-        sys.exit(f"TranslationSplitBody 길이 불일치 오류 발생: Project: {projectName} | Process: TranslationBodySplit | SplitBodyLengthError\n[ 분할 전후 텍스트 수가 다름 (분할전: {OriginalCount} != 분할후: {SplitCount}) ]")
+        sys.exit(f"TranslationSplitBody 길이 불일치 오류: Project: {projectName} | Process: TranslationBodySplit | SplitBodyLengthError\n[ 분할 전후 텍스트 수가 다름 (분할전: {OriginalCount} != 분할후: {SplitCount}) ]")
 
 ## MaxLength 이상인 경우 분할 함수
-def SplitBySentence(SectionText, MaxLength):
-    # Define sentence delimiters
+def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText, MaxLength):
+    # 쌍따옴표, 따옴표 일치화
+    SectionText = SectionText.replace('“', '"').replace('”', '"').replace("‘", "'").replace("’", "'")
+    
+    # 따옴표 균형 확인
+    if SectionText.count('"') % 2 != 0:
+        FirstPart = SectionText[:20] if len(SectionText) > 20 else SectionText
+        LastPart = SectionText[-20:] if len(SectionText) > 20 else SectionText
+        sys.exit(f"TranslationBodySplit 따옴표 개수 홀수 오류: Project: {ProjectName} | Process: TranslationBodySplit | SplitBodyError\n[ 아래 경로 파일 {ProjectName}_Body(Translation).txt -> <{IndexText}> -> ({FirstPart} ... {LastPart}) 문단에서 따옴표 개수가 홀수개 입니다. ]\n{TranslationBodyFilePath}")
+    
+    # 문장 종결자 정의
     SentenceDelimiters = ['. ', '! ', '? ', '.\n', '!\n', '?\n']
-    # Split SectionText into sentences
-    sentences = []
-    start = 0
+    
+    # 1단계: 대화문을 보존하며 텍스트 분할
+    Sentences = []
+    Start = 0
     i = 0
+    InDialogue = False
+    
     while i < len(SectionText):
-        FoundDelimiter = False
-        for delimiter in SentenceDelimiters:
-            if i + len(delimiter) <= len(SectionText) and SectionText[i:i+len(delimiter)] == delimiter:
-                # End of a sentence found
-                sentences.append(SectionText[start:i+len(delimiter)])  # Include the delimiter
-                start = i + len(delimiter)
-                i = start - 1  # Will be incremented in the outer loop
-                FoundDelimiter = True
-                break
-
-        if not FoundDelimiter:
-            i += 1
-            
-    # Add the last part if any
-    if start < len(SectionText):
-        sentences.append(SectionText[start:])
+        # 따옴표 체크하여 대화문 여부 확인
+        if SectionText[i] == '"':
+            InDialogue = not InDialogue
         
-    # If we have no sentences (no delimiters found), return the SectionText as a single segment
-    if not sentences:
-        return [SectionText]
+        # 대화문 외부에서만 구분자 처리
+        if not InDialogue:
+            FoundDelimiter = False
+            for Delimiter in SentenceDelimiters:
+                if i + len(Delimiter) <= len(SectionText) and SectionText[i:i+len(Delimiter)] == Delimiter:
+                    # 대화문 외부에서 문장 끝 발견
+                    Sentences.append(SectionText[Start:i+len(Delimiter)])
+                    Start = i + len(Delimiter)
+                    i = Start - 1  # 외부 루프에서 증가될 예정
+                    FoundDelimiter = True
+                    break
+            
+            if not FoundDelimiter:
+                i += 1
+        else:  # 대화문 내부
+            i += 1
     
-    # Calculate the optimal number of segments
+    # 남은 부분 추가
+    if Start < len(SectionText):
+        Sentences.append(SectionText[Start:])
+    
+    # 문장이 없으면 전체 텍스트를 하나의 세그먼트로 반환
+    if not Sentences:
+        HasNewline = SectionText.endswith('\n')
+        return [{'CurrentSegment': SectionText, 'FinalEnding': '\n' if HasNewline else ''}]
+    
+    # 최적 세그먼트 계산
     TotalChars = len(SectionText)
-    NumSegments = max(1, (TotalChars + MaxLength - 1) // MaxLength)  # At least 1 segment
+    NumSubSections = max(1, (TotalChars + MaxLength - 1) // MaxLength)  # 최소 1개 세그먼트
+    TargetSize = TotalChars / NumSubSections
     
-    # Calculate target size for each segment for balanced splitting
-    target_size = TotalChars / NumSegments
-    
-    # Group sentences into segments to achieve target size
-    segments = []
+    # 문장을 세그먼트로 그룹화
+    SubSections = []
     CurrentSegment = ""
     
-    for sentence in sentences:
-        potential_length = len(CurrentSegment) + len(sentence)
+    for Sentence in Sentences:
+        PotentialLength = len(CurrentSegment) + len(Sentence)
         
-        if potential_length <= MaxLength:
-            # 현재 세그먼트에 문장을 추가했을 때 목표 크기에 더 가까워지는지 확인
+        if PotentialLength <= MaxLength:
+            # 이 문장을 추가했을 때 목표 크기에 더 가까워지는지 확인
             if (not CurrentSegment or 
-                abs(potential_length - target_size) < abs(len(CurrentSegment) - target_size)):
-                CurrentSegment += sentence
+                abs(PotentialLength - TargetSize) < abs(len(CurrentSegment) - TargetSize)):
+                CurrentSegment += Sentence
             else:
-                segments.append(CurrentSegment)
-                CurrentSegment = sentence
+                HasNewline = CurrentSegment.endswith('\n')
+                SubSections.append({
+                    'CurrentSegment': CurrentSegment, 
+                    'FinalEnding': '\n' if HasNewline else ''
+                })
+                CurrentSegment = Sentence
         else:
             if CurrentSegment:
-                segments.append(CurrentSegment)
-            CurrentSegment = sentence
+                HasNewline = CurrentSegment.endswith('\n')
+                SubSections.append({
+                    'CurrentSegment': CurrentSegment, 
+                    'FinalEnding': '\n' if HasNewline else ''
+                })
+            CurrentSegment = Sentence
     
-    # Add the last segment if any
+    # 마지막 세그먼트 추가
     if CurrentSegment:
-        if segments and len(segments[-1]) + len(CurrentSegment) <= MaxLength:
-            segments[-1] += CurrentSegment
+        HasNewline = CurrentSegment.endswith('\n')
+        LastSegment = {
+            'CurrentSegment': CurrentSegment,
+            'FinalEnding': '\n' if HasNewline else ''
+        }
+        
+        # 가능하면 이전 세그먼트와 결합
+        if SubSections and len(SubSections[-1]['CurrentSegment']) + len(CurrentSegment) <= MaxLength:
+            Combined = SubSections[-1]['CurrentSegment'] + CurrentSegment
+            SubSections[-1] = {
+                'CurrentSegment': Combined,
+                'FinalEnding': '\n' if Combined.endswith('\n') else ''
+            }
         else:
-            segments.append(CurrentSegment)
+            SubSections.append(LastSegment)
     
-    return segments
+    return SubSections
 
 ## Load3: MainLang, Translation 불러오기
 def LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath):
@@ -3496,12 +3534,14 @@ def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process)
                 json.dump(TranslationEdit, TranslationEditJson, indent = 4, ensure_ascii = False)
 
 ## ProcessEditText 저장
-def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2):
+def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2, Process3):
     ## TranslationEdit 불러오기
     with open(TranslationEditPath, 'r', encoding='utf-8') as TranslationEditJson:
         TranslationEdit = json.load(TranslationEditJson)
-    TranslationBodyEdit = TranslationEdit[Process2]
-    TranslationIndexEdit = TranslationEdit[Process1]
+    TranslationBodySplit = TranslationEdit[Process1]
+    TranslationIndexEdit = TranslationEdit[Process2]
+    TranslationBodyEdit = TranslationEdit[Process3]
+    
         
     ## TranslationEdit을 Index, Body Text 파일로 저장할 경로 설정
     EditIndexFileName = f"{ProjectName}_Index({MainLang}-{Process2}).txt"
@@ -3544,6 +3584,11 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
                 # Body 내용 작성
                 BodyText = ProcessDic['Body'].replace('\n\n\n\n', '\n\n')
                 BodyText = BodyText.replace('\n\n\n', '\n\n')
+                if "FinalEnding" in TranslationBodySplit[i]:
+                    if BodyText.endswith('\n'):
+                        pass
+                    else:
+                        BodyText += TranslationBodySplit[i]['FinalEnding']
                 bodyFile.write(f"{BodyText}")
     else:
         print(f"[{ProjectName} Body 파일 {EditBodyFilePath}이(가) 이미 존재합니다.]")
@@ -3711,14 +3756,22 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## TranslationBodySplit 경로 생성
     ProjectDataFrameTranslationBodySplitPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
-    ## Result 생성
-    TranslationBodySplitResult = TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, "TranslationIndexDefine", ProjectDataFrameTranslationIndexDefinePath, BodyLength)
-    
-    ## DataFrame 저장
-    TranslationBodySplitProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationBodySplitPath, TranslationBodySplitResult, Process, len(TranslationBodySplitResult), len(TranslationBodySplitResult))
+    ## CompletionCheck 및 Process 진행
+    with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
+        TranslationEdit = json.load(TranslationEditJson)
+    EditCompletion = False
+    if Process + 'Completion' in TranslationEdit:
+        if TranslationEdit[Process + 'Completion'] != 'Completion':
+            EditCompletion = True
+    if not EditCompletion:
+        ## Result 생성
+        TranslationBodySplitResult = TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, "TranslationIndexDefine", ProjectDataFrameTranslationIndexDefinePath, BodyLength)
+        
+        ## DataFrame 저장
+        TranslationBodySplitProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationBodySplitPath, TranslationBodySplitResult, Process, len(TranslationBodySplitResult), len(TranslationBodySplitResult))
 
-    ## Edit 저장
-    BodySplitProcessEditSave(ProjectDataFrameTranslationBodySplitPath, TranslationEditPath, Process)
+        ## Edit 저장
+        BodySplitProcessEditSave(ProjectDataFrameTranslationBodySplitPath, TranslationEditPath, Process)
 
     ####################################################
     ### Process2: TranslationBodySummary Response 생성 ##
@@ -4097,7 +4150,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     ## BodyTranslationCheck, BodyToneEditing ##
                     CheckProcess = "BodyTranslationCheck"
                     ToneEditProcess = "BodyToneEditing"
-                    _, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    _, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, inputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                     
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                     
@@ -4243,7 +4296,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         ## BodyTranslationCheck, BodyToneEditing ##
                         CheckProcess = "BodyTranslationCheck"
                         ToneEditProcess = "BodyToneEditing"
-                        LangCheck, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, InputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
+                        LangCheck, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, inputCount, TotalInputCount, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse)
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                         
                         if not LangCheck:
@@ -4400,7 +4453,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         ## BodyTranslationCheck, BodyToneEditing ##
                         CheckProcess = "BodyTranslationCheck"
                         ToneEditProcess = "BodyToneEditing"
-                        LangCheck, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, InputCount, TotalInputCount, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
+                        LangCheck, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, inputCount, TotalInputCount, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse)
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                         
                         if not LangCheck:
@@ -4558,7 +4611,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         ## BodyTranslationCheck, BodyToneEditing ##
                         CheckProcess = "BodyTranslationCheck"
                         ToneEditProcess = "BodyToneEditing"
-                        LangCheck, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, InputCount, TotalInputCount, ProjectDataFrameTranslationKinfolkStyleRefinementPath, TranslationKinfolkStyleRefinementResponse)
+                        LangCheck, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, inputCount, TotalInputCount, ProjectDataFrameTranslationKinfolkStyleRefinementPath, TranslationKinfolkStyleRefinementResponse)
                         BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
                         
                         if not LangCheck:
@@ -4681,7 +4734,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 MemoryCounter = '\n※ 참고! 교정 작업의 대상은 <**작업: 교정할도서내용> 입니다. <교정도서내용.json>에 <참고: 이전교정도서내용>은 포함하지 마세요.'
                 
                 ## Response 생성
-                TranslationProofreadingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationProofreadingFilter, InputList[i]['Body'], "DeepSeek", mode, MessagesReview, memoryCounter = MemoryCounter)
+                TranslationProofreadingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationProofreadingFilter, InputList[i]['Body'], "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
                 
                 ## ErrorPass 예외처리
                 if TranslationProofreadingResponse == "ErrorPass":
@@ -4695,7 +4748,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
         
         ## EditText 저장
-        ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "IndexTranslation", Process)
+        ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "TranslationBodySplit", "IndexTranslation", Process)
         
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")

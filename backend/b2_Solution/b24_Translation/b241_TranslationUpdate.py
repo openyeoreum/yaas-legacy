@@ -3584,6 +3584,7 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
                 # Body 내용 작성
                 BodyText = ProcessDic['Body'].replace('\n\n\n\n', '\n\n')
                 BodyText = BodyText.replace('\n\n\n', '\n\n')
+                BodyText = BodyText.replace('  ', ' ')
                 if "FinalEnding" in TranslationBodySplit[i]:
                     if BodyText.endswith('\n'):
                         pass

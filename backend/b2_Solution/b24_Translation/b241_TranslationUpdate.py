@@ -275,7 +275,29 @@ def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText
         sys.exit(f"TranslationBodySplit 따옴표 개수 홀수 오류: Project: {ProjectName} | Process: TranslationBodySplit | SplitBodyError\n[ 아래 경로 파일 {ProjectName}_Body(Translation).txt -> <{IndexText}> -> ({FirstPart} ... {LastPart}) 문단에서 따옴표 개수가 홀수개 입니다. ]\n{TranslationBodyFilePath}")
     
     # 문장 종결자 정의
-    SentenceDelimiters = ['. ', '! ', '? ', '.\n', '!\n', '?\n']
+    SentenceDelimiters = [
+        '। ',  # 힌디어 단다 (공백)
+        '۔ ',  # 아랍어/우르두어 마침표 (공백)
+        '؟ ',  # 아랍어 질문 부호 (공백)
+        '։ ',  # 아르메니아어 종결 부호 (공백)
+        '。 ',  # 일본어/중국어 종결 온점 (공백)
+        '. ',  # 영어 마침표 (공백)
+        '！ ', # 전각 느낌표 (공백)
+        '! ',  # 영어 느낌표 (공백)
+        '？ ', # 전각 물음표 (공백)
+        '? ',  # 영어 물음표 (공백)
+        
+        '।\n',  # 힌디어 단다 (줄바꿈)
+        '۔\n',  # 아랍어/우르두어 마침표 (줄바꿈)
+        '؟\n',  # 아랍어 질문 부호 (줄바꿈)
+        '։\n',  # 아르메니아어 종결 부호 (줄바꿈)
+        '。\n',  # 일본어/중국어 종결 온점 (줄바꿈)
+        '.\n',  # 영어 마침표 (줄바꿈)
+        '！\n', # 전각 느낌표 (줄바꿈)
+        '!\n',  # 영어 느낌표 (줄바꿈)
+        '？\n', # 전각 물음표 (줄바꿈)
+        '?\n'   # 영어 물음표 (줄바꿈)
+    ]
     
     # 1단계: 대화문을 보존하며 텍스트 분할
     Sentences = []
@@ -658,7 +680,7 @@ def WordListPostprocessingInputList(TranslationEditPath, MainLangCode, Translati
         for j, WordDic in enumerate(OrganizedDic['OrganizedWordList']):
             Word = WordDic['Word']
             Translation = WordDic['Translation']
-            WordsText += f"[번호] {j+1}\n[*원문] {Word}\n[번역] {', '.join(Translation)}\n\n"
+            WordsText += f"[번호] {j+1}\n[원문] {Word}\n[번역] {', '.join(Translation)}\n\n"
         
         Input = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n[원문내용]\n{Body}\n\n\n<단어장>\n{WordsText}\n"
         
@@ -1616,9 +1638,13 @@ def AuthorResearchInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2,
             return Text
         Candidate = Text[:MaxChars]
         LastDot = Candidate.rfind('.')
+        LastJapaneseDot = Candidate.rfind('。')
+        LastHindiDanda = Candidate.rfind('।')
         LastExclam = Candidate.rfind('!')
+        LastJapaneseExclam = Candidate.rfind('！')
         LastQuestion = Candidate.rfind('?')
-        LastPunc = max(LastDot, LastExclam, LastQuestion)
+        LastJapaneseQuestion = Candidate.rfind('？')
+        LastPunc = max(LastDot, LastJapaneseDot, LastHindiDanda, LastExclam, LastJapaneseExclam, LastQuestion, LastJapaneseQuestion)
         if LastPunc != -1:
             return Candidate[:LastPunc+1]
         return Candidate
@@ -3740,7 +3766,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ## 최종 설정된 Translation 불러오기 및 MainLangCode, TranslationLangCode 설정
     Translation = LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath)
@@ -3829,7 +3856,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     #########################################
     ### Process3: WordListGen Response 생성 ##
@@ -3879,7 +3907,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ###############################################
     ### Process4: UniqueWordListGen Response 생성 ##
@@ -3929,7 +3958,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ####################################################
     ### Process5: WordListPostprocessing Response 생성 ##
@@ -3980,7 +4010,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ##############################################
     ### Process6: IndexTranslation Response 생성 ##
@@ -4034,7 +4065,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ##########################################################
     ### Process7: BodyTranslationPreprocessing Response 생성 ##
@@ -4088,7 +4120,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     #############################################
     ### Process8: BodyTranslation Response 생성 ##
@@ -4224,7 +4257,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ################################################
     ### Process9: TranslationEditing Response 생성 ##
@@ -4380,7 +4414,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 if not EditCompletion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                     sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+        if EditCompletion:
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ####################################################
     ### Process9: TranslationRefinement Response 생성 ###
@@ -4537,7 +4572,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 if not EditCompletion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                     sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+        if EditCompletion:
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
 
     ################################################################
     ### Process9: TranslationKinfolkStyleRefinement Response 생성 ###
@@ -4695,7 +4731,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 if not EditCompletion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                     sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+        if EditCompletion:
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
 
     ######################################################
     ### Process10: TranslationProofreading Response 생성 ##
@@ -4759,7 +4796,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ##########################################################
     ### Process11: TranslationDialogueAnalysis Response 생성 ##
@@ -4821,7 +4859,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 if not EditCompletion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                     sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}\n\n1. TranslationDialogueAnalysis와 TranslationDialogueAnalysisCharacter를 비교하여, 미비한 인물 부분을 수정합니다. 이 경우 'Body'와 'DialogueBody'와 'BodyCharacterList'를 모두 수정해야 합니다.\n2. {{인물이름: 대화내용}} 중에 잘못된 표기나 괄호 묶음을 수정합니다. 이 경우 'Body'와 'DialogueBody' 모두 수정해야 합니다.\n\n")
-        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+        if EditCompletion:
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
         
     #########################################################
     ### Process12: TranslationDialogueEditing Response 생성 ##
@@ -4890,7 +4929,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 if not EditCompletion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                     sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+        if EditCompletion:
+            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     ##########################################################
     ### Process14: AfterTranslationBodySummary Response 생성 ##
@@ -4947,7 +4987,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
     
     #############################################
     ### Process15: AuthorResearch Response 생성 ##
@@ -4996,7 +5037,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
 
     #####################################################
     ### Process16: TranslationCatchphrase Response 생성 ##
@@ -5048,7 +5090,8 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             if not EditCompletion:
                 ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-    print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
 
 if __name__ == "__main__":
     

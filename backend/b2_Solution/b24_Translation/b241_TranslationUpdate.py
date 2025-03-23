@@ -3544,7 +3544,7 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
     
         
     ## TranslationEdit을 Index, Body Text 파일로 저장할 경로 설정
-    EditIndexFileName = f"{ProjectName}_Index({MainLang}-{Process2}).txt"
+    EditIndexFileName = f"{ProjectName}_Index({MainLang}).txt"
     EditIndexFilePath = os.path.join(ProjectMasterTranslationPath, EditIndexFileName)
     EditBodyFileName = f"{ProjectName}_Body({MainLang}-{Process2}).txt"
     EditBodyFilePath = os.path.join(ProjectMasterTranslationPath, EditBodyFileName)

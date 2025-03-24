@@ -3717,6 +3717,23 @@ def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process)
 
 ## ProcessEditText 저장
 def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2, Process3):
+    # 대화문 끝 따옴표 뒤 공백 처리
+    def AddSpaceAfterDialog(BodyText):
+        AddSpaceAfterDialogBodyText = ""
+        QuoteCount = 0
+        for i in range(len(BodyText)):
+            Char = BodyText[i]
+            AddSpaceAfterDialogBodyText += Char
+            if Char == '"':
+                QuoteCount += 1
+                # If it's the end of dialog (even-numbered quote)
+                if QuoteCount % 2 == 0:
+                    # Check if the next character exists and is not a space or newline
+                    if i + 1 < len(BodyText) and BodyText[i + 1] not in [' ', '\n']:
+                        AddSpaceAfterDialogBodyText += ' '  # Add a space
+        
+        return AddSpaceAfterDialogBodyText
+    
     ## TranslationEdit 불러오기
     with open(TranslationEditPath, 'r', encoding='utf-8') as TranslationEditJson:
         TranslationEdit = json.load(TranslationEditJson)
@@ -3766,6 +3783,7 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
                 # Body 내용 작성
                 BodyText = ProcessDic['Body'].replace('\n\n\n\n', '\n\n')
                 BodyText = BodyText.replace('\n\n\n', '\n\n')
+                BodyText = AddSpaceAfterDialog(BodyText)
                 BodyText = BodyText.replace('  ', ' ')
                 if "FinalEnding" in TranslationBodySplit[i]:
                     if BodyText.endswith('\n'):

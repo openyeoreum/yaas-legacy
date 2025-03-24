@@ -3731,6 +3731,7 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
                     # Check if the next character exists and is not a space or newline
                     if i + 1 < len(BodyText) and BodyText[i + 1] not in [' ', '\n']:
                         AddSpaceAfterDialogBodyText += ' '  # Add a space
+        AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace('""', '" "')
         
         return AddSpaceAfterDialogBodyText
     

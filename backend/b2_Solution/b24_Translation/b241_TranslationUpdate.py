@@ -905,16 +905,27 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
     return AddInput
 
 ## Process8: BodyToneEditing의 Input(BodyTranslation용도)
-def BodyToneEditingInput(ToneCode, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
+def BodyToneEditingInput(Tone, ToneCode, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
+    CurrentBodyTranslation = re.sub(r'\{[^{}]*->([^{}]*)\}', r'\1', BodyTranslationResponse['번역문']).replace('{', '').replace('}', '')
     ## 이전번역문과 현재번역문 비교 Input 생성
     if os.path.exists(ProjectDataFrameBodyTranslationPath):
         with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
             BodyTranslation = json.load(TranslationDataFrame)[1]
         BeforeBodyTranslation = BodyTranslation[-1]['Body']
-        CurrentBodyTranslation = re.sub(r'\{[^{}]*->([^{}]*)\}', r'\1', BodyTranslationResponse['번역문']).replace('{', '').replace('}', '')
         
         ## ToneEditInput 생성
         ToneEditInput = f"[이전도서어조]\n{ToneCode}\n\n[이전도서내용]\n{BeforeBodyTranslation}\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n\n"
+    else:
+        ## ToneEditInput 생성
+        if Tone == 'Auto':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없음"
+        if Tone == 'Formal':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없습니다. 완성 절차 및 방법에 따라서, 현재도서내용의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **격식체 ->>> (((습니다. 입니다. 합니다. ... 등))) 로 작성을 시작해주세요."
+        elif Tone == 'Normal':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없다. 완성 절차 및 방법에 따라서, 현재도서내용의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성을 시작하세요."
+        elif Tone == 'Informal':
+            StartBodyTranslation = "현재 책의 가장 앞부분이라서 이전편집내용이 없어. 완성 절차 및 방법에 따라서, 현재도서내용의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성을 시작하세요."
+        ToneEditInput = f"[이전도서어조]\n{ToneCode}\n\n[이전도서내용]\n{StartBodyTranslation}\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n\n"
     
     return ToneEditInput
 
@@ -4256,7 +4267,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
                     
                     ## BodyToneEditing ## BodyTranslation 만 예외 처리
-                    ToneEditInput = BodyToneEditingInput(ToneCode, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
+                    ToneEditInput = BodyToneEditingInput(Tone, ToneCode, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                     BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
                     BodyTranslationResponse = {'번역문': BodyToneEditingResponse['어조일치현재도서내용']}
                 else:

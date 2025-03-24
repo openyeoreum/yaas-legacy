@@ -904,6 +904,20 @@ def BodyTranslationAddInput(ProjectDataFrameBodyTranslationPath, ProjectDataFram
         
     return AddInput
 
+## Process8: BodyToneEditing의 Input(BodyTranslation용도)
+def BodyToneEditingInput(ToneCode, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
+    ## 이전번역문과 현재번역문 비교 Input 생성
+    if os.path.exists(ProjectDataFrameBodyTranslationPath):
+        with open(ProjectDataFrameBodyTranslationPath, 'r', encoding = 'utf-8') as TranslationDataFrame:
+            BodyTranslation = json.load(TranslationDataFrame)[1]
+        BeforeBodyTranslation = BodyTranslation[-1]['Body']
+        CurrentBodyTranslation = re.sub(r'\{[^{}]*->([^{}]*)\}', r'\1', BodyTranslationResponse['번역문']).replace('{', '').replace('}', '')
+        
+        ## ToneEditInput 생성
+        ToneEditInput = f"[이전도서어조]\n{ToneCode}\n\n[이전도서내용]\n{BeforeBodyTranslation}\n\n\n<현재도서내용>\n{CurrentBodyTranslation}\n\n"
+    
+    return ToneEditInput
+
 ## Process8: BodyTranslationCheck의 Input
 def BodyTranslationCheckAndBodyToneEditingInput(ProjectName, Process, ToneCode, InputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse):
     ## 이전번역문과 현재번역문 비교 Input 생성
@@ -4141,6 +4155,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '08'
     Process = "BodyTranslation"
+    ToneEditProcess = "BodyToneEditing"
     print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
     
     ## BodyTranslation 경로 생성
@@ -4194,7 +4209,6 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     
                     ## BodyTranslationCheck, BodyToneEditing ##
                     CheckProcess = "BodyTranslationCheck"
-                    ToneEditProcess = "BodyToneEditing"
                     _, CheckInput, ToneEditInput, BeforeCheck = BodyTranslationCheckAndBodyToneEditingInput(projectName, Process, ToneCode, inputCount, TotalInputCount, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                     
                     BodyTranslationCheckResponse = ProcessResponse(projectName, email, CheckProcess, CheckInput, inputCount, TotalInputCount, BodyTranslationCheckFilter, CheckCount, "OpenAI", mode, MessagesReview)
@@ -4240,6 +4254,9 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **평서체 ->>> (((이다. 한다. 있다. ... 등))) 로 작성해주세요.'
                     elif Tone == 'Informal':
                         MemoryCounter = '\n※ 참고! [*원문]의 **서술문(내레이션이라 하며 대화문, 인용문 이외에 내용을 서술하는 문장)은 **비격식체 ->>> (((이었어. 했어. 있어. ... 등)))인 반말로 작성해주세요.'
+                    
+                    ## BodyToneEditing ## BodyTranslation 만 예외 처리
+                    ToneEditInput = BodyToneEditingInput(ToneCode, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse)
                     BodyToneEditingResponse = ProcessResponse(projectName, email, ToneEditProcess, ToneEditInput, inputCount, TotalInputCount, BodyToneEditingFilter, ToneCode, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
                     BodyTranslationResponse = {'번역문': BodyToneEditingResponse['어조일치현재도서내용']}
                 else:

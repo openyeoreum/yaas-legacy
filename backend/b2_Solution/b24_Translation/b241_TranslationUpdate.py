@@ -982,7 +982,18 @@ def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, Input
                     return 'Other'
             except ValueError:
                 return 'Unknown'
-        
+
+        # 언어별 정상적인 스크립트 조합 정의(일본어는 한자 및 히라가나/가타카나 조합 가능)
+        def IsValidScriptCombination(UniqueScripts):
+            # 일본어 특수 케이스: 히라가나/가타카나 + 한자 조합은 정상적인 일본어
+            if UniqueScripts == {'Japanese', 'CJK'} or UniqueScripts == {'Japanese'} or UniqueScripts == {'CJK'}:
+                return True
+            # 단일 스크립트이면 항상 유효함
+            elif len(UniqueScripts) <= 1:
+                return True
+            # 다른 모든 스크립트 조합은 혼합 언어로 간주
+            return False
+
         # 텍스트를 단어로 분리
         words = re.findall(r'\b\w+\b', CurrentBodyTranslation)
         MixedLanguageWords = []
@@ -999,7 +1010,7 @@ def BodyLanguageEditingInput(ProjectName, Process, MainLang, MainLangCode, Input
             
             # 단어에 여러 언어가 포함되어 있는지 확인
             UniqueScripts = set(CharScripts)
-            if len(UniqueScripts) > 1:
+            if not IsValidScriptCombination(UniqueScripts) and len(UniqueScripts) > 1:
                 MixedLanguageWords.append(word)
         
         return MixedLanguageWords, len(MixedLanguageWords) == 0
@@ -5103,3 +5114,16 @@ if __name__ == "__main__":
     Intention = "Similarity"
     #########################################################################
     # BookScriptGenProcessUpdate(ProjectName, email, Intention)
+    Body = """この小さな本は、瞑想と思索、そして経験を通じて得た貴重な悟りを収めているのである。
+        これは考えの能力という深遠な主題を扱っているが、堅苦しい論文や解説書を志向しているわけではないのである。
+        代わりに、読者の皆さんの心に潜在する洞察を呼び覚まそうとしているのである。
+        特に、一つの重要な真理を発見するよう導こうとしているのである。
+
+        『我々は皆、自らを作り上げる創造者である。』
+        これは、我々が意識的に選択し、育んでいる考えのおかげである。
+        偉大な心という職人は、内面の人格と外面の状況という二着の衣を絶えず織りなしているのである。
+        これまで無知と苦しみの中でその衣を織り上げてきたのであれば、いまや悟りと幸せによって新たな衣を作り上げる時である。
+
+        1902年
+        ジェームズ・アレン"""
+    print(LanguageDetection(Body, DetectionLength = 5))

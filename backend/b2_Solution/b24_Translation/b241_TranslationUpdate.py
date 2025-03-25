@@ -3719,8 +3719,6 @@ def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process)
 def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2, Process3):
     # 대화문 끝 따옴표 뒤 공백 처리
     def AddSpaceAfterDialog(BodyText):
-        BodyText = re.sub(r"'(\s*)([^']*?)(\s*)'", r"'\2'", BodyText)
-        BodyText = BodyText.replace(' "', '"')
         AddSpaceAfterDialogBodyText = ""
         QuoteCount = 0
         for i in range(len(BodyText)):
@@ -3733,6 +3731,9 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
                     # Check if the next character exists and is not a space or newline
                     if i + 1 < len(BodyText) and BodyText[i + 1] not in [' ', '\n']:
                         AddSpaceAfterDialogBodyText += ' '  # Add a space
+        AddSpaceAfterDialogBodyText = re.sub(r"'(\s*)([^']*?)(\s*)'", r"'\2'", AddSpaceAfterDialogBodyText)
+        AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace("''", "' '")
+        AddSpaceAfterDialogBodyText = re.sub(r'"(\s*)([^"]*?)(\s*)"', r'"\2"', AddSpaceAfterDialogBodyText)
         AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace('""', '" "')
         
         return AddSpaceAfterDialogBodyText

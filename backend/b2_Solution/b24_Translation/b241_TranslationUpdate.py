@@ -3717,8 +3717,13 @@ def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process)
 
 ## ProcessEditText 저장
 def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2, Process3):
-    # 대화문 끝 따옴표 뒤 공백 처리
+    # 대화문 끝 따옴표 뒤 공백 처리 및 추가 기능 처리
     def AddSpaceAfterDialog(BodyText):
+        # 따옴표 통일
+        BodyText = BodyText.replace('”', '"').replace('“', '"')
+        BodyText = BodyText.replace('’', "'").replace('‘', "'")
+        BodyText = BodyText.replace("………", "…").replace("……", "…")
+        
         AddSpaceAfterDialogBodyText = ""
         QuoteCount = 0
         for i in range(len(BodyText)):
@@ -3726,15 +3731,32 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
             AddSpaceAfterDialogBodyText += Char
             if Char == '"':
                 QuoteCount += 1
-                # If it's the end of dialog (even-numbered quote)
+                # 대화문 끝(짝수번째 인용부호)인 경우
                 if QuoteCount % 2 == 0:
-                    # Check if the next character exists and is not a space or newline
+                    # 다음 문자가 존재하고 공백이나 줄바꿈이 아니면 공백 추가
                     if i + 1 < len(BodyText) and BodyText[i + 1] not in [' ', '\n']:
-                        AddSpaceAfterDialogBodyText += ' '  # Add a space
+                        AddSpaceAfterDialogBodyText += ' '
+        
+        # 기존 단일 인용부호 내부의 앞뒤 공백 제거 (내부는 공백 없이 붙이기)
         AddSpaceAfterDialogBodyText = re.sub(r"'(\s*)([^']*?)(\s*)'", r"'\2'", AddSpaceAfterDialogBodyText)
         AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace("''", "' '")
+        # 기존 이중 인용부호 내부의 앞뒤 공백 제거
         AddSpaceAfterDialogBodyText = re.sub(r'"(\s*)([^"]*?)(\s*)"', r'"\2"', AddSpaceAfterDialogBodyText)
         AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace('""', '" "')
+
+        # 단일 인용문 ('문구')의 시작 인용부호 앞에 무조건 정확히 1개의 공백을 추가
+        # (문자열 시작이 아닐 경우에 한해, 기존의 모든 공백을 제거하고 1개의 공백으로 대체)
+        AddSpaceAfterDialogBodyText = re.sub(r"(?<!^)\s*(')([^']+?')", r" \1\2", AddSpaceAfterDialogBodyText)
+
+        # 유니코드 ellipsis(…)를 점 3개(...)로 변경
+        AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace("…", "...")
+        # "..." 뒤에 줄바꿈이 아닌 경우에는 1개의 공백을 추가 (이미 공백이 있거나 여러 개면 1개로 조정)
+        AddSpaceAfterDialogBodyText = re.sub(r"\.\.\.(?!\n)\s*", r"... ", AddSpaceAfterDialogBodyText)
+        AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace("... ...", "...")
+        AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace("... ..", "...")
+        AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace("... .", "...")
+        AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace('... "', '..."')
+        AddSpaceAfterDialogBodyText = AddSpaceAfterDialogBodyText.replace("... '", "...'")
         
         return AddSpaceAfterDialogBodyText
     

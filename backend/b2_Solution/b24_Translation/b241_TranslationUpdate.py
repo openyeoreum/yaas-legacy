@@ -3719,6 +3719,7 @@ def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process)
 def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2, Process3):
     # 대화문 끝 따옴표 뒤 공백 처리
     def AddSpaceAfterDialog(BodyText):
+        BodyText = re.sub(r"'(\s*)([^']*?)(\s*)'", r"'\2'", BodyText)
         BodyText = BodyText.replace(' "', '"')
         AddSpaceAfterDialogBodyText = ""
         QuoteCount = 0

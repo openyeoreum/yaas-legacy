@@ -243,7 +243,6 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
 
     if Mode == "Master":
       Model = promptFrame[0]["OpenAI"]["MasterModel"]
-      ReasoningEffort = promptFrame[0]["OpenAI"]["ReasoningEffort"]
     else:
       if TotalTokens < 14000:
         if Mode in ["Example", "Memory"]:
@@ -274,6 +273,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
             Model = promptFrame[0]["OpenAI"]["BaseModel"]["LongTokensModel"]
 
     Temperature = temperature
+    ReasoningEffort = promptFrame[0]["OpenAI"]["ReasoningEffort"]
 
     for _ in range(MaxAttempts):
       try:

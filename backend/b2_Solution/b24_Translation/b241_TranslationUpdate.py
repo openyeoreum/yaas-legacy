@@ -154,318 +154,280 @@ def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, Translation
 ########################################
 ## Process1: MaxLength 이상인 경우 분할 함수
 def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText, MaxLength):
-    # 쌍따옴표, 따옴표 일치화
-    SectionText = SectionText.replace('“', '"').replace('”', '"').replace("‘", "'").replace("’", "'")
-    
-    # 따옴표 균형 확인
-    if SectionText.count('"') % 2 != 0:
-        FirstPart = SectionText[:20] if len(SectionText) > 20 else SectionText
-        LastPart = SectionText[-20:] if len(SectionText) > 20 else SectionText
-        sys.exit(f"TranslationBodySplit 따옴표 개수 홀수 오류: Project: {ProjectName} | Process: TranslationBodySplit | SplitBodyError\n[ 아래 경로 파일 {ProjectName}_Body(Translation).txt -> <{IndexText}> -> ({FirstPart} ... {LastPart}) 문단에서 따옴표 개수가 홀수개 입니다. ]\n{TranslationBodyFilePath}")
-    
-    # 일반적인 약어 목록 정의
-    CommonAbbreviations = [
-        'Mr.', 'Mrs.', 'Dr.', 'Prof.', 'Ms.', 'Rev.', 'Capt.', 'Lt.', 'Col.', 'Gen.',
-        'St.', 'Ave.', 'Blvd.', 'Rd.', 'Ph.D.', 'M.D.', 'B.A.', 'M.A.', 'Jr.', 'Sr.',
-        'Inc.', 'Ltd.', 'Co.', 'Corp.', 'e.g.', 'i.e.', 'etc.', 'vs.', 'Fig.', 'p.',
-        'pp.', 'Vol.', 'ex.', 'No.', 'Dept.', 'Jan.', 'Feb.', 'Mar.', 'Apr.', 'Jun.',
-        'Jul.', 'Aug.', 'Sep.', 'Sept.', 'Oct.', 'Nov.', 'Dec.', 'a.m.', 'p.m.'
-    ]
-    
-    # 문장 종결자 정의
-    SentenceDelimiters = [
-        '। ',  # 힌디어 단다 (공백)
-        '۔ ',  # 아랍어/우르두어 마침표 (공백)
-        '؟ ',  # 아랍어 질문 부호 (공백)
-        '։ ',  # 아르메니아어 종결 부호 (공백)
-        '。 ',  # 일본어/중국어 종결 온점 (공백)
-        '. ',  # 영어 마침표 (공백)
-        '！ ', # 전각 느낌표 (공백)
-        '! ',  # 영어 느낌표 (공백)
-        '？ ', # 전각 물음표 (공백)
-        '? ',  # 영어 물음표 (공백)
+    import sys, re
+
+    ## 초기화 및 유효성 검사를 수행하는 함수
+    def InitializeAndValidate(TranslationBodyFilePath, ProjectName, IndexText, SectionText):
+        # 쌍따옴표, 따옴표 일치화
+        SectionText = SectionText.replace('“', '"').replace('”', '"').replace("‘", "'").replace("’", "'")
         
-        '।\n',  # 힌디어 단다 (줄바꿈)
-        '۔\n',  # 아랍어/우르두어 마침표 (줄바꿈)
-        '؟\n',  # 아랍어 질문 부호 (줄바꿈)
-        '։\n',  # 아르메니아어 종결 부호 (줄바꿈)
-        '。\n',  # 일본어/중국어 종결 온점 (줄바꿈)
-        '.\n',  # 영어 마침표 (줄바꿈)
-        '！\n', # 전각 느낌표 (줄바꿈)
-        '!\n',  # 영어 느낌표 (줄바꿈)
-        '？\n', # 전각 물음표 (줄바꿈)
-        '?\n',  # 영어 물음표 (줄바꿈)
+        # 따옴표 균형 확인
+        if SectionText.count('"') % 2 != 0:
+            FirstPart = SectionText[:20] if len(SectionText) > 20 else SectionText
+            LastPart = SectionText[-20:] if len(SectionText) > 20 else SectionText
+            sys.exit(f"TranslationBodySplit 따옴표 개수 홀수 오류: Project: {ProjectName} | Process: TranslationBodySplit | SplitBodyError\n[ 아래 경로 파일 {ProjectName}_Body(Translation).txt -> <{IndexText}> -> ({FirstPart} ... {LastPart}) 문단에서 따옴표 개수가 홀수개 입니다. ]\n{TranslationBodyFilePath}")
         
-        '.',  # 영어 마침표 (공백/줄바꿈 없음)
-        '!',  # 영어 느낌표 (공백/줄바꿈 없음)
-        '?',  # 영어 물음표 (공백/줄바꿈 없음)
-        '।',  # 힌디어 단다 (공백/줄바꿈 없음)
-        '۔',  # 아랍어/우르두어 마침표 (공백/줄바꿈 없음)
-        '؟',  # 아랍어 질문 부호 (공백/줄바꿈 없음)
-        '։',  # 아르메니아어 종결 부호 (공백/줄바꿈 없음)
-        '。',  # 일본어/중국어 종결 온점 (공백/줄바꿈 없음)
-        '！', # 전각 느낌표 (공백/줄바꿈 없음)
-        '？' # 전각 물음표 (공백/줄바꿈 없음)
-    ]
-    
-    # 주석 패턴 정규식 (도서 본문의 주석 [^n: ...])
-    FootnotePattern = re.compile(r'\[\^(\d+):\s*(.*?)\]')
-    
-    # 주석 위치와 내용을 리스트로 저장
-    FootnoteMatches = list(FootnotePattern.finditer(SectionText))
-    
-    # 1단계: 긴 대화문 분할 및 일반 텍스트 분할
-    ProcessedText = ""
-    i = 0
-    dialogueStart = -1
-    
-    # 주석 위치를 추적하기 위한 변수
-    currentFootnoteIndex = 0
-    inFootnote = False
-    
-    while i < len(SectionText):
-        # 현재 위치가 주석 시작점인지 확인
-        if currentFootnoteIndex < len(FootnoteMatches) and i == FootnoteMatches[currentFootnoteIndex].start():
-            footnote = FootnoteMatches[currentFootnoteIndex].group(0)  # 전체 주석 텍스트
-            ProcessedText += footnote
-            i += len(footnote)
-            currentFootnoteIndex += 1
-            continue
+        # 주석 패턴 정규식 (도서 본문의 주석 [^n: ...])
+        FootnotePattern = re.compile(r'\[\^(\d+):\s*(.*?)\]', re.DOTALL)
         
-        # 대화문 시작 지점 체크
-        if SectionText[i] == '"' and dialogueStart == -1:
-            dialogueStart = i
-            ProcessedText += '"'
-            i += 1
-        # 대화문 종료 지점 체크
-        elif SectionText[i] == '"' and dialogueStart != -1:
-            dialogueLength = i - dialogueStart - 1  # 따옴표 제외 내용 길이
-            
-            # 대화문이 너무 길면 분할
-            if dialogueLength > MaxLength:
-                dialogueContent = SectionText[dialogueStart+1:i]
-                
-                # 대화문 내용 분할 수 계산 (최소 분할 횟수 결정)
-                numSplits = max(2, (dialogueLength + MaxLength - 1) // MaxLength)
-                splitSize = dialogueLength // numSplits
-                
-                # 각 분할이 최대 길이를 초과하지 않도록 조정
-                if splitSize > MaxLength:
-                    numSplits = (dialogueLength + MaxLength - 1) // MaxLength
-                    splitSize = dialogueLength // numSplits
-                
-                # 대화문 분할 처리
-                sections = []
-                start = 0
-                
-                while start < len(dialogueContent):
-                    end = min(start + splitSize, len(dialogueContent))
-                    
-                    # 너무 짧은 마지막 부분은 이전 부분에 합침
-                    if len(dialogueContent) - end < splitSize // 3 and len(sections) > 0:
-                        sections[-1] += dialogueContent[start:]
-                        break
-                    
-                    sections.append(dialogueContent[start:end])
-                    start = end
-                
-                # 분할된 대화문에 따옴표 추가하여 처리된 텍스트에 추가
-                ProcessedText = ProcessedText[:-1]  # 시작 따옴표 제거
-                for j, section in enumerate(sections):
-                    if j > 0:
-                        ProcessedText += " "  # 각 분할 사이에 공백 추가
-                    ProcessedText += f'"{section}"'
-                
+        # 주석 위치와 내용을 리스트로 저장
+        FootnoteMatches = list(FootnotePattern.finditer(SectionText))
+        
+        return SectionText, FootnoteMatches
+
+    ## 대화문 처리 및 분할 함수
+    # – 대화문 내부에 주석이 포함된 경우, 해당 대화문은 MaxLength와 상관없이 하나의 단위로 처리합니다.
+    def ProcessDialoguesAndFootnotes(SectionText, FootnoteMatches, MaxLength):
+        ProcessedText = ""
+        dialogueBuffer = None  # 대화문이 열려있으면 대화 내용을 누적 (없으면 None)
+        dialogueHasFootnote = False  # 대화문 내에 주석이 포함되었는지 여부
+        AdditionalQuotesCount = 0
+
+        currentFootnoteIndex = 0
+        i = 0
+        while i < len(SectionText):
+            # 주석 시작 위치 확인
+            if currentFootnoteIndex < len(FootnoteMatches) and i == FootnoteMatches[currentFootnoteIndex].start():
+                footnote = FootnoteMatches[currentFootnoteIndex].group(0)
+                footnoteEnd = i + len(footnote)
+                # 대화문 내부인 경우: 주석을 대화문 내용에 포함하고, 분할 대상에서 제외
+                if dialogueBuffer is not None:
+                    dialogueHasFootnote = True
+                    dialogueBuffer += footnote
+                else:
+                    ProcessedText += footnote
+                i = footnoteEnd
+                currentFootnoteIndex += 1
+                continue
+
+            c = SectionText[i]
+            if c == '"':
+                # 따옴표를 만나면 대화문 상태 전환
+                if dialogueBuffer is None:
+                    # 대화문 시작: 새 버퍼를 생성하고(아직 따옴표는 나중에 추가)
+                    dialogueBuffer = ""
+                    dialogueHasFootnote = False
+                    i += 1
+                else:
+                    # 대화문 종료 시: 대화문 내용을 처리
+                    # 만약 대화문 내에 주석이 없다면 MaxLength 초과 시 분할
+                    if not dialogueHasFootnote and len(dialogueBuffer) > MaxLength:
+                        # 분할을 위해 기존에 추가된 시작 따옴표는 제거한 후 분할 함수 호출
+                        splitDialogue, extra_quotes = SplitLongDialogueBuffer(dialogueBuffer, MaxLength)
+                        AdditionalQuotesCount += extra_quotes
+                        ProcessedText += splitDialogue
+                    else:
+                        ProcessedText += '"' + dialogueBuffer + '"'
+                    dialogueBuffer = None
+                    dialogueHasFootnote = False
+                    i += 1
             else:
-                # 일반 대화문은 그대로 처리
-                ProcessedText += SectionText[dialogueStart+1:i+1]
-            
-            dialogueStart = -1
-            i += 1
-        else:
-            # 대화문 외부 또는 대화문 내부 내용
-            if dialogueStart == -1:
-                ProcessedText += SectionText[i]
-            i += 1
-    
-    # 2단계: 문장 단위로 분할하되, 주석 처리 고려
-    Sentences = []
-    Start = 0
-    i = 0
-    InDialogue = False
-    
-    # 주석 매칭을 다시 구성 (이제 처리된 텍스트 기준)
-    ProcessedFootnoteMatches = list(FootnotePattern.finditer(ProcessedText))
-    
-    while i < len(ProcessedText):
-        # 현재 위치가 주석의 시작인지 확인
-        isFootnoteStart = False
-        for match in ProcessedFootnoteMatches:
-            if i == match.start():
-                # 현재까지의 텍스트를 문장으로 추가
-                if i > Start:
-                    Sentences.append(ProcessedText[Start:i])
-                
-                # 주석 전체를 하나의 문장으로 추가
-                footnoteText = match.group(0)
-                Sentences.append(footnoteText)
-                
-                # 주석 이후 위치로 이동
-                Start = match.end()
-                i = Start
-                isFootnoteStart = True
-                break
-                
-        if isFootnoteStart:
-            continue
-                
-        # 따옴표 체크하여 대화문 여부 확인
-        if ProcessedText[i] == '"':
-            InDialogue = not InDialogue
-        
-        # 대화문 외부에서만 구분자 처리
-        if not InDialogue:
-            FoundDelimiter = False
-            for Delimiter in SentenceDelimiters:
-                if i + len(Delimiter) <= len(ProcessedText) and ProcessedText[i:i+len(Delimiter)] == Delimiter:
-                    # 약어 확인 - 현재 위치 이전 텍스트에서 약어가 있는지 확인
-                    IsAbbreviation = False
-                    
-                    # 공백/줄바꿈 있는 마침표 또는 공백/줄바꿈 없는 마침표에 대해 약어 확인
-                    if Delimiter in ['. ', '.\n', '.']:
-                        for Abbr in CommonAbbreviations:
-                            # 현재 위치가 약어의 끝인지 확인
-                            CheckStart = max(0, i + 1 - len(Abbr))
-                            CheckEnd = i + 1
-                            if CheckStart >= 0 and ProcessedText[CheckStart:CheckEnd] == Abbr:
-                                IsAbbreviation = True
-                                break
-                    
-                    # 단순 마침표('.')인 경우 추가 검사
-                    if Delimiter == '.':
-                        # 숫자 패턴 검사 (소수점, 버전 번호 등)
-                        if i > 0 and i + 1 < len(ProcessedText):
-                            # 숫자 사이의 소수점 (예: 3.0)
-                            if ProcessedText[i-1].isdigit() and ProcessedText[i+1].isdigit():
-                                IsAbbreviation = True
-                                
-                            # 숫자 다음의 마침표와 그 뒤에 문자 또는 숫자 (예: 3.0km, 3.5배)
-                            elif ProcessedText[i-1].isdigit():
-                                IsAbbreviation = True
-                                
-                            # IP 주소 패턴 (예: 192.168.0.1)
-                            elif (i > 2 and ProcessedText[i-2:i].replace('.', '').isdigit() and 
-                                i + 4 <= len(ProcessedText) and ProcessedText[i+1:i+4].replace('.', '').isdigit()):
-                                IsAbbreviation = True
-                                
-                            # 알파벳과 숫자 사이의 마침표 (예: v1.0, 파일.txt)
-                            elif ((i > 0 and ProcessedText[i-1].isalnum()) and 
-                                (i + 1 < len(ProcessedText) and ProcessedText[i+1].isalnum())):
-                                IsAbbreviation = True
-                        
-                        # 다음 문자가 소문자인 경우 (보통 문장의 끝이라면 다음 문자는 대문자일 가능성 높음)
-                        if i + 1 < len(ProcessedText) and ProcessedText[i+1].islower():
-                            IsAbbreviation = True  # 문장 종결자가 아닐 가능성이 높음
-                    
-                    if not IsAbbreviation:
-                        # 약어가 아닌 경우에만 문장 종결로 처리
-                        Sentences.append(ProcessedText[Start:i+len(Delimiter)])
-                        Start = i + len(Delimiter)
-                        i = Start
-                        FoundDelimiter = True
-                        break
-            
-            if not FoundDelimiter:
+                # 대화문 내부이면 버퍼에 누적, 아니면 바로 출력
+                if dialogueBuffer is not None:
+                    dialogueBuffer += c
+                else:
+                    ProcessedText += c
                 i += 1
-        else:  # 대화문 내부
-            i += 1
-    
-    # 남은 부분 추가
-    if Start < len(ProcessedText):
-        Sentences.append(ProcessedText[Start:])
-    
-    # 문장이 없으면 전체 텍스트를 하나의 세그먼트로 반환
+
+        # 만약 대화문이 끝나지 않고 남아있으면 그냥 닫아서 추가 (유효성 검사상 이 경우는 없을 것)
+        if dialogueBuffer is not None:
+            ProcessedText += '"' + dialogueBuffer
+        return ProcessedText, AdditionalQuotesCount
+
+    ## 긴 대화문을 적절하게 분할하는 함수 (대화문 내 주석이 없을 때만 호출됨)
+    def SplitLongDialogueBuffer(dialogueContent, MaxLength):
+        dialogueLength = len(dialogueContent)
+        numSplits = max(2, (dialogueLength + MaxLength - 1) // MaxLength)
+        splitSize = dialogueLength // numSplits
+        if splitSize > MaxLength:
+            numSplits = (dialogueLength + MaxLength - 1) // MaxLength
+            splitSize = dialogueLength // numSplits
+        sections = []
+        start = 0
+        while start < len(dialogueContent):
+            end = min(start + splitSize, len(dialogueContent))
+            if len(dialogueContent) - end < splitSize // 3 and sections:
+                sections[-1] += dialogueContent[start:]
+                break
+            sections.append(dialogueContent[start:end])
+            start = end
+        processedDialogue = ""
+        for j, section in enumerate(sections):
+            if j > 0:
+                processedDialogue += " "
+            processedDialogue += f'"{section}"'
+        extra_quotes = 2 * len(sections) - 2
+        return processedDialogue, extra_quotes
+
+    ## 텍스트를 문장 단위로 분할하는 함수
+    def SplitIntoSentences(ProcessedText):
+        CommonAbbreviations = [
+            'Mr.', 'Mrs.', 'Dr.', 'Prof.', 'Ms.', 'Rev.', 'Capt.', 'Lt.', 'Col.', 'Gen.',
+            'St.', 'Ave.', 'Blvd.', 'Rd.', 'Ph.D.', 'M.D.', 'B.A.', 'M.A.', 'Jr.', 'Sr.',
+            'Inc.', 'Ltd.', 'Co.', 'Corp.', 'e.g.', 'i.e.', 'etc.', 'vs.', 'Fig.', 'p.',
+            'pp.', 'Vol.', 'ex.', 'No.', 'Dept.', 'Jan.', 'Feb.', 'Mar.', 'Apr.', 'Jun.',
+            'Jul.', 'Aug.', 'Sep.', 'Sept.', 'Oct.', 'Nov.', 'Dec.', 'a.m.', 'p.m.'
+        ]
+        SentenceDelimiters = [
+            '। ', '۔ ', '؟ ', '։ ', '।\n', '۔\n', '؟\n', '։\n',
+            '。 ', '. ', '！ ', '! ', '？ ', '? ',
+            '。\n', '.\n', '！\n', '!\n', '？\n', '?\n',
+            '.', '!', '?', '।', '۔', '؟', '։', '。', '！', '？'
+        ]
+        FootnotePattern = re.compile(r'\[\^(\d+):\s*(.*?)\]')
+        
+        Sentences = []
+        Start = 0
+        i = 0
+        InDialogue = False
+        
+        ProcessedFootnoteMatches = list(FootnotePattern.finditer(ProcessedText))
+        
+        while i < len(ProcessedText):
+            isFootnoteStart = False
+            for match in ProcessedFootnoteMatches:
+                if i == match.start():
+                    if i > Start:
+                        Sentences.append(ProcessedText[Start:i])
+                    footnoteText = match.group(0)
+                    Sentences.append(footnoteText)
+                    Start = match.end()
+                    i = Start
+                    isFootnoteStart = True
+                    break
+            if isFootnoteStart:
+                continue
+                    
+            if ProcessedText[i] == '"':
+                InDialogue = not InDialogue
+            
+            if not InDialogue:
+                FoundDelimiter = handle_sentence_delimiter(ProcessedText, i, Sentences, Start, SentenceDelimiters, CommonAbbreviations)
+                if FoundDelimiter:
+                    Start = FoundDelimiter
+                    i = Start
+                else:
+                    i += 1
+            else:
+                i += 1
+        
+        if Start < len(ProcessedText):
+            Sentences.append(ProcessedText[Start:])
+        
+        return Sentences
+
+    def handle_sentence_delimiter(ProcessedText, i, Sentences, Start, SentenceDelimiters, CommonAbbreviations):
+        for Delimiter in SentenceDelimiters:
+            if i + len(Delimiter) <= len(ProcessedText) and ProcessedText[i:i+len(Delimiter)] == Delimiter:
+                IsAbbreviation = check_for_abbreviations(ProcessedText, i, Delimiter, CommonAbbreviations)
+                if not IsAbbreviation:
+                    Sentences.append(ProcessedText[Start:i+len(Delimiter)])
+                    return i + len(Delimiter)
+        return None
+
+    def check_for_abbreviations(ProcessedText, i, Delimiter, CommonAbbreviations):
+        IsAbbreviation = False
+        if Delimiter in ['. ', '.\n', '.']:
+            for Abbr in CommonAbbreviations:
+                CheckStart = max(0, i + 1 - len(Abbr))
+                CheckEnd = i + 1
+                if CheckStart >= 0 and ProcessedText[CheckStart:CheckEnd] == Abbr:
+                    IsAbbreviation = True
+                    break
+        if Delimiter == '.':
+            if i > 0 and i + 1 < len(ProcessedText):
+                if ProcessedText[i-1].isdigit() and ProcessedText[i+1].isdigit():
+                    IsAbbreviation = True
+                elif ProcessedText[i-1].isdigit():
+                    IsAbbreviation = True
+                elif (i > 2 and ProcessedText[i-2:i].replace('.', '').isdigit() and 
+                      i + 4 <= len(ProcessedText) and ProcessedText[i+1:i+4].replace('.', '').isdigit()):
+                    IsAbbreviation = True
+                elif (i > 0 and ProcessedText[i-1].isalnum() and 
+                      i + 1 < len(ProcessedText) and ProcessedText[i+1].isalnum()):
+                    IsAbbreviation = True
+            if i + 1 < len(ProcessedText) and ProcessedText[i+1].islower():
+                IsAbbreviation = True
+        return IsAbbreviation
+
+    def SeparateFootnotesAndRegular(Sentences, MaxLength):
+        FootnotePattern = re.compile(r'\[\^(\d+):\s*(.*?)\]')
+        FootnoteSentences = []
+        RegularSentences = []
+        for sentence in Sentences:
+            if FootnotePattern.match(sentence.strip()):
+                if len(sentence) > MaxLength:
+                    FootnoteSentences.append(sentence)
+                else:
+                    RegularSentences.append(sentence)
+            else:
+                RegularSentences.append(sentence)
+        return FootnoteSentences, RegularSentences
+
+    def CreateOptimalSegments(RegularSentences, FootnoteSentences, MaxLength):
+        TotalChars = sum(len(sentence) for sentence in RegularSentences)
+        NumSubSections = max(1, (TotalChars + MaxLength - 1) // MaxLength)
+        TargetSize = TotalChars / NumSubSections if NumSubSections > 0 else 0
+        SubSections = []
+        CurrentSegment = ""
+        for Sentence in RegularSentences:
+            PotentialLength = len(CurrentSegment) + len(Sentence)
+            if PotentialLength <= MaxLength:
+                if (not CurrentSegment or abs(PotentialLength - TargetSize) < abs(len(CurrentSegment) - TargetSize)):
+                    CurrentSegment += Sentence
+                else:
+                    HasNewline = CurrentSegment.endswith('\n')
+                    SubSections.append({
+                        'CurrentSegment': CurrentSegment,
+                        'FinalEnding': '\n' if HasNewline else ''
+                    })
+                    CurrentSegment = Sentence
+            else:
+                if CurrentSegment:
+                    HasNewline = CurrentSegment.endswith('\n')
+                    SubSections.append({
+                        'CurrentSegment': CurrentSegment,
+                        'FinalEnding': '\n' if HasNewline else ''
+                    })
+                CurrentSegment = Sentence
+        if CurrentSegment:
+            HasNewline = CurrentSegment.endswith('\n')
+            LastSegment = {
+                'CurrentSegment': CurrentSegment,
+                'FinalEnding': '\n' if HasNewline else ''
+            }
+            if SubSections and len(SubSections[-1]['CurrentSegment']) + len(CurrentSegment) <= MaxLength:
+                Combined = SubSections[-1]['CurrentSegment'] + CurrentSegment
+                SubSections[-1] = {
+                    'CurrentSegment': Combined,
+                    'FinalEnding': '\n' if Combined.endswith('\n') else ''
+                }
+            else:
+                SubSections.append(LastSegment)
+        for footnote in FootnoteSentences:
+            HasNewline = footnote.endswith('\n')
+            SubSections.append({
+                'CurrentSegment': footnote,
+                'FinalEnding': '\n' if HasNewline else ''
+            })
+        return SubSections
+
+    # 실행 순서
+    SectionText, FootnoteMatches = InitializeAndValidate(TranslationBodyFilePath, ProjectName, IndexText, SectionText)
+    ProcessedText, AdditionalQuotesCount = ProcessDialoguesAndFootnotes(SectionText, FootnoteMatches, MaxLength)
+    Sentences = SplitIntoSentences(ProcessedText)
     if not Sentences:
         HasNewline = ProcessedText.endswith('\n')
-        return [{'CurrentSegment': ProcessedText, 'FinalEnding': '\n' if HasNewline else ''}]
-    
-    # 주석 문장과 일반 문장 구분하기
-    FootnoteSentences = []
-    RegularSentences = []
-    
-    for sentence in Sentences:
-        # 주석 패턴 매칭
-        if FootnotePattern.match(sentence.strip()):
-            # 주석이 MaxLength를 넘으면 별도 세그먼트로 처리
-            if len(sentence) > MaxLength:
-                FootnoteSentences.append(sentence)
-            else:
-                # MaxLength를 넘지 않는 주석은 일반 문장으로 취급
-                RegularSentences.append(sentence)
-        else:
-            RegularSentences.append(sentence)
-    
-    # 최적 세그먼트 계산
-    TotalChars = sum(len(sentence) for sentence in RegularSentences)
-    NumSubSections = max(1, (TotalChars + MaxLength - 1) // MaxLength)  # 최소 1개 세그먼트
-    TargetSize = TotalChars / NumSubSections if NumSubSections > 0 else 0
-    
-    # 문장을 세그먼트로 그룹화
-    SubSections = []
-    CurrentSegment = ""
-    
-    # 일반 문장 처리
-    for Sentence in RegularSentences:
-        PotentialLength = len(CurrentSegment) + len(Sentence)
-        
-        if PotentialLength <= MaxLength:
-            # 이 문장을 추가했을 때 목표 크기에 더 가까워지는지 확인
-            if (not CurrentSegment or 
-                abs(PotentialLength - TargetSize) < abs(len(CurrentSegment) - TargetSize)):
-                CurrentSegment += Sentence
-            else:
-                HasNewline = CurrentSegment.endswith('\n')
-                SubSections.append({
-                    'CurrentSegment': CurrentSegment, 
-                    'FinalEnding': '\n' if HasNewline else ''
-                })
-                CurrentSegment = Sentence
-        else:
-            if CurrentSegment:
-                HasNewline = CurrentSegment.endswith('\n')
-                SubSections.append({
-                    'CurrentSegment': CurrentSegment, 
-                    'FinalEnding': '\n' if HasNewline else ''
-                })
-            CurrentSegment = Sentence
-    
-    # 마지막 세그먼트 추가
-    if CurrentSegment:
-        HasNewline = CurrentSegment.endswith('\n')
-        LastSegment = {
-            'CurrentSegment': CurrentSegment,
-            'FinalEnding': '\n' if HasNewline else ''
+        return {
+            'SubSections': [{'CurrentSegment': ProcessedText, 'FinalEnding': '\n' if HasNewline else ''}],
+            'AdditionalQuotes': AdditionalQuotesCount
         }
-        
-        # 가능하면 이전 세그먼트와 결합
-        if SubSections and len(SubSections[-1]['CurrentSegment']) + len(CurrentSegment) <= MaxLength:
-            Combined = SubSections[-1]['CurrentSegment'] + CurrentSegment
-            SubSections[-1] = {
-                'CurrentSegment': Combined,
-                'FinalEnding': '\n' if Combined.endswith('\n') else ''
-            }
-        else:
-            SubSections.append(LastSegment)
-    
-    # MaxLength를 초과하는 주석은 별도 세그먼트로 추가
-    for footnote in FootnoteSentences:
-        HasNewline = footnote.endswith('\n')
-        SubSections.append({
-            'CurrentSegment': footnote,
-            'FinalEnding': '\n' if HasNewline else ''
-        })
-    
-    return SubSections
+    FootnoteSentences, RegularSentences = SeparateFootnotesAndRegular(Sentences, MaxLength)
+    SubSections = CreateOptimalSegments(RegularSentences, FootnoteSentences, MaxLength)
+    return {
+        'SubSections': SubSections,
+        'AdditionalQuotes': AdditionalQuotesCount
+    }
 
 ## Process1: TranslationBodySplit Process
 def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, TranslationEditPath, BeforeProcess, ProjectDataFrameTranslationIndexDefinePath, MaxLength):
@@ -523,6 +485,7 @@ def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, Translat
     ## Load2-3: SplitedTranslationBody 생성
     SplitedTranslationBody = []
     BodyId = 1
+    AddQuotes = 0
     for i, (lineNum, IndexDic) in enumerate(IndexPositions):
         IndexId = IndexDic["IndexId"]
         IndexTag = IndexDic["IndexTag"]
@@ -546,7 +509,11 @@ def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, Translat
             BodyId += 1
         else:
             # 섹션이 MaxLength(2,000, 3,000, 4,000)자를 초과하면 문장 단위로 추가 분할
-            SubSections = SplitBySentence(TranslationBodyFilePath, projectName, IndexText, SectionText, MaxLength)
+            SubSectionsDic = SplitBySentence(TranslationBodyFilePath, projectName, IndexText, SectionText, MaxLength)
+            SubSections = SubSectionsDic['SubSections']
+            AddQuotes += SubSectionsDic['AdditionalQuotes']
+            
+            
             for SubText in SubSections:
                 SplitedTranslationBody.append({"IndexId": IndexId, "IndexTag": IndexTag, "Index": IndexText, "BodyId": BodyId, "Body": SubText['CurrentSegment'], 'FinalEnding': SubText['FinalEnding']})
                 BodyId += 1
@@ -564,19 +531,43 @@ def TranslationBodySplitProcess(projectName, UploadTranslationFilePath, Translat
             OriginalLines.append(BodyLine)
     
     OriginalText = "\n".join(OriginalLines)
-    CleanOriginalText = re.sub(r'\s+', '', OriginalText)
+    CleanOriginalText = re.sub(r'\s+', '', OriginalText).replace('“', '"').replace('”', '"').replace("‘", "'").replace("’", "'")
     OriginalCount = len(CleanOriginalText)
     
     # 분할된 본문의 모든 문자 결합 후 공백 제거
     SplitedBodyText = ''.join(TranslationBodyDic["Body"] for TranslationBodyDic in SplitedTranslationBody)
-    CleanSplitedBodyText = re.sub(r'\s+', '', SplitedBodyText)
+    CleanSplitedBodyText = re.sub(r'\s+', '', SplitedBodyText).replace('“', '"').replace('”', '"').replace("‘", "'").replace("’", "'")
     SplitCount = len(CleanSplitedBodyText)
     
     # 최종 글자수 일치 확인
-    if OriginalCount == SplitCount:
+    if (OriginalCount + AddQuotes) == SplitCount:
         return SplitedTranslationBody
     else:
-        sys.exit(f"TranslationSplitBody 길이 불일치 오류: Project: {projectName} | Process: TranslationBodySplit | SplitBodyLengthError\n[ 분할 전후 텍스트 수가 다름 (분할전: {OriginalCount} != 분할후: {SplitCount}) ]")
+        # 차이점 찾기: 문자 단위 비교
+        MinLength = min(len(CleanOriginalText), len(CleanSplitedBodyText))
+        DiffIndex = next((i for i, (c1, c2) in enumerate(zip(CleanOriginalText, CleanSplitedBodyText)) if c1 != c2), -1)
+        if DiffIndex == -1 and len(CleanOriginalText) != len(CleanSplitedBodyText):
+            DiffIndex = MinLength
+
+        StartIdx = max(0, DiffIndex - 50)
+        EndIdxOriginal = min(len(CleanOriginalText), DiffIndex + 50)
+        EndIdxSplited = min(len(CleanSplitedBodyText), DiffIndex + 50)
+
+        OriginalContext = CleanOriginalText[StartIdx:EndIdxOriginal]
+        SplitedContext = CleanSplitedBodyText[StartIdx:EndIdxSplited]
+        PositionMark = ' ' * (DiffIndex - StartIdx) + '^'
+
+        ErrorMessage = (
+            f"TranslationSplitBody 길이 불일치 오류: Project: {projectName} | Process: TranslationBodySplit | SplitBodyLengthError\n"
+            f"분할 전후 텍스트 수가 다름 (분할전: {OriginalCount} != 분할후: {SplitCount})\n\n"
+            f"차이점 발생 위치 (인덱스 {DiffIndex}):\n"
+            f"분할전: {OriginalContext}\n"
+            f"위치:   {PositionMark}\n"
+            f"분할후: {SplitedContext}"
+        )
+
+        sys.exit(ErrorMessage)
+        # sys.exit(f"TranslationSplitBody 길이 불일치 오류: Project: {projectName} | Process: TranslationBodySplit | SplitBodyLengthError\n[ 분할 전후 텍스트 수가 다름 (분할전: {OriginalCount} != 분할후: {SplitCount}) ]")
 
 ## Load3: MainLang, Translation 불러오기
 def LoadTranslation(Translation, ProjectDataFrameTranslationIndexDefinePath):

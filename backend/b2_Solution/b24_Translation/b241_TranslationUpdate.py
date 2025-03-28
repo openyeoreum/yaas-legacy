@@ -155,7 +155,7 @@ def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, Translation
 ## Process1: MaxLength 이상인 경우 분할 함수
 def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText, MaxLength):
     # 쌍따옴표, 따옴표 일치화
-    SectionText = SectionText.replace('"', '"').replace('"', '"').replace("'", "'").replace("'", "'")
+    SectionText = SectionText.replace('“', '"').replace('”', '"').replace("‘", "'").replace("’", "'")
     
     # 따옴표 균형 확인
     if SectionText.count('"') % 2 != 0:
@@ -196,7 +196,6 @@ def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText
         '？\n', # 전각 물음표 (줄바꿈)
         '?\n',  # 영어 물음표 (줄바꿈)
         
-        # 공백 없이 종결되는 문장 구분자 (단순 마침표, 느낌표, 물음표)
         '.',  # 영어 마침표 (공백/줄바꿈 없음)
         '!',  # 영어 느낌표 (공백/줄바꿈 없음)
         '?',  # 영어 물음표 (공백/줄바꿈 없음)
@@ -209,11 +208,30 @@ def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText
         '？' # 전각 물음표 (공백/줄바꿈 없음)
     ]
     
+    # 주석 패턴 정규식 (도서 본문의 주석 [^n: ...])
+    FootnotePattern = re.compile(r'\[\^(\d+):\s*(.*?)\]')
+    
+    # 주석 위치와 내용을 리스트로 저장
+    FootnoteMatches = list(FootnotePattern.finditer(SectionText))
+    
     # 1단계: 긴 대화문 분할 및 일반 텍스트 분할
     ProcessedText = ""
     i = 0
     dialogueStart = -1
+    
+    # 주석 위치를 추적하기 위한 변수
+    currentFootnoteIndex = 0
+    inFootnote = False
+    
     while i < len(SectionText):
+        # 현재 위치가 주석 시작점인지 확인
+        if currentFootnoteIndex < len(FootnoteMatches) and i == FootnoteMatches[currentFootnoteIndex].start():
+            footnote = FootnoteMatches[currentFootnoteIndex].group(0)  # 전체 주석 텍스트
+            ProcessedText += footnote
+            i += len(footnote)
+            currentFootnoteIndex += 1
+            continue
+        
         # 대화문 시작 지점 체크
         if SectionText[i] == '"' and dialogueStart == -1:
             dialogueStart = i
@@ -270,12 +288,37 @@ def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText
                 ProcessedText += SectionText[i]
             i += 1
     
-    # 2단계: 처리된 텍스트를 문장 단위로 분할
+    # 2단계: 문장 단위로 분할하되, 주석 처리 고려
     Sentences = []
     Start = 0
     i = 0
     InDialogue = False
+    
+    # 주석 매칭을 다시 구성 (이제 처리된 텍스트 기준)
+    ProcessedFootnoteMatches = list(FootnotePattern.finditer(ProcessedText))
+    
     while i < len(ProcessedText):
+        # 현재 위치가 주석의 시작인지 확인
+        isFootnoteStart = False
+        for match in ProcessedFootnoteMatches:
+            if i == match.start():
+                # 현재까지의 텍스트를 문장으로 추가
+                if i > Start:
+                    Sentences.append(ProcessedText[Start:i])
+                
+                # 주석 전체를 하나의 문장으로 추가
+                footnoteText = match.group(0)
+                Sentences.append(footnoteText)
+                
+                # 주석 이후 위치로 이동
+                Start = match.end()
+                i = Start
+                isFootnoteStart = True
+                break
+                
+        if isFootnoteStart:
+            continue
+                
         # 따옴표 체크하여 대화문 여부 확인
         if ProcessedText[i] == '"':
             InDialogue = not InDialogue
@@ -328,7 +371,7 @@ def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText
                         # 약어가 아닌 경우에만 문장 종결로 처리
                         Sentences.append(ProcessedText[Start:i+len(Delimiter)])
                         Start = i + len(Delimiter)
-                        i = Start  # 수정: Start - 1이 아닌 Start로 변경하여 다음 위치로 이동
+                        i = Start
                         FoundDelimiter = True
                         break
             
@@ -346,15 +389,33 @@ def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText
         HasNewline = ProcessedText.endswith('\n')
         return [{'CurrentSegment': ProcessedText, 'FinalEnding': '\n' if HasNewline else ''}]
     
+    # 주석 문장과 일반 문장 구분하기
+    FootnoteSentences = []
+    RegularSentences = []
+    
+    for sentence in Sentences:
+        # 주석 패턴 매칭
+        if FootnotePattern.match(sentence.strip()):
+            # 주석이 MaxLength를 넘으면 별도 세그먼트로 처리
+            if len(sentence) > MaxLength:
+                FootnoteSentences.append(sentence)
+            else:
+                # MaxLength를 넘지 않는 주석은 일반 문장으로 취급
+                RegularSentences.append(sentence)
+        else:
+            RegularSentences.append(sentence)
+    
     # 최적 세그먼트 계산
-    TotalChars = len(ProcessedText)
+    TotalChars = sum(len(sentence) for sentence in RegularSentences)
     NumSubSections = max(1, (TotalChars + MaxLength - 1) // MaxLength)  # 최소 1개 세그먼트
-    TargetSize = TotalChars / NumSubSections
+    TargetSize = TotalChars / NumSubSections if NumSubSections > 0 else 0
     
     # 문장을 세그먼트로 그룹화
     SubSections = []
     CurrentSegment = ""
-    for Sentence in Sentences:
+    
+    # 일반 문장 처리
+    for Sentence in RegularSentences:
         PotentialLength = len(CurrentSegment) + len(Sentence)
         
         if PotentialLength <= MaxLength:
@@ -395,6 +456,14 @@ def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText
             }
         else:
             SubSections.append(LastSegment)
+    
+    # MaxLength를 초과하는 주석은 별도 세그먼트로 추가
+    for footnote in FootnoteSentences:
+        HasNewline = footnote.endswith('\n')
+        SubSections.append({
+            'CurrentSegment': footnote,
+            'FinalEnding': '\n' if HasNewline else ''
+        })
     
     return SubSections
 

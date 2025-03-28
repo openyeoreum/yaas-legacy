@@ -353,6 +353,8 @@ def VoiceTimeStempsProcessFilter(Response, AlphabetList, LastNumber, NumberWordL
     if not isinstance(outputJson, list):
         return "JSONType에서 오류 발생: JSONTypeError"
     # Error3: 결과와 시작의 알파벳이 다를 때의 예외 처리
+    if len(AlphabetList) != len(outputJson):
+        return "Response의 리스트와 본문의 알파벳이 일치하지 않음: JSONMatchingError"
     for i in range(len(AlphabetList)):
         if AlphabetList[i] != outputJson[i]['알파벳']:
             return "Response의 리스트와 본문의 알파벳이 일치하지 않음: JSONMatchingError"

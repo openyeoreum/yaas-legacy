@@ -750,16 +750,14 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
         while attempt < 65:
             try:
                 ########## ElevenLabs API 요청 ##########
-                Api_key = os.getenv("ELEVENLABS_API_KEY")
-                client = ElevenLabs(api_key = Api_key)
+                ElevenLabsApikey = os.getenv("ELEVENLABS_API_KEY")
+                client = ElevenLabs(api_key = ElevenLabsApikey)
                 
-                Voice_Audio = client.generate(
+                Voice_Audio = client.text_to_speech.convert(
                     text = EL_Chunk,
-                    voice = Voice(
-                        voice_id = VoiceId,
-                        settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True)
-                    ),
-                    model = Model
+                    voice_id = VoiceId,
+                    voice_settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True),
+                    model_id = Model
                 )
 
                 if len(SplitChunks) == 1:
@@ -809,6 +807,119 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
 
                 return "Continue"
                 ########## ElevenLabs API 요청 ##########
+            except KeyError as e:
+                attempt += 1
+                print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
+                time.sleep(60)  # 1분 대기 후 재시도
+                
+            except Exception as e:
+                attempt += 1
+                if attempt >= 5:
+                    sys.exit(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                else:
+                    print(f"[ 예상치 못한 에러 발생: {e}, 5초 후 재시도 {attempt}/65: {e} ]")
+                    time.sleep(5)
+
+    #################
+    ### SuperTone ###
+    #################
+    if Api == "SuperTone":
+        # Api Setting
+        Name = ApiSetting['ApiName']
+        Volume = ApiSetting['Volume']
+        Style = random.choice(ApiSetting['style'])
+        Model = ApiSetting['models']
+        
+        while attempt < 65:
+            try:
+                ########## SuperTone API 요청 ##########
+                SUPERTONEApikey = os.getenv("SUPERTONE_API_KEY")
+                # 1. Search Voices API를 사용하여 voice_id 검색
+                search_url = "https://supertoneapi.com/v1/voices/search"
+                params = {
+                    "search": Name,  # 이름 기반 검색 (name과 description 필드 대상)
+                    "style": Style   # 스타일 필터
+                }
+                headers = {
+                    "x-sup-api-key": SUPERTONEApikey
+                }
+
+                response_search = requests.get(search_url, headers=headers, params=params)
+
+                if response_search.status_code != 200:
+                    sys.exit(f"[ SUPERTONE 음성 {name} -> ({Name}) - {Style} 검색 오류 ]\n{response_search.status_code}\n{response_search.text}")
+
+                data = response_search.json()
+                voices = data.get("voices", [])
+                if not voices:
+                    sys.exit(f"[ SUPERTONE 음성 {name} -> ({Name}) - {Style} 검색 오류 ]")
+
+                # 첫 번째 검색 결과에서 voice_id 추출
+                voice_id = voices[0].get("voice_id")
+
+                # 2. 찾은 voice_id를 사용하여 Text-to-speech API 호출
+                tts_url = f"https://supertoneapi.com/v1/text-to-speech/{voice_id}"
+                payload = {
+                    "text": EL_Chunk,
+                    "language": "ko",
+                    "model": Model,
+                    "voice_settings": {
+                        "pitch_shift": 0,
+                        "pitch_variance": 1,
+                        "speed": 1
+                    }
+                }
+                headers_tts = {
+                    "x-sup-api-key": SUPERTONEApikey,
+                    "Content-Type": "application/json"
+                }
+
+                response_tts = requests.post(tts_url, json=payload, headers=headers_tts)
+
+                if len(SplitChunks) == 1:
+                    if "M.wav" in voiceLayerPath:
+                        fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
+                    else:
+                        fileName = voiceLayerPath.replace(".wav", "_(0).wav")
+                else:
+                    fileName = voiceLayerPath
+                    
+                print(f"VoiceGen: completion, {name} waiting 1-5 second")
+
+                if response_tts.status_code == 200:
+                    # API 호출이 성공하면 음성 파일을 바이너리 데이터로 받아 저장
+                    with open(fileName, "wb") as f:
+                        f.write(response_tts.content)
+                else:
+                    sys.exit(f"[ SUPERTONE 오류 발생 ]\n{response_tts.status_code}\n{response_tts.text}")
+                    
+                ## VoiceReverbe ##
+                if voiceReverbe == 'on':
+                    ## tag가 Title, Logue인 경우 ##
+                    if tag in ['Title', 'Logue']:
+                        print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
+                        ChangeSpeedIndexVoice(fileName, Volume = 1.04, Speed = 0.95, Pad = 0.5, Reverb = 'off')
+
+                    ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
+                    if tag in ['Part', 'Chapter', 'Index']:
+                        print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
+                        ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.95, Pad = 1.0, Reverb = 'off')
+                
+                if len(SplitChunks) > 1:
+                    ### 음성파일을 분할하는 코드 ###
+                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                    if RetryIdList != []:
+                        return RetryIdList
+                # 수정 파일 별도 저장
+                if len(SplitChunks) == 1 and Modify == "Yes":
+                    Voice_Audio_Wav = AudioSegment.from_wav(fileName)
+                    InspectionExportPath = fileName.replace("_(0)M.wav", "_(0)Modify.wav")
+                    InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
+                    InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
+                    Voice_Audio_Wav.export(InspectionExportMasterFilePath, format = "wav")
+
+                return "Continue"
+                ########## SuperTone API 요청 ##########
             except KeyError as e:
                 attempt += 1
                 print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
@@ -1728,13 +1839,11 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                     for i in range(len(texts)):
                         if langs[i] == 'En':
                             Style = 0
-                        Voice_Audio = client.generate(
+                        Voice_Audio = client.text_to_speech.convert(
                             text = texts[i],
-                            voice = Voice(
-                                voice_id = CloneVoiceActor['ApiSetting']['voice_id'],
-                                settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True)
-                            ),
-                            model = CloneVoiceActor['ApiSetting']['models'][langs[i]]
+                            voice_id = CloneVoiceActor['ApiSetting']['voice_id'],
+                            voice_settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True),
+                            model_id = CloneVoiceActor['ApiSetting']['models'][langs[i]]
                         )
                         SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice({langs[i]}).mp3'
                         print(f"VoiceGen: completion, {SampleFile} waiting 1-5 second")
@@ -1750,13 +1859,11 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
                 for i in range(len(texts)):
                     if langs[i] == 'En':
                         Style = 0
-                    Voice_Audio = client.generate(
+                    Voice_Audio = client.text_to_speech.convert(
                         text = texts[i],
-                        voice = Voice(
-                            voice_id = CloneVoiceActor['ApiSetting']['voice_id'],
-                            settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True)
-                        ),
-                        model = CloneVoiceActor['ApiSetting']['models'][langs[i]]
+                        voice_id = CloneVoiceActor['ApiSetting']['voice_id'],
+                        voice_settings = VoiceSettings(stability = Stability, similarity_boost = SimilarityBoost, style = Style, use_speaker_boost = True),
+                        model_id = CloneVoiceActor['ApiSetting']['models'][langs[i]]
                     )
                     SampleFile = f'{Name}_{Stability}-{SimilarityBoost}-{Style}_ClonedVoice({langs[i]}).mp3'
                     print(f"VoiceGen: completion, {SampleFile} waiting 1-5 second")
@@ -2705,7 +2812,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             
             ## ElevenLabs Chunk Modify ##
             EL_Chunk = None
-            if Api == 'ElevenLabs':
+            if Api in ['ElevenLabs', 'SuperTone']:
                 ELChunks = []
                 BracketsELChunks = []
                 for idx, _ELChunk in enumerate(Update['ActorChunk']):
@@ -2865,8 +2972,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 else:
                     LASTPITCH = ApiSetting['last_pitch']
             
-            ## ElevenLabs ApiSetting ##
-            elif Api == 'ElevenLabs':
+            ## ElevenLabs, SuperTone ApiSetting ##
+            elif Api in ['ElevenLabs', 'SuperTone']:
                 ApiSetting = MatchedActor['ApiSetting']
                 name = ApiSetting['name']
                 EMOTION = ['None']

@@ -28521,7 +28521,7 @@
             },
             {
                 "CharacterId": 267,
-                "Name": "싱클레어(낭독)",
+                "Name": "도윤재(낭독)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_TypeCastVoice/.wav",
                 "Quilty": 0,
                 "Grade": [
@@ -28590,11 +28590,23 @@
                     "Feature": "None"
                 },
                 "ApiSetting": {
-                    "name": "싱클레어(낭독)",
-                    "ApiName": "Yoonho", 
-                    "Api": "SuperTone",
-                    "style": ["blank_high"],
-                    "models": "turbo",
+                    "name": "도윤재(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "ggD1mjNKJcBh0JAY1pMa",
+                    "stability": [
+                        0.8
+                    ],
+                    "similarity_boost": [
+                        0.75
+                    ],
+                    "style": [
+                        0
+                    ],
+                    "models": {
+                        "Ko": "eleven_multilingual_v2",
+                        "En": "eleven_turbo_v2_5",
+                        "Zh": "eleven_multilingual_v2"
+                    },
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0

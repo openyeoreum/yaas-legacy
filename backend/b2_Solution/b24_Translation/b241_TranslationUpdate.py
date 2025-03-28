@@ -905,7 +905,6 @@ def BodyTranslationPreprocessingInputList(TranslationEditPath, MainLangCode, Tra
         
         # 단어를 길이 기준으로 정렬 (긴 단어 먼저 처리)
         TranslationWords.sort(key = lambda x: len(x['Word']), reverse=True)
-        
         # 원본 텍스트 복사
         ProcessedInput = TranslationBody
         
@@ -916,12 +915,11 @@ def BodyTranslationPreprocessingInputList(TranslationEditPath, MainLangCode, Tra
             Translation = WordDict['Translation']
             
             # 고유 마커 생성
-            Marker = f"__MARKER_{i}__"
+            Marker = f"⒨⒜⒭⒦|{i}|"
             MarkerMap[Marker] = (OriginalWord, Translation)
             
             # 단어를 마커로 대체
             ProcessedInput = ProcessedInput.replace(OriginalWord, Marker)
-        
         # 모든 마커의 위치 찾기
         MarkerPositions = []
         for Marker in MarkerMap:
@@ -932,7 +930,6 @@ def BodyTranslationPreprocessingInputList(TranslationEditPath, MainLangCode, Tra
                     break
                 MarkerPositions.append((Pos, Marker))
                 StartPos = Pos + len(Marker)
-        
         # 위치별로 정렬
         MarkerPositions.sort(key=lambda x: x[0])
         
@@ -941,7 +938,6 @@ def BodyTranslationPreprocessingInputList(TranslationEditPath, MainLangCode, Tra
             OriginalWord, Translation = MarkerMap[Marker]
             Replacement = f"{{{Idx}: {OriginalWord}->{Translation}}}"
             ProcessedInput = ProcessedInput.replace(Marker, Replacement, 1)
-        
         Input = f"[원문언어] {TranslationLangCode}\n[번역언어] {MainLangCode}\n[현재원문]\n{ProcessedInput}\n\n"
         
         # 처리된 입력을 InputList에 추가
@@ -4331,6 +4327,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ## Process 설정
     ProcessNumber = '08'
     Process = "BodyTranslation"
+    ProofreadingBeforeProcess = Process
     ToneEditProcess = "BodyToneEditing"
     print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
     

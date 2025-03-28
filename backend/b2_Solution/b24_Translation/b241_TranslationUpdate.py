@@ -154,8 +154,6 @@ def LoadTranslationSplitBody(projectName, UploadTranslationFilePath, Translation
 ########################################
 ## Process1: MaxLength 이상인 경우 분할 함수
 def SplitBySentence(TranslationBodyFilePath, ProjectName, IndexText, SectionText, MaxLength):
-    import sys, re
-
     ## 초기화 및 유효성 검사를 수행하는 함수
     def InitializeAndValidate(TranslationBodyFilePath, ProjectName, IndexText, SectionText):
         # 쌍따옴표, 따옴표 일치화

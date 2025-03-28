@@ -16,6 +16,7 @@ import sys
 sys.path.append("/yaas")
 
 from backend.b2_Solution.b25_DataFrame.b251_DataCommit.b2511_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from io import BytesIO
 from tqdm import tqdm
 from time import sleep
 from collections import OrderedDict
@@ -843,39 +844,94 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 headers = {
                     "x-sup-api-key": SUPERTONEApikey
                 }
-
                 response_search = requests.get(search_url, headers=headers, params=params)
-
                 if response_search.status_code != 200:
                     sys.exit(f"[ SUPERTONE 음성 {name} -> ({Name}) - {Style} 검색 오류 ]\n{response_search.status_code}\n{response_search.text}")
-
                 data = response_search.json()
                 voices = data.get("voices", [])
                 if not voices:
                     sys.exit(f"[ SUPERTONE 음성 {name} -> ({Name}) - {Style} 검색 오류 ]")
-
                 # 첫 번째 검색 결과에서 voice_id 추출
                 voice_id = voices[0].get("voice_id")
-
-                # 2. 찾은 voice_id를 사용하여 Text-to-speech API 호출
-                tts_url = f"https://supertoneapi.com/v1/text-to-speech/{voice_id}"
-                payload = {
-                    "text": EL_Chunk,
-                    "language": "ko",
-                    "model": Model,
-                    "voice_settings": {
-                        "pitch_shift": 0,
-                        "pitch_variance": 1,
-                        "speed": 1
+                
+                # 최종 음성 합성을 위한 AudioSegment 생성
+                final_audio = AudioSegment.empty()
+                silence_segment = AudioSegment.silent(duration=300)  # 0.3초 공백
+                
+                # EL_Chunk가 길 경우, 문장 단위로 분할 후 여러 문장을 합쳐 150자 이하의 chunk로 생성
+                if len(EL_Chunk) >= 190:
+                    sentences = re.split(r'(?<=[.!?])\s+', EL_Chunk)
+                    sentences = [s.strip() for s in sentences if s.strip() != ""]
+                    
+                    chunks = []
+                    current_chunk = ""
+                    for sentence in sentences:
+                        candidate = current_chunk + " " + sentence if current_chunk else sentence
+                        if len(candidate) <= 150:
+                            current_chunk = candidate
+                        else:
+                            if current_chunk:
+                                chunks.append(current_chunk)
+                            current_chunk = sentence
+                    if current_chunk:
+                        chunks.append(current_chunk)
+                    
+                    # 각 chunk마다 TTS API 호출 후, 0.3초 공백을 추가하며 음성 합성
+                    for idx, chunk in enumerate(chunks):
+                        tts_url = f"https://supertoneapi.com/v1/text-to-speech/{voice_id}"
+                        payload = {
+                            "text": chunk,
+                            "language": "ko",
+                            "model": Model,
+                            "voice_settings": {
+                                "pitch_shift": 0,
+                                "pitch_variance": 1,
+                                "speed": 1
+                            }
+                        }
+                        headers_tts = {
+                            "x-sup-api-key": SUPERTONEApikey,
+                            "Content-Type": "application/json"
+                        }
+                        response_tts = requests.post(tts_url, json=payload, headers=headers_tts)
+                        
+                        if response_tts.status_code == 200:
+                            segment_audio = AudioSegment.from_file(BytesIO(response_tts.content), format="wav")
+                            final_audio += segment_audio
+                            # 마지막 chunk가 아니라면 0.3초 공백 추가
+                            if idx < len(chunks) - 1:
+                                final_audio += silence_segment
+                        else:
+                            sys.exit(f"[ SUPERTONE 오류 발생 ]\n{response_tts.status_code}\n{response_tts.text}")
+                        
+                        wait_time = random.uniform(1, 5)
+                        print(f"VoiceGen: chunk 생성 완료, {wait_time:.1f}초 대기")
+                        time.sleep(wait_time)
+                else:
+                    # EL_Chunk 길이가 짧은 경우, 한 번에 API 호출
+                    tts_url = f"https://supertoneapi.com/v1/text-to-speech/{voice_id}"
+                    payload = {
+                        "text": EL_Chunk,
+                        "language": "ko",
+                        "model": Model,
+                        "voice_settings": {
+                            "pitch_shift": 0,
+                            "pitch_variance": 1,
+                            "speed": 1
+                        }
                     }
-                }
-                headers_tts = {
-                    "x-sup-api-key": SUPERTONEApikey,
-                    "Content-Type": "application/json"
-                }
-
-                response_tts = requests.post(tts_url, json=payload, headers=headers_tts)
-
+                    headers_tts = {
+                        "x-sup-api-key": SUPERTONEApikey,
+                        "Content-Type": "application/json"
+                    }
+                    response_tts = requests.post(tts_url, json=payload, headers=headers_tts)
+                    
+                    if response_tts.status_code == 200:
+                        final_audio = AudioSegment.from_file(BytesIO(response_tts.content), format="wav")
+                    else:
+                        sys.exit(f"[ SUPERTONE 오류 발생 ]\n{response_tts.status_code}\n{response_tts.text}")
+                
+                # 파일명 결정
                 if len(SplitChunks) == 1:
                     if "M.wav" in voiceLayerPath:
                         fileName = voiceLayerPath.replace("M.wav", "_(0)M.wav")
@@ -883,48 +939,38 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                         fileName = voiceLayerPath.replace(".wav", "_(0).wav")
                 else:
                     fileName = voiceLayerPath
-                    
-                print(f"VoiceGen: completion, {name} waiting 1-5 second")
-
-                if response_tts.status_code == 200:
-                    # API 호출이 성공하면 음성 파일을 바이너리 데이터로 받아 저장
-                    with open(fileName, "wb") as f:
-                        f.write(response_tts.content)
-                else:
-                    sys.exit(f"[ SUPERTONE 오류 발생 ]\n{response_tts.status_code}\n{response_tts.text}")
-                    
+                
+                # 최종 합성된 음성 저장
+                final_audio.export(fileName, format="wav")
+                print(f"VoiceGen: 완료, {name} 1-5초 대기")
+                
                 ## VoiceReverbe ##
                 if voiceReverbe == 'on':
-                    ## tag가 Title, Logue인 경우 ##
                     if tag in ['Title', 'Logue']:
                         print(f"ChangeSpeed(0.89): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Volume = 1.04, Speed = 0.95, Pad = 0.5, Reverb = 'off')
-
-                    ## tag가 Title, Logue, Part, Chapter, Index인 경우 ##
+                        ChangeSpeedIndexVoice(fileName, Volume=1.04, Speed=0.95, Pad=0.5, Reverb='off')
                     if tag in ['Part', 'Chapter', 'Index']:
                         print(f"ChangeSpeed(0.91): ({tag}) Voice waiting 1-2 second")
-                        ChangeSpeedIndexVoice(fileName, Volume = 1.07, Speed = 0.95, Pad = 1.0, Reverb = 'off')
+                        ChangeSpeedIndexVoice(fileName, Volume=1.07, Speed=0.95, Pad=1.0, Reverb='off')
                 
                 if len(SplitChunks) > 1:
-                    ### 음성파일을 분할하는 코드 ###
-                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview = MessagesReview)
+                    RetryIdList, segment_durations = VoiceSplit(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, bracketsSplitChunksNumber, name, voiceLayerPath, SplitChunks, MessagesReview=MessagesReview)
                     if RetryIdList != []:
                         return RetryIdList
-                # 수정 파일 별도 저장
+                
                 if len(SplitChunks) == 1 and Modify == "Yes":
                     Voice_Audio_Wav = AudioSegment.from_wav(fileName)
                     InspectionExportPath = fileName.replace("_(0)M.wav", "_(0)Modify.wav")
                     InspectionExportFolder, InspectionExportFile = os.path.split(InspectionExportPath)
                     InspectionExportMasterFilePath = os.path.join(ModifyFolderPath, InspectionExportFile)
-                    Voice_Audio_Wav.export(InspectionExportMasterFilePath, format = "wav")
-
+                    Voice_Audio_Wav.export(InspectionExportMasterFilePath, format="wav")
+                
                 return "Continue"
                 ########## SuperTone API 요청 ##########
             except KeyError as e:
                 attempt += 1
                 print(f"[ KeyError 발생, 1분 후 재시도 {attempt}/65: {e} ]")
-                time.sleep(60)  # 1분 대기 후 재시도
-                
+                time.sleep(60)
             except Exception as e:
                 attempt += 1
                 if attempt >= 5:

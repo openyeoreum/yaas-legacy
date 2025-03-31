@@ -1968,6 +1968,18 @@ def TranslationCatchphraseInputList(TranslationEditPath, BeforeProcess1, BeforeP
 ######################
 ##### Filter 조건 #####
 ######################
+## 대괄호 쌍 확인 함수
+def CheckBalancedBrackets(text):
+    stack = []
+    for char in text:
+        if char == '[':
+            stack.append(char)
+        elif char == ']':
+            if not stack:
+                return False
+            stack.pop()
+    return len(stack) == 0
+
 ## Process1: TranslationIndexDefine의 Filter(Error 예외처리)
 def TranslationIndexDefineFilter(Response, CheckCount):
     # Error1: JSON 형식 예외 처리
@@ -2320,6 +2332,11 @@ def BodyTranslationFilter(Response, CheckCount):
     # 데이터 타입 검증
     if not isinstance(OutputDic['현재번역문']['번역문'], str):
         return "BodyTranslation, JSON에서 오류 발생: '현재번역문 > 번역문'은 문자열이어야 합니다"
+    
+    # Error4: 번역문에 주석 표기 검증
+    if ('[' in OutputDic['현재번역문']['번역문']) or (']' in OutputDic['현재번역문']['번역문']):
+        if not CheckBalancedBrackets(OutputDic['현재번역문']['번역문']):
+            return "BodyTranslation, 주석표기 오류: 번역문 내의 주석표기 대괄호의 짝이 맞지 않습니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['현재번역문']
@@ -2509,6 +2526,11 @@ def TranslationEditingFilter(Response, CheckCount):
     # 데이터 타입 검증
     if not isinstance(OutputDic['편집내용']['내용'], str):
         return "TranslationEditing, JSON에서 오류 발생: '편집내용 > 내용'은 문자열이어야 합니다"
+    
+    # Error4: 번역문에 주석 표기 검증
+    if ('[' in OutputDic['편집내용']['내용']) or (']' in OutputDic['편집내용']['내용']):
+        if not CheckBalancedBrackets(OutputDic['편집내용']['내용']):
+            return "TranslationEditing, 주석표기 오류: 번역문 내의 주석표기 대괄호의 짝이 맞지 않습니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['편집내용']
@@ -2559,7 +2581,12 @@ def TranslationProofreadingFilter(Response, CheckCount):
     # print(f"\n\nEditCheckCount: {EditCheckCount}\n\n")
     if CheckCount != EditCheckCount:
         return f"TranslationProofreading, JSON에서 오류 발생: '교정내용({len(EditCheckCount)}) != 도서내용({len(CheckCount)})'이 교정 전후로 일치하지 않습니다"
-    
+
+    # Error7: 번역문에 주석 표기 검증
+    if ('[' in OutputDic['교정']['도서내용']) or (']' in OutputDic['교정']['도서내용']):
+        if not CheckBalancedBrackets(OutputDic['교정']['도서내용']):
+            return "TranslationProofreading, 주석표기 오류: 번역문 내의 주석표기 대괄호의 짝이 맞지 않습니다"
+
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['교정']
 

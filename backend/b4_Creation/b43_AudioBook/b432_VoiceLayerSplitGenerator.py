@@ -1939,7 +1939,7 @@ def CloneVoiceSetting(projectName, Narrator, CloneVoiceName, MatchedActors, Clon
         VoiceDataSetPath = "/yaas/backend/b5_Database/b57_RelationalDatabase/b572_Character/b572-01_VoiceDataSet.json"
         with open(VoiceDataSetPath, 'r', encoding = 'utf-8') as VoiceDataSetJson:
             VoiceDataSet = json.load(VoiceDataSetJson)
-        VoiceActos = VoiceDataSet[1]['CharactersKo']
+        VoiceActos = VoiceDataSet[1]['Characters']
         
         ## VoiceActor 매칭
         MatchedSecondaryVoiceActor = 'None'

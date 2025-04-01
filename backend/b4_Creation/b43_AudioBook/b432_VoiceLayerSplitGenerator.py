@@ -44,10 +44,11 @@ def LoadVoiceDataSetCharacters(MainLang):
     voiceDataSet = GetSoundDataSet("VoiceDataSet")
     VoiceDataSet = voiceDataSet[0][1]
     
-    if MainLang == 'Ko':
-        VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
-    if MainLang == 'En':
-        VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
+    VoiceDataSetCharacters = VoiceDataSet['Characters'][1:]
+    # if MainLang == 'Ko':
+    #     VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
+    # if MainLang == 'En':
+    #     VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
     # if MainLang == 'Ja':
     #     VoiceDataSetCharacters = VoiceDataSet['Characters' + MainLang][1:]
     # if MainLang == 'Zh':

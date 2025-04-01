@@ -82,12 +82,9 @@
                         "emotion_tone_preset": [
                             "None"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -115,11 +112,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -128,8 +121,7 @@
                     "name": "None",
                     "ApiName": "None",
                     "Api": "SuperTone",
-                    "style": [
-                        "None"],
+                    "style": ["None"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -214,12 +206,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -319,12 +308,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -419,12 +405,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -525,12 +508,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -625,12 +605,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -725,12 +702,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -823,12 +797,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -929,12 +900,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -1035,12 +1003,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -1134,12 +1099,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -1232,12 +1194,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -1330,12 +1289,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -1427,12 +1383,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -1524,12 +1477,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -1629,12 +1579,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -1737,12 +1684,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -1837,12 +1781,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -1934,12 +1875,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -2031,12 +1969,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -2129,12 +2064,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -2234,12 +2166,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -2341,12 +2270,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -2441,12 +2367,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -2541,12 +2464,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -2647,12 +2567,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -2754,12 +2671,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -2861,12 +2775,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -2968,12 +2879,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -3076,12 +2984,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -3184,12 +3089,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -3283,12 +3185,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -3380,12 +3279,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -3478,12 +3374,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -3580,12 +3473,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -3678,12 +3568,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -3777,12 +3664,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.08
@@ -3876,12 +3760,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.08
@@ -3983,12 +3864,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -4083,12 +3961,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -4181,12 +4056,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.08
@@ -4279,12 +4151,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.08
@@ -4377,12 +4246,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -4475,12 +4341,9 @@
                             "scream-2",
                             "scream-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -4571,12 +4434,9 @@
                         "emotion_tone_preset": [
                             "normal-1"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1
@@ -4669,12 +4529,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1
@@ -4767,12 +4624,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -4866,12 +4720,9 @@
                             "cold-3",
                             "cold-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -4966,12 +4817,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -5066,12 +4914,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -5164,12 +5009,9 @@
                             "tonedown-2",
                             "tonedown-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -5261,12 +5103,9 @@
                             "sad-1",
                             "sad-2"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1
@@ -5358,12 +5197,9 @@
                             "normal-1",
                             "normal-2"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -5456,12 +5292,9 @@
                             "inspire-1",
                             "inspire-2"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -5555,12 +5388,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -5654,12 +5484,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -5753,12 +5580,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -5854,12 +5678,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -5952,12 +5773,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -6050,12 +5868,9 @@
                             "sad-2",
                             "sad-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -6149,12 +5964,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -6248,12 +6060,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -6346,12 +6155,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -6443,12 +6249,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -6541,12 +6344,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -6641,12 +6441,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.08
@@ -6739,12 +6536,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.08
@@ -6837,12 +6631,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.08
@@ -6936,12 +6727,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -7035,12 +6823,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -7135,12 +6920,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -7241,12 +7023,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -7341,12 +7120,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -7440,12 +7216,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -7539,12 +7312,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -7638,12 +7408,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -7745,12 +7512,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -7844,12 +7608,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -7948,12 +7709,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -8048,12 +7806,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -8147,12 +7902,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -8246,12 +7998,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -8344,12 +8093,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -8441,12 +8187,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -8538,12 +8281,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -8638,12 +8378,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -8735,12 +8472,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -8832,12 +8566,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -8930,12 +8661,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -9027,12 +8755,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -9126,12 +8851,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -9225,12 +8947,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -9324,12 +9043,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -9422,12 +9138,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -9519,12 +9232,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -9617,12 +9327,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -9715,12 +9422,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -9813,12 +9517,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -9910,12 +9611,9 @@
                             "tonedown-2",
                             "tonedown-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -10008,12 +9706,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -10106,12 +9801,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.1
@@ -10204,12 +9896,9 @@
                             "whisper-3",
                             "whisper-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -10302,12 +9991,9 @@
                             "whisper-3",
                             "whisper-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -10401,12 +10087,9 @@
                             "cheer-3",
                             "cheer-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -10500,12 +10183,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -10600,12 +10280,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -10706,12 +10383,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -10805,12 +10479,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -10902,12 +10573,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11001,12 +10669,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11098,12 +10763,9 @@
                             "tonemid-1",
                             "tonemid-2"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11197,12 +10859,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11296,12 +10955,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11394,12 +11050,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11492,12 +11145,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11598,12 +11248,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11698,12 +11345,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11797,12 +11441,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11895,12 +11536,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -11995,12 +11633,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -12094,12 +11729,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -12192,12 +11824,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -12291,12 +11920,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -12389,12 +12015,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -12487,12 +12110,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -12585,12 +12205,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -12683,12 +12300,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -12781,12 +12395,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -12879,12 +12490,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -12977,12 +12585,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -13075,12 +12680,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -13173,12 +12775,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -13271,12 +12870,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -13368,12 +12964,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -13467,12 +13060,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -13565,12 +13155,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -13664,12 +13251,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -13762,12 +13346,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -13859,12 +13440,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -13957,12 +13535,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -14055,12 +13630,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -14153,12 +13725,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -14251,12 +13820,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -14348,12 +13914,9 @@
                             "normal-1",
                             "normal-2"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -14445,12 +14008,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -14542,12 +14102,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -14641,12 +14198,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -14739,12 +14293,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -14837,12 +14388,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -14936,12 +14484,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -15035,12 +14580,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -15134,12 +14676,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -15233,12 +14772,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -15332,12 +14868,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -15431,12 +14964,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -15530,12 +15060,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -15629,12 +15156,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -15726,12 +15250,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -15822,12 +15343,9 @@
                             "tonemid-2",
                             "tonemid-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -15920,12 +15438,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16018,12 +15533,9 @@
                             "soft-3",
                             "soft-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16116,12 +15628,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16214,12 +15723,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16312,12 +15818,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16410,12 +15913,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16508,12 +16008,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16606,12 +16103,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16704,12 +16198,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16802,12 +16293,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16900,12 +16388,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -16998,12 +16483,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -17096,12 +16578,9 @@
                             "angry-3",
                             "angry-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -17191,12 +16670,9 @@
                         "emotion_tone_preset": [
                             "toneup-1"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -17289,12 +16765,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -17387,12 +16860,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -17485,12 +16955,9 @@
                             "happy-3",
                             "happy-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -17580,12 +17047,9 @@
                         "emotion_tone_preset": [
                             "angry-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -17678,12 +17142,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -17777,12 +17238,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -17876,12 +17334,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -17974,12 +17429,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -18069,12 +17521,9 @@
                         "emotion_tone_preset": [
                             "None"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -18168,12 +17617,9 @@
                             "whisper-3",
                             "whisper-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -18267,12 +17713,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -18366,12 +17809,9 @@
                             "sad-3",
                             "sad-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -18465,12 +17905,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -18562,12 +17999,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -18659,12 +18093,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -18758,12 +18189,9 @@
                             "tonedown-3",
                             "tonedown-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -18856,12 +18284,9 @@
                             "sad-2",
                             "sad-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -18952,12 +18377,9 @@
                             "angry-1",
                             "angry-2"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -19050,12 +18472,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -19145,12 +18564,9 @@
                         "emotion_tone_preset": [
                             "tonemid-1"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -19243,12 +18659,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -19342,12 +18755,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -19440,12 +18850,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -19538,12 +18945,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -19634,12 +19038,9 @@
                         "emotion_tone_preset": [
                             "normal-1"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -19732,12 +19133,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -19830,12 +19228,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -19926,12 +19321,9 @@
                             "tonemid-2",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -20024,12 +19416,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -20122,12 +19511,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -20220,12 +19606,9 @@
                             "tonemid-3",
                             "tonemid-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -20319,12 +19702,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -20417,12 +19797,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -20516,12 +19893,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -20615,12 +19989,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -20713,12 +20084,9 @@
                             "toneup-3",
                             "toneup-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -20811,12 +20179,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -20908,12 +20273,9 @@
                             "scream-1",
                             "scream-2"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -21007,12 +20369,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -21105,12 +20464,9 @@
                             "angry-2",
                             "angry-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -21201,12 +20557,9 @@
                         "emotion_tone_preset": [
                             "normal-1"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -21301,12 +20654,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.08
@@ -21402,12 +20752,9 @@
                             "normal-3",
                             "normal-4"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.08
@@ -21501,12 +20848,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -21600,12 +20944,9 @@
                             "normal-2",
                             "normal-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.08
@@ -21699,12 +21040,9 @@
                             "toneup-2",
                             "toneup-3"
                         ],
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_prompt": "None"},
                     "emotion_prompt": {
-                        "emotion_tone_preset": "emotion_prompt",
-                        "emotion_prompt": "None"
-                    },
+                        "emotion_tone_preset": "emotion_prompt", "emotion_prompt": "None"},
                     "volume": 120,
                     "speed_x": [
                         1.05
@@ -21802,11 +21140,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -21885,10 +21219,7 @@
                     "ApiName": "Yoonho",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
-                    "style": [
-                        "sad",
-                        "sad_high",
-                        "surprised"],
+                    "style": ["sad", "sad_high", "surprised"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -21968,12 +21299,7 @@
                     "ApiName": "Yoonho",
                     "Api": "SuperTone",
                     "emotion": "일반",
-                    "style": [
-                        "angry",
-                        "blank_high",
-                        "blank",
-                        "loving",
-                        "suspicious"],
+                    "style": ["angry", "blank_high", "blank", "loving", "suspicious"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -22053,9 +21379,7 @@
                     "ApiName": "Yoonho",
                     "Api": "SuperTone",
                     "emotion": "화남",
-                    "style": [
-                        "loving_high",
-                        "surprised_high"],
+                    "style": ["loving_high", "surprised_high"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -22143,11 +21467,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -22226,8 +21546,7 @@
                     "ApiName": "Leo",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
-                    "style": [
-                        "sad"],
+                    "style": ["sad"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -22307,9 +21626,7 @@
                     "ApiName": "Leo",
                     "Api": "SuperTone",
                     "emotion": "일반",
-                    "style": [
-                        "kind",
-                        "normal"],
+                    "style": ["kind", "normal"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -22389,10 +21706,7 @@
                     "ApiName": "Leo",
                     "Api": "SuperTone",
                     "emotion": "화남",
-                    "style": [
-                        "angry",
-                        "command",
-                        "excited"],
+                    "style": ["angry", "command", "excited"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -22480,11 +21794,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -22563,11 +21873,7 @@
                     "ApiName": "Isamu",
                     "Api": "SuperTone",
                     "emotion": "일반",
-                    "style": [
-                        "happy",
-                        "normal",
-                        "sad",
-                        "unfriendly"],
+                    "style": ["happy", "normal", "sad", "unfriendly"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -22647,9 +21953,7 @@
                     "ApiName": "Isamu",
                     "Api": "SuperTone",
                     "emotion": "화남",
-                    "style": [
-                        "angry",
-                        "courageous"],
+                    "style": ["angry", "courageous"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -22737,11 +22041,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -22820,12 +22120,7 @@
                     "ApiName": "Andy",
                     "Api": "SuperTone",
                     "emotion": "일반",
-                    "style": [
-                        "friendly",
-                        "calm",
-                        "shy",
-                        "unfriendly",
-                        "worry"],
+                    "style": ["friendly", "calm", "shy", "unfriendly", "worry"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -22905,8 +22200,7 @@
                     "ApiName": "Andy",
                     "Api": "SuperTone",
                     "emotion": "화남",
-                    "style": [
-                        "excited"],
+                    "style": ["excited"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -22994,11 +22288,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23077,9 +22367,7 @@
                     "ApiName": "Gloria",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
-                    "style": [
-                        "normal",
-                        "suspicious"],
+                    "style": ["normal", "suspicious"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -23159,9 +22447,7 @@
                     "ApiName": "Gloria",
                     "Api": "SuperTone",
                     "emotion": "일반",
-                    "style": [
-                        "kind",
-                        "happy"],
+                    "style": ["kind", "happy"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -23241,8 +22527,334 @@
                     "ApiName": "Gloria",
                     "Api": "SuperTone",
                     "emotion": "화남",
+                    "style": ["angry"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(낭독).mp3",
+                "Quilty": 8,
+                "Grade": ["Main"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 9},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 1}
+                    ],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "NUb48o4f88KX3Lua8TF3",
+                    "stability": [
+                        0.9
+                    ],
+                    "similarity_boost": [
+                        0.5
+                    ],
                     "style": [
-                        "angry"],
+                        0
+                    ],
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(슬픔).mp3",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 4}
+                    ],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["shy"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(일반).mp3",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "침착함", "Score": 7},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 2},
+                        {"index": "화남", "Score": 1}
+                    ],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["excited", "loving", "normal", "unfriendly"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(화남).mp3",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 3},
+                        {"index": "침착함", "Score": 4},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "화남", "Score": 8}
+                    ],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -23330,11 +22942,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23421,11 +23029,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23512,11 +23116,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23603,11 +23203,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23694,11 +23290,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23785,11 +23377,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23876,11 +23464,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23967,11 +23551,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24058,11 +23638,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24149,11 +23725,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24240,11 +23812,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24331,11 +23899,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24422,11 +23986,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24513,11 +24073,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24604,11 +24160,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24695,11 +24247,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24786,11 +24334,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24877,11 +24421,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -24968,11 +24508,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25059,11 +24595,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25150,11 +24682,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25241,11 +24769,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25332,11 +24856,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25423,11 +24943,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25514,11 +25030,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25605,11 +25117,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25696,11 +25204,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25787,11 +25291,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25878,11 +25378,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -25969,11 +25465,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26060,11 +25552,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26151,11 +25639,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26242,11 +25726,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26333,11 +25813,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26424,11 +25900,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26515,11 +25987,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26606,11 +26074,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26697,11 +26161,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26788,11 +26248,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26879,11 +26335,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -26970,11 +26422,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27061,11 +26509,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27152,11 +26596,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27243,11 +26683,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27334,11 +26770,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27425,11 +26857,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27516,11 +26944,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27607,11 +27031,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27698,11 +27118,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27789,11 +27205,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27880,11 +27292,7 @@
                     "style": [
                         0
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -27971,11 +27379,7 @@
                     "style": [
                         0.01
                     ],
-                    "models": {
-                        "Ko": "eleven_multilingual_v2",
-                        "En": "eleven_turbo_v2_5",
-                        "Zh": "eleven_multilingual_v2"
-                    },
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -28054,10 +27458,7 @@
                     "ApiName": "Keld",
                     "Api": "SuperTone",
                     "emotion": "일반",
-                    "style": [
-                        "admiring",
-                        "blank",
-                        "serene"],
+                    "style": ["admiring", "blank", "serene"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -28137,9 +27538,7 @@
                     "ApiName": "Keld",
                     "Api": "SuperTone",
                     "emotion": "화남",
-                    "style": [
-                        "unfriendly",
-                        "disgusted"],
+                    "style": ["unfriendly", "disgusted"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -28219,8 +27618,7 @@
                     "ApiName": "Keld",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
-                    "style": [
-                        "sad"],
+                    "style": ["sad"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -28300,9 +27698,7 @@
                     "ApiName": "Serin",
                     "Api": "SuperTone",
                     "emotion": "일반",
-                    "style": [
-                        "trusting",
-                        "suspicious"],
+                    "style": ["trusting", "suspicious"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -28382,9 +27778,7 @@
                     "ApiName": "Serin",
                     "Api": "SuperTone",
                     "emotion": "화남",
-                    "style": [
-                        "shouting",
-                        "sad"],
+                    "style": ["shouting", "sad"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -28464,9 +27858,7 @@
                     "ApiName": "Serin",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
-                    "style": [
-                        "angry",
-                        "courageous"],
+                    "style": ["angry", "courageous"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -28546,10 +27938,7 @@
                     "ApiName": "Allen",
                     "Api": "SuperTone",
                     "emotion": "일반",
-                    "style": [
-                        "worry",
-                        "normal",
-                        "kind"],
+                    "style": ["worry", "normal", "kind"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -28629,9 +28018,7 @@
                     "ApiName": "Allen",
                     "Api": "SuperTone",
                     "emotion": "화남",
-                    "style": [
-                        "annoyed",
-                        "excited"],
+                    "style": ["annoyed", "excited"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -28711,8 +28098,7 @@
                     "ApiName": "Allen",
                     "Api": "SuperTone",
                     "emotion": "분노",
-                    "style": [
-                        "angry"],
+                    "style": ["angry"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -28792,11 +28178,7 @@
                     "ApiName": "Teriel",
                     "Api": "SuperTone",
                     "emotion": "일반",
-                    "style": [
-                        "relieved",
-                        "loving",
-                        "courageous",
-                        "admiring"],
+                    "style": ["relieved", "loving", "courageous", "admiring"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,
@@ -28876,9 +28258,7 @@
                     "ApiName": "Teriel",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
-                    "style": [
-                        "anxious",
-                        "shy"],
+                    "style": ["anxious", "shy"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,

@@ -468,7 +468,7 @@
                     "name": "도윤재",
                     "ApiName": "Yoonho", 
                     "Api": "SuperTone",
-                    "emotion": "일반",
+                    "emotion": "화남",
                     "style": ["loving_high", "surprised_high"],
                     "models": "turbo",
                     "Volume": 0,
@@ -807,7 +807,7 @@
                     "name": "오선우",
                     "ApiName": "Leo", 
                     "Api": "SuperTone",
-                    "emotion": "일반",
+                    "emotion": "화남",
                     "style": ["angry", "command", "excited"],
                     "models": "turbo",
                     "Volume": 0,
@@ -1433,7 +1433,7 @@
                 "SecondaryVoice": "None",
                 "Context": {
                     "Genre": [
-                        {"index": "문학", "Score": 0},
+                        {"index": "문학", "Score": 10},
                         {"index": "비문학", "Score": 0},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
@@ -1527,7 +1527,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -1620,7 +1620,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -1713,7 +1713,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -1806,7 +1806,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -1899,7 +1899,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -1992,7 +1992,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -2085,7 +2085,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -2178,7 +2178,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -2271,7 +2271,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -2364,7 +2364,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -2457,7 +2457,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -2550,7 +2550,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -2643,7 +2643,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -2736,7 +2736,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -2829,7 +2829,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -2922,7 +2922,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3015,7 +3015,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3108,7 +3108,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3201,7 +3201,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3294,7 +3294,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3387,7 +3387,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3480,7 +3480,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3573,7 +3573,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3666,7 +3666,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3759,7 +3759,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3852,7 +3852,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -3945,7 +3945,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4038,7 +4038,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4131,7 +4131,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4224,7 +4224,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4317,7 +4317,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4410,7 +4410,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4503,7 +4503,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4596,7 +4596,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4689,7 +4689,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4771,7 +4771,7 @@
                 }
             },
             {
-                "CharacterId": 2002,
+                "CharacterId": 2018,
                 "Name": "안현호(연기)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/2019_안현호B(연기).mp3",
                 "Quilty": 0,
@@ -4782,7 +4782,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4875,7 +4875,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -4968,7 +4968,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5061,7 +5061,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5154,7 +5154,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5247,7 +5247,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5340,7 +5340,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5433,7 +5433,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5526,7 +5526,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5619,7 +5619,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5712,7 +5712,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5805,7 +5805,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5898,7 +5898,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -5991,7 +5991,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -6084,7 +6084,7 @@
                 "Context": {
                     "Genre": [
                         {"index": "문학", "Score": 0},
-                        {"index": "비문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
                         {"index": "아동", "Score": 0},
                         {"index": "시", "Score": 0},
                         {"index": "학술", "Score": 0}
@@ -6168,7 +6168,7 @@
             {
                 "CharacterId": 3001,
                 "Name": "백도환(일반)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3001_백도환S(일반).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3001_백도환S(일반).wav",
                 "Quilty": 10,
                 "Grade": [
                     "Actor"
@@ -6216,7 +6216,7 @@
                     "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
                         {"index": "청년", "Score": 10},
                         {"index": "중년", "Score": 8},
                         {"index": "장년", "Score": 6},
@@ -6237,8 +6237,9 @@
                 },
                 "ApiSetting": {
                     "name": "백도환",
-                    "ApiName": "None", 
+                    "ApiName": "Keld", 
                     "Api": "SuperTone",
+                    "emotion": "일반",
                     "style": ["admiring", "blank", "serene"],
                     "models": "turbo",
                     "Volume": 0,
@@ -6249,7 +6250,7 @@
             {
                 "CharacterId": 3001,
                 "Name": "백도환(화남)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3001_백도환S(화남).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3001_백도환S(화남).wav",
                 "Quilty": 10,
                 "Grade": [
                     "Actor"
@@ -6297,7 +6298,7 @@
                     "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
                         {"index": "청년", "Score": 10},
                         {"index": "중년", "Score": 8},
                         {"index": "장년", "Score": 6},
@@ -6331,7 +6332,7 @@
             {
                 "CharacterId": 3001,
                 "Name": "백도환(슬픔)",
-                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3001_백도환S(슬픔).wav",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3001_백도환S(슬픔).wav",
                 "Quilty": 10,
                 "Grade": [
                     "Actor"
@@ -6379,7 +6380,7 @@
                     "Gender": ["남"],
                     "Age": [
                         {"index": "유년", "Score": 0},
-                        {"index": "청소년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
                         {"index": "청년", "Score": 10},
                         {"index": "중년", "Score": 8},
                         {"index": "장년", "Score": 6},
@@ -6404,6 +6405,662 @@
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["sad"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3002,
+                "Name": "윤리아(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3002_윤리아S(일반).wav",
+                "Quilty": 10,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "윤리아(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 6},
+                        {"index": "노년", "Score": 2}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 8},
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 8},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 9},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "화남", "Score": 1}
+                    ],
+                    "Feature": "당돌한 여자 아이 주인공, 에너지 넘침, 착한 성격"
+                },
+                "ApiSetting": {
+                    "name": "윤리아",
+                    "ApiName": "Serin", 
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["trusting", "suspicious"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3002,
+                "Name": "윤리아(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3002_윤리아S(화남).wav",
+                "Quilty": 10,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "윤리아(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 6},
+                        {"index": "노년", "Score": 2}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 8},
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 8},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 1},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 7},
+                        {"index": "화남", "Score": 8}
+                    ],
+                    "Feature": "당돌한 여자 아이 주인공, 에너지 넘침, 착한 성격"
+                },
+                "ApiSetting": {
+                    "name": "윤리아",
+                    "ApiName": "Serin", 
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["shouting", "sad"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3002,
+                "Name": "윤리아(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3002_윤리아S(슬픔).wav",
+                "Quilty": 10,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "윤리아(화남)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 6},
+                        {"index": "노년", "Score": 2}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 8},
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 8},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 9},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 1}
+                    ],
+                    "Feature": "당돌한 여자 아이 주인공, 에너지 넘침, 착한 성격"
+                },
+                "ApiSetting": {
+                    "name": "윤리아",
+                    "ApiName": "Serin", 
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["angry", "courageous"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3004,
+                "Name": "장루한(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3004_장루한S(일반).wav",
+                "Quilty": 9,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "장루한(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 5},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 6},
+                        {"index": "노년", "Score": 2}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 5}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "두려움", "Score": 1},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 8},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 8},
+                        {"index": "노년", "Score": 5}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 1}
+                    ],
+                    "Feature": "당돌한 어르신, 에너지 넘침, 주인공의 아버지"
+                },
+                "ApiSetting": {
+                    "name": "장루한",
+                    "ApiName": "Allen", 
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["worry", "normal", "kind"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3003,
+                "Name": "장루한(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3003_장루한A(화남).wav",
+                "Quilty": 9,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "장루한(분노)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 5},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 6},
+                        {"index": "노년", "Score": 2}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 5}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "두려움", "Score": 1},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 8},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 8},
+                        {"index": "노년", "Score": 5}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 8}
+                    ],
+                    "Feature": "당돌한 어르신, 에너지 넘침, 주인공의 아버지"
+                },
+                "ApiSetting": {
+                    "name": "장루한",
+                    "ApiName": "Allen",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["annoyed", "excited"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3003,
+                "Name": "장루한(분노)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3003_장루한A(분노).wav",
+                "Quilty": 9,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "장루한(화남)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 5},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 6},
+                        {"index": "노년", "Score": 2}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 5}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "두려움", "Score": 1},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 8},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 8},
+                        {"index": "노년", "Score": 5}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 1},
+                        {"index": "중립", "Score": 3},
+                        {"index": "슬픔", "Score": 7},
+                        {"index": "화남", "Score": 10}
+                    ],
+                    "Feature": "당돌한 어르신, 에너지 넘침, 주인공의 아버지"
+                },
+                "ApiSetting": {
+                    "name": "장루한",
+                    "ApiName": "Allen",
+                    "Api": "SuperTone",
+                    "emotion": "분노",
+                    "style": ["angry"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3004,
+                "Name": "문지후(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3004_문지후A(일반).wav",
+                "Quilty": 9,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "문지후(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 5},
+                        {"index": "노년", "Score": 2}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 8},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 3}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 1}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 1}
+                    ],
+                    "Feature": "매우 착하고 도와주는 성격, 온화한 이미지, 선한 성품, 도와주려는 마음"
+                },
+                "ApiSetting": {
+                    "name": "문지후",
+                    "ApiName": "Teriel", 
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["relieved", "loving", "courageous", "admiring"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3004,
+                "Name": "문지후(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3004_문지후A(슬픔).wav",
+                "Quilty": 9,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "문지후(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 5},
+                        {"index": "노년", "Score": 2}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 8},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 3}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 1}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 5}
+                    ],
+                    "Feature": "매우 착하고 도와주는 성격, 온화한 이미지, 선한 성품, 도와주려는 마음"
+                },
+                "ApiSetting": {
+                    "name": "문지후",
+                    "ApiName": "Teriel",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["anxious", "shy"],
                     "models": "turbo",
                     "Volume": 0,
                     "Speed": 1.0,

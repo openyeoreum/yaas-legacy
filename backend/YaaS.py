@@ -353,25 +353,4 @@ if __name__ == "__main__":
 
     #########################################################################
 
-    # YaaSMultiProcessing(User, ProjectNameList, MainLang, Estimate, DataCollection, Search, Script, Translation, TextBook, AudioBook, Marketing, MessagesReview, Account)
-    
-    import json
-
-    # 파일 경로 설정
-    input_file_path = "/yaas/backend/b5_Database/b57_RelationalDatabase/b572_Character/b572-01_VoiceDataSet.json"
-    output_file_path = "/yaas/backend/b5_Database/b57_RelationalDatabase/b572_Character/b572-01_VoiceDataSet_updated.json"
-
-    # JSON 파일 불러오기
-    with open(input_file_path, 'r', encoding='utf-8') as file:
-        Data = json.load(file)
-    data = Data[1]['Characters']
-    # 리스트 내의 각 딕셔너리에 대해 수정 작업 수행
-    for item in data:
-        # CharacterId가 500보다 작으면 1000 더하기
-        # 최종 CharacterId가 1000보다 작은 경우에만 Quilty에 0.5 곱하고 소숫점 1자리까지 반올림 적용
-        if item.get("CharacterId", 0) < 1000 and "Quilty" in item:
-            item["Quilty"] = round(item["Quilty"] * 0.5, 1)
-
-    # 수정된 데이터를 새로운 파일에 저장하기
-    with open(output_file_path, 'w', encoding='utf-8') as file:
-        json.dump(Data, file, ensure_ascii=False, indent=4)
+    YaaSMultiProcessing(User, ProjectNameList, MainLang, Estimate, DataCollection, Search, Script, Translation, TextBook, AudioBook, Marketing, MessagesReview, Account)

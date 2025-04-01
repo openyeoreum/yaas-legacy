@@ -1330,6 +1330,345 @@
                 }
             },
             {
+                "CharacterId": 1005,
+                "Name": "이시안(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1005_이시안A(낭독).mp3",
+                "Quilty": 9,
+                "Grade": [
+                    "Main"
+                ],
+                "SecondaryVoice": "이시안(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 9},
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "두려움", "Score": 1},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 2},
+                        {"index": "청년", "Score": 8},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 5},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "침착함", "Score": 9},
+                        {"index": "중립", "Score": 7},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "화남", "Score": 0}
+                    ],
+                    "Feature": "차분하고 우아한 중년 여성, 신뢰가는 음성, 선한 이미지"
+                },
+                "ApiSetting": {
+                    "name": "이시안(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "NUb48o4f88KX3Lua8TF3",
+                    "stability": [
+                        0.9
+                    ],
+                    "similarity_boost": [
+                        0.5
+                    ],
+                    "style": [
+                        0
+                    ],
+                    "models": {
+                        "Ko": "eleven_multilingual_v2",
+                        "En": "eleven_turbo_v2_5",
+                        "Zh": "eleven_multilingual_v2"
+                    },
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1005,
+                "Name": "이시안(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1005_이시안A(슬픔).mp3",
+                "Quilty": 10,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "이시안(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 9},
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "두려움", "Score": 1},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 2},
+                        {"index": "청년", "Score": 8},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 5},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 7},
+                        {"index": "슬픔", "Score": 9},
+                        {"index": "화남", "Score": 5}
+                    ],
+                    "Feature": "차분하고 우아한 중년 여성, 신뢰가는 음성, 선한 이미지"
+                },
+                "ApiSetting": {
+                    "name": "이시안",
+                    "ApiName": "Gloria", 
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["normal", "suspicious"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1005,
+                "Name": "이시안(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1005_이시안A(일반).mp3",
+                "Quilty": 10,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "이시안(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 9},
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "두려움", "Score": 1},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 2},
+                        {"index": "청년", "Score": 8},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 5},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "침착함", "Score": 9},
+                        {"index": "중립", "Score": 7},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "화남", "Score": 0}
+                    ],
+                    "Feature": "차분하고 우아한 중년 여성, 신뢰가는 음성, 선한 이미지"
+                },
+                "ApiSetting": {
+                    "name": "이시안",
+                    "ApiName": "Gloria", 
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["kind", "happy"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1005,
+                "Name": "이시안(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1005_이시안A(화남).mp3",
+                "Quilty": 10,
+                "Grade": [
+                    "Actor"
+                ],
+                "SecondaryVoice": "이시안(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}
+                    ],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}
+                    ],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}
+                    ],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}
+                    ],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 9},
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "두려움", "Score": 1},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 2},
+                        {"index": "청년", "Score": 8},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 5},
+                        {"index": "노년", "Score": 0}
+                    ],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}
+                    ],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 1},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 7},
+                        {"index": "화남", "Score": 10}
+                    ],
+                    "Feature": "차분하고 우아한 중년 여성, 신뢰가는 음성, 선한 이미지"
+                },
+                "ApiSetting": {
+                    "name": "이시안",
+                    "ApiName": "Gloria", 
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry"],
+                    "models": "turbo",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
                 "CharacterId": 2001,
                 "Name": "노일남(낭독)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/2001_노일남A(낭독).mp3",

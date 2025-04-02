@@ -19725,16 +19725,6 @@
                     "Pitch": 0
                 }
             },
-
-
-
-
-
-
-
-
-
-
             {
                 "CharacterId": 1010,
                 "Name": "윤시온(낭독)",
@@ -24181,10 +24171,10 @@
                 }
             },
             {
-                "CharacterId": 3004,
+                "CharacterId": 3003,
                 "Name": "장루한(일반)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3004_장루한S(일반).wav",
-                "Quilty": 9,
+                "Quilty": 0.9,
                 "Grade": ["Actor"],
                 "SecondaryVoice": "장루한(슬픔)",
                 "Context": {
@@ -24256,7 +24246,7 @@
                 "CharacterId": 3003,
                 "Name": "장루한(화남)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3003_장루한A(화남).wav",
-                "Quilty": 9,
+                "Quilty": 0.9,
                 "Grade": ["Actor"],
                 "SecondaryVoice": "장루한(분노)",
                 "Context": {
@@ -24328,7 +24318,7 @@
                 "CharacterId": 3003,
                 "Name": "장루한(분노)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3003_장루한A(분노).wav",
-                "Quilty": 9,
+                "Quilty": 0.9,
                 "Grade": ["Actor"],
                 "SecondaryVoice": "장루한(화남)",
                 "Context": {
@@ -24534,6 +24524,942 @@
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["anxious", "shy"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3005,
+                "Name": "유진우(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3005_유진우A(일반).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "유진우(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 4},
+                        {"index": "장년", "Score": 2},
+                        {"index": "노년", "Score": 1}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 7}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 3}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 3},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 7},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "젊고 중립적인 목소리와 기발하면서도 명랑한 성격이 돋보이며, 약간 쉰 목소리가 특징"
+                },
+                "ApiSetting": {
+                    "name": "유진우",
+                    "ApiName": "Thin",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["amused", "happy"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3005,
+                "Name": "유진우(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3005_유진우A(슬픔).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "유진우(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 4},
+                        {"index": "장년", "Score": 2},
+                        {"index": "노년", "Score": 1}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 7}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 3}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 3},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 7},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 7},
+                        {"index": "슬픔", "Score": 9},
+                        {"index": "화남", "Score": 5}],
+                    "Feature": "젊고 중립적인 목소리와 기발하면서도 명랑한 성격이 돋보이며, 약간 쉰 목소리가 특징"
+                },
+                "ApiSetting": {
+                    "name": "유진우",
+                    "ApiName": "Thin",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["anxious"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3005,
+                "Name": "유진우(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3005_유진우A(화남).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "유진우(놀람)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 4},
+                        {"index": "장년", "Score": 2},
+                        {"index": "노년", "Score": 1}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 7}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 3}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 3},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 7},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 1},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "화남", "Score": 8}],
+                    "Feature": "젊고 중립적인 목소리와 기발하면서도 명랑한 성격이 돋보이며, 약간 쉰 목소리가 특징"
+                },
+                "ApiSetting": {
+                    "name": "유진우",
+                    "ApiName": "Thin",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3005,
+                "Name": "유진우(놀람)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3005_유진우A(놀람).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "유진우(화남)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 4},
+                        {"index": "장년", "Score": 2},
+                        {"index": "노년", "Score": 1}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 7}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 8},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 3}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 3},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 7},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 1},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "화남", "Score": 7}],
+                    "Feature": "젊고 중립적인 목소리와 기발하면서도 명랑한 성격이 돋보이며, 약간 쉰 목소리가 특징"
+                },
+                "ApiSetting": {
+                    "name": "유진우",
+                    "ApiName": "Thin",
+                    "Api": "SuperTone",
+                    "emotion": "놀람",
+                    "style": ["surprised"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3006,
+                "Name": "최도식(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3006_최도식A(일반).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "최도식(화남)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 8}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 7},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 5},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 3}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "신사적이고 엄격한 외모 뒤에 따뜻함을 숨기고 있어, 모험가들에게 현명한 조언과 실질적인 도움을 주는 마을의 지혜로운 인물"
+                },
+                "ApiSetting": {
+                    "name": "최도식",
+                    "ApiName": "Dond",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["admiring", "anxious", "loving", "sad"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3006,
+                "Name": "최도식(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3006_최도식A(화남).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "최도식(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 8}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 7},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 5},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 5},
+                        {"index": "두려움", "Score": 3},
+                        {"index": "놀람", "Score": 3}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 5},
+                        {"index": "중립", "Score": 6},
+                        {"index": "슬픔", "Score": 7},
+                        {"index": "화남", "Score": 8}],
+                    "Feature": "신사적이고 엄격한 외모 뒤에 따뜻함을 숨기고 있어, 모험가들에게 현명한 조언과 실질적인 도움을 주는 마을의 지혜로운 인물"
+                },
+                "ApiSetting": {
+                    "name": "최도식",
+                    "ApiName": "Dond",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3007,
+                "Name": "장승민(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3007_장승민A(일반).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "장승민(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 8},
+                        {"index": "노년", "Score": 5}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 1},
+                        {"index": "즐거움", "Score": 2},
+                        {"index": "평온", "Score": 3},
+                        {"index": "무감정", "Score": 6},
+                        {"index": "피곤", "Score": 9},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 6},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 6},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 2},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 4},
+                        {"index": "침착함", "Score": 7},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 7},
+                        {"index": "화남", "Score": 7}],
+                    "Feature": "정의와 충성심에 기반한 강인한 리더십으로 전사들을 이끄는 기사단의 중심 인물"
+                },
+                "ApiSetting": {
+                    "name": "장승민",
+                    "ApiName": "Kai",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["normal", "painful", "trusting"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3007,
+                "Name": "장승민(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3007_장승민A(슬픔).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "장승민(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 8},
+                        {"index": "노년", "Score": 5}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 1},
+                        {"index": "즐거움", "Score": 2},
+                        {"index": "평온", "Score": 3},
+                        {"index": "무감정", "Score": 6},
+                        {"index": "피곤", "Score": 9},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 6},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 6},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 2},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 7},
+                        {"index": "화남", "Score": 3}],
+                    "Feature": "정의와 충성심에 기반한 강인한 리더십으로 전사들을 이끄는 기사단의 중심 인물"
+                },
+                "ApiSetting": {
+                    "name": "장승민",
+                    "ApiName": "Kai",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["unfriendly"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3007,
+                "Name": "장승민(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3007_장승민A(화남).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "장승민(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 8},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 8},
+                        {"index": "노년", "Score": 5}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 1},
+                        {"index": "즐거움", "Score": 2},
+                        {"index": "평온", "Score": 3},
+                        {"index": "무감정", "Score": 6},
+                        {"index": "피곤", "Score": 9},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 6},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 6},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 2},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 7},
+                        {"index": "화남", "Score": 9}],
+                    "Feature": "정의와 충성심에 기반한 강인한 리더십으로 전사들을 이끄는 기사단의 중심 인물"
+                },
+                "ApiSetting": {
+                    "name": "장승민",
+                    "ApiName": "Kai",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry", "courageous"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3008,
+                "Name": "황재호(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3008_황재호A(일반).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "황재호(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "침착함", "Score": 7},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "화남", "Score": 2}],
+                    "Feature": "온화하고 다정한 노인, 그는 친근하고 격식 없이 다가오는 성격"
+                },
+                "ApiSetting": {
+                    "name": "황재호",
+                    "ApiName": "Alphonse",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["admiring", "anxious", "loving_high", "loving", "serene"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3008,
+                "Name": "황재호(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3008_황재호A(슬픔).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "황재호(놀람)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 1},
+                        {"index": "중립", "Score": 7},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 2}],
+                    "Feature": "온화하고 다정한 노인, 그는 친근하고 격식 없이 다가오는 성격"
+                },
+                "ApiSetting": {
+                    "name": "황재호",
+                    "ApiName": "Alphonse",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["anxious_high", "sad_high", "sad"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3008,
+                "Name": "황재호(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3008_황재호A(화남).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "황재호(놀람)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 4},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 9}],
+                    "Feature": "온화하고 다정한 노인, 그는 친근하고 격식 없이 다가오는 성격"
+                },
+                "ApiSetting": {
+                    "name": "황재호",
+                    "ApiName": "Alphonse",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry", "angry_high"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3008,
+                "Name": "황재호(놀람)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3008_황재호A(놀람).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "황재호(화남)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 6},
+                        {"index": "중립", "Score": 9},
+                        {"index": "슬픔", "Score": 2},
+                        {"index": "화남", "Score": 7}],
+                    "Feature": "온화하고 다정한 노인, 그는 친근하고 격식 없이 다가오는 성격"
+                },
+                "ApiSetting": {
+                    "name": "황재호",
+                    "ApiName": "Alphonse",
+                    "Api": "SuperTone",
+                    "emotion": "놀람",
+                    "style": ["admiring_high"],
                     "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,

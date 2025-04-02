@@ -18974,6 +18974,1204 @@
                     "Pitch": 0
                 }
             },
+
+
+            {
+                "CharacterId": 1007,
+                "Name": "남이솔(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1007_남이솔B(낭독).mp3",
+                "Quilty": 8,
+                "Grade": ["Main"],
+                "SecondaryVoice": "남이솔(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 9},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "남이솔은 자주 실수를 하지만, 그럼에도 불구하고 한없는 사랑과 따뜻함, 매력적인 성격으로 모두에게 기쁨과 웃음을 전하는 사랑받는 인물"
+                },
+                "ApiSetting": {
+                    "name": "남이솔(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "NUb48o4f88KX3Lua8TF3",
+                    "stability": [
+                        0.9],
+                    "similarity_boost": [
+                        0.5],
+                    "style": [
+                        0],
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1007,
+                "Name": "남이솔(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1007_남이솔A(슬픔).mp3",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "남이솔(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 4}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "남이솔",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["shy"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1007,
+                "Name": "남이솔(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1007_남이솔A(일반).mp3",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "남이솔(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "침착함", "Score": 7},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 2},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "남이솔",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["excited", "loving", "normal", "unfriendly"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1007,
+                "Name": "남이솔(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1007_남이솔A(화남).mp3",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "남이솔(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 3},
+                        {"index": "침착함", "Score": 4},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "화남", "Score": 8}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "남이솔",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+
+
+
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(낭독).mp3",
+                "Quilty": 8,
+                "Grade": ["Main"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 9},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "NUb48o4f88KX3Lua8TF3",
+                    "stability": [
+                        0.9],
+                    "similarity_boost": [
+                        0.5],
+                    "style": [
+                        0],
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(슬픔).mp3",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 4}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["shy"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(일반).mp3",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "침착함", "Score": 7},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 2},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["excited", "loving", "normal", "unfriendly"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(화남).mp3",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 3},
+                        {"index": "침착함", "Score": 4},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "화남", "Score": 8}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+
+
+
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(낭독).mp3",
+                "Quilty": 8,
+                "Grade": ["Main"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 9},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "NUb48o4f88KX3Lua8TF3",
+                    "stability": [
+                        0.9],
+                    "similarity_boost": [
+                        0.5],
+                    "style": [
+                        0],
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(슬픔).mp3",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 4}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["shy"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(일반).mp3",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "침착함", "Score": 7},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 2},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["excited", "loving", "normal", "unfriendly"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(화남).mp3",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 3},
+                        {"index": "침착함", "Score": 4},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "화남", "Score": 8}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+
+
+
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(낭독).mp3",
+                "Quilty": 8,
+                "Grade": ["Main"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 9},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "NUb48o4f88KX3Lua8TF3",
+                    "stability": [
+                        0.9],
+                    "similarity_boost": [
+                        0.5],
+                    "style": [
+                        0],
+                    "models": { "Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(슬픔).mp3",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 4}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["shy"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(일반).mp3",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "침착함", "Score": 7},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 2},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["excited", "loving", "normal", "unfriendly"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1006,
+                "Name": "현민서(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1006_현민서A(화남).mp3",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "현민서(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 4}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 7},
+                        {"index": "피곤", "Score": 5},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "두려움", "Score": 2},
+                        {"index": "놀람", "Score": 1}
+                    ]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 3},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 1},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 3},
+                        {"index": "침착함", "Score": 4},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "화남", "Score": 8}],
+                    "Feature": "신뢰가는 목소리, 차분함, 선하고 잘챙겨주는 느낌의 인물"
+                },
+                "ApiSetting": {
+                    "name": "현민서",
+                    "ApiName": "Robert",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+
+
+
             {
                 "CharacterId": 2001,
                 "Name": "노일남(낭독)",

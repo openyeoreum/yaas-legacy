@@ -104,7 +104,7 @@
                     "ApiName": "None",
                     "Api": "SuperTone",
                     "style": ["None"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -17488,7 +17488,7 @@
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["sad", "sad_high", "surprised"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -17561,7 +17561,7 @@
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["angry", "blank_high", "blank", "loving", "suspicious"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -17634,7 +17634,7 @@
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["loving_high", "surprised_high"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -17784,7 +17784,7 @@
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["sad"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -17857,7 +17857,7 @@
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["kind", "normal"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -17930,7 +17930,7 @@
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry", "command", "excited"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -18080,7 +18080,7 @@
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["happy", "normal", "sad", "unfriendly"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -18153,7 +18153,7 @@
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry", "courageous"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -18303,7 +18303,7 @@
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["friendly", "calm", "shy", "unfriendly", "worry"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -18376,7 +18376,7 @@
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["excited"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -18526,7 +18526,7 @@
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["normal", "suspicious"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -18599,7 +18599,7 @@
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["kind", "happy"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -18672,7 +18672,7 @@
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -18822,7 +18822,7 @@
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["shy"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -18895,7 +18895,7 @@
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["excited", "loving", "normal", "unfriendly"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -18968,7 +18968,7 @@
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23045,7 +23045,7 @@
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["admiring", "blank", "serene"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23118,7 +23118,7 @@
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["unfriendly", "disgusted"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23191,7 +23191,7 @@
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["sad"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23264,7 +23264,7 @@
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["trusting", "suspicious"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23337,7 +23337,7 @@
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["shouting", "sad"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23410,7 +23410,7 @@
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["angry", "courageous"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23483,7 +23483,7 @@
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["worry", "normal", "kind"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23556,7 +23556,7 @@
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["annoyed", "excited"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23629,7 +23629,7 @@
                     "Api": "SuperTone",
                     "emotion": "분노",
                     "style": ["angry"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23702,7 +23702,7 @@
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["relieved", "loving", "courageous", "admiring"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0
@@ -23775,7 +23775,7 @@
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["anxious", "shy"],
-                    "models": "turbo",
+                    "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
                     "Pitch": 0

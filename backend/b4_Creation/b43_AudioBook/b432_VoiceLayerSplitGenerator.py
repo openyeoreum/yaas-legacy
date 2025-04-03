@@ -843,9 +843,9 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 # 1. Search Voices API를 사용하여 voice_id 검색
                 search_url = "https://supertoneapi.com/v1/voices/search"
                 params = {
-                    "search": Name,  # 이름 기반 검색 (name과 description 필드 대상)
-                    "language": Language,   # 언어 필터
-                    "style": Style   # 스타일 필터
+                    "search": Name, # 이름 기반 검색 (name과 description 필드 대상)
+                    "language": Language, # 언어 필터
+                    "style": Style # 스타일 필터
                 }
                 headers = {
                     "x-sup-api-key": SUPERTONEApikey

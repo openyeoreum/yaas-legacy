@@ -19285,7 +19285,7 @@
                     "ApiName": "Pherena",
                     "Api": "SuperTone",
                     "emotion": "일반",
-                    "style": ["dominating", "jealous", "seductive", "teasing"],
+                    "style": ["dominating", "seductive", "teasing"],
                     "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,

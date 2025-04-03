@@ -829,6 +829,9 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
         # Api Setting
         Name = ApiSetting['ApiName']
         Volume = ApiSetting['Volume']
+        Speed = ApiSetting['Speed']
+        pitch = ApiSetting['Pitch'] * 10
+        PitchVariance = ApiSetting['PitchVariance']
         Style = random.choice(ApiSetting['style'])
         Model = ApiSetting['models']
         
@@ -886,9 +889,9 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                             "language": "ko",
                             "model": Model,
                             "voice_settings": {
-                                "pitch_shift": 0,
-                                "pitch_variance": 1,
-                                "speed": 1
+                                "pitch_shift": pitch,
+                                "pitch_variance": PitchVariance,
+                                "speed": Speed
                             }
                         }
                         headers_tts = {

@@ -100,6 +100,7 @@
                 "ApiSetting3": {
                     "name": "None",
                     "ApiName": "None",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "style": ["None"],
                     "models": "pro",
@@ -17261,6 +17262,7 @@
                 "ApiSetting": {
                     "name": "도윤재",
                     "ApiName": "Yoonho",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["sad", "sad_high", "surprised"],
@@ -17334,6 +17336,7 @@
                 "ApiSetting": {
                     "name": "도윤재",
                     "ApiName": "Yoonho",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["angry", "blank_high", "blank", "loving", "suspicious"],
@@ -17407,6 +17410,7 @@
                 "ApiSetting": {
                     "name": "도윤재",
                     "ApiName": "Yoonho",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["loving_high", "surprised_high"],
@@ -17553,6 +17557,7 @@
                 "ApiSetting": {
                     "name": "오선우",
                     "ApiName": "Leo",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["sad"],
@@ -17626,6 +17631,7 @@
                 "ApiSetting": {
                     "name": "오선우",
                     "ApiName": "Leo",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["kind", "normal"],
@@ -17699,6 +17705,7 @@
                 "ApiSetting": {
                     "name": "오선우",
                     "ApiName": "Leo",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry", "command", "excited"],
@@ -17845,6 +17852,7 @@
                 "ApiSetting": {
                     "name": "장무현",
                     "ApiName": "Isamu",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["happy", "normal", "sad", "unfriendly"],
@@ -17918,6 +17926,7 @@
                 "ApiSetting": {
                     "name": "장무현",
                     "ApiName": "Isamu",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry", "courageous"],
@@ -18064,6 +18073,7 @@
                 "ApiSetting": {
                     "name": "노지훈",
                     "ApiName": "Andy",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["friendly", "calm", "shy", "unfriendly", "worry"],
@@ -18137,6 +18147,7 @@
                 "ApiSetting": {
                     "name": "노지훈",
                     "ApiName": "Andy",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["excited"],
@@ -18283,6 +18294,7 @@
                 "ApiSetting": {
                     "name": "이시안",
                     "ApiName": "Gloria",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["normal", "suspicious"],
@@ -18356,6 +18368,7 @@
                 "ApiSetting": {
                     "name": "이시안",
                     "ApiName": "Gloria",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["kind", "happy"],
@@ -18429,6 +18442,7 @@
                 "ApiSetting": {
                     "name": "이시안",
                     "ApiName": "Gloria",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry"],
@@ -18575,6 +18589,7 @@
                 "ApiSetting": {
                     "name": "현민서",
                     "ApiName": "Robert",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["shy"],
@@ -18648,6 +18663,7 @@
                 "ApiSetting": {
                     "name": "현민서",
                     "ApiName": "Robert",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["excited", "loving", "normal", "unfriendly"],
@@ -18721,6 +18737,7 @@
                 "ApiSetting": {
                     "name": "현민서",
                     "ApiName": "Robert",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry"],
@@ -18867,6 +18884,7 @@
                 "ApiSetting": {
                     "name": "남이솔",
                     "ApiName": "Daeun",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["embarrassed", "suspicious"],
@@ -18940,6 +18958,7 @@
                 "ApiSetting": {
                     "name": "남이솔",
                     "ApiName": "Daeun",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["amused", "loving"],
@@ -19013,6 +19032,7 @@
                 "ApiSetting": {
                     "name": "남이솔",
                     "ApiName": "Daeun",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry"],
@@ -19086,6 +19106,7 @@
                 "ApiSetting": {
                     "name": "남이솔",
                     "ApiName": "Daeun",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "놀람",
                     "style": ["surprised"],
@@ -19232,6 +19253,7 @@
                 "ApiSetting": {
                     "name": "류하린",
                     "ApiName": "Pherena",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "기쁨",
                     "style": ["amused", "dominating_high", "seductive_high", "teasing_high"],
@@ -19305,6 +19327,7 @@
                 "ApiSetting": {
                     "name": "류하린",
                     "ApiName": "Pherena",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["dominating", "seductive", "teasing"],
@@ -19378,6 +19401,7 @@
                 "ApiSetting": {
                     "name": "류하린",
                     "ApiName": "Pherena",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["amused_high", "jealous_high", "painful_high", "painful"],
@@ -19524,6 +19548,7 @@
                 "ApiSetting": {
                     "name": "오하준",
                     "ApiName": "Nix",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["embarrassed", "sad_high", "sad"],
@@ -19597,6 +19622,7 @@
                 "ApiSetting": {
                     "name": "오하준",
                     "ApiName": "Nix",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "기쁨",
                     "style": ["active_high"],
@@ -19670,6 +19696,7 @@
                 "ApiSetting": {
                     "name": "오하준",
                     "ApiName": "Nix",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["active", "amused", "flirty_high", "flirty"],
@@ -19743,6 +19770,7 @@
                 "ApiSetting": {
                     "name": "오하준",
                     "ApiName": "Nix",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["embarrassed_high", "triumphant_high", "triumphant"],
@@ -19889,6 +19917,7 @@
                 "ApiSetting": {
                     "name": "윤시온",
                     "ApiName": "Zyros",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "설득",
                     "style": ["seductive", "suspicious", "teasing"],
@@ -19962,6 +19991,7 @@
                 "ApiSetting": {
                     "name": "윤시온",
                     "ApiName": "Zyros",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["admiring", "disgusted", "dominating"],
@@ -20108,6 +20138,7 @@
                 "ApiSetting": {
                     "name": "엄순희",
                     "ApiName": "Grace",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["admiring", "loving", "serene"],
@@ -20181,6 +20212,7 @@
                 "ApiSetting": {
                     "name": "엄순희",
                     "ApiName": "Grace",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["anxiou", "sad"],
@@ -20254,6 +20286,7 @@
                 "ApiSetting": {
                     "name": "엄순희",
                     "ApiName": "Grace",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry"],
@@ -24123,6 +24156,7 @@
                 "ApiSetting": {
                     "name": "백도환",
                     "ApiName": "Keld",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["admiring", "blank", "serene"],
@@ -24196,6 +24230,7 @@
                 "ApiSetting": {
                     "name": "백도환",
                     "ApiName": "Keld",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["unfriendly", "disgusted"],
@@ -24269,6 +24304,7 @@
                 "ApiSetting": {
                     "name": "백도환",
                     "ApiName": "Keld",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["sad"],
@@ -24342,6 +24378,7 @@
                 "ApiSetting": {
                     "name": "윤리아",
                     "ApiName": "Serin",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["trusting", "suspicious"],
@@ -24415,6 +24452,7 @@
                 "ApiSetting": {
                     "name": "윤리아",
                     "ApiName": "Serin",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["shouting", "sad"],
@@ -24488,6 +24526,7 @@
                 "ApiSetting": {
                     "name": "윤리아",
                     "ApiName": "Serin",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["angry", "courageous"],
@@ -24561,6 +24600,7 @@
                 "ApiSetting": {
                     "name": "장루한",
                     "ApiName": "Allen",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["worry", "normal", "kind"],
@@ -24634,6 +24674,7 @@
                 "ApiSetting": {
                     "name": "장루한",
                     "ApiName": "Allen",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["annoyed", "excited"],
@@ -24707,6 +24748,7 @@
                 "ApiSetting": {
                     "name": "장루한",
                     "ApiName": "Allen",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "분노",
                     "style": ["angry"],
@@ -24780,6 +24822,7 @@
                 "ApiSetting": {
                     "name": "문지후",
                     "ApiName": "Teriel",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["relieved", "loving", "courageous", "admiring"],
@@ -24853,6 +24896,7 @@
                 "ApiSetting": {
                     "name": "문지후",
                     "ApiName": "Teriel",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["anxious", "shy"],
@@ -24926,6 +24970,7 @@
                 "ApiSetting": {
                     "name": "유진우",
                     "ApiName": "Thin",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["amused", "happy"],
@@ -24999,6 +25044,7 @@
                 "ApiSetting": {
                     "name": "유진우",
                     "ApiName": "Thin",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["anxious"],
@@ -25072,6 +25118,7 @@
                 "ApiSetting": {
                     "name": "유진우",
                     "ApiName": "Thin",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry"],
@@ -25145,6 +25192,7 @@
                 "ApiSetting": {
                     "name": "유진우",
                     "ApiName": "Thin",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "놀람",
                     "style": ["surprised"],
@@ -25218,6 +25266,7 @@
                 "ApiSetting": {
                     "name": "최도식",
                     "ApiName": "Dond",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["admiring", "anxious", "loving", "sad"],
@@ -25291,6 +25340,7 @@
                 "ApiSetting": {
                     "name": "최도식",
                     "ApiName": "Dond",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry"],
@@ -25364,6 +25414,7 @@
                 "ApiSetting": {
                     "name": "장승민",
                     "ApiName": "Kai",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["normal", "painful", "trusting"],
@@ -25437,6 +25488,7 @@
                 "ApiSetting": {
                     "name": "장승민",
                     "ApiName": "Kai",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["unfriendly"],
@@ -25510,6 +25562,7 @@
                 "ApiSetting": {
                     "name": "장승민",
                     "ApiName": "Kai",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry", "courageous"],
@@ -25583,6 +25636,7 @@
                 "ApiSetting": {
                     "name": "황재호",
                     "ApiName": "Alphonse",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["admiring", "anxious", "loving_high", "loving", "serene"],
@@ -25656,6 +25710,7 @@
                 "ApiSetting": {
                     "name": "황재호",
                     "ApiName": "Alphonse",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["anxious_high", "sad_high", "sad"],
@@ -25729,6 +25784,7 @@
                 "ApiSetting": {
                     "name": "황재호",
                     "ApiName": "Alphonse",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["angry", "angry_high"],
@@ -25802,6 +25858,7 @@
                 "ApiSetting": {
                     "name": "황재호",
                     "ApiName": "Alphonse",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "놀람",
                     "style": ["admiring_high"],
@@ -25875,6 +25932,7 @@
                 "ApiSetting": {
                     "name": "박소아",
                     "ApiName": "Hyewon",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["happy", "loving", "shy"],
@@ -25948,6 +26006,7 @@
                 "ApiSetting": {
                     "name": "박소아",
                     "ApiName": "Hyewon",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
                     "style": ["sad_high", "sad"],
@@ -26021,6 +26080,7 @@
                 "ApiSetting": {
                     "name": "박소아",
                     "ApiName": "Hyewon",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "화남",
                     "style": ["amused_high", "angry_high"],
@@ -26094,6 +26154,7 @@
                 "ApiSetting": {
                     "name": "박소아",
                     "ApiName": "Hyewon",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "놀람",
                     "style": ["happy_high", "loving_high", "shy_high"],
@@ -26167,6 +26228,7 @@
                 "ApiSetting": {
                     "name": "박소아",
                     "ApiName": "Hyewon",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "설득",
                     "style": ["amused", "angry"],
@@ -26240,6 +26302,7 @@
                 "ApiSetting": {
                     "name": "윤소희",
                     "ApiName": "Neo",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "일반",
                     "style": ["blank", "curious", "shy", "suspicious", "unfriendly"],
@@ -26313,6 +26376,7 @@
                 "ApiSetting": {
                     "name": "윤소희",
                     "ApiName": "Neo",
+                    "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "설득",
                     "style": ["normal"],

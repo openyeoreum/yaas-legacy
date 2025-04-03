@@ -828,6 +828,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
     if Api == "SuperTone":
         # Api Setting
         Name = ApiSetting['ApiName']
+        Language = ApiSetting['Language']
         Volume = ApiSetting['Volume']
         Speed = ApiSetting['Speed']
         pitch = ApiSetting['Pitch'] * 10
@@ -843,6 +844,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 search_url = "https://supertoneapi.com/v1/voices/search"
                 params = {
                     "search": Name,  # 이름 기반 검색 (name과 description 필드 대상)
+                    "language": Language,   # 언어 필터
                     "style": Style   # 스타일 필터
                 }
                 headers = {
@@ -860,7 +862,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 
                 # 최종 음성 합성을 위한 AudioSegment 생성
                 final_audio = AudioSegment.empty()
-                silence_segment = AudioSegment.silent(duration=300)  # 0.3초 공백
+                silence_segment = AudioSegment.silent(duration=200)  # 0.2초 공백
                 
                 # EL_Chunk가 길 경우, 문장 단위로 분할 후 여러 문장을 합쳐 150자 이하의 chunk로 생성
                 if len(EL_Chunk) >= 190:
@@ -886,7 +888,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                         tts_url = f"https://supertoneapi.com/v1/text-to-speech/{voice_id}"
                         payload = {
                             "text": chunk,
-                            "language": "ko",
+                            "language": Language,
                             "model": Model,
                             "voice_settings": {
                                 "pitch_shift": pitch,
@@ -914,15 +916,16 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                         time.sleep(wait_time)
                 else:
                     # EL_Chunk 길이가 짧은 경우, 한 번에 API 호출
+                    EL_Chunk = EL_Chunk.replace('//', ' ').replace('  ', ' ')
                     tts_url = f"https://supertoneapi.com/v1/text-to-speech/{voice_id}"
                     payload = {
                         "text": EL_Chunk,
-                        "language": "ko",
+                        "language": Language,
                         "model": Model,
                         "voice_settings": {
-                            "pitch_shift": 0,
-                            "pitch_variance": 1,
-                            "speed": 1
+                            "pitch_shift": pitch,
+                            "pitch_variance": PitchVariance,
+                            "speed": Speed
                         }
                     }
                     headers_tts = {

@@ -861,7 +861,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 
                 # EL_Chunk가 길 경우, 문장 단위로 분할 후 여러 문장을 합쳐 150자 이하의 chunk로 생성
                 if len(EL_Chunk) >= 190:
-                    sentences = re.split(r'(?<=[.!?])\s+', EL_Chunk)
+                    sentences = re.split(r'//', EL_Chunk)
                     sentences = [s.strip() for s in sentences if s.strip() != ""]
                     
                     chunks = []
@@ -879,6 +879,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                     
                     # 각 chunk마다 TTS API 호출 후, 0.3초 공백을 추가하며 음성 합성
                     for idx, chunk in enumerate(chunks):
+                        chunk = chunk.replace('//', ' ').replace('  ', ' ')
                         tts_url = f"https://supertoneapi.com/v1/text-to-speech/{voice_id}"
                         payload = {
                             "text": chunk,
@@ -2870,10 +2871,16 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                             BracketsELChunks.append(ELChunk)
                     ELChunk = ModifyELChunk(_ELChunk)
                     ELChunks.append(ELChunk)                    
-                if BracketsSwitch:
-                    EL_Chunk = " ".join(BracketsELChunks)
-                else:
-                    EL_Chunk = " ".join(ELChunks)
+                if 'ElevenLabs':
+                    if BracketsSwitch:
+                        EL_Chunk = " ".join(BracketsELChunks)
+                    else:
+                        EL_Chunk = " ".join(ELChunks)
+                elif 'SuperTone':
+                    if BracketsSwitch:
+                        EL_Chunk = "//".join(BracketsELChunks)
+                    else:
+                        EL_Chunk = "//".join(ELChunks)
             # print(f"ChunkModify: ({EL_Chunk})")
             ## TypeCast Chunk Modify ##
             Chunk = None

@@ -19943,6 +19943,295 @@
                 }
             },
             {
+                "CharacterId": 1011,
+                "Name": "엄순희(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1011_엄순희A(낭독).mp3",
+                "Quilty": 9,
+                "Grade": ["Main"],
+                "SecondaryVoice": "엄순희(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "침착함", "Score": 7},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "화남", "Score": 2}],
+                    "Feature": "따뜻하고 친절한 목소리를 가진 중년의 숙소 주인인 인물"
+                },
+                "ApiSetting": {
+                    "name": "엄순희(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "3grP9Dz7yrKgCZ7pr1R3",
+                    "stability": [0.9],
+                    "similarity_boost": [0.6],
+                    "style": [0],
+                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1011,
+                "Name": "엄순희(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1011_엄순희A(일반).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "엄순희(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "침착함", "Score": 7},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 4},
+                        {"index": "화남", "Score": 2}],
+                    "Feature": "따뜻하고 친절한 목소리를 가진 중년의 숙소 주인인 인물"
+                },
+                "ApiSetting": {
+                    "name": "엄순희",
+                    "ApiName": "Grace",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["admiring", "loving", "serene"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1011,
+                "Name": "엄순희(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1011_엄순희A(슬픔).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "엄순희(놀람)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 1},
+                        {"index": "중립", "Score": 7},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 2}],
+                    "Feature": "따뜻하고 친절한 목소리를 가진 중년의 숙소 주인인 인물"
+                },
+                "ApiSetting": {
+                    "name": "엄순희",
+                    "ApiName": "Grace",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["anxiou", "sad"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 1011,
+                "Name": "엄순희(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/1011_엄순희A(화남).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "엄순희(놀람)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 4},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 9}],
+                    "Feature": "따뜻하고 친절한 목소리를 가진 중년의 숙소 주인인 인물"
+                },
+                "ApiSetting": {
+                    "name": "엄순희",
+                    "ApiName": "Grace",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
                 "CharacterId": 2001,
                 "Name": "노일남(낭독)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/2001_노일남A(낭독).mp3",
@@ -25460,6 +25749,510 @@
                     "Api": "SuperTone",
                     "emotion": "놀람",
                     "style": ["admiring_high"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3009,
+                "Name": "박소아(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3009_박소아A(일반).wav",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "박소아(슬픔)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 10},
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "평온", "Score": 8},
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 3},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 1},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 8},
+                        {"index": "침착함", "Score": 9},
+                        {"index": "중립", "Score": 8},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "화남", "Score": 0}],
+                    "Feature": "밝고 수줍지만 명랑하며, 감정 표현이 뚜렷한 인물, 수줍은 여주인공"
+                },
+                "ApiSetting": {
+                    "name": "박소아",
+                    "ApiName": "Hyewon",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["happy", "loving", "shy"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3009,
+                "Name": "박소아(슬픔)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3009_박소아A(슬픔).wav",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "박소아(놀람)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 10},
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "평온", "Score": 8},
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 3},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 1},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 1},
+                        {"index": "침착함", "Score": 3},
+                        {"index": "중립", "Score": 7},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 2}],
+                    "Feature": "밝고 수줍지만 명랑하며, 감정 표현이 뚜렷한 인물, 수줍은 여주인공"
+                },
+                "ApiSetting": {
+                    "name": "박소아",
+                    "ApiName": "Hyewon",
+                    "Api": "SuperTone",
+                    "emotion": "슬픔",
+                    "style": ["sad_high", "sad"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3009,
+                "Name": "박소아(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3009_박소아A(화남).wav",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "박소아(놀람)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 10},
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "평온", "Score": 8},
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 3},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 1},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 4},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 7},
+                        {"index": "화남", "Score": 9}],
+                    "Feature": "밝고 수줍지만 명랑하며, 감정 표현이 뚜렷한 인물, 수줍은 여주인공"
+                },
+                "ApiSetting": {
+                    "name": "박소아",
+                    "ApiName": "Hyewon",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["amused_high", "angry_high"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3009,
+                "Name": "박소아(놀람)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3009_박소아A(놀람).wav",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "박소아(화남)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 10},
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "평온", "Score": 8},
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 3},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 1},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 4},
+                        {"index": "중립", "Score": 5},
+                        {"index": "슬픔", "Score": 3},
+                        {"index": "화남", "Score": 5}],
+                    "Feature": "밝고 수줍지만 명랑하며, 감정 표현이 뚜렷한 인물, 수줍은 여주인공"
+                },
+                "ApiSetting": {
+                    "name": "박소아",
+                    "ApiName": "Hyewon",
+                    "Api": "SuperTone",
+                    "emotion": "놀람",
+                    "style": ["happy_high", "loving_high", "shy_high"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3009,
+                "Name": "박소아(설득)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3009_박소아A(설득).wav",
+                "Quilty": 10,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "박소아(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 10},
+                        {"index": "즐거움", "Score": 9},
+                        {"index": "평온", "Score": 8},
+                        {"index": "무감정", "Score": 8},
+                        {"index": "피곤", "Score": 3},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 1},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 6},
+                        {"index": "침착함", "Score": 7},
+                        {"index": "중립", "Score": 9},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "화남", "Score": 0}],
+                    "Feature": "밝고 수줍지만 명랑하며, 감정 표현이 뚜렷한 인물, 수줍은 여주인공"
+                },
+                "ApiSetting": {
+                    "name": "박소아",
+                    "ApiName": "Hyewon",
+                    "Api": "SuperTone",
+                    "emotion": "설득",
+                    "style": ["amused", "angry"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3010,
+                "Name": "윤소희(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3010_윤소희A(일반).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "윤소희(설득)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 5},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 5},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 9},
+                        {"index": "장년", "Score": 8},
+                        {"index": "노년", "Score": 5}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 5},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 5},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 10},
+                        {"index": "무감정", "Score": 10},
+                        {"index": "피곤", "Score": 6},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "두려움", "Score": 1},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 1},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 5},
+                        {"index": "침착함", "Score": 10},
+                        {"index": "중립", "Score": 10},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "친절하고 감정 변화가 크지 않은 여자 인물, 감정 동요가 적은 성공한 교수같은 느낌"
+                },
+                "ApiSetting": {
+                    "name": "윤소희",
+                    "ApiName": "Neo",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["blank", "curious", "shy", "suspicious", "unfriendly"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 3010,
+                "Name": "윤소희(설득)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3010_윤소희A(설득).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "윤소희(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 5},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 5},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 9},
+                        {"index": "장년", "Score": 8},
+                        {"index": "노년", "Score": 5}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 5},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 5},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 10},
+                        {"index": "무감정", "Score": 10},
+                        {"index": "피곤", "Score": 6},
+                        {"index": "슬픔", "Score": 1},
+                        {"index": "두려움", "Score": 1},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 1},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 3},
+                        {"index": "침착함", "Score": 10},
+                        {"index": "중립", "Score": 10},
+                        {"index": "슬픔", "Score": 2},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "친절하고 감정 변화가 크지 않은 여자 인물, 감정 동요가 적은 성공한 교수같은 느낌"
+                },
+                "ApiSetting": {
+                    "name": "윤소희",
+                    "ApiName": "Neo",
+                    "Api": "SuperTone",
+                    "emotion": "설득",
+                    "style": ["normal"],
                     "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,

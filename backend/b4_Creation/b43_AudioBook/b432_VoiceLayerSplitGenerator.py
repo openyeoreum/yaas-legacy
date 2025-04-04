@@ -866,12 +866,24 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
                 
                 # EL_Chunk가 길 경우, 문장 단위로 분할 후 여러 문장을 합쳐 150자 이하의 chunk로 생성
                 if len(EL_Chunk) >= 190:
+                    # 먼저 '//' 기준으로 분할
                     sentences = re.split(r'//', EL_Chunk)
                     sentences = [s.strip() for s in sentences if s.strip() != ""]
                     
+                    # 각 문장이 150자보다 큰 경우, 문장단위(.!? ...)로 추가 분할
+                    refined_sentences = []
+                    for sentence in sentences:
+                        if len(sentence) > 150:
+                            sub_sentences = re.split(r'(?<=[.!?])\s+', sentence)
+                            sub_sentences = [s.strip() for s in sub_sentences if s.strip() != ""]
+                            refined_sentences.extend(sub_sentences)
+                        else:
+                            refined_sentences.append(sentence)
+                    
+                    # 150자 이하의 청크로 문장들을 합치기
                     chunks = []
                     current_chunk = ""
-                    for sentence in sentences:
+                    for sentence in refined_sentences:
                         candidate = current_chunk + " " + sentence if current_chunk else sentence
                         if len(candidate) <= 150:
                             current_chunk = candidate

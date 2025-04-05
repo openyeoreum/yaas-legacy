@@ -6,7 +6,7 @@
 알퐁스 벡: Zyros(윤시온) O
 베아트리체: Serin(윤리아) O
 플렌 박사: Alphonse(황재호) O
-피스토리우스: Kai(장승민) O
+피스토리우스: Kai(장승민) O -> Pierce(류도윤) O
 크나우어: Thin(유진우)
 에바부인: Pherena(류하린)
 
@@ -28,17 +28,15 @@ Kai(장승민)
 Alphonse(황재호)
 Zyros(윤시온)
 Pherena(류하린)
-
 Hyewon(박소아) O
 Grace(엄순희) O
 Neo(윤소희)
-
+Pierce(류도윤) O
+Woojin(강민우)
+Viper(조서윤)
 
 
 jun(유진우)
 Bert(변우진)
-Pierce(류도윤) O
 Aiden(강시율) O
-Woojin(강민우)
 Shade
-Viper

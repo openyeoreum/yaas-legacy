@@ -1303,7 +1303,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     CloneVoicePitch = 0
     for MatchedActor in MatchedActors:
         # CloneVoiceSpeed & Pitch는 ElevenLabs만 가능 따라서, Speed와 Pitch 옵션이 필요함
-        if 'Speed' in MatchedActor['ApiSetting'] and 'Pitch' in MatchedActor['ApiSetting']:
+        if MatchedActor['ApiSetting']['Api'] == 'ElevenLabs' and 'Speed' in MatchedActor['ApiSetting'] and 'Pitch' in MatchedActor['ApiSetting']:
             ActorName = MatchedActor['ActorName']
             CloneVoiceSpeed = MatchedActor['ApiSetting']['Speed']
             CloneVoicePitch = MatchedActor['ApiSetting']['Pitch']

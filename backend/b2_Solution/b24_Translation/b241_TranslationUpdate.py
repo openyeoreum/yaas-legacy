@@ -4457,7 +4457,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = Input1 + Input2
                 
                 ## Response 생성
-                BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = MemoryCounter)
+                BodyTranslationResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, BodyTranslationFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
                 
                 #######################################################
                 ### Process8: BodyTranslationCheck, BodyToneEditing ###
@@ -4606,7 +4606,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     Input = Input1 + Input2
                     
                     ## Response 생성
-                    TranslationEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Anthropic", mode, MessagesReview, memoryCounter = MemoryCounter)
+                    TranslationEditingResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationEditingFilter, CheckCount, "Google", mode, MessagesReview, memoryCounter = MemoryCounter)
 
                     #######################################################
                     ### Process8: BodyTranslationCheck, BodyToneEditing ###

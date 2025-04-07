@@ -3870,6 +3870,7 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
                     IndexText = f"\n<{Index}>\n\n"
                 else:
                     IndexText = f"<{Index}>\n"
+                IndexText = IndexText.replace("<<", "<").replace(">>", ">")
                 indexFile.write(IndexText)
     else:
         print(f"[{ProjectName} Index 파일 {EditIndexFilePath}이(가) 이미 존재합니다.]")

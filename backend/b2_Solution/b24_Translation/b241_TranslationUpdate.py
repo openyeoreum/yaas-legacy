@@ -2527,6 +2527,9 @@ def TranslationEditingFilter(Response, CheckCount):
     if not isinstance(OutputDic['편집내용']['내용'], str):
         return "TranslationEditing, JSON에서 오류 발생: '편집내용 > 내용'은 문자열이어야 합니다"
     
+    if '이전편집내용' in OutputDic['편집내용']['내용']:
+        return "TranslationEditing, JSON에서 오류 발생: '편집내용 > 내용'에 <이전편집내용>이 포함되어 있으면 안됩니다."
+    
     # Error4: 번역문에 주석 표기 검증
     if ('[' in OutputDic['편집내용']['내용']) or (']' in OutputDic['편집내용']['내용']):
         if not CheckBalancedBrackets(OutputDic['편집내용']['내용']):
@@ -3142,8 +3145,8 @@ def IndexTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, Tra
     IndexTranslation = IndexTranslationFrame[1][0].copy()
     IndexTranslation['IndexId'] = IndexId
     IndexTranslation['IndexTag'] = IndexTag
-    IndexTranslation['Index'] = IndexTranslationResponse['현재목차원문']
-    IndexTranslation['IndexTranslation'] = IndexTranslationResponse['현재목차번역']
+    IndexTranslation['Index'] = IndexTranslationResponse['현재목차원문'] if IndexTranslationResponse['현재목차원문'].startswith('<') and IndexTranslationResponse['현재목차원문'].endswith('>') else f"<{IndexTranslationResponse['현재목차원문']}>".replace("<<", "<").replace(">>", ">")
+    IndexTranslation['IndexTranslation'] = IndexTranslationResponse['현재목차번역'] if IndexTranslationResponse['현재목차번역'].startswith('<') and IndexTranslationResponse['현재목차번역'].endswith('>') else f"<{IndexTranslationResponse['현재목차번역']}>".replace("<<", "<").replace(">>", ">")
     IndexTranslation['Reason'] = IndexTranslationResponse['번역이유']
 
     ## IndexTranslationFrame 데이터 프레임 업데이트

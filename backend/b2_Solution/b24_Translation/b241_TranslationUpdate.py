@@ -2756,9 +2756,7 @@ def AuthorResearchFilter(Response, CheckCount):
     if not isinstance(OutputDic['작가정보'], dict):
         return "AuthorResearch, JSON에서 오류 발생: '작가정보'는 딕셔너리 형태여야 합니다"
 
-    required_keys = [
-        '이름', '출생', '국적', '전공', '학위', '주요경력', '대표저서', '사상및영향력', '기타흥미로운요소서술'
-    ]
+    required_keys = ['이름', '출생', '국적', '전공', '학위', '주요경력', '대표저서', '사상및영향력', '기타흥미로운요소서술', '저자소개']
     missing_keys = [key for key in required_keys if key not in OutputDic['작가정보']]
     if missing_keys:
         return f"AuthorResearch, JSONKeyError: '작가정보'에 누락된 키: {', '.join(missing_keys)}"
@@ -2792,6 +2790,9 @@ def AuthorResearchFilter(Response, CheckCount):
 
     if not isinstance(item['기타흥미로운요소서술'], str):
         return "AuthorResearch, JSON에서 오류 발생: '기타흥미로운요소서술'는 문자열이어야 합니다"
+    
+    if not isinstance(item['저자소개'], str):
+        return "AuthorResearch, JSON에서 오류 발생: '저자소개'는 문자열이어야 합니다"
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['작가정보']
@@ -3683,6 +3684,7 @@ def AuthorResearchProcessDataFrameSave(ProjectName, MainLang, Translation, Trans
     AuthorResearch['RepresentativeWorks'] = AuthorResearchResponse['대표저서']
     AuthorResearch['ThoughtsAndInfluence'] = AuthorResearchResponse['사상및영향력']
     AuthorResearch['OtherInterestingFacts'] = AuthorResearchResponse['기타흥미로운요소서술']
+    AuthorResearch['AboutTheAuthor'] = AuthorResearchResponse['저자소개']
 
     ## AuthorResearchFrame 데이터 프레임 업데이트
     AuthorResearchFrame[1].append(AuthorResearch)
@@ -3930,6 +3932,7 @@ def BookCopyTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Transl
             RepresentativeWorks = AuthorResearch[0]['RepresentativeWorks']
             ThoughtsAndInfluence = AuthorResearch[0]['ThoughtsAndInfluence']
             OtherInterestingFacts = AuthorResearch[0]['OtherInterestingFacts']
+            AboutTheAuthor = AuthorResearch[0]['AboutTheAuthor']
             OtherInterestingFacts = re.sub(r'(?<!^)(\d+\))', r'\n\1', OtherInterestingFacts).strip()
             
             Subtitle = TranslationBookCopy[0]['Subtitle']
@@ -3942,7 +3945,7 @@ def BookCopyTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Transl
             BookIntroduction = TranslationBookCopy[0]['BookIntroduction']
             PublisherReview = TranslationBookCopy[0]['PublisherReview']
             
-            BookCopyText = f"<저자소개>\n\n[이름]\n{Author}\n\n[출생]\n{Birth}\n\n[국적]\n{Nationality}\n\n[전공]\n{Major}\n\n[학위]\n{Degree}\n\n[주요경력]\n{MajorCareer}\n\n[대표저서]\n{RepresentativeWorks}\n\n[사상 및 영향력]\n{ThoughtsAndInfluence}\n\n[기타 흥미로운 요소]\n{OtherInterestingFacts}\n\n\n<도서문구>\n\n[부제]\n{Subtitle}\n\n[표지카피1]\n{CoverCopy1}\n\n[표지카피2]\n{CoverCopy2}\n\n[표지카피3]\n{CoverCopy3}\n\n[띠지카피]\n{BandCopy}\n\n[핵심메세지]\n{BookCoreMessage}\n\n[역자 서문]\n{TranslatorPreface}\n\n[책소개]\n{BookIntroduction}\n\n[출판사 서평]\n{PublisherReview}"
+            BookCopyText = f"<저자소개>\n\n[이름]\n{Author}\n\n[출생]\n{Birth}\n\n[국적]\n{Nationality}\n\n[전공]\n{Major}\n\n[학위]\n{Degree}\n\n[주요경력]\n{MajorCareer}\n\n[대표저서]\n{RepresentativeWorks}\n\n[사상 및 영향력]\n{ThoughtsAndInfluence}\n\n[기타 흥미로운 요소]\n{OtherInterestingFacts}\n\n[저자소개]\n{AboutTheAuthor}\n\n\n<도서문구>\n\n[부제]\n{Subtitle}\n\n[표지카피1]\n{CoverCopy1}\n\n[표지카피2]\n{CoverCopy2}\n\n[표지카피3]\n{CoverCopy3}\n\n[띠지카피]\n{BandCopy}\n\n[핵심메세지]\n{BookCoreMessage}\n\n[역자 서문]\n{TranslatorPreface}\n\n[책소개]\n{BookIntroduction}\n\n[출판사 서평]\n{PublisherReview}"
             BookCopyFile.write(BookCopyText)
     else:
         print(f"[{ProjectName} BookCopy 파일 {EditBookCopyFilePath}이(가) 이미 존재합니다.]")
@@ -5312,7 +5315,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 Input = InputList[i]['Input']
                 
                 ## Response 생성
-                AuthorResearchResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AuthorResearchFilter, CheckCount, "Anthropic", mode, MessagesReview)
+                AuthorResearchResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, AuthorResearchFilter, CheckCount, "Google", mode, MessagesReview)
                 
                 ## DataFrame 저장
                 AuthorResearchProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameAuthorResearchPath, AuthorResearchResponse, Process, inputCount, TotalInputCount)

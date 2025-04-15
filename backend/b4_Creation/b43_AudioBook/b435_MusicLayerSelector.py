@@ -1839,7 +1839,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
     # if IndexTag in ['Intro', 'Title', 'Logue', 'Part', 'Chapter', 'Index']:
     IndexTitle = ' '.join(IndexTitles)
-    if len(FileLimitList) > 1:
+    if len(FileLimitList) >= 1:
         for i in range(len(FileLimitList)):
             for j in range(len(EditGenerationKoChunks)):
                 if FileLimitList[i] == EditGenerationKoChunks[j]['EditId']:
@@ -1877,7 +1877,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         if "FileId" in entry:
             MeatDataCSV.append([entry.get("FileId"), entry.get("IndexTitle", entry.get("Title")), entry.get("RunningTime"), entry.get("FileSize(MB)")])
     
-    with open(MetaDateCSVPath, mode='w', newline='', encoding = 'utf-8') as csv_file:
+    with open(MetaDateCSVPath, mode = 'w', newline = '', encoding = 'utf-8') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(HeaderCSV)
         writer.writerows(MeatDataCSV)

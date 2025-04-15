@@ -531,7 +531,7 @@ def JsonParsingProcess(projectName, email, RawResponse, FilterFunc):
     Process = "JsonParsing"
     ErrorCount = 1
     while True:
-        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
+        Response, Usage, Model = GOOGLE_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
 
         FilteredResponse = FilterFunc(Response, RawResponse)
         

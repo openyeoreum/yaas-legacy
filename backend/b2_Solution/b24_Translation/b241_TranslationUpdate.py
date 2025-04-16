@@ -2527,6 +2527,11 @@ def TranslationEditingFilter(Response, CheckCount):
     if not isinstance(OutputDic['편집내용']['내용'], str):
         return "TranslationEditing, JSON에서 오류 발생: '편집내용 > 내용'은 문자열이어야 합니다"
     
+    OriginalText = OutputDic['편집내용']['내용']
+    RemovePattern = r"^<이전편집내용>\s*에\s*이\s*어\s*서\s*"
+    CleanedText = re.sub(RemovePattern, "", OriginalText)
+    OutputDic['편집내용']['내용'] = CleanedText
+    
     if '이전편집내용' in OutputDic['편집내용']['내용']:
         return "TranslationEditing, JSON에서 오류 발생: '편집내용 > 내용'에 <이전편집내용>이 포함되어 있으면 안됩니다."
     

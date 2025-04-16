@@ -527,11 +527,14 @@ def JsonParsingFilter(Response, RawResponse):
     return Response
 
 ## Json파싱 오류 해결
-def JsonParsingProcess(projectName, email, RawResponse, FilterFunc):
+def JsonParsingProcess(projectName, email, RawResponse, FilterFunc, LLM = "GOOGLE"):
     Process = "JsonParsing"
     ErrorCount = 1
     while True:
-        Response, Usage, Model = GOOGLE_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
+        if LLM == "GOOGLE":
+            Response, Usage, Model = GOOGLE_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
+        if LLM == "OpenAI":
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
 
         FilteredResponse = FilterFunc(Response, RawResponse)
         

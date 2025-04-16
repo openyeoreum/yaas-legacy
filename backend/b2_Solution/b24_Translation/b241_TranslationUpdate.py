@@ -3858,12 +3858,11 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
     TranslationBodySplit = TranslationEdit[Process1]
     TranslationIndexEdit = TranslationEdit[Process2]
     TranslationBodyEdit = TranslationEdit[Process3]
-    
         
     ## TranslationEdit을 Index, Body Text 파일로 저장할 경로 설정
     EditIndexFileName = f"{ProjectName}_Index({MainLang}).txt"
     EditIndexFilePath = os.path.join(ProjectMasterTranslationPath, EditIndexFileName)
-    EditBodyFileName = f"{ProjectName}_Body({MainLang}-{Process2}).txt"
+    EditBodyFileName = f"{ProjectName}_Body({MainLang}-{Process3}).txt"
     EditBodyFilePath = os.path.join(ProjectMasterTranslationPath, EditBodyFileName)
     
     # Index 파일이 존재하지 않을 때만 생성
@@ -3895,9 +3894,9 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
                     CurrentIndex = ProcessDic['Index']
                     # 새 Index 작성
                     if i != 0:
-                        bodyFile.write(f"\n\n\n<{ProcessDic['Index']}>\n\n\n")
+                        bodyFile.write(f"\n\n\n<{ProcessDic['Index']}>\n\n\n".replace("<<", "<").replace(">>", ">"))
                     else:
-                        bodyFile.write(f"<{ProcessDic['Index']}>\n\n\n")
+                        bodyFile.write(f"<{ProcessDic['Index']}>\n\n\n".replace("<<", "<").replace(">>", ">"))
                 
                 # Body 내용 작성
                 BodyText = ProcessDic['Body'].replace('\n\n\n\n', '\n\n')

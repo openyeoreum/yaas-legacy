@@ -244,7 +244,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
     if Mode == "Master":
       Model = promptFrame[0]["OpenAI"]["MasterModel"]
     else:
-      if TotalTokens < 14000:
+      if TotalTokens < 20000:
         if Mode in ["Example", "Memory"]:
           Model = promptFrame[0]["OpenAI"]["BaseModel"]["ShortTokensModel"]
         if Mode == "ExampleFineTuning":
@@ -278,7 +278,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
     for _ in range(MaxAttempts):
       try:
           if promptFrame[0]["OutputFormat"] == 'json':
-            if 'o3-mini' in Model:
+            if Model in ['o4-mini', 'o3']:
               response = OpenAIClient.chat.completions.create(
                   model = Model,
                   reasoning_effort = ReasoningEffort,
@@ -291,7 +291,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "backen
                   messages = Messages,
                   temperature = Temperature)
           else:
-            if 'o3-mini' in Model:
+            if Model in ['o4-mini', 'o3']:
               response = OpenAIClient.chat.completions.create(
                   model = Model,
                   reasoning_effort = ReasoningEffort,
@@ -432,9 +432,9 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
 
       # 토큰수별 모델 선정
       if ModelTokens == "Short":
-        BaseModel = "gpt-4o-mini"
+        BaseModel = "gpt-4.1-mini"
       elif ModelTokens == "Long":
-        BaseModel = "gpt-4o-mini"
+        BaseModel = "gpt-4.1-mini"
       
       # FineTuning 요청
       FineTuningJob = OpenAIClient.fine_tuning.jobs.create(
@@ -598,7 +598,6 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
           else:
             Model = promptFrame[0]["ANTHROPIC"]["BaseModel"]["LongTokensModel"]
     
-    ParsingError = False
     for _ in range(MaxAttempts):
       try:
           if promptFrame[0]["OutputFormat"] == 'json':
@@ -665,11 +664,11 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "bac
                   TestResponse = json.loads(JsonResponse)
               except json.JSONDecodeError:
                   print(f"Project: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 파싱오류 | JsonParsingProcess 시작")
-                  if ParsingError:
+                  JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
+                  try:
+                      TestResponse = json.loads(JsonResponse)
+                  except json.JSONDecodeError:
                       JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, LLM = "OpenAI")
-                  else:
-                      JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
-                  ParsingError = True
 
           return JsonResponse, Usage, Model
       
@@ -695,12 +694,10 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "backen
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
         promptFrame = [json.load(promptFrameJson)]
 
-    
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
     Model = promptFrame[0]["GOOGLE"]["MasterModel"]
     
-    ParsingError = False
     for _ in range(MaxAttempts):
       try:
           if promptFrame[0]["OutputFormat"] == 'json':
@@ -763,11 +760,11 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "backen
                   TestResponse = json.loads(JsonResponse)
               except json.JSONDecodeError:
                   print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse 파싱오류 | JsonParsingProcess 시작")
-                  if ParsingError:
+                  JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
+                  try:
+                      TestResponse = json.loads(JsonResponse)
+                  except json.JSONDecodeError:
                       JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, LLM = "OpenAI")
-                  else:
-                      JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
-                  ParsingError = True
 
           return JsonResponse, Usage, Model
       
@@ -796,7 +793,6 @@ def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "back
 
     Model = promptFrame[0]["DEEPSEEK"]["MasterModel"]
     
-    ParsingError = False
     for _ in range(MaxAttempts):
       try:
           if promptFrame[0]["OutputFormat"] == 'json':
@@ -867,11 +863,11 @@ def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "back
                   TestResponse = json.loads(JsonResponse)
               except json.JSONDecodeError:
                   print(f"Project: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 파싱오류 | JsonParsingProcess 시작")
-                  if ParsingError:
+                  JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
+                  try:
+                      TestResponse = json.loads(JsonResponse)
+                  except json.JSONDecodeError:
                       JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, LLM = "OpenAI")
-                  else:
-                      JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter)
-                  ParsingError = True
 
           return JsonResponse, Usage, Model
       

@@ -2,8 +2,8 @@
     "TaskName": "LifeGraphAnalysis",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-4o-mini",
-            "LongTokensModel": "gpt-4o-mini"
+            "ShortTokensModel": "gpt-4.1-mini",
+            "LongTokensModel": "gpt-4.1-mini"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -13,7 +13,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-4o-mini",
+        "MasterModel": "gpt-4.1-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {

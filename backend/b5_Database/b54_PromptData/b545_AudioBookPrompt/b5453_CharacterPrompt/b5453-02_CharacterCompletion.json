@@ -2,14 +2,14 @@
     "TaskName": "CharacterCompletion",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-4o-mini",
-            "LongTokensModel": "o3-mini"
+            "ShortTokensModel": "gpt-4.1-mini",
+            "LongTokensModel": "o4-mini"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [
                 {
                     "Date": "CharacterCompletion-231104034753",
-                    "Model": "ft:gpt-4o-mini-0613:yeoreum::8H4qi78e"
+                    "Model": "ft:gpt-4.1-mini-0613:yeoreum::8H4qi78e"
                 }
             ],
             "LongTokensModel": []
@@ -18,7 +18,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "o3-mini",
+        "MasterModel": "o4-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {

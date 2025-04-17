@@ -2,22 +2,22 @@
     "TaskName": "CharacterDefine",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-4o-mini",
-            "LongTokensModel": "o3-mini"
+            "ShortTokensModel": "gpt-4.1-mini",
+            "LongTokensModel": "o4-mini"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [
                 {
                     "Date": "CharacterDefine-231022073805",
-                    "Model": "ft:gpt-4o-mini-0613:yeoreum::8CTTEzmS"
+                    "Model": "ft:gpt-4.1-mini-0613:yeoreum::8CTTEzmS"
                 },
                 {
                     "Date": "CharacterDefine-231102055753",
-                    "Model": "ft:gpt-4o-mini-0613:yeoreum::8GJjYaiZ"
+                    "Model": "ft:gpt-4.1-mini-0613:yeoreum::8GJjYaiZ"
                 },
                 {
                     "Date": "CharacterDefine-231108032841",
-                    "Model": "ft:gpt-4o-mini:yeoreum::8ILpWsR7"
+                    "Model": "ft:gpt-4.1-mini:yeoreum::8ILpWsR7"
                 }
             ],
             "LongTokensModel": []
@@ -26,7 +26,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "o3-mini",
+        "MasterModel": "o4-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {

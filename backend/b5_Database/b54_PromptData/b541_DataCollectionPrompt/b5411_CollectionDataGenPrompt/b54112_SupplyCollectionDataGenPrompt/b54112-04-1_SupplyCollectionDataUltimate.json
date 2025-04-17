@@ -2,8 +2,8 @@
     "TaskName": "SupplyCollectionDataUltimate",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-4o-mini",
-            "LongTokensModel": "o3-mini"
+            "ShortTokensModel": "gpt-4.1-mini",
+            "LongTokensModel": "o4-mini"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -13,7 +13,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "o3-mini",
+        "MasterModel": "o4-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {

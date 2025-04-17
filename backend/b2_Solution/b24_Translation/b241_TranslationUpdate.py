@@ -3807,7 +3807,7 @@ def BodySplitProcessEditSave(ProjectDataFramePath, TranslationEditPath, Process)
                 json.dump(TranslationEdit, TranslationEditJson, indent = 4, ensure_ascii = False)
 
 ## ProcessEditText 저장
-def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2, Process3):
+def ProcessEditTextSave(ProjectName, MainLang, BookGenre, ProjectMasterTranslationPath, TranslationEditPath, Process1, Process2, Process3, ProofreadingBeforeProcess):
     # 대화문 끝 따옴표 뒤 공백 처리 및 추가 기능 처리
     def AddSpaceAfterDialog(BodyText):
         # 따옴표 통일
@@ -3860,9 +3860,9 @@ def ProcessEditTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Tra
     TranslationBodyEdit = TranslationEdit[Process3]
         
     ## TranslationEdit을 Index, Body Text 파일로 저장할 경로 설정
-    EditIndexFileName = f"{ProjectName}_Index({MainLang}).txt"
+    EditIndexFileName = f"{ProjectName}_Index({MainLang}-{BookGenre}).txt"
     EditIndexFilePath = os.path.join(ProjectMasterTranslationPath, EditIndexFileName)
-    EditBodyFileName = f"{ProjectName}_Body({MainLang}-{Process3}).txt"
+    EditBodyFileName = f"{ProjectName}_Body({MainLang}-{BookGenre}-{ProofreadingBeforeProcess}).txt"
     EditBodyFilePath = os.path.join(ProjectMasterTranslationPath, EditBodyFileName)
     
     # Index 파일이 존재하지 않을 때만 생성
@@ -5085,7 +5085,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
         
         ## EditText 저장
-        ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "TranslationBodySplit", "IndexTranslation", Process)
+        ProcessEditTextSave(projectName, MainLang, BookGenre, ProjectMasterTranslationPath, TranslationEditPath, "TranslationBodySplit", "IndexTranslation", Process, ProofreadingBeforeProcess)
         
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
@@ -5097,7 +5097,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                 sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
     if EditCompletion:
         print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
-    
+
     ##########################################################
     ### Process11: TranslationDialogueAnalysis Response 생성 ##
     ##########################################################
@@ -5218,7 +5218,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
             print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
             
             ## EditText 저장
-            ProcessEditTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "TranslationBodySplit", "IndexTranslation", Process)
+            ProcessEditTextSave(projectName, MainLang, BookGenre, ProjectMasterTranslationPath, TranslationEditPath, "TranslationBodySplit", "IndexTranslation", Process, ProofreadingBeforeProcess)
             
             if EditMode == "Manual":
                 sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")

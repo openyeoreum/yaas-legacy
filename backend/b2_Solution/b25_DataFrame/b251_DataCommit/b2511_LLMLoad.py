@@ -11,6 +11,7 @@ sys.path.append("/yaas")
 from datetime import datetime
 from openai import OpenAI
 from google import genai
+from google.genai import types
 from backend.b1_Api.b13_Database import get_db
 from sqlalchemy.orm.attributes import flag_modified
 from backend.b1_Api.b14_Models import User, Prompt
@@ -526,18 +527,41 @@ def JsonParsingFilter(Response, RawResponse):
     
     return Response
 
+## JsonParsing 결과 형태가 리스트인 경우 대괄호 제거
+def RemoveListBrackets(ResponseStr):
+    ResponseStr = ResponseStr.strip()
+    # 문자열이 '[{'로 시작하고 '}]'로 끝나는지 확인
+    if ResponseStr.strip().startswith('[{') and ResponseStr.strip().endswith('}]'):
+        # 첫 번째 '[' 제거
+        temp = ResponseStr.strip()[1:]
+        # 마지막 ']' 제거
+        result = temp[:-1]
+        return result
+    else:
+        # 이미 대괄호가 없거나 형식이 다른 경우 원본 반환
+        return ResponseStr
+      
 ## Json파싱 오류 해결
 def JsonParsingProcess(projectName, email, RawResponse, FilterFunc, LLM = "GOOGLE"):
+    # RawResponse의 데이터 형태 확인
+    RawResponse = RawResponse.strip()
+    if RawResponse.startswith('{') and RawResponse.endswith('}'):
+        DataType = "Dict"
+    
     Process = "JsonParsing"
     ErrorCount = 1
     while True:
+        print(f"RawResponse: {RawResponse}")
         if LLM == "GOOGLE":
             Response, Usage, Model = GOOGLE_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
         if LLM == "OpenAI":
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
-
+        print(f"Response1: {Response}")
         FilteredResponse = FilterFunc(Response, RawResponse)
-        
+        # Response에서 필요없는 대괄호 형성 문제 해결
+        if DataType == "Dict":
+           Response = RemoveListBrackets(Response)
+        print(f"Response2: {Response}")
         if 'JSONDecode에서 오류 발생:' in FilteredResponse:
             print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/5 | {FilteredResponse}")
             ErrorCount += 1
@@ -700,21 +724,34 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "backen
     
     for _ in range(MaxAttempts):
       try:
+          Response = ''
           if promptFrame[0]["OutputFormat"] == 'json':
-            response = GoogleAIClient.models.generate_content(
+            for responseChunk in GoogleAIClient.models.generate_content_stream(
                 model = Model,
-                contents = [f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"]
-            )
+                contents = [
+                  types.Content(
+                    role = "user",
+                    parts = [types.Part.from_text(text = f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"),],
+                    ),
+                ],
+                config = types.GenerateContentConfig(response_mime_type = "application/json",)
+            ):
+              Response += responseChunk.text
           else:
-            response = GoogleAIClient.models.generate_content(
+            for responseChunk in GoogleAIClient.models.generate_content_stream(
                 model = Model,
-                contents = [f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}"]
-            )
-          Response = response.text
-          Usage = {'Input': response.usage_metadata.prompt_token_count,
-                   'Output': response.usage_metadata.candidates_token_count,
-                   'Total': response.usage_metadata.total_token_count}
-          
+                contents = [
+                  types.Content(
+                    role = "user",
+                    parts = [types.Part.from_text(text = f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"),],
+                    ),
+                ],
+                config = types.GenerateContentConfig(response_mime_type = "text/plain",)
+            ):
+              Response += responseChunk.text
+          Usage = {'Input': responseChunk.usage_metadata.prompt_token_count,
+                    'Output': responseChunk.usage_metadata.candidates_token_count,
+                    'Total': responseChunk.usage_metadata.total_token_count}
           # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
           if promptFrame[0]["OutputFormat"] == 'json':
               pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'

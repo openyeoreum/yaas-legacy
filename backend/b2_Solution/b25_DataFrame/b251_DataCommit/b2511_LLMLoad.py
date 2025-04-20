@@ -545,8 +545,11 @@ def RemoveListBrackets(ResponseStr):
 def JsonParsingProcess(projectName, email, RawResponse, FilterFunc, LLM = "GOOGLE"):
     # RawResponse의 데이터 형태 확인
     RawResponse = RawResponse.strip()
+    DictType = False
     if RawResponse.startswith('{') and RawResponse.endswith('}'):
-        DataType = "Dict"
+        DictType = True
+    elif RawResponse.startswith('[') and RawResponse.endswith(']'):
+        DictType = False
     
     Process = "JsonParsing"
     ErrorCount = 1
@@ -556,12 +559,12 @@ def JsonParsingProcess(projectName, email, RawResponse, FilterFunc, LLM = "GOOGL
             Response, Usage, Model = GOOGLE_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
         if LLM == "OpenAI":
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
-        print(f"Response1: {Response}")
         FilteredResponse = FilterFunc(Response, RawResponse)
+        
         # Response에서 필요없는 대괄호 형성 문제 해결
-        if DataType == "Dict":
+        if DictType:
            Response = RemoveListBrackets(Response)
-        print(f"Response2: {Response}")
+           
         if 'JSONDecode에서 오류 발생:' in FilteredResponse:
             print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/5 | {FilteredResponse}")
             ErrorCount += 1

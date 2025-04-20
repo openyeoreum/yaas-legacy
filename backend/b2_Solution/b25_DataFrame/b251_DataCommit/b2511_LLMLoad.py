@@ -524,7 +524,20 @@ def JsonParsingFilter(Response, RawResponse):
     RawResponseLength = len(RawResponse_clean)
     if ResponseLength != RawResponseLength:
         return f"BodyTranslation, JSONDecode에서 오류 발생: Json 내용의 텍스트 수가 다름 Response({ResponseLength}), RawResponse({RawResponseLength})"
-    
+      
+    # 3단계: RawResponse의 데이터 형태 확인 및 일치화
+    RawResponse = RawResponse.strip()
+    DictType = False
+    if RawResponse.startswith('{') and RawResponse.endswith('}'):
+        DictType = True
+    elif RawResponse.startswith('[') and RawResponse.endswith(']'):
+        DictType = False
+        
+    # Response에서 필요없는 대괄호 형성 문제 해결
+    if DictType:
+        Response = RemoveListBrackets(Response)
+        print(f"Response: {Response}")
+
     return Response
 
 ## JsonParsing 결과 형태가 리스트인 경우 대괄호 제거
@@ -543,28 +556,15 @@ def RemoveListBrackets(ResponseStr):
       
 ## Json파싱 오류 해결
 def JsonParsingProcess(projectName, email, RawResponse, FilterFunc, LLM = "GOOGLE"):
-    # RawResponse의 데이터 형태 확인
-    RawResponse = RawResponse.strip()
-    DictType = False
-    if RawResponse.startswith('{') and RawResponse.endswith('}'):
-        DictType = True
-    elif RawResponse.startswith('[') and RawResponse.endswith(']'):
-        DictType = False
-    
     Process = "JsonParsing"
     ErrorCount = 1
     while True:
-        print(f"RawResponse: {RawResponse}")
         if LLM == "GOOGLE":
             Response, Usage, Model = GOOGLE_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
         if LLM == "OpenAI":
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, Mode = "Master", messagesReview = "off")
         FilteredResponse = FilterFunc(Response, RawResponse)
         
-        # Response에서 필요없는 대괄호 형성 문제 해결
-        if DictType:
-           Response = RemoveListBrackets(Response)
-           
         if 'JSONDecode에서 오류 발생:' in FilteredResponse:
             print(f"Project: {projectName} | ErrorCount: {Process} {ErrorCount}/5 | {FilteredResponse}")
             ErrorCount += 1

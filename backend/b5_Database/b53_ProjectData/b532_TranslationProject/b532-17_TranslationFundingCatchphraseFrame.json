@@ -1,0 +1,26 @@
+[
+    {
+        "ProjectName": "",
+        "Content": "Book",
+        "MainLang": "Ko",
+        "Translation": "",
+        "TaskName": "TranslationFundingCatchphrase",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "MainTitle": "None",
+            "SubTitle": "None",
+            "ProjectSummary": "None",
+            "DetailPageMainTitle": "None",
+            "DetailPageSubTitle": "None",
+            "ProjectDescription": "None",
+            "BookDescription": "None",
+            "EditionDescription": "None",
+            "Recommendations": "None",
+            "ProjectSchedule": "None",
+            "RewardDescription": "None"
+        }
+    ]
+]

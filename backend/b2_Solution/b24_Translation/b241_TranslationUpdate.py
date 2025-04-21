@@ -1907,7 +1907,7 @@ def AuthorResearchInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2,
     
     return InputList
 
-## Process15: AuthorResearch의 InputList
+## Process16: TranslationCatchphrase의 InputList
 def TranslationCatchphraseInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2, BeforeProcess3, MainLangCode):
     with open(TranslationEditPath, 'r', encoding = 'utf-8') as TranslationEditJson:
         TranslationEditList = json.load(TranslationEditJson)
@@ -2859,6 +2859,75 @@ def TranslationCatchphraseFilter(Response, CheckCount):
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['도서카피모음']
 
+## Process17: TranslationFundingCatchphrase의 Filter(Error 예외처리)
+def TranslationFundingCatchphraseFilter(Response, CheckCount):
+    # Error1: JSON 형식 예외 처리
+    try:
+        OutputDic = json.loads(Response)
+    except json.JSONDecodeError:
+        return "TranslationFundingCatchphrase, JSONDecode에서 오류 발생: JSONDecodeError"
+
+    # Error2: 최상위 키 확인
+    if '도서펀딩카피모음' not in OutputDic:
+        return "TranslationFundingCatchphrase, JSONKeyError: '도서펀딩카피모음' 키가 누락되었습니다"
+
+    # Error3: '도서펀딩카피모음' 데이터 타입 검증
+    if not isinstance(OutputDic['도서펀딩카피모음'], dict):
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '도서펀딩카피모음'은 딕셔너리 형태여야 합니다"
+
+    # Error4: 필수 키 확인
+    required_keys = [
+        '23자_메인타이틀', '7자_서브타이틀', '50자_프로젝트요약', '상세페이지타이틀',
+        '상세페이지서브타이틀', '프로젝트소개', '도서소개', '에디션소개',
+        '이런분들께추천합니다', '프로젝트일정', '선물설명'
+    ]
+    missing_keys = [key for key in required_keys if key not in OutputDic['도서펀딩카피모음']]
+    if missing_keys:
+        return f"TranslationFundingCatchphrase, JSONKeyError: '도서펀딩카피모음'에 누락된 키: {', '.join(missing_keys)}"
+
+    item = OutputDic['도서펀딩카피모음']
+
+    # 각 필드의 데이터 타입 및 길이 검증 (최대 길이는 '내외' 값의 약 2배로 설정)
+    # 각 필드의 설명에 명시된 글자 수를 기준으로 최대 길이를 설정합니다.
+    if not isinstance(item.get('23자_메인타이틀'), str) or len(item.get('23자_메인타이틀', '')) > 50: # 약 23 * 2 = 46 -> 50
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '23자_메인타이틀'은 23자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item.get('7자_서브타이틀'), str) or len(item.get('7자_서브타이틀', '')) > 20: # 약 7 * 2 = 14 -> 20
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '7자_서브타이틀'은 7자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item.get('50자_프로젝트요약'), str) or len(item.get('50자_프로젝트요약', '')) > 100: # 약 50 * 2 = 100
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '50자_프로젝트요약'은 50자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item.get('상세페이지타이틀'), str) or len(item.get('상세페이지타이틀', '')) > 100: # 50자 내외 -> 100
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '상세페이지타이틀'은 50자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item.get('상세페이지서브타이틀'), str) or len(item.get('상세페이지서브타이틀', '')) > 200: # 100자 내외 -> 200
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '상세페이지서브타이틀'은 100자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item.get('프로젝트소개'), str) or len(item.get('프로젝트소개', '')) > 1600: # 800자 내외 -> 1600
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '프로젝트소개'는 800자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item.get('도서소개'), str) or len(item.get('도서소개', '')) > 1600: # 800자 내외 -> 1600
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '도서소개'는 800자 내외의 문자열이어야 합니다"
+
+    if not isinstance(item.get('에디션소개'), str) or len(item.get('에디션소개', '')) > 1600: # 800자 내외 -> 1600
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '에디션소개'는 800자 내외의 문자열이어야 합니다"
+
+    # '이런분들께추천합니다'는 "5가지 이상"이라는 조건이 있지만, 여기서는 문자열 타입과 임의의 최대 길이만 검증합니다.
+    if not isinstance(item.get('이런분들께추천합니다'), str) or len(item.get('이런분들께추천합니다', '')) > 1000: # 임의의 최대 길이 1000
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '이런분들께추천합니다'는 적절한 길이의 문자열이어야 합니다"
+
+    # '프로젝트일정'은 "5개로 나누어 간략하게 작성" 조건이 있지만, 문자열 타입과 임의의 최대 길이만 검증합니다.
+    if not isinstance(item.get('프로젝트일정'), str) or len(item.get('프로젝트일정', '')) > 500: # 임의의 최대 길이 500
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '프로젝트일정'은 적절한 길이의 문자열이어야 합니다"
+
+    # '선물설명'은 "간략하게 작성" 조건이 있지만, 문자열 타입과 임의의 최대 길이만 검증합니다.
+    if not isinstance(item.get('선물설명'), str) or len(item.get('선물설명', '')) > 500: # 임의의 최대 길이 500
+        return "TranslationFundingCatchphrase, JSON에서 오류 발생: '선물설명'은 적절한 길이의 문자열이어야 합니다"
+
+    # 모든 조건을 만족하면 '도서펀딩카피모음' 딕셔너리 반환
+    return OutputDic['도서펀딩카피모음']
+
 #######################
 ##### Process 응답 #####
 #######################
@@ -3743,6 +3812,47 @@ def TranslationCatchphraseProcessDataFrameSave(ProjectName, MainLang, Translatio
     with open(ProjectDataFrameTranslationCatchphrasePath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TranslationCatchphraseFrame, DataFrameJson, indent = 4, ensure_ascii = False)
 
+## Process17: TranslationFundingCatchphraseProcess DataFrame 저장
+def TranslationFundingCatchphraseProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationFundingCatchphrasePath, TranslationFundingCatchphraseResponse, Process, InputCount, TotalInputCount):
+    if os.path.exists(ProjectDataFrameTranslationFundingCatchphrasePath):
+        TranslationFundingCatchphraseFramePath = ProjectDataFrameTranslationFundingCatchphrasePath
+    else:
+        TranslationFundingCatchphraseFramePath = os.path.join(TranslationDataFramePath, "b532-17_TranslationFundingCatchphraseFrame.json")
+    with open(TranslationFundingCatchphraseFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+        TranslationFundingCatchphraseFrame = json.load(DataFrameJson)
+        
+    ## TranslationFundingCatchphraseFrame 업데이트
+    TranslationFundingCatchphraseFrame[0]['ProjectName'] = ProjectName
+    TranslationFundingCatchphraseFrame[0]['MainLang'] = MainLang.capitalize()
+    TranslationFundingCatchphraseFrame[0]['Translation'] = Translation.capitalize()
+    TranslationFundingCatchphraseFrame[0]['TaskName'] = Process
+    
+    ## TranslationFundingCatchphraseFrame 첫번째 데이터 프레임 복사
+    TranslationFundingCatchphrase = TranslationFundingCatchphraseFrame[1][0].copy()
+    TranslationFundingCatchphrase['MainTitle'] = TranslationFundingCatchphraseResponse['23자_메인타이틀']
+    TranslationFundingCatchphrase['SubTitle'] = TranslationFundingCatchphraseResponse['7자_서브타이틀']
+    TranslationFundingCatchphrase['ProjectSummary'] = TranslationFundingCatchphraseResponse['50자_프로젝트요약']
+    TranslationFundingCatchphrase['DetailPageMainTitle'] = TranslationFundingCatchphraseResponse['상세페이지타이틀']
+    TranslationFundingCatchphrase['DetailPageSubTitle'] = TranslationFundingCatchphraseResponse['상세페이지서브타이틀']
+    TranslationFundingCatchphrase['ProjectDescription'] = TranslationFundingCatchphraseResponse['프로젝트소개']
+    TranslationFundingCatchphrase['BookDescription'] = TranslationFundingCatchphraseResponse['도서소개']
+    TranslationFundingCatchphrase['EditionDescription'] = TranslationFundingCatchphraseResponse['에디션소개']
+    TranslationFundingCatchphrase['Recommendations'] = TranslationFundingCatchphraseResponse['이런분들께추천합니다']
+    TranslationFundingCatchphrase['ProjectSchedule'] = TranslationFundingCatchphraseResponse['프로젝트일정']
+    TranslationFundingCatchphrase['RewardDescription'] = TranslationFundingCatchphraseResponse['선물설명']
+
+    ## TranslationFundingCatchphraseFrame 데이터 프레임 업데이트
+    TranslationFundingCatchphraseFrame[1].append(TranslationFundingCatchphrase)
+        
+    ## TranslationFundingCatchphraseFrame ProcessCount 및 Completion 업데이트
+    TranslationFundingCatchphraseFrame[0]['InputCount'] = InputCount
+    if InputCount == TotalInputCount:
+        TranslationFundingCatchphraseFrame[0]['Completion'] = 'Yes'
+        
+    ## TranslationFundingCatchphraseFrame 저장
+    with open(ProjectDataFrameTranslationFundingCatchphrasePath, 'w', encoding = 'utf-8') as DataFrameJson:
+        json.dump(TranslationFundingCatchphraseFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
 ##############################
 ##### ProcessEdit 업데이트 #####
 ##############################
@@ -3926,7 +4036,7 @@ def BookCopyTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Transl
     
     # Index 파일이 존재하지 않을 때만 생성
     if not os.path.exists(EditBookCopyFilePath):
-        with open(EditBookCopyFilePath, 'w', encoding='utf-8') as BookCopyFile:
+        with open(EditBookCopyFilePath, 'w', encoding = 'utf-8') as BookCopyFile:
             Author = AuthorResearch[0]['Author']
             Birth = AuthorResearch[0]['Birth']
             Nationality = AuthorResearch[0]['Nationality']
@@ -3953,6 +4063,39 @@ def BookCopyTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, Transl
             BookCopyFile.write(BookCopyText)
     else:
         print(f"[{ProjectName} BookCopy 파일 {EditBookCopyFilePath}이(가) 이미 존재합니다.]")
+        
+## BookFundingCopyText 저장
+def BookFundingCopyTextSave(ProjectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, Process):
+    ## TranslationEdit 불러오기
+    with open(TranslationEditPath, 'r', encoding='utf-8') as TranslationEditJson:
+        TranslationEdit = json.load(TranslationEditJson)
+    TranslationBookFundingCopy = TranslationEdit[Process]
+        
+    ## TranslationEdit을 BookCopy Text 파일로 저장할 경로 설정
+    EditBookFundingCopyFileName = f"{ProjectName}_BookFundingCopy({MainLang}).txt"
+    EditBookFundingCopyFilePath = os.path.join(ProjectMasterTranslationPath, EditBookFundingCopyFileName)
+    
+    # Index 파일이 존재하지 않을 때만 생성
+    if not os.path.exists(EditBookFundingCopyFilePath):
+        with open(EditBookFundingCopyFilePath, 'w', encoding = 'utf-8') as BookCopyFile:
+            MainTitle = TranslationBookFundingCopy[0]['MainTitle']
+            SubTitle = TranslationBookFundingCopy[0]['SubTitle']
+            ProjectSummary = TranslationBookFundingCopy[0]['ProjectSummary']
+            DetailPageMainTitle = TranslationBookFundingCopy[0]['DetailPageMainTitle']
+            DetailPageSubTitle = TranslationBookFundingCopy[0]['DetailPageSubTitle']
+            ProjectDescription = TranslationBookFundingCopy[0]['ProjectDescription']
+            BookDescription = TranslationBookFundingCopy[0]['BookDescription']
+            EditionDescription = TranslationBookFundingCopy[0]['EditionDescription']
+            Recommendations = TranslationBookFundingCopy[0]['Recommendations']
+            ProjectBudget = "목표 금액은 아래의 지출 항목으로 사용할 예정입니다.\n\n인쇄비: 고품질 하드커버 도서 100권 제작비\n배송비: 각각 개별 포장 및 도서 배송비"
+            ProjectSchedule = TranslationBookFundingCopy[0]['ProjectSchedule']
+            ProjectTeam = "45일 전: 데미안 유화 에디션의 시안 및 1차 샘플북 제작\n30일 전: 도서 내지 및 삽화 컬러 보정과 최종안 완성\n20일 전: 펀딩 수량 만큼 도서 최종 인쇄 및 제작\n전달일: 일괄 포장 및 배송 (선물 예상 전달일)"
+            RewardDescription = TranslationBookFundingCopy[0]['RewardDescription']
+            
+            BookFundingCopyText = f"<펀딩문구>\n\n[23자 메인타이틀]\n{MainTitle}\n\n[7자 서브타이틀]\n{SubTitle}\n\n[50자 프로젝트요약]\n{ProjectSummary}\n\n[상세페이지 타이틀]\n{DetailPageMainTitle}\n\n[상세페이지 서브타이틀]\n{DetailPageSubTitle}\n\n[프로젝트 소개]\n{ProjectDescription}\n\n[도서 소개]\n{BookDescription}\n\n[에디션 소개]\n{EditionDescription}\n\n[이런 분들께 추천합니다]\n{Recommendations}\n\n[프로젝트 예산]\n{ProjectBudget}\n\n[프로젝트 일정]\n{ProjectSchedule}\n\n[프로젝트 팀 소개]\n{ProjectTeam}\n\n[선물설명]\n{RewardDescription}"
+            BookCopyFile.write(BookFundingCopyText)
+    else:
+        print(f"[{ProjectName} BookFundingCopy 파일 {EditBookFundingCopyFilePath}이(가) 이미 존재합니다.]")
 
 ## Process Edit Prompt 확인
 def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumProcesses = 1, OutputCountKey = None):
@@ -5400,6 +5543,59 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         
         ## BookCopyText 저장
         BookCopyTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "AuthorResearch", "TranslationCatchphrase")
+        
+        if EditMode == "Manual":
+            sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+
+    if EditMode == "Manual":
+        if EditCheck:
+            if not EditCompletion:
+                ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
+                sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+    if EditCompletion:
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
+        
+    ############################################################
+    ### Process17: TranslationFundingCatchphrase Response 생성 ##
+    ############################################################
+    
+    ## Process 설정
+    ProcessNumber = '17'
+    Process = "TranslationFundingCatchphrase"
+    print(f"< User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 시작 >")
+    
+    ## TranslationFundingCatchphrase 경로 생성
+    ProjectDataFrameTranslationFundingCatchphrasePath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
+    
+    ## Process Count 계산 및 Check
+    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    InputList = TranslationCatchphraseInputList(TranslationEditPath, "IndexTranslation", "AfterTranslationBodySummary", "AuthorResearch", MainLangCode)
+    TotalInputCount = len(InputList) # 인풋의 전체 카운트
+    InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationFundingCatchphrasePath)
+    EditCheck, EditCompletion = ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount)
+    # print(f"InputCount: {InputCount}")
+    # print(f"EditCheck: {EditCheck}")
+    # print(f"EditCompletion: {EditCompletion}")
+    ## Process 진행
+    if not EditCheck:
+        if DataFrameCompletion == 'No':
+            for i in range(InputCount - 1, TotalInputCount):
+                ## Input 생성
+                inputCount = InputList[i]['Id']
+                Input = InputList[i]['Input']
+                
+                ## Response 생성
+                TranslationFundingCatchphraseResponse = ProcessResponse(projectName, email, Process, Input, inputCount, TotalInputCount, TranslationFundingCatchphraseFilter, CheckCount, "Google", mode, MessagesReview)
+                
+                ## DataFrame 저장
+                TranslationFundingCatchphraseProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationFundingCatchphrasePath, TranslationFundingCatchphraseResponse, Process, inputCount, TotalInputCount)
+                
+        ## Edit 저장
+        ProcessEditSave(ProjectDataFrameTranslationFundingCatchphrasePath, TranslationEditPath, Process, EditMode)
+        print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+        
+        ## BookCopyText 저장
+        BookFundingCopyTextSave(projectName, MainLang, ProjectMasterTranslationPath, TranslationEditPath, "TranslationFundingCatchphrase")
         
         if EditMode == "Manual":
             sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")

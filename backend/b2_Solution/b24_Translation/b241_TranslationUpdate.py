@@ -1900,7 +1900,7 @@ def AuthorResearchInputList(TranslationEditPath, BeforeProcess1, BeforeProcess2,
     ## InputList 생성
     InputId = 1
     InputList = []
-    Input = f"[원어앞부분]\n{BookIntroductionText}\n\n[도서제목]{BookTitle}\n\n[도서목차]\n{BookContents}\n\n[도서핵심내용요약]\n{BookSummaryText}\n\n[도서주요문구모음]\n{MainText}\n\n[작가정보.json 작성언어, 꼭 해당 언어로 작성]\n{MainLangCode}\n\n"
+    Input = f"[원어앞부분]\n{BookIntroductionText}\n\n[도서제목]{BookTitle}\n\n[도서목차]\n{BookContents}\n\n[도서핵심내용요약]\n{BookSummaryText}\n\n[도서주요문구모음]\n{MainText}\n\n[작가정보.json 작성언어, 꼭 해당 지정된 언어로 작성]\n{MainLangCode}\n\n"
 
     InputDic = {"Id": InputId, "Input": Input}
     InputList.append(InputDic)
@@ -1958,7 +1958,7 @@ def TranslationCatchphraseInputList(TranslationEditPath, BeforeProcess1, BeforeP
     ## InputList 생성
     InputId = 1
     InputList = []
-    Input = f"[저자]\n{AuthorText}\n\n[도서제목]\n{BookTitle}\n\n[도서목차]{BookContents}\n\n[도서핵심내용요약]\n{BookSummaryText}\n\n[도서주요문구모음]\n{MainText}\n\n[도서카피모음.json 작성언어, 꼭 해당 언어로 작성]\n{MainLangCode}\n\n"
+    Input = f"[저자]\n{AuthorText}\n\n[도서제목]\n{BookTitle}\n\n[도서목차]{BookContents}\n\n[도서핵심내용요약]\n{BookSummaryText}\n\n[도서주요문구모음]\n{MainText}\n\n[도서카피모음.json 작성언어, 꼭 해당 지정된 언어로 작성]\n{MainLangCode}\n\n"
 
     InputDic = {"Id": InputId, "Input": Input}
     InputList.append(InputDic)
@@ -3396,7 +3396,7 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
     TranslationProofreading['IndexTag'] = IndexTag
     TranslationProofreading['Index'] = Index
     TranslationProofreading['BodyId'] = BodyId
-    TranslationProofreading['Body'] = TranslationProofreadingResponse['도서내용']
+    TranslationProofreading['Body'] = TranslationProofreadingResponse['도서내용'].replace('“', '"').replace('”', '"').replace('‘', "'").replace('’', "'").replace('{', '').replace('}', '')
 
     ## TranslationProofreadingFrame 데이터 프레임 업데이트
     TranslationProofreadingFrame[1].append(TranslationProofreading)

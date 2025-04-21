@@ -510,6 +510,7 @@ class Prompt(Base):
     AfterTranslationBodySummary = Column(JSON)
     AuthorResearch = Column(JSON)
     TranslationCatchphrase = Column(JSON)
+    TranslationFundingCatchphrase = Column(JSON)
     
     ## TextBookPrompt
     

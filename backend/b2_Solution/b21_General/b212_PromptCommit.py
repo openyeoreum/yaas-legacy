@@ -84,6 +84,7 @@ def AddPromptToDB():
         afterTranslationBodySummary = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-14_AfterTranslationBodySummary.json")
         authorResearch = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-15_AuthorResearch.json")
         translationCatchphrase = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-16_TranslationCatchphrase.json")
+        translationFundingCatchphrase = LoadJsonFrame(PromptDataPath + "/b543_TranslationPrompt/b543-17_TranslationFundingCatchphrase.json")
         # TextBookPrompt
         # AudioBookPrompt
         bookPreprocess = LoadJsonFrame(PromptDataPath + "/b545_AudioBookPrompt/b5451_ScriptPrompt/b5451-00_BookPreprocess.json")
@@ -190,6 +191,7 @@ def AddPromptToDB():
             ExistingPrompt.AfterTranslationBodySummary = afterTranslationBodySummary
             ExistingPrompt.AuthorResearch = authorResearch
             ExistingPrompt.TranslationCatchphrase = translationCatchphrase
+            ExistingPrompt.TranslationFundingCatchphrase = translationFundingCatchphrase
             ExistingPrompt.BookPreprocess = bookPreprocess
             ExistingPrompt.IndexDefinePreprocess = indexDefinePreprocess
             ExistingPrompt.IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess
@@ -292,6 +294,7 @@ def AddPromptToDB():
                 AfterTranslationBodySummary = afterTranslationBodySummary,
                 AuthorResearch = authorResearch,
                 TranslationCatchphrase = translationCatchphrase,
+                TranslationFundingCatchphrase = translationFundingCatchphrase,
                 BookPreprocess = bookPreprocess,
                 IndexDefinePreprocess = indexDefinePreprocess,
                 IndexDefineDivisionPreprocess = indexDefineDivisionPreprocess,

@@ -2914,7 +2914,7 @@ def TranslationFundingCatchphraseFilter(Response, CheckCount):
         return "TranslationFundingCatchphrase, JSON에서 오류 발생: '에디션소개'는 800자 내외의 문자열이어야 합니다"
 
     # '이런분들께추천합니다'는 "5가지 이상"이라는 조건이 있지만, 여기서는 문자열 타입과 임의의 최대 길이만 검증합니다.
-    if not isinstance(item.get('이런분들께추천합니다'), str) or len(item.get('이런분들께추천합니다', '')) > 1000: # 임의의 최대 길이 1000
+    if not isinstance(item.get('이런분들께추천합니다'), str) or len(item.get('이런분들께추천합니다', '')) > 1200: # 임의의 최대 길이 1200
         return "TranslationFundingCatchphrase, JSON에서 오류 발생: '이런분들께추천합니다'는 적절한 길이의 문자열이어야 합니다"
 
     # '프로젝트일정'은 "5개로 나누어 간략하게 작성" 조건이 있지만, 문자열 타입과 임의의 최대 길이만 검증합니다.

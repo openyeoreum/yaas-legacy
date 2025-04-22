@@ -4011,6 +4011,7 @@ def ProcessEditTextSave(ProjectName, MainLang, BookGenre, ProjectMasterTranslati
                 # Body 내용 작성
                 BodyText = ProcessDic['Body'].replace('\n\n\n\n', '\n\n')
                 BodyText = BodyText.replace('\n\n\n', '\n\n')
+                BodyText = BodyText.replace(' \n', '\n')
                 BodyText = AddSpaceAfterDialog(BodyText)
                 BodyText = BodyText.replace('  ', ' ')
                 if "FinalEnding" in TranslationBodySplit[i]:

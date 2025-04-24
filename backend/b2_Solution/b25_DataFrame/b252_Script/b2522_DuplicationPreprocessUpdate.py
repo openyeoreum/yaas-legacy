@@ -243,9 +243,11 @@ def DuplicationPreprocessFilter(responseData, Input, Index):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputDic = json.loads(responseData)
-        OutputDic = outputDic['중복수정']
+        if 'error' in outputDic:
+            OutputDic = []
+        elif '중복수정' in outputDic:
+            OutputDic = outputDic['중복수정']
         if OutputDic == []:
-            
             Output = {"Index": Index, "Duplication": OutputDic, "DuplicationScript": Input}
             return {'json': Output, 'filter': Output}
     

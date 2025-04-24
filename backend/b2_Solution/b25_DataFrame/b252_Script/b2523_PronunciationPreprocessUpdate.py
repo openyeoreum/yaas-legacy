@@ -37,7 +37,10 @@ def PronunciationPreprocessFilter(responseData, Input, Index):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputDic = json.loads(responseData)
-        OutputDic = outputDic['발음수정']
+        if 'error' in outputDic:
+            OutputDic = []
+        elif '발음수정' in outputDic:
+            OutputDic = outputDic['발음수정']
         if OutputDic == []:
             Output = {"Index": Index, "Pronunciation": OutputDic, "PronunciationScript": Input}
             return {'json': Output, 'filter': Output}

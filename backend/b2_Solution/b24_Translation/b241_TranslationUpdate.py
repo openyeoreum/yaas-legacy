@@ -2332,11 +2332,36 @@ def BodyTranslationFilter(Response, CheckCount):
     # 데이터 타입 검증
     if not isinstance(OutputDic['현재번역문']['번역문'], str):
         return "BodyTranslation, JSON에서 오류 발생: '현재번역문 > 번역문'은 문자열이어야 합니다"
-    
+        
     # Error4: 번역문에 주석 표기 검증
     if ('[' in OutputDic['현재번역문']['번역문']) or (']' in OutputDic['현재번역문']['번역문']):
         if not CheckBalancedBrackets(OutputDic['현재번역문']['번역문']):
             return "BodyTranslation, 주석표기 오류: 번역문 내의 주석표기 대괄호의 짝이 맞지 않습니다"
+
+    # Error5: '현재번역문'에 이전 번역문이 포함되었는지 확인
+    BeforeText = CheckCount # CheckCount는 원본 글의 내용으로 가정
+    CurrentText = OutputDic['현재번역문']['번역문']
+    
+    # 각 텍스트에서 앞 문장 3개 추출
+    BeforeSentences = [s.strip() for s in re.split(r'[.!?。？！]+', BeforeText) if s.strip()][:3]
+    CurrentSentences = [s.strip() for s in re.split(r'[.!?。？！]+', CurrentText) if s.strip()][:3]
+
+    # 각 문장에서 언어를 제외한 모든 것(공백, 특수기호 등) 제거
+    CleanBeforeSentences = [re.sub(r'\W+', '', s, flags=re.UNICODE) for s in BeforeSentences]
+    CleanCurrentSentences = [re.sub(r'\W+', '', s, flags=re.UNICODE) for s in CurrentSentences]
+
+    # 정제된 문장 비교 및 동일 문장 개수 확인
+    MatchCount = 0
+    # 두 리스트 중 짧은 길이만큼만 비교 (문장 수가 3개 미만일 경우 대비)
+    MinLen = min(len(CleanBeforeSentences), len(CleanCurrentSentences))
+    for i in range(MinLen):
+        # 비어 있지 않은 문자열끼리 비교했을 때 동일하면 카운트 증가
+        if CleanBeforeSentences[i] and CleanCurrentSentences[i] and CleanBeforeSentences[i] == CleanCurrentSentences[i]:
+            MatchCount += 1
+
+    # 동일한 문장이 2개 이상이면 오류 메시지 반환
+    if MatchCount >= 2:
+        return "BodyTranslation, SentenceMatchError: 번역된 내용과 원본 내용의 앞 3문장 중 2개 이상이 동일합니다."
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['현재번역문']
@@ -2535,10 +2560,40 @@ def TranslationEditingFilter(Response, CheckCount):
     if '이전편집내용' in OutputDic['편집내용']['내용']:
         return "TranslationEditing, JSON에서 오류 발생: '편집내용 > 내용'에 <이전편집내용>이 포함되어 있으면 안됩니다."
     
-    # Error4: 번역문에 주석 표기 검증
+    # Error4: 편집내용에 주석 표기 검증
     if ('[' in OutputDic['편집내용']['내용']) or (']' in OutputDic['편집내용']['내용']):
         if not CheckBalancedBrackets(OutputDic['편집내용']['내용']):
             return "TranslationEditing, 주석표기 오류: 번역문 내의 주석표기 대괄호의 짝이 맞지 않습니다"
+        
+    # Error5: '편집내용'에 이전 내용이 포함되었는지 확인
+    BeforeText = CheckCount # CheckCount는 원본 글의 내용으로 가정
+    CurrentText = OutputDic['편집내용']['내용']
+    
+    # 각 텍스트에서 앞 문장 3개 추출
+    BeforeSentences = [s.strip() for s in re.split(r'[.!?。？！]+', BeforeText) if s.strip()][:3]
+    CurrentSentences = [s.strip() for s in re.split(r'[.!?。？！]+', CurrentText) if s.strip()][:3]
+
+    # 각 문장에서 언어를 제외한 모든 것(공백, 특수기호 등) 제거
+    CleanBeforeSentences = [re.sub(r'\W+', '', s, flags=re.UNICODE) for s in BeforeSentences]
+    CleanCurrentSentences = [re.sub(r'\W+', '', s, flags=re.UNICODE) for s in CurrentSentences]
+
+    # 정제된 문장 비교 및 동일 문장 개수 확인
+    MatchCount = 0
+    # 두 리스트 중 짧은 길이만큼만 비교 (문장 수가 3개 미만일 경우 대비)
+    MinLen = min(len(CleanBeforeSentences), len(CleanCurrentSentences))
+    for i in range(MinLen):
+        # 비어 있지 않은 문자열끼리 비교했을 때 동일하면 카운트 증가
+        if CleanBeforeSentences[i] and CleanCurrentSentences[i] and CleanBeforeSentences[i] == CleanCurrentSentences[i]:
+            MatchCount += 1
+
+    # 동일한 문장이 2개 이상이면 오류 메시지 반환
+    if MatchCount >= 2:
+        return "TranslationEditing, SentenceMatchError: 편집된 내용과 원본 내용의 앞 3문장 중 2개 이상이 동일합니다."
+
+    print(CleanBeforeSentences)
+    print(CleanCurrentSentences)
+    print(MatchCount)
+    sys.exit()
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['편집내용']
@@ -2594,6 +2649,31 @@ def TranslationProofreadingFilter(Response, CheckCount):
     if ('[' in OutputDic['교정']['도서내용']) or (']' in OutputDic['교정']['도서내용']):
         if not CheckBalancedBrackets(OutputDic['교정']['도서내용']):
             return "TranslationProofreading, 주석표기 오류: 번역문 내의 주석표기 대괄호의 짝이 맞지 않습니다"
+        
+    # Error8: '도서내용'에 이전 도서내용이 포함되었는지 확인
+    BeforeText = CheckCount # CheckCount는 원본 글의 내용으로 가정
+    CurrentText = OutputDic['교정']['도서내용']
+    
+    # 각 텍스트에서 앞 문장 3개 추출
+    BeforeSentences = [s.strip() for s in re.split(r'[.!?。？！]+', BeforeText) if s.strip()][:3]
+    CurrentSentences = [s.strip() for s in re.split(r'[.!?。？！]+', CurrentText) if s.strip()][:3]
+
+    # 각 문장에서 언어를 제외한 모든 것(공백, 특수기호 등) 제거
+    CleanBeforeSentences = [re.sub(r'\W+', '', s, flags=re.UNICODE) for s in BeforeSentences]
+    CleanCurrentSentences = [re.sub(r'\W+', '', s, flags=re.UNICODE) for s in CurrentSentences]
+
+    # 정제된 문장 비교 및 동일 문장 개수 확인
+    MatchCount = 0
+    # 두 리스트 중 짧은 길이만큼만 비교 (문장 수가 3개 미만일 경우 대비)
+    MinLen = min(len(CleanBeforeSentences), len(CleanCurrentSentences))
+    for i in range(MinLen):
+        # 비어 있지 않은 문자열끼리 비교했을 때 동일하면 카운트 증가
+        if CleanBeforeSentences[i] and CleanCurrentSentences[i] and CleanBeforeSentences[i] == CleanCurrentSentences[i]:
+            MatchCount += 1
+
+    # 동일한 문장이 2개 이상이면 오류 메시지 반환
+    if MatchCount >= 2:
+        return "TranslationProofreading, SentenceMatchError: 교정된 내용과 원본 내용의 앞 3문장 중 2개 이상이 동일합니다."
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['교정']
@@ -3331,6 +3411,8 @@ def BodyTranslationProcessDataFrameSave(ProjectName, MainLang, Translation, Tran
     ## BodyTranslationFrame 저장
     with open(ProjectDataFrameBodyTranslationPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(BodyTranslationFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+    
+    return BodyTranslation['Body']
 
 ## Process9: TranslationEditingProcess DataFrame 저장
 def TranslationEditingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, BodyTranslationCheckResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
@@ -3368,6 +3450,8 @@ def TranslationEditingProcessDataFrameSave(ProjectName, MainLang, Translation, T
     ## TranslationEditingFrame 저장
     with open(ProjectDataFrameTranslationEditingPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TranslationEditingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+        
+    return TranslationEditing['Body']
 
 ## Process9: TranslationRefinementProcess DataFrame 저장
 def TranslationRefinementProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse, BodyTranslationCheckResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
@@ -3405,6 +3489,8 @@ def TranslationRefinementProcessDataFrameSave(ProjectName, MainLang, Translation
     ## TranslationRefinementFrame 저장
     with open(ProjectDataFrameTranslationRefinementPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TranslationRefinementFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+        
+    return TranslationRefinement['Body']
 
 ## Process9: TranslationKinfolkStyleRefinementProcess DataFrame 저장
 def TranslationKinfolkStyleRefinementProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationKinfolkStyleRefinementPath, TranslationKinfolkStyleRefinementResponse, BodyTranslationCheckResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
@@ -3442,6 +3528,8 @@ def TranslationKinfolkStyleRefinementProcessDataFrameSave(ProjectName, MainLang,
     ## TranslationKinfolkStyleRefinementFrame 저장
     with open(ProjectDataFrameTranslationKinfolkStyleRefinementPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TranslationKinfolkStyleRefinementFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+        
+    return TranslationKinfolkStyleRefinement['Body']
 
 ## Process10: TranslationProofreadingProcess DataFrame 저장
 def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationProofreadingPath, TranslationProofreadingResponse, Process, InputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount):
@@ -3496,6 +3584,8 @@ def TranslationProofreadingProcessDataFrameSave(ProjectName, MainLang, Translati
     ## TranslationProofreadingFrame 저장
     with open(ProjectDataFrameTranslationProofreadingPath, 'w', encoding = 'utf-8') as DataFrameJson:
         json.dump(TranslationProofreadingFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+        
+    return TranslationProofreading['Body']
 
 ## Process11: TranslationDialogueAnalysis DataFrame 저장
 def TranslationDialogueAnalysisProcessDataFrameSave(ProjectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationDialogueAnalysisPath, MarkBody, TranslationDialogueAnalysisResponse, Process, InputCount, BodyId, Body, TotalInputCount):
@@ -4576,7 +4666,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ProjectDataFrameBodyTranslationPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
     ## Process Count 계산 및 Check
-    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    CheckCount = "None" # 필터에서 데이터 체크가 필요한 카운트(여기서는 이전내용 체크)
     InputList = BodyTranslationInputList(TranslationEditPath, "BodyTranslationPreprocessing")
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameBodyTranslationPath)
@@ -4691,7 +4781,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     BodyTranslationResponse = ProcessResponse(projectName, email, LanguageEditingProcess, LanguageEditInput, inputCount, TotalInputCount, BodyLanguageEditingFilter, CurrentBodyLang, "OpenAI", mode, MessagesReview)
                 
                 ## DataFrame 저장
-                BodyTranslationProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                CheckCount = BodyTranslationProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameBodyTranslationPath, BodyTranslationResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
                 i += 1  # 다음 인덱스로 이동
             
         ## Edit 저장
@@ -4724,7 +4814,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ProjectDataFrameTranslationEditingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
         ## Process Count 계산 및 Check
-        CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+        CheckCount = "None" # 필터에서 데이터 체크가 필요한 카운트(여기서는 이전내용 체크)
         InputList = TranslationEditingInputList(TranslationEditPath, "BodyTranslationPreprocessing", "BodyTranslation")
         TotalInputCount = len(InputList) # 인풋의 전체 카운트
         InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationEditingPath)
@@ -4853,7 +4943,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryCounter = ''
 
                     ## DataFrame 저장
-                    TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                    CheckCount = TranslationEditingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationEditingPath, TranslationEditingResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
                     i += 1  # 다음 인덱스로 이동
                     ErrorCount = 0
 
@@ -4888,7 +4978,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ProjectDataFrameTranslationRefinementPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
         ## Process Count 계산 및 Check
-        CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+        CheckCount = "None" # 필터에서 데이터 체크가 필요한 카운트(여기서는 이전내용 체크)
         InputList = TranslationEditingInputList(TranslationEditPath, "BodyTranslationPreprocessing", "TranslationEditing")
         TotalInputCount = len(InputList) # 인풋의 전체 카운트
         InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationRefinementPath)
@@ -5017,7 +5107,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryCounter = ''
 
                     ## DataFrame 저장
-                    TranslationRefinementProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                    CheckCount = TranslationRefinementProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationRefinementPath, TranslationRefinementResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
                     i += 1  # 다음 인덱스로 이동
                     ErrorCount = 0
 
@@ -5052,7 +5142,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
         ProjectDataFrameTranslationKinfolkStyleRefinementPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
         ## Process Count 계산 및 Check
-        CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+        CheckCount = "None" # 필터에서 데이터 체크가 필요한 카운트(여기서는 이전내용 체크)
         InputList = TranslationEditingInputList(TranslationEditPath, "BodyTranslationPreprocessing", "TranslationEditing")
         TotalInputCount = len(InputList) # 인풋의 전체 카운트
         InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationKinfolkStyleRefinementPath)
@@ -5182,7 +5272,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                         MemoryCounter = ''
 
                     ## DataFrame 저장
-                    TranslationKinfolkStyleRefinementProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationKinfolkStyleRefinementPath, TranslationKinfolkStyleRefinementResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                    CheckCount = TranslationKinfolkStyleRefinementProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationKinfolkStyleRefinementPath, TranslationKinfolkStyleRefinementResponse, BodyTranslationCheckResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
                     i += 1  # 다음 인덱스로 이동
                     ErrorCount = 0
 
@@ -5214,7 +5304,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
     ProjectDataFrameTranslationProofreadingPath = os.path.join(ProjectDataFrameTranslationPath, f'{email}_{projectName}_{ProcessNumber}_{Process}DataFrame.json')
 
     ## Process Count 계산 및 Check
-    CheckCount = 0 # 필터에서 데이터 체크가 필요한 카운트
+    CheckCount = "None" # 필터에서 데이터 체크가 필요한 카운트(여기서는 이전내용 체크)
     InputList, InputListLength = TranslationProofreadingInputList(TranslationEditPath, ProofreadingBeforeProcess)
     TotalInputCount = len(InputList) # 인풋의 전체 카운트
     InputCount, DataFrameCompletion = ProcessDataFrameCheck(ProjectDataFrameTranslationProofreadingPath)
@@ -5246,7 +5336,7 @@ def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenr
                     TranslationProofreadingResponse = {'도서내용': ' ' + Body}
                 
                 ## DataFrame 저장
-                TranslationProofreadingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationProofreadingPath, TranslationProofreadingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
+                CheckCount = TranslationProofreadingProcessDataFrameSave(projectName, MainLang, Translation, TranslationDataFramePath, ProjectDataFrameTranslationProofreadingPath, TranslationProofreadingResponse, Process, inputCount, IndexId, IndexTag, Index, BodyId, TotalInputCount)
                 
         ## Edit 저장
         ProcessEditSave(ProjectDataFrameTranslationProofreadingPath, TranslationEditPath, Process, EditMode)

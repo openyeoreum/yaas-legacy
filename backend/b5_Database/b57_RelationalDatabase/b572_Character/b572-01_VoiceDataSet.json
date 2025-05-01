@@ -24673,7 +24673,7 @@
                 "ApiSetting": {
                     "name": "문도현(낭독)",
                     "Api": "ElevenLabs",
-                    "voice_id": "8xqDiScWrtT6gTW430Ur",
+                    "voice_id": "7vz7t2g0RI7krfnn4iuo",
                     "stability": [0.9],
                     "similarity_boost": [0.6],
                     "style": [0],
@@ -24746,7 +24746,7 @@
                 "ApiSetting": {
                     "name": "None",
                     "Api": "ElevenLabs",
-                    "voice_id": "8xqDiScWrtT6gTW430Ur",
+                    "voice_id": "7vz7t2g0RI7krfnn4iuo",
                     "stability": [0.3],
                     "similarity_boost": [0.85],
                     "style": [0.01],

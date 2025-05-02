@@ -921,7 +921,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
             tokens.append({"Pause": "(0.75)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Character" and Aftertag == "Narrator":
-            tokens.append({"Pause": "(0.40)"})
+            tokens.append({"Pause": "(0.65)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Character" and Aftertag == "Comment":
             tokens.append({"Pause": "(0.20)"})

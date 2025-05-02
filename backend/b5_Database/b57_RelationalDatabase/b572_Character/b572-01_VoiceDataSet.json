@@ -24679,7 +24679,7 @@
                     "style": [0],
                     "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
-                    "Speed": 1.0,
+                    "Speed": 1.05,
                     "Pitch": 0
                 }
             },
@@ -24747,9 +24747,9 @@
                     "name": "None",
                     "Api": "ElevenLabs",
                     "voice_id": "7vz7t2g0RI7krfnn4iuo",
-                    "stability": [0.3],
-                    "similarity_boost": [0.85],
-                    "style": [0.01],
+                    "stability": [0.4],
+                    "similarity_boost": [0.7],
+                    "style": [0.02],
                     "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
                     "Speed": 1.0,
@@ -25935,7 +25935,7 @@
                     "style": ["admiring", "anxious", "loving", "sad"],
                     "models": "pro",
                     "Volume": 0,
-                    "Speed": 1.0,
+                    "Speed": 1.1,
                     "Pitch": 0,
                     "PitchVariance": 1
                 }
@@ -26009,7 +26009,7 @@
                     "style": ["angry"],
                     "models": "pro",
                     "Volume": 0,
-                    "Speed": 1.0,
+                    "Speed": 1.1,
                     "Pitch": 0,
                     "PitchVariance": 1
                 }

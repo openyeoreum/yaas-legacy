@@ -1301,7 +1301,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
 
     DefaultVoiceSpeed = 1.0 # CloneVoiceSpeed의 기본값에 해당
     DefaultVoicePitch = 0.0 # CloneVoicePitch의 기본값에 해당
-    SpeedRemoveList = [] # 기존 _SpeedRemoveList를 PascalCase로 변경
+    _SpeedRemoveList = [] # 기존 _SpeedRemoveList를 PascalCase로 변경
 
     # 처리할 액터별 설정 정보를 저장할 리스트
     ActorConfigsForProcessing = []
@@ -1372,8 +1372,8 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                                 
                                 if AppliedTransformation: # 실제 변환이 설정된 경우에만 build 실행
                                     Tfm.build(VoiceFilePath, SpeedFilePath)
-                                    if SpeedFilePath not in SpeedRemoveList: # 중복 추가 방지
-                                        SpeedRemoveList.append(SpeedFilePath)
+                                    if SpeedFilePath not in _SpeedRemoveList: # 중복 추가 방지
+                                        _SpeedRemoveList.append(SpeedFilePath)
                     except sox.SoxError as E: # 예외 변수 e를 E로 (PascalCase는 아니지만 관례적 대문자)
                         # 어떤 액터 설정으로 인해 오류가 발생했는지 명시하기 위해 ConfigActorName 사용
                         print(f"\nSOX 처리 오류 발생 ({Update}, 액터: {Config['ConfigActorName']}): {E}")

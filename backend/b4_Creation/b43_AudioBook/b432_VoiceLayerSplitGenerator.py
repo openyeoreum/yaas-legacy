@@ -2137,11 +2137,8 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     _chunK.update(OrderedDict(new_items))
         
         ### B-1. AudioBook_Edit Chunk에 'ActorName:'이 가장 앞부분에 존재할 경우 이를 'ActorName:'기준으로 Edit 나누기 추가 ###
+        # Chunk 문자열의 선행 공백을 제거 함수
         def DeepcopyAndStripLeadingWhitespaceForChunkList(OriginalChunkList):
-            """
-            청크 딕셔너리 리스트를 입력받아, 각 딕셔너리를 깊은 복사하고
-            "Chunk" 문자열의 선행 공백을 제거한 새 리스트를 반환합니다.
-            """
             ProcessedList = []
             for ChunkItem in OriginalChunkList:
                 CopiedChunkItem = copy.deepcopy(ChunkItem)

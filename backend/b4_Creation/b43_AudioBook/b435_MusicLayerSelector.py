@@ -1340,7 +1340,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                         total=len(FilteredFiles),
                         desc='CloneVoiceSpeed & Pitch')
 
-        for Update in FilteredFiles: # 기존 Update 변수명 사용 (파일명 루프 아이템)
+        for Update in UpdateTqdm: # 기존 Update 변수명 사용 (파일명 루프 아이템)
             for Config in ActorConfigsForProcessing:
                 # 원본 조건: ('_[' not in Update) and (CloneVoiceName in Update)
                 # 여기서 CloneVoiceName 역할은 Config['FilterKey']가 수행

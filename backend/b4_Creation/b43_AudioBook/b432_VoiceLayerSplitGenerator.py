@@ -2147,71 +2147,59 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             return ProcessedList
         
         NewMatchedChunksList = []
-        for EditItem in MatchedChunks: # 각 편집 아이템 순회
-            OriginalActorName = EditItem["ActorName"] # 원래 액터 이름
-            CurrentActorChunksBuffer = []  # 현재 액터의 청크를 임시 저장
-            SplitOccurredInEditItem = False # 현재 편집 아이템 내 분할 발생 여부
+        for EditItem in MatchedChunks:
+            # 현재 청크 버퍼가 속한 액터의 이름. EditItem의 기본 ActorName으로 시작.
+            CurrentActorNameForBuffer = EditItem["ActorName"]
+            CurrentActorChunksBuffer = []  # 현재 액터의 청크들을 임시 저장하는 버퍼
+            
+            ActorChunkList = EditItem.get("ActorChunk", [])
 
-            ActorChunkList = EditItem.get("ActorChunk", []) # 액터 청크 리스트
-
-            for Index, ChunkDataItem in enumerate(ActorChunkList): # 각 청크 데이터 순회
-                ChunkText = ChunkDataItem["Chunk"] # 청크 텍스트
-                
-                PrefixMatch = re.match(r"^(.+?)\((.+?)\):(.*)", ChunkText) # 패턴 매칭
+            for Index, ChunkDataItem in enumerate(ActorChunkList):
+                ChunkText = ChunkDataItem["Chunk"]
+                # "이름(특성):대사" 패턴을 찾음
+                PrefixMatch = re.match(r"^(.+?)\((.+?)\):(.*)", ChunkText)
 
                 if PrefixMatch:
-                    SplitOccurredInEditItem = True
+                    # 패턴 발견: 새로운 액터 세그먼트의 시작을 의미 (또는 동일 액터의 명시적 재시작)
                     
+                    # 1. 이전까지 버퍼에 쌓인 청크가 있다면, 이전 액터의 세그먼트로 확정하여 추가
                     if CurrentActorChunksBuffer:
-                        # CurrentActorChunksBuffer의 내용을 처리하여 추가
                         FinalBufferChunks = DeepcopyAndStripLeadingWhitespaceForChunkList(CurrentActorChunksBuffer)
                         NewMatchedChunksList.append({
                             "EditId": EditItem["EditId"],
                             "Tag": EditItem["Tag"],
-                            "ActorName": OriginalActorName,
+                            "ActorName": CurrentActorNameForBuffer, # 버퍼가 속했던 액터의 이름
                             "ActorChunk": FinalBufferChunks
                         })
                     
+                    # 2. 새로운 액터 세그먼트를 위해 컨텍스트 업데이트
                     NewActorNamePart = PrefixMatch.group(1).strip()
                     NewActorAttributePart = PrefixMatch.group(2).strip()
-                    DialogueAfterPrefix = PrefixMatch.group(3).strip() # .strip()은 선행/후행 공백 모두 제거
-                    NewActorFullName = f"{NewActorNamePart}({NewActorAttributePart})"
+                    # 대사 부분은 일관성을 위해 lstrip() 적용 (선행 공백만 제거)
+                    DialogueAfterPrefix = PrefixMatch.group(3).lstrip() 
                     
-                    NewActorChunkList = []
+                    CurrentActorNameForBuffer = f"{NewActorNamePart}({NewActorAttributePart})" # 현재 컨텍스트 액터 이름 변경
+                    CurrentActorChunksBuffer = []                         # 새 액터를 위해 버퍼 초기화
                     
-                    if DialogueAfterPrefix: # DialogueAfterPrefix는 이미 strip() 처리됨
-                        ModifiedCurrentChunk = copy.deepcopy(ChunkDataItem)
-                        ModifiedCurrentChunk["Chunk"] = DialogueAfterPrefix
-                        NewActorChunkList.append(ModifiedCurrentChunk)
+                    # 3. 패턴이 매칭된 현재 줄의 대사 부분을 새 액터 버퍼의 첫 청크로 추가 (대사가 있을 경우)
+                    if DialogueAfterPrefix:
+                        # 원본 ChunkDataItem의 Pause, EndTime 등 다른 메타데이터를 사용
+                        ModifiedChunkPayload = copy.deepcopy(ChunkDataItem) 
+                        ModifiedChunkPayload["Chunk"] = DialogueAfterPrefix # lstrip 처리된 대사로 변경
+                        CurrentActorChunksBuffer.append(ModifiedChunkPayload)
                     
-                    # 새 액터의 나머지 청크들 (원본에서 가져옴)
-                    # 요청은 CurrentActorChunksBuffer에 대한 것이었으므로, 이 부분의 청크들은
-                    # 현재 로직에서는 선행 공백 제거 처리를 하지 않습니다.
-                    # 만약 이 부분도 처리가 필요하다면 DeepcopyAndStripLeadingWhitespaceForChunkList를 적용해야 합니다.
-                    if Index + 1 < len(ActorChunkList):
-                        SubsequentChunks = copy.deepcopy(ActorChunkList[Index + 1:])
-                        # 예: 만약 모든 청크에 적용해야 한다면 아래와 같이 변경
-                        # SubsequentChunks = DeepcopyAndStripLeadingWhitespaceForChunkList(ActorChunkList[Index + 1:])
-                        NewActorChunkList.extend(SubsequentChunks)
-                    
-                    if NewActorChunkList:
-                        NewMatchedChunksList.append({
-                            "EditId": EditItem["EditId"],
-                            "Tag": EditItem["Tag"],
-                            "ActorName": NewActorFullName,
-                            "ActorChunk": NewActorChunkList
-                        })
-                    break 
                 else:
-                    CurrentActorChunksBuffer.append(ChunkDataItem) # 원본 청크 아이템 추가
-            
-            if not SplitOccurredInEditItem:
-                # CurrentActorChunksBuffer의 내용을 처리하여 추가
+                    # 패턴 미발견: 현재 ChunkDataItem은 CurrentActorNameForBuffer에 속함. 버퍼에 추가.
+                    # (선행 공백 제거는 버퍼가 최종적으로 처리될 때 DeepcopyAndStripLeadingWhitespaceForChunkList 함수를 통해 일괄 적용됨)
+                    CurrentActorChunksBuffer.append(ChunkDataItem) 
+
+            # ActorChunkList의 모든 청크를 순회한 후, 버퍼에 남아있는 마지막 액터의 청크들을 처리
+            if CurrentActorChunksBuffer:
                 FinalBufferChunks = DeepcopyAndStripLeadingWhitespaceForChunkList(CurrentActorChunksBuffer)
                 NewMatchedChunksList.append({
                     "EditId": EditItem["EditId"],
                     "Tag": EditItem["Tag"],
-                    "ActorName": OriginalActorName,
+                    "ActorName": CurrentActorNameForBuffer, # 마지막으로 활성화되었던 액터의 이름
                     "ActorChunk": FinalBufferChunks
                 })
 

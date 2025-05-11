@@ -2137,53 +2137,66 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     _chunK.update(OrderedDict(new_items))
         
         ### B-1. AudioBook_Edit Chunk에 'ActorName:'이 가장 앞부분에 존재할 경우 이를 'ActorName:'기준으로 Edit 나누기 추가 ###
+        def DeepcopyAndStripLeadingWhitespaceForChunkList(OriginalChunkList):
+            """
+            청크 딕셔너리 리스트를 입력받아, 각 딕셔너리를 깊은 복사하고
+            "Chunk" 문자열의 선행 공백을 제거한 새 리스트를 반환합니다.
+            """
+            ProcessedList = []
+            for ChunkItem in OriginalChunkList:
+                CopiedChunkItem = copy.deepcopy(ChunkItem)
+                CopiedChunkItem["Chunk"] = CopiedChunkItem["Chunk"].lstrip()
+                ProcessedList.append(CopiedChunkItem)
+            return ProcessedList
+        
         NewMatchedChunksList = []
-        for EditItem in MatchedChunks: # 각 편집 아이템 순회 (_Edit -> EditItem)
-            OriginalActorName = EditItem["ActorName"] # 원래 액터 이름 (original_actor_name -> OriginalActorName)
-            CurrentActorChunksBuffer = []  # 현재 액터의 청크를 임시 저장 (current_actor_chunks_buffer -> CurrentActorChunksBuffer)
-            SplitOccurredInEditItem = False # 현재 편집 아이템 내 분할 발생 여부 (split_occurred_in_edit -> SplitOccurredInEditItem)
+        for EditItem in MatchedChunks: # 각 편집 아이템 순회
+            OriginalActorName = EditItem["ActorName"] # 원래 액터 이름
+            CurrentActorChunksBuffer = []  # 현재 액터의 청크를 임시 저장
+            SplitOccurredInEditItem = False # 현재 편집 아이템 내 분할 발생 여부
 
-            # "ActorChunk" 키가 없을 수도 있으므로 .get()을 사용하여 안전하게 접근
-            ActorChunkList = EditItem.get("ActorChunk", []) # 액터 청크 리스트 (actor_chunk_list -> ActorChunkList)
+            ActorChunkList = EditItem.get("ActorChunk", []) # 액터 청크 리스트
 
-            for Index, ChunkDataItem in enumerate(ActorChunkList): # 각 청크 데이터 순회 (i -> Index, chunk_data -> ChunkDataItem)
-                ChunkText = ChunkDataItem["Chunk"] # 청크 텍스트 (chunk_text -> ChunkText)
+            for Index, ChunkDataItem in enumerate(ActorChunkList): # 각 청크 데이터 순회
+                ChunkText = ChunkDataItem["Chunk"] # 청크 텍스트
                 
-                # 정규 표현식으로 "이름(특성):" 패턴 매칭
-                PrefixMatch = re.match(r"^(.+?)\((.+?)\):(.*)", ChunkText) # 매치 객체 (match -> PrefixMatch)
+                PrefixMatch = re.match(r"^(.+?)\((.+?)\):(.*)", ChunkText) # 패턴 매칭
 
                 if PrefixMatch:
                     SplitOccurredInEditItem = True
                     
-                    # 1. 분할 지점 이전의 Chunk들을 원래 ActorName으로 추가 (버퍼에 내용이 있을 경우)
                     if CurrentActorChunksBuffer:
+                        # CurrentActorChunksBuffer의 내용을 처리하여 추가
+                        FinalBufferChunks = DeepcopyAndStripLeadingWhitespaceForChunkList(CurrentActorChunksBuffer)
                         NewMatchedChunksList.append({
                             "EditId": EditItem["EditId"],
                             "Tag": EditItem["Tag"],
                             "ActorName": OriginalActorName,
-                            "ActorChunk": copy.deepcopy(CurrentActorChunksBuffer)
+                            "ActorChunk": FinalBufferChunks
                         })
                     
-                    # 2. 새로운 ActorName으로 분할된 부분 처리
-                    NewActorNamePart = PrefixMatch.group(1).strip() # 새 액터 이름 부분 (new_actor_name_extracted -> NewActorNamePart)
-                    NewActorAttributePart = PrefixMatch.group(2).strip() # 새 액터 특성 부분 (new_actor_attribute_extracted -> NewActorAttributePart)
-                    DialogueAfterPrefix = PrefixMatch.group(3).strip() # 접두사 제외 실제 대사 (actual_dialogue_after_prefix -> DialogueAfterPrefix)
-                    NewActorFullName = f"{NewActorNamePart}({NewActorAttributePart})" # 새 액터 전체 이름 (new_actor_name_full -> NewActorFullName)
+                    NewActorNamePart = PrefixMatch.group(1).strip()
+                    NewActorAttributePart = PrefixMatch.group(2).strip()
+                    DialogueAfterPrefix = PrefixMatch.group(3).strip() # .strip()은 선행/후행 공백 모두 제거
+                    NewActorFullName = f"{NewActorNamePart}({NewActorAttributePart})"
                     
-                    # 분할된 부분부터 시작하는 새 액터의 청크 리스트
-                    NewActorChunkList = [] # 새 액터 청크 리스트 (new_actor_chunk_list -> NewActorChunkList)
+                    NewActorChunkList = []
                     
-                    # 현재 Chunk (접두사 제거됨)를 새 액터의 첫 Chunk로 추가 (실제 대사가 있을 경우)
-                    if DialogueAfterPrefix:
-                        ModifiedCurrentChunk = copy.deepcopy(ChunkDataItem) # 수정된 현재 청크 (modified_current_chunk -> ModifiedCurrentChunk)
+                    if DialogueAfterPrefix: # DialogueAfterPrefix는 이미 strip() 처리됨
+                        ModifiedCurrentChunk = copy.deepcopy(ChunkDataItem)
                         ModifiedCurrentChunk["Chunk"] = DialogueAfterPrefix
                         NewActorChunkList.append(ModifiedCurrentChunk)
                     
-                    # 원본 ActorChunkList의 현재 Chunk 이후 모든 Chunk들을 새 액터에게 할당
+                    # 새 액터의 나머지 청크들 (원본에서 가져옴)
+                    # 요청은 CurrentActorChunksBuffer에 대한 것이었으므로, 이 부분의 청크들은
+                    # 현재 로직에서는 선행 공백 제거 처리를 하지 않습니다.
+                    # 만약 이 부분도 처리가 필요하다면 DeepcopyAndStripLeadingWhitespaceForChunkList를 적용해야 합니다.
                     if Index + 1 < len(ActorChunkList):
-                        NewActorChunkList.extend(copy.deepcopy(ActorChunkList[Index + 1:]))
+                        SubsequentChunks = copy.deepcopy(ActorChunkList[Index + 1:])
+                        # 예: 만약 모든 청크에 적용해야 한다면 아래와 같이 변경
+                        # SubsequentChunks = DeepcopyAndStripLeadingWhitespaceForChunkList(ActorChunkList[Index + 1:])
+                        NewActorChunkList.extend(SubsequentChunks)
                     
-                    # 새 액터의 Chunk 리스트가 내용이 있을 경우에만 결과에 추가
                     if NewActorChunkList:
                         NewMatchedChunksList.append({
                             "EditId": EditItem["EditId"],
@@ -2191,23 +2204,20 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                             "ActorName": NewActorFullName,
                             "ActorChunk": NewActorChunkList
                         })
-                    
-                    break  # 현재 EditItem 처리를 중단하고 다음 EditItem으로 넘어감
+                    break 
                 else:
-                    # 패턴 미일치: 현재 Chunk를 버퍼에 추가
-                    CurrentActorChunksBuffer.append(ChunkDataItem)
+                    CurrentActorChunksBuffer.append(ChunkDataItem) # 원본 청크 아이템 추가
             
-            # 해당 EditItem의 모든 Chunk 순회 완료 또는 분할로 인한 중단 후
             if not SplitOccurredInEditItem:
-                # 분할이 발생하지 않았다면, 버퍼에 쌓인 모든 Chunk를 사용해 원본 EditItem 정보를 추가
+                # CurrentActorChunksBuffer의 내용을 처리하여 추가
+                FinalBufferChunks = DeepcopyAndStripLeadingWhitespaceForChunkList(CurrentActorChunksBuffer)
                 NewMatchedChunksList.append({
                     "EditId": EditItem["EditId"],
                     "Tag": EditItem["Tag"],
-                    "ActorName": OriginalActorName, # EditItem["ActorName"]과 동일
-                    "ActorChunk": copy.deepcopy(CurrentActorChunksBuffer)
+                    "ActorName": OriginalActorName,
+                    "ActorChunk": FinalBufferChunks
                 })
 
-        # 최종적으로 MatchedChunks가 변형된 리스트를 참조하도록 함
         MatchedChunks = NewMatchedChunksList
             
         ### B-2. AudioBook_Edit에 새로운 ActorName이 발생한 경우 이를 MatchedActors에 추가 ###

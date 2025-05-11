@@ -1637,7 +1637,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
         CombinedSoundFilePaths = []
 
     ## _Speed.wav 파일 모두 삭제 (Clone Voice 속도 조절시) ##
-    if CloneVoiceSpeed != 1 or CloneVoicePitch != 0:
+    if _SpeedRemoveList != []:
         for _SpeedFile in _SpeedRemoveList:
             os.remove(_SpeedFile)
     ## _Speed.wav 파일 모두 삭제 (Clone Voice 속도 조절시) ##

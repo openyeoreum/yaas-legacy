@@ -109,7 +109,7 @@ def speed_up_wav_files_safe(folder_path, name_keyword, speed_factor=1.1):
 # --- Configuration ---
 target_folder = '/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/250418_싯다르타/250418_싯다르타_audiobook/250418_싯다르타_mixed_audiobook_file/VoiceLayers'
 keyword = '최도식'
-speed = 1.1
+speed = 1.06
 
 # --- Important Warning ---
 print("="*50)

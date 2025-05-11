@@ -1299,40 +1299,89 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
         MatchedActors = json.load(MatchedActorsJson)
 
-    CloneVoiceSpeed = 1
-    CloneVoicePitch = 0
-    for MatchedActor in MatchedActors:
-        # CloneVoiceSpeed & Pitch는 ElevenLabs만 가능 따라서, Speed와 Pitch 옵션이 필요함
-        if MatchedActor['ApiSetting']['Api'] == 'ElevenLabs' and 'Speed' in MatchedActor['ApiSetting'] and 'Pitch' in MatchedActor['ApiSetting']:
-            ActorName = MatchedActor['ActorName']
-            CloneVoiceSpeed = MatchedActor['ApiSetting']['Speed']
-            CloneVoicePitch = MatchedActor['ApiSetting']['Pitch']
-        
-            # Speed 변수가 1이 아닌 경우 속도 조절
-            if CloneVoiceSpeed != 1 or CloneVoicePitch != 0:
+    DefaultVoiceSpeed = 1.0 # CloneVoiceSpeed의 기본값에 해당
+    DefaultVoicePitch = 0.0 # CloneVoicePitch의 기본값에 해당
+    SpeedRemoveList = [] # 기존 _SpeedRemoveList를 PascalCase로 변경
+
+    # 처리할 액터별 설정 정보를 저장할 리스트
+    ActorConfigsForProcessing = []
+
+    for MatchedActor in MatchedActors: # 기존 MatchedActor 변수명 유지 (루프 아이템)
+        # ApiSetting은 MatchedActor 안에 있고 'Api', 'Speed', 'Pitch' 키를 포함한다고 가정
+        ApiSetting = MatchedActor.get('ApiSetting', {})
+        if ApiSetting.get('Api') == 'ElevenLabs' and \
+        'Speed' in ApiSetting and \
+        'Pitch' in ApiSetting:
+            
+            # MatchedActor에서 직접 가져오는 값들에 기존 변수명(파스칼케이스) 사용
+            ActorName = MatchedActor.get('ActorName', 'UnknownActor') # 기존 ActorName
+            CloneVoiceSpeed = ApiSetting['Speed'] # 현 액터의 CloneVoiceSpeed 값
+            CloneVoicePitch = ApiSetting['Pitch'] # 현 액터의 CloneVoicePitch 값
+            
+            # 중요: 이 FilterKey는 현재 MatchedActor의 파일을 식별하는 데 사용될 이름/키여야 합니다.
+            # 원본 코드의 'CloneVoiceName' 변수가 이 역할을 어떻게 했는지에 따라 이 부분을 사용자의 실제 로직에 맞게 수정해야 합니다.
+            # 예: ActorSpecificFilterKey = MatchedActor.get('VoiceFileIdentifier', ActorName)
+            # 여기서는 ActorName을 파일 식별자로 가정합니다. 이는 실제 상황에 맞게 조정이 필요합니다.
+            ActorSpecificFilterKey = ActorName # 원본의 'CloneVoiceName'에 해당하며, 액터별로 달라질 수 있다고 가정
+
+            if CloneVoiceSpeed != DefaultVoiceSpeed or CloneVoicePitch != DefaultVoicePitch:
+                # 기존 print문 형식과 변수명 사용
                 print(f"[ CloneVoiceSpeed & Pitch: ActorName({ActorName}), Speed({CloneVoiceSpeed}), Pitch({CloneVoicePitch}) ]")
-                UpdateTQDM = tqdm(FilteredFiles,
-                                total = len(FilteredFiles),
-                                desc = 'CloneVoiceSpeed & Pitch')
-                
-                _SpeedRemoveList = []
-                for Update in UpdateTQDM:
-                    if ('_[' not in Update) and (CloneVoiceName in Update):
-                        VoiceFilePath = os.path.join(voiceLayerPath, Update)
-                        _SpeedFilePath = VoiceFilePath.replace('.wav', '_Speed.wav')
-                        if os.path.exists(_SpeedFilePath):
-                            os.remove(_SpeedFilePath)
-                        
-                        with open(os.devnull, 'w') as devnull:
-                            with contextlib.redirect_stderr(devnull):
-                                tfm = sox.Transformer()
-                                if CloneVoiceSpeed != 1:
-                                    tfm.tempo(CloneVoiceSpeed, 's')
-                                if CloneVoicePitch != 0:
-                                    tfm.pitch(CloneVoicePitch)
-                                tfm.build(VoiceFilePath, _SpeedFilePath)
-                        
-                        _SpeedRemoveList.append(_SpeedFilePath)
+                ActorConfigsForProcessing.append({
+                    'ConfigActorName': ActorName,       # 로깅 및 참조용 ActorName
+                    'FilterKey': ActorSpecificFilterKey,# 파일 필터링에 사용될 키 (원본의 CloneVoiceName 역할)
+                    'ConfigSpeed': CloneVoiceSpeed,    # 해당 액터의 특정 Speed 값
+                    'ConfigPitch': CloneVoicePitch     # 해당 액터의 특정 Pitch 값
+                })
+
+    if ActorConfigsForProcessing: # 처리할 설정이 하나라도 있다면 파일 루프 실행
+        # tqdm의 desc는 기존 코드의 'CloneVoiceSpeed & Pitch'를 유지
+        UpdateTqdm = tqdm(FilteredFiles, # 기존 FilteredFiles 변수명 사용
+                        total=len(FilteredFiles),
+                        desc='CloneVoiceSpeed & Pitch')
+
+        for Update in FilteredFiles: # 기존 Update 변수명 사용 (파일명 루프 아이템)
+            for Config in ActorConfigsForProcessing:
+                # 원본 조건: ('_[' not in Update) and (CloneVoiceName in Update)
+                # 여기서 CloneVoiceName 역할은 Config['FilterKey']가 수행
+                if ('_[' not in Update) and (Config['FilterKey'] in Update):
+                    
+                    VoiceFilePath = os.path.join(voiceLayerPath, Update) # 기존 VoiceFilePath
+                    # _SpeedFilePath -> SpeedFilePath (파스칼케이스 적용)
+                    SpeedFilePath = VoiceFilePath.replace('.wav', '_Speed.wav')
+
+                    if os.path.exists(SpeedFilePath):
+                        os.remove(SpeedFilePath)
+                    
+                    try:
+                        with open(os.devnull, 'w') as DevNull: # devnull 변수를 PascalCase로
+                            with contextlib.redirect_stderr(DevNull):
+                                Tfm = sox.Transformer() # tfm 변수를 PascalCase로
+                                # Config에서 현재 처리 중인 액터의 Speed와 Pitch 값을 가져와 사용
+                                CurrentSpeedToApply = Config['ConfigSpeed']
+                                CurrentPitchToApply = Config['ConfigPitch']
+                                AppliedTransformation = False # 변환 적용 여부 플래그
+
+                                if CurrentSpeedToApply != DefaultVoiceSpeed:
+                                    Tfm.tempo(CurrentSpeedToApply, 's')
+                                    AppliedTransformation = True
+                                
+                                if CurrentPitchToApply != DefaultVoicePitch:
+                                    Tfm.pitch(CurrentPitchToApply)
+                                    AppliedTransformation = True
+                                
+                                if AppliedTransformation: # 실제 변환이 설정된 경우에만 build 실행
+                                    Tfm.build(VoiceFilePath, SpeedFilePath)
+                                    if SpeedFilePath not in SpeedRemoveList: # 중복 추가 방지
+                                        SpeedRemoveList.append(SpeedFilePath)
+                    except sox.SoxError as E: # 예외 변수 e를 E로 (PascalCase는 아니지만 관례적 대문자)
+                        # 어떤 액터 설정으로 인해 오류가 발생했는지 명시하기 위해 ConfigActorName 사용
+                        print(f"\nSOX 처리 오류 발생 ({Update}, 액터: {Config['ConfigActorName']}): {E}")
+                    except Exception as E:
+                        print(f"\n예상치 못한 오류 발생 ({Update}, 액터: {Config['ConfigActorName']}): {E}")
+                    
+                    # 한 파일이 특정 액터 설정에 의해 처리되었다면, 다른 액터 설정으로 중복 처리하지 않도록 내부 루프 중단
+                    break 
     ## _Speed.wav 파일 생성 (Clone Voice 속도 조절시) ##
 
     ## 파일과 Edit간 불일치시 FilteredFiles 재구성

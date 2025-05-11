@@ -26008,7 +26008,7 @@
                     "style": ["admiring", "anxious", "loving", "sad"],
                     "models": "pro",
                     "Volume": 0,
-                    "Speed": 1.1,
+                    "Speed": 1.18,
                     "Pitch": 0,
                     "PitchVariance": 1
                 }
@@ -26082,7 +26082,7 @@
                     "style": ["angry"],
                     "models": "pro",
                     "Volume": 0,
-                    "Speed": 1.1,
+                    "Speed": 1.18,
                     "Pitch": 0,
                     "PitchVariance": 1
                 }
@@ -26378,7 +26378,7 @@
                     "style": ["admiring", "anxious", "loving_high", "loving", "serene"],
                     "models": "pro",
                     "Volume": 0,
-                    "Speed": 1.0,
+                    "Speed": 1.15,
                     "Pitch": 0,
                     "PitchVariance": 1
                 }
@@ -26452,7 +26452,7 @@
                     "style": ["anxious_high", "sad_high", "sad"],
                     "models": "pro",
                     "Volume": 0,
-                    "Speed": 1.0,
+                    "Speed": 1.15,
                     "Pitch": 0,
                     "PitchVariance": 1
                 }
@@ -26526,7 +26526,7 @@
                     "style": ["angry", "angry_high"],
                     "models": "pro",
                     "Volume": 0,
-                    "Speed": 1.0,
+                    "Speed": 1.15,
                     "Pitch": 0,
                     "PitchVariance": 1
                 }
@@ -26600,7 +26600,7 @@
                     "style": ["admiring_high"],
                     "models": "pro",
                     "Volume": 0,
-                    "Speed": 1.0,
+                    "Speed": 1.15,
                     "Pitch": 0,
                     "PitchVariance": 1
                 }
@@ -27711,6 +27711,228 @@
                     "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,
+                    "Pitch": 0,
+                    "PitchVariance": 1
+                }
+            },
+            {
+                "CharacterId": 3013,
+                "Name": "정승법(일반)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3013_정승법A(일반).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "정승법(설득)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 8},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 5},
+                        {"index": "침착함", "Score": 8},
+                        {"index": "중립", "Score": 9},
+                        {"index": "슬픔", "Score": 2},
+                        {"index": "화남", "Score": 1}],
+                    "Feature": "듬직하며 지혜를 가진 어르신, 정중하고 저음에 매우 신뢰가 가는 인물"
+                },
+                "ApiSetting": {
+                    "name": "정승법",
+                    "ApiName": "Cedric",
+                    "Language": "ko",
+                    "Api": "SuperTone",
+                    "emotion": "일반",
+                    "style": ["trusting"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.13,
+                    "Pitch": 0,
+                    "PitchVariance": 1
+                }
+            },
+            {
+                "CharacterId": 3013,
+                "Name": "정승법(설득)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3013_정승법A(설득).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "정승법(일반)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 5},
+                        {"index": "침착함", "Score": 5},
+                        {"index": "중립", "Score": 6},
+                        {"index": "슬픔", "Score": 8},
+                        {"index": "화남", "Score": 6}],
+                    "Feature": "듬직하며 지혜를 가진 어르신, 정중하고 저음에 매우 신뢰가 가는 인물"
+                },
+                "ApiSetting": {
+                    "name": "정승법",
+                    "ApiName": "Cedric",
+                    "Language": "ko",
+                    "Api": "SuperTone",
+                    "emotion": "설득",
+                    "style": ["happy", "sad", "serene"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.13,
+                    "Pitch": 0,
+                    "PitchVariance": 1
+                }
+            },
+            {
+                "CharacterId": 3013,
+                "Name": "정승법(화남)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/3013_정승법A(화남).wav",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "정승법(설득)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 10},
+                        {"index": "비문학", "Score": 0},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 10},
+                        {"index": "여", "Score": 10},
+                        {"index": "중성", "Score": 10}],
+                    "Age": [
+                        {"index": "유년", "Score": 8},
+                        {"index": "청소년", "Score": 10},
+                        {"index": "청년", "Score": 10},
+                        {"index": "중년", "Score": 10},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 10},
+                        {"index": "중립적", "Score": 10},
+                        {"index": "내향적", "Score": 10}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 7},
+                        {"index": "즐거움", "Score": 7},
+                        {"index": "평온", "Score": 9},
+                        {"index": "무감정", "Score": 9},
+                        {"index": "피곤", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "두려움", "Score": 5},
+                        {"index": "놀람", "Score": 4}]
+                },
+                "Voice": {
+                    "Language": ["Ko"],
+                    "Gender": ["남"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 7},
+                        {"index": "장년", "Score": 10},
+                        {"index": "노년", "Score": 10}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 5},
+                        {"index": "침착함", "Score": 5},
+                        {"index": "중립", "Score": 7},
+                        {"index": "슬픔", "Score": 6},
+                        {"index": "화남", "Score": 8}],
+                    "Feature": "듬직하며 지혜를 가진 어르신, 정중하고 저음에 매우 신뢰가 가는 인물"
+                },
+                "ApiSetting": {
+                    "name": "정승법",
+                    "ApiName": "Cedric",
+                    "Language": "ko",
+                    "Api": "SuperTone",
+                    "emotion": "화남",
+                    "style": ["angry", "courageous"],
+                    "models": "pro",
+                    "Volume": 0,
+                    "Speed": 1.13,
                     "Pitch": 0,
                     "PitchVariance": 1
                 }

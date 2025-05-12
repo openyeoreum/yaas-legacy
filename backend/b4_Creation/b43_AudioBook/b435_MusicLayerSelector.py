@@ -1704,9 +1704,10 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     CumulativeRunningTime = 0
     CumulativeNum = 0
     for j in range(len(EditGenerationKoChunks)):
-        if EditGenerationKoChunks[j]['EditId'] - 1 in FileLimitList:
-            CumulativeRunningTime += FileRunningTimeList[CumulativeNum]
-            CumulativeNum += 1
+        if j > 0:
+            if EditGenerationKoChunks[j-1]['EditId'] in FileLimitList:
+                CumulativeRunningTime += FileRunningTimeList[CumulativeNum]
+                CumulativeNum += 1
         for k in range(len(EditGenerationKoChunks[j]['ActorChunk'])):
             if EditGenerationKoChunks[j]['ActorChunk'][k]['EndTime']['Second'] != None:
                 SplitFileTime = SecondsToHMS(EditGenerationKoChunks[j]['ActorChunk'][k]['EndTime']['Second'] - CumulativeRunningTime)

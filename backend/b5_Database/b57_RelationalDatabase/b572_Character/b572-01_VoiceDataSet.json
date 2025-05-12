@@ -20436,7 +20436,7 @@
                     "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "슬픔",
-                    "style": ["anxiou", "sad"],
+                    "style": ["sad"],
                     "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,

@@ -1301,7 +1301,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
 
     DefaultVoiceSpeed = 1.0 # CloneVoiceSpeed의 기본값에 해당
     DefaultVoicePitch = 0.0 # CloneVoicePitch의 기본값에 해당
-    _SpeedRemoveList = [] # 기존 _SpeedRemoveList를 PascalCase로 변경
+    _SpeedRemoveList = []
 
     # 처리할 액터별 설정 정보를 저장할 리스트
     ActorConfigsForProcessing = []

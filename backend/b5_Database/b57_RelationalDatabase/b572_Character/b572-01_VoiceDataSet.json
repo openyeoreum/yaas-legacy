@@ -27707,7 +27707,7 @@
                     "Language": "ko",
                     "Api": "SuperTone",
                     "emotion": "설득",
-                    "style": ["suspicious", "unfriendly", "unfriendly_high"],
+                    "style": ["unfriendly", "unfriendly_high"],
                     "models": "pro",
                     "Volume": 0,
                     "Speed": 1.0,

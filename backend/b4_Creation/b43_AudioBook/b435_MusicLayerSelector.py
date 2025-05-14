@@ -1309,9 +1309,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     for MatchedActor in MatchedActors: # 기존 MatchedActor 변수명 유지 (루프 아이템)
         # ApiSetting은 MatchedActor 안에 있고 'Api', 'Speed', 'Pitch' 키를 포함한다고 가정
         ApiSetting = MatchedActor.get('ApiSetting', {})
-        if ApiSetting.get('Api') == 'ElevenLabs' and \
-        'Speed' in ApiSetting and \
-        'Pitch' in ApiSetting:
+        if ApiSetting.get('Api') == 'ElevenLabs' and 'Speed' in ApiSetting and 'Pitch' in ApiSetting:
             
             # MatchedActor에서 직접 가져오는 값들에 기존 변수명(파스칼케이스) 사용
             ActorName = MatchedActor.get('ActorName', 'UnknownActor') # 기존 ActorName
@@ -1345,9 +1343,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                 # 원본 조건: ('_[' not in Update) and (CloneVoiceName in Update)
                 # 여기서 CloneVoiceName 역할은 Config['FilterKey']가 수행
                 if ('_[' not in Update) and (Config['FilterKey'] in Update):
-                    
                     VoiceFilePath = os.path.join(voiceLayerPath, Update) # 기존 VoiceFilePath
-                    # _SpeedFilePath -> SpeedFilePath (파스칼케이스 적용)
                     SpeedFilePath = VoiceFilePath.replace('.wav', '_Speed.wav')
 
                     if os.path.exists(SpeedFilePath):
@@ -1379,7 +1375,6 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                         print(f"\nSOX 처리 오류 발생 ({Update}, 액터: {Config['ConfigActorName']}): {E}")
                     except Exception as E:
                         print(f"\n예상치 못한 오류 발생 ({Update}, 액터: {Config['ConfigActorName']}): {E}")
-                    
                     # 한 파일이 특정 액터 설정에 의해 처리되었다면, 다른 액터 설정으로 중복 처리하지 않도록 내부 루프 중단
                     break 
     ## _Speed.wav 파일 생성 (Clone Voice 속도 조절시) ##

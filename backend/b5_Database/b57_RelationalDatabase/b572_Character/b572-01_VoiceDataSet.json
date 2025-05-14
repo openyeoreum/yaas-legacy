@@ -22773,7 +22773,7 @@
                     "Feature": "에세이, 라디오, 푸근한 목소리"
                 },
                 "ApiSetting": {
-                    "name": "점범식(연기)",
+                    "name": "정범식(연기)",
                     "Api": "ElevenLabs",
                     "voice_id": "6peRe8KN0G8EUAz6T6Ct",
                     "stability": [0.5],

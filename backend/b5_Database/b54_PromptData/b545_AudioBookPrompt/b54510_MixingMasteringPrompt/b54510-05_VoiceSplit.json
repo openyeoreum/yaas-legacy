@@ -13,13 +13,13 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-4o-2024-11-20",
+        "MasterModel": "gpt-4.1",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
         "BaseModel": {
             "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-3-5-sonnet-latest"
+            "LongTokensModel": "claude-3-7-sonnet-latest"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -29,7 +29,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "claude-3-5-sonnet-latest"
+        "MasterModel": "claude-3-7-sonnet-latest"
     },
     "GOOGLE":{
         "MasterModel": "gemini-2.5-flash-preview-04-17"

@@ -63,7 +63,7 @@ def TotalPublisherDataAddition(TotalPublisherDataJsonPath, TotalPublisherDataAdd
     # 3) CSV 파일 읽기 및 조건에 따라 필터링
     FilteredRows = []
 
-    with open(TotalPublisherDataAdditionCSVPath, "r", encoding = "utf-8") as TotalPublisherDataAdditionCSV:
+    with open(TotalPublisherDataAdditionCSVPath, "r", encoding = "utf-8-sig") as TotalPublisherDataAdditionCSV:
         TotalPublisherDataAddition = csv.DictReader(TotalPublisherDataAdditionCSV)
         # reader.fieldnames = ['출판사','홈페이지','이메일','담당자']
         for row in TotalPublisherDataAddition:
@@ -95,6 +95,7 @@ def TotalPublisherDataAddition(TotalPublisherDataJsonPath, TotalPublisherDataAdd
                 "이메일": email,
                 "담당자": manager
             })
+            print(f"[ {publisher} ]\n홈페이지: {homepage}\n이메일: {email}\n담당자: {manager}\n\n")
 
     # 4) JSON에 합치기
     NewIdStart = max([entry["Id"] for entry in TotalPublisherData]) if TotalPublisherData else 0

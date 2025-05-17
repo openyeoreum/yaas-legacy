@@ -357,7 +357,7 @@ def PublisherDataUpdate():
     if os.path.exists(TotalPublisherDataAdditionCSVPath):
         TotalPublisherDataAddition(TotalPublisherDataJsonPath, TotalPublisherDataAdditionCSVPath)
     else:
-        print(f"\n[ TotalPublisherDataAddition : 새로운 출판사 이메일 추가가 필요하면 아래 경로에 csv파일을 추가해주세요. ]\n{TotalPublisherDataAdditionCSVPath}\n")
+        print(f"\n[ TotalPublisherDataAddition : 새로운 출판사 이메일 추가가 필요하면 아래 경로에 csv파일을 추가해주세요. ]\n{TotalPublisherDataAdditionCSVPath}\n\n1. yymmdd_TotalPublisherData.json 파일로 최신화 할 경우 해당 파일을 출판사, 홈페이지, 이메일, 담당자 열로 분리하여 csv파일로 저장해주세요.\n2. 저장 후 yymmdd_TotalPublisherData.json에서 csv로 변환된 딕셔너리는 삭제해주세요.\n3. csv파일을 TotalPublisherDataAddition 폴더에 넣어주세요.\n4. 스크립트를 실행하면 자동으로 TotalPublisherData.json에 추가됩니다.\n5. csv파일은 TotalPublisherDataAddition 폴더에 TotalPublisherDataAddition(yymmdd).csv로 저장됩니다.\n6. 이후 스크립트는 자동으로 TotalPublisherData.json에 추가된 출판사 정보를 업데이트합니다.\n7. yymmdd_TotalPublisherData.json는 다시 남은 딕셔너리부터 수집하면 됩니다.")
         
     ## 출판사 이메일 및 메인페이지 정보 스크래핑
     TotalPublisherDataJsonPath, TotalPublisherData = PublisherWebScraper(PublisherDataPath, TotalPublisherDataJsonPath)

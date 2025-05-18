@@ -465,7 +465,6 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
       
       # Prompt 모델 업데이트
       fineTunedModelDic = {"Id" : Process + '-' + str(Date("Second")), "Model" :FineTunedModel}
-      print(fineTunedModelDic)
       if Mode == "Example":
         if ModelTokens == "Short":
           promptFrame[0]['ExampleFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
@@ -536,7 +535,6 @@ def JsonParsingFilter(Response, RawResponse):
     # Response에서 필요없는 대괄호 형성 문제 해결
     if DictType:
         Response = RemoveListBrackets(Response)
-        print(f"Response: {Response}")
 
     return Response
 

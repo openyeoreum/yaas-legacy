@@ -2590,11 +2590,6 @@ def TranslationEditingFilter(Response, CheckCount):
     if MatchCount >= 2:
         return "TranslationEditing, SentenceMatchError: 편집된 내용과 원본 내용의 앞 3문장 중 2개 이상이 동일합니다."
 
-    print(CleanBeforeSentences)
-    print(CleanCurrentSentences)
-    print(MatchCount)
-    sys.exit()
-
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['편집내용']
 

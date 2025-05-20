@@ -302,16 +302,8 @@ def ReplaceNthOccurrence(CleanText, NonINPUT, NonOUTPUT, n):
     return CleanText[:pos] + NonOUTPUT + CleanText[pos+len(NonINPUT):]
 
 ## CorrectionKo의 Filter(Error 예외처리)
-def CorrectionKoFilter(Input, DotsInput, responseDataDic, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount):
-    # Error1: json 형식이 아닐 때의 예외 처리
-    try:
-        outputJson = json.loads(responseDataDic)
-        responseData = outputJson['보정']['끊어읽기보정']
-    except json.JSONDecodeError:
-        return "JSONDecode에서 오류 발생: JSONDecodeError"
-    except KeyError:
-        return "JSON에서 오류 발생: KeyError MainKey가 '효과음태그'가 아님"
-    
+def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount):
+    # Error1: 결과가 마지막까지 생성되지 않을 경우 예외 처리
     if f'[{InputDots}]' not in responseData:
         return f"OUTPUT의 마지막 [{InputDots}]이 생성되지 않음, OUTPUT이 덜 생성됨"
     
@@ -590,10 +582,10 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             outputEnder = ""
             
             # Response 생성
-            # if ErrorCount in [2, 4]:
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
-            # else:
-            #     Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            if ErrorCount in [2, 4]:
+                Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            else:
+                Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
@@ -630,7 +622,6 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                 if ErrorCount >= 10:
                     sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
 
-                    
                 continue
             else:
                 OutputDic = Filter['filter']
@@ -929,7 +920,7 @@ def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview =
             tokens.append({"Pause": "(0.75)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Character" and Aftertag == "Narrator":
-            tokens.append({"Pause": "(0.65)"})
+            tokens.append({"Pause": "(0.40)"})
             tokens.append({"Enter": "\n"})
         elif tag == "Character" and Aftertag == "Comment":
             tokens.append({"Pause": "(0.20)"})

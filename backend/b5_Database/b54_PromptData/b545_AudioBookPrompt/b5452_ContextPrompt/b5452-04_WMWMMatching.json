@@ -19,7 +19,7 @@
     "ANTHROPIC": {
         "BaseModel": {
             "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-3-7-sonnet-latest"
+            "LongTokensModel": "claude-3-5-sonnet-latest"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -29,7 +29,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "claude-3-7-sonnet-latest"
+        "MasterModel": "claude-3-5-sonnet-latest"
     },
     "GOOGLE":{
         "MasterModel": "gemini-2.5-flash-preview-04-17"
@@ -37,7 +37,7 @@
     "DEEPSEEK":{
         "MasterModel": "deepseek-reasoner"
     },
-    "Temperature": 0.8,
+    "Temperature": 0.4,
     "OutputTokensRatio": 0.5,
     "OutputFormat": "json",
     "Memo": "벡터데이터 베이스를 통해 1차적으로 <도서메타데이터>와 유사도가 높은 <영상메타데이터.db>를 선정한 후, 이를 통해 완벽한 <영상메타데이터>를 선별하기",

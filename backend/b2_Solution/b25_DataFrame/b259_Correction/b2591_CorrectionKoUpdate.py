@@ -302,7 +302,7 @@ def ReplaceNthOccurrence(CleanText, NonINPUT, NonOUTPUT, n):
     return CleanText[:pos] + NonOUTPUT + CleanText[pos+len(NonINPUT):]
 
 ## CorrectionKo의 Filter(Error 예외처리)
-def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount):
+def CorrectionKoFilter(Input, DotsInput, responseData, memoryCounter, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount):
     # Error1: 결과가 마지막까지 생성되지 않을 경우 예외 처리
     if f'[{InputDots}]' not in responseData:
         return f"OUTPUT의 마지막 [{InputDots}]이 생성되지 않음, OUTPUT이 덜 생성됨"
@@ -313,6 +313,7 @@ def CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, 
     # [n]을 통해 문장 분리 및 전처리가 가능하도록 [n]을 '●'로 치환
     responseData = NumbersToDots(responseData)
     LastTagIndex = responseData.rfind("<끊어읽기보정>")
+    responseData = responseData.replace(memoryCounter, '')
     if LastTagIndex != -1:
         responseData = responseData[LastTagIndex + len("<끊어읽기보정>"):].strip()
     responseData = responseData.replace('<끊어읽기보정>\n\n', '')
@@ -602,7 +603,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = CorrectionKoFilter(Input, DotsInput, responseData, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount)
+            Filter = CorrectionKoFilter(Input, DotsInput, responseData, memoryCounter, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount)
             
             if isinstance(Filter, str) or "UnmatchedSpot" in Filter:
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

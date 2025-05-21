@@ -2445,6 +2445,17 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             del MatchedChunks[j]
         ### E. EditGenerationKoChunks에 Edit내 ActorChunk 비어있는 경우 삭제 ###
 
+    ### F. EditGenerationKoChunks에 Edit내 Title 부분(첫번째, 두번째 Edit)의 ActorName이 다를 경우 일치
+    # Title이 시작하는 Edit 순번 찾기
+    for TSId in range(len(MatchedChunks)):
+        if MatchedChunks[TSId]['Tag'] == 'Title':
+            break
+    # Title과 Title 다음 Edit의 ActorName이 다를 경우 일치화
+    if len(MatchedChunks) - TSId > 1:
+        if MatchedChunks[TSId]['ActorName'] != MatchedChunks[TSId + 1]['ActorName']:
+            MatchedChunks[TSId + 1]['ActorName'] = MatchedChunks[TSId]['ActorName']
+    ### F. EditGenerationKoChunks에 Edit내 Title 부분(첫번째, 두번째 Edit)의 ActorName이 다를 경우 일치
+    
     ## 모든 인물 전체 히스토리 불러오기 (Modify 검사 용도)
     GenerationKoChunkAllHistory = []
     for _MatchedActor in MatchedActors:

@@ -2406,6 +2406,14 @@
                                 "Volume": 110,
                                 "Direction": "뒤"
                             }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s184_TitleMusic/12_TitleMusicSet/126_PartMusic.wav",
+                            "Setting": {
+                                "Length": [2.87, 6.00],
+                                "Volume": 110,
+                                "Direction": "뒤"
+                            }
                         }
                     ],
                     "IndexMusic": [
@@ -2445,6 +2453,14 @@
                             "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s184_TitleMusic/12_TitleMusicSet/125_IndexMusic.wav",
                             "Setting": {
                                 "Length": [1.25, 2.98],
+                                "Volume": 100,
+                                "Direction": "뒤"
+                            }
+                        },
+                        {
+                            "FilePath": "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s184_TitleMusic/12_TitleMusicSet/126_IndexMusic.wav",
+                            "Setting": {
+                                "Length": [1.25, 2],
                                 "Volume": 100,
                                 "Direction": "뒤"
                             }

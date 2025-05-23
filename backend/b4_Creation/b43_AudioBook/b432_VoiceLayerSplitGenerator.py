@@ -2624,7 +2624,9 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     ##### 3. 문장의 순서 또는 내용이 변경된 경우 -> 이 경우는 현재 파악못함 #####
     #### Brackets 자동 생성 ####
 
+    ########################################
     #### MatchedActor 순서대로 Speech 생성 ####
+    ########################################
     for MatchedActor in MatchedActors:
         Api = MatchedActor['ApiSetting']['Api']
         Actor = MatchedActor['ActorName']

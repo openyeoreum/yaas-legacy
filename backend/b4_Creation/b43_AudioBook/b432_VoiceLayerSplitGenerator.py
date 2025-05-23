@@ -2623,9 +2623,11 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
     ## 2. 수정 이전 문장의 개수를 파악하는 문제
     ##### 3. 문장의 순서 또는 내용이 변경된 경우 -> 이 경우는 현재 파악못함 #####
     #### Brackets 자동 생성 ####
-
+    
+    ########################################
     ########################################
     #### MatchedActor 순서대로 Speech 생성 ####
+    ########################################
     ########################################
     for MatchedActor in MatchedActors:
         Api = MatchedActor['ApiSetting']['Api']
@@ -2805,11 +2807,11 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             
             #### ReadingStyle: NarratorOnly와 AllCharacters의 설정 ####
             if ReadingStyle == 'NarratorOnly':
-                for MatchedActor in MatchedActors:
-                    if MatchedActor['CharacterTag'] == 'Narrator':
-                        NarratorActorName = MatchedActor['ActorName']
-                    if MatchedActor['CharacterTag'] == 'SecondaryNarrator':
-                        SecondaryNarratorActorName = MatchedActor['ActorName']
+                for _MatchedActor in MatchedActors:
+                    if _MatchedActor['CharacterTag'] == 'Narrator':
+                        NarratorActorName = _MatchedActor['ActorName']
+                    if _MatchedActor['CharacterTag'] == 'SecondaryNarrator':
+                        SecondaryNarratorActorName = _MatchedActor['ActorName']
                     
                 for chunk in EditGenerationKoChunks:
                     if chunk['Tag'] == 'Character':
@@ -2817,7 +2819,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                     else:
                         chunk['ActorName'] = NarratorActorName
             #### ReadingStyle: NarratorOnly와 AllCharacters의 설정 ####
-
+            
             # MatchedActors, MatchedChunks 저장 (Dic 저장 후 다시 List로 변환)
             fileName = projectName + '_' + 'MatchedVoices.json'
             MatchedActorsPath = VoiceLayerPathGen(projectName, email, fileName, 'Mixed')

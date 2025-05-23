@@ -2447,8 +2447,10 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 
     ### F. EditGenerationKoChunks에 Edit내 Title 부분(첫번째, 두번째 Edit)의 ActorName이 다를 경우 일치
     # Title이 시작하는 Edit 순번 찾기
-    for TSId in range(len(MatchedChunks)):
-        if MatchedChunks[TSId]['Tag'] == 'Title':
+    TSId = 0
+    for i in range(len(MatchedChunks)):
+        if MatchedChunks[i]['Tag'] == 'Title':
+            TSId = i
             break
     # Title과 Title 다음 Edit의 ActorName이 다를 경우 일치화
     if len(MatchedChunks) - TSId > 1:

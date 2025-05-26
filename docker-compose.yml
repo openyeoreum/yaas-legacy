@@ -27,7 +27,7 @@ services:
     environment:
       - DATABASE_URL=postgres://yeoreum:0128@yaasdb:5432/yaasdb
     ports:
-      - "5173:3000"
+      - "5174:5174"
     volumes:
       - ./backend:/yaas/backend
       - ./extension:/yaas/extension

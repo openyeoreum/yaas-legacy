@@ -1884,7 +1884,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
     # if IndexTag in ['Intro', 'Title', 'Logue', 'Part', 'Chapter', 'Index']:
     IndexTitle = ' '.join(IndexTitles)
-    if len(FileLimitList) >= 1:
+    if (len(FileLimitList) >= 1) and (FileLimitList[-1] + 1 < len(EditGenerationKoChunks)):
         for i in range(len(FileLimitList)):
             for j in range(len(EditGenerationKoChunks)):
                 if FileLimitList[i] == EditGenerationKoChunks[j]['EditId']:

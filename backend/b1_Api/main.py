@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -19,11 +19,6 @@ app.add_middleware(
     allow_headers=["*"],    # 모든 헤더 허용
 )
 
-@app.get("/yaas")
-def hello(request: Request):
-    # IP 확인용
-    client_ip = request.client.host if request.client else "unknown"
-    origin = request.headers.get("origin", "no-origin")
-    print(f"Request from IP: {client_ip}")
-    print(f"Origin: {origin}")
-    return {"message": "Hello, YaaS!", "your_ip": client_ip, "origin": origin}
+@app.get("/hello")
+def hello():
+    return {"message": " 안 녕 하 세 요 파 이 보 "}

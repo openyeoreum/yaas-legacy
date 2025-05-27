@@ -24829,7 +24829,7 @@
                     "Pitch": 0
                 }
             },
-                        {
+            {
                 "CharacterId": 2028,
                 "Name": "성순애(낭독)",
                 "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/2028_성순애S(낭독).mp3",
@@ -24966,6 +24966,444 @@
                     "name": "성순애(연기)",
                     "Api": "ElevenLabs",
                     "voice_id": "xtaxrd4HcU6ijg1MTKgA",
+                    "stability": [0.4],
+                    "similarity_boost": [0.75],
+                    "style": [0.01],
+                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 2029,
+                "Name": "한예림(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/2029_한예림S(낭독).mp3",
+                "Quilty": 10,
+                "Grade": ["Main"],
+                "SecondaryVoice": "한예림(연기)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 0},
+                        {"index": "여", "Score": 0},
+                        {"index": "중성", "Score": 0}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 0},
+                        {"index": "중립적", "Score": 0},
+                        {"index": "내향적", "Score": 0}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 0},
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "평온", "Score": 0},
+                        {"index": "무감정", "Score": 0},
+                        {"index": "피곤", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["ko", "en", "zh", "ja", "es", "fr", "de"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 0},
+                        {"index": "중립", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "화남", "Score": 0}],
+                    "Feature": "활기차고 또박또박한 음성, 에너지 풍부, 교육 서적이나 정보전달 낭독"
+                },
+                "ApiSetting": {
+                    "name": "한예림(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "xrCZo4THGbGTlT7hIrc6",
+                    "stability": [0.9],
+                    "similarity_boost": [0.6],
+                    "style": [0],
+                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.15,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 2029,
+                "Name": "한예림(연기)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/2029_한예림S(연기).mp3",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "None",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 0},
+                        {"index": "여", "Score": 0},
+                        {"index": "중성", "Score": 0}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 0},
+                        {"index": "중립적", "Score": 0},
+                        {"index": "내향적", "Score": 0}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 0},
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "평온", "Score": 0},
+                        {"index": "무감정", "Score": 0},
+                        {"index": "피곤", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["ko", "en", "zh", "ja", "es", "fr", "de"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 0},
+                        {"index": "중립", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "화남", "Score": 0}],
+                    "Feature": "활기차고 또박또박한 음성, 에너지 풍부, 교육 서적이나 정보전달 낭독"
+                },
+                "ApiSetting": {
+                    "name": "한예림(연기)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "xrCZo4THGbGTlT7hIrc6",
+                    "stability": [0.45],
+                    "similarity_boost": [0.75],
+                    "style": [0.01],
+                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 0.9,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 2030,
+                "Name": "고은별(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/2030_고은별S(낭독).mp3",
+                "Quilty": 10,
+                "Grade": ["Main"],
+                "SecondaryVoice": "고은별(연기)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 0},
+                        {"index": "여", "Score": 0},
+                        {"index": "중성", "Score": 0}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 0},
+                        {"index": "중립적", "Score": 0},
+                        {"index": "내향적", "Score": 0}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 0},
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "평온", "Score": 0},
+                        {"index": "무감정", "Score": 0},
+                        {"index": "피곤", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["ko", "en", "zh", "ja", "es", "fr", "de"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 0},
+                        {"index": "중립", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "화남", "Score": 0}],
+                    "Feature": "보이시하고 매력적인 저음 여성, 차분하고 전달력 있는 목소리"
+                },
+                "ApiSetting": {
+                    "name": "고은별(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "kOFEdWqLv8dTBq60MCKi",
+                    "stability": [0.95],
+                    "similarity_boost": [0.4],
+                    "style": [0],
+                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 2030,
+                "Name": "고은별(연기)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/2030_고은별S(연기).mp3",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "None",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 0},
+                        {"index": "여", "Score": 0},
+                        {"index": "중성", "Score": 0}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 0},
+                        {"index": "중립적", "Score": 0},
+                        {"index": "내향적", "Score": 0}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 0},
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "평온", "Score": 0},
+                        {"index": "무감정", "Score": 0},
+                        {"index": "피곤", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["ko", "en", "zh", "ja", "es", "fr", "de"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 0},
+                        {"index": "중립", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "화남", "Score": 0}],
+                    "Feature": "보이시하고 매력적인 저음 여성, 차분하고 전달력 있는 목소리"
+                },
+                "ApiSetting": {
+                    "name": "고은별(연기)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "kOFEdWqLv8dTBq60MCKi",
+                    "stability": [0.4],
+                    "similarity_boost": [0.75],
+                    "style": [0.01],
+                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 2031,
+                "Name": "임나린(낭독)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/2031_임나린S(낭독).mp3",
+                "Quilty": 10,
+                "Grade": ["Main"],
+                "SecondaryVoice": "임나린(연기)",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 0},
+                        {"index": "여", "Score": 0},
+                        {"index": "중성", "Score": 0}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 0},
+                        {"index": "중립적", "Score": 0},
+                        {"index": "내향적", "Score": 0}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 0},
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "평온", "Score": 0},
+                        {"index": "무감정", "Score": 0},
+                        {"index": "피곤", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["ko", "en", "zh", "ja", "es", "fr", "de"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 10},
+                        {"index": "대화", "Score": 0}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 0},
+                        {"index": "중립", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "화남", "Score": 0}],
+                    "Feature": "차분하고 조곤조곤 속삭이는 목소리, 따뜻한 라디오 감성, ASMR"
+                },
+                "ApiSetting": {
+                    "name": "임나린(낭독)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "BQ72tzB9Z5zYiLOShl59",
+                    "stability": [0.9],
+                    "similarity_boost": [0.6],
+                    "style": [0],
+                    "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
+                    "Volume": 0,
+                    "Speed": 1.0,
+                    "Pitch": 0
+                }
+            },
+            {
+                "CharacterId": 2031,
+                "Name": "임나린(연기)",
+                "SamplePath": "/yaas/storage/s1_Yeoreum/s13_CloneStorage/s131_VoiceStorage/s1311_ActorVoice/2031_임나린S(연기).mp3",
+                "Quilty": 9,
+                "Grade": ["Actor"],
+                "SecondaryVoice": "None",
+                "Context": {
+                    "Genre": [
+                        {"index": "문학", "Score": 0},
+                        {"index": "비문학", "Score": 10},
+                        {"index": "아동", "Score": 0},
+                        {"index": "시", "Score": 0},
+                        {"index": "학술", "Score": 0}],
+                    "Gender": [
+                        {"index": "남", "Score": 0},
+                        {"index": "여", "Score": 0},
+                        {"index": "중성", "Score": 0}],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Personality": [
+                        {"index": "외향적", "Score": 0},
+                        {"index": "중립적", "Score": 0},
+                        {"index": "내향적", "Score": 0}],
+                    "Atmosphere": [
+                        {"index": "행복", "Score": 0},
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "평온", "Score": 0},
+                        {"index": "무감정", "Score": 0},
+                        {"index": "피곤", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "두려움", "Score": 0},
+                        {"index": "놀람", "Score": 0}]
+                },
+                "Voice": {
+                    "Language": ["ko", "en", "zh", "ja", "es", "fr", "de"],
+                    "Gender": ["여"],
+                    "Age": [
+                        {"index": "유년", "Score": 0},
+                        {"index": "청소년", "Score": 0},
+                        {"index": "청년", "Score": 0},
+                        {"index": "중년", "Score": 0},
+                        {"index": "장년", "Score": 0},
+                        {"index": "노년", "Score": 0}],
+                    "Role": [
+                        {"index": "낭독", "Score": 0},
+                        {"index": "대화", "Score": 10}],
+                    "Emotion": [
+                        {"index": "즐거움", "Score": 0},
+                        {"index": "침착함", "Score": 0},
+                        {"index": "중립", "Score": 0},
+                        {"index": "슬픔", "Score": 0},
+                        {"index": "화남", "Score": 0}],
+                    "Feature": "차분하고 조곤조곤 속삭이는 목소리, 따뜻한 라디오 감성, ASMR"
+                },
+                "ApiSetting": {
+                    "name": "임나린(연기)",
+                    "Api": "ElevenLabs",
+                    "voice_id": "BQ72tzB9Z5zYiLOShl59",
                     "stability": [0.4],
                     "similarity_boost": [0.75],
                     "style": [0.01],

@@ -1299,8 +1299,8 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     with open(MatchedActorsPath, 'r', encoding = 'utf-8') as MatchedActorsJson:
         MatchedActors = json.load(MatchedActorsJson)
 
-    DefaultVoiceSpeed = 1.0 # CloneVoiceSpeed의 기본값에 해당
-    DefaultVoicePitch = 0.0 # CloneVoicePitch의 기본값에 해당
+    DefaultVoiceSpeed = 1 # CloneVoiceSpeed의 기본값에 해당
+    DefaultVoicePitch = 0 # CloneVoicePitch의 기본값에 해당
     _SpeedRemoveList = []
 
     # 처리할 액터별 설정 정보를 저장할 리스트
@@ -1313,6 +1313,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
             
             # MatchedActor에서 직접 가져오는 값들에 기존 변수명(파스칼케이스) 사용
             ActorName = MatchedActor.get('ActorName', 'UnknownActor') # 기존 ActorName
+            CloneVoiceApi = ApiSetting['Api'] # 현 액터의 CloneVoiceApi 값
             CloneVoiceSpeed = ApiSetting['Speed'] # 현 액터의 CloneVoiceSpeed 값
             CloneVoicePitch = ApiSetting['Pitch'] # 현 액터의 CloneVoicePitch 값
             # 중요: 이 FilterKey는 현재 MatchedActor의 파일을 식별하는 데 사용될 이름/키여야 합니다.
@@ -1327,6 +1328,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                 ActorConfigsForProcessing.append({
                     'ConfigActorName': ActorName,       # 로깅 및 참조용 ActorName
                     'FilterKey': ActorSpecificFilterKey,# 파일 필터링에 사용될 키 (원본의 CloneVoiceName 역할)
+                    'CloneVoiceApi': CloneVoiceApi,     # 해당 액터의 CloneVoiceApi 값
                     'ConfigSpeed': CloneVoiceSpeed,    # 해당 액터의 특정 Speed 값
                     'ConfigPitch': CloneVoicePitch     # 해당 액터의 특정 Pitch 값
                 })
@@ -1412,17 +1414,16 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
     # 전체 오디오 클립의 누적 길이를 추적하는 변수 추가
     for Update in UpdateTQDM:
         # 현재 낭독 속도 확인을 위해 CurrentActorName 추출 후 설정값 추출
+        CloneVoiceFileSpeed = 1
+        CloneVoiceFilePitch = 0
         CurrentActorName = Update['ActorName']
         for config in ActorConfigsForProcessing:
             if config['ConfigActorName'] == CurrentActorName:
-                CloneVoiceSpeed = config['ConfigSpeed']
-                CloneVoicePitch = config['ConfigPitch']
-                CloneVoiceName = config['FilterKey']
+                CloneVoiceFileSpeed = config['ConfigSpeed']
+                CloneVoiceFilePitch = config['ConfigPitch']
+                CloneVoiceApi = config['CloneVoiceApi']
                 break
-            else:
-                CloneVoiceSpeed = 1
-                CloneVoicePitch = 0
-                CloneVoiceName = "저자명"
+            
         EditId = Update['EditId']
         Tag = Update['Tag']
         # if EditId in [1, 2, 3, 4, 5, 6]: ######
@@ -1470,7 +1471,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                             
                             # CloneVoice의 끊어읽기 시간을 고려해서 CloneVoice Puase시간 추가
                             AddPause = 0
-                            if (CloneVoiceName in FilteredFiles[FilesCount]) and (_pausenum == len(Pause)-1):
+                            if (CurrentActorName in FilteredFiles[FilesCount]) and (_pausenum == len(Pause)-1):
                                 AddPause = 0.3
                             PauseDuration_ms = (Pause[_pausenum] + AddPause) * 1000
                             # if EditId in [1, 2, 3, 4, 5, 6]: ######
@@ -1478,8 +1479,9 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                             silence = AudioSegment.silent(duration = PauseDuration_ms)
                             
                             ## _Speed.wav 파일 선택 (Clone Voice 속도 조절시) ##
-                            if CloneVoiceSpeed != 1:
-                                if ('_[' not in FilteredFiles[FilesCount]) and (Tag in ['Narrator', 'Caption', 'Character']) and (CloneVoiceName in FilteredFiles[FilesCount]):
+                            if (CloneVoiceFileSpeed != 1 or CloneVoiceFilePitch != 0) and (CloneVoiceApi == 'ElevenLabs'):
+                                # CloneVoice 속도 조절이 필요한 경우
+                                if ('_[' not in FilteredFiles[FilesCount]) and (Tag in ['Narrator', 'Caption', 'Character']) and (CurrentActorName in FilteredFiles[FilesCount]):
                                     # Caption의 경우 첫번째 제목 부분은 음성 속도를 원래대로
                                     if not (Tag == 'Caption' and _pausenum == 0):
                                         _VoiceFilePath = os.path.join(voiceLayerPath, FilteredFiles[FilesCount])
@@ -1487,7 +1489,7 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                                         # Voice 속도를 빠르게
                                         sound_file = AudioSegment.from_wav(_SpeedFilePath)
                                         # Pause 속도를 빠르게
-                                        PauseDuration_ms = PauseDuration_ms/CloneVoiceSpeed
+                                        PauseDuration_ms = PauseDuration_ms/CloneVoiceFileSpeed
                                         silence = AudioSegment.silent(duration = PauseDuration_ms)
                             ## _Speed.wav 파일 선택 (Clone Voice 속도 조절시) ##
                             

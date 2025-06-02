@@ -1469,6 +1469,21 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                                 with open(_VoiceFilePath, 'rb') as mVoiceFile:
                                     sound_file = AudioSegment.from_wav(mVoiceFile)
                             
+                            # 0.15초 SAddPause 후처리
+                            SAddPause = AudioSegment.silent(duration = 150)
+                            ActorChunkNumMatch = re.search(r'.*_\((\d+)\)', FilteredFiles[FilesCount])
+                            if ActorChunkNumMatch:
+                                ActorChunkNum = int(ActorChunkNumMatch.group(1))
+    
+                                # 대괄호 생성 문장 앞뒤 0.15초 추가
+                                CurrentActorChunk = ActorChunk[ActorChunkNum].strip()
+                                if len(CurrentActorChunk) > 1 and CurrentActorChunk.startswith('[') and CurrentActorChunk.endswith(']'):
+                                    sound_file = SAddPause + sound_file + SAddPause
+                                
+                                # ActorChunk 마지막 문장 뒤 0.15초 추가
+                                if len(ActorChunk) - 1 == ActorChunkNum:
+                                    sound_file = sound_file + SAddPause
+
                             # CloneVoice의 끊어읽기 시간을 고려해서 CloneVoice Puase시간 추가
                             AddPause = 0
                             if (CurrentActorName in FilteredFiles[FilesCount]) and (_pausenum == len(Pause)-1):
@@ -1492,7 +1507,8 @@ def MusicSelector(projectName, email, CloneVoiceName = "저자명", MainLang = '
                                         PauseDuration_ms = PauseDuration_ms/CloneVoiceFileSpeed
                                         silence = AudioSegment.silent(duration = PauseDuration_ms)
                             ## _Speed.wav 파일 선택 (Clone Voice 속도 조절시) ##
-                            
+
+                            # 최종 음성파일 합성
                             CombinedSound += sound_file + silence
                             CombinedSize += 1
                             FilesCount += 1

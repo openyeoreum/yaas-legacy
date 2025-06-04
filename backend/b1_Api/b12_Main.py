@@ -4,6 +4,7 @@ sys.path.append("/yaas")
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from backend.b1_Api.b16_Routers import UserRouter
+from backend.b1_Api.domain.question.question_router import router as QuestionRouter
 
 app = FastAPI(debug=True)
 
@@ -22,6 +23,10 @@ app.add_middleware(
     allow_methods=["*"],    # 모든 HTTP 메소드 허용 (OPTIONS 포함)
     allow_headers=["*"],    # 모든 헤더 허용
 )
+
+#### 학습 후 삭제 ####
+app.include_router(QuestionRouter)
+#### 학습 후 삭제 ####
 
 app.include_router(UserRouter)
 # app.include_router(b1112_UserHistoryRouter.router)

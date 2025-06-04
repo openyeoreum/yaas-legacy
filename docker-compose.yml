@@ -23,7 +23,7 @@ services:
       - yaasdb
 
   yaas:
-    image: yeoreum/yaas:1.0.2
+    image: yeoreum/yaas:1.0.1
     environment:
       - DATABASE_URL=postgres://yeoreum:0128@yaasdb:5432/yaasdb
     ports:

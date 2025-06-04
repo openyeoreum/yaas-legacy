@@ -30,7 +30,7 @@ services:
       - "5174:5174"
     volumes:
       - ./backend:/yaas/backend
-      - ./frontend:/yaas/frontend
+      - ./webfrontend:/yaas/webfrontend
       - ./extension:/yaas/extension
       # - /Users/remake/Library/Group Containers/G69SCX94XU.duck/Library/Application Support/duck/Volumes.noindex/Storage.localized:/yaas/storage
       # - /Volumes/Storage:/yaas/storage

@@ -829,6 +829,7 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
         # Api Setting
         Name = ApiSetting['ApiName']
         Language = ApiSetting['Language']
+        voice_id = ApiSetting['voice_id']
         Volume = ApiSetting['Volume']
         Speed = ApiSetting['Speed']
         pitch = ApiSetting['Pitch'] * 10
@@ -840,52 +841,33 @@ def ActorVoiceGen(projectName, email, Modify, ModifyFolderPath, BracketsSwitch, 
             try:
                 ########## SuperTone API 요청 ##########
                 SUPERTONEApikey = os.getenv("SUPERTONE_API_KEY")
-                # 1. Search Voices API를 사용하여 voice_id 검색
-                search_url = "https://supertoneapi.com/v1/voices/search"
-                params = {
-                    "search": Name, # 이름 기반 검색 (name과 description 필드 대상)
-                    "language": Language, # 언어 필터
-                    "style": Style # 스타일 필터
-                }
-                headers = {
-                    "x-sup-api-key": SUPERTONEApikey
-                }
-                response_search = requests.get(search_url, headers=headers, params=params)
-                if response_search.status_code != 200:
-                    sys.exit(f"[ SUPERTONE 음성 {name} -> ({Name}) - {Style} 검색 오류 ]\n{response_search.status_code}\n{response_search.text}")
-                data = response_search.json()
-                voices = data.get("voices", [])
-                if not voices:
-                    sys.exit(f"[ SUPERTONE 음성 {name} -> ({Name}) - {Style} 검색 오류 ]")
-                # 첫 번째 검색 결과에서 voice_id 추출
-                voice_id = voices[0].get("voice_id")
                 
-                # 최종 음성 합성을 위한 AudioSegment 생성
+                # 음성 합성을 위한 AudioSegment 생성
                 final_audio = AudioSegment.empty()
                 silence_segment = AudioSegment.silent(duration=200)  # 0.2초 공백
                 
-                # EL_Chunk가 길 경우, 문장 단위로 분할 후 여러 문장을 합쳐 150자 이하의 chunk로 생성
-                if len(EL_Chunk) >= 190:
+                # EL_Chunk가 길 경우, 문장 단위로 분할 후 여러 문장을 합쳐 220자 이하의 chunk로 생성
+                if len(EL_Chunk) >= 220:
                     # 먼저 '//' 기준으로 분할
                     sentences = re.split(r'//', EL_Chunk)
                     sentences = [s.strip() for s in sentences if s.strip() != ""]
                     
-                    # 각 문장이 150자보다 큰 경우, 문장단위(.!? ...)로 추가 분할
+                    # 각 문장이 220자보다 큰 경우, 문장단위(.!? ...)로 추가 분할
                     refined_sentences = []
                     for sentence in sentences:
-                        if len(sentence) > 150:
+                        if len(sentence) > 220:
                             sub_sentences = re.split(r'(?<=[.!?])\s+', sentence)
                             sub_sentences = [s.strip() for s in sub_sentences if s.strip() != ""]
                             refined_sentences.extend(sub_sentences)
                         else:
                             refined_sentences.append(sentence)
                     
-                    # 150자 이하의 청크로 문장들을 합치기
+                    # 220자 이하의 청크로 문장들을 합치기
                     chunks = []
                     current_chunk = ""
                     for sentence in refined_sentences:
                         candidate = current_chunk + " " + sentence if current_chunk else sentence
-                        if len(candidate) <= 150:
+                        if len(candidate) <= 220:
                             current_chunk = candidate
                         else:
                             if current_chunk:

@@ -6,7 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 from backend.b1_Api.b16_Routers import UserRouter
 from backend.b1_Api.domain.question.question_router import router as QuestionRouter
 
-app = FastAPI(debug=True)
+app = FastAPI(debug = True)
 
 # CORS 설정 - credentials와 * 동시 사용 불가
 origins = [
@@ -18,10 +18,10 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins, # 또는 구체적인 origins 목록
-    allow_credentials=True, # allow_origins=["*"]일 경우 False
-    allow_methods=["*"],    # 모든 HTTP 메소드 허용 (OPTIONS 포함)
-    allow_headers=["*"],    # 모든 헤더 허용
+    allow_origins = origins, # 또는 구체적인 origins 목록
+    allow_credentials = True, # allow_origins=["*"]일 경우 False
+    allow_methods = ["*"],    # 모든 HTTP 메소드 허용 (OPTIONS 포함)
+    allow_headers = ["*"],    # 모든 헤더 허용
 )
 
 #### 학습 후 삭제 ####

@@ -304,46 +304,68 @@ def ExtractingHtml(WebPageTXTPath):
     return EmailText
 
 ## Name, Email 데이터를 CSV로 저장
-def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, ChunkSize = 500):
+def SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, UnsubscribeEmailListPath, ChunkSize = 500):
     os.makedirs(TotalPublisherDataCSVPath, exist_ok = True)
 
+    # 수신거부 이메일 리스트 읽기 (JSON 파일)
+    UnsubscribeEmails = set()
+    try:
+        import json
+        with open(UnsubscribeEmailListPath, 'r', encoding='utf-8') as f:
+            email_list = json.load(f)
+            UnsubscribeEmails = set(email_list)
+        print(f"[ SaveEmailToCSV : {len(UnsubscribeEmails)}개의 수신거부 이메일을 로드했습니다. ]")
+    except FileNotFoundError:
+        print(f"[ SaveEmailToCSV : 경고 - 수신거부 이메일 파일을 찾을 수 없습니다: {UnsubscribeEmailListPath} ]")
+    except Exception as e:
+        print(f"[ SaveEmailToCSV : 경고 - 수신거부 이메일 파일 읽기 실패: {e} ]")
+    
     # 1) 모든 (Name, Email) 쌍을 'flatten' 형태로 수집할 리스트
     FlattenedData = []
-
+    ExcludedCount = 0  # 제외된 이메일 수 카운트
+    
     for item in TotalPublisherData:
         name = item["PublisherInformation"].get("Name", "")
         email = item["PublisherInformation"].get("Email", "")
         if email == ['']:
             email = []
-
+        
         # 이메일이 비어있지 않은 경우만 처리
         if email:
             # 하나의 Name에 여러 이메일이 있을 경우 -> 각각 flatten_data에 추가
             for e_mail in email:
-                FlattenedData.append((name, e_mail))
+                # 수신거부 이메일 리스트에 포함되지 않은 경우만 추가
+                if e_mail not in UnsubscribeEmails:
+                    FlattenedData.append((name, e_mail))
+                else:
+                    ExcludedCount += 1
+    
+    print(f"[ SaveEmailToCSV : 총 {ExcludedCount}개의 이메일이 제외되었습니다. ]")
+    print(f"[ SaveEmailToCSV : 저장할 데이터 수: {len(FlattenedData)}개 ]")
+    
     # 2) 최대 500행씩 CSV 저장
     # FlattenedData는 이미 (Name, Email) 쌍으로 '한 행에 들어갈 데이터'가 준비된 상태
     for start_idx in range(0, len(FlattenedData), ChunkSize):
         end_idx = start_idx + ChunkSize
         chunk = FlattenedData[start_idx:end_idx]
-
+        
         # 파일명 생성 (ex: 1_PublisherEmail(500).csv)
         FileIndex = (start_idx // ChunkSize) + 1
         NumChunk = len(chunk)
         CSVFileName = f"{FileIndex}_PublisherEmail({NumChunk}).csv"
         CSVFilePath = os.path.join(TotalPublisherDataCSVPath, CSVFileName)
-
+        
         # CSV 파일 쓰기
-        with open(CSVFilePath, 'w', encoding = 'utf-8', newline = '') as csvfile:
+        with open(CSVFilePath, 'w', encoding='utf-8', newline='') as csvfile:
             writer = csv.writer(csvfile)
             # 헤더 작성
             writer.writerow(["Name", "Email"])
-
+            
             # 실제 데이터 작성 (chunk에 들어있는 (Name, Email) 쌍)
             for name, e in chunk:
                 writer.writerow([name, e])
-
-    print(f"[ SaveEmaiToCSV : ({CSVFileName})까지 저장 완료 ]")
+        
+        print(f"[ SaveEmailToCSV : ({CSVFileName})까지 저장 완료 ]")
         
 ## 출판사 이메일 및 메인페이지 정보 스크래퍼
 def PublisherDataUpdate():
@@ -353,6 +375,8 @@ def PublisherDataUpdate():
     TotalPublisherDataCSVPath = os.path.join(PublisherDataPath, "TotalPublisherDataCSV")
     TotalPublisherDataJsonPath = os.path.join(PublisherDataPath, "TotalPublisherData.json")
     TotalPublisherDataAdditionCSVPath = os.path.join(PublisherDataPath, "TotalPublisherDataAddition", "TotalPublisherDataAddition.csv")
+    ## 수신거부 이메일 리스트
+    UnsubscribeEmailListPath = os.path.join(PublisherDataPath, "UnsubscribePublisherData.json")
     
     ## TotalPublisherData 수집된 출판사 데이터 추가(TotalPublisherDataAddition.csv가 존재할때)
     if os.path.exists(TotalPublisherDataAdditionCSVPath):
@@ -371,25 +395,24 @@ def PublisherDataUpdate():
             Id = TotalPublisherData[i]['Id']
             Name = TotalPublisherData[i]['PublisherInformation']['Name']
             WebPageTXTPath = TotalPublisherData[i]['PublisherInformation']['WebPageTXTPath']
-            if WebPageTXTPath != "None":
+            if WebPageTXTPath != "None" and not os.path.exists(WebPageTXTPath.replace('_WebPage.txt', '_WebPage_Extract.txt')):
                 EmailText = ExtractingHtml(WebPageTXTPath)
                 if TotalPublisherData[i]['PublisherInformation']['Email'] == "":
                     TotalPublisherData[i]['PublisherInformation']['Email'] = EmailText
                 else:
-                    TotalPublisherData[i]['PublisherInformation']['Email'] += EmailText
+                    if EmailText not in TotalPublisherData[i]['PublisherInformation']['Email']:
+                        TotalPublisherData[i]['PublisherInformation']['Email'] += EmailText
             elif WebPageTXTPath == "None":
                 if TotalPublisherData[i]['PublisherInformation']['Email'] == "":
                     TotalPublisherData[i]['PublisherInformation']['Email'] = []
-            elif WebPageTXTPath == "":
-                break
         ## 출판사 이메일 업데이트 사항 저장
         with open(TotalPublisherDataJsonPath, 'w', encoding = 'utf-8') as PublisherJson:
             json.dump(TotalPublisherData, PublisherJson, ensure_ascii = False, indent = 4)
-            
+        
         print(f"[ ({Id}) ({Name}) 출판사까지 이메일 및 메인페이지 정보 스크래핑 & 업데이트 완료 ]\n")
     
     ## Name, Email 데이터를 CSV로 저장
-    SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath)
+    SaveEmailToCSV(TotalPublisherData, TotalPublisherDataCSVPath, UnsubscribeEmailListPath)
     
 
 if __name__ == "__main__":

@@ -336,8 +336,8 @@ def WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = None
                 if ErrorCount >= 10:
                     sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
 
-                    
                 continue
+
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']
@@ -532,6 +532,13 @@ def WMWMMatchingBodyResponseJson(projectName, email, DataFramePath, messagesRevi
                 inputlist.append({'Id': BodyId, 'Continue': TaskBody})
         else:
             inputlist.append({'Id': BodyId, 'Pass': ''})
+            
+    # Continue가 존재하지 않는 경우(예외 처리)
+    if not any('Continue' in item for item in inputlist):
+        for item in inputlist:
+            # 'Pass'가 있고 값이 비어있지 않은 경우에만 'Continue'로 변경
+            if 'Pass' in item and item['Pass']:
+                item['Continue'] = item.pop('Pass')
 
     return SplitedChunkContexts, BodyResponseJson, inputlist, BookTitle
 

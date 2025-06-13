@@ -224,8 +224,8 @@ def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatc
                 if ErrorCount >= 10:
                     sys.exit(f"Project: {projectName} | Process: {Process} {OutputMemoryCount + ProcessCount}/{len(inputList)} | 오류횟수 {ErrorCount}회 초과, 프롬프트 종료")
 
-                    
                 continue
+
             else:
                 OutputDic = Filter['filter']
                 outputJson = Filter['json']

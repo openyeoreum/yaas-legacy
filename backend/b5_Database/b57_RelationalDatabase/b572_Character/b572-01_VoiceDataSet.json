@@ -25155,7 +25155,7 @@
                     "style": [0.01],
                     "models": {"Ko": "eleven_multilingual_v2", "En": "eleven_turbo_v2_5", "Zh": "eleven_multilingual_v2"},
                     "Volume": 0,
-                    "Speed": 0.9,
+                    "Speed": 1.1,
                     "Pitch": 0
                 }
             },

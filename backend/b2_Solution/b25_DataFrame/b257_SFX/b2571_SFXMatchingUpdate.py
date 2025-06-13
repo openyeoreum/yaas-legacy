@@ -160,6 +160,13 @@ def SFXMatchingFilter(Input, responseData, memoryCounter):
                 dic[key]['길이'] = ''
             elif not ('명칭' in dic[key] and '영어명칭' in dic[key] and '유형' in dic[key] and '역할' in dic[key] and '공간음향' in dic[key] and '길이' in dic[key] and '필요성' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
+            
+            # 필요성 값이 숫자 또는 문자열 숫자인지 검사
+            necessity_value = dic[key]['필요성']
+            if not (isinstance(necessity_value, (int, float)) or 
+                    (isinstance(necessity_value, str) and necessity_value.isdigit())):
+                return "JSON에서 오류 발생: 필요성 값이 숫자가 아님"
+            
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"

@@ -80,6 +80,15 @@ def SoundMatchingFilter(responseData, memoryCounter):
             key = list(dic.keys())[0]
             if not ('전환소리명칭' in dic[key] and '전환소리영어명칭' in dic[key] and '전환소리필요성' in dic[key] and '배경소리명칭' in dic[key] and '배경소리영어명칭' in dic[key] and '배경소리필요성' in dic[key] and '배경소리길이' in dic[key] and '유형' in dic[key] and '환경' in dic[key] and '상황' in dic[key] and '시대' in dic[key] and '문화' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
+            
+            # 필요성 값들이 숫자 또는 문자열 숫자인지 검사
+            necessity_keys = ['전환소리필요성', '배경소리필요성']
+            for necessity_key in necessity_keys:
+                value = dic[key][necessity_key]
+                if not (isinstance(value, (int, float)) or 
+                        (isinstance(value, str) and value.isdigit())):
+                    return f"JSON에서 오류 발생: {necessity_key} 값이 숫자가 아님"
+            
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"

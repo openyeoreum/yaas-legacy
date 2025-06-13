@@ -80,6 +80,13 @@ def CaptionCompletionFilter(responseData, memoryCounter):
     try:
         if not ('유형' in OutputDic and '맞는이유' in OutputDic and '아닌이유' in OutputDic and '최종캡션판단여부' in OutputDic and '정확도' in OutputDic) and (OutputDic['최종캡션판단여부'] == '맞다' or OutputDic['최종캡션판단여부'] == '아니다' or OutputDic['최종캡션판단여부'] == '알수없다'):
             return "JSON에서 오류 발생: JSONKeyError"
+        
+        # 정확도 값이 숫자 또는 문자열 숫자인지 검사
+        importance_value = OutputDic['정확도']
+        if not (isinstance(importance_value, (int, float)) or 
+                (isinstance(importance_value, str) and importance_value.isdigit())):
+            return "JSON에서 오류 발생: 정확도 값이 숫자가 아님"
+        
     # Error5: 자료의 형태가 Str일 때의 예외처리
     except AttributeError:
         return "JSON에서 오류 발생: strJSONError"

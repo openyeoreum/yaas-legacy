@@ -139,6 +139,13 @@ def ContextDefineFilter(Input, responseData, memoryCounter):
                     return f"JSON에서 오류 발생: JSON '핵심문구'가 Input에 포함되지 않음 Error\n문구: {dic[key]['핵심문구']}"
             elif not ('목적' in dic[key] and '원인' in dic[key] and '핵심문구' in dic[key] and '예상질문' in dic[key] and '매칭독자' in dic[key] and '주제' in dic[key] and '중요도' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
+            
+            # 중요도 값이 숫자 또는 문자열 숫자인지 검사
+            importance_value = dic[key]['중요도']
+            if not (isinstance(importance_value, (int, float)) or 
+                    (isinstance(importance_value, str) and importance_value.isdigit())):
+                return "JSON에서 오류 발생: 중요도 값이 숫자가 아님"
+            
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"

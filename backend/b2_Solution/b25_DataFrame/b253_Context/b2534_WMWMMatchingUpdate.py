@@ -182,6 +182,23 @@ def WMWMMatchingFilter(responseData, memoryCounter):
             key = '토론요약'
             if not ('장르' in dic[key] and '성별' in dic[key] and '연령' in dic[key] and '성향' in dic[key] and '감성' in dic[key] and '문구' in dic[key] and '대상독자' in dic[key] and '주제' in dic[key] and '목적' in dic[key] and '이유' in dic[key] and '대표질문' in dic[key] and '필요성' in dic[key] and '필요성배점이유' in dic[key] and '지식적유익성' in dic[key] and '지식적유익성배점이유' in dic[key] and '마음가짐의유익성' in dic[key] and '마음가짐의유익성배점이유' in dic[key] and '실천의유익성' in dic[key] and '실천의유익성배점이유' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
+            
+            # 유익성 점수들이 1-5 범위의 숫자 또는 문자열 숫자인지 검사
+            usefulness_keys = ['필요성', '지식적유익성', '마음가짐의유익성', '실천의유익성']
+            for usefulness_key in usefulness_keys:
+                value = dic[key][usefulness_key]
+                # 숫자 또는 문자열 숫자인지 확인
+                if isinstance(value, (int, float)):
+                    score = int(value)
+                elif isinstance(value, str) and value.isdigit():
+                    score = int(value)
+                else:
+                    return f"JSON에서 오류 발생: {usefulness_key} 값이 숫자가 아님"
+                
+                # 1-5 범위 내에 있는지 확인
+                if score < 1 or score > 5:
+                    return f"JSON에서 오류 발생: {usefulness_key} 값이 1-5 범위를 벗어남"
+            
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"
         except KeyError:

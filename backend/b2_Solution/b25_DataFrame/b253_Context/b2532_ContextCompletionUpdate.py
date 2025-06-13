@@ -115,6 +115,13 @@ def ContextCompletionFilter(MemoTag, responseData, memoryCounter):
             else:
                 if not ('성별' in dic[key] and '연령' in dic[key] and '장르' in dic[key] and '성격' in dic[key] and '감성' in dic[key] and '정확도' in dic[key]):
                     return "JSON에서 오류 발생: JSONUnderKeyError"
+                
+                # 정확도 값이 숫자 또는 문자열 숫자인지 검사
+                importance_value = dic[key]['정확도']
+                if not (isinstance(importance_value, (int, float)) or 
+                        (isinstance(importance_value, str) and importance_value.isdigit())):
+                    return "JSON에서 오류 발생: 정확도 값이 숫자가 아님"
+                
         # Error4: 자료의 형태가 Str일 때의 예외처리
         except AttributeError:
             return "JSON에서 오류 발생: strJSONError"

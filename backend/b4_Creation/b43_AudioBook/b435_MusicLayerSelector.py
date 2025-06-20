@@ -329,7 +329,30 @@ def MusicMatchedSelectionGenerationChunks(projectName, email, MainLang = 'Ko', I
         
         NewMatchedMusic = {'Tag': MatchedMusic['Tag'], 'File': File, 'FilePath': FilePath, 'Setting': Setting}
         NewMatchedMusics.append(NewMatchedMusic)
-
+    
+    # Logue 부분 존재하지 않을 경우 초기화
+    LogueExist = False
+    for _MatchedMusic in NewMatchedMusics:
+        if _MatchedMusic['Tag'] == 'Logue':
+            LogueExist = True
+            
+    if not LogueExist:
+        # 두 개의 음악 파일 중 하나를 무작위로 선택합니다.
+        music_files = ['1_LogueMusic.wav', '2_LogueMusic.wav']
+        selected_music_file = random.choice(music_files)
+        
+        # 선택된 파일에 따라 파일 경로를 설정합니다.
+        file_path = f'/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s186_LogueMusic/{selected_music_file}'
+        
+        # 무작위로 선택된 음악 파일 정보로 딕셔너리를 생성합니다.
+        NewLogueMusic = {
+            'Tag': 'Logue',
+            'File': selected_music_file,
+            'FilePath': file_path,
+            'Setting': {'Length': [0.75, 2.0], 'Volume': 100, 'Direction': '뒤'}
+        }
+        NewMatchedMusics.append(NewLogueMusic)
+        
     ## NewMatchedMusics 파일 저장
     with open(MatchedMusicLayerPath, 'w', encoding = 'utf-8') as MatchedMusicsJson:
         json.dump(NewMatchedMusics, MatchedMusicsJson, ensure_ascii = False, indent = 4)
@@ -388,6 +411,8 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB
                         
             if 'Index' in matchedMusic['Tag']:
                 IndexMusic = matchedMusic
+            if 'Logue' in matchedMusic['Tag']:
+                LogueMusic = matchedMusic
             if 'Caption' in matchedMusic['Tag']:
                 CaptionMusic = matchedMusic
 
@@ -471,6 +496,9 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB
         elif Tag == 'Index':
             MusicMixingDataDic = {'EditId': EditId, 'ActorChunkId': 0, 'Tag': Tag, 'Pause': Pause, 'StartTime': StartTime, 'EndTime': EndTime, 'VoiceFileName': VoiceFileName, 'Music': IndexMusic}
             EditGeneration[i]['Music'] = IndexMusic['FilePath'].split('/')[-1]
+        elif Tag == 'Logue':
+            MusicMixingDataDic = {'EditId': EditId, 'ActorChunkId': 0, 'Tag': Tag, 'Pause': Pause, 'StartTime': StartTime, 'EndTime': EndTime, 'VoiceFileName': VoiceFileName, 'Music': LogueMusic}
+            EditGeneration[i]['Music'] = LogueMusic['FilePath'].split('/')[-1]
         elif (BeforeTag not in ['Caption', 'CaptionComment']) and (Tag == 'Caption'):
             MusicMixingDataDic = {'EditId': EditId, 'ActorChunkId': 0, 'Tag': Tag, 'Pause': Pause, 'StartTime': StartTime, 'EndTime': EndTime, 'VoiceFileName': VoiceFileName, 'Music': CaptionMusic}
             EditGeneration[i]['Music'] = CaptionMusic['FilePath'].split('/')[-1]
@@ -511,12 +539,19 @@ def MusicsMixingPath(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB
     if Intro != None:
         IntroPath = Intro['FilePath']
     TitleMusicPath = TitleMusic['FilePath']
-    PartMusicPath = PartMusic['FilePath']
-    ChapterMusicPath = ChapterMusic['FilePath']
+    try:
+        PartMusicPath = PartMusic['FilePath']
+    except:
+        PartMusicPath = "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s184_TitleMusic/1_TitleMusicSet/00_PartMusic.wav"
+    try:
+        ChapterMusicPath = ChapterMusic['FilePath']
+    except:
+        ChapterMusicPath = "/yaas/storage/s1_Yeoreum/s18_AudioBookStorage/s184_TitleMusic/1_TitleMusicSet/00_PartMusic.wav"
     IndexMusicPath = IndexMusic['FilePath']
+    LogueMusicPath = LogueMusic['FilePath']
     CaptionMusicPath = CaptionMusic['FilePath']
     
-    return editGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath
+    return editGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, LogueMusicPath, CaptionMusicPath
 
 ## Musics 파일 볼륨 값 일치시키기 (볼륨이 Volume값 보다 작을 경우에는 원본 볼륨을 유지)
 def MusicsVolume(MusicPath, Volume):
@@ -564,7 +599,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = '
     print(f"[ MixingMode : {DeNoiseMixedVar} ]")
     ## DeNoise폴더내에 파일이 있는지 확인 (있다면 해당 파일로 믹싱 시작)
     
-    EditGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro, MusicDB = MusicDB)
+    EditGeneration, _Intro2_VoiceFileNames, MusicMixingDatas, LogoPath, IntroPath, TitleMusicPath, PartMusicPath, ChapterMusicPath, IndexMusicPath, LogueMusicPath, CaptionMusicPath = MusicsMixingPath(projectName, email, MainLang = MainLang, Intro = Intro, MusicDB = MusicDB)
     ## 각 사운드 생성
     Volume = -30 # 볼륨은 최대 값을 0으로 산정 -값이 클수록 볼륨이 작음(-25 ~ -32)
     Logo_Audio = AudioSegment.from_wav(LogoPath) + AudioSegment.silent(duration = 3000)
@@ -588,6 +623,7 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = '
     PartMusic_Audio = MusicsVolume(PartMusicPath, Volume)
     ChapterMusic_Audio = MusicsVolume(ChapterMusicPath, Volume)
     IndexMusic_Audio = MusicsVolume(IndexMusicPath, Volume)
+    LogueMusic_Audio = MusicsVolume(LogueMusicPath, Volume)
     CaptionMusic_Audio = MusicsVolume(CaptionMusicPath, Volume)
     
     ### 초기화: Mixed Audio누적 추가 시간 생성 ###
@@ -864,6 +900,47 @@ def MusicsMixing(projectName, email, MainLang = 'Ko', Intro = 'off', MusicDB = '
                     MixedMusicAudio += ExtraIndexMusic
                 
             AccumulatedTime = MixedMusicAudio.duration_seconds - IndexVoice.duration_seconds
+            
+        elif MusicMixingData['Tag'] == 'Logue':
+            Pause = MusicMixingData['Pause']
+            # 파일 선별
+            LogueVoice = AudioSegment.empty()
+            j = 0
+            while j < len(VoiceFileNames):
+                if (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' in VoiceFileNames[j]):
+                    LogueVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration=Pause * 1000))
+                    LastVoiceFileName = VoiceFileNames[j]
+                    j += 2  # 'M' 파일이 존재하면 다음 항목 건너뜀
+                elif (os.path.exists(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar))) and ('M' not in VoiceFileNames[j]):
+                    LogueVoice += (AudioSegment.from_wav(VoiceLayerPathGen(projectName, email, VoiceFileNames[j], DeNoiseMixedVar)) + AudioSegment.silent(duration=Pause * 1000))
+                    LastVoiceFileName = VoiceFileNames[j]
+                    j += 1  # 일반 파일일 경우 다음 항목으로 이동
+                else:
+                    j += 1  # 파일이 존재하지 않을 경우에도 다음 항목으로 이동
+            MusicFilePath = MusicLayerPathGen(projectName, email, LastVoiceFileName)
+
+            # Mixing
+            if LogueMusic_Audio.duration_seconds >= LogueVoice.duration_seconds:
+                MixedMusicAudio = LogueMusic_Audio.overlay(LogueVoice, position = Length[0] * 1000)
+                
+                # 목소리가 남는 경우 처리
+                ExtraSoundDuration = len(LogueMusic_Audio) - Length[0] * 1000
+                if len(LogueVoice) > ExtraSoundDuration:
+                    ExtraLogueVoiceLength = len(LogueVoice) - ExtraSoundDuration
+                    ExtraLogueVoice = LogueVoice[-ExtraLogueVoiceLength:]
+                    MixedMusicAudio += ExtraLogueVoice
+                
+            else:
+                _LogueVoice = AudioSegment.silent(duration = Length[0] * 1000) + LogueVoice
+                MixedMusicAudio = _LogueVoice.overlay(LogueMusic_Audio, position = 0)
+                
+                # 음악이 남는 경우 처리
+                if len(LogueMusic_Audio) > len(_LogueVoice):
+                    ExtraSoundDuration = len(LogueMusic_Audio) - len(_LogueVoice)
+                    ExtraLogueMusic = LogueMusic_Audio[-ExtraSoundDuration:]
+                    MixedMusicAudio += ExtraLogueMusic
+                
+            AccumulatedTime = MixedMusicAudio.duration_seconds - LogueVoice.duration_seconds
             
         elif MusicMixingData['Tag'] == 'Caption':
             Pause = MusicMixingData['Pause']
@@ -1920,18 +1997,20 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
                     MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i]), 'FileSize(MB)': round(FileSizeList[i], 1)}
                     MetaDataSet.append(MetaData)
                     
-                    # IndexTitle
-                    IndexTag = EditGenerationKoChunks[j+1]['Tag']
-                    IndexTitles = []
-                    for ActorChunk in EditGenerationKoChunks[j+1]['ActorChunk']:
-                        Chunk = ActorChunk['Chunk']
-                        IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
-                    IndexTitle = ' '.join(IndexTitles)
-        try:
-            MetaData = {'FileId': i+3, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1]), 'FileSize(MB)': round(FileSizeList[i+1], 1)}
-            MetaDataSet.append(MetaData)
-        except:
-            sys.exit(f'[ (FileRunningTimeList: {FileRunningTimeList}), (LastVoiceFilePath: {VoiceFilePath}) ]\n[ 해당 EditId 이후 파일 삭제 요망, Edit과 VoiceLayer 음성.wav 파일간에 불일치 확인 ]')
+                    if len(EditGenerationKoChunks) > j+1:
+                        IndexTag = EditGenerationKoChunks[j+1]['Tag']
+                        IndexTitles = []
+                        for ActorChunk in EditGenerationKoChunks[j+1]['ActorChunk']:
+                            Chunk = ActorChunk['Chunk']
+                            IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
+                        IndexTitle = ' '.join(IndexTitles)
+        
+        if len(FileRunningTimeList) > i+1:
+            try:
+                MetaData = {'FileId': i+3, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1]), 'FileSize(MB)': round(FileSizeList[i+1], 1)}
+                MetaDataSet.append(MetaData)
+            except:
+                sys.exit(f'[ (FileRunningTimeList: {FileRunningTimeList}), (LastVoiceFilePath: {VoiceFilePath}) ]\n[ 해당 EditId 이후 파일 삭제 요망, Edit과 VoiceLayer 음성.wav 파일간에 불일치 확인 ]')
 
     fileName = '[' + projectName + '_' + 'AudioBook_MetaDate].json'
     MetaDatePath = VoiceLayerPathGen(projectName, email, fileName, Folder = 'Master')

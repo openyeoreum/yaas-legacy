@@ -1972,7 +1972,6 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
 
 ## 오디오북 메타데이터 생성 ##
 def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitList, FileRunningTimeList, FileSizeList, VoiceFilePath, AudiobookPreviewSecond, AudiobookPreviewSize):
-    
     # 시간, 분, 초로 변환
     def SecondsToHMS(seconds):
         hours = seconds // 3600
@@ -1990,11 +1989,13 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         IndexTitles.append(Chunk.replace('.', '').replace(',', '').replace('~', ''))
     # if IndexTag in ['Intro', 'Title', 'Logue', 'Part', 'Chapter', 'Index']:
     IndexTitle = ' '.join(IndexTitles)
-    if (len(FileLimitList) >= 1) and (FileLimitList[-1] + 1 < len(EditGenerationKoChunks)):
+    MetaDataNum = 1
+    if len(FileLimitList) >= 1:
         for i in range(len(FileLimitList)):
             for j in range(len(EditGenerationKoChunks)):
                 if FileLimitList[i] == EditGenerationKoChunks[j]['EditId']:
                     MetaData = {'FileId': i+2, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i]), 'FileSize(MB)': round(FileSizeList[i], 1)}
+                    print(f"[ MetaData{MetaDataNum}: {MetaData} ]")
                     MetaDataSet.append(MetaData)
                     
                     if len(EditGenerationKoChunks) > j+1:
@@ -2008,6 +2009,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
         if len(FileRunningTimeList) > i+1:
             try:
                 MetaData = {'FileId': i+3, 'Index': IndexTag, 'IndexTitle': IndexTitle, 'RunningTime': SecondsToHMS(FileRunningTimeList[i+1]), 'FileSize(MB)': round(FileSizeList[i+1], 1)}
+                print(f"[ MetaData{MetaDataNum}: {MetaData} ]")
                 MetaDataSet.append(MetaData)
             except:
                 sys.exit(f'[ (FileRunningTimeList: {FileRunningTimeList}), (LastVoiceFilePath: {VoiceFilePath}) ]\n[ 해당 EditId 이후 파일 삭제 요망, Edit과 VoiceLayer 음성.wav 파일간에 불일치 확인 ]')

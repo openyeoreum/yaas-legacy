@@ -1,0 +1,24 @@
+# Git 관련 파일
+.git
+.gitignore
+
+# 로컬 의존성 폴더 (이미지 안에서 설치할 것이므로 제외)
+node_modules
+__pycache__
+
+# 운영체제 및 IDE 관련 파일
+.DS_Store
+.idea/
+.vscode/
+
+# Docker 관련 파일 자체는 이미지에 포함될 필요 없음
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# 불필요한 폴더
+agent/
+backend/
+extension/
+frontend/
+storage/

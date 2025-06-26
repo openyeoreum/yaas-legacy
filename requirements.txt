@@ -1,0 +1,54 @@
+# ====== Web Framework & DB ======
+fastapi
+uvicorn
+python-dotenv
+bcrypt
+# DB Drivers & ORM
+tzdata
+psycopg2-binary
+asyncpg
+sqlalchemy
+alembic
+pydantic
+
+# ====== AI APIs & SDKs ======
+openai
+anthropic
+elevenlabs
+google-genai
+mistralai
+pinecone
+pinecone-client # pinecone -> pinecone-client 최신 패키지명으로 수정
+firebase-admin
+gspread
+google-api-python-client
+
+# ====== Core AI/ML & NLP ======
+tiktoken
+langdetect
+nltk
+konlpy
+pandas
+numpy # pandas, seaborn, matplotlib 등에서 필요로 하므로 명시적으로 추가
+
+# ====== Audio & Video Processing ======
+pydub
+audoai-noise-removal
+pyloudnorm
+ffmpeg-python # ffmpeg 시스템 패키지를 파이썬에서 제어하기 위한 라이브러리
+# selenium은 웹 자동화/스크래핑으로 분류
+
+# ====== Data Visualization & Reporting ======
+seaborn
+matplotlib
+reportlab
+openpyxl
+
+# ====== File Parsing & Web Scraping ======
+pdfplumber
+PyPDF2
+beautifulsoup4 # bs4 -> 정식 패키지명인 beautifulsoup4 로 수정
+selenium
+
+# ====== Image Processing ======
+Pillow

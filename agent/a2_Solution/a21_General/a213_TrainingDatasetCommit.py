@@ -1,0 +1,133 @@
+import os
+import sys
+import json
+sys.path.append("/yaas")
+
+from agent.a1_Api.a14_Models import TrainingDataset, Project, User
+from agent.a1_Api.a13_Database import get_db
+
+def GetTrainingDatasetPath():
+    RootPath = "/yaas"
+    DataPath = "agent/a5_Database/a55_TrainingDataset/a551_TrainingDataset.json"
+    return os.path.join(RootPath, DataPath)
+
+def LoadJsonDataset(filepath):
+    with open(filepath, 'r') as file:
+        DataDataset = json.load(file)
+    return DataDataset
+
+def AddTrainingDatasetToDB(projectName, email):
+    with get_db() as db:
+        user = db.query(User).filter(User.Email == email).first()
+        project = db.query(Project).filter(Project.UserId == user.UserId, Project.ProjectName == projectName).first()
+        projectsStorageId = project.ProjectsStorageId,
+        projectId = project.ProjectId,
+        projectname = project.ProjectName,
+        
+        # JSON 데이터 불러오기
+        TrainingDatasetPath = GetTrainingDatasetPath()
+        trainingDataset = LoadJsonDataset(TrainingDatasetPath)
+
+        ExistingDataset = db.query(TrainingDataset).filter(TrainingDataset.UserId == user.UserId, TrainingDataset.ProjectName == projectName).first()
+
+        # DB Commit
+        if ExistingDataset:
+            ExistingDataset.UserId = user.UserId
+            ExistingDataset.ProjectsStorageId = projectsStorageId
+            ExistingDataset.ProjectId = projectId
+            ExistingDataset.ProjectName = projectname
+            ExistingDataset.ScriptGen = trainingDataset
+            ExistingDataset.BookPreprocess = trainingDataset
+            ExistingDataset.IndexDefinePreprocess = trainingDataset
+            ExistingDataset.IndexDefineDivisionPreprocess = trainingDataset
+            ExistingDataset.IndexDefine = trainingDataset
+            ExistingDataset.DuplicationPreprocess = trainingDataset
+            ExistingDataset.PronunciationPreprocess = trainingDataset
+            ExistingDataset.CaptionCompletion = trainingDataset
+            # ExistingDataset.TransitionPhargraph = trainingDataset
+            ExistingDataset.ContextDefine = trainingDataset
+            ExistingDataset.ContextCompletion = trainingDataset
+            ExistingDataset.WMWMDefine = trainingDataset
+            ExistingDataset.WMWMMatching = trainingDataset
+            ExistingDataset.CharacterDefine = trainingDataset
+            ExistingDataset.CharacterCompletion = trainingDataset
+            ExistingDataset.CharacterPostCompletion = trainingDataset
+            ExistingDataset.CharacterPostCompletionLiterary = trainingDataset
+            ExistingDataset.SoundMatching = trainingDataset
+            ExistingDataset.SFXMatching = trainingDataset
+            ExistingDataset.SFXMultiQuery = trainingDataset
+            ExistingDataset.TranslationIndexEn = trainingDataset
+            ExistingDataset.TranslationWordListEn = trainingDataset
+            ExistingDataset.TranslationBodyEn = trainingDataset
+            ExistingDataset.TranslationIndexJa = trainingDataset
+            ExistingDataset.TranslationWordListJa = trainingDataset
+            ExistingDataset.TranslationBodyJa = trainingDataset
+            ExistingDataset.TranslationIndexZh = trainingDataset
+            ExistingDataset.TranslationWordListZh = trainingDataset
+            ExistingDataset.TranslationBodyZh = trainingDataset
+            ExistingDataset.TranslationIndexEs = trainingDataset
+            ExistingDataset.TranslationWordListEs = trainingDataset
+            ExistingDataset.TranslationBodyEs = trainingDataset
+            # ExistingDataset.TranslationEn = trainingDataset
+            ExistingDataset.CorrectionKo = trainingDataset
+            # ExistingDataset.CorrectionEn = trainingDataset
+            
+            ### 아래로 추가되는 데이터셋 작성 ###
+            
+            print(f"[ Email: {email} | ProjectName: {projectName} | AddTrainingDatasetToDB 변경사항 업데이트 ]")
+        else:
+            trainingDataset = TrainingDataset(
+                UserId = user.UserId,
+                ProjectsStorageId = projectsStorageId,
+                ProjectId = projectId,
+                ProjectName = projectname,
+                ScriptGen = trainingDataset,
+                BookPreprocess = trainingDataset,
+                IndexDefinePreprocess = trainingDataset,
+                IndexDefineDivisionPreprocess = trainingDataset,
+                IndexDefine = trainingDataset,
+                DuplicationPreprocess = trainingDataset,
+                PronunciationPreprocess = trainingDataset,
+                CaptionCompletion = trainingDataset,
+                # TransitionPhargraph = trainingDataset,
+                ContextDefine = trainingDataset,
+                ContextCompletion = trainingDataset,
+                WMWMDefine = trainingDataset,
+                WMWMMatching = trainingDataset,
+                CharacterDefine = trainingDataset,
+                CharacterCompletion = trainingDataset,
+                CharacterPostCompletion = trainingDataset,
+                CharacterPostCompletionLiterary = trainingDataset,
+                SoundMatching = trainingDataset,
+                SFXMatching = trainingDataset,
+                SFXMultiQuery = trainingDataset,
+                TranslationIndexEn = trainingDataset,
+                TranslationWordListEn = trainingDataset,
+                TranslationBodyEn = trainingDataset,
+                TranslationIndexJa = trainingDataset,
+                TranslationWordListJa = trainingDataset,
+                TranslationBodyJa = trainingDataset,
+                TranslationIndexZh = trainingDataset,
+                TranslationWordListZh = trainingDataset,
+                TranslationBodyZh = trainingDataset,
+                TranslationIndexEs = trainingDataset,
+                TranslationWordListEs = trainingDataset,
+                TranslationBodyEs = trainingDataset,
+                # TranslationEn = trainingDataset,
+                CorrectionKo = trainingDataset
+                # CorrectionEn = trainingDataset
+                ### 아래로 추가되는 데이터셋 작성 ###
+                )
+            db.add(trainingDataset)
+            print(f"[ Email: {email} | ProjectName: {projectName} | AddTrainingDatasetToDB 완료 ]")
+        db.commit()
+         
+if __name__ == "__main__":
+    
+    ############################ 하이퍼 파라미터 설정 ############################
+    email = "yeoreum00128@gmail.com"
+    name = "yeoreum"
+    projectName = "우리는행복을진단한다"
+    #########################################################################
+    
+    AddTrainingDatasetToDB(projectName, email)

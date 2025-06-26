@@ -3,8 +3,8 @@ import json
 import sys
 sys.path.append("/yaas")
 
-from agent.a1_Connector.a14_Models import Project
-from agent.a1_Connector.a13_Database import get_db
+from agent.a1_Connector.a13_Models import Project
+from agent.a1_Connector.a12_Database import get_db
 from agent.a2_Solution.a21_General.a211_GetDBtable import GetProjectsStorage
 
 def GetProjectDataPath():

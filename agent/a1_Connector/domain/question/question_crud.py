@@ -2,7 +2,7 @@ import json
 import sys
 sys.path.append("/yaas")
 
-from agent.a1_Api.a14_Models import Question, Answer
+from agent.a1_Connector.a14_Models import Question, Answer
 from sqlalchemy.orm import Session
 
 def get_question_list(db: Session):

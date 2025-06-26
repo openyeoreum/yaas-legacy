@@ -8,8 +8,8 @@ sys.path.append("/yaas")
 from datetime import datetime
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm.attributes import flag_modified
-from agent.a1_Api.a14_Models import TrainingDataset
-from agent.a1_Api.a13_Database import get_db
+from agent.a1_Connector.a14_Models import TrainingDataset
+from agent.a1_Connector.a13_Database import get_db
 from agent.a2_Solution.a21_General.a211_GetDBtable import GetTrainingDataset
 
 

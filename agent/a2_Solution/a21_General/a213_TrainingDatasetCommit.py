@@ -3,8 +3,8 @@ import sys
 import json
 sys.path.append("/yaas")
 
-from agent.a1_Api.a14_Models import TrainingDataset, Project, User
-from agent.a1_Api.a13_Database import get_db
+from agent.a1_Connector.a14_Models import TrainingDataset, Project, User
+from agent.a1_Connector.a13_Database import get_db
 
 def GetTrainingDatasetPath():
     RootPath = "/yaas"

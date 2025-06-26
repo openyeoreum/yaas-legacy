@@ -3,8 +3,8 @@ sys.path.append("/yaas")
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from agent.a1_Api.a13_Database import GetDB
-from agent.a1_Api.domain.question import question_schema, question_crud
+from agent.a1_Connector.a13_Database import GetDB
+from agent.a1_Connector.domain.question import question_schema, question_crud
 
 router = APIRouter(prefix = "/api/question")
 

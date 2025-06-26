@@ -1,12 +1,12 @@
 import sys
 sys.path.append("/yaas")
 
-from agent.a1_Api.a14_Models import Question, Answer
+from agent.a1_Connector.a14_Models import Question, Answer
 from datetime import datetime
 
 q = Question(subject = 'pybo가 무엇인가요?', content = 'pybo에 대해서 알고싶습니다.', create_date = datetime.now())
 
-from agent.a1_Api.a13_Database import SessionLocal
+from agent.a1_Connector.a13_Database import SessionLocal
 db = SessionLocal()
 db.add(q)
 db.commit()

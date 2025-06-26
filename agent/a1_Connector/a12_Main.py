@@ -3,8 +3,8 @@ sys.path.append("/yaas")
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from agent.a1_Api.a16_Routers import UserRouter
-from agent.a1_Api.domain.question.question_router import router as QuestionRouter
+from agent.a1_Connector.a16_Routers import UserRouter
+from agent.a1_Connector.domain.question.question_router import router as QuestionRouter
 
 app = FastAPI(debug = True)
 

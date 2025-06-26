@@ -3,8 +3,8 @@ import json
 import sys
 sys.path.append("/yaas")
 
-from agent.a1_Api.a14_Models import User, Project
-from agent.a1_Api.a13_Database import get_db
+from agent.a1_Connector.a14_Models import User, Project
+from agent.a1_Connector.a13_Database import get_db
 from agent.a2_Solution.a21_General.a211_GetDBtable import GetProject
 
 # Load Index, Body

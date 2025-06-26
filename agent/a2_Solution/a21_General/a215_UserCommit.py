@@ -5,8 +5,8 @@ import sys
 
 sys.path.append("/yaas")
 
-from agent.a1_Api.a14_Models import User, SeoulNow
-from agent.a1_Api.a13_Database import get_db
+from agent.a1_Connector.a14_Models import User, SeoulNow
+from agent.a1_Connector.a13_Database import get_db
 
 ### 이메일과 현재 시간을 기반으로 UserId를 생성하는 함수
 def GenerateUserId(email: str) -> str:

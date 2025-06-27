@@ -16,7 +16,7 @@ def GetUserPath(email):
             print(f"No user found for email: {email}")
             return None
 
-def AddProjectsStorageToDB(projectsStorageName, email):
+def AddProjectsStorageToDB(email):
     with get_db() as db:
         user = db.query(User).filter(User.Email == email).first()
 
@@ -26,27 +26,27 @@ def AddProjectsStorageToDB(projectsStorageName, email):
             return
 
         UserPath = user.UserPath
-        projectsStoragePath = os.path.join(UserPath, f"{projectsStorageName}_storage")
+        projectsStoragePath = os.path.join(UserPath, f"{email}_storage")
 
         # 폴더 존재 여부 확인
         if not os.path.exists(projectsStoragePath):
             # 새로운 폴더 생성
             os.makedirs(projectsStoragePath, exist_ok = True)
             
-        ExistingProjectsStorage = db.query(ProjectsStorage).filter(ProjectsStorage.UserId == user.UserId, ProjectsStorage.ProjectsStorageName == projectsStorageName).first()
+        ExistingProjectsStorage = db.query(ProjectsStorage).filter(ProjectsStorage.UserId == user.UserId, ProjectsStorage.ProjectsStorageName == email).first()
 
         # ProjectsStorage 객체 생성 및 초기 정보 입력
         if not ExistingProjectsStorage:
             projectsStorage = ProjectsStorage(
                 UserId = user.UserId,
-                ProjectsStorageName = projectsStorageName,
+                ProjectsStorageName = email,
                 ProjectsStoragePath = projectsStoragePath
                 )
             db.add(projectsStorage)
             db.commit()
-            print(f"[ Email: {email} | ProjectsStorageName: {projectsStorageName} | AddProjectsStorageToDB 완료 ]")
+            print(f"[ Email: {email} | ProjectsStorageName: {email} | AddProjectsStorageToDB 완료 ]")
         else:
-            print(f"[ Email: {email} | ProjectsStorageName: {projectsStorageName} | AddProjectsStorageToDB가 이미 완료됨 ]")
+            print(f"[ Email: {email} | ProjectsStorageName: {email} | AddProjectsStorageToDB가 이미 완료됨 ]")
 
 if __name__ == "__main__":
     

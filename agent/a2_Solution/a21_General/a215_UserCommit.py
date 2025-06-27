@@ -22,8 +22,8 @@ def AddUserToDB(email, username, password):
         # BasePath 생성
         BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage'
         # UserPath 생성
-        userPath = os.path.join(BasePath, f"{username}_user")
-        profileImageFilePath = os.path.join(userPath, f"{username}_profile_image")
+        userPath = os.path.join(BasePath, f"{email}_user")
+        profileImageFilePath = os.path.join(userPath, f"{email}_profile_image")
 
         # 존재하는 경로 사용
         if not os.path.exists(userPath):

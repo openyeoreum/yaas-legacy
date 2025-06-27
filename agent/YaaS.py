@@ -262,12 +262,12 @@ def YaaS(email, ProjectName, MainLang, EstimateConfig, DataCollectionConfig, Sea
 
 #################################################################################################################################
 #################################################################################################################################
-### Main1 : YaaS Multiprocessing에서 병렬로 'Estimate', 'DataCollection', 'Script', 'TextBook', 'AudioBook', 'Marketing' 동시 제작 ###
+### Main1 : YaaS Process에서 병렬로 'Estimate', 'DataCollection', 'Script', 'TextBook', 'AudioBook', 'Marketing' 동시 제작 ###
 #################################################################################################################################
 #################################################################################################################################
 
-### Main1-2 : YaaS Multiprocessing 실행 ###
-def YaaSMultiProcessing(User, ProjectName, MainLang, Estimate, DataCollection, Search, Script, Translation, TextBook, AudioBook, Marketing, MessagesReview, Account):
+### Main1-2 : YaaS Process 실행 ###
+def YaaSProcess(User, ProjectName, MainLang, Estimate, DataCollection, Search, Script, Translation, TextBook, AudioBook, Marketing, MessagesReview, Account):
     ## User 정보
     UserEmail = User["email"]
     UserPassword = User["password"]
@@ -329,4 +329,4 @@ if __name__ == "__main__":
 
     #########################################################################
 
-    YaaSMultiProcessing(User, ProjectName, MainLang, Estimate, DataCollection, Search, Script, Translation, TextBook, AudioBook, Marketing, MessagesReview, Account)
+    YaaSProcess(User, ProjectName, MainLang, Estimate, DataCollection, Search, Script, Translation, TextBook, AudioBook, Marketing, MessagesReview, Account)

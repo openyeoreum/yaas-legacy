@@ -63,7 +63,6 @@ class User(Base):
 
         return CheckPassword(self._password.encode('utf-8'), password)
 
-    UserName = Column(String(64))
     UserPath = Column(Text)
     ProfileImagePath = Column(Text)
 
@@ -89,7 +88,6 @@ class UserHistory(Base):
 
         return CheckPassword(self._password.encode('utf-8'), password)
     
-    UserName = Column(String(64))
     UserPath = Column(Text)
     ProfileImagePath = Column(Text)
     

@@ -732,17 +732,9 @@ def ResponseJsonText(projectName, email, responseJson):
             for token_dict in responseJson[i]['CorrectionChunks'][j]['CorrectionChunkTokens']:
                 token = next(iter(token_dict.values()))
                 responseJsonText += token
-
-    # 데이터베이스에서 사용자 이름 찾기
-    with get_db() as db:
-        user = db.query(User).filter(User.Email == email).first()
-        if user is None:
-            raise ValueError("User not found with the provided email")
-        
-        username = user.UserName
         
     # 문자열 정규화
-    _baseFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{username}_user/{username}_storage/{projectName}/{projectName}_audiobook/{projectName}_dataframe_audiobook_file/{email}_{projectName}_21_responseJson"
+    _baseFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_audiobook/{projectName}_dataframe_audiobook_file/{email}_{projectName}_21_responseJson"
     baseFilePathNFCNormalized = unicodedata.normalize('NFC', _baseFilePath)
     baseFilePathNFDNormalized = unicodedata.normalize('NFD', _baseFilePath)
     

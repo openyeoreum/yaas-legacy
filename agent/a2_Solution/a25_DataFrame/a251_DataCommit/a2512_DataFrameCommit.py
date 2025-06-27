@@ -111,27 +111,20 @@ def LoadAddOutputMemory(projectName, email, ProcessNum, DataFramePath):
 
 ## 각 유저별 DataframeFilePaths 찾기
 def FindDataframeFilePaths(email, projectName, userStoragePath):
-    with get_db() as db:
-        user = db.query(User).filter(User.Email == email).first()
-        if user is None:
-            raise ValueError("User not found with the provided email")
-        
-        username = user.UserName
+    # 데이터프레임 파일 경로 구성
+    expectedFilePath = os.path.join(userStoragePath, f"{email}_user", f"{email}_storage", projectName, f"{projectName}_audiobook", f"{projectName}_dataframe_audiobook_file")
+    normalizedFilePath = unicodedata.normalize('NFC', expectedFilePath)
 
-        # 데이터프레임 파일 경로 구성
-        expectedFilePath = os.path.join(userStoragePath, f"{username}_user", f"{username}_storage", projectName, f"{projectName}_audiobook", f"{projectName}_dataframe_audiobook_file")
-        normalizedFilePath = unicodedata.normalize('NFC', expectedFilePath)
-
-        # 파일 존재 여부 확인
-        if os.path.exists(expectedFilePath):
-            # 파일이 존재하면 정규화된 파일 경로 반환
-            return expectedFilePath + '/'
-        elif os.path.exists(normalizedFilePath):
-            # 파일이 존재하면 정규화된 파일 경로 반환
-            return normalizedFilePath + '/'
-        else:
-            # 파일이 존재하지 않으면, 빈 리스트 반환
-            return None
+    # 파일 존재 여부 확인
+    if os.path.exists(expectedFilePath):
+        # 파일이 존재하면 정규화된 파일 경로 반환
+        return expectedFilePath + '/'
+    elif os.path.exists(normalizedFilePath):
+        # 파일이 존재하면 정규화된 파일 경로 반환
+        return normalizedFilePath + '/'
+    else:
+        # 파일이 존재하지 않으면, 빈 리스트 반환
+        return None
 
 ## 업데이트된 OutputMemoryDics 파일 저장하기
 def SaveOutputMemory(projectName, email, OutputMemoryDics, ProcessNum, DataFramePath):

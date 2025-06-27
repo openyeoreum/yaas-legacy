@@ -43,9 +43,7 @@ def YaasConfigUpdate(UserEmail, ProjectName, MainLang, Estimate, DataCollection,
         print(f"[ Project: {ProjectName} | Config.json 생성 및 설정 ]")
         
         ### Step3-1 : Project 설정 ###
-        email = "yeoreum00128@gmail.com"
-        name = "yeoreum"
-        password = "0128"
+        email = UserEmail
         ProjectName = ProjectName
         MainLang = MainLang
 
@@ -157,7 +155,7 @@ def YaasConfigUpdate(UserEmail, ProjectName, MainLang, Estimate, DataCollection,
             MarketingConfig = {"Marketing": Marketing}
         
         ## YaaSConfig 업데이트
-        YaasConfig = {"email": email, "name": name, "password": password, "ProjectName": ProjectName, "MainLang": MainLang, "EstimateConfig": EstimateConfig, "DataCollectionConfig": DataCollectionConfig, "SearchConfig": SearchConfig, "ScriptConfig": ScriptConfig, "TranslationConfig": TranslationConfig, "TextBookConfig": TextBookConfig, "AudioBookConfig": AudioBookConfig, "MarketingConfig": MarketingConfig, "ConfigCompletion": "세팅 완료 후 Completion"}
+        YaasConfig = {"email": email, "ProjectName": ProjectName, "MainLang": MainLang, "EstimateConfig": EstimateConfig, "DataCollectionConfig": DataCollectionConfig, "SearchConfig": SearchConfig, "ScriptConfig": ScriptConfig, "TranslationConfig": TranslationConfig, "TextBookConfig": TextBookConfig, "AudioBookConfig": AudioBookConfig, "MarketingConfig": MarketingConfig, "ConfigCompletion": "세팅 완료 후 Completion"}
 
         ## 업데이트 된 YaaSConfig 저장
         with open(ConfigPath, 'w', encoding = 'utf-8') as ConfigJson:
@@ -272,7 +270,6 @@ def YaaS(email, ProjectName, MainLang, EstimateConfig, DataCollectionConfig, Sea
 def YaaSMultiProcessing(User, ProjectName, MainLang, Estimate, DataCollection, Search, Script, Translation, TextBook, AudioBook, Marketing, MessagesReview, Account):
     ## User 정보
     UserEmail = User["email"]
-    UserName = User["name"]
     UserPassword = User["password"]
 
     ## ProjectName NFC 정규화
@@ -283,7 +280,7 @@ def YaaSMultiProcessing(User, ProjectName, MainLang, Estimate, DataCollection, S
         sys.exit(f'[ 잘못된 프로젝트 이름: (({ProjectName})) -> ((YYMMDD_프로젝트명)) 형식으로 프로젝트 이름을 변경해주세요 ]')
     
     ## MultiProcessing 실행
-    print(f"[ Project: {ProjectName} | 프로세스(Processing) 시작 ]")
+    print(f"[ Email: {UserEmail} | Project: {ProjectName} | 프로세스(Processing) 시작 ]")
 
     ### Step1 : UserStorage에 프로젝트 리스트 불러오기 ###
     storageProjectNameList = []
@@ -294,7 +291,7 @@ def YaaSMultiProcessing(User, ProjectName, MainLang, Estimate, DataCollection, S
 
     ### Step2 : ProjectNameList ###
     ### Step2-1 : 솔루션에 계정정보 업데이트 ###
-    AccountUpdate(UserEmail, UserName, UserPassword)
+    AccountUpdate(UserEmail, UserPassword)
     ### Step2-2 : 솔루션에 프로젝트 파일 업데이트 ###
     SolutionProjectUpdate(UserEmail, ProjectName)            
     ### Step2-3 : 프로젝트 Config 설정 ###
@@ -305,7 +302,7 @@ def YaaSMultiProcessing(User, ProjectName, MainLang, Estimate, DataCollection, S
     
     YaaS(YaasConfig["email"], YaasConfig["ProjectName"], YaasConfig["MainLang"], YaasConfig["EstimateConfig"], YaasConfig["DataCollectionConfig"], YaasConfig["SearchConfig"], YaasConfig["ScriptConfig"], YaasConfig["TranslationConfig"], YaasConfig["TextBookConfig"], YaasConfig["AudioBookConfig"], YaasConfig["MarketingConfig"], MessagesReview, Account)
         
-    print(f"[ Project: {ProjectName} | 프로세스(Processing) 완료 ]")
+    print(f"[ Email: {UserEmail} | Project: {ProjectName} | 프로세스(Processing) 완료 ]")
 
 if __name__ == "__main__":
 
@@ -314,9 +311,9 @@ if __name__ == "__main__":
     # '250101_스튜디오여름'
     # '240223_나는외식창업에적합한사람인가', '240223_나무에서만난경영지혜', '240223_노인을위한나라는있다', '240223_마케터의무기들', '240405_빌리월터스겜블러', '240412_카이스트명상수업', '240705_도산안창호', '240801_빨간풍차가있는집', '240802_암을이기는천연항암제', '240919_암을이기는천연항암제요약', '240812_룰루레몬스토리', '240815_노유파', '240908_나무스토리텔링', '240910_AI미래시나리오2030', '240925_불멸의지혜', '241005_그해여름필립로커웨이에서일어난소설같은일', '241009_책갈피와책수레', '241010_틈틈이낭만', '241024_오성삼유튜브', '241024_서울장애인가족지원센터당선작13선', '241029_누가정부창업지원을받는가', '241116_베이버터와다섯개의빛', '241118_세종교육청우리반오디오북새움중1학년8반', '241118_세종교육청우리반오디오북아름초5학년5반', '241118_세종교육청우리반오디오북아름초1학년1반', '241127_엄마의첫공부', '241128_끌리는이들에겐이유가있다', '241204_개정교육과정초등교과별이해연수', '241210_공부하듯주식해서보화찾기요약', '241210_끌리는이들에겐이유가있다요약', '241210_나는외식창업에적합한사람인가요약', '241226_법이사라진내멋대로마을을지켜줘', '250111_프로스트와베타', '250201_멘진', '250202_정년그깊은독백', '250225_격몽', '250206_업데이트', '250213_요한복음삼장', '250221_킹제임스성경의역사', '250221_성경샘플', '250221_지식정보인프라96호', '250226_생각하는대로그렇게된다', '250304_데미안', '250309_방법서설', '250312_모방의법칙', '250320_언캐니한것들의목소리', '250322_에밀', '250323_돈버는법', '250414_삶의혼란너머에서', '250418_싯다르타', '250424_카다인사이드사십일호', '250511_생명이란무엇인가', '250515_정신과물질', '250517_기억과숲다섯번째', '250519_기억과숲여섯번째', '250527_꼭알아야할생명과학샘플', '250530_바람에마음을맡기다', '250613_수되수'
 
-    User = {"email": "yeoreum00128@gmail.com", "name": "yeoreum", "password": "0128"}
+    User = {"email": "junsun0128@gmail.com", "password": "0128"}
 
-    ProjectName = "250309_방법서설"
+    ProjectName = "250418_싯다르타"
     MainLang = "Ko" # 'Ko', 'En', 'Ja', 'Zh', 'Es' ... 중 메인이 되는 언어를 선택
     Estimate = [] # [], 'TextBook', 'AudioBook', 'VideoBook' ... 중 필요한 견적을 다중 선택
     DataCollection = [] # [], 'Book', 'Meditation', 'Architect' ... 중 데이터 수집이 필요한 도메인을 다중 선택

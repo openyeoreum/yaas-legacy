@@ -63,17 +63,9 @@ def LoadMusicDataSet(projectName, email, MainLang = 'Ko'):
 ############################
 ## VoiceLayerPath 경로 생성
 def VoiceLayerPathGen(projectName, email, FileName, Folder = 'Mixed'):
-    # 데이터베이스에서 사용자 이름 찾기
-    with get_db() as db:
-        user = db.query(User).filter(User.Email == email).first()
-        if user is None:
-            raise ValueError("User not found with the provided email")
-        
-        username = user.UserName
-
     # 첫번째, 두번째 폴더 패턴: 시간 스탬프와 사용자 이름을 포함
-    UserFolderName = username + '_user'
-    StorageFolderName = username + '_storage'
+    UserFolderName = email + '_user'
+    StorageFolderName = email + '_storage'
     BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage'
 
     # 최종 경로 생성
@@ -89,17 +81,9 @@ def VoiceLayerPathGen(projectName, email, FileName, Folder = 'Mixed'):
 
 ## MusicLayerPath 경로 생성
 def MusicLayerPathGen(projectName, email, FileName):
-    # 데이터베이스에서 사용자 이름 찾기
-    with get_db() as db:
-        user = db.query(User).filter(User.Email == email).first()
-        if user is None:
-            raise ValueError("User not found with the provided email")
-        
-        username = user.UserName
-
     # 첫번째, 두번째 폴더 패턴: 시간 스탬프와 사용자 이름을 포함
-    UserFolderName = username + '_user'
-    StorageFolderName = username + '_storage'
+    UserFolderName = email + '_user'
+    StorageFolderName = email + '_storage'
     BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage'
 
     # 최종 경로 생성
@@ -2044,7 +2028,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
     df.to_excel(MetaDateCSVPath.replace('.csv', '.xlsx'), index = False, engine = 'openpyxl')
     
 ## 오디오북 러닝타임 기록 ##
-def SaveAudiobookRunningTime(projectName, FileRunningTimeList):
+def SaveAudiobookRunningTime(projectName, email, FileRunningTimeList):
     # BodyScript의 개수 구하기
     BodyScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file/{projectName}_Body.txt"
     with open(BodyScriptPath, 'r', encoding='utf-8') as Textfile:
@@ -2112,7 +2096,7 @@ def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang 
     RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunksPath)
 
     ## 오디오북 러닝타임 기록
-    SaveAudiobookRunningTime(projectName, FileRunningTimeList)
+    SaveAudiobookRunningTime(projectName, email, FileRunningTimeList)
 
     ## 믹싱 템플릿 저장
     SaveMusicTemplate(projectName, email)

@@ -16,7 +16,7 @@ from agent.a2_Solution.a21_General.a219_ProjectFileCommit import AddTextToDB
 #################################
 
 ### 솔루션에 계정 업데이트 ###
-def AccountUpdate(email, name, password):
+def AccountUpdate(email, password):
 
     ### a212_PromptCommit ###
     AddPromptToDB()
@@ -25,7 +25,7 @@ def AccountUpdate(email, name, password):
     AddSoundDataSetToDB()
 
     ### a215_UserCommit ###
-    AddUserToDB(email, name, password)
+    AddUserToDB(email, password)
     # AddUserToDB('junsun0128@gmail.com', 'junyoung', '0128')
     # AddUserToDB('ahyeon0128@gmail.com', 'ahyeon', '0128')
 

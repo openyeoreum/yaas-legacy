@@ -14,7 +14,7 @@ def GenerateUserId(email: str) -> str:
     return hashlib.sha256(UniqueString.encode('utf-8')).hexdigest()
 
 ### User 테이블과 폴더를 생성하는 함수
-def AddUserToDB(email, username, password):
+def AddUserToDB(email, password):
     
     with get_db() as db:
         # UserId 생성
@@ -41,7 +41,6 @@ def AddUserToDB(email, username, password):
             user = User(
                 UserId = GeneratedUserId,
                 Email = email,
-                UserName = username,
                 UserPath = userPath,
                 ProfileImagePath = profileImageFilePath,
                 TTSapiKey = tTSapiKey,
@@ -53,9 +52,9 @@ def AddUserToDB(email, username, password):
             os.makedirs(userPath, exist_ok = True)
             
             db.commit()
-            print(f"[ Email: {email} | Username: {username} | AddUserToDB 완료 ]")
+            print(f"[ Email: {email} | AddUserToDB 완료 ]")
         else:
-            print(f"[ Email: {email} | Username: {username} | AddUserToDB가 이미 완료됨 ]")
+            print(f"[ Email: {email} | AddUserToDB가 이미 완료됨 ]")
 
 if __name__ == "__main__":
     

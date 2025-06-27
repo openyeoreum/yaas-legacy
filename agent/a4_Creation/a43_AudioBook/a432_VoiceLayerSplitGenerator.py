@@ -648,17 +648,9 @@ def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, messages
     
 ## VoiceLayerPath(TTS 저장) 경로 생성
 def VoiceLayerPathGen(projectName, email, FileName, Folder):
-    # 데이터베이스에서 사용자 이름 찾기
-    with get_db() as db:
-        user = db.query(User).filter(User.Email == email).first()
-        if user is None:
-            raise ValueError("User not found with the provided email")
-        
-        username = user.UserName
-
     # 첫번째, 두번째 폴더 패턴: 시간 스탬프와 사용자 이름을 포함
-    UserFolderName = username + '_user'
-    StorageFolderName = username + '_storage'
+    UserFolderName = email + '_user'
+    StorageFolderName = email + '_storage'
     BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage'
 
     # 최종 경로 생성

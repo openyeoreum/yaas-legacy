@@ -30,7 +30,7 @@ def AccountUpdate(email, name, password):
     # AddUserToDB('ahyeon0128@gmail.com', 'ahyeon', '0128')
 
     ### a217_ProjectsStorageCommit ###
-    AddProjectsStorageToDB(name, email)
+    AddProjectsStorageToDB(email)
     # AddProjectsStorageToDB('junyoung', 'junsun0128@gmail.com')
     # AddProjectsStorageToDB('ahyeon', 'ahyeon0128@gmail.com')
 

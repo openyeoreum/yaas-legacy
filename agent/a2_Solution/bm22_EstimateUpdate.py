@@ -28,11 +28,11 @@ def SecondsToHMS(seconds):
     return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
 
 ### SciptFile의 EstimateSetting ###
-def EstimateSettingGen(projectName, Estimate, Estimates):
-    ScriptFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file"
+def EstimateSettingGen(projectName, email, Estimate, Estimates):
+    ScriptFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     ScriptFile = f"{projectName}_Script.txt"
     ProjectScriptFilePath = os.path.join(ScriptFilePath, ScriptFile)
-    EstimateFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_estimate/{projectName}_master_estimate_file"
+    EstimateFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_estimate/{projectName}_master_estimate_file"
     EstimateFile = f"[{projectName}_{Estimate}Estimate_Setting].json"
     ProjectEstimateFilePath = os.path.join(EstimateFilePath, EstimateFile)
     RunningTimeDataPath = f"/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s141_RunningTimeData"
@@ -249,7 +249,7 @@ def ConvertTimeFormat(RunningTime):
 ### EstimatePDF 생성 ###
 def SolutionEstimateUpdate(projectName, email, Estimates):
     for i, Estimate in enumerate(Estimates):
-        EstimateSetting, EstimateFilePath = EstimateSettingGen(projectName, Estimate, Estimates)
+        EstimateSetting, EstimateFilePath = EstimateSettingGen(projectName, email, Estimate, Estimates)
         
         print(f"< User: {email} | Project: {projectName} | 0{i+1}_{Estimate}_EstimateUpdate 시작 >")
 

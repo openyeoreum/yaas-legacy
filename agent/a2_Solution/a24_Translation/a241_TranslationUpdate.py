@@ -4226,7 +4226,7 @@ def ProcessEditPromptCheck(TranslationEditPath, Process, TotalInputCount, NumPro
 def TranslationProcessUpdate(projectName, email, MainLang, Translation, BookGenre, Tone, BodyLength, Editing, Refinement, KinfolkStyleRefinement, EditMode, mode = "Master", MessagesReview = "on"):
     print(f"< User: {email} | Translation: {projectName} ({Translation}) >>> ({MainLang}) | TranslationUpdate 시작 >")
     ## projectName_translation 경로 설정
-    ProjectTranslationPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_translation"
+    ProjectTranslationPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_translation"
     UploadTranslationFilePath = os.path.join(ProjectTranslationPath, f"{projectName}_upload_translation_file")
     ProjectDataFrameTranslationPath = os.path.join(ProjectTranslationPath, f'{projectName}_dataframe_translation_file')
     ProjectMasterTranslationPath = os.path.join(ProjectTranslationPath, f'{projectName}_master_translation_file')

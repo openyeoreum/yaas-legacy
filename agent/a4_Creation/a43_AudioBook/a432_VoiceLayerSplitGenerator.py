@@ -516,7 +516,7 @@ def ActorChunkSetting(RawChunk):
 # 낭독 ActorMatching
 def ActorMatchedSelectionGenerationChunks(projectName, email, MainLang, messagesReview):
     voiceDataSetCharacters, CharacterCompletion, CharacterChunks, SelectionGenerationKoBookContext, SelectionGenerationKoChunks = LoadSelectionGenerationKoChunks(projectName, email, MainLang)
-    VoiceLayerPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_audiobook/{projectName}_mixed_audiobook_file/VoiceLayers"
+    VoiceLayerPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_audiobook/{projectName}_mixed_audiobook_file/VoiceLayers"
     MatchedVoicesFileName = f"{projectName}_MatchedVoices.json"
     ActorsNeededFileName = f"{projectName}_ActorsNeeded.json"
     MatchedVoicesFilePath = os.path.join(VoiceLayerPath, MatchedVoicesFileName)

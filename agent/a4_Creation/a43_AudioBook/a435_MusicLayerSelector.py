@@ -2046,7 +2046,7 @@ def AudiobookMetaDataGen(projectName, email, EditGenerationKoChunks, FileLimitLi
 ## 오디오북 러닝타임 기록 ##
 def SaveAudiobookRunningTime(projectName, FileRunningTimeList):
     # BodyScript의 개수 구하기
-    BodyScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file/{projectName}_Body.txt"
+    BodyScriptPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file/{projectName}_Body.txt"
     with open(BodyScriptPath, 'r', encoding='utf-8') as Textfile:
         BodyScript = Textfile.read()
         BodyScript = unicodedata.normalize('NFC', BodyScript)

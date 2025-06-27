@@ -16,7 +16,7 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 # IndexText 로드
 def LoadIndexText(projectName, email):
     # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/yeoreum_user/yeoreum_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file"
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     RawIndexTextFilePath = TextDirPath + f'/{projectName}_Index(Raw).txt'
     RawBodyTextFilePath = TextDirPath + f'/{projectName}_Body(Raw).txt'
     

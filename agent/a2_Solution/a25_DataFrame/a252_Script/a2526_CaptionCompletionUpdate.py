@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a211_GetDBtable import GetProject, GetPromptFrame
+from agent.a2_Solution.a21_General.a212_GetDBtable import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCaptionCompletionToDB, AddCaptionCompletionChunksToDB, CaptionCompletionCountLoad, CaptionCompletionCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
@@ -400,7 +400,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

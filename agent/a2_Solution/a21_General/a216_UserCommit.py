@@ -14,15 +14,15 @@ def GenerateUserId(email: str) -> str:
     return hashlib.sha256(UniqueString.encode('utf-8')).hexdigest()
 
 ### User 테이블과 폴더를 생성하는 함수
-def AddUserToDB(email, password):
+def AddUserToDB(email):
     
     with get_db() as db:
         # UserId 생성
         GeneratedUserId = GenerateUserId(email)
         # BasePath 생성
-        BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage'
+        BasePath = '/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage'
         # UserPath 생성
-        userPath = os.path.join(BasePath, f"{email}_user")
+        userPath = os.path.join(BasePath, f"{email}")
         profileImageFilePath = os.path.join(userPath, f"{email}_profile_image")
 
         # 존재하는 경로 사용
@@ -46,7 +46,6 @@ def AddUserToDB(email, password):
                 TTSapiKey = tTSapiKey,
                 LLMapiKey = lLMapiKey
                 )
-            user.SetPassword(password)
             db.add(user)
             # 사용자 폴더 생성
             os.makedirs(userPath, exist_ok = True)

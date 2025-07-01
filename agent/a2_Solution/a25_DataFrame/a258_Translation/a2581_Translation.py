@@ -9,7 +9,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a211_GetDBtable import GetProject, GetPromptFrame
+from agent.a2_Solution.a21_General.a212_GetDBtable import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedSFXMatchingToDB, AddSFXSplitedBodysToDB, SFXMatchingCountLoad, SFXMatchingCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
@@ -418,7 +418,7 @@ if __name__ == "__main__":
     projectName = "240801_빨간풍차가있는집"
     ProcessNumber = '17'
     Process = 'TranslationKo'
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

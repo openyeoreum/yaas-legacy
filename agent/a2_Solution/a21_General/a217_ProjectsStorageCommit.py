@@ -3,7 +3,7 @@ import sys
 
 sys.path.append("/yaas")
 
-from agent.a1_Connector.a13_Models import ProjectsStorage, User, SeoulNow
+from agent.a1_Connector.a13_Models import ProjectsStorage, User
 from agent.a1_Connector.a12_Database import get_db
 
 def GetUserPath(email):
@@ -26,7 +26,7 @@ def AddProjectsStorageToDB(email):
             return
 
         UserPath = user.UserPath
-        projectsStoragePath = os.path.join(UserPath, f"{email}_storage")
+        projectsStoragePath = os.path.join(UserPath)
 
         # 폴더 존재 여부 확인
         if not os.path.exists(projectsStoragePath):

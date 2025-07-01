@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from PyPDF2 import PdfWriter, PdfReader
-from agent.a2_Solution.a21_General.a211_GetDBtable import GetProject, GetPromptFrame
+from agent.a2_Solution.a21_General.a212_GetDBtable import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedBookPreprocessToDB, AddBookPreprocessBookPagesToDB, BookPreprocessCountLoad, BookPreprocessCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
@@ -24,7 +24,7 @@ def ExistenceOrNotScriptFile(projectName, email):
     PDFFileSourcePath = os.path.join(ScriptFilesPath, projectName + ".pdf")
     IndexFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Index.txt")
     BodyFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Body.txt")
-    ProjectConfig = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_config.json"
+    ProjectConfig = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_config.json"
     
     with open(ProjectConfig, 'r', encoding = 'utf-8') as ConfigJson:
         Config = json.load(ConfigJson)
@@ -116,7 +116,7 @@ def PDFBookCropping(projectName, email, PDFBookToTextSetting, TextDirPath):
 ## PDF파일 편집 및 텍스트화
 def PDFBookToText(projectName, email, PDFBookToTextSetting):
     # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file"
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     CroppedPDFPath = TextDirPath + f'/{projectName}_Cropped.pdf'
     TextOutputDir = TextDirPath + f'/{projectName}_Text'
     # PDF파일 편집
@@ -210,7 +210,7 @@ def MergeBodyElements(InputList):
 ## TextFile의 BookPreprocessInputList 치환 (인덱스, 캡션 부분 합치기)
 def BookPreprocessInputList(projectName, email, IndexLength = 50):
     # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file"
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     JsonPath = os.path.join(TextDirPath, f'[{projectName}_PDFSetting].json')
     TextOutputDir = TextDirPath + f'/{projectName}_Text'
     ## JSON 파일이 없으면 생성
@@ -748,7 +748,7 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
 
     ### B. 검수 ###
     # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file"
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     JsonPath = os.path.join(TextDirPath, f'[{projectName}_PDFSetting].json')
     TextOutputDir = TextDirPath + f'/{projectName}_Text'
     IndexTextFilePath = TextDirPath + f'/{projectName}_Index.txt'
@@ -849,7 +849,7 @@ def BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview
 ## 프롬프트 요청 및 결과물 Json을 BookPreprocess에 업데이트
 def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     # 경로 설정
-    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/{email}_user/{email}_storage/{projectName}/{projectName}_script/{projectName}_upload_script_file"
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     IndexTextFilePath = TextDirPath + f'/{projectName}_Index.txt'
     BodyTextFilePath = TextDirPath + f'/{projectName}_Body.txt'
     
@@ -910,7 +910,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "241005_그해여름필립로커웨이에서일어난소설같은일"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

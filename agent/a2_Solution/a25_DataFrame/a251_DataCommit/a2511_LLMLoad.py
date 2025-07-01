@@ -15,8 +15,8 @@ from google.genai import types
 from agent.a1_Connector.a12_Database import get_db
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a13_Models import User, Prompt
-from agent.a2_Solution.a21_General.a211_GetDBtable import GetPromptFrame, GetTrainingDataset
-from agent.a2_Solution.a21_General.a212_PromptCommit import GetPromptDataPath, LoadJsonFrame
+from agent.a2_Solution.a21_General.a212_GetDBtable import GetPromptFrame, GetTrainingDataset
+from agent.a2_Solution.a21_General.a213_PromptCommit import GetPromptDataPath, LoadJsonFrame
 
 
 ######################
@@ -922,7 +922,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
     FeedbackDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s112_FeedbackDataSet/"
     CompleteDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s113_CompleteDataSet/"
     TrainingDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s114_TrainingDataSet/"

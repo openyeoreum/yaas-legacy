@@ -6,7 +6,7 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
-from agent.a2_Solution.a21_General.a211_GetDBtable import GetProject
+from agent.a2_Solution.a21_General.a212_GetDBtable import GetProject
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedHalfBodyFrameToDB, AddHalfBodyFrameBodyToDB, AddHalfBodyFrameChunkToDB, AddHalfBodyFrameBodysToDB, HalfBodyFrameCountLoad, InitHalfBodyFrame, UpdatedHalfBodyFrame, HalfBodyFrameCompletionUpdate
 
 # BodyText 로드
@@ -687,7 +687,7 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

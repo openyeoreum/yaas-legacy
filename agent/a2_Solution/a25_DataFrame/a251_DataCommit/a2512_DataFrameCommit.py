@@ -13,7 +13,7 @@ from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a13_Models import Project
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a211_GetDBtable import GetProject
+from agent.a2_Solution.a21_General.a212_GetDBtable import GetProject
 from agent.a2_Solution.a21_General.a218_ProjectCommit import GetProjectDataPath, LoadJsonFrame
 
 
@@ -112,7 +112,7 @@ def LoadAddOutputMemory(projectName, email, ProcessNum, DataFramePath):
 ## 각 유저별 DataframeFilePaths 찾기
 def FindDataframeFilePaths(email, projectName, userStoragePath):
     # 데이터프레임 파일 경로 구성
-    expectedFilePath = os.path.join(userStoragePath, f"{email}_user", f"{email}_storage", projectName, f"{projectName}_audiobook", f"{projectName}_dataframe_audiobook_file")
+    expectedFilePath = os.path.join(userStoragePath, f"{email}", projectName, f"{projectName}_audiobook", f"{projectName}_dataframe_audiobook_file")
     normalizedFilePath = unicodedata.normalize('NFC', expectedFilePath)
 
     # 파일 존재 여부 확인
@@ -2160,7 +2160,7 @@ if __name__ == "__main__":
     email = "yeoreum00128@gmail.com"
     projectName = "우리는행복을진단한다"
     process = 'IndexDefinePreprocess'
-    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage"
+    userStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
     DataFramePath = FindDataframeFilePaths(email, projectName, userStoragePath)
     RawDataSetPath = "/yaas/storage/s1_Yeoreum/s11_ModelFeedback/s111_RawDataSet/"
     messagesReview = "on"

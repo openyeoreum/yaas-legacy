@@ -8,8 +8,8 @@ from agent.a1_Connector.a12_Database import get_db
 
 ## 데이터베이스에서 JSON 파일을 불러오는 함수
 def LoadJsonFrame(FilePath): # 함수명 변경: LoadJsonFrame
-    with open(FilePath, 'r', encoding='utf-8') as file: # 변수명 변경: FilePath
-        DataFrame = json.load(file) # 변수명 변경: DataFrame
+    with open(FilePath, 'r', encoding = 'utf-8') as JsonFrame: # 변수명 변경: FilePath
+        DataFrame = json.load(JsonFrame) # 변수명 변경: DataFrame
     return DataFrame
 
 ##########################

@@ -56,7 +56,9 @@ def AddProjectToDB(projectName, email):
         # audiobook
         audiobookPath = os.path.join(projectPath, f"{projectName}_audiobook")
         audiobookDataFramePath = os.path.join(audiobookPath, f"{projectName}_dataframe_audiobook_file") # dataFramePath = os.path.join(projectPath, f"{projectName}_dataframe_file")
+        audiobookProcessConfigFilePath = os.path.join(audiobookDataFramePath, f"{email}_{projectName}_AudiobookProcess_Config.json") # dataConfigFilePath = os.path.join(projectPath, f"{projectName}_data_config_file")
         audiobookDataSetPath = os.path.join(audiobookPath, f"{projectName}_dataset_audiobook_file") # dataSetPath = os.path.join(projectPath, f"{projectName}_dataset_file")
+        audiobookDataSetConfigFilePath = os.path.join(audiobookDataSetPath, f"{email}_{projectName}_AudiobookDataSet_Config.json") # dataConfigFilePath = os.path.join(projectPath, f"{projectName}_data_config_file")
         mixedAudioBookPath = os.path.join(audiobookPath, f"{projectName}_mixed_audiobook_file") # mixedTextBookPath = os.path.join(projectPath, f"{projectName}_mixed_textbook_file")
 
         voiceLayersPath = os.path.join(mixedAudioBookPath, 'VoiceLayers') # masterTextBookPath = os.path.join(projectPath, f"{projectName}_master_textbook_file")
@@ -110,7 +112,11 @@ def AddProjectToDB(projectName, email):
             os.makedirs(masterTextBookPath, exist_ok = True)
             os.makedirs(audiobookPath, exist_ok = True)
             os.makedirs(audiobookDataFramePath, exist_ok = True)
-            os.makedirs(audiobookDataSetPath, exist_ok = True)
+            with open(audiobookProcessConfigFilePath, 'w') as ConfigFile:
+                json.dump({}, ConfigFile)
+            os.makedirs(audiobookDataSetPath, exist_ok = True)           
+            with open(audiobookDataSetConfigFilePath, 'w') as ConfigFile:
+                json.dump({}, ConfigFile)
             os.makedirs(mixedAudioBookPath, exist_ok = True)
             os.makedirs(voiceLayersPath, exist_ok = True)
             # os.makedirs(narratorPath, exist_ok = True)

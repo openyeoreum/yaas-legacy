@@ -39,7 +39,6 @@ def AddDataSetMetaDataToDB(projectName, email):
         db.add(trainingDataset)
         db.commit()
 
-
 ###########################
 ##### General Process #####
 ###########################

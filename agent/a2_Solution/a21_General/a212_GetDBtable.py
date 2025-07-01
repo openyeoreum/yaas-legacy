@@ -168,6 +168,13 @@ def GetSoundDataSet(soundDataSet):
     else:
         return None
 
+###########################
+###########################
+##### GetProjectsStorage ##
+###########################
+###########################
+
+## ProjectsStorage를 가져오는 함수
 def GetProjectsStorage(email):
     with get_db() as db:
         # 이메일로 사용자의 UserId를 반환

@@ -109,7 +109,7 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
         Response = re.sub(r"^'", '', Response)
         
         promptFrame = GetPromptFrame(Process)
-        Example = promptFrame[0]["Example"]
+        Example = promptFrame["Example"]
         responseData = Example[2]["OutputStarter"] + Response
         responseData = responseData.replace("'", "\"")
         try:

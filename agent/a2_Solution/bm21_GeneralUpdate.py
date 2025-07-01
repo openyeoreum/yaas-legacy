@@ -2,9 +2,7 @@ import sys
 sys.path.append("/yaas")
 
 from agent.a2_Solution.a21_General.a211_Access import AddProjectAccess
-from agent.a2_Solution.a21_General.a213_PromptCommit import AddPromptToDB
 from agent.a2_Solution.a21_General.a214_TrainingDatasetCommit import AddTrainingDatasetToDB
-from agent.a2_Solution.a21_General.a215_SoundDatasetCommit import AddSoundDataSetToDB
 from agent.a2_Solution.a21_General.a216_UserCommit import AddUserToDB
 from agent.a2_Solution.a21_General.a217_ProjectsStorageCommit import AddProjectsStorageToDB
 from agent.a2_Solution.a21_General.a218_ProjectCommit import AddProjectToDB
@@ -21,12 +19,6 @@ def AccountUpdate(email, projectName):
 
     ### a211_Access ###
     AddProjectAccess(projectName, email)
-
-    ### a213_PromptCommit
-    AddPromptToDB()
-    
-    ### a214_SoundDataSetCommit
-    AddSoundDataSetToDB()
 
     ### a215_UserCommit
     AddUserToDB(email)

@@ -8,25 +8,6 @@ from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
 
-#### 학습 후 삭제 ####
-class Question(Base):
-    __tablename__ = "question"
-
-    id = Column(Integer, primary_key = True)
-    subject = Column(String, nullable = False)
-    content = Column(Text, nullable = False)
-    create_date = Column(DateTime, nullable = False)
-
-class Answer(Base):
-    __tablename__ = "answer"
-
-    id = Column(Integer, primary_key = True)
-    content = Column(Text, nullable = False)
-    create_date = Column(DateTime, nullable = False)
-    question_id = Column(Integer, ForeignKey("question.id"))
-    question = relationship("Question", backref = "answers")
-#### 학습 후 삭제 ####
-
 ### 데이터베이스 시간을 서울로 지정하는 함수
 def SeoulNow():
 

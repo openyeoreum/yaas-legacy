@@ -265,7 +265,7 @@ def TranslationIndexProcess(projectName, email, processNumber, DataFramePath, me
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
             if mode in ["Example", "ExampleFineTuning", "Master"]:
-                Example = promptFrame[0]["Example"]
+                Example = promptFrame["Example"]
                 if Response.startswith(Example[2]["OutputStarter"]):
                     Response = Response.replace(Example[2]["OutputStarter"], "", 1)
                 responseData = Example[2]["OutputStarter"] + Response

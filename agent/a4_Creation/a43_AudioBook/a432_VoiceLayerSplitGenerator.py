@@ -42,7 +42,7 @@ def LoadVoiceDataSetCharacters(MainLang):
     
     # MainLang의 언어별 보이스 데이터셋 불러오기
     voiceDataSet = GetSoundDataSet("VoiceDataSet")
-    VoiceDataSet = voiceDataSet[0][1]
+    VoiceDataSet = voiceDataSet[1]
     
     VoiceDataSetCharacters = VoiceDataSet['Characters'][1:]
     # if MainLang == 'Ko':

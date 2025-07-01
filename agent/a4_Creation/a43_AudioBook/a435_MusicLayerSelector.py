@@ -45,16 +45,16 @@ def LoadMusicDataSet(projectName, email, MainLang = 'Ko'):
 
     ## LogoDataSet 불러오기
     soundDataSet = GetSoundDataSet("LogoDataSet")
-    LogoDataSet = soundDataSet[0][1]['Logos'][1:]
+    LogoDataSet = soundDataSet[1]['Logos'][1:]
     
     ## IntroDataSet 불러오기
     soundDataSet = GetSoundDataSet("IntroDataSet")
-    IntroDataSet = soundDataSet[0][1]['Intros'][1:]
+    IntroDataSet = soundDataSet[1]['Intros'][1:]
     
     ## TitleMusicDataSet 불러오기
     soundDataSet = GetSoundDataSet("TitleMusicDataSet")
-    TitleMusicDataSet = soundDataSet[0][1]['TitleMusics'][1:]
-    LogueMusicDataSet = soundDataSet[0][1]['LogueMusics'][1:]
+    TitleMusicDataSet = soundDataSet[1]['TitleMusics'][1:]
+    LogueMusicDataSet = soundDataSet[1]['LogueMusics'][1:]
     
     return SelectionGeneration, EditGeneration, LogoDataSet, IntroDataSet, TitleMusicDataSet, LogueMusicDataSet
 
@@ -1928,7 +1928,6 @@ def RecordModifiedChunk(projectName, email, EditGenerationKoChunks, MatchedChunk
     
     # 최신 Modified_Part 폴더 찾기
     LatestModifiedFolder = GetLatestModifiedFolder(BaseModifiedFolderPath)
-    print(LatestModifiedFolder)
     # wav 파일 리스트와 정보 딕셔너리 리스트 얻기
     ModifiedWavInfoList = GetModifiedWavFiles(LatestModifiedFolder)
     

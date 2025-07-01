@@ -16,7 +16,6 @@ from agent.a1_Connector.a12_Database import get_db
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a13_Models import User, Prompt
 from agent.a2_Solution.a21_General.a212_GetDBtable import GetPromptFrame, GetTrainingDataset
-from agent.a2_Solution.a21_General.a213_PromptCommit import GetPromptDataPath, LoadJsonFrame
 
 
 ######################
@@ -80,16 +79,16 @@ def LLMmessages(Process, Input, Model, Root = "agent", promptFramePath = "", Out
       promptFrame = GetPromptFrame(Process)
     else:
       with open(promptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
-        promptFrame = [json.load(promptFrameJson)]
+        promptFrame = json.load(promptFrameJson)
 
     messageTime = "current time: " + str(Date("Second")) + '\n\n'
     
     # messages
     if mode in ["Example", "ExampleFineTuning", "Master"]:
       if mode == "Example":
-        Example = promptFrame[0]["Example"]
+        Example = promptFrame["Example"]
       elif mode in ["ExampleFineTuning", "Master"]:
-        Example = promptFrame[0]["ExampleFineTuning"]
+        Example = promptFrame["ExampleFineTuning"]
 
       messages = [
         {
@@ -119,9 +118,9 @@ def LLMmessages(Process, Input, Model, Root = "agent", promptFramePath = "", Out
       
     elif mode in ["Memory", "MemoryFineTuning"]:
       if mode == "Memory":
-        Memory = promptFrame[0]["Memory"]
+        Memory = promptFrame["Memory"]
       elif mode == "MemoryFineTuning":
-        Memory = promptFrame[0]["MemoryFineTuning"]
+        Memory = promptFrame["MemoryFineTuning"]
         
       messages = [
         {
@@ -153,7 +152,7 @@ def LLMmessages(Process, Input, Model, Root = "agent", promptFramePath = "", Out
     
     # Training
     elif mode == "ExampleTraining":
-      ExampleFineTuning = promptFrame[0]["ExampleFineTuning"]
+      ExampleFineTuning = promptFrame["ExampleFineTuning"]
       messages = [
         {
           "role": ExampleFineTuning[0]["Role"],
@@ -174,7 +173,7 @@ def LLMmessages(Process, Input, Model, Root = "agent", promptFramePath = "", Out
       ]
       
     elif mode == "MemoryTraining":
-      MemoryFineTuning = promptFrame[0]["MemoryFineTuning"]
+      MemoryFineTuning = promptFrame["MemoryFineTuning"]
       messages = [
         {
           "role": MemoryFineTuning[0]["Role"],
@@ -198,10 +197,10 @@ def LLMmessages(Process, Input, Model, Root = "agent", promptFramePath = "", Out
     # print(f'messages: {messages}')
     InputTokens = len(encoding.encode(str(Input)))
     messageTokens = len(encoding.encode(str(messages)))
-    OutputTokensRatio = promptFrame[0]["OutputTokensRatio"]
+    OutputTokensRatio = promptFrame["OutputTokensRatio"]
     outputTokens = InputTokens * OutputTokensRatio
     totalTokens = messageTokens + outputTokens
-    Temperature = promptFrame[0]["Temperature"]
+    Temperature = promptFrame["Temperature"]
 
     return messages, outputTokens, totalTokens, Temperature
   
@@ -238,47 +237,47 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "agent"
       promptFrame = GetPromptFrame(Process)
     else:
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
-        promptFrame = [json.load(promptFrameJson)]
+        promptFrame = json.load(promptFrameJson)
 
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'gpt', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
     if Mode == "Master":
-      Model = promptFrame[0]["OpenAI"]["MasterModel"]
+      Model = promptFrame["OpenAI"]["MasterModel"]
     else:
       if TotalTokens < 20000:
         if Mode in ["Example", "Memory"]:
-          Model = promptFrame[0]["OpenAI"]["BaseModel"]["ShortTokensModel"]
+          Model = promptFrame["OpenAI"]["BaseModel"]["ShortTokensModel"]
         if Mode == "ExampleFineTuning":
-          if promptFrame[0]["OpenAI"]["ExampleFineTunedModel"]["ShortTokensModel"] != []:
-            Model = promptFrame[0]["OpenAI"]["ExampleFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+          if promptFrame["OpenAI"]["ExampleFineTunedModel"]["ShortTokensModel"] != []:
+            Model = promptFrame["OpenAI"]["ExampleFineTunedModel"]["ShortTokensModel"][-1]["Model"]
           else:
-            Model = promptFrame[0]["OpenAI"]["BaseModel"]["ShortTokensModel"]
+            Model = promptFrame["OpenAI"]["BaseModel"]["ShortTokensModel"]
         if Mode == "MemoryFineTuning":
-          if promptFrame[0]["OpenAI"]["MemoryFineTunedModel"]["ShortTokensModel"] != []:
-            Model = promptFrame[0]["OpenAI"]["MemoryFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+          if promptFrame["OpenAI"]["MemoryFineTunedModel"]["ShortTokensModel"] != []:
+            Model = promptFrame["OpenAI"]["MemoryFineTunedModel"]["ShortTokensModel"][-1]["Model"]
           else:
-            Model = promptFrame[0]["OpenAI"]["BaseModel"]["ShortTokensModel"]
+            Model = promptFrame["OpenAI"]["BaseModel"]["ShortTokensModel"]
 
       else:
         if Mode in ["Example", "Memory"]:
-          Model = promptFrame[0]["OpenAI"]["BaseModel"]["LongTokensModel"]
+          Model = promptFrame["OpenAI"]["BaseModel"]["LongTokensModel"]
         if Mode == "ExampleFineTuning":
-          if promptFrame[0]["OpenAI"]["ExampleFineTunedModel"]["LongTokensModel"] != []:
-            Model = promptFrame[0]["OpenAI"]["ExampleFineTunedModel"]["LongTokensModel"][-1]["Model"]
+          if promptFrame["OpenAI"]["ExampleFineTunedModel"]["LongTokensModel"] != []:
+            Model = promptFrame["OpenAI"]["ExampleFineTunedModel"]["LongTokensModel"][-1]["Model"]
           else:
-            Model = promptFrame[0]["OpenAI"]["BaseModel"]["LongTokensModel"]
+            Model = promptFrame["OpenAI"]["BaseModel"]["LongTokensModel"]
         if Mode == "MemoryFineTuning":
-          if promptFrame[0]["OpenAI"]["MemoryFineTunedModel"]["LongTokensModel"] != []:
-            Model = promptFrame[0]["OpenAI"]["MemoryFineTunedModel"]["LongTokensModel"][-1]["Model"]
+          if promptFrame["OpenAI"]["MemoryFineTunedModel"]["LongTokensModel"] != []:
+            Model = promptFrame["OpenAI"]["MemoryFineTunedModel"]["LongTokensModel"][-1]["Model"]
           else:
-            Model = promptFrame[0]["OpenAI"]["BaseModel"]["LongTokensModel"]
+            Model = promptFrame["OpenAI"]["BaseModel"]["LongTokensModel"]
 
     Temperature = temperature
-    ReasoningEffort = promptFrame[0]["OpenAI"]["ReasoningEffort"]
+    ReasoningEffort = promptFrame["OpenAI"]["ReasoningEffort"]
 
     for _ in range(MaxAttempts):
       try:
-          if promptFrame[0]["OutputFormat"] == 'json':
+          if promptFrame["OutputFormat"] == 'json':
             if Model in ['o4-mini', 'o3']:
               response = OpenAIClient.chat.completions.create(
                   model = Model,
@@ -467,15 +466,15 @@ def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDat
       fineTunedModelDic = {"Id" : Process + '-' + str(Date("Second")), "Model" :FineTunedModel}
       if Mode == "Example":
         if ModelTokens == "Short":
-          promptFrame[0]['ExampleFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
+          promptFrame['ExampleFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
         elif ModelTokens == "Long":
-          promptFrame[0]['ExampleFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
+          promptFrame['ExampleFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
           
       elif Mode == "Memory":
         if ModelTokens == "Short":
-          promptFrame[0]['MemoryFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
+          promptFrame['MemoryFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
         elif ModelTokens == "Long":
-          promptFrame[0]['MemoryFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
+          promptFrame['MemoryFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
 
       flag_modified(prompt, Process)
       
@@ -587,45 +586,45 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "age
       promptFrame = GetPromptFrame(Process)
     else:
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
-        promptFrame = [json.load(promptFrameJson)]
+        promptFrame = json.load(promptFrameJson)
 
     
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
     if Mode == "Master":
-      Model = promptFrame[0]["ANTHROPIC"]["MasterModel"]
+      Model = promptFrame["ANTHROPIC"]["MasterModel"]
     else:
       if TotalTokens < 14000:
         if Mode in ["Example", "Memory"]:
-          Model = promptFrame[0]["ANTHROPIC"]["BaseModel"]["ShortTokensModel"]
+          Model = promptFrame["ANTHROPIC"]["BaseModel"]["ShortTokensModel"]
         if Mode == "ExampleFineTuning":
-          if promptFrame[0]["OpenAI"]["ExampleFineTunedModel"]["ShortTokensModel"] != []:
-            Model = promptFrame[0]["ANTHROPIC"]["ExampleFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+          if promptFrame["OpenAI"]["ExampleFineTunedModel"]["ShortTokensModel"] != []:
+            Model = promptFrame["ANTHROPIC"]["ExampleFineTunedModel"]["ShortTokensModel"][-1]["Model"]
           else:
-            Model = promptFrame[0]["ANTHROPIC"]["BaseModel"]["ShortTokensModel"]
+            Model = promptFrame["ANTHROPIC"]["BaseModel"]["ShortTokensModel"]
         if Mode == "MemoryFineTuning":
-          if promptFrame[0]["OpenAI"]["MemoryFineTunedModel"]["ShortTokensModel"] != []:
-            Model = promptFrame[0]["ANTHROPIC"]["MemoryFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+          if promptFrame["OpenAI"]["MemoryFineTunedModel"]["ShortTokensModel"] != []:
+            Model = promptFrame["ANTHROPIC"]["MemoryFineTunedModel"]["ShortTokensModel"][-1]["Model"]
           else:
-            Model = promptFrame[0]["ANTHROPIC"]["BaseModel"]["ShortTokensModel"]
+            Model = promptFrame["ANTHROPIC"]["BaseModel"]["ShortTokensModel"]
 
       else:
         if Mode in ["Example", "Memory"]:
-          Model = promptFrame[0]["ANTHROPIC"]["BaseModel"]["LongTokensModel"]
+          Model = promptFrame["ANTHROPIC"]["BaseModel"]["LongTokensModel"]
         if Mode == "ExampleFineTuning":
-          if promptFrame[0]["OpenAI"]["ExampleFineTunedModel"]["LongTokensModel"] != []:
-            Model = promptFrame[0]["ANTHROPIC"]["ExampleFineTunedModel"]["LongTokensModel"][-1]["Model"]
+          if promptFrame["OpenAI"]["ExampleFineTunedModel"]["LongTokensModel"] != []:
+            Model = promptFrame["ANTHROPIC"]["ExampleFineTunedModel"]["LongTokensModel"][-1]["Model"]
           else:
-            Model = promptFrame[0]["ANTHROPIC"]["BaseModel"]["LongTokensModel"]
+            Model = promptFrame["ANTHROPIC"]["BaseModel"]["LongTokensModel"]
         if Mode == "MemoryFineTuning":
-          if promptFrame[0]["OpenAI"]["MemoryFineTunedModel"]["LongTokensModel"] != []:
-            Model = promptFrame[0]["ANTHROPIC"]["MemoryFineTunedModel"]["LongTokensModel"][-1]["Model"]
+          if promptFrame["OpenAI"]["MemoryFineTunedModel"]["LongTokensModel"] != []:
+            Model = promptFrame["ANTHROPIC"]["MemoryFineTunedModel"]["LongTokensModel"][-1]["Model"]
           else:
-            Model = promptFrame[0]["ANTHROPIC"]["BaseModel"]["LongTokensModel"]
+            Model = promptFrame["ANTHROPIC"]["BaseModel"]["LongTokensModel"]
     
     for _ in range(MaxAttempts):
       try:
-          if promptFrame[0]["OutputFormat"] == 'json':
+          if promptFrame["OutputFormat"] == 'json':
             response = AnthropicAIClient.messages.create(
                 model = Model,
                 max_tokens = 4096,
@@ -645,7 +644,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "age
                    'Total': response.usage.input_tokens + response.usage.output_tokens}
           
           # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
-          if promptFrame[0]["OutputFormat"] == 'json':
+          if promptFrame["OutputFormat"] == 'json':
               pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'
               match = re.search(pattern, Response, re.DOTALL)
               if match:
@@ -717,16 +716,16 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "agent"
       promptFrame = GetPromptFrame(Process)
     else:
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
-        promptFrame = [json.load(promptFrameJson)]
+        promptFrame = json.load(promptFrameJson)
 
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
-    Model = promptFrame[0]["GOOGLE"]["MasterModel"]
+    Model = promptFrame["GOOGLE"]["MasterModel"]
     
     for _ in range(MaxAttempts):
       try:
           Response = ''
-          if promptFrame[0]["OutputFormat"] == 'json':
+          if promptFrame["OutputFormat"] == 'json':
             for responseChunk in GoogleAIClient.models.generate_content_stream(
                 model = Model,
                 contents = [
@@ -754,7 +753,7 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "agent"
                     'Output': responseChunk.usage_metadata.candidates_token_count,
                     'Total': responseChunk.usage_metadata.total_token_count}
           # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
-          if promptFrame[0]["OutputFormat"] == 'json':
+          if promptFrame["OutputFormat"] == 'json':
               pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'
               match = re.search(pattern, Response, re.DOTALL)
               if match:
@@ -825,15 +824,15 @@ def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "agen
       promptFrame = GetPromptFrame(Process)
     else:
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
-        promptFrame = [json.load(promptFrameJson)]
+        promptFrame = json.load(promptFrameJson)
 
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
 
-    Model = promptFrame[0]["DEEPSEEK"]["MasterModel"]
+    Model = promptFrame["DEEPSEEK"]["MasterModel"]
     
     for _ in range(MaxAttempts):
       try:
-          if promptFrame[0]["OutputFormat"] == 'json':
+          if promptFrame["OutputFormat"] == 'json':
             response = DeepSeekClient.chat.completions.create(
                 model = Model,
                 messages = [
@@ -857,7 +856,7 @@ def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "agen
                   'Total': response.usage.total_tokens }
           
           # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
-          if promptFrame[0]["OutputFormat"] == 'json':
+          if promptFrame["OutputFormat"] == 'json':
               pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'
               match = re.search(pattern, Response, re.DOTALL)
               if match:

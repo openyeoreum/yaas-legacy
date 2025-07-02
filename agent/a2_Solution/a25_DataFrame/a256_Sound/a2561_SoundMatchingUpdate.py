@@ -7,8 +7,6 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
-from sqlalchemy.orm.attributes import flag_modified
-from agent.a1_Connector.a12_Database import get_db
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedSoundMatchingToDB, AddSoundSplitedIndexsToDB, SoundMatchingCountLoad, SoundMatchingCompletionUpdate

@@ -11,12 +11,3 @@ def GetDB():
         yield db
     finally:
         db.close()
-
-## 임시사용
-@contextmanager
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()

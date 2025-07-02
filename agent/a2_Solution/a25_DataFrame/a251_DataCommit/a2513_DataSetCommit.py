@@ -6,8 +6,6 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
-from sqlalchemy.orm.attributes import flag_modified
-from agent.a1_Connector.a12_Database import get_db
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetTrainingDataset, SaveTrainingDataset
 
 

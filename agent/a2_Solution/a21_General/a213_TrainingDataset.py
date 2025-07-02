@@ -4,11 +4,10 @@ import json
 sys.path.append("/yaas")
 
 def GetTrainingDatasetPath():
-    RootPath = "/yaas"
-    DataPath = "agent/a5_Database/a55_TrainingDataset/a551_TrainingDataset.json"
-    return os.path.join(RootPath, DataPath)
+    TrainingDatasetPath = "/yaas/agent/a5_Database/a55_TrainingDataset/a551_TrainingDataset.json"
+    return TrainingDatasetPath
 
-def GetDataSetConfigPath(email, projectName):
+def GetDataSetConfigPath(projectName, email):
     PDataSetConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file/{email}_{projectName}_AudiobookDataSet_Config.json"
     return PDataSetConfigPath
 
@@ -21,7 +20,7 @@ def SetupTrainingDataset(projectName, email):
     # 디렉토리 경로 생성
     TrainingDatasetPath = GetTrainingDatasetPath()
 
-    audiobookDataSetConfigFilePath = GetDataSetConfigPath(email, projectName)
+    audiobookDataSetConfigFilePath = GetDataSetConfigPath(projectName, email)
 
     # JSON 데이터 불러오기
     trainingDataset = LoadJsonDataset(TrainingDatasetPath)
@@ -68,8 +67,8 @@ def SetupTrainingDataset(projectName, email):
             ### 아래로 추가되는 데이터셋 작성 ###
         }
         ## 데이터셋 설정 생성
-        with open(audiobookDataSetConfigFilePath, 'w') as ConfigFile:
-            json.dump(audiobookDataSetConfig, ConfigFile)
+        with open(audiobookDataSetConfigFilePath, 'w', encoding = 'utf-8') as ConfigFile:
+            json.dump(audiobookDataSetConfig, ConfigFile, ensure_ascii = False, indent = 4)
 
         print(f"[ Email: {email} | ProjectName: {projectName} | AudiobookDataSetConfig 완료 ]")
     else:

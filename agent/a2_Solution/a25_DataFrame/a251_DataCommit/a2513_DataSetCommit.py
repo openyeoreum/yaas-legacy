@@ -6,65 +6,44 @@ import sys
 sys.path.append("/yaas")
 
 from datetime import datetime
-from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm.attributes import flag_modified
-from agent.a1_Connector.a13_Models import TrainingDataset
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a214_GetProcessData import GetTrainingDataset
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetTrainingDataset, SaveTrainingDataset
 
 
 #########################################################
 ##### 전체 TrainingDataSet의 MetaData(식별)부분을 업데이트 #####
 #########################################################
 def AddDataSetMetaDataToDB(projectName, email):
-    with get_db() as db:
-        trainingDataset = GetTrainingDataset(projectName, email)
+    trainingDataset = GetTrainingDataset(projectName, email)
 
-        if not trainingDataset:
-            print("TrainingDataset not found!")
-            return
-        
-        for column in TrainingDataset.__table__.columns:
-            if isinstance(column.type, JSON):
-                ProcessData = getattr(trainingDataset, column.name)
-                if ProcessData is None:
-                    continue
-                ProcessData["UserId"] = trainingDataset.UserId
-                ProcessData["ProjectsStorageID"] = trainingDataset.ProjectsStorageId
-                ProcessData["ProjectId"] = trainingDataset.ProjectId
-                ProcessData["ProjectName"] = trainingDataset.ProjectName
-                setattr(trainingDataset, column.name, ProcessData)
-                flag_modified(trainingDataset, column.name)
+    trainingDataset["ProjectName"] = projectName
 
-        db.add(trainingDataset)
-        db.commit()
+    SaveTrainingDataset(projectName, email, trainingDataset)
 
 ###########################
 ##### General Process #####
 ###########################
 ## 1. 1-1 IndexFrame이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedDataSetToDB(projectName, email, Process, ExistedDataSet):
-    with get_db() as db:
-    
-        trainingDataset = GetTrainingDataset(projectName, email)
-        ProcessDataset = getattr(trainingDataset, Process)
-        ProcessDataset["TaskName"] = ExistedDataSet["TaskName"]
-        ProcessDataset["UserId"] = ExistedDataSet["UserId"]
-        ProcessDataset["ProjectsStorageID"] = ExistedDataSet["ProjectsStorageID"]
-        ProcessDataset["ProjectId"] = ExistedDataSet["ProjectId"]
-        ProcessDataset["ProjectName"] = ExistedDataSet["ProjectName"]
-        ProcessDataset["RawDataSetCount"] = ExistedDataSet["RawDataSetCount"]
-        ProcessDataset["FeedbackDatasetCount"] = ExistedDataSet["FeedbackDatasetCount"]
-        ProcessDataset["EmbeddingDatasetCount"] = ExistedDataSet["EmbeddingDatasetCount"]
-        ProcessDataset["Completion"] = ExistedDataSet["Completion"]
-        ProcessDataset["Accuracy"] = ExistedDataSet["Accuracy"]
-        ProcessDataset["Context"] = ExistedDataSet["Context"]
-        ProcessDataset["RawDataset"] = ExistedDataSet["RawDataset"]
+    trainingDataset = GetTrainingDataset(projectName, email)
+
+    ProcessDataset = trainingDataset[Process]
+    ProcessDataset["TaskName"] = ExistedDataSet["TaskName"]
+    ProcessDataset["UserId"] = ExistedDataSet["UserId"]
+    ProcessDataset["ProjectsStorageID"] = ExistedDataSet["ProjectsStorageID"]
+    ProcessDataset["ProjectId"] = ExistedDataSet["ProjectId"]
+    ProcessDataset["ProjectName"] = ExistedDataSet["ProjectName"]
+    ProcessDataset["RawDataSetCount"] = ExistedDataSet["RawDataSetCount"]
+    ProcessDataset["FeedbackDatasetCount"] = ExistedDataSet["FeedbackDatasetCount"]
+    ProcessDataset["EmbeddingDatasetCount"] = ExistedDataSet["EmbeddingDatasetCount"]
+    ProcessDataset["Completion"] = ExistedDataSet["Completion"]
+    ProcessDataset["Accuracy"] = ExistedDataSet["Accuracy"]
+    ProcessDataset["Context"] = ExistedDataSet["Context"]
+    ProcessDataset["RawDataset"] = ExistedDataSet["RawDataset"]
         
-        flag_modified(trainingDataset, Process)
-        
-        db.add(trainingDataset)
-        db.commit()
+    SaveTrainingDataset(projectName, email, trainingDataset)
+
         
 ## 1. 1-1 UpdateProjectContext 업데이트 형식
 def UpdateProjectContext(ProcessDataset, Process, Language = "None", Genre = "None", Gender = "None", Age = "None", Personality = "None", Emotion = "None", Environment = "None", Situation = "None", Era = "None", Culture = "None"):
@@ -88,16 +67,12 @@ def UpdateProjectContext(ProcessDataset, Process, Language = "None", Genre = "No
     
 ## 1. 1-2 ProjectContext 부분 업데이트
 def AddProjectContextToDB(projectName, email, Process, language = "None", genre = "None", gender = "None", age = "None", personality = "None", emotion = "None", environment = "None", situation = "None", era = "None", culture = "None"):
-    with get_db() as db:
-    
-        trainingDataset = GetTrainingDataset(projectName, email)
-        ProcessDataset = getattr(trainingDataset, Process)
-        UpdateProjectContext(ProcessDataset, Process, Language = language, Genre = genre, Gender = gender, Age = age, Personality = personality, Emotion = emotion, Environment = environment, Situation = situation, Era = era, Culture = culture)
-        
-        flag_modified(trainingDataset, Process)
-        
-        db.add(trainingDataset)
-        db.commit()
+    trainingDataset = GetTrainingDataset(projectName, email)
+
+    ProcessDataset = trainingDataset[Process]
+    UpdateProjectContext(ProcessDataset, Process, Language = language, Genre = genre, Gender = gender, Age = age, Personality = personality, Emotion = emotion, Environment = environment, Situation = situation, Era = era, Culture = culture)
+
+    SaveTrainingDataset(projectName, email, trainingDataset)
         
 ## 1. 1-3 UpdateProjectRawDataset 업데이트 형식
 def UpdateProjectRawDataset(ProcessDataset, Mode, Model, Usage, Input, Output, InputMemory = "None"):
@@ -117,16 +92,12 @@ def UpdateProjectRawDataset(ProcessDataset, Mode, Model, Usage, Input, Output, I
     
 ## 1. 1-4 ProjectRawDataset 부분 업데이트
 def AddProjectRawDatasetToDB(projectName, email, Process, Mode, Model, Usage, Input, Output, INPUTMEMORY = "None"):
-    with get_db() as db:
-    
-        trainingDataset = GetTrainingDataset(projectName, email)
-        ProcessDataset = getattr(trainingDataset, Process)
-        UpdateProjectRawDataset(ProcessDataset, Mode, Model, Usage, Input, Output, InputMemory = INPUTMEMORY)
-        
-        flag_modified(trainingDataset, Process)
-        
-        db.add(trainingDataset)
-        db.commit()
+    trainingDataset = GetTrainingDataset(projectName, email)
+
+    ProcessDataset = trainingDataset[Process]
+    UpdateProjectRawDataset(ProcessDataset, Mode, Model, Usage, Input, Output, InputMemory = INPUTMEMORY)
+
+    SaveTrainingDataset(projectName, email, trainingDataset)
         
 ## 1. 1-5 UpdateProjectFeedbackDataSets 업데이트 형식
 def UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output, InputMemory = "None"):
@@ -145,16 +116,12 @@ def UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output, InputMemory = "
     
 ## 1. 1-6 ProjectFeedbackDataSets 부분 업데이트
 def AddProjectFeedbackDataSetsToDB(projectName, email, Process, Input, Output, INPUTMEMORY = "None"):
-    with get_db() as db:
-    
-        trainingDataset = GetTrainingDataset(projectName, email)
-        ProcessDataset = getattr(trainingDataset, Process)
-        UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output, InputMemory = INPUTMEMORY)
-        
-        flag_modified(trainingDataset, Process)
-        
-        db.add(trainingDataset)
-        db.commit()
+    trainingDataset = GetTrainingDataset(projectName, email)
+
+    ProcessDataset = trainingDataset[Process]
+    UpdateProjectFeedbackDataSets(ProcessDataset, Input, Output, InputMemory = INPUTMEMORY)
+
+    SaveTrainingDataset(projectName, email, trainingDataset)
         
 ## 1. 1-7 UpdateProjectEmbeddingDataSets 업데이트 형식
 def UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbedding, InputMemoryEmbedding = "None"):
@@ -171,22 +138,18 @@ def UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbeddi
     
 ## 1. 1-8 UpdateProjectEmbeddingDataSets 부분 업데이트
 def AddProjectEmbeddingDataSetsToDB(projectName, email, Process, InputEmbedding, OutputEmbedding, inputMemoryEmbedding = "None"):
-    with get_db() as db:
-    
-        trainingDataset = GetTrainingDataset(projectName, email)
-        ProcessDataset = getattr(trainingDataset, Process)
-        UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbedding, InputMemoryEmbedding = inputMemoryEmbedding)
-        
-        flag_modified(trainingDataset, Process)
-        
-        db.add(trainingDataset)
-        db.commit()
+    trainingDataset = GetTrainingDataset(projectName, email)
+
+    ProcessDataset = trainingDataset[Process]
+    UpdateProjectEmbeddingDataSets(ProcessDataset, InputEmbedding, OutputEmbedding, InputMemoryEmbedding = inputMemoryEmbedding)
+
+    SaveTrainingDataset(projectName, email, trainingDataset)
     
 ## 1. DataSetCount 가져오기
 def DataSetCountLoad(projectName, email, Process):
 
     trainingDataset = GetTrainingDataset(projectName, email)
-    ProcessDataset = getattr(trainingDataset, Process)
+    ProcessDataset = trainingDataset[Process]
     RawDataSetCount = ProcessDataset["RawDataSetCount"]
     FeedbackDatasetCount = ProcessDataset["FeedbackDatasetCount"]
     EmbeddingDatasetCount = ProcessDataset["EmbeddingDatasetCount"]
@@ -196,87 +159,80 @@ def DataSetCountLoad(projectName, email, Process):
 
 ## 1. DataSet 초기화
 def InitRawDataSet(projectName, email, Process):
-    with get_db() as db:
-    
-        trainingDataset = GetTrainingDataset(projectName, email)
-        ProcessDataset = getattr(trainingDataset, Process)
-        ProcessDataset["RawDataSetCount"] = 0
-        ProcessDataset["FeedbackDatasetCount"] = 0
-        ProcessDataset["EmbeddingDatasetCount"] = 0
-        ProcessDataset["Completion"] = "No"
-        ProcessDataset["Accuracy"] = {}
-        ProcessDataset["Context"] = {
-            "Language": "Ko",
-            "Genre": "None",
-            "Gender": "None",
-            "Age": "None",
-            "Personality": "None",
-            "Emotion": "None",
-            "Environment": "None",
-            "Situation": "None",
-            "Era": "None",
-            "Culture": "None"
-            }
-        ProcessDataset["RawDataset"] = [
-            {
-                "DataSetId": 0,
-                "Mode": "None",
-                "TrainingModel": "None",
-                "Tokens": "None",
-                "InputMemory": "None",
-                "Input": "None",
-                "Output": "None"
-            }
-        ]
-        ProcessDataset["FeedbackDataset"] = [
-            {
-                "DataSetId": 0,
-                "InputMemory": "None",
-                "Input": "None",
-                "Feedback": "None",
-                "Check": "No",
-                "Accuracy": "None"
-            }
-        ]
-        ProcessDataset["FeedbackCompletion"] = "No"
-        ProcessDataset["EmbeddingDataset"] = [
-            {
-                "DataSetId": 0,
-                "InputMemoryEmbedding": "None",
-                "InputEmbedding": "None",
-                "OutputEmbedding": "None"
-            }
-        ]
-        flag_modified(trainingDataset, Process)
-        
-        db.add(trainingDataset)
-        db.commit()
+    trainingDataset = GetTrainingDataset(projectName, email)
+
+    ProcessDataset = trainingDataset[Process]
+    ProcessDataset["RawDataSetCount"] = 0
+    ProcessDataset["FeedbackDatasetCount"] = 0
+    ProcessDataset["EmbeddingDatasetCount"] = 0
+    ProcessDataset["Completion"] = "No"
+    ProcessDataset["Accuracy"] = {}
+    ProcessDataset["Context"] = {
+        "Language": "Ko",
+        "Genre": "None",
+        "Gender": "None",
+        "Age": "None",
+        "Personality": "None",
+        "Emotion": "None",
+        "Environment": "None",
+        "Situation": "None",
+        "Era": "None",
+        "Culture": "None"
+        }
+    ProcessDataset["RawDataset"] = [
+        {
+            "DataSetId": 0,
+            "Mode": "None",
+            "TrainingModel": "None",
+            "Tokens": "None",
+            "InputMemory": "None",
+            "Input": "None",
+            "Output": "None"
+        }
+    ]
+    ProcessDataset["FeedbackDataset"] = [
+        {
+            "DataSetId": 0,
+            "InputMemory": "None",
+            "Input": "None",
+            "Feedback": "None",
+            "Check": "No",
+            "Accuracy": "None"
+        }
+    ]
+    ProcessDataset["FeedbackCompletion"] = "No"
+    ProcessDataset["EmbeddingDataset"] = [
+        {
+            "DataSetId": 0,
+            "InputMemoryEmbedding": "None",
+            "InputEmbedding": "None",
+            "OutputEmbedding": "None"
+        }
+    ]
+
+    SaveTrainingDataset(projectName, email, trainingDataset)
         
 ## 1. 업데이트된 DataSet 출력
 def UpdatedDataSet(projectName, email, Process):
-    with get_db() as db:
-        trainingDataset = GetTrainingDataset(projectName, email)
-        ProcessDataset = getattr(trainingDataset, Process)
+    trainingDataset = GetTrainingDataset(projectName, email)
 
+    ProcessDataset = trainingDataset[Process]
     return ProcessDataset
 
 ## 1. DataSetCompletion 업데이트
 def DataSetCompletionUpdate(projectName, email, Process):
-    with get_db() as db:
-        trainingDataset = GetTrainingDataset(projectName, email)
-        ProcessDataset = getattr(trainingDataset, Process)
-        ProcessDataset["Completion"] = "Yes"
+    trainingDataset = GetTrainingDataset(projectName, email)
 
-        flag_modified(trainingDataset, Process)
+    ProcessDataset = trainingDataset[Process]
+    ProcessDataset["Completion"] = "Yes"
 
-        db.add(trainingDataset)
-        db.commit()
+    SaveTrainingDataset(projectName, email, trainingDataset)
         
 ## 1. 업데이트된 DataSet 파일저장
 def SaveDataSet(projectName, email, ProcessNumber, Process, RawDataSetPath):
-    with get_db() as db:
-        trainingDataset = GetTrainingDataset(projectName, email)
-        ProcessDataset = getattr(trainingDataset, Process)
+    trainingDataset = GetTrainingDataset(projectName, email)
+
+    ProcessDataset = trainingDataset[Process]
     # 현재 날짜 및 시간을 가져옵니다.
     now = datetime.now()
     date = now.strftime('%y%m%d')
@@ -401,17 +357,14 @@ def AddProjectFeedbackDataSets(projectName, email, Process, FeedbackDataSetPath,
     if ExistedDataSet:
         if ExistedDataSet["FeedbackCompletion"] == "Yes":
             AccuracyDataSet = OutputAccuracy(ExistedDataSet)
-            with get_db() as db:
-                trainingDataset = GetTrainingDataset(projectName, email)
-                ProcessDataset = getattr(trainingDataset, Process)
-                ProcessDataset["Accuracy"] = AccuracyDataSet["Accuracy"]
-                ProcessDataset["FeedbackDataset"] = AccuracyDataSet["FeedbackDataset"]
-                ProcessDataset["FeedbackCompletion"] = "Yes"
-                
-                flag_modified(trainingDataset, Process)
+            trainingDataset = GetTrainingDataset(projectName, email)
 
-                db.add(trainingDataset)
-                db.commit()
+            ProcessDataset = trainingDataset[Process]
+            ProcessDataset["Accuracy"] = AccuracyDataSet["Accuracy"]
+            ProcessDataset["FeedbackDataset"] = AccuracyDataSet["FeedbackDataset"]
+            ProcessDataset["FeedbackCompletion"] = "Yes"
+                
+            SaveTrainingDataset(projectName, email, trainingDataset)
                 
             SaveFeedbackDataSet(projectName, Process, RecentFile, AccuracyDataSet, FeedbackDataSetPath, CompleteDataSetPath)
         else:

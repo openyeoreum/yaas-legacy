@@ -3,16 +3,19 @@ import sys
 import json
 sys.path.append("/yaas")
 
-from agent.a1_Connector.a13_Models import SoundDataSet, TrainingDataset, Prompt, Project, ProjectsStorage, User
-from agent.a1_Connector.a12_Database import get_db
 from agent.a2_Solution.a21_General.a212_Project import GetProjectConfigPath
 from agent.a2_Solution.a21_General.a213_TrainingDataset import GetDataSetConfigPath
 
-## 데이터베이스에서 JSON 파일을 불러오는 함수
-def LoadJsonFrame(FilePath): # 함수명 변경: LoadJsonFrame
+## JSON 파일을 불러오는 함수
+def LoadJsonFrame(FilePath):
     with open(FilePath, 'r', encoding = 'utf-8') as JsonFrame: # 변수명 변경: FilePath
         DataFrame = json.load(JsonFrame) # 변수명 변경: DataFrame
     return DataFrame
+
+## JSON 파일을 저장하는 함수
+def SaveJsonData(FilePath, Data):
+    with open(FilePath, 'w', encoding = 'utf-8') as JsonData:
+        json.dump(Data, JsonData, ensure_ascii = False, indent = 4)
 
 ##########################
 ##########################
@@ -125,25 +128,6 @@ def GetPromptFrame(Process):
     else:
         return None
 
-##############################
-##############################
-##### GetTrainingDataset #####
-##############################
-##############################
-
-def GetTrainingDataset(projectName, email):
-    with get_db() as db:  
-        # 이메일로 사용자의 UserId를 반환
-        user = db.query(User).filter(User.Email == email).first()
-        # UserId로 사용자의 trainingDataset를 반환
-        trainingDataset = db.query(TrainingDataset).filter(TrainingDataset.UserId == user.UserId, TrainingDataset.ProjectName == projectName).first()
-
-        if trainingDataset:
-            return trainingDataset
-        else:
-            print(f"No Project found for email: {email}")
-            return None
-
 ###########################
 ###########################
 ##### GetSoundDataSet #####
@@ -170,18 +154,37 @@ def GetSoundDataSet(soundDataSet):
     else:
         return None
 
+##############################
+##############################
+##### GetTrainingDataset #####
+##############################
+##############################
 
+## TrainingDataset을 가져오는 함수
+def GetTrainingDataset(projectName, email):
+    trainingDataset = LoadJsonFrame(GetProjectConfigPath(projectName, email))
+    return trainingDataset
+
+## TrainingDataset을 저장하는 함수
+def SaveTrainingDataset(projectName, email, trainingDataset):
+    trainingDatasetPath = GetDataSetConfigPath(projectName, email)
+    SaveJsonData(trainingDatasetPath, trainingDataset)
+
+######################
+######################
+##### GetProject #####
+######################
+######################
+
+## Project를 가져오는 함수
 def GetProject(projectName, email):
-    with get_db() as db:
-        # 이메일로 사용자의 UserId를 반환
-        user = db.query(User).filter(User.Email == email).first()
-        # UserId로 사용자의 Project를 반환
-        project = db.query(Project).filter(Project.UserId == user.UserId, Project.ProjectName == projectName).first()
-        if project:
-            return project
-        else:
-            print(f"No Project found for email: {email}")
-            return None
+    project = LoadJsonFrame(GetDataSetConfigPath(projectName, email))
+    return project
+
+## Project를 저장하는 함수
+def SaveProject(projectName, email, project):
+    projectPath = GetProjectConfigPath(projectName, email)
+    SaveJsonData(projectPath, project)
 
 if __name__ == "__main__":
     

@@ -3,12 +3,15 @@ import json
 import sys
 sys.path.append("/yaas")
 
-def GetProjectDataPath():
-    RootPath = "/yaas"
-    DataPath = "agent/a5_Database/a53_ProjectData/a534_AudioBookProject"
-    return os.path.join(RootPath, DataPath)
+def GetProjectPath(projectName, email):
+    ProjectPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}"
+    return ProjectPath
 
-def GetProjectConfigPath(email, projectName):
+def GetProjectDataPath():
+    ProjectDataPath = "/yaas/agent/a5_Database/a53_ProjectData/a534_AudioBookProject"
+    return ProjectDataPath
+
+def GetProjectConfigPath(projectName, email):
     ProjectConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataframe_audiobook_file/{email}_{projectName}_AudiobookProcess_Config.json"
     return ProjectConfigPath
 
@@ -19,8 +22,8 @@ def LoadJsonFrame(filepath):
 
 def SetupProject(projectName, email):
     # 디렉토리 경로 생성
+    projectPath = GetProjectPath(projectName, email)
     ProjectDataPath = GetProjectDataPath()
-    projectPath = os.path.join(ProjectDataPath, f"{email}", f"{projectName}")
     
     # estimate
     estimatePath = os.path.join(projectPath, f"{projectName}_estimate")
@@ -47,7 +50,7 @@ def SetupProject(projectName, email):
     # audiobook
     audiobookPath = os.path.join(projectPath, f"{projectName}_audiobook")
     audiobookDataFramePath = os.path.join(audiobookPath, f"{projectName}_dataframe_audiobook_file") # dataFramePath = os.path.join(projectPath, f"{projectName}_dataframe_file")
-    audiobookProcessConfigFilePath = GetProjectConfigPath(email, projectName)
+    audiobookProcessConfigFilePath = GetProjectConfigPath(projectName, email)
     audiobookDataSetPath = os.path.join(audiobookPath, f"{projectName}_dataset_audiobook_file") # dataSetPath = os.path.join(projectPath, f"{projectName}_dataset_file")
     mixedAudioBookPath = os.path.join(audiobookPath, f"{projectName}_mixed_audiobook_file") # mixedTextBookPath = os.path.join(projectPath, f"{projectName}_mixed_textbook_file")
 
@@ -236,8 +239,8 @@ def SetupProject(projectName, email):
             ### 아래로 추가되는 데이터프레임 작성 ###
         }
         ## 프로젝트 설정 생성
-        with open(audiobookProcessConfigFilePath, 'w') as ConfigFile:
-            json.dump(audiobookProcessConfig, ConfigFile)
+        with open(audiobookProcessConfigFilePath, 'w', encoding = 'utf-8') as ConfigFile:
+            json.dump(audiobookProcessConfig, ConfigFile, ensure_ascii = False, indent = 4)
         
         print(f"[ Email: {email} | ProjectName: {projectName} | AudiobookProcessConfig 완료 ]")
     else:

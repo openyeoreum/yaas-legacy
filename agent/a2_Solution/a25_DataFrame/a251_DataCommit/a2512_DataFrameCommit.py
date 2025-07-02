@@ -7,14 +7,11 @@ import time
 sys.path.append("/yaas")
 
 from datetime import datetime
-from agent.a1_Connector.a13_Models import User
 from agent.a1_Connector.a12_Database import get_db
-from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm.attributes import flag_modified
-from agent.a1_Connector.a13_Models import Project
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject
 from agent.a2_Solution.a21_General.a212_Project import GetProjectDataPath, LoadJsonFrame
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, SaveProject
 
 
 ############################################
@@ -224,27 +221,11 @@ def SaveAddOutputMemory(projectName, email, AddOutputMemoryDics, ProcessNum, Dat
 ##### 전체 DataFrame의 MetaData(식별)부분을 업데이트 #####
 ###################################################
 def AddFrameMetaDataToDB(projectName, email):
-    with get_db() as db:
-        project = GetProject(projectName, email)
+    project = GetProject(projectName, email)
 
-        if not project:
-            print("Project not found!")
-            return
-        
-        for column in Project.__table__.columns:
-            if isinstance(column.type, JSON):
-                ProcessData = getattr(project, column.name)
-                if ProcessData is None:
-                    continue
-                ProcessData[0]["UserId"] = project.UserId
-                ProcessData[0]["ProjectsStorageID"] = project.ProjectsStorageId
-                ProcessData[0]["ProjectId"] = project.ProjectId
-                ProcessData[0]["ProjectName"] = project.ProjectName
-                setattr(project, column.name, ProcessData)
-                flag_modified(project, column.name)
+    project["ProjectName"] = projectName
 
-        db.add(project)
-        db.commit()
+    SaveProject(projectName, email, project)
 
 
 #####################################
@@ -252,15 +233,11 @@ def AddFrameMetaDataToDB(projectName, email):
 #####################################
 ## 0-1. 1-0 ScriptGen이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedScriptGenToDB(projectName, email, ExistedDataFrame):
-    with get_db() as db:
-    
-        project = GetProject(projectName, email)
-        project.ScriptGenFrame[1] = ExistedDataFrame[1]
-        
-        flag_modified(project, "ScriptGenFrame")
-        
-        db.add(project)
-        db.commit()
+    project = GetProject(projectName, email)
+
+    project["ScriptGenFrame"][1] = ExistedDataFrame[1]
+
+    SaveProject(projectName, email, project)
 
 ## 0-1. 1-1 ScriptGen의 Scripts(페이지) updateScripts 업데이트 형식
 def UpdateScripts(project, ScriptId, Script):    
@@ -274,59 +251,45 @@ def UpdateScripts(project, ScriptId, Script):
     
 ## 0-1. 1-2 ScriptGen의 Scripts(페이지) updateScripts 업데이트
 def AddScriptGenBookPagesToDB(projectName, email, ScriptId, Script):
-    with get_db() as db:
-        
-        project = GetProject(projectName, email)
-        UpdateScripts(project, ScriptId, Script)
-        
-        flag_modified(project, "ScriptGenFrame")
-        
-        db.add(project)
-        db.commit()
+    project = GetProject(projectName, email)
+
+    UpdateScripts(project, ScriptId, Script)
+
+    SaveProject(projectName, email, project)
         
 ## 0-1. ScriptGen의Count의 가져오기
 def ScriptGenCountLoad(projectName, email):
-
     project = GetProject(projectName, email)
-    ScriptCount = project.ScriptGenFrame[0]["ScriptCount"]
-    Completion = project.ScriptGenFrame[0]["Completion"]
+
+    ScriptCount = project["ScriptGenFrame"][0]["ScriptCount"]
+    Completion = project["ScriptGenFrame"][0]["Completion"]
     
     return ScriptCount, Completion
 
 ## 0-1. ScriptGen의 초기화
 def InitScriptGen(projectName, email):
     ProjectDataPath = GetProjectDataPath()
-    with get_db() as db:
-    
-        project = GetProject(projectName, email)
-        project.ScriptGenFrame[0]["ScriptCount"] = 0
-        project.ScriptGenFrame[0]["Completion"] = "No"
-        project.ScriptGenFrame[1] = LoadJsonFrame(ProjectDataPath + "/a530_ScriptGen/a530-00_ScriptGenFrame.json")[1]
+    project = GetProject(projectName, email)
 
-        flag_modified(project, "ScriptGenFrame")
-        
-        db.add(project)
-        db.commit()
+    project["ScriptGenFrame"][0]["ScriptCount"] = 0
+    project["ScriptGenFrame"][0]["Completion"] = "No"
+    project["ScriptGenFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a530_ScriptGen/a530-00_ScriptGenFrame.json")[1]
+
+    SaveProject(projectName, email, project)
         
 ## 0-1. 업데이트된 ScriptGen 출력
 def UpdatedScriptGen(projectName, email):
-    with get_db() as db:
+    project = GetProject(projectName, email)
 
-        project = GetProject(projectName, email)
-
-    return project.ScriptGenFrame
+    return project["ScriptGenFrame"]
 
 ## 0-1. ScriptGenCompletion 업데이트
 def ScriptGenCompletionUpdate(projectName, email):
-    with get_db() as db:
+    project = GetProject(projectName, email)
 
-        project = GetProject(projectName, email)
-        project.ScriptGenFrame[0]["Completion"] = "Yes"
+    project["ScriptGenFrame"][0]["Completion"] = "Yes"
 
-        flag_modified(project, "ScriptGenFrame")
-
-        db.add(project)
-        db.commit()
+    SaveProject(projectName, email, project)
 
 
 #####################################
@@ -334,15 +297,11 @@ def ScriptGenCompletionUpdate(projectName, email):
 #####################################
 ## 0-1. 1-0 BookPreprocess이 이미 ExistedFrame으로 존재할때 업데이트
 def AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame):
-    with get_db() as db:
+    project = GetProject(projectName, email)
+
+    project["BookPreprocessFrame"][1] = ExistedDataFrame[1]
     
-        project = GetProject(projectName, email)
-        project.BookPreprocessFrame[1] = ExistedDataFrame[1]
-        
-        flag_modified(project, "BookPreprocessFrame")
-        
-        db.add(project)
-        db.commit()
+    SaveProject(projectName, email, project)
 
 ## 0-1. 1-1 BookPreprocess의 BookPages(페이지) updateBookPages 업데이트 형식
 def UpdateBookPreprocessBookPages(project, PageId, PageElement, Script):    

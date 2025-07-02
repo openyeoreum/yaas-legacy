@@ -274,21 +274,12 @@ def YaaSProcess(email, ProjectName, MainLang, Estimate, DataCollection, Search, 
     ## MultiProcessing 실행
     print(f"[ email: {email} | Project: {ProjectName} | 프로세스(Processing) 시작 ]")
 
-    ### Step1 : UserStorage에 프로젝트 리스트 불러오기 ###
-    storageProjectNameList = []
-    if os.path.exists(f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/'):
-        for storageProjectName in os.listdir(f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/'):
-            if os.path.isdir(f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{storageProjectName}'):
-                storageProjectNameList.append(storageProjectName)
-
-    ### Step2 : ProjectNameList ###
-    ### Step2-1 : 솔루션에 계정정보 업데이트 ###
+    ### Step1 : 솔루션에 계정정보 업데이트 ###
     AccountUpdate(email, ProjectName)
-    ### Step2-2 : 솔루션에 프로젝트 파일 업데이트 ###
+    ### Step2 : 솔루션에 프로젝트 파일 업데이트 ###
     SolutionProjectUpdate(email, ProjectName)            
-    ### Step2-3 : 프로젝트 Config 설정 ###
-    if ProjectName not in storageProjectNameList:
-        YaasConfigUpdate(email, ProjectName, MainLang, Estimate, DataCollection, Search, Script, Translation, TextBook, AudioBook, Marketing)
+    ### Step3 : 프로젝트 Config 설정 ###
+    YaasConfigUpdate(email, ProjectName, MainLang, Estimate, DataCollection, Search, Script, Translation, TextBook, AudioBook, Marketing)
     ## Config 불러오기
     YaasConfig, ConfigPath = LoadYaaSConfig(email, ProjectName)
     

@@ -26,8 +26,8 @@ def SetupProjectAccess(projectName, email):
     with open(ProjectListPath, 'r', encoding='utf-8') as ProjectListJson:
         ProjectListData = json.load(ProjectListJson)
     
-    if projectName not in ProjectListData:
-        ProjectListData.append(projectName)
+    if f"{email}_{projectName}" not in ProjectListData:
+        ProjectListData.append(f"{email}_{projectName}")
         
     with open(ProjectListPath, 'w', encoding='utf-8') as ProjectListJson:
         json.dump(ProjectListData, ProjectListJson, ensure_ascii=False, indent=4)

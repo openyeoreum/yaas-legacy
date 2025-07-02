@@ -18,7 +18,7 @@ from pydub import AudioSegment
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a13_Models import User
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetSoundDataSet
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, SaveProject, GetSoundDataSet
 
 
 #######################
@@ -2096,24 +2096,20 @@ def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang 
     ## 믹싱 템플릿 저장
     SaveMusicTemplate(projectName, email)
 
-    with get_db() as db:
-        
-        project = GetProject(projectName, email)
-        if MainLang == 'Ko':
-            project["MixingMasteringKo"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
-        if MainLang == 'En':
-            project["MixingMasteringEn"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
-        if MainLang == 'Ja':
-            project["MixingMasteringJa"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
-        if MainLang == 'Zh':
-            project["MixingMasteringZh"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
-        if MainLang == 'Es':
-            project["MixingMasteringEs"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
-        
-        flag_modified(project, "MixingMastering" + MainLang)
-        
-        db.add(project)
-        db.commit()
+    project = GetProject(projectName, email)
+
+    if MainLang == 'Ko':
+        project["MixingMasteringKo"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+    if MainLang == 'En':
+        project["MixingMasteringEn"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+    if MainLang == 'Ja':
+        project["MixingMasteringJa"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+    if MainLang == 'Zh':
+        project["MixingMasteringZh"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+    if MainLang == 'Es':
+        project["MixingMasteringEs"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+    
+    SaveProject(projectName, email, project)
     
     print(f"[ User: {email} | Project: {projectName} | MusicLayerGenerator 완료 ]\n")
 

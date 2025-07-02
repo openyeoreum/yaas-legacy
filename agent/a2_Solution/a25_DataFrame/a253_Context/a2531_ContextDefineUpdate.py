@@ -10,8 +10,8 @@ from tqdm import tqdm
 from nltk.metrics.distance import edit_distance
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, SaveProject, GetPromptFrame
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedContextDefineToDB, AddContextDefineChunksToDB, ContextDefineCountLoad, ContextDefineCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
@@ -341,47 +341,43 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
 ################################
 ## ContextDefine의 Bodys전환
 def ContextDefineToBodys(projectName, email, ResponseJson):
-    with get_db() as db:
-        project = GetProject(projectName, email)
-        bodyFrame = project["BodyFrame"]
-        Bodys = bodyFrame[2]["Bodys"][1:]
+    project = GetProject(projectName, email)
+    bodyFrame = project["BodyFrame"]
+    Bodys = bodyFrame[2]["Bodys"][1:]
 
-        responseCount = 0  # 마지막으로 처리된 ResponseJson의 인덱스를 추적
-        for body in Bodys:
-            ContextBody = body['Body']
-            memoAdded = False  # {메모} 태그가 추가되었는지 추적하는 플래그
-            for i in range(responseCount, len(ResponseJson)):
-                response = ResponseJson[i]
-                Chunk = response['Chunk']
-                if isinstance(response['ChunkId'], list):
-                    if all(elem in body['ChunkId'] for elem in response['ChunkId']):
-                        memoAdded = True
-                        PhrasesTag = f"\n\n[핵심문구{i+1}] "
-                        MemoTag = f"\n{{메모{i+1}}}\n\n"
-                        newStartChunk = PhrasesTag + Chunk[0]
-                        newEndChunk = Chunk[-1] + MemoTag
-                        ContextBody = ContextBody.replace(Chunk[0], newStartChunk, 1)
-                        ContextBody = ContextBody.replace(Chunk[-1], newEndChunk, 1)
-                        responseCount = i + 1
-                else:
-                    if response['ChunkId'] in body['ChunkId']:
-                        memoAdded = True
-                        PhrasesTag = f"\n\n[핵심문구{i+1}] "
-                        MemoTag = f"\n{{메모{i+1}}}\n\n"
-                        newChunk = PhrasesTag + Chunk + MemoTag
-                                        
-                        ContextBody = ContextBody.replace(Chunk, newChunk, 1)
-                        responseCount = i + 1
-            
-            if memoAdded:
-                if 'Context' not in body['Task']:
-                    body['Task'].append('Context')
-            body['Context'] = ContextBody
+    responseCount = 0  # 마지막으로 처리된 ResponseJson의 인덱스를 추적
+    for body in Bodys:
+        ContextBody = body['Body']
+        memoAdded = False  # {메모} 태그가 추가되었는지 추적하는 플래그
+        for i in range(responseCount, len(ResponseJson)):
+            response = ResponseJson[i]
+            Chunk = response['Chunk']
+            if isinstance(response['ChunkId'], list):
+                if all(elem in body['ChunkId'] for elem in response['ChunkId']):
+                    memoAdded = True
+                    PhrasesTag = f"\n\n[핵심문구{i+1}] "
+                    MemoTag = f"\n{{메모{i+1}}}\n\n"
+                    newStartChunk = PhrasesTag + Chunk[0]
+                    newEndChunk = Chunk[-1] + MemoTag
+                    ContextBody = ContextBody.replace(Chunk[0], newStartChunk, 1)
+                    ContextBody = ContextBody.replace(Chunk[-1], newEndChunk, 1)
+                    responseCount = i + 1
+            else:
+                if response['ChunkId'] in body['ChunkId']:
+                    memoAdded = True
+                    PhrasesTag = f"\n\n[핵심문구{i+1}] "
+                    MemoTag = f"\n{{메모{i+1}}}\n\n"
+                    newChunk = PhrasesTag + Chunk + MemoTag
+                                    
+                    ContextBody = ContextBody.replace(Chunk, newChunk, 1)
+                    responseCount = i + 1
         
-    flag_modified(project, "BodyFrame")
-    
-    db.add(project)
-    db.commit()
+        if memoAdded:
+            if 'Context' not in body['Task']:
+                body['Task'].append('Context')
+        body['Context'] = ContextBody
+        
+    SaveProject(projectName, email, project)
 
 ## 데이터 치환
 def ContextDefineResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):

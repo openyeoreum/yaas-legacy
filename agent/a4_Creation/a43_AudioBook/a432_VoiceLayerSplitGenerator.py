@@ -15,7 +15,7 @@ import pyloudnorm as pyln
 import sys
 sys.path.append("/yaas")
 
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from io import BytesIO
 from tqdm import tqdm
 from time import sleep
@@ -30,7 +30,7 @@ from sqlalchemy.orm.attributes import flag_modified
 from audoai.noise_removal import NoiseRemovalClient
 from agent.a1_Connector.a13_Models import User
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetSoundDataSet
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, SaveProject, GetSoundDataSet
 from agent.a4_Creation.a43_AudioBook.a433_TypeCastWebMacro import TypeCastMacro
 from agent.a4_Creation.a43_AudioBook.a434_VoiceSplit import VoiceSplit
 
@@ -3218,25 +3218,21 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
 def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName = '저자명', ReadingStyle = 'AllCharacters', VoiceReverbe = 'on', MainLang = 'Ko', Mode = "Manual", Macro = "Auto", Bracket = "Manual", VolumeEqual = "Mixing", Account = "None", Intro = "None", VoiceEnhance = 'off', VoiceFileGen = "on", MessagesReview = "off"):
     print(f"< User: {email} | Project: {projectName} | VoiceLayerGenerator 시작 >")
     EditGenerationKoChunks = VoiceLayerSplitGenerator(projectName, email, Narrator = Narrator, CloneVoiceName = CloneVoiceName, ReadingStyle = ReadingStyle, VoiceReverbe = VoiceReverbe, MainLang = MainLang, Mode = Mode, Macro = Macro, Bracket = Bracket, VolumeEqual = VolumeEqual, Account = Account, VoiceEnhance = VoiceEnhance, VoiceFileGen = VoiceFileGen, MessagesReview = MessagesReview)
+        
+    project = GetProject(projectName, email)
 
-    with get_db() as db:
-        
-        project = GetProject(projectName, email)
-        if MainLang == 'Ko':
-            project["MixingMasteringKo"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
-        if MainLang == 'En':
-            project["MixingMasteringEn"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
-        if MainLang == 'Ja':
-            project["MixingMasteringJa"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
-        if MainLang == 'Zh':
-            project["MixingMasteringZh"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
-        if MainLang == 'Es':
-            project["MixingMasteringEs"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
-        
-        flag_modified(project, "MixingMastering" + MainLang)
-        
-        db.add(project)
-        db.commit()
+    if MainLang == 'Ko':
+        project["MixingMasteringKo"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+    if MainLang == 'En':
+        project["MixingMasteringEn"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+    if MainLang == 'Ja':
+        project["MixingMasteringJa"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+    if MainLang == 'Zh':
+        project["MixingMasteringZh"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+    if MainLang == 'Es':
+        project["MixingMasteringEs"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+
+    SaveProject(projectName, email, project)
         
     print(f"[ User: {email} | Project: {projectName} | VoiceLayerGenerator 완료 ]\n")
         

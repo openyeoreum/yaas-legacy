@@ -32,15 +32,6 @@ def Date(Option = "Day"):
     
     return date
 
-## LLM API key 로드
-def LoadLLMapiKey(email):
-    with get_db() as db:
-        user = db.query(User).filter(User.Email == email).first()
-        lLMapiKey = user.LLMapiKey
-    
-    return lLMapiKey
-
-
 ################################
 ################################
 ########## OpenAI API ##########
@@ -231,7 +222,6 @@ def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = "age
   
 ## 프롬프트 실행
 def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
-    # OpenAIClient = OpenAI(api_key = LoadLLMapiKey(email))
     OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)
@@ -341,153 +331,151 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "agent"
       #     continue
 
 
-#################################
-##### OpenAI LLM FineTuning #####
-#################################
-## 파인튜닝 데이터셋 생성
-def OpenAI_LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = "Example"):  
-    trainingDataset = GetTrainingDataset(projectName, email)
-    ProcessDataset = getattr(trainingDataset, Process)
+# #################################
+# ##### OpenAI LLM FineTuning #####
+# #################################
+# ## 파인튜닝 데이터셋 생성
+# def OpenAI_LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = "Example"):  
+#     trainingDataset = GetTrainingDataset(projectName, email)
+#     ProcessDataset = getattr(trainingDataset, Process)
 
-    filename = TrainingDataSetPath + email + '_' + projectName + '_' + ProcessNumber + '_' + Process + 'DataSet_' + str(Date()) + '.jsonl'
+#     filename = TrainingDataSetPath + email + '_' + projectName + '_' + ProcessNumber + '_' + Process + 'DataSet_' + str(Date()) + '.jsonl'
     
-    base, ext = os.path.splitext(filename)
-    counter = 0
-    newFilename = filename
-    while os.path.exists(newFilename):
-        counter += 1
-        newFilename = f"{base} ({counter}){ext}"
+#     base, ext = os.path.splitext(filename)
+#     counter = 0
+#     newFilename = filename
+#     while os.path.exists(newFilename):
+#         counter += 1
+#         newFilename = f"{base} ({counter}){ext}"
     
-    if ProcessDataset["FeedbackCompletion"] == "Yes":
-      if Mode == "Example":
-        MOde = "ExampleTraining"
-      elif Mode == "Memory":
-        MOde = "MemoryTraining"
-      IOList = ProcessDataset["FeedbackDataset"][1:]
-      TotalTokens = 0
+#     if ProcessDataset["FeedbackCompletion"] == "Yes":
+#       if Mode == "Example":
+#         MOde = "ExampleTraining"
+#       elif Mode == "Memory":
+#         MOde = "MemoryTraining"
+#       IOList = ProcessDataset["FeedbackDataset"][1:]
+#       TotalTokens = 0
       
-      with open(newFilename, 'w', encoding = 'utf-8') as file:
-        for i in range(len(IOList)):
-          # "InputMemory"가 "None"일 경우 빈 텍스트("") 처리
-          if IOList[i]["InputMemory"] == "None":
-            InputMemory = ""
-          else:
-            InputMemory = IOList[i]["InputMemory"]
-          Input = IOList[i]["Input"]
-          output = IOList[i]["Feedback"]
+#       with open(newFilename, 'w', encoding = 'utf-8') as file:
+#         for i in range(len(IOList)):
+#           # "InputMemory"가 "None"일 경우 빈 텍스트("") 처리
+#           if IOList[i]["InputMemory"] == "None":
+#             InputMemory = ""
+#           else:
+#             InputMemory = IOList[i]["InputMemory"]
+#           Input = IOList[i]["Input"]
+#           output = IOList[i]["Feedback"]
           
-          messages, outputTokens, totalTokens, Temperature = LLMmessages(Process, Input, 'gpt', Output = output, mode = MOde, inputMemory = InputMemory)
+#           messages, outputTokens, totalTokens, Temperature = LLMmessages(Process, Input, 'gpt', Output = output, mode = MOde, inputMemory = InputMemory)
           
-          TrainingData = {"messages": [messages[0], messages[1], messages[2]]}
+#           TrainingData = {"messages": [messages[0], messages[1], messages[2]]}
 
-          file.write(json.dumps(TrainingData, ensure_ascii = False) + '\n')
+#           file.write(json.dumps(TrainingData, ensure_ascii = False) + '\n')
           
-          TotalTokens += totalTokens
+#           TotalTokens += totalTokens
       
-      return filename, open(newFilename, 'rb')
-    else:
-      print(f"Project: {projectName} | Process: {Process} | FeedbackCompletion에서 오류 발생: Feedback이 완료 되지 않았습니다.")
-      return None, None
+#       return filename, open(newFilename, 'rb')
+#     else:
+#       print(f"Project: {projectName} | Process: {Process} | FeedbackCompletion에서 오류 발생: Feedback이 완료 되지 않았습니다.")
+#       return None, None
     
-## 파인튜닝 파일 업로드 생성
-def OpenAI_LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = "Example", MaxAttempts = 100):
-    OpenAIClient = OpenAI(api_key = LoadLLMapiKey(email))
-    OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
+# ## 파인튜닝 파일 업로드 생성
+# def OpenAI_LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = "Example", MaxAttempts = 100):
+#     OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     
-    # LLMTrainingDataset 업로드
-    filename, LLMTrainingDataset = OpenAI_LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = mode)
-    UploadedFile = OpenAIClient.files.create(
-      file = LLMTrainingDataset,
-      purpose = 'fine-tune'
-    )
-    time.sleep(random.randint(15, 20))
+#     # LLMTrainingDataset 업로드
+#     filename, LLMTrainingDataset = OpenAI_LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = mode)
+#     UploadedFile = OpenAIClient.files.create(
+#       file = LLMTrainingDataset,
+#       purpose = 'fine-tune'
+#     )
+#     time.sleep(random.randint(15, 20))
     
-    for _ in range(MaxAttempts):
-      uploadedFile = OpenAIClient.files.retrieve(UploadedFile.id)
-      if uploadedFile.status == "processed":
-        FileId = uploadedFile.id
-        # 파일이름에 FileId 붙이기
-        FilePath, oldFilename = os.path.split(filename)
-        base, ext = os.path.splitext(oldFilename)
-        newFilename = f"{base}_{FileId}{ext}"
-        newFilePath = os.path.join(FilePath, newFilename)
-        os.rename(filename, newFilePath)
+#     for _ in range(MaxAttempts):
+#       uploadedFile = OpenAIClient.files.retrieve(UploadedFile.id)
+#       if uploadedFile.status == "processed":
+#         FileId = uploadedFile.id
+#         # 파일이름에 FileId 붙이기
+#         FilePath, oldFilename = os.path.split(filename)
+#         base, ext = os.path.splitext(oldFilename)
+#         newFilename = f"{base}_{FileId}{ext}"
+#         newFilePath = os.path.join(FilePath, newFilename)
+#         os.rename(filename, newFilePath)
         
-        print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMTrainingDatasetUpload 완료")
-        break
-      else:
-        print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMTrainingDatasetUploading ... 기다려주세요.")
-        time.sleep(random.randint(10, 15))
-        continue
+#         print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMTrainingDatasetUpload 완료")
+#         break
+#       else:
+#         print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMTrainingDatasetUploading ... 기다려주세요.")
+#         time.sleep(random.randint(10, 15))
+#         continue
 
-    return newFilename, FileId
+#     return newFilename, FileId
 
-## 파인튜닝
-def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
-    with get_db() as db:
-      OpenAIClient = OpenAI(api_key = LoadLLMapiKey(email))
-      OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
+# ## 파인튜닝
+# def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
+#     with get_db() as db:
+#       OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
       
-      newFilename, FileId = OpenAI_LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = Mode)
+#       newFilename, FileId = OpenAI_LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = Mode)
 
-      # 토큰수별 모델 선정
-      if ModelTokens == "Short":
-        BaseModel = "gpt-4.1-mini"
-      elif ModelTokens == "Long":
-        BaseModel = "gpt-4.1-mini"
+#       # 토큰수별 모델 선정
+#       if ModelTokens == "Short":
+#         BaseModel = "gpt-4.1-mini"
+#       elif ModelTokens == "Long":
+#         BaseModel = "gpt-4.1-mini"
       
-      # FineTuning 요청
-      FineTuningJob = OpenAIClient.fine_tuning.jobs.create(
-        training_file = FileId,
-        model = BaseModel,
-        hyperparameters={"n_epochs":Epochs}
-      )
-      time.sleep(random.randint(60, 90))
+#       # FineTuning 요청
+#       FineTuningJob = OpenAIClient.fine_tuning.jobs.create(
+#         training_file = FileId,
+#         model = BaseModel,
+#         hyperparameters={"n_epochs":Epochs}
+#       )
+#       time.sleep(random.randint(60, 90))
       
-      for _ in range(MaxAttempts):
+#       for _ in range(MaxAttempts):
 
-        fineTuningJob = OpenAIClient.fine_tuning.jobs.retrieve(FineTuningJob.id)
-        if fineTuningJob.status == "succeeded":
-          FineTunedModel = fineTuningJob.fine_tuned_model
-          TrainedTokens = fineTuningJob.trained_tokens
-          TrainingFile = fineTuningJob.training_file
-          print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMFineTuning 완료")
-          break
-        else:
-          print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMFineTuning ... 기다려주세요.")
-          time.sleep(random.randint(60, 90))
-          continue
+#         fineTuningJob = OpenAIClient.fine_tuning.jobs.retrieve(FineTuningJob.id)
+#         if fineTuningJob.status == "succeeded":
+#           FineTunedModel = fineTuningJob.fine_tuned_model
+#           TrainedTokens = fineTuningJob.trained_tokens
+#           TrainingFile = fineTuningJob.training_file
+#           print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMFineTuning 완료")
+#           break
+#         else:
+#           print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMFineTuning ... 기다려주세요.")
+#           time.sleep(random.randint(60, 90))
+#           continue
       
-      prompt = db.query(Prompt).first()
-      column = getattr(Prompt, Process, None)
-      promptFrame = db.query(column).first()
+#       prompt = db.query(Prompt).first()
+#       column = getattr(Prompt, Process, None)
+#       promptFrame = db.query(column).first()
       
-      # Prompt 모델 업데이트
-      fineTunedModelDic = {"Id" : Process + '-' + str(Date("Second")), "Model" :FineTunedModel}
-      if Mode == "Example":
-        if ModelTokens == "Short":
-          promptFrame['ExampleFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
-        elif ModelTokens == "Long":
-          promptFrame['ExampleFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
+#       # Prompt 모델 업데이트
+#       fineTunedModelDic = {"Id" : Process + '-' + str(Date("Second")), "Model" :FineTunedModel}
+#       if Mode == "Example":
+#         if ModelTokens == "Short":
+#           promptFrame['ExampleFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
+#         elif ModelTokens == "Long":
+#           promptFrame['ExampleFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
           
-      elif Mode == "Memory":
-        if ModelTokens == "Short":
-          promptFrame['MemoryFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
-        elif ModelTokens == "Long":
-          promptFrame['MemoryFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
+#       elif Mode == "Memory":
+#         if ModelTokens == "Short":
+#           promptFrame['MemoryFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
+#         elif ModelTokens == "Long":
+#           promptFrame['MemoryFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
 
-      flag_modified(prompt, Process)
+#       flag_modified(prompt, Process)
       
-      db.merge(prompt)
-      db.commit()
+#       db.merge(prompt)
+#       db.commit()
       
-    with open(newFilename, "a", encoding = "utf-8") as file:
-      jsonLine = json.dumps(fineTunedModelDic)
-      file.write(jsonLine)
+#     with open(newFilename, "a", encoding = "utf-8") as file:
+#       jsonLine = json.dumps(fineTunedModelDic)
+#       file.write(jsonLine)
         
-    # OpenAIClient.File.delete(TrainingFile)
+#     # OpenAIClient.File.delete(TrainingFile)
     
-    return FineTunedModel, TrainedTokens
+#     return FineTunedModel, TrainedTokens
 
 
 ###################################

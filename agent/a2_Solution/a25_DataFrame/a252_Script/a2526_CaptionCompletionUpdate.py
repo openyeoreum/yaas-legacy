@@ -8,8 +8,8 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, SaveProject, GetPromptFrame
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCaptionCompletionToDB, AddCaptionCompletionChunksToDB, CaptionCompletionCountLoad, CaptionCompletionCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
@@ -286,26 +286,24 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
 # ## CaptionCompletion의 BodyFrame전환
 # def CaptionCompletionToBodyFrame(projectName, email):
 #     # BodyFrame CaptionTag 업데이트
-#     with get_db() as db:
-#         project = GetProject(projectName, email)
-#         BodyFrame = project["BodyFrame"][1]["SplitedBodyScripts"][1:]
-#         CaptionFrame = project["CaptionFrame"][1]['CaptionCompletions'][1:]
 
-#         BodyFrame = CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame)
-#     flag_modified(project, "BodyFrame")
-#     db.add(project)
-#     db.commit()
+    # project = GetProject(projectName, email)
+    # BodyFrame = project["BodyFrame"][1]["SplitedBodyScripts"][1:]
+    # CaptionFrame = project["CaptionFrame"][1]['CaptionCompletions'][1:]
+
+    # BodyFrame = CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame)
+
+    # SaveProject(projectName, email, project)
     
 #     # HalfBodyFrame CaptionTag 업데이트
-#     with get_db() as db:
-#         project = GetProject(projectName, email)
-#         HalfBodyFrame = project["HalfBodyFrame"][1]["SplitedBodyScripts"][1:]
-#         CaptionFrame = project["CaptionFrame"][1]['CaptionCompletions'][1:]
-        
-#         HalfBodyFrame = CaptionTagUpdateToBodyFrame(HalfBodyFrame, CaptionFrame)
-#     flag_modified(project, "HalfBodyFrame")
-#     db.add(project)
-#     db.commit()
+
+    # project = GetProject(projectName, email)
+    # HalfBodyFrame = project["HalfBodyFrame"][1]["SplitedBodyScripts"][1:]
+    # CaptionFrame = project["CaptionFrame"][1]['CaptionCompletions'][1:]
+    
+    # HalfBodyFrame = CaptionTagUpdateToBodyFrame(HalfBodyFrame, CaptionFrame)
+
+    # SaveProject(projectName, email, project)
 
 ## 데이터 치환
 def CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):   

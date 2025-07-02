@@ -9,8 +9,8 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import LoadLLMapiKey, OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, SaveProject, GetPromptFrame
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedSFXMatchingToDB, AddSFXSplitedBodysToDB, SFXMatchingCountLoad, SFXMatchingCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
@@ -472,113 +472,109 @@ def SFXToBodys(projectName, email, ResponseJson):
         
         SFXChunkList.append({'ChunkId': lastChunkId, 'Chunk': lastChunk, 'SFXChunk': sfxchunk, 'SFXChunks': SameIdSFXChunkList, 'RangePoint': rangePoint})
 
-    with get_db() as db:
-        project = GetProject(projectName, email)
-        HalfBodyFrame = project["HalfBodyFrame"]
-        SplitedBodyScripts = HalfBodyFrame[1]["SplitedBodyScripts"][1:]
-        Bodys = HalfBodyFrame[2]["Bodys"][1:]
+
+    project = GetProject(projectName, email)
+    HalfBodyFrame = project["HalfBodyFrame"]
+    SplitedBodyScripts = HalfBodyFrame[1]["SplitedBodyScripts"][1:]
+    Bodys = HalfBodyFrame[2]["Bodys"][1:]
+    
+    # HalfBodyFrameChunkList
+    ChunkList = []
+    for i in range(len(SplitedBodyScripts)):
+        SplitedBodyChunks = SplitedBodyScripts[i]['SplitedBodyChunks']
+        for j in range(len(SplitedBodyChunks)):
+            ChunkId = SplitedBodyChunks[j]['ChunkId']
+            Tag = SplitedBodyChunks[j]['Tag']
+            Chunk = SplitedBodyChunks[j]['Chunk']
+            ChunkList.append({'ChunkId': ChunkId, 'Tag': Tag, 'Chunk': Chunk})
+
+    # SFXBody 변환
+    ChunkIdx = []
+    Chunks = []
+    CorrectionChunkList = []
+    for i in range(len(SFXChunkList)):
+        SFXChunkDic = SFXChunkList[i]
+        SFXChunkIdx = SFXChunkDic['ChunkId']
+        if not isinstance(SFXChunkIdx, list):
+            SFXChunkIdx = [SFXChunkIdx]
+        # SFXChunk = SFXChunkDic['Chunk']
+        for j in range(len(ChunkList)):
+            ChunkDic = ChunkList[j]
+            ChunkId = ChunkDic['ChunkId']
+            Chunk = ChunkDic['Chunk']
+            if ChunkId in SFXChunkIdx:
+                ChunkIdx.append(ChunkId)
+                Chunks.append(Chunk)
+                if ChunkIdx == SFXChunkIdx:
+                    Correction = []
+                    CorrectionPoint = []
+                    CP = 0
+                    if len(Chunks) > 1:
+                        for k in range(len(Chunks)):
+                            if k == len(Chunks) - 1:
+                                break
+                            Correction.append('●')
+                            ChunkPoint = len(Chunks[k]) + 1
+                            CP += ChunkPoint
+                            CorrectionPoint.append(CP)
+                    else:
+                        Correction = None
+                        CorrectionPoint = None
+                    CorrectionChunk = ' ●'.join(Chunks)
+                    CorrectionChunkList.append({'ChunkId': ChunkIdx, 'CorrectionChunk': CorrectionChunk, 'Correction': Correction, 'CorrectionPoint': CorrectionPoint})
+                    ChunkIdx = []
+                    Chunks = []
+                    break
+
+    # json_data = json.dumps(CorrectionChunkList, ensure_ascii = False, indent = 4)
+    # with open('CorrectionChunkList.json', 'w', encoding = 'utf-8') as file:
+    #     file.write(json_data)
+
+    # SFXCorrectionChunk 합성
+    SFXCorrectionChunkList = []
+    for i in range(len(SFXChunkList)):
+        ChunkId = SFXChunkList[i]['ChunkId']
+        Chunk = SFXChunkList[i]['Chunk']
+        SFXChunk = SFXChunkList[i]['SFXChunk']
+        SFXPoint = SFXChunkList[i]['RangePoint']['SFXPoint']
+        # print(ChunkId)
+        # print(SFXPoint)
+        # print('')
+        SFXTag = SFXChunkList[i]['RangePoint']['SFX']
         
-        # HalfBodyFrameChunkList
-        ChunkList = []
-        for i in range(len(SplitedBodyScripts)):
-            SplitedBodyChunks = SplitedBodyScripts[i]['SplitedBodyChunks']
-            for j in range(len(SplitedBodyChunks)):
-                ChunkId = SplitedBodyChunks[j]['ChunkId']
-                Tag = SplitedBodyChunks[j]['Tag']
-                Chunk = SplitedBodyChunks[j]['Chunk']
-                ChunkList.append({'ChunkId': ChunkId, 'Tag': Tag, 'Chunk': Chunk})
-
-        # SFXBody 변환
-        ChunkIdx = []
-        Chunks = []
-        CorrectionChunkList = []
-        for i in range(len(SFXChunkList)):
-            SFXChunkDic = SFXChunkList[i]
-            SFXChunkIdx = SFXChunkDic['ChunkId']
-            if not isinstance(SFXChunkIdx, list):
-                SFXChunkIdx = [SFXChunkIdx]
-            # SFXChunk = SFXChunkDic['Chunk']
-            for j in range(len(ChunkList)):
-                ChunkDic = ChunkList[j]
-                ChunkId = ChunkDic['ChunkId']
-                Chunk = ChunkDic['Chunk']
-                if ChunkId in SFXChunkIdx:
-                    ChunkIdx.append(ChunkId)
-                    Chunks.append(Chunk)
-                    if ChunkIdx == SFXChunkIdx:
-                        Correction = []
-                        CorrectionPoint = []
-                        CP = 0
-                        if len(Chunks) > 1:
-                            for k in range(len(Chunks)):
-                                if k == len(Chunks) - 1:
-                                    break
-                                Correction.append('●')
-                                ChunkPoint = len(Chunks[k]) + 1
-                                CP += ChunkPoint
-                                CorrectionPoint.append(CP)
-                        else:
-                            Correction = None
-                            CorrectionPoint = None
-                        CorrectionChunk = ' ●'.join(Chunks)
-                        CorrectionChunkList.append({'ChunkId': ChunkIdx, 'CorrectionChunk': CorrectionChunk, 'Correction': Correction, 'CorrectionPoint': CorrectionPoint})
-                        ChunkIdx = []
-                        Chunks = []
-                        break
-
-        # json_data = json.dumps(CorrectionChunkList, ensure_ascii = False, indent = 4)
-        # with open('CorrectionChunkList.json', 'w', encoding = 'utf-8') as file:
-        #     file.write(json_data)
-
-        # SFXCorrectionChunk 합성
-        SFXCorrectionChunkList = []
-        for i in range(len(SFXChunkList)):
-            ChunkId = SFXChunkList[i]['ChunkId']
-            Chunk = SFXChunkList[i]['Chunk']
-            SFXChunk = SFXChunkList[i]['SFXChunk']
-            SFXPoint = SFXChunkList[i]['RangePoint']['SFXPoint']
-            # print(ChunkId)
-            # print(SFXPoint)
-            # print('')
-            SFXTag = SFXChunkList[i]['RangePoint']['SFX']
-            
-            CorrectionChunk = CorrectionChunkList[i]['CorrectionChunk']
-            CorrectionPoint = CorrectionChunkList[i]['CorrectionPoint']
-            CorrectionTag = CorrectionChunkList[i]['Correction']
-            
-            SFXCorrectionChunk = ApplyTagsToChunk(Chunk, SFXPoint, SFXTag, CorrectionPoint, CorrectionTag)
-            SFXCorrectionChunkList.append({'ChunkId': ChunkId, 'CorrectionChunk': CorrectionChunk, 'SFXCorrectionChunk': SFXCorrectionChunk})
+        CorrectionChunk = CorrectionChunkList[i]['CorrectionChunk']
+        CorrectionPoint = CorrectionChunkList[i]['CorrectionPoint']
+        CorrectionTag = CorrectionChunkList[i]['Correction']
         
-        # SFXBody 형성
-        for body in Bodys:
-            SFXBody = body['Correction']
-            SFXBodyChunkIds = body['ChunkId']
-            for i in range(len(SFXCorrectionChunkList)):
-                SFXCorrectionChunkDic = SFXCorrectionChunkList[i]
-                ChunkId = SFXCorrectionChunkDic['ChunkId']
-                if isinstance(ChunkId, list):
-                    ChunkId = ChunkId[0]
-                if ChunkId in SFXBodyChunkIds:
-                    CorrectionChunk = SFXCorrectionChunkDic['CorrectionChunk']
-                    
-                    SFXCorrectionChunk = SFXCorrectionChunkDic['SFXCorrectionChunk']
-                    SFXCorrectionChunk = SFXCorrectionChunk.replace('<효과음시작', '<S')
-                    SFXCorrectionChunk = SFXCorrectionChunk.replace('<효과음끝', '<E')
-                    
-                    SFXBody = SFXBody.replace(CorrectionChunk, SFXCorrectionChunk, 1)
+        SFXCorrectionChunk = ApplyTagsToChunk(Chunk, SFXPoint, SFXTag, CorrectionPoint, CorrectionTag)
+        SFXCorrectionChunkList.append({'ChunkId': ChunkId, 'CorrectionChunk': CorrectionChunk, 'SFXCorrectionChunk': SFXCorrectionChunk})
+    
+    # SFXBody 형성
+    for body in Bodys:
+        SFXBody = body['Correction']
+        SFXBodyChunkIds = body['ChunkId']
+        for i in range(len(SFXCorrectionChunkList)):
+            SFXCorrectionChunkDic = SFXCorrectionChunkList[i]
+            ChunkId = SFXCorrectionChunkDic['ChunkId']
+            if isinstance(ChunkId, list):
+                ChunkId = ChunkId[0]
+            if ChunkId in SFXBodyChunkIds:
+                CorrectionChunk = SFXCorrectionChunkDic['CorrectionChunk']
+                
+                SFXCorrectionChunk = SFXCorrectionChunkDic['SFXCorrectionChunk']
+                SFXCorrectionChunk = SFXCorrectionChunk.replace('<효과음시작', '<S')
+                SFXCorrectionChunk = SFXCorrectionChunk.replace('<효과음끝', '<E')
+                
+                SFXBody = SFXBody.replace(CorrectionChunk, SFXCorrectionChunk, 1)
 
-            if 'SFX' not in body['Task']:
-                body['Task'].append('SFX')
-            body['SFX'] = SFXBody
+        if 'SFX' not in body['Task']:
+            body['Task'].append('SFX')
+        body['SFX'] = SFXBody
 
     # json_data = json.dumps(Bodys, ensure_ascii = False, indent = 4)
     # with open('Bodys.json', 'w', encoding = 'utf-8') as file:
     #     file.write(json_data)
-
-    flag_modified(project, "HalfBodyFrame")
-    
-    db.add(project)
-    db.commit()
+    SaveProject(projectName, email, project)
 
 ## Chunk에서 ExtractedSFXchunk와 가장 유사한 부분을 찾아서 ExtractedSFXchunk로 대처
 def ReplaceSimilarChunk(Chunk, ExtractedSFXchunk, SFXID):

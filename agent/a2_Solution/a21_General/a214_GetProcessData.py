@@ -162,7 +162,7 @@ def GetSoundDataSet(soundDataSet):
 
 ## TrainingDataset을 가져오는 함수
 def GetTrainingDataset(projectName, email):
-    trainingDataset = LoadJsonFrame(GetProjectConfigPath(projectName, email))
+    trainingDataset = LoadJsonFrame(GetDataSetConfigPath(projectName, email))
     return trainingDataset
 
 ## TrainingDataset을 저장하는 함수
@@ -178,7 +178,7 @@ def SaveTrainingDataset(projectName, email, trainingDataset):
 
 ## Project를 가져오는 함수
 def GetProject(projectName, email):
-    project = LoadJsonFrame(GetDataSetConfigPath(projectName, email))
+    project = LoadJsonFrame(GetProjectConfigPath(projectName, email))
     return project
 
 ## Project를 저장하는 함수

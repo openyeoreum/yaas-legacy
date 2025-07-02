@@ -30,18 +30,18 @@ def LoadMusicDataSet(projectName, email, MainLang = 'Ko'):
     
     ## MainLang의 언어별 SelectionGenerationKoChunks 불러오기
     if MainLang == 'Ko':
-        SelectionGeneration = project.SelectionGenerationKo[1]
+        SelectionGeneration = project["SelectionGenerationKo"][1]
     if MainLang == 'En':
-        SelectionGeneration = project.SelectionGenerationEn[1]
+        SelectionGeneration = project["SelectionGenerationEn"][1]
     # if MainLang == 'Ja':
-        # SelectionGeneration = project.SelectionGenerationJa[1]
+        # SelectionGeneration = project["SelectionGenerationJa"][1]
     # if MainLang == 'Zh':
-        # SelectionGeneration = project.SelectionGenerationZh[1]
+        # SelectionGeneration = project["SelectionGenerationZh"][1]
     # if MainLang == 'Es':
-        # SelectionGeneration = project.SelectionGenerationEs[1]
+        # SelectionGeneration = project["SelectionGenerationEs"][1]
     
     ## MainLang의 언어별 VoiceLayer 불러오기
-    EditGeneration = project.MixingMasteringKo[1]['AudioBookLayers' + MainLang]
+    EditGeneration = project["MixingMasteringKo"][1]['AudioBookLayers' + MainLang]
 
     ## LogoDataSet 불러오기
     soundDataSet = GetSoundDataSet("LogoDataSet")
@@ -2045,15 +2045,15 @@ def SaveMusicTemplate(projectName, email, MainLang = 'Ko'):
     project = GetProject(projectName, email)
     ## MainLang의 언어별 SelectionGenerationKoChunks 불러오기
     if MainLang == 'Ko':
-        SelectionGeneration = project.SelectionGenerationKo[1]
+        SelectionGeneration = project["SelectionGenerationKo"][1]
     if MainLang == 'En':
-        SelectionGeneration = project.SelectionGenerationEn[1]
+        SelectionGeneration = project["SelectionGenerationEn"][1]
     # if MainLang == 'Ja':
-        # SelectionGeneration = project.SelectionGenerationJa[1]
+        # SelectionGeneration = project["SelectionGenerationJa"][1]
     # if MainLang == 'Zh':
-        # SelectionGeneration = project.SelectionGenerationZh[1]
+        # SelectionGeneration = project["SelectionGenerationZh"][1]
     # if MainLang == 'Es':
-        # SelectionGeneration = project.SelectionGenerationEs[1]
+        # SelectionGeneration = project["SelectionGenerationEs"][1]
         
     Genre = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['Genre']
     GenreRatio = SelectionGeneration['SelectionGenerationKoBookContext'][1]['Vector']['ContextCompletion']['Genre']['GenreRatio']
@@ -2100,15 +2100,15 @@ def MusicLayerUpdate(projectName, email, CloneVoiceName = "저자명", MainLang 
         
         project = GetProject(projectName, email)
         if MainLang == 'Ko':
-            project.MixingMasteringKo[1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+            project["MixingMasteringKo"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
         if MainLang == 'En':
-            project.MixingMasteringEn[1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+            project["MixingMasteringEn"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
         if MainLang == 'Ja':
-            project.MixingMasteringJa[1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+            project["MixingMasteringJa"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
         if MainLang == 'Zh':
-            project.MixingMasteringZh[1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+            project["MixingMasteringZh"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
         if MainLang == 'Es':
-            project.MixingMasteringEs[1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+            project["MixingMasteringEs"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
         
         flag_modified(project, "MixingMastering" + MainLang)
         

@@ -13,8 +13,8 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit impor
 # BodyText 로드
 def LoadBodyText(projectName, email):
     project = GetProject(projectName, email)
-    _bodyText = project.BodyText + '\n\n"끝까지 들어주셔서 감사합니다."\n\n"안녕하세요."\n"스튜디오 여름 입니다."\n"스튜디오 여름에서 이 책을 오디오북으로 제작하게 되어 영광이며,"\n"모든 책을 편하게 들을 수 있는 그날을 스튜디오 여름이 열어가겠습니다."'
-    PronunciationPreprocessFrame = project.PronunciationPreprocessFrame[1]['PreprocessScripts'][1:]
+    _bodyText = project["BodyText"] + '\n\n"끝까지 들어주셔서 감사합니다."\n\n"안녕하세요."\n"스튜디오 여름 입니다."\n"스튜디오 여름에서 이 책을 오디오북으로 제작하게 되어 영광이며,"\n"모든 책을 편하게 들을 수 있는 그날을 스튜디오 여름이 열어가겠습니다."'
+    PronunciationPreprocessFrame = project["PronunciationPreprocessFrame"][1]['PreprocessScripts'][1:]
     
     bodyText = ""
     BeforeIndex = None
@@ -358,7 +358,7 @@ def IndexMatching(projectName, email):
     IndexMatchedChunks = CharacterTaggedChunks.copy()
     
     project = GetProject(projectName, email)
-    IndexFrame = project.IndexFrame[1]["IndexTags"][1:]
+    IndexFrame = project["IndexFrame"][1]["IndexTags"][1:]
 
     # nonMatchingIndexList 구성
     nonMatchingIndexList = []
@@ -492,7 +492,7 @@ def TaggedChunksToUnitedChunks(projectName, email, tokensCount):
 
 def SplitedBodyScriptsToBodys(projectName, email):
     project = GetProject(projectName, email)
-    bodyFrame = project.BodyFrame
+    bodyFrame = project["BodyFrame"]
     SplitedBodyScripts = bodyFrame[1]["SplitedBodyScripts"][1:]
 
     IndexTags = [{"Title"}, {"Logue"}, {"Chapter"}, {"Part"}, {"Index"}]

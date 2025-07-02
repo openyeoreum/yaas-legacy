@@ -19,10 +19,10 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 ## ContextFrame 로드
 def LoadContextCompletions(projectName, email):
     project = GetProject(projectName, email)
-    HalfBodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
-    ContextChunks = project.ContextDefine[1]['ContextChunks'][1:]
-    ContextCompletions = project.ContextCompletion[1]['ContextCompletions'][1:]
-    WMWMCompletions =  project.WMWMDefine[1]['WMWMCompletions'][1:]
+    HalfBodyFrameSplitedBodyScripts = project["HalfBodyFrame"][1]['SplitedBodyScripts'][1:]
+    ContextChunks = project["ContextDefine"][1]['ContextChunks'][1:]
+    ContextCompletions = project["ContextCompletion"][1]['ContextCompletions'][1:]
+    WMWMCompletions =  project["WMWMDefine"][1]['WMWMCompletions'][1:]
     
     return HalfBodyFrameSplitedBodyScripts, ContextChunks, ContextCompletions, WMWMCompletions
 

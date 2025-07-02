@@ -16,8 +16,8 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 # IndexBodyText 로드
 def LoadIndexBody(projectName, email):
     project = GetProject(projectName, email)
-    indexFrame = project.IndexFrame[1]['IndexTags'][1:]
-    bodyText = project.BodyText + '\n\n"끝까지 들어주셔서 감사합니다."\n\n"안녕하세요."\n"스튜디오 여름 입니다."\n"스튜디오 여름에서 이 책을 오디오북으로 제작하게 되어 영광이며,"\n"모든 책을 편하게 들을 수 있는 그날을 스튜디오 여름이 열어가겠습니다."'
+    indexFrame = project["IndexFrame"][1]['IndexTags'][1:]
+    bodyText = project["BodyText"] + '\n\n"끝까지 들어주셔서 감사합니다."\n\n"안녕하세요."\n"스튜디오 여름 입니다."\n"스튜디오 여름에서 이 책을 오디오북으로 제작하게 되어 영광이며,"\n"모든 책을 편하게 들을 수 있는 그날을 스튜디오 여름이 열어가겠습니다."'
     
     return indexFrame, bodyText
 

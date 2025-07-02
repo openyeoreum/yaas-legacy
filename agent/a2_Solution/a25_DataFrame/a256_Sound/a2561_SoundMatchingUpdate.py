@@ -20,7 +20,7 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
+    BodyFrameSplitedBodyScripts = project["BodyFrame"][1]['SplitedBodyScripts'][1:]
     
     return BodyFrameSplitedBodyScripts
 
@@ -272,7 +272,7 @@ def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatc
 ## 데이터 치환
 def SoundMatchingResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory", TransitionImportance = 0, BackgroundImportance = 0):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
+    BodyFrameSplitedBodyScripts = project["BodyFrame"][1]['SplitedBodyScripts'][1:]
     # IndexChunkIds 구조 형성
     IndexId = 1
     IndexChunkIds = []

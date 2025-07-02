@@ -21,16 +21,16 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 ## BodyFrameBodys 로드
 def SelectionGenerationKoJson(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrame = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
+    BodyFrame = project["HalfBodyFrame"][1]['SplitedBodyScripts'][1:]
     
-    CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
-    WMWMFrameBookContext = project.WMWMMatching[1]['BookContexts'][1:]
-    WMWMFrameIndexs = project.WMWMMatching[1]['SplitedIndexContexts'][1:]
-    WMWMFrameBodys = project.WMWMMatching[1]['SplitedBodyContexts'][1:]
-    WMWMFrameChunks = project.WMWMMatching[1]['SplitedChunkContexts'][1:]
-    CharacterFrame = project.CharacterCompletion[1]['CharacterCompletions'][1:]
-    CharacterTags = project.CharacterCompletion[2]['CheckedCharacterTags'][1:]
-    if len(project.CharacterCompletion[2]['CheckedCharacterTags']) > 1:
+    CaptionFrame = project["CaptionFrame"][1]['CaptionCompletions'][1:]
+    WMWMFrameBookContext = project["WMWMMatching"][1]['BookContexts'][1:]
+    WMWMFrameIndexs = project["WMWMMatching"][1]['SplitedIndexContexts'][1:]
+    WMWMFrameBodys = project["WMWMMatching"][1]['SplitedBodyContexts'][1:]
+    WMWMFrameChunks = project["WMWMMatching"][1]['SplitedChunkContexts'][1:]
+    CharacterFrame = project["CharacterCompletion"][1]['CharacterCompletions'][1:]
+    CharacterTags = project["CharacterCompletion"][2]['CheckedCharacterTags'][1:]
+    if len(project["CharacterCompletion"][2]['CheckedCharacterTags']) > 1:
         Narrater = CharacterTags[0]
     else:
         # NarraterGenre 기본값
@@ -49,9 +49,9 @@ def SelectionGenerationKoJson(projectName, email):
         else:
             NarraterEmotion = '중립'
         Narrater = {"CharacterId": 1, "CharacterTag": "Narrator", "Gender": NarraterGender, "Age": NarraterAge, "Emotion": {NarraterEmotion: 100.0}, "MainCharacterList": [{"Id": 1, "MainCharacter": "저자"}]}
-    SoundFrame = project.SoundMatching[1]['SoundSplitedIndexs'][1:]
-    SFXFrame =  project.SFXMatching[1]['SFXSplitedBodys'][1:]
-    CorrectionKoFrame = project.CorrectionKo[1]['CorrectionKoSplitedBodys'][1:]
+    SoundFrame = project["SoundMatching"][1]['SoundSplitedIndexs'][1:]
+    SFXFrame =  project["SFXMatching"][1]['SFXSplitedBodys'][1:]
+    CorrectionKoFrame = project["CorrectionKo"][1]['CorrectionKoSplitedBodys'][1:]
     
     ## SelectionGenerationKoSplitedIndexs 구조 구성
     SelectionGenerationKoSplitedBodys = []

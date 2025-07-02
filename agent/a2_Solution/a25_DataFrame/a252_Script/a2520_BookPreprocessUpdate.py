@@ -20,7 +20,7 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 ## Script파일 여부 확인
 def ExistenceOrNotScriptFile(projectName, email):
     project = GetProject(projectName, email)
-    ScriptFilesPath = project.UploadScriptPath
+    ScriptFilesPath = project["UploadScriptPath"]
     PDFFileSourcePath = os.path.join(ScriptFilesPath, projectName + ".pdf")
     IndexFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Index.txt")
     BodyFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Body.txt")

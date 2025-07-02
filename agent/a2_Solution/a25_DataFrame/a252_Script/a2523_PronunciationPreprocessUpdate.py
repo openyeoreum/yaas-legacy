@@ -16,7 +16,7 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 # duplicationPreprocessFrame 로드
 def LoadduplicationPreprocessFrame(projectName, email):
     project = GetProject(projectName, email)
-    duplicationPreprocessFrame = project.DuplicationPreprocessFrame[1]['PreprocessScripts'][1:]
+    duplicationPreprocessFrame = project["DuplicationPreprocessFrame"][1]['PreprocessScripts'][1:]
     
     return duplicationPreprocessFrame
 

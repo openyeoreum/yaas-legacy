@@ -25,8 +25,8 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
-    BodyFrameBodys = project.HalfBodyFrame[2]['Bodys'][1:]
+    BodyFrameSplitedBodyScripts = project["HalfBodyFrame"][1]['SplitedBodyScripts'][1:]
+    BodyFrameBodys = project["HalfBodyFrame"][2]['Bodys'][1:]
     
     return BodyFrameSplitedBodyScripts, BodyFrameBodys
 
@@ -789,7 +789,7 @@ def SplitChunkIntoTokens(Chunk):
 def CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
+    BodyFrameSplitedBodyScripts = project["HalfBodyFrame"][1]['SplitedBodyScripts'][1:]
 
     # 데이터 치환
     outputMemoryDics, nonCommonPartList = CorrectionKoProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)

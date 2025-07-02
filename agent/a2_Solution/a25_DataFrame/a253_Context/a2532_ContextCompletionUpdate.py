@@ -17,9 +17,9 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    BodyFrameBodys = project.BodyFrame[2]['Bodys'][1:]
-    ContextChunks =  project.ContextDefine[1]['ContextChunks'][1:]
+    BodyFrameSplitedBodyScripts = project["BodyFrame"][1]['SplitedBodyScripts'][1:]
+    BodyFrameBodys = project["BodyFrame"][2]['Bodys'][1:]
+    ContextChunks =  project["ContextDefine"][1]['ContextChunks'][1:]
     
     return BodyFrameSplitedBodyScripts, BodyFrameBodys, ContextChunks
 
@@ -328,7 +328,7 @@ def ContextCompletionProcess(projectName, email, DataFramePath, Process = "Conte
 def ContextCompletionResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
-    ContextDefine = project.ContextDefine[1]['ContextChunks'][1:]
+    ContextDefine = project["ContextDefine"][1]['ContextChunks'][1:]
     
     # 데이터 치환
     outputMemoryDics = ContextCompletionProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)

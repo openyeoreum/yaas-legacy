@@ -20,8 +20,8 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 ## LoadSFXSplitedBodys 로드
 def LoadSFXBodys(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.HalfBodyFrame[1]['SplitedBodyScripts'][1:]
-    SFXMatchingSFXSplitedBodys = project.SFXMatching[1]['SFXSplitedBodys'][1:]
+    BodyFrameSplitedBodyScripts = project["HalfBodyFrame"][1]['SplitedBodyScripts'][1:]
+    SFXMatchingSFXSplitedBodys = project["SFXMatching"][1]['SFXSplitedBodys'][1:]
     
     # SFXIndexs와 SFXBodys 치환
     SFXIndexs = []

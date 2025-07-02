@@ -19,22 +19,22 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    BodyFrameBodys = project.BodyFrame[2]['Bodys'][1:]
+    BodyFrameSplitedBodyScripts = project["BodyFrame"][1]['SplitedBodyScripts'][1:]
+    BodyFrameBodys = project["BodyFrame"][2]['Bodys'][1:]
     
     return BodyFrameSplitedBodyScripts, BodyFrameBodys
 
 ## BodyFrameBodys 로드
 def LoadWMWMMatchingBookGenre(projectName, email):
     project = GetProject(projectName, email)
-    BookGenre = project.WMWMMatching[1]['BookContexts'][1]['Vector']['ContextCompletion']['Genre']['Genre']
+    BookGenre = project["WMWMMatching"][1]['BookContexts'][1]['Vector']['ContextCompletion']['Genre']['Genre']
     
     return BookGenre
 
 ## CharacterDefine 로드
 def LoadCharacterDefine(projectName, email):
     project = GetProject(projectName, email)
-    CharacterChunks = project.CharacterDefine[1]['CharacterChunks'][1:]
+    CharacterChunks = project["CharacterDefine"][1]['CharacterChunks'][1:]
     
     return CharacterChunks
 
@@ -995,8 +995,8 @@ def SelectedCharacterFilter(projectName, email, DataFramePath, messagesReview, m
 def CharacterCompletionResponseJson(projectName, email, DataFramePath, bookGenre, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
-    BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    CharacterDefine = project.CharacterDefine[1]['CharacterChunks'][1:]
+    BodyFrame = project["BodyFrame"][1]['SplitedBodyScripts'][1:]
+    CharacterDefine = project["CharacterDefine"][1]['CharacterChunks'][1:]
     
     CharacterTagChunk = []
     CharacterTagChunkId = []

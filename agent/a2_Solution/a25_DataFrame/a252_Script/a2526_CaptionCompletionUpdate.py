@@ -19,7 +19,7 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
+    BodyFrameSplitedBodyScripts = project["BodyFrame"][1]['SplitedBodyScripts'][1:]
     
     return BodyFrameSplitedBodyScripts
 
@@ -288,8 +288,8 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
 #     # BodyFrame CaptionTag 업데이트
 #     with get_db() as db:
 #         project = GetProject(projectName, email)
-#         BodyFrame = project.BodyFrame[1]["SplitedBodyScripts"][1:]
-#         CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
+#         BodyFrame = project["BodyFrame"][1]["SplitedBodyScripts"][1:]
+#         CaptionFrame = project["CaptionFrame"][1]['CaptionCompletions'][1:]
 
 #         BodyFrame = CaptionTagUpdateToBodyFrame(BodyFrame, CaptionFrame)
 #     flag_modified(project, "BodyFrame")
@@ -299,8 +299,8 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
 #     # HalfBodyFrame CaptionTag 업데이트
 #     with get_db() as db:
 #         project = GetProject(projectName, email)
-#         HalfBodyFrame = project.HalfBodyFrame[1]["SplitedBodyScripts"][1:]
-#         CaptionFrame = project.CaptionFrame[1]['CaptionCompletions'][1:]
+#         HalfBodyFrame = project["HalfBodyFrame"][1]["SplitedBodyScripts"][1:]
+#         CaptionFrame = project["CaptionFrame"][1]['CaptionCompletions'][1:]
         
 #         HalfBodyFrame = CaptionTagUpdateToBodyFrame(HalfBodyFrame, CaptionFrame)
 #     flag_modified(project, "HalfBodyFrame")

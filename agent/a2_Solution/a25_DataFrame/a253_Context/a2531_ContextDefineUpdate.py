@@ -21,8 +21,8 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 ## BodyFrameBodys 로드
 def LoadBodyFrameBodys(projectName, email):
     project = GetProject(projectName, email)
-    BodyFrameSplitedBodyScripts = project.BodyFrame[1]['SplitedBodyScripts'][1:]
-    BodyFrameBodys = project.BodyFrame[2]['Bodys'][1:]
+    BodyFrameSplitedBodyScripts = project["BodyFrame"][1]['SplitedBodyScripts'][1:]
+    BodyFrameBodys = project["BodyFrame"][2]['Bodys'][1:]
     
     return BodyFrameSplitedBodyScripts, BodyFrameBodys
 
@@ -343,7 +343,7 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
 def ContextDefineToBodys(projectName, email, ResponseJson):
     with get_db() as db:
         project = GetProject(projectName, email)
-        bodyFrame = project.BodyFrame
+        bodyFrame = project["BodyFrame"]
         Bodys = bodyFrame[2]["Bodys"][1:]
 
         responseCount = 0  # 마지막으로 처리된 ResponseJson의 인덱스를 추적
@@ -387,7 +387,7 @@ def ContextDefineToBodys(projectName, email, ResponseJson):
 def ContextDefineResponseJson(projectName, email, DataFramePath, messagesReview = 'off', mode = "Memory"):
     # Chunk, ChunkId 데이터 추출
     project = GetProject(projectName, email)
-    BodyFrame = project.BodyFrame[1]['SplitedBodyScripts'][1:]
+    BodyFrame = project["BodyFrame"][1]['SplitedBodyScripts'][1:]
     
     # 데이터 치환
     outputMemoryDics = ContextDefineProcess(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode)

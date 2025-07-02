@@ -20,7 +20,7 @@ def LoadIndexText(projectName, email):
     RawBodyTextFilePath = TextDirPath + f'/{projectName}_Body(Raw).txt'
     
     project = GetProject(projectName, email)
-    indexText = project.IndexText
+    indexText = project["IndexText"]
     
     if indexText is None:
       ## [ Script Generation 프로세스 ] 인 경우 ##

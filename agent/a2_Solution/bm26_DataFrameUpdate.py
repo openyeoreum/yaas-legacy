@@ -97,9 +97,9 @@ def LoadAndUpdateBodyFrameBodys(projectName, email, Process, Data, DataFramePath
     project = GetProject(projectName, email)
 
     if Process == "BodyFrame":
-        bodyFrame = project.BodyFrame
+        bodyFrame = project["BodyFrame"]
     elif Process == "HalfBodyFrame":
-        bodyFrame = project.HalfBodyFrame
+        bodyFrame = project["HalfBodyFrame"]
 
     if Data == "SplitedBodyScripts":
         Bodys = bodyFrame[1]["SplitedBodyScripts"]

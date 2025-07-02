@@ -64,25 +64,25 @@ def LoadSelectionGenerationKoChunks(projectName, email, MainLang):
     VoiceDataSetCharacters = LoadVoiceDataSetCharacters(MainLang)
     
     project = GetProject(projectName, email)
-    CharacterCompletion = project.CharacterCompletion[2]['CheckedCharacterTags'][1:]
-    CharacterChunks = project.CharacterCompletion[1]['CharacterCompletions'][1:]
+    CharacterCompletion = project["CharacterCompletion"][2]['CheckedCharacterTags'][1:]
+    CharacterChunks = project["CharacterCompletion"][1]['CharacterCompletions'][1:]
     
     ## MainLang의 언어별 SelectionGenerationKoChunks 불러오기
     if MainLang == 'Ko':
-        SelectionGenerationBookContext = project.SelectionGenerationKo[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
-        SelectionGenerationSplitedIndexs = project.SelectionGenerationKo[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
+        SelectionGenerationBookContext = project["SelectionGenerationKo"][1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+        SelectionGenerationSplitedIndexs = project["SelectionGenerationKo"][1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     if MainLang == 'En':
-        SelectionGenerationBookContext = project.SelectionGenerationEn[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
-        SelectionGenerationSplitedIndexs = project.SelectionGenerationEn[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
+        SelectionGenerationBookContext = project["SelectionGenerationEn"][1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+        SelectionGenerationSplitedIndexs = project["SelectionGenerationEn"][1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     # if MainLang == 'Ja':
-        # SelectionGenerationBookContext = project.SelectionGenerationJa[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
-        # SelectionGenerationSplitedIndexs = project.SelectionGenerationJa[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
+        # SelectionGenerationBookContext = project["SelectionGenerationJa"][1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+        # SelectionGenerationSplitedIndexs = project["SelectionGenerationJa"][1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     # if MainLang == 'Zh':
-        # SelectionGenerationBookContext = project.SelectionGenerationZh[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
-        # SelectionGenerationSplitedIndexs = project.SelectionGenerationZh[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
+        # SelectionGenerationBookContext = project["SelectionGenerationZh"][1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+        # SelectionGenerationSplitedIndexs = project["SelectionGenerationZh"][1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     # if MainLang == 'Es':
-        # SelectionGenerationBookContext = project.SelectionGenerationEs[1]['SelectionGeneration' + MainLang + 'BookContext'][1]
-        # SelectionGenerationSplitedIndexs = project.SelectionGenerationEs[1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
+        # SelectionGenerationBookContext = project["SelectionGenerationEs"][1]['SelectionGeneration' + MainLang + 'BookContext'][1]
+        # SelectionGenerationSplitedIndexs = project["SelectionGenerationEs"][1]['SelectionGeneration' + MainLang + 'SplitedIndexs'][1:]
     
     # SecondaryNarratorList, TertiaryNarratorList 형성
     # print(f"@@@@@{CharacterCompletion}")
@@ -3223,15 +3223,15 @@ def VoiceLayerUpdate(projectName, email, Narrator = 'VoiceActor', CloneVoiceName
         
         project = GetProject(projectName, email)
         if MainLang == 'Ko':
-            project.MixingMasteringKo[1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+            project["MixingMasteringKo"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
         if MainLang == 'En':
-            project.MixingMasteringEn[1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+            project["MixingMasteringEn"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
         if MainLang == 'Ja':
-            project.MixingMasteringJa[1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+            project["MixingMasteringJa"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
         if MainLang == 'Zh':
-            project.MixingMasteringZh[1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+            project["MixingMasteringZh"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
         if MainLang == 'Es':
-            project.MixingMasteringEs[1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
+            project["MixingMasteringEs"][1]['AudioBookLayers' + MainLang] = EditGenerationKoChunks
         
         flag_modified(project, "MixingMastering" + MainLang)
         

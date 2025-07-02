@@ -5,6 +5,8 @@ sys.path.append("/yaas")
 
 from agent.a1_Connector.a13_Models import SoundDataSet, TrainingDataset, Prompt, Project, ProjectsStorage, User
 from agent.a1_Connector.a12_Database import get_db
+from agent.a2_Solution.a21_General.a212_Project import GetProjectConfigPath
+from agent.a2_Solution.a21_General.a213_TrainingDataset import GetDataSetConfigPath
 
 ## 데이터베이스에서 JSON 파일을 불러오는 함수
 def LoadJsonFrame(FilePath): # 함수명 변경: LoadJsonFrame

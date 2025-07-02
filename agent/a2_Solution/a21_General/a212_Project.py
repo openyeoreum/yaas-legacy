@@ -8,12 +8,16 @@ def GetProjectDataPath():
     DataPath = "agent/a5_Database/a53_ProjectData/a534_AudioBookProject"
     return os.path.join(RootPath, DataPath)
 
+def GetProjectConfigPath(email, projectName):
+    ProjectConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataframe_audiobook_file/{email}_{projectName}_AudiobookProcess_Config.json"
+    return ProjectConfigPath
+
 def LoadJsonFrame(filepath):
     with open(filepath, 'r') as file:
         DataFrame = json.load(file)
     return DataFrame
 
-def AddProjectToDB(projectName, email):
+def SetupProject(projectName, email):
     # 디렉토리 경로 생성
     ProjectDataPath = GetProjectDataPath()
     projectPath = os.path.join(ProjectDataPath, f"{email}", f"{projectName}")
@@ -43,7 +47,7 @@ def AddProjectToDB(projectName, email):
     # audiobook
     audiobookPath = os.path.join(projectPath, f"{projectName}_audiobook")
     audiobookDataFramePath = os.path.join(audiobookPath, f"{projectName}_dataframe_audiobook_file") # dataFramePath = os.path.join(projectPath, f"{projectName}_dataframe_file")
-    audiobookProcessConfigFilePath = os.path.join(audiobookDataFramePath, f"{email}_{projectName}_AudiobookProcess_Config.json") # dataConfigFilePath = os.path.join(projectPath, f"{projectName}_data_config_file")
+    audiobookProcessConfigFilePath = GetProjectConfigPath(email, projectName)
     audiobookDataSetPath = os.path.join(audiobookPath, f"{projectName}_dataset_audiobook_file") # dataSetPath = os.path.join(projectPath, f"{projectName}_dataset_file")
     mixedAudioBookPath = os.path.join(audiobookPath, f"{projectName}_mixed_audiobook_file") # mixedTextBookPath = os.path.join(projectPath, f"{projectName}_mixed_textbook_file")
 
@@ -241,10 +245,10 @@ def AddProjectToDB(projectName, email):
          
 if __name__ == "__main__":
     
-    AddProjectToDB('데미안', 'yeoreum00128@gmail.com')
-    AddProjectToDB('빨간머리앤', 'yeoreum00128@gmail.com')
-    AddProjectToDB('웹3.0메타버스', 'yeoreum00128@gmail.com')
-    AddProjectToDB('나는선비로소이다', 'yeoreum00128@gmail.com')
-    AddProjectToDB('나는노비로소이다', 'yeoreum00128@gmail.com')
-    AddProjectToDB('카이스트명상수업', 'yeoreum00128@gmail.com')
-    AddProjectToDB('우리는행복을진단한다', 'yeoreum00128@gmail.com')
+    SetupProject('데미안', 'yeoreum00128@gmail.com')
+    SetupProject('빨간머리앤', 'yeoreum00128@gmail.com')
+    SetupProject('웹3.0메타버스', 'yeoreum00128@gmail.com')
+    SetupProject('나는선비로소이다', 'yeoreum00128@gmail.com')
+    SetupProject('나는노비로소이다', 'yeoreum00128@gmail.com')
+    SetupProject('카이스트명상수업', 'yeoreum00128@gmail.com')
+    SetupProject('우리는행복을진단한다', 'yeoreum00128@gmail.com')

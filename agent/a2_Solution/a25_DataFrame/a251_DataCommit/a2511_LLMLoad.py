@@ -15,7 +15,7 @@ from google.genai import types
 from agent.a1_Connector.a12_Database import get_db
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a13_Models import User, Prompt
-from agent.a2_Solution.a21_General.a212_GetDBtable import GetPromptFrame, GetTrainingDataset
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetPromptFrame, GetTrainingDataset
 
 
 ######################

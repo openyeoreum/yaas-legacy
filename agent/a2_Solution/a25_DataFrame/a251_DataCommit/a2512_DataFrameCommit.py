@@ -13,8 +13,8 @@ from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm.attributes import flag_modified
 from agent.a1_Connector.a13_Models import Project
 from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a212_GetDBtable import GetProject
-from agent.a2_Solution.a21_General.a218_ProjectCommit import GetProjectDataPath, LoadJsonFrame
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject
+from agent.a2_Solution.a21_General.a212_Project import GetProjectDataPath, LoadJsonFrame
 
 
 ############################################

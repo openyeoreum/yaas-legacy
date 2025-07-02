@@ -1,12 +1,9 @@
 import sys
 sys.path.append("/yaas")
 
-from agent.a2_Solution.a21_General.a211_Access import AddProjectAccess
-from agent.a2_Solution.a21_General.a214_TrainingDatasetCommit import AddTrainingDatasetToDB
-from agent.a2_Solution.a21_General.a216_UserCommit import AddUserToDB
-from agent.a2_Solution.a21_General.a217_ProjectsStorageCommit import AddProjectsStorageToDB
-from agent.a2_Solution.a21_General.a218_ProjectCommit import AddProjectToDB
-from agent.a2_Solution.a21_General.a219_ProjectFileCommit import AddTextToDB
+from agent.a2_Solution.a21_General.a211_Access import SetupProjectAccess
+from agent.a2_Solution.a21_General.a212_Project import SetupProject
+from agent.a2_Solution.a21_General.a213_TrainingDataset import SetupTrainingDataset
 
 #################################
 #################################
@@ -18,25 +15,16 @@ from agent.a2_Solution.a21_General.a219_ProjectFileCommit import AddTextToDB
 def AccountUpdate(email, projectName):
 
     ### a211_Access ###
-    AddProjectAccess(projectName, email)
-
-    ### a215_UserCommit
-    AddUserToDB(email)
-
-    ### a217_ProjectsStorageCommit
-    AddProjectsStorageToDB(email)
+    SetupProjectAccess(projectName, email)
 
 ### 솔루션에 프로젝트 업데이트 ###
 def SolutionProjectUpdate(email, projectName):
 
-    ### a218_ProjectCommit ###
-    AddProjectToDB(projectName, email)
-    
-    ### a219_ProjectsStorageCommit ###
-    AddTextToDB(projectName, email)
+    ### a212_ProjectCommit ###
+    SetupProject(projectName, email)
 
-    ### a212_TrainingDatasetCommit ###
-    AddTrainingDatasetToDB(projectName, email)
+    ### a213_TrainingDatasetCommit ###
+    SetupTrainingDataset(projectName, email)
 
 if __name__ == "__main__":
 

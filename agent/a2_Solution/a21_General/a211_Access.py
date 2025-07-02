@@ -16,7 +16,7 @@ def LoadProjectStoragePath(email):
     return f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}'
 
 ### ProjectAccess 생성 ###
-def AddProjectAccess(projectName, email):
+def SetupProjectAccess(projectName, email):
     ## 1. Project_ProjectAccess.json 경로 불러오기
     ProjectListPath = LoadProjectListPath()
     ProjectAccessJsonPath = LoadProjectAccessPath(projectName, email)

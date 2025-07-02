@@ -8,16 +8,20 @@ def GetTrainingDatasetPath():
     DataPath = "agent/a5_Database/a55_TrainingDataset/a551_TrainingDataset.json"
     return os.path.join(RootPath, DataPath)
 
+def GetDataSetConfigPath(email, projectName):
+    PDataSetConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file/{email}_{projectName}_AudiobookDataSet_Config.json"
+    return PDataSetConfigPath
+
 def LoadJsonDataset(filepath):
     with open(filepath, 'r') as file:
         DataDataset = json.load(file)
     return DataDataset
 
-def AddTrainingDatasetToDB(projectName, email):
+def SetupTrainingDataset(projectName, email):
     # 디렉토리 경로 생성
     TrainingDatasetPath = GetTrainingDatasetPath()
 
-    audiobookDataSetConfigFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file/{email}_{projectName}_AudiobookDataSet_Config.json"
+    audiobookDataSetConfigFilePath = GetDataSetConfigPath(email, projectName)
 
     # JSON 데이터 불러오기
     trainingDataset = LoadJsonDataset(TrainingDatasetPath)
@@ -79,4 +83,4 @@ if __name__ == "__main__":
     projectName = "우리는행복을진단한다"
     #########################################################################
     
-    AddTrainingDatasetToDB(projectName, email)
+    SetupTrainingDataset(projectName, email)

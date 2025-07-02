@@ -168,25 +168,7 @@ def GetSoundDataSet(soundDataSet):
     else:
         return None
 
-###########################
-###########################
-##### GetProjectsStorage ##
-###########################
-###########################
 
-## ProjectsStorage를 가져오는 함수
-def GetProjectsStorage(email):
-    with get_db() as db:
-        # 이메일로 사용자의 UserId를 반환
-        user = db.query(User).filter(User.Email == email).first()
-        # UserId로 사용자의 ProjectsStoragePath를 반환
-        projectsStorage = db.query(ProjectsStorage).filter(ProjectsStorage.UserId == user.UserId).first()
-        if projectsStorage:
-            return user, projectsStorage
-        else:
-            print(f"No ProjectsStorage found for email: {email}")
-            return None
-        
 def GetProject(projectName, email):
     with get_db() as db:
         # 이메일로 사용자의 UserId를 반환
@@ -198,7 +180,7 @@ def GetProject(projectName, email):
         else:
             print(f"No Project found for email: {email}")
             return None
-        
+
 if __name__ == "__main__":
     
     GetPromptFrame("IndexDefinePreprocess")

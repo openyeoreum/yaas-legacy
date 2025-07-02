@@ -3,9 +3,6 @@ import sys
 import json
 sys.path.append("/yaas")
 
-from agent.a1_Connector.a13_Models import TrainingDataset, Project, User
-from agent.a1_Connector.a12_Database import get_db
-
 def GetTrainingDatasetPath():
     RootPath = "/yaas"
     DataPath = "agent/a5_Database/a55_TrainingDataset/a551_TrainingDataset.json"
@@ -17,23 +14,17 @@ def LoadJsonDataset(filepath):
     return DataDataset
 
 def AddTrainingDatasetToDB(projectName, email):
-    user = db.query(User).filter(User.Email == email).first()
-    project = db.query(Project).filter(Project.UserId == user.UserId, Project.ProjectName == projectName).first()
-    projectsStorageId = project.ProjectsStorageId,
-    projectId = project.ProjectId,
-    
-    # JSON 데이터 불러오기
+    # 디렉토리 경로 생성
     TrainingDatasetPath = GetTrainingDatasetPath()
-    trainingDataset = LoadJsonDataset(TrainingDatasetPath)
 
-    # AudiobookDataSetConfig 파일 경로 설정
     audiobookDataSetConfigFilePath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataset_audiobook_file/{email}_{projectName}_AudiobookDataSet_Config.json"
+
+    # JSON 데이터 불러오기
+    trainingDataset = LoadJsonDataset(TrainingDatasetPath)
 
     ## audiobookDataSetConfig 생성
     if not os.path.exists(audiobookDataSetConfigFilePath):
         audiobookDataSetConfig = {
-            "UserId": user.UserId,
-            "ProjectId": projectId,
             "ProjectName": projectName,
             "ScriptGen": trainingDataset,
             "BookPreprocess": trainingDataset,

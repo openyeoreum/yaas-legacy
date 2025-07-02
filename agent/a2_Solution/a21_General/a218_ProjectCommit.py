@@ -3,10 +3,6 @@ import json
 import sys
 sys.path.append("/yaas")
 
-from agent.a1_Connector.a13_Models import Project
-from agent.a1_Connector.a12_Database import get_db
-from agent.a2_Solution.a21_General.a212_GetDBtable import GetProjectsStorage
-
 def GetProjectDataPath():
     RootPath = "/yaas"
     DataPath = "agent/a5_Database/a53_ProjectData/a534_AudioBookProject"
@@ -18,12 +14,9 @@ def LoadJsonFrame(filepath):
     return DataFrame
 
 def AddProjectToDB(projectName, email):
-    user, ProjectsStorage = GetProjectsStorage(email)
-    projectsStorageId = ProjectsStorage.ProjectsStorageId
-    pojectsStoragePath = ProjectsStorage.ProjectsStoragePath
-    
     # 디렉토리 경로 생성
-    projectPath = os.path.join(pojectsStoragePath, f"{projectName}")
+    ProjectDataPath = GetProjectDataPath()
+    projectPath = os.path.join(ProjectDataPath, f"{email}", f"{projectName}")
     
     # estimate
     estimatePath = os.path.join(projectPath, f"{projectName}_estimate")
@@ -135,8 +128,6 @@ def AddProjectToDB(projectName, email):
         os.makedirs(masterMarketingPath, exist_ok = True)
         
     # JSON 데이터 불러오기
-    ProjectDataPath = GetProjectDataPath()
-    
     bookPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-00_BookPreprocessFrame.json")
     indexFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-01_IndexFrame.json")
     duplicationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-02_DuplicationPreprocessFrame.json")
@@ -167,8 +158,6 @@ def AddProjectToDB(projectName, email):
     ## audiobookProcessConfig 생성
     if not os.path.exists(audiobookProcessConfigFilePath):
         audiobookProcessConfig = {
-            "UserId": user.UserId,
-            "ProjectsStorageId": projectsStorageId,
             "ProjectName": projectName,
             "ProjectPath": projectPath,
             "EstimatePath": estimatePath,

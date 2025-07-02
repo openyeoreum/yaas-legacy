@@ -2,8 +2,8 @@ import sys
 sys.path.append("/yaas")
 
 from sqlalchemy.orm import Session
-from agent.a1_Connector.a12_Database import get_db
-from agent.a1_Connector.a13_Models import User, ProjectsStorage, Project
+from backend.database import GetDB
+from backend.models import User, ProjectsStorage, Project
 
 def GetUser(db: Session, email: str):
     return db.query(User).filter(User.Email == email).first()
@@ -19,5 +19,5 @@ def GetProjectsProcess(db: Session, email: str, projectname: str, process: str):
 
 if __name__ == "__main__":
     
-    Process = GetProjectsProcess(get_db, 'yeoreum00128@gmail.com', '카이스트명상수업', 'MixingMasteringKo')
+    Process = GetProjectsProcess(GetDB, 'yeoreum00128@gmail.com', '카이스트명상수업', 'MixingMasteringKo')
     print(Process)

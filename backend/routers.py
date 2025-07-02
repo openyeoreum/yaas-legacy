@@ -3,10 +3,10 @@ sys.path.append("/yaas")
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from agent.a1_Connector.a12_Database import get_db
-from agent.a1_Connector.a13_Models import Project
-from agent.a1_Connector.a15_CRUD import GetUser, GetProjectsStorage, GetProjectsProcess
-from agent.a1_Connector.a17_Schemas import UserSchema, ProjectsStorageSchema, ProjectsProcessSchema
+from backend.database import get_db
+from backend.models import Project
+from backend.crud import GetUser, GetProjectsStorage, GetProjectsProcess
+from backend.schemas import UserSchema, ProjectsStorageSchema, ProjectsProcessSchema
 
 UserRouter = APIRouter(
     prefix="/api/user",

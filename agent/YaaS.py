@@ -5,7 +5,7 @@ import unicodedata
 import sys
 sys.path.append("/yaas")
 
-from a2_Solution.bm21_GeneralUpdate import AccountUpdate, SolutionProjectUpdate
+from agent.a2_Solution.bm21_GeneralUpdate import AccountUpdate, SolutionProjectUpdate
 from agent.a2_Solution.bm22_EstimateUpdate import SolutionEstimateUpdate
 from agent.a2_Solution.bm23_DataCollectionUpdate import SolutionDataCollectionUpsert, SolutionDataCollectionSearch
 from agent.a2_Solution.bm24_ScriptUpdate import SolutionScriptUpdate

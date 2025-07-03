@@ -1,12 +1,12 @@
 import sys
 sys.path.append("/yaas")
 
-from backend.models import Question, Answer
+from backend.b3_Models import Question, Answer
 from datetime import datetime
 
 q = Question(subject = 'pybo가 무엇인가요?', content = 'pybo에 대해서 알고싶습니다.', create_date = datetime.now())
 
-from backend.database import SessionLocal
+from backend.b2_Database import SessionLocal
 db = SessionLocal()
 db.add(q)
 db.commit()

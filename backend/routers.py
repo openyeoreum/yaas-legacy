@@ -3,8 +3,8 @@ sys.path.append("/yaas")
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.database import get_db
-from backend.models import Project
+from backend.b2_Database import get_db
+from backend.b3_Models import Project
 from backend.crud import GetUser, GetProjectsStorage, GetProjectsProcess
 from backend.schemas import UserSchema, ProjectsStorageSchema, ProjectsProcessSchema
 

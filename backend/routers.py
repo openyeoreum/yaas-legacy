@@ -3,7 +3,7 @@ sys.path.append("/yaas")
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.b2_Database import get_db
+from backend.b2_Database import GetDB
 from backend.b3_Models import Project
 from backend.crud import GetUser, GetProjectsStorage, GetProjectsProcess
 from backend.schemas import UserSchema, ProjectsStorageSchema, ProjectsProcessSchema
@@ -13,7 +13,7 @@ UserRouter = APIRouter(
 )
 
 @UserRouter.get("/{email}", response_model = UserSchema)
-def UserDetail(email: str, db: Session = Depends(get_db)):
+def UserDetail(email: str, db: Session = Depends(GetDB)):
     dbUser = GetUser(db, email = email)
 
     if dbUser is None:
@@ -22,7 +22,7 @@ def UserDetail(email: str, db: Session = Depends(get_db)):
     return dbUser
 
 @UserRouter.get("/{email}/ProjectsStorage", response_model = ProjectsStorageSchema)
-def ProjectsStorageDetail(email: str, db: Session = Depends(get_db)):
+def ProjectsStorageDetail(email: str, db: Session = Depends(GetDB)):
     dbProjectsStorage = GetProjectsStorage(db, email = email)
 
     if dbProjectsStorage is None:
@@ -31,7 +31,7 @@ def ProjectsStorageDetail(email: str, db: Session = Depends(get_db)):
     return dbProjectsStorage
 
 @UserRouter.get("/{email}/{projectname}/{process}", response_model = ProjectsProcessSchema)
-def ProjectsProcess(email: str, projectname: str, process: str, db: Session = Depends(get_db)):
+def ProjectsProcess(email: str, projectname: str, process: str, db: Session = Depends(GetDB)):
     dbProjectsProcess = GetProjectsProcess(db, email = email, projectname = projectname, process = process)
 
     if dbProjectsProcess is None:

@@ -4,7 +4,6 @@ sys.path.append("/yaas")
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from backend.routers import UserRouter
-from backend.domain.question.question_router import router as QuestionRouter
 
 app = FastAPI(debug = True)
 
@@ -24,9 +23,9 @@ app.add_middleware(
     allow_headers = ["*"],    # 모든 헤더 허용
 )
 
-#### 학습 후 삭제 ####
-app.include_router(QuestionRouter)
-#### 학습 후 삭제 ####
+@app.get("/hello")
+def hello():
+    return {"message": "사랑해요. 아공이!"}
 
 app.include_router(UserRouter)
 # app.include_router(a1112_UserHistoryRouter.router)

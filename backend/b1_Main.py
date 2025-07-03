@@ -4,6 +4,7 @@ sys.path.append("/yaas")
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from backend.routers import UserRouter
+from backend.b5_Domain.question.question_router import question_router
 
 app = FastAPI(debug = True)
 
@@ -28,6 +29,7 @@ def hello():
     return {"message": "사랑해요. 아공이!"}
 
 app.include_router(UserRouter)
+app.include_router(question_router)
 # app.include_router(a1112_UserHistoryRouter.router)
 # app.include_router(a1113_SubscriptionRouter.router)
 # app.include_router(a1114_SubscriptionHistoryRouter.router)

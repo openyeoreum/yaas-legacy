@@ -1,12 +1,32 @@
 import bcrypt
 import pytz
-from datetime import datetime
+import sys
+sys.path.append("/yaas")
 
+from datetime import datetime
 from sqlalchemy import Column, Integer, Float, String, Text, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import JSON
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
+from backend.b2_Database import Base
 
-Base = declarative_base()
+### 테스트 후 삭제 ###
+class Question(Base):
+    __tablename__ = "questions"
+
+    id = Column(Integer, primary_key = True)
+    subject = Column(String, nullable = False)
+    content = Column(Text, nullable = False)
+    create_date = Column(DateTime, nullable = False)
+
+class Answer(Base):
+    __tablename__ = "answers"
+
+    id = Column(Integer, primary_key = True)
+    content = Column(Text, nullable = False)
+    create_date = Column(DateTime, nullable = False)
+    question_id = Column(Integer, ForeignKey("questions.id"))
+    question = relationship("Question", backref = "answers")
+### 테스트 후 삭제 ###
 
 ### 데이터베이스 시간을 서울로 지정하는 함수
 def SeoulNow():
@@ -24,7 +44,6 @@ def HashPassword(password: str) -> bytes:
 def CheckPassword(HashedPassword: bytes, UserPassword: str) -> bool:
 
     return bcrypt.checkpw(UserPassword.encode('utf-8'), HashedPassword)
-
 
 #################
 ### UserFrame ###

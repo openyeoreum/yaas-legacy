@@ -1103,7 +1103,7 @@ def RestoreOriginalFiles(voiceLayerPath):
     RawFiles = os.listdir(backup_folder)
     UpdateTQDM = tqdm(RawFiles,
                       total=len(RawFiles),
-                      desc='Restore_VolumeEqualFiles')
+                      desc = 'Restore_VolumeEqualFiles')
     
     for filename in RawFiles:
         backup_file = os.path.join(backup_folder, filename)

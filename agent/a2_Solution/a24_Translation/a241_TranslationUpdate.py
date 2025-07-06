@@ -2593,7 +2593,7 @@ def TranslationEditingFilter(Response, CheckCount):
     # Error6: '편집내용'에 프롬프트가 포함된 경우 제거
     PromtList = ['<현재편집할내용>을 매끄럽고 세련되게 다듬는 윤문, 문장 구조의 다변화, 호소력 있는 어조와 친근한 표현 사용 과정을 통해 편집하여 작성', '[*편집할내용]을 편집작업1, 편집작업2, 편집작업3, 편집작업4에 따라 현대적으로 편집하여 매우 완성도가 높은 글로 재작성', '(완성도 높은 <편집내용.json>완성을 위한 절차와 방법)과 (좋은내용 예시n)에 따라서 <**편집내용-편집대상>를 편집한 내용']
     for prompt in PromtList:
-        OutputDic['편집내용'] = OutputDic['편집내용'].replace(prompt, '')
+        OutputDic['편집내용']['내용'] = re.sub(rf'\n?{re.escape(prompt)}\n?', '', OutputDic['편집내용']['내용'])
 
     # 모든 조건을 만족하면 JSON 반환
     return OutputDic['편집내용']

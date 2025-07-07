@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, UpdatedScriptGen, UpdatedBookPreprocess, UpdatedIndexFrame, UpdatedDuplicationPreprocess, UpdatedPronunciationPreprocess, UpdatedBodyFrame, UpdatedHalfBodyFrame, UpdatedCaptionCompletion, UpdatedContextDefine, UpdatedContextCompletion, UpdatedWMWMDefine, UpdatedWMWMMatching, UpdatedCharacterDefine, UpdatedCharacterCompletion, UpdatedSoundMatching, UpdatedSFXMatching, UpdatedCorrectionKo, UpdatedSelectionGenerationKo
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, InitScriptGen, UpdatedScriptGen, InitBookPreprocess, UpdatedBookPreprocess, InitIndexFrame, UpdatedIndexFrame, InitDuplicationPreprocess, UpdatedDuplicationPreprocess, InitPronunciationPreprocess, UpdatedPronunciationPreprocess, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from agent.a2_Solution.a25_DataFrame.a251_ScriptGen.a2511_ScriptGenUpdate import ScriptGenUpdate, ScriptGenResponseJson
 from agent.a2_Solution.a25_DataFrame.a252_Script.a2520_BookPreprocessUpdate import BookPreprocessUpdate
@@ -86,7 +86,7 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
     if RecentFile:
         with open(os.path.join(dataFramePath, RecentFile), 'r', encoding = 'utf-8') as file:
             ExistedDataFrame = json.load(file)
-            return ExistedDataFrame
+        return ExistedDataFrame
 
     return None
 
@@ -198,6 +198,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
             existedDataFrame = LoadexistedDataFrame(projectName, email, "ScriptGenFrame", DataFramePath)
             recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ScriptGen", RawDataSetPath)
 
+        if existedDataFrame == None:
+            InitScriptGen(projectName, email)
+        if existedDataSet == None:
+            InitRawDataSet(projectName, email, "ScriptGen")
+
         mode = "Memory"
         ScriptGenUpdate(projectName, email, DataFramePath, ScriptConfig, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
         if existedDataFrame == None:
@@ -216,6 +221,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         if existedDataFrameMode == "on":
             existedDataFrame = LoadexistedDataFrame(projectName, email, "BookPreprocessFrame", DataFramePath)
             recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BookPreprocess", RawDataSetPath)
+        
+        if existedDataFrame == None:
+            InitBookPreprocess(projectName, email)
+        if existedDataSet == None:
+            InitRawDataSet(projectName, email, "BookPreprocess")
 
         mode = "Master"
         BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
@@ -236,6 +246,12 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         existedDataFrame = LoadexistedDataFrame(projectName, email, "IndexFrame", DataFramePath)
         recentFile, existedDataSet1 = LoadExistedDataSets(projectName, email, "IndexDefinePreprocess", RawDataSetPath)
         recentFile, existedDataSet2 = LoadExistedDataSets(projectName, email, "IndexDefine", RawDataSetPath)
+
+    if existedDataFrame == None:
+        InitIndexFrame(projectName, email)
+    if existedDataSet1 == None:
+        InitRawDataSet(projectName, email, "IndexDefinePreprocess")
+        InitRawDataSet(projectName, email, "IndexDefine")
 
     mode = "Master" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning", "Master"
     IndexFrameUpdate(projectName, email, mainLang, MessagesReview = messagesReview, Mode = mode, IndexMode = indexMode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
@@ -258,6 +274,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         existedDataFrame = LoadexistedDataFrame(projectName, email, "DuplicationPreprocess", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "DuplicationPreprocess", RawDataSetPath)
 
+    if existedDataFrame == None:
+        InitDuplicationPreprocess(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "DuplicationPreprocess")
+
     mode = "Master"
     DuplicationPreprocessUpdate(projectName, email, mainLang, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
 
@@ -277,6 +298,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         existedDataFrame = LoadexistedDataFrame(projectName, email, "PronunciationPreprocess", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "PronunciationPreprocess", RawDataSetPath)
 
+    if existedDataFrame == None:
+        InitPronunciationPreprocess(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "PronunciationPreprocess")
+
     mode = "Master"
     PronunciationPreprocessUpdate(projectName, email, mainLang, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
 
@@ -295,6 +321,9 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", DataFramePath)
 
+    if existedDataFrame == None:
+        InitBodyFrame(projectName, email)
+
     BodyFrameUpdate(projectName, email, tokensCount = 2500, ExistedDataFrame = existedDataFrame)
 
     if existedDataFrame == None:
@@ -308,6 +337,9 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ##################################################
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "HalfBodyFrame", DataFramePath)
+
+    if existedDataFrame == None:
+        InitHalfBodyFrame(projectName, email)
 
     HalfBodyFrameUpdate(projectName, email, tokensCount = 750, ExistedDataFrame = existedDataFrame)
 
@@ -323,6 +355,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "CaptionCompletion", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CaptionCompletion", RawDataSetPath)
+
+    if existedDataFrame == None:
+        InitCaptionCompletion(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "CaptionCompletion")
 
     mode = "Master"
     CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
@@ -346,6 +383,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextDefine", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextDefine", RawDataSetPath)
 
+    if existedDataFrame == None:
+        InitContextDefine(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "ContextDefine")
+
     mode = "Master"
     ContextDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -367,6 +409,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextCompletion", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextCompletion", RawDataSetPath)
 
+    if existedDataFrame == None:
+        InitContextCompletion(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "ContextCompletion")
+
     mode = "Master"
     ContextCompletionUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -385,6 +432,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "WMWMDefine", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "WMWMDefine", RawDataSetPath)
+
+    if existedDataFrame == None:
+        InitWMWMDefine(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "WMWMDefine")
 
     mode = "Master"
     WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
@@ -405,6 +457,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         existedDataFrame = LoadexistedDataFrame(projectName, email, "WMWMMatching", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "WMWMMatching", RawDataSetPath)
 
+    if existedDataFrame == None:
+        InitWMWMMatching(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "WMWMMatching")
+
     mode = "Example"
     WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -424,6 +481,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterDefine", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterDefine", RawDataSetPath)
 
+    if existedDataFrame == None:
+        InitCharacterDefine(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "CharacterDefine")
+
     mode = "Master"
     CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -442,6 +504,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterCompletion", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterCompletion", RawDataSetPath)
+    if existedDataFrame == None:
+        InitCharacterCompletion(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "CharacterCompletion")
 
     mode = "Master"
     CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
@@ -461,6 +527,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     # if existedDataFrameMode == "on":
     #     existedDataFrame = LoadexistedDataFrame(projectName, email, "SoundMatching", DataFramePath)
     #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "SoundMatching", RawDataSetPath)
+
+    # if existedDataFrame == None:
+    #     InitSoundMatching(projectName, email)
+    # if existedDataSet == None:
+    #     InitRawDataSet(projectName, email, "SoundMatching")
 
     # mode = "Master"
     # SoundMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet, transitionImportance = 0, backgroundImportance = 0)
@@ -483,6 +554,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         existedDataFrame = LoadexistedDataFrame(projectName, email, "SFXMatching", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "SFXMatching", RawDataSetPath)
 
+    if existedDataFrame == None:
+        InitSFXMatching(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "SFXMatching")
+
     mode = "Master"
     SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet, Importance = 0)
     
@@ -504,6 +580,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         existedDataFrame = LoadexistedDataFrame(projectName, email, "CorrectionKo", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CorrectionKo", RawDataSetPath)
 
+    if existedDataFrame == None:
+        InitCorrectionKo(projectName, email)
+    if existedDataSet == None:
+        InitRawDataSet(projectName, email, "CorrectionKo")
+
     mode = "Master"
     CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -520,6 +601,9 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ################################
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "SelectionGenerationKo", DataFramePath)
+
+    if existedDataFrame == None:
+        InitSelectionGenerationKo(projectName, email)
 
     SelectionGenerationKoUpdate(projectName, email, ExistedDataFrame = existedDataFrame)
     

@@ -212,8 +212,6 @@ def SelectionGenerationKoJson(projectName, email):
                 except LangDetectException:
                     Language = "ko"
                 emotions = list(Narrater['Emotion'].keys())
-                print(Narrater)
-                sys.exit()
                 Voice = {'Character': Narrater['MainCharacterList'][0]['MainCharacter'], 'CharacterTag': Narrater['CharacterTag'], 'Language': Language, 'Gender': Narrater['Gender'], 'Age': Narrater['Age'], 'Emotion': emotions[0]}
                 for CharacterChunk in CharacterFrame:
                     if CharacterChunk['ChunkId'] == chunkid:
@@ -266,8 +264,10 @@ def SelectionGenerationKoUpdate(projectName, email, ExistedDataFrame = None):
         else:
             SelectionGenerationKoBookContext, SelectionGenerationKoSplitedIndexs = SelectionGenerationKoJson(projectName, email)
 
+            DataFrame = UpdatedSelectionGenerationKo(projectName, email)
+
             ## A. SelectionGenerationKoBookContext
-            AddSelectionGenerationKoBookContextToDB(projectName, email, SelectionGenerationKoBookContext)
+            AddSelectionGenerationKoBookContextToDB(DataFrame, SelectionGenerationKoBookContext)
 
             ## B. SelectionGenerationKoSplitedIndexs
             # ResponseJson을 ContinueCount로 슬라이스
@@ -281,7 +281,6 @@ def SelectionGenerationKoUpdate(projectName, email, ExistedDataFrame = None):
             
             # i값 수동 생성
             i = 0
-            DataFrame = UpdatedSelectionGenerationKo(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f"SelectionGenerationKoUpdate: {Update['IndexId']}")
                 time.sleep(0.0001)

@@ -374,9 +374,9 @@ def ScriptGenUpdate(projectName, email, DataFramePath, ScriptConfig, MessagesRev
         ScriptCount, Completion = ScriptGenCountLoad(projectName, email)
         if Completion == "No":
             if ExistedDataFrame != None:
-                # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-                AddExistedScriptGenToDB(projectName, email, ExistedDataFrame)
-                AddExistedDataSetToDB(projectName, email, "ScriptGen", ExistedDataSet)
+                # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+                # AddExistedScriptGenToDB(projectName, email, ExistedDataFrame)
+                # AddExistedDataSetToDB(projectName, email, "ScriptGen", ExistedDataSet)
                 print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenUpdate는 ExistedScriptGen으로 대처됨 ]\n")
                 
                 responseJson = ScriptGenResponseJson(projectName, email, DataFramePath, TextDirPath, ScriptConfig, messagesReview = MessagesReview, mode = Mode)

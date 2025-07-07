@@ -7,6 +7,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from collections import Counter
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetSoundDataSet
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCharacterCompletionToDB, AddCharacterCompletionChunksToDB, AddCharacterCompletionCheckedCharacterTagsToDB, CharacterCompletionCountLoad, UpdatedCharacterCompletion, CharacterCompletionCompletionUpdate
@@ -1046,6 +1047,61 @@ def CharacterCompletionResponseJson(projectName, email, DataFramePath, bookGenre
 
         return SelectedResponseJson, CharacterList
 
+## NarratorOnly일 경우의 Narrator 설정
+def NarratorSetting(projectName, email, DataFrame, CharacterId):
+    ## ProjectConfig 불러오기
+    ProjectConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_config.json"
+    with open(ProjectConfigPath, 'r', encoding = 'utf-8') as file:
+        projectConfig = json.load(file)
+    ## NarratorName 불러오기
+    NarratorName = projectConfig["AudioBookConfig"]["CloneVoiceName"]
+
+    ## VoiceDataSet의 Characters 불러오기
+    Characters = GetSoundDataSet("VoiceDataSet")[1]["Characters"]
+    NarratorCharacter = None
+    for Character in Characters:
+        if Character["Name"] == NarratorName:
+            NarratorCharacter = Character
+            break
+    
+    ## NarratorCharacter가 존재할 경우 NarratorSetting
+    if NarratorCharacter:
+        # 최고 점수의 나이 찾기, 점수가 같으면 "청년"으로 기본 설정
+        NarratorAge = NarratorCharacter["Voice"]["Age"]
+        MaxScore = max(age["Score"] for age in NarratorAge)
+        HighestScoreAges = [age["index"] for age in NarratorAge if age["Score"] == MaxScore]
+        SelectedAge = "청년" if len(HighestScoreAges) > 1 or MaxScore == 0 else HighestScoreAges[0]
+        # 최고 점수의 감정 찾기, 점수가 같으면 "중립"으로 기본 설정
+        NarratorEmotion = NarratorCharacter["Voice"]["Emotion"]
+        MaxEmotionScore = max(emotion["Score"] for emotion in NarratorEmotion)
+        HighestEmotionScores = [emotion["index"] for emotion in NarratorEmotion if emotion["Score"] == MaxEmotionScore]
+        SelectedEmotion = "중립" if len(HighestEmotionScores) > 1 or MaxEmotionScore == 0 else HighestEmotionScores[0]
+        
+        narratorSetting = {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator", 
+            "Gender": NarratorCharacter["Voice"]["Gender"][0],
+            "Age": SelectedAge,
+            "Emotion": {SelectedEmotion: 100},
+            "Frequency": 0,
+            "MainCharacterList": [{"Id": 0, "MainCharacter": "나레이터", "Frequency": 0, "ChunkIds": []}],
+        }
+    else:
+        narratorSetting = {
+            "CharacterId": 1,
+            "CharacterTag": "Narrator", 
+            "Gender": "남",
+            "Age": "청년",
+            "Emotion": {"중립": 100},
+            "Frequency": 0,
+            "MainCharacterList": [{"Id": 0, "MainCharacter": "나레이터", "Frequency": 0, "ChunkIds": []}],
+        }
+
+    # DataFrame에 Narrator 설정
+    DataFrame[2]["CheckedCharacterTags"][CharacterId] = narratorSetting
+
+    return DataFrame
+
 ## 프롬프트 요청 및 결과물 Json을 CharacterCompletion에 업데이트
 def CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, MessagesReview = 'off', Mode = "Memory", ExistedDataFrame = None, ExistedDataSet = None):
     print(f"< User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate 시작 >")
@@ -1126,6 +1182,14 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, Mess
                 i += 1
             
             UpdateTQDM.close()
+
+            # Narrator 설정 (Narrator가 설정되지 않은 경우)
+            for CharacterDic in DataFrame[2]["CheckedCharacterTags"]:
+                if CharacterDic["CharacterTag"] == "Narrator":
+                    if CharacterDic["MainCharacterList"] == []:
+                        CharacterId = CharacterDic["CharacterId"]
+                        DataFrame = NarratorSetting(projectName, email, DataFrame, CharacterId)
+
             # Completion "Yes" 업데이트
             CharacterCompletionCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate 완료 ]\n")

@@ -263,17 +263,6 @@ def ScriptGenCountLoad(projectName, email):
     Completion = project["ScriptGenFrame"][0]["Completion"]
     
     return ScriptCount, Completion
-
-## 0-1. ScriptGen의 초기화
-def InitScriptGen(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["ScriptGenFrame"][0]["ScriptCount"] = 0
-    project["ScriptGenFrame"][0]["Completion"] = "No"
-    project["ScriptGenFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a530_ScriptGen/a530-00_ScriptGenFrame.json")[1]
-
-    SaveProject(projectName, email, project)
         
 ## 0-1. 업데이트된 ScriptGen 출력
 def UpdatedScriptGen(projectName, email):
@@ -330,17 +319,6 @@ def BookPreprocessCountLoad(projectName, email):
     Completion = project["BookPreprocessFrame"][0]["Completion"]
     
     return PageCount, Completion
-
-## 0-1. BookPreprocess의 초기화
-def InitBookPreprocess(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["BookPreprocessFrame"][0]["PageCount"] = 0
-    project["BookPreprocessFrame"][0]["Completion"] = "No"
-    project["BookPreprocessFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-00_BookPreprocessFrame.json")[1]
-
-    SaveProject(projectName, email, project)
         
 ## 0-1. 업데이트된 BookPreprocess 출력
 def UpdatedBookPreprocess(projectName, email):
@@ -399,17 +377,6 @@ def IndexFrameCountLoad(projectName, email):
     
     return IndexCount, Completion
         
-## 1. IndexFrame의 초기화
-def InitIndexFrame(projectName, email):
-    ProjectDataPath = GetProjectDataPath()   
-    project = GetProject(projectName, email)
-
-    project["IndexFrame"][0]["IndexCount"] = 0
-    project["IndexFrame"][0]["Completion"] = "No"
-    project["IndexFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-01_IndexFrame.json")[1]
-        
-    SaveProject(projectName, email, project)
-        
 ## 1. 업데이트된 IndexFrame 출력
 def UpdatedIndexFrame(projectName, email):
     project = GetProject(projectName, email)
@@ -466,17 +433,6 @@ def DuplicationPreprocessCountLoad(projectName, email):
     Completion = project["DuplicationPreprocessFrame"][0]["Completion"]
     
     return PreprocessCount, Completion
-
-## 2-1. DuplicationPreprocess의 초기화
-def InitDuplicationPreprocess(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["DuplicationPreprocessFrame"][0]["PreprocessCount"] = 0
-    project["DuplicationPreprocessFrame"][0]["Completion"] = "No"
-    project["DuplicationPreprocessFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-02_DuplicationPreprocessFrame.json")[1]
-        
-    SaveProject(projectName, email, project)
         
 ## 2-1. 업데이트된 DuplicationPreprocess 출력
 def UpdatedDuplicationPreprocess(projectName, email):
@@ -534,17 +490,6 @@ def PronunciationPreprocessCountLoad(projectName, email):
     Completion = project["PronunciationPreprocessFrame"][0]["Completion"]
     
     return PreprocessCount, Completion
-
-## 2-2. PronunciationPreprocess의 초기화
-def InitPronunciationPreprocess(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["PronunciationPreprocessFrame"][0]["PreprocessCount"] = 0
-    project["PronunciationPreprocessFrame"][0]["Completion"] = "No"
-    project["PronunciationPreprocessFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-03_PronunciationPreprocessFrame.json")[1]
-        
-    SaveProject(projectName, email, project)
         
 ## 2-2. 업데이트된 PronunciationPreprocess 출력
 def UpdatedPronunciationPreprocess(projectName, email):
@@ -661,20 +606,6 @@ def BodyFrameCountLoad(projectName, email):
     Completion = project["BodyFrame"][0]["Completion"]
     
     return IndexCount, BodyCount, ChunkCount, Completion
-
-## 3. BodyFrame의 초기화
-def InitBodyFrame(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["BodyFrame"][0]["IndexCount"] = 0
-    project["BodyFrame"][0]["BodyCount"] = 0
-    project["BodyFrame"][0]["ChunkCount"] = 0
-    project["BodyFrame"][0]["Completion"] = "No"
-    project["BodyFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-04_BodyFrame.json")[1]
-    project["BodyFrame"][2] = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-04_BodyFrame.json")[2]
-        
-    SaveProject(projectName, email, project)
         
 ## 3. 업데이트된 BodyFrame 출력
 def UpdatedBodyFrame(projectName, email):
@@ -793,20 +724,6 @@ def HalfBodyFrameCountLoad(projectName, email):
     Completion = project["HalfBodyFrame"][0]["Completion"]
     
     return IndexCount, BodyCount, ChunkCount, Completion
-
-## 4. HalfBodyFrame의 초기화
-def InitHalfBodyFrame(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["HalfBodyFrame"][0]["IndexCount"] = 0
-    project["HalfBodyFrame"][0]["BodyCount"] = 0
-    project["HalfBodyFrame"][0]["ChunkCount"] = 0
-    project["HalfBodyFrame"][0]["Completion"] = "No"
-    project["HalfBodyFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-04_BodyFrame.json")[1]
-    project["HalfBodyFrame"][2] = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-04_BodyFrame.json")[2]
-        
-    SaveProject(projectName, email, project)
         
 ## 4. 업데이트된 HalfBodyFrame 출력
 def UpdatedHalfBodyFrame(projectName, email):
@@ -867,17 +784,6 @@ def CaptionCompletionCountLoad(projectName, email):
     Completion = project["CaptionFrame"][0]["Completion"]
     
     return CaptionCount, Completion
-
-## 6. CaptionCompletion의 초기화
-def InitCaptionCompletion(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["CaptionFrame"][0]["CaptionCount"] = 0
-    project["CaptionFrame"][0]["Completion"] = "No"
-    project["CaptionFrame"][1] = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-05_CaptionFrame.json")[1]
-
-    SaveProject(projectName, email, project)
         
 ## 6. 업데이트된 CaptionCompletion 출력
 def UpdatedCaptionCompletion(projectName, email):
@@ -942,18 +848,6 @@ def ContextDefineCountLoad(projectName, email):
     Completion = project["ContextDefine"][0]["Completion"]
     
     return ContextChunkCount, ContextCount, Completion
-
-## 7. ContextDefine의 초기화
-def InitContextDefine(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["ContextDefine"][0]["ContextChunkCount"] = 0
-    project["ContextDefine"][0]["ContextCount"] = 0
-    project["ContextDefine"][0]["Completion"] = "No"
-    project["ContextDefine"][1] = LoadJsonFrame(ProjectDataPath + "/a5342_Context/a5342-01_ContextDefine.json")[1]
-        
-    SaveProject(projectName, email, project)
         
 ## 7. 업데이트된 ContextDefine 출력
 def UpdatedContextDefine(projectName, email):
@@ -1043,19 +937,6 @@ def ContextCompletionCountLoad(projectName, email):
     Completion = project["ContextCompletion"][0]["Completion"]
     
     return ContextChunkCount, ContextCount, Completion
-
-## 8. ContextCompletion의 초기화
-def InitContextCompletion(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["ContextCompletion"][0]["ContextChunkCount"] = 0
-    project["ContextCompletion"][0]["ContextCount"] = 0
-    project["ContextCompletion"][0]["Completion"] = "No"
-    project["ContextCompletion"][1] = LoadJsonFrame(ProjectDataPath + "/a5342_Context/a5342-02_ContextCompletion.json")[1]
-    project["ContextCompletion"][2] = LoadJsonFrame(ProjectDataPath + "/a5342_Context/a5342-02_ContextCompletion.json")[2]
-        
-    SaveProject(projectName, email, project)
         
 ## 8. 업데이트된 ContextCompletion 출력
 def UpdatedContextCompletion(projectName, email):
@@ -1148,19 +1029,6 @@ def WMWMDefineCountLoad(projectName, email):
     Completion = project["WMWMDefine"][0]["Completion"]
     
     return WMWMChunkCount, WMWMCount, Completion
-
-## 9. WMWMDefine의 초기화
-def InitWMWMDefine(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["WMWMDefine"][0]["WMWMChunkCount"] = 0
-    project["WMWMDefine"][0]["WMWMCount"] = 0
-    project["WMWMDefine"][0]["Completion"] = "No"
-    project["WMWMDefine"][1] = LoadJsonFrame(ProjectDataPath + "/a5342_Context/a5342-03_WMWMDefine.json")[1]
-    project["WMWMDefine"][2] = LoadJsonFrame(ProjectDataPath + "/a5342_Context/a5342-03_WMWMDefine.json")[2]
-        
-    SaveProject(projectName, email, project)
         
 ## 9. 업데이트된 WMWMDefine 출력
 def UpdatedWMWMDefine(projectName, email):
@@ -1284,19 +1152,6 @@ def WMWMMatchingCountLoad(projectName, email):
     Completion = project["WMWMMatching"][0]["Completion"]
     
     return WMWMChunkCount, WMWMBodyCount, WMWMIndexCount, Completion
-
-## 10. WMWMMatching의 초기화
-def InitWMWMMatching(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["WMWMMatching"][0]["WMWMChunkCount"] = 0
-    project["WMWMMatching"][0]["WMWMBodyCount"] = 0
-    project["WMWMMatching"][0]["WMWMIndexCount"] = 0
-    project["WMWMMatching"][0]["Completion"] = "No"
-    project["WMWMMatching"][1] = LoadJsonFrame(ProjectDataPath + "/a5342_Context/a5342-04_WMWMMatching.json")[1]
-        
-    SaveProject(projectName, email, project)
         
 ## 10. 업데이트된 WMWMMatching 출력
 def UpdatedWMWMMatching(projectName, email):
@@ -1361,18 +1216,6 @@ def CharacterDefineCountLoad(projectName, email):
     Completion = project["CharacterDefine"][0]["Completion"]
     
     return CharacterChunkCount, CharacterCount, Completion
-
-## 11. CharacterDefine의 초기화
-def InitCharacterDefine(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["CharacterDefine"][0]["CharacterChunkCount"] = 0
-    project["CharacterDefine"][0]["CharacterCount"] = 0
-    project["CharacterDefine"][0]["Completion"] = "No"
-    project["CharacterDefine"][1] = LoadJsonFrame(ProjectDataPath + "/a5343_Character/a5343-01_CharacterDefine.json")[1]
-        
-    SaveProject(projectName, email, project)
         
 ## 11. 업데이트된 CharacterDefine 출력
 def UpdatedCharacterDefine(projectName, email):
@@ -1464,19 +1307,6 @@ def CharacterCompletionCountLoad(projectName, email):
     Completion = project["CharacterCompletion"][0]["Completion"]
     
     return CharacterChunkCount, CharacterCount, Completion
-
-## 12. CharacterCompletion의 초기화
-def InitCharacterCompletion(projectName, email):
-    ProjectDataPath = GetProjectDataPath()    
-    project = GetProject(projectName, email)
-
-    project["CharacterCompletion"][0]["CharacterChunkCount"] = 0
-    project["CharacterCompletion"][0]["CharacterCount"] = 0
-    project["CharacterCompletion"][0]["Completion"] = "No"
-    project["CharacterCompletion"][1] = LoadJsonFrame(ProjectDataPath + "/a5343_Character/a5343-02_CharacterCompletion.json")[1]
-    project["CharacterCompletion"][2] = LoadJsonFrame(ProjectDataPath + "/a5343_Character/a5343-02_CharacterCompletion.json")[2]
-        
-    SaveProject(projectName, email, project)
         
 ## 12. 업데이트된 CharacterCompletion 출력
 def UpdatedCharacterCompletion(projectName, email):
@@ -1532,17 +1362,6 @@ def SoundMatchingCountLoad(projectName, email):
     Completion = project["SoundMatching"][0]["Completion"]
     
     return BodyCount, Completion
-
-## 14. SoundMatching의 초기화
-def InitSoundMatching(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["SoundMatching"][0]["BodyCount"] = 0
-    project["SoundMatching"][0]["Completion"] = "No"
-    project["SoundMatching"][1] = LoadJsonFrame(ProjectDataPath + "/a5345_Sound/a5345-01_SoundMatching.json")[1]
-        
-    SaveProject(projectName, email, project)
         
 ## 14. 업데이트된 SoundMatching 출력
 def UpdatedSoundMatching(projectName, email):
@@ -1600,17 +1419,6 @@ def SFXMatchingCountLoad(projectName, email):
     Completion = project["SFXMatching"][0]["Completion"]
     
     return BodyCount, Completion
-
-## 15. SFXMatching의 초기화
-def InitSFXMatching(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["SFXMatching"][0]["BodyCount"] = 0
-    project["SFXMatching"][0]["Completion"] = "No"
-    project["SFXMatching"][1] = LoadJsonFrame(ProjectDataPath + "/a5346_SFX/a5346-01_SFXMatching.json")[1]
-        
-    SaveProject(projectName, email, project)
         
 ## 15. 업데이트된 SFXMatching 출력
 def UpdatedSFXMatching(projectName, email):
@@ -1694,18 +1502,6 @@ def CorrectionKoCountLoad(projectName, email):
     Completion = project["CorrectionKo"][0]["Completion"]
     
     return BodyCount, ChunkCount, Completion
-
-## 21. CorrectionKo의 초기화
-def InitCorrectionKo(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["CorrectionKo"][0]["IndexCount"] = 0
-    project["CorrectionKo"][0]["ChunkCount"] = 0
-    project["CorrectionKo"][0]["Completion"] = "No"
-    project["CorrectionKo"][1] = LoadJsonFrame(ProjectDataPath + "/a5348_Correction/a5348-01_CorrectionKo.json")[1]
-        
-    SaveProject(projectName, email, project)
         
 ## 21. 업데이트된 CorrectionKo 출력
 def UpdatedCorrectionKo(projectName, email):
@@ -1781,17 +1577,6 @@ def SelectionGenerationKoCountLoad(projectName, email):
     Completion = project["SelectionGenerationKo"][0]["Completion"]
     
     return IndexCount, Completion
-
-## 26. SelectionGenerationKo의 초기화
-def InitSelectionGenerationKo(projectName, email):
-    ProjectDataPath = GetProjectDataPath()
-    project = GetProject(projectName, email)
-
-    project["SelectionGenerationKo"][0]["IndexCount"] = 0
-    project["SelectionGenerationKo"][0]["Completion"] = "No"
-    project["SelectionGenerationKo"][1] = LoadJsonFrame(ProjectDataPath + "/a5349_SelectionGeneration/a5349-01_SelectionGenerationKo.json")[1]
-        
-    SaveProject(projectName, email, project)
         
 ## 26. 업데이트된 SelectionGenerationKo 출력
 def UpdatedSelectionGenerationKo(projectName, email):

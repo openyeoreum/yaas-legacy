@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 
 from datetime import datetime
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, InitScriptGen, UpdatedScriptGen, InitBookPreprocess, UpdatedBookPreprocess, InitIndexFrame, UpdatedIndexFrame, InitDuplicationPreprocess, UpdatedDuplicationPreprocess, InitPronunciationPreprocess, UpdatedPronunciationPreprocess, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, UpdatedScriptGen, UpdatedBookPreprocess, UpdatedIndexFrame, UpdatedDuplicationPreprocess, UpdatedPronunciationPreprocess, UpdatedBodyFrame, UpdatedHalfBodyFrame, UpdatedCaptionCompletion, UpdatedContextDefine, UpdatedContextCompletion, UpdatedWMWMDefine, UpdatedWMWMMatching, UpdatedCharacterDefine, UpdatedCharacterCompletion, UpdatedSoundMatching, UpdatedSFXMatching, UpdatedCorrectionKo, UpdatedSelectionGenerationKo
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
 from agent.a2_Solution.a25_DataFrame.a251_ScriptGen.a2511_ScriptGenUpdate import ScriptGenUpdate, ScriptGenResponseJson
 from agent.a2_Solution.a25_DataFrame.a252_Script.a2520_BookPreprocessUpdate import BookPreprocessUpdate
@@ -194,11 +194,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ### 00_ScriptGen ###
     ####################
     if ScriptConfig != {}:
-        InitScriptGen(projectName, email)
-        InitRawDataSet(projectName, email, "ScriptGen")
         if existedDataFrameMode == "on":
             existedDataFrame = LoadexistedDataFrame(projectName, email, "ScriptGenFrame", DataFramePath)
             recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ScriptGen", RawDataSetPath)
+
         mode = "Memory"
         ScriptGenUpdate(projectName, email, DataFramePath, ScriptConfig, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
         if existedDataFrame == None:
@@ -214,11 +213,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ### 00_BookPreprocess ###
     #########################
     if ScriptConfig == {}:
-        InitBookPreprocess(projectName, email)
-        InitRawDataSet(projectName, email, "BookPreprocess")
         if existedDataFrameMode == "on":
             existedDataFrame = LoadexistedDataFrame(projectName, email, "BookPreprocessFrame", DataFramePath)
             recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "BookPreprocess", RawDataSetPath)
+
         mode = "Master"
         BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
 
@@ -234,13 +232,11 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ###################################
     ### 01_IndexFrame-[IndexDefine] ###
     ###################################
-    InitIndexFrame(projectName, email)
-    InitRawDataSet(projectName, email, "IndexDefinePreprocess")
-    InitRawDataSet(projectName, email, "IndexDefine")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "IndexFrame", DataFramePath)
         recentFile, existedDataSet1 = LoadExistedDataSets(projectName, email, "IndexDefinePreprocess", RawDataSetPath)
         recentFile, existedDataSet2 = LoadExistedDataSets(projectName, email, "IndexDefine", RawDataSetPath)
+
     mode = "Master" # mode의 종류: "Example", "ExampleFineTuning", "Memory", "MemoryFineTuning", "Master"
     IndexFrameUpdate(projectName, email, mainLang, MessagesReview = messagesReview, Mode = mode, IndexMode = indexMode, ExistedDataFrame = existedDataFrame, ExistedDataSet1 = existedDataSet1, ExistedDataSet2 = existedDataSet2)
     
@@ -258,11 +254,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ##################################
     ### 02-1_DuplicationPreprocess ###
     ##################################
-    InitDuplicationPreprocess(projectName, email)
-    InitRawDataSet(projectName, email, "DuplicationPreprocess")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "DuplicationPreprocess", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "DuplicationPreprocess", RawDataSetPath)
+
     mode = "Master"
     DuplicationPreprocessUpdate(projectName, email, mainLang, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
 
@@ -278,11 +273,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ####################################
     ### 02-2_PronunciationPreprocess ###
     ####################################
-    InitPronunciationPreprocess(projectName, email)
-    InitRawDataSet(projectName, email, "PronunciationPreprocess")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "PronunciationPreprocess", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "PronunciationPreprocess", RawDataSetPath)
+
     mode = "Master"
     PronunciationPreprocessUpdate(projectName, email, mainLang, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
 
@@ -298,9 +292,9 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ##############################################
     ### 03_BodyFrame-[BodySplit, IndexTagging] ###
     ##############################################
-    InitBodyFrame(projectName, email)
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "BodyFrame", DataFramePath)
+
     BodyFrameUpdate(projectName, email, tokensCount = 2500, ExistedDataFrame = existedDataFrame)
 
     if existedDataFrame == None:
@@ -312,9 +306,9 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ##################################################
     ### 04_HalfBodyFrame-[BodySplit, IndexTagging] ###
     ##################################################
-    InitHalfBodyFrame(projectName, email)
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "HalfBodyFrame", DataFramePath)
+
     HalfBodyFrameUpdate(projectName, email, tokensCount = 750, ExistedDataFrame = existedDataFrame)
 
     if existedDataFrame == None:
@@ -326,11 +320,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ############################
     ### 06_CaptionCompletion ###
     ############################
-    InitCaptionCompletion(projectName, email)
-    InitRawDataSet(projectName, email, "CaptionCompletion")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "CaptionCompletion", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CaptionCompletion", RawDataSetPath)
+
     mode = "Master"
     CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -349,11 +342,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ########################
     ### 07_ContextDefine ###
     ########################
-    InitContextDefine(projectName, email)
-    InitRawDataSet(projectName, email, "ContextDefine")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextDefine", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextDefine", RawDataSetPath)
+
     mode = "Master"
     ContextDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -371,11 +363,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ############################
     ### 08_ContextCompletion ###
     ############################
-    InitContextCompletion(projectName, email)
-    InitRawDataSet(projectName, email, "ContextCompletion")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "ContextCompletion", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ContextCompletion", RawDataSetPath)
+
     mode = "Master"
     ContextCompletionUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -391,11 +382,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     #####################
     ### 09_WMWMDefine ###
     #####################
-    InitWMWMDefine(projectName, email)
-    InitRawDataSet(projectName, email, "WMWMDefine")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "WMWMDefine", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "WMWMDefine", RawDataSetPath)
+
     mode = "Master"
     WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -411,11 +401,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     #######################
     ### 10_WMWMMatching ###
     #######################
-    InitWMWMMatching(projectName, email)
-    InitRawDataSet(projectName, email, "WMWMMatching")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "WMWMMatching", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "WMWMMatching", RawDataSetPath)
+
     mode = "Example"
     WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -431,11 +420,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ##########################
     ### 11_CharacterDefine ###
     ##########################
-    InitCharacterDefine(projectName, email)
-    InitRawDataSet(projectName, email, "CharacterDefine")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterDefine", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterDefine", RawDataSetPath)
+
     mode = "Master"
     CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -451,11 +439,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     ##############################
     ### 12_CharacterCompletion ###
     ##############################
-    InitCharacterCompletion(projectName, email)
-    InitRawDataSet(projectName, email, "CharacterCompletion")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "CharacterCompletion", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CharacterCompletion", RawDataSetPath)
+
     mode = "Master"
     CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -471,11 +458,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     # ########################
     # ### 14_SoundMatching ###
     # ########################
-    # InitSoundMatching(projectName, email)
-    # InitRawDataSet(projectName, email, "SoundMatching")
     # if existedDataFrameMode == "on":
     #     existedDataFrame = LoadexistedDataFrame(projectName, email, "SoundMatching", DataFramePath)
     #     recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "SoundMatching", RawDataSetPath)
+
     # mode = "Master"
     # SoundMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet, transitionImportance = 0, backgroundImportance = 0)
     
@@ -493,11 +479,10 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     #######################
     ### 15_SFXMatching ###
     #######################
-    InitSFXMatching(projectName, email)
-    InitRawDataSet(projectName, email, "SFXMatching")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "SFXMatching", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "SFXMatching", RawDataSetPath)
+
     mode = "Master"
     SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet, Importance = 0)
     
@@ -512,48 +497,13 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     existedDataSet = None
 
 
-    #########################
-    ### 17-20_Translation ###
-    #########################
-    if Translations != []:
-        for Translation in Translations:
-            if Translation == 'En':
-                ProcessNumber = '17'
-                Process = 'TranslationEn'
-            if Translation == 'Ja':
-                ProcessNumber = '18'
-                Process = 'TranslationJa'
-            if Translation == 'Zh':
-                ProcessNumber = '19'
-                Process = 'TranslationZh'
-            if Translation == 'Es':
-                ProcessNumber = '20'
-                Process = 'TranslationEs'
-                
-            InitCorrectionKo(projectName, email)
-            InitRawDataSet(projectName, email, "CorrectionKo")
-            if existedDataFrameMode == "on":
-                existedDataFrame = LoadexistedDataFrame(projectName, email, "CorrectionKo", DataFramePath)
-                recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CorrectionKo", RawDataSetPath)
-            mode = "Master"
-            CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
-            
-            if existedDataFrame == None:
-                updatedCorrectionKo = UpdatedCorrectionKo(projectName, email)
-                SaveDataFrame(projectName, email, "21_CorrectionKo", updatedCorrectionKo, DataFramePath)       
-                SaveDataSet(projectName, email, "21", "CorrectionKo", RawDataSetPath)
-            existedDataFrame = None
-            existedDataSet = None
-
-
     #######################
     ### 21_CorrectionKo ###
     #######################
-    InitCorrectionKo(projectName, email)
-    InitRawDataSet(projectName, email, "CorrectionKo")
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "CorrectionKo", DataFramePath)
         recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "CorrectionKo", RawDataSetPath)
+
     mode = "Master"
     CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
@@ -563,58 +513,21 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
         SaveDataSet(projectName, email, "21", "CorrectionKo", RawDataSetPath)
     existedDataFrame = None
     existedDataSet = None
-    
-    
-    ########################
-    ### 22-25_Correction ###
-    ########################
-    if Translations != []:
-        for Translation in Translations:
-            if Translation == 'En':
-                ProcessNumber = '17'
-                Process = 'TranslationEn'
-            if Translation == 'Ja':
-                ProcessNumber = '18'
-                Process = 'TranslationJa'
-            if Translation == 'Zh':
-                ProcessNumber = '19'
-                Process = 'TranslationZh'
-            if Translation == 'Es':
-                ProcessNumber = '20'
-                Process = 'TranslationEs'
-    
+
 
     ################################
     ### 26_SelectionGenerationKo ###
     ################################
-    InitSelectionGenerationKo(projectName, email)
     if existedDataFrameMode == "on":
         existedDataFrame = LoadexistedDataFrame(projectName, email, "SelectionGenerationKo", DataFramePath)
+
     SelectionGenerationKoUpdate(projectName, email, ExistedDataFrame = existedDataFrame)
     
     if existedDataFrame == None:
         updatedSelectionGenerationKo = UpdatedSelectionGenerationKo(projectName, email)
         SaveDataFrame(projectName, email, "26_SelectionGenerationKo", updatedSelectionGenerationKo, DataFramePath)       
     existedDataFrame = None
-    
-    
-    # #################################
-    # ### 27-30_SelectionGeneration ###
-    # #################################
-    # if Translations != []:
-    #     for Translation in Translations:
-    #         if Translation == 'En':
-    #             ProcessNumber = '17'
-    #             Process = 'TranslationEn'
-    #         if Translation == 'Ja':
-    #             ProcessNumber = '18'
-    #             Process = 'TranslationJa'
-    #         if Translation == 'Zh':
-    #             ProcessNumber = '19'
-    #             Process = 'TranslationZh'
-    #         if Translation == 'Es':
-    #             ProcessNumber = '20'
-    #             Process = 'TranslationEs'
+
 
 if __name__ == "__main__":
 

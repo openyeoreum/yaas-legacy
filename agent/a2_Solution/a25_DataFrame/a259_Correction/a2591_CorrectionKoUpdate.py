@@ -1022,7 +1022,7 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f"CorrectionKoUpdate: {Update['BodyId']}")
                 time.sleep(0.0001)
-                AddCorrectionKoSplitedBodysToDB(projectName, email)
+                AddCorrectionKoSplitedBodysToDB(DataFrame)
                 for j in range(len(Update['CorrectionChunks'])):
                     ChunkId = Update['CorrectionChunks'][j]['ChunkId']
                     Tag = Update['CorrectionChunks'][j]['Tag']

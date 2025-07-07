@@ -597,7 +597,8 @@ def BodyFrameBodysUpdate(projectName, email):
     i = 0
     DataFrame = UpdatedBodyFrame(projectName, email)
     for Update in UpdateTQDM:
-        UpdateTQDM.set_description(f'BodyFrameBodysUpdate: {Update} ...')
+        BodyPreview = Update["Body"][:20].replace("\n", "")
+        UpdateTQDM.set_description(f'BodyFrameBodysUpdate: {BodyPreview} ...')
         time.sleep(0.0001)
         ChunkIds = Bodys[i]['ChunkId']
         Task = Bodys[i]['Task']

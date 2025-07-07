@@ -1670,7 +1670,7 @@ def UpdateCorrectionKoSplitedBodys(DataFrame):
     return DataFrame
     
 ## 21. 1-2 CorrectionKo의 Body(본문) CorrectionKoSplitedBodys 업데이트
-def AddCorrectionKoSplitedBodysToDB(projectName, email, DataFrame):
+def AddCorrectionKoSplitedBodysToDB(DataFrame):
 
     DataFrame = UpdateCorrectionKoSplitedBodys(DataFrame)
         

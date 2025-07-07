@@ -553,9 +553,10 @@ def UpdatedPronunciationPreprocess(projectName, email):
     return project["PronunciationPreprocessFrame"]
 
 ## 2-2. PronunciationPreprocessCompletion 업데이트
-def PronunciationPreprocessCompletionUpdate(projectName, email):
+def PronunciationPreprocessCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["PronunciationPreprocessFrame"] = DataFrame
     project["PronunciationPreprocessFrame"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)

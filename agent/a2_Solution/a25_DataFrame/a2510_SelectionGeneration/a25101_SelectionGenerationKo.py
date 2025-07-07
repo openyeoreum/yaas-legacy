@@ -281,6 +281,7 @@ def SelectionGenerationKoUpdate(projectName, email, ExistedDataFrame = None):
             
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedSelectionGenerationKo(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f"SelectionGenerationKoUpdate: {Update['IndexId']}")
                 time.sleep(0.0001)

@@ -624,7 +624,15 @@ def AddBodyFrameChunkToDB(DataFrame, ChunkId, Tag, Chunk):
     DataFrame = UpdateSplitedBodyTagChunks(DataFrame, ChunkId, Tag, Chunk)
         
     return DataFrame
-        
+
+## 3. 2-3 BodyFrame의 Body(본문) 저장
+def SaveBodyFrame(projectName, email, DataFrame):
+    project = GetProject(projectName, email)
+
+    project["BodyFrame"] = DataFrame
+
+    SaveProject(projectName, email, project)
+
 ## 3. 3-1 BodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
 def UpdateBodys(DataFrame, ChunkIds, Task, Body, Correction, Character, Context = "None", SFX = "None"):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
@@ -755,7 +763,15 @@ def AddHalfBodyFrameChunkToDB(DataFrame, ChunkId, Tag, Chunk):
     DataFrame = UpdateSplitedHalfBodyTagChunks(DataFrame, ChunkId, Tag, Chunk)
         
     return DataFrame
-        
+
+## 4. 2-3 HalfBodyFrame의 Body(본문) 저장
+def SaveHalfBodyFrame(projectName, email, DataFrame):
+    project = GetProject(projectName, email)
+    
+    project["HalfBodyFrame"] = DataFrame
+
+    SaveProject(projectName, email, project)
+
 ## 4. 3-1 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
 def UpdateHalfBodys(DataFrame, ChunkIds, Task, Body, Correction, Character, Context = "None", SFX = "None"):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일

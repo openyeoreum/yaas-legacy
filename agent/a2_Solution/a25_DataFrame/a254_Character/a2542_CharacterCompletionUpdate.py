@@ -1094,7 +1094,7 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, Mess
                 Context = {'Type': Type, 'Gender': Gender, 'Age': Age, 'Emotion': Emotion, 'Role': Role}
                 Voice = Update["Voice"]
                 
-                AddCharacterCompletionChunksToDB(DataFrame, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship, Context, Voice)
+                DataFrame = AddCharacterCompletionChunksToDB(DataFrame, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship, Context, Voice)
                 # i값 수동 업데이트
                 i += 1
             
@@ -1111,7 +1111,6 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, Mess
                             desc = 'CharacterPostCompletionUpdate')
             # i값 수동 생성
             i = 0
-            DataFrame = UpdatedCharacterCompletion(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'CharacterPostCompletionUpdate: {Update}')
                 time.sleep(0.0001)

@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedHalfBodyFrameToDB, AddHalfBodyFrameBodyToDB, AddHalfBodyFrameChunkToDB, AddHalfBodyFrameBodysToDB, HalfBodyFrameCountLoad, UpdatedHalfBodyFrame, UpdatedHalfBodyFrame, HalfBodyFrameCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedHalfBodyFrameToDB, AddHalfBodyFrameBodyToDB, AddHalfBodyFrameChunkToDB, AddHalfBodyFrameBodysToDB, HalfBodyFrameCountLoad, SaveHalfBodyFrame, UpdatedHalfBodyFrame, HalfBodyFrameCompletionUpdate
 
 # BodyText 로드
 def LoadBodyText(projectName, email):
@@ -593,6 +593,7 @@ def HalfBodyFrameBodysUpdate(projectName, email):
                     desc = 'HalfBodyFrameBodysUpdate')
     # i값 수동 생성
     i = 0
+    DataFrame = UpdatedHalfBodyFrame(projectName, email)
     for Update in UpdateTQDM:
         UpdateTQDM.set_description(f'HalfBodyFrameBodysUpdate: {Update} ...')
         time.sleep(0.0001)
@@ -602,11 +603,13 @@ def HalfBodyFrameBodysUpdate(projectName, email):
         Correction = Bodys[i]['Correction']
         Character = Bodys[i]['Character']
         
-        AddHalfBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character)
+        DataFrame = AddHalfBodyFrameBodysToDB(DataFrame, ChunkIds, Task, Body, Correction, Character)
         # i값 수동 업데이트
         i += 1
 
     UpdateTQDM.close()
+
+    return DataFrame
 
 ###################################################
 ### IndexBodyUnitChunksList을 HalfBodyFrame에 업데이트 ###
@@ -664,8 +667,10 @@ def HalfBodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame
                 i += 1
             
             UpdateTQDM.close()
+            # HalfBodyFrame의 Body(본문) 저장
+            SaveHalfBodyFrame(projectName, email, DataFrame)
             ##### Bodys 업데이트
-            HalfBodyFrameBodysUpdate(projectName, email)
+            DataFrame = HalfBodyFrameBodysUpdate(projectName, email)
             #####
             # Completion "Yes" 업데이트
             HalfBodyFrameCompletionUpdate(projectName, email, DataFrame)

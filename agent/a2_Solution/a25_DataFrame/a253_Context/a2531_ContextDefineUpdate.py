@@ -195,7 +195,7 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
-    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '07', DataFramePath)    
+    OutputMemoryDicsFile, OutputMemoryCount = LoadOutputMemory(projectName, email, '07', DataFramePath)
     inputList = BodyFrameBodysToInputList(projectName, email)
     InputList = inputList[OutputMemoryCount:]
     if InputList == []:

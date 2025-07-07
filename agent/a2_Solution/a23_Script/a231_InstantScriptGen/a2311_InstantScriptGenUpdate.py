@@ -9,7 +9,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedScriptGenToDB, AddScriptGenBookPagesToDB, ScriptGenCountLoad, ScriptGenCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedScriptGenToDB, AddScriptGenBookPagesToDB, ScriptGenCountLoad, UpdatedScriptGen, ScriptGenCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -398,19 +398,20 @@ def ScriptGenUpdate(projectName, email, DataFramePath, ScriptConfig, MessagesRev
                                 desc = 'ScriptGenUpdate')
                 # i값 수동 생성
                 i = 0
+                DataFrame = UpdatedScriptGen(projectName, email)
                 for Update in UpdateTQDM:
                     UpdateTQDM.set_description(f'ScriptGenUpdate: {Update["ScriptId"]}...')
                     time.sleep(0.0001)
                     ScriptId = Update["ScriptId"]
                     Script = Update["Script"]
                     
-                    AddScriptGenBookPagesToDB(projectName, email, ScriptId, Script)
+                    DataFrame = AddScriptGenBookPagesToDB(DataFrame, ScriptId, Script)
                     # i값 수동 업데이트
                     i += 1
                 
                 UpdateTQDM.close()
                 # Completion "Yes" 업데이트
-                ScriptGenCompletionUpdate(projectName, email)
+                ScriptGenCompletionUpdate(projectName, email, DataFrame)
                 print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenUpdate 완료 ]\n")
         else:
             print(f"[ User: {email} | Project: {projectName} | 00_ScriptGenUpdate는 이미 완료됨 ]\n")

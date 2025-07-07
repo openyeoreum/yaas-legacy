@@ -710,6 +710,7 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                             desc = 'WMWMMatchingChunkUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedWMWMMatching(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'WMWMMatchingChunkUpdate: {Update["Chunk"]}')
                 time.sleep(0.0001)
@@ -718,7 +719,7 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                 Vector = Update["Vector"]
                 WMWM = Update["WMWM"]
                 
-                AddWMWMMatchingChunksToDB(projectName, email, ChunkId, Chunk, Vector, WMWM)
+                DataFrame = AddWMWMMatchingChunksToDB(DataFrame, ChunkId, Chunk, Vector, WMWM)
                 # i값 수동 업데이트
                 i += 1
             
@@ -743,7 +744,7 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                 Vector = Update["Vector"]
                 WMWM = Update["WMWM"]
                 
-                AddWMWMMatchingBODYsToDB(projectName, email, BodyId, Phrases, Vector, WMWM)
+                DataFrame = AddWMWMMatchingBODYsToDB(DataFrame, BodyId, Phrases, Vector, WMWM)
                 # i값 수동 업데이트
                 i += 1
             
@@ -769,7 +770,7 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                 Vector = Update["Vector"]
                 WMWM = Update["WMWM"]
                 
-                AddWMWMMatchingIndexsToDB(projectName, email, IndexId, Index, Phrases, Vector, WMWM)
+                DataFrame = AddWMWMMatchingIndexsToDB(DataFrame, IndexId, Index, Phrases, Vector, WMWM)
                 # i값 수동 업데이트
                 i += 1
             
@@ -786,7 +787,6 @@ def WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                             desc = 'WMWMMatchingBookUpdate')
             # i값 수동 생성
             i = 0
-            DataFrame = UpdatedWMWMMatching(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'WMWMMatchingBookUpdate: {Update["Title"]}')
                 time.sleep(0.0001)

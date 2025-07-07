@@ -9,7 +9,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedBodyFrameToDB, AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, UpdatedBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedBodyFrameToDB, AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, SaveBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
 
 # BodyText 로드
 def LoadBodyText(projectName, email):
@@ -595,6 +595,7 @@ def BodyFrameBodysUpdate(projectName, email):
                     desc = 'BodyFrameBodysUpdate')
     # i값 수동 생성
     i = 0
+    DataFrame = UpdatedBodyFrame(projectName, email)
     for Update in UpdateTQDM:
         UpdateTQDM.set_description(f'BodyFrameBodysUpdate: {Update} ...')
         time.sleep(0.0001)
@@ -604,11 +605,13 @@ def BodyFrameBodysUpdate(projectName, email):
         Correction = Bodys[i]['Correction']
         Character = Bodys[i]['Character']
 
-        AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character)
+        DataFrame = AddBodyFrameBodysToDB(DataFrame, ChunkIds, Task, Body, Correction, Character)
         # i값 수동 업데이트
         i += 1
 
     UpdateTQDM.close()
+
+    return DataFrame
 
 ###################################################
 ### IndexBodyUnitChunksList을 BodyFrame에 업데이트 ###
@@ -666,8 +669,10 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
                 i += 1
             
             UpdateTQDM.close()
+            # BodyFrame의 Body(본문) 저장
+            SaveBodyFrame(projectName, email, DataFrame)
             ##### Bodys 업데이트
-            BodyFrameBodysUpdate(projectName, email)
+            DataFrame = BodyFrameBodysUpdate(projectName, email)
             #####
             # Completion "Yes" 업데이트
             BodyFrameCompletionUpdate(projectName, email, DataFrame)

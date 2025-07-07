@@ -9,7 +9,7 @@ sys.path.append("/yaas")
 
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedBodyFrameToDB, AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, InitBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedBodyFrameToDB, AddBodyFrameBodyToDB, AddBodyFrameChunkToDB, AddBodyFrameBodysToDB, BodyFrameCountLoad, UpdatedBodyFrame, UpdatedBodyFrame, BodyFrameCompletionUpdate
 
 # BodyText 로드
 def LoadBodyText(projectName, email):
@@ -621,8 +621,8 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame)
             print(f"[ User: {email} | Project: {projectName} | 03_BodyFrameUpdate는 ExistedBodyFrame으로 대처됨 ]\n")
         else:
             indexBodyUnitChunksList = TaggedChunksToUnitedChunks(projectName, email, tokensCount)
@@ -640,6 +640,7 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
                             desc = 'BodyFrameUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedBodyFrame(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'BodyFrameUpdate: {Update[0]} ...')
                 time.sleep(0.0001)
@@ -649,7 +650,7 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
                 IndexChunk = IndexBodyUnitChunksList[i][0][0]['TagChunks']
 
                 for j in range(len(IndexBodyUnitChunksList[i])):
-                    AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, IndexChunk)
+                    DataFrame = AddBodyFrameBodyToDB(DataFrame, IndexId, IndexTag, IndexChunk)
                     
                     for k in range(len(IndexBodyUnitChunksList[i][j])):
                         ChunkId += 1
@@ -660,7 +661,7 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
                             Tag = IndexBodyUnitChunksList[i][j][k]["Tag"]
                         Chunk = IndexBodyUnitChunksList[i][j][k]["TagChunks"]
                         
-                        AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk)
+                        DataFrame = AddBodyFrameChunkToDB(DataFrame, ChunkId, Tag, Chunk)
                 # i값 수동 업데이트
                 i += 1
             
@@ -669,7 +670,7 @@ def BodyFrameUpdate(projectName, email, tokensCount = 3000, ExistedDataFrame = N
             BodyFrameBodysUpdate(projectName, email)
             #####
             # Completion "Yes" 업데이트
-            BodyFrameCompletionUpdate(projectName, email)
+            BodyFrameCompletionUpdate(projectName, email, DataFrame)
             
             # BodyText와 텍스트 매칭 체크
             BodyFrameList = []

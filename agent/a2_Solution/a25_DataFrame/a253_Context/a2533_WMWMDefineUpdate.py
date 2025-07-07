@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedWMWMDefineToDB, AddWMWMDefineChunksToDB, WMWMDefineCountLoad, WMWMDefineCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedWMWMDefineToDB, AddWMWMDefineChunksToDB, WMWMDefineCountLoad, UpdatedWMWMDefine, WMWMDefineCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -364,9 +364,9 @@ def WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', 
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedWMWMDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "WMWMDefine", ExistedDataSet)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedWMWMDefineToDB(projectName, email, ExistedDataFrame)
+            # AddExistedDataSetToDB(projectName, email, "WMWMDefine", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 09_WMWMDefineUpdate는 ExistedWMWMDefine으로 대처됨 ]\n")
         else:
             responseJson = WMWMDefineResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
@@ -383,6 +383,7 @@ def WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', 
                             desc = 'WMWMDefineUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedWMWMDefine(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'WMWMDefineUpdate: {Update}')
                 time.sleep(0.0001)
@@ -399,13 +400,13 @@ def WMWMDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off', 
                 ReasonOfWildness = Update["ReasonOfWildness"]
                 Accuracy = Update["Accuracy"]
                 
-                AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfMind, Wildness, ReasonOfWildness, Accuracy)
+                DataFrame = AddWMWMDefineChunksToDB(DataFrame, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfMind, Wildness, ReasonOfWildness, Accuracy)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            WMWMDefineCompletionUpdate(projectName, email)
+            WMWMDefineCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 09_WMWMDefineUpdate 완료 ]\n")
         
     else:

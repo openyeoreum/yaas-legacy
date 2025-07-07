@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCharacterDefineToDB, AddCharacterDefineChunksToDB, CharacterDefineCountLoad, CharacterDefineCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCharacterDefineToDB, AddCharacterDefineChunksToDB, CharacterDefineCountLoad, UpdatedCharacterDefine, CharacterDefineCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 
@@ -357,9 +357,9 @@ def CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'o
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CharacterDefine", ExistedDataSet)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame)
+            # AddExistedDataSetToDB(projectName, email, "CharacterDefine", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate는 ExistedCharacterDefine으로 대처됨 ]\n")
         else:
             responseJson = CharacterDefineResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
@@ -376,6 +376,7 @@ def CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'o
                             desc = 'CharacterDefineUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedCharacterDefine(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'CharacterDefineUpdate: {Update}')
                 time.sleep(0.0001)
@@ -390,13 +391,13 @@ def CharacterDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'o
                 Role = Update["Role"]
                 Listener = Update["Listener"]
                 
-                AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
+                DataFrame = AddCharacterDefineChunksToDB(DataFrame, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            CharacterDefineCompletionUpdate(projectName, email)
+            CharacterDefineCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 11_CharacterDefineUpdate 완료 ]\n")
         
     else:

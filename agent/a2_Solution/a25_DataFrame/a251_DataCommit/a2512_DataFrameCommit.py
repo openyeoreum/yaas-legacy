@@ -237,23 +237,24 @@ def AddExistedScriptGenToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 0-1. 1-1 ScriptGen의 Scripts(페이지) updateScripts 업데이트 형식
-def UpdateScripts(project, ScriptId, Script):    
+def UpdateScripts(DataFrame, ScriptId, Script):    
     updateScripts = {
         "ScriptId": ScriptId,
         "Script": Script
     }
     
-    project["ScriptGenFrame"][1]["Scripts"].append(updateScripts)
-    project["ScriptGenFrame"][0]["ScriptCount"] = ScriptId
+    DataFrame[1]["Scripts"].append(updateScripts)
+    DataFrame[0]["ScriptCount"] = ScriptId
+
+    return DataFrame
     
 ## 0-1. 1-2 ScriptGen의 Scripts(페이지) updateScripts 업데이트
-def AddScriptGenBookPagesToDB(projectName, email, ScriptId, Script):
-    project = GetProject(projectName, email)
+def AddScriptGenBookPagesToDB(DataFrame, ScriptId, Script):
 
-    UpdateScripts(project, ScriptId, Script)
+    DataFrame = UpdateScripts(DataFrame, ScriptId, Script)
 
-    SaveProject(projectName, email, project)
-        
+    return DataFrame
+
 ## 0-1. ScriptGen의Count의 가져오기
 def ScriptGenCountLoad(projectName, email):
     project = GetProject(projectName, email)
@@ -281,9 +282,10 @@ def UpdatedScriptGen(projectName, email):
     return project["ScriptGenFrame"]
 
 ## 0-1. ScriptGenCompletion 업데이트
-def ScriptGenCompletionUpdate(projectName, email):
+def ScriptGenCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["ScriptGenFrame"] = DataFrame
     project["ScriptGenFrame"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -301,23 +303,24 @@ def AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 0-1. 1-1 BookPreprocess의 BookPages(페이지) updateBookPages 업데이트 형식
-def UpdateBookPreprocessBookPages(project, PageId, PageElement, Script):    
+def UpdateBookPreprocessBookPages(DataFrame, PageId, PageElement, Script):    
     updateBookPages = {
         "PageId": PageId,
         "PageElement": PageElement,
         "Script": Script
     }
     
-    project["BookPreprocessFrame"][1]["BookPages"].append(updateBookPages)
-    project["BookPreprocessFrame"][0]["PageCount"] = PageId
+    DataFrame[1]["BookPages"].append(updateBookPages)
+    DataFrame[0]["PageCount"] = PageId
+
+    return DataFrame
     
 ## 0-1. 1-2 BookPreprocess의 BookPages(페이지) updateBookPages 업데이트
-def AddBookPreprocessBookPagesToDB(projectName, email, PageId, PageElement, Script):
-    project = GetProject(projectName, email)
+def AddBookPreprocessBookPagesToDB(DataFrame, PageId, PageElement, Script):
 
-    UpdateBookPreprocessBookPages(project, PageId, PageElement, Script)
+    DataFrame = UpdateBookPreprocessBookPages(DataFrame, PageId, PageElement, Script)
     
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 0-1. BookPreprocess의Count의 가져오기
 def BookPreprocessCountLoad(projectName, email):
@@ -346,9 +349,10 @@ def UpdatedBookPreprocess(projectName, email):
     return project["BookPreprocessFrame"]
 
 ## 0-1. BookPreprocessCompletion 업데이트
-def BookPreprocessCompletionUpdate(projectName, email):
+def BookPreprocessCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["BookPreprocessFrame"] = DataFrame
     project["BookPreprocessFrame"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -366,7 +370,7 @@ def AddExistedIndexFrameToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 1. 1-2 IndexFrame의 Body(본문)부분 업데이트 형식
-def UpdateIndexTags(project, IndexId, IndexTag, Index):
+def UpdateIndexTags(DataFrame, IndexId, IndexTag, Index):
     
     updateIndexTags = {
         "IndexId": IndexId,
@@ -374,17 +378,17 @@ def UpdateIndexTags(project, IndexId, IndexTag, Index):
         "Index": Index
     }
     
-    project["IndexFrame"][1]["IndexTags"].append(updateIndexTags)
-    # Count 업데이트
-    project["IndexFrame"][0]["IndexCount"] = IndexId
+    DataFrame[1]["IndexTags"].append(updateIndexTags)
+    DataFrame[0]["IndexCount"] = IndexId
+
+    return DataFrame
 
 ## 1. 1-3 IndexFrame의 Body(본문)부분 업데이트
-def AddIndexFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):   
-    project = GetProject(projectName, email)
+def AddIndexFrameBodyToDB(DataFrame, IndexId, IndexTag, Index):   
+
+    DataFrame = UpdateIndexTags(DataFrame, IndexId, IndexTag, Index)
     
-    UpdateIndexTags(project, IndexId, IndexTag, Index)
-        
-    SaveProject(projectName, email, project)
+    return DataFrame
 
 ## 1. IndexFrameCount 가져오기
 def IndexFrameCountLoad(projectName, email):
@@ -413,9 +417,10 @@ def UpdatedIndexFrame(projectName, email):
     return project["IndexFrame"]
 
 ## 1. IndexFrameCompletion 업데이트
-def IndexFrameCompletionUpdate(projectName, email):
+def IndexFrameCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["IndexFrame"] = DataFrame
     project["IndexFrame"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -433,7 +438,7 @@ def AddExistedDuplicationPreprocessToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 2-1. 1-1 DuplicationPreprocess의 Body(본문) updateContextChunks 업데이트 형식
-def UpdateDuplicationPreprocessScripts(project, PreprocessId, Index, Duplication, DuplicationScript):    
+def UpdateDuplicationPreprocessScripts(DataFrame, PreprocessId, Index, Duplication, DuplicationScript):    
     updatePreprocessScripts = {
         "PreprocessId": PreprocessId,
         "Index": Index,
@@ -441,16 +446,17 @@ def UpdateDuplicationPreprocessScripts(project, PreprocessId, Index, Duplication
         "DuplicationScript": DuplicationScript
     }
     
-    project["DuplicationPreprocessFrame"][1]["PreprocessScripts"].append(updatePreprocessScripts)
-    project["DuplicationPreprocessFrame"][0]["PreprocessCount"] = PreprocessId
+    DataFrame[1]["PreprocessScripts"].append(updatePreprocessScripts)
+    DataFrame[0]["PreprocessCount"] = PreprocessId
+
+    return DataFrame
     
 ## 2-1. 1-2 DuplicationPreprocess의 Body(본문) updateContextChunks 업데이트
-def AddDuplicationPreprocessScriptsToDB(projectName, email, PreprocessId, Index, Duplication, DuplicationScript):
-    project = GetProject(projectName, email)
+def AddDuplicationPreprocessScriptsToDB(DataFrame, PreprocessId, Index, Duplication, DuplicationScript):
 
-    UpdateDuplicationPreprocessScripts(project, PreprocessId, Index, Duplication, DuplicationScript)
+    DataFrame = UpdateDuplicationPreprocessScripts(DataFrame, PreprocessId, Index, Duplication, DuplicationScript)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 2-1. DuplicationPreprocess의Count의 가져오기
 def DuplicationPreprocessCountLoad(projectName, email):
@@ -479,9 +485,10 @@ def UpdatedDuplicationPreprocess(projectName, email):
     return project["DuplicationPreprocessFrame"]
 
 ## 2-1. DuplicationPreprocessCompletion 업데이트
-def DuplicationPreprocessCompletionUpdate(projectName, email):
+def DuplicationPreprocessCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["DuplicationPreprocessFrame"] = DataFrame
     project["DuplicationPreprocessFrame"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -499,7 +506,7 @@ def AddExistedPronunciationPreprocessToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 2-2. 1-1 PronunciationPreprocess의 Body(본문) updateContextChunks 업데이트 형식
-def UpdatePronunciationPreprocessScripts(project, PreprocessId, Index, Pronunciation, PronunciationScript):    
+def UpdatePronunciationPreprocessScripts(DataFrame, PreprocessId, Index, Pronunciation, PronunciationScript):    
     updatePreprocessScripts = {
         "PreprocessId": PreprocessId,
         "Index": Index,
@@ -507,16 +514,17 @@ def UpdatePronunciationPreprocessScripts(project, PreprocessId, Index, Pronuncia
         "PronunciationScript": PronunciationScript
     }
     
-    project["PronunciationPreprocessFrame"][1]["PreprocessScripts"].append(updatePreprocessScripts)
-    project["PronunciationPreprocessFrame"][0]["PreprocessCount"] = PreprocessId
+    DataFrame[1]["PreprocessScripts"].append(updatePreprocessScripts)
+    DataFrame[0]["PreprocessCount"] = PreprocessId
+
+    return DataFrame
     
 ## 2-2. 1-2 PronunciationPreprocess의 Body(본문) updateContextChunks 업데이트
-def AddPronunciationPreprocessScriptsToDB(projectName, email, PreprocessId, Index, Pronunciation, PronunciationScript):
-    project = GetProject(projectName, email)
+def AddPronunciationPreprocessScriptsToDB(DataFrame, PreprocessId, Index, Pronunciation, PronunciationScript):
 
-    UpdatePronunciationPreprocessScripts(project, PreprocessId, Index, Pronunciation, PronunciationScript)
+    DataFrame = UpdatePronunciationPreprocessScripts(DataFrame, PreprocessId, Index, Pronunciation, PronunciationScript)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 2-2. PronunciationPreprocess의Count의 가져오기
 def PronunciationPreprocessCountLoad(projectName, email):
@@ -566,9 +574,9 @@ def AddExistedBodyFrameToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
         
 ## 3. 1-2 BodyFrame의 Body(본문) Body부분 업데이트 형식
-def UpdateSplitedBodyScripts(project, IndexId, IndexTag, Index):
+def UpdateSplitedBodyScripts(DataFrame, IndexId, IndexTag, Index):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
-    BodyId = len(project["BodyFrame"][1]["SplitedBodyScripts"])
+    BodyId = len(DataFrame[1]["SplitedBodyScripts"])
     
     updateSplitedBodyScripts = {
         "IndexId": IndexId,
@@ -578,23 +586,24 @@ def UpdateSplitedBodyScripts(project, IndexId, IndexTag, Index):
         "SplitedBodyChunks": []
     }
     
-    project["BodyFrame"][1]["SplitedBodyScripts"].append(updateSplitedBodyScripts)
+    DataFrame[1]["SplitedBodyScripts"].append(updateSplitedBodyScripts)
     # Count 업데이트
-    project["BodyFrame"][0]["IndexCount"] = IndexId
-    project["BodyFrame"][0]["BodyCount"] = BodyId
+    DataFrame[0]["IndexCount"] = IndexId
+    DataFrame[0]["BodyCount"] = BodyId
+
+    return DataFrame
 
 ## 3. 1-3 BodyFrame의 Body(본문) Body부분 업데이트
-def AddBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
-    project = GetProject(projectName, email)
+def AddBodyFrameBodyToDB(DataFrame, IndexId, IndexTag, Index):
 
-    UpdateSplitedBodyScripts(project, IndexId, IndexTag, Index)
+    DataFrame = UpdateSplitedBodyScripts(DataFrame, IndexId, IndexTag, Index)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
 
 ## 3. 2-1 BodyFrame의 Body(본문) TagChunks부분 업데이트 형식
-def UpdateSplitedBodyTagChunks(project, ChunkId, Tag, Chunk):
+def UpdateSplitedBodyTagChunks(DataFrame, ChunkId, Tag, Chunk):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
-    BodyId = len(project["BodyFrame"][1]["SplitedBodyScripts"]) -1
+    BodyId = len(DataFrame[1]["SplitedBodyScripts"]) -1
     
     updateSplitedBodyChunks = {
         "ChunkId": ChunkId,
@@ -602,22 +611,23 @@ def UpdateSplitedBodyTagChunks(project, ChunkId, Tag, Chunk):
         "Chunk":Chunk
     }
     
-    project["BodyFrame"][1]["SplitedBodyScripts"][BodyId]["SplitedBodyChunks"].append(updateSplitedBodyChunks)
+    DataFrame[1]["SplitedBodyScripts"][BodyId]["SplitedBodyChunks"].append(updateSplitedBodyChunks)
     # Count 업데이트
-    project["BodyFrame"][0]["ChunkCount"] = ChunkId
+    DataFrame[0]["ChunkCount"] = ChunkId
+
+    return DataFrame
 
 ## 3. 2-2 BodyFrame의 Body(본문) TagChunks부분 업데이트
-def AddBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
-    project = GetProject(projectName, email)
+def AddBodyFrameChunkToDB(DataFrame, ChunkId, Tag, Chunk):
 
-    UpdateSplitedBodyTagChunks(project, ChunkId, Tag, Chunk)
+    DataFrame = UpdateSplitedBodyTagChunks(DataFrame, ChunkId, Tag, Chunk)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 3. 3-1 BodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
-def UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = "None", SFX = "None"):
+def UpdateBodys(DataFrame, ChunkIds, Task, Body, Correction, Character, Context = "None", SFX = "None"):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
-    BodyId = len(project["BodyFrame"][2]["Bodys"])
+    BodyId = len(DataFrame[2]["Bodys"])
     
     updateBodys = {
         "BodyId": BodyId,
@@ -630,15 +640,16 @@ def UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = 
         "SFX": SFX
     }
     
-    project["BodyFrame"][2]["Bodys"].append(updateBodys)
+    DataFrame[2]["Bodys"].append(updateBodys)
+
+    return DataFrame
     
 ## 3. 3-2 BodyFrame의 Bodys(부문) Bodys부분 업데이트
-def AddBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character, context = "None", sfx = "None"):
-    project = GetProject(projectName, email)
+def AddBodyFrameBodysToDB(DataFrame, ChunkIds, Task, Body, Correction, Character, context = "None", sfx = "None"):
 
-    UpdateBodys(project, ChunkIds, Task, Body, Correction, Character, Context = context, SFX = sfx)
+    DataFrame = UpdateBodys(DataFrame, ChunkIds, Task, Body, Correction, Character, Context = context, SFX = sfx)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
                 
 ## 3. BodyFrame의Count의 가져오기
 def BodyFrameCountLoad(projectName, email):
@@ -672,9 +683,10 @@ def UpdatedBodyFrame(projectName, email):
     return project["BodyFrame"]
 
 ## 3. BodyFrameCompletion 업데이트
-def BodyFrameCompletionUpdate(projectName, email):
+def BodyFrameCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["BodyFrame"] = DataFrame
     project["BodyFrame"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -693,9 +705,9 @@ def AddExistedHalfBodyFrameToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
         
 ## 4. 1-2 HalfBodyFrame의 Body(본문) Body부분 업데이트 형식
-def UpdateSplitedHalfBodyScripts(project, IndexId, IndexTag, Index):
+def UpdateSplitedHalfBodyScripts(DataFrame, IndexId, IndexTag, Index):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
-    BodyId = len(project["HalfBodyFrame"][1]["SplitedBodyScripts"])
+    BodyId = len(DataFrame[1]["SplitedBodyScripts"])
     
     updateSplitedBodyScripts = {
         "IndexId": IndexId,
@@ -705,23 +717,25 @@ def UpdateSplitedHalfBodyScripts(project, IndexId, IndexTag, Index):
         "SplitedBodyChunks": []
     }
     
-    project["HalfBodyFrame"][1]["SplitedBodyScripts"].append(updateSplitedBodyScripts)
+    DataFrame[1]["SplitedBodyScripts"].append(updateSplitedBodyScripts)
     # Count 업데이트
-    project["HalfBodyFrame"][0]["IndexCount"] = IndexId
-    project["HalfBodyFrame"][0]["BodyCount"] = BodyId
+    DataFrame[0]["IndexCount"] = IndexId
+    DataFrame[0]["BodyCount"] = BodyId
+
+    return DataFrame
 
 ## 4. 1-3 HalfBodyFrame의 Body(본문) Body부분 업데이트
-def AddHalfBodyFrameBodyToDB(projectName, email, IndexId, IndexTag, Index):
+def AddHalfBodyFrameBodyToDB(DataFrame, IndexId, IndexTag, Index):
     project = GetProject(projectName, email)
 
-    UpdateSplitedHalfBodyScripts(project, IndexId, IndexTag, Index)
+    DataFrame = UpdateSplitedHalfBodyScripts(project, IndexId, IndexTag, Index)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
 
 ## 4. 2-1 HalfBodyFrame의 Body(본문) TagChunks부분 업데이트 형식
-def UpdateSplitedHalfBodyTagChunks(project, ChunkId, Tag, Chunk):
+def UpdateSplitedHalfBodyTagChunks(DataFrame, ChunkId, Tag, Chunk):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
-    BodyId = len(project["HalfBodyFrame"][1]["SplitedBodyScripts"]) -1
+    BodyId = len(DataFrame[1]["SplitedBodyScripts"]) -1
     
     updateSplitedBodyChunks = {
         "ChunkId": ChunkId,
@@ -729,22 +743,23 @@ def UpdateSplitedHalfBodyTagChunks(project, ChunkId, Tag, Chunk):
         "Chunk":Chunk
     }
     
-    project["HalfBodyFrame"][1]["SplitedBodyScripts"][BodyId]["SplitedBodyChunks"].append(updateSplitedBodyChunks)
+    DataFrame[1]["SplitedBodyScripts"][BodyId]["SplitedBodyChunks"].append(updateSplitedBodyChunks)
     # Count 업데이트
-    project["HalfBodyFrame"][0]["ChunkCount"] = ChunkId
+    DataFrame[0]["ChunkCount"] = ChunkId
+
+    return DataFrame
 
 ## 4. 2-2 HalfBodyFrame의 Body(본문) TagChunks부분 업데이트
-def AddHalfBodyFrameChunkToDB(projectName, email, ChunkId, Tag, Chunk):
-    project = GetProject(projectName, email)
+def AddHalfBodyFrameChunkToDB(DataFrame, ChunkId, Tag, Chunk):
 
-    UpdateSplitedHalfBodyTagChunks(project, ChunkId, Tag, Chunk)
+    DataFrame = UpdateSplitedHalfBodyTagChunks(DataFrame, ChunkId, Tag, Chunk)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 4. 3-1 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트 형식
-def UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Context = "None", SFX = "None"):
+def UpdateHalfBodys(DataFrame, ChunkIds, Task, Body, Correction, Character, Context = "None", SFX = "None"):
     # 새롭게 생성되는 BodyId는 SplitedBodyScripts의 Len값과 동일
-    BodyId = len(project["HalfBodyFrame"][2]["Bodys"])
+    BodyId = len(DataFrame[2]["Bodys"])
     
     updateBodys = {
         "BodyId": BodyId,
@@ -757,15 +772,16 @@ def UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Contex
         "SFX": SFX
     }
     
-    project["HalfBodyFrame"][2]["Bodys"].append(updateBodys)
+    DataFrame[2]["Bodys"].append(updateBodys)
+
+    return DataFrame
     
 ## 4. 3-2 HalfBodyFrame의 Bodys(부문) Bodys부분 업데이트
-def AddHalfBodyFrameBodysToDB(projectName, email, ChunkIds, Task, Body, Correction, Character, context = "None", sfx = "None"):
-    project = GetProject(projectName, email)
+def AddHalfBodyFrameBodysToDB(DataFrame, ChunkIds, Task, Body, Correction, Character, context = "None", sfx = "None"):
 
-    UpdateHalfBodys(project, ChunkIds, Task, Body, Correction, Character, Context = context, SFX = sfx)
+    DataFrame = UpdateHalfBodys(DataFrame, ChunkIds, Task, Body, Correction, Character, Context = context, SFX = sfx)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
                 
 ## 4. HalfBodyFrame의Count의 가져오기
 def HalfBodyFrameCountLoad(projectName, email):
@@ -799,9 +815,10 @@ def UpdatedHalfBodyFrame(projectName, email):
     return project["HalfBodyFrame"]
 
 ## 4. HalfBodyFrameCompletion 업데이트
-def HalfBodyFrameCompletionUpdate(projectName, email):
+def HalfBodyFrameCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
     
+    project["HalfBodyFrame"] = DataFrame
     project["HalfBodyFrame"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -819,7 +836,7 @@ def AddExistedCaptionCompletionToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 6. 1-1 CaptionCompletion의 Body(본문) updateContextChunks 업데이트 형식
-def UpdateCaptionCompletions(project, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks):    
+def UpdateCaptionCompletions(DataFrame, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks):    
     updateCaptionCompletions = {
         "CaptionId": CaptionId,
         "CaptionTag": CaptionTag,
@@ -830,16 +847,17 @@ def UpdateCaptionCompletions(project, CaptionId, CaptionTag, CaptionType, Reason
         "SplitedCaptionChunks": SplitedCaptionChunks
     }
     
-    project["CaptionFrame"][1]["CaptionCompletions"].append(updateCaptionCompletions)
-    project["CaptionFrame"][0]["CaptionCount"] = CaptionId
+    DataFrame[1]["CaptionCompletions"].append(updateCaptionCompletions)
+    DataFrame[0]["CaptionCount"] = CaptionId
+
+    return DataFrame
     
 ## 6. 1-2 CaptionCompletion의 Body(본문) updateContextChunks 업데이트
-def AddCaptionCompletionChunksToDB(projectName, email, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks):
-    project = GetProject(projectName, email)
+def AddCaptionCompletionChunksToDB(DataFrame, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks):
     
-    UpdateCaptionCompletions(project, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks)
+    DataFrame = UpdateCaptionCompletions(DataFrame, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 6. CaptionCompletion의Count의 가져오기
 def CaptionCompletionCountLoad(projectName, email):
@@ -868,9 +886,10 @@ def UpdatedCaptionCompletion(projectName, email):
     return project["CaptionFrame"]
 
 ## 6. CaptionCompletionCompletion 업데이트
-def CaptionCompletionCompletionUpdate(projectName, email):
+def CaptionCompletionCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
     
+    project["CaptionFrame"] = DataFrame
     project["CaptionFrame"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -888,7 +907,7 @@ def AddExistedContextDefineToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 7. 1-1 ContextDefine의 Body(본문) updateContextChunks 업데이트 형식
-def UpdateChunkContexts(project, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance):    
+def UpdateChunkContexts(DataFrame, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance):    
     updateContextChunks = {
         "ContextChunkId": ContextChunkId,
         "ChunkId": ChunkId,
@@ -902,16 +921,17 @@ def UpdateChunkContexts(project, ContextChunkId, ChunkId, Chunk, Phrases, Reader
         "Importance": Importance
     }
     
-    project["ContextDefine"][1]["ContextChunks"].append(updateContextChunks)
-    project["ContextDefine"][0]["ContextChunkCount"] = ContextChunkId
+    DataFrame[1]["ContextChunks"].append(updateContextChunks)
+    DataFrame[0]["ContextChunkCount"] = ContextChunkId
+
+    return DataFrame
     
 ## 7. 1-2 ContextDefine의 Body(본문) updateContextChunks 업데이트
-def AddContextDefineChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance):
-    project = GetProject(projectName, email)
+def AddContextDefineChunksToDB(DataFrame, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance):
     
-    UpdateChunkContexts(project, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance)
+    DataFrame = UpdateChunkContexts(DataFrame, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 7. ContextDefine의Count의 가져오기
 def ContextDefineCountLoad(projectName, email):
@@ -942,9 +962,10 @@ def UpdatedContextDefine(projectName, email):
     return project["ContextDefine"]
 
 ## 7. ContextDefineCompletion 업데이트
-def ContextDefineCompletionUpdate(projectName, email):
+def ContextDefineCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["ContextDefine"] = DataFrame
     project["ContextDefine"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -963,7 +984,7 @@ def AddExistedContextCompletionToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 8. 1-1 ContextCompletion의 Body(본문) ContextCompletions 업데이트 형식
-def UpdateCompletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy):    
+def UpdateCompletionContexts(DataFrame, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy):    
     updateContextCompletions = {
         "ContextChunkId": ContextChunkId,
         "ChunkId": ChunkId,
@@ -976,21 +997,22 @@ def UpdateCompletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gen
         "Accuracy": Accuracy
     }
     
-    project["ContextCompletion"][1]["ContextCompletions"].append(updateContextCompletions)
-    project["ContextCompletion"][0]["ContextChunkCount"] = ContextChunkId
+    DataFrame[1]["ContextCompletions"].append(updateContextCompletions)
+    DataFrame[0]["ContextChunkCount"] = ContextChunkId
+
+    return DataFrame
     
 ## 8. 1-2 ContextCompletion의 Body(본문) ContextCompletions 업데이트
-def AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy):
-    project = GetProject(projectName, email)
+def AddContextCompletionChunksToDB(DataFrame, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy):
 
-    UpdateCompletionContexts(project, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy)
+    DataFrame = UpdateCompletionContexts(DataFrame, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 8. 2-1 ContextCompletion의 Context(부문) ContextTags부분 업데이트 형식
-def updateCheckedContextTags(project, ContextTag, ContextList, Context):
+def updateCheckedContextTags(DataFrame, ContextTag, ContextList, Context):
     # 새롭게 생성되는 ContextId는 CheckedContextTags의 Len값과 동일
-    ContextId = len(project["ContextCompletion"][2]["CheckedContextTags"]) -1
+    ContextId = len(DataFrame[2]["CheckedContextTags"]) -1
     
     ### 실제 테스크시 수정 요망 ###
     updateCheckedContextTags = {
@@ -1000,16 +1022,17 @@ def updateCheckedContextTags(project, ContextTag, ContextList, Context):
         "Context": Context
     }
     
-    project["ContextCompletion"][2]["CheckedContextTags"].append(updateCheckedContextTags)
-    project["ContextCompletion"][0]["ContextCount"] = ContextId
+    DataFrame[2]["CheckedContextTags"].append(updateCheckedContextTags)
+    DataFrame[0]["ContextCount"] = ContextId
+
+    return DataFrame
     
 ## 8. 2-2 ContextCompletion의 Context(부문) ContextTags부분 업데이트
-def AddContextCompletionCheckedContextTagsToDB(projectName, email, ContextTag, ContextList, Context):
-    project = GetProject(projectName, email)
+def AddContextCompletionCheckedContextTagsToDB(DataFrame, ContextTag, ContextList, Context):
 
-    updateCheckedContextTags(project, ContextTag, ContextList, Context)
+    DataFrame = updateCheckedContextTags(DataFrame, ContextTag, ContextList, Context)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 8. ContextCompletion의Count의 가져오기
 def ContextCompletionCountLoad(projectName, email):
@@ -1041,9 +1064,10 @@ def UpdatedContextCompletion(projectName, email):
     return project["ContextCompletion"]
         
 ## 8. ContextCompletionCompletion 업데이트
-def ContextCompletionCompletionUpdate(projectName, email):
+def ContextCompletionCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["ContextCompletion"] = DataFrame
     project["ContextCompletion"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -1062,7 +1086,7 @@ def AddExistedWMWMDefineToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 9. 1-1 WMWMDefine의 Body(본문) WMWMCompletions 업데이트 형식
-def UpdateCompletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):    
+def UpdateCompletionWMWMs(DataFrame, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):    
     updateWMWMCompletions = {
         "WMWMChunkId": WMWMChunkId,
         "ChunkId": ChunkId,
@@ -1078,21 +1102,22 @@ def UpdateCompletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfN
         "Accuracy": Accuracy
     }
     
-    project["WMWMDefine"][1]["WMWMCompletions"].append(updateWMWMCompletions)
-    project["WMWMDefine"][0]["WMWMChunkCount"] = WMWMChunkId
+    DataFrame[1]["WMWMCompletions"].append(updateWMWMCompletions)
+    DataFrame[0]["WMWMChunkCount"] = WMWMChunkId
+
+    return DataFrame
     
 ## 9. 1-2 WMWMDefine의 Body(본문) WMWMCompletions 업데이트
-def AddWMWMDefineChunksToDB(projectName, email, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):
-    project = GetProject(projectName, email)
+def AddWMWMDefineChunksToDB(DataFrame, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy):
 
-    UpdateCompletionWMWMs(project, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
+    DataFrame = UpdateCompletionWMWMs(DataFrame, WMWMChunkId, ChunkId, Chunk, Needs, ReasonOfNeeds, Wisdom, ReasonOfWisdom, Mind, ReasonOfPotentialMind, Wildness, ReasonOfWildness, Accuracy)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 9. 2-1 WMWMDefine의 WMWM(부문) WMWMTags부분 업데이트 형식
-def updateWMWMQuerys(project, WMWMChunkId, ChunkId, Vector, WMWM):
+def updateWMWMQuerys(DataFrame, WMWMChunkId, ChunkId, Vector, WMWM):
     # 새롭게 생성되는 WMWMId는 WMWMQuerys의 Len값과 동일
-    WMWMId = len(project["WMWMDefine"][2]["WMWMQuerys"]) -1
+    WMWMId = len(DataFrame[2]["WMWMQuerys"]) -1
     
     ### 실제 테스크시 수정 요망 ###
     updateWMWMQuerys = {
@@ -1102,16 +1127,17 @@ def updateWMWMQuerys(project, WMWMChunkId, ChunkId, Vector, WMWM):
         "WMWM": WMWM
     }
     
-    project["WMWMDefine"][2]["WMWMQuerys"].append(updateWMWMQuerys)
-    project["WMWMDefine"][0]["WMWMCount"] = WMWMId
+    DataFrame[2]["WMWMQuerys"].append(updateWMWMQuerys)
+    DataFrame[0]["WMWMCount"] = WMWMId
+
+    return DataFrame
     
 ## 9. 2-2 WMWMDefine의 WMWM(부문) WMWMTags부분 업데이트
-def AddWMWMDefineWMWMQuerysToDB(projectName, email, WMWMChunkId, ChunkId, Vector, WMWM):
-    project = GetProject(projectName, email)
+def AddWMWMDefineWMWMQuerysToDB(DataFrame, WMWMChunkId, ChunkId, Vector, WMWM):
 
-    updateWMWMQuerys(project, WMWMChunkId, ChunkId, Vector, WMWM)
+    DataFrame = updateWMWMQuerys(DataFrame, WMWMChunkId, ChunkId, Vector, WMWM)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 9. WMWMDefine의Count의 가져오기
 def WMWMDefineCountLoad(projectName, email):
@@ -1143,9 +1169,10 @@ def UpdatedWMWMDefine(projectName, email):
     return project["WMWMDefine"]
         
 ## 9. WMWMDefineCompletion 업데이트
-def WMWMDefineCompletionUpdate(projectName, email):
+def WMWMDefineCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["WMWMDefine"] = DataFrame
     project["WMWMDefine"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -1163,7 +1190,7 @@ def AddExistedWMWMMatchingToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 10. 1-1 WMWMMatching의 Body(본문) SplitedChunkContexts 업데이트 형식
-def UpdateSplitedChunkContexts(project, ChunkId, Chunk, Vector, WMWM):    
+def UpdateSplitedChunkContexts(DataFrame, ChunkId, Chunk, Vector, WMWM):    
     updateSplitedChunkContexts = {
         "ChunkId": ChunkId,
         "Chunk": Chunk,
@@ -1171,19 +1198,20 @@ def UpdateSplitedChunkContexts(project, ChunkId, Chunk, Vector, WMWM):
         "WMWM": WMWM
     }
     
-    project["WMWMMatching"][1]["SplitedChunkContexts"].append(updateSplitedChunkContexts)
-    project["WMWMMatching"][0]["WMWMChunkCount"] = ChunkId
+    DataFrame[1]["SplitedChunkContexts"].append(updateSplitedChunkContexts)
+    DataFrame[0]["WMWMChunkCount"] = ChunkId
+
+    return DataFrame
     
 ## 10. 1-2 WMWMMatching의 Body(본문) SplitedChunkContexts 업데이트
-def AddWMWMMatchingChunksToDB(projectName, email, ChunkId, Chunk, Vector, WMWM):
-    project = GetProject(projectName, email)
-
-    UpdateSplitedChunkContexts(project, ChunkId, Chunk, Vector, WMWM)
+def AddWMWMMatchingChunksToDB(DataFrame, ChunkId, Chunk, Vector, WMWM):
+    
+    DataFrame = UpdateSplitedChunkContexts(DataFrame, ChunkId, Chunk, Vector, WMWM)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 10. 1-3 WMWMMatching의 Body(본문) SplitedBodyContexts 업데이트 형식
-def UpdateSplitedBodyContexts(project, BodyId, Phrases, Vector, WMWM):    
+def UpdateSplitedBodyContexts(DataFrame, BodyId, Phrases, Vector, WMWM):    
     updateSplitedBodyContexts = {
         "BodyId": BodyId,
         "Phrases": Phrases,
@@ -1191,19 +1219,20 @@ def UpdateSplitedBodyContexts(project, BodyId, Phrases, Vector, WMWM):
         "WMWM": WMWM
     }
     
-    project["WMWMMatching"][1]["SplitedBodyContexts"].append(updateSplitedBodyContexts)
-    project["WMWMMatching"][0]["WMWMBodyCount"] = BodyId
+    DataFrame[1]["SplitedBodyContexts"].append(updateSplitedBodyContexts)
+    DataFrame[0]["WMWMBodyCount"] = BodyId
+
+    return DataFrame
     
 ## 10. 1-4 WMWMMatching의 Body(본문) SplitedBodyContexts 업데이트
-def AddWMWMMatchingBODYsToDB(projectName, email, BodyId, Phrases, Vector, WMWM):
-    project = GetProject(projectName, email)
+def AddWMWMMatchingBODYsToDB(DataFrame, BodyId, Phrases, Vector, WMWM):
 
-    UpdateSplitedBodyContexts(project, BodyId, Phrases, Vector, WMWM)
+    DataFrame = UpdateSplitedBodyContexts(DataFrame, BodyId, Phrases, Vector, WMWM)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 10. 1-5 WMWMMatching의 Index(본문) SplitedIndexContexts 업데이트 형식
-def UpdateSplitedIndexContexts(project, IndexId, Index, Phrases, Vector, WMWM):    
+def UpdateSplitedIndexContexts(DataFrame, IndexId, Index, Phrases, Vector, WMWM):    
     updateSplitedIndexContexts = {
         "IndexId": IndexId,
         "Index": Index,
@@ -1212,19 +1241,20 @@ def UpdateSplitedIndexContexts(project, IndexId, Index, Phrases, Vector, WMWM):
         "WMWM": WMWM
     }
     
-    project["WMWMMatching"][1]["SplitedIndexContexts"].append(updateSplitedIndexContexts)
-    project["WMWMMatching"][0]["WMWMIndexCount"] = IndexId
+    DataFrame[1]["SplitedIndexContexts"].append(updateSplitedIndexContexts)
+    DataFrame[0]["WMWMIndexCount"] = IndexId
+
+    return DataFrame
     
 ## 10. 1-6 WMWMMatching의 Index(본문) SplitedIndexContexts 업데이트
-def AddWMWMMatchingIndexsToDB(projectName, email, IndexId, Index, Phrases, Vector, WMWM):
-    project = GetProject(projectName, email)
+def AddWMWMMatchingIndexsToDB(DataFrame, IndexId, Index, Phrases, Vector, WMWM):
 
-    UpdateSplitedIndexContexts(project, IndexId, Index, Phrases, Vector, WMWM)
+    DataFrame = UpdateSplitedIndexContexts(DataFrame, IndexId, Index, Phrases, Vector, WMWM)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 10. 1-7 WMWMMatching의 Book(본문) SplitedBookContexts 업데이트 형식
-def UpdateBookContexts(project, BookId, Title, Phrases, Vector, WMWM):    
+def UpdateBookContexts(DataFrame, BookId, Title, Phrases, Vector, WMWM):    
     updateBookContexts = {
         "BookId": BookId,
         "Title": Title,
@@ -1233,15 +1263,16 @@ def UpdateBookContexts(project, BookId, Title, Phrases, Vector, WMWM):
         "WMWM": WMWM
     }
     
-    project["WMWMMatching"][1]["BookContexts"].append(updateBookContexts)
+    DataFrame[1]["BookContexts"].append(updateBookContexts)
+
+    return DataFrame
     
 ## 10. 1-8 WMWMMatching의 Book(본문) SplitedBookContexts 업데이트
-def AddWMWMMatchingBookToDB(projectName, email, BookId, Title, Phrases, Vector, WMWM):
-    project = GetProject(projectName, email)
+def AddWMWMMatchingBookToDB(DataFrame, BookId, Title, Phrases, Vector, WMWM):
 
-    UpdateBookContexts(project, BookId, Title, Phrases, Vector, WMWM)
+    DataFrame = UpdateBookContexts(DataFrame, BookId, Title, Phrases, Vector, WMWM)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 10. WMWMMatching의Count의 가져오기
 def WMWMMatchingCountLoad(projectName, email):
@@ -1274,9 +1305,10 @@ def UpdatedWMWMMatching(projectName, email):
     return project["WMWMMatching"]
         
 ## 10. WMWMMatchingCompletion 업데이트
-def WMWMMatchingCompletionUpdate(projectName, email):
+def WMWMMatchingCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["WMWMMatching"] = DataFrame
     project["WMWMMatching"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -1294,7 +1326,7 @@ def AddExistedCharacterDefineToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
         
 ## 11. 1-1 CharacterDefine의 Body(본문) updateCharacterChunks 업데이트 형식
-def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener):    
+def UpdateChunkCharacters(DataFrame, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener):    
     updateCharacterChunks = {
         "CharacterChunkId": CharacterChunkId,
         "ChunkId": ChunkId,
@@ -1308,16 +1340,17 @@ def UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, 
         "Listener": Listener
     }
     
-    project["CharacterDefine"][1]["CharacterChunks"].append(updateCharacterChunks)
-    project["CharacterDefine"][0]["CharacterChunkCount"] = CharacterChunkId
+    DataFrame[1]["CharacterChunks"].append(updateCharacterChunks)
+    DataFrame[0]["CharacterChunkCount"] = CharacterChunkId
+
+    return DataFrame
     
 ## 11. 1-2 CharacterDefine의 Body(본문) updateCharacterChunks 업데이트
-def AddCharacterDefineChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener):
-    project = GetProject(projectName, email)
+def AddCharacterDefineChunksToDB(DataFrame, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener):
 
-    UpdateChunkCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
+    DataFrame = UpdateChunkCharacters(DataFrame, CharacterChunkId, ChunkId, Chunk, Character, Type, Gender, Age, Emotion, Role, Listener)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
 
 ## 11. CharacterDefine의Count의 가져오기
 def CharacterDefineCountLoad(projectName, email):
@@ -1348,9 +1381,10 @@ def UpdatedCharacterDefine(projectName, email):
     return project["CharacterDefine"]
 
 ## 11. CharacterDefineCompletion 업데이트
-def CharacterDefineCompletionUpdate(projectName, email):
+def CharacterDefineCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["CharacterDefine"] = DataFrame
     project["CharacterDefine"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -1369,7 +1403,7 @@ def AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
         
 ## 12. 1-1 CharacterCompletion의 Body(본문) CharacterCompletions 업데이트 형식
-def UpdateCompletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship, Context, Voice):    
+def UpdateCompletionCharacters(DataFrame, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship, Context, Voice):    
     updateCharacterCompletions = {
         "CharacterChunkId": CharacterChunkId,
         "ChunkId": ChunkId,
@@ -1381,21 +1415,22 @@ def UpdateCompletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Charac
         "Voice": Voice
     }
     
-    project["CharacterCompletion"][1]["CharacterCompletions"].append(updateCharacterCompletions)
-    project["CharacterCompletion"][0]["CharacterChunkCount"] = CharacterChunkId
-    
-## 12. 1-2 CharacterCompletion의 Body(본문) CharacterCompletions 업데이트
-def AddCharacterCompletionChunksToDB(projectName, email, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship, Context, Voice):
-    project = GetProject(projectName, email)
+    DataFrame[1]["CharacterCompletions"].append(updateCharacterCompletions)
+    DataFrame[0]["CharacterChunkCount"] = CharacterChunkId
 
-    UpdateCompletionCharacters(project, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship, Context, Voice)
+    return DataFrame
+
+## 12. 1-2 CharacterCompletion의 Body(본문) CharacterCompletions 업데이트
+def AddCharacterCompletionChunksToDB(DataFrame, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship, Context, Voice):
+
+    DataFrame = UpdateCompletionCharacters(DataFrame, CharacterChunkId, ChunkId, Chunk, Character, MainCharacter, AuthorRelationship, Context, Voice)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 12. 2-1 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트 형식
-def UpdateCheckedCharacterTags(project, CharacterTag, Gender, Age, Emotion, Frequency, MainCharacterList):
+def UpdateCheckedCharacterTags(DataFrame, CharacterTag, Gender, Age, Emotion, Frequency, MainCharacterList):
     # 새롭게 생성되는 CharacterId는 CharacterTags의 Len값과 동일
-    CharacterId = len(project["CharacterCompletion"][2]["CheckedCharacterTags"])
+    CharacterId = len(DataFrame[2]["CheckedCharacterTags"])
     
     ### 실제 테스크시 수정 요망 ###
     updateCheckedCharacterTags = {
@@ -1408,16 +1443,17 @@ def UpdateCheckedCharacterTags(project, CharacterTag, Gender, Age, Emotion, Freq
         "MainCharacterList": MainCharacterList
     }
     
-    project["CharacterCompletion"][2]["CheckedCharacterTags"].append(updateCheckedCharacterTags)
-    project["CharacterCompletion"][0]["CharacterCount"] = CharacterId
+    DataFrame[2]["CheckedCharacterTags"].append(updateCheckedCharacterTags)
+    DataFrame[0]["CharacterCount"] = CharacterId
+
+    return DataFrame
     
 ## 12. 2-2 CharacterCompletion의 Character(부문) CharacterTags부분 업데이트
-def AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, Gender, Age, Emotion, Frequency, MainCharacterList):
-    project = GetProject(projectName, email)
+def AddCharacterCompletionCheckedCharacterTagsToDB(DataFrame, CharacterTag, Gender, Age, Emotion, Frequency, MainCharacterList):
 
-    UpdateCheckedCharacterTags(project, CharacterTag, Gender, Age, Emotion, Frequency, MainCharacterList)
+    DataFrame = UpdateCheckedCharacterTags(DataFrame, CharacterTag, Gender, Age, Emotion, Frequency, MainCharacterList)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 12. CharacterCompletion의Count의 가져오기
 def CharacterCompletionCountLoad(projectName, email):
@@ -1449,9 +1485,10 @@ def UpdatedCharacterCompletion(projectName, email):
     return project["CharacterCompletion"]
         
 ## 12. CharacterCompletionCompletion 업데이트
-def CharacterCompletionCompletionUpdate(projectName, email):
+def CharacterCompletionCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["CharacterCompletion"] = DataFrame
     project["CharacterCompletion"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -1469,22 +1506,23 @@ def AddExistedSoundMatchingToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
         
 ## 14. 1-1 SoundMatching의 Body(본문) SoundSplitedBodys 업데이트 형식
-def UpdateSoundSplitedIndexs(project, IndexId, Sounds):
+def UpdateSoundSplitedIndexs(DataFrame, IndexId, Sounds):
     updateSoundSplitedIndexs = {
         "IndexId": IndexId,
         "Sounds": Sounds
     }
     
-    project["SoundMatching"][1]["SoundSplitedIndexs"].append(updateSoundSplitedIndexs)
-    project["SoundMatching"][0]["IndexCount"] = IndexId
+    DataFrame[1]["SoundSplitedIndexs"].append(updateSoundSplitedIndexs)
+    DataFrame[0]["IndexCount"] = IndexId
+
+    return DataFrame
     
 ## 14. 1-2 SoundMatching의 Body(본문) SoundSplitedBodys 업데이트
-def AddSoundSplitedIndexsToDB(projectName, email, IndexId, Sounds):
-    project = GetProject(projectName, email)
+def AddSoundSplitedIndexsToDB(DataFrame, IndexId, Sounds):
 
-    UpdateSoundSplitedIndexs(project, IndexId, Sounds)
+    DataFrame = UpdateSoundSplitedIndexs(DataFrame, IndexId, Sounds)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 14. SoundMatching의Count의 가져오기
 def SoundMatchingCountLoad(projectName, email):
@@ -1513,9 +1551,10 @@ def UpdatedSoundMatching(projectName, email):
     return project["SoundMatching"]
         
 ## 14. SoundMatchingCompletion 업데이트
-def SoundMatchingCompletionUpdate(projectName, email):
+def SoundMatchingCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["SoundMatching"] = DataFrame
     project["SoundMatching"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -1533,24 +1572,25 @@ def AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
         
 ## 15. 1-1 SFXMatching의 Body(본문) SFXSplitedBodys 업데이트 형식
-def UpdateSFXSplitedBodys(project, SFXSplitedBodyChunks):
-    BodyId = len(project["SFXMatching"][1]["SFXSplitedBodys"])
+def UpdateSFXSplitedBodys(DataFrame, SFXSplitedBodyChunks):
+    BodyId = len(DataFrame[1]["SFXSplitedBodys"])
     
     updateSFXSplitedBodys = {
         "BodyId": BodyId,
         "SFXSplitedBodyChunks": SFXSplitedBodyChunks
     }
     
-    project["SFXMatching"][1]["SFXSplitedBodys"].append(updateSFXSplitedBodys)
-    project["SFXMatching"][0]["BodyCount"] = BodyId
+    DataFrame[1]["SFXSplitedBodys"].append(updateSFXSplitedBodys)
+    DataFrame[0]["BodyCount"] = BodyId
+
+    return DataFrame
     
 ## 15. 1-2 SFXMatching의 Body(본문) SFXSplitedBodys 업데이트
-def AddSFXSplitedBodysToDB(projectName, email, SFXSplitedBodyChunks):
-    project = GetProject(projectName, email)
+def AddSFXSplitedBodysToDB(DataFrame, SFXSplitedBodyChunks):
 
-    UpdateSFXSplitedBodys(project, SFXSplitedBodyChunks)
+    DataFrame = UpdateSFXSplitedBodys(DataFrame, SFXSplitedBodyChunks)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 15. SFXMatching의Count의 가져오기
 def SFXMatchingCountLoad(projectName, email):
@@ -1579,9 +1619,10 @@ def UpdatedSFXMatching(projectName, email):
     return project["SFXMatching"]
         
 ## 15. SFXMatchingCompletion 업데이트
-def SFXMatchingCompletionUpdate(projectName, email):
+def SFXMatchingCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["SFXMatching"] = DataFrame
     project["SFXMatching"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -1599,29 +1640,30 @@ def AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
         
 ## 21. 1-1 CorrectionKo의 Body(본문) CorrectionKoSplitedBodys 업데이트 형식
-def UpdateCorrectionKoSplitedBodys(project):
-    BodyId = len(project["CorrectionKo"][1]["CorrectionKoSplitedBodys"])
+def UpdateCorrectionKoSplitedBodys(DataFrame):
+    BodyId = len(DataFrame[1]["CorrectionKoSplitedBodys"])
     
     updateCorrectionKoSplitedBodys = {
         "BodyId": BodyId,
         "CorrectionKoSplitedBodyChunks": []
     }
     
-    project["CorrectionKo"][1]["CorrectionKoSplitedBodys"].append(updateCorrectionKoSplitedBodys)
-    project["CorrectionKo"][0]["BodyCount"] = BodyId
+    DataFrame[1]["CorrectionKoSplitedBodys"].append(updateCorrectionKoSplitedBodys)
+    DataFrame[0]["BodyCount"] = BodyId
+
+    return DataFrame
     
 ## 21. 1-2 CorrectionKo의 Body(본문) CorrectionKoSplitedBodys 업데이트
-def AddCorrectionKoSplitedBodysToDB(projectName, email):
-    project = GetProject(projectName, email)
+def AddCorrectionKoSplitedBodysToDB(projectName, email, DataFrame):
 
-    UpdateCorrectionKoSplitedBodys(project)
+    DataFrame = UpdateCorrectionKoSplitedBodys(DataFrame)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 21. 2-1 CorrectionKo의 Body(본문) CorrectionKoChunk 업데이트 형식
-def UpdateCorrectionKoSplitedChunks(project, ChunkId, Tag, ChunkTokens):
+def UpdateCorrectionKoSplitedChunks(DataFrame, ChunkId, Tag, ChunkTokens):
     # 새롭게 생성되는 BodyId는 CorrectionKoSplitedBodys의 Len값과 동일
-    BodyId = len(project["CorrectionKo"][1]["CorrectionKoSplitedBodys"]) -1
+    BodyId = len(DataFrame[1]["CorrectionKoSplitedBodys"]) -1
     
     updateCorrectionKoChunkTokens = {
         "ChunkId": ChunkId,
@@ -1629,18 +1671,19 @@ def UpdateCorrectionKoSplitedChunks(project, ChunkId, Tag, ChunkTokens):
         "CorrectionKoChunkTokens": ChunkTokens
     }
     
-    project["CorrectionKo"][1]["CorrectionKoSplitedBodys"][BodyId]["CorrectionKoSplitedBodyChunks"].append(updateCorrectionKoChunkTokens)
-    project["CorrectionKo"][0]["BodyCount"] = BodyId
+    DataFrame[1]["CorrectionKoSplitedBodys"][BodyId]["CorrectionKoSplitedBodyChunks"].append(updateCorrectionKoChunkTokens)
+    DataFrame[0]["BodyCount"] = BodyId
     # Count 업데이트
-    project["CorrectionKo"][0]["ChunkCount"] = ChunkId
+    DataFrame[0]["ChunkCount"] = ChunkId
+
+    return DataFrame
     
 ## 21. 2-2 CorrectionKo의 Body(본문) CorrectionKoChunk 업데이트
-def AddCorrectionKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens):
-    project = GetProject(projectName, email)
+def AddCorrectionKoChunksToDB(DataFrame, ChunkId, Tag, ChunkTokens):
 
-    UpdateCorrectionKoSplitedChunks(project, ChunkId, Tag, ChunkTokens)
+    DataFrame = UpdateCorrectionKoSplitedChunks(DataFrame, ChunkId, Tag, ChunkTokens)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 21. CorrectionKo의Count의 가져오기
 def CorrectionKoCountLoad(projectName, email):
@@ -1671,9 +1714,10 @@ def UpdatedCorrectionKo(projectName, email):
     return project["CorrectionKo"]
         
 ## 21. CorrectionKoCompletion 업데이트
-def CorrectionKoCompletionUpdate(projectName, email):
+def CorrectionKoCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["CorrectionKo"] = DataFrame
     project["CorrectionKo"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)
@@ -1691,20 +1735,21 @@ def AddExistedSelectionGenerationKoToDB(projectName, email, ExistedDataFrame):
     SaveProject(projectName, email, project)
 
 ## 26. 1-1 SelectionGenerationKo의 Body(본문) SelectionGenerationKoSplitedBodys 업데이트 형식
-def UpdateSelectionGenerationKoBookContext(project, SelectionGenerationKoBookContext):
+def UpdateSelectionGenerationKoBookContext(DataFrame, SelectionGenerationKoBookContext):
     
-    project["SelectionGenerationKo"][1]["SelectionGenerationKoBookContext"].append(SelectionGenerationKoBookContext)
+    DataFrame[1]["SelectionGenerationKoBookContext"].append(SelectionGenerationKoBookContext)
+
+    return DataFrame
     
 ## 26. 1-2 SelectionGenerationKo의 Body(본문) SelectionGenerationKoSplitedBodys 업데이트
-def AddSelectionGenerationKoBookContextToDB(projectName, email, SelectionGenerationKoBookContext):
-    project = GetProject(projectName, email)
+def AddSelectionGenerationKoBookContextToDB(DataFrame, SelectionGenerationKoBookContext):
 
-    UpdateSelectionGenerationKoBookContext(project, SelectionGenerationKoBookContext)
+    DataFrame = UpdateSelectionGenerationKoBookContext(DataFrame, SelectionGenerationKoBookContext)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
 
 ## 26. 1-1 SelectionGenerationKo의 Body(본문) SelectionGenerationKoSplitedBodys 업데이트 형식
-def UpdateSelectionGenerationKoSplitedIndexs(project, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys):
+def UpdateSelectionGenerationKoSplitedIndexs(DataFrame, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys):
     
     updateSelectionGenerationKoSplitedIndex = {
         "IndexId": IndexId,
@@ -1716,16 +1761,17 @@ def UpdateSelectionGenerationKoSplitedIndexs(project, IndexId, IndexTag, Index, 
         "SelectionGenerationKoSplitedBodys": SelectionGenerationKoSplitedBodys
     }
     
-    project["SelectionGenerationKo"][1]["SelectionGenerationKoSplitedIndexs"].append(updateSelectionGenerationKoSplitedIndex)
-    project["SelectionGenerationKo"][0]["IndexCount"] = IndexId
+    DataFrame[1]["SelectionGenerationKoSplitedIndexs"].append(updateSelectionGenerationKoSplitedIndex)
+    DataFrame[0]["IndexCount"] = IndexId
+
+    return DataFrame
     
 ## 26. 1-2 SelectionGenerationKo의 Body(본문) SelectionGenerationKoSplitedBodys 업데이트
-def AddSelectionGenerationKoSplitedIndexsToDB(projectName, email, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys):
-    project = GetProject(projectName, email)
+def AddSelectionGenerationKoSplitedIndexsToDB(DataFrame, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys):
 
-    UpdateSelectionGenerationKoSplitedIndexs(project, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys)
+    DataFrame = UpdateSelectionGenerationKoSplitedIndexs(DataFrame, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys)
         
-    SaveProject(projectName, email, project)
+    return DataFrame
         
 ## 26. SelectionGenerationKo의Count의 가져오기
 def SelectionGenerationKoCountLoad(projectName, email):
@@ -1754,9 +1800,10 @@ def UpdatedSelectionGenerationKo(projectName, email):
     return project["SelectionGenerationKo"]
         
 ## 26. SelectionGenerationKoCompletion 업데이트
-def SelectionGenerationKoCompletionUpdate(projectName, email):
+def SelectionGenerationKoCompletionUpdate(projectName, email, DataFrame):
     project = GetProject(projectName, email)
 
+    project["SelectionGenerationKo"] = DataFrame
     project["SelectionGenerationKo"][0]["Completion"] = "Yes"
 
     SaveProject(projectName, email, project)

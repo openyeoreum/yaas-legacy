@@ -9,7 +9,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedIndexFrameToDB, AddIndexFrameBodyToDB, IndexFrameCountLoad, InitIndexFrame, IndexFrameCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedIndexFrameToDB, AddIndexFrameBodyToDB, IndexFrameCountLoad, UpdatedIndexFrame, IndexFrameCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 # IndexText 로드
@@ -197,10 +197,10 @@ def IndexFrameUpdate(projectName, email, mainLang, MessagesReview = "off", Mode 
     if Completion == "No":
       
         if ExistedDataFrame != None:
-          # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-          AddExistedIndexFrameToDB(projectName, email, ExistedDataFrame)
-          AddExistedDataSetToDB(projectName, email, "IndexDefinePreprocess", ExistedDataSet1)
-          AddExistedDataSetToDB(projectName, email, "IndexDefine", ExistedDataSet2)
+          # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+          # AddExistedIndexFrameToDB(projectName, email, ExistedDataFrame)
+          # AddExistedDataSetToDB(projectName, email, "IndexDefinePreprocess", ExistedDataSet1)
+          # AddExistedDataSetToDB(projectName, email, "IndexDefine", ExistedDataSet2)
           print(f"[ User: {email} | Project: {projectName} | 01_IndexFrameUpdate은 ExistedIndexFrame으로 대처됨 ]\n")
         else:
           responseJson = IndexDefineDivision(projectName, email, mode = Mode, indexMode = IndexMode, messagesReview = MessagesReview)
@@ -217,6 +217,7 @@ def IndexFrameUpdate(projectName, email, mainLang, MessagesReview = "off", Mode 
                             desc = 'IndexFrameUpdate')
           # i값 수동 생성
           i = 0
+          DataFrame = UpdatedIndexFrame(projectName, email)
           for Update in UpdateTQDM:
               UpdateTQDM.set_description(f'IndexFrameUpdate: {Update}')
               time.sleep(0.0001)
@@ -224,13 +225,13 @@ def IndexFrameUpdate(projectName, email, mainLang, MessagesReview = "off", Mode 
               IndexTag = list(ResponseJson[i].keys())[0]
               Index = ResponseJson[i][IndexTag]
 
-              AddIndexFrameBodyToDB(projectName, email, IndexId, IndexTag, Index)
+              DataFrame = AddIndexFrameBodyToDB(DataFrame, IndexId, IndexTag, Index)
               # i값 수동 업데이트
               i += 1
-              
+
           UpdateTQDM.close()
           # Completion "Yes" 업데이트
-          IndexFrameCompletionUpdate(projectName, email)
+          IndexFrameCompletionUpdate(projectName, email, DataFrame)
           print(f"[ User: {email} | Project: {projectName} | 01_IndexFrameUpdate 완료 ]\n")
     
     else:

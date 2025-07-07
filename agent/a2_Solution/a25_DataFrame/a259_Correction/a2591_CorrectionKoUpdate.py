@@ -13,7 +13,7 @@ from datetime import datetime
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, LoadAddOutputMemory, SaveOutputMemory, SaveAddOutputMemory, AddExistedCorrectionKoToDB, AddCorrectionKoSplitedBodysToDB, AddCorrectionKoChunksToDB, CorrectionKoCountLoad, CorrectionKoCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, LoadAddOutputMemory, SaveOutputMemory, SaveAddOutputMemory, AddExistedCorrectionKoToDB, AddCorrectionKoSplitedBodysToDB, AddCorrectionKoChunksToDB, CorrectionKoCountLoad, UpdatedCorrectionKo, CorrectionKoCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -999,9 +999,9 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CorrectionKo", ExistedDataSet)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedCorrectionKoToDB(projectName, email, ExistedDataFrame)
+            # AddExistedDataSetToDB(projectName, email, "CorrectionKo", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 21_CorrectionKoUpdate는 ExistedCorrectionKo으로 대처됨 ]\n")
         else:
             responseJson = CorrectionKoResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
@@ -1018,6 +1018,7 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                             desc = 'CorrectionKoUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedCorrectionKo(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f"CorrectionKoUpdate: {Update['BodyId']}")
                 time.sleep(0.0001)
@@ -1026,15 +1027,14 @@ def CorrectionKoUpdate(projectName, email, DataFramePath, MessagesReview = 'off'
                     ChunkId = Update['CorrectionChunks'][j]['ChunkId']
                     Tag = Update['CorrectionChunks'][j]['Tag']
                     ChunkTokens = Update['CorrectionChunks'][j]['CorrectionChunkTokens']
-                
-                    AddCorrectionKoChunksToDB(projectName, email, ChunkId, Tag, ChunkTokens)
+                    DataFrame = AddCorrectionKoChunksToDB(DataFrame, ChunkId, Tag, ChunkTokens)
 
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            CorrectionKoCompletionUpdate(projectName, email)
+            CorrectionKoCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 21_CorrectionKoUpdate 완료 ]\n")
         
     else:

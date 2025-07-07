@@ -10,7 +10,7 @@ from tqdm import tqdm
 from nltk.metrics.distance import edit_distance
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, SaveProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedContextDefineToDB, AddContextDefineChunksToDB, ContextDefineCountLoad, ContextDefineCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedContextDefineToDB, AddContextDefineChunksToDB, ContextDefineCountLoad, UpdatedContextDefine, ContextDefineCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -134,7 +134,7 @@ def ContextDefineFilter(Input, responseData, memoryCounter):
                     if IsSimilar(CleanInput, OUTPUT, threshold = 1):
                         TrueSwitch += 1
                 if TrueSwitch == 0:
-                    return f"JSON에서 오류 발생: JSON '핵심문구'가 Input에 포함되지 않음 Error\n문구: {dic[key]['핵심문구']}"
+                    return f"JSON에서 오류 발생: JSON '핵심문구'가 Input에 포함되지 않음\n문구: {dic[key]['핵심문구']}"
             elif not ('목적' in dic[key] and '원인' in dic[key] and '핵심문구' in dic[key] and '예상질문' in dic[key] and '매칭독자' in dic[key] and '주제' in dic[key] and '중요도' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
             
@@ -535,9 +535,9 @@ def ContextDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedContextDefineToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "ContextDefine", ExistedDataSet)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedContextDefineToDB(projectName, email, ExistedDataFrame)
+            # AddExistedDataSetToDB(projectName, email, "ContextDefine", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 07_ContextDefineUpdate는 ExistedContextDefine으로 대처됨 ]\n")
         else:
             responseJson = ContextDefineResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
@@ -554,6 +554,7 @@ def ContextDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off
                             desc = 'ContextDefineUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedContextDefine(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'ContextDefineUpdate: {Update}')
                 time.sleep(0.0001)
@@ -568,13 +569,13 @@ def ContextDefineUpdate(projectName, email, DataFramePath, MessagesReview = 'off
                 Question = Update["Question"]
                 Importance = Update["Importance"]
                 
-                AddContextDefineChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance)
+                DataFrame = AddContextDefineChunksToDB(DataFrame, ContextChunkId, ChunkId, Chunk, Phrases, Reader, Subject, Purpose, Reason, Question, Importance)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            ContextDefineCompletionUpdate(projectName, email)
+            ContextDefineCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 07_ContextDefineUpdate 완료 ]\n")
         
     else:

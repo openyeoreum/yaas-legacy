@@ -83,7 +83,6 @@ def LoadexistedDataFrame(projectName, email, Process, DataFramePath):
             if date > MaxDate:
                 MaxDate = date
                 RecentFile = FileName
-
     if RecentFile:
         with open(os.path.join(dataFramePath, RecentFile), 'r', encoding = 'utf-8') as file:
             ExistedDataFrame = json.load(file)

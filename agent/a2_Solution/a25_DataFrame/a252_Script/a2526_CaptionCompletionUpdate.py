@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, SaveProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCaptionCompletionToDB, AddCaptionCompletionChunksToDB, CaptionCompletionCountLoad, CaptionCompletionCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCaptionCompletionToDB, AddCaptionCompletionChunksToDB, CaptionCompletionCountLoad, UpdatedCaptionCompletion, CaptionCompletionCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -349,9 +349,9 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCaptionCompletionToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CaptionCompletion", ExistedDataSet)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedCaptionCompletionToDB(projectName, email, ExistedDataFrame)
+            # AddExistedDataSetToDB(projectName, email, "CaptionCompletion", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate는 ExistedCaptionCompletion으로 대처됨 ]\n")
         else:
             responseJson = CaptionCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
@@ -366,6 +366,7 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
                             desc = 'CaptionCompletionUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedCaptionCompletion(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'CaptionCompletionUpdate: {Update["CaptionType"]}')
                 time.sleep(0.0001)
@@ -377,7 +378,7 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
                 ChunkIds = Update["ChunkIds"]
                 SplitedCaptionChunks = Update["SplitedCaptionChunks"]
                 
-                AddCaptionCompletionChunksToDB(projectName, email, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks)
+                DataFrame = AddCaptionCompletionChunksToDB(DataFrame, CaptionId, CaptionTag, CaptionType, Reason, Importance, ChunkIds, SplitedCaptionChunks)
                 # i값 수동 업데이트
                 i += 1
             
@@ -385,7 +386,7 @@ def CaptionCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
             # # BodyFrame CaptionTag 업데이트
             # CaptionCompletionToBodyFrame(projectName, email)
             # Completion "Yes" 업데이트
-            CaptionCompletionCompletionUpdate(projectName, email)
+            CaptionCompletionCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 06_CaptionCompletionUpdate 완료 ]\n")
         
     else:

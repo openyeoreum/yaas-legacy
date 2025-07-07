@@ -9,7 +9,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, SaveProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedSFXMatchingToDB, AddSFXSplitedBodysToDB, SFXMatchingCountLoad, SFXMatchingCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedSFXMatchingToDB, AddSFXSplitedBodysToDB, SFXMatchingCountLoad, UpdatedSFXMatching, SFXMatchingCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -152,9 +152,9 @@ def SFXMatchingFilter(Input, responseData, memoryCounter):
             if not '효과음' in key:
                 return "JSON에서 오류 발생: JSONKeyError"
             elif not ('<시작>' in dic[key]['길이'] and '<끝>' in dic[key]['길이']):
-                return f"JSON에서 오류 발생: JSON <시작>, <끝>의 표기가 Output에 포함되지 않음 Error\n문구: {dic[key]['길이']}"
+                return f"JSON에서 오류 발생: JSON <시작>, <끝>의 표기가 Output에 포함되지 않음\n문구: {dic[key]['길이']}"
             elif not OUTPUT in INPUT:
-                print(f"JSON에서 오류 발생: JSON '길이'의 문구가 Input에 포함되지 않음 Error\n문구: {dic[key]['길이']}")
+                print(f"JSON에서 오류 발생: JSON '길이'의 문구가 Input에 포함되지 않음\n문구: {dic[key]['길이']}")
                 dic[key]['길이'] = ''
             elif not ('명칭' in dic[key] and '영어명칭' in dic[key] and '유형' in dic[key] and '역할' in dic[key] and '공간음향' in dic[key] and '길이' in dic[key] and '필요성' in dic[key]):
                 return "JSON에서 오류 발생: JSONKeyError"
@@ -842,9 +842,9 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "SFXMatching", ExistedDataSet)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedSFXMatchingToDB(projectName, email, ExistedDataFrame)
+            # AddExistedDataSetToDB(projectName, email, "SFXMatching", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate는 ExistedSFXMatching으로 대처됨 ]\n")
         else:
             responseJson = SFXMatchingResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode, importance = Importance)
@@ -853,26 +853,25 @@ def SFXMatchingUpdate(projectName, email, DataFramePath, MessagesReview = 'off',
             ResponseJson = responseJson[ContinueCount:]
             ResponseJsonCount = len(ResponseJson)
             
-            SFXBodyId = ContinueCount
-            
             # TQDM 셋팅
             UpdateTQDM = tqdm(ResponseJson,
                             total = ResponseJsonCount,
                             desc = 'SFXMatchingUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedSFXMatching(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f"SFXMatchingUpdate: {Update['BodyId']}")
                 time.sleep(0.0001)
                 SFXSplitedBodyChunks = Update['SFXSplitedBodyChunks']
-                AddSFXSplitedBodysToDB(projectName, email, SFXSplitedBodyChunks)
+                DataFrame = AddSFXSplitedBodysToDB(DataFrame, SFXSplitedBodyChunks)
 
                 # i값 수동 업데이트
                 i += 1
 
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            SFXMatchingCompletionUpdate(projectName, email)
+            SFXMatchingCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 15_SFXMatchingUpdate 완료 ]\n")
 
     else:

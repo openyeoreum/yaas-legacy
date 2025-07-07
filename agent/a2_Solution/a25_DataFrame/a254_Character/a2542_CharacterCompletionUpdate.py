@@ -9,7 +9,7 @@ from tqdm import tqdm
 from collections import Counter
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCharacterCompletionToDB, AddCharacterCompletionChunksToDB, AddCharacterCompletionCheckedCharacterTagsToDB, CharacterCompletionCountLoad, CharacterCompletionCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedCharacterCompletionToDB, AddCharacterCompletionChunksToDB, AddCharacterCompletionCheckedCharacterTagsToDB, CharacterCompletionCountLoad, UpdatedCharacterCompletion, CharacterCompletionCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 
@@ -1054,9 +1054,9 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, Mess
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "CharacterCompletion", ExistedDataSet)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedCharacterCompletionToDB(projectName, email, ExistedDataFrame)
+            # AddExistedDataSetToDB(projectName, email, "CharacterCompletion", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate는 ExistedCharacterCompletion으로 대처됨 ]\n")
         else:
             SelectedResponseJson, CharacterList = CharacterCompletionResponseJson(projectName, email, DataFramePath, bookGenre, messagesReview = MessagesReview, mode = Mode)
@@ -1110,6 +1110,7 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, Mess
                             desc = 'CharacterPostCompletionUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedCharacterCompletion(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'CharacterPostCompletionUpdate: {Update}')
                 time.sleep(0.0001)
@@ -1120,13 +1121,13 @@ def CharacterCompletionUpdate(projectName, email, DataFramePath, bookGenre, Mess
                 Frequency = Update["Frequency"]
                 MainCharacterList = Update["Actors"]
                 
-                AddCharacterCompletionCheckedCharacterTagsToDB(projectName, email, CharacterTag, Gender, Age, Emotion, Frequency, MainCharacterList)
+                DataFrame = AddCharacterCompletionCheckedCharacterTagsToDB(DataFrame, CharacterTag, Gender, Age, Emotion, Frequency, MainCharacterList)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            CharacterCompletionCompletionUpdate(projectName, email)
+            CharacterCompletionCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 12_CharacterCompletionUpdate 완료 ]\n")
         
     else:

@@ -10,7 +10,7 @@ from langdetect import detect
 from langdetect.lang_detect_exception import LangDetectException
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedSelectionGenerationKoToDB, AddSelectionGenerationKoBookContextToDB, AddSelectionGenerationKoSplitedIndexsToDB, SelectionGenerationKoCountLoad, SelectionGenerationKoCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedSelectionGenerationKoToDB, AddSelectionGenerationKoBookContextToDB, AddSelectionGenerationKoSplitedIndexsToDB, SelectionGenerationKoCountLoad, UpdatedSelectionGenerationKo, SelectionGenerationKoCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB
 
 #############################################
@@ -212,6 +212,8 @@ def SelectionGenerationKoJson(projectName, email):
                 except LangDetectException:
                     Language = "ko"
                 emotions = list(Narrater['Emotion'].keys())
+                print(Narrater)
+                sys.exit()
                 Voice = {'Character': Narrater['MainCharacterList'][0]['MainCharacter'], 'CharacterTag': Narrater['CharacterTag'], 'Language': Language, 'Gender': Narrater['Gender'], 'Age': Narrater['Age'], 'Emotion': emotions[0]}
                 for CharacterChunk in CharacterFrame:
                     if CharacterChunk['ChunkId'] == chunkid:
@@ -258,8 +260,8 @@ def SelectionGenerationKoUpdate(projectName, email, ExistedDataFrame = None):
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedSelectionGenerationKoToDB(projectName, email, ExistedDataFrame)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedSelectionGenerationKoToDB(projectName, email, ExistedDataFrame)
             print(f"[ User: {email} | Project: {projectName} | 26_SelectionGenerationKoUpdate는 ExistedSelectionGenerationKo으로 대처됨 ]\n")
         else:
             SelectionGenerationKoBookContext, SelectionGenerationKoSplitedIndexs = SelectionGenerationKoJson(projectName, email)
@@ -279,6 +281,7 @@ def SelectionGenerationKoUpdate(projectName, email, ExistedDataFrame = None):
             
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedSelectionGenerationKo(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f"SelectionGenerationKoUpdate: {Update['IndexId']}")
                 time.sleep(0.0001)
@@ -289,14 +292,14 @@ def SelectionGenerationKoUpdate(projectName, email, ExistedDataFrame = None):
                 Music = Update['Music']
                 Sound = Update['Sound']
                 SelectionGenerationKoSplitedBodys = Update['SelectionGenerationKoSplitedBodys']
-                AddSelectionGenerationKoSplitedIndexsToDB(projectName, email, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys)
+                DataFrame = AddSelectionGenerationKoSplitedIndexsToDB(DataFrame, IndexId, IndexTag, Index, IndexContext, Music, Sound, SelectionGenerationKoSplitedBodys)
 
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            SelectionGenerationKoCompletionUpdate(projectName, email)
+            SelectionGenerationKoCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 26_SelectionGenerationKoUpdate 완료 ]\n")
         
     else:

@@ -7,7 +7,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedPronunciationPreprocessToDB, AddPronunciationPreprocessScriptsToDB, PronunciationPreprocessCountLoad, PronunciationPreprocessCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedPronunciationPreprocessToDB, AddPronunciationPreprocessScriptsToDB, PronunciationPreprocessCountLoad, UpdatedPronunciationPreprocess, PronunciationPreprocessCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -279,9 +279,9 @@ def PronunciationPreprocessUpdate(projectName, email, mainLang, DataFramePath, M
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedPronunciationPreprocessToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "PronunciationPreprocess", ExistedDataSet)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedPronunciationPreprocessToDB(projectName, email, ExistedDataFrame)
+            # AddExistedDataSetToDB(projectName, email, "PronunciationPreprocess", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 02-2_PronunciationPreprocessUpdate는 ExistedPronunciationPreprocess으로 대처됨 ]\n")
         else:
             responseJson = PronunciationPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
@@ -296,6 +296,7 @@ def PronunciationPreprocessUpdate(projectName, email, mainLang, DataFramePath, M
                             desc = 'PronunciationPreprocessUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedPronunciationPreprocess(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'PronunciationPreprocessUpdate: {Update["Pronunciation"]}')
                 time.sleep(0.0001)
@@ -304,15 +305,15 @@ def PronunciationPreprocessUpdate(projectName, email, mainLang, DataFramePath, M
                 Pronunciation = Update["Pronunciation"]
                 PronunciationScript = Update["PronunciationScript"]
                 
-                AddPronunciationPreprocessScriptsToDB(projectName, email, PreprocessId, Index, Pronunciation, PronunciationScript)
+                DataFrame = AddPronunciationPreprocessScriptsToDB(DataFrame, PreprocessId, Index, Pronunciation, PronunciationScript)
                 # i값 수동 업데이트
                 i += 1
-            
+                
             UpdateTQDM.close()
             # # BodyFrame PronunciationPreprocessTag 업데이트
             # PronunciationPreprocessToBodyFrame(projectName, email)
             # Completion "Yes" 업데이트
-            PronunciationPreprocessCompletionUpdate(projectName, email)
+            PronunciationPreprocessCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 02-2_PronunciationPreprocessUpdate 완료 ]\n")
         
     else:

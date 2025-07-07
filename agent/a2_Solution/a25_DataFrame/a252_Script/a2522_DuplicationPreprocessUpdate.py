@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedDuplicationPreprocessToDB, AddDuplicationPreprocessScriptsToDB, DuplicationPreprocessCountLoad, DuplicationPreprocessCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedDuplicationPreprocessToDB, AddDuplicationPreprocessScriptsToDB, DuplicationPreprocessCountLoad, UpdatedDuplicationPreprocess, DuplicationPreprocessCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -472,9 +472,9 @@ def DuplicationPreprocessUpdate(projectName, email, mainLang, DataFramePath, Mes
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedDuplicationPreprocessToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "DuplicationPreprocess", ExistedDataSet)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedDuplicationPreprocessToDB(projectName, email, ExistedDataFrame)
+            # AddExistedDataSetToDB(projectName, email, "DuplicationPreprocess", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 02-1_DuplicationPreprocessUpdate는 ExistedDuplicationPreprocess으로 대처됨 ]\n")
         else:
             responseJson = DuplicationPreprocessResponseJson(projectName, email, mainLang, DataFramePath, messagesReview = MessagesReview, mode = Mode)
@@ -489,6 +489,7 @@ def DuplicationPreprocessUpdate(projectName, email, mainLang, DataFramePath, Mes
                             desc = 'DuplicationPreprocessUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedDuplicationPreprocess(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'DuplicationPreprocessUpdate: {Update["Duplication"]}')
                 time.sleep(0.0001)
@@ -497,7 +498,7 @@ def DuplicationPreprocessUpdate(projectName, email, mainLang, DataFramePath, Mes
                 Duplication = Update["Duplication"]
                 DuplicationScript = Update["DuplicationScript"]
                 
-                AddDuplicationPreprocessScriptsToDB(projectName, email, PreprocessId, Index, Duplication, DuplicationScript)
+                DataFrame = AddDuplicationPreprocessScriptsToDB(DataFrame, PreprocessId, Index, Duplication, DuplicationScript)
                 # i값 수동 업데이트
                 i += 1
             
@@ -505,7 +506,7 @@ def DuplicationPreprocessUpdate(projectName, email, mainLang, DataFramePath, Mes
             # # BodyFrame DuplicationPreprocessTag 업데이트
             # DuplicationPreprocessToBodyFrame(projectName, email)
             # Completion "Yes" 업데이트
-            DuplicationPreprocessCompletionUpdate(projectName, email)
+            DuplicationPreprocessCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 02-1_DuplicationPreprocessUpdate 완료 ]\n")
         
     else:

@@ -10,7 +10,7 @@ from tqdm import tqdm
 from PyPDF2 import PdfWriter, PdfReader
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedBookPreprocessToDB, AddBookPreprocessBookPagesToDB, BookPreprocessCountLoad, BookPreprocessCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedBookPreprocessToDB, AddBookPreprocessBookPagesToDB, BookPreprocessCountLoad, UpdatedBookPreprocess, BookPreprocessCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -861,9 +861,9 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
         if Completion == "No":
             
             if ExistedDataFrame != None:
-                # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-                AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame)
-                AddExistedDataSetToDB(projectName, email, "BookPreprocess", ExistedDataSet)
+                # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+                # AddExistedBookPreprocessToDB(projectName, email, ExistedDataFrame)
+                # AddExistedDataSetToDB(projectName, email, "BookPreprocess", ExistedDataSet)
                 print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 ExistedBookPreprocess으로 대처됨 ]\n")
                 
                 _, TextProcess = BookPreprocessResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
@@ -885,6 +885,7 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
                                 desc = 'BookPreprocessUpdate')
                 # i값 수동 생성
                 i = 0
+                DataFrame = UpdatedBookPreprocess(projectName, email)
                 for Update in UpdateTQDM:
                     UpdateTQDM.set_description(f'BookPreprocessUpdate: {Update["Script"][:10]}...')
                     time.sleep(0.0001)
@@ -892,13 +893,13 @@ def BookPreprocessUpdate(projectName, email, DataFramePath, MessagesReview = 'of
                     PageElement = Update["PageElement"]
                     Script = Update["Script"]
                     
-                    AddBookPreprocessBookPagesToDB(projectName, email, PageId, PageElement, Script)
+                    DataFrame = AddBookPreprocessBookPagesToDB(DataFrame, PageId, PageElement, Script)
                     # i값 수동 업데이트
                     i += 1
                 
                 UpdateTQDM.close()
                 # Completion "Yes" 업데이트
-                BookPreprocessCompletionUpdate(projectName, email)
+                BookPreprocessCompletionUpdate(projectName, email, DataFrame)
                 print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate 완료 ]\n")
         else:
             print(f"[ User: {email} | Project: {projectName} | 00_BookPreprocessUpdate는 이미 완료됨 ]\n")

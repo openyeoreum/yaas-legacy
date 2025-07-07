@@ -8,7 +8,7 @@ sys.path.append("/yaas")
 from tqdm import tqdm
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedContextCompletionToDB, AddContextCompletionChunksToDB, ContextCompletionCountLoad, ContextCompletionCompletionUpdate
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, LoadOutputMemory, SaveOutputMemory, AddExistedContextCompletionToDB, AddContextCompletionChunksToDB, ContextCompletionCountLoad, UpdatedContextCompletion, ContextCompletionCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
 
 #########################
@@ -360,9 +360,9 @@ def ContextCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
     if Completion == "No":
         
         if ExistedDataFrame != None:
-            # 이전 작업이 존재할 경우 가져온 뒤 업데이트
-            AddExistedContextCompletionToDB(projectName, email, ExistedDataFrame)
-            AddExistedDataSetToDB(projectName, email, "ContextCompletion", ExistedDataSet)
+            # # 이전 작업이 존재할 경우 가져온 뒤 업데이트
+            # AddExistedContextCompletionToDB(projectName, email, ExistedDataFrame)
+            # AddExistedDataSetToDB(projectName, email, "ContextCompletion", ExistedDataSet)
             print(f"[ User: {email} | Project: {projectName} | 08_ContextCompletionUpdate는 ExistedContextCompletion으로 대처됨 ]\n")
         else:
             responseJson = ContextCompletionResponseJson(projectName, email, DataFramePath, messagesReview = MessagesReview, mode = Mode)
@@ -379,6 +379,7 @@ def ContextCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
                             desc = 'ContextCompletionUpdate')
             # i값 수동 생성
             i = 0
+            DataFrame = UpdatedContextCompletion(projectName, email)
             for Update in UpdateTQDM:
                 UpdateTQDM.set_description(f'ContextCompletionUpdate: {Update}')
                 time.sleep(0.0001)
@@ -392,13 +393,13 @@ def ContextCompletionUpdate(projectName, email, DataFramePath, MessagesReview = 
                 Emotion = Update["Emotion"]
                 Accuracy = Update["Accuracy"]
                 
-                AddContextCompletionChunksToDB(projectName, email, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy)
+                DataFrame = AddContextCompletionChunksToDB(DataFrame, ContextChunkId, ChunkId, Chunk, Genre, Gender, Age, Personality, Emotion, Accuracy)
                 # i값 수동 업데이트
                 i += 1
             
             UpdateTQDM.close()
             # Completion "Yes" 업데이트
-            ContextCompletionCompletionUpdate(projectName, email)
+            ContextCompletionCompletionUpdate(projectName, email, DataFrame)
             print(f"[ User: {email} | Project: {projectName} | 08_ContextCompletionUpdate 완료 ]\n")
         
     else:

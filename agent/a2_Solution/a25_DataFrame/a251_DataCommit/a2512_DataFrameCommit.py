@@ -727,9 +727,8 @@ def UpdateSplitedHalfBodyScripts(DataFrame, IndexId, IndexTag, Index):
 
 ## 4. 1-3 HalfBodyFrame의 Body(본문) Body부분 업데이트
 def AddHalfBodyFrameBodyToDB(DataFrame, IndexId, IndexTag, Index):
-    project = GetProject(projectName, email)
 
-    DataFrame = UpdateSplitedHalfBodyScripts(project, IndexId, IndexTag, Index)
+    DataFrame = UpdateSplitedHalfBodyScripts(DataFrame, IndexId, IndexTag, Index)
         
     return DataFrame
 

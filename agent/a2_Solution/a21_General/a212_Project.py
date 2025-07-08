@@ -3,23 +3,40 @@ import json
 import sys
 sys.path.append("/yaas")
 
+## Project 경로 설정
 def GetProjectPath(projectName, email):
     ProjectPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}"
     return ProjectPath
 
+## Init audiobookDataFrame 경로 불러오기
 def GetProjectDataPath():
     ProjectDataPath = "/yaas/agent/a5_Database/a53_ProjectData/a534_AudioBookProject"
     return ProjectDataPath
 
+## audiobookDataFrameConfig 경로 설정
 def GetProjectConfigPath(projectName, email):
     ProjectConfigPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_audiobook/{projectName}_dataframe_audiobook_file/{email}_{projectName}_AudiobookProcess_Config.json"
     return ProjectConfigPath
 
+## DataFrame JSON 데이터 불러오기
 def LoadJsonFrame(filepath):
-    with open(filepath, 'r') as file:
+    with open(filepath, 'r', encoding = 'utf-8') as file:
         DataFrame = json.load(file)
     return DataFrame
 
+## DataFrameName이 포함된 DataFrame JSON 데이터 불러오기
+def LoadExistingDataFrame(audiobookDataFramePath, DataFrameName, InitDataFramePath):
+    AllFiles = os.listdir(audiobookDataFramePath)
+
+    # DataFrameName이 포함된 파일 찾기
+    for DataFrameFile in AllFiles:
+        if DataFrameName in DataFrameFile:
+            DataFramePath = os.path.join(audiobookDataFramePath, DataFrameFile)
+            return LoadJsonFrame(DataFramePath)
+        
+    return LoadJsonFrame(InitDataFramePath)
+
+## DataFrame Config 설정
 def SetupProject(projectName, email):
     # 디렉토리 경로 생성
     projectPath = GetProjectPath(projectName, email)
@@ -135,82 +152,39 @@ def SetupProject(projectName, email):
         os.makedirs(masterMarketingPath, exist_ok = True)
         
     # JSON 데이터 불러오기
-    bookPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-00_BookPreprocessFrame.json")
-    indexFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-01_IndexFrame.json")
-    duplicationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-02_DuplicationPreprocessFrame.json")
-    pronunciationPreprocessFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-03_PronunciationPreprocessFrame.json")
-    bodyFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-04_BodyFrame.json")
-    halfBodyFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-04_BodyFrame.json")
-    captionFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-05_CaptionFrame.json")
-    phargraphTransitionFrame = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-06_PhargraphTransitionFrame.json")
-    bodyContextTags = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-07_BodyContextTags.json")
-    wMWMContextTags = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-08_WMWMContextTags.json")
-    characterContextTags = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-09_CharacterContextTags.json")
-    soundContextTags = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-10_SoundContextTags.json")
-    sFXContextTags = LoadJsonFrame(ProjectDataPath + "/a5341_Script/a5341-11_SFXContextTags.json")
-    contextDefine = LoadJsonFrame(ProjectDataPath + "/a5342_Context/a5342-01_ContextDefine.json")
-    contextCompletion = LoadJsonFrame(ProjectDataPath + "/a5342_Context/a5342-02_ContextCompletion.json")
-    wMWMDefine = LoadJsonFrame(ProjectDataPath + "/a5342_Context/a5342-03_WMWMDefine.json")
-    wMWMMatching = LoadJsonFrame(ProjectDataPath + "/a5342_Context/a5342-04_WMWMMatching.json")
-    characterDefine = LoadJsonFrame(ProjectDataPath + "/a5343_Character/a5343-01_CharacterDefine.json")
-    characterCompletion = LoadJsonFrame(ProjectDataPath + "/a5343_Character/a5343-02_CharacterCompletion.json")
-    soundMatching = LoadJsonFrame(ProjectDataPath + "/a5345_Sound/a5345-01_SoundMatching.json")
-    sFXMatching = LoadJsonFrame(ProjectDataPath + "/a5346_SFX/a5346-01_SFXMatching.json")
-    correctionKo = LoadJsonFrame(ProjectDataPath + "/a5348_Correction/a5348-01_CorrectionKo.json")
-    correctionEn = LoadJsonFrame(ProjectDataPath + "/a5348_Correction/a5348-02_CorrectionEn.json")
-    selectionGenerationKo = LoadJsonFrame(ProjectDataPath + "/a5349_SelectionGeneration/a5349-01_SelectionGenerationKo.json")
-    mixingMasteringKo = LoadJsonFrame(ProjectDataPath + "/a53410_MixingMastering/a53410-01_MixingMasteringKo.json")
+    bookPreprocessFrame = LoadExistingDataFrame(audiobookDataFramePath, "00_BookPreprocessFrameDataFrame", ProjectDataPath + "/a5341_Script/a5341-00_BookPreprocessFrame.json")
+    indexFrame = LoadExistingDataFrame(audiobookDataFramePath, "01_IndexFrameDataFrame", ProjectDataPath + "/a5341_Script/a5341-01_IndexFrame.json")
+    duplicationPreprocessFrame = LoadExistingDataFrame(audiobookDataFramePath, "02-1_DuplicationPreprocessDataFrame", ProjectDataPath + "/a5341_Script/a5341-02_DuplicationPreprocessFrame.json")
+    pronunciationPreprocessFrame = LoadExistingDataFrame(audiobookDataFramePath, "02-2_PronunciationPreprocessDataFrame", ProjectDataPath + "/a5341_Script/a5341-03_PronunciationPreprocessFrame.json")
+    bodyFrame = LoadExistingDataFrame(audiobookDataFramePath, "03_BodyFrameDataFrame", ProjectDataPath + "/a5341_Script/a5341-04_BodyFrame.json")
+    halfBodyFrame = LoadExistingDataFrame(audiobookDataFramePath, "04_HalfBodyFrameDataFrame", ProjectDataPath + "/a5341_Script/a5341-04_BodyFrame.json")
+    captionFrame = LoadExistingDataFrame(audiobookDataFramePath, "06_CaptionCompletionDataFrame", ProjectDataPath + "/a5341_Script/a5341-05_CaptionFrame.json")
+    phargraphTransitionFrame = LoadExistingDataFrame(audiobookDataFramePath, "PhargraphTransitionFrame", ProjectDataPath + "/a5341_Script/a5341-06_PhargraphTransitionFrame.json")
+    bodyContextTags = LoadExistingDataFrame(audiobookDataFramePath, "BodyContextTags", ProjectDataPath + "/a5341_Script/a5341-07_BodyContextTags.json")
+    wMWMContextTags = LoadExistingDataFrame(audiobookDataFramePath, "WMWMContextTags", ProjectDataPath + "/a5341_Script/a5341-08_WMWMContextTags.json")
+    characterContextTags = LoadExistingDataFrame(audiobookDataFramePath, "CharacterContextTags", ProjectDataPath + "/a5341_Script/a5341-09_CharacterContextTags.json")
+    soundContextTags = LoadExistingDataFrame(audiobookDataFramePath, "SoundContextTags", ProjectDataPath + "/a5341_Script/a5341-10_SoundContextTags.json")
+    sFXContextTags = LoadExistingDataFrame(audiobookDataFramePath, "SFXContextTags", ProjectDataPath + "/a5341_Script/a5341-11_SFXContextTags.json")
+    contextDefine = LoadExistingDataFrame(audiobookDataFramePath, "07_ContextDefineDataFrame", ProjectDataPath + "/a5342_Context/a5342-01_ContextDefine.json")
+    contextCompletion = LoadExistingDataFrame(audiobookDataFramePath, "08_ContextCompletionDataFrame", ProjectDataPath + "/a5342_Context/a5342-02_ContextCompletion.json")
+    wMWMDefine = LoadExistingDataFrame(audiobookDataFramePath, "09_WMWMDefineDataFrame", ProjectDataPath + "/a5342_Context/a5342-03_WMWMDefine.json")
+    wMWMMatching = LoadExistingDataFrame(audiobookDataFramePath, "10_WMWMMatchingDataFrame", ProjectDataPath + "/a5342_Context/a5342-04_WMWMMatching.json")
+    characterDefine = LoadExistingDataFrame(audiobookDataFramePath, "11_CharacterDefineDataFrame", ProjectDataPath + "/a5343_Character/a5343-01_CharacterDefine.json")
+    characterCompletion = LoadExistingDataFrame(audiobookDataFramePath, "12_CharacterCompletionDataFrame", ProjectDataPath + "/a5343_Character/a5343-02_CharacterCompletion.json")
+    soundMatching = LoadExistingDataFrame(audiobookDataFramePath, "SoundMatching", ProjectDataPath + "/a5345_Sound/a5345-01_SoundMatching.json")
+    sFXMatching = LoadExistingDataFrame(audiobookDataFramePath, "15_SFXMatchingDataFrame", ProjectDataPath + "/a5346_SFX/a5346-01_SFXMatching.json")
+    translationKo = LoadExistingDataFrame(audiobookDataFramePath, "TranslationKo", ProjectDataPath + "/a5347_Translation/a5347-01_TranslationKo.json")
+    translationEn = LoadExistingDataFrame(audiobookDataFramePath, "TranslationEn", ProjectDataPath + "/a5347_Translation/a5347-02_TranslationEn.json")
+    correctionKo = LoadExistingDataFrame(audiobookDataFramePath, "CorrectionKo", ProjectDataPath + "/a5348_Correction/a5348-01_CorrectionKo.json")
+    correctionEn = LoadExistingDataFrame(audiobookDataFramePath, "CorrectionEn", ProjectDataPath + "/a5348_Correction/a5348-02_CorrectionEn.json")
+    selectionGenerationKo = LoadExistingDataFrame(audiobookDataFramePath, "26_SelectionGenerationKoDataFrame", ProjectDataPath + "/a5349_SelectionGeneration/a5349-01_SelectionGenerationKo.json")
+    mixingMasteringKo = LoadExistingDataFrame(audiobookDataFramePath, "MixingMasteringKo", ProjectDataPath + "/a53410_MixingMastering/a53410-01_MixingMasteringKo.json")
     ### 아래로 추가되는 데이터프레임 작성 ###
 
     ## audiobookProcessConfig 생성
     if not os.path.exists(audiobookProcessConfigFilePath):
         audiobookProcessConfig = {
             "ProjectName": projectName,
-            "ProjectPath": projectPath,
-            "EstimatePath": estimatePath,
-            "MasterEstimatePath": masterEstimatePath,
-            "ScriptPath": scriptPath,
-            "ScriptDataFramePath": scriptDataFramePath,
-            "MasterScriptPath": masterScriptPath,
-            "UploadScriptPath": uploadScriptPath,
-            "TranslationPath": translationPath,
-            "TranslationDataFramePath": translationDataFramePath,
-            "MasterTranslationPath": masterTranslationPath,
-            "UploadTranslationPath": uploadTranslationPath,
-            "TextbookPath": textbookPath,
-            "TextbookDataFramePath": textbookDataFramePath,
-            "MixedTextBookPath": mixedTextBookPath,
-            "MasterTextBookPath": masterTextBookPath,
-            "AudiobookPath": audiobookPath,
-            "AudiobookDataFramePath": audiobookDataFramePath,
-            "AudiobookDataSetPath": audiobookDataSetPath,
-            "MixedAudioBookPath": mixedAudioBookPath,
-            "VoiceLayersPath": voiceLayersPath,
-            # "NarratorPath": narratorPath,
-            # "Character1Path": character1Path,
-            # "Character2Path": character2Path,
-            # "Character3Path": character3Path,
-            # "Character4Path": character4Path,
-            "SFXLayersPath": sFXLayersPath,
-            "SFX1Path": sFX1Path,
-            "SFX2Path": sFX2Path,
-            "SFX3Path": sFX3Path,
-            "SFX4Path": sFX4Path,
-            "SFX5Path": sFX5Path,
-            "SoundLayersPath": soundLayersPath,
-            "BackgoundSoundPath": backgoundSoundPath,
-            "CaptionSoundPath": captionSoundPath,
-            "MusicLayersPath": musicLayersPath,
-            "Music1Path": music1Path,
-            "Music2Path": music2Path,
-            "MasterAudioBookPath": masterAudioBookPath,
-            "VideobookPath": videobookPath,
-            "VideobookDataFramePath": videobookDataFramePath,
-            "MixedVideoBookPath": mixedVideoBookPath,
-            "MasterVideoBookPath": masterVideoBookPath,
-            "MarketingPath": marketingPath,
-            "MarketingDataFramePath": marketingDataFramePath,
-            "MasterMarketingPath": masterMarketingPath,
             "BookPreprocessFrame": bookPreprocessFrame,
             "IndexFrame": indexFrame,
             "DuplicationPreprocessFrame": duplicationPreprocessFrame,
@@ -232,10 +206,12 @@ def SetupProject(projectName, email):
             "CharacterCompletion": characterCompletion,
             "SoundMatching": soundMatching,
             "SFXMatching": sFXMatching,
+            "TranslationEn": translationEn,
+            "TranslationKo": translationKo,
             "CorrectionKo": correctionKo,
             "CorrectionEn": correctionEn,
             "SelectionGenerationKo": selectionGenerationKo,
-            "MixingMasteringKo": mixingMasteringKo
+            "MixingMasteringKo": mixingMasteringKo,
             ### 아래로 추가되는 데이터프레임 작성 ###
         }
         ## 프로젝트 설정 생성

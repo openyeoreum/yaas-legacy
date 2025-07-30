@@ -32,7 +32,7 @@
         "MasterModel": "claude-3-5-sonnet-latest"
     },
     "GOOGLE":{
-        "MasterModel": "gemini-2.5-flash-preview-04-17"
+        "MasterModel": "gemini-2.5-flash"
     },
     "DEEPSEEK":{
         "MasterModel": "deepseek-reasoner"

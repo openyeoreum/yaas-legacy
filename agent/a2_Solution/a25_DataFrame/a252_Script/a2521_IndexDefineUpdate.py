@@ -7,7 +7,7 @@ import sys
 sys.path.append("/yaas")
 
 from tqdm import tqdm
-from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject, GetPromptFrame
+from agent.a2_Solution.a21_General.a214_GetProcessData import GetScript, GetProject, GetPromptFrame
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit import FindDataframeFilePaths, AddExistedIndexFrameToDB, AddIndexFrameBodyToDB, IndexFrameCountLoad, UpdatedIndexFrame, IndexFrameCompletionUpdate
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import AddExistedDataSetToDB, AddProjectContextToDB, AddProjectRawDatasetToDB, AddProjectFeedbackDataSetsToDB
@@ -19,10 +19,9 @@ def LoadIndexText(projectName, email):
     RawIndexTextFilePath = TextDirPath + f'/{projectName}_Index(Raw).txt'
     RawBodyTextFilePath = TextDirPath + f'/{projectName}_Body(Raw).txt'
     
-    project = GetProject(projectName, email)
-    indexTextPath = os.path.join(project["UploadScriptPath"], f"{projectName}_Index.txt")
+    indexTextPath = os.path.join(TextDirPath, f"{projectName}_Index.txt")
     with open(indexTextPath, 'r', encoding='utf-8') as file:
-      indexText = file.read()
+      indexText = GetScript(projectName, email, "Index")
     
     if indexText is None:
       ## [ Script Generation 프로세스 ] 인 경우 ##

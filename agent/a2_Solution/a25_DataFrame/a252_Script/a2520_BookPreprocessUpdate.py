@@ -19,8 +19,8 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2513_DataSetCommit import 
 
 ## Script파일 여부 확인
 def ExistenceOrNotScriptFile(projectName, email):
-    project = GetProject(projectName, email)
-    ScriptFilesPath = project["UploadScriptPath"]
+    # 경로 설정
+    ScriptFilesPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     PDFFileSourcePath = os.path.join(ScriptFilesPath, projectName + ".pdf")
     IndexFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Index.txt")
     BodyFileSourcePath = os.path.join(ScriptFilesPath, projectName + "_Body.txt")

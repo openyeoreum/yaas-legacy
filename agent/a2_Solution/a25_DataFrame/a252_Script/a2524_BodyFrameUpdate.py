@@ -13,8 +13,10 @@ from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataFrameCommit impor
 
 # BodyText 로드
 def LoadBodyText(projectName, email):
+    # 경로 설정
+    TextDirPath = f"/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{projectName}/{projectName}_script/{projectName}_upload_script_file"
     project = GetProject(projectName, email)
-    bodyTextPath = os.path.join(project["UploadScriptPath"], f"{projectName}_Body.txt")
+    bodyTextPath = os.path.join(TextDirPath, f"{projectName}_Body.txt")
     with open(bodyTextPath, 'r', encoding='utf-8') as file:
         bodyText = file.read()
     _bodyText = bodyText + '\n\n"끝까지 들어주셔서 감사합니다."\n\n"안녕하세요."\n"스튜디오 여름 입니다."\n"스튜디오 여름에서 이 책을 오디오북으로 제작하게 되어 영광이며,"\n"모든 책을 편하게 들을 수 있는 그날을 스튜디오 여름이 열어가겠습니다."'

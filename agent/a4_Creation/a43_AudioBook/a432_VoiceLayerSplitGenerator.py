@@ -15,7 +15,7 @@ import pyloudnorm as pyln
 import sys
 sys.path.append("/yaas")
 
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LLMLoad import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from io import BytesIO
 from tqdm import tqdm
 from time import sleep

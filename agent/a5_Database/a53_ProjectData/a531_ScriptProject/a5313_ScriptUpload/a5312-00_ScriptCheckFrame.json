@@ -1,0 +1,20 @@
+[
+    {
+        "ProjectName": "",
+        "FileExtension": "",
+        "Language": "",
+        "Solution": "",
+        "AutoSegmentation": "No",
+        "TaskName": "ScriptCheck",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "Page": 0,
+            "Form": "None",
+            "Index": "None",
+            "Component": []
+        }
+    ]
+]

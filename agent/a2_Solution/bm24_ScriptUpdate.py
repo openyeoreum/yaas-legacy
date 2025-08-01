@@ -11,15 +11,15 @@ from agent.a2_Solution.a23_Script.a232_BookScriptGen.a2321_BookScriptGenUpdate i
 
 ### 솔루션에 북스크립트 업데이트 ###
 def SolutionScriptUpdate(ProjectName, email, Script, Intention, MessagesReview):
-    
-    #######################
-    ### 01_ScriptUpload ###
-    #######################
-    
-    if Script == "" or Script == "None":
-        # ScriptUpload(ProjectName, email)
+
+    ###########################
+    ### 01_InstantScriptGen ###
+    ###########################
+
+    if not Script in ["", "None", "BookScript"]:
+        # InstantScriptGenProcessUpdate(ProjectName, email, Script)
         pass
-    
+
     ########################
     ### 02_BookScriptGen ###
     ########################
@@ -27,10 +27,8 @@ def SolutionScriptUpdate(ProjectName, email, Script, Intention, MessagesReview):
     elif Script == "BookScript":
         BookScriptGenProcessUpdate(ProjectName, email, Intention, MessagesReview = MessagesReview)
 
-    ###########################
-    ### 03_InstantScriptGen ###
-    ###########################
-
-    else:
-        # InstantScriptGenProcessUpdate(ProjectName, email, Script)
-        pass
+    #######################
+    ### 03_ScriptUpload ###
+    #######################
+    
+    # ScriptUpload(ProjectName, email)

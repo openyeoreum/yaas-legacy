@@ -717,9 +717,9 @@ def LanguageDetection(Body, DetectionLength = 10):
     # 결과를 리스트로 변환
     return list(DetectedLanguages)
 
-#####################
+##############################
 ##### Input Response 생성 #####
-#####################
+##############################
 
 ## Process1: TranslationIndexDefine의 InputList
 def TranslationIndexDefineInputList(projectName, UploadTranslationFilePath):

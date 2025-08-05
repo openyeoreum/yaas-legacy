@@ -3,8 +3,11 @@
 - Content 내에 각 요소를 오디오북 솔루션의 효과음 표기 처럼 (마치 html처럼) 표기
 - 일반 txt인 경우에는 2,000~3,000 지정 토큰 수에 맞게 분힐(문장 단위)
 - 한/영 프롬프트 다 만들기
+- 문장 나눌때는 자연어 모델로 분할해달라고 하기
 
-#1 양식 및 언어체크, ScriptCheck, 페이지별 Language, Form(표지, 면지, 프롤로그, 목차, 본문목차, 본문, 에필로그, 부록, 도서정보, 기타 등)
+#1 PDF파일 리사이즈
+
+#2 양식 및 언어체크, ScriptCheck, 페이지별 Language, Form(표지, 면지, 프롤로그, 목차, 본문목차, 본문, 에필로그, 부록, 도서정보, 기타 등)
 
 (역할 및 업무)
 지금 <도서목차>에서 (언어태그)와 목차별 (목차태그)를 지정하여 정리하는 작업을 필요로 합니다. 그래서 <도서목차>를 보고 언어태그와 각 목차별 목차태그를 지정하여 <도서목차.json>로 완성하는 작업을 완성해 주세요.
@@ -15,7 +18,7 @@
 빈지
 
 
-#2 목차체크, ScriptCheck, Index(부, 장, 절, 관, 항)
+#3 목차체크, ScriptCheck, Index(부, 장, 절, 관, 항)
 
 부 -> Part
 장 -> Chapter
@@ -23,36 +26,39 @@
 프롤로그, 에필로그 -> Logue 
 
 
-#3 요소체크, ScriptCheck, Component(주석, 이미지, 다이어그램, 표, 코멘트, 특수문자)
+#4 요소체크, ScriptCheck, Component(주석, 이미지, 다이어그램, 표, 특수문자)
 
+<본문></본문> -> Body
+<캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <표></표> -> Caption
 <주석></주석> -> Annotation
-<이미지></이미지>, <다이어그램></다이어그램>, <표></표> -> Caption
-<코멘트></코멘트>, <특수문자></특수문자> -> Comments
 
-#4 주석 양식에 따른 표기
+<특수문자></특수문자> -> Sign
 
-#5 이미지설명 양식에 따른 표기
+#5 캡션 양식에 따른 표기
 
-#6 다이어그램 양식에 따른 표기
+#6 주석 양식에 따른 표기
 
-#7 표 csv양식에 따른 표기
+#7 이미지설명 양식에 따른 표기
 
-#8 코멘트 표기
+#8 다이어그램 양식에 따른 표기
 
-#9 특수문자 표기
+#9 표 csv양식에 따른 표기
 
-#10 문장별 분리 후 토큰수 별 Index -> Body묶기
+#10 특수문자 표기
 
-** 최종 양식은 From, Index, Body, Caption, Comments, Annotation **
+#11 문장별 분리 후 토큰수 별 Index(Part, Chapter, Index, Logue) -> Body(Body, Caption, Annotation) -> Chunk(Chunk, Sign)로 묶기
+
+** 최종 양식은 Index(Part, Chapter, Index, Logue), Body(Body, Caption, Annotation) -> Chunk(Chunk, Sign) **
+
 
 -- 후처리 --
 
 
-#1 Image(이미지), Annotation(주석) 미주로 처리 <- 이 부분은 번역 마지막 태스크로 변경
+#1 Image(이미지), Annotation(주석) 미주로 처리 <- 이 부분은 번역 마지막 태스크
 
-#2 Duplication
+#2 Duplication <- 이 부분은 오디오북 앞 태스크
 
-#3 Pronunciation
+#3 Pronunciation <- 이 부분은 오디오북 앞 태스크
 
 
 

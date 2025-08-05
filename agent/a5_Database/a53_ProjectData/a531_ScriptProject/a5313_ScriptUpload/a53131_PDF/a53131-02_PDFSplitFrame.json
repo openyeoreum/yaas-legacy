@@ -1,0 +1,18 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "PDFSplit",
+        "Solution": "",
+        "AutoSegmentation": "",
+        "FileExtension": "pdf",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "ScriptId": 0,
+            "PageFilePath": "None"
+        }
+    ]
+]

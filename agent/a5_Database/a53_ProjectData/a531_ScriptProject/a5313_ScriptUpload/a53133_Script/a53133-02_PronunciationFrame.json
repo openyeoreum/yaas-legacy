@@ -1,0 +1,29 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "Pronunciation",
+        "Solution": "AudioBook",
+        "AutoSegmentation": "No",
+        "FileExtension": "",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "IndexId": 0,
+            "IndexTag": "None",
+            "Index": "None",
+            "BodyId": "None",
+            "BodyTag": "None",
+            "Pronunciation": [
+                {
+                    "Before": "None",
+                    "After": "None",
+                    "Type": "None"
+                }
+            ],
+            "PronunciationBody": "None"
+        }
+    ]
+]

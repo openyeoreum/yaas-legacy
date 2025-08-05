@@ -1,0 +1,19 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "TXTIndexMatching",
+        "Solution": "",
+        "AutoSegmentation": "",
+        "FileExtension": "txt",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "ScriptId": 0,
+            "IndexTag": "None",
+            "Index": "None"
+        }
+    ]
+]

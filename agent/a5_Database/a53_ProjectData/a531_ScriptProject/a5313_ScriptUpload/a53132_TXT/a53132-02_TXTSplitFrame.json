@@ -1,0 +1,18 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "TXTSplit",
+        "Solution": "",
+        "AutoSegmentation": "",
+        "FileExtension": "txt",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "ScriptId": 0,
+            "SplitedTextFile": "None"
+        }
+    ]
+]

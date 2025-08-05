@@ -1,0 +1,22 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "TXTCheck",
+        "Solution": "",
+        "AutoSegmentation": "",
+        "FileExtension": "txt",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "ScriptId": 0,
+            "SplitedTextFile": "None",
+            "IndexTag": "None",
+            "Index": "None",
+            "Component": [],
+            "Script": "None"
+        }
+    ]
+]

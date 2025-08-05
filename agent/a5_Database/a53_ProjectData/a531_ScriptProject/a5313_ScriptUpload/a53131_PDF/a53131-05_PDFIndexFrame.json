@@ -1,0 +1,19 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "PDFIndex",
+        "Solution": "",
+        "AutoSegmentation": "",
+        "FileExtension": "pdf",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "IndexId": 0,
+            "IndexTag": "None",
+            "Index": "None"
+        }
+    ]
+]

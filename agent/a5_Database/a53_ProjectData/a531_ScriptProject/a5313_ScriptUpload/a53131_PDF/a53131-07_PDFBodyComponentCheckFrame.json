@@ -1,0 +1,19 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "PDFBodyComponentCheck",
+        "Solution": "",
+        "AutoSegmentation": "",
+        "FileExtension": "pdf",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "ScriptId": 0,
+            "BodyComponent": [],
+            "BML": "None"
+        }
+    ]
+]

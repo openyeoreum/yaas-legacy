@@ -1,0 +1,19 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "TXTIndex",
+        "Solution": "",
+        "AutoSegmentation": "",
+        "FileExtension": "txt",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "IndexId": 0,
+            "IndexTag": "None",
+            "Index": "None"
+        }
+    ]
+]

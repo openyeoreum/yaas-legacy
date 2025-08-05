@@ -1,0 +1,19 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "TXTBodyComponentCheck",
+        "Solution": "",
+        "AutoSegmentation": "",
+        "FileExtension": "txt",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "ScriptId": 0,
+            "BodyComponent": [],
+            "BML": "None"
+        }
+    ]
+]

@@ -1,7 +1,17 @@
+pip install spacy
+
+python -m spacy download ko_core_news_sm
+python -m spacy download en_core_web_sm
+python -m spacy download ja_core_news_sm
+python -m spacy download zh_core_web_sm
+python -m spacy download es_core_news_sm
+python -m spacy download de_core_news_sm
+python -m spacy download fr_core_news_sm
+
 - 전처리 프로세스는 전체 언어로 처리
 - Content 내에 각 요소를 오디오북 솔루션의 효과음 표기 처럼 (마치 html처럼) 표기
 - 일반 txt인 경우에는 2,000~3,000 지정 토큰 수에 맞게 분힐(문장 단위)
-- 한/영 프롬프트 다 만들기
+- 한/영 프롬프트 모두 만들기
 - 문장 나눌때는 자연어 모델로 분할해달라고 하기
 - Task Process는 하나의 모듈로 구현 후 모든 프로세스 진행하기
 
@@ -13,7 +23,7 @@
 #P1 PDFReSize (PDF 파일 리사이즈)
 
 
-#P2 PDFPageSplit (PDF 파일 페이지 분할)
+#P2 PDFSplit (PDF 파일 페이지 분할)
 
 
 #P3 PDFLanguageCheck (PDF 파일 언어 체크)
@@ -34,9 +44,12 @@
 #P6 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)
 
 
-#P7 PDFComponentCheck (PDF 파일 페이지별 구성요소 체크)
+#P7 PDFBodyComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <표></표> -> Caption
+
+
+#P8 PDFChunkAnnotationComponentCheck (PDF 파일 페이지별 Chunk, Annotation 구성요소 체크)
 <주석></주석> -> Annotation
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment
@@ -47,7 +60,7 @@
 언어 -> Ko, En, Ja ...
 
 
-#T2 TXTPageSplit (텍스트 파일 지정 토큰수 분할)
+#T2 TXTSplit (텍스트 파일 지정 토큰수 분할)
 
 
 #T3 TXTIndexGen (텍스트 파일 목차 데이터 형성)
@@ -60,9 +73,12 @@
 #T4 TXTIndexMatching (텍스트 파일 목차와 본문 속 목차 매칭)
 
 
-#T5 TXTComponentCheck (텍스트 파일 페이지별 구성요소 체크)
+#T5 TXTBodyComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <표></표> -> Caption
+
+
+#T6 TXTChunkAnnotationComponentCheck (텍스트 파일 페이지별 Chunk, Annotation 구성요소 체크)
 <주석></주석> -> Annotation
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment
@@ -89,11 +105,10 @@
 #PT8 CommentGen (코멘트 구조화 데이터 형성)
 
 
-#PT9 BodyFrameUpdate (도서 전처리 구조화 데이터 완성)
+#PT9 BodyFrame (도서 전처리 구조화 데이터 완성)
 Index(Part, Chapter, Index, Logue)
 Body(Body, Caption, Annotation)
 Chunk(Chunk, Sign, Comment)
-
 
 
 ---- 후처리 ----

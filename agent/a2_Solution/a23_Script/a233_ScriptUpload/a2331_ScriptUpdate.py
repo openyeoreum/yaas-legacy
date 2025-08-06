@@ -50,8 +50,8 @@ class ScriptLoadProcess:
         self.DataFrameScriptPath = os.path.join(self.ScriptFilePath, f"{self.projectName}_dataframe_script_file")
 
         # 최종 생성될 LoadFrame 파일 경로
-        self.PDFLoadFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_01_PDFLoadFrame({self.Solution}).json")
-        self.TXTLoadFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_01_TXTLoadFrame({self.Solution}).json")
+        self.PDFLoadFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_P01_PDFLoadFrame({self.Solution}).json")
+        self.TXTLoadFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_T01_TXTLoadFrame({self.Solution}).json")
 
     def _CheckExistingLoadFrame(self):
         """PDFLoadFrame 또는 TXTLoadFrame 파일이 존재하는지 확인"""
@@ -83,7 +83,7 @@ class ScriptLoadProcess:
         return False
 
     def _CreateLoadFrameFile(self):
-        """주어진 정보로 ScriptCheck JSON 파일 생성 및 저장"""
+        """주어진 정보로 ScriptLoadFrame JSON 파일 생성 및 저장"""
         # 스크립트 파일 확장자에 따라 적합한 경로 설정
         if self.ScriptFileExtension == "pdf":
             LoadDataFramePath = self.PDFLoadDataFramePath
@@ -104,6 +104,27 @@ class ScriptLoadProcess:
         with open(LoadFramePath, 'w', encoding='utf-8') as LoadFrameFile:
             json.dump(LoadFrame, LoadFrameFile, ensure_ascii = False, indent = 4)
 
+    def _LoadScriptLoadFrame(self):
+        """생성된 ScriptLoadFrame JSON 파일 불러오기"""
+        # 스크립트 파일 확장자에 따라 적합한 경로 설정
+        if os.path.exists(self.PDFLoadFramePath):
+            LoadFramePath = self.PDFLoadFramePath
+        elif os.path.exists(self.TXTLoadFramePath):
+            LoadFramePath = self.TXTLoadFramePath
+            
+        # LoadFrame JSON 파일 불러오기
+        with open(LoadFramePath, 'r', encoding='utf-8') as LoadFrameFile:
+            LoadFrame = json.load(LoadFrameFile)
+
+        # LoadFrame에서 필요한 정보 반환
+        ProjectName = LoadFrame[0]['ProjectName']
+        Solution = LoadFrame[0]['Solution']
+        AutoTemplate = LoadFrame[0]['AutoTemplate']
+        FileExtension = LoadFrame[0]['FileExtension']
+        Language = LoadFrame[0]['Language'] if LoadFrame[0]['Language'] != "" else None
+            
+        return ProjectName, Solution, AutoTemplate, FileExtension, Language
+
     def Run(self):
         """스크립트 로드 전체 프로세스를 실행하는 메인 메서드"""
         ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
@@ -118,9 +139,16 @@ class ScriptLoadProcess:
             else:
                 self._CreateLoadFrameFile()
                 print(f"[ {ProcessInfo} Update 완료 ]\n")
+                return self._LoadScriptLoadFrame()
 
         else:
             print(f"[ {ProcessInfo} Update는 이미 완료됨 ]\n")
+            return self._LoadScriptLoadFrame()
+
+################################################
+##### P1 PDFResize (업로드 된 스크립트 파일 확인) #####
+################################################
+# class PDFResizeProcess:
 
 if __name__ == "__main__":
     
@@ -132,4 +160,5 @@ if __name__ == "__main__":
     #########################################################################
 
     ScriptLoaderInstance = ScriptLoadProcess(projectName, email, Solution, AutoTemplate)
-    ScriptLoaderInstance.Run()
+    ProjectName, Solution, AutoTemplate, FileExtension, Language = ScriptLoaderInstance.Run()
+    print(f"ProjectName: {ProjectName}, Solution: {Solution}, AutoTemplate: {AutoTemplate}, FileExtension: {FileExtension}, Language: {Language}")

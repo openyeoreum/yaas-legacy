@@ -20,7 +20,7 @@ python -m spacy download fr_core_news_sm
 
 
 ## PDF ##
-#P1 PDFReSize (PDF 파일 리사이즈)
+#P1 PDFResize (PDF 파일 리사이즈)
 
 
 #P2 PDFSplit (PDF 파일 페이지 분할)

@@ -1,15 +1,12 @@
 import os
 import shutil
 import json
-import logging
 import spacy
 import sys
 sys.path.append("/yaas")
 
 from PyPDF2 import PdfReader, PdfWriter
 
-# 로깅 설정
-logging.basicConfig(level = logging.INFO, format = '%(asctime)s - %(levelname)s - %(message)s')
 
 ##################################################
 ##### PT1 ScriptLoad (업로드 된 스크립트 파일 확인) #####
@@ -110,20 +107,20 @@ class ScriptLoadProcess:
     def Run(self):
         """스크립트 로드 전체 프로세스를 실행하는 메인 메서드"""
         ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
-        logging.info(f"< {ProcessInfo} Update 시작 >")
+        print(f"< {ProcessInfo} Update 시작 >")
 
         # LoadFrame 파일이 이미 존재하는지 확인
         if not self._CheckExistingLoadFrame():
 
             # 업로드 된 스크립트 파일 여부 확인
             if not self._FindAndProcessScriptFile():
-                raise FileNotFoundError(f"\n\n[ 원고 파일(txt, pdf)을 아래 경로에 복사해주세요. ]\n({self.ScriptDirPath})\n\n")
+                raise FileNotFoundError(f"\n\n[ 원고 파일(txt, pdf)을 아래 경로에 복사해주세요. ]\n({self.UploadScriptFilePath})\n\n")
             else:
                 self._CreateLoadFrameFile()
-                logging.info(f"[ {ProcessInfo} Update 완료 ]\n")
+                print(f"[ {ProcessInfo} Update 완료 ]\n")
 
         else:
-            logging.info(f"[ {ProcessInfo} Update는 이미 완료됨 ]\n")
+            print(f"[ {ProcessInfo} Update는 이미 완료됨 ]\n")
 
 if __name__ == "__main__":
     

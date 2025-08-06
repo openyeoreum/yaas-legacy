@@ -18,7 +18,6 @@ from agent.a4_Creation.bm29_AudioBookUpdate import CreationAudioBookUpdate
 ### Step3 : 프로젝트 Config 설정 ###
 #################################
 #################################
-
 ## YaaSConfig 로드
 def LoadYaaSConfig(email, ProjectName):
     ConfigPath = f'/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/{email}/{ProjectName}/{ProjectName}_config.json'

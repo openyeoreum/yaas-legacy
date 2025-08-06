@@ -16,7 +16,7 @@ python -m spacy download fr_core_news_sm
 - Task Process는 하나의 모듈로 구현 후 모든 프로세스 진행하기
 
 
-#PT1 ScriptLoader (업로드 된 스크립트 파일 확인)
+#PT1 ScriptLoad (업로드 된 스크립트 파일 확인)
 
 
 ## PDF ##

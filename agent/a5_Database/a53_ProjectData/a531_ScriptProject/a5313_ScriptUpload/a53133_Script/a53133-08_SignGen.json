@@ -1,10 +1,10 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFBodyComponentCheck",
+        "TaskName": "SignGen",
         "Solution": "",
         "AutoTemplate": "Yes",
-        "FileExtension": "pdf",
+        "FileExtension": "",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
@@ -12,8 +12,12 @@
     [
         {
             "ScriptId": 0,
-            "BodyComponent": [],
-            "BML": "None"
+            "Signs": [
+                {
+                    "SignId": 0,
+                    "Sign": "None"
+                }
+            ]
         }
     ]
 ]

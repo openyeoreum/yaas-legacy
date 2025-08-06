@@ -3,7 +3,7 @@
         "ProjectName": "",
         "TaskName": "Pronunciation",
         "Solution": "AudioBook",
-        "AutoSegmentation": "No",
+        "AutoTemplate": "No",
         "FileExtension": "",
         "Language": "",
         "InputCount": 0,

@@ -3,7 +3,7 @@
         "ProjectName": "",
         "TaskName": "PDFChunkAnnotationComponentCheck",
         "Solution": "",
-        "AutoSegmentation": "",
+        "AutoTemplate": "Yes",
         "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,

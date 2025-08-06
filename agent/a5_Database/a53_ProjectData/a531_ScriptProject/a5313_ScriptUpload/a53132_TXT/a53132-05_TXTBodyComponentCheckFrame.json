@@ -3,7 +3,7 @@
         "ProjectName": "",
         "TaskName": "TXTBodyComponentCheck",
         "Solution": "",
-        "AutoSegmentation": "",
+        "AutoTemplate": "Yes",
         "FileExtension": "txt",
         "Language": "",
         "InputCount": 0,

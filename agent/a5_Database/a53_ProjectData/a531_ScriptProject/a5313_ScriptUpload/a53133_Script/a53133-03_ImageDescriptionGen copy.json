@@ -1,0 +1,23 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "ImageDescriptionGen",
+        "Solution": "",
+        "AutoTemplate": "Yes",
+        "FileExtension": "",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "ScriptId": 0,
+            "ImageDescriptions": [
+                {
+                    "ImageDescriptionId": 0,
+                    "ImageDescription": "None"
+                }
+            ]
+        }
+    ]
+]

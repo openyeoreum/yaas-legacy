@@ -46,7 +46,7 @@ python -m spacy download fr_core_news_sm
 
 #P7 PDFBodyComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body
-<캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <표></표> -> Caption
+<캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
 #P8 PDFChunkAnnotationComponentCheck (PDF 파일 페이지별 Chunk, Annotation 구성요소 체크)
@@ -75,7 +75,7 @@ python -m spacy download fr_core_news_sm
 
 #T5 TXTBodyComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body
-<캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <표></표> -> Caption
+<캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
 #T6 TXTChunkAnnotationComponentCheck (텍스트 파일 페이지별 Chunk, Annotation 구성요소 체크)
@@ -96,16 +96,22 @@ python -m spacy download fr_core_news_sm
 #PT5 DiagramGen (다이어그램 구조화 데이터 형성)
 
 
-#PT6 TableGen (테이블 구조화 데이터 형성)
+#PT6 ChartGen (차트 구조화 데이터 형성)
 
 
-#PT7 SignGen (기호 및 특수문자 구조화 데이터 형성)
+#PT7 GraphGen (그래프 구조화 데이터 형성)
 
 
-#PT8 CommentGen (코멘트 구조화 데이터 형성)
+#PT8 TableGen (테이블 구조화 데이터 형성)
 
 
-#PT9 BodyFrame (도서 전처리 구조화 데이터 완성)
+#PT9 SignGen (기호 및 특수문자 구조화 데이터 형성)
+
+
+#PT10 CommentGen (코멘트 구조화 데이터 형성)
+
+
+#PT11 BodyFrame (도서 전처리 구조화 데이터 완성)
 Index(Part, Chapter, Index, Logue)
 Body(Body, Caption, Annotation)
 Chunk(Chunk, Sign, Comment)

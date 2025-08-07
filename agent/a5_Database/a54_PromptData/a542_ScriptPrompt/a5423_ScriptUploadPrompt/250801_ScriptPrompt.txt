@@ -33,13 +33,19 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 
 
 #P5 PDFIndexGen (PDF 파일 목차 데이터 형성)
+제목 -> Title
 부 -> Part
 장 -> Chapter
-절, 항 -> Index
-프롤로그, 에필로그 -> Logue 
+항 -> Index
+프롤로그, 에필로그 -> Logue
 
 
 #P6 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)
+<제목></제목> -> Title
+<부></부> -> Part
+<장></장> -> Chapter
+<항></항> -> Index
+<로그></로그> -> Logue
 
 
 #P7 PDFBodyCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
@@ -67,13 +73,19 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 
 
 #T4 TXTIndexGen (텍스트 파일 목차 데이터 형성)
+제목 -> Title
 부 -> Part
 장 -> Chapter
-절, 항 -> Index
-프롤로그, 에필로그 -> Logue 
+항 -> Index
+프롤로그, 에필로그 -> Logue
 
 
 #T5 TXTIndexMatching (텍스트 파일 목차와 본문 속 목차 매칭)
+<제목></제목> -> Title
+<부></부> -> Part
+<장></장> -> Chapter
+<항></항> -> Index
+<로그></로그> -> Logue
 
 
 #T6 TXTBodyCaptionComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
@@ -116,7 +128,7 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 
 
 #PT10 BodyFrame (도서 전처리 구조화 데이터 완성)
-Index(Part, Chapter, Index, Logue)
+Index(Title, Part, Chapter, Index, Logue)
 Body(Body, Caption, Annotation)
 Chunk(Chunk, Sign, Comment)
 

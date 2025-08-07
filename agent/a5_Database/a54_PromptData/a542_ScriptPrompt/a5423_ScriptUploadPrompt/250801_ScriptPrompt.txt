@@ -25,7 +25,7 @@ python -m spacy download fr_core_news_sm
 
 #P3 PDFLanguageFormCheck (PDF 파일 언어 체크)
 언어 -> Ko, En, Ja ...
-형식 -> 표지, 목차, 빈지 ...
+형식 -> 표지, 목차, 본문, 빈지 ...
 
 
 #P4 PDFResize (PDF 파일 리사이즈)
@@ -42,12 +42,13 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 #P6 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)
 
 
-#P7 PDFCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
-<본문></본문> -> Body
+#P7 PDFBodyCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
+<본문></본문> -> Body(체크대상은 아님)
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
 #P8 PDFChunkAnnotationComponentCheck (PDF 파일 페이지별 Chunk, Annotation 구성요소 체크)
+<문장></문장> -> Chunk(체크대상은 아님)
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment
 <주석></주석> -> Annotation
@@ -60,8 +61,9 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 #T2 TXTSplit (텍스트 파일 지정 토큰수 분할)
 
 
-#T3 TXTLanguageCheck (텍스트 파일 언어 체크)
+#T3 TXTLanguageFormCheck (텍스트 파일 언어 체크)
 언어 -> Ko, En, Ja ...
+형식 -> 목차, 본문
 
 
 #T4 TXTIndexGen (텍스트 파일 목차 데이터 형성)
@@ -74,12 +76,13 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 #T5 TXTIndexMatching (텍스트 파일 목차와 본문 속 목차 매칭)
 
 
-#T6 TXTCaptionComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
-<본문></본문> -> Body
+#T6 TXTBodyCaptionComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
+<본문></본문> -> Body(체크대상은 아님)
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
 #T7 TXTChunkAnnotationComponentCheck (텍스트 파일 페이지별 Chunk, Annotation 구성요소 체크)
+<문장></문장> -> Chunk(체크대상은 아님)
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment
 <주석></주석> -> Annotation

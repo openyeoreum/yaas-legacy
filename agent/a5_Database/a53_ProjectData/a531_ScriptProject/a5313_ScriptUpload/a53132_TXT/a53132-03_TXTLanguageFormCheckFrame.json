@@ -1,10 +1,10 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFCaptionComponentCheck",
+        "TaskName": "TXTLanguageFormCheckFrame",
         "Solution": "",
-        "AutoTemplate": "Yes",
-        "FileExtension": "pdf",
+        "AutoTemplate": "",
+        "FileExtension": "txt",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
@@ -12,8 +12,8 @@
     [
         {
             "ScriptId": 0,
-            "BodyComponent": [],
-            "BML": "None"
+            "Language": "None",
+            "Form": "None"
         }
     ]
 ]

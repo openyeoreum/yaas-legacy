@@ -1,7 +1,7 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTCaptionComponentCheck",
+        "TaskName": "TXTBodyCaptionComponentCheck",
         "Solution": "",
         "AutoTemplate": "Yes",
         "FileExtension": "txt",
@@ -12,7 +12,7 @@
     [
         {
             "ScriptId": 0,
-            "BodyComponent": [],
+            "CaptionComponent": [],
             "BML": "None"
         }
     ]

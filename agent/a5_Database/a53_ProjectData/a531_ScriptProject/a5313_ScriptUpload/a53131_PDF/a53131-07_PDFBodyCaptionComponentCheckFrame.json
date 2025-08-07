@@ -1,10 +1,10 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTSplit",
+        "TaskName": "PDFBodyCaptionComponentCheck",
         "Solution": "",
-        "AutoTemplate": "",
-        "FileExtension": "txt",
+        "AutoTemplate": "Yes",
+        "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
@@ -12,7 +12,8 @@
     [
         {
             "ScriptId": 0,
-            "Language": "None"
+            "CaptionComponent": [],
+            "BML": "None"
         }
     ]
 ]

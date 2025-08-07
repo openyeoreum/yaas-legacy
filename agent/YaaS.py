@@ -299,9 +299,9 @@ if __name__ == "__main__":
     DataCollection = [] # [], 'Book', 'Meditation', 'Architect' ... 중 데이터 수집이 필요한 도메인을 다중 선택
     Search = {"Search": "", "Intention": "Similarity", "Collection": "Book"} # Search: "", Search: SearchTerm, Match: PublisherData_(Id) // # Intention: Demand, Supply, Similarity ... // Extension: Expertise, Ultimate, Detail, Rethink ... // Collection: Entire, Target, Trend, Publisher, Book ... // Range: 10-100
     Script = "" # ScriptUpload: '' // BookScriptGen: 'BookScript' // InstantScriptGen: 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 선택
-    Translation = "Auto" # '', 'Auto', 'En', 'Ja', 'Zh', 'Es' ... 중 원문언어를 선택
+    Translation = "" # '', 'Auto', 'En', 'Ja', 'Zh', 'Es' ... 중 원문언어를 선택
     TextBook = "" # '', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
-    AudioBook = "" # '', 'Auto', '클로닝성우이름', '성우이름(특성)' ... 중 선택
+    AudioBook = "Auto" # '', 'Auto', '클로닝성우이름', '성우이름(특성)' ... 중 선택
     Marketing = [] # [] 'InstagramTemplate1', 'BlogTemplate1' ... 중 마케팅 제작 템플릿을 다중 선택
     
     MessagesReview = "off" # 'on', 'off' : on 은 모든 프롬프트 출력, off 는 모든 프롬프트 비출력

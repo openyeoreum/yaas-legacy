@@ -1,9 +1,9 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFFormCheck",
+        "TaskName": "PDFChunkAnnotationComponentCheck",
         "Solution": "",
-        "AutoTemplate": "",
+        "AutoTemplate": "Yes",
         "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,
@@ -12,8 +12,9 @@
     [
         {
             "ScriptId": 0,
-            "PageFilePath": "None",
-            "Form": "None"
+            "ChunkComponent": [],
+            "AnnotationComponent": [],
+            "BML": "None"
         }
     ]
 ]

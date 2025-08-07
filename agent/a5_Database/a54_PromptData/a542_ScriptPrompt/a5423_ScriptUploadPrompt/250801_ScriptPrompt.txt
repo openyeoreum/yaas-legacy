@@ -16,22 +16,20 @@ python -m spacy download fr_core_news_sm
 - Task Process는 하나의 모듈로 구현 후 모든 프로세스 진행하기
 
 
-#PT1 ScriptLoad (업로드 된 스크립트 파일 확인)
-
-
 ## PDF ##
-#P1 PDFResize (PDF 파일 리사이즈)
+#P1 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
 
 
 #P2 PDFSplit (PDF 파일 페이지 분할)
 
 
-#P3 PDFLanguageCheck (PDF 파일 언어 체크)
+#P3 PDFLanguageFormCheck (PDF 파일 언어 체크)
 언어 -> Ko, En, Ja ...
-
-
-#P4 PDFFormCheck (PDF 파일 페이지별 형식 체크)
 형식 -> 표지, 목차, 빈지 ...
+
+
+#P4 PDFResize (PDF 파일 리사이즈)
+Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플을 가로, 세로 5% 조정해서 10개정도 제작 -> 프로세스 진행
 
 
 #P5 PDFIndexGen (PDF 파일 목차 데이터 형성)
@@ -44,74 +42,77 @@ python -m spacy download fr_core_news_sm
 #P6 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)
 
 
-#P7 PDFBodyComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
+#P7 PDFCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
 #P8 PDFChunkAnnotationComponentCheck (PDF 파일 페이지별 Chunk, Annotation 구성요소 체크)
-<주석></주석> -> Annotation
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment
+<주석></주석> -> Annotation
 
 
 ## TXT ##
-#T1 TXTLanguageCheck (텍스트 파일 언어 체크)
-언어 -> Ko, En, Ja ...
+#T1 통합: (TXT)ScriptLoad (업로드 된 스크립트 파일 확인)
 
 
 #T2 TXTSplit (텍스트 파일 지정 토큰수 분할)
 
 
-#T3 TXTIndexGen (텍스트 파일 목차 데이터 형성)
+#T3 TXTLanguageCheck (텍스트 파일 언어 체크)
+언어 -> Ko, En, Ja ...
+
+
+#T4 TXTIndexGen (텍스트 파일 목차 데이터 형성)
 부 -> Part
 장 -> Chapter
 절, 항 -> Index
 프롤로그, 에필로그 -> Logue 
 
 
-#T4 TXTIndexMatching (텍스트 파일 목차와 본문 속 목차 매칭)
+#T5 TXTIndexMatching (텍스트 파일 목차와 본문 속 목차 매칭)
 
 
-#T5 TXTBodyComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
+#T6 TXTCaptionComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
-#T6 TXTChunkAnnotationComponentCheck (텍스트 파일 페이지별 Chunk, Annotation 구성요소 체크)
-<주석></주석> -> Annotation
+#T7 TXTChunkAnnotationComponentCheck (텍스트 파일 페이지별 Chunk, Annotation 구성요소 체크)
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment
+<주석></주석> -> Annotation
 
 
-#PT2 CaptionGen (캡션 구조화 데이터 형성)
+#PT1 CaptionGen (캡션 구조화 데이터 형성)
 
 
-#PT3 AnnotationGen (주석 구조화 데이터 형성)
+#PT2 AnnotationGen (주석 구조화 데이터 형성)
 
 
-#PT4 ImageDescriptionGen (이미지설명 구조화 데이터 형성)
+#PT3 ImageDescriptionGen (이미지설명 구조화 데이터 형성)
 
 
-#PT5 DiagramGen (다이어그램 구조화 데이터 형성)
+#PT4 DiagramGen (다이어그램 구조화 데이터 형성)
 
 
-#PT6 ChartGen (차트 구조화 데이터 형성)
+#PT5 ChartGen (차트 구조화 데이터 형성)
 
 
-#PT7 GraphGen (그래프 구조화 데이터 형성)
+#PT6 GraphGen (그래프 구조화 데이터 형성)
 
 
-#PT8 TableGen (테이블 구조화 데이터 형성)
+#PT7 TableGen (테이블 구조화 데이터 형성)
 
 
-#PT9 SignGen (기호 및 특수문자 구조화 데이터 형성)
+#PT8 SignGen (기호 및 특수문자 구조화 데이터 형성)
 
 
-#PT10 CommentGen (코멘트 구조화 데이터 형성)
+#PT9 CommentGen (코멘트 구조화 데이터 형성)
 
 
-#PT11 BodyFrame (도서 전처리 구조화 데이터 완성)
+#PT10 BodyFrame (도서 전처리 구조화 데이터 완성)
 Index(Part, Chapter, Index, Logue)
 Body(Body, Caption, Annotation)
 Chunk(Chunk, Sign, Comment)

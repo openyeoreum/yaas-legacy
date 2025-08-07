@@ -1,10 +1,10 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTChunkAnnotationComponentCheck",
+        "TaskName": "PDFCaptionComponentCheck",
         "Solution": "",
         "AutoTemplate": "Yes",
-        "FileExtension": "txt",
+        "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
@@ -12,7 +12,7 @@
     [
         {
             "ScriptId": 0,
-            "ChunkComponent": [],
+            "BodyComponent": [],
             "BML": "None"
         }
     ]

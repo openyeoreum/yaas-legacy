@@ -1,10 +1,10 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFBodyComponentCheck",
+        "TaskName": "TXTChunkAnnotationComponentCheck",
         "Solution": "",
         "AutoTemplate": "Yes",
-        "FileExtension": "pdf",
+        "FileExtension": "txt",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
@@ -12,7 +12,8 @@
     [
         {
             "ScriptId": 0,
-            "BodyComponent": [],
+            "ChunkComponent": [],
+            "AnnotationComponent": [],
             "BML": "None"
         }
     ]

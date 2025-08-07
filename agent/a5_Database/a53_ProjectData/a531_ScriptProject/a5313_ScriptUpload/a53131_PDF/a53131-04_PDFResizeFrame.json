@@ -9,10 +9,11 @@
         "InputCount": 0,
         "Completion": "No"
     },
-    [
-        {
-            "ScriptId": 0,
-            "PageFilePath": "None"
-        }
-    ]
+    {
+        "SizeForm": "None",
+        "LeftSize": 1,
+        "RightSize": 1,
+        "UpSize": 1,
+        "DownSize": 1
+    }
 ]

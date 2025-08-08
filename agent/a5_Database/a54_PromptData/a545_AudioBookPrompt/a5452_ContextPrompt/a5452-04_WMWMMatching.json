@@ -37,7 +37,7 @@
     "DEEPSEEK":{
         "MasterModel": "deepseek-reasoner"
     },
-    "Temperature": 0.4,
+    "Temperature": 1,
     "OutputTokensRatio": 0.5,
     "OutputFormat": "json",
     "Memo": "벡터데이터 베이스를 통해 1차적으로 <도서메타데이터>와 유사도가 높은 <영상메타데이터.db>를 선정한 후, 이를 통해 완벽한 <영상메타데이터>를 선별하기",

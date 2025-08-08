@@ -37,7 +37,7 @@
     "DEEPSEEK":{
         "MasterModel": "deepseek-reasoner"
     },
-    "Temperature": 0.5,
+    "Temperature": 1,
     "OutputTokensRatio": 1,
     "OutputFormat": "text",
     "Example": [

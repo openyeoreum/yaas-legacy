@@ -1,0 +1,18 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "TXTFormCheck",
+        "Solution": "",
+        "AutoTemplate": "",
+        "FileExtension": "txt",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "ScriptId": 0,
+            "Form": "None"
+        }
+    ]
+]

@@ -1,0 +1,18 @@
+[
+    {
+        "ProjectName": "",
+        "TaskName": "TXTLanguageCheck",
+        "Solution": "",
+        "AutoTemplate": "",
+        "FileExtension": "txt",
+        "Language": "",
+        "InputCount": 0,
+        "Completion": "No"
+    },
+    [
+        {
+            "SampleId": 0,
+            "Language": "None"
+        }
+    ]
+]

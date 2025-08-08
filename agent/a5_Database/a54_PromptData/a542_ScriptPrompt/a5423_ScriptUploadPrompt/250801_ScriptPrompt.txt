@@ -20,19 +20,22 @@ python -m spacy download fr_core_news_sm
 #P1 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
 
 
-#P2 PDFSplit (PDF 파일 페이지 분할)
-
-
-#P3 PDFLanguageFormCheck (PDF 파일 언어 체크)
+#P2 PDFLanguageCheck (PDF 언어 체크)
 언어 -> Ko, En, Ja ...
+
+
+#P3 PDFSplit (PDF 파일 페이지 분할)
+
+
+#P4 PDFLanguageFormCheck (PDF 파일 페이지 형식 체크)
 형식 -> 표지, 목차, 본문, 빈지 ...
 
 
-#P4 PDFResize (PDF 파일 리사이즈)
+#P5 PDFResize (PDF 파일 리사이즈)
 Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플을 가로, 세로 5% 조정해서 10개정도 제작 -> 프로세스 진행
 
 
-#P5 PDFIndexGen (PDF 파일 목차 데이터 형성)
+#P6 PDFIndexGen (PDF 파일 목차 데이터 형성)
 제목 -> Title
 부 -> Part
 장 -> Chapter
@@ -40,7 +43,7 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 프롤로그, 에필로그 -> Logue
 
 
-#P6 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)
+#P7 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)
 <제목></제목> -> Title
 <부></부> -> Part
 <장></장> -> Chapter
@@ -48,12 +51,12 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 <로그></로그> -> Logue
 
 
-#P7 PDFBodyCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
+#P8 PDFBodyCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body(체크대상은 아님)
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
-#P8 PDFChunkAnnotationComponentCheck (PDF 파일 페이지별 Chunk, Annotation 구성요소 체크)
+#P9 PDFChunkAnnotationComponentCheck (PDF 파일 페이지별 Chunk, Annotation 구성요소 체크)
 <문장></문장> -> Chunk(체크대상은 아님)
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment
@@ -64,15 +67,18 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 #T1 통합: (TXT)ScriptLoad (업로드 된 스크립트 파일 확인)
 
 
-#T2 TXTSplit (텍스트 파일 지정 토큰수 분할)
-
-
-#T3 TXTLanguageFormCheck (텍스트 파일 언어 체크)
+#T2 TXTLanguageCheck (TXT 언어 체크)
 언어 -> Ko, En, Ja ...
+
+
+#T3 TXTSplit (텍스트 파일 지정 토큰수 분할)
+
+
+#T4 TXTFormCheck (텍스트 파일 페이지 형식 체크)
 형식 -> 목차, 본문
 
 
-#T4 TXTIndexGen (텍스트 파일 목차 데이터 형성)
+#T5 TXTIndexGen (텍스트 파일 목차 데이터 형성)
 제목 -> Title
 부 -> Part
 장 -> Chapter
@@ -80,7 +86,7 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 프롤로그, 에필로그 -> Logue
 
 
-#T5 TXTIndexMatching (텍스트 파일 목차와 본문 속 목차 매칭)
+#T6 TXTIndexMatching (텍스트 파일 목차와 본문 속 목차 매칭)
 <제목></제목> -> Title
 <부></부> -> Part
 <장></장> -> Chapter
@@ -88,12 +94,12 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 <로그></로그> -> Logue
 
 
-#T6 TXTBodyCaptionComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
+#T7 TXTBodyCaptionComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body(체크대상은 아님)
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
-#T7 TXTChunkAnnotationComponentCheck (텍스트 파일 페이지별 Chunk, Annotation 구성요소 체크)
+#T8 TXTChunkAnnotationComponentCheck (텍스트 파일 페이지별 Chunk, Annotation 구성요소 체크)
 <문장></문장> -> Chunk(체크대상은 아님)
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment

@@ -1,7 +1,7 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFLanguageFormCheckFrame",
+        "TaskName": "PDFLanguageCheck",
         "Solution": "",
         "AutoTemplate": "",
         "FileExtension": "pdf",
@@ -11,9 +11,8 @@
     },
     [
         {
-            "ScriptId": 0,
-            "Language": "None",
-            "Form": "None"
+            "SampleId": 0,
+            "Language": "None"
         }
     ]
 ]

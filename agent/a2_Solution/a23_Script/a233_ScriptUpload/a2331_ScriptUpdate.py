@@ -13,33 +13,33 @@ from PyPDF2 import PdfReader, PdfWriter
 ##################################################
 class ScriptLoadProcess:
 
-    # 기본 경로 정의
+    ## 기본 경로 정의 ##
     ScriptUploadDataFramePath = "/yaas/agent/a5_Database/a53_ProjectData/a531_ScriptProject/a5313_ScriptUpload"
     ProjectStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
 
     ## ScriptLoad 초기화 ##
     def __init__(self, projectName, email, Solution, AutoTemplate):
         """클래스 초기화"""
-
-        ## 업데이트 정보
+        # 업데이트 정보
         self.email = email
         self.projectName = projectName
         self.Solution = Solution
         self.AutoTemplate = AutoTemplate
 
-        ## Process 설정
+        # Process 설정
         self.ProcessNumber = '1'
         self.ProcessName = "ScriptLoad"
 
-        ## 업로드 스크립트 파일 경로 및 확장자
+        # 업로드 스크립트 파일 경로 및 확장자
         self.UploadedScriptFilePath = None
         self.ScriptFileExtension = None
 
-        ## 경로설정
+        # 경로설정
         self._InitializePaths()
 
+    ## 프로세스 관련 경로 초기화 ##
     def _InitializePaths(self):
-        """프로젝트와 관련된 모든 경로를 초기화"""
+        """프로세스와 관련된 모든 경로를 초기화"""
         # DataFrame 원본 경로
         self.PDFLoadDataFramePath = os.path.join(self.ScriptUploadDataFramePath, "a53131_PDF/a53131-01_PDFLoadFrame.json")
         self.TXTLoadDataFramePath = os.path.join(self.ScriptUploadDataFramePath, "a53132_TXT/a53132-01_TXTLoadFrame.json")
@@ -53,10 +53,12 @@ class ScriptLoadProcess:
         self.PDFLoadFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_P01_PDFLoadFrame({self.Solution}).json")
         self.TXTLoadFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_T01_TXTLoadFrame({self.Solution}).json")
 
+    ## LoadFrame 파일 생성 확인 ##
     def _CheckExistingLoadFrame(self):
         """PDFLoadFrame 또는 TXTLoadFrame 파일이 존재하는지 확인"""
         return os.path.exists(self.PDFLoadFramePath) or os.path.exists(self.TXTLoadFramePath)
 
+    ## 스크립트 파일 확장자 확인 및 표준화 ##
     def _FindAndProcessScriptFile(self):
         """지정된 디렉토리에서 txt 또는 pdf 스크립트 파일을 찾아 표준화된 이름으로 저장"""
         # 디렉토리의 모든 파일을 가져와 .txt 또는 .pdf 파일 탐색
@@ -82,6 +84,7 @@ class ScriptLoadProcess:
         # txt 또는 pdf 파일이 없으면 False
         return False
 
+    ## LoadFrame 생성 및 저장 ##
     def _CreateLoadFrameFile(self):
         """주어진 정보로 ScriptLoadFrame JSON 파일 생성 및 저장"""
         # 스크립트 파일 확장자에 따라 적합한 경로 설정
@@ -106,6 +109,7 @@ class ScriptLoadProcess:
         with open(LoadFramePath, 'w', encoding = 'utf-8') as LoadFrameFile:
             json.dump(LoadFrame, LoadFrameFile, ensure_ascii = False, indent = 4)
 
+    ## LoadFrame 불러오기 ##
     def _LoadScriptLoadFrame(self):
         """생성된 ScriptLoadFrame JSON 파일 불러오기"""
         # 스크립트 파일 확장자에 따라 적합한 경로 설정
@@ -128,6 +132,7 @@ class ScriptLoadProcess:
             
         return ProjectName, Solution, AutoTemplate, FileExtension, Language, ScriptFilePath
 
+    ## ScriptLoadProcess 실행 ##
     def Run(self):
         """스크립트 로드 전체 프로세스를 실행하는 메인 메서드"""
         ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
@@ -148,52 +153,66 @@ class ScriptLoadProcess:
             print(f"[ {ProcessInfo} Update는 이미 완료됨 ]\n")
             return self._LoadScriptLoadFrame()
 
+
 #############################################
 ##### P2 PDFSplit (PDF 페이지 별 분할) #########
 #############################################
 class PDFSplitProcess:
 
-    # 기본 경로 정의
+    ## 기본 경로 정의 ##
     ScriptUploadDataFramePath = "/yaas/agent/a5_Database/a53_ProjectData/a531_ScriptProject/a5313_ScriptUpload"
     ProjectStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
 
     ## PDFSplit 초기화 ##
-    def __init__(self, projectName, email, Solution, AutoTemplate, FileExtension, UploadedScriptFilePath):
+    def __init__(self, projectName, email, Solution, AutoTemplate, FileExtension, UploadedScriptFilePath, Language):
         """클래스 초기화"""
-
-        ## 업데이트 정보
+        # 업데이트 정보
         self.projectName = projectName
         self.email = email
         self.Solution = Solution
         self.AutoTemplate = AutoTemplate
+        self.Language = Language
         self.ScriptFileExtension = FileExtension
         self.UploadedScriptFilePath = UploadedScriptFilePath
         
-        ## Process 설정
-        self.ProcessNumber = '2'
+        # Process 설정
+        self.ProcessNumber = '3'
         self.ProcessName = "PDFSplit"
         
-        ## 경로설정
+        # 경로설정
         self._InitializePaths()
 
+    ## 프로세스 관련 경로 초기화 ##
     def _InitializePaths(self):
-        """프로젝트와 관련된 모든 경로를 초기화"""
-        self.PDFSplitDataFramePath = os.path.join(self.ScriptUploadDataFramePath, "a53131_PDF/a53131-02_PDFSplitFrame.json")
+        """프로세스와 관련된 모든 경로를 초기화"""
+        # DataFrame 원본 경로
+        self.PDFSplitDataFramePath = os.path.join(self.ScriptUploadDataFramePath, "a53131_PDF/a53131-03_PDFSplitFrame.json")
         
+        # project_script 관련 경로
         self.ScriptFilePath = os.path.join(self.ProjectStoragePath, self.email, self.projectName, f"{self.projectName}_script")
         self.DataFrameScriptPath = os.path.join(self.ScriptFilePath, f"{self.projectName}_dataframe_script_file")
-        
-        self.SplitPDFDirectoryPath = os.path.join(self.ScriptFilePath, f"{self.projectName}_Script({self.Solution})_{self.ScriptFileExtension}")
+
+        # SplitedPDF 경로 및 디렉토리 생성
+        self.SplitPDFDirectoryPath = os.path.join(self.ScriptFilePath, f"{self.projectName}_upload_script_file" f"{self.projectName}_Script({self.Solution})_{self.ScriptFileExtension}")
         os.makedirs(self.SplitPDFDirectoryPath, exist_ok = True)
         
-        self.PDFSplitFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_P02_PDFSplitFrame({self.Solution}).json")
+        # 최종 생성될 LoadFrame 파일 경로
+        self.PDFSplitFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_P03_PDFSplitFrame({self.Solution}).json")
 
+    ## PDFSplitFrame 파일 생성 확인 ##
+    def _CheckExistingSplitFrame(self):
+        """PDFSplitFrame 파일이 이미 존재하는지 확인"""
+        return os.path.exists(self.PDFSplitFramePath)
+
+    ## PDF 파일을 페이지별로 분할 및 저장 ##
     def _SplitPDF(self):
         """PDF 파일을 페이지별로 분할하고 저장"""
+        # PDF 파일 읽고 총 페이지 수 계산
         PageFilePaths = []
         Reader = PdfReader(self.UploadedScriptFilePath)
         TotalPages = len(Reader.pages)
         
+        # 각 페이지를 개별 PDF 파일로 저장
         for PageNum in range(TotalPages):
             Writer = PdfWriter()
             Writer.add_page(Reader.pages[PageNum])
@@ -201,184 +220,258 @@ class PDFSplitProcess:
             OutputFileName = f"{self.projectName}_Script({self.Solution})({PageNum + 1}).{self.ScriptFileExtension}"
             OutputFilePath = os.path.join(self.SplitPDFDirectoryPath, OutputFileName)
             
+            # 페이지별 PDF 파일 저장
             with open(OutputFilePath, "wb") as OutputFile:
                 Writer.write(OutputFile)
+            # 페이지별 파일 경로를 리스트에 추가
             PageFilePaths.append(OutputFilePath)
             
         return PageFilePaths
 
+    ## SplitFrame 생성 및 저장 ##
     def _CreateSplitFrameFile(self, PageFilePaths):
         """분할된 PDF 정보로 SplitFrame JSON 파일 생성"""
+        # SplitFrame JSON 파일 생성
         with open(self.PDFSplitDataFramePath, 'r', encoding='utf-8') as FrameFile:
             SplitFrame = json.load(FrameFile)
 
         SplitFrame[0]['ProjectName'] = self.projectName
         SplitFrame[0]['Solution'] = self.Solution
         SplitFrame[0]['AutoTemplate'] = self.AutoTemplate
+        SplitFrame[0]['Language'] = self.Language
         SplitFrame[0]['InputCount'] = len(PageFilePaths)
         SplitFrame[0]['Completion'] = "Yes"
         
         # 기존 리스트에 페이지별 경로 추가
         for i, Path in enumerate(PageFilePaths):
-            SplitFrame[1].append({
-                "ScriptId": i + 1,
-                "PageFilePath": Path
-            })
+            PageFilePathDic = SplitFrame[1][0].copy()
+            PageFilePathDic['ScriptId'] = i + 1
+            PageFilePathDic['PageFilePath'] = Path
+            # 페이지별 경로를 SplitFrame에 추가
+            SplitFrame[1].append(PageFilePathDic)
 
-        with open(self.PDFSplitFramePath, 'w', encoding='utf-8') as OutputJson:
-            json.dump(SplitFrame, OutputJson, ensure_ascii=False, indent=4)
+        with open(self.PDFSplitFramePath, 'w', encoding = 'utf-8') as OutputJson:
+            json.dump(SplitFrame, OutputJson, ensure_ascii = False, indent = 4)
 
+    ## PDFSplitProcess 실행 ##
     def Run(self):
         """PDF 분할 전체 프로세스 실행"""
         ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
         print(f"< {ProcessInfo} Update 시작 >")
 
-        if os.path.exists(self.PDFSplitFramePath):
+        # PDFSplitFrame 파일이 이미 존재하는지 확인
+        if not self._CheckExistingSplitFrame():
+            PageFilePaths = self._SplitPDF()
+            self._CreateSplitFrameFile(PageFilePaths)
+            print(f"[ {ProcessInfo} Update 완료 ]\n")
+        else:
             print(f"[ {ProcessInfo} Update는 이미 완료됨 ]\n")
-            return
-
-        PageFilePaths = self._SplitPDF()
-        self._CreateSplitFrameFile(PageFilePaths)
-        print(f"[ {ProcessInfo} Update 완료 ]\n")
 
 
 ##############################################
 ##### T2 TXTSplit (TXT 토큰 단위 분할) ##########
 ##############################################
 class TXTSplitProcess:
+
+    ## 기본 경로 정의 ##
     ScriptUploadDataFramePath = "/yaas/agent/a5_Database/a53_ProjectData/a531_ScriptProject/a5313_ScriptUpload"
     ProjectStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
 
-    def __init__(self, projectName, email, Solution, AutoTemplate, FileExtension, Language, UploadedScriptFilePath):
+    ## TXTSplit 초기화 ##
+    def __init__(self, projectName, email, Solution, AutoTemplate, FileExtension, UploadedScriptFilePath, Language, BaseTokens = 3000):
+        """클래스 초기화"""
+        # 업데이트 정보
         self.projectName = projectName
         self.email = email
         self.Solution = Solution
         self.AutoTemplate = AutoTemplate
         self.ScriptFileExtension = FileExtension
-        self.Language = Language if Language else 'en' # 언어 설정이 없으면 영어로 기본값
         self.UploadedScriptFilePath = UploadedScriptFilePath
         
-        self.ProcessNumber = '2'
+        # Process 설정
+        self.ProcessNumber = '3'
         self.ProcessName = "TXTSplit"
         
-        self.MaxTokens = 3000
+        # 언어별 MaxTokens 설정
+        self.Language = Language
+        self.BaseTokens = BaseTokens
+        self.MaxTokens = self._DetermineMaxTokens()
 
+        # 경로설정
         self._InitializePaths()
 
+    ## 언어별 MaxTokens ##
+    def _DetermineMaxTokens(self):
+        """언어에 따라 적절한 MaxTokens 값을 결정"""       
+        # 언어별 토큰 비율 (한국어 대비)
+        TokenRatios = {
+            'ko': 1.0,      # 한국어 (기준)
+            'en': 1.8,      # 영어
+            'de': 2.1,      # 독일어
+            'fr': 2.0,      # 프랑스어
+            'es': 2.0,      # 스페인어
+            'zh': 0.9,      # 중국어
+            'ja': 1.2,      # 일본어
+            'it': 2.0,      # 이탈리아어
+            'pt': 2.0,      # 포르투갈어
+            'nl': 2.1,      # 네덜란드어
+            'sv': 1.8,      # 스웨덴어
+            'no': 1.8,      # 노르웨이어
+            'da': 1.9,      # 덴마크어
+            'pl': 2.1,      # 폴란드어
+        }
+
+        # 언어 코드에 해당하는 비율 적용, 없으면 기본값(1.0) 사용
+        Ratio = TokenRatios.get(self.Language.lower(), 1.0)
+
+        return int(self.BaseTokens * Ratio/2.5)
+
+    ## 프로세스 관련 경로 초기화 ##
     def _InitializePaths(self):
-        self.TXTSplitDataFramePath = os.path.join(self.ScriptUploadDataFramePath, "a53132_TXT/a53132-02_TXTSplitFrame.json")
+        """프로세스와 관련된 모든 경로를 초기화"""
+        # DataFrame 원본 경로
+        self.TXTSplitDataFramePath = os.path.join(self.ScriptUploadDataFramePath, "a53132_TXT/a53132-03_TXTSplitFrame.json")
         
+        # project_script 관련 경로
         self.ScriptFilePath = os.path.join(self.ProjectStoragePath, self.email, self.projectName, f"{self.projectName}_script")
         self.DataFrameScriptPath = os.path.join(self.ScriptFilePath, f"{self.projectName}_dataframe_script_file")
         
-        self.TXTSplitFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_T02_TXTSplitFrame({self.Solution}).json")
+        # 최종 생성될 SplitFrame 파일 경로
+        self.TXTSplitFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_T03_TXTSplitFrame({self.Solution}).json")
 
+    ## TXTSplitFrame 파일 생성 확인 ##
+    def _CheckExistingSplitFrame(self):
+        """TXTSplitFrame 파일이 이미 존재하는지 확인"""
+        return os.path.exists(self.TXTSplitFramePath)
+    
+    ## Spacy 모델 로드 및 사용자 정의 경계 설정 ##
     def _LoadSpacyModel(self):
         """언어에 맞는 Spacy 모델 로드"""
-        # 간단한 언어 코드 매핑
+        # 언어 코드 매핑
         ModelMap = {
-            'en': 'en_core_web_sm',
-            'ko': 'ko_core_news_sm'
-            # 필요에 따라 다른 언어 모델 추가
+            'ko': 'ko_core_news_sm',      # 한국어
+            'en': 'en_core_web_sm',       # 영어
+            'de': 'de_core_news_sm',      # 독일어
+            'fr': 'fr_core_news_sm',      # 프랑스어
+            'es': 'es_core_news_sm',      # 스페인어
+            'zh': 'zh_core_web_sm',       # 중국어
+            'ja': 'ja_core_news_sm',      # 일본어
+            'it': 'it_core_news_sm',      # 이탈리아어
+            'pt': 'pt_core_news_sm',      # 포르투갈어
+            'nl': 'nl_core_news_sm',      # 네덜란드어
+            'sv': 'sv_core_news_sm',      # 스웨덴어
+            'no': 'nb_core_news_sm',      # 노르웨이어
+            'da': 'da_core_news_sm',      # 덴마크어
+            'pl': 'pl_core_news_sm',      # 폴란드어
         }
-        ModelName = ModelMap.get(self.Language.lower(), 'en_core_web_sm')
+
+        # 언어에 맞는 모델 이름 가져오기, 기본값은 한국어 모델
+        ModelName = ModelMap.get(self.Language.lower(), 'ko_core_news_sm')
         
         try:
             nlp = spacy.load(ModelName)
         except OSError:
-            print(f"Spacy 모델 '{ModelName}'을 찾을 수 없습니다. 다운로드를 시도합니다.")
+            print(f"[ Download: Spacy 모델 '{ModelName}'을 찾을 수 없습니다. 다운로드를 시도합니다. ]")
             spacy.cli.download(ModelName)
             nlp = spacy.load(ModelName)
 
-        # 기존 파이프라인에 사용자 정의 경계 설정 추가
-        if "set_custom_boundaries" not in nlp.pipe_names:
-            nlp.add_pipe("set_custom_boundaries", before="parser")
         return nlp
 
+    ## TXT 파일을 지정된 토큰 수에 가깝게 문장 묶음으로 분할 ##
     def _SplitTXT(self):
-        """TXT 파일을 지정된 토큰 수에 가깝게 문장 묶음으로 분할"""
+        """TXT 파일을 지정된 토큰 수에 가깝게 문장 묶음으로 분할 (공백/줄바꿈 유지)"""
+        # Spacy 모델 로드
         nlp = self._LoadSpacyModel()
         
-        with open(self.UploadedScriptFilePath, 'r', encoding='utf-8') as f:
+        # 업로드된 스크립트 파일 읽기
+        with open(self.UploadedScriptFilePath, 'r', encoding = 'utf-8') as f:
             FullText = f.read()
 
-        doc = nlp(FullText)
-        Sentences = [s.text for s in doc.sents]
+        Doc = nlp(FullText)
         
-        Chunks = []
-        CurrentChunkList = []
+        # [핵심 수정] 문장의 원본 텍스트(s.text)와 마지막 토큰 뒤의 공백/줄바꿈(s[-1].whitespace_)을 합쳐서 리스트 생성
+        Sentences = [s.text + s[-1].whitespace_ for s in Doc.sents]
         
-        for sent in Sentences:
-            CurrentChunkList.append(sent)
-            CurrentText = "".join(CurrentChunkList)
+        TXTChunks = []
+        CurrentTXTChunkList = []
+        
+        for Sent in Sentences:
+            CurrentTXTChunkList.append(Sent)
+            CurrentText = "".join(CurrentTXTChunkList)
             
             # 토큰 수는 더 빠른 `make_doc`을 사용하여 계산
             TokenCount = len(nlp.make_doc(CurrentText))
             
             if TokenCount >= self.MaxTokens:
-                Chunks.append(CurrentText)
-                CurrentChunkList = []
+                TXTChunks.append(CurrentText)
+                CurrentTXTChunkList = []
                 
         # 마지막 남은 문장 묶음 추가
-        if CurrentChunkList:
-            Chunks.append("".join(CurrentChunkList))
+        if CurrentTXTChunkList:
+            TXTChunks.append("".join(CurrentTXTChunkList))
             
-        return Chunks
+        return TXTChunks
 
-    def _CreateSplitFrameFile(self, TextChunks):
+    ## SplitFrame 생성 및 저장 ##
+    def _CreateSplitFrameFile(self, TXTChunks):
         """분할된 텍스트 정보로 SplitFrame JSON 파일 생성"""
-        with open(self.TXTSplitDataFramePath, 'r', encoding='utf-8') as FrameFile:
+        # SplitFrame JSON 파일 생성
+        with open(self.TXTSplitDataFramePath, 'r', encoding = 'utf-8') as FrameFile:
             SplitFrame = json.load(FrameFile)
 
         SplitFrame[0]['ProjectName'] = self.projectName
         SplitFrame[0]['Solution'] = self.Solution
         SplitFrame[0]['AutoTemplate'] = self.AutoTemplate
         SplitFrame[0]['Language'] = self.Language
-        SplitFrame[0]['InputCount'] = len(TextChunks)
+        SplitFrame[0]['InputCount'] = len(TXTChunks)
         SplitFrame[0]['Completion'] = "Yes"
         
-        for i, Chunk in enumerate(TextChunks):
-            SplitFrame[1].append({
-                "ScriptId": i + 1,
-                "SplitedText": Chunk
-            })
+        for i, TXTChunk in enumerate(TXTChunks):
+            SplitedTextDic = SplitFrame[1][0].copy()
+            SplitedTextDic['ScriptId'] = i + 1
+            SplitedTextDic['SplitedText'] = TXTChunk
+            # 페이지별 텍스트를 SplitFrame에 추가
+            SplitFrame[1].append(SplitedTextDic)
 
-        with open(self.TXTSplitFramePath, 'w', encoding='utf-8') as OutputJson:
-            json.dump(SplitFrame, OutputJson, ensure_ascii=False, indent=4)
+        with open(self.TXTSplitFramePath, 'w', encoding = 'utf-8') as OutputJson:
+            json.dump(SplitFrame, OutputJson, ensure_ascii = False, indent = 4)
 
     def Run(self):
         """TXT 분할 전체 프로세스 실행"""
         ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
         print(f"< {ProcessInfo} Update 시작 >")
 
-        if os.path.exists(self.TXTSplitFramePath):
+        # TXTSplitFrame 파일이 이미 존재하는지 확인
+        if not self._CheckExistingSplitFrame():
+            TXTChunks = self._SplitTXT()
+            self._CreateSplitFrameFile(TXTChunks)
+            print(f"[ {ProcessInfo} Update 완료 ]\n")
+        else:
             print(f"[ {ProcessInfo} Update는 이미 완료됨 ]\n")
-            return
 
-        TextChunks = self._SplitTXT()
-        self._CreateSplitFrameFile(TextChunks)
-        print(f"[ {ProcessInfo} Update 완료 ]\n")
+
 
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
     email = "yeoreum00128@gmail.com"
-    projectName = '250516_업데이트'
+    projectNameList = ['250807_PDF테스트', '250807_TXT테스트']
     Solution = 'Translation'
     AutoTemplate = "Yes" # 자동 컴포넌트 체크 여부 (Yes/No)
     #########################################################################
 
-    # 1. 스크립트 파일 로드
-    ScriptLoaderInstance = ScriptLoadProcess(projectName, email, Solution, AutoTemplate)
-    ProjectName, Solution, AutoTemplate, FileExtension, Language, ScriptFilePath = ScriptLoaderInstance.Run()
-    
-    print(f"ProjectName: {ProjectName}, Solution: {Solution}, AutoTemplate: {AutoTemplate}, FileExtension: {FileExtension}, Language: {Language}, ScriptFilePath: {ScriptFilePath}\n")
-
-    # 2. 파일 확장자에 따라 후속 프로세스 실행
-    if FileExtension == 'pdf':
-        PDFSplitterInstance = PDFSplitProcess(ProjectName, email, Solution, AutoTemplate, FileExtension, ScriptFilePath)
-        PDFSplitterInstance.Run()
+    for projectName in projectNameList:
+        # 1. 스크립트 파일 로드
+        ScriptLoadInstance = ScriptLoadProcess(projectName, email, Solution, AutoTemplate)
+        ProjectName, Solution, AutoTemplate, FileExtension, Language, ScriptFilePath = ScriptLoadInstance.Run()
         
-    elif FileExtension == 'txt':
-        TXTSplitterInstance = TXTSplitProcess(ProjectName, email, Solution, AutoTemplate, FileExtension, Language, ScriptFilePath)
-        TXTSplitterInstance.Run()
+        print(f"ProjectName: {ProjectName}, Solution: {Solution}, AutoTemplate: {AutoTemplate}, FileExtension: {FileExtension}, Language: {Language}, ScriptFilePath: {ScriptFilePath}\n")
+
+        # 2. 파일 확장자에 따라 후속 프로세스 실행
+        if FileExtension == 'pdf':
+            PDFSplitterInstance = PDFSplitProcess(ProjectName, email, Solution, AutoTemplate, FileExtension, ScriptFilePath, "ko")
+            PDFSplitterInstance.Run()
+            
+        elif FileExtension == 'txt':
+            TXTSplitterInstance = TXTSplitProcess(ProjectName, email, Solution, AutoTemplate, FileExtension, ScriptFilePath, "ko")
+            TXTSplitterInstance.Run()

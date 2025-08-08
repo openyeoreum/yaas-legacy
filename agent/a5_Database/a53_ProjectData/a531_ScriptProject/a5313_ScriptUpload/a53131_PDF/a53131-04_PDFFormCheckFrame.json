@@ -1,10 +1,10 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTLanguageFormCheckFrame",
+        "TaskName": "PDFFormCheck",
         "Solution": "",
         "AutoTemplate": "",
-        "FileExtension": "txt",
+        "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
@@ -12,7 +12,6 @@
     [
         {
             "ScriptId": 0,
-            "Language": "None",
             "Form": "None"
         }
     ]

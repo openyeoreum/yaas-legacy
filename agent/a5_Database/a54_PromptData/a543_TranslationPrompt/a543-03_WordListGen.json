@@ -2,8 +2,8 @@
     "TaskName": "WordListGen",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-4.1-mini",
-            "LongTokensModel": "o4-mini"
+            "ShortTokensModel": "gpt-5-mini",
+            "LongTokensModel": "gpt-5-mini"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -13,13 +13,13 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "o4-mini",
+        "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
         "BaseModel": {
             "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-3-7-sonnet-latest"
+            "LongTokensModel": "claude-sonnet-4-0"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -29,7 +29,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "claude-3-7-sonnet-latest"
+        "MasterModel": "claude-sonnet-4-0"
     },
     "GOOGLE":{
         "MasterModel": "gemini-2.5-flash"

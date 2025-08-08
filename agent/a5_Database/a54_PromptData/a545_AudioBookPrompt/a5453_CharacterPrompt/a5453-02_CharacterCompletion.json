@@ -2,14 +2,14 @@
     "TaskName": "CharacterCompletion",
     "OpenAI": {
         "BaseModel": {
-            "ShortTokensModel": "gpt-4.1-mini",
-            "LongTokensModel": "o4-mini"
+            "ShortTokensModel": "gpt-5-mini",
+            "LongTokensModel": "gpt-5-mini"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [
                 {
                     "Date": "CharacterCompletion-231104034753",
-                    "Model": "ft:gpt-4.1-mini-0613:yeoreum::8H4qi78e"
+                    "Model": "ft:gpt-5-mini-0613:yeoreum::8H4qi78e"
                 }
             ],
             "LongTokensModel": []
@@ -18,13 +18,13 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "o4-mini",
+        "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
         "BaseModel": {
             "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-3-5-sonnet-latest"
+            "LongTokensModel": "claude-sonnet-4-0"
         },
         "ExampleFineTunedModel": {
             "ShortTokensModel": [],
@@ -34,7 +34,7 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "claude-3-5-sonnet-latest"
+        "MasterModel": "claude-sonnet-4-0"
     },
     "GOOGLE":{
         "MasterModel": "gemini-2.5-flash"

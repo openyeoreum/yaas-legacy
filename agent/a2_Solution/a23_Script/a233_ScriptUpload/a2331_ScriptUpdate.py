@@ -159,6 +159,12 @@ class ScriptLoadProcess:
 #############################################
 # class PDFLanguageCheckProcess:
 
+    ## Process 설정
+
+    ## InputList 생성
+
+    ## PDFLanguageCheckProcess 실행
+
 
 #########################################
 ##### P3 PDFSplit (PDF 페이지 별 분할) #####

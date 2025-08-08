@@ -417,9 +417,9 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "agent"
 
 #       # 토큰수별 모델 선정
 #       if ModelTokens == "Short":
-#         BaseModel = "gpt-4.1-mini"
+#         BaseModel = "gpt-5-mini"
 #       elif ModelTokens == "Long":
-#         BaseModel = "gpt-4.1-mini"
+#         BaseModel = "gpt-5-mini"
       
 #       # FineTuning 요청
 #       FineTuningJob = OpenAIClient.fine_tuning.jobs.create(

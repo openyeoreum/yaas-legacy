@@ -324,7 +324,7 @@ class TXTSplitProcess:
         # 언어 코드에 해당하는 비율 적용, 없으면 기본값(1.0) 사용
         Ratio = TokenRatios.get(self.Language.lower(), 1.0)
 
-        return int(self.BaseTokens * Ratio/2.5)
+        return int(self.BaseTokens * Ratio)
 
     ## 프로세스 관련 경로 초기화 ##
     def _InitializePaths(self):
@@ -379,7 +379,7 @@ class TXTSplitProcess:
 
     ## TXT 파일을 지정된 토큰 수에 가깝게 문장 묶음으로 분할 ##
     def _SplitTXT(self):
-        """TXT 파일을 지정된 토큰 수에 가깝게 문장 묶음으로 분할 (공백/줄바꿈 유지)"""
+        """TXT 파일을 지정된 글자 수(공백 포함)에 가깝게 문장 묶음으로 분할 (공백/줄바꿈 유지)"""
         # Spacy 모델 로드
         nlp = self._LoadSpacyModel()
         
@@ -389,7 +389,7 @@ class TXTSplitProcess:
 
         Doc = nlp(FullText)
         
-        # [핵심 수정] 문장의 원본 텍스트(s.text)와 마지막 토큰 뒤의 공백/줄바꿈(s[-1].whitespace_)을 합쳐서 리스트 생성
+        # 문장의 원본 텍스트와 마지막 토큰 뒤의 공백/줄바꿈을 합쳐서 리스트 생성
         Sentences = [s.text + s[-1].whitespace_ for s in Doc.sents]
         
         TXTChunks = []
@@ -399,10 +399,11 @@ class TXTSplitProcess:
             CurrentTXTChunkList.append(Sent)
             CurrentText = "".join(CurrentTXTChunkList)
             
-            # 토큰 수는 더 빠른 `make_doc`을 사용하여 계산
-            TokenCount = len(nlp.make_doc(CurrentText))
+            # 토큰 수 계산 대신, 공백을 포함한 글자 수를 계산합니다.
+            CharCount = len(CurrentText)
             
-            if TokenCount >= self.MaxTokens:
+            # 글자 수가 MaxTokens를 초과하면 분할합니다.
+            if CharCount >= self.MaxTokens:
                 TXTChunks.append(CurrentText)
                 CurrentTXTChunkList = []
                 

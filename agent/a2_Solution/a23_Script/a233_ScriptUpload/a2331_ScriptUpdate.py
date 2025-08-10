@@ -29,6 +29,7 @@ class ScriptLoadProcess:
         # Process 설정
         self.ProcessNumber = '1'
         self.ProcessName = "ScriptLoad"
+        self.ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
 
         # 업로드 스크립트 파일 경로 및 확장자
         self.UploadedScriptFilePath = None
@@ -135,8 +136,7 @@ class ScriptLoadProcess:
     ## ScriptLoadProcess 실행 ##
     def Run(self):
         """스크립트 로드 전체 프로세스를 실행하는 메인 메서드"""
-        ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
-        print(f"< {ProcessInfo} Update 시작 >")
+        print(f"< {self.ProcessInfo} Update 시작 >")
 
         # LoadFrame 파일이 이미 존재하는지 확인
         if not self._CheckExistingLoadFrame():
@@ -146,11 +146,11 @@ class ScriptLoadProcess:
                 raise FileNotFoundError(f"\n\n[ 원고 파일(txt, pdf)을 아래 경로에 복사해주세요. ]\n({self.UploadScriptFilePath})\n\n")
             else:
                 self._CreateLoadFrameFile()
-                print(f"[ {ProcessInfo} Update 완료 ]\n")
+                print(f"[ {self.ProcessInfo} Update 완료 ]\n")
                 return self._LoadScriptLoadFrame()
 
         else:
-            print(f"[ {ProcessInfo} Update는 이미 완료됨 ]\n")
+            print(f"[ {self.ProcessInfo} Update는 이미 완료됨 ]\n")
             return self._LoadScriptLoadFrame()
 
 
@@ -190,6 +190,7 @@ class PDFSplitProcess:
         # Process 설정
         self.ProcessNumber = '3'
         self.ProcessName = "PDFSplit"
+        self.ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
         
         # 경로설정
         self._InitializePaths()
@@ -268,16 +269,15 @@ class PDFSplitProcess:
     ## PDFSplitProcess 실행 ##
     def Run(self):
         """PDF 분할 전체 프로세스 실행"""
-        ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
-        print(f"< {ProcessInfo} Update 시작 >")
+        print(f"< {self.ProcessInfo} Update 시작 >")
 
         # PDFSplitFrame 파일이 이미 존재하는지 확인
         if not self._CheckExistingSplitFrame():
             PageFilePaths = self._SplitPDF()
             self._CreateSplitFrameFile(PageFilePaths)
-            print(f"[ {ProcessInfo} Update 완료 ]\n")
+            print(f"[ {self.ProcessInfo} Update 완료 ]\n")
         else:
-            print(f"[ {ProcessInfo} Update는 이미 완료됨 ]\n")
+            print(f"[ {self.ProcessInfo} Update는 이미 완료됨 ]\n")
 
 
 #########################################
@@ -303,6 +303,7 @@ class TXTSplitProcess:
         # Process 설정
         self.ProcessNumber = '3'
         self.ProcessName = "TXTSplit"
+        self.ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
         
         # 언어별 MaxTokens 설정
         self.Language = Language
@@ -451,16 +452,15 @@ class TXTSplitProcess:
 
     def Run(self):
         """TXT 분할 전체 프로세스 실행"""
-        ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
-        print(f"< {ProcessInfo} Update 시작 >")
+        print(f"< {self.ProcessInfo} Update 시작 >")
 
         # TXTSplitFrame 파일이 이미 존재하는지 확인
         if not self._CheckExistingSplitFrame():
             TXTChunks = self._SplitTXT()
             self._CreateSplitFrameFile(TXTChunks)
-            print(f"[ {ProcessInfo} Update 완료 ]\n")
+            print(f"[ {self.ProcessInfo} Update 완료 ]\n")
         else:
-            print(f"[ {ProcessInfo} Update는 이미 완료됨 ]\n")
+            print(f"[ {self.ProcessInfo} Update는 이미 완료됨 ]\n")
 
 
 

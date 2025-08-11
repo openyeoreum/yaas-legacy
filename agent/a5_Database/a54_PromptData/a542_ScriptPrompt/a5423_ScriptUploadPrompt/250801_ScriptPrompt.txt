@@ -22,6 +22,66 @@ python -m spacy download fr_core_news_sm
 
 #P2 PDFLanguageCheck (PDF 언어 체크)
 언어 -> Ko, En, Ja ...
+[한글]
+(역할 및 업무)
+당신은 언어 데이터 전문가 입니다. 주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다.
+
+(언어태그)
+ko: Korean - 한국어 - 한국어
+en: English - English - 영어
+de: German - Deutsch - 독일어
+fr: French - Français - 프랑스어
+es: Spanish - Español - 스페인어
+zh: Chinese - 中文 - 중국어
+ja: Japanese - 日本語 - 일본어
+it: Italian - Italiano - 이탈리아어
+pt: Portuguese - Português - 포르투갈어
+nl: Dutch - Nederlands - 네덜란드어
+sv: Swedish - Svenska - 스웨덴어
+no: Norwegian - Norsk - 노르웨이어
+da: Danish - Dansk - 덴마크어
+pl: Polish - Polski - 폴란드어
+
+(<도서언어태그.json>의 구조 및 내용)
+{
+    '언어': {
+        '태그': 'ko, en, de ... pl 중 <도서페이지>의 언어태그를 지정'
+    }
+}
+
+(주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성해주세요)
+<도서언어태그.json>
+
+
+[English]
+(Role and Task)
+You are a Language Data Expert. Your task is to analyze the five given <BookPage> data items, determine the single (LanguageTag) for the book, and complete the task by generating a <BookLanguageTag.json> file.
+
+(LanguageTags)
+ko: Korean - 한국어
+en: English - English
+de: German - Deutsch
+fr: French - Français
+es: Spanish - Español
+zh: Chinese - 中文
+ja: Japanese - 日本語
+it: Italian - Italiano
+pt: Portuguese - Português
+nl: Dutch - Nederlands
+sv: Swedish - Svenska
+no: Norwegian - Norsk
+da: Danish - Dansk
+pl: Polish - Polski
+
+(Structure and Content of <BookLanguageTag.json>)
+{
+    "Language": {
+        "Tag": "Based on the <BookPage> data, assign the single language tag for the book from the list: ko, en, de, ..., pl"
+    }
+}
+
+(Please analyze the five given <BookPage> data items, determine the single (LanguageTag) for the book, and provide the output in the <BookLanguageTag.json> format.)
+<BookLanguageTag.json>
 
 
 #P3 PDFSplit (PDF 파일 페이지 분할)
@@ -29,6 +89,84 @@ python -m spacy download fr_core_news_sm
 
 #P4 PDFLanguageFormCheck (PDF 파일 페이지 형식 체크)
 형식 -> 표지, 목차, 본문, 빈지 ...
+[한글]
+(역할 및 업무)
+당신은 도서 데이터 전문가 입니다. 주어진 <도서페이지> 자료 5개를 보고 각각 (도서페이지형식)을 지정하여 <도서페이지형식.json>로 완성하는 업무를 수행합니다.
+
+(도서페이지형식)
+표지: 책의 제목이 들어간 표지, 속표지 등
+저작권-판권: 저작권 정보, 발행처, ISBN 등 법적 고지 페이지
+목차: 전체 목차를 보여주는 차례 페이지
+서문-머리말: 저자나 추천인의 글, 프롤로그, 일러두기 등 본문 이해를 돕는 도입부 페이지
+장-부 시작: 새로운 장(Chapter)이나 부(Part)의 시작을 알리는 페이지
+본문: 글, 그림, 도표 등을 포함한 책의 핵심 내용인 본문 페이지
+후기-에필로그: 저자의 말이나 이야기의 결말 부분 페이지
+참고자료: 부록, 참고 문헌, 찾아보기 등 독자의 이해를 돕는 추가 정보 페이지
+빈지: 내용이 전혀 없는 페이지
+간지: 내용 없이 단순히 파트를 구분하기 위한 페이지 (만약 장-부 제목이 있다면 '장-부 시작'으로 분류)
+광고: 다른 도서나 상품을 홍보하는 페이지
+
+(<도서페이지형식.json>의 구조 및 내용)
+{
+    '도서': [
+        {
+            '자료번호': 1
+            '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
+        },
+        {
+            '자료번호': 2
+            '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
+        },
+        ...
+    ]
+}
+
+(<페이지형식.json> 완성 절차 및 방법)
+1. <도서페이지> 자료는 이미지 파일 5개이며 각 파일별로 우측 상단에 "자료번호: n"이 표기되어 있습니다.
+2. (<도서페이지형식.json>의 구조 및 내용)에 따라, 각 <도서페이지> 자료를 보고 '자료번호'와 '페이지형식'을 작성하여 <페이지형식.json>을 완성합니다.
+
+(주어진 <도서페이지> 자료 5개를 보고 (도서페이지형식)을 지정하여 <도서페이지형식.json>로 완성해주세요)
+<도서페이지형식.json>
+
+
+[English]
+(Role and Task)
+You are a Book Data Expert. Your task is to analyze five given <BookPage> data items, determine the (BookPageType) for each, and complete the task by generating a <BookPageType.json> file.
+
+(BookPageTypes)
+Cover: The cover or title page containing the book's title.
+Copyright-Colophon: Legal notice pages, including copyright information, publisher details, ISBN, etc.
+TableOfContents: The page(s) showing the full table of contents.
+Preface-Introduction: Introductory sections that aid in understanding the main text, such as a foreword, author's note, prologue, or usage guide.
+Chapter-PartStart: A page that announces the beginning of a new chapter or part.
+BodyText: The core content of the book, including text, images, charts, and diagrams.
+Afterword-Epilogue: Concluding sections, such as an author's closing remarks or the story's epilogue.
+ReferenceMaterial: Additional information to aid the reader, such as an appendix, bibliography, or index.
+BlankPage: A page with no content whatsoever.
+DividerPage: A page with no content, used merely to separate sections. (If it includes a chapter or part title, classify it as 'Chapter-Part Start').
+Advertisement: A page promoting other books or products.
+
+(Structure and Content of <BookPageType.json>)
+{
+    "Book": [
+        {
+            "DataNumber": 1,
+            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, or Advertisement"
+        },
+        {
+            "DataNumber": 2,
+            "PageType": "Assign the appropriate page type for the <BookPage> from the list: ..."
+        },
+        ...
+    ]
+}
+
+(Procedure for completing <BookPageType.json>)
+1. The <BookPage> data consists of 5 image files. Each file is marked with "DataNumber: n" in the top-right corner.
+2. Following the JSON structure defined above, analyze each <BookPage> image and fill in the corresponding Data Number and Page Type to complete the <BookPageType.json> file.
+
+(Please analyze the five given <BookPage> data items, assign the (BookPageType) for each, and provide the output in the <BookPageType.json> format.)
+<BookPageType.json>
 
 
 #P5 PDFResize (PDF 파일 리사이즈)
@@ -69,6 +207,71 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 
 #T2 TXTLanguageCheck (TXT 언어 체크)
 언어 -> Ko, En, Ja ...
+[한글]
+(역할 및 업무)
+당신은 언어 데이터 전문가 입니다. 주어진 <도서텍스트>를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다.
+
+(언어태그)
+ko: Korean - 한국어 - 한국어
+en: English - English - 영어
+de: German - Deutsch - 독일어
+fr: French - Français - 프랑스어
+es: Spanish - Español - 스페인어
+zh: Chinese - 中文 - 중국어
+ja: Japanese - 日本語 - 일본어
+it: Italian - Italiano - 이탈리아어
+pt: Portuguese - Português - 포르투갈어
+nl: Dutch - Nederlands - 네덜란드어
+sv: Swedish - Svenska - 스웨덴어
+no: Norwegian - Norsk - 노르웨이어
+da: Danish - Dansk - 덴마크어
+pl: Polish - Polski - 폴란드어
+
+(<도서언어태그.json>의 구조 및 내용)
+{
+    '언어': {
+        '태그': 'ko, en, de ... pl 중 <도서텍스트>의 언어태그를 지정'
+    }
+}
+
+(주어진 <도서텍스트>를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성해주세요)
+<도서텍스트>
+
+<도서언어태그.json>
+
+
+[English]
+(Role and Task)
+You are a Language Data Expert. Your task is to analyze the given <BookText>, determine the (LanguageTag) for the book, and complete the task by generating a <BookLanguageTag.json> file.
+
+(LanguageTags)
+ko: Korean - 한국어
+en: English - English
+de: German - Deutsch
+fr: French - Français
+es: Spanish - Español
+zh: Chinese - 中文
+ja: Japanese - 日本語
+it: Italian - Italiano
+pt: Portuguese - Português
+nl: Dutch - Nederlands
+sv: Swedish - Svenska
+no: Norwegian - Norsk
+da: Danish - Dansk
+pl: Polish - Polski
+
+(Structure and Content of <BookLanguageTag.json>)
+{
+    "Language": {
+        "Tag": "Based on the <BookText>, assign the language tag for the book from the list: ko, en, de, ..., pl"
+    }
+}
+
+
+(Please analyze the given <BookText>, determine the (LanguageTag) for the book, and provide the output in the <BookLanguageTag.json> format.)
+<BookText>
+
+<BookLanguageTag.json>
 
 
 #T3 TXTSplit (텍스트 파일 지정 토큰수 분할)
@@ -76,6 +279,48 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 
 #T4 TXTFormCheck (텍스트 파일 페이지 형식 체크)
 형식 -> 목차, 본문
+[한글]
+(역할 및 업무)
+당신은 도서 데이터 전문가 입니다. 주어진 <도서텍스트> 자료 5개를 보고 각각 (도서페이지형식)을 리스트 형식으로 지정하여 <도서페이지형식.json>로 완성하는 업무를 수행합니다.
+
+(도서페이지형식)
+표지: 책의 제목이 들어간 표지, 속표지 등
+저작권-판권: 저작권 정보, 발행처, ISBN 등 법적 고지 부분
+목차: 전체 목차를 보여주는 차례 부분
+서문-머리말: 저자나 추천인의 글, 프롤로그, 일러두기 등 본문 이해를 돕는 도입부 부분
+장-부 시작: 새로운 장(Chapter)이나 부(Part)의 시작을 알리는 부분
+본문: 글, 그림, 도표 등을 포함한 책의 핵심 내용인 본문 부분
+후기-에필로그: 저자의 말이나 이야기의 결말 부분
+참고자료: 부록, 참고 문헌, 찾아보기 등 독자의 이해를 돕는 추가 정보 부분
+
+(<페이지형식.json>의 구조 및 내용)
+{
+    '도서': [
+        {
+            '자료번호': 1
+            '페이지형식': ['표지, 저작권-판권, 목차, 서문-머리말,', '장-부 시작, 본문, 후기-에필로그, 참고자료 중', '<도서텍스트>에 적합한 페이지형식을 지정']
+        },
+        {
+            '자료번호': 2
+            '페이지형식': ['표지, 저작권-판권, 목차, 서문-머리말,', '장-부 시작, 본문, 후기-에필로그, 참고자료 중', '<도서텍스트>에 적합한 페이지형식을 지정']
+        },
+        ...
+    ]
+}
+
+(<페이지형식.json> 완성 절차 및 방법)
+1. <도서텍스트> 자료는 텍스트 파일 5개이며 각 파일별로 시작 부분에 [자료번호: n]이 표기되어 있습니다.
+2. (<도서페이지형식.json>의 구조 및 내용)에 따라, 각 <도서텍스트> 자료를 보고 '자료번호'와 '페이지형식'을 작성하여 <페이지형식.json>을 완성합니다.
+3. <도서텍스트>내 하나의 [자료번호: n]에는 여러개의 페이지형식이 복합적으로 존재할 수 있음으로 '페이지형식'은 리스트 형식으로 작성합니다.
+
+(주어진 <도서페이지> 자료 5개를 보고 (도서페이지형식)을 지정하여 <도서페이지형식.json>로 완성해주세요)
+<도서텍스트>
+[자료번호: 1]
+
+[자료번호: 2]
+...
+
+<도서페이지형식.json>
 
 
 #T5 TXTIndexGen (텍스트 파일 목차 데이터 형성)

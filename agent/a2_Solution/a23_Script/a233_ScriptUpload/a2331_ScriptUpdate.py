@@ -581,12 +581,17 @@ if __name__ == "__main__":
 
         # 파일 확장자에 따라 후속 프로세스 실행
         if FileExtension == 'pdf':
+            # 2. PDF 언어 체크
             PDFLanguageCheckProcessInstance = PDFLanguageCheckProcess(ProjectName, Email, Solution, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)
             PDFLanguageCheckProcessInstance._CreateInputList()
 
+            # 3. PDF 분할
             PDFSplitterInstance = PDFSplitProcess(ProjectName, Email, Solution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)
             PDFSplitterInstance.Run()
             
         elif FileExtension == 'txt':
+            # 2. TXT 언어 체크
+
+            # 3. TXT 분할
             TXTSplitterInstance = TXTSplitProcess(ProjectName, Email, Solution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)
             TXTSplitterInstance.Run()

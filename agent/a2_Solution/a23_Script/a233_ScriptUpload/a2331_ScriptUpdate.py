@@ -1,11 +1,15 @@
 import os
+import fitz
+import random
 import shutil
 import json
 import spacy
 import sys
 sys.path.append("/yaas")
 
+from PIL import Image, ImageDraw, ImageFont
 from PyPDF2 import PdfReader, PdfWriter
+from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_LoadAgent import LoadAgent
 
 
 ##################################################
@@ -27,7 +31,7 @@ class ScriptLoadProcess:
         self.AutoTemplate = AutoTemplate
 
         # Process 설정
-        self.ProcessNumber = '1'
+        self.ProcessNumber = 'PT01'
         self.ProcessName = "ScriptLoad"
         self.ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
 
@@ -54,12 +58,12 @@ class ScriptLoadProcess:
         self.PDFLoadFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_P01_PDFLoadFrame({self.Solution}).json")
         self.TXTLoadFramePath = os.path.join(self.DataFrameScriptPath, f"{self.email}_{self.projectName}_T01_TXTLoadFrame({self.Solution}).json")
 
-    ## LoadFrame 파일 생성 확인 ##
+    ## LoadFrame 파일 생성 확인 메서드 ##
     def _CheckExistingLoadFrame(self):
         """PDFLoadFrame 또는 TXTLoadFrame 파일이 존재하는지 확인"""
         return os.path.exists(self.PDFLoadFramePath) or os.path.exists(self.TXTLoadFramePath)
 
-    ## 스크립트 파일 확장자 확인 및 표준화 ##
+    ## 스크립트 파일 확장자 확인 및 표준화 메서드 ##
     def _FindAndProcessScriptFile(self):
         """지정된 디렉토리에서 txt 또는 pdf 스크립트 파일을 찾아 표준화된 이름으로 저장"""
         # 디렉토리의 모든 파일을 가져와 .txt 또는 .pdf 파일 탐색
@@ -85,7 +89,7 @@ class ScriptLoadProcess:
         # txt 또는 pdf 파일이 없으면 False
         return False
 
-    ## LoadFrame 생성 및 저장 ##
+    ## LoadFrame 생성 및 저장 메서드 ##
     def _CreateLoadFrameFile(self):
         """주어진 정보로 ScriptLoadFrame JSON 파일 생성 및 저장"""
         # 스크립트 파일 확장자에 따라 적합한 경로 설정
@@ -110,7 +114,7 @@ class ScriptLoadProcess:
         with open(LoadFramePath, 'w', encoding = 'utf-8') as LoadFrameFile:
             json.dump(LoadFrame, LoadFrameFile, ensure_ascii = False, indent = 4)
 
-    ## LoadFrame 불러오기 ##
+    ## LoadFrame 불러오기 메서드 ##
     def _LoadScriptLoadFrame(self):
         """생성된 ScriptLoadFrame JSON 파일 불러오기"""
         # 스크립트 파일 확장자에 따라 적합한 경로 설정
@@ -133,7 +137,7 @@ class ScriptLoadProcess:
             
         return ProjectName, Solution, AutoTemplate, FileExtension, Language, ScriptFilePath
 
-    ## ScriptLoadProcess 실행 ##
+    ## ScriptLoadProcess 실행 메서드 ##
     def Run(self):
         """스크립트 로드 전체 프로세스를 실행하는 메인 메서드"""
         print(f"< {self.ProcessInfo} Update 시작 >")
@@ -157,13 +161,112 @@ class ScriptLoadProcess:
 #############################################
 ##### P2 PDFLanguageCheck (PDF 언어 체크) #####
 #############################################
-# class PDFLanguageCheckProcess:
+class PDFLanguageCheckProcess:
 
-    ## Process 설정
+    ## PDFLanguageCheck 초기화 ##
+    def __init__(self, projectName, email, Solution, PDFFilePath):
+        """클래스 초기화"""
+        # 업데이트 정보
+        self.projectName = projectName
+        self.email = email
+        self.Solution = Solution
+        self.PDFFilePath = PDFFilePath
 
-    ## InputList 생성
+        # Process 설정
+        self.ProcessNumber = "P02"
+        self.ProcessName = "PDFLanguageCheck"
+        self.ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
 
-    ## PDFLanguageCheckProcess 실행
+        # 경로설정
+
+    ## 프로세스 관련 경로 초기화 ##
+    def _InitializePaths(self):
+        """프로세스와 관련된 모든 경로를 초기화"""
+        # SplitedPDF 경로 및 디렉토리 생성
+        self.SplitJPEGDirectoryPath = os.path.join(self.ScriptFilePath, f"{self.projectName}_upload_script_file", f"{self.projectName}_Script({self.Solution})_jpeg")
+        os.makedirs(self.SplitJPEGDirectoryPath, exist_ok = True)
+
+    ## InputList 생성 ##
+    def _CreateInputList(self):
+        """InputList를 생성하는 메서드"""
+        # 1. PDF 파일 불러오기
+        PdfDocument = fitz.open(self.PdfFilePath)
+
+        # 2. 랜덤으로 5개 페이지 선택
+        TotalPages = len(PdfDocument)
+            
+        if TotalPages < 5:
+            # 페이지가 5장 미만일 경우 모든 페이지를 대상으로 함
+            SelectedPageIndices = range(TotalPages)
+        else:
+            SelectedPageIndices = random.sample(range(TotalPages), 5)
+
+        InputList = []
+        
+        # 3. 이미지 생성, "자료번호" 라벨 추가 및 저장
+        for ImageIndex, PageIndex in enumerate(SelectedPageIndices, 1):
+            Page = PdfDocument.load_page(PageIndex)
+            
+            # 페이지를 고해상도 이미지로 변환
+            Pixmap = page.get_pixmap(dpi=150)
+            PageImage = Image.frombytes("RGB", [Pixmap.width, Pixmap.height], Pixmap.samples)
+
+            # "자료번호: n" 라벨 이미지 생성
+            LabelText = f"자료번호: {ImageIndex}"
+            
+            try:
+                # 지정된 Noto Sans CJK 폰트 사용 (Linux 기반 경로 예시)
+                FontPath = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
+                Font = ImageFont.truetype(FontPath, 30)
+            except IOError:
+                print(f"경고: 지정된 폰트를 찾을 수 없어({FontPath}) 기본 폰트를 사용합니다. 한글이 깨질 수 있습니다.")
+                Font = ImageFont.load_default()
+
+            # 텍스트 크기 계산
+            TextBbox = Font.getbbox(LabelText)
+            TextWidth = TextBbox[2] - TextBbox[0]
+            TextHeight = TextBbox[3] - TextBbox[1]
+            
+            # 라벨 이미지의 여백(Padding)을 포함한 크기 계산
+            Padding = 10
+            LabelWidth = TextWidth + 2 * Padding
+            LabelHeight = TextHeight + 2 * Padding
+            
+            # 하얀 배경의 라벨 이미지 생성
+            LabelImage = Image.new('RGB', (LabelWidth, LabelHeight), 'white')
+            Draw = ImageDraw.Draw(LabelImage)
+            
+            # 검은색 테두리 그리기
+            Draw.rectangle([(0, 0), (LabelWidth - 1, LabelHeight - 1)], outline='black', width=2)
+            
+            # 검은색 텍스트 추가
+            Draw.text((Padding, Padding), LabelText, font=Font, fill='black')
+            
+            # 원본 페이지 이미지의 우측 상단에 라벨 이미지 합성 ** 중앙상단으로 수정
+            Margin = 20
+            Position = (PageImage.width - LabelWidth - Margin, Margin)
+            PageImage.paste(LabelImage, Position)
+
+            # 4. 해당 이미지 파일을 지정된 디렉토리에 저장
+            OutputFilename = f"{self.projectName}_Script({self.Solution})({ImageIndex}).jpeg"
+            OutputFilePath = os.path.join(self.SplitJPEGDirectoryPath, OutputFilename)
+            PageImage.save(OutputFilePath, 'JPEG')
+            
+            InputList.append(OutputFilePath)
+
+        PdfDocument.close()
+        
+        # 5. 생성된 이미지 파일 경로 리스트를 리턴
+        return InputList
+
+
+    ## PDFLanguageCheckProcess 실행 ##
+    def Run(self):
+        """PDF 언어 체크 전체 프로세스 실행"""
+        print(f"< {self.ProcessInfo} Update 시작 >")
+
+        # InputList 생성
+        self._CreateInputList()
 
 
 #########################################
@@ -206,7 +309,7 @@ class PDFSplitProcess:
         self.DataFrameScriptPath = os.path.join(self.ScriptFilePath, f"{self.projectName}_dataframe_script_file")
 
         # SplitedPDF 경로 및 디렉토리 생성
-        self.SplitPDFDirectoryPath = os.path.join(self.ScriptFilePath, f"{self.projectName}_upload_script_file" f"{self.projectName}_Script({self.Solution})_{self.ScriptFileExtension}")
+        self.SplitPDFDirectoryPath = os.path.join(self.ScriptFilePath, f"{self.projectName}_upload_script_file", f"{self.projectName}_Script({self.Solution})_{self.ScriptFileExtension}")
         os.makedirs(self.SplitPDFDirectoryPath, exist_ok = True)
         
         # 최종 생성될 LoadFrame 파일 경로
@@ -477,10 +580,8 @@ if __name__ == "__main__":
         # 1. 스크립트 파일 로드
         ScriptLoadInstance = ScriptLoadProcess(projectName, email, Solution, AutoTemplate)
         ProjectName, Solution, AutoTemplate, FileExtension, Language, ScriptFilePath = ScriptLoadInstance.Run()
-        
-        print(f"ProjectName: {ProjectName}, Solution: {Solution}, AutoTemplate: {AutoTemplate}, FileExtension: {FileExtension}, Language: {Language}, ScriptFilePath: {ScriptFilePath}\n")
 
-        # 2. 파일 확장자에 따라 후속 프로세스 실행
+        # 파일 확장자에 따라 후속 프로세스 실행
         if FileExtension == 'pdf':
             PDFSplitterInstance = PDFSplitProcess(ProjectName, email, Solution, AutoTemplate, FileExtension, ScriptFilePath, "ko")
             PDFSplitterInstance.Run()

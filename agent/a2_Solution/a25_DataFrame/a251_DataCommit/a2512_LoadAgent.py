@@ -1,6 +1,7 @@
 import os
 import shutil
 import json
+import time
 import spacy
 import sys
 sys.path.append("/yaas")
@@ -75,7 +76,7 @@ class LoadAgent:
         self.FilterPass = FilterPass # 핃터 오류 3회가 넘어가는 경우 그냥 패스 (에러의 수준이 글자 1000자 중 1자 수준으로 매우 작으나, Response 오류 회수가 너무 빈번한 경우 예시로 TranslationProofreading 등)
         self.EditCheck, self.EditCompletion = self._SolutionEditCheck(OutputsPerInput, InputCountKey, IgnoreCountCheck)
 
-    ## Solution 및 SubSolution 경로에서 DataFrame 경로 가져오기 ##
+    ## Solution 및 SubSolution 경로에서 DataFrame 경로 가져오기 메서드 ##
     def _GetSolutionDataFramePath(self, DataFramePath, Solution, SubSolution):
         """Solution 및 SubSolution 경로에서 DataFrame을 찾는 메서드"""
         try:
@@ -108,7 +109,7 @@ class LoadAgent:
         # 루프를 모두 순회했으나 파일을 찾지 못한 경우
         raise FileNotFoundError(f"\n\n[ 아래 경로에서 해당 데이터 프레임 파일을 찾을 수 없습니다: {self.ProcessNumber}_{self.ProcessName} ]\n{ProjectFrameDirPath}\n\n")
 
-    ## 프로세스 DataFrame의 파일, 카운트, 완료 체크 ##
+    ## 프로세스 DataFrame의 파일, 카운트, 완료 체크 메서드 ##
     def _ProcessDataFrameCheck(self):
         """프로세스 DataFrame이 존재하는지 확인하고, InputCount와 DataFrameCompletion을 반환하는 메서드"""
         # InputCount 및 DataFrameCompletion 초기화
@@ -129,7 +130,7 @@ class LoadAgent:
             
             return NextInputCount, DataFrameCompletion
 
-    ## 솔루션 Edit의 파일, 완료 체크 ##
+    ## 솔루션 Edit의 파일, 완료 체크 메서드 ##
     def _SolutionEditCheck(self, OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False):
         """프로세스 Edit 및 Completion을 확인하는 메서드"""
         # EditCheck 및 EditCompletion 초기화
@@ -170,9 +171,9 @@ class LoadAgent:
             
         return EditCheck, EditCompletion
 
-    ##
+    ## ProcessResponse 생성 메서드 ##
     def _ProcessResponse(self, Input, InputCount, CheckCount, memoryCounter = ""):
-        """"""
+        """ProcessResponse를 생성하는 메서드"""
         ErrorCount = 0
         while True:
             if self.Model == "OpenAI":
@@ -183,9 +184,11 @@ class LoadAgent:
                 Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryCounter = memoryCounter, messagesReview = self.MessagesReview)
             elif self.Model == "DeepSeek":
                 Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryCounter = memoryCounter, messagesReview = self.MessagesReview)
+
+            # 생성된 Respnse Filler 처리
             FilteredResponse = self._ProcessFilter(Response, CheckCount)
-                
-            
+
+            # 필터 에외처리, JSONDecodeError 처리
             if isinstance(FilteredResponse, str):
                 print(f"{self.ProcessInfo} | {InputCount}/{self.TotalInputCount} | {FilteredResponse}")
                 ErrorCount += 1
@@ -263,3 +266,23 @@ if __name__ == "__main__":
     Solution = 'Translation'
     AutoTemplate = "Yes" # 자동 컴포넌트 체크 여부 (Yes/No)
     #########################################################################
+
+    LoadAgentInstance = LoadAgent(
+        InputList = [],
+        Email = email,
+        ProjectName = projectNameList[0],
+        Solution = Solution,
+        ProcessNumber = "P01",
+        ProcessName = "PDFLoadFrame",
+        MainLang = "ko",
+        Model = "OpenAI",
+        Mode = "Master",
+        MessagesReview = "off",
+        SubSolution = None,
+        SolutionTag = None,
+        EditMode = "Auto",
+        OutputsPerInput = 1,
+        InputCountKey = None,
+        IgnoreCountCheck = False,
+        FilterPass = False
+    )

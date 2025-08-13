@@ -10,7 +10,7 @@ from matplotlib import font_manager, rc
 import matplotlib.pyplot as plt
 from datetime import datetime
 from PIL import Image
-from reportlab.lib.pagesizes import portrait
+from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
 ##########################
@@ -201,10 +201,10 @@ def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath, Estimate):
     if Estimate == "VideoBook":
         DesignFormatPath = "/yaas/storage/s1_Yeoreum/s14_EstimateStorage/s144_VideoBookEstemateTemplate/VideoBookEstimateTemplate_"
     
-    # 첫 번째 이미지 크기에 맞는 PDF 생성
-    FirstImage = Image.open(EstimatePNGPaths[0])
-    FirstWidth, FirstHeight = FirstImage.size
-    pdf = canvas.Canvas(EstimatePDFPath, pagesize = portrait((FirstWidth, FirstHeight)))
+    # A4 사이즈의 가로, 세로 길이를 가져옵니다.
+    width, height = A4
+    # 페이지 사이즈를 A4로 명시적으로 설정합니다.
+    pdf = canvas.Canvas(EstimatePDFPath, pagesize = A4)
 
     for i in range(len(EstimatePNGPaths)):
         # 그래프 이미지와 디자인 포멧 불러오기
@@ -217,14 +217,14 @@ def PNGsToPDF(EstimatePNGPaths, EstimatePDFPath, Estimate):
         CompositeImage = Image.alpha_composite(DesignFormat, text)
         # 합쳐진 이미지 임시저장
         CompositeImage.save(EstimatePNGPaths[i], "PNG", optimize = True)
-        # 이미지를 PDF에 추가
-        pdf.drawImage(EstimatePNGPaths[i], 0, 0)
+        # 이미지를 A4 페이지 크기에 맞춰 그립니다.
+        pdf.drawImage(EstimatePNGPaths[i], 0, 0, width=width, height=height)
         pdf.showPage()
         # PDF로 저장된 PNG 파일 제거
         os.remove(EstimatePNGPaths[i])
     
-    # 마지막 라이센스 이미지를 PDF에 추가
-    pdf.drawImage(f"{DesignFormatPath}2.png", 0, 0)
+    # 마지막 라이센스 이미지도 A4 페이지 크기에 맞춰 그립니다.
+    pdf.drawImage(f"{DesignFormatPath}2.png", 0, 0, width=width, height=height)
     pdf.showPage()
     
     # PDF 파일 저장

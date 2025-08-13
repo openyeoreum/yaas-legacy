@@ -37,10 +37,10 @@ class LoadAgent:
         self.ProcessInfo = f"User: {self.Email} | Solution: {self.Solution}-{self.SubSolution} | Project: {self.ProjectName} | Process: {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
 
         # ProjectFrame 경로 설정 (저장된 프로젝트 DataFrame)
-        self.SolutionProjectFramePath = self._GetSolutionDataFramePath(self.ProjectDataPath, self.Solution, self.SubSolution)
+        self.SolutionProjectFramePath = self._GetSolutionDataFramePath(self.ProjectDataPath, self.Solution, self.SubSolution, self.MainLang)
 
         # PromptFrame 경로 설정 (저장된 프롬프트 DataFrame)
-        self.SolutionPromptFramePath = self._GetSolutionDataFramePath(self.PromptDataPath, self.Solution, self.SubSolution)
+        self.SolutionPromptFramePath = self._GetSolutionDataFramePath(self.PromptDataPath, self.Solution, self.SubSolution, self.MainLang)
 
         # UserProcess 경로 설정
         self.UserProjectSolutionPath = os.path.join(self.StoragePath, self.Email, self.ProjectName, f"{self.ProjectName}_{self.Solution.lower()}")
@@ -63,6 +63,7 @@ class LoadAgent:
             self.SolutionEditPath = _SolutionEditPath
 
         # InputList 설정
+        self.CheckCount = 0
         self.InputList = InputList
         self.TotalInputCount = len(self.InputList)
 
@@ -77,7 +78,7 @@ class LoadAgent:
         self.EditCheck, self.EditCompletion = self._SolutionEditCheck(OutputsPerInput, InputCountKey, IgnoreCountCheck)
 
     ## Solution 및 SubSolution 경로에서 DataFrame 경로 가져오기 메서드 ##
-    def _GetSolutionDataFramePath(self, DataFramePath, Solution, SubSolution):
+    def _GetSolutionDataFramePath(self, DataFramePath, Solution, SubSolution, MainLang):
         """Solution 및 SubSolution 경로에서 DataFrame을 찾는 메서드"""
         try:
             # Solution이 포함된 첫 번째 디렉터리 찾기
@@ -100,10 +101,14 @@ class LoadAgent:
             raise FileNotFoundError(f"\n\n[ 아래 경로에서 해당 솔루션 데이터 프레임 파일을 찾을 수 없습니다: {Solution} 또는 {SubSolution} ]\n{DataFramePath}\n\n")
 
         # 결정된 최종 디렉터리 내에서 .json 파일 검색
+        if MainLang == "ko":
+            FileEndName = "(ko).json"
+        else:
+            FileEndName = "(global).json"
         for Root, Dirs, Files in os.walk(ProjectFrameDirPath):
             for File in Files:
                 # 파일 이름에 ProcessNumber와 ProcessName이 포함되어 있는지 확인
-                if File.endswith('.json') and f"{self.ProcessNumber}_{self.ProcessName}" in File:
+                if File.endswith(FileEndName) and f"{self.ProcessNumber}_{self.ProcessName}" in File:
                     return os.path.join(Root, File) # 파일을 찾으면 즉시 경로 반환
         
         # 루프를 모두 순회했으나 파일을 찾지 못한 경우
@@ -172,7 +177,7 @@ class LoadAgent:
         return EditCheck, EditCompletion
 
     ## ProcessResponse 생성 메서드 ##
-    def _ProcessResponse(self, Input, InputCount, CheckCount, memoryCounter = ""):
+    def _ProcessResponse(self, Input, InputCount, memoryCounter = ""):
         """ProcessResponse를 생성하는 메서드"""
         ErrorCount = 0
         while True:
@@ -186,7 +191,7 @@ class LoadAgent:
                 Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryCounter = memoryCounter, messagesReview = self.MessagesReview)
 
             # 생성된 Respnse Filler 처리
-            FilteredResponse = self._ProcessFilter(Response, CheckCount)
+            FilteredResponse = self._ProcessFilter(Response, self.CheckCount)
 
             # 필터 에외처리, JSONDecodeError 처리
             if isinstance(FilteredResponse, str):
@@ -232,14 +237,14 @@ class LoadAgent:
                     Input = self.InputList[i]['Input']
                     
                     ## ProcessResponse 생성
-                    ProcessResponse = self._ProcessResponse(self, Input, inputCount, CheckCount, memoryCounter = "")
+                    ProcessResponse = self._ProcessResponse(self, Input, inputCount, memoryCounter = "")
                     
                     ## DataFrame 저장
                     self._UpdateProcessDataFrame(self.ProjectName, self.MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, ProcessResponse, self.ProcessName, inputCount, IndexId, self.TotalInputCount)
                     
             ## Edit 저장
             self._UpdateSolutionEdit(ProjectDataFrameWordListGenPath, TranslationEditPath, Process, EditMode)
-            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update 완료 ]\n")
+            print(f"[ {self.ProcessInfo}Update 완료 ]\n")
             
             if EditMode == "Manual":
                 sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")

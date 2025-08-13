@@ -195,17 +195,86 @@ class PDFLanguageCheckProcess:
         self.PDFLanguageCheckFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.email}_{self.projectName}_P02_PDFLanguageCheckFrame({self.Solution}).json")
 
         # SplitedPDF 경로 및 디렉토리 생성
-        self.SampleScriptDirPath = os.path.join(self.UploadScriptFilePath, f"{self.projectName}_SampleScript({self.Solution})_jpeg")
-        os.makedirs(self.SampleScriptDirPath, exist_ok = True)
+        self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.projectName}_SampleScript({self.Solution})_jpeg")
+        os.makedirs(self.SampleScriptJPEGDirPath, exist_ok = True)
         self.FontDirPath = "/usr/share/fonts/"
         self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
 
     # ## PDFToImageSample 생성 ##
     # def _CreatePDFToImageSample(self):
 
+    ## PDF 이미지 생성 및 라벨 생성 ##
+    def _CreatePDFToLabeledSmapleJPEG(self, Page, InputId):
+        """PDF 페이지를 받아 라벨을 추가한 뒤, 이미지 파일로 저장하고 경로를 반환하는 메서드"""
+        # 페이지를 고해상도 이미지로 변환
+        Pixmap = Page.get_pixmap(dpi = 150)
+        PageImage = Image.frombytes("RGB", [Pixmap.width, Pixmap.height], Pixmap.samples)
+
+        # "자료번호: n" 라벨 이미지 생성
+        LabelText = f"자료번호: {InputId}"
+        Font = ImageFont.truetype(self.NotoSansCJKRegular, 30)
+
+        # 페이지 번호가 3~5자리가 되어도 너비가 충분하도록 최대 너비 기준으로 계산
+        PlaceholderText = "자료번호: 99999"
+        PlaceholderBbox = Font.getbbox(PlaceholderText)
+        TextWidth = PlaceholderBbox[2] - PlaceholderBbox[0]
+        
+        TextBbox = Font.getbbox(LabelText)
+        TextHeight = TextBbox[3] - TextBbox[1]
+        
+        # 라벨 이미지의 여백(Padding)을 포함한 크기 계산
+        Padding = 15  # 좌우 여백을 조금 더 주어 넉넉하게 설정
+        LabelWidth = TextWidth + 2 * Padding
+        LabelHeight = TextHeight + 2 * Padding
+        
+        # 하얀 배경의 라벨 이미지 생성
+        LabelImage = Image.new('RGB', (LabelWidth, LabelHeight), 'white')
+        Draw = ImageDraw.Draw(LabelImage)
+        
+        # 검은색 테두리 그리기
+        Draw.rectangle([(0, 0), (LabelWidth - 1, LabelHeight - 1)], outline = 'black', width = 4)
+        
+        # 요구사항 1: 페이지 높이에 비례하여 텍스트 세로 위치 자동 조정
+        BaseHeight = 1754  # 기준 높이
+        BaseVerticalOffset = -8  # 기준 높이에서의 조정값
+        VerticalTextOffset = int((BaseVerticalOffset / BaseHeight) * PageImage.height)
+        
+        # 텍스트를 라벨의 중앙에 위치시키기 위한 x좌표 계산
+        # (라벨 전체 너비 - 실제 텍스트 너비) / 2
+        text_x_position = (LabelWidth - (TextBbox[2] - TextBbox[0])) // 2
+        
+        # 검은색 텍스트 추가 (조정된 위치 적용)
+        Draw.text((text_x_position, Padding + VerticalTextOffset), LabelText, font=Font, fill = 'black')
+        
+        # 원본 페이지 이미지의 중앙 상단에 라벨 이미지 합성
+        Margin = 20
+        Position = ((PageImage.width - LabelWidth) // 2, Margin)
+        PageImage.paste(LabelImage, Position)
+
+        # 해당 이미지 파일을 지정된 디렉토리에 저장
+        OutputFilename = f"{self.projectName}_Script({self.Solution})({InputId}).jpeg"
+        OutputFilePath = os.path.join(self.SampleScriptJPEGDirPath, OutputFilename)
+        PageImage.save(OutputFilePath, 'JPEG')
+        
+        return OutputFilePath
+
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
+        # SampleScriptJPEGDirPath에 ScriptJPEG 파일이 5개 존재하면 그대로 유지
+        if os.path.exists(self.SampleScriptJPEGDirPath):
+            # SampleScriptJPEGDirPath에서 모든 JPEG 파일을 가져와 정렬
+            ScriptJPEGFiles = sorted([
+                FileName for FileName in os.listdir(self.SampleScriptJPEGDirPath)
+                if FileName.lower().endswith('.jpeg')
+            ])
+
+            # SampleScriptJPEGDirPath에 JPEG 파일이 5개 이상 있는 경우는 InputList 생성 및 리턴
+            if len(ScriptJPEGFiles) >= 5:
+                # 파일 경로로 InputList 생성
+                InputList = [os.path.join(self.SampleScriptJPEGDirPath, FileName) for FileName in ScriptJPEGFiles]
+                return InputList
+
         # PDF 파일 불러오기 및 랜덤으로 5개 페이지 선택
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
         TotalPages = len(PdfDocument)
@@ -218,54 +287,14 @@ class PDFLanguageCheckProcess:
         InputList = []
         for InputId, PageIndex in enumerate(SelectedPageIndices, 1):
             Page = PdfDocument.load_page(PageIndex)
-            
-            # 페이지를 고해상도 이미지로 변환
-            Pixmap = Page.get_pixmap(dpi = 150)
-            PageImage = Image.frombytes("RGB", [Pixmap.width, Pixmap.height], Pixmap.samples)
-
-            # "자료번호: n" 라벨 이미지 생성
-            LabelText = f"자료번호: {InputId}"
-
-            # Noto Sans CJK Regular 폰트 로드
-            Font = ImageFont.truetype(self.NotoSansCJKRegular, 30)
-
-            # 텍스트 크기 계산
-            TextBbox = Font.getbbox(LabelText)
-            TextWidth = TextBbox[2] - TextBbox[0]
-            TextHeight = TextBbox[3] - TextBbox[1]
-            
-            # 라벨 이미지의 여백(Padding)을 포함한 크기 계산
-            Padding = 10
-            LabelWidth = TextWidth + 2 * Padding
-            LabelHeight = TextHeight + 2 * Padding
-            
-            # 하얀 배경의 라벨 이미지 생성
-            LabelImage = Image.new('RGB', (LabelWidth, LabelHeight), 'white')
-            Draw = ImageDraw.Draw(LabelImage)
-            
-            # 검은색 테두리 그리기
-            Draw.rectangle([(0, 0), (LabelWidth - 1, LabelHeight - 1)], outline='black', width=2)
-            
-            # 검은색 텍스트 추가
-            Draw.text((Padding, Padding), LabelText, font=Font, fill='black')
-            
-            # 원본 페이지 이미지의 중앙 상단에 라벨 이미지 합성
-            Margin = 20
-            Position = ((PageImage.width - LabelWidth) // 2, Margin)
-            PageImage.paste(LabelImage, Position)
-
-            # 4. 해당 이미지 파일을 지정된 디렉토리에 저장
-            OutputFilename = f"{self.projectName}_Script({self.Solution})({InputId}).jpeg"
-            OutputFilePath = os.path.join(self.SampleScriptDirPath, OutputFilename)
-            PageImage.save(OutputFilePath, 'JPEG')
+            # PDF 이미지 생성 및 라벨 생성
+            OutputFilePath = self._CreatePDFToLabeledSmapleJPEG(Page, InputId)
             
             InputList.append(OutputFilePath)
 
         PdfDocument.close()
-        
-        # 5. 생성된 이미지 파일 경로 리스트를 리턴
-        return InputList
 
+        return InputList
 
     ## PDFLanguageCheckProcess 실행 ##
     def Run(self):
@@ -314,8 +343,8 @@ class PDFSplitProcess:
         self.PDFSplitFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.email}_{self.projectName}_P03_PDFSplitFrame({self.Solution}).json")
 
         # SplitedPDF 경로 및 디렉토리 생성
-        self.SplitPDFDirectoryPath = os.path.join(self.UploadScriptFilePath, f"{self.projectName}_Script({self.Solution})_{self.ScriptFileExtension}")
-        os.makedirs(self.SplitPDFDirectoryPath, exist_ok = True)
+        self.SplitScriptPDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.projectName}_SplitScript({self.Solution})_{self.ScriptFileExtension}")
+        os.makedirs(self.SplitScriptPDFDirPath, exist_ok = True)
         
     ## PDFSplitFrame 파일 생성 확인 ##
     def _CheckExistingSplitFrame(self):
@@ -336,7 +365,7 @@ class PDFSplitProcess:
             Writer.add_page(Reader.pages[PageNum])
             
             OutputFileName = f"{self.projectName}_Script({self.Solution})({PageNum + 1}).{self.ScriptFileExtension}"
-            OutputFilePath = os.path.join(self.SplitPDFDirectoryPath, OutputFileName)
+            OutputFilePath = os.path.join(self.SplitScriptPDFDirPath, OutputFileName)
             
             # 페이지별 PDF 파일 저장
             with open(OutputFilePath, "wb") as OutputFile:
@@ -583,7 +612,8 @@ if __name__ == "__main__":
         if FileExtension == 'pdf':
             # 2. PDF 언어 체크
             PDFLanguageCheckProcessInstance = PDFLanguageCheckProcess(ProjectName, Email, Solution, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)
-            PDFLanguageCheckProcessInstance._CreateInputList()
+            InputList = PDFLanguageCheckProcessInstance._CreateInputList()
+            print(f"InputList: {InputList}")
 
             # 3. PDF 분할
             PDFSplitterInstance = PDFSplitProcess(ProjectName, Email, Solution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)

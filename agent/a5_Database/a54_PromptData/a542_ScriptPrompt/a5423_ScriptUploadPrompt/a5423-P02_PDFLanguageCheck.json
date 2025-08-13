@@ -1,6 +1,6 @@
 {
-    "TaskName": "SupplyCollectionDataExpertiseChain",
-    "InputFormat": "text",
+    "TaskName": "PDFLanguageCheck",
+    "InputFormat": "jpeg",
     "OpenAI": {
         "BaseModel": {
             "ShortTokensModel": "gpt-5-mini",
@@ -45,18 +45,18 @@
         {
             "Role": "system",
             "Mark": "(역할 및 업무)\n",
-            "Message": "내가 제시한 <데이터>와 관련이 높고 구체적인 전문분야 5개로 세분화하는 <전문분야.json> 작업을 신중하게 진행합니다."
+            "Message": "당신은 언어 데이터 전문가 입니다. 주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다."
         },
         {
             "Role": "user",
             "Request": [
                 {
-                    "Mark": "(<전문분야.json>작성 방법)\n",
-                    "Message": "1. <데이터>는 내가 핵심솔루션을 제안할 의뢰인에게 전달하기 위해 '핵심목적', '분야', '필요'로 나누어 정리 및 작성한 것 입니다.\n2. <데이터>를 관련이 높은 구체적인 전문분야 5개로 세분화하여 각 분야별 '전문분야', '이유'를 작성하여 <전문분야.json>을 완성합니다."
+                    "Mark": "(언어태그)\n",
+                    "Message": "ko: Korean - 한국어 - 한국어\nen: English - English - 영어\nde: German - Deutsch - 독일어\nfr: French - Français - 프랑스어\nes: Spanish - Español - 스페인어\nzh: Chinese - 中文 - 중국어\nja: Japanese - 日本語 - 일본어\nit: Italian - Italiano - 이탈리아어\npt: Portuguese - Português - 포르투갈어\nnl: Dutch - Nederlands - 네덜란드어\nsv: Swedish - Svenska - 스웨덴어\nno: Norwegian - Norsk - 노르웨이어\nda: Danish - Dansk - 덴마크어\npl: Polish - Polski - 폴란드어"
                 },
                 {
-                    "Mark": "\n\n(<전문분야.json>의 구조)\n",
-                    "Message": "{'전문분야들': [{'전문분야': '<데이터>와 관련이 높고 구체적인 전문분야 명칭', '이유': '해당 전문분야가 <데이터>와 관련이 높은 타당한 이유'}, { ... 구조 동일 ... }, { ... 구조 동일 ... }, { ... 구조 동일 ... }, { ... 구조 동일 ... }]}"
+                    "Mark": "\n\n(<도서언어태그.json>의 구조 및 내용)\n",
+                    "Message": "{'언어': {'태그': 'ko, en, de ... pl 중 <도서페이지>의 언어태그를 지정'}}"
                 },
                 {
                     "Mark": "",
@@ -84,8 +84,8 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n(<데이터>를 관련이 높고 구체적인 전문분야 5개를 선정하여 <전문분야.json>을 작성해주세요)\n",
-                    "InputMark": "<데이터>\n",
+                    "Mark": "\n\n\n(주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성해주세요)\n\n",
+                    "InputMark": "",
                     "Input": "INPUT",
                     "InputMark2": "",
                     "Input2": "INPUT2"
@@ -94,7 +94,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n<전문분야.json>\n",
+            "OutputMark": "\n\n<도서언어태그.json>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -104,18 +104,18 @@
         {
             "Role": "system",
             "Mark": "(역할 및 업무)\n",
-            "Message": "내가 제시한 <데이터>와 관련이 높고 구체적인 전문분야 5개로 세분화하는 <전문분야.json> 작업을 신중하게 진행합니다."
+            "Message": "당신은 언어 데이터 전문가 입니다. 주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다."
         },
         {
             "Role": "user",
             "Request": [
                 {
-                    "Mark": "(<전문분야.json>작성 방법)\n",
-                    "Message": "1. <데이터>는 내가 핵심솔루션을 제안할 의뢰인에게 전달하기 위해 '핵심목적', '분야', '필요'로 나누어 정리 및 작성한 것 입니다.\n2. <데이터>를 관련이 높은 구체적인 전문분야 5개로 세분화하여 각 분야별 '전문분야', '이유'를 작성하여 <전문분야.json>을 완성합니다."
+                    "Mark": "(언어태그)\n",
+                    "Message": "ko: Korean - 한국어 - 한국어\nen: English - English - 영어\nde: German - Deutsch - 독일어\nfr: French - Français - 프랑스어\nes: Spanish - Español - 스페인어\nzh: Chinese - 中文 - 중국어\nja: Japanese - 日本語 - 일본어\nit: Italian - Italiano - 이탈리아어\npt: Portuguese - Português - 포르투갈어\nnl: Dutch - Nederlands - 네덜란드어\nsv: Swedish - Svenska - 스웨덴어\nno: Norwegian - Norsk - 노르웨이어\nda: Danish - Dansk - 덴마크어\npl: Polish - Polski - 폴란드어"
                 },
                 {
-                    "Mark": "\n\n(<전문분야.json>의 구조)\n",
-                    "Message": "{'전문분야들': [{'전문분야': '<데이터>와 관련이 높고 구체적인 전문분야 명칭', '이유': '해당 전문분야가 <데이터>와 관련이 높은 타당한 이유'}, { ... 구조 동일 ... }, { ... 구조 동일 ... }, { ... 구조 동일 ... }, { ... 구조 동일 ... }]}"
+                    "Mark": "\n\n(<도서언어태그.json>의 구조 및 내용)\n",
+                    "Message": "{'언어': {'태그': 'ko, en, de ... pl 중 <도서페이지>의 언어태그를 지정'}}"
                 },
                 {
                     "Mark": "",
@@ -143,8 +143,8 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n(<데이터>를 관련이 높고 구체적인 전문분야 5개를 선정하여 <전문분야.json>을 작성해주세요)\n",
-                    "InputMark": "<데이터>\n",
+                    "Mark": "\n\n\n(주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성해주세요)\n\n",
+                    "InputMark": "",
                     "Input": "INPUT",
                     "InputMark2": "",
                     "Input2": "INPUT2"
@@ -153,7 +153,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n<전문분야.json>\n",
+            "OutputMark": "\n\n<도서언어태그.json>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "Output": "OUTPUT"
@@ -163,18 +163,18 @@
         {
             "Role": "system",
             "Mark": "(역할 및 업무)\n",
-            "Message": "내가 제시한 <데이터>와 관련이 높고 구체적인 전문분야 5개로 세분화하는 <전문분야.json> 작업을 신중하게 진행합니다."
+            "Message": "당신은 언어 데이터 전문가 입니다. 주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다."
         },
         {
             "Role": "user",
             "Request": [
                 {
-                    "Mark": "(<전문분야.json>작성 방법)\n",
-                    "Message": "1. <데이터>는 내가 핵심솔루션을 제안할 의뢰인에게 전달하기 위해 '핵심목적', '분야', '필요'로 나누어 정리 및 작성한 것 입니다.\n2. <데이터>를 관련이 높은 구체적인 전문분야 5개로 세분화하여 각 분야별 '전문분야', '이유'를 작성하여 <전문분야.json>을 완성합니다."
+                    "Mark": "(언어태그)\n",
+                    "Message": "ko: Korean - 한국어 - 한국어\nen: English - English - 영어\nde: German - Deutsch - 독일어\nfr: French - Français - 프랑스어\nes: Spanish - Español - 스페인어\nzh: Chinese - 中文 - 중국어\nja: Japanese - 日本語 - 일본어\nit: Italian - Italiano - 이탈리아어\npt: Portuguese - Português - 포르투갈어\nnl: Dutch - Nederlands - 네덜란드어\nsv: Swedish - Svenska - 스웨덴어\nno: Norwegian - Norsk - 노르웨이어\nda: Danish - Dansk - 덴마크어\npl: Polish - Polski - 폴란드어"
                 },
                 {
-                    "Mark": "\n\n(<전문분야.json>의 구조)\n",
-                    "Message": "{'전문분야들': [{'전문분야': '<데이터>와 관련이 높고 구체적인 전문분야 명칭', '이유': '해당 전문분야가 <데이터>와 관련이 높은 타당한 이유'}, { ... 구조 동일 ... }, { ... 구조 동일 ... }, { ... 구조 동일 ... }, { ... 구조 동일 ... }]}"
+                    "Mark": "\n\n(<도서언어태그.json>의 구조 및 내용)\n",
+                    "Message": "{'언어': {'태그': 'ko, en, de ... pl 중 <도서페이지>의 언어태그를 지정'}}"
                 },
                 {
                     "Mark": "",
@@ -195,8 +195,8 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n(<데이터>를 관련이 높고 구체적인 전문분야 5개를 선정하여 <전문분야.json>을 작성해주세요)\n",
-                    "InputMark": "<데이터>\n",
+                    "Mark": "\n\n\n(주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성해주세요)\n\n",
+                    "InputMark": "",
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
@@ -209,7 +209,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n<전문분야.json>\n",
+            "OutputMark": "\n\n<도서언어태그.json>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
@@ -221,18 +221,18 @@
         {
             "Role": "system",
             "Mark": "(역할 및 업무)\n",
-            "Message": "내가 제시한 <데이터>와 관련이 높고 구체적인 전문분야 5개로 세분화하는 <전문분야.json> 작업을 신중하게 진행합니다."
+            "Message": "당신은 언어 데이터 전문가 입니다. 주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성하는 업무를 수행합니다."
         },
         {
             "Role": "user",
             "Request": [
                 {
-                    "Mark": "(<전문분야.json>작성 방법)\n",
-                    "Message": "1. <데이터>는 내가 핵심솔루션을 제안할 의뢰인에게 전달하기 위해 '핵심목적', '분야', '필요'로 나누어 정리 및 작성한 것 입니다.\n2. <데이터>를 관련이 높은 구체적인 전문분야 5개로 세분화하여 각 분야별 '전문분야', '이유'를 작성하여 <전문분야.json>을 완성합니다."
+                    "Mark": "(언어태그)\n",
+                    "Message": "ko: Korean - 한국어 - 한국어\nen: English - English - 영어\nde: German - Deutsch - 독일어\nfr: French - Français - 프랑스어\nes: Spanish - Español - 스페인어\nzh: Chinese - 中文 - 중국어\nja: Japanese - 日本語 - 일본어\nit: Italian - Italiano - 이탈리아어\npt: Portuguese - Português - 포르투갈어\nnl: Dutch - Nederlands - 네덜란드어\nsv: Swedish - Svenska - 스웨덴어\nno: Norwegian - Norsk - 노르웨이어\nda: Danish - Dansk - 덴마크어\npl: Polish - Polski - 폴란드어"
                 },
                 {
-                    "Mark": "\n\n(<전문분야.json>의 구조)\n",
-                    "Message": "{'전문분야들': [{'전문분야': '<데이터>와 관련이 높고 구체적인 전문분야 명칭', '이유': '해당 전문분야가 <데이터>와 관련이 높은 타당한 이유'}, { ... 구조 동일 ... }, { ... 구조 동일 ... }, { ... 구조 동일 ... }, { ... 구조 동일 ... }]}"
+                    "Mark": "\n\n(<도서언어태그.json>의 구조 및 내용)\n",
+                    "Message": "{'언어': {'태그': 'ko, en, de ... pl 중 <도서페이지>의 언어태그를 지정'}}"
                 },
                 {
                     "Mark": "",
@@ -253,8 +253,8 @@
                     "OutputExample": ""
                 },
                 {
-                    "Mark": "\n\n(<데이터>를 관련이 높고 구체적인 전문분야 5개를 선정하여 <전문분야.json>을 작성해주세요)\n",
-                    "InputMark": "<데이터>\n",
+                    "Mark": "\n\n\n(주어진 <도서페이지> 자료 5개를 보고 해당 도서의 (언어태그)를 지정하여 <도서언어태그.json>로 완성해주세요)\n\n",
+                    "InputMark": "",
                     "InputStarter": "",
                     "InputMemory": "InputMemory",
                     "Input": "INPUT",
@@ -267,7 +267,7 @@
         },
         {
             "Role": "assistant",
-            "OutputMark": "\n<전문분야.json>\n",
+            "OutputMark": "\n\n<도서언어태그.json>",
             "MemoryCounter": "MemoryCounter",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",

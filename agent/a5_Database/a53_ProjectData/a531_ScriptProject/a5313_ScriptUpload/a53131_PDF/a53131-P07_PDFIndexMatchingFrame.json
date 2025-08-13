@@ -1,9 +1,9 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFBodyCaptionComponentCheck",
-        "Solution": "",
-        "AutoTemplate": "Yes",
+        "TaskName": "PDFIndexMatching",
+        "NextSolution": "",
+        "AutoTemplate": "",
         "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,
@@ -12,8 +12,8 @@
     [
         {
             "ScriptId": 0,
-            "CaptionComponent": [],
-            "BML": "None"
+            "IndexTag": "None",
+            "Index": "None"
         }
     ]
 ]

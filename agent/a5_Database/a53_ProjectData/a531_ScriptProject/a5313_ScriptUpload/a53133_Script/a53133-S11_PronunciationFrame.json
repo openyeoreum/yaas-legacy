@@ -1,8 +1,8 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "Body",
-        "Solution": "",
+        "TaskName": "Pronunciation",
+        "NextSolution": "AudioBook",
         "AutoTemplate": "No",
         "FileExtension": "",
         "Language": "",
@@ -16,13 +16,14 @@
             "Index": "None",
             "BodyId": "None",
             "BodyTag": "None",
-            "SplitedBodyChunks": [
+            "Pronunciation": [
                 {
-                    "ChunkId": 0,
-                    "Tag": "None",
-                    "Chunk": "None"
+                    "Before": "None",
+                    "After": "None",
+                    "Type": "None"
                 }
-            ]
+            ],
+            "PronunciationBody": "None"
         }
     ]
 ]

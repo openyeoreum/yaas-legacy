@@ -1,10 +1,10 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFSplit",
-        "Solution": "",
+        "TaskName": "TXTIndexMatching",
+        "NextSolution": "",
         "AutoTemplate": "",
-        "FileExtension": "pdf",
+        "FileExtension": "txt",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
@@ -12,7 +12,8 @@
     [
         {
             "ScriptId": 0,
-            "PageFilePath": "None"
+            "IndexTag": "None",
+            "Index": "None"
         }
     ]
 ]

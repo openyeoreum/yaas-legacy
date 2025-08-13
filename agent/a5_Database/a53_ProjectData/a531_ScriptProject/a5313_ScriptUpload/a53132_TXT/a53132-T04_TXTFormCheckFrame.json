@@ -1,8 +1,8 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTIndexMatching",
-        "Solution": "",
+        "TaskName": "TXTFormCheck",
+        "NextSolution": "",
         "AutoTemplate": "",
         "FileExtension": "txt",
         "Language": "",
@@ -12,8 +12,7 @@
     [
         {
             "ScriptId": 0,
-            "IndexTag": "None",
-            "Index": "None"
+            "Form": "None"
         }
     ]
 ]

@@ -1,9 +1,9 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTFormCheck",
-        "Solution": "",
-        "AutoTemplate": "",
+        "TaskName": "TXTBodyCaptionComponentCheck",
+        "NextSolution": "",
+        "AutoTemplate": "Yes",
         "FileExtension": "txt",
         "Language": "",
         "InputCount": 0,
@@ -12,7 +12,8 @@
     [
         {
             "ScriptId": 0,
-            "Form": "None"
+            "CaptionComponent": [],
+            "BML": "None"
         }
     ]
 ]

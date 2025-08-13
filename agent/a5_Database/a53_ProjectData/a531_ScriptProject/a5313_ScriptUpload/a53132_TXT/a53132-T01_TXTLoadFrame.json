@@ -1,18 +1,15 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTSplit",
-        "Solution": "",
+        "TaskName": "TXTCheck",
+        "NextSolution": "",
         "AutoTemplate": "",
         "FileExtension": "txt",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
     },
-    [
-        {
-            "ScriptId": 0,
-            "SplitedText": "None"
-        }
-    ]
+    {
+        "UploadedScriptFilePath": "None"
+    }
 ]

@@ -1,8 +1,8 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TableGen",
-        "Solution": "",
+        "TaskName": "AnnotationGen",
+        "NextSolution": "",
         "AutoTemplate": "Yes",
         "FileExtension": "",
         "Language": "",
@@ -12,10 +12,10 @@
     [
         {
             "ScriptId": 0,
-            "Tables": [
+            "Annotations": [
                 {
-                    "TableId": 0,
-                    "Table": "None"
+                    "AnnotationId": 0,
+                    "Annotation": "None"
                 }
             ]
         }

@@ -1,15 +1,19 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTCheck",
-        "Solution": "",
+        "TaskName": "TXTIndex",
+        "NextSolution": "",
         "AutoTemplate": "",
         "FileExtension": "txt",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
     },
-    {
-        "UploadedScriptFilePath": "None"
-    }
+    [
+        {
+            "IndexId": 0,
+            "IndexTag": "None",
+            "Index": "None"
+        }
+    ]
 ]

@@ -1,5 +1,6 @@
 {
     "TaskName": "TranslationEditing",
+    "InputFormat": "text",
     "OpenAI": {
         "BaseModel": {
             "ShortTokensModel": "gpt-5-mini",

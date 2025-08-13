@@ -1,18 +1,15 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFFormCheck",
-        "Solution": "",
+        "TaskName": "PDFCheck",
+        "NextSolution": "",
         "AutoTemplate": "",
         "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
     },
-    [
-        {
-            "ScriptId": 0,
-            "Form": "None"
-        }
-    ]
+    {
+        "UploadedScriptFilePath": "None"
+    }
 ]

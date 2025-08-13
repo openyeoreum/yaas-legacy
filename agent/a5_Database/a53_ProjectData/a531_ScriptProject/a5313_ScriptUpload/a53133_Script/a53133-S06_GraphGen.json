@@ -1,8 +1,8 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "CaptionGen",
-        "Solution": "",
+        "TaskName": "GraphGen",
+        "NextSolution": "",
         "AutoTemplate": "Yes",
         "FileExtension": "",
         "Language": "",
@@ -12,10 +12,10 @@
     [
         {
             "ScriptId": 0,
-            "Captions": [
+            "Graphs": [
                 {
-                    "CaptionId": 0,
-                    "Caption": "None"
+                    "GraphId": 0,
+                    "Graph": "None"
                 }
             ]
         }

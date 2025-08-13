@@ -1,8 +1,8 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "CommentGen",
-        "Solution": "",
+        "TaskName": "DiagramGen",
+        "NextSolution": "",
         "AutoTemplate": "Yes",
         "FileExtension": "",
         "Language": "",
@@ -12,10 +12,10 @@
     [
         {
             "ScriptId": 0,
-            "Comments": [
+            "Diagrams": [
                 {
-                    "CommentId": 0,
-                    "Comment": "None"
+                    "DiagramId": 0,
+                    "Diagram": "None"
                 }
             ]
         }

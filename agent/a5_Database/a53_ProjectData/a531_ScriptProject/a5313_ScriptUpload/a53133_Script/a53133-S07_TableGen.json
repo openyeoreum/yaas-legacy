@@ -1,8 +1,8 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "ChartGen",
-        "Solution": "",
+        "TaskName": "TableGen",
+        "NextSolution": "",
         "AutoTemplate": "Yes",
         "FileExtension": "",
         "Language": "",
@@ -12,10 +12,10 @@
     [
         {
             "ScriptId": 0,
-            "Charts": [
+            "Tables": [
                 {
-                    "ChartId": 0,
-                    "Chart": "None"
+                    "TableId": 0,
+                    "Table": "None"
                 }
             ]
         }

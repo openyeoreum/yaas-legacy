@@ -25,16 +25,16 @@ class LoadAgent:
         # Process 설정
         self.Email = Email
         self.ProjectName = ProjectName
-        self.ProcessNumber = ProcessNumber
-        self.ProcessName = ProcessName
         self.Solution = Solution
         self.SubSolution = SubSolution
-        self.EditMode = EditMode
-        self.ProcessInfo = f"User: {self.Email} | Solution: {self.Solution}-{self.SubSolution} | Project: {self.ProjectName} | Process: {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
+        self.ProcessNumber = ProcessNumber
+        self.ProcessName = ProcessName
         self.MainLang = MainLang
         self.Model = Model
         self.Mode = Mode
         self.MessagesReview = MessagesReview
+        self.EditMode = EditMode
+        self.ProcessInfo = f"User: {self.Email} | Solution: {self.Solution}-{self.SubSolution} | Project: {self.ProjectName} | Process: {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
 
         # ProjectFrame 경로 설정 (저장된 프로젝트 DataFrame)
         self.SolutionProjectFramePath = self._GetSolutionDataFramePath(self.ProjectDataPath, self.Solution, self.SubSolution)

@@ -1,8 +1,8 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "SignGen",
-        "Solution": "",
+        "TaskName": "ImageDescriptionGen",
+        "NextSolution": "",
         "AutoTemplate": "Yes",
         "FileExtension": "",
         "Language": "",
@@ -12,10 +12,10 @@
     [
         {
             "ScriptId": 0,
-            "Signs": [
+            "ImageDescriptions": [
                 {
-                    "SignId": 0,
-                    "Sign": "None"
+                    "ImageDescriptionId": 0,
+                    "ImageDescription": "None"
                 }
             ]
         }

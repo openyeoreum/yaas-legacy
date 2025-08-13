@@ -1,8 +1,8 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "AnnotationGen",
-        "Solution": "",
+        "TaskName": "CaptionGen",
+        "NextSolution": "",
         "AutoTemplate": "Yes",
         "FileExtension": "",
         "Language": "",
@@ -12,10 +12,10 @@
     [
         {
             "ScriptId": 0,
-            "Annotations": [
+            "Captions": [
                 {
-                    "AnnotationId": 0,
-                    "Annotation": "None"
+                    "CaptionId": 0,
+                    "Caption": "None"
                 }
             ]
         }

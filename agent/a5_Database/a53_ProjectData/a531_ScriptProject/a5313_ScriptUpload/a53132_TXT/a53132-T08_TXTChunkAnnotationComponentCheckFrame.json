@@ -1,8 +1,8 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTBodyCaptionComponentCheck",
-        "Solution": "",
+        "TaskName": "TXTChunkAnnotationComponentCheck",
+        "NextSolution": "",
         "AutoTemplate": "Yes",
         "FileExtension": "txt",
         "Language": "",
@@ -12,7 +12,8 @@
     [
         {
             "ScriptId": 0,
-            "CaptionComponent": [],
+            "ChunkComponent": [],
+            "AnnotationComponent": [],
             "BML": "None"
         }
     ]

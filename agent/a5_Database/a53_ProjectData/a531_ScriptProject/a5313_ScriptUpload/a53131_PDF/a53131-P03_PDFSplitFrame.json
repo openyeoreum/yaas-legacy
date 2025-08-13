@@ -1,9 +1,9 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFChunkAnnotationComponentCheck",
-        "Solution": "",
-        "AutoTemplate": "Yes",
+        "TaskName": "PDFSplit",
+        "NextSolution": "",
+        "AutoTemplate": "",
         "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,
@@ -12,9 +12,7 @@
     [
         {
             "ScriptId": 0,
-            "ChunkComponent": [],
-            "AnnotationComponent": [],
-            "BML": "None"
+            "PageFilePath": "None"
         }
     ]
 ]

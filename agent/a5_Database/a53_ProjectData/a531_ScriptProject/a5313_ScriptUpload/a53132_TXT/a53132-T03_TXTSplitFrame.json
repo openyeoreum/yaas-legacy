@@ -1,18 +1,18 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFLanguageCheck",
-        "Solution": "",
+        "TaskName": "TXTSplit",
+        "NextSolution": "",
         "AutoTemplate": "",
-        "FileExtension": "pdf",
+        "FileExtension": "txt",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
     },
     [
         {
-            "SampleId": 0,
-            "Language": "None"
+            "ScriptId": 0,
+            "SplitedText": "None"
         }
     ]
 ]

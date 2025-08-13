@@ -1,10 +1,10 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTChunkAnnotationComponentCheck",
-        "Solution": "",
+        "TaskName": "PDFChunkAnnotationComponentCheck",
+        "NextSolution": "",
         "AutoTemplate": "Yes",
-        "FileExtension": "txt",
+        "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"

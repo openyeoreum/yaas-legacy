@@ -1,15 +1,18 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFCheck",
-        "Solution": "",
+        "TaskName": "PDFLanguageCheck",
+        "NextSolution": "",
         "AutoTemplate": "",
         "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
     },
-    {
-        "UploadedScriptFilePath": "None"
-    }
+    [
+        {
+            "SampleId": 0,
+            "Language": "None"
+        }
+    ]
 ]

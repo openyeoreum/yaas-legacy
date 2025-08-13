@@ -23,18 +23,18 @@ class ScriptLoadProcess:
     ProjectStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
 
     ## ScriptLoad 초기화 ##
-    def __init__(self, projectName, email, Solution, AutoTemplate):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate):
         """클래스 초기화"""
         # 업데이트 정보
-        self.email = email
-        self.projectName = projectName
-        self.Solution = Solution
+        self.Email = Email
+        self.ProjectName = ProjectName
+        self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
 
         # Process 설정
         self.ProcessNumber = 'PT01'
         self.ProcessName = "ScriptLoad"
-        self.ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
+        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
         # 업로드 스크립트 파일 경로 및 확장자
         self.UploadedScriptFilePath = None
@@ -51,14 +51,14 @@ class ScriptLoadProcess:
         self.TXTLoadDataFramePath = os.path.join(self.ScriptUploadDataFramePath, "a53132_TXT/a53132-01_TXTLoadFrame.json")
 
         # project_script 관련 경로
-        self.ScriptDirPath = os.path.join(self.ProjectStoragePath, self.email, self.projectName, f"{self.projectName}_script")
-        self.UploadScriptFilePath = os.path.join(self.ScriptDirPath, f"{self.projectName}_upload_script_file")
-        self.DataFrameScriptFilePath = os.path.join(self.ScriptDirPath, f"{self.projectName}_dataframe_script_file")
-        self.MasterScriptFilePath = os.path.join(self.ScriptDirPath, f"{self.projectName}_master_script_file")
+        self.ScriptDirPath = os.path.join(self.ProjectStoragePath, self.Email, self.ProjectName, f"{self.ProjectName}_script")
+        self.UploadScriptFilePath = os.path.join(self.ScriptDirPath, f"{self.ProjectName}_upload_script_file")
+        self.DataFrameScriptFilePath = os.path.join(self.ScriptDirPath, f"{self.ProjectName}_dataframe_script_file")
+        self.MasterScriptFilePath = os.path.join(self.ScriptDirPath, f"{self.ProjectName}_master_script_file")
 
         # 최종 생성될 LoadFrame 파일 경로
-        self.PDFLoadFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.email}_{self.projectName}_P01_PDFLoadFrame({self.Solution}).json")
-        self.TXTLoadFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.email}_{self.projectName}_T01_TXTLoadFrame({self.Solution}).json")
+        self.PDFLoadFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.Email}_{self.ProjectName}_P01_PDFLoadFrame({self.NextSolution}).json")
+        self.TXTLoadFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.Email}_{self.ProjectName}_T01_TXTLoadFrame({self.NextSolution}).json")
 
     ## LoadFrame 파일 생성 확인 메서드 ##
     def _CheckExistingLoadFrame(self):
@@ -78,7 +78,7 @@ class ScriptLoadProcess:
             if ScriptFiles:
                 RawUploadedScriptFilePath = os.path.join(self.UploadScriptFilePath, ScriptFiles[0])
                 self.ScriptFileExtension = Extension[1:]
-                ScriptFileName = f"{self.projectName}_Script({self.Solution}).{self.ScriptFileExtension}"
+                ScriptFileName = f"{self.ProjectName}_Script({self.NextSolution}).{self.ScriptFileExtension}"
                 self.UploadedScriptFilePath = os.path.join(self.UploadScriptFilePath, ScriptFileName)
 
                 # 파일명이 다르면 표준화된 이름으로 복사
@@ -106,8 +106,8 @@ class ScriptLoadProcess:
         with open(LoadDataFramePath, 'r', encoding = 'utf-8') as LoadDataFrameFile:
             LoadFrame = json.load(LoadDataFrameFile)
 
-        LoadFrame[0]['ProjectName'] = self.projectName
-        LoadFrame[0]['Solution'] = self.Solution
+        LoadFrame[0]['ProjectName'] = self.ProjectName
+        LoadFrame[0]['NextSolution'] = self.NextSolution
         LoadFrame[0]['AutoTemplate'] = self.AutoTemplate
         LoadFrame[0]['FileExtension'] = self.ScriptFileExtension
         LoadFrame[0]['Completion'] = "Yes"
@@ -166,42 +166,33 @@ class ScriptLoadProcess:
 class PDFLanguageCheckProcess:
 
     ## PDFLanguageCheck 초기화 ##
-    def __init__(self, projectName, email, Solution, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath):
         """클래스 초기화"""
         # 업데이트 정보
-        self.projectName = projectName
-        self.email = email
+        self.Email = Email
+        self.ProjectName = ProjectName
         self.Solution = Solution
+        self.SubSolution = SubSolution
+        self.NextSolution = NextSolution
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
         self.ProcessNumber = "P02"
         self.ProcessName = "PDFLanguageCheck"
-        self.ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
+        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
         # 경로설정
         self.UploadScriptFilePath = UploadScriptFilePath
-        self.ScriptUploadDataFramePath = ScriptUploadDataFramePath
-        self.DataFrameScriptFilePath = DataFrameScriptFilePath
         self._InitializePaths()
 
     ## 프로세스 관련 경로 초기화 ##
     def _InitializePaths(self):
         """프로세스와 관련된 모든 경로를 초기화"""
-        # DataFrame 원본 경로
-        self.PDFLanguageCheckDataFramePath = os.path.join(self.ScriptUploadDataFramePath, "a53131_PDF/a53131-02_PDFLanguageCheckFrame.json")
-
-        # 최종 생성될 LanguageCheckFrame 파일 경로
-        self.PDFLanguageCheckFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.email}_{self.projectName}_P02_PDFLanguageCheckFrame({self.Solution}).json")
-
         # SplitedPDF 경로 및 디렉토리 생성
-        self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.projectName}_SampleScript({self.Solution})_jpeg")
+        self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_SampleScript({self.NextSolution})_jpeg")
         os.makedirs(self.SampleScriptJPEGDirPath, exist_ok = True)
         self.FontDirPath = "/usr/share/fonts/"
         self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
-
-    # ## PDFToImageSample 생성 ##
-    # def _CreatePDFToImageSample(self):
 
     ## PDF 이미지 생성 및 라벨 생성 ##
     def _CreatePDFToLabeledSmapleJPEG(self, Page, InputId):
@@ -252,7 +243,7 @@ class PDFLanguageCheckProcess:
         PageImage.paste(LabelImage, Position)
 
         # 해당 이미지 파일을 지정된 디렉토리에 저장
-        OutputFilename = f"{self.projectName}_Script({self.Solution})({InputId}).jpeg"
+        OutputFilename = f"{self.ProjectName}_Script({self.NextSolution})({InputId}).jpeg"
         OutputFilePath = os.path.join(self.SampleScriptJPEGDirPath, OutputFilename)
         PageImage.save(OutputFilePath, 'JPEG')
         
@@ -300,10 +291,8 @@ class PDFLanguageCheckProcess:
     def Run(self):
         """PDF 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
-
-        # InputList 생성
-        self._CreateInputList()
-
+        InputList = self._CreateInputList()
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, SubSolution = self.SubSolution)
 
 #########################################
 ##### P3 PDFSplit (PDF 페이지 별 분할) #####
@@ -311,12 +300,12 @@ class PDFLanguageCheckProcess:
 class PDFSplitProcess:
 
     ## PDFSplit 초기화 ##
-    def __init__(self, projectName, email, Solution, AutoTemplate, Language, FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, Language, FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath):
         """클래스 초기화"""
         # 업데이트 정보
-        self.projectName = projectName
-        self.email = email
-        self.Solution = Solution
+        self.Email = Email
+        self.ProjectName = ProjectName
+        self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
         self.Language = Language
         self.ScriptFileExtension = FileExtension
@@ -325,7 +314,7 @@ class PDFSplitProcess:
         # Process 설정
         self.ProcessNumber = '3'
         self.ProcessName = "PDFSplit"
-        self.ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
+        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
         
         # 경로설정
         self.UploadScriptFilePath = UploadScriptFilePath
@@ -340,10 +329,10 @@ class PDFSplitProcess:
         self.PDFSplitDataFramePath = os.path.join(self.ScriptUploadDataFramePath, "a53131_PDF/a53131-03_PDFSplitFrame.json")
 
         # 최종 생성될 SplitFrame 파일 경로
-        self.PDFSplitFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.email}_{self.projectName}_P03_PDFSplitFrame({self.Solution}).json")
+        self.PDFSplitFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.Email}_{self.ProjectName}_P03_PDFSplitFrame({self.NextSolution}).json")
 
         # SplitedPDF 경로 및 디렉토리 생성
-        self.SplitScriptPDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.projectName}_SplitScript({self.Solution})_{self.ScriptFileExtension}")
+        self.SplitScriptPDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_SplitScript({self.NextSolution})_{self.ScriptFileExtension}")
         os.makedirs(self.SplitScriptPDFDirPath, exist_ok = True)
         
     ## PDFSplitFrame 파일 생성 확인 ##
@@ -364,7 +353,7 @@ class PDFSplitProcess:
             Writer = PdfWriter()
             Writer.add_page(Reader.pages[PageNum])
             
-            OutputFileName = f"{self.projectName}_Script({self.Solution})({PageNum + 1}).{self.ScriptFileExtension}"
+            OutputFileName = f"{self.ProjectName}_Script({self.NextSolution})({PageNum + 1}).{self.ScriptFileExtension}"
             OutputFilePath = os.path.join(self.SplitScriptPDFDirPath, OutputFileName)
             
             # 페이지별 PDF 파일 저장
@@ -382,8 +371,8 @@ class PDFSplitProcess:
         with open(self.PDFSplitDataFramePath, 'r', encoding = 'utf-8') as FrameFile:
             SplitFrame = json.load(FrameFile)
 
-        SplitFrame[0]['ProjectName'] = self.projectName
-        SplitFrame[0]['Solution'] = self.Solution
+        SplitFrame[0]['ProjectName'] = self.ProjectName
+        SplitFrame[0]['NextSolution'] = self.NextSolution
         SplitFrame[0]['AutoTemplate'] = self.AutoTemplate
         SplitFrame[0]['Language'] = self.Language
         SplitFrame[0]['InputCount'] = len(PageFilePaths)
@@ -420,12 +409,12 @@ class PDFSplitProcess:
 class TXTSplitProcess:
 
     ## TXTSplit 초기화 ##
-    def __init__(self, projectName, email, Solution, AutoTemplate, Language, FileExtension, UploadedScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath, BaseTokens = 3000):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, Language, FileExtension, UploadedScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath, BaseTokens = 3000):
         """클래스 초기화"""
         # 업데이트 정보
-        self.projectName = projectName
-        self.email = email
-        self.Solution = Solution
+        self.Email = Email
+        self.ProjectName = ProjectName
+        self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
         self.ScriptFileExtension = FileExtension
         self.UploadedScriptFilePath = UploadedScriptFilePath
@@ -433,7 +422,7 @@ class TXTSplitProcess:
         # Process 설정
         self.ProcessNumber = '3'
         self.ProcessName = "TXTSplit"
-        self.ProcessInfo = f"User: {self.email} | Project: {self.projectName} | {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
+        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
         
         # 언어별 MaxTokens 설정
         self.Language = Language
@@ -478,7 +467,7 @@ class TXTSplitProcess:
         self.TXTSplitDataFramePath = os.path.join(self.ScriptUploadDataFramePath, "a53132_TXT/a53132-03_TXTSplitFrame.json")
 
         # 최종 생성될 SplitFrame 파일 경로
-        self.TXTSplitFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.email}_{self.projectName}_T03_TXTSplitFrame({self.Solution}).json")
+        self.TXTSplitFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.Email}_{self.ProjectName}_T03_TXTSplitFrame({self.NextSolution}).json")
 
     ## TXTSplitFrame 파일 생성 확인 ##
     def _CheckExistingSplitFrame(self):
@@ -561,8 +550,8 @@ class TXTSplitProcess:
         with open(self.TXTSplitDataFramePath, 'r', encoding = 'utf-8') as FrameFile:
             SplitFrame = json.load(FrameFile)
 
-        SplitFrame[0]['ProjectName'] = self.projectName
-        SplitFrame[0]['Solution'] = self.Solution
+        SplitFrame[0]['ProjectName'] = self.ProjectName
+        SplitFrame[0]['NextSolution'] = self.NextSolution
         SplitFrame[0]['AutoTemplate'] = self.AutoTemplate
         SplitFrame[0]['Language'] = self.Language
         SplitFrame[0]['InputCount'] = len(TXTChunks)
@@ -597,31 +586,32 @@ if __name__ == "__main__":
     ############################ 하이퍼 파라미터 설정 ############################
     Email = "yeoreum00128@gmail.com"
     ProjectNameList = ['250807_PDF테스트', '250807_TXT테스트']
-    Solution = 'Translation'
+    Solution = 'Script'
+    SubSolution = 'ScriptUpload'
+    NextSolution = 'Translation'
     AutoTemplate = "Yes" # 자동 컴포넌트 체크 여부 (Yes/No)
     #########################################################################
 
     for ProjectName in ProjectNameList:
-        # 1. 스크립트 파일 로드
-        ScriptLoadInstance = ScriptLoadProcess(ProjectName, Email, Solution, AutoTemplate)
+        # PT01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
+        ScriptLoadInstance = ScriptLoadProcess(Email, ProjectName, NextSolution, AutoTemplate)
         ScriptLoadInstance.Run()
         FileExtension, Language, UploadedScriptFilePath = ScriptLoadInstance.LoadScriptLoadFrame()
         ScriptUploadDataFramePath, ScriptUploadPromptPath, UploadScriptFilePath, DataFrameScriptFilePath, MasterScriptFilePath = ScriptLoadInstance.LoadScriptUploadPath()
 
         # 파일 확장자에 따라 후속 프로세스 실행
         if FileExtension == 'pdf':
-            # 2. PDF 언어 체크
-            PDFLanguageCheckProcessInstance = PDFLanguageCheckProcess(ProjectName, Email, Solution, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)
-            InputList = PDFLanguageCheckProcessInstance._CreateInputList()
-            print(f"InputList: {InputList}")
+            # P02 PDFLanguageCheck (PDF 언어 체크)
+            PDFLanguageCheckProcessInstance = PDFLanguageCheckProcess(Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath)
+            PDFLanguageCheckProcessInstance.Run()
 
-            # 3. PDF 분할
-            PDFSplitterInstance = PDFSplitProcess(ProjectName, Email, Solution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)
+            # #P03 PDFSplit (PDF 파일 페이지 분할)
+            PDFSplitterInstance = PDFSplitProcess(Email, ProjectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)
             PDFSplitterInstance.Run()
             
         elif FileExtension == 'txt':
-            # 2. TXT 언어 체크
+            # T02 TXTLanguageCheck (TXT 언어 체크)
 
-            # 3. TXT 분할
-            TXTSplitterInstance = TXTSplitProcess(ProjectName, Email, Solution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)
+            # T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
+            TXTSplitterInstance = TXTSplitProcess(Email, ProjectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)
             TXTSplitterInstance.Run()

@@ -17,10 +17,10 @@ python -m spacy download fr_core_news_sm
 
 
 ## PDF ##
-#P1 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
+#P01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
 
 
-#P2 PDFLanguageCheck (PDF 언어 체크)
+#P02 PDFLanguageCheck (PDF 언어 체크)
 언어 -> Ko, En, Ja ...
 [한글]
 (역할 및 업무)
@@ -84,10 +84,10 @@ pl: Polish - Polski
 <BookLanguageTag.json>
 
 
-#P3 PDFSplit (PDF 파일 페이지 분할)
+#P03 PDFSplit (PDF 파일 페이지 분할)
 
 
-#P4 PDFLanguageFormCheck (PDF 파일 페이지 형식 체크)
+#P04 PDFLanguageFormCheck (PDF 파일 페이지 형식 체크)
 형식 -> 표지, 목차, 본문, 빈지 ...
 [한글]
 (역할 및 업무)
@@ -169,11 +169,11 @@ Advertisement: A page promoting other books or products.
 <BookPageType.json>
 
 
-#P5 PDFResize (PDF 파일 리사이즈)
+#P05 PDFResize (PDF 파일 리사이즈)
 Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플을 가로, 세로 5% 조정해서 10개정도 제작 -> 프로세스 진행
 
 
-#P6 PDFIndexGen (PDF 파일 목차 데이터 형성)
+#P06 PDFIndexGen (PDF 파일 목차 데이터 형성)
 제목 -> Title
 부 -> Part
 장 -> Chapter
@@ -181,7 +181,7 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 프롤로그, 에필로그 -> Logue
 
 
-#P7 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)
+#P07 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)
 <제목></제목> -> Title
 <부></부> -> Part
 <장></장> -> Chapter
@@ -189,12 +189,12 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 <로그></로그> -> Logue
 
 
-#P8 PDFBodyCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
+#P08 PDFBodyCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body(체크대상은 아님)
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
-#P9 PDFChunkAnnotationComponentCheck (PDF 파일 페이지별 Chunk, Annotation 구성요소 체크)
+#P09 PDFChunkAnnotationComponentCheck (PDF 파일 페이지별 Chunk, Annotation 구성요소 체크)
 <문장></문장> -> Chunk(체크대상은 아님)
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment
@@ -202,10 +202,10 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 
 
 ## TXT ##
-#T1 통합: (TXT)ScriptLoad (업로드 된 스크립트 파일 확인)
+#T01 통합: (TXT)ScriptLoad (업로드 된 스크립트 파일 확인)
 
 
-#T2 TXTLanguageCheck (TXT 언어 체크)
+#T02 TXTLanguageCheck (TXT 언어 체크)
 언어 -> Ko, En, Ja ...
 [한글]
 (역할 및 업무)
@@ -274,10 +274,10 @@ pl: Polish - Polski
 <BookLanguageTag.json>
 
 
-#T3 TXTSplit (텍스트 파일 지정 토큰수 분할)
+#T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
 
 
-#T4 TXTFormCheck (텍스트 파일 페이지 형식 체크)
+#T04 TXTFormCheck (텍스트 파일 페이지 형식 체크)
 형식 -> 목차, 본문
 [한글]
 (역할 및 업무)
@@ -323,7 +323,7 @@ pl: Polish - Polski
 <도서페이지형식.json>
 
 
-#T5 TXTIndexGen (텍스트 파일 목차 데이터 형성)
+#T05 TXTIndexGen (텍스트 파일 목차 데이터 형성)
 제목 -> Title
 부 -> Part
 장 -> Chapter
@@ -331,7 +331,7 @@ pl: Polish - Polski
 프롤로그, 에필로그 -> Logue
 
 
-#T6 TXTIndexMatching (텍스트 파일 목차와 본문 속 목차 매칭)
+#T06 TXTIndexMatching (텍스트 파일 목차와 본문 속 목차 매칭)
 <제목></제목> -> Title
 <부></부> -> Part
 <장></장> -> Chapter
@@ -339,46 +339,46 @@ pl: Polish - Polski
 <로그></로그> -> Logue
 
 
-#T7 TXTBodyCaptionComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
+#T07 TXTBodyCaptionComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body(체크대상은 아님)
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
-#T8 TXTChunkAnnotationComponentCheck (텍스트 파일 페이지별 Chunk, Annotation 구성요소 체크)
+#T08 TXTChunkAnnotationComponentCheck (텍스트 파일 페이지별 Chunk, Annotation 구성요소 체크)
 <문장></문장> -> Chunk(체크대상은 아님)
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment
 <주석></주석> -> Annotation
 
 
-#PT1 CaptionGen (캡션 구조화 데이터 형성)
+#S01 CaptionGen (캡션 구조화 데이터 형성)
 
 
-#PT2 AnnotationGen (주석 구조화 데이터 형성)
+#S02 AnnotationGen (주석 구조화 데이터 형성)
 
 
-#PT3 ImageDescriptionGen (이미지설명 구조화 데이터 형성)
+#S03 ImageDescriptionGen (이미지설명 구조화 데이터 형성)
 
 
-#PT4 DiagramGen (다이어그램 구조화 데이터 형성)
+#S04 DiagramGen (다이어그램 구조화 데이터 형성)
 
 
-#PT5 ChartGen (차트 구조화 데이터 형성)
+#S05 ChartGen (차트 구조화 데이터 형성)
 
 
-#PT6 GraphGen (그래프 구조화 데이터 형성)
+#S06 GraphGen (그래프 구조화 데이터 형성)
 
 
-#PT7 TableGen (테이블 구조화 데이터 형성)
+#S07 TableGen (테이블 구조화 데이터 형성)
 
 
-#PT8 SignGen (기호 및 특수문자 구조화 데이터 형성)
+#S08 SignGen (기호 및 특수문자 구조화 데이터 형성)
 
 
-#PT9 CommentGen (코멘트 구조화 데이터 형성)
+#S09 CommentGen (코멘트 구조화 데이터 형성)
 
 
-#PT10 BodyFrame (도서 전처리 구조화 데이터 완성)
+#S10 BodyFrame (도서 전처리 구조화 데이터 완성)
 Index(Title, Part, Chapter, Index, Logue)
 Body(Body, Caption, Annotation)
 Chunk(Chunk, Sign, Comment)

@@ -1,19 +1,18 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "TXTIndex",
-        "Solution": "",
+        "TaskName": "PDFFormCheck",
+        "NextSolution": "",
         "AutoTemplate": "",
-        "FileExtension": "txt",
+        "FileExtension": "pdf",
         "Language": "",
         "InputCount": 0,
         "Completion": "No"
     },
     [
         {
-            "IndexId": 0,
-            "IndexTag": "None",
-            "Index": "None"
+            "ScriptId": 0,
+            "Form": "None"
         }
     ]
 ]

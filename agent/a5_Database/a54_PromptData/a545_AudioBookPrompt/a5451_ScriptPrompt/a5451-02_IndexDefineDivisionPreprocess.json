@@ -244,7 +244,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<분할된 목차 리스트>\n",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",
@@ -302,7 +302,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<분할된 목차 리스트>\n",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",

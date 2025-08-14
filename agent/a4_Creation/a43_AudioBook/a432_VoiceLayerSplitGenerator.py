@@ -201,7 +201,7 @@ def ActorMatchingProcess(projectName, email, CharacterInfo, voiceDataSetCharacte
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
-        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = "", messagesReview = MessagesReview)
+        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = "", messagesReview = MessagesReview)
         Filter = ActorMatchingFilter(Response)
         
         if isinstance(Filter, str):

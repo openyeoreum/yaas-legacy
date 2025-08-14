@@ -299,20 +299,20 @@ def ReplaceNthOccurrence(CleanText, NonINPUT, NonOUTPUT, n):
     return CleanText[:pos] + NonOUTPUT + CleanText[pos+len(NonINPUT):]
 
 ## Response결과에 MomoryCount가 포함되어 있을 경우 이를 삭제
-def RemoveMomoryCountLine(responseData, memoryCounterKeyWords):
+def RemoveMomoryCountLine(responseData, memoryNoteKeyWords):
     lines = responseData.splitlines()
     lines_to_remove = []
 
     # 첫째 줄 확인
     if len(lines) > 0:
         line1 = lines[0]
-        if all(keyword in line1 for keyword in memoryCounterKeyWords):
+        if all(keyword in line1 for keyword in memoryNoteKeyWords):
             lines_to_remove.append(0)
 
     # 둘째 줄 확인 (첫째 줄이 삭제되지 않았고, 둘째 줄이 존재할 경우)
     if len(lines) > 1 and 0 not in lines_to_remove:
         line2 = lines[1]
-        if all(keyword in line2 for keyword in memoryCounterKeyWords):
+        if all(keyword in line2 for keyword in memoryNoteKeyWords):
             lines_to_remove.append(1)
     elif len(lines) > 1 and 0 in lines_to_remove:
         pass
@@ -324,13 +324,13 @@ def RemoveMomoryCountLine(responseData, memoryCounterKeyWords):
     return "\n".join(lines)
 
 ## CorrectionKo의 Filter(Error 예외처리)
-def CorrectionKoFilter(Input, DotsInput, responseData, memoryCounterKeyWords, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount):
+def CorrectionKoFilter(Input, DotsInput, responseData, memoryNoteKeyWords, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount):
     # Error1: 결과가 마지막까지 생성되지 않을 경우 예외 처리
     if f'[{InputDots}]' not in responseData:
         return f"OUTPUT의 마지막 [{InputDots}]이 생성되지 않음, OUTPUT이 덜 생성됨"
     
     # Response결과에 MomoryCount가 포함되어 있을 경우 이를 삭제
-    responseData = RemoveMomoryCountLine(responseData, memoryCounterKeyWords)
+    responseData = RemoveMomoryCountLine(responseData, memoryNoteKeyWords)
     
     # [n] 불일치 오류시 이를 찾을 수 있도록 CorrectionText를 미리 저장
     CorrectionText = responseData
@@ -598,20 +598,20 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
             Input = DotsToNumbers(DotsInput)
             InPutPeriods = str(Input).count('.')
             
-            # Filter, MemoryCounter, OutputEnder 처리
+            # Filter, MemoryNote, OutputEnder 처리
             if UnmatchedSpot != "":
                 momoryCounterAttention = f", 특히 '{UnmatchedSpot}' 부분 주의해주세요. -"
             else:
                 momoryCounterAttention = " -"
-            memoryCounter = f" - 중요: 매우 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음!, 효과음 시작/끝 기호 <Sn> <En>와 [숫자]는 절대로 변경 말고 그대로 유지!, 청크 기호 [1] ~ [{InputDots}]까지 숫자를 절대 하나도 빠트리지 않고 그대로 작성!" + momoryCounterAttention
+            memoryNote = f" - 중요: 매우 꼼꼼한 끊어읽기!, 띄어쓰기 맞춤법 오타 등 절대 수정 및 변경 없음!, 효과음 시작/끝 기호 <Sn> <En>와 [숫자]는 절대로 변경 말고 그대로 유지!, 청크 기호 [1] ~ [{InputDots}]까지 숫자를 절대 하나도 빠트리지 않고 그대로 작성!" + momoryCounterAttention
             outputEnder = ""
-            memoryCounterKeyWords = ["<Sn>", "<En>", "[1]", f"[{InputDots}]"]
+            memoryNoteKeyWords = ["<Sn>", "<En>", "[1]", f"[{InputDots}]"]
             
             # Response 생성
             if ErrorCount in [2, 4]:
-                Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+                Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             else:
-                Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+                Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
@@ -628,7 +628,7 @@ def CorrectionKoProcess(projectName, email, DataFramePath, Process = "Correction
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = CorrectionKoFilter(Input, DotsInput, responseData, memoryCounterKeyWords, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount)
+            Filter = CorrectionKoFilter(Input, DotsInput, responseData, memoryNoteKeyWords, InputDots, InputSFXTags, InPutPeriods, InputChunkId, ErrorCount)
             
             if isinstance(Filter, str) or "UnmatchedSpot" in Filter:
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

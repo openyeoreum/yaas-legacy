@@ -218,16 +218,16 @@ def ScriptGenProcess(projectName, email, DataFramePath, ScriptConfig, TextDirPat
         if "Continue" in InputDic:
             Input = '\n' + InputDic['Continue']
             if outputMemory == []:
-                memoryCounter = f" '{InputDic['Name']}, {InputDic['Title']}'의 부분을 작성해주세요.\n\n".replace("', ", "'").replace(", '", "'")
+                memoryNote = f" '{InputDic['Name']}, {InputDic['Title']}'의 부분을 작성해주세요.\n\n".replace("', ", "'").replace(", '", "'")
             else:
-                memoryCounter = f"에서 '{InputDic['Name']} {InputDic['Title']}'의 부분을 이어서 작성해주세요.\n\n".replace("', ", "'").replace(", '", "'")
+                memoryNote = f"에서 '{InputDic['Name']} {InputDic['Title']}'의 부분을 이어서 작성해주세요.\n\n".replace("', ", "'").replace(", '", "'")
             outputEnder = ""
 
             # Response 생성
             if ScriptConfig['Model'] == "OpenAI":
-                Response, Usage, Model = OpenAI_LLMresponse(projectName, email, ScriptConfig['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+                Response, Usage, Model = OpenAI_LLMresponse(projectName, email, ScriptConfig['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             elif ScriptConfig['Model'] == "ANTHROPIC":
-                Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, ScriptConfig['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+                Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, ScriptConfig['Process'], Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(ScriptConfig['Process'])

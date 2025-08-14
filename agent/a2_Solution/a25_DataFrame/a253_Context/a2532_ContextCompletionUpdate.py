@@ -96,7 +96,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Context"):
 ##### Filter 조건 #####
 ######################
 ## ContextCompletion의 Filter(Error 예외처리)
-def ContextCompletionFilter(MemoTag, responseData, memoryCounter):
+def ContextCompletionFilter(MemoTag, responseData, memoryNote):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -235,18 +235,18 @@ def ContextCompletionProcess(projectName, email, DataFramePath, Process = "Conte
             else:
                 Input = InputDic['Continue']
             
-            # Filter, MemoryCounter, OutputEnder 처리
+            # Filter, MemoryNote, OutputEnder 처리
             if Mode == "Master" or Mode == "ExampleFineTuning":
                 memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(Input))
             else:
                 memoTag = re.findall(r'\[핵심문구(\d{1,5})\]', str(InputDic))
             
             MemoTag = ["핵심문구" + match for match in memoTag]
-            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + f', 작업의 시작은 {{"{MemoTag[0]}": 으로 시작  -\n'
+            memoryNote = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in MemoTag]) + f', 작업의 시작은 {{"{MemoTag[0]}": 으로 시작  -\n'
             outputEnder = f"{{'핵심문구"
 
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
@@ -263,7 +263,7 @@ def ContextCompletionProcess(projectName, email, DataFramePath, Process = "Conte
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                                 
-            Filter = ContextCompletionFilter(MemoTag, responseData, memoryCounter)
+            Filter = ContextCompletionFilter(MemoTag, responseData, memoryNote)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

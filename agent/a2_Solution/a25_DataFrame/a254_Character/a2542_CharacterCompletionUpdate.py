@@ -121,7 +121,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Character"):
 ##### Filter 조건 #####
 ######################
 ## 12-1. CharacterCompletion의 Filter(Error 예외처리)
-def CharacterCompletionFilter(TalkTag, responseData, memoryCounter):
+def CharacterCompletionFilter(TalkTag, responseData, memoryNote):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -217,7 +217,7 @@ def RemoveDuplicates(OutputDic, Duplicate):
     return OutputDic, sorted(OutputDicIdList)
 
 ## CharacterPostCompletion의 Filter(Error 예외처리)
-def CharacterPostCompletionFilter(inputIdList, responseData, memoryCounter):
+def CharacterPostCompletionFilter(inputIdList, responseData, memoryNote):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -359,21 +359,21 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
             else:
                 Input = InputDic['Continue']
             
-            # Filter, MemoryCounter, OutputEnder 처리
+            # Filter, MemoryNote, OutputEnder 처리
             if Mode == "Master" or Mode == "ExampleFineTuning":
                 talkTag = re.findall(r'\[말(\d{1,5})\]', str(Input))
             else:
                 talkTag = re.findall(r'\[말(\d{1,5})\]', str(InputDic))
             
             TalkTag = ["말" + match for match in talkTag]
-            memoryCounter = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
+            memoryNote = " - 이어서 작업할 데이터: " + ', '.join(['[' + tag + ']' for tag in TalkTag]) + ' -\n'
             outputEnder = ""
 
             # Response 생성
             # if ErrorCount in [2, 4]:
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             # else:
-            #     Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            #     Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
@@ -390,7 +390,7 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
             
-            Filter = CharacterCompletionFilter(TalkTag, responseData, memoryCounter)
+            Filter = CharacterCompletionFilter(TalkTag, responseData, memoryNote)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:
@@ -506,14 +506,14 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
 
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = " - 주의사항2: <인물리스트>에서 등장횟수가 큰 인물[특히 앞부분 인물들이 등장횟수가 큼]들은 절대 묶지 않으며, 인물 1인당 1명의 개별성우로 선정. 주의사항3: <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않음. 주의사항4: 성우와 인물의 성별은 같아야 함 -\n"
+            memoryNote = " - 주의사항2: <인물리스트>에서 등장횟수가 큰 인물[특히 앞부분 인물들이 등장횟수가 큼]들은 절대 묶지 않으며, 인물 1인당 1명의 개별성우로 선정. 주의사항3: <인물리스트>의 인물은 절대 1명도 빠트리지 않으며, 동일인물번호를 중복하여 작성하지 않음. 주의사항4: 성우와 인물의 성별은 같아야 함 -\n"
             outputEnder = ""
 
             # Response 생성
             # if ErrorCount in [2, 4]:
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             # else:
-            #     Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            #     Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             # print(f"@@@@@@@@@@\n\nResponse: {Response}\n\n@@@@@@@@@@")
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
@@ -530,7 +530,7 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
             
-            Filter = CharacterPostCompletionFilter(inputIdList, responseData, memoryCounter)
+            Filter = CharacterPostCompletionFilter(inputIdList, responseData, memoryNote)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

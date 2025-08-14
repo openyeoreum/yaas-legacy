@@ -96,7 +96,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<Life Graph Analysis.json>",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "Output": "OUTPUT"
         }
@@ -156,7 +156,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<Life Graph Analysis.json>",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "Output": "OUTPUT"
         }
@@ -213,7 +213,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<Life Graph Analysis.json>",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",
@@ -272,7 +272,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<Life Graph Analysis.json>",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",

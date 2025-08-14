@@ -79,7 +79,7 @@ def SentsSplitingProcess(projectName, email, SplitSents, SplitWords, RetryIdList
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
-        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = "", messagesReview = MessagesReview)
+        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = "", messagesReview = MessagesReview)
         Filter = SentsSplitingFilter(Response)
         
         if isinstance(Filter, str):
@@ -166,8 +166,8 @@ def VoiceSplitInspectionProcess(projectName, email, name, ResponseJson, NotSameN
     ErrorCount = 0
     while 10 >= ErrorCount:
         # Response 생성
-        memoryCounter = "\n- 매우중요!, 틀려서 ‘검수': '불합격’인 경우 <'단어 [숫자] 단어' 나열>를 꼼꼼히 보고 맞는 정답으로 '수정정답'을 작성합니다. 이것이 가장 중요합니다. -\n"
-        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
+        memoryNote = "\n- 매우중요!, 틀려서 ‘검수': '불합격’인 경우 <'단어 [숫자] 단어' 나열>를 꼼꼼히 보고 맞는 정답으로 '수정정답'을 작성합니다. 이것이 가장 중요합니다. -\n"
+        Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview)
         Filter = VoiceSplitInspectionFilter(Response, ResponseJson)
         
         if isinstance(Filter, str):
@@ -745,17 +745,17 @@ def InputText(SplitSents, SplitWords, SameNum):
     RawResponse = [{'알파벳': key, '숫자': value} for key, value in SameDic.items()]
     ErrorRawResponse = []
 
-    # 최종 memoryCounter, ErrorMemoryCounter 생성
-    MemoryCounter = []
-    ErrorMemoryCounter = []
+    # 최종 memoryNote, ErrorMemoryNote 생성
+    MemoryNote = []
+    ErrorMemoryNote = []
     for ABWordList in AlphabetABWordList:
-        ErrorMemoryCounter.append(f'{ABWordList[1]} [{ABWordList[2]}] {ABWordList[3]}')
+        ErrorMemoryNote.append(f'{ABWordList[1]} [{ABWordList[2]}] {ABWordList[3]}')
         for NSA in NotSameAlphabet:
             if ABWordList[2] == NSA:
-                MemoryCounter.append(f'{ABWordList[1]} [{ABWordList[2]}] {ABWordList[3]}')
+                MemoryNote.append(f'{ABWordList[1]} [{ABWordList[2]}] {ABWordList[3]}')
                 
-    return {"Normal": {"Input": Input, "NotSameAlphabet": NotSameAlphabet, "lastNumber": lastNumber, "NumberWordList": NumberWordList, "MemoryCounter": MemoryCounter, "RawResponse": RawResponse},
-            "Error": {"Input": ErrorInput, "NotSameAlphabet": AlphabetList, "lastNumber": lastNumber, "NumberWordList": NumberWordList, "MemoryCounter": ErrorMemoryCounter, "RawResponse": ErrorRawResponse}}, NotSameNumberWordList
+    return {"Normal": {"Input": Input, "NotSameAlphabet": NotSameAlphabet, "lastNumber": lastNumber, "NumberWordList": NumberWordList, "MemoryNote": MemoryNote, "RawResponse": RawResponse},
+            "Error": {"Input": ErrorInput, "NotSameAlphabet": AlphabetList, "lastNumber": lastNumber, "NumberWordList": NumberWordList, "MemoryNote": ErrorMemoryNote, "RawResponse": ErrorRawResponse}}, NotSameNumberWordList
 
 ## VoiceSplit 프롬프트 요청
 def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, InspectionCount = 5, Process = "VoiceSplit", MessagesReview = "off"):
@@ -766,7 +766,7 @@ def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Inspecti
     # print(f"NotSameAlphabet: {InputSet['Normal']['NotSameAlphabet']}\n\n")
     # print(f"lastNumber: {InputSet['Normal']['lastNumber']}\n\n")
     # print(f"NumberWordList: {InputSet['Normal']['NumberWordList']}\n\n")
-    # print(f"MemoryCounter: {InputSet['Normal']['MemoryCounter']}\n\n")
+    # print(f"MemoryNote: {InputSet['Normal']['MemoryNote']}\n\n")
     # print(f"RawResponse: {InputSet['Normal']['RawResponse']}\n\n")
     
     ErrorOutput = ''
@@ -779,27 +779,27 @@ def VoiceSplitProcess(projectName, email, name, SplitSents, SplitWords, Inspecti
                 NotSameAlphabet = InputSet['Normal']['NotSameAlphabet']
                 lastNumber = InputSet['Normal']['lastNumber']
                 NumberWordList = InputSet['Normal']['NumberWordList']
-                _MemoryCounter = InputSet['Normal']['MemoryCounter']
+                _MemoryNote = InputSet['Normal']['MemoryNote']
                 RawResponse = InputSet['Normal']['RawResponse']
             else:
                 Input = InputSet['Error']['Input']
                 NotSameAlphabet = InputSet['Error']['NotSameAlphabet']
                 lastNumber = InputSet['Error']['lastNumber']
                 NumberWordList = InputSet['Error']['NumberWordList']
-                _MemoryCounter = InputSet['Error']['MemoryCounter']
+                _MemoryNote = InputSet['Error']['MemoryNote']
                 RawResponse =InputSet['Error']['RawResponse']
             
-            ## memoryCounter 생성
-            memoryCounter = f"\n\n최종주의사항: 매칭 '알파벳부분'은 | {' | '.join(_MemoryCounter)} |, '숫자부분'과 '매칭숫자'는 [숫자]의 앞뒤 부분을 자세히 살펴보고, 숫자는 꼭 1개만 작성!\n\n"
-            ## memoryCounter에 ErrorOutput 포함
+            ## memoryNote 생성
+            memoryNote = f"\n\n최종주의사항: 매칭 '알파벳부분'은 | {' | '.join(_MemoryNote)} |, '숫자부분'과 '매칭숫자'는 [숫자]의 앞뒤 부분을 자세히 살펴보고, 숫자는 꼭 1개만 작성!\n\n"
+            ## memoryNote에 ErrorOutput 포함
             if ErrorOutput == '':
-                memoryCounter = memoryCounter + "\n\n"
+                memoryNote = memoryNote + "\n\n"
             else:
-                memoryCounter = memoryCounter + f"\"숫자부분\": \"{ErrorOutput}\"은 정답이 아님. 실수하지 말것!\n\n"
+                memoryNote = memoryNote + f"\"숫자부분\": \"{ErrorOutput}\"은 정답이 아님. 실수하지 말것!\n\n"
                 ErrorOutput = ''
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
-            # Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, 0, Mode = "Example", MemoryCounter = memoryCounter, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, 0, Mode = "Master", MemoryNote = memoryNote, messagesReview = MessagesReview)
+            # Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, 0, Mode = "Example", MemoryNote = memoryNote, messagesReview = MessagesReview)
             ResponseJson = VoiceTimeStempsProcessFilter(Response, NotSameAlphabet, lastNumber, NumberWordList)
             ## VoiceSplit이 많아서 오답률이 클 경우 VoiceSplitInspectionProcess 프롬프트 요청
             

@@ -95,7 +95,7 @@
         {
             "Role": "assistant",
             "OutputMark": "\n\n<작가정보.json>",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "Output": "OUTPUT"
         }
@@ -154,7 +154,7 @@
         {
             "Role": "assistant",
             "OutputMark": "\n\n<작가정보.json>",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "Output": "OUTPUT"
         }
@@ -210,7 +210,7 @@
         {
             "Role": "assistant",
             "OutputMark": "\n\n<작가정보.json>",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",
@@ -268,7 +268,7 @@
         {
             "Role": "assistant",
             "OutputMark": "\n\n<작가정보.json>",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",

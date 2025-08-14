@@ -464,7 +464,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<태그된 목차.json> - 태그된 목차 예시.json의 구조를 그대로 지켜주세요! -\n",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",
@@ -522,7 +522,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<태그된 목차.json> - 태그된 목차 예시.json의 구조를 그대로 지켜주세요! -\n",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",

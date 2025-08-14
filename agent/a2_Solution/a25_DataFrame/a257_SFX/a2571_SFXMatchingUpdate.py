@@ -105,7 +105,7 @@ def BodyFrameBodysToInputList(projectName, email, Task = "Body"):
 ##### Filter 조건 #####
 ######################
 ## SFXMatching의 Filter(Error 예외처리)
-def SFXMatchingFilter(Input, responseData, memoryCounter):
+def SFXMatchingFilter(Input, responseData, memoryNote):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -261,12 +261,12 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
         if "Continue" in InputDic:
             Input = InputDic['Continue']
             
-            # Filter, MemoryCounter, OutputEnder 처리
-            memoryCounter = " - 주의사항: '길이'에서 <내용>에 포함된 문장을 그대로 작성하며 <시작> <끝>을 꼭 표기, 효과음의 명칭은 구체적이고 물리적으로 작성, 글의 순서에 맞도록 '효과음1' ... '효과음n' 까지 작성 -\n"
+            # Filter, MemoryNote, OutputEnder 처리
+            memoryNote = " - 주의사항: '길이'에서 <내용>에 포함된 문장을 그대로 작성하며 <시작> <끝>을 꼭 표기, 효과음의 명칭은 구체적이고 물리적으로 작성, 글의 순서에 맞도록 '효과음1' ... '효과음n' 까지 작성 -\n"
             outputEnder = "{{'효과음"
             
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
@@ -283,7 +283,7 @@ def SFXMatchingProcess(projectName, email, DataFramePath, Process = "SFXMatching
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = SFXMatchingFilter(Input, responseData, memoryCounter)
+            Filter = SFXMatchingFilter(Input, responseData, memoryNote)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

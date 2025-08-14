@@ -364,11 +364,11 @@ def DuplicationPreprocessProcess(projectName, email, mainLang, DataFramePath, Pr
             Input = InputDic['Continue']
             Index = InputDic['Index']
             Script = InputDic['Script']
-            memoryCounter = " - 중요사항 | '중복수정전'과 '중복수정후'는 내용과 서술을 변경하여 글을 바꾸는 것이 절대로 아니며, 단순히 이어서 2번 이상 낭독되는 번역, 약어, 발음, 기타를 찾아서 작성하는 것 | 중복수정이 없을 경우는 {'중복수정': []}로 작성 -\n"
+            memoryNote = " - 중요사항 | '중복수정전'과 '중복수정후'는 내용과 서술을 변경하여 글을 바꾸는 것이 절대로 아니며, 단순히 이어서 2번 이상 낭독되는 번역, 약어, 발음, 기타를 찾아서 작성하는 것 | 중복수정이 없을 경우는 {'중복수정': []}로 작성 -\n"
             outputEnder = ""
 
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)

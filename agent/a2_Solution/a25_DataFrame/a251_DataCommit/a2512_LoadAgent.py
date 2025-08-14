@@ -183,18 +183,18 @@ class LoadAgent:
         return EditCheck, EditCompletion
 
     ## ProcessResponse 생성 메서드 ##
-    def _ProcessResponse(self, Input, InputCount, memoryCounter = ""):
+    def _ProcessResponse(self, Input, InputCount, memoryNote = ""):
         """ProcessResponse를 생성하는 메서드"""
         ErrorCount = 0
         while True:
             if self.Model == "OpenAI":
-                Response, Usage, Model = OpenAI_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryCounter = memoryCounter, messagesReview = self.MessagesReview)
+                Response, Usage, Model = OpenAI_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "Anthropic":
-                Response, Usage, Model = ANTHROPIC_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryCounter = memoryCounter, messagesReview = self.MessagesReview)
+                Response, Usage, Model = ANTHROPIC_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "Google":
-                Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryCounter = memoryCounter, messagesReview = self.MessagesReview)
+                Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "DeepSeek":
-                Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryCounter = memoryCounter, messagesReview = self.MessagesReview)
+                Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
 
             # 생성된 Respnse Filler 처리
             FilteredResponse = self._ProcessFilter(Response, self.CheckCount)
@@ -243,7 +243,7 @@ class LoadAgent:
                     Input = self.InputList[i]['Input']
                     
                     ## ProcessResponse 생성
-                    ProcessResponse = self._ProcessResponse(self, Input, inputCount, memoryCounter = "")
+                    ProcessResponse = self._ProcessResponse(self, Input, inputCount, memoryNote = "")
                     
                     ## DataFrame 저장
                     self._UpdateProcessDataFrame(self.ProjectName, self.MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, ProcessResponse, self.ProcessName, inputCount, IndexId, self.TotalInputCount)

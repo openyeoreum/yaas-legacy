@@ -406,11 +406,11 @@ def BookPreprocessProcess(projectName, email, DataFramePath, Process = "BookPrep
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = "- 구두점(, .), 따옴표(“” \" ')는 낭독에서 매우 중요함으로, 절대로 절대로 수정 및 추가, 삭제 하지 않습니다. -\n"
+            memoryNote = "- 구두점(, .), 따옴표(“” \" ')는 낭독에서 매우 중요함으로, 절대로 절대로 수정 및 추가, 삭제 하지 않습니다. -\n"
             outputEnder = ""
 
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)

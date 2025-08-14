@@ -166,7 +166,7 @@ def ContextCompletionsToInputList(projectName, email):
 ##### Filter 조건 #####
 ######################
 ## WMWMMatching의 Filter(Error 예외처리)
-def WMWMMatchingFilter(responseData, memoryCounter):
+def WMWMMatchingFilter(responseData, memoryNote):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -299,11 +299,11 @@ def WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = None
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = "\n"
+            memoryNote = "\n"
             outputEnder = ""
 
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
@@ -320,7 +320,7 @@ def WMWMMatchingProcess(projectName, email, DataFramePath, BeforeResponse = None
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                                 
-            Filter = WMWMMatchingFilter(responseData, memoryCounter)
+            Filter = WMWMMatchingFilter(responseData, memoryNote)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

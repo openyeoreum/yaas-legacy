@@ -693,13 +693,13 @@ def LongScriptEditFilter(Response, CheckCount):
 ##### Process 응답 #####
 #######################
 ## Process LLMResponse 함수
-def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCount, FilterFunc, CheckCount, LLM, mode, MessagesReview, input2 = "", memoryCounter = ""):
+def ProcessResponse(projectName, email, Process, Input, InputCount, TotalInputCount, FilterFunc, CheckCount, LLM, mode, MessagesReview, input2 = "", memoryNote = ""):
     ErrorCount = 0
     while True:
         if LLM == "OpenAI":
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryNote = memoryNote, messagesReview = MessagesReview)
         elif LLM == "Anthropic":
-            Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryCounter = memoryCounter, messagesReview = MessagesReview)
+            Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, InputCount, Mode = mode, Input2 = input2, MemoryNote = memoryNote, messagesReview = MessagesReview)
         Filter = FilterFunc(Response, CheckCount)
         
         if isinstance(Filter, str):
@@ -1621,7 +1621,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 Caution = InputList2[i]['Caution'] + json.dumps(SummaryOfIndexGenBeforeResponse, indent = 4, ensure_ascii = False)
     
                 ## Response 생성
-                SummaryOfIndexGenResponse = ProcessResponse(projectName, email, Process, Input1, inputCount, TotalInputCount, SummaryOfIndexGenFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2, memoryCounter = Caution)
+                SummaryOfIndexGenResponse = ProcessResponse(projectName, email, Process, Input1, inputCount, TotalInputCount, SummaryOfIndexGenFilter, CheckCount, "OpenAI", mode, MessagesReview, input2 = Input2, memoryNote = Caution)
                 
                 ## DataFrame 저장
                 SummaryOfIndexGenProcessDataFrameSave(projectName, BookScriptGenDataFramePath, ProjectDataFrameSummaryOfIndexPath, SummaryOfIndexGenResponse, Process, inputCount, TotalInputCount)
@@ -1762,7 +1762,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
                 FeedbackPromptInput = ShortScriptGenFeedbackInputAndExtension(PromptInputDic, ScriptEditPath, "ScriptIntroductionGen", Process)
                 
                 ## Response 생성
-                ShortScriptGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, ShortScriptGenFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryCounter = Caution)
+                ShortScriptGenFeedbackResponse = ProcessResponse(projectName, email, FeedbackProcess, FeedbackPromptInput, inputCount, TotalInputCount, ShortScriptGenFilter, CheckCount, "OpenAI", mode, MessagesReview, memoryNote = Caution)
                 
                 ## Edit 업데이트
                 ShortScriptGenFeedbackEditUpdate(ScriptEditPath, ModifiedScriptEditPath, Process, "SummaryOfIndexGen", "TitleAndIndexGen", EditCount, ShortScriptGenFeedbackResponse)

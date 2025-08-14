@@ -170,11 +170,11 @@ def PronunciationPreprocessProcess(projectName, email, DataFramePath, Process = 
             Index = InputDic['Index']
             Script = InputDic['Script']
             Input = RemoveSpecialCharacters(Input)
-            memoryCounter = " - 중요사항 | '발음수정전'과 '발음수정후'는 *숫자, *외국어, *기호, *특수문자 등의 요소들을 한글발음으로 수정하는 것 | 발음수정이 없을 경우는 {'발음수정': []}로 작성 -\n"
+            memoryNote = " - 중요사항 | '발음수정전'과 '발음수정후'는 *숫자, *외국어, *기호, *특수문자 등의 요소들을 한글발음으로 수정하는 것 | 발음수정이 없을 경우는 {'발음수정': []}로 작성 -\n"
             outputEnder = ""
 
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)

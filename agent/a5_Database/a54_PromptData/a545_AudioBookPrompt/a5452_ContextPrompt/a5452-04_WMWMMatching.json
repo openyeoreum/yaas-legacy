@@ -96,7 +96,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<최종독서토론요약.json>\n",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "Output": "OUTPUT"
         }
@@ -155,7 +155,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<최종독서토론요약.json>\n",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "Output": "OUTPUT"
         }
@@ -211,7 +211,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<최종독서토론요약.json>",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",
@@ -269,7 +269,7 @@
         {
             "Role": "assistant",
             "OutputMark": "<최종독서토론요약.json>",
-            "MemoryCounter": "MemoryCounter",
+            "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "OutputMemory": "OutputMemory",
             "Output": "OUTPUT",

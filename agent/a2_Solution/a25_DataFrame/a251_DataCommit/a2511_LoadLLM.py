@@ -40,7 +40,7 @@ def Date(Option = "Day"):
 ##### OpenAI LLM Response #####
 ###############################
 ## 프롬프트 요청할 LLMmessages 메세지 구조 생성
-def LLMmessages(Process, Input, Model, Root = "agent", promptFramePath = "", Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryCounter = "", outputEnder = ""):
+def LLMmessages(Process, Input, Model, Root = "agent", promptFramePath = "", Output = "", mode = "Example", input2 = "", inputMemory = "", inputMemory2 = "", outputMemory = "", memoryNote = "", outputEnder = ""):
     ## '...'을 “...”로 변경하여 Claude에서도 json 형식이 갖춰지도록 구성
     def ConvertQuotes(Model, Message):
         if "claude" in Model:
@@ -99,7 +99,7 @@ def LLMmessages(Process, Input, Model, Root = "agent", promptFramePath = "", Out
         {
           "role": Example[2]["Role"],
           "content": Example[2]["OutputMark"] + 
-                    memoryCounter + 
+                    memoryNote + 
                     Example[2]["OutputStarter"]
         }
       ]
@@ -131,7 +131,7 @@ def LLMmessages(Process, Input, Model, Root = "agent", promptFramePath = "", Out
         },
         {
           "role": Memory[2]["Role"],
-          "content": Memory[2]["OutputMark"] + memoryCounter +
+          "content": Memory[2]["OutputMark"] + memoryNote +
                     Memory[2]["OutputStarter"] +
                     str(outputMemory) +
                     str(outputEnder)
@@ -195,7 +195,7 @@ def LLMmessages(Process, Input, Model, Root = "agent", promptFramePath = "", Out
 ## 프롬프트에 메세지 확인
 def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = "agent", PromptFramePath = "", MODE = "Example", INPUT2 = "", INPUTMEMORY = "", OUTPUTMEMORY = "", MEMORYCOUNTER = "", OUTPUTENDER = ""):
 
-    Messages, outputTokens, TotalTokens, Temperature = LLMmessages(Process, Input, Model, Root = ROOT, promptFramePath = PromptFramePath, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryCounter = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
+    Messages, outputTokens, TotalTokens, Temperature = LLMmessages(Process, Input, Model, Root = ROOT, promptFramePath = PromptFramePath, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryNote = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
     
     TextMessagesList = [f"\n############# Messages #############\n",
                         f"Messages: ({Count}), ({Model}), ({MODE}), (Tep:{Temperature})\n",
@@ -218,7 +218,7 @@ def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = "age
     return print(TextMessages + TextReponse)
   
 ## 프롬프트 실행
-def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
     OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)
@@ -226,7 +226,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "agent"
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
         promptFrame = json.load(promptFrameJson)
 
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'gpt', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'gpt', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
     if Mode == "Master":
       Model = promptFrame["OpenAI"]["MasterModel"]
@@ -299,7 +299,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, root = "agent"
             print(f"LifeGraphName: {projectName} | Process: {Process} | OpenAI_LLMresponse 완료")
           
           if messagesReview == "on":
-            LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = root, PromptFramePath = PromptFramePath, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+            LLMmessagesReview(Process, Input, Count, Response, Usage, Model, ROOT = root, PromptFramePath = PromptFramePath, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryNote, OUTPUTENDER = OutputEnder)
 
           return Response, Usage, Model
       
@@ -564,7 +564,7 @@ def JsonParsingProcess(projectName, email, RawResponse, FilterFunc, LLM = "GOOGL
         return FilteredResponse
 
 ## 프롬프트 실행
-def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
 
     AnthropicAIClient = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
     if PromptFramePath == "":
@@ -574,7 +574,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "age
         promptFrame = json.load(promptFrameJson)
 
     
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
     if Mode == "Master":
       Model = promptFrame["ANTHROPIC"]["MasterModel"]
@@ -665,7 +665,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "age
               print(f"LifeGraphName: {projectName} | Process: {Process} | ANTHROPIC_LLMresponse 완료")
           
           if messagesReview == "on":
-              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryNote, OUTPUTENDER = OutputEnder)
 
           ## Response Mode 전처리2: JsonParsing의 재구조화
           if ":" in JsonResponse and "{" in JsonResponse and "}" in JsonResponse:
@@ -694,7 +694,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, root = "age
 ###############################
 
 ## 프롬프트 실행
-def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
 
     GoogleAIClient = genai.Client(api_key= os.getenv("GEMINI_API_KEY"), http_options={'api_version':'v1alpha'})
     if PromptFramePath == "":
@@ -703,7 +703,7 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "agent"
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
         promptFrame = json.load(promptFrameJson)
 
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
     Model = promptFrame["GOOGLE"]["MasterModel"]
     
@@ -774,7 +774,7 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "agent"
               print(f"LifeGraphName: {projectName} | Process: {Process} | GOOGLE_LLMresponse 완료")
           
           if messagesReview == "on":
-              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryNote, OUTPUTENDER = OutputEnder)
 
           ## Response Mode 전처리2: JsonParsing의 재구조화
           if ":" in JsonResponse and "{" in JsonResponse and "}" in JsonResponse:
@@ -803,7 +803,7 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, root = "agent"
 #################################
 
 ## 프롬프트 실행
-def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryCounter = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
     DeepSeekClient = OpenAI(api_key = os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
     if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process)
@@ -811,7 +811,7 @@ def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "agen
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
         promptFrame = json.load(promptFrameJson)
 
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryCounter = MemoryCounter, outputEnder = OutputEnder)
+    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
     Model = promptFrame["DEEPSEEK"]["MasterModel"]
     
@@ -877,7 +877,7 @@ def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, root = "agen
               print(f"LifeGraphName: {projectName} | Process: {Process} | DEEPSEEK_LLMresponse 완료")
           
           if messagesReview == "on":
-              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryCounter, OUTPUTENDER = OutputEnder)
+              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryNote, OUTPUTENDER = OutputEnder)
 
           ## Response Mode 전처리2: JsonParsing의 재구조화
           if ":" in JsonResponse and "{" in JsonResponse and "}" in JsonResponse:

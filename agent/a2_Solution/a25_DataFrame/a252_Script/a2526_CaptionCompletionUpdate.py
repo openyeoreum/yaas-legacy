@@ -69,7 +69,7 @@ def BodyFrameCaptionsToInputList(projectName, email):
 ##### Filter 조건 #####
 ######################
 ## CaptionCompletion의 Filter(Error 예외처리)
-def CaptionCompletionFilter(responseData, memoryCounter):
+def CaptionCompletionFilter(responseData, memoryNote):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         OutputDic = json.loads(responseData)
@@ -180,11 +180,11 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
             
         if "Continue" in InputDic:
             Input = InputDic['Continue']
-            memoryCounter = "\n"
+            memoryNote = "\n"
             outputEnder = ""
 
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
@@ -201,7 +201,7 @@ def CaptionCompletionProcess(projectName, email, DataFramePath, Process = "Capti
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
                     
-            Filter = CaptionCompletionFilter(responseData, memoryCounter)
+            Filter = CaptionCompletionFilter(responseData, memoryNote)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

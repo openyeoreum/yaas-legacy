@@ -97,7 +97,7 @@ def IsSimilar(inputText, outputText, threshold = 1):
     return distance <= threshold
 
 ## ContextDefine의 Filter(Error 예외처리)
-def ContextDefineFilter(Input, responseData, memoryCounter):
+def ContextDefineFilter(Input, responseData, memoryNote):
     # Error1: json 형식이 아닐 때의 예외 처리
     try:
         outputJson = json.loads(responseData)
@@ -255,12 +255,12 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
             else:
                 Input = InputDic['Continue']
             
-            # Filter, MemoryCounter, OutputEnder 처리
-            memoryCounter = "\n"
+            # Filter, MemoryNote, OutputEnder 처리
+            memoryNote = "\n"
             outputEnder = f"{{'메모"
             
             # Response 생성
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryCounter = memoryCounter, OutputEnder = outputEnder, messagesReview = MessagesReview)
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
             # OutputStarter, OutputEnder에 따른 Response 전처리
             promptFrame = GetPromptFrame(Process)
@@ -277,7 +277,7 @@ def ContextDefineProcess(projectName, email, DataFramePath, Process = "ContextDe
                         Response = Response.replace(outputEnder, "", 1)
                     responseData = outputEnder + Response
          
-            Filter = ContextDefineFilter(Input, responseData, memoryCounter)
+            Filter = ContextDefineFilter(Input, responseData, memoryNote)
             
             if isinstance(Filter, str):
                 if Mode == "Memory" and mode == "Example" and ContinueCount == 1:

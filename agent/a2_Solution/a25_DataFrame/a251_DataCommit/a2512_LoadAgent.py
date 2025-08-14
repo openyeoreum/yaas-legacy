@@ -20,13 +20,14 @@ class LoadAgent:
     PromptDataPath = "/yaas/agent/a5_Database/a54_PromptData"
 
     ## LoadAgent 초기화 ##
-    def __init__(self, InputList, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", Mode = "Master", MessagesReview = "off", SubSolution = None, SolutionTag = None, EditMode = "Auto", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
+    def __init__(self, InputList, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", Mode = "Master", MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
         """클래스 초기화"""
         # Process 설정
         self.Email = Email
         self.ProjectName = ProjectName
         self.Solution = Solution
         self.SubSolution = SubSolution
+        self.NextSolution = NextSolution
         self.ProcessNumber = ProcessNumber
         self.ProcessName = ProcessName
         self.MainLang = MainLang
@@ -37,10 +38,10 @@ class LoadAgent:
         self.ProcessInfo = f"User: {self.Email} | Solution: {self.Solution}-{self.SubSolution} | Project: {self.ProjectName} | Process: {self.ProcessNumber}_{self.ProcessName}({self.Solution})"
 
         # ProjectFrame 경로 설정 (저장된 프로젝트 DataFrame)
-        self.SolutionProjectFramePath = self._GetSolutionDataFramePath(self.ProjectDataPath, self.Solution, self.SubSolution, self.MainLang)
+        self.SolutionProjectFramePath = self._GetSolutionDataFramePath("ProjectFrame", self.ProjectDataPath)
 
         # PromptFrame 경로 설정 (저장된 프롬프트 DataFrame)
-        self.SolutionPromptFramePath = self._GetSolutionDataFramePath(self.PromptDataPath, self.Solution, self.SubSolution, self.MainLang)
+        self.SolutionPromptFramePath = self._GetSolutionDataFramePath("PromptFrame", self.PromptDataPath)
 
         # UserProcess 경로 설정
         self.UserProjectSolutionPath = os.path.join(self.StoragePath, self.Email, self.ProjectName, f"{self.ProjectName}_{self.Solution.lower()}")
@@ -49,16 +50,16 @@ class LoadAgent:
         self.DataFrameFileDirPath = os.path.join(self.UserProjectSolutionPath, f"{self.ProjectName}_dataframe_{self.Solution.lower()}_file")
 
         _SolutionProjectDataFramePath = os.path.join(self.DataFrameFileDirPath, f"{self.Email}_{self.ProjectName}_{self.ProcessNumber}_{ProcessName}.json")
-        if SolutionTag:
-            self.SolutionProjectDataFramePath = _SolutionProjectDataFramePath.replace('.json', f'({SolutionTag}).json')
+        if self.NextSolution:
+            self.SolutionProjectDataFramePath = _SolutionProjectDataFramePath.replace('.json', f'({self.NextSolution}).json')
         else:
             self.SolutionProjectDataFramePath = _SolutionProjectDataFramePath
         
         # SolutionEdit 경로 설정 (스토리지에 생성되는 최종 Edit)
         self.MasterFileDirPath = os.path.join(self.UserProjectSolutionPath, f"{self.ProjectName}_master_{self.Solution.lower()}_file")
         _SolutionEditPath = os.path.join(self.MasterFileDirPath, f'[{self.ProjectName}_{self.Solution}_Edit].json')
-        if SolutionTag:
-            self.SolutionEditPath = _SolutionEditPath.replace('.json', f'({SolutionTag}).json')
+        if self.NextSolution:
+            self.SolutionEditPath = _SolutionEditPath.replace('.json', f'({self.NextSolution}).json')
         else:
             self.SolutionEditPath = _SolutionEditPath
 
@@ -78,19 +79,20 @@ class LoadAgent:
         self.EditCheck, self.EditCompletion = self._SolutionEditCheck(OutputsPerInput, InputCountKey, IgnoreCountCheck)
 
     ## Solution 및 SubSolution 경로에서 DataFrame 경로 가져오기 메서드 ##
-    def _GetSolutionDataFramePath(self, DataFramePath, Solution, SubSolution, MainLang):
+    def _GetSolutionDataFramePath(self, DataFrameType, DataFramePath):
         """Solution 및 SubSolution 경로에서 DataFrame을 찾는 메서드"""
         try:
             # Solution이 포함된 첫 번째 디렉터리 찾기
             SolutionDirName = next(Dir for Dir in os.listdir(DataFramePath) 
-                                    if Solution in Dir and os.path.isdir(os.path.join(DataFramePath, Dir)))
+                                    if self.Solution in Dir and os.path.isdir(os.path.join(DataFramePath, Dir)))
             SolutionDirPath = os.path.join(DataFramePath, SolutionDirName)
 
             # SubSolution 값의 유무에 따라 최종 검색 경로를 설정
-            if SubSolution:
+            if self.SubSolution:
                 # SubSolution이 있을 경우, 한 단계 더 들어감
                 SubSolutionDirName = next(Dir for Dir in os.listdir(SolutionDirPath) 
-                                            if SubSolution in Dir and os.path.isdir(os.path.join(SolutionDirPath, Dir)))
+                                            if self.SubSolution in Dir and os.path.isdir(os.path.join(SolutionDirPath, Dir)))
+                print(f"SubSolutionDirName: {SubSolutionDirName}")
                 ProjectFrameDirPath = os.path.join(SolutionDirPath, SubSolutionDirName)
             else:
                 # SubSolution이 None일 경우, Solution 디렉터리가 최종 경로가 됨
@@ -98,13 +100,17 @@ class LoadAgent:
 
         except StopIteration:
             # 해당하는 디렉터리를 찾지 못한 경우
-            raise FileNotFoundError(f"\n\n[ 아래 경로에서 해당 솔루션 데이터 프레임 파일을 찾을 수 없습니다: {Solution} 또는 {SubSolution} ]\n{DataFramePath}\n\n")
+            raise FileNotFoundError(f"\n\n[ 아래 경로에서 해당 솔루션 데이터 프레임 파일을 찾을 수 없습니다: {self.Solution} 또는 {self.SubSolution} ]\n{DataFramePath}\n\n")
 
         # 결정된 최종 디렉터리 내에서 .json 파일 검색
-        if MainLang == "ko":
-            FileEndName = "(ko).json"
-        else:
-            FileEndName = "(global).json"
+        if DataFrameType == "ProjectFrame":
+            FileEndName = ".json"
+        elif DataFrameType == "PromptFrame":
+            if self.MainLang == "ko":
+                FileEndName = "(ko).json"
+            else:
+                FileEndName = "(global).json"
+
         for Root, Dirs, Files in os.walk(ProjectFrameDirPath):
             for File in Files:
                 # 파일 이름에 ProcessNumber와 ProcessName이 포함되어 있는지 확인
@@ -284,7 +290,7 @@ if __name__ == "__main__":
         Mode = "Master",
         MessagesReview = "off",
         SubSolution = None,
-        SolutionTag = None,
+        NextSolution = None,
         EditMode = "Auto",
         OutputsPerInput = 1,
         InputCountKey = None,

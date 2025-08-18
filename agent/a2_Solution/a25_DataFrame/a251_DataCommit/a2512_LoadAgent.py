@@ -219,9 +219,43 @@ class LoadAgent:
             print(f"{self.ProcessInfo} | {InputCount}/{self.TotalInputCount} | JSONDecode 완료")
             return FilteredResponse
 
-    ##
-    def _ProcessFilter(self):
-        """"""
+    ## ProcessFilter 메서드 ##
+    def _ProcessFilter(self, Response, ResponseStructure = {"MainResponseData": {"Key": None, "Type": None, "Filter": None}, "MainResponseData": [{"Key": None, "Type": None, "Filter": None}], "SubResponseType": dict}):
+        """프로세스 응답에 대한 필터 메서드"""
+        ## 1: 각 필터들 마다 함수로 정리 ##
+        ## 2: Main 또는 Sub에서 "Filter": 의 벨류값을 통해 함수 호출 및 검수
+        # Error1: JSON 형식 예외 처리
+        try:
+            FilteredResponse = json.loads(Response)
+        except json.JSONDecodeError:
+            return f"{self.ProcessInfo} | JSONDecodeError: 응답이 Json이 아닙니다"
+        
+        # Error2-1: 메인키(MainKey) 확인
+        if ResponseStructure[] and MainKey not in FilteredResponse:
+            return f"{self.ProcessInfo} | MainKeyError: '{MainKey}' 키가 누락되었습니다"
+
+        # Error2-2: 메인키(MainKey) 데이터 타입 확인
+        if MainValueType and not isinstance(FilteredResponse[MainKey], MainValueType):
+            return f"{self.ProcessInfo} | MainKeyTypeError: '{MainKey}' 키의 데이터 타입이 {MainValueType}가 아닙니다"
+
+        # Error3: 서브키리스트(SubKeyList) 및 데이터 타입 확인
+        for i, SubKey in enumerate(SubKeyList):
+            # Error3-1: 서브키(SubKeyList) 확인
+            if SubKey not in FilteredResponse[MainKey]:
+                return f"{self.ProcessInfo} | SubKeyError: '{SubKey}' 키가 누락되었습니다"
+            
+            # Error3-2: 서브키(SubKeyList) 데이터 타입 확인
+            if SubValueTypeList and not isinstance(FilteredResponse[MainKey][SubKey], SubValueTypeList[i]):
+                return f"{self.ProcessInfo} | SubKeyTypeError: '{SubKey}' 키의 데이터 타입이 {SubValueTypeList[i]}가 아닙니다"
+
+            # Error3-3: 서브키(SubKeyList) 데이터 타입이 리스트인 경우
+            if isinstance(FilteredResponse[MainKey][SubKey], list):
+                for item in FilteredResponse[MainKey][SubKey]:
+                    if not isinstance(item, str):
+                        return f"{self.ProcessInfo} | SubKeyItemTypeError: '{SubKey}' 리스트의 아이템이 문자열이 아닙니다"
+        
+        # 모든 조건을 만족하면 필터링된 응답 반환
+        return FilteredResponse[MainKey]
 
     ##
     def _UpdateProcessDataFrame(self):

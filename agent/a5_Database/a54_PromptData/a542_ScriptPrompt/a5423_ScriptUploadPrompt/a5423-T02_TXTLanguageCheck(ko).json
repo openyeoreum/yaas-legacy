@@ -1,6 +1,6 @@
 {
-    "TaskName": "PDFLanguageCheck",
-    "InputFormat": "jpeg",
+    "TaskName": "TXTLanguageCheck",
+    "InputFormat": "text",
     "OpenAI": {
         "BaseModel": {
             "ShortTokensModel": "gpt-5-mini",

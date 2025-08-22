@@ -149,10 +149,10 @@ class ScriptLoadProcess:
 
         # LoadFrame에서 필요한 정보 반환
         FileExtension = LoadFrame[0]['FileExtension']
-        Language = LoadFrame[0]['Language'] if LoadFrame[0]['Language'] != "" else None
+        MainLang = LoadFrame[0]['MainLang'] if LoadFrame[0]['MainLang'] != "" else None
         UploadedScriptFilePath = LoadFrame[1]['UploadedScriptFilePath']
             
-        return FileExtension, Language, UploadedScriptFilePath
+        return FileExtension, MainLang, UploadedScriptFilePath
 
     ## LoadFrame 불러오기 메서드 ##
     def LoadScriptUploadPath(self):
@@ -161,11 +161,11 @@ class ScriptLoadProcess:
         return self.ScriptUploadDataFramePath, self.ScriptUploadPromptPath, self.UploadScriptFilePath, self.DataFrameScriptFilePath, self.MasterScriptFilePath
 
 #############################################
-##### P2 PDFLanguageCheck (PDF 언어 체크) #####
+##### P2 PDFMainLangCheck (PDF 언어 체크) #####
 #############################################
-class PDFLanguageCheckProcess:
+class PDFMainLangCheckProcess:
 
-    ## PDFLanguageCheck 초기화 ##
+    ## PDFMainLangCheck 초기화 ##
     def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath):
         """클래스 초기화"""
         # 업데이트 정보
@@ -178,7 +178,7 @@ class PDFLanguageCheckProcess:
 
         # Process 설정
         self.ProcessNumber = "P02"
-        self.ProcessName = "PDFLanguageCheck"
+        self.ProcessName = "PDFMainLangCheck"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
         # 경로설정
@@ -262,8 +262,17 @@ class PDFLanguageCheckProcess:
 
             # SampleScriptJPEGDirPath에 JPEG 파일이 5개 이상 있는 경우는 InputList 생성 및 리턴
             if len(ScriptJPEGFiles) >= 5:
-                # 파일 경로로 InputList 생성
-                InputList = [os.path.join(self.SampleScriptJPEGDirPath, FileName) for FileName in ScriptJPEGFiles]
+                InputList = [
+                    {
+                        "Id": 1,
+                        "Input": [],
+                        "InputFormat": "jpeg",
+                        "ComparisonInput": None
+                    }
+                ]
+                for InputId, FileName in enumerate(ScriptJPEGFiles, 1):
+                    FilePath = os.path.join(self.SampleScriptJPEGDirPath, FileName)
+                    InputList[0]["Input"].append(FilePath)
                 return InputList
 
         # PDF 파일 불러오기 및 랜덤으로 5개 페이지 선택
@@ -275,24 +284,32 @@ class PDFLanguageCheckProcess:
             SelectedPageIndices = random.sample(range(TotalPages), 5)
 
         # InputList 생성
-        InputList = []
+        InputList = [
+            {
+                "Id": 1,
+                "Input": [],
+                "InputFormat": "jpeg",
+                "ComparisonInput": None
+            }
+        ]
         for InputId, PageIndex in enumerate(SelectedPageIndices, 1):
             Page = PdfDocument.load_page(PageIndex)
             # PDF 이미지 생성 및 라벨 생성
             OutputFilePath = self._CreatePDFToLabeledSmapleJPEG(Page, InputId)
-            
-            InputList.append(OutputFilePath)
+
+            InputList[0]["Input"].append(OutputFilePath)
 
         PdfDocument.close()
 
         return InputList
 
-    ## PDFLanguageCheckProcess 실행 ##
+    ## PDFMainLangCheckProcess 실행 ##
     def Run(self):
         """PDF 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
         InputList = self._CreateInputList()
         LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
+        LoadAgentInstance.Run()
 
 #########################################
 ##### P3 PDFSplit (PDF 페이지 별 분할) #####
@@ -300,14 +317,14 @@ class PDFLanguageCheckProcess:
 class PDFSplitProcess:
 
     ## PDFSplit 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, Language, FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
         self.ProjectName = ProjectName
         self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
-        self.Language = Language
+        self.MainLang = MainLang
         self.ScriptFileExtension = FileExtension
         self.UploadedScriptFilePath = UploadedScriptFilePath
         
@@ -374,7 +391,7 @@ class PDFSplitProcess:
         SplitFrame[0]['ProjectName'] = self.ProjectName
         SplitFrame[0]['NextSolution'] = self.NextSolution
         SplitFrame[0]['AutoTemplate'] = self.AutoTemplate
-        SplitFrame[0]['Language'] = self.Language
+        SplitFrame[0]['MainLang'] = self.MainLang
         SplitFrame[0]['InputCount'] = len(PageFilePaths)
         SplitFrame[0]['Completion'] = "Yes"
         
@@ -409,7 +426,7 @@ class PDFSplitProcess:
 class TXTSplitProcess:
 
     ## TXTSplit 초기화 ##
-    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, Language, FileExtension, UploadedScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath, BaseTokens = 3000):
+    def __init__(self, Email, ProjectName, NextSolution, AutoTemplate, MainLang, FileExtension, UploadedScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath, BaseTokens = 3000):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -425,7 +442,7 @@ class TXTSplitProcess:
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
         
         # 언어별 MaxTokens 설정
-        self.Language = Language
+        self.MainLang = MainLang
         self.BaseTokens = BaseTokens
         self.MaxTokens = self._DetermineMaxTokens()
 
@@ -456,7 +473,7 @@ class TXTSplitProcess:
         }
 
         # 언어 코드에 해당하는 비율 적용, 없으면 기본값(1.0) 사용
-        Ratio = TokenRatios.get(self.Language.lower(), 1.0)
+        Ratio = TokenRatios.get(self.MainLang.lower(), 1.0)
 
         return int(self.BaseTokens * Ratio)
 
@@ -496,7 +513,7 @@ class TXTSplitProcess:
         }
 
         # 언어에 맞는 모델 이름 가져오기, 기본값은 한국어 모델
-        ModelName = ModelMap.get(self.Language.lower(), 'ko_core_news_sm')
+        ModelName = ModelMap.get(self.MainLang.lower(), 'ko_core_news_sm')
         
         try:
             nlp = spacy.load(ModelName)
@@ -553,7 +570,7 @@ class TXTSplitProcess:
         SplitFrame[0]['ProjectName'] = self.ProjectName
         SplitFrame[0]['NextSolution'] = self.NextSolution
         SplitFrame[0]['AutoTemplate'] = self.AutoTemplate
-        SplitFrame[0]['Language'] = self.Language
+        SplitFrame[0]['MainLang'] = self.MainLang
         SplitFrame[0]['InputCount'] = len(TXTChunks)
         SplitFrame[0]['Completion'] = "Yes"
         
@@ -596,21 +613,21 @@ if __name__ == "__main__":
         # PT01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
         ScriptLoadInstance = ScriptLoadProcess(Email, ProjectName, NextSolution, AutoTemplate)
         ScriptLoadInstance.Run()
-        FileExtension, Language, UploadedScriptFilePath = ScriptLoadInstance.LoadScriptLoadFrame()
+        FileExtension, MainLang, UploadedScriptFilePath = ScriptLoadInstance.LoadScriptLoadFrame()
         ScriptUploadDataFramePath, ScriptUploadPromptPath, UploadScriptFilePath, DataFrameScriptFilePath, MasterScriptFilePath = ScriptLoadInstance.LoadScriptUploadPath()
 
         # 파일 확장자에 따라 후속 프로세스 실행
         if FileExtension == 'pdf':
-            # P02 PDFLanguageCheck (PDF 언어 체크)
-            PDFLanguageCheckProcessInstance = PDFLanguageCheckProcess(Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath)
-            PDFLanguageCheckProcessInstance.Run()
+            # P02 PDFMainLangCheck (PDF 언어 체크)
+            PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath)
+            PDFMainLangCheckProcessInstance.Run()
 
             # #P03 PDFSplit (PDF 파일 페이지 분할)
             PDFSplitterInstance = PDFSplitProcess(Email, ProjectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)
             PDFSplitterInstance.Run()
             
         elif FileExtension == 'txt':
-            # T02 TXTLanguageCheck (TXT 언어 체크)
+            # T02 TXTMainLangCheck (TXT 언어 체크)
 
             # T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
             TXTSplitterInstance = TXTSplitProcess(Email, ProjectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, ScriptUploadDataFramePath, DataFrameScriptFilePath)

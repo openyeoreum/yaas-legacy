@@ -20,7 +20,7 @@ python -m spacy download fr_core_news_sm
 #P01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
 
 
-#P02 PDFLanguageCheck (PDF 언어 체크)
+#P02 PDFMainLangCheck (PDF 언어 체크)
 언어 -> Ko, En, Ja ...
 [한글]
 (역할 및 업무)
@@ -87,7 +87,7 @@ pl: Polish - Polski
 #P03 PDFSplit (PDF 파일 페이지 분할)
 
 
-#P04 PDFLanguageFormCheck (PDF 파일 페이지 형식 체크)
+#P04 PDFFormCheck (PDF 파일 페이지 형식 체크)
 형식 -> 표지, 목차, 본문, 빈지 ...
 [한글]
 (역할 및 업무)
@@ -122,7 +122,7 @@ pl: Polish - Polski
 }
 
 (<페이지형식.json> 완성 절차 및 방법)
-1. <도서페이지> 자료는 이미지 파일 5개이며 각 파일별로 우측 상단에 "자료번호: n"이 표기되어 있습니다.
+1. <도서페이지> 자료는 이미지 파일 5개이며 각 파일별로 중앙 상단에 "자료번호: n"이 표기되어 있습니다.
 2. (<도서페이지형식.json>의 구조 및 내용)에 따라, 각 <도서페이지> 자료를 보고 '자료번호'와 '페이지형식'을 작성하여 <페이지형식.json>을 완성합니다.
 
 (주어진 <도서페이지> 자료 5개를 보고 (도서페이지형식)을 지정하여 <도서페이지형식.json>로 완성해주세요)
@@ -162,7 +162,7 @@ Advertisement: A page promoting other books or products.
 }
 
 (Procedure for completing <BookPageType.json>)
-1. The <BookPage> data consists of 5 image files. Each file is marked with "DataNumber: n" in the top-right corner.
+1. The <BookPage> data consists of 5 image files. Each file is marked with "DataNumber: n" in the top-center.
 2. Following the JSON structure defined above, analyze each <BookPage> image and fill in the corresponding Data Number and Page Type to complete the <BookPageType.json> file.
 
 (Please analyze the five given <BookPage> data items, assign the (BookPageType) for each, and provide the output in the <BookPageType.json> format.)
@@ -170,7 +170,7 @@ Advertisement: A page promoting other books or products.
 
 
 #P05 PDFResize (PDF 파일 리사이즈)
-Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플을 가로, 세로 5% 조정해서 10개정도 제작 -> 프로세스 진행
+Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플을 가로 5% 조정해서 10개, 세로 5% 조정해서 10개 제작 -> 가로 본문선 및 세로 본문선 번호 찾기 프로세스 진행
 
 
 #P06 PDFIndexGen (PDF 파일 목차 데이터 형성)
@@ -205,7 +205,7 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 #T01 통합: (TXT)ScriptLoad (업로드 된 스크립트 파일 확인)
 
 
-#T02 TXTLanguageCheck (TXT 언어 체크)
+#T02 TXTMainLangCheck (TXT 언어 체크)
 언어 -> Ko, En, Ja ...
 [한글]
 (역할 및 업무)

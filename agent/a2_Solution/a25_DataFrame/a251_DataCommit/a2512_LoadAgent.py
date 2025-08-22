@@ -188,18 +188,18 @@ class LoadAgent:
         return EditCheck, EditCompletion
 
     ## ProcessResponse 생성 메서드 ##
-    def _ProcessResponse(self, Input, InputCount, memoryNote = ""):
+    def _ProcessResponse(self, Input, InputCount, InputFormat = "text", MainLang = "ko", memoryNote = ""):
         """ProcessResponse를 생성하는 메서드"""
         ErrorCount = 0
         while True:
             if self.Model == "OpenAI":
-                Response, Usage, Model = OpenAI_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = OpenAI_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainlang = MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "Anthropic":
-                Response, Usage, Model = ANTHROPIC_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = ANTHROPIC_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainlang = MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "Google":
-                Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainlang = MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "DeepSeek":
-                Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainlang = MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
 
             # 생성된 Respnse Filler 처리
             FilteredResponse = self._ProcessFilter(Response, Input)
@@ -319,24 +319,24 @@ class LoadAgent:
                         if CheckItem in Value:
                             return f"{self.ProcessInfo} | StrDataExclusionCheckError: ({CheckItem}) 항목이 포함되어서는 안됩니다"
 
-                # 벨류가 문자인 경우 문자 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key)
+                # 벨류가 문자인 경우 문자 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
                 if ValueCheck == "strDataSameCheck":
                     if Value != Input[ValueCheckItem[0]]:
                         return f"{self.ProcessInfo} | StrDataSameCheckError: ({ResponseStructureDict['Key']}) 와 (Input[{[ValueCheckItem[0]]}]) 는 일치해야 합니다\n\n({Value})\n\n({Input[ValueCheckItem[0]]})"
 
-                # 벨류가 문자인 경우 특수문자 및 공백제외 문자 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key)
+                # 벨류가 문자인 경우 특수문자 및 공백제외 문자 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
                 if ValueCheck == "strCleanDataSameCheck":
                     if re.sub(r'\W+', '', Value, flags = re.UNICODE) != re.sub(r'\W+', '', Input[ValueCheckItem[0]], flags = re.UNICODE):
                         return f"{self.ProcessInfo} | StrCleanDataSameCheckError: ({ResponseStructureDict['Key']}) 와 (Input[{[ValueCheckItem[0]]}]) 는 일치해야 합니다\n\n({Value})\n\n({Input[ValueCheckItem[0]]})"
 
-                # 벨류가 문자인 경우 문자열 길이 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key)
+                # 벨류가 문자인 경우 문자열 길이 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
                 if ValueCheck == "strDataLengthCheck":
                     ValueLength = len(Value)
                     InputLength = len(Input[ValueCheckItem[0]])
                     if ValueLength != InputLength:
                         return f"{self.ProcessInfo} | StrDataLengthCheckError: ({ResponseStructureDict['Key']} Length: {ValueLength}) 와 (Input[{[ValueCheckItem[0]]}] Length: {InputLength}) 는 길이는 일치해야 합니다"
 
-                # 벨류가 문자인 경우 특수문자 및 공백제외 문자열 길이 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key)
+                # 벨류가 문자인 경우 특수문자 및 공백제외 문자열 길이 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
                 if ValueCheck == "strCleanDataLengthCheck":
                     CleanValueLength = len(re.sub(r'\W+', '', Value, flags=re.UNICODE))
                     CleanInputLength = len(re.sub(r'\W+', '', Input[ValueCheckItem[0]], flags=re.UNICODE))
@@ -368,7 +368,7 @@ class LoadAgent:
                         return f"{self.ProcessInfo} | StrDataStartEndExclusionCheckError: ({ResponseStructureDict['Key']}) 는 ({ValueCheckItem[0]}) 로 시작하고 ({ValueCheckItem[1]}) 로 끝나지 않아야 합니다"
 
                 # 벨류가 문자인 경우 주요 언어 체크
-                if ValueCheck == "strLanguageCheck":
+                if ValueCheck == "strMainLangCheck":
                     return FilteredResponse
 
                 # 벨류가 숫자인 경우 수의 범위 체크
@@ -450,9 +450,10 @@ class LoadAgent:
                     inputCount = self.InputList[i]['Id']
                     IndexId = self.InputList[i]['IndexId']
                     Input = self.InputList[i]['Input']
-                    
+                    InputFormat = self.InputList[i]['InputFormat']
+
                     ## ProcessResponse 생성
-                    ProcessResponse = self._ProcessResponse(self, Input, inputCount, memoryNote = "")
+                    ProcessResponse = self._ProcessResponse(self, Input, InputFormat, inputCount, memoryNote = "")
                     
                     ## DataFrame 저장
                     self._UpdateProcessDataFrame(self.ProjectName, self.MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, ProcessResponse, self.ProcessName, inputCount, IndexId, self.TotalInputCount)
@@ -486,7 +487,7 @@ if __name__ == "__main__":
     Solution = 'Script'
     SubSolution = 'ScriptUpload'
     ProcessNumber = 'T02'
-    ProcessName = 'TXTLanguageCheck'
+    ProcessName = 'TXTMainLangCheck'
     NextSolution = 'Translation'
     MessagesReview = 'on'
     AutoTemplate = "Yes" # 자동 컴포넌트 체크 여부 (Yes/No)

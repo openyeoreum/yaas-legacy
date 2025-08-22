@@ -1,11 +1,11 @@
 [
     {
         "ProjectName": "",
-        "TaskName": "PDFLanguageCheck",
+        "TaskName": "TXTLanguageCheck",
         "NextSolution": "",
         "AutoTemplate": "",
-        "FileExtension": "pdf",
-        "Language": "",
+        "FileExtension": "txt",
+        "MainLang": "",
         "InputCount": 0,
         "Completion": "No"
     },

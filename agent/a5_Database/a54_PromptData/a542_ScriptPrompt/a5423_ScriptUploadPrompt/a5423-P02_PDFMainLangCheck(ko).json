@@ -54,7 +54,7 @@
             }
         ]
     },
-    "Example": [
+    "Master": [
         {
             "Role": "system",
             "Mark": "(역할 및 업무)\n",

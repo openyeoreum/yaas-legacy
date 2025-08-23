@@ -166,7 +166,7 @@ class ScriptLoadProcess:
 class PDFMainLangCheckProcess:
 
     ## PDFMainLangCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -184,6 +184,9 @@ class PDFMainLangCheckProcess:
         # 경로설정
         self.UploadScriptFilePath = UploadScriptFilePath
         self._InitializePaths()
+
+        # 출력설정
+        self.MessagesReview = MessagesReview
 
     ## 프로세스 관련 경로 초기화 ##
     def _InitializePaths(self):
@@ -308,7 +311,7 @@ class PDFMainLangCheckProcess:
         """PDF 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
         InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
         LoadAgentInstance.Run()
 
 #########################################
@@ -607,6 +610,7 @@ if __name__ == "__main__":
     SubSolution = 'ScriptUpload'
     NextSolution = 'Translation'
     AutoTemplate = "Yes" # 자동 컴포넌트 체크 여부 (Yes/No)
+    MessagesReview = "on"
     #########################################################################
 
     for ProjectName in ProjectNameList:
@@ -619,7 +623,7 @@ if __name__ == "__main__":
         # 파일 확장자에 따라 후속 프로세스 실행
         if FileExtension == 'pdf':
             # P02 PDFMainLangCheck (PDF 언어 체크)
-            PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath)
+            PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
             PDFMainLangCheckProcessInstance.Run()
 
             # #P03 PDFSplit (PDF 파일 페이지 분할)

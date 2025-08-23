@@ -97,7 +97,6 @@ class LoadAgent:
                 # SubSolution이 있을 경우, 한 단계 더 들어감
                 SubSolutionDirName = next(Dir for Dir in os.listdir(SolutionDirPath) 
                                             if self.SubSolution in Dir and os.path.isdir(os.path.join(SolutionDirPath, Dir)))
-                print(f"SubSolutionDirName: {SubSolutionDirName}")
                 ProjectFrameDirPath = os.path.join(SolutionDirPath, SubSolutionDirName)
             else:
                 # SubSolution이 None일 경우, Solution 디렉터리가 최종 경로가 됨
@@ -188,18 +187,18 @@ class LoadAgent:
         return EditCheck, EditCompletion
 
     ## ProcessResponse 생성 메서드 ##
-    def _ProcessResponse(self, Input, InputCount, InputFormat = "text", MainLang = "ko", memoryNote = ""):
+    def _ProcessResponse(self, Input, InputCount, InputFormat = "text", memoryNote = ""):
         """ProcessResponse를 생성하는 메서드"""
         ErrorCount = 0
         while True:
             if self.Model == "OpenAI":
-                Response, Usage, Model = OpenAI_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainlang = MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = OpenAI_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "Anthropic":
-                Response, Usage, Model = ANTHROPIC_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainlang = MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = ANTHROPIC_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "Google":
-                Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainlang = MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "DeepSeek":
-                Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainlang = MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
 
             # 생성된 Respnse Filler 처리
             FilteredResponse = self._ProcessFilter(Response, Input)
@@ -448,12 +447,12 @@ class LoadAgent:
                 for i in range(self.InputCount - 1, self.TotalInputCount):
                     ## Input 생성
                     inputCount = self.InputList[i]['Id']
-                    IndexId = self.InputList[i]['IndexId']
                     Input = self.InputList[i]['Input']
                     InputFormat = self.InputList[i]['InputFormat']
 
                     ## ProcessResponse 생성
-                    ProcessResponse = self._ProcessResponse(self, Input, InputFormat, inputCount, memoryNote = "")
+                    ProcessResponse = self._ProcessResponse(Input, inputCount, InputFormat = InputFormat)
+                    sys.exit()
                     
                     ## DataFrame 저장
                     self._UpdateProcessDataFrame(self.ProjectName, self.MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, ProcessResponse, self.ProcessName, inputCount, IndexId, self.TotalInputCount)

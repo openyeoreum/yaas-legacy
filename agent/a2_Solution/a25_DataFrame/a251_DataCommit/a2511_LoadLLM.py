@@ -77,122 +77,122 @@ def LLMmessages(Process, Input, Model, InputFormat = "text", MainLang = "ko", Ro
             return Message
     
     if promptFramePath == "":
-      promptFrame = GetPromptFrame(Process, MainLang)
+        promptFrame = GetPromptFrame(Process, MainLang)
     else:
-      with open(promptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
-        promptFrame = json.load(promptFrameJson)
+        with open(promptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
+            promptFrame = json.load(promptFrameJson)
 
     messageTime = "current time: " + str(Date("Second")) + '\n\n'
     
     # messages
     if mode in ["Example", "ExampleFineTuning", "Master"]:
-      if mode == "Example":
-        Example = promptFrame["Example"]
-      elif mode in ["ExampleFineTuning", "Master"]:
-        Example = promptFrame["ExampleFineTuning"]
+        if mode == "Example":
+            Example = promptFrame["Example"]
+        elif mode in ["ExampleFineTuning", "Master"]:
+            Example = promptFrame["Master"]
 
-      messages = [
-        {
-          "role": Example[0]["Role"],
-          "content": messageTime + Example[0]["Mark"] + Example[0]["Message"]
-        },
-        {
-          "role": Example[1]["Role"],
-          "content": Example[1]["Request"][0]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][0]["Message"]) +
-                    Example[1]["Request"][1]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][1]["Message"]) +
-                    Example[1]["Request"][2]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][2]["Message"]) +
-                    Example[1]["Request"][3]["Mark"] + Example[1]["Request"][3]["InputExampleMark"] + str(Example[1]["Request"][3]["InputExample"]) +
-                    Example[1]["Request"][3]["OutputExampleMark"] + str(Example[1]["Request"][3]["OutputExample"]) +
-                    Example[1]["Request"][4]["Mark"] + Example[1]["Request"][4]["InputExampleMark"] + str(Example[1]["Request"][4]["InputExample"]) +
-                    Example[1]["Request"][4]["OutputExampleMark"] + str(Example[1]["Request"][4]["OutputExample"]) +
-                    Example[1]["Request"][5]["Mark"] + Example[1]["Request"][5]["InputExampleMark"] + str(Example[1]["Request"][5]["InputExample"]) +
-                    Example[1]["Request"][5]["OutputExampleMark"] + str(Example[1]["Request"][5]["OutputExample"]) +
-                    Example[1]["Request"][6]["Mark"] + Example[1]["Request"][6]["InputMark"] + str(Input) + Example[1]["Request"][6]["InputMark2"] + str(input2)
-        },
-        {
-          "role": Example[2]["Role"],
-          "content": Example[2]["OutputMark"] + 
-                    memoryNote + 
-                    Example[2]["OutputStarter"]
-        }
-      ]
+        messages = [
+            {
+                "role": Example[0]["Role"],
+                "content": messageTime + Example[0]["Mark"] + Example[0]["Message"]
+            },
+            {
+                "role": Example[1]["Role"],
+                "content": Example[1]["Request"][0]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][0]["Message"]) +
+                            Example[1]["Request"][1]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][1]["Message"]) +
+                            Example[1]["Request"][2]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][2]["Message"]) +
+                            Example[1]["Request"][3]["Mark"] + Example[1]["Request"][3]["InputExampleMark"] + str(Example[1]["Request"][3]["InputExample"]) +
+                            Example[1]["Request"][3]["OutputExampleMark"] + str(Example[1]["Request"][3]["OutputExample"]) +
+                            Example[1]["Request"][4]["Mark"] + Example[1]["Request"][4]["InputExampleMark"] + str(Example[1]["Request"][4]["InputExample"]) +
+                            Example[1]["Request"][4]["OutputExampleMark"] + str(Example[1]["Request"][4]["OutputExample"]) +
+                            Example[1]["Request"][5]["Mark"] + Example[1]["Request"][5]["InputExampleMark"] + str(Example[1]["Request"][5]["InputExample"]) +
+                            Example[1]["Request"][5]["OutputExampleMark"] + str(Example[1]["Request"][5]["OutputExample"]) +
+                            Example[1]["Request"][6]["Mark"] + Example[1]["Request"][6]["InputMark"] + str(Input) + Example[1]["Request"][6]["InputMark2"] + str(input2)
+            },
+            {
+                "role": Example[2]["Role"],
+                "content": Example[2]["OutputMark"] + 
+                            memoryNote + 
+                            Example[2]["OutputStarter"]
+            }
+        ]
       
     elif mode in ["Memory", "MemoryFineTuning"]:
-      if mode == "Memory":
-        Memory = promptFrame["Memory"]
-      elif mode == "MemoryFineTuning":
-        Memory = promptFrame["MemoryFineTuning"]
+        if mode == "Memory":
+            Memory = promptFrame["Memory"]
+        elif mode == "MemoryFineTuning":
+            Memory = promptFrame["MemoryFineTuning"]
         
-      messages = [
-        {
-          "role": Memory[0]["Role"],
-          "content": messageTime + Memory[0]["Mark"] + Memory[0]["Message"]
-        },
-        {
-          "role": Memory[1]["Role"],
-          "content": Memory[1]["Request"][0]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][0]["Message"]) +
-                    Memory[1]["Request"][1]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][1]["Message"]) +
-                    Memory[1]["Request"][2]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][2]["Message"]) +
-                    Memory[1]["Request"][3]["Mark"] + Memory[1]["Request"][3]["InputExampleMark"] + Memory[1]["Request"][3]["InputExample"] +
-                    Memory[1]["Request"][3]["OutputExampleMark"] + Memory[1]["Request"][3]["OutputExample"] +
-                    Memory[1]["Request"][4]["Mark"] + Memory[1]["Request"][4]["InputExampleMark"] + Memory[1]["Request"][4]["InputExample"] +
-                    Memory[1]["Request"][4]["OutputExampleMark"] + Memory[1]["Request"][4]["OutputExample"] +
-                    Memory[1]["Request"][5]["Mark"] + Memory[1]["Request"][5]["InputMark"] +
-                    Memory[1]["Request"][5]["InputStarter"] +
-                    str(inputMemory) +
-                    Memory[1]["Request"][5]["InputEnder"] + Memory[1]["Request"][5]["InputMark2"] + str(inputMemory2)
-        },
-        {
-          "role": Memory[2]["Role"],
-          "content": Memory[2]["OutputMark"] + memoryNote +
-                    Memory[2]["OutputStarter"] +
-                    str(outputMemory) +
-                    str(outputEnder)
-        }
-      ]
+        messages = [
+            {
+                "role": Memory[0]["Role"],
+                "content": messageTime + Memory[0]["Mark"] + Memory[0]["Message"]
+            },
+            {
+                "role": Memory[1]["Role"],
+                "content": Memory[1]["Request"][0]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][0]["Message"]) +
+                            Memory[1]["Request"][1]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][1]["Message"]) +
+                            Memory[1]["Request"][2]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][2]["Message"]) +
+                            Memory[1]["Request"][3]["Mark"] + Memory[1]["Request"][3]["InputExampleMark"] + Memory[1]["Request"][3]["InputExample"] +
+                            Memory[1]["Request"][3]["OutputExampleMark"] + Memory[1]["Request"][3]["OutputExample"] +
+                            Memory[1]["Request"][4]["Mark"] + Memory[1]["Request"][4]["InputExampleMark"] + Memory[1]["Request"][4]["InputExample"] +
+                            Memory[1]["Request"][4]["OutputExampleMark"] + Memory[1]["Request"][4]["OutputExample"] +
+                            Memory[1]["Request"][5]["Mark"] + Memory[1]["Request"][5]["InputMark"] +
+                            Memory[1]["Request"][5]["InputStarter"] +
+                            str(inputMemory) +
+                            Memory[1]["Request"][5]["InputEnder"] + Memory[1]["Request"][5]["InputMark2"] + str(inputMemory2)
+            },
+            {
+                "role": Memory[2]["Role"],
+                "content": Memory[2]["OutputMark"] + memoryNote +
+                            Memory[2]["OutputStarter"] +
+                            str(outputMemory) +
+                            str(outputEnder)
+            }
+        ]
     
     # Training
     elif mode == "ExampleTraining":
-      ExampleFineTuning = promptFrame["ExampleFineTuning"]
-      messages = [
-        {
-          "role": ExampleFineTuning[0]["Role"],
-          "content": ExampleFineTuning[0]["Mark"] + ExampleFineTuning[0]["Message"]
-        },
-        {
-          "role": ExampleFineTuning[1]["Role"],
-          "content": ExampleFineTuning[1]["Request"][0]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][0]["Message"]) +
-                    ExampleFineTuning[1]["Request"][1]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][1]["Message"]) +
-                    ExampleFineTuning[1]["Request"][2]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][2]["Message"]) +
-                    ExampleFineTuning[1]["Request"][6]["Mark"] + ExampleFineTuning[1]["Request"][6]["InputMark"] + str(Input) +
-                    ExampleFineTuning[1]["Request"][6]["InputMark2"] + str(input2)
-        },
-        {
-          "role": ExampleFineTuning[2]["Role"],
-          "content": ExampleFineTuning[2]["OutputMark"] + ExampleFineTuning[2]["OutputStarter"] + str(Output)
-        }
-      ]
+        ExampleFineTuning = promptFrame["ExampleFineTuning"]
+        messages = [
+            {
+                "role": ExampleFineTuning[0]["Role"],
+                "content": ExampleFineTuning[0]["Mark"] + ExampleFineTuning[0]["Message"]
+            },
+            {
+                "role": ExampleFineTuning[1]["Role"],
+                "content": ExampleFineTuning[1]["Request"][0]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][0]["Message"]) +
+                            ExampleFineTuning[1]["Request"][1]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][1]["Message"]) +
+                            ExampleFineTuning[1]["Request"][2]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][2]["Message"]) +
+                            ExampleFineTuning[1]["Request"][6]["Mark"] + ExampleFineTuning[1]["Request"][6]["InputMark"] + str(Input) +
+                            ExampleFineTuning[1]["Request"][6]["InputMark2"] + str(input2)
+            },
+            {
+                "role": ExampleFineTuning[2]["Role"],
+                "content": ExampleFineTuning[2]["OutputMark"] + ExampleFineTuning[2]["OutputStarter"] + str(Output)
+            }
+        ]
       
     elif mode == "MemoryTraining":
       MemoryFineTuning = promptFrame["MemoryFineTuning"]
       messages = [
-        {
-          "role": MemoryFineTuning[0]["Role"],
-          "content": MemoryFineTuning[0]["Mark"] + MemoryFineTuning[0]["Message"]
-        },
-        {
-          "role": MemoryFineTuning[1]["Role"],
-          "content": MemoryFineTuning[1]["Request"][0]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][0]["Message"]) +
-                    MemoryFineTuning[1]["Request"][1]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][1]["Message"]) +
-                    MemoryFineTuning[1]["Request"][2]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][2]["Message"]) +
-                    MemoryFineTuning[1]["Request"][5]["Mark"] + MemoryFineTuning[1]["Request"][5]["InputMark"] + str(inputMemory) + str(Input) +
-                    MemoryFineTuning[1]["Request"][5]["InputMark2"] + str(inputMemory2) + str(input2)
-        },
-        {
-          "role": MemoryFineTuning[2]["Role"],
-          "content": MemoryFineTuning[2]["OutputMark"] + MemoryFineTuning[2]["OutputStarter"] + str(Output)
-        }
-      ]
+            {
+                "role": MemoryFineTuning[0]["Role"],
+                "content": MemoryFineTuning[0]["Mark"] + MemoryFineTuning[0]["Message"]
+            },
+            {
+                "role": MemoryFineTuning[1]["Role"],
+                "content": MemoryFineTuning[1]["Request"][0]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][0]["Message"]) +
+                            MemoryFineTuning[1]["Request"][1]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][1]["Message"]) +
+                            MemoryFineTuning[1]["Request"][2]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][2]["Message"]) +
+                            MemoryFineTuning[1]["Request"][5]["Mark"] + MemoryFineTuning[1]["Request"][5]["InputMark"] + str(inputMemory) + str(Input) +
+                            MemoryFineTuning[1]["Request"][5]["InputMark2"] + str(inputMemory2) + str(input2)
+            },
+            {
+                "role": MemoryFineTuning[2]["Role"],
+                "content": MemoryFineTuning[2]["OutputMark"] + MemoryFineTuning[2]["OutputStarter"] + str(Output)
+            }
+        ]
 
     encoding = tiktoken.get_encoding("cl100k_base")
     # print(f'messages: {messages}')
@@ -234,10 +234,10 @@ def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, INPUTFORMAT
 def OpenAI_LLMresponse(projectName, email, Process, Input, Count, inputFormat = "text", mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
     OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     if PromptFramePath == "":
-      promptFrame = GetPromptFrame(Process, mainLang)
+        promptFrame = GetPromptFrame(Process, mainLang)
     else:
-      with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
-        promptFrame = json.load(promptFrameJson)
+        with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
+            promptFrame = json.load(promptFrameJson)
 
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'gpt', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
@@ -272,57 +272,72 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
           else:
             Model = promptFrame["OpenAI"]["BaseModel"]["LongTokensModel"]
 
-    Temperature = temperature
+    # Temperature = temperature
     ReasoningEffort = promptFrame["OpenAI"]["ReasoningEffort"]
 
-    for _ in range(MaxAttempts):
-      try:
-          if promptFrame["OutputFormat"] == 'json':
-            if Model in ['o4-mini', 'o3']:
-              response = OpenAIClient.chat.completions.create(
-                  model = Model,
-                  reasoning_effort = ReasoningEffort,
-                  response_format = {"type": "json_object"},
-                  messages = Messages)
-            else:
-              response = OpenAIClient.chat.completions.create(
-                  model = Model,
-                  response_format = {"type": "json_object"},
-                  messages = Messages,
-                  temperature = Temperature)
-          else:
-            if Model in ['o4-mini', 'o3']:
-              response = OpenAIClient.chat.completions.create(
-                  model = Model,
-                  reasoning_effort = ReasoningEffort,
-                  messages = Messages)
-            else:
-              response = OpenAIClient.chat.completions.create(
-                  model = Model,
-                  messages = Messages,
-                  temperature = Temperature)
-          Response = response.choices[0].message.content
-          Usage = {'Input': response.usage.prompt_tokens,
-                   'Output': response.usage.completion_tokens,
-                   'Total': response.usage.total_tokens}
-          
-          if isinstance(email, str):
-            print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse 완료")
-          else:
-            print(f"LifeGraphName: {projectName} | Process: {Process} | OpenAI_LLMresponse 완료")
-          
-          if messagesReview == "on":
-            LLMmessagesReview(Process, Input, Count, Response, Usage, Model, INPUTFORMAT = inputFormat, MAINLANG = mainLang, ROOT = root, promptFramePath = PromptFramePath, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryNote, OUTPUTENDER = OutputEnder)
+    # JPEG 파일 업로드 함수(파일 업로드 → file_id 리스트)
+    def UploadJPEG(JPEGFilePath):
+        with open(JPEGFilePath, "rb") as JPEGFile:
+            result = OpenAIClient.files.create(file = JPEGFile, purpose = "vision")
+            return result.id
+    
+    # InputFormat이 jpeg인 경우, 이미지 파일 업로드 후 Messages[1]["content"]에 이미지 블록 추가
+    if inputFormat == "jpeg":
+        # 파일 업로드 → file_id 리스트
+        imageFileIds = [UploadJPEG(JPEGFilePath) for JPEGFilePath in Input]
 
-          return Response, Usage, Model
+        # Messages[1]["content"]가 문자열이라면, input_text 블록으로 변환
+        if isinstance(Messages[1]["content"], str):
+            Messages[1]["content"] = [{"type": "input_text", "text": Messages[1]["content"]}]
+
+        elif not isinstance(Messages[1]["content"], list):
+            Messages[1]["content"] = []
+
+        # 이미지 블록들 추가 (append X, extend O)
+        Messages[1]["content"].extend({"type": "input_image", "file_id": fid, "detail": "high"} for fid in imageFileIds)
+
+    for _ in range(MaxAttempts):
+        try:
+            # JSON 출력을 요청하는 경우
+            if promptFrame["OutputFormat"] == 'json':
+                response = OpenAIClient.responses.create(
+                    model = Model,
+                    reasoning = {"effort": ReasoningEffort},
+                    input = Messages,
+                    text_format = {"type": "json_object"}
+                )
+            # 일반 텍스트 출력을 요청하는 경우
+            else:
+                response = OpenAIClient.responses.create(
+                    model = Model,
+                    reasoning = {"effort": ReasoningEffort},
+                    input = Messages
+                )
+                
+            Response = response.output_text
+            Usage = {
+                'Input': response.usage.input_tokens,
+                'Output': response.usage.output_tokens,
+                'Total': response.usage.total_tokens
+            }
+          
+            if isinstance(email, str):
+                print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse 완료")
+            else:
+                print(f"LifeGraphName: {projectName} | Process: {Process} | OpenAI_LLMresponse 완료")
+            
+            if messagesReview == "on":
+                LLMmessagesReview(Process, Input, Count, Response, Usage, Model, INPUTFORMAT = inputFormat, MAINLANG = mainLang, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryNote, OUTPUTENDER = OutputEnder)
+
+            return Response, Usage, Model
       
-      except Exception as e:
-          if isinstance(email, str):
-            print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생\n\n{e}")
-          else:
-            print(f"LifeGraphName: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생\n\n{e}")
-          time.sleep(random.uniform(5, 10))
-          continue
+        except Exception as e:
+            if isinstance(email, str):
+                print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생\n\n{e}")
+            else:
+                print(f"LifeGraphName: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생\n\n{e}")
+            time.sleep(random.uniform(5, 10))
+            continue
       # except openai.APIError as e:
       #     print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생: OpenAI API returned an API Error: {e}")
       #     time.sleep(random.uniform(5, 10))

@@ -304,7 +304,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
                     model = Model,
                     reasoning = {"effort": ReasoningEffort},
                     input = Messages,
-                    text_format = {"type": "json_object"}
+                    text = {"format": {"type": "json_object"}}
                 )
             # 일반 텍스트 출력을 요청하는 경우
             else:

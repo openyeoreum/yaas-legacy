@@ -452,7 +452,6 @@ class LoadAgent:
 
                     ## ProcessResponse 생성
                     ProcessResponse = self._ProcessResponse(Input, inputCount, InputFormat = InputFormat)
-                    sys.exit()
                     
                     ## DataFrame 저장
                     self._UpdateProcessDataFrame(self.ProjectName, self.MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, ProcessResponse, self.ProcessName, inputCount, IndexId, self.TotalInputCount)

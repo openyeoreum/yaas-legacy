@@ -599,40 +599,44 @@ class TXTSplitProcess:
         else:
             print(f"[ {self.ProcessInfo} Update는 이미 완료됨 ]\n")
 
+################################
+##### Process 진행 및 업데이트 #####
+################################
+## ScriptSegmentation 프롬프트 요청 및 결과물 Json화
+def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTemplate, MessagesReview = "on"):
+    Solution = 'Script'
+    SubSolution = 'ScriptSegmentation'
+    # PT01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
+    ScriptLoadInstance = ScriptLoadProcess(email, projectName, NextSolution, AutoTemplate)
+    ScriptLoadInstance.Run()
+    FileExtension, MainLang, UploadedScriptFilePath = ScriptLoadInstance.LoadScriptLoadFrame()
+    ScriptSegmentationDataFramePath, ScriptSegmentationPromptPath, UploadScriptFilePath, DataFrameScriptFilePath, MasterScriptFilePath = ScriptLoadInstance.LoadScriptSegmentationPath()
 
+    # 파일 확장자에 따라 후속 프로세스 실행
+    if FileExtension == 'pdf':
+        # P02 PDFMainLangCheck (PDF 언어 체크)
+        PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFMainLangCheckProcessInstance.Run()
+
+        # #P03 PDFSplit (PDF 파일 페이지 분할)
+        PDFSplitterInstance = PDFSplitProcess(email, projectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptSegmentationDataFramePath, DataFrameScriptFilePath)
+        PDFSplitterInstance.Run()
+        
+    elif FileExtension == 'txt':
+        # T02 TXTMainLangCheck (TXT 언어 체크)
+
+        # T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
+        TXTSplitterInstance = TXTSplitProcess(email, projectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, ScriptSegmentationDataFramePath, DataFrameScriptFilePath)
+        TXTSplitterInstance.Run()
 
 if __name__ == "__main__":
     
     ############################ 하이퍼 파라미터 설정 ############################
-    Email = "yeoreum00128@gmail.com"
-    ProjectNameList = ['250807_PDF테스트', '250807_TXT테스트']
+    email = 'yeoreum00128@gmail.com'
+    projectName = '250807_TXT테스트'
     Solution = 'Script'
     SubSolution = 'ScriptSegmentation'
     NextSolution = 'Translation'
-    AutoTemplate = "Yes" # 자동 컴포넌트 체크 여부 (Yes/No)
+    AutoTemplate = "on" # 자동 컴포넌트 체크 여부 (on/off)
     MessagesReview = "on"
     #########################################################################
-
-    for ProjectName in ProjectNameList:
-        # PT01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
-        ScriptLoadInstance = ScriptLoadProcess(Email, ProjectName, NextSolution, AutoTemplate)
-        ScriptLoadInstance.Run()
-        FileExtension, MainLang, UploadedScriptFilePath = ScriptLoadInstance.LoadScriptLoadFrame()
-        ScriptSegmentationDataFramePath, ScriptSegmentationPromptPath, UploadScriptFilePath, DataFrameScriptFilePath, MasterScriptFilePath = ScriptLoadInstance.LoadScriptSegmentationPath()
-
-        # 파일 확장자에 따라 후속 프로세스 실행
-        if FileExtension == 'pdf':
-            # P02 PDFMainLangCheck (PDF 언어 체크)
-            PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
-            PDFMainLangCheckProcessInstance.Run()
-
-            # #P03 PDFSplit (PDF 파일 페이지 분할)
-            PDFSplitterInstance = PDFSplitProcess(Email, ProjectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, UploadScriptFilePath, ScriptSegmentationDataFramePath, DataFrameScriptFilePath)
-            PDFSplitterInstance.Run()
-            
-        elif FileExtension == 'txt':
-            # T02 TXTMainLangCheck (TXT 언어 체크)
-
-            # T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
-            TXTSplitterInstance = TXTSplitProcess(Email, ProjectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, ScriptSegmentationDataFramePath, DataFrameScriptFilePath)
-            TXTSplitterInstance.Run()

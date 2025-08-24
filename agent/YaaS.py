@@ -52,7 +52,7 @@ def YaasConfigUpdate(email, ProjectName, MainLang, Estimate, DataCollection, Sea
         else:
             DataCollectionConfig = {
                 "DataCollection": DataCollection
-                }
+            }
 
         ### Step3-3 : SearchConfig 설정 ###
         if Search['Search'] == "" or Search['Search'] == " " or Search['Search'] == "None":
@@ -64,15 +64,29 @@ def YaasConfigUpdate(email, ProjectName, MainLang, Estimate, DataCollection, Sea
                 "Extension": ["Expertise", "Ultimate"],
                 "Collection": Search['Collection'],
                 "Range": 10
-                }
+            }
 
         ### Step3-4 : ScriptConfig 설정 ###
         if Script == "" or Script == "None":
             ScriptConfig = {}
         else:
-            ScriptConfig = {"Script": Script}
-            
-        ### Step3-5 : TranslationConfig 설정 ###
+            ScriptConfig = {
+                "Script": Script
+            }
+
+        ### Step3-5 : UploadConfig 설정 ###
+        if Translation != "" and Translation != "None":
+            UploadConfig = {
+                "NextSolution": "Translation"
+            }
+        elif AudioBook != "" and AudioBook != "None":
+            UploadConfig = {
+                "NextSolution": "AudioBook"
+            }
+        else:
+            UploadConfig = {}
+
+        ### Step3-6 : TranslationConfig 설정 ###
         if Translation == "" or Translation == "None":
             TranslationConfig = {}
         else:
@@ -86,15 +100,17 @@ def YaasConfigUpdate(email, ProjectName, MainLang, Estimate, DataCollection, Sea
                 "Refinement": "off", # "on", "off"
                 "KinfolkStyleRefinement": "on", # "on", "off
                 "EditMode": "Auto", # "Auto", "Manual"
-                }
+            }
             
-        ### Step3-6 : TextBookConfig 설정 ###
+        ### Step3-7 : TextBookConfig 설정 ###
         if TextBook == "" or TextBook == "None":
             TextBookConfig = {}
         else:
-            TextBookConfig = {"TextBook": TextBook}
+            TextBookConfig = {
+                "TextBook": TextBook
+            }
             
-        ### Step3-7 : AudioBookConfig 설정 ###
+        ### Step3-8 : AudioBookConfig 설정 ###
         if AudioBook == "" or AudioBook == "None":
             AudioBookConfig = {}
         elif AudioBook == "Auto":
@@ -115,7 +131,7 @@ def YaasConfigUpdate(email, ProjectName, MainLang, Estimate, DataCollection, Sea
                 "Macro": "Auto",
                 "Bracket": "Auto",
                 "VolumeEqual": "Mastering"
-                }
+            }
         else:
             CloneVoiceName = AudioBook
             if "(" in CloneVoiceName and ")" in CloneVoiceName:
@@ -139,9 +155,9 @@ def YaasConfigUpdate(email, ProjectName, MainLang, Estimate, DataCollection, Sea
                 "Macro": "Auto",
                 "Bracket": "Auto",
                 "VolumeEqual": "Mastering"
-                }
-            
-        ### Step3-8 MarketingConfig 설정 ###
+            }
+
+        ### Step3-9 : MarketingConfig 설정 ###
         if Marketing == [] or Marketing == [""] or Marketing == ["None"]:
             MarketingConfig = {}
         else:
@@ -298,7 +314,7 @@ if __name__ == "__main__":
     Estimate = ['AudioBook'] # [], 'TextBook', 'AudioBook', 'VideoBook' ... 중 필요한 견적을 다중 선택
     DataCollection = [] # [], 'Book', 'Meditation', 'Architect' ... 중 데이터 수집이 필요한 도메인을 다중 선택
     Search = {"Search": "", "Intention": "Similarity", "Collection": "Book"} # Search: "", Search: SearchTerm, Match: PublisherData_(Id) // # Intention: Demand, Supply, Similarity ... // Extension: Expertise, Ultimate, Detail, Rethink ... // Collection: Entire, Target, Trend, Publisher, Book ... // Range: 10-100
-    Script = "" # ScriptUpload: '' // BookScriptGen: 'BookScript' // InstantScriptGen: 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 선택
+    Script = "" # ScriptUpload: 'PDF', 'TXT' // BookScriptGen: 'BookScript' // InstantScriptGen: 'SejongCityOfficeOfEducation_Poem', 'ChangesAfterMeditation_Script', 'Sample_Script', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis', 'InstagramTemplate1', 'BlogTemplate1' ... 중 스크립트 생성 템플릿을 선택
     Translation = "" # '', 'Auto', 'En', 'Ja', 'Zh', 'Es' ... 중 원문언어를 선택
     TextBook = "" # '', 'ONDOBook', 'ONDOMeditation', 'ONDOArchitect', 'LifeGraphAnalysis' ... 중 텍스트북 제작 템플릿을 다중 선택
     AudioBook = "" # '', 'Auto', '클로닝성우이름', '성우이름(특성)' ... 중 선택

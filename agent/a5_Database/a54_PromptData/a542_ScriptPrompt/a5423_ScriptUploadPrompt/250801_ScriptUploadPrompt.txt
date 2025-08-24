@@ -8,6 +8,32 @@ python -m spacy download es_core_news_sm
 python -m spacy download de_core_news_sm
 python -m spacy download fr_core_news_sm
 
+## 주요 프로세스 과정 ##
+- 완성된 UploadScript의 형식은 모두 동일해야함 (TXT 및 JSON 형식으로 TXT -> JSON 변형이 간소화 프로세스가 되어야 함)
+- (간소화) 프로세스는 UploadScript와 별도로 만들기 (매우 여러곳에 범용으로 사용될 에정)
+
+- Translation 경우
+1. Translation PDF (전체)
+2. Translation TXT (전체)
+3. Translation TXT (간소화)
+
+- Translation 이후 연속 Audiobook 경우
+1. Audiobook TXT (간소화)
+
+- Audiobook 경우
+1. Audiobook PDF (전체)
+2. Audiobook TXT (전체)
+3. Audiobook TXT (간소화)
+
+- 추가: ScriptGen 이후 연속 Translation, Audiobook 경우 (ScriptGen도 완성된 UploadScript의 형식으로 완성)
+1. Translation TXT (간소화)
+2. Audiobook TXT (간소화)
+
+Audiobook, Translation은 다음 테스크 유무를 통해 확인 가능
+PDF, TXT는 파일 확장자를 통해 확인 가능
+PDF는 무조건 전체이며, TXT 간소화는 내부 TXT파일 구조를 통해 확인 가능
+
+## 메모 ##
 - 전처리 프로세스는 전체 언어로 처리
 - Content 내에 각 요소를 오디오북 솔루션의 효과음 표기 처럼 (마치 html처럼) 표기
 - 일반 txt인 경우에는 2,000~3,000 지정 토큰 수에 맞게 분힐(문장 단위)

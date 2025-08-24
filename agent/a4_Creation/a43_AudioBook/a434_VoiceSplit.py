@@ -9,7 +9,7 @@ import copy
 import sys
 sys.path.append("/yaas")
 
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
+from agent.a2_Solution.a21_General.a215_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse
 from openai import OpenAI
 from pydub import AudioSegment
 

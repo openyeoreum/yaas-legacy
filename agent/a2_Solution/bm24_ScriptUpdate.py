@@ -28,7 +28,7 @@ def SolutionScriptUpdate(ProjectName, email, Script, Intention, MessagesReview):
         BookScriptGenProcessUpdate(ProjectName, email, Intention, MessagesReview = MessagesReview)
 
     #######################
-    ### 03_ScriptUpload ###
+    ### 03_ScriptSegmentation ###
     #######################
     
-    # ScriptUpload(ProjectName, email)
+    # ScriptSegmentation(ProjectName, email)

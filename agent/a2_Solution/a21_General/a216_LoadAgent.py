@@ -8,7 +8,7 @@ import sys
 sys.path.append("/yaas")
 
 from PyPDF2 import PdfReader, PdfWriter
-from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse, DEEPSEEK_LLMresponse
+from agent.a2_Solution.a21_General.a215_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse, DEEPSEEK_LLMresponse
 
 #############################################
 ##### LoadAgent (업로드 된 스크립트 파일 확인) #####
@@ -483,7 +483,7 @@ if __name__ == "__main__":
     Email = "yeoreum00128@gmail.com"
     ProjectNameList = ['250807_PDF테스트', '250807_TXT테스트']
     Solution = 'Script'
-    SubSolution = 'ScriptUpload'
+    SubSolution = 'ScriptSegmentation'
     ProcessNumber = 'T02'
     ProcessName = 'TXTMainLangCheck'
     NextSolution = 'Translation'

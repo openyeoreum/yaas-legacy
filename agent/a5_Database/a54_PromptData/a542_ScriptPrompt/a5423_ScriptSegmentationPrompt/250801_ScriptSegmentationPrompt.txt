@@ -9,26 +9,27 @@ python -m spacy download de_core_news_sm
 python -m spacy download fr_core_news_sm
 
 ## 주요 프로세스 과정 ##
-- 완성된 UploadScript의 형식은 모두 동일해야함 (TXT 및 JSON 형식으로 TXT -> JSON 변형이 간소화 프로세스가 되어야 함)
-- (간소화) 프로세스는 UploadScript와 별도로 만들기 (매우 여러곳에 범용으로 사용될 에정)
+- 완성된 ScriptSegmentation의 형식은 모두 동일해야함 (TXT 및 JSON 형식으로 TXT -> JSON 변형이 간소화 프로세스가 되어야 함)
+- (ScriptStructuration) 프로세스는 (Upload)ScriptSegmentation의 다음 프로세스로 별도로 만들기 (매우 여러곳에 범용으로 사용될 에정)
 
 - Translation 경우
-1. Translation PDF (전체)
-2. Translation TXT (전체)
-3. Translation TXT (간소화)
+1. Segmentation + Structuration Translation PDF (전체)
+2. Segmentation + Structuration Translation TXT (전체)
+3. Segmentation이 완료된 파일을 업로드한 경우 Structuration Translation TXT (간소화)
 
 - Translation 이후 연속 Audiobook 경우
-1. Audiobook TXT (간소화)
+1. Structuration Audiobook TXT (간소화)
 
 - Audiobook 경우
-1. Audiobook PDF (전체)
-2. Audiobook TXT (전체)
-3. Audiobook TXT (간소화)
+1. Segmentation + Structuration Audiobook PDF (전체)
+2. Segmentation + Structuration Audiobook TXT (전체)
+3. Segmentation이 완료된 파일을 업로드한 경우 Structuration Audiobook TXT (간소화)
 
-- 추가: ScriptGen 이후 연속 Translation, Audiobook 경우 (ScriptGen도 완성된 UploadScript의 형식으로 완성)
-1. Translation TXT (간소화)
-2. Audiobook TXT (간소화)
+- 추가: ScriptGen 이후 연속 Translation, Audiobook 경우 (ScriptGen도 완성된 ScriptSegmentation의 형식으로 완성)
+1. Structuration Translation TXT (간소화)
+2. Structuration Audiobook TXT (간소화)
 
+ScriptGen은 이전 테스크 유무를 통해 확인 가능
 Audiobook, Translation은 다음 테스크 유무를 통해 확인 가능
 PDF, TXT는 파일 확장자를 통해 확인 가능
 PDF는 무조건 전체이며, TXT 간소화는 내부 TXT파일 구조를 통해 확인 가능

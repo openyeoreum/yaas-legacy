@@ -1,18 +1,17 @@
 [
     {
-        "ProjectName": "",
+        "ProjectName": "eval(self.ProjectName)",
         "TaskName": "PDFLanguageCheck",
-        "NextSolution": "",
-        "AutoTemplate": "",
+        "NextSolution": "eval(self.NextSolution)",
+        "AutoTemplate": "eval(self.AutoTemplate)",
         "FileExtension": "pdf",
-        "MainLang": "",
+        "MainLang": "eval(Response['태그'])",
         "InputCount": 0,
         "Completion": "No"
     },
     [
         {
-            "SampleId": 0,
-            "Language": "None"
+            "MainLang": "eval(Response['태그'])"
         }
     ]
 ]

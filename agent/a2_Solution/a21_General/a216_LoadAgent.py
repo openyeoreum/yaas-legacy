@@ -21,7 +21,7 @@ class LoadAgent:
     PromptDataPath = "/yaas/agent/a5_Database/a54_PromptData"
 
     ## LoadAgent 초기화 ##
-    def __init__(self, InputList, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", Mode = "Master", MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
+    def __init__(self, InputList, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", Mode = "Master", MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", AutoTemplate = "on", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
         """클래스 초기화"""
         # Process 설정
         self.Email = Email
@@ -36,6 +36,7 @@ class LoadAgent:
         self.Mode = Mode
         self.MessagesReview = MessagesReview
         self.EditMode = EditMode
+        self.AutoTemplate = AutoTemplate
         self.ProcessInfo = f"User: {self.Email} | Solution: {self.Solution}-{self.SubSolution} | Project: {self.ProjectName} | Process: {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
         # ProjectFrame 경로 설정 (저장된 프로젝트 DataFrame)
@@ -431,15 +432,92 @@ class LoadAgent:
         # 모든 조건을 만족하면 필터링된 응답 반환
         return FilteredResponse[self.ResponseStructure["Key"]]
 
-    ##
-    def _UpdateProcessDataFrame(self):
-        """"""
+    ## ProcessDataFrame 업데이트 메서드 ##
+    def _UpdateProcessDataFrame(self, InputCount, Response):
+        """Response에 따라 ProcessDataFrame을 업데이트하는 메서드"""
+        ## SolutionProjectDataFrame 불러오기
+        if os.path.exists(self.SolutionProjectDataFramePath):
+            SolutionProcessDataFramePath = self.SolutionProjectDataFramePath
+        else:
+            SolutionProcessDataFramePath = self.SolutionProjectFramePath
+        with open(SolutionProcessDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+            SolutionProcessDataFrame = json.load(DataFrameJson)
 
-    ##
+        ## SolutionProcessInfo 데이터 업데이트
+        SolutionProcessInfo = SolutionProcessDataFrame[0].copy()
+        for key, ValueExpression in SolutionProcessInfo.items():
+            if key in ['InputCount', 'Completion']:
+                continue
+
+            ActualValue = ValueExpression
+            if isinstance(ValueExpression, str) and ValueExpression.startswith("eval(") and ValueExpression.endswith(")"):
+                # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
+                CodeToEval = ValueExpression[5:-1]
+                ActualValue = eval(CodeToEval)
+            
+            SolutionProcessDataFrame[0][key] = ActualValue
+
+
+        ## SolutionProcessData 데이터 업데이트
+        SolutionProcessData = SolutionProcessDataFrame[1][0].copy()
+        for key, ValueExpression in SolutionProcessData.items():
+
+            ActualValue = ValueExpression
+            if isinstance(ValueExpression, str) and ValueExpression.startswith("eval(") and ValueExpression.endswith(")"):
+                # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
+                CodeToEval = ValueExpression[5:-1]
+                ActualValue = eval(CodeToEval)
+
+            SolutionProcessData[key] = ActualValue
+
+        ## SolutionProcessDataFrame 데이터 프레임 업데이트
+        SolutionProcessDataFrame[1].append(SolutionProcessData)
+        
+        ## SolutionProjectDataFrame ProcessCount 및 Completion 업데이트
+        SolutionProcessDataFrame[0]['InputCount'] = InputCount
+        if InputCount == self.TotalInputCount:
+            SolutionProcessDataFrame[0]['Completion'] = 'Yes'
+            
+        ## SolutionProjectDataFrame 저장
+        with open(self.SolutionProjectDataFramePath, 'w', encoding = 'utf-8') as DataFrameJson:
+            json.dump(SolutionProcessDataFrame, DataFrameJson, indent = 4, ensure_ascii = False)
+
+    ## SolutionEdit 업데이트 메서드 ##
     def _UpdateSolutionEdit(self):
-        """"""
+        """SolutionEdit을 업데이트하는 메서드"""
+        ## SolutionProjectDataFrame 불러온 뒤 Completion 확인
+        with open(self.SolutionProjectDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+            SolutionProjectDataFrame = json.load(DataFrameJson)
+        if SolutionProjectDataFrame[0]['Completion'] == 'Yes':
+            ## SolutionEdit이 존재할때
+            if os.path.exists(self.SolutionEditPath):
+                with open(self.SolutionEditPath, 'r', encoding = 'utf-8') as SolutionEditJson:
+                    SolutionEdit = json.load(SolutionEditJson)
+            ## SolutionEdit이 존재 안할때
+            else:
+                SolutionEdit = {}
+            ## TranslationEdit 업데이트
+            SolutionEdit[self.ProcessName] = []
+            if self.EditMode == "Manual":
+                SolutionEdit[f"{self.ProcessName}Completion"] = '완료 후 Completion'
+            elif self.EditMode == "Auto":
+                SolutionEdit[f"{self.ProcessName}Completion"] = 'Completion'
+            SolutionProjectDataList = SolutionProjectDataFrame[1]
+            for i in range(1, len(SolutionProjectDataList)):
+                SolutionProjectData = SolutionProjectDataList[i]
+                SolutionEdit[self.ProcessName].append(SolutionProjectData)
 
-    ##
+            ## Process에서 추가 데이터가 존재하는 경우 예외 저장
+            if len(SolutionProjectDataFrame) > 2:
+                for i, AdditionalData in enumerate(SolutionProjectDataFrame[2:], start = 1):
+                    AdditionalKey = f"{self.ProcessName}AdditionalData{i}"
+                    SolutionEdit[AdditionalKey] = AdditionalData
+
+            ## SolutionEdit 저장
+            with open(self.SolutionEditPath, 'w', encoding = 'utf-8') as SolutionEditJson:
+                json.dump(SolutionEdit, SolutionEditJson, indent = 4, ensure_ascii = False)
+
+    ## Response 생성 및 프로세스 실행 메서드 ##
     def Run(self):
         """프로세스 실행 메서드"""
         if not self.EditCheck:
@@ -454,27 +532,22 @@ class LoadAgent:
                     ProcessResponse = self._ProcessResponse(Input, inputCount, InputFormat = InputFormat)
                     
                     ## DataFrame 저장
-                    self._UpdateProcessDataFrame(self.ProjectName, self.MainLang, Translation, TranslationDataFramePath, ProjectDataFrameWordListGenPath, ProcessResponse, self.ProcessName, inputCount, IndexId, self.TotalInputCount)
+                    self._UpdateProcessDataFrame(inputCount, ProcessResponse)
                     
             ## Edit 저장
-            self._UpdateSolutionEdit(ProjectDataFrameWordListGenPath, TranslationEditPath, Process, EditMode)
+            self._UpdateSolutionEdit()
             print(f"[ {self.ProcessInfo}Update 완료 ]\n")
             
-            if EditMode == "Manual":
-                sys.exit(f"[ {projectName}_Script_Edit 생성 완료 -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
+            if self.EditMode == "Manual":
+                sys.exit(f"[ {self.ProjectName}_Script_Edit 생성 완료 -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경 ]\n\n{self.SolutionEditPath}")
 
-        if EditMode == "Manual":
-            if EditCheck:
-                if not EditCompletion:
+        if self.EditMode == "Manual":
+            if self.EditCheck:
+                if not self.EditCompletion:
                     ### 필요시 이부분에서 RestructureProcessDic 후 다시 저장 필요 ###
-                    sys.exit(f"[ {projectName}_Script_Edit -> {Process}: (({Process}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({Process}Completion: Completion))으로 변경 ]\n\n{TranslationEditPath}")
-        if EditCompletion:
-            print(f"[ User: {email} | Project: {projectName} | {ProcessNumber}_{Process}Update는 이미 완료됨 ]\n")
-
-    
-    ## Process Count 계산 및 Check ##
-
-    ## Process 진행 ##
+                    sys.exit(f"[ {self.ProjectName}_Script_Edit -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경 ]\n\n{self.SolutionEditPath}")
+        if self.EditCompletion:
+            print(f"[ {self.ProcessInfo}Update는 이미 완료됨 ]\n")
 
 
 if __name__ == "__main__":
@@ -490,36 +563,3 @@ if __name__ == "__main__":
     MessagesReview = 'on'
     AutoTemplate = "Yes" # 자동 컴포넌트 체크 여부 (Yes/No)
     #########################################################################
-    # with open('/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage/yeoreum00128@gmail.com/250807_TXT테스트/250807_TXT테스트_script/250807_TXT테스트_dataframe_script_file/yeoreum00128@gmail.com_250807_TXT테스트_T03_TXTSplitFrame(Translation).json', 'r', encoding = 'utf-8') as LoadDataFrameFile:
-    #     LoadFrame = json.load(LoadDataFrameFile)
-    #     InputList = []
-    #     for Input in LoadFrame[1][1:]:
-    #         InputList.append(Input['SplitedText'])
-
-    # LoadAgentInstance = LoadAgent(InputList, Email, ProjectNameList[0], Solution, ProcessNumber, ProcessName, MessagesReview = MessagesReview, SubSolution = SubSolution, NextSolution = NextSolution)
-    
-    # Response = """
-    # {
-    #     "언어": {
-    #         "태그": ["koo", "ja", "lo"]
-    #     }
-    # }
-    # """
-    # ResponseStructure = {
-    #     "Key": "언어",
-    #     "ValueType": "dict",
-    #     "ValueCheckList": [{"ValueCheck": "", "ValueCheckItem": ""}],
-    #     "Value": [
-    #         {
-    #             "Key": "태그",
-    #             "ValueType": "list",
-    #             "ValueCheckList": [{"ValueCheck": "listDataRangeCheck",
-    #             "ValueCheckItem": "1, 2"}],
-    #             "Value": ""
-    #         }
-    #     ]
-    # }
-
-    # FilteredResponse = LoadAgentInstance._ProcessFilter(Response, ResponseStructure)
-
-    # print(f"FilteredResponse: {FilteredResponse}")

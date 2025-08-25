@@ -606,15 +606,18 @@ class TXTSplitProcess:
 def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTemplate, MessagesReview = "on"):
     Solution = 'Script'
     SubSolution = 'ScriptSegmentation'
-    # PT01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
+    ## PT01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
     ScriptLoadInstance = ScriptLoadProcess(email, projectName, NextSolution, AutoTemplate)
     ScriptLoadInstance.Run()
+
+    ## DataFrame Info 불러오기
     FileExtension, MainLang, UploadedScriptFilePath = ScriptLoadInstance.LoadScriptLoadFrame()
     ScriptSegmentationDataFramePath, ScriptSegmentationPromptPath, UploadScriptFilePath, DataFrameScriptFilePath, MasterScriptFilePath = ScriptLoadInstance.LoadScriptSegmentationPath()
 
-    # 파일 확장자에 따라 후속 프로세스 실행
+    ## 파일 확장자에 따라 후속 프로세스 실행
     if FileExtension == 'pdf':
-        # P02 PDFMainLangCheck (PDF 언어 체크)
+
+        ## P02 PDFMainLangCheck (PDF 언어 체크)
         PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         PDFMainLangCheckProcessInstance.Run()
 
@@ -623,7 +626,9 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         PDFSplitterInstance.Run()
         
     elif FileExtension == 'txt':
+
         # T02 TXTMainLangCheck (TXT 언어 체크)
+
 
         # T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
         TXTSplitterInstance = TXTSplitProcess(email, projectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, ScriptSegmentationDataFramePath, DataFrameScriptFilePath)

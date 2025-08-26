@@ -44,15 +44,15 @@ def LLMmessages(Process, Input, Model, InputFormat = "text", MainLang = "ko", Ro
     ## InputFormat이 text가 아닌 경우에는 파일리스트 정리
     if InputFormat != "text":
         InputList = [os.path.basename(path) for path in Input]
-    
-    Input = ""
-    if MainLang == "ko":
-        for i in range(len(InputList)):
-            Input += f"업로드 자료 {i+1} : {InputList[i]}\n"
 
-    else:
-        for i in range(len(InputList)):
-            Input += f"Uploaded Data {i+1} : {InputList[i]}\n"
+        Input = ""
+        if MainLang == "ko":
+            for i in range(len(InputList)):
+                Input += f"업로드 자료 {i+1} : {InputList[i]}\n"
+
+        else:
+            for i in range(len(InputList)):
+                Input += f"Uploaded Data {i+1} : {InputList[i]}\n"
 
     ## '...'을 “...”로 변경하여 Claude에서도 json 형식이 갖춰지도록 구성
     def ConvertQuotes(Model, Message):

@@ -14,8 +14,8 @@
             "ShortTokensModel": [],
             "LongTokensModel": []
         },
-        "MasterModel": "gpt-4o-2024-11-20",
-        "ReasoningEffort": "medium"
+        "MasterModel": "gpt-5-mini",
+        "ReasoningEffort": "low"
     },
     "ANTHROPIC": {
         "BaseModel": {
@@ -41,7 +41,7 @@
     "Temperature": 1,
     "OutputTokensRatio": 1,
     "OutputFormat": "json",
-    "Example": [
+    "Master": [
         {
             "Role": "system",
             "Mark": "(역할 및 업무)\n",

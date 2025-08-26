@@ -41,7 +41,7 @@
     "Temperature": 1,
     "OutputTokensRatio": 1.6,
     "OutputFormat": "text",
-    "Example": [
+    "Master": [
         {
             "Role": "system",
             "Mark": "(역할 및 업무)\n",

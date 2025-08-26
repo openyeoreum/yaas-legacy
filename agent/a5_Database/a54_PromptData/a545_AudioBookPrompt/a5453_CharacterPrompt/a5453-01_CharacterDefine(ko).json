@@ -54,7 +54,7 @@
     "Temperature": 1,
     "OutputTokensRatio": 0.5,
     "OutputFormat": "json",
-    "Example": [
+    "Master": [
         {
             "Role": "system",
             "Mark": "(역할 및 업무)\n",

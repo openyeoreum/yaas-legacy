@@ -2921,13 +2921,13 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
             if BracketsSwitch:
                 for _EditGenerationKoChunk in _EditGenerationKoChunks:
                     if _EditGenerationKoChunk['EditId'] == EditId:
-                        print(f'_EditGenerationKoChunk: {_EditGenerationKoChunk}')
+                        # print(f'_EditGenerationKoChunk: {_EditGenerationKoChunk}')
                         _EditGenerationActorChunk = _EditGenerationKoChunk['ActorChunk']
                         for i in range(len(_EditGenerationActorChunk)):
                             if i + 1 in BracketsNumber:
                                 _EditGenerationChunk = _EditGenerationActorChunk[i]['Chunk']
                                 _EditGenerationKoChunk['ActorChunk'][i]['Chunk'] = _EditGenerationChunk.replace('[[', '[').replace(']]', ']')
-                                print(_EditGenerationKoChunk['ActorChunk'][i]['Chunk'])
+                                # print(_EditGenerationKoChunk['ActorChunk'][i]['Chunk'])
                 # with open(MatchedChunksPath, 'w', encoding = 'utf-8') as MatchedChunksJson:
                 #     json.dump(_EditGenerationKoChunks, MatchedChunksJson, ensure_ascii = False, indent = 4)
             

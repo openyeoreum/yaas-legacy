@@ -87,7 +87,7 @@ def LLMmessages(Process, Input, Model, InputFormat = "text", MainLang = "ko", Ro
     # messages
     if mode in ["Example", "ExampleFineTuning", "Master"]:
         if mode == "Example":
-            Example = promptFrame["Example"]
+            Example = promptFrame["Master"]
         elif mode in ["ExampleFineTuning", "Master"]:
             Example = promptFrame["Master"]
 

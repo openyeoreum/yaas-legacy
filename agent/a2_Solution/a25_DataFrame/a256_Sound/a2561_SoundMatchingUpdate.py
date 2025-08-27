@@ -134,7 +134,7 @@ def SoundMatchingOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## SoundMatching 프롬프트 요청 및 결과물 Json화
-def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatching", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatching", memoryLength = 2, MessagesReview = "on", Mode = "Memory", MainLang = "ko"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -192,9 +192,9 @@ def SoundMatchingProcess(projectName, email, DataFramePath, Process = "SoundMatc
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
             # OutputStarter, OutputEnder에 따른 Response 전처리
-            promptFrame = GetPromptFrame(Process)
+            promptFrame = GetPromptFrame(Process, MainLang)
             if mode in ["Example", "ExampleFineTuning", "Master"]:
-                Example = promptFrame["Example"]
+                Example = promptFrame["Master"]
                 if Response.startswith(Example[2]["OutputStarter"]):
                     Response = Response.replace(Example[2]["OutputStarter"], "", 1)
                 responseData = Example[2]["OutputStarter"] + Response

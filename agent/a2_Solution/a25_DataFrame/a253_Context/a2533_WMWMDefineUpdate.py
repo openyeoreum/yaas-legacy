@@ -172,7 +172,7 @@ def WMWMDefineOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## WMWMDefine 프롬프트 요청 및 결과물 Json화
-def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine", memoryLength = 2, MessagesReview = "on", Mode = "Memory", MainLang = "ko"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -249,9 +249,9 @@ def WMWMDefineProcess(projectName, email, DataFramePath, Process = "WMWMDefine",
             Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             
             # OutputStarter, OutputEnder에 따른 Response 전처리
-            promptFrame = GetPromptFrame(Process)
+            promptFrame = GetPromptFrame(Process, MainLang)
             if mode in ["Example", "ExampleFineTuning", "Master"]:
-                Example = promptFrame["Example"]
+                Example = promptFrame["Master"]
                 if Response.startswith(Example[2]["OutputStarter"]):
                     Response = Response.replace(Example[2]["OutputStarter"], "", 1)
                 responseData = Example[2]["OutputStarter"] + Response

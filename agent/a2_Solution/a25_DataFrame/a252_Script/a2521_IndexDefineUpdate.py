@@ -77,7 +77,7 @@ def IndexDefinePreprocess(projectName, email, Process = "IndexDefinePreprocess",
       return Input
 
 # IndexDefine 프롬프트 요청 및 결과물 Json화
-def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None, MaxRetries = 100, IndexMode = "Define", Mode = "Example", MessagesReview = "off"):
+def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None, MaxRetries = 100, IndexMode = "Define", Mode = "Example", MessagesReview = "off", MainLang = "ko"):
     if Input == None:
       Input = IndexDefinePreprocess(projectName, email, mode = Mode, indexMode = IndexMode, MESSAGESREVIEW = MessagesReview)
     Input = Input.replace("'", "")
@@ -108,8 +108,8 @@ def IndexDefineProcess(projectName, email, Process = "IndexDefine", Input = None
         Response = re.sub(r'^"', '', Response)
         Response = re.sub(r"^'", '', Response)
         
-        promptFrame = GetPromptFrame(Process)
-        Example = promptFrame["Example"]
+        promptFrame = GetPromptFrame(Process, MainLang)
+        Example = promptFrame["Master"]
         responseData = Example[2]["OutputStarter"] + Response
         responseData = responseData.replace("'", "\"")
         try:

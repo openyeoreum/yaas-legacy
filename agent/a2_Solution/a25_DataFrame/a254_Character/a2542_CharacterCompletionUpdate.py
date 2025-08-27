@@ -296,7 +296,7 @@ def CharacterCompletionOutputMemory(outputMemoryDics, MemoryLength):
 ##### Process 진행 #####
 #######################
 ## 12-1. CharacterCompletion 프롬프트 요청 및 결과물 Json화
-def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "CharacterCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory"):
+def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "CharacterCompletion", memoryLength = 2, MessagesReview = "on", Mode = "Memory", MainLang = "ko"):
     # DataSetsContext 업데이트
     AddProjectContextToDB(projectName, email, Process)
 
@@ -376,9 +376,9 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
             #     Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
 
             # OutputStarter, OutputEnder에 따른 Response 전처리
-            promptFrame = GetPromptFrame(Process)
+            promptFrame = GetPromptFrame(Process, MainLang)
             if mode in ["Example", "ExampleFineTuning", "Master"]:
-                Example = promptFrame["Example"]
+                Example = promptFrame["Master"]
                 if Response.startswith(Example[2]["OutputStarter"]):
                     Response = Response.replace(Example[2]["OutputStarter"], "", 1)
                 responseData = Example[2]["OutputStarter"] + Response
@@ -449,7 +449,7 @@ def CharacterCompletionProcess(projectName, email, DataFramePath, Process = "Cha
     return outputMemoryDics
 
 ## 12-2. CharacterPostCompletion 프롬프트 요청 및 결과물 Json화
-def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, memoryLength = 2, MessagesReview = "on", Mode = "Memory", BookGenre = "Auto"):
+def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList, inputIdList, memoryLength = 2, MessagesReview = "on", Mode = "Memory", BookGenre = "Auto", MainLang = "ko"):
     if BookGenre == "Auto":
         # BookGenre에 따른 Process 선정
         BookGenre = LoadWMWMMatchingBookGenre(projectName, email)
@@ -516,9 +516,9 @@ def CharacterPostCompletionProcess(projectName, email, DataFramePath, inputList,
             #     Response, Usage, Model = ANTHROPIC_LLMresponse(projectName, email, Process, Input, ProcessCount, Mode = mode, InputMemory = inputMemory, OutputMemory = outputMemory, MemoryNote = memoryNote, OutputEnder = outputEnder, messagesReview = MessagesReview)
             # print(f"@@@@@@@@@@\n\nResponse: {Response}\n\n@@@@@@@@@@")
             # OutputStarter, OutputEnder에 따른 Response 전처리
-            promptFrame = GetPromptFrame(Process)
+            promptFrame = GetPromptFrame(Process, MainLang)
             if mode in ["Example", "ExampleFineTuning", "Master"]:
-                Example = promptFrame["Example"]
+                Example = promptFrame["Master"]
                 if Response.startswith(Example[2]["OutputStarter"]):
                     Response = Response.replace(Example[2]["OutputStarter"], "", 1)
                 responseData = Example[2]["OutputStarter"] + Response

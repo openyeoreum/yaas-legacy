@@ -2072,7 +2072,7 @@ def VoiceLayerSplitGenerator(projectName, email, Narrator = 'VoiceActor', CloneV
                 with open(unicodedata.normalize('NFD', MatchedChunksPath), 'r', encoding = 'utf-8') as MatchedChunksJson:
                     MatchedChunks = json.load(MatchedChunksJson)
             except:
-                sys.exit(f'[ MatchedVoices 파일이 이미 생성됨, 삭제해주세요 : {MatchedActorsPath} ]')
+                sys.exit(f"[ MatchedVoices 파일이 이미 생성됨, 삭제해주세요 : {MatchedActorsPath} ]\n\n [ 또는, AudioBook_Edit의 json 구조에 문제가 없는지 확인하세요. {unicodedata.normalize('NFC', MatchedChunksPath)} ]")
 
         #######################################
         #### EditGenerationKoChunks 자동수정 ####

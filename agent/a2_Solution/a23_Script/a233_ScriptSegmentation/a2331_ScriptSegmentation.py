@@ -160,6 +160,7 @@ class ScriptLoadProcess:
             
         return self.ScriptSegmentationDataFramePath, self.ScriptSegmentationPromptPath, self.UploadScriptFilePath, self.DataFrameScriptFilePath, self.MasterScriptFilePath
 
+
 #############################################
 ##### P2 PDFMainLangCheck (PDF 언어 체크) #####
 #############################################
@@ -197,7 +198,7 @@ class PDFMainLangCheckProcess:
         self.FontDirPath = "/usr/share/fonts/"
         self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
 
-    ## PDF 이미지 생성 및 라벨 생성 ##
+    ## PDF 샘플 이미지 생성 및 라벨 생성 ##
     def _CreatePDFToLabeledSmapleJPEG(self, Page, InputId):
         """PDF 페이지를 받아 라벨을 추가한 뒤, 이미지 파일로 저장하고 경로를 반환하는 메서드"""
         # 페이지를 고해상도 이미지로 변환
@@ -314,6 +315,7 @@ class PDFMainLangCheckProcess:
         LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
         LoadAgentInstance.Run()
 
+
 #########################################
 ##### P3 PDFSplit (PDF 페이지 별 분할) #####
 #########################################
@@ -421,6 +423,106 @@ class PDFSplitProcess:
             print(f"[ {self.ProcessInfo} Update 완료 ]\n")
         else:
             print(f"[ {self.ProcessInfo} Update는 이미 완료됨 ]\n")
+
+
+#############################################
+##### T2 TXTMainLangCheck (TXT 언어 체크) #####
+#############################################
+class TXTMainLangCheckProcess:
+
+    ## TXTMainLangCheck 초기화 ##
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, MessagesReview):
+        """클래스 초기화"""
+        # 업데이트 정보
+        self.Email = Email
+        self.ProjectName = ProjectName
+        self.Solution = Solution
+        self.SubSolution = SubSolution
+        self.NextSolution = NextSolution
+        self.UploadedScriptFilePath = UploadedScriptFilePath
+
+        # Process 설정
+        self.ProcessNumber = "T02"
+        self.ProcessName = "TXTMainLangCheck"
+        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
+
+        # 출력설정
+        self.MessagesReview = MessagesReview
+
+    ## TXT 샘플 생성 ##
+    def _CreateTXTToSampleText(self, FullText):
+        """텍스트 파일에서 3개의 샘플 텍스트를 추출하여 하나의 문자열로 반환하는 메서드"""
+        FullTextLength = len(FullText)
+        sampleTextLength = 1000
+
+        # 세그먼트 길이 결정: 텍스트가 1000자 미만이면 가능한 길이로 줄임
+        SampleTextLength = sampleTextLength if FullTextLength >= sampleTextLength else FullTextLength
+
+        SampleTextList = []
+        if FullTextLength == 0:
+            # 내용이 비어있다면 빈 문자열 3개
+            SampleTextList = ["", "", ""]
+        elif FullTextLength >= SampleTextLength * 3:
+            # 3,000자 이상이면 서로 겹치지 않게 3구간을 무작위로 선택
+            # 후보 시작 인덱스
+            CandidateSampleList = list(range(0, FullTextLength - SampleTextLength + 1))
+            random.shuffle(CandidateSampleList)
+
+            Starts = []
+            for s in CandidateSampleList:
+                # 기존에 선택된 구간과 겹치는지 검사
+                overlaps = any(not (s + SampleTextLength <= t or t + SampleTextLength <= s) for t in Starts)
+                if not overlaps:
+                    Starts.append(s)
+                    if len(Starts) == 3:
+                        break
+
+            # 혹시 예외적으로 겹치지 않는 3개를 못 찾으면(매우 드묾) 겹침 허용으로 전환
+            if len(Starts) < 3:
+                Starts = [random.randint(0, FullTextLength - SampleTextLength) for _ in range(3)]
+
+            Starts.sort()
+            SampleTextList = [FullText[s:s + SampleTextLength] for s in Starts]
+
+        elif FullTextLength >= SampleTextLength:
+            # 1,000자 이상 3,000자 미만이면 겹침을 허용해 3구간을 선택
+            MaxStart = max(0, FullTextLength - SampleTextLength)
+            Starts = [random.randint(0, MaxStart) for _ in range(3)]
+            SampleTextList = [FullText[s:s + SampleTextLength] for s in Starts]
+        else:
+            # 1,000자 미만이면 텍스트 전체를 각 세그먼트로 사용
+            SampleTextList = [FullText, FullText, FullText]
+
+        # "1구간문구 ... 2구간문구 ... 3구간문구" 형태로 합치기
+        SampleText = f"{SampleTextList[0]} ... {SampleTextList[1]} ... {SampleTextList[2]}"
+
+        return SampleText
+
+    ## InputList 생성 ##
+    def _CreateInputList(self):
+        """InputList를 생성하는 메서드"""
+        # 업로드된 스크립트 파일 읽기
+        with open(self.UploadedScriptFilePath, 'r', encoding = 'utf-8') as f:
+            FullText = f.read()
+
+        InputList = [
+            {
+                "Id": 1,
+                "Input": self._CreateTXTToSampleText(FullText),
+                "InputFormat": "text",
+                "ComparisonInput": None
+            }
+        ]
+
+        return InputList
+
+    ## TXTMainLangCheckProcess 실행 ##
+    def Run(self):
+        """TXT 언어 체크 전체 프로세스 실행"""
+        print(f"< {self.ProcessInfo} Update 시작 >")
+        InputList = self._CreateInputList()
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
+        LoadAgentInstance.Run()
 
 
 #########################################
@@ -599,6 +701,7 @@ class TXTSplitProcess:
         else:
             print(f"[ {self.ProcessInfo} Update는 이미 완료됨 ]\n")
 
+
 ################################
 ##### Process 진행 및 업데이트 #####
 ################################
@@ -628,7 +731,8 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
     elif FileExtension == 'txt':
 
         # T02 TXTMainLangCheck (TXT 언어 체크)
-
+        TXTMainLangCheckInstance = TXTMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, MessagesReview)
+        TXTMainLangCheckInstance.Run()
 
         # T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
         TXTSplitterInstance = TXTSplitProcess(email, projectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, ScriptSegmentationDataFramePath, DataFrameScriptFilePath)

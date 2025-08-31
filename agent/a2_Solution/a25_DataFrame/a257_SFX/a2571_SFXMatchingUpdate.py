@@ -122,6 +122,8 @@ def SFXMatchingFilter(Input, responseData, memoryNote):
     for dic in OutputDic:
         try:
             key = list(dic.keys())[0]
+            # '길이' 키의 <Start>, <End>가 존재할 경우 <시작>, <끝>으로 치환
+            dic[key]['길이'] = dic[key]['길이'].replace('<Start>', '<시작>').replace('<start>', '<시작>').replace('<START>', '<시작>').replace('<End>', '<끝>').replace('<end>', '<끝>').replace('<END>', '<끝>')
             # '핵심문구' 키에 접근하는 부분에 예외 처리 추가
             try:
                 # '길이'에 <시작>과 <끝>이 존재하지 않을 경우, 문장의 가장 앞부분과 가장 뒷부분에 <시작>과 <끝>을 삽입

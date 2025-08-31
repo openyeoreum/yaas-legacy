@@ -70,6 +70,7 @@ def GetPromptFrame(Process, MainLang):
         "ShortScriptGenFeedback": "/a542_ScriptPrompt/a5422_BookScriptGenPrompt/a5423-12_ShortScriptGenFeedback",
         # ScriptSegmentationPrompt
         "PDFMainLangCheck": "/a542_ScriptPrompt/a5423_ScriptSegmentationPrompt/a5423-P02_PDFMainLangCheck",
+        "TXTMainLangCheck": "/a542_ScriptPrompt/a5423_ScriptSegmentationPrompt/a5423-T02_TXTMainLangCheck",
         # TranslationPrompt
         "TranslationIndexDefine": "/a543_TranslationPrompt/a543-01_TranslationIndexDefine",
         "TranslationBodySummary": "/a543_TranslationPrompt/a543-02_TranslationBodySummary",

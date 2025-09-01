@@ -18,8 +18,8 @@ from agent.a2_Solution.a21_General.a216_LoadAgent import LoadAgent
 class ScriptLoadProcess:
 
     ## 기본 경로 정의 ##
-    ScriptSegmentationDataFramePath = "/yaas/agent/a5_Database/a53_ProjectData/a531_ScriptProject/a5313_ScriptSegmentation"
-    ScriptSegmentationPromptPath = "/yaas/agent/a5_Database/a54_PromptData/a542_ScriptPrompt/a5423_ScriptSegmentationPrompt"
+    ScriptSegmentationDataFramePath = "/yaas/agent/a5_Database/a53_ProjectData/a531_ScriptProject/a5312_ScriptSegmentation"
+    ScriptSegmentationPromptPath = "/yaas/agent/a5_Database/a54_PromptData/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt"
     ProjectStoragePath = "/yaas/storage/s1_Yeoreum/s12_UserStorage/s123_Storage"
 
     ## ScriptLoad 초기화 ##
@@ -47,8 +47,8 @@ class ScriptLoadProcess:
     def _InitializePaths(self):
         """프로세스와 관련된 모든 경로를 초기화"""
         # DataFrame 원본 경로
-        self.PDFLoadDataFramePath = os.path.join(self.ScriptSegmentationDataFramePath, "a53131-P01_PDFLoadFrame.json")
-        self.TXTLoadDataFramePath = os.path.join(self.ScriptSegmentationDataFramePath, "a53132-T01_TXTLoadFrame.json")
+        self.PDFLoadDataFramePath = os.path.join(self.ScriptSegmentationDataFramePath, "a5312-P01_PDFLoadFrame.json")
+        self.TXTLoadDataFramePath = os.path.join(self.ScriptSegmentationDataFramePath, "a5312-T01_TXTLoadFrame.json")
 
         # project_script 관련 경로
         self.ScriptDirPath = os.path.join(self.ProjectStoragePath, self.Email, self.ProjectName, f"{self.ProjectName}_script")
@@ -348,7 +348,7 @@ class PDFSplitProcess:
     def _InitializePaths(self):
         """프로세스와 관련된 모든 경로를 초기화"""
         # DataFrame 원본 경로
-        self.PDFSplitDataFramePath = os.path.join(self.ScriptSegmentationDataFramePath, "a53131-P03_PDFSplitFrame.json")
+        self.PDFSplitDataFramePath = os.path.join(self.ScriptSegmentationDataFramePath, "a5312-P03_PDFSplitFrame.json")
 
         # 최종 생성될 SplitFrame 파일 경로
         self.PDFSplitFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.Email}_{self.ProjectName}_P03_PDFSplitFrame({self.NextSolution}).json")
@@ -586,7 +586,7 @@ class TXTSplitProcess:
     def _InitializePaths(self):
         """프로세스와 관련된 모든 경로를 초기화"""
         # DataFrame 원본 경로
-        self.TXTSplitDataFramePath = os.path.join(self.ScriptSegmentationDataFramePath, "a53132-T03_TXTSplitFrame.json")
+        self.TXTSplitDataFramePath = os.path.join(self.ScriptSegmentationDataFramePath, "a5312-T03_TXTSplitFrame.json")
 
         # 최종 생성될 SplitFrame 파일 경로
         self.TXTSplitFramePath = os.path.join(self.DataFrameScriptFilePath, f"{self.Email}_{self.ProjectName}_T03_TXTSplitFrame({self.NextSolution}).json")

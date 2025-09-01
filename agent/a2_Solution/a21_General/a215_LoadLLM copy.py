@@ -29,7 +29,6 @@ def Date(Option = "Day"):
     
     return date
 
-
 ################################
 ################################
 ########## OpenAI API ##########
@@ -86,33 +85,114 @@ def LLMmessages(Process, Input, Model, InputFormat = "text", MainLang = "ko", Ro
     messageTime = "current time: " + str(Date("Second")) + '\n\n'
     
     # messages
-    PromptDic = promptFrame["Master"]
+    if mode in ["Example", "ExampleFineTuning", "Master"]:
+        if mode == "Example":
+            Example = promptFrame["Master"]
+        elif mode in ["ExampleFineTuning", "Master"]:
+            Example = promptFrame["Master"]
 
-    messages = [
-        {
-            "role": PromptDic[0]["Role"],
-            "content": messageTime + PromptDic[0]["Mark"] + PromptDic[0]["Message"]
-        },
-        {
-            "role": PromptDic[1]["Role"],
-            "content": PromptDic[1]["Request"][0]["Mark"] + ConvertQuotes(Model, PromptDic[1]["Request"][0]["Message"]) +
-                        PromptDic[1]["Request"][1]["Mark"] + ConvertQuotes(Model, PromptDic[1]["Request"][1]["Message"]) +
-                        PromptDic[1]["Request"][2]["Mark"] + ConvertQuotes(Model, PromptDic[1]["Request"][2]["Message"]) +
-                        PromptDic[1]["Request"][3]["Mark"] + PromptDic[1]["Request"][3]["InputPromptDicMark"] + str(PromptDic[1]["Request"][3]["InputPromptDic"]) +
-                        PromptDic[1]["Request"][3]["OutputPromptDicMark"] + str(PromptDic[1]["Request"][3]["OutputPromptDic"]) +
-                        PromptDic[1]["Request"][4]["Mark"] + PromptDic[1]["Request"][4]["InputPromptDicMark"] + str(PromptDic[1]["Request"][4]["InputPromptDic"]) +
-                        PromptDic[1]["Request"][4]["OutputPromptDicMark"] + str(PromptDic[1]["Request"][4]["OutputPromptDic"]) +
-                        PromptDic[1]["Request"][5]["Mark"] + PromptDic[1]["Request"][5]["InputPromptDicMark"] + str(PromptDic[1]["Request"][5]["InputPromptDic"]) +
-                        PromptDic[1]["Request"][5]["OutputPromptDicMark"] + str(PromptDic[1]["Request"][5]["OutputPromptDic"]) +
-                        PromptDic[1]["Request"][6]["Mark"] + PromptDic[1]["Request"][6]["InputMark"] + str(Input) + PromptDic[1]["Request"][6]["InputMark2"] + str(input2)
-        },
-        {
-            "role": PromptDic[2]["Role"],
-            "content": PromptDic[2]["OutputMark"] + 
-                        memoryNote + 
-                        PromptDic[2]["OutputStarter"]
-        }
-    ]
+        messages = [
+            {
+                "role": Example[0]["Role"],
+                "content": messageTime + Example[0]["Mark"] + Example[0]["Message"]
+            },
+            {
+                "role": Example[1]["Role"],
+                "content": Example[1]["Request"][0]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][0]["Message"]) +
+                            Example[1]["Request"][1]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][1]["Message"]) +
+                            Example[1]["Request"][2]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][2]["Message"]) +
+                            Example[1]["Request"][3]["Mark"] + Example[1]["Request"][3]["InputExampleMark"] + str(Example[1]["Request"][3]["InputExample"]) +
+                            Example[1]["Request"][3]["OutputExampleMark"] + str(Example[1]["Request"][3]["OutputExample"]) +
+                            Example[1]["Request"][4]["Mark"] + Example[1]["Request"][4]["InputExampleMark"] + str(Example[1]["Request"][4]["InputExample"]) +
+                            Example[1]["Request"][4]["OutputExampleMark"] + str(Example[1]["Request"][4]["OutputExample"]) +
+                            Example[1]["Request"][5]["Mark"] + Example[1]["Request"][5]["InputExampleMark"] + str(Example[1]["Request"][5]["InputExample"]) +
+                            Example[1]["Request"][5]["OutputExampleMark"] + str(Example[1]["Request"][5]["OutputExample"]) +
+                            Example[1]["Request"][6]["Mark"] + Example[1]["Request"][6]["InputMark"] + str(Input) + Example[1]["Request"][6]["InputMark2"] + str(input2)
+            },
+            {
+                "role": Example[2]["Role"],
+                "content": Example[2]["OutputMark"] + 
+                            memoryNote + 
+                            Example[2]["OutputStarter"]
+            }
+        ]
+      
+    elif mode in ["Memory", "MemoryFineTuning"]:
+        if mode == "Memory":
+            Memory = promptFrame["Memory"]
+        elif mode == "MemoryFineTuning":
+            Memory = promptFrame["MemoryFineTuning"]
+        
+        messages = [
+            {
+                "role": Memory[0]["Role"],
+                "content": messageTime + Memory[0]["Mark"] + Memory[0]["Message"]
+            },
+            {
+                "role": Memory[1]["Role"],
+                "content": Memory[1]["Request"][0]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][0]["Message"]) +
+                            Memory[1]["Request"][1]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][1]["Message"]) +
+                            Memory[1]["Request"][2]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][2]["Message"]) +
+                            Memory[1]["Request"][3]["Mark"] + Memory[1]["Request"][3]["InputExampleMark"] + Memory[1]["Request"][3]["InputExample"] +
+                            Memory[1]["Request"][3]["OutputExampleMark"] + Memory[1]["Request"][3]["OutputExample"] +
+                            Memory[1]["Request"][4]["Mark"] + Memory[1]["Request"][4]["InputExampleMark"] + Memory[1]["Request"][4]["InputExample"] +
+                            Memory[1]["Request"][4]["OutputExampleMark"] + Memory[1]["Request"][4]["OutputExample"] +
+                            Memory[1]["Request"][5]["Mark"] + Memory[1]["Request"][5]["InputMark"] +
+                            Memory[1]["Request"][5]["InputStarter"] +
+                            str(inputMemory) +
+                            Memory[1]["Request"][5]["InputEnder"] + Memory[1]["Request"][5]["InputMark2"] + str(inputMemory2)
+            },
+            {
+                "role": Memory[2]["Role"],
+                "content": Memory[2]["OutputMark"] + memoryNote +
+                            Memory[2]["OutputStarter"] +
+                            str(outputMemory) +
+                            str(outputEnder)
+            }
+        ]
+    
+    # Training
+    elif mode == "ExampleTraining":
+        ExampleFineTuning = promptFrame["ExampleFineTuning"]
+        messages = [
+            {
+                "role": ExampleFineTuning[0]["Role"],
+                "content": ExampleFineTuning[0]["Mark"] + ExampleFineTuning[0]["Message"]
+            },
+            {
+                "role": ExampleFineTuning[1]["Role"],
+                "content": ExampleFineTuning[1]["Request"][0]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][0]["Message"]) +
+                            ExampleFineTuning[1]["Request"][1]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][1]["Message"]) +
+                            ExampleFineTuning[1]["Request"][2]["Mark"] + ConvertQuotes(Model, ExampleFineTuning[1]["Request"][2]["Message"]) +
+                            ExampleFineTuning[1]["Request"][6]["Mark"] + ExampleFineTuning[1]["Request"][6]["InputMark"] + str(Input) +
+                            ExampleFineTuning[1]["Request"][6]["InputMark2"] + str(input2)
+            },
+            {
+                "role": ExampleFineTuning[2]["Role"],
+                "content": ExampleFineTuning[2]["OutputMark"] + ExampleFineTuning[2]["OutputStarter"] + str(Output)
+            }
+        ]
+      
+    elif mode == "MemoryTraining":
+      MemoryFineTuning = promptFrame["MemoryFineTuning"]
+      messages = [
+            {
+                "role": MemoryFineTuning[0]["Role"],
+                "content": MemoryFineTuning[0]["Mark"] + MemoryFineTuning[0]["Message"]
+            },
+            {
+                "role": MemoryFineTuning[1]["Role"],
+                "content": MemoryFineTuning[1]["Request"][0]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][0]["Message"]) +
+                            MemoryFineTuning[1]["Request"][1]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][1]["Message"]) +
+                            MemoryFineTuning[1]["Request"][2]["Mark"] + ConvertQuotes(Model, MemoryFineTuning[1]["Request"][2]["Message"]) +
+                            MemoryFineTuning[1]["Request"][5]["Mark"] + MemoryFineTuning[1]["Request"][5]["InputMark"] + str(inputMemory) + str(Input) +
+                            MemoryFineTuning[1]["Request"][5]["InputMark2"] + str(inputMemory2) + str(input2)
+            },
+            {
+                "role": MemoryFineTuning[2]["Role"],
+                "content": MemoryFineTuning[2]["OutputMark"] + MemoryFineTuning[2]["OutputStarter"] + str(Output)
+            }
+        ]
 
     encoding = tiktoken.get_encoding("cl100k_base")
     # print(f'messages: {messages}')
@@ -161,7 +241,36 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
 
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'gpt', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
-    Model = promptFrame["OpenAI"]["MasterModel"]
+    if Mode == "Master":
+        Model = promptFrame["OpenAI"]["MasterModel"]
+    else:
+      if TotalTokens < 20000:
+        if Mode in ["Example", "Memory"]:
+            Model = promptFrame["OpenAI"]["BaseModel"]["ShortTokensModel"]
+        if Mode == "ExampleFineTuning":
+            if promptFrame["OpenAI"]["ExampleFineTunedModel"]["ShortTokensModel"] != []:
+                Model = promptFrame["OpenAI"]["ExampleFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+            else:
+                Model = promptFrame["OpenAI"]["BaseModel"]["ShortTokensModel"]
+        if Mode == "MemoryFineTuning":
+            if promptFrame["OpenAI"]["MemoryFineTunedModel"]["ShortTokensModel"] != []:
+                Model = promptFrame["OpenAI"]["MemoryFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+            else:
+                Model = promptFrame["OpenAI"]["BaseModel"]["ShortTokensModel"]
+
+      else:
+        if Mode in ["Example", "Memory"]:
+          Model = promptFrame["OpenAI"]["BaseModel"]["LongTokensModel"]
+        if Mode == "ExampleFineTuning":
+          if promptFrame["OpenAI"]["ExampleFineTunedModel"]["LongTokensModel"] != []:
+            Model = promptFrame["OpenAI"]["ExampleFineTunedModel"]["LongTokensModel"][-1]["Model"]
+          else:
+            Model = promptFrame["OpenAI"]["BaseModel"]["LongTokensModel"]
+        if Mode == "MemoryFineTuning":
+          if promptFrame["OpenAI"]["MemoryFineTunedModel"]["LongTokensModel"] != []:
+            Model = promptFrame["OpenAI"]["MemoryFineTunedModel"]["LongTokensModel"][-1]["Model"]
+          else:
+            Model = promptFrame["OpenAI"]["BaseModel"]["LongTokensModel"]
 
     # Temperature = temperature
     ReasoningEffort = promptFrame["OpenAI"]["ReasoningEffort"]
@@ -229,6 +338,169 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
                 print(f"LifeGraphName: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생\n\n{e}")
             time.sleep(random.uniform(5, 10))
             continue
+      # except openai.APIError as e:
+      #     print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생: OpenAI API returned an API Error: {e}")
+      #     time.sleep(random.uniform(5, 10))
+      #     continue
+      # except openai.APIConnectionError as e:
+      #     print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생: Failed to connect to OpenAI API: {e}")
+      #     time.sleep(random.uniform(5, 10))
+      #     continue
+      # except openai.RateLimitError as e:
+      #     print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생: OpenAI API request exceeded rate limit: {e}")
+      #     time.sleep(random.uniform(5, 10))
+      #     continue
+      # except openai.APIStatusError as e:
+      #     print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMresponse에서 오류 발생: API status error in OpenAI_LLMresponse: {e.status_code}, {e.response}")
+      #     time.sleep(random.uniform(5, 10))
+      #     continue
+
+
+# #################################
+# ##### OpenAI LLM FineTuning #####
+# #################################
+# ## 파인튜닝 데이터셋 생성
+# def OpenAI_LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = "Example"):  
+#     trainingDataset = GetTrainingDataset(projectName, email)
+#     ProcessDataset = getattr(trainingDataset, Process)
+
+#     filename = TrainingDataSetPath + email + '_' + projectName + '_' + ProcessNumber + '_' + Process + 'DataSet_' + str(Date()) + '.jsonl'
+    
+#     base, ext = os.path.splitext(filename)
+#     counter = 0
+#     newFilename = filename
+#     while os.path.exists(newFilename):
+#         counter += 1
+#         newFilename = f"{base} ({counter}){ext}"
+    
+#     if ProcessDataset["FeedbackCompletion"] == "Yes":
+#       if Mode == "Example":
+#         MOde = "ExampleTraining"
+#       elif Mode == "Memory":
+#         MOde = "MemoryTraining"
+#       IOList = ProcessDataset["FeedbackDataset"][1:]
+#       TotalTokens = 0
+      
+#       with open(newFilename, 'w', encoding = 'utf-8') as file:
+#         for i in range(len(IOList)):
+#           # "InputMemory"가 "None"일 경우 빈 텍스트("") 처리
+#           if IOList[i]["InputMemory"] == "None":
+#             InputMemory = ""
+#           else:
+#             InputMemory = IOList[i]["InputMemory"]
+#           Input = IOList[i]["Input"]
+#           output = IOList[i]["Feedback"]
+          
+#           messages, outputTokens, totalTokens, Temperature = LLMmessages(Process, Input, 'gpt', Output = output, mode = MOde, inputMemory = InputMemory)
+          
+#           TrainingData = {"messages": [messages[0], messages[1], messages[2]]}
+
+#           file.write(json.dumps(TrainingData, ensure_ascii = False) + '\n')
+          
+#           TotalTokens += totalTokens
+      
+#       return filename, open(newFilename, 'rb')
+#     else:
+#       print(f"Project: {projectName} | Process: {Process} | FeedbackCompletion에서 오류 발생: Feedback이 완료 되지 않았습니다.")
+#       return None, None
+    
+# ## 파인튜닝 파일 업로드 생성
+# def OpenAI_LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = "Example", MaxAttempts = 100):
+#     OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
+    
+#     # LLMTrainingDataset 업로드
+#     filename, LLMTrainingDataset = OpenAI_LLMTrainingDatasetGenerator(projectName, email, ProcessNumber, Process, TrainingDataSetPath, Mode = mode)
+#     UploadedFile = OpenAIClient.files.create(
+#       file = LLMTrainingDataset,
+#       purpose = 'fine-tune'
+#     )
+#     time.sleep(random.randint(15, 20))
+    
+#     for _ in range(MaxAttempts):
+#       uploadedFile = OpenAIClient.files.retrieve(UploadedFile.id)
+#       if uploadedFile.status == "processed":
+#         FileId = uploadedFile.id
+#         # 파일이름에 FileId 붙이기
+#         FilePath, oldFilename = os.path.split(filename)
+#         base, ext = os.path.splitext(oldFilename)
+#         newFilename = f"{base}_{FileId}{ext}"
+#         newFilePath = os.path.join(FilePath, newFilename)
+#         os.rename(filename, newFilePath)
+        
+#         print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMTrainingDatasetUpload 완료")
+#         break
+#       else:
+#         print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMTrainingDatasetUploading ... 기다려주세요.")
+#         time.sleep(random.randint(10, 15))
+#         continue
+
+#     return newFilename, FileId
+
+# ## 파인튜닝
+# def OpenAI_LLMFineTuning(projectName, email, ProcessNumber, Process, TrainingDataSetPath, ModelTokens = "Short", Mode = "Example", Epochs = 3, MaxAttempts = 100):
+#     with get_db() as db:
+#       OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
+      
+#       newFilename, FileId = OpenAI_LLMTrainingDatasetUpload(projectName, email, ProcessNumber, Process, TrainingDataSetPath, mode = Mode)
+
+#       # 토큰수별 모델 선정
+#       if ModelTokens == "Short":
+#         BaseModel = "gpt-5-mini"
+#       elif ModelTokens == "Long":
+#         BaseModel = "gpt-5-mini"
+      
+#       # FineTuning 요청
+#       FineTuningJob = OpenAIClient.fine_tuning.jobs.create(
+#         training_file = FileId,
+#         model = BaseModel,
+#         hyperparameters={"n_epochs":Epochs}
+#       )
+#       time.sleep(random.randint(60, 90))
+      
+#       for _ in range(MaxAttempts):
+
+#         fineTuningJob = OpenAIClient.fine_tuning.jobs.retrieve(FineTuningJob.id)
+#         if fineTuningJob.status == "succeeded":
+#           FineTunedModel = fineTuningJob.fine_tuned_model
+#           TrainedTokens = fineTuningJob.trained_tokens
+#           TrainingFile = fineTuningJob.training_file
+#           print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMFineTuning 완료")
+#           break
+#         else:
+#           print(f"Project: {projectName} | Process: {Process} | OpenAI_LLMFineTuning ... 기다려주세요.")
+#           time.sleep(random.randint(60, 90))
+#           continue
+      
+#       prompt = db.query(Prompt).first()
+#       column = getattr(Prompt, Process, None)
+#       promptFrame = db.query(column).first()
+      
+#       # Prompt 모델 업데이트
+#       fineTunedModelDic = {"Id" : Process + '-' + str(Date("Second")), "Model" :FineTunedModel}
+#       if Mode == "Example":
+#         if ModelTokens == "Short":
+#           promptFrame['ExampleFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
+#         elif ModelTokens == "Long":
+#           promptFrame['ExampleFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
+          
+#       elif Mode == "Memory":
+#         if ModelTokens == "Short":
+#           promptFrame['MemoryFineTunedModel']['ShortTokensModel'].append(fineTunedModelDic)
+#         elif ModelTokens == "Long":
+#           promptFrame['MemoryFineTunedModel']['LongTokensModel'].append(fineTunedModelDic)
+
+#       flag_modified(prompt, Process)
+      
+#       db.merge(prompt)
+#       db.commit()
+      
+#     with open(newFilename, "a", encoding = "utf-8") as file:
+#       jsonLine = json.dumps(fineTunedModelDic)
+#       file.write(jsonLine)
+        
+#     # OpenAIClient.File.delete(TrainingFile)
+    
+#     return FineTunedModel, TrainedTokens
 
 
 ###################################
@@ -332,7 +604,36 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, inputFormat
 
     Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
-    Model = promptFrame["ANTHROPIC"]["MasterModel"]
+    if Mode == "Master":
+      Model = promptFrame["ANTHROPIC"]["MasterModel"]
+    else:
+      if TotalTokens < 14000:
+        if Mode in ["Example", "Memory"]:
+          Model = promptFrame["ANTHROPIC"]["BaseModel"]["ShortTokensModel"]
+        if Mode == "ExampleFineTuning":
+          if promptFrame["OpenAI"]["ExampleFineTunedModel"]["ShortTokensModel"] != []:
+            Model = promptFrame["ANTHROPIC"]["ExampleFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+          else:
+            Model = promptFrame["ANTHROPIC"]["BaseModel"]["ShortTokensModel"]
+        if Mode == "MemoryFineTuning":
+          if promptFrame["OpenAI"]["MemoryFineTunedModel"]["ShortTokensModel"] != []:
+            Model = promptFrame["ANTHROPIC"]["MemoryFineTunedModel"]["ShortTokensModel"][-1]["Model"]
+          else:
+            Model = promptFrame["ANTHROPIC"]["BaseModel"]["ShortTokensModel"]
+
+      else:
+        if Mode in ["Example", "Memory"]:
+          Model = promptFrame["ANTHROPIC"]["BaseModel"]["LongTokensModel"]
+        if Mode == "ExampleFineTuning":
+          if promptFrame["OpenAI"]["ExampleFineTunedModel"]["LongTokensModel"] != []:
+            Model = promptFrame["ANTHROPIC"]["ExampleFineTunedModel"]["LongTokensModel"][-1]["Model"]
+          else:
+            Model = promptFrame["ANTHROPIC"]["BaseModel"]["LongTokensModel"]
+        if Mode == "MemoryFineTuning":
+          if promptFrame["OpenAI"]["MemoryFineTunedModel"]["LongTokensModel"] != []:
+            Model = promptFrame["ANTHROPIC"]["MemoryFineTunedModel"]["LongTokensModel"][-1]["Model"]
+          else:
+            Model = promptFrame["ANTHROPIC"]["BaseModel"]["LongTokensModel"]
     
     for _ in range(MaxAttempts):
       try:

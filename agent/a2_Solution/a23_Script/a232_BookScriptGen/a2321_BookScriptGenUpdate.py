@@ -745,7 +745,7 @@ def ScriptPlanProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, Proj
     if os.path.exists(ProjectDataFrameScriptPalnPath):
         ScriptPlanFramePath = ProjectDataFrameScriptPalnPath
     else:
-        ScriptPlanFramePath = os.path.join(BookScriptGenDataFramePath, "a5312-01_ScriptPlanFrame.json") 
+        ScriptPlanFramePath = os.path.join(BookScriptGenDataFramePath, "a5311-01_ScriptPlanFrame.json") 
     with open(ScriptPlanFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         ScriptPlanFrame = json.load(DataFrameJson)
     
@@ -794,7 +794,7 @@ def TitleAndIndexGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath
     if os.path.exists(ProjectDataFrameTitleAndIndexPath):
         TitleAndIndexFramePath = ProjectDataFrameTitleAndIndexPath
     else:
-        TitleAndIndexFramePath = os.path.join(BookScriptGenDataFramePath, "a5312-02_TitleAndIndexFrame.json")
+        TitleAndIndexFramePath = os.path.join(BookScriptGenDataFramePath, "a5311-02_TitleAndIndexFrame.json")
     with open(TitleAndIndexFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         TitleAndIndexFrame = json.load(DataFrameJson)
         
@@ -833,7 +833,7 @@ def SummaryOfIndexGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePat
     if os.path.exists(ProjectDataFrameSummaryOfIndexPath):
         SummaryOfIndexFramePath = ProjectDataFrameSummaryOfIndexPath
     else:
-        SummaryOfIndexFramePath = os.path.join(BookScriptGenDataFramePath, "a5312-03_SummaryOfIndexFrame.json")
+        SummaryOfIndexFramePath = os.path.join(BookScriptGenDataFramePath, "a5311-03_SummaryOfIndexFrame.json")
     with open(SummaryOfIndexFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         SummaryOfIndexFrame = json.load(DataFrameJson)
         
@@ -874,7 +874,7 @@ def ScriptIntroductionGenProcessDataFrameSave(ProjectName, BookScriptGenDataFram
     if os.path.exists(ProjectDataFrameScriptIntroductionGenPath):
         ScriptIntroductionFramePath = ProjectDataFrameScriptIntroductionGenPath
     else:
-        ScriptIntroductionFramePath = os.path.join(BookScriptGenDataFramePath, "a5312-04_ScriptIntroductionFrame.json")
+        ScriptIntroductionFramePath = os.path.join(BookScriptGenDataFramePath, "a5311-04_ScriptIntroductionFrame.json")
     with open(ScriptIntroductionFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         ScriptIntroductionFrame = json.load(DataFrameJson)
         
@@ -907,7 +907,7 @@ def ShortScriptGenProcessDataFrameSave(ProjectName, BookScriptGenDataFramePath, 
     if os.path.exists(ProjectDataFrameShortScriptPath):
         ShortScriptFramePath = ProjectDataFrameShortScriptPath
     else:
-        ShortScriptFramePath = os.path.join(BookScriptGenDataFramePath, "a5312-05_ShortScriptFrame.json")
+        ShortScriptFramePath = os.path.join(BookScriptGenDataFramePath, "a5311-05_ShortScriptFrame.json")
     with open(ShortScriptFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
         ShortScriptFrame = json.load(DataFrameJson)
         
@@ -1441,7 +1441,7 @@ def BookScriptGenProcessUpdate(projectName, email, Intention, mode = "Master", M
     ModifiedScriptEditPath = os.path.join(ProjectMasterScriptPath, BaseModifyFolder, f'[{ModifyTime}_{projectName}_Script_ModifiedEdit].json')
 
     
-    BookScriptGenDataFramePath = "/yaas/agent/a5_Database/a53_ProjectData/a531_ScriptProject/a5312_BookScriptGen"
+    BookScriptGenDataFramePath = "/yaas/agent/a5_Database/a53_ProjectData/a531_ScriptProject/a5311_BookScriptGen"
 
     #########################################
     ### Process1: ScriptPlan Response 생성 ###

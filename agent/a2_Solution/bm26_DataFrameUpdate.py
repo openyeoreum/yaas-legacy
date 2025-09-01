@@ -9,7 +9,6 @@ from datetime import datetime
 from agent.a2_Solution.a21_General.a214_GetProcessData import GetProject
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2511_DataFrameCommit import FindDataframeFilePaths, AddFrameMetaDataToDB, InitScriptGen, UpdatedScriptGen, InitBookPreprocess, UpdatedBookPreprocess, InitIndexFrame, UpdatedIndexFrame, InitDuplicationPreprocess, UpdatedDuplicationPreprocess, InitPronunciationPreprocess, UpdatedPronunciationPreprocess, InitBodyFrame, UpdatedBodyFrame, InitHalfBodyFrame, UpdatedHalfBodyFrame, InitCaptionCompletion, UpdatedCaptionCompletion, InitContextDefine, UpdatedContextDefine, InitContextCompletion, UpdatedContextCompletion, InitWMWMDefine, UpdatedWMWMDefine, InitWMWMMatching, UpdatedWMWMMatching, InitCharacterDefine, UpdatedCharacterDefine, InitCharacterCompletion, UpdatedCharacterCompletion, InitSoundMatching, UpdatedSoundMatching, InitSFXMatching, UpdatedSFXMatching, InitCorrectionKo, UpdatedCorrectionKo, InitSelectionGenerationKo, UpdatedSelectionGenerationKo
 from agent.a2_Solution.a25_DataFrame.a251_DataCommit.a2512_DataSetCommit import LoadExistedDataSets, AddDataSetMetaDataToDB, SaveDataSet, InitRawDataSet
-from agent.a2_Solution.a25_DataFrame.a251_ScriptGen.a2511_ScriptGenUpdate import ScriptGenUpdate, ScriptGenResponseJson
 from agent.a2_Solution.a25_DataFrame.a252_Script.a2520_BookPreprocessUpdate import BookPreprocessUpdate
 from agent.a2_Solution.a25_DataFrame.a252_Script.a2521_IndexDefineUpdate import IndexFrameUpdate
 from agent.a2_Solution.a25_DataFrame.a252_Script.a2522_DuplicationPreprocessUpdate import DuplicationPreprocessUpdate
@@ -188,30 +187,6 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     AddFrameMetaDataToDB(projectName, email)
 
     AddDataSetMetaDataToDB(projectName, email)
-
-
-    ####################
-    ### 00_ScriptGen ###
-    ####################
-    if ScriptConfig != {}:
-        if existedDataFrameMode == "on":
-            existedDataFrame = LoadexistedDataFrame(projectName, email, "ScriptGenFrame", DataFramePath)
-            recentFile, existedDataSet = LoadExistedDataSets(projectName, email, "ScriptGen", RawDataSetPath)
-
-        if existedDataFrame == None:
-            InitScriptGen(projectName, email)
-        if existedDataSet == None:
-            InitRawDataSet(projectName, email, "ScriptGen")
-
-        mode = "Memory"
-        ScriptGenUpdate(projectName, email, DataFramePath, ScriptConfig, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
-        if existedDataFrame == None:
-            updatedScriptGen = UpdatedScriptGen(projectName, email)
-            SaveDataFrame(projectName, email, "00_ScriptGenFrame", updatedScriptGen, DataFramePath)
-        if existedDataSet == None:
-            SaveDataSet(projectName, email, "00", "ScriptGen", RawDataSetPath)
-        existedDataFrame = None
-        existedDataSet = None
 
 
     #########################
@@ -462,7 +437,7 @@ def SolutionDataFrameUpdate(email, projectName, mainLang, indexMode = "Define", 
     if existedDataSet == None:
         InitRawDataSet(projectName, email, "WMWMMatching")
 
-    mode = "Example"
+    mode = "Master"
     WMWMMatchingUpdate(projectName, email, DataFramePath, MessagesReview = messagesReview, Mode = mode, ExistedDataFrame = existedDataFrame, ExistedDataSet = existedDataSet)
     
     if existedDataFrame == None:

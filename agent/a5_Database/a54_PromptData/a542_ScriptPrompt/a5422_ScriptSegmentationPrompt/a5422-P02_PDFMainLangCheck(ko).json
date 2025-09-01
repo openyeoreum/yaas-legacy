@@ -2,40 +2,16 @@
     "TaskName": "PDFLanguageCheck",
     "InputFormat": "jpeg",
     "OpenAI": {
-        "BaseModel": {
-            "ShortTokensModel": "gpt-5-mini",
-            "LongTokensModel": "gpt-5-mini"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
-        "BaseModel": {
-            "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-sonnet-4-0"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "claude-sonnet-4-0"
     },
-    "GOOGLE":{
+    "GOOGLE": {
         "MasterModel": "gemini-2.5-flash"
     },
-    "DEEPSEEK":{
+    "DEEPSEEK": {
         "MasterModel": "deepseek-reasoner"
     },
     "Temperature": 1,
@@ -44,12 +20,22 @@
     "OutputStructure": {
         "Key": "언어",
         "ValueType": "dict",
-        "ValueCheckList": [{"ValueCheck": "", "ValueCheckItem": ""}],
+        "ValueCheckList": [
+            {
+                "ValueCheck": "",
+                "ValueCheckItem": ""
+            }
+        ],
         "Value": [
             {
                 "Key": "태그",
                 "ValueType": "str",
-                "ValueCheckList": [{"ValueCheck": "strDataAnswerRangeCheck", "ValueCheckItem": "ko, en, de, fr, es, zh, ja, it, pt, nl, sv, no, da, pl"}],
+                "ValueCheckList": [
+                    {
+                        "ValueCheck": "strDataAnswerRangeCheck",
+                        "ValueCheckItem": "ko, en, de, fr, es, zh, ja, it, pt, nl, sv, no, da, pl"
+                    }
+                ],
                 "Value": ""
             }
         ]
@@ -77,24 +63,24 @@
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "\n\n\n(주어진 <도서페이지> 자료 5개를 보고 해당 도서의 주요 언어 1개를 (언어태그)에서 지정하여 <도서언어태그.json>로 완성해주세요)\n\n",

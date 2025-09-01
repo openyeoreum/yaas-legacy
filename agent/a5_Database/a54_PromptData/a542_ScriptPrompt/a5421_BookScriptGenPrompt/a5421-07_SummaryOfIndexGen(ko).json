@@ -2,40 +2,16 @@
     "TaskName": "SummaryOfIndexGen",
     "InputFormat": "text",
     "OpenAI": {
-        "BaseModel": {
-            "ShortTokensModel": "gpt-5-mini",
-            "LongTokensModel": "gpt-5-mini"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
-        "BaseModel": {
-            "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-sonnet-4-0"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "claude-sonnet-4-0"
     },
-    "GOOGLE":{
+    "GOOGLE": {
         "MasterModel": "gemini-2.5-flash"
     },
-    "DEEPSEEK":{
+    "DEEPSEEK": {
         "MasterModel": "deepseek-reasoner"
     },
     "Temperature": 1,
@@ -64,24 +40,24 @@
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "\n\n\n(<집필계획>과 <도서제목및목차>를 보고 <목차별내용요약.json>을 작성해주세요)\n\n",

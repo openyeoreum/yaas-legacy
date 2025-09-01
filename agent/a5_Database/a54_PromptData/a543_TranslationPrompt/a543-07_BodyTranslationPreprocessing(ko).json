@@ -2,40 +2,16 @@
     "TaskName": "BodyTranslationPreprocessing",
     "InputFormat": "text",
     "OpenAI": {
-        "BaseModel": {
-            "ShortTokensModel": "gpt-5-mini",
-            "LongTokensModel": "gpt-5-mini"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
-        "BaseModel": {
-            "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-sonnet-4-0"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "claude-sonnet-4-0"
     },
-    "GOOGLE":{
+    "GOOGLE": {
         "MasterModel": "gemini-2.5-flash"
     },
-    "DEEPSEEK":{
+    "DEEPSEEK": {
         "MasterModel": "deepseek-reasoner"
     },
     "Temperature": 1,
@@ -64,24 +40,24 @@
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "\n\n\n([현재원문]에서 {n: 원단어->번역단어}를 하나씩 보고 수정번역이 번역단어들을 수정번역하여 <수정된번역단어.json>을 완성해주세요.)\n\n",

@@ -2,40 +2,16 @@
     "TaskName": "VoiceInspection",
     "InputFormat": "text",
     "OpenAI": {
-        "BaseModel": {
-            "ShortTokensModel": "gpt-5-mini",
-            "LongTokensModel": "gpt-5-mini"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
-        "BaseModel": {
-            "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-sonnet-4-0"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "claude-sonnet-4-0"
     },
-    "GOOGLE":{
+    "GOOGLE": {
         "MasterModel": "gemini-2.5-flash"
     },
-    "DEEPSEEK":{
+    "DEEPSEEK": {
         "MasterModel": "deepseek-reasoner"
     },
     "Temperature": 1,
@@ -64,24 +40,24 @@
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "\n\n(<낭독샘플분리.json> 완성작업 시작)\n",
@@ -98,181 +74,6 @@
             "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "Output": "OUTPUT"
-        }
-    ],
-    "ExampleFineTuning": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "<낭독샘플글>이 있습니다. 이 <낭독샘플글>은 성우가 녹음한 <성우녹음>을 STT 인공지능이 텍스트로 변환한 것입니다. <낭독샘플글>은 @형태1: “지금/생성될/내용은/...내용.../문장/입니다”의 형태와, @형태2: “...내용...” 만으로 이루어진 형태인 2가지 형태로 존재합니다. 이 두 가지 형태를 분리하여 <낭독샘플분리.json>을 완성하는 작업을 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "(<낭독샘플분리.json>)\n",
-                    "Message": "{‘낭독샘플분리’: [{‘낭독샘플’: ‘지금/생성될/내용은/최근/암/뇌심혈관질환/당뇨/정신질환/등의/만성난치성질환이/전체/사망원인의/약/80/퍼센트/이상을/차지하고/있다/문장/입니다’, ‘형태’: ‘@형태1’}, {‘낭독샘플’: ‘지금/생성될/내용은/난칫병이란/약/또는/수술로/고치기/어려운/병을/말/한다문장/입니다’, ‘형태’: ‘@형태1’}, ..., {‘낭독샘플3’: ‘자연이/키운/신선하고/오염되지/않은/당해/수확한/식물종자를/엄선한다.’, ‘형태’: ‘@형태2’}]}"
-                },
-                {
-                    "Mark": "\n\n(@형태1 예시)\n",
-                    "Message": "지금/생성될/내용은/최근/암/뇌심혈관질환/당뇨/정신질환/등의/만성난치성질환이/전체/사망원인의/약/80/퍼센트/이상을/차지하고/있다/문장/입니다n\n(@형태2 예시)\n최근/암/뇌심혈관질환/당뇨/정신질환/등의/만성난치성질환이/전체/사망원인의/약/80/퍼센트/이상을/차지하고/있다"
-                },
-                {
-                    "Mark": "\n\n(<낭독샘플분리.json>을 완성 방법)\n",
-                    "Message": "1. <낭독샘플글>은 @형태1: “지금/생성될/내용은/...내용.../문장/입니다”의 형태와, @형태2: “...내용...” 만으로 이루어진 형태인 2가지 형태로 존재합니다.\n2. <낭독샘플글>에서 발견되는 형태1과 형태2를 순서대로 나열한 다음, ‘형태’에 @형태1과 @형태2로 태깅하여 <낭독샘플분리.json>을 완성합니다."
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n(<낭독샘플분리.json> 완성작업 시작)\n",
-                    "InputMark": "<낭독샘플글>\n",
-                    "Input": "INPUT",
-                    "InputMark2": "",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "<낭독샘플분리.json>",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "Output": "OUTPUT"
-        }
-    ],
-    "Memory": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "<낭독샘플글>이 있습니다. 이 <낭독샘플글>은 성우가 녹음한 <성우녹음>을 STT 인공지능이 텍스트로 변환한 것입니다. <낭독샘플글>은 @형태1: “지금/생성될/내용은/...내용.../문장/입니다”의 형태와, @형태2: “...내용...” 만으로 이루어진 형태인 2가지 형태로 존재합니다. 이 두 가지 형태를 분리하여 <낭독샘플분리.json>을 완성하는 작업을 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "(<낭독샘플분리.json>)\n",
-                    "Message": "{‘낭독샘플분리’: [{‘낭독샘플’: ‘지금/생성될/내용은/최근/암/뇌심혈관질환/당뇨/정신질환/등의/만성난치성질환이/전체/사망원인의/약/80/퍼센트/이상을/차지하고/있다/문장/입니다’, ‘형태’: ‘@형태1’}, {‘낭독샘플’: ‘지금/생성될/내용은/난칫병이란/약/또는/수술로/고치기/어려운/병을/말/한다문장/입니다’, ‘형태’: ‘@형태1’}, ..., {‘낭독샘플3’: ‘자연이/키운/신선하고/오염되지/않은/당해/수확한/식물종자를/엄선한다.’, ‘형태’: ‘@형태2’}]}"
-                },
-                {
-                    "Mark": "\n\n(@형태1 예시)\n",
-                    "Message": "지금/생성될/내용은/최근/암/뇌심혈관질환/당뇨/정신질환/등의/만성난치성질환이/전체/사망원인의/약/80/퍼센트/이상을/차지하고/있다/문장/입니다n\n(@형태2 예시)\n최근/암/뇌심혈관질환/당뇨/정신질환/등의/만성난치성질환이/전체/사망원인의/약/80/퍼센트/이상을/차지하고/있다"
-                },
-                {
-                    "Mark": "\n\n(<낭독샘플분리.json>을 완성 방법)\n",
-                    "Message": "1. <낭독샘플글>은 @형태1: “지금/생성될/내용은/...내용.../문장/입니다”의 형태와, @형태2: “...내용...” 만으로 이루어진 형태인 2가지 형태로 존재합니다.\n2. <낭독샘플글>에서 발견되는 형태1과 형태2를 순서대로 나열한 다음, ‘형태’에 @형태1과 @형태2로 태깅하여 <낭독샘플분리.json>을 완성합니다."
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n(<낭독샘플분리.json> 완성작업 시작)\n",
-                    "InputMark": "<낭독샘플글>\n",
-                    "InputStarter": "",
-                    "InputMemory": "InputMemory",
-                    "Input": "INPUT",
-                    "InputEnder": "",
-                    "InputMark2": "",
-                    "InputMemory2": "InputMemory2",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "<낭독샘플분리.json>",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "OutputMemory": "OutputMemory",
-            "Output": "OUTPUT",
-            "OutputEnder": "OutputEnder"
-        }
-    ],
-    "MemoryFineTuning": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "<낭독샘플글>이 있습니다. 이 <낭독샘플글>은 성우가 녹음한 <성우녹음>을 STT 인공지능이 텍스트로 변환한 것입니다. <낭독샘플글>은 @형태1: “지금/생성될/내용은/...내용.../문장/입니다”의 형태와, @형태2: “...내용...” 만으로 이루어진 형태인 2가지 형태로 존재합니다. 이 두 가지 형태를 분리하여 <낭독샘플분리.json>을 완성하는 작업을 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "(<낭독샘플분리.json>)\n",
-                    "Message": "{‘낭독샘플분리’: [{‘낭독샘플’: ‘지금/생성될/내용은/최근/암/뇌심혈관질환/당뇨/정신질환/등의/만성난치성질환이/전체/사망원인의/약/80/퍼센트/이상을/차지하고/있다/문장/입니다’, ‘형태’: ‘@형태1’}, {‘낭독샘플’: ‘지금/생성될/내용은/난칫병이란/약/또는/수술로/고치기/어려운/병을/말/한다문장/입니다’, ‘형태’: ‘@형태1’}, ..., {‘낭독샘플3’: ‘자연이/키운/신선하고/오염되지/않은/당해/수확한/식물종자를/엄선한다.’, ‘형태’: ‘@형태2’}]}"
-                },
-                {
-                    "Mark": "\n\n(@형태1 예시)\n",
-                    "Message": "지금/생성될/내용은/최근/암/뇌심혈관질환/당뇨/정신질환/등의/만성난치성질환이/전체/사망원인의/약/80/퍼센트/이상을/차지하고/있다/문장/입니다n\n(@형태2 예시)\n최근/암/뇌심혈관질환/당뇨/정신질환/등의/만성난치성질환이/전체/사망원인의/약/80/퍼센트/이상을/차지하고/있다"
-                },
-                {
-                    "Mark": "\n\n(<낭독샘플분리.json>을 완성 방법)\n",
-                    "Message": "1. <낭독샘플글>은 @형태1: “지금/생성될/내용은/...내용.../문장/입니다”의 형태와, @형태2: “...내용...” 만으로 이루어진 형태인 2가지 형태로 존재합니다.\n2. <낭독샘플글>에서 발견되는 형태1과 형태2를 순서대로 나열한 다음, ‘형태’에 @형태1과 @형태2로 태깅하여 <낭독샘플분리.json>을 완성합니다."
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n(<낭독샘플분리.json> 완성작업 시작)\n",
-                    "InputMark": "<낭독샘플글>\n",
-                    "InputStarter": "",
-                    "InputMemory": "InputMemory",
-                    "Input": "INPUT",
-                    "InputEnder": "",
-                    "InputMark2": "",
-                    "InputMemory2": "InputMemory2",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "<낭독샘플분리.json>",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "OutputMemory": "OutputMemory",
-            "Output": "OUTPUT",
-            "OutputEnder": "OutputEnder"
         }
     ]
 }

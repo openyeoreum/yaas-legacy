@@ -2,40 +2,16 @@
     "TaskName": "UniqueWordListGen",
     "InputFormat": "text",
     "OpenAI": {
-        "BaseModel": {
-            "ShortTokensModel": "gpt-5-mini",
-            "LongTokensModel": "gpt-5-mini"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
-        "BaseModel": {
-            "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-sonnet-4-0"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "claude-sonnet-4-0"
     },
-    "GOOGLE":{
+    "GOOGLE": {
         "MasterModel": "gemini-2.5-flash"
     },
-    "DEEPSEEK":{
+    "DEEPSEEK": {
         "MasterModel": "deepseek-reasoner"
     },
     "Temperature": 1,
@@ -64,24 +40,24 @@
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "\n\n\n(<도서내용>을 보고 번역시 일관성이 필요한 특정 사람이나 장소, 사물, 개념 등의 고유명사를 파악하여 <고유명사메모장.json>을 완성해주세요)\n\n",

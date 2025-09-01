@@ -2,40 +2,16 @@
     "TaskName": "BodyToneEditing",
     "InputFormat": "text",
     "OpenAI": {
-        "BaseModel": {
-            "ShortTokensModel": "gpt-5-mini",
-            "LongTokensModel": "gpt-5-mini"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
-        "BaseModel": {
-            "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-sonnet-4-0"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "claude-sonnet-4-0"
     },
-    "GOOGLE":{
+    "GOOGLE": {
         "MasterModel": "gemini-2.5-flash"
     },
-    "DEEPSEEK":{
+    "DEEPSEEK": {
         "MasterModel": "deepseek-reasoner"
     },
     "Temperature": 1,
@@ -64,24 +40,24 @@
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "\n\n\n(<현재도서내용>의 어조를 변경하여 <어조일치현재도서내용.json>을 완성해주세요.)\n\n",
@@ -98,181 +74,6 @@
             "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "Output": "OUTPUT"
-        }
-    ],
-    "ExampleFineTuning": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "당신은 <현재도서내용>을 <이전도서내용>와 일치된 어조로 변경하는 작가 입니다. <이전도서내용>에 작성된 '서술문(내레이션)'의 어조를 확인한 뒤 <현재도서내용>을 <이전도서내용>의 어조와 동일하게 변경하여 <어조일치현재도서내용.json>을 완성합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "('격식체'와 '평서체'와 '비격식체' 어조의 정의)\n",
-                    "Message": "격식체: 격식체는 서술문의 종결어미가 '~했습니다.', '~입니다.' '~였습니다.'등과 같은 격식적인 어조를 의미합니다.\n평서체: 평서체는 서술문의 종결어미가 '~했다.', '~이다.' '~였다.'등과 같은 평서적인 어조를 의미합니다.\n비격식체: 비격식체는 서술문의 종결어미가 '~했어.', '~이었어.', '~였어.'등과 같은 비격식적인 어조를 의미합니다.\n\n* 도서내용에서 격식체와 평서체와 비격식체를 구분하는 기준은 <이전도서내용>과 <현재도서내용>에 존재하는 '서술문(내레이션)'이 기준으로, '대화문'과 '인용문' 등은 그 기준이 아닙니다."
-                },
-                {
-                    "Mark": "\n\n(<어조일치현재도서내용.json>의 구조 및 내용)\n",
-                    "Message": "{'어조일치': {'이전도서어조': '<현재도서내용>을 <이전도서내용>과 동일하게 작성하기 위해 [이전도서어조]를 체크하여 '격식체', '평서체', '비격식체' 중 하나를 작성', '어조일치현재도서내용': '<현재도서내용>을 <이전도서내용>의 서술문(내레이션)과 일치된 어조로 변경하여 작성'}}"
-                },
-                {
-                    "Mark": "\n\n(<어조일치현재도서내용.json> 완성 절차 및 방법)\n",
-                    "Message": "1. <이전도서내용>은 [이전도서어조]와 [이전도서내용]으로 구성되어 있습니다. 만약 [이전도서내용]이 '서술문(내레이션)' 없이 '대화문'과 '인용문'으로만 이루어져 있더라도 [이전도서어조]을 확인하면 됩니다.\n2. 우선 <현재도서내용>을 <이전도서내용>과 동일하게 작성하기 위해 [이전도서어조]를 체크하여 '격식체', '평서체', '비격식체' 중 하나를 '이전도서어조'에 작성합니다.\n3. <현재도서내용>의 '서술문(내레이션)'부분을 <이전도서내용>의 '서술문(내레이션)'부분과 일치된 어조로 변경하여 <어조일치현재도서내용.json>을 완성합니다.\n4. <현재도서내용>의 [^n]과 [^n: ...]도 주석 표기로 <이전도서내용>의 '서술문(내레이션)'부분과 일치된 어조로 변경하여야 합니다.\n5. 그러나, <현재도서내용>의 \"대화문\"은 어조 변경의 대상이 아닙니다. <현재도서내용>에 작성된 그대로 변경 없이 작성하시면 됩니다.\n6. 만약 <현재도서내용>에서 변경할 부분이 없으면 그대로 작성하여 <어조일치현재도서내용.json>을 완성하면 됩니다."
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n\n(<현재도서내용>의 어조를 변경하여 <어조일치현재도서내용.json>을 완성해주세요.)\n\n",
-                    "InputMark": "<이전도서내용>\n",
-                    "Input": "INPUT",
-                    "InputMark2": "",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "\n\n<어조일치현재도서내용.json>",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "Output": "OUTPUT"
-        }
-    ],
-    "Memory": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "당신은 <현재도서내용>을 <이전도서내용>와 일치된 어조로 변경하는 작가 입니다. <이전도서내용>에 작성된 '서술문(내레이션)'의 어조를 확인한 뒤 <현재도서내용>을 <이전도서내용>의 어조와 동일하게 변경하여 <어조일치현재도서내용.json>을 완성합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "('격식체'와 '평서체'와 '비격식체' 어조의 정의)\n",
-                    "Message": "격식체: 격식체는 서술문의 종결어미가 '~했습니다.', '~입니다.' '~였습니다.'등과 같은 격식적인 어조를 의미합니다.\n평서체: 평서체는 서술문의 종결어미가 '~했다.', '~이다.' '~였다.'등과 같은 평서적인 어조를 의미합니다.\n비격식체: 비격식체는 서술문의 종결어미가 '~했어.', '~이었어.', '~였어.'등과 같은 비격식적인 어조를 의미합니다.\n\n* 도서내용에서 격식체와 평서체와 비격식체를 구분하는 기준은 <이전도서내용>과 <현재도서내용>에 존재하는 '서술문(내레이션)'이 기준으로, '대화문'과 '인용문' 등은 그 기준이 아닙니다."
-                },
-                {
-                    "Mark": "\n\n(<어조일치현재도서내용.json>의 구조 및 내용)\n",
-                    "Message": "{'어조일치': {'이전도서어조': '<현재도서내용>을 <이전도서내용>과 동일하게 작성하기 위해 [이전도서어조]를 체크하여 '격식체', '평서체', '비격식체' 중 하나를 작성', '어조일치현재도서내용': '<현재도서내용>을 <이전도서내용>의 서술문(내레이션)과 일치된 어조로 변경하여 작성'}}"
-                },
-                {
-                    "Mark": "\n\n(<어조일치현재도서내용.json> 완성 절차 및 방법)\n",
-                    "Message": "1. <이전도서내용>은 [이전도서어조]와 [이전도서내용]으로 구성되어 있습니다. 만약 [이전도서내용]이 '서술문(내레이션)' 없이 '대화문'과 '인용문'으로만 이루어져 있더라도 [이전도서어조]을 확인하면 됩니다.\n2. 우선 <현재도서내용>을 <이전도서내용>과 동일하게 작성하기 위해 [이전도서어조]를 체크하여 '격식체', '평서체', '비격식체' 중 하나를 '이전도서어조'에 작성합니다.\n3. <현재도서내용>의 '서술문(내레이션)'부분을 <이전도서내용>의 '서술문(내레이션)'부분과 일치된 어조로 변경하여 <어조일치현재도서내용.json>을 완성합니다.\n4. <현재도서내용>의 [^n]과 [^n: ...]도 주석 표기로 <이전도서내용>의 '서술문(내레이션)'부분과 일치된 어조로 변경하여야 합니다.\n5. 그러나, <현재도서내용>의 \"대화문\"은 어조 변경의 대상이 아닙니다. <현재도서내용>에 작성된 그대로 변경 없이 작성하시면 됩니다.\n6. 만약 <현재도서내용>에서 변경할 부분이 없으면 그대로 작성하여 <어조일치현재도서내용.json>을 완성하면 됩니다."
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n\n(<현재도서내용>의 어조를 변경하여 <어조일치현재도서내용.json>을 완성해주세요.)\n\n",
-                    "InputMark": "<이전도서내용>\n",
-                    "InputStarter": "",
-                    "InputMemory": "InputMemory",
-                    "Input": "INPUT",
-                    "InputEnder": "",
-                    "InputMark2": "",
-                    "InputMemory2": "InputMemory2",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "\n\n<어조일치현재도서내용.json>",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "OutputMemory": "OutputMemory",
-            "Output": "OUTPUT",
-            "OutputEnder": "OutputEnder"
-        }
-    ],
-    "MemoryFineTuning": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "당신은 <현재도서내용>을 <이전도서내용>와 일치된 어조로 변경하는 작가 입니다. <이전도서내용>에 작성된 '서술문(내레이션)'의 어조를 확인한 뒤 <현재도서내용>을 <이전도서내용>의 어조와 동일하게 변경하여 <어조일치현재도서내용.json>을 완성합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "('격식체'와 '평서체'와 '비격식체' 어조의 정의)\n",
-                    "Message": "격식체: 격식체는 서술문의 종결어미가 '~했습니다.', '~입니다.' '~였습니다.'등과 같은 격식적인 어조를 의미합니다.\n평서체: 평서체는 서술문의 종결어미가 '~했다.', '~이다.' '~였다.'등과 같은 평서적인 어조를 의미합니다.\n비격식체: 비격식체는 서술문의 종결어미가 '~했어.', '~이었어.', '~였어.'등과 같은 비격식적인 어조를 의미합니다.\n\n* 도서내용에서 격식체와 평서체와 비격식체를 구분하는 기준은 <이전도서내용>과 <현재도서내용>에 존재하는 '서술문(내레이션)'이 기준으로, '대화문'과 '인용문' 등은 그 기준이 아닙니다."
-                },
-                {
-                    "Mark": "\n\n(<어조일치현재도서내용.json>의 구조 및 내용)\n",
-                    "Message": "{'어조일치': {'이전도서어조': '<현재도서내용>을 <이전도서내용>과 동일하게 작성하기 위해 [이전도서어조]를 체크하여 '격식체', '평서체', '비격식체' 중 하나를 작성', '어조일치현재도서내용': '<현재도서내용>을 <이전도서내용>의 서술문(내레이션)과 일치된 어조로 변경하여 작성'}}"
-                },
-                {
-                    "Mark": "\n\n(<어조일치현재도서내용.json> 완성 절차 및 방법)\n",
-                    "Message": "1. <이전도서내용>은 [이전도서어조]와 [이전도서내용]으로 구성되어 있습니다. 만약 [이전도서내용]이 '서술문(내레이션)' 없이 '대화문'과 '인용문'으로만 이루어져 있더라도 [이전도서어조]을 확인하면 됩니다.\n2. 우선 <현재도서내용>을 <이전도서내용>과 동일하게 작성하기 위해 [이전도서어조]를 체크하여 '격식체', '평서체', '비격식체' 중 하나를 '이전도서어조'에 작성합니다.\n3. <현재도서내용>의 '서술문(내레이션)'부분을 <이전도서내용>의 '서술문(내레이션)'부분과 일치된 어조로 변경하여 <어조일치현재도서내용.json>을 완성합니다.\n4. <현재도서내용>의 [^n]과 [^n: ...]도 주석 표기로 <이전도서내용>의 '서술문(내레이션)'부분과 일치된 어조로 변경하여야 합니다.\n5. 그러나, <현재도서내용>의 \"대화문\"은 어조 변경의 대상이 아닙니다. <현재도서내용>에 작성된 그대로 변경 없이 작성하시면 됩니다.\n6. 만약 <현재도서내용>에서 변경할 부분이 없으면 그대로 작성하여 <어조일치현재도서내용.json>을 완성하면 됩니다."
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n\n(<현재도서내용>의 어조를 변경하여 <어조일치현재도서내용.json>을 완성해주세요.)\n\n",
-                    "InputMark": "<이전도서내용>\n",
-                    "InputStarter": "",
-                    "InputMemory": "InputMemory",
-                    "Input": "INPUT",
-                    "InputEnder": "",
-                    "InputMark2": "",
-                    "InputMemory2": "InputMemory2",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "\n\n<어조일치현재도서내용.json>",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "OutputMemory": "OutputMemory",
-            "Output": "OUTPUT",
-            "OutputEnder": "OutputEnder"
         }
     ]
 }

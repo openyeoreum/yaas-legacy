@@ -101,12 +101,12 @@ def LLMmessages(Process, Input, Model, InputFormat = "text", MainLang = "ko", Ro
                 "content": Example[1]["Request"][0]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][0]["Message"]) +
                             Example[1]["Request"][1]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][1]["Message"]) +
                             Example[1]["Request"][2]["Mark"] + ConvertQuotes(Model, Example[1]["Request"][2]["Message"]) +
-                            Example[1]["Request"][3]["Mark"] + Example[1]["Request"][3]["InputExampleMark"] + str(Example[1]["Request"][3]["InputExample"]) +
-                            Example[1]["Request"][3]["OutputExampleMark"] + str(Example[1]["Request"][3]["OutputExample"]) +
-                            Example[1]["Request"][4]["Mark"] + Example[1]["Request"][4]["InputExampleMark"] + str(Example[1]["Request"][4]["InputExample"]) +
-                            Example[1]["Request"][4]["OutputExampleMark"] + str(Example[1]["Request"][4]["OutputExample"]) +
-                            Example[1]["Request"][5]["Mark"] + Example[1]["Request"][5]["InputExampleMark"] + str(Example[1]["Request"][5]["InputExample"]) +
-                            Example[1]["Request"][5]["OutputExampleMark"] + str(Example[1]["Request"][5]["OutputExample"]) +
+                            Example[1]["Request"][3]["Mark"] + Example[1]["Request"][3]["InputMasterMark"] + str(Example[1]["Request"][3]["InputMaster"]) +
+                            Example[1]["Request"][3]["OutputMasterMark"] + str(Example[1]["Request"][3]["OutputMaster"]) +
+                            Example[1]["Request"][4]["Mark"] + Example[1]["Request"][4]["InputMasterMark"] + str(Example[1]["Request"][4]["InputMaster"]) +
+                            Example[1]["Request"][4]["OutputMasterMark"] + str(Example[1]["Request"][4]["OutputMaster"]) +
+                            Example[1]["Request"][5]["Mark"] + Example[1]["Request"][5]["InputMasterMark"] + str(Example[1]["Request"][5]["InputMaster"]) +
+                            Example[1]["Request"][5]["OutputMasterMark"] + str(Example[1]["Request"][5]["OutputMaster"]) +
                             Example[1]["Request"][6]["Mark"] + Example[1]["Request"][6]["InputMark"] + str(Input) + Example[1]["Request"][6]["InputMark2"] + str(input2)
             },
             {
@@ -133,10 +133,10 @@ def LLMmessages(Process, Input, Model, InputFormat = "text", MainLang = "ko", Ro
                 "content": Memory[1]["Request"][0]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][0]["Message"]) +
                             Memory[1]["Request"][1]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][1]["Message"]) +
                             Memory[1]["Request"][2]["Mark"] + ConvertQuotes(Model, Memory[1]["Request"][2]["Message"]) +
-                            Memory[1]["Request"][3]["Mark"] + Memory[1]["Request"][3]["InputExampleMark"] + Memory[1]["Request"][3]["InputExample"] +
-                            Memory[1]["Request"][3]["OutputExampleMark"] + Memory[1]["Request"][3]["OutputExample"] +
-                            Memory[1]["Request"][4]["Mark"] + Memory[1]["Request"][4]["InputExampleMark"] + Memory[1]["Request"][4]["InputExample"] +
-                            Memory[1]["Request"][4]["OutputExampleMark"] + Memory[1]["Request"][4]["OutputExample"] +
+                            Memory[1]["Request"][3]["Mark"] + Memory[1]["Request"][3]["InputMasterMark"] + Memory[1]["Request"][3]["InputMaster"] +
+                            Memory[1]["Request"][3]["OutputMasterMark"] + Memory[1]["Request"][3]["OutputMaster"] +
+                            Memory[1]["Request"][4]["Mark"] + Memory[1]["Request"][4]["InputMasterMark"] + Memory[1]["Request"][4]["InputMaster"] +
+                            Memory[1]["Request"][4]["OutputMasterMark"] + Memory[1]["Request"][4]["OutputMaster"] +
                             Memory[1]["Request"][5]["Mark"] + Memory[1]["Request"][5]["InputMark"] +
                             Memory[1]["Request"][5]["InputStarter"] +
                             str(inputMemory) +

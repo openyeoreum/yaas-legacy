@@ -98,12 +98,12 @@ def LLMmessages(Process, Input, Model, InputFormat = "text", MainLang = "ko", Ro
             "content": PromptDic[1]["Request"][0]["Mark"] + ConvertQuotes(Model, PromptDic[1]["Request"][0]["Message"]) +
                         PromptDic[1]["Request"][1]["Mark"] + ConvertQuotes(Model, PromptDic[1]["Request"][1]["Message"]) +
                         PromptDic[1]["Request"][2]["Mark"] + ConvertQuotes(Model, PromptDic[1]["Request"][2]["Message"]) +
-                        PromptDic[1]["Request"][3]["Mark"] + PromptDic[1]["Request"][3]["InputPromptDicMark"] + str(PromptDic[1]["Request"][3]["InputPromptDic"]) +
-                        PromptDic[1]["Request"][3]["OutputPromptDicMark"] + str(PromptDic[1]["Request"][3]["OutputPromptDic"]) +
-                        PromptDic[1]["Request"][4]["Mark"] + PromptDic[1]["Request"][4]["InputPromptDicMark"] + str(PromptDic[1]["Request"][4]["InputPromptDic"]) +
-                        PromptDic[1]["Request"][4]["OutputPromptDicMark"] + str(PromptDic[1]["Request"][4]["OutputPromptDic"]) +
-                        PromptDic[1]["Request"][5]["Mark"] + PromptDic[1]["Request"][5]["InputPromptDicMark"] + str(PromptDic[1]["Request"][5]["InputPromptDic"]) +
-                        PromptDic[1]["Request"][5]["OutputPromptDicMark"] + str(PromptDic[1]["Request"][5]["OutputPromptDic"]) +
+                        PromptDic[1]["Request"][3]["Mark"] + PromptDic[1]["Request"][3]["InputMasterMark"] + str(PromptDic[1]["Request"][3]["InputMaster"]) +
+                        PromptDic[1]["Request"][3]["OutputMasterMark"] + str(PromptDic[1]["Request"][3]["OutputMaster"]) +
+                        PromptDic[1]["Request"][4]["Mark"] + PromptDic[1]["Request"][4]["InputMasterMark"] + str(PromptDic[1]["Request"][4]["InputMaster"]) +
+                        PromptDic[1]["Request"][4]["OutputMasterMark"] + str(PromptDic[1]["Request"][4]["OutputMaster"]) +
+                        PromptDic[1]["Request"][5]["Mark"] + PromptDic[1]["Request"][5]["InputMasterMark"] + str(PromptDic[1]["Request"][5]["InputMaster"]) +
+                        PromptDic[1]["Request"][5]["OutputMasterMark"] + str(PromptDic[1]["Request"][5]["OutputMaster"]) +
                         PromptDic[1]["Request"][6]["Mark"] + PromptDic[1]["Request"][6]["InputMark"] + str(Input) + PromptDic[1]["Request"][6]["InputMark2"] + str(input2)
         },
         {

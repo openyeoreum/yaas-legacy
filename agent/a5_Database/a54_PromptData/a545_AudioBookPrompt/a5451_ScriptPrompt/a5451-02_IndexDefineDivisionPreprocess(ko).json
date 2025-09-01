@@ -2,40 +2,16 @@
     "TaskName": "IndexDefineDivisionPreprocess",
     "InputFormat": "text",
     "OpenAI": {
-        "BaseModel": {
-            "ShortTokensModel": "gpt-5-mini",
-            "LongTokensModel": "gpt-5-mini"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
-        "BaseModel": {
-            "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-sonnet-4-0"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "claude-sonnet-4-0"
     },
-    "GOOGLE":{
+    "GOOGLE": {
         "MasterModel": "gemini-2.5-flash"
     },
-    "DEEPSEEK":{
+    "DEEPSEEK": {
         "MasterModel": "deepseek-reasoner"
     },
     "Temperature": 1,
@@ -64,17 +40,17 @@
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "\n\n(목차 분할 작업1)\n",
-                    "InputExampleMark": "<목차1>\n",
-                    "InputExample": "카이스트 명상 수업\n\n들어가며\n\n1부 내 삶의 터닝 포인트가 된 카이스트 명상 수업\n카이스트 사태와 성찰\n수업을 준비하며\n첫 번째 수업: 마음을 정의해본다면\n두 번째 수업: 자기 돌아보기\n세 번째 수업: 마음은 내가 살아온 사진이다\n네 번째 수업: 내 삶을 바꿔놓은 마음빼기 명상\n다섯 번째 수업: 마음빼기 명상이 가져온 변화들\n여섯 번째 수업: 철학과 명상의 만남\n일곱 번째 수업: 뇌과학과 명상\n명상을 본격적으로 시작하기 전에 알아야 할 것들\n\n2부 나의 명상 이야기\n\n나의 인생, 그리고 명상을 하게 되었다\n내게 일어난 명상 효과\n나의 첫 명상 이야기\n명상을 하며 내가 비워낸 마음들\n\n3부 명상의 과학적 효과\n사람들이 명상을 하는 이유\n명상 효과 1: 행복\n명상 효과 2: 뇌파 변화\n명상 효과 3: 스트레스와 우울감 감소\n명상 효과 4: 인지오류 감소\n명상 효과 5: 자기 이해와 성찰\n명상 효과 6: 자가존중감과 감사 성향\n\n4부 명상이 필요한 순간\n일상에서의 명상 프로그램\n재난을 예방하고 극복하는 명상\n소통과 융합을 위한 명상\n코로나19 팬데믹과 4차 산업혁명 시대의 명상\n코세라 온라인 명상수업",
-                    "OutputExampleMark": "\n\n<분할된 목차 리스트1>\n",
-                    "OutputExample": [
+                    "InputMasterMark": "<목차1>\n",
+                    "InputMaster": "카이스트 명상 수업\n\n들어가며\n\n1부 내 삶의 터닝 포인트가 된 카이스트 명상 수업\n카이스트 사태와 성찰\n수업을 준비하며\n첫 번째 수업: 마음을 정의해본다면\n두 번째 수업: 자기 돌아보기\n세 번째 수업: 마음은 내가 살아온 사진이다\n네 번째 수업: 내 삶을 바꿔놓은 마음빼기 명상\n다섯 번째 수업: 마음빼기 명상이 가져온 변화들\n여섯 번째 수업: 철학과 명상의 만남\n일곱 번째 수업: 뇌과학과 명상\n명상을 본격적으로 시작하기 전에 알아야 할 것들\n\n2부 나의 명상 이야기\n\n나의 인생, 그리고 명상을 하게 되었다\n내게 일어난 명상 효과\n나의 첫 명상 이야기\n명상을 하며 내가 비워낸 마음들\n\n3부 명상의 과학적 효과\n사람들이 명상을 하는 이유\n명상 효과 1: 행복\n명상 효과 2: 뇌파 변화\n명상 효과 3: 스트레스와 우울감 감소\n명상 효과 4: 인지오류 감소\n명상 효과 5: 자기 이해와 성찰\n명상 효과 6: 자가존중감과 감사 성향\n\n4부 명상이 필요한 순간\n일상에서의 명상 프로그램\n재난을 예방하고 극복하는 명상\n소통과 융합을 위한 명상\n코로나19 팬데믹과 4차 산업혁명 시대의 명상\n코세라 온라인 명상수업",
+                    "OutputMasterMark": "\n\n<분할된 목차 리스트1>\n",
+                    "OutputMaster": [
                         {
                             "Count": 1,
                             "Text": "카이스트 명상 수업\n\n들어가며\n\n1부 내 삶의 터닝 포인트가 된 카이스트 명상 수업\n카이스트 사태와 성찰\n수업을 준비하며\n첫 번째 수업: 마음을 정의해본다면\n두 번째 수업: 자기 돌아보기\n세 번째 수업: 마음은 내가 살아온 사진이다\n네 번째 수업: 내 삶을 바꿔놓은 마음빼기 명상\n다섯 번째 수업: 마음빼기 명상이 가져온 변화들\n여섯 번째 수업: 철학과 명상의 만남\n일곱 번째 수업: 뇌과학과 명상\n명상을 본격적으로 시작하기 전에 알아야 할 것들\n\n2부 나의 명상 이야기\n\n나의 인생, 그리고 명상을 하게 되었다\n내게 일어난 명상 효과\n나의 첫 명상 이야기\n명상을 하며 내가 비워낸 마음들\n\n"
@@ -87,10 +63,10 @@
                 },
                 {
                     "Mark": "\n\n(목차 분할 작업2)\n",
-                    "InputExampleMark": "<목차2>\n",
-                    "InputExample": "나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n\n소 탄 노인\n노인의 정체\n신분의 굴레\n안가노안\n기묘사화\n비부\n보충대\n송사련\n잇따른 역모\n불만 세력\n고변\n안처겸 옥사\n상황의 변화\n동인과 서인\n이이의 죽음\n\n2장 안씨 집안\n\n안가의 노력\n붕당의 죄\n법률의 적용\n감형\n기묘당 선언\n기묘당적\n기묘당인\n기묘사림\n기묘록보유\n역모의 재규정\n송사 준비\n우군들\n\n문중일지 1 시효와 정의\n\n3장 송사의 배경\n\n소제기\n격쟁\n원고의 주장\n이어진 격쟁\n시효\n과한법\n수교와 법전\n법률의 해석\n송관\n곽사원 둑소송\n논란의 비롯\n피혐\n선조의 분노\n처벌\n\n4장 소송의 진행\n\n친착결절\n문서인부\n서증\n입증\n유서\n증거\n입속입안\n반전\n판결이유\n비장의 무기\n파멸\n\n파멸에 대한 평가",
-                    "OutputExampleMark": "\n\n<분할된 목차 리스트2>\n",
-                    "OutputExample": [
+                    "InputMasterMark": "<목차2>\n",
+                    "InputMaster": "나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n\n소 탄 노인\n노인의 정체\n신분의 굴레\n안가노안\n기묘사화\n비부\n보충대\n송사련\n잇따른 역모\n불만 세력\n고변\n안처겸 옥사\n상황의 변화\n동인과 서인\n이이의 죽음\n\n2장 안씨 집안\n\n안가의 노력\n붕당의 죄\n법률의 적용\n감형\n기묘당 선언\n기묘당적\n기묘당인\n기묘사림\n기묘록보유\n역모의 재규정\n송사 준비\n우군들\n\n문중일지 1 시효와 정의\n\n3장 송사의 배경\n\n소제기\n격쟁\n원고의 주장\n이어진 격쟁\n시효\n과한법\n수교와 법전\n법률의 해석\n송관\n곽사원 둑소송\n논란의 비롯\n피혐\n선조의 분노\n처벌\n\n4장 소송의 진행\n\n친착결절\n문서인부\n서증\n입증\n유서\n증거\n입속입안\n반전\n판결이유\n비장의 무기\n파멸\n\n파멸에 대한 평가",
+                    "OutputMasterMark": "\n\n<분할된 목차 리스트2>\n",
+                    "OutputMaster": [
                         {
                             "Count": 1,
                             "Text": "나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n\n소 탄 노인\n노인의 정체\n신분의 굴레\n안가노안\n기묘사화\n비부\n보충대\n송사련\n잇따른 역모\n불만 세력\n고변\n안처겸 옥사\n상황의 변화\n동인과 서인\n이이의 죽음\n\n2장 안씨 집안\n\n안가의 노력\n붕당의 죄\n법률의 적용\n감형\n기묘당 선언\n기묘당적\n기묘당인\n기묘사림\n기묘록보유\n역모의 재규정\n송사 준비\n우군들\n\n문중일지 1 시효와 정의\n\n"
@@ -115,198 +91,6 @@
             "OutputMark": "<분할된 목차 리스트3>\n",
             "OutputStarter": "",
             "Output": "OUTPUT"
-        }
-    ],
-    "ExampleFineTuning": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "당신은 도서의 목차 분할 전문가 입니다.\n그래서 지금 긴 도서목차를 분할하는 작업을 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
-                    "Mark": "(요청)\n",
-                    "Message": "1. 도서의 <목차>를 자세히 살펴보고 각 목차 부분중 분할하기 적합한 부분을 파악합니다.\n2. <목차>를 2개로 분할하여 <분할된 목차 리스트>를 완성합니다."
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n(목차 분할 작업1)\n",
-                    "InputExampleMark": "<목차1>\n",
-                    "InputExample": "카이스트 명상 수업\n\n들어가며\n\n1부 내 삶의 터닝 포인트가 된 카이스트 명상 수업\n카이스트 사태와 성찰\n수업을 준비하며\n첫 번째 수업: 마음을 정의해본다면\n두 번째 수업: 자기 돌아보기\n세 번째 수업: 마음은 내가 살아온 사진이다\n네 번째 수업: 내 삶을 바꿔놓은 마음빼기 명상\n다섯 번째 수업: 마음빼기 명상이 가져온 변화들\n여섯 번째 수업: 철학과 명상의 만남\n일곱 번째 수업: 뇌과학과 명상\n명상을 본격적으로 시작하기 전에 알아야 할 것들\n\n2부 나의 명상 이야기\n\n나의 인생, 그리고 명상을 하게 되었다\n내게 일어난 명상 효과\n나의 첫 명상 이야기\n명상을 하며 내가 비워낸 마음들\n\n3부 명상의 과학적 효과\n사람들이 명상을 하는 이유\n명상 효과 1: 행복\n명상 효과 2: 뇌파 변화\n명상 효과 3: 스트레스와 우울감 감소\n명상 효과 4: 인지오류 감소\n명상 효과 5: 자기 이해와 성찰\n명상 효과 6: 자가존중감과 감사 성향\n\n4부 명상이 필요한 순간\n일상에서의 명상 프로그램\n재난을 예방하고 극복하는 명상\n소통과 융합을 위한 명상\n코로나19 팬데믹과 4차 산업혁명 시대의 명상\n코세라 온라인 명상수업",
-                    "OutputExampleMark": "\n\n<분할된 목차 리스트1>\n",
-                    "OutputExample": [
-                        {
-                            "Count": 1,
-                            "Text": "카이스트 명상 수업\n\n들어가며\n\n1부 내 삶의 터닝 포인트가 된 카이스트 명상 수업\n카이스트 사태와 성찰\n수업을 준비하며\n첫 번째 수업: 마음을 정의해본다면\n두 번째 수업: 자기 돌아보기\n세 번째 수업: 마음은 내가 살아온 사진이다\n네 번째 수업: 내 삶을 바꿔놓은 마음빼기 명상\n다섯 번째 수업: 마음빼기 명상이 가져온 변화들\n여섯 번째 수업: 철학과 명상의 만남\n일곱 번째 수업: 뇌과학과 명상\n명상을 본격적으로 시작하기 전에 알아야 할 것들\n\n2부 나의 명상 이야기\n\n나의 인생, 그리고 명상을 하게 되었다\n내게 일어난 명상 효과\n나의 첫 명상 이야기\n명상을 하며 내가 비워낸 마음들\n\n"
-                        },
-                        {
-                            "Count": 2,
-                            "Text": "3부 명상의 과학적 효과\n사람들이 명상을 하는 이유\n명상 효과 1: 행복\n명상 효과 2: 뇌파 변화\n명상 효과 3: 스트레스와 우울감 감소\n명상 효과 4: 인지오류 감소\n명상 효과 5: 자기 이해와 성찰\n명상 효과 6: 자가존중감과 감사 성향\n\n4부 명상이 필요한 순간\n일상에서의 명상 프로그램\n재난을 예방하고 극복하는 명상\n소통과 융합을 위한 명상\n코로나19 팬데믹과 4차 산업혁명 시대의 명상\n코세라 온라인 명상수업"
-                        }
-                    ]
-                },
-                {
-                    "Mark": "\n\n(목차 분할 작업2)\n",
-                    "InputExampleMark": "<목차2>\n",
-                    "InputExample": "나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n\n소 탄 노인\n노인의 정체\n신분의 굴레\n안가노안\n기묘사화\n비부\n보충대\n송사련\n잇따른 역모\n불만 세력\n고변\n안처겸 옥사\n상황의 변화\n동인과 서인\n이이의 죽음\n\n2장 안씨 집안\n\n안가의 노력\n붕당의 죄\n법률의 적용\n감형\n기묘당 선언\n기묘당적\n기묘당인\n기묘사림\n기묘록보유\n역모의 재규정\n송사 준비\n우군들\n\n문중일지 1 시효와 정의\n\n3장 송사의 배경\n\n소제기\n격쟁\n원고의 주장\n이어진 격쟁\n시효\n과한법\n수교와 법전\n법률의 해석\n송관\n곽사원 둑소송\n논란의 비롯\n피혐\n선조의 분노\n처벌\n\n4장 소송의 진행\n\n친착결절\n문서인부\n서증\n입증\n유서\n증거\n입속입안\n반전\n판결이유\n비장의 무기\n파멸\n\n파멸에 대한 평가",
-                    "OutputExampleMark": "\n\n<분할된 목차 리스트2>\n",
-                    "OutputExample": [
-                        {
-                            "Count": 1,
-                            "Text": "나는 선비로소이다\n\n책을 펴내며\n\n1장 송씨 집안\n\n소 탄 노인\n노인의 정체\n신분의 굴레\n안가노안\n기묘사화\n비부\n보충대\n송사련\n잇따른 역모\n불만 세력\n고변\n안처겸 옥사\n상황의 변화\n동인과 서인\n이이의 죽음\n\n2장 안씨 집안\n\n안가의 노력\n붕당의 죄\n법률의 적용\n감형\n기묘당 선언\n기묘당적\n기묘당인\n기묘사림\n기묘록보유\n역모의 재규정\n송사 준비\n우군들\n\n문중일지 1 시효와 정의\n\n"
-                        },
-                        {
-                            "Count": 2,
-                            "Text": "3장 송사의 배경\n\n소제기\n격쟁\n원고의 주장\n이어진 격쟁\n시효\n과한법\n수교와 법전\n법률의 해석\n송관\n곽사원 둑소송\n논란의 비롯\n피혐\n선조의 분노\n처벌\n\n4장 소송의 진행\n\n친착결절\n문서인부\n서증\n입증\n유서\n증거\n입속입안\n반전\n판결이유\n비장의 무기\n파멸\n\n파멸에 대한 평가"
-                        }
-                    ]
-                },
-                {
-                    "Mark": "\n\n(목차 분할 작업3)\n",
-                    "InputMark": "<목차3>\n",
-                    "Input": "INPUT",
-                    "InputMark2": "",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "<분할된 목차 리스트3>\n",
-            "OutputStarter": "",
-            "Output": "OUTPUT"
-        }
-    ],
-    "Memory": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "당신은 도서의 목차 분할 전문가 입니다.\n그래서 지금 긴 도서목차를 분할하는 작업을 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
-                    "Mark": "(요청)\n",
-                    "Message": "1. 도서의 <목차>를 자세히 살펴보고 각 목차 부분중 분할하기 적합한 부분을 파악합니다.\n2. <목차>를 2개로 분할하여 <분할된 목차 리스트>를 완성합니다."
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n(목차 분할 작업)\n",
-                    "InputMark": "<목차>\n",
-                    "InputStarter": "",
-                    "InputMemory": "InputMemory",
-                    "Input": "INPUT",
-                    "InputEnder": "",
-                    "InputMark2": "",
-                    "InputMemory2": "InputMemory2",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "<분할된 목차 리스트>\n",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "OutputMemory": "OutputMemory",
-            "Output": "OUTPUT",
-            "OutputEnder": "OutputEnder"
-        }
-    ],
-    "MemoryFineTuning": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "당신은 도서의 목차 분할 전문가 입니다.\n그래서 지금 긴 도서목차를 분할하는 작업을 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
-                    "Mark": "(요청)\n",
-                    "Message": "1. 도서의 <목차>를 자세히 살펴보고 각 목차 부분중 분할하기 적합한 부분을 파악합니다.\n2. <목차>를 2개로 분할하여 <분할된 목차 리스트>를 완성합니다."
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n(목차 분할 작업)\n",
-                    "InputMark": "<목차>\n",
-                    "InputStarter": "",
-                    "InputMemory": "InputMemory",
-                    "Input": "INPUT",
-                    "InputEnder": "",
-                    "InputMark2": "",
-                    "InputMemory2": "InputMemory2",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "<분할된 목차 리스트>\n",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "OutputMemory": "OutputMemory",
-            "Output": "OUTPUT",
-            "OutputEnder": "OutputEnder"
         }
     ]
 }

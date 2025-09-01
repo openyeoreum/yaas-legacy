@@ -2,40 +2,16 @@
     "TaskName": "ActorMatching",
     "InputFormat": "text",
     "OpenAI": {
-        "BaseModel": {
-            "ShortTokensModel": "gpt-5-mini",
-            "LongTokensModel": "gpt-5-mini"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "gpt-5-mini",
         "ReasoningEffort": "medium"
     },
     "ANTHROPIC": {
-        "BaseModel": {
-            "ShortTokensModel": "claude-3-5-haiku-latest",
-            "LongTokensModel": "claude-sonnet-4-0"
-        },
-        "ExampleFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
-        "MemoryFineTunedModel": {
-            "ShortTokensModel": [],
-            "LongTokensModel": []
-        },
         "MasterModel": "claude-sonnet-4-0"
     },
-    "GOOGLE":{
+    "GOOGLE": {
         "MasterModel": "gemini-2.5-flash"
     },
-    "DEEPSEEK":{
+    "DEEPSEEK": {
         "MasterModel": "deepseek-reasoner"
     },
     "Temperature": 1,
@@ -64,24 +40,24 @@
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
+                    "InputMasterMark": "",
+                    "InputMaster": "",
+                    "OutputMasterMark": "",
+                    "OutputMaster": ""
                 },
                 {
                     "Mark": "\n\n(<인물정보>를 보고 해당 인물을 낭독/연기할 성우를 <성우리스트>에서 선정하여 <성우선정.json>를 완성해주세요)\n",
@@ -98,181 +74,6 @@
             "MemoryNote": "MemoryNote",
             "OutputStarter": "",
             "Output": "OUTPUT"
-        }
-    ],
-    "ExampleFineTuning": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "당신은 오디오북 제작자 입니다. 따라서 <인물정보>를 보고 해당 인물을 낭독/연기할 성우를 <성우리스트>에서 선정하여 <성우선정.json>을 완성하는 업무를 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "(<성우선정.json>의 구조 및 내용)\n",
-                    "Message": "{'선정성우': {'번호': '선정된 성우의 [번호]를 작성, 선정된 성우가 없으면 없음을 작성', '이름': '선정된 성우의 [이름]을 작성, 선정된 성우가 없으면 없음을 작성', '선정기준': '선정된 성우의 정보를 작성, 선정된 성우가 없으면 필요한 성우의 특징과 기준을 아주 상세하게 작성', '선정적합여부': '선정 여부에 따라서 여 또는 부를 작성'}}"
-                },
-                {
-                    "Mark": "\n\n(<성우선정.json>완성 방법)\n",
-                    "Message": "1. <인물정보>는 도서에 등장하는 인물의 정보로서 [이름], [성별], [연령], [감정], [주요 문구]으로 되어 있습니다.\n2. <성우리스트>는 현재 낭독이 가능한 성우들의 리스트로 각각 [번호], [낭독실력], [이름], [성별], [연령], [감정], [성우의 특징]으로 되어 있습니다.\n3. <성우리스트>를 꼼꼼하게 살펴보고, <인물정보>를 낭독/연기를 위해 선정에 적합한 성우가 있는지 없는지의 여부를 판단합니다.\n4. <성우리스트>에서 선정할 성우가 있으면 ’번호’와 ‘이름’에 그 성우의 [번호]와 [이름]을 작성한 뒤, ‘선정기준’에 그 기준을 작성하고 ‘선정적합여부’에 ‘여’를 표기하여 <성우선정.json>를 완성합니다.\n5. 반면, <성우리스트>에서 선정할 성우가 없으면 ‘번호’와 ‘이름’에 ‘없음’을 작성한 뒤, ‘선정이유’에 필요한 성우의 특징과 기준을 아주 상게하게 작성하고 ‘선정적합여부’에 ‘부’를 표기하여 <성우선정.json>를 완성합니다."
-                },
-                {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n(<인물정보>를 보고 해당 인물을 낭독/연기할 성우를 <성우리스트>에서 선정하여 <성우선정.json>를 완성해주세요)\n",
-                    "InputMark": "<인물정보>\n",
-                    "Input": "INPUT",
-                    "InputMark2": "",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "\n<성우선정.json>\n",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "Output": "OUTPUT"
-        }
-    ],
-    "Memory": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "당신은 오디오북 제작자 입니다. 따라서 <인물정보>를 보고 해당 인물을 낭독/연기할 성우를 <성우리스트>에서 선정하여 <성우선정.json>을 완성하는 업무를 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "(<성우선정.json>의 구조 및 내용)\n",
-                    "Message": "{'선정성우': {'번호': '선정된 성우의 [번호]를 작성, 선정된 성우가 없으면 없음을 작성', '이름': '선정된 성우의 [이름]을 작성, 선정된 성우가 없으면 없음을 작성', '선정기준': '선정된 성우의 정보를 작성, 선정된 성우가 없으면 필요한 성우의 특징과 기준을 아주 상세하게 작성', '선정적합여부': '선정 여부에 따라서 여 또는 부를 작성'}}"
-                },
-                {
-                    "Mark": "\n\n(<성우선정.json>완성 방법)\n",
-                    "Message": "1. <인물정보>는 도서에 등장하는 인물의 정보로서 [이름], [성별], [연령], [감정], [주요 문구]으로 되어 있습니다.\n2. <성우리스트>는 현재 낭독이 가능한 성우들의 리스트로 각각 [번호], [낭독실력], [이름], [성별], [연령], [감정], [성우의 특징]으로 되어 있습니다.\n3. <성우리스트>를 꼼꼼하게 살펴보고, <인물정보>를 낭독/연기를 위해 선정에 적합한 성우가 있는지 없는지의 여부를 판단합니다.\n4. <성우리스트>에서 선정할 성우가 있으면 ’번호’와 ‘이름’에 그 성우의 [번호]와 [이름]을 작성한 뒤, ‘선정기준’에 그 기준을 작성하고 ‘선정적합여부’에 ‘여’를 표기하여 <성우선정.json>를 완성합니다.\n5. 반면, <성우리스트>에서 선정할 성우가 없으면 ‘번호’와 ‘이름’에 ‘없음’을 작성한 뒤, ‘선정이유’에 필요한 성우의 특징과 기준을 아주 상게하게 작성하고 ‘선정적합여부’에 ‘부’를 표기하여 <성우선정.json>를 완성합니다."
-                },
-                {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n(<인물정보>를 보고 해당 인물을 낭독/연기할 성우를 <성우리스트>에서 선정하여 <성우선정.json>를 완성해주세요)\n",
-                    "InputMark": "<인물정보>\n",
-                    "InputStarter": "",
-                    "InputMemory": "InputMemory",
-                    "Input": "INPUT",
-                    "InputEnder": "",
-                    "InputMark2": "",
-                    "InputMemory2": "InputMemory2",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "\n<성우선정.json>\n",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "OutputMemory": "OutputMemory",
-            "Output": "OUTPUT",
-            "OutputEnder": "OutputEnder"
-        }
-    ],
-    "MemoryFineTuning": [
-        {
-            "Role": "system",
-            "Mark": "(역할 및 업무)\n",
-            "Message": "당신은 오디오북 제작자 입니다. 따라서 <인물정보>를 보고 해당 인물을 낭독/연기할 성우를 <성우리스트>에서 선정하여 <성우선정.json>을 완성하는 업무를 진행합니다."
-        },
-        {
-            "Role": "user",
-            "Request": [
-                {
-                    "Mark": "(<성우선정.json>의 구조 및 내용)\n",
-                    "Message": "{'선정성우': {'번호': '선정된 성우의 [번호]를 작성, 선정된 성우가 없으면 없음을 작성', '이름': '선정된 성우의 [이름]을 작성, 선정된 성우가 없으면 없음을 작성', '선정기준': '선정된 성우의 정보를 작성, 선정된 성우가 없으면 필요한 성우의 특징과 기준을 아주 상세하게 작성', '선정적합여부': '선정 여부에 따라서 여 또는 부를 작성'}}"
-                },
-                {
-                    "Mark": "\n\n(<성우선정.json>완성 방법)\n",
-                    "Message": "1. <인물정보>는 도서에 등장하는 인물의 정보로서 [이름], [성별], [연령], [감정], [주요 문구]으로 되어 있습니다.\n2. <성우리스트>는 현재 낭독이 가능한 성우들의 리스트로 각각 [번호], [낭독실력], [이름], [성별], [연령], [감정], [성우의 특징]으로 되어 있습니다.\n3. <성우리스트>를 꼼꼼하게 살펴보고, <인물정보>를 낭독/연기를 위해 선정에 적합한 성우가 있는지 없는지의 여부를 판단합니다.\n4. <성우리스트>에서 선정할 성우가 있으면 ’번호’와 ‘이름’에 그 성우의 [번호]와 [이름]을 작성한 뒤, ‘선정기준’에 그 기준을 작성하고 ‘선정적합여부’에 ‘여’를 표기하여 <성우선정.json>를 완성합니다.\n5. 반면, <성우리스트>에서 선정할 성우가 없으면 ‘번호’와 ‘이름’에 ‘없음’을 작성한 뒤, ‘선정이유’에 필요한 성우의 특징과 기준을 아주 상게하게 작성하고 ‘선정적합여부’에 ‘부’를 표기하여 <성우선정.json>를 완성합니다."
-                },
-                {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "",
-                    "InputExampleMark": "",
-                    "InputExample": "",
-                    "OutputExampleMark": "",
-                    "OutputExample": ""
-                },
-                {
-                    "Mark": "\n\n(<인물정보>를 보고 해당 인물을 낭독/연기할 성우를 <성우리스트>에서 선정하여 <성우선정.json>를 완성해주세요)\n",
-                    "InputMark": "<인물정보>\n",
-                    "InputStarter": "",
-                    "InputMemory": "InputMemory",
-                    "Input": "INPUT",
-                    "InputEnder": "",
-                    "InputMark2": "",
-                    "InputMemory2": "InputMemory2",
-                    "Input2": "INPUT2"
-                }
-            ]
-        },
-        {
-            "Role": "assistant",
-            "OutputMark": "\n<성우선정.json>\n",
-            "MemoryNote": "MemoryNote",
-            "OutputStarter": "",
-            "OutputMemory": "OutputMemory",
-            "Output": "OUTPUT",
-            "OutputEnder": "OutputEnder"
         }
     ]
 }

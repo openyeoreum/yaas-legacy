@@ -737,6 +737,8 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         # T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
         TXTSplitterInstance = TXTSplitProcess(email, projectName, NextSolution, AutoTemplate, "ko", FileExtension, UploadedScriptFilePath, ScriptSegmentationDataFramePath, DataFrameScriptFilePath)
         TXTSplitterInstance.Run()
+        
+    sys.exit()
 
 if __name__ == "__main__":
     

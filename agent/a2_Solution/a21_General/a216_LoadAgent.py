@@ -50,7 +50,7 @@ class LoadAgent:
         self.SolutionPromptFramePath = self._GetSolutionDataFramePath("PromptFrame", self.PromptDataPath)
         # PromptFrame, ResponseStructure 설정
         with open(self.SolutionPromptFramePath, 'r', encoding = 'utf-8') as PromptJson:
-            self.SolutionPromptFrame = json.load(PromptJson)
+            self.SolutionPromptFrame = json.load(PromptJson)[self.MainLangTag]
         self.ResponseStructure = self.SolutionPromptFrame["OutputStructure"]
 
         # UserProcess 경로 설정

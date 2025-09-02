@@ -652,8 +652,10 @@ class TXTSplitProcess:
 ################################
 ## ScriptSegmentation 프롬프트 요청 및 결과물 Json화
 def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTemplate, MessagesReview = "on"):
+    ## 솔루션 정의
     Solution = 'Script'
     SubSolution = 'ScriptSegmentation'
+    
     ## PT01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
     ScriptLoadInstance = ScriptLoadProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MessagesReview)
     SolutionEdit, ScriptFileExtension, UploadedScriptFilePath, UploadScriptFilePath = ScriptLoadInstance.Run()

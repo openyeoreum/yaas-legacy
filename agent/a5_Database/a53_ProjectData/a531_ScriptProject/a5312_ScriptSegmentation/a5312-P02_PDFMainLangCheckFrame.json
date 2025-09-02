@@ -1,17 +1,36 @@
-[
-    {
-        "ProjectName": "eval(self.ProjectName)",
-        "TaskName": "PDFLanguageCheck",
-        "NextSolution": "eval(self.NextSolution)",
-        "AutoTemplate": "eval(self.AutoTemplate)",
-        "FileExtension": "pdf",
-        "MainLang": "eval(Response['태그'])",
-        "InputCount": 0,
-        "Completion": "No"
-    },
-    [
+{
+    "ko": [
         {
-            "MainLang": "eval(Response['태그'])"
-        }
+            "ProjectName": "eval(self.ProjectName)",
+            "TaskName": "PDFLanguageCheck",
+            "NextSolution": "eval(self.NextSolution)",
+            "AutoTemplate": "eval(self.AutoTemplate)",
+            "FileExtension": "pdf",
+            "MainLang": "eval(Response['태그'])",
+            "InputCount": 0,
+            "Completion": "No"
+        },
+        [
+            {
+                "MainLang": "eval(Response['태그'])"
+            }
+        ]
+    ],
+    "global": [
+        {
+            "ProjectName": "eval(self.ProjectName)",
+            "TaskName": "PDFLanguageCheck",
+            "NextSolution": "eval(self.NextSolution)",
+            "AutoTemplate": "eval(self.AutoTemplate)",
+            "FileExtension": "pdf",
+            "MainLang": "eval(Response['Tag'])",
+            "InputCount": 0,
+            "Completion": "No"
+        },
+        [
+            {
+                "MainLang": "eval(Response['Tag'])"
+            }
+        ]
     ]
-]
+}

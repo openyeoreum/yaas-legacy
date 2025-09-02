@@ -1,18 +1,38 @@
-[
-    {
-        "ProjectName": "eval(self.ProjectName)",
-        "TaskName": "TXTSplit",
-        "NextSolution": "eval(self.NextSolution)",
-        "AutoTemplate": "eval(self.AutoTemplate)",
-        "FileExtension": "txt",
-        "MainLang": "eval(self.MainLang)",
-        "InputCount": 0,
-        "Completion": "No"
-    },
-    [
+{
+    "ko": [
         {
-            "ScriptId": "eval(Response['ScriptId'])",
-            "SplitedText": "eval(Response['SplitedText'])"
-        }
+            "ProjectName": "eval(self.ProjectName)",
+            "TaskName": "TXTSplit",
+            "NextSolution": "eval(self.NextSolution)",
+            "AutoTemplate": "eval(self.AutoTemplate)",
+            "FileExtension": "txt",
+            "MainLang": "eval(self.MainLang)",
+            "InputCount": 0,
+            "Completion": "No"
+        },
+        [
+            {
+                "ScriptId": "eval(Response['ScriptId'])",
+                "SplitedText": "eval(Response['SplitedText'])"
+            }
+        ]
+    ],
+    "global": [
+        {
+            "ProjectName": "eval(self.ProjectName)",
+            "TaskName": "TXTSplit",
+            "NextSolution": "eval(self.NextSolution)",
+            "AutoTemplate": "eval(self.AutoTemplate)",
+            "FileExtension": "txt",
+            "MainLang": "eval(self.MainLang)",
+            "InputCount": 0,
+            "Completion": "No"
+        },
+        [
+            {
+                "ScriptId": "eval(Response['ScriptId'])",
+                "SplitedText": "eval(Response['SplitedText'])"
+            }
+        ]
     ]
-]
+}

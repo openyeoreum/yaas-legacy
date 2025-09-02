@@ -1,17 +1,36 @@
-[
-    {
-        "ProjectName": "eval(self.ProjectName)",
-        "TaskName": "TXTCheck",
-        "NextSolution": "eval(self.NextSolution)",
-        "AutoTemplate": "eval(self.AutoTemplate)",
-        "FileExtension": "txt",
-        "MainLang": "",
-        "InputCount": 0,
-        "Completion": "No"
-    },
-    [
+{
+    "ko": [
         {
-            "UploadedScriptFilePath": "eval(Response['UploadedScriptFilePath'])"
-        }
+            "ProjectName": "eval(self.ProjectName)",
+            "TaskName": "TXTCheck",
+            "NextSolution": "eval(self.NextSolution)",
+            "AutoTemplate": "eval(self.AutoTemplate)",
+            "FileExtension": "txt",
+            "MainLang": "",
+            "InputCount": 0,
+            "Completion": "No"
+        },
+        [
+            {
+                "UploadedScriptFilePath": "eval(Response['UploadedScriptFilePath'])"
+            }
+        ]
+    ],
+    "global": [
+        {
+            "ProjectName": "eval(self.ProjectName)",
+            "TaskName": "TXTCheck",
+            "NextSolution": "eval(self.NextSolution)",
+            "AutoTemplate": "eval(self.AutoTemplate)",
+            "FileExtension": "txt",
+            "MainLang": "",
+            "InputCount": 0,
+            "Completion": "No"
+        },
+        [
+            {
+                "UploadedScriptFilePath": "eval(Response['UploadedScriptFilePath'])"
+            }
+        ]
     ]
-]
+}

@@ -1,18 +1,18 @@
 [
     {
-        "ProjectName": "",
+        "ProjectName": "eval(self.ProjectName)",
         "TaskName": "PDFSplit",
-        "NextSolution": "",
-        "AutoTemplate": "",
+        "NextSolution": "eval(self.NextSolution)",
+        "AutoTemplate": "eval(self.AutoTemplate)",
         "FileExtension": "pdf",
-        "MainLang": "",
+        "MainLang": "eval(self.MainLang)",
         "InputCount": 0,
         "Completion": "No"
     },
     [
         {
-            "ScriptId": 0,
-            "PageFilePath": "None"
+            "ScriptId": "eval(Response['ScriptId'])",
+            "PageFilePath": "eval(Response['PageFilePath'])"
         }
     ]
 ]

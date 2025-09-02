@@ -66,7 +66,9 @@ def GetPromptFrame(Process, MainLang):
         "ShortScriptGen": "/a542_ScriptPrompt/a5421_BookScriptGenPrompt/a5421-11_ShortScriptGen",
         "ShortScriptGenFeedback": "/a542_ScriptPrompt/a5421_BookScriptGenPrompt/a5421-12_ShortScriptGenFeedback",
         # ScriptSegmentationPrompt
+        "PDFLoad": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P01_PDFLoad",
         "PDFMainLangCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P02_PDFMainLangCheck",
+        "TXTLoad": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-T01_TXTLoad",
         "TXTMainLangCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-T02_TXTMainLangCheck",
         # TranslationPrompt
         "TranslationIndexDefine": "/a543_TranslationPrompt/a543-01_TranslationIndexDefine",

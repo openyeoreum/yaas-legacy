@@ -1,15 +1,17 @@
 [
     {
-        "ProjectName": "",
+        "ProjectName": "eval(self.ProjectName)",
         "TaskName": "TXTCheck",
-        "NextSolution": "",
-        "AutoTemplate": "",
+        "NextSolution": "eval(self.NextSolution)",
+        "AutoTemplate": "eval(self.AutoTemplate)",
         "FileExtension": "txt",
         "MainLang": "",
         "InputCount": 0,
         "Completion": "No"
     },
-    {
-        "UploadedScriptFilePath": "None"
-    }
+    [
+        {
+            "UploadedScriptFilePath": "eval(Response['UploadedScriptFilePath'])"
+        }
+    ]
 ]

@@ -517,8 +517,16 @@ class LoadAgent:
             with open(self.SolutionEditPath, 'w', encoding = 'utf-8') as SolutionEditJson:
                 json.dump(SolutionEdit, SolutionEditJson, indent = 4, ensure_ascii = False)
 
+    ## SolutionEdit 불러오기 메서드 ##
+    def _LoadEdit(self):
+        """SolutionEdit 불러오기 메서드"""
+        if os.path.exists(self.SolutionEditPath):
+            with open(self.SolutionEditPath, 'r', encoding = 'utf-8') as SolutionEditJson:
+                SolutionEdit = json.load(SolutionEditJson)
+        return SolutionEdit
+
     ## Response 생성 및 프로세스 실행 메서드 ##
-    def Run(self):
+    def Run(self, Response = "Response"):
         """프로세스 실행 메서드"""
         if not self.EditCheck:
             if self.DataFrameCompletion == 'No':
@@ -528,16 +536,19 @@ class LoadAgent:
                     Input = self.InputList[i]['Input']
                     InputFormat = self.InputList[i]['InputFormat']
 
-                    ## ProcessResponse 생성
-                    ProcessResponse = self._ProcessResponse(Input, inputCount, InputFormat = InputFormat)
-                    
+                    if Response == "Response":
+                        ## ProcessResponse 생성
+                        ProcessResponse = self._ProcessResponse(Input, inputCount, InputFormat = InputFormat)
+                    if Response == "Input":
+                        ProcessResponse = Input
+
                     ## DataFrame 저장
                     self._UpdateProcessDataFrame(inputCount, ProcessResponse)
-                    
+
             ## Edit 저장
             self._UpdateSolutionEdit()
             print(f"[ {self.ProcessInfo}Update 완료 ]\n")
-            
+
             if self.EditMode == "Manual":
                 sys.exit(f"[ {self.ProjectName}_Script_Edit 생성 완료 -> {self.ProcessName}: (({self.ProcessName}))을 검수한 뒤 직접 수정, 수정사항이 없을 시 (({self.ProcessName}Completion: Completion))으로 변경 ]\n\n{self.SolutionEditPath}")
 
@@ -549,6 +560,8 @@ class LoadAgent:
         if self.EditCompletion:
             print(f"[ {self.ProcessInfo}Update는 이미 완료됨 ]\n")
 
+        ## Edit 불러오기
+        return self._LoadEdit()
 
 if __name__ == "__main__":
     

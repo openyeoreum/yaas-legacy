@@ -1,18 +1,18 @@
 [
     {
-        "ProjectName": "",
+        "ProjectName": "eval(self.ProjectName)",
         "TaskName": "TXTSplit",
-        "NextSolution": "",
-        "AutoTemplate": "",
+        "NextSolution": "eval(self.NextSolution)",
+        "AutoTemplate": "eval(self.AutoTemplate)",
         "FileExtension": "txt",
-        "MainLang": "",
+        "MainLang": "eval(self.MainLang)",
         "InputCount": 0,
         "Completion": "No"
     },
     [
         {
-            "ScriptId": 0,
-            "SplitedText": "None"
+            "ScriptId": "eval(Response['ScriptId'])",
+            "SplitedText": "eval(Response['SplitedText'])"
         }
     ]
 ]

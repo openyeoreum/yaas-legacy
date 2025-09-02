@@ -1,0 +1,156 @@
+{
+    "ko": {
+        "TaskName": "DemandSearchCollectionDataFilter",
+        "InputFormat": "text",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "<공급검색결과>에서 [수요 매칭대상]에게 도움이 되는 가장 적합한 데이터를 [공급 검색결과]에서 엄격하게 선별하여 <선별된공급검색결과.json>를 작성하는 작업을 진행합니다."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(<선별된공급검색결과.json>작성 방법)\n",
+                        "Message": "1. <공급검색결과>의 [수요 매칭대상]과 [공급 검색결과]는 모두 1) - 요약정보 -, 2) 각각의 - 수요정보 -와 - 공급정보 - 로 구성되어 있습니다.\n2. [수요 매칭대상]은 자신에게 도움을 줄 수 있는 대상(또는 정보 등)의 데이터를 찾고 있습니다.\n3. [공급 검색결과]는 그 도움을 줄 수 있는 대상(또는 정보 등)의 예비 데이터 리스트 입니다. 그러나 이는 부정확한 경우가 있음으로 이 중에서 [수요 매칭대상]에게 가장 도움이 되는 [공급 검색결과]를 엄격하게 선별해야 합니다.\n4. 따라서 [공급 검색결과]에서 [수요 매칭대상]에게 가장 도움이 될 수 있는 데이터들을 엄격하게 선별하여, 선별된 데이터들의 '데이터번호', '선별이유', '연결키워드', '매칭점수'를 리스트로 작성하여 <선별된공급검색결과.json>를 완성합니다.\n5. 선별하는 데이터의 수는 제한이 없습니다. 따라서 1개일 수도 있고, 여러개일 수도 있습니다.\n6. <선별된공급검색결과.json> 내에는 [수요 매칭대상], [공급 검색결과], [데이터번호: n]등의 표현은 사용하지 않습니다."
+                    },
+                    {
+                        "Mark": "\n\n(<선별된공급검색결과.json>의 구조 및 내용)\n",
+                        "Message": "{'선별': [{'데이터번호': '선별된 데이터의 번호 작성', '선별이유': '선별 이유에 대해서 2-3문장의 길이로 작성', '연결키워드': ['수요 매칭대상과', '선별된 공급 검색결과를', '연결할 수 있는', '공통된 키워드를', '추측하여 3-5개 작성'], '상생키워드': ['수요 매칭대상과', '선별된 공급 검색결과가', '함께 상생할 수 있는', '키워드를', '추측하여 3-5개 작성'], '매칭점수': '매칭 점수를 0-100점까지 숫자로 표기'}]}"
+                    },
+                    {
+                        "Mark": "",
+                        "Message": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n([수요 매칭대상]에게 도움이 되는 가장 적합한 데이터를 [공급 검색결과]에서 엄격하게 선별하여 <선별된공급검색결과.json>를 작성해주세요)\n",
+                        "InputMark": "<공급검색결과>\n",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n<선별된공급검색결과.json>\n",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    },
+    "global": {
+        "TaskName": "DemandSearchCollectionDataFilter",
+        "InputFormat": "text",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "<공급검색결과>에서 [수요 매칭대상]에게 도움이 되는 가장 적합한 데이터를 [공급 검색결과]에서 엄격하게 선별하여 <선별된공급검색결과.json>를 작성하는 작업을 진행합니다."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(<선별된공급검색결과.json>작성 방법)\n",
+                        "Message": "1. <공급검색결과>의 [수요 매칭대상]과 [공급 검색결과]는 모두 1) - 요약정보 -, 2) 각각의 - 수요정보 -와 - 공급정보 - 로 구성되어 있습니다.\n2. [수요 매칭대상]은 자신에게 도움을 줄 수 있는 대상(또는 정보 등)의 데이터를 찾고 있습니다.\n3. [공급 검색결과]는 그 도움을 줄 수 있는 대상(또는 정보 등)의 예비 데이터 리스트 입니다. 그러나 이는 부정확한 경우가 있음으로 이 중에서 [수요 매칭대상]에게 가장 도움이 되는 [공급 검색결과]를 엄격하게 선별해야 합니다.\n4. 따라서 [공급 검색결과]에서 [수요 매칭대상]에게 가장 도움이 될 수 있는 데이터들을 엄격하게 선별하여, 선별된 데이터들의 '데이터번호', '선별이유', '연결키워드', '매칭점수'를 리스트로 작성하여 <선별된공급검색결과.json>를 완성합니다.\n5. 선별하는 데이터의 수는 제한이 없습니다. 따라서 1개일 수도 있고, 여러개일 수도 있습니다.\n6. <선별된공급검색결과.json> 내에는 [수요 매칭대상], [공급 검색결과], [데이터번호: n]등의 표현은 사용하지 않습니다."
+                    },
+                    {
+                        "Mark": "\n\n(<선별된공급검색결과.json>의 구조 및 내용)\n",
+                        "Message": "{'선별': [{'데이터번호': '선별된 데이터의 번호 작성', '선별이유': '선별 이유에 대해서 2-3문장의 길이로 작성', '연결키워드': ['수요 매칭대상과', '선별된 공급 검색결과를', '연결할 수 있는', '공통된 키워드를', '추측하여 3-5개 작성'], '상생키워드': ['수요 매칭대상과', '선별된 공급 검색결과가', '함께 상생할 수 있는', '키워드를', '추측하여 3-5개 작성'], '매칭점수': '매칭 점수를 0-100점까지 숫자로 표기'}]}"
+                    },
+                    {
+                        "Mark": "",
+                        "Message": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n([수요 매칭대상]에게 도움이 되는 가장 적합한 데이터를 [공급 검색결과]에서 엄격하게 선별하여 <선별된공급검색결과.json>를 작성해주세요)\n",
+                        "InputMark": "<공급검색결과>\n",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n<선별된공급검색결과.json>\n",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    }
+}

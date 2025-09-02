@@ -1,0 +1,10 @@
+{
+    "ko": {
+        "TaskName": "TXTLoad",
+        "OutputStructure": {}
+    },
+    "global": {
+        "TaskName": "TXTLoad",
+        "OutputStructure": {}
+    }
+}

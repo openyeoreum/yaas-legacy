@@ -1,0 +1,156 @@
+{
+    "ko": {
+        "TaskName": "TranslationProofreading",
+        "InputFormat": "text",
+        "OpenAI": {
+            "MasterModel": "gpt-4.1",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "당신은 도서 교정 전문가 입니다. <**작업: 교정할도서내용>을 대화문 쌍따옴표 교정, 뛰어쓰기 교정을 통해서 <교정도서내용.json>으로 완성해주세요."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(<교정도서내용.json>의 구조 및 내용)\n",
+                        "Message": "{'교정': {'도서내용': '<**작업: 교정할도서내용>을 자세하게 읽고 대화문 쌍따옴표 교정, 뛰어쓰기 교정을 완벽하게 처리하여 <교정도서내용.json>으로 완성'}}"
+                    },
+                    {
+                        "Mark": "\n\n(<교정도서내용.json>의 완성 절차 및 방법)\n",
+                        "Message": "1. <참고: 이전교정도서내용>은 이미 교정이 완료된 <**작업: 교정할도서내용>의 앞부분으로 <**작업: 교정할도서내용>을 <교정도서내용.json>으로 완성할 때 참고자료 입니다.\n2. 교정은 <**작업: 교정할도서내용>을 자세하게 읽고 대화문 쌍따옴표 교정, 뛰어쓰기 교정을 완벽하게 처리하여 <교정도서내용.json>으로 완성하는 것입니다.\n3. 대화문 쌍따옴표 교정1: <**작업: 교정할도서내용>에서 대화문에 쌍따옴표가 누락되거나 외따옴표로 잘못 표기되어 있는 부분을 \"..대화내용..\" 와 같이 교정하는 것입니다. 단, 단어나 구문 등의 강조를 위한 외따옴표는 절대 쌍따옴표로 변경하지 않습니다. 즉, <**작업: 교정할도서내용>에서 쌍따옴표 교정의 대상은 대화문임으로 대화문이 없으면 일체 교정하지 않습니다.\n4. 대화문 쌍따옴표 교정2: 한 인물의 대화문이 중간 문장 없이 이어서 존재할때는 \"..인물A의 대화내용1..인물A의 대화내용2..\" 와 같이 대화문을 인물 단위로 묶어서 쌍따옴표 처리합니다. 예를 들면 \"..인물A의 대화내용1..\" \"..인물A의 대화내용2..\" -> \"..인물A의 대화내용1..인물A의 대화내용2..\"와 같이 교정하는 것입니다.\n5. 뛰어쓰기 교정: <**작업: 교정할도서내용>에서 뛰어쓰기 부분을 교정하는 것입니다.\n6. 주의2: 교정의 대상은 <**작업: 교정할도서내용>의 내용이며, 교정이외의 <**작업: 교정할도서내용>은 단 한글자도 일체 수정하지 않습니다."
+                    },
+                    {
+                        "Mark": "",
+                        "Message": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n\n(<**작업: 교정할도서내용>에서 대화문 쌍따옴표 교정, 뛰어쓰기 교정을 완벽하게 처리하여 <교정도서내용.json>으로 완성해주세요.)\n\n",
+                        "InputMark": "<참고: 이전교정도서내용>\n",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n\n<교정도서내용.json>",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    },
+    "global": {
+        "TaskName": "TranslationProofreading",
+        "InputFormat": "text",
+        "OpenAI": {
+            "MasterModel": "gpt-4.1",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "당신은 도서 교정 전문가 입니다. <**작업: 교정할도서내용>을 대화문 쌍따옴표 교정, 뛰어쓰기 교정을 통해서 <교정도서내용.json>으로 완성해주세요."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(<교정도서내용.json>의 구조 및 내용)\n",
+                        "Message": "{'교정': {'도서내용': '<**작업: 교정할도서내용>을 자세하게 읽고 대화문 쌍따옴표 교정, 뛰어쓰기 교정을 완벽하게 처리하여 <교정도서내용.json>으로 완성'}}"
+                    },
+                    {
+                        "Mark": "\n\n(<교정도서내용.json>의 완성 절차 및 방법)\n",
+                        "Message": "1. <참고: 이전교정도서내용>은 이미 교정이 완료된 <**작업: 교정할도서내용>의 앞부분으로 <**작업: 교정할도서내용>을 <교정도서내용.json>으로 완성할 때 참고자료 입니다.\n2. 교정은 <**작업: 교정할도서내용>을 자세하게 읽고 대화문 쌍따옴표 교정, 뛰어쓰기 교정을 완벽하게 처리하여 <교정도서내용.json>으로 완성하는 것입니다.\n3. 대화문 쌍따옴표 교정1: <**작업: 교정할도서내용>에서 대화문에 쌍따옴표가 누락되거나 외따옴표로 잘못 표기되어 있는 부분을 \"..대화내용..\" 와 같이 교정하는 것입니다. 단, 단어나 구문 등의 강조를 위한 외따옴표는 절대 쌍따옴표로 변경하지 않습니다. 즉, <**작업: 교정할도서내용>에서 쌍따옴표 교정의 대상은 대화문임으로 대화문이 없으면 일체 교정하지 않습니다.\n4. 대화문 쌍따옴표 교정2: 한 인물의 대화문이 중간 문장 없이 이어서 존재할때는 \"..인물A의 대화내용1..인물A의 대화내용2..\" 와 같이 대화문을 인물 단위로 묶어서 쌍따옴표 처리합니다. 예를 들면 \"..인물A의 대화내용1..\" \"..인물A의 대화내용2..\" -> \"..인물A의 대화내용1..인물A의 대화내용2..\"와 같이 교정하는 것입니다.\n5. 뛰어쓰기 교정: <**작업: 교정할도서내용>에서 뛰어쓰기 부분을 교정하는 것입니다.\n6. 주의2: 교정의 대상은 <**작업: 교정할도서내용>의 내용이며, 교정이외의 <**작업: 교정할도서내용>은 단 한글자도 일체 수정하지 않습니다."
+                    },
+                    {
+                        "Mark": "",
+                        "Message": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n\n(<**작업: 교정할도서내용>에서 대화문 쌍따옴표 교정, 뛰어쓰기 교정을 완벽하게 처리하여 <교정도서내용.json>으로 완성해주세요.)\n\n",
+                        "InputMark": "<참고: 이전교정도서내용>\n",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n\n<교정도서내용.json>",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    }
+}

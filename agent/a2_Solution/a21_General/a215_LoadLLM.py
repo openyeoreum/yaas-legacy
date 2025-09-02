@@ -118,17 +118,17 @@ def LLMmessages(Process, Input, Model, InputFormat = "text", MainLang = "ko", Ro
     # print(f'messages: {messages}')
     InputTokens = len(encoding.encode(str(Input)))
     messageTokens = len(encoding.encode(str(messages)))
-    OutputTokensRatio = promptFrame["OutputTokensRatio"]
+    OutputTokensRatio = 1.0
     outputTokens = InputTokens * OutputTokensRatio
     totalTokens = messageTokens + outputTokens
-    Temperature = promptFrame["Temperature"]
+    Temperature = 1.0
 
-    return messages, outputTokens, totalTokens, Temperature
+    return messages, totalTokens, Temperature
   
 ## 프롬프트에 메세지 확인
 def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, INPUTFORMAT = "text", MAINLANG = "ko", ROOT = "agent", PromptFramePath = "", MODE = "Example", INPUT2 = "", INPUTMEMORY = "", OUTPUTMEMORY = "", MEMORYCOUNTER = "", OUTPUTENDER = ""):
 
-    Messages, outputTokens, TotalTokens, Temperature = LLMmessages(Process, Input, Model, InputFormat = INPUTFORMAT, MainLang = MAINLANG, Root = ROOT, promptFramePath = PromptFramePath, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryNote = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
+    Messages, TotalTokens, Temperature = LLMmessages(Process, Input, Model, InputFormat = INPUTFORMAT, MainLang = MAINLANG, Root = ROOT, promptFramePath = PromptFramePath, mode = MODE, input2 = INPUT2, inputMemory = INPUTMEMORY, outputMemory = OUTPUTMEMORY, memoryNote = MEMORYCOUNTER, outputEnder = OUTPUTENDER)
 
     TextMessagesList = [f"\n############# Messages #############\n",
                         f"Messages: ({Count}), ({Model}), ({MODE}), (Tep:{Temperature})\n",
@@ -159,7 +159,7 @@ def OpenAI_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
         with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
             promptFrame = json.load(promptFrameJson)
 
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'gpt', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
+    Messages, TotalTokens, temperature = LLMmessages(Process, Input, 'gpt', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
     Model = promptFrame["OpenAI"]["MasterModel"]
 
@@ -330,7 +330,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, inputFormat
         promptFrame = json.load(promptFrameJson)
 
 
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
+    Messages, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
     Model = promptFrame["ANTHROPIC"]["MasterModel"]
     
@@ -430,7 +430,7 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
         promptFrame = json.load(promptFrameJson)
 
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
+    Messages, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
     Model = promptFrame["GOOGLE"]["MasterModel"]
     
@@ -538,7 +538,7 @@ def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, inputFormat 
       with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
         promptFrame = json.load(promptFrameJson)
 
-    Messages, outputTokens, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
+    Messages, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
     Model = promptFrame["DEEPSEEK"]["MasterModel"]
     

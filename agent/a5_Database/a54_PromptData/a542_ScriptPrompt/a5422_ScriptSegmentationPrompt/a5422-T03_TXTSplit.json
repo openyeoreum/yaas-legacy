@@ -1,0 +1,10 @@
+{
+    "ko": {
+        "TaskName": "TXTSplit",
+        "OutputStructure": {}
+    },
+    "global": {
+        "TaskName": "TXTSplit",
+        "OutputStructure": {}
+    }
+}

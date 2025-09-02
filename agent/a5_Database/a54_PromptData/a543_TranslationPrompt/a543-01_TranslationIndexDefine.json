@@ -1,0 +1,156 @@
+{
+    "ko": {
+        "TaskName": "TranslationIndexDefine",
+        "InputFormat": "text",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "지금 <도서목차>에서 (언어태그)와 목차별 (목차태그)를 지정하여 정리하는 작업을 필요로 합니다. 그래서 <도서목차>를 보고 언어태그와 각 목차별 목차태그를 지정하여 <도서목차.json>로 완성하는 작업을 완성해 주세요."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(언어태그)\n",
+                        "Message": "[en] English - English - 영어\n[zh] Chinese - 中文 - 중국어\n[es] Spanish - Español - 스페인어\n[fr] French - Français - 프랑스어\n[de] German - Deutsch - 독일어\n[it] Italian - Italiano - 이탈리아어\n[ja] Japanese - 日本語 - 일본어\n[ko] Korean - 한국어 - 한국어\n[pt] Portuguese - Português - 포르투갈어\n[ru] Russian - Русский - 러시아어\n[ar] Arabic - العربية - 아랍어\n[nl] Dutch - Nederlands - 네덜란드어\n[sv] Swedish - Svenska - 스웨덴어\n[no] Norwegian - Norsk - 노르웨이어\n[da] Danish - Dansk - 덴마크어\n[fi] Finnish - Suomi - 핀란드어\n[pl] Polish - Polski - 폴란드어\n[tr] Turkish - Türkçe - 터키어\n[el] Greek - Ελληνικά - 그리스어\n[cs] Czech - Čeština - 체코어\n[hu] Hungarian - Magyar - 헝가리어\n[ro] Romanian - Română - 루마니아어\n[sk] Slovak - Slovenčina - 슬로바키아어\n[uk] Ukrainian - Українська - 우크라이나어\n[hi] Hindi - हिन्दी - 힌디어\n[id] Indonesian - Bahasa Indonesia - 인도네시아어\n[ms] Malay - Bahasa Melayu - 말레이어\n[th] Thai - ไทย - 태국어\n[vi] Vietnamese - Tiếng Việt - 베트남어\n[he] Hebrew - עברית - 히브리어\n[bg] Bulgarian - Български - 불가리아어\n[ca] Catalan - Català - 카탈루냐어\n\n(목차태그)\n[Title] 도서의 제목\n[Logue] 도서의 서문, 서평, 머릿말, 부록, 맺음말, 기타 등\n[Part] 파트, 부 등 가장 큰 범주의 목차\n[Chapter] 챕터, 장 등 중간 범주의 목차\n[Index] 소제목 등 작은 범주의 목차"
+                    },
+                    {
+                        "Mark": "\n\n(<도서목차.json>의 구조 및 내용)\n",
+                        "Message": "{{'언어태그': 'en,  zh,  es ... ca 중 지정', '목차리스트': [{'번호': 1, '목차태그': 'Title', '목차': '목차의 가장 첫 부분인 제목을 그대로 작성'}, {'번호': 2, '목차태그': 'Logue,  Part,  Chapter,  Index 중 지정', '목차': '목차의 두번째 부분을 그대로 작성'}, {'번호': 3, '목차태그': 'Logue,  Part,  Chapter,  Index 중 지정', '목차': '목차의 세번째 부분을 그대로 작성'}, ...]}}"
+                    },
+                    {
+                        "Mark": "\n\n(<도서목차.json> 완성 절차)\n",
+                        "Message": "1. <도서목차>의 언어를 파악하여 '언어태그'를 우선 지정합니다.\n2. <도서목차>는 한줄씩 목차를 구성하고 있습니다.\n3. <도서목차>를 한줄씩 보며 목차의 가장 첫번째 부분인 [Title]부터 한줄씩 '목차태그'를 고민하며 지정합니다.\n4. 지정된 내용에 따라서 '목차리스트'에 순서대로 '번호', '목차태그', '목차'를 작성하여 <도서목차.json>를 완성합니다."
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n\n(<도서목차>에서 언어태그와 한줄씩 목차별 목차태그를 지정하여 <도서목차.json>로 완성해주세요)\n\n",
+                        "InputMark": "<도서목차>\n",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n\n<도서목차.json>",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    },
+    "global": {
+        "TaskName": "TranslationIndexDefine",
+        "InputFormat": "text",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "지금 <도서목차>에서 (언어태그)와 목차별 (목차태그)를 지정하여 정리하는 작업을 필요로 합니다. 그래서 <도서목차>를 보고 언어태그와 각 목차별 목차태그를 지정하여 <도서목차.json>로 완성하는 작업을 완성해 주세요."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(언어태그)\n",
+                        "Message": "[en] English - English - 영어\n[zh] Chinese - 中文 - 중국어\n[es] Spanish - Español - 스페인어\n[fr] French - Français - 프랑스어\n[de] German - Deutsch - 독일어\n[it] Italian - Italiano - 이탈리아어\n[ja] Japanese - 日本語 - 일본어\n[ko] Korean - 한국어 - 한국어\n[pt] Portuguese - Português - 포르투갈어\n[ru] Russian - Русский - 러시아어\n[ar] Arabic - العربية - 아랍어\n[nl] Dutch - Nederlands - 네덜란드어\n[sv] Swedish - Svenska - 스웨덴어\n[no] Norwegian - Norsk - 노르웨이어\n[da] Danish - Dansk - 덴마크어\n[fi] Finnish - Suomi - 핀란드어\n[pl] Polish - Polski - 폴란드어\n[tr] Turkish - Türkçe - 터키어\n[el] Greek - Ελληνικά - 그리스어\n[cs] Czech - Čeština - 체코어\n[hu] Hungarian - Magyar - 헝가리어\n[ro] Romanian - Română - 루마니아어\n[sk] Slovak - Slovenčina - 슬로바키아어\n[uk] Ukrainian - Українська - 우크라이나어\n[hi] Hindi - हिन्दी - 힌디어\n[id] Indonesian - Bahasa Indonesia - 인도네시아어\n[ms] Malay - Bahasa Melayu - 말레이어\n[th] Thai - ไทย - 태국어\n[vi] Vietnamese - Tiếng Việt - 베트남어\n[he] Hebrew - עברית - 히브리어\n[bg] Bulgarian - Български - 불가리아어\n[ca] Catalan - Català - 카탈루냐어\n\n(목차태그)\n[Title] 도서의 제목\n[Logue] 도서의 서문, 서평, 머릿말, 부록, 맺음말, 기타 등\n[Part] 파트, 부 등 가장 큰 범주의 목차\n[Chapter] 챕터, 장 등 중간 범주의 목차\n[Index] 소제목 등 작은 범주의 목차"
+                    },
+                    {
+                        "Mark": "\n\n(<도서목차.json>의 구조 및 내용)\n",
+                        "Message": "{{'언어태그': 'en,  zh,  es ... ca 중 지정', '목차리스트': [{'번호': 1, '목차태그': 'Title', '목차': '목차의 가장 첫 부분인 제목을 그대로 작성'}, {'번호': 2, '목차태그': 'Logue,  Part,  Chapter,  Index 중 지정', '목차': '목차의 두번째 부분을 그대로 작성'}, {'번호': 3, '목차태그': 'Logue,  Part,  Chapter,  Index 중 지정', '목차': '목차의 세번째 부분을 그대로 작성'}, ...]}}"
+                    },
+                    {
+                        "Mark": "\n\n(<도서목차.json> 완성 절차)\n",
+                        "Message": "1. <도서목차>의 언어를 파악하여 '언어태그'를 우선 지정합니다.\n2. <도서목차>는 한줄씩 목차를 구성하고 있습니다.\n3. <도서목차>를 한줄씩 보며 목차의 가장 첫번째 부분인 [Title]부터 한줄씩 '목차태그'를 고민하며 지정합니다.\n4. 지정된 내용에 따라서 '목차리스트'에 순서대로 '번호', '목차태그', '목차'를 작성하여 <도서목차.json>를 완성합니다."
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n\n(<도서목차>에서 언어태그와 한줄씩 목차별 목차태그를 지정하여 <도서목차.json>로 완성해주세요)\n\n",
+                        "InputMark": "<도서목차>\n",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n\n<도서목차.json>",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    }
+}

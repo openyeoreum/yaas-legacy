@@ -38,8 +38,6 @@
     "DEEPSEEK":{
         "MasterModel": "deepseek-reasoner"
     },
-    "Temperature": 1,
-    "OutputTokensRatio": 0.5,
     "OutputFormat": "json",
     "Master": [
         {

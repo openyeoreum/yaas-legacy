@@ -1,0 +1,10 @@
+{
+    "ko": {
+        "TaskName": "PDFLoad",
+        "OutputStructure": {}
+    },
+    "global": {
+        "TaskName": "PDFLoad",
+        "OutputStructure": {}
+    }
+}

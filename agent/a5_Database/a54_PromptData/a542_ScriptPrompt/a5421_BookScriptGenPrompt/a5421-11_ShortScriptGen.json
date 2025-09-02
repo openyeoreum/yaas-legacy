@@ -1,0 +1,156 @@
+{
+    "ko": {
+        "TaskName": "ScriptIntroductionGen",
+        "InputFormat": "text",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "나는 여러 권의 베스트셀러를 출간한 작가 입니다. 현재 새로운 도서를 집필하기 위해 <도서제목및목차>와 <직전내용및초안내용요약>의 정리를 마쳤습니다. 그래서 이를 바탕으로 지금 완성할 업무는, <도서제목및목차>와 <직전내용및초안내용요약>을 보고 서브목차별로 공백 포함 한글 4,000~8,000자 분량의 <도서초안.json>을 작성하는 작업 입니다."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(<도서초안.json>작성을 위한 원칙, 아주 중요!)\n",
+                        "Message": "1) 통일된 스타일\n[직전내용]과 <도서초안.json>은 한사람이 작성한 글로서, 경어체/존댓말 중심, 구어체/문어체 혼용 범위, 한자어·외래어 사용 규칙 등의 어조(톤)와 문체(스타일)을 통일\n\n2) 맥락 연결\n내용을 유기적으로 연결하고 불필요한 반복이나 어색한 전환부가 없도록 작성\n\n3) 파트, 챕터 소개, 뒷 부분 내용의 작성 계획 및 소개 등의 표현 금지\n글의 내용을 어떻게 작성하겠다, 이번 글의 내용은 어떠하다, 어떠한 내용을 소개 및 설명 하겠다 등의 글의 본문 자체가 아닌 본문의 작성 계획 및 소개 등의 표현은 작성 금지\n\n4) 글 형식 및 구성의 다양성\n[직전내용]과 <도서초안.json>이 자연스럽게 이어지지만, [직전내용]과 <도서초안.json>의 구성과 형식에는 다양한 변화를 주어 독자에게 더욱 풍푸한 표현의 글이 될 수 있도록 작성\n\n5) 글의 도입의 다양성\n[직전내용]과 <도서초안.json>의 도입이 달라야 합니다. 경험에서 시작, 현상에서 시작, 이슈에서 시작, 의문문에서 시작 등등 글 전체가 매우 다양한 도입이 되도록 작성\n\n6) 글의 끝맺음의 다양성\n[직전내용]과 <도서초안.json>의 끝맺음이 달라야 합니다. ..것이다, ..일까요?, ..습니다, ..되었다, ..해도 좋다, 이어서 설명한다 등등 글 전체가 매우 다양한 끝맺음이 되도록 작성"
+                    },
+                    {
+                        "Mark": "\n\n(<도서초안.json>의 구조 및 내용)\n",
+                        "Message": "{'파트순번': 'n', '파트명': '메인목차를 그대로 작성', '챕터순번': 'n', '챕터명': '서브목차를 그대로 작성', '초안': '공백 포함 한글 4,000~8,000자 분량의 초안 작성'}\n"
+                    },
+                    {
+                        "Mark": "",
+                        "Message": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n\n(<도서제목및목차>과 <직전내용및초안내용요약>을 보고 공백 포함 한글 4,000~8,000자 분량의 <도서초안.json>을 작성해주세요)\n\n",
+                        "InputMark": "<도서제목및목차>\n",
+                        "Input": "INPUT",
+                        "InputMark2": "<직전내용및초안내용요약>\n",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n\n<도서초안.json>",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    },
+    "global": {
+        "TaskName": "ScriptIntroductionGen",
+        "InputFormat": "text",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "나는 여러 권의 베스트셀러를 출간한 작가 입니다. 현재 새로운 도서를 집필하기 위해 <도서제목및목차>와 <직전내용및초안내용요약>의 정리를 마쳤습니다. 그래서 이를 바탕으로 지금 완성할 업무는, <도서제목및목차>와 <직전내용및초안내용요약>을 보고 서브목차별로 공백 포함 한글 4,000~8,000자 분량의 <도서초안.json>을 작성하는 작업 입니다."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(<도서초안.json>작성을 위한 원칙, 아주 중요!)\n",
+                        "Message": "1) 통일된 스타일\n[직전내용]과 <도서초안.json>은 한사람이 작성한 글로서, 경어체/존댓말 중심, 구어체/문어체 혼용 범위, 한자어·외래어 사용 규칙 등의 어조(톤)와 문체(스타일)을 통일\n\n2) 맥락 연결\n내용을 유기적으로 연결하고 불필요한 반복이나 어색한 전환부가 없도록 작성\n\n3) 파트, 챕터 소개, 뒷 부분 내용의 작성 계획 및 소개 등의 표현 금지\n글의 내용을 어떻게 작성하겠다, 이번 글의 내용은 어떠하다, 어떠한 내용을 소개 및 설명 하겠다 등의 글의 본문 자체가 아닌 본문의 작성 계획 및 소개 등의 표현은 작성 금지\n\n4) 글 형식 및 구성의 다양성\n[직전내용]과 <도서초안.json>이 자연스럽게 이어지지만, [직전내용]과 <도서초안.json>의 구성과 형식에는 다양한 변화를 주어 독자에게 더욱 풍푸한 표현의 글이 될 수 있도록 작성\n\n5) 글의 도입의 다양성\n[직전내용]과 <도서초안.json>의 도입이 달라야 합니다. 경험에서 시작, 현상에서 시작, 이슈에서 시작, 의문문에서 시작 등등 글 전체가 매우 다양한 도입이 되도록 작성\n\n6) 글의 끝맺음의 다양성\n[직전내용]과 <도서초안.json>의 끝맺음이 달라야 합니다. ..것이다, ..일까요?, ..습니다, ..되었다, ..해도 좋다, 이어서 설명한다 등등 글 전체가 매우 다양한 끝맺음이 되도록 작성"
+                    },
+                    {
+                        "Mark": "\n\n(<도서초안.json>의 구조 및 내용)\n",
+                        "Message": "{'파트순번': 'n', '파트명': '메인목차를 그대로 작성', '챕터순번': 'n', '챕터명': '서브목차를 그대로 작성', '초안': '공백 포함 한글 4,000~8,000자 분량의 초안 작성'}\n"
+                    },
+                    {
+                        "Mark": "",
+                        "Message": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n\n(<도서제목및목차>과 <직전내용및초안내용요약>을 보고 공백 포함 한글 4,000~8,000자 분량의 <도서초안.json>을 작성해주세요)\n\n",
+                        "InputMark": "<도서제목및목차>\n",
+                        "Input": "INPUT",
+                        "InputMark2": "<직전내용및초안내용요약>\n",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n\n<도서초안.json>",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    }
+}

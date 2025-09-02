@@ -1,0 +1,10 @@
+{
+    "ko": {
+        "TaskName": "PDFSplit",
+        "OutputStructure": {}
+    },
+    "global": {
+        "TaskName": "PDFSplit",
+        "OutputStructure": {}
+    }
+}

@@ -1,0 +1,156 @@
+{
+    "ko": {
+        "TaskName": "JsonParsing",
+        "InputFormat": "text",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "현재 <응답.txt>는 Json형태로 텍스트로 작성한 것 입니다. 이것을 한줄로 구성된 Json형식으로 정리하여 파이썬에서 오류 없이 파싱이 가능한 <응답.json>으로 다시 작성해주세요."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(<응답.json>작성 방법)\n",
+                        "Message": "1. <응답.txt>는 Json형태로 텍스트로 작성한 것 입니다.\n2. 이것을 한줄로 구성된 Json형식으로 정리하여 파이썬에서 오류 없이 파싱이 가능한 <응답.json>으로 다시 작성해주세요.\n3. 이 업무는 형식과 구조를 한줄로 정리하여 오류 없이 파싱이 가능하도록 다시 작성하는 것이 목적임으로, 기존 데이터의 구조와 Key, Value 값과 내용들은 완전히 동일해야 합니다."
+                    },
+                    {
+                        "Mark": "",
+                        "Message": ""
+                    },
+                    {
+                        "Mark": "",
+                        "Message": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n(작성 방법대로 <응답.txt>을 <응답.json>으로 다시 작성해주세요.)\n",
+                        "InputMark": "<응답.txt>\n",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n<응답.json>\n",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    },
+    "global": {
+        "TaskName": "JsonParsing",
+        "InputFormat": "text",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "현재 <응답.txt>는 Json형태로 텍스트로 작성한 것 입니다. 이것을 한줄로 구성된 Json형식으로 정리하여 파이썬에서 오류 없이 파싱이 가능한 <응답.json>으로 다시 작성해주세요."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(<응답.json>작성 방법)\n",
+                        "Message": "1. <응답.txt>는 Json형태로 텍스트로 작성한 것 입니다.\n2. 이것을 한줄로 구성된 Json형식으로 정리하여 파이썬에서 오류 없이 파싱이 가능한 <응답.json>으로 다시 작성해주세요.\n3. 이 업무는 형식과 구조를 한줄로 정리하여 오류 없이 파싱이 가능하도록 다시 작성하는 것이 목적임으로, 기존 데이터의 구조와 Key, Value 값과 내용들은 완전히 동일해야 합니다."
+                    },
+                    {
+                        "Mark": "",
+                        "Message": ""
+                    },
+                    {
+                        "Mark": "",
+                        "Message": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n(작성 방법대로 <응답.txt>을 <응답.json>으로 다시 작성해주세요.)\n",
+                        "InputMark": "<응답.txt>\n",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n<응답.json>\n",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    }
+}

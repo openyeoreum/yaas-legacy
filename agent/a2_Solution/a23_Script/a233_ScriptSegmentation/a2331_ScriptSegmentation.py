@@ -83,7 +83,7 @@ class ScriptLoadProcess:
 
         if FileExistsError:
             # txt 또는 pdf 파일이 없으면 오류메세지 출력
-            raise FileNotFoundError(f"\n\n[ 원고 파일(txt, pdf)을 아래 경로에 복사해주세요. ]\n({self.UploadScriptFilePath})\n\n")
+            sys.exit(f"\n\n[ 원고 파일(txt, pdf)을 아래 경로에 복사해주세요. ]\n({self.UploadScriptFilePath})\n\n")
 
     ## InputList 생성 ##
     def _CreateInputList(self):

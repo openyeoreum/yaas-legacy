@@ -27,16 +27,16 @@
             "Role": "user",
             "Request": [
                 {
-                    "Mark": "",
-                    "Message": ""
-                },
-                {
                     "Mark": "(목차태그 종류)\n",
                     "Message": "Title: 도서의 제목\nLogue: 도서의 서문, 서평, 머릿말, 부록, 맺음말, 기타 등\nPart: 파트, 부 등의 제목\nChapter: 챕터, 장 등의 제목\nIndex: 소제목 등"
                 },
                 {
                     "Mark": "\n\n(요청)\n",
                     "Message": "1. 도서의 <목차.text>를 한줄씩 목차 부분을 분리합니다.\n2. 목차를 가장 큰 단위인 제목부터 가장 작은 단위인 소제목까지 파악합니다.\n3. 각 목차 앞에 목차태그의 key값 'Title, Logue, Part, Chapter, Index'를 결정하여 <태그된 목차.json>으로 정리합니다.\n4. 아래 <목차.text>를 '한줄도 빠짐 없이' <태그된 목차.json>로 완성합니다.\n"
+                },
+                {
+                    "Mark": "",
+                    "Message": ""
                 },
                 {
                     "Mark": "",

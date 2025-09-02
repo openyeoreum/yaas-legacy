@@ -32,6 +32,10 @@ class LoadAgent:
         self.ProcessNumber = ProcessNumber
         self.ProcessName = ProcessName
         self.MainLang = MainLang
+        if MainLang.lower() == "ko":
+            self.MainLangTag = "ko"
+        else:
+            self.MainLangTag = "global"
         self.Model = Model
         self.Mode = Mode
         self.MessagesReview = MessagesReview
@@ -108,13 +112,7 @@ class LoadAgent:
             raise FileNotFoundError(f"\n\n[ 아래 경로에서 해당 솔루션 데이터 프레임 파일을 찾을 수 없습니다: {self.Solution} 또는 {self.SubSolution} ]\n{DataFramePath}\n\n")
 
         # 결정된 최종 디렉터리 내에서 .json 파일 검색
-        if DataFrameType == "ProjectFrame":
-            FileEndName = ".json"
-        elif DataFrameType == "PromptFrame":
-            if self.MainLang == "ko":
-                FileEndName = "(ko).json"
-            else:
-                FileEndName = "(global).json"
+        FileEndName = ".json"
 
         for Root, Dirs, Files in os.walk(ProjectFrameDirPath):
             for File in Files:
@@ -437,12 +435,11 @@ class LoadAgent:
         """Response에 따라 ProcessDataFrame을 업데이트하는 메서드"""
         ## SolutionProjectDataFrame 불러오기
         if os.path.exists(self.SolutionProjectDataFramePath):
-            SolutionProcessDataFramePath = self.SolutionProjectDataFramePath
+            with open(self.SolutionProjectDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+                SolutionProcessDataFrame = json.load(DataFrameJson)
         else:
-            SolutionProcessDataFramePath = self.SolutionProjectFramePath
-        with open(SolutionProcessDataFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
-            SolutionProcessDataFrame = json.load(DataFrameJson)
-
+            with open(self.SolutionProjectFramePath, 'r', encoding = 'utf-8') as DataFrameJson:
+                SolutionProcessDataFrame = json.load(DataFrameJson)[self.MainLangTag]
         ## SolutionProcessInfo 데이터 업데이트
         SolutionProcessInfo = SolutionProcessDataFrame[0].copy()
         for key, ValueExpression in SolutionProcessInfo.items():

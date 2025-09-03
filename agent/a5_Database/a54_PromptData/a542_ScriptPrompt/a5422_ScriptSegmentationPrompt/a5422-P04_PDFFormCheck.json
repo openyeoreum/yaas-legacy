@@ -1,0 +1,290 @@
+{
+    "ko": {
+        "TaskName": "PDFFormCheck",
+        "InputFormat": "jpeg",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "OutputStructure": {
+            "Key": "도서페이지형식",
+            "ValueType": "list",
+            "ValueCheckList": [
+                {
+                    "ValueCheck": "listDataLengthCheck",
+                    "ValueCheckItem": "5"
+                }
+            ],
+            "Value": [
+                {
+                    "Key": "자료번호1",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고"
+                        }
+                    ],
+                    "Value": ""
+                },
+                {
+                    "Key": "자료번호2",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고"
+                        }
+                    ],
+                    "Value": ""
+                },
+                {
+                    "Key": "자료번호3",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고"
+                        }
+                    ],
+                    "Value": ""
+                },
+                {
+                    "Key": "자료번호4",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고"
+                        }
+                    ],
+                    "Value": ""
+                },
+                {
+                    "Key": "자료번호5",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고"
+                        }
+                    ],
+                    "Value": ""
+                }
+            ]
+        },
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "당신은 도서 데이터 전문가 입니다. 주어진 <도서페이지> 자료 5개를 보고 각각 (도서페이지형식)을 지정하여 <도서페이지형식.json>로 완성하는 업무를 수행합니다."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(도서페이지형식)\n",
+                        "Message": "표지: 책의 제목이 들어간 표지, 속표지 등\n저작권-판권: 저작권 정보, 발행처, ISBN 등 법적 고지 페이지\n목차: 전체 목차를 보여주는 차례 페이지\n서문-머리말: 저자나 추천인의 글, 프롤로그, 일러두기 등 본문 이해를 돕는 도입부 페이지\n장-부 시작: 새로운 장(Chapter)이나 부(Part)의 시작을 알리는 페이지\n본문: 글, 그림, 도표 등을 포함한 책의 핵심 내용인 본문 페이지\n후기-에필로그: 저자의 말이나 이야기의 결말 부분 페이지\n참고자료: 부록, 참고 문헌, 찾아보기 등 독자의 이해를 돕는 추가 정보 페이지\n빈지: 내용이 전혀 없는 페이지\n간지: 내용 없이 단순히 파트를 구분하기 위한 페이지 (만약 장-부 제목이 있다면 '장-부 시작'으로 분류)\n광고: 다른 도서나 상품을 홍보하는 페이지"
+                    },
+                    {
+                        "Mark": "\n\n(<도서페이지형식.json>의 구조 및 내용)\n",
+                        "Message": "{'도서페이지형식': [{'자료번호1': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}, {'자료번호2': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}, ... {'자료번호5': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}]}"
+                    },
+                    {
+                        "Mark": "\n\n(<페이지형식.json> 완성 절차 및 방법)\n",
+                        "Message": "1. <도서페이지> 자료는 이미지 파일 5개이며 각 파일별로 중앙 상단에 '자료번호: n'이 표기되어 있습니다.\n2. (<도서페이지형식.json>의 구조 및 내용)에 따라, 각 <도서페이지> 자료를 보고 '자료번호'와 '페이지형식'을 작성하여 <페이지형식.json>을 완성합니다."
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n\n(주어진 <도서페이지> 자료 5개를 보고 (도서페이지형식)을 지정하여 <도서페이지형식.json>로 완성해주세요)\n\n",
+                        "InputMark": "",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n\n<도서페이지형식.json>",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    },
+    "global": {
+        "TaskName": "PDFFormCheck",
+        "InputFormat": "jpeg",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "OutputStructure": {
+            "Key": "BookPageType",
+            "ValueType": "list",
+            "ValueCheckList": [
+                {
+                    "ValueCheck": "listDataLengthCheck",
+                    "ValueCheckItem": "5"
+                }
+            ],
+            "Value": [
+                {
+                    "Key": "DataNumber1",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement"
+                        }
+                    ],
+                    "Value": ""
+                },
+                {
+                    "Key": "DataNumber2",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement"
+                        }
+                    ],
+                    "Value": ""
+                },
+                {
+                    "Key": "DataNumber3",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement"
+                        }
+                    ],
+                    "Value": ""
+                },
+                {
+                    "Key": "DataNumber4",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement"
+                        }
+                    ],
+                    "Value": ""
+                },
+                {
+                    "Key": "DataNumber5",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement"
+                        }
+                    ],
+                    "Value": ""
+                }
+            ]
+        },
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(Role and Task)\n",
+                "Message": "You are a Book Data Expert. Your task is to analyze five given <BookPage> data items, determine the (BookPageType) for each, and complete the task by generating a <BookPageType.json> file."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(BookPageTypes)\n",
+                        "Message": "Cover: The cover or title page containing the book's title.\nCopyright-Colophon: Legal notice pages, including copyright information, publisher details, ISBN, etc.\nTableOfContents: The page(s) showing the full table of contents.\nPreface-Introduction: Introductory sections that aid in understanding the main text, such as a foreword, author's note, prologue, or usage guide.\nChapter-PartStart: A page that announces the beginning of a new chapter or part.\nBodyText: The core content of the book, including text, images, charts, and diagrams.\nAfterword-Epilogue: Concluding sections, such as an author's closing remarks or the story's epilogue.\nReferenceMaterial: Additional information to aid the reader, such as an appendix, bibliography, or index.\nBlankPage: A page with no content whatsoever.\nDividerPage: A page with no content, used merely to separate sections. (If it includes a chapter or part title, classify it as 'Chapter-Part Start').\nAdvertisement: A page promoting other books or products."
+                    },
+                    {
+                        "Mark": "\n\n(Structure and Content of <BookPageType.json>)\n",
+                        "Message": "{'BookPageType': [{'DataNumber1': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement'}, {'DataNumber2': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement'}, ... {'DataNumber5': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement'}]}"
+                    },
+                    {
+                        "Mark": "\n\n(Procedure for completing <BookPageType.json>)\n",
+                        "Message": "1. The <BookPage> data consists of 5 image files. Each file is marked with 'DataNumber: n' in the top-center.\n2. Following the JSON structure defined above, analyze each <BookPage> image and fill in the corresponding DataNumberN to complete the <BookPageType.json> file."
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n\n(Please analyze the five given <BookPage> data items, assign the (BookPageType) for each, and provide the output in the <BookPageType.json> format)\n\n",
+                        "InputMark": "",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n\n<BookPageType.json>",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    }
+}

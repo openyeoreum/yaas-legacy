@@ -300,61 +300,61 @@ class LoadAgent:
                     if not (int(ValueCheckItem[0]) <= len(Value) <= int(ValueCheckItem[1])):
                         return f"{self.ProcessInfo} | ListDataRangeCheckError: ({Value}) 의 개수는 ({ValueCheckItem[0]}) 개 이상 ({ValueCheckItem[1]}) 개 이하여야 합니다."
 
-                # 벨류가 문자인 경우 객관식 답의 범주 체크 (ValueCheckItem: 객관식 답의 범주 리스트)
+                # Filter4-6: 벨류가 문자인 경우 객관식 답의 범주 체크 (ValueCheckItem: 객관식 답의 범주 리스트)
                 if ValueCheck == "strDataAnswerRangeCheck":
                     if Value not in ValueCheckItem:
                         return f"{self.ProcessInfo} | StrDataAnswerRangeCheckError: ({Value}) 항목은 ({ValueCheckItem})에 포함되지 않습니다"
 
-                # 벨류가 문자인 경우 꼭 포함되어야할 문자 체크 (ValueCheckItem: 포함되어야할 문자 리스트)
+                # Filter4-7: 벨류가 문자인 경우 꼭 포함되어야할 문자 체크 (ValueCheckItem: 포함되어야할 문자 리스트)
                 if ValueCheck == "strDataInclusionCheck":
                     for CheckItem in ValueCheckItem:
                         if CheckItem not in Value:
                             return f"{self.ProcessInfo} | StrDataInclusionCheckError: ({CheckItem}) 항목이 ({Value})에 포함되어야 합니다"
                 
-                # 벨류가 문자인 경우 꼭 포함되지 말아야할 문자 체크 (ValueCheckItem: 포함되지 말아야할 문자 리스트)
+                # Filter4-8: 벨류가 문자인 경우 꼭 포함되지 말아야할 문자 체크 (ValueCheckItem: 포함되지 말아야할 문자 리스트)
                 if ValueCheck == "strDataExclusionCheck":
                     for CheckItem in ValueCheckItem:
                         if CheckItem in Value:
                             return f"{self.ProcessInfo} | StrDataExclusionCheckError: ({CheckItem}) 항목이 포함되어서는 안됩니다"
 
-                # 벨류가 문자인 경우 문자 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
+                # Filter4-9: 벨류가 문자인 경우 문자 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
                 if ValueCheck == "strDataSameCheck":
                     if Value != Input[ValueCheckItem[0]]:
                         return f"{self.ProcessInfo} | StrDataSameCheckError: ({ResponseStructureDict['Key']}) 와 (Input[{[ValueCheckItem[0]]}]) 는 일치해야 합니다\n\n({Value})\n\n({Input[ValueCheckItem[0]]})"
 
-                # 벨류가 문자인 경우 특수문자 및 공백제외 문자 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
+                # Filter4-10: 벨류가 문자인 경우 특수문자 및 공백제외 문자 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
                 if ValueCheck == "strCleanDataSameCheck":
                     if re.sub(r'\W+', '', Value, flags = re.UNICODE) != re.sub(r'\W+', '', Input[ValueCheckItem[0]], flags = re.UNICODE):
                         return f"{self.ProcessInfo} | StrCleanDataSameCheckError: ({ResponseStructureDict['Key']}) 와 (Input[{[ValueCheckItem[0]]}]) 는 일치해야 합니다\n\n({Value})\n\n({Input[ValueCheckItem[0]]})"
 
-                # 벨류가 문자인 경우 문자열 길이 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
+                # Filter4-11: 벨류가 문자인 경우 문자열 길이 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
                 if ValueCheck == "strDataLengthCheck":
                     ValueLength = len(Value)
                     InputLength = len(Input[ValueCheckItem[0]])
                     if ValueLength != InputLength:
                         return f"{self.ProcessInfo} | StrDataLengthCheckError: ({ResponseStructureDict['Key']} Length: {ValueLength}) 와 (Input[{[ValueCheckItem[0]]}] Length: {InputLength}) 는 길이는 일치해야 합니다"
 
-                # 벨류가 문자인 경우 특수문자 및 공백제외 문자열 길이 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
+                # Filter4-12: 벨류가 문자인 경우 특수문자 및 공백제외 문자열 길이 일치 여부 체크 (ValueCheckItem: Input에서 비교 대상의 dict Key, ex: ComparisonInput)
                 if ValueCheck == "strCleanDataLengthCheck":
                     CleanValueLength = len(re.sub(r'\W+', '', Value, flags=re.UNICODE))
                     CleanInputLength = len(re.sub(r'\W+', '', Input[ValueCheckItem[0]], flags=re.UNICODE))
                     if CleanValueLength != CleanInputLength:
                         return f"{self.ProcessInfo} | StrCleanDataLengthCheckError: ({ResponseStructureDict['Key']} Length: {CleanValueLength}) 와 (Input[{[ValueCheckItem[0]]}] Length: {CleanInputLength}) 는 길이는 일치해야 합니다"
 
-                # 벨류가 문자인 경우 문자열 길이의 범위 체크 (ValueCheckItem: 문자열의 길이 범위 [최소, 최대])
+                # Filter4-13: 벨류가 문자인 경우 문자열 길이의 범위 체크 (ValueCheckItem: 문자열의 길이 범위 [최소, 최대])
                 if ValueCheck == "strDataRangeCheck":
                     ValueLength = len(Value)
                     if not (int(ValueCheckItem[0]) <= ValueLength <= int(ValueCheckItem[1])):
                         return f"{self.ProcessInfo} | StrDataRangeCheckError: ({ResponseStructureDict['Key']} Length: {ValueLength}) 는 ({ValueCheckItem[0]}) 이상 ({ValueCheckItem[1]}) 이하여야 합니다"
 
-                # 벨류가 문자인 경우 문자열 처음과 끝에 존재해야하는 필수 문자 체크 (ValueCheckItem: 문자열 처음과 끝에 존재해야하는 문자 리스트 [시작 문자, 끝 문자], 시작 문자 또는 끝 문자중 존재하지 않는 부분은 빈문자 ""로 작성)
+                # Filter4-14: 벨류가 문자인 경우 문자열 처음과 끝에 존재해야하는 필수 문자 체크 (ValueCheckItem: 문자열 처음과 끝에 존재해야하는 문자 리스트 [시작 문자, 끝 문자], 시작 문자 또는 끝 문자중 존재하지 않는 부분은 빈문자 ""로 작성)
                 if ValueCheck == "strDataStartEndInclusionCheck":
                     StartWordLength = len(ValueCheckItem[0])
                     EndWordLength = len(ValueCheckItem[1])
                     if ValueCheckItem[0] not in Value[0:StartWordLength + 10] or ValueCheckItem[1] not in Value[-EndWordLength - 10:-1]:
                         return f"{self.ProcessInfo} | StrDataStartEndInclusionCheckError: ({ResponseStructureDict['Key']}) 는 ({ValueCheckItem[0]}) 로 시작하고 ({ValueCheckItem[1]}) 로 끝나야 합니다"
 
-                # 벨류가 문자인 경우 문자열 처음과 끝에 존재하지 말아야할 문자 체크 (ValueCheckItem: 문자열 처음과 끝에 존재하지 말아야할 문자 리스트 [시작 문자, 끝 문자], 시작 문자 또는 끝 문자중 존재하지 않는 부분은 빈문자 ""로 작성)
+                # Filter4-15: 벨류가 문자인 경우 문자열 처음과 끝에 존재하지 말아야할 문자 체크 (ValueCheckItem: 문자열 처음과 끝에 존재하지 말아야할 문자 리스트 [시작 문자, 끝 문자], 시작 문자 또는 끝 문자중 존재하지 않는 부분은 빈문자 ""로 작성)
                 if ValueCheck == "strDataStartEndExclusionCheck":
                     if ValueCheckItem[0] == "":
                         ValueCheckItem[0] = "(포@함-방$지_문^구#)"
@@ -365,15 +365,15 @@ class LoadAgent:
                     if ValueCheckItem[0] in Value[0:StartWordLength + 10] or ValueCheckItem[1] in Value[-EndWordLength - 10:-1]:
                         return f"{self.ProcessInfo} | StrDataStartEndExclusionCheckError: ({ResponseStructureDict['Key']}) 는 ({ValueCheckItem[0]}) 로 시작하고 ({ValueCheckItem[1]}) 로 끝나지 않아야 합니다"
 
-                # 벨류가 문자인 경우 주요 언어 체크
+                # Filter4-16: 벨류가 문자인 경우 주요 언어 체크
                 if ValueCheck == "strMainLangCheck":
                     return FilteredResponse
 
-                # 벨류가 숫자인 경우 수의 범위 체크
+                # Filter4-17: 벨류가 숫자인 경우 수의 범위 체크
                 if ValueCheck == "intDataRangeCheck":
                     return FilteredResponse
 
-            # 벨류가 숫자인 경우 수 일치 여부 체크
+                # Filter4-18: 벨류가 숫자인 경우 수 일치 여부 체크
                 if ValueCheck == "intDataSameCheck":
                     return FilteredResponse
                 
@@ -396,6 +396,7 @@ class LoadAgent:
         if isinstance(FilteredResponse, str):
             return FilteredResponse
         
+        
         # Error2: SubCheck
         # Main-ValueType이 dict인 경우
         if self.ResponseStructure["ValueType"] == "dict":
@@ -411,6 +412,21 @@ class LoadAgent:
                 SubFilteredResponse = FilterFunc(SubFilteredResponse, self.ResponseStructure["Value"][i], Input)
                 if isinstance(SubFilteredResponse, str):
                     return SubFilteredResponse
+                
+                # Error2-4: Sub-ValueType이 dict 또는 list인 경우에만 Sub-Sub 체크
+                if self.ResponseStructure["Value"][i]["ValueType"] in ["dict", "list"]:
+                    SubSubFilteredResponse = SubFilteredResponse[self.ResponseStructure["Value"][i]["Key"]]
+                    for j in range(len(self.ResponseStructure["Value"][i]["Value"])):
+                        
+                        # Error2-4-1: Sub-Sub-KeyCheck
+                        SubSubFilteredResponse = KeyCheck(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j])
+                        if isinstance(SubSubFilteredResponse, str):
+                            return SubSubFilteredResponse
+
+                        # Error2-4-2: Sub-Sub-FilterFunc
+                        SubSubFilteredResponse = FilterFunc(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j], Input)
+                        if isinstance(SubSubFilteredResponse, str):
+                            return SubSubFilteredResponse
         
         # Main-ValueType이 list인 경우
         if self.ResponseStructure["ValueType"] == "list":
@@ -426,6 +442,21 @@ class LoadAgent:
                     SubFilteredResponse = FilterFunc(SubFilteredResponse, self.ResponseStructure["Value"][i], Input)
                     if isinstance(SubFilteredResponse, str):
                         return SubFilteredResponse
+                    
+                    # Error2-4: Sub-ValueType이 dict 또는 list인 경우에만 Sub-Sub 체크
+                    if self.ResponseStructure["Value"][i]["ValueType"] in ["dict", "list"]:
+                        SubSubFilteredResponse = SubFilteredResponse[self.ResponseStructure["Value"][i]["Key"]]
+                        for j in range(len(self.ResponseStructure["Value"][i]["Value"])):
+                            
+                            # Error2-4-1: Sub-Sub-KeyCheck
+                            SubSubFilteredResponse = KeyCheck(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j])
+                            if isinstance(SubSubFilteredResponse, str):
+                                return SubSubFilteredResponse
+
+                            # Error2-4-2: Sub-Sub-FilterFunc
+                            SubSubFilteredResponse = FilterFunc(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j], Input)
+                            if isinstance(SubSubFilteredResponse, str):
+                                return SubSubFilteredResponse
         
         # 모든 조건을 만족하면 필터링된 응답 반환
         return FilteredResponse[self.ResponseStructure["Key"]]

@@ -137,22 +137,23 @@ pl: Polish - Polski
 
 (<도서페이지형식.json>의 구조 및 내용)
 {
-    '도서': [
+    '도서페이지형식': [
         {
-            '자료번호': 1
-            '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
+            '자료번호n': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
         },
         {
-            '자료번호': 2
-            '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
+            '자료번호n+1': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
         },
         ...
+        {
+            '자료번호n+4': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
+        }
     ]
 }
 
 (<페이지형식.json> 완성 절차 및 방법)
-1. <도서페이지> 자료는 이미지 파일 5개이며 각 파일별로 중앙 상단에 "자료번호: n"이 표기되어 있습니다.
-2. (<도서페이지형식.json>의 구조 및 내용)에 따라, 각 <도서페이지> 자료를 보고 '자료번호'와 '페이지형식'을 작성하여 <페이지형식.json>을 완성합니다.
+1. <도서페이지> 자료는 이미지 파일 5개이며 각 파일별로 중앙 상단에 '자료번호: n'이 표기되어 있습니다.
+2. (<도서페이지형식.json>의 구조 및 내용)에 따라, 각 <도서페이지> 자료를 보고 '자료번호n'을 작성하여 <페이지형식.json>을 완성합니다.
 
 (주어진 <도서페이지> 자료 5개를 보고 (도서페이지형식)을 지정하여 <도서페이지형식.json>로 완성해주세요)
 <도서페이지형식.json>
@@ -177,22 +178,23 @@ Advertisement: A page promoting other books or products.
 
 (Structure and Content of <BookPageType.json>)
 {
-    "Book": [
+    "BookPageType": [
         {
-            "DataNumber": 1,
-            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, or Advertisement"
+            "DataNumber1": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, or Advertisement"
         },
         {
-            "DataNumber": 2,
-            "PageType": "Assign the appropriate page type for the <BookPage> from the list: ..."
+            "DataNumber2": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, or Advertisement"
         },
         ...
+        {
+            "DataNumber5": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, or Advertisement"
+        }
     ]
 }
 
 (Procedure for completing <BookPageType.json>)
-1. The <BookPage> data consists of 5 image files. Each file is marked with "DataNumber: n" in the top-center.
-2. Following the JSON structure defined above, analyze each <BookPage> image and fill in the corresponding Data Number and Page Type to complete the <BookPageType.json> file.
+1. The <BookPage> data consists of 5 image files. Each file is marked with 'DataNumber: n' in the top-center.
+2. Following the JSON structure defined above, analyze each <BookPage> image and fill in the corresponding DataNumberN to complete the <BookPageType.json> file.
 
 (Please analyze the five given <BookPage> data items, assign the (BookPageType) for each, and provide the output in the <BookPageType.json> format.)
 <BookPageType.json>

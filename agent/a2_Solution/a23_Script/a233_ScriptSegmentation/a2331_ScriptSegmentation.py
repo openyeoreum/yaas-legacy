@@ -12,9 +12,9 @@ from PyPDF2 import PdfReader, PdfWriter
 from agent.a2_Solution.a21_General.a216_LoadAgent import LoadAgent
 
 
-##################################################
-##### PT1 ScriptLoad (업로드 된 스크립트 파일 확인) #####
-##################################################
+###################################################
+##### PT01 ScriptLoad (업로드 된 스크립트 파일 확인) #####
+###################################################
 class ScriptLoadProcess:
 
     ## 기본 경로 정의 ##
@@ -117,9 +117,16 @@ class ScriptLoadProcess:
         return SolutionEdit, self.ScriptFileExtension, self.UploadedScriptFilePath, self.UploadScriptFilePath
 
 
-#############################################
-##### P2 PDFMainLangCheck (PDF 언어 체크) #####
-#############################################
+#################################
+#################################
+########## PDF Process ##########
+#################################
+#################################
+
+
+##############################################
+##### P02 PDFMainLangCheck (PDF 언어 체크) #####
+##############################################
 class PDFMainLangCheckProcess:
 
     ## PDFMainLangCheck 초기화 ##
@@ -155,59 +162,83 @@ class PDFMainLangCheckProcess:
         self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
 
     ## PDF 샘플 이미지 생성 및 라벨 생성 ##
-    def _CreatePDFToLabeledSmapleJPEG(self, Page, InputId):
-        """PDF 페이지를 받아 라벨을 추가한 뒤, 이미지 파일로 저장하고 경로를 반환하는 메서드"""
-        # 페이지를 고해상도 이미지로 변환
+    def _CreatePDFToLabeledSampleJPEG(self, Page, InputId):
+        """PDF 페이지에 '자료번호: InputId' 라벨을 추가한 JPEG 파일을 생성"""
+        # 페이지 → 이미지
         Pixmap = Page.get_pixmap(dpi = 150)
-        PageImage = Image.frombytes("RGB", [Pixmap.width, Pixmap.height], Pixmap.samples)
+        PageImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
 
-        # "자료번호: n" 라벨 이미지 생성
+        # 스케일 기준 및 스케일 팩터
+        RefWidth = 1240
+        Scale = max(0.5, min(2.5, PageImg.width / RefWidth))
+
+        # 폰트 로딩 (캐시/멤버 재사용 권장)
+        FontSize = int(30 * Scale)
+        try:
+            Font = ImageFont.truetype(self.NotoSansCJKRegular, FontSize)
+        except Exception:
+            Font = ImageFont.load_default()
+
+        # 라벨 텍스트 및 치수 계산 (최소 폭 보장)
         LabelText = f"자료번호: {InputId}"
-        Font = ImageFont.truetype(self.NotoSansCJKRegular, 30)
 
-        # 페이지 번호가 3~5자리가 되어도 너비가 충분하도록 최대 너비 기준으로 계산
-        PlaceholderText = "자료번호: 99999"
-        PlaceholderBbox = Font.getbbox(PlaceholderText)
-        TextWidth = PlaceholderBbox[2] - PlaceholderBbox[0]
-        
-        TextBbox = Font.getbbox(LabelText)
-        TextHeight = TextBbox[3] - TextBbox[1]
-        
-        # 라벨 이미지의 여백(Padding)을 포함한 크기 계산
-        Padding = 15  # 좌우 여백을 조금 더 주어 넉넉하게 설정
-        LabelWidth = TextWidth + 2 * Padding
-        LabelHeight = TextHeight + 2 * Padding
-        
-        # 하얀 배경의 라벨 이미지 생성
-        LabelImage = Image.new('RGB', (LabelWidth, LabelHeight), 'white')
-        Draw = ImageDraw.Draw(LabelImage)
-        
-        # 검은색 테두리 그리기
-        Draw.rectangle([(0, 0), (LabelWidth - 1, LabelHeight - 1)], outline = 'black', width = 4)
-        
-        # 요구사항 1: 페이지 높이에 비례하여 텍스트 세로 위치 자동 조정
-        BaseHeight = 1754  # 기준 높이
-        BaseVerticalOffset = -8  # 기준 높이에서의 조정값
-        VerticalTextOffset = int((BaseVerticalOffset / BaseHeight) * PageImage.height)
-        
-        # 텍스트를 라벨의 중앙에 위치시키기 위한 x좌표 계산
-        # (라벨 전체 너비 - 실제 텍스트 너비) / 2
-        text_x_position = (LabelWidth - (TextBbox[2] - TextBbox[0])) // 2
-        
-        # 검은색 텍스트 추가 (조정된 위치 적용)
-        Draw.text((text_x_position, Padding + VerticalTextOffset), LabelText, font=Font, fill = 'black')
-        
-        # 원본 페이지 이미지의 중앙 상단에 라벨 이미지 합성
-        Margin = 20
-        Position = ((PageImage.width - LabelWidth) // 2, Margin)
-        PageImage.paste(LabelImage, Position)
+        TextBBox = Font.getbbox(LabelText)
+        TextW = TextBBox[2] - TextBBox[0]
+        TextH = TextBBox[3] - TextBBox[1]
 
-        # 해당 이미지 파일을 지정된 디렉토리에 저장
+        Padding = int(14 * Scale)
+        BorderW = max(2, int(4 * Scale))
+        Margin = int(20 * Scale)
+
+        MinWBBox = Font.getbbox("자료번호: 99999")
+        MinTextW = (MinWBBox[2] - MinWBBox[0])
+
+        LabelW = max(TextW, MinTextW) + 2 * Padding
+        LabelH = TextH + 2 * Padding
+
+        # 라벨 이미지 (반투명 배경 + 얕은 그림자)
+        LabelImg = Image.new("RGBA", (LabelW, LabelH), (255, 255, 255, 230))
+        Draw = ImageDraw.Draw(LabelImg)
+
+        # 테두리
+        Draw.rectangle([(0, 0), (LabelW - 1, LabelH - 1)], outline=(0, 0, 0, 255), width=BorderW)
+
+        # 텍스트 중앙 정렬 + 수직 오프셋(폰트 크기 기준 보정)
+        TextX = (LabelW - TextW) // 2
+        VerticalOffset = int(-0.3 * FontSize)
+        TextY = (LabelH - TextH) // 2 + VerticalOffset
+        TextY = max(Padding // 2, min(TextY, LabelH - TextH - Padding // 2))
+
+        ShadowOffset = max(1, int(Scale))
+        Draw.text((TextX + ShadowOffset, TextY + ShadowOffset), LabelText, font=Font, fill=(0, 0, 0, 90))
+        Draw.text((TextX, TextY), LabelText, font=Font, fill=(0, 0, 0, 255))
+
+        # 합성 위치(상단 중앙) 계산 + 경계 체크
+        PosX = (PageImg.width - LabelW) // 2
+        PosY = Margin
+        PosX = max(0, min(PosX, PageImg.width - LabelW))
+        PosY = max(0, min(PosY, PageImg.height - LabelH))
+
+        # 합성 (RGBA → RGB)
+        PageImg = PageImg.convert("RGBA")
+        PageImg.alpha_composite(LabelImg, dest=(PosX, PosY))
+        PageImg = PageImg.convert("RGB")
+
+        # 디렉터리 보장 및 저장 옵션
+        os.makedirs(self.SampleScriptJPEGDirPath, exist_ok=True)
         OutputFilename = f"{self.ProjectName}_Script({self.NextSolution})({InputId}).jpeg"
-        OutputFilePath = os.path.join(self.SampleScriptJPEGDirPath, OutputFilename)
-        PageImage.save(OutputFilePath, 'JPEG')
-        
-        return OutputFilePath
+        OutputPath = os.path.join(self.SampleScriptJPEGDirPath, OutputFilename)
+
+        PageImg.save(
+            OutputPath,
+            "JPEG",
+            quality = 92,
+            optimize = True,
+            progressive = True,
+            subsampling = 1  # 4:2:2에 해당
+        )
+
+        return OutputPath
 
     ## InputList 생성 ##
     def _CreateInputList(self):
@@ -255,7 +286,7 @@ class PDFMainLangCheckProcess:
         for InputId, PageIndex in enumerate(SelectedPageIndices, 1):
             Page = PdfDocument.load_page(PageIndex)
             # PDF 이미지 생성 및 라벨 생성
-            OutputFilePath = self._CreatePDFToLabeledSmapleJPEG(Page, InputId)
+            OutputFilePath = self._CreatePDFToLabeledSampleJPEG(Page, InputId)
 
             InputList[0]["Input"].append(OutputFilePath)
 
@@ -277,9 +308,9 @@ class PDFMainLangCheckProcess:
         return SolutionEdit, MainLang
 
 
-#########################################
-##### P3 PDFSplit (PDF 페이지 별 분할) #####
-#########################################
+##########################################
+##### P03 PDFSplit (PDF 페이지 별 분할) #####
+##########################################
 class PDFSplitProcess:
 
     ## PDFSplit 초기화 ##
@@ -373,9 +404,164 @@ class PDFSplitProcess:
         return SolutionEdit
 
 
-#############################################
-##### T2 TXTMainLangCheck (TXT 언어 체크) #####
-#############################################
+####################################################
+##### #P04 PDFFormCheck (PDF 파일 페이지 형식 체크) #####
+####################################################
+class PDFFormCheck:
+
+    ## PDFFormCheck 초기화 ##
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+        """클래스 초기화"""
+        # 업데이트 정보
+        self.Email = Email
+        self.ProjectName = ProjectName
+        self.Solution = Solution
+        self.SubSolution = SubSolution
+        self.NextSolution = NextSolution
+        self.UploadedScriptFilePath = UploadedScriptFilePath
+
+        # Process 설정
+        self.ProcessNumber = "P02"
+        self.ProcessName = "PDFMainLangCheck"
+        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
+
+        # 경로설정
+        self.UploadScriptFilePath = UploadScriptFilePath
+        self._InitializePaths()
+
+        # 출력설정
+        self.MessagesReview = MessagesReview
+
+    ## 프로세스 관련 경로 초기화 ##
+    def _InitializePaths(self):
+        """프로세스와 관련된 모든 경로를 초기화"""
+        # SplitedPDF 경로 및 디렉토리 생성
+        self.ScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_Script({self.NextSolution})_jpeg")
+        os.makedirs(self.ScriptJPEGDirPath, exist_ok = True)
+        self.FontDirPath = "/usr/share/fonts/"
+        self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
+
+    ## PDF 이미지 생성 및 라벨 생성 ##
+    def _CreatePDFToLabeledJPEGs(self, PDFDoc):
+        """PDF 전체 페이지를 순회하며 '자료번호: 페이지번호' 라벨을 추가한 JPEG 파일을 생성"""
+
+        OutputPathList = []
+
+        # 페이지 번호는 1부터 시작 (보통 사람이 보는 페이지 넘버링과 일치)
+        for PageNumber in range(len(PDFDoc)):
+            Page = PDFDoc[PageNumber]
+
+            # 페이지 → 이미지
+            Pixmap = Page.get_pixmap(dpi =150)
+            PageImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
+
+            # 스케일 기준
+            RefWidth = 1240
+            Scale = max(0.5, min(2.5, PageImg.width / RefWidth))
+
+            # 폰트
+            FontSize = int(30 * Scale)
+            try:
+                Font = ImageFont.truetype(self.NotoSansCJKRegular, FontSize)
+            except Exception:
+                Font = ImageFont.load_default()
+
+            # 라벨 텍스트
+            LabelText = f"자료번호: {PageNumber + 1}"
+            TextBBox = Font.getbbox(LabelText)
+            TextW = TextBBox[2] - TextBBox[0]
+            TextH = TextBBox[3] - TextBBox[1]
+
+            Padding = int(14 * Scale)
+            BorderW = max(2, int(4 * Scale))
+            Margin = int(20 * Scale)
+
+            # 최소 폭 보장
+            MinWBBox = Font.getbbox("자료번호: 99999")
+            MinTextW = MinWBBox[2] - MinWBBox[0]
+
+            LabelW = max(TextW, MinTextW) + 2 * Padding
+            LabelH = TextH + 2 * Padding
+
+            # 라벨 이미지
+            LabelImg = Image.new("RGBA", (LabelW, LabelH), (255, 255, 255, 230))
+            Draw = ImageDraw.Draw(LabelImg)
+
+            Draw.rectangle([(0, 0), (LabelW - 1, LabelH - 1)], outline=(0, 0, 0, 255), width=BorderW)
+
+            TextX = (LabelW - TextW) // 2
+            VerticalOffset = int(-0.3 * FontSize)
+            TextY = (LabelH - TextH) // 2 + VerticalOffset
+            TextY = max(Padding // 2, min(TextY, LabelH - TextH - Padding // 2))
+
+            ShadowOffset = max(1, int(Scale))
+            Draw.text((TextX + ShadowOffset, TextY + ShadowOffset), LabelText, font=Font, fill=(0, 0, 0, 90))
+            Draw.text((TextX, TextY), LabelText, font=Font, fill=(0, 0, 0, 255))
+
+            # 합성 위치
+            PosX = (PageImg.width - LabelW) // 2
+            PosY = Margin
+            PosX = max(0, min(PosX, PageImg.width - LabelW))
+            PosY = max(0, min(PosY, PageImg.height - LabelH))
+
+            PageImg = PageImg.convert("RGBA")
+            PageImg.alpha_composite(LabelImg, dest=(PosX, PosY))
+            PageImg = PageImg.convert("RGB")
+
+            # 저장
+            os.makedirs(self.ScriptJPEGDirPath, exist_ok=True)
+            OutputFilename = f"{self.ProjectName}_Script({self.NextSolution})({PageNumber + 1}).jpeg"
+            OutputPath = os.path.join(self.ScriptJPEGDirPath, OutputFilename)
+
+            PageImg.save(
+                OutputPath,
+                "JPEG",
+                quality = 92,
+                optimize = True,
+                progressive = True,
+                subsampling = 1
+            )
+
+            OutputPathList.append(OutputPath)
+
+        return OutputPathList
+
+    ## InputList 생성 ##
+    def _CreateInputList(self):
+        """InputList를 생성하는 메서드"""
+        # SampleScriptJPEGDirPath에 ScriptJPEG 파일이 5개 존재하면 그대로 유지
+        if os.path.exists(self.ScriptJPEGDirPath):
+            # SampleScriptJPEGDirPath에서 모든 JPEG 파일을 가져와 정렬
+            ScriptJPEGFiles = sorted([
+                FileName for FileName in os.listdir(self.SampleScriptJPEGDirPath)
+                if FileName.lower().endswith('.jpeg')
+            ])
+
+            # SampleScriptJPEGDirPath에 JPEG 파일이 5개 이상 있는 경우는 InputList 생성 및 리턴
+            if len(ScriptJPEGFiles) >= 5:
+                InputList = [
+                    {
+                        "Id": 1,
+                        "Input": [],
+                        "InputFormat": "jpeg",
+                        "ComparisonInput": None
+                    }
+                ]
+                for InputId, FileName in enumerate(ScriptJPEGFiles, 1):
+                    FilePath = os.path.join(self.SampleScriptJPEGDirPath, FileName)
+                    InputList[0]["Input"].append(FilePath)
+                return InputList
+
+#################################
+#################################
+########## TXT Process ##########
+#################################
+#################################
+
+
+##############################################
+##### T02 TXTMainLangCheck (TXT 언어 체크) #####
+##############################################
 class TXTMainLangCheckProcess:
 
     ## TXTMainLangCheck 초기화 ##
@@ -478,9 +664,9 @@ class TXTMainLangCheckProcess:
         return SolutionEdit, MainLang
 
 
-#########################################
-##### T3 TXTSplit (TXT 토큰 단위 분할) #####
-#########################################
+##########################################
+##### T03 TXTSplit (TXT 토큰 단위 분할) #####
+##########################################
 class TXTSplitProcess:
 
     ## TXTSplit 초기화 ##
@@ -680,8 +866,6 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         # T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
         TXTSplitterInstance = TXTSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, ScriptFileExtension, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview, BaseTokens = 3000)
         SolutionEdit = TXTSplitterInstance.Run()
-        
-    sys.exit()
 
 if __name__ == "__main__":
     

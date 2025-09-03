@@ -165,23 +165,22 @@ class PDFMainLangCheckProcess:
     def _CreatePDFToLabeledSampleJPEG(self, Page, InputId):
         """PDF 페이지에 '자료번호: InputId' 라벨을 추가한 JPEG 파일을 생성"""
         # 페이지 → 이미지
-        Pixmap = Page.get_pixmap(dpi = 150)
+        Pixmap = Page.get_pixmap(dpi=150)
         PageImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
 
         # 스케일 기준 및 스케일 팩터
         RefWidth = 1240
         Scale = max(0.5, min(2.5, PageImg.width / RefWidth))
 
-        # 폰트 로딩 (캐시/멤버 재사용 권장)
+        # 폰트 로딩
         FontSize = int(30 * Scale)
         try:
             Font = ImageFont.truetype(self.NotoSansCJKRegular, FontSize)
         except Exception:
             Font = ImageFont.load_default()
 
-        # 라벨 텍스트 및 치수 계산 (최소 폭 보장)
+        # 라벨 텍스트 및 치수
         LabelText = f"자료번호: {InputId}"
-
         TextBBox = Font.getbbox(LabelText)
         TextW = TextBBox[2] - TextBBox[0]
         TextH = TextBBox[3] - TextBBox[1]
@@ -196,35 +195,34 @@ class PDFMainLangCheckProcess:
         LabelW = max(TextW, MinTextW) + 2 * Padding
         LabelH = TextH + 2 * Padding
 
-        # 라벨 이미지 (반투명 배경 + 얕은 그림자)
-        LabelImg = Image.new("RGBA", (LabelW, LabelH), (255, 255, 255, 230))
+        # 라벨 이미지 (흰색 불투명 배경, RGB)
+        LabelImg = Image.new("RGB", (LabelW, LabelH), "white")
         Draw = ImageDraw.Draw(LabelImg)
 
         # 테두리
-        Draw.rectangle([(0, 0), (LabelW - 1, LabelH - 1)], outline=(0, 0, 0, 255), width=BorderW)
+        Draw.rectangle([(0, 0), (LabelW - 1, LabelH - 1)], outline="black", width=BorderW)
 
-        # 텍스트 중앙 정렬 + 수직 오프셋(폰트 크기 기준 보정)
+        # 텍스트 중앙 정렬 + 수직 오프셋(그림자 없음)
         TextX = (LabelW - TextW) // 2
-        VerticalOffset = int(-0.3 * FontSize)
+        VerticalOffset = int(-0.3 * FontSize)  # 필요시 0 ~ -0.3*FontSize 내에서 조정
         TextY = (LabelH - TextH) // 2 + VerticalOffset
         TextY = max(Padding // 2, min(TextY, LabelH - TextH - Padding // 2))
 
-        ShadowOffset = max(1, int(Scale))
-        Draw.text((TextX + ShadowOffset, TextY + ShadowOffset), LabelText, font=Font, fill=(0, 0, 0, 90))
-        Draw.text((TextX, TextY), LabelText, font=Font, fill=(0, 0, 0, 255))
+        Draw.text((TextX, TextY), LabelText, font=Font, fill="black")
 
-        # 합성 위치(상단 중앙) 계산 + 경계 체크
+        # 합성 위치(상단 중앙)
         PosX = (PageImg.width - LabelW) // 2
         PosY = Margin
         PosX = max(0, min(PosX, PageImg.width - LabelW))
         PosY = max(0, min(PosY, PageImg.height - LabelH))
 
-        # 합성 (RGBA → RGB)
-        PageImg = PageImg.convert("RGBA")
-        PageImg.alpha_composite(LabelImg, dest=(PosX, PosY))
-        PageImg = PageImg.convert("RGB")
+        # ✅ 불투명 라벨은 paste로 합성 (alpha_composite 사용 금지)
+        if LabelImg.mode != "RGB":
+            LabelImg = LabelImg.convert("RGB")
+        # PageImg는 이미 RGB
+        PageImg.paste(LabelImg, (PosX, PosY))
 
-        # 디렉터리 보장 및 저장 옵션
+        # 디렉터리 보장 및 저장
         os.makedirs(self.SampleScriptJPEGDirPath, exist_ok=True)
         OutputFilename = f"{self.ProjectName}_Script({self.NextSolution})({InputId}).jpeg"
         OutputPath = os.path.join(self.SampleScriptJPEGDirPath, OutputFilename)
@@ -232,10 +230,10 @@ class PDFMainLangCheckProcess:
         PageImg.save(
             OutputPath,
             "JPEG",
-            quality = 92,
-            optimize = True,
-            progressive = True,
-            subsampling = 1  # 4:2:2에 해당
+            quality=92,
+            optimize=True,
+            progressive=True,
+            subsampling=1  # 4:2:2
         )
 
         return OutputPath
@@ -444,18 +442,16 @@ class PDFFormCheck:
     ## PDF 이미지 생성 및 라벨 생성 ##
     def _CreatePDFToLabeledJPEGs(self, PDFDoc):
         """PDF 전체 페이지를 순회하며 '자료번호: 페이지번호' 라벨을 추가한 JPEG 파일을 생성"""
-
         OutputPathList = []
 
-        # 페이지 번호는 1부터 시작 (보통 사람이 보는 페이지 넘버링과 일치)
         for PageNumber in range(len(PDFDoc)):
             Page = PDFDoc[PageNumber]
 
             # 페이지 → 이미지
-            Pixmap = Page.get_pixmap(dpi =150)
+            Pixmap = Page.get_pixmap(dpi=150)
             PageImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
 
-            # 스케일 기준
+            # 스케일
             RefWidth = 1240
             Scale = max(0.5, min(2.5, PageImg.width / RefWidth))
 
@@ -476,37 +472,37 @@ class PDFFormCheck:
             BorderW = max(2, int(4 * Scale))
             Margin = int(20 * Scale)
 
-            # 최소 폭 보장
             MinWBBox = Font.getbbox("자료번호: 99999")
             MinTextW = MinWBBox[2] - MinWBBox[0]
 
             LabelW = max(TextW, MinTextW) + 2 * Padding
             LabelH = TextH + 2 * Padding
 
-            # 라벨 이미지
-            LabelImg = Image.new("RGBA", (LabelW, LabelH), (255, 255, 255, 230))
+            # 라벨 이미지 (흰색 불투명 배경, RGB)
+            LabelImg = Image.new("RGB", (LabelW, LabelH), "white")
             Draw = ImageDraw.Draw(LabelImg)
 
-            Draw.rectangle([(0, 0), (LabelW - 1, LabelH - 1)], outline=(0, 0, 0, 255), width=BorderW)
+            # 테두리
+            Draw.rectangle([(0, 0), (LabelW - 1, LabelH - 1)], outline="black", width=BorderW)
 
+            # 텍스트 중앙 정렬 + 수직 오프셋(그림자 없음)
             TextX = (LabelW - TextW) // 2
             VerticalOffset = int(-0.3 * FontSize)
             TextY = (LabelH - TextH) // 2 + VerticalOffset
             TextY = max(Padding // 2, min(TextY, LabelH - TextH - Padding // 2))
 
-            ShadowOffset = max(1, int(Scale))
-            Draw.text((TextX + ShadowOffset, TextY + ShadowOffset), LabelText, font=Font, fill=(0, 0, 0, 90))
-            Draw.text((TextX, TextY), LabelText, font=Font, fill=(0, 0, 0, 255))
+            Draw.text((TextX, TextY), LabelText, font=Font, fill="black")
 
-            # 합성 위치
+            # 합성 위치(상단 중앙)
             PosX = (PageImg.width - LabelW) // 2
             PosY = Margin
             PosX = max(0, min(PosX, PageImg.width - LabelW))
             PosY = max(0, min(PosY, PageImg.height - LabelH))
 
-            PageImg = PageImg.convert("RGBA")
-            PageImg.alpha_composite(LabelImg, dest=(PosX, PosY))
-            PageImg = PageImg.convert("RGB")
+            # ✅ 불투명 라벨은 paste 사용
+            if LabelImg.mode != "RGB":
+                LabelImg = LabelImg.convert("RGB")
+            PageImg.paste(LabelImg, (PosX, PosY))
 
             # 저장
             os.makedirs(self.ScriptJPEGDirPath, exist_ok=True)
@@ -516,10 +512,10 @@ class PDFFormCheck:
             PageImg.save(
                 OutputPath,
                 "JPEG",
-                quality = 92,
-                optimize = True,
-                progressive = True,
-                subsampling = 1
+                quality=92,
+                optimize=True,
+                progressive=True,
+                subsampling=1
             )
 
             OutputPathList.append(OutputPath)
@@ -529,28 +525,33 @@ class PDFFormCheck:
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
-        # SampleScriptJPEGDirPath에 ScriptJPEG 파일이 5개 존재하면 그대로 유지
-        if os.path.exists(self.ScriptJPEGDirPath):
-            # SampleScriptJPEGDirPath에서 모든 JPEG 파일을 가져와 정렬
-            ScriptJPEGFiles = sorted([
-                FileName for FileName in os.listdir(self.SampleScriptJPEGDirPath)
-                if FileName.lower().endswith('.jpeg')
-            ])
+        # PDF 파일 불러오기 및 이미지 생성 및 라벨 생성
+        PdfDocument = fitz.open(self.UploadedScriptFilePath)
+        OutputPathList = self._CreatePDFToLabeledJPEGs(PdfDocument)
+        
+        # InputList 생성 및 리턴
+        InputList = []
+        for i, OutputPath in enumerate(OutputPathList):
+            InputList.append(
+                {
+                    "Id": i + 1,
+                    "Input": OutputPath,
+                    "InputFormat": "jpeg",
+                    "ComparisonInput": None
+                }
+            )
 
-            # SampleScriptJPEGDirPath에 JPEG 파일이 5개 이상 있는 경우는 InputList 생성 및 리턴
-            if len(ScriptJPEGFiles) >= 5:
-                InputList = [
-                    {
-                        "Id": 1,
-                        "Input": [],
-                        "InputFormat": "jpeg",
-                        "ComparisonInput": None
-                    }
-                ]
-                for InputId, FileName in enumerate(ScriptJPEGFiles, 1):
-                    FilePath = os.path.join(self.SampleScriptJPEGDirPath, FileName)
-                    InputList[0]["Input"].append(FilePath)
-                return InputList
+        return InputList
+
+    ## PDFFormCheckProcess 실행 ##
+    def Run(self):
+        """PDF 페이지 형식 체크 전체 프로세스 실행"""
+        print(f"< {self.ProcessInfo} Update 시작 >")
+        InputList = self._CreateInputList()
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
+        SolutionEdit = LoadAgentInstance.Run()
+
+        return SolutionEdit
 
 #################################
 #################################
@@ -853,9 +854,13 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit, MainLang = PDFMainLangCheckProcessInstance.Run()
 
-        # #P03 PDFSplit (PDF 파일 페이지 분할)
+        ## P03 PDFSplit (PDF 파일 페이지 분할)
         PDFSplitterInstance = PDFSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, ScriptFileExtension, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFSplitterInstance.Run()
+
+        ## P04 PDFFormCheck (PDF 파일 페이지 형식 체크)
+        PDFFormCheckInstance = PDFFormCheck(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        SolutionEdit = PDFFormCheckInstance.Run()
         
     elif ScriptFileExtension == 'txt':
 

@@ -99,8 +99,8 @@ class ScriptLoadProcess:
                     "FileExtension": self.ScriptFileExtension,
                     "UploadedScriptFilePath": self.UploadedScriptFilePath
                 },
-                "InputFormat": None,
-                "ComparisonInput": None
+                "InputFormat": "text",
+                "ComparisonInput": ""
             }
         ]
 
@@ -216,7 +216,7 @@ class PDFMainLangCheckProcess:
         PosX = max(0, min(PosX, PageImg.width - LabelW))
         PosY = max(0, min(PosY, PageImg.height - LabelH))
 
-        # ✅ 불투명 라벨은 paste로 합성 (alpha_composite 사용 금지)
+        # 불투명 라벨은 paste로 합성 (alpha_composite 사용 금지)
         if LabelImg.mode != "RGB":
             LabelImg = LabelImg.convert("RGB")
         # PageImg는 이미 RGB
@@ -256,7 +256,7 @@ class PDFMainLangCheckProcess:
                         "Id": 1,
                         "Input": [],
                         "InputFormat": "jpeg",
-                        "ComparisonInput": None
+                        "ComparisonInput": ""
                     }
                 ]
                 for InputId, FileName in enumerate(ScriptJPEGFiles, 1):
@@ -278,7 +278,7 @@ class PDFMainLangCheckProcess:
                 "Id": 1,
                 "Input": [],
                 "InputFormat": "jpeg",
-                "ComparisonInput": None
+                "ComparisonInput": ""
             }
         ]
         for InputId, PageIndex in enumerate(SelectedPageIndices, 1):
@@ -384,8 +384,8 @@ class PDFSplitProcess:
                         "ScriptId": i + 1,
                         "PageFilePath": Path
                     },
-                    "InputFormat": None,
-                    "ComparisonInput": None
+                    "InputFormat": "text",
+                    "ComparisonInput": ""
                 }
             )
 
@@ -419,8 +419,8 @@ class PDFFormCheck:
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
-        self.ProcessNumber = "P02"
-        self.ProcessName = "PDFMainLangCheck"
+        self.ProcessNumber = "P04"
+        self.ProcessName = "PDFFormCheck"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
         # 경로설정
@@ -499,7 +499,7 @@ class PDFFormCheck:
             PosX = max(0, min(PosX, PageImg.width - LabelW))
             PosY = max(0, min(PosY, PageImg.height - LabelH))
 
-            # ✅ 불투명 라벨은 paste 사용
+            # 불투명 라벨은 paste 사용
             if LabelImg.mode != "RGB":
                 LabelImg = LabelImg.convert("RGB")
             PageImg.paste(LabelImg, (PosX, PosY))
@@ -528,16 +528,24 @@ class PDFFormCheck:
         # PDF 파일 불러오기 및 이미지 생성 및 라벨 생성
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
         OutputPathList = self._CreatePDFToLabeledJPEGs(PdfDocument)
-        
-        # InputList 생성 및 리턴
+        OutputPathListLength = len(OutputPathList)
+
         InputList = []
-        for i, OutputPath in enumerate(OutputPathList):
+        for i, Start in enumerate(range(0, OutputPathListLength, 2), start = 1):
+            # 원형 인덱스(0-based)
+            Indexes = [(Start + k) % OutputPathListLength for k in range(5)]
+            # 경로 리스트
+            OutputPathSet = [OutputPathList[idx] for idx in Indexes]
+            # 사람이 보는 1-based 페이지 순번 리스트
+            OutputPathNums = [idx + 1 for idx in Indexes]
+            OutputPathNumsStr = ", ".join(str(idx) for idx in OutputPathNums)
+
             InputList.append(
                 {
                     "Id": i + 1,
-                    "Input": OutputPath,
+                    "Input": OutputPathSet,
                     "InputFormat": "jpeg",
-                    "ComparisonInput": None
+                    "ComparisonInput": OutputPathNumsStr
                 }
             )
 
@@ -645,7 +653,7 @@ class TXTMainLangCheckProcess:
                 "Id": 1,
                 "Input": self._CreateTXTToSampleText(FullText),
                 "InputFormat": "text",
-                "ComparisonInput": None
+                "ComparisonInput": ""
             }
         ]
 
@@ -816,8 +824,8 @@ class TXTSplitProcess:
                         "ScriptId": i + 1,
                         "SplitedText": TXTChunk
                     },
-                    "InputFormat": None,
-                    "ComparisonInput": None
+                    "InputFormat": "text",
+                    "ComparisonInput": ""
                 }
             )
 

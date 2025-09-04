@@ -17,7 +17,7 @@
         },
         "OutputFormat": "json",
         "OutputStructure": {
-            "Key": "도서페이지형식",
+            "Key": "도서",
             "ValueType": "list",
             "ValueCheckList": [
                 {
@@ -31,7 +31,7 @@
                     "ValueType": "int",
                     "ValueCheckList": [
                         {
-                            "ValueCheck": "intDataSameCheck",
+                            "ValueCheck": "intDataAnswerRangeCheck",
                             "ValueCheckItem": "ComparisonInput"
                         }
                     ],
@@ -128,7 +128,7 @@
         },
         "OutputFormat": "json",
         "OutputStructure": {
-            "Key": "BookPageType",
+            "Key": "Book",
             "ValueType": "list",
             "ValueCheckList": [
                 {
@@ -142,7 +142,7 @@
                     "ValueType": "int",
                     "ValueCheckList": [
                         {
-                            "ValueCheck": "intDataSameCheck",
+                            "ValueCheck": "intDataAnswerRangeCheck",
                             "ValueCheckItem": "ComparisonInput"
                         }
                     ],

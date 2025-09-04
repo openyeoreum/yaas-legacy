@@ -4,6 +4,7 @@ import shutil
 import json
 import time
 import spacy
+import copy
 import sys
 sys.path.append("/yaas")
 
@@ -186,7 +187,7 @@ class LoadAgent:
         return EditCheck, EditCompletion
 
     ## ProcessResponse 생성 메서드 ##
-    def _ProcessResponse(self, Input, InputCount, InputFormat = "text", memoryNote = ""):
+    def _ProcessResponse(self, Input, InputCount, InputFormat, ComparisonInput, memoryNote = ""):
         """ProcessResponse를 생성하는 메서드"""
         ErrorCount = 0
         while True:
@@ -200,7 +201,7 @@ class LoadAgent:
                 Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
 
             # 생성된 Respnse Filler 처리
-            FilteredResponse = self._ProcessFilter(Response, Input)
+            FilteredResponse = self._ProcessFilter(Response, ComparisonInput)
 
             # 필터 에외처리, JSONDecodeError 처리
             if isinstance(FilteredResponse, str):
@@ -223,7 +224,7 @@ class LoadAgent:
             return FilteredResponse
 
     ## ProcessFilter 메서드 ##
-    def _ProcessFilter(self, Response, Input):
+    def _ProcessFilter(self, Response, ComparisonInput):
         """프로세스 응답에 대한 필터 메서드"""
         # Filter1: JsonLoad
         def JsonLoad(Response):
@@ -266,16 +267,24 @@ class LoadAgent:
                 return f"{self.ProcessInfo} | KeyCheckError: ({ResponseStructureDict['Key']}) 키가 누락되었습니다"
 
         # Filter4: FilterFunc
-        def FilterFunc(FilteredResponse, ResponseStructureDict, Input):
+        def FilterFunc(FilteredResponse, ResponseStructureDict, ComparisonInput):
             Value = FilteredResponse[ResponseStructureDict["Key"]]
             for ValueCheckDict in ResponseStructureDict["ValueCheckList"]:
                 ValueCheck = ValueCheckDict["ValueCheck"]
-                ValueCheckItem = [item.strip() for item in ValueCheckDict['ValueCheckItem'].split(",")]
-                ComparisonInput = [item.strip() for item in Input['ComparisonInput'].split(",")]
+                # ValueCheckItem 처리
+                if isinstance(ValueCheckDict['ValueCheckItem'], list):
+                    ValueCheckItem = ValueCheckDict['ValueCheckItem']
+                else:
+                    ValueCheckItem = [item.strip() for item in str(ValueCheckDict['ValueCheckItem']).split(",")]
+                # ComparisonInputItem 처리
+                if isinstance(ComparisonInput, list):
+                    ComparisonInputItem = ComparisonInput
+                else:
+                    ComparisonInputItem = [item.strip() for item in str(ComparisonInput).split(",")]
 
                 # Filter4-1: 벨류가 리스트인 경우 객관식 답의 범주 체크 (ValueCheckItem: 객관식 답의 범주 리스트)
                 if ValueCheck == "listDataAnswerRangeCheck":
-                    ValueCheckTarget = ComparisonInput if ValueCheckItem in ["", "ComparisonInput"] else ValueCheckItem
+                    ValueCheckTarget = ComparisonInputItem if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem
 
                     for value in Value:
                         if value not in ValueCheckTarget:
@@ -283,7 +292,7 @@ class LoadAgent:
 
                 # Filter4-2: 벨류가 리스트인 경우 꼭 포함되어야할 데이터 체크 (ValueCheckItem: 포함되어야할 데이터 리스트)
                 if ValueCheck == "listDataInclusionCheck":
-                    ValueCheckTarget = ComparisonInput if ValueCheckItem in ["", "ComparisonInput"] else ValueCheckItem
+                    ValueCheckTarget = ComparisonInputItem if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem
 
                     for CheckItem in ValueCheckTarget:
                         if CheckItem not in Value:
@@ -291,7 +300,7 @@ class LoadAgent:
 
                 # Filter4-3: 벨류가 리스트인 경우 꼭 포함되지 말아야할 데이터 체크 (ValueCheckItem: 포함되지 말아야할 데이터 리스트)
                 if ValueCheck == "listDataExclusionCheck":
-                    ValueCheckTarget = ComparisonInput if ValueCheckItem in ["", "ComparisonInput"] else ValueCheckItem
+                    ValueCheckTarget = ComparisonInputItem if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem
 
                     for CheckItem in ValueCheckTarget:
                         if CheckItem in Value:
@@ -299,29 +308,29 @@ class LoadAgent:
 
                 # Filter4-4: 벨류가 리스트인 경우 리스트의 길이 체크 (ValueCheckItem: 리스트의 길이 [정수])
                 if ValueCheck == "listDataLengthCheck":
-                    ValueCheckTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    ValueCheckTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
 
                     if len(Value) != int(ValueCheckTarget):
                         return f"{self.ProcessInfo} | ListDataLengthCheckError: ({Value}) 의 개수는 ({ValueCheckTarget}) 개가 되어야 합니다."
                 
                 # Filter4-5: 벨류가 리스트인 경우 리스트 길이의 범위 체크 (ValueCheckItem: 리스트의 길이 범위 [최소, 최대])
                 if ValueCheck == "listDataRangeCheck":
-                    MinTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
-                    MaxTarget = ComparisonInput[1] if ValueCheckItem[1] in ["", "ComparisonInput"] else ValueCheckItem[1]
+                    MinTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    MaxTarget = ComparisonInputItem[1] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[1]
 
                     if not (int(MinTarget) <= len(Value) <= int(MaxTarget)):
                         return f"{self.ProcessInfo} | ListDataRangeCheckError: ({Value}) 의 개수는 ({MinTarget}) 개 이상 ({MaxTarget}) 개 이하여야 합니다."
 
                 # Filter4-6: 벨류가 문자인 경우 객관식 답의 범주 체크 (ValueCheckItem: 객관식 답의 범주 리스트)
                 if ValueCheck == "strDataAnswerRangeCheck":
-                    ValueCheckTarget = ComparisonInput if ValueCheckItem in ["", "ComparisonInput"] else ValueCheckItem
+                    ValueCheckTarget = ComparisonInputItem if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem
 
                     if Value not in ValueCheckTarget:
                         return f"{self.ProcessInfo} | StrDataAnswerRangeCheckError: ({Value}) 항목은 ({ValueCheckTarget})에 포함되지 않습니다"
 
                 # Filter4-7: 벨류가 문자인 경우 꼭 포함되어야할 문자 체크 (ValueCheckItem: 포함되어야할 문자 리스트)
                 if ValueCheck == "strDataInclusionCheck":
-                    ValueCheckTarget = ComparisonInput if ValueCheckItem in ["", "ComparisonInput"] else ValueCheckItem
+                    ValueCheckTarget = ComparisonInputItem if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem
 
                     for CheckItem in ValueCheckTarget:
                         if CheckItem not in Value:
@@ -329,7 +338,7 @@ class LoadAgent:
                 
                 # Filter4-8: 벨류가 문자인 경우 꼭 포함되지 말아야할 문자 체크 (ValueCheckItem: 포함되지 말아야할 문자 리스트)
                 if ValueCheck == "strDataExclusionCheck":
-                    ValueCheckTarget = ComparisonInput if ValueCheckItem in ["", "ComparisonInput"] else ValueCheckItem
+                    ValueCheckTarget = ComparisonInputItem if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem
 
                     for CheckItem in ValueCheckTarget:
                         if CheckItem in Value:
@@ -337,14 +346,14 @@ class LoadAgent:
 
                 # Filter4-9: 벨류가 문자인 경우 문자 일치 여부 체크 (ValueCheckItem: 비교할 문자)
                 if ValueCheck == "strDataSameCheck":
-                    ValueCheckTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    ValueCheckTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
 
                     if Value != ValueCheckTarget:
                         return (f"{self.ProcessInfo} | StrDataSameCheckError: ({ResponseStructureDict['Key']}) 는 아래와 같이 일치해야 합니다\n\n({Value})\n\n({ValueCheckTarget})")
 
                 # Filter4-10: 특수문자/공백 제거 후 동일성 체크
                 if ValueCheck == "strCleanDataSameCheck":
-                    ValueCheckTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    ValueCheckTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
 
                     Clean = lambda s: re.sub(r'\W+', '', s, flags=re.UNICODE)
                     if Clean(Value) != Clean(ValueCheckTarget):
@@ -352,7 +361,7 @@ class LoadAgent:
 
                 # Filter4-11: 문자열 길이 일치 여부 체크
                 if ValueCheck == "strDataLengthCheck":
-                    ValueCheckTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    ValueCheckTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
 
                     ValueLength = len(Value)
                     TargetLength = len(ValueCheckTarget)
@@ -361,7 +370,7 @@ class LoadAgent:
 
                 # Filter4-12: 특수문자/공백 제거 후 문자열 길이 일치 여부 체크
                 if ValueCheck == "strCleanDataLengthCheck":
-                    ValueCheckTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    ValueCheckTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
 
                     Clean = lambda s: re.sub(r'\W+', '', s, flags=re.UNICODE)
                     CleanValueLength = len(Clean(Value))
@@ -371,8 +380,8 @@ class LoadAgent:
 
                 # Filter4-13: 벨류가 문자인 경우 문자열 길이의 범위 체크 (ValueCheckItem: 문자열의 길이 범위 [최소, 최대])
                 if ValueCheck == "strDataRangeCheck":
-                    MinTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
-                    MaxTarget = ComparisonInput[1] if ValueCheckItem[1] in ["", "ComparisonInput"] else ValueCheckItem[1]
+                    MinTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    MaxTarget = ComparisonInputItem[1] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[1]
                     
                     ValueLength = len(Value)
                     if not (int(MinTarget) <= ValueLength <= int(MaxTarget)):
@@ -380,8 +389,8 @@ class LoadAgent:
 
                 # Filter4-14: 벨류가 문자인 경우 문자열 처음과 끝에 존재해야하는 필수 문자 체크 (ValueCheckItem: 문자열 처음과 끝에 존재해야하는 문자 리스트 [시작 문자, 끝 문자], 시작 문자 또는 끝 문자중 존재하지 않는 부분은 빈문자 ""로 작성)
                 if ValueCheck == "strDataStartEndInclusionCheck":
-                    StartTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
-                    EndTarget   = ComparisonInput[1] if ValueCheckItem[1] in ["", "ComparisonInput"] else ValueCheckItem[1]
+                    StartTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    EndTarget = ComparisonInputItem[1] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[1]
 
                     StartWordLength = len(StartTarget)
                     EndWordLength = len(EndTarget)
@@ -390,8 +399,8 @@ class LoadAgent:
 
                 # Filter4-15: 벨류가 문자인 경우 문자열 처음과 끝에 존재하지 말아야할 문자 체크 (ValueCheckItem: 문자열 처음과 끝에 존재하지 말아야할 문자 리스트 [시작 문자, 끝 문자], 시작 문자 또는 끝 문자중 존재하지 않는 부분은 빈문자 ""로 작성)
                 if ValueCheck == "strDataStartEndExclusionCheck":
-                    StartCheckItem = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
-                    EndCheckItem   = ComparisonInput[1] if ValueCheckItem[1] in ["", "ComparisonInput"] else ValueCheckItem[1]
+                    StartCheckItem = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    EndCheckItem = ComparisonInputItem[1] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[1]
 
                     StartWordLength = len(StartCheckItem)
                     EndWordLength = len(EndCheckItem)
@@ -469,7 +478,7 @@ class LoadAgent:
                             return "unknown"
                     
                     # Filter4-16-2: 주요 언어 체크
-                    ValueCheckTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    ValueCheckTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
                     ValueCheckTarget = (ValueCheckTarget).lower()
                     
                     DetectedLang = DetectLangWithSpacy(Value).lower()
@@ -478,9 +487,9 @@ class LoadAgent:
                     
                 # Filter4-17: 벨류가 숫자인 경우 답의 범주 체크 (ValueCheckItem: 객관식 답의 범주 리스트)
                 if ValueCheck == "intDataAnswerRangeCheck":
-                    ValueCheckTarget = ComparisonInput if ValueCheckItem in ["", "ComparisonInput"] else ValueCheckItem
+                    ValueCheckTarget = ComparisonInputItem if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem
                     ValueCheckTarget = [int(Item) for Item in ValueCheckTarget]
-                    
+
                     if isinstance(Value, int) or (isinstance(Value, str) and Value.isdigit()):
                         FilteredResponse[ResponseStructureDict["Key"]] = int(Value)
                         if int(Value) not in ValueCheckTarget:
@@ -488,8 +497,8 @@ class LoadAgent:
 
                 # Filter4-18: 벨류가 숫자인 경우 수의 범위 체크 (ValueCheckItem: 수의 범위 [최소, 최대])
                 if ValueCheck == "intDataRangeCheck":
-                    MinTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
-                    MaxTarget = ComparisonInput[1] if ValueCheckItem[1] in ["", "ComparisonInput"] else ValueCheckItem[1]
+                    MinTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    MaxTarget = ComparisonInputItem[1] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[1]
 
                     if isinstance(Value, int) or (isinstance(Value, str) and Value.isdigit()):
                         FilteredResponse[ResponseStructureDict["Key"]] = int(Value)
@@ -498,10 +507,11 @@ class LoadAgent:
 
                 # Filter4-19: 벨류가 숫자인 경우 수 일치 여부 체크 (ValueCheckItem: 비교할 숫자)
                 if ValueCheck == "intDataSameCheck":
-                    ValueCheckTarget = ComparisonInput[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
+                    ValueCheckTarget = ComparisonInputItem[0] if ValueCheckItem[0] in ["", "ComparisonInput"] else ValueCheckItem[0]
                     
                     if isinstance(Value, int) or (isinstance(Value, str) and Value.isdigit()):
                         FilteredResponse[ResponseStructureDict["Key"]] = int(Value)
+                        print(f"{int(ValueCheckTarget)} -> {int(Value)}")
                         if int(Value) != int(ValueCheckTarget):
                             return f"{self.ProcessInfo} | IntDataSameCheckError: ({ResponseStructureDict['Key']}: {Value}) 는 ({ValueCheckTarget}) 여야 합니다."
 
@@ -520,72 +530,104 @@ class LoadAgent:
             return FilteredResponse
                
         # Error1-3: Main-FilterFunc
-        FilteredResponse = FilterFunc(FilteredResponse, self.ResponseStructure, Input)
+        FilteredResponse = FilterFunc(FilteredResponse, self.ResponseStructure, ComparisonInput)
         if isinstance(FilteredResponse, str):
             return FilteredResponse
         
         
         # Error2: SubCheck
-        # Main-ValueType이 dict인 경우
+        # Error2(1): Main-ValueType이 dict인 경우
         if self.ResponseStructure["ValueType"] == "dict":
             SubFilteredResponse = FilteredResponse[self.ResponseStructure["Key"]]
             for i in range(len(self.ResponseStructure["Value"])):
 
-                # Error2-2: Sub-KeyCheck
-                SubFilteredResponse = KeyCheck(SubFilteredResponse, self.ResponseStructure["Value"][i])
-                if isinstance(SubFilteredResponse, str):
-                    return SubFilteredResponse
+                # Error2(1)-2: Sub-KeyCheck
+                _SubFilteredResponse = KeyCheck(SubFilteredResponse, self.ResponseStructure["Value"][i])
+                if isinstance(_SubFilteredResponse, str):
+                    return _SubFilteredResponse
 
-                # Error2-3: Sub-FilterFunc
-                SubFilteredResponse = FilterFunc(SubFilteredResponse, self.ResponseStructure["Value"][i], Input)
-                if isinstance(SubFilteredResponse, str):
-                    return SubFilteredResponse
+                # Error2(1)-3: Sub-FilterFunc
+                _SubFilteredResponse = FilterFunc(SubFilteredResponse, self.ResponseStructure["Value"][i], ComparisonInput)
+                if isinstance(_SubFilteredResponse, str):
+                    return _SubFilteredResponse
                 
-                # Error2-4: Sub-ValueType이 dict 또는 list인 경우에만 Sub-Sub 체크
-                if self.ResponseStructure["Value"][i]["ValueType"] in ["dict", "list"]:
+                # Error2(1)-4: Sub-ValueType이 dict 또는 list인 경우에만 Sub-Sub 체크
+                # Sub-ValueType이 dict인 경우
+                if self.ResponseStructure["Value"][i]["ValueType"] == "dict":
                     SubSubFilteredResponse = SubFilteredResponse[self.ResponseStructure["Value"][i]["Key"]]
                     for j in range(len(self.ResponseStructure["Value"][i]["Value"])):
                         
-                        # Error2-4-1: Sub-Sub-KeyCheck
-                        SubSubFilteredResponse = KeyCheck(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j])
-                        if isinstance(SubSubFilteredResponse, str):
-                            return SubSubFilteredResponse
+                        # Error2(1)-4-1: Sub-Sub-KeyCheck
+                        _SubSubFilteredResponse = KeyCheck(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j])
+                        if isinstance(_SubSubFilteredResponse, str):
+                            return _SubSubFilteredResponse
 
-                        # Error2-4-2: Sub-Sub-FilterFunc
-                        SubSubFilteredResponse = FilterFunc(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j], Input)
-                        if isinstance(SubSubFilteredResponse, str):
-                            return SubSubFilteredResponse
-        
-        # Main-ValueType이 list인 경우
+                        # Error2(1)-4-2: Sub-Sub-FilterFunc
+                        _SubSubFilteredResponse = FilterFunc(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j], ComparisonInput)
+                        if isinstance(_SubSubFilteredResponse, str):
+                            return _SubSubFilteredResponse
+
+                # Error2(1)-4: Sub-ValueType이 list인 경우
+                if self.ResponseStructure["Value"][i]["ValueType"] == "list":
+                    for SubSubFilteredResponse in SubFilteredResponse[self.ResponseStructure["Value"][i]["Key"]]:
+                        for j in range(len(self.ResponseStructure["Value"][i]["Value"])):
+
+                            # Error2(1)-4-1: Sub-Sub-KeyCheck
+                            _SubSubFilteredResponse = KeyCheck(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j])
+                            if isinstance(_SubSubFilteredResponse, str):
+                                return _SubSubFilteredResponse
+
+                            # Error2(1)-4-2: Sub-Sub-FilterFunc
+                            _SubSubFilteredResponse = FilterFunc(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j], ComparisonInput)
+                            if isinstance(_SubSubFilteredResponse, str):
+                                return _SubSubFilteredResponse
+
+        # Error2(2): Main-ValueType이 list인 경우
         if self.ResponseStructure["ValueType"] == "list":
-            for SubFilteredResponse in FilteredResponse["Key"]:
+            for SubFilteredResponse in FilteredResponse[self.ResponseStructure["Key"]]:
                 for i in range(len(self.ResponseStructure["Value"])):
 
-                    # Error2-2: Sub-KeyCheck
-                    SubFilteredResponse = KeyCheck(SubFilteredResponse, self.ResponseStructure["Value"][i])
-                    if isinstance(SubFilteredResponse, str):
-                        return SubFilteredResponse
+                    # Error2(2)-2: Sub-KeyCheck
+                    _SubFilteredResponse = KeyCheck(SubFilteredResponse, self.ResponseStructure["Value"][i])
+                    if isinstance(_SubFilteredResponse, str):
+                        return _SubFilteredResponse
 
-                    # Error2-3: Sub-FilterFunc
-                    SubFilteredResponse = FilterFunc(SubFilteredResponse, self.ResponseStructure["Value"][i], Input)
-                    if isinstance(SubFilteredResponse, str):
-                        return SubFilteredResponse
-                    
-                    # Error2-4: Sub-ValueType이 dict 또는 list인 경우에만 Sub-Sub 체크
-                    if self.ResponseStructure["Value"][i]["ValueType"] in ["dict", "list"]:
+                    # Error2(2)-3: Sub-FilterFunc
+                    _SubFilteredResponse = FilterFunc(SubFilteredResponse, self.ResponseStructure["Value"][i], ComparisonInput)
+                    if isinstance(_SubFilteredResponse, str):
+                        return _SubFilteredResponse
+
+                    # Error2(2)-4: Sub-ValueType이 dict 또는 list인 경우에만 Sub-Sub 체크
+                    # Sub-ValueType이 dict인 경우
+                    if self.ResponseStructure["Value"][i]["ValueType"] == "dict":
                         SubSubFilteredResponse = SubFilteredResponse[self.ResponseStructure["Value"][i]["Key"]]
                         for j in range(len(self.ResponseStructure["Value"][i]["Value"])):
                             
-                            # Error2-4-1: Sub-Sub-KeyCheck
-                            SubSubFilteredResponse = KeyCheck(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j])
-                            if isinstance(SubSubFilteredResponse, str):
-                                return SubSubFilteredResponse
+                            # Error2(2)-4-1: Sub-Sub-KeyCheck
+                            _SubSubFilteredResponse = KeyCheck(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j])
+                            if isinstance(_SubSubFilteredResponse, str):
+                                return _SubSubFilteredResponse
 
-                            # Error2-4-2: Sub-Sub-FilterFunc
-                            SubSubFilteredResponse = FilterFunc(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j], Input)
-                            if isinstance(SubSubFilteredResponse, str):
-                                return SubSubFilteredResponse
-        
+                            # Error2(2)-4-2: Sub-Sub-FilterFunc
+                            _SubSubFilteredResponse = FilterFunc(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j], ComparisonInput)
+                            if isinstance(_SubSubFilteredResponse, str):
+                                return _SubSubFilteredResponse
+
+                    # Error2(2)-4: Sub-ValueType이 list인 경우
+                    if self.ResponseStructure["Value"][i]["ValueType"] == "list":
+                        for SubSubFilteredResponse in SubFilteredResponse[self.ResponseStructure["Value"][i]["Key"]]:
+                            for j in range(len(self.ResponseStructure["Value"][i]["Value"])):
+
+                                # Error2(2)-4-1: Sub-Sub-KeyCheck
+                                _SubSubFilteredResponse = KeyCheck(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j])
+                                if isinstance(_SubSubFilteredResponse, str):
+                                    return _SubSubFilteredResponse
+
+                                # Error2(2)-4-2: Sub-Sub-FilterFunc
+                                _SubSubFilteredResponse = FilterFunc(SubSubFilteredResponse, self.ResponseStructure["Value"][i]["Value"][j], ComparisonInput)
+                                if isinstance(_SubSubFilteredResponse, str):
+                                    return _SubSubFilteredResponse
+
         # 모든 조건을 만족하면 필터링된 응답 반환
         return FilteredResponse[self.ResponseStructure["Key"]]
 
@@ -615,20 +657,35 @@ class LoadAgent:
 
 
         ## SolutionProcessData 데이터 업데이트
-        SolutionProcessData = SolutionProcessDataFrame[1][0].copy()
-        for key, ValueExpression in SolutionProcessData.items():
+        ## Response가 dict인 경우
+        SolutionProcessData = copy.deepcopy(SolutionProcessDataFrame[1][0])
+        if isinstance(SolutionProcessData, dict):
+            for key, ValueExpression in SolutionProcessData.items():
 
-            ActualValue = ValueExpression
-            if isinstance(ValueExpression, str) and ValueExpression.startswith("eval(") and ValueExpression.endswith(")"):
-                # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
-                CodeToEval = ValueExpression[5:-1]
-                ActualValue = eval(CodeToEval)
+                ActualValue = ValueExpression
+                if isinstance(ValueExpression, str) and ValueExpression.startswith("eval(") and ValueExpression.endswith(")"):
+                    # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
+                    CodeToEval = ValueExpression[5:-1]
+                    ActualValue = eval(CodeToEval)
 
-            SolutionProcessData[key] = ActualValue
+                SolutionProcessData[key] = ActualValue
+
+        ## Response가 list인 경우
+        elif isinstance(SolutionProcessData, list):
+            for i in range(len(SolutionProcessData)):
+                for key, ValueExpression in SolutionProcessData[i].items():
+                    
+                    ActualValue = ValueExpression
+                    if isinstance(ValueExpression, str) and ValueExpression.startswith("eval(") and ValueExpression.endswith(")"):
+                        # "eval("와 ")" 부분을 제외한 안쪽 코드만 추출
+                        CodeToEval = ValueExpression[5:-1]
+                        ActualValue = eval(CodeToEval)
+
+                    SolutionProcessData[i][key] = ActualValue
 
         ## SolutionProcessDataFrame 데이터 프레임 업데이트
         SolutionProcessDataFrame[1].append(SolutionProcessData)
-        
+
         ## SolutionProjectDataFrame ProcessCount 및 Completion 업데이트
         SolutionProcessDataFrame[0]['InputCount'] = InputCount
         if InputCount == self.TotalInputCount:
@@ -681,6 +738,13 @@ class LoadAgent:
                 SolutionEdit = json.load(SolutionEditJson)
         return SolutionEdit
 
+
+    ## Input을 동적으로 지정하는 메서드 ##
+
+
+    ## ComparisonInput을 동적으로 지정하는 메서드 ##
+
+
     ## Response 생성 및 프로세스 실행 메서드 ##
     def Run(self, Response = "Response"):
         """프로세스 실행 메서드"""
@@ -691,10 +755,11 @@ class LoadAgent:
                     inputCount = self.InputList[i]['Id']
                     Input = self.InputList[i]['Input']
                     InputFormat = self.InputList[i]['InputFormat']
+                    ComparisonInput = self.InputList[i]['ComparisonInput']
 
                     if Response == "Response":
                         ## ProcessResponse 생성
-                        ProcessResponse = self._ProcessResponse(Input, inputCount, InputFormat = InputFormat)
+                        ProcessResponse = self._ProcessResponse(Input, inputCount, InputFormat, ComparisonInput)
                     if Response == "Input":
                         ProcessResponse = Input
 

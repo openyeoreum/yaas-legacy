@@ -1,11 +1,11 @@
 [
     {
-        "ProjectName": "",
+        "ProjectName": "eval(self.ProjectName)",
         "TaskName": "PDFFormCheck",
-        "NextSolution": "",
-        "AutoTemplate": "",
+        "NextSolution": "eval(self.NextSolution)",
+        "AutoTemplate": "eval(self.AutoTemplate)",
         "FileExtension": "pdf",
-        "MainLang": "",
+        "MainLang": "eval(self.MainLang)",
         "InputCount": 0,
         "Completion": "No"
     },

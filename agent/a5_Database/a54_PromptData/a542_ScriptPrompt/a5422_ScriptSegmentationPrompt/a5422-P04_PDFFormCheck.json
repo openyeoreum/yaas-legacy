@@ -27,51 +27,18 @@
             ],
             "Value": [
                 {
-                    "Key": "자료번호1",
-                    "ValueType": "str",
+                    "Key": "자료번호",
+                    "ValueType": "int",
                     "ValueCheckList": [
                         {
-                            "ValueCheck": "strDataAnswerRangeCheck",
-                            "ValueCheckItem": "표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고"
+                            "ValueCheck": "intDataSameCheck",
+                            "ValueCheckItem": "ComparisonInput"
                         }
                     ],
                     "Value": ""
                 },
                 {
-                    "Key": "자료번호2",
-                    "ValueType": "str",
-                    "ValueCheckList": [
-                        {
-                            "ValueCheck": "strDataAnswerRangeCheck",
-                            "ValueCheckItem": "표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고"
-                        }
-                    ],
-                    "Value": ""
-                },
-                {
-                    "Key": "자료번호3",
-                    "ValueType": "str",
-                    "ValueCheckList": [
-                        {
-                            "ValueCheck": "strDataAnswerRangeCheck",
-                            "ValueCheckItem": "표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고"
-                        }
-                    ],
-                    "Value": ""
-                },
-                {
-                    "Key": "자료번호4",
-                    "ValueType": "str",
-                    "ValueCheckList": [
-                        {
-                            "ValueCheck": "strDataAnswerRangeCheck",
-                            "ValueCheckItem": "표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고"
-                        }
-                    ],
-                    "Value": ""
-                },
-                {
-                    "Key": "자료번호5",
+                    "Key": "페이지형식",
                     "ValueType": "str",
                     "ValueCheckList": [
                         {
@@ -98,7 +65,7 @@
                     },
                     {
                         "Mark": "\n\n(<도서페이지형식.json>의 구조 및 내용)\n",
-                        "Message": "{'도서페이지형식': [{'자료번호1': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}, {'자료번호2': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}, ... {'자료번호5': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}]}"
+                        "Message": "{'도서': [{'자료번호': n, '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}, {'자료번호': n+1, '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}, ... {'자료번호': n+4, '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}]}"
                     },
                     {
                         "Mark": "\n\n(<페이지형식.json> 완성 절차 및 방법)\n",
@@ -171,51 +138,18 @@
             ],
             "Value": [
                 {
-                    "Key": "DataNumber1",
-                    "ValueType": "str",
+                    "Key": "DataNumber",
+                    "ValueType": "int",
                     "ValueCheckList": [
                         {
-                            "ValueCheck": "strDataAnswerRangeCheck",
-                            "ValueCheckItem": "Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement"
+                            "ValueCheck": "intDataSameCheck",
+                            "ValueCheckItem": "ComparisonInput"
                         }
                     ],
                     "Value": ""
                 },
                 {
-                    "Key": "DataNumber2",
-                    "ValueType": "str",
-                    "ValueCheckList": [
-                        {
-                            "ValueCheck": "strDataAnswerRangeCheck",
-                            "ValueCheckItem": "Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement"
-                        }
-                    ],
-                    "Value": ""
-                },
-                {
-                    "Key": "DataNumber3",
-                    "ValueType": "str",
-                    "ValueCheckList": [
-                        {
-                            "ValueCheck": "strDataAnswerRangeCheck",
-                            "ValueCheckItem": "Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement"
-                        }
-                    ],
-                    "Value": ""
-                },
-                {
-                    "Key": "DataNumber4",
-                    "ValueType": "str",
-                    "ValueCheckList": [
-                        {
-                            "ValueCheck": "strDataAnswerRangeCheck",
-                            "ValueCheckItem": "Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement"
-                        }
-                    ],
-                    "Value": ""
-                },
-                {
-                    "Key": "DataNumber5",
+                    "Key": "PageType",
                     "ValueType": "str",
                     "ValueCheckList": [
                         {
@@ -242,11 +176,11 @@
                     },
                     {
                         "Mark": "\n\n(Structure and Content of <BookPageType.json>)\n",
-                        "Message": "{'BookPageType': [{'DataNumber1': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement'}, {'DataNumber2': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement'}, ... {'DataNumber5': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement'}]}"
+                        "Message": "{'Book': [{'DataNumber': n, 'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, or Advertisement'}, {'DataNumber': n+1, 'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, BlankPage, DividerPage, or Advertisement'}, ... {'DataNumber': n+4, 'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, BlankPage, DividerPage, Advertisement'}]}"
                     },
                     {
                         "Mark": "\n\n(Procedure for completing <BookPageType.json>)\n",
-                        "Message": "1. The <BookPage> data consists of 5 image files. Each file is marked with 'DataNumber: n' in the top-center.\n2. Following the JSON structure defined above, analyze each <BookPage> image and fill in the corresponding DataNumberN to complete the <BookPageType.json> file."
+                        "Message": "1. The <BookPage> data consists of 5 image files. Each file is marked with 'DataNumber: n' in the top-center.\n2. Following the JSON structure defined above, analyze each <BookPage> image and fill in the corresponding Data Number and Page Type to complete the <BookPageType.json> file."
                     },
                     {
                         "Mark": "",

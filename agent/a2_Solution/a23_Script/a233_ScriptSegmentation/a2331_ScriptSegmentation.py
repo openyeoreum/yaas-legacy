@@ -222,18 +222,17 @@ class PDFMainLangCheckProcess:
         # PageImg는 이미 RGB
         PageImg.paste(LabelImg, (PosX, PosY))
 
-        # 디렉터리 보장 및 저장
-        os.makedirs(self.SampleScriptJPEGDirPath, exist_ok=True)
+        # 디렉터리 저장
         OutputFilename = f"{self.ProjectName}_Script({self.NextSolution})({InputId}).jpeg"
         OutputPath = os.path.join(self.SampleScriptJPEGDirPath, OutputFilename)
 
         PageImg.save(
             OutputPath,
             "JPEG",
-            quality=92,
-            optimize=True,
-            progressive=True,
-            subsampling=1  # 4:2:2
+            quality = 92,
+            optimize = True,
+            progressive = True,
+            subsampling = 1  # 4:2:2
         )
 
         return OutputPath
@@ -306,6 +305,96 @@ class PDFMainLangCheckProcess:
         return SolutionEdit, MainLang
 
 
+##############################################################
+##### P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크) #####
+##############################################################
+class PDFLayoutCheck:
+
+    ## PDFLayoutCheck 초기화 ##
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+        """클래스 초기화"""
+        # 업데이트 정보
+        self.Email = Email
+        self.ProjectName = ProjectName
+        self.Solution = Solution
+        self.SubSolution = SubSolution
+        self.NextSolution = NextSolution
+        self.AutoTemplate = AutoTemplate
+        self.MainLang = MainLang
+        self.UploadedScriptFilePath = UploadedScriptFilePath
+
+        # Process 설정
+        self.ProcessNumber = "P03"
+        self.ProcessName = "PDFLayoutCheck"
+        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
+
+        # 경로설정
+        self.UploadScriptFilePath = UploadScriptFilePath
+        self._InitializePaths()
+
+        # 출력설정
+        self.MessagesReview = MessagesReview
+
+    ## 프로세스 관련 경로 초기화 ##
+    def _InitializePaths(self):
+        """프로세스와 관련된 모든 경로를 초기화"""
+        # SplitedPDF 경로 및 디렉토리 생성
+        self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_SampleScript({self.NextSolution})_jpeg")
+
+    ## PDF 라벨 샘플 이미지 불러오기 ##
+    def _LoadPDFToLabeledSampleJPEG(self):
+        """SampleScriptJPEGDirPath에 저장된 JPEG 파일 경로를 리스트로 반환"""
+        # SampleScriptJPEGDirPath에 ScriptJPEG 파일 5개 파일명 추출
+        ScriptJPEGFiles = sorted([FileName for FileName in os.listdir(self.SampleScriptJPEGDirPath) if FileName.lower().endswith('.jpeg')])
+
+        # SampleScriptJPEGDirPath에 JPEG 파일 5개 경로 OutputPathList 생성 및 리턴
+        OutputPathList = []
+        for FileName in ScriptJPEGFiles:
+            FilePath = os.path.join(self.SampleScriptJPEGDirPath, FileName)
+            OutputPathList.append(FilePath)
+            
+        return OutputPathList
+
+    ## InputList 생성 ##
+    def _CreateInputList(self):
+        """InputList를 생성하는 메서드"""
+        # PDF 라벨 샘플 이미지 불러오기
+        OutputPathList = self._LoadPDFToLabeledSampleJPEG()
+
+        InputList = [
+            {
+                "Id": 1,
+                "Input": OutputPathList,
+                "InputFormat": "jpeg",
+                "ComparisonInput": ""
+            }
+        ]
+
+        return InputList
+    
+    ## PDFLayoutCheckProcess 실행 ##
+    def Run(self):
+        """PDF 인쇄 파일 형식인 단면, 양면 체크 전체 프로세스 실행"""
+        print(f"< {self.ProcessInfo} Update 시작 >")
+        InputList = self._CreateInputList()
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, AutoTemplate = self.AutoTemplate)
+        SolutionEdit = LoadAgentInstance.Run()
+
+        return SolutionEdit
+
+
+#####################################################
+##### P04 PDFHorizontalResize (PDF 파일 가로 재단) #####
+#####################################################
+
+
+
+###################################################
+##### P05 PDFVerticalResize (PDF 파일 세로 재단) #####
+###################################################
+
+
+
 ##########################################
 ##### P06 PDFSplit (PDF 페이지 별 분할) #####
 ##########################################
@@ -341,7 +430,7 @@ class PDFSplitProcess:
     def _InitializePaths(self):
         """프로세스와 관련된 모든 경로를 초기화"""
         # SplitedPDF 경로 및 디렉토리 생성
-        self.SplitScriptPDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_SplitScript({self.NextSolution})_{self.ScriptFileExtension}")
+        self.SplitScriptPDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_Script({self.NextSolution})_{self.ScriptFileExtension}")
         os.makedirs(self.SplitScriptPDFDirPath, exist_ok = True)
 
     ## PDF 파일을 페이지별로 분할 및 저장 ##
@@ -408,7 +497,7 @@ class PDFSplitProcess:
 class PDFFormCheck:
 
     ## PDFFormCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -416,6 +505,8 @@ class PDFFormCheck:
         self.Solution = Solution
         self.SubSolution = SubSolution
         self.NextSolution = NextSolution
+        self.AutoTemplate = AutoTemplate
+        self.MainLang = MainLang
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
@@ -505,7 +596,6 @@ class PDFFormCheck:
             PageImg.paste(LabelImg, (PosX, PosY))
 
             # 저장
-            os.makedirs(self.ScriptJPEGDirPath, exist_ok=True)
             OutputFilename = f"{self.ProjectName}_Script({self.NextSolution})({PageNumber + 1}).jpeg"
             OutputPath = os.path.join(self.ScriptJPEGDirPath, OutputFilename)
 
@@ -556,7 +646,7 @@ class PDFFormCheck:
         """PDF 페이지 형식 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
         InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -861,13 +951,21 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         ## P02 PDFMainLangCheck (PDF 언어 체크)
         PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit, MainLang = PDFMainLangCheckProcessInstance.Run()
-
+        
+        ## P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크)
+        PDFLayoutCheckInstance = PDFLayoutCheck(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        SolutionEdit = PDFLayoutCheckInstance.Run()
+        
+        ## P04 PDFHorizontalResize (PDF 파일 가로 재단)
+        
+        ## P05 PDFVerticalResize (PDF 파일 세로 재단)
+        
         ## P06 PDFSplit (PDF 파일 페이지 분할)
         PDFSplitterInstance = PDFSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, ScriptFileExtension, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFSplitterInstance.Run()
 
         ## P07 PDFFormCheck (PDF 파일 페이지 형식 체크)
-        PDFFormCheckInstance = PDFFormCheck(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFFormCheckInstance = PDFFormCheck(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFFormCheckInstance.Run()
         
     elif ScriptFileExtension == 'txt':

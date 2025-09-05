@@ -125,7 +125,7 @@ pl: Polish - Polski
 
 
 
-#P03 PDFLayoutCheck (PDF 파일 형식인 wide, normal 체크)
+#P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크)
 [한글]
 (역할 및 업무)
 당신은 도서인쇄 검수 전문가 입니다. 주어진 <도서인쇄> 자료 5개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성하는 업무를 수행합니다.

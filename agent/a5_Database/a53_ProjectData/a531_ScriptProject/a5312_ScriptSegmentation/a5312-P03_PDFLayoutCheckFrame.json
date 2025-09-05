@@ -1,0 +1,74 @@
+{
+    "ko": [
+        {
+            "ProjectName": "eval(self.ProjectName)",
+            "TaskName": "PDFLayoutCheck",
+            "NextSolution": "eval(self.NextSolution)",
+            "AutoTemplate": "eval(self.AutoTemplate)",
+            "FileExtension": "pdf",
+            "MainLang": "eval(self.MainLang)",
+            "InputCount": 0,
+            "Completion": "No"
+        },
+        [
+            [
+                {
+                    "ScriptId": "eval(Response[0]['자료번호'])",
+                    "Size": "eval(Response[0]['레이아웃'])"
+                },
+                {
+                    "ScriptId": "eval(Response[1]['자료번호'])",
+                    "Size": "eval(Response[1]['레이아웃'])"
+                },
+                {
+                    "ScriptId": "eval(Response[2]['자료번호'])",
+                    "Size": "eval(Response[2]['레이아웃'])"
+                },
+                {
+                    "ScriptId": "eval(Response[3]['자료번호'])",
+                    "Size": "eval(Response[3]['레이아웃'])"
+                },
+                {
+                    "ScriptId": "eval(Response[4]['자료번호'])",
+                    "Size": "eval(Response[4]['레이아웃'])"
+                }
+            ]
+        ]
+    ],
+    "global": [
+        {
+            "ProjectName": "eval(self.ProjectName)",
+            "TaskName": "PDFLayoutCheck",
+            "NextSolution": "eval(self.NextSolution)",
+            "AutoTemplate": "eval(self.AutoTemplate)",
+            "FileExtension": "pdf",
+            "MainLang": "eval(self.MainLang)",
+            "InputCount": 0,
+            "Completion": "No"
+        },
+        [
+            [
+                {
+                    "ScriptId": "eval(Response[0]['DataNumber'])",
+                    "Size": "eval(Response[0]['Layout'])"
+                },
+                {
+                    "ScriptId": "eval(Response[1]['DataNumber'])",
+                    "Size": "eval(Response[1]['Layout'])"
+                },
+                {
+                    "ScriptId": "eval(Response[2]['DataNumber'])",
+                    "Size": "eval(Response[2]['Layout'])"
+                },
+                {
+                    "ScriptId": "eval(Response[3]['DataNumber'])",
+                    "Size": "eval(Response[3]['Layout'])"
+                },
+                {
+                    "ScriptId": "eval(Response[4]['DataNumber'])",
+                    "Size": "eval(Response[4]['Layout'])"
+                }
+            ]
+        ]
+    ]
+}

@@ -1,0 +1,224 @@
+{
+    "ko": {
+        "TaskName": "PDFLayoutCheck",
+        "InputFormat": "jpeg",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "OutputStructure": {
+            "Key": "도서인쇄",
+            "ValueType": "list",
+            "ValueCheckList": [
+                {
+                    "ValueCheck": "listDataLengthCheck",
+                    "ValueCheckItem": "5"
+                }
+            ],
+            "Value": [
+                {
+                    "Key": "자료번호",
+                    "ValueType": "int",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "intDataAnswerRangeCheck",
+                            "ValueCheckItem": "ComparisonInput"
+                        }
+                    ],
+                    "Value": ""
+                },
+                {
+                    "Key": "레이아웃",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "단면, 양면"
+                        }
+                    ],
+                    "Value": ""
+                }
+            ]
+        },
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(역할 및 업무)\n",
+                "Message": "당신은 도서인쇄 검수 전문가 입니다. 주어진 <도서인쇄> 자료 5개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성하는 업무를 수행합니다."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(도서인쇄레이아웃)\n",
+                        "Message": "단면: 한장의 인쇄물이 도서 한페이지로 되어 있는 경우로 보통 세로가 가로보다 길다.\n양면: 한장의 인쇄물이 도서 두페이지로 되어 있는 경우로 보통 가로가 세로보다 길다."
+                    },
+                    {
+                        "Mark": "\n\n(<도서인쇄레이아웃.json>의 구조 및 내용)\n",
+                        "Message": "{'도서인쇄': [{'자료번호': n, '레이아웃': '단면, 양면 중 표기'}, {'자료번호': n+1, '레이아웃': '단면, 양면 중 표기'}, ..., {'자료번호': n+4, '레이아웃': '단면, 양면 중 표기'}]}"
+                    },
+                    {
+                        "Mark": "\n\n(<도서인쇄레이아웃.json> 완성 절차 및 방법)\n",
+                        "Message": "1. <도서인쇄> 자료는 이미지 파일 5개이며 각 파일별로 중앙 상단에 '자료번호: n'이 표기되어 있습니다.\n2. (<도서인쇄레이아웃.json>의 구조 및 내용)에 따라, 각 <도서인쇄> 자료를 보고 '자료번호'와 '레이아웃'을 작성하여 <도서인쇄레이아웃.json>을 완성합니다."
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n\n(주어진 <도서인쇄> 자료 5개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성해주세요)\n\n",
+                        "InputMark": "",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n\n<도서인쇄레이아웃.json>",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    },
+    "global": {
+        "TaskName": "PDFLayoutCheck",
+        "InputFormat": "jpeg",
+        "OpenAI": {
+            "MasterModel": "gpt-5-mini",
+            "ReasoningEffort": "medium"
+        },
+        "ANTHROPIC": {
+            "MasterModel": "claude-sonnet-4-0"
+        },
+        "GOOGLE": {
+            "MasterModel": "gemini-2.5-flash"
+        },
+        "DEEPSEEK": {
+            "MasterModel": "deepseek-reasoner"
+        },
+        "OutputFormat": "json",
+        "OutputStructure": {
+            "Key": "BookPrinting",
+            "ValueType": "list",
+            "ValueCheckList": [
+                {
+                    "ValueCheck": "listDataLengthCheck",
+                    "ValueCheckItem": "5"
+                }
+            ],
+            "Value": [
+                {
+                    "Key": "DataNumber",
+                    "ValueType": "int",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "intDataAnswerRangeCheck",
+                            "ValueCheckItem": "1, 2, 3, 4, 5"
+                        }
+                    ],
+                    "Value": ""
+                },
+                {
+                    "Key": "Layout",
+                    "ValueType": "str",
+                    "ValueCheckList": [
+                        {
+                            "ValueCheck": "strDataAnswerRangeCheck",
+                            "ValueCheckItem": "Single, Spread"
+                        }
+                    ],
+                    "Value": ""
+                }
+            ]
+        },
+        "Master": [
+            {
+                "Role": "system",
+                "Mark": "(Role and Task)\n",
+                "Message": "You are a Book Printing Inspection Expert. Your task is to analyze five given  data items, determine the (BookPrintingLayout) for each, and complete them into a <BookPrintingLayout.json> file."
+            },
+            {
+                "Role": "user",
+                "Request": [
+                    {
+                        "Mark": "(BookPrintingLayouts)\n",
+                        "Message": "Single: When one printed sheet corresponds to one page of the book, usually with the vertical dimension longer than the horizontal.\nSpread: When one printed sheet corresponds to two facing pages of the book, usually with the horizontal dimension longer than the vertical."
+                    },
+                    {
+                        "Mark": "\n\n(Structure and Content of <BookPrintingLayout.json>)\n",
+                        "Message": "{'BookPrinting': [{'DataNumber': n, 'Layout': 'Single or Spread'}, {'DataNumber': n+1, 'Layout': 'Single or Spread'}, ..., {'DataNumber': n+4, 'Layout': 'Single or Spread'}]}"
+                    },
+                    {
+                        "Mark": "\n\n(Procedure for completing <BookPrintingLayout.json>)\n",
+                        "Message": "1. The  data consists of 5 image files. Each file is marked with 'DataNumber: n' in the top-center.\n2. Following the structure and content of <BookPrintingLayout.json>, analyze each  item and record its 'DataNumber' and 'Layout' to complete the <BookPrintingLayout.json> file."
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "",
+                        "InputMasterMark": "",
+                        "InputMaster": "",
+                        "OutputMasterMark": "",
+                        "OutputMaster": ""
+                    },
+                    {
+                        "Mark": "\n\n\n(Please analyze the five given  data items, assign the (BookPrintingLayout) for each, and provide the output in the <BookPrintingLayout.json> format)\n\n",
+                        "InputMark": "",
+                        "Input": "INPUT",
+                        "InputMark2": "",
+                        "Input2": "INPUT2"
+                    }
+                ]
+            },
+            {
+                "Role": "assistant",
+                "OutputMark": "\n\n<BookPrintingLayout.json>",
+                "MemoryNote": "MemoryNote",
+                "OutputStarter": "",
+                "Output": "OUTPUT"
+            }
+        ]
+    }
+}

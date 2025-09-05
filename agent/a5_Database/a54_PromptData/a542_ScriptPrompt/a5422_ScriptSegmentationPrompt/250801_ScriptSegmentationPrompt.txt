@@ -114,8 +114,8 @@ pl: Polish - Polski
 
 (Structure and Content of <BookLanguageTag.json>)
 {
-    "Language": {
-        "Tag": "Based on the <BookPage> data, assign the single language tag for the book from the list: ko, en, de, ..., pl"
+    'Language': {
+        'Tag': 'Based on the <BookPage> data, assign the single language tag for the book from the list: ko, en, de, ..., pl'
     }
 }
 
@@ -125,7 +125,7 @@ pl: Polish - Polski
 
 
 
-#P03 PDFSizeCheck (PDF 파일 형식인 wide, normal 체크)
+#P03 PDFLayoutCheck (PDF 파일 형식인 wide, normal 체크)
 [한글]
 (역할 및 업무)
 당신은 도서인쇄 검수 전문가 입니다. 주어진 <도서인쇄> 자료 5개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성하는 업무를 수행합니다.
@@ -171,19 +171,19 @@ Spread: When one printed sheet corresponds to two facing pages of the book, usua
 
 (Structure and Content of <BookPrintingLayout.json>)
 {
-    "BookPrinting": [
+    'BookPrinting': [
         {
-            "DataNumber": n,
-            "Layout": "Single or Spread"
+            'DataNumber': n,
+            'Layout': 'Single or Spread'
         },
         {
-            "DataNumber": n+1,
-            "Layout": "Single or Spread"
+            'DataNumber': n+1,
+            'Layout': 'Single or Spread'
         },
         ...
         {
-            "DataNumber": n+4,
-            "Layout": "Single or Spread"
+            'DataNumber': n+4,
+            'Layout': 'Single or Spread'
         }
     ]
 }
@@ -198,7 +198,7 @@ Spread: When one printed sheet corresponds to two facing pages of the book, usua
 
 
 
-#P04 PDFWidthResize (PDF 파일 가로 재단)
+#P04 PDFHorizontalResize (PDF 파일 가로 재단)
 Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플을 가로 5% 조정해서 10개, 세로 5% 조정해서 10개 제작 -> 가로 본문선 및 세로 본문선 번호 찾기 프로세스 진행
 [한글]
 (역할 및 업무)
@@ -246,22 +246,22 @@ You are a Book Cropping Expert. Your task is to analyze two given <ExampleOfHori
 
 (Structure and Content of <BookBodyHorizontalCrop.json>)
 {
-    "Cropping": [
+    'Cropping': [
         {
-            "DataNumber": n,
-            "IsBody": "Mark as 'Correct' or 'Incorrect'",
-            "BodyCropLineNumber": n
+            'DataNumber': n,
+            'IsBody': 'Mark as 'Correct' or 'Incorrect'',
+            'BodyCropLineNumber': n
         },
         {
-            "DataNumber": n+1,
-            "IsBody": "Mark as 'Correct' or 'Incorrect'",
-            "BodyCropLineNumber": n
+            'DataNumber': n+1,
+            'IsBody': 'Mark as 'Correct' or 'Incorrect'',
+            'BodyCropLineNumber': n
         },
         ...
         {
-            "DataNumber": n+4,
-            "IsBody": "Mark as 'Correct' or 'Incorrect'",
-            "BodyCropLineNumber": n
+            'DataNumber': n+4,
+            'IsBody': 'Mark as 'Correct' or 'Incorrect'',
+            'BodyCropLineNumber': n
         }
     ]
 }
@@ -282,7 +282,7 @@ You are a Book Cropping Expert. Your task is to analyze two given <ExampleOfHori
 
 
 
-#P05 PDFHeightResize (PDF 파일 세로 재단)
+#P05 PDFVerticalResize (PDF 파일 세로 재단)
 [한글]
 (역할 및 업무)
 당신은 도서 재단 전문가 입니다. 주어진 <도서페이지세로본문재단예시> 자료 2개와 <세로본문재단이필요한도서페이지> 자료 5개를 보고 <도서본문세로재단.json>로 완성하는 업무를 수행합니다.
@@ -329,22 +329,22 @@ You are a Book Cropping Expert. Your task is to analyze two given <ExampleOfVert
 
 (Structure and Content of <BookBodyVerticalCrop.json>)
 {
-    "Cropping": [
+    'Cropping': [
         {
-            "DataNumber": n,
-            "IsBody": "Mark as 'Correct' or 'Incorrect'",
-            "BodyCropLineNumber": n
+            'DataNumber': n,
+            'IsBody': 'Mark as 'Correct' or 'Incorrect'',
+            'BodyCropLineNumber': n
         },
         {
-            "DataNumber": n+1,
-            "IsBody": "Mark as 'Correct' or 'Incorrect'",
-            "BodyCropLineNumber": n
+            'DataNumber': n+1,
+            'IsBody': 'Mark as 'Correct' or 'Incorrect'',
+            'BodyCropLineNumber': n
         },
         ...
         {
-            "DataNumber": n+4,
-            "IsBody": "Mark as 'Correct' or 'Incorrect'",
-            "BodyCropLineNumber": n
+            'DataNumber': n+4,
+            'IsBody': 'Mark as 'Correct' or 'Incorrect'',
+            'BodyCropLineNumber': n
         }
     ]
 }
@@ -437,19 +437,19 @@ Advertisement: A page promoting other books or products.
 
 (Structure and Content of <BookPageType.json>)
 {
-    "Book": [
+    'Book': [
         {
-            "DataNumber": n,
-            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement"
+            'DataNumber': n,
+            'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement'
         },
         {
-            "DataNumber": n+1,
-            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement"
+            'DataNumber': n+1,
+            'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement'
         },
         ...
         {
-            "DataNumber": n+4,
-            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement"
+            'DataNumber': n+4,
+            'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement'
         }
     ]
 }
@@ -569,8 +569,8 @@ pl: Polish - Polski
 
 (Structure and Content of <BookLanguageTag.json>)
 {
-    "Language": {
-        "Tag": "Based on the <BookText>, assign the language tag for the book from the list: ko, en, de, ..., pl"
+    'Language': {
+        'Tag': 'Based on the <BookText>, assign the language tag for the book from the list: ko, en, de, ..., pl'
     }
 }
 

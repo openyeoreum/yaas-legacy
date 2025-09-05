@@ -32,7 +32,7 @@
                     "ValueCheckList": [
                         {
                             "ValueCheck": "intDataAnswerRangeCheck",
-                            "ValueCheckItem": "ComparisonInput"
+                            "ValueCheckItem": "1, 2, 3, 4, 5"
                         }
                     ],
                     "Value": ""

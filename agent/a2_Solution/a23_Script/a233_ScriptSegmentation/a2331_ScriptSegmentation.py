@@ -232,7 +232,7 @@ class PDFMainLangCheckProcess:
             quality = 92,
             optimize = True,
             progressive = True,
-            subsampling = 1  # 4:2:2
+            subsampling = 1
         )
 
         return OutputPath
@@ -565,7 +565,7 @@ class PDFHorizontalResizeProcess:
             quality = 92,
             optimize = True,
             progressive = True,
-            subsampling = 1  # 4:2:2
+            subsampling = 1
         )
 
         return OutputPath

@@ -249,18 +249,18 @@ You are a Book Cropping Expert. Your task is to analyze two given <ExampleOfHori
     'Cropping': [
         {
             'DataNumber': n,
-            'IsBody': 'Mark as 'Correct' or 'Incorrect'',
+            'IsBody': 'Mark as Correct or Incorrect',
             'BodyCropLineNumber': n
         },
         {
             'DataNumber': n+1,
-            'IsBody': 'Mark as 'Correct' or 'Incorrect'',
+            'IsBody': 'Mark as Correct or Incorrect',
             'BodyCropLineNumber': n
         },
         ...
         {
             'DataNumber': n+4,
-            'IsBody': 'Mark as 'Correct' or 'Incorrect'',
+            'IsBody': 'Mark as Correct or Incorrect',
             'BodyCropLineNumber': n
         }
     ]

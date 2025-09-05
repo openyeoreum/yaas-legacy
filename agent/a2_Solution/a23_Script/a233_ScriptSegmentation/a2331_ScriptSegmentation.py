@@ -165,7 +165,7 @@ class PDFMainLangCheckProcess:
     def _CreatePDFToLabeledSampleJPEG(self, Page, InputId):
         """PDF 페이지에 '자료번호: InputId' 라벨을 추가한 JPEG 파일을 생성"""
         # 페이지 → 이미지
-        Pixmap = Page.get_pixmap(dpi=150)
+        Pixmap = Page.get_pixmap(dpi = 150)
         PageImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
 
         # 스케일 기준 및 스케일 팩터
@@ -263,11 +263,13 @@ class PDFMainLangCheckProcess:
                     InputList[0]["Input"].append(FilePath)
                 return InputList
 
-        # PDF 파일 불러오기 및 랜덤으로 5개 페이지 선택
+        # PDF 파일 불러오기
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
         TotalPages = len(PdfDocument)
+
+        # 총 페이지가 5 미만이면 중복 포함해서 5개 선택
         if TotalPages < 5:
-            SelectedPageIndices = range(TotalPages)
+            SelectedPageIndices = random.choices(range(TotalPages), k = 5)
         else:
             SelectedPageIndices = random.sample(range(TotalPages), 5)
 
@@ -308,7 +310,7 @@ class PDFMainLangCheckProcess:
 ##############################################################
 ##### P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크) #####
 ##############################################################
-class PDFLayoutCheck:
+class PDFLayoutCheckProcess:
 
     ## PDFLayoutCheck 초기화 ##
     def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
@@ -386,8 +388,253 @@ class PDFLayoutCheck:
 #####################################################
 ##### P04 PDFHorizontalResize (PDF 파일 가로 재단) #####
 #####################################################
+class PDFHorizontalResizeProcess:
 
+    ## PDFHorizontalResize 초기화 ##
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+        """클래스 초기화"""
+        # 업데이트 정보
+        self.Email = Email
+        self.ProjectName = ProjectName
+        self.Solution = Solution
+        self.SubSolution = SubSolution
+        self.NextSolution = NextSolution
+        self.AutoTemplate = AutoTemplate
+        self.MainLang = MainLang
+        self.UploadedScriptFilePath = UploadedScriptFilePath
 
+        # Process 설정
+        self.ProcessNumber = "P04"
+        self.ProcessName = "PDFHorizontalResize"
+        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
+
+        # 경로설정
+        self.UploadScriptFilePath = UploadScriptFilePath
+        self._InitializePaths()
+
+        # 출력설정
+        self.MessagesReview = MessagesReview
+
+    ## 프로세스 관련 경로 초기화 ##
+    def _InitializePaths(self):
+        """프로세스와 관련된 모든 경로를 초기화"""
+        # SplitedPDF 경로 및 디렉토리 생성
+        self.HTrimScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_HTrimScript({self.NextSolution})_jpeg")
+        os.makedirs(self.HTrimScriptJPEGDirPath, exist_ok = True)
+        self.FontDirPath = "/usr/share/fonts/"
+        self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
+
+    ## PDF 샘플 이미지 생성 및 라벨 + HTrim 보조선/동그라미 숫자(흰 배경) 생성 ##
+    def _CreatePDFToHTrimJPEG(self, Page, InputId):
+        """PDF 페이지에 '자료번호: InputId' 라벨을 추가하고, 상·하단에 3% 간격 10개 선(빨강)과 동그라미 숫자(흰 배경)를 그린 JPEG 파일 생성"""
+
+        # 페이지 → 이미지
+        Pixmap = Page.get_pixmap(dpi = 150)
+        PageImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
+
+        # 스케일 기준 및 스케일 팩터
+        RefWidth = 1240
+        Scale = max(0.5, min(2.5, PageImg.width / RefWidth))
+
+        # 폰트 로딩 (라벨/번호 공용)
+        FontSize = int(30 * Scale)
+        NumberFontSize = max(14, int(26 * Scale))  # 숫자 크기 키움
+        try:
+            Font = ImageFont.truetype(self.NotoSansCJKRegular, FontSize)
+            NumberFont = ImageFont.truetype(self.NotoSansCJKRegular, NumberFontSize)
+        except Exception:
+            Font = ImageFont.load_default()
+            NumberFont = ImageFont.load_default()
+
+        # ===== 상·하단 보조선 및 번호 (먼저 그림) =====
+        PageDraw = ImageDraw.Draw(PageImg)
+
+        # 간격: 전체 세로 길이의 3%
+        Interval = max(1, int(PageImg.height * 0.03))
+
+        # 스타일/여백 파라미터
+        LineWidth = max(1, int(2 * Scale))
+        EdgeInset = int(13 * Scale)            # 우측 번호 여백
+        NumberPad = int(3 * Scale)             # 숫자 배경 패딩
+        NumberShiftLeft = int(6 * Scale)       # 숫자+배경을 왼쪽으로 이동
+        NumberBaselineLift = int(5 * Scale)    # 숫자+배경을 위로 올림(폰트 베이스라인 보정)
+
+        # 동그라미 숫자(1~10)
+        CircledNums = ["", "①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"]
+
+        # 숫자+흰 배경 그리기: textbbox로 실제 렌더 박스 기준 배경 계산
+        def DrawNumberWithWhiteBG(Text, LineXRight, LineY, FontObj):
+            # 1) 폭/높이 추정용 bbox
+            EstBBox = FontObj.getbbox(Text)
+            TextW, TextH = EstBBox[2] - EstBBox[0], EstBBox[3] - EstBBox[1]
+
+            # 2) 우측 정렬 + 세로 중앙에서 약간 위로 보정
+            Tx = LineXRight - TextW - NumberShiftLeft
+            Ty = int(LineY - TextH / 2 - NumberBaselineLift)
+
+            # 3) 실제 렌더 박스(baseline 포함)로 배경 사각형 산출
+            try:
+                RealBBox = PageDraw.textbbox((Tx, Ty), Text, font = FontObj)
+                BgLeft, BgTop, BgRight, BgBottom = RealBBox
+            except Exception:
+                # Pillow가 textbbox 미지원 시 getbbox 기반 근사
+                BgLeft, BgTop = Tx, Ty
+                BgRight, BgBottom = Tx + TextW, Ty + TextH
+
+            # 4) 배경(흰색)
+            try:
+                PageDraw.rounded_rectangle(
+                    [(BgLeft - NumberPad, BgTop - NumberPad),
+                    (BgRight + NumberPad, BgBottom + NumberPad)],
+                    radius = max(2, int(6 * Scale)),
+                    fill   = "white"
+                )
+            except AttributeError:
+                PageDraw.rectangle(
+                    [(BgLeft - NumberPad, BgTop - NumberPad),
+                    (BgRight + NumberPad, BgBottom + NumberPad)],
+                    fill = "white"
+                )
+
+            # 5) 숫자(빨강)
+            PageDraw.text((Tx, Ty), Text, font = FontObj, fill = "red")
+
+        # 우측 기준점(X): 오른쪽 여백만 고려
+        XRight = PageImg.width - EdgeInset
+
+        # 상단 10개 선 (위에서부터 1~10)
+        for i in range(1, 11):
+            Y = i * Interval
+            PageDraw.line([(0, Y), (PageImg.width, Y)], fill = "red", width = LineWidth)
+            DrawNumberWithWhiteBG(CircledNums[i], XRight, Y, NumberFont)
+
+        # 하단 10개 선 (아래에서부터 1~10)
+        for j in range(1, 11):
+            Y = PageImg.height - (j * Interval)
+            PageDraw.line([(0, Y), (PageImg.width, Y)], fill = "red", width = LineWidth)
+            DrawNumberWithWhiteBG(CircledNums[j], XRight, Y, NumberFont)
+
+        # 라벨(자료번호)은 마지막에 붙여 선 위로 오게 처리
+        LabelText = f"자료번호: {InputId}"
+        TextBBox = Font.getbbox(LabelText)
+        TextW = TextBBox[2] - TextBBox[0]
+        TextH = TextBBox[3] - TextBBox[1]
+
+        Padding = int(14 * Scale)
+        BorderW = max(2, int(4 * Scale))
+        Margin = int(20 * Scale)
+
+        # 최소 폭 보장(예: 99999까지 가정)
+        MinWBBox = Font.getbbox("자료번호: 99999")
+        MinTextW = (MinWBBox[2] - MinWBBox[0])
+
+        LabelW = max(TextW, MinTextW) + 2 * Padding
+        LabelH = TextH + 2 * Padding
+
+        # 라벨 이미지 (흰색 불투명 배경, RGB)
+        LabelImg = Image.new("RGB", (LabelW, LabelH), "white")
+        Draw = ImageDraw.Draw(LabelImg)
+
+        # 라벨 테두리
+        Draw.rectangle([(0, 0), (LabelW - 1, LabelH - 1)], outline = "black", width = BorderW)
+
+        # 라벨 텍스트 중앙 정렬(+ 수직 미세 보정)
+        TextX = (LabelW - TextW) // 2
+        VerticalOffset = int(-0.3 * FontSize)
+        TextY = (LabelH - TextH) // 2 + VerticalOffset
+        TextY = max(Padding // 2, min(TextY, LabelH - TextH - Padding // 2))
+        Draw.text((TextX, TextY), LabelText, font = Font, fill = "black")
+
+        # 라벨 합성 위치(상단 중앙)
+        PosX = (PageImg.width - LabelW) // 2
+        PosY = Margin
+        PosX = max(0, min(PosX, PageImg.width - LabelW))
+        PosY = max(0, min(PosY, PageImg.height - LabelH))
+
+        if LabelImg.mode != "RGB":
+            LabelImg = LabelImg.convert("RGB")
+        PageImg.paste(LabelImg, (PosX, PosY))
+
+        # 저장
+        OutputFilename = f"{self.ProjectName}_HTrimScript({self.NextSolution})({InputId}).jpeg"
+        OutputPath = os.path.join(self.HTrimScriptJPEGDirPath, OutputFilename)
+
+        PageImg.save(
+            OutputPath,
+            "JPEG",
+            quality = 92,
+            optimize = True,
+            progressive = True,
+            subsampling = 1  # 4:2:2
+        )
+
+        return OutputPath
+
+    ## InputList 생성 ##
+    def _CreateInputList(self):
+        """InputList를 생성하는 메서드"""
+        # SampleScriptJPEGDirPath에 ScriptJPEG 파일이 5개 존재하면 그대로 유지
+        if os.path.exists(self.HTrimScriptJPEGDirPath):
+            # SampleScriptJPEGDirPath에서 모든 JPEG 파일을 가져와 정렬
+            ScriptJPEGFiles = sorted([
+                FileName for FileName in os.listdir(self.HTrimScriptJPEGDirPath)
+                if FileName.lower().endswith('.jpeg')
+            ])
+
+            # SampleScriptJPEGDirPath에 JPEG 파일이 5개 이상 있는 경우는 InputList 생성 및 리턴
+            if len(ScriptJPEGFiles) >= 5:
+                InputList = [
+                    {
+                        "Id": 1,
+                        "Input": [],
+                        "InputFormat": "jpeg",
+                        "ComparisonInput": ""
+                    }
+                ]
+                for InputId, FileName in enumerate(ScriptJPEGFiles, 1):
+                    FilePath = os.path.join(self.HTrimScriptJPEGDirPath, FileName)
+                    InputList[0]["Input"].append(FilePath)
+                return InputList
+
+        # PDF 파일 불러오기
+        PdfDocument = fitz.open(self.UploadedScriptFilePath)
+        TotalPages = len(PdfDocument)
+
+        # 총 페이지가 5 미만이면 중복 포함해서 5개 선택
+        if TotalPages < 5:
+            SelectedPageIndices = random.choices(range(TotalPages), k = 5)
+        else:
+            SelectedPageIndices = random.sample(range(TotalPages), 5)
+
+        # InputList 생성
+        InputList = [
+            {
+                "Id": 1,
+                "Input": [],
+                "InputFormat": "jpeg",
+                "ComparisonInput": ""
+            }
+        ]
+        for InputId, PageIndex in enumerate(SelectedPageIndices, 1):
+            Page = PdfDocument.load_page(PageIndex)
+            # PDF 이미지 생성 및 라벨 생성
+            OutputFilePath = self._CreatePDFToHTrimJPEG(Page, InputId)
+
+            InputList[0]["Input"].append(OutputFilePath)
+
+        PdfDocument.close()
+
+        return InputList
+
+    ## PDFHorizontalResizeProcess 실행 ##
+    def Run(self):
+        """PDF 가로 재단 전체 프로세스 실행"""
+        print(f"< {self.ProcessInfo} Update 시작 >")
+        InputList = self._CreateInputList()
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, AutoTemplate = self.AutoTemplate)
+        SolutionEdit = LoadAgentInstance.Run()
+
+        return SolutionEdit
 
 ###################################################
 ##### P05 PDFVerticalResize (PDF 파일 세로 재단) #####
@@ -494,7 +741,7 @@ class PDFSplitProcess:
 ####################################################
 ##### #P07 PDFFormCheck (PDF 파일 페이지 형식 체크) #####
 ####################################################
-class PDFFormCheck:
+class PDFFormCheckProcess:
 
     ## PDFFormCheck 초기화 ##
     def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
@@ -539,7 +786,7 @@ class PDFFormCheck:
             Page = PDFDoc[PageNumber]
 
             # 페이지 → 이미지
-            Pixmap = Page.get_pixmap(dpi=150)
+            Pixmap = Page.get_pixmap(dpi = 150)
             PageImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
 
             # 스케일
@@ -953,10 +1200,12 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         SolutionEdit, MainLang = PDFMainLangCheckProcessInstance.Run()
         
         ## P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크)
-        PDFLayoutCheckInstance = PDFLayoutCheck(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFLayoutCheckInstance.Run()
         
         ## P04 PDFHorizontalResize (PDF 파일 가로 재단)
+        PDFHorizontalResizeInstance = PDFHorizontalResizeProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        SolutionEdit = PDFHorizontalResizeInstance.Run()
         
         ## P05 PDFVerticalResize (PDF 파일 세로 재단)
         
@@ -965,7 +1214,7 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         SolutionEdit = PDFSplitterInstance.Run()
 
         ## P07 PDFFormCheck (PDF 파일 페이지 형식 체크)
-        PDFFormCheckInstance = PDFFormCheck(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFFormCheckInstance = PDFFormCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFFormCheckInstance.Run()
         
     elif ScriptFileExtension == 'txt':

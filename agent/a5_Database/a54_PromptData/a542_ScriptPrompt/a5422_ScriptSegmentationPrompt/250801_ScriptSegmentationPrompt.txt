@@ -45,8 +45,18 @@ PDF는 무조건 전체이며, TXT 간소화는 내부 TXT파일 구조를 통�
 **- Estimate의 Script 업로드의 경우 파일이름 지정하지 않고 무조건 내부에 txt 또는 pdf가 있으면 이를 txt화하여 진행하도록 변경 -> 그리고 해당파일은 견적 후 삭제(이렇게 해야 프로세스가 꼬이지 않음) 또는 파일명을 변경하는 테스크를 가장 앞으로 설정
 
 
+
+
+#########
 ## PDF ##
+#########
+
+
+
+
 #P01 통합: (PDF)ScriptLoad (업로드 된 스크립트 파일 확인)
+
+
 
 
 #P02 PDFMainLangCheck (PDF 언어 체크)
@@ -113,10 +123,254 @@ pl: Polish - Polski
 <BookLanguageTag.json>
 
 
-#P03 PDFSplit (PDF 파일 페이지 분할)
 
 
-#P04 PDFFormCheck (PDF 파일 페이지 형식 체크)
+#P03 PDFSizeCheck (PDF 파일 형식인 wide, normal 체크)
+[한글]
+(역할 및 업무)
+당신은 도서인쇄 검수 전문가 입니다. 주어진 <도서인쇄> 자료 5개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성하는 업무를 수행합니다.
+
+(도서인쇄레이아웃)
+단면: 한장의 인쇄물이 도서 한페이지로 되어 있는 경우로 보통 세로가 가로보다 길다.
+양면: 한장의 인쇄물이 도서 두페이지로 되어 있는 경우로 보통 가로가 세로보다 길다.
+
+(<도서인쇄레이아웃.json>의 구조 및 내용)
+{
+    '도서인쇄': [
+        {
+            '자료번호': n,
+            '레이아웃': '단면, 양면 중 표기'
+        },
+        {
+            '자료번호': n+1,
+            '레이아웃': '단면, 양면 중 표기'
+        },
+        ...
+        {
+            '자료번호': n+4,
+            '레이아웃': '단면, 양면 중 표기'
+        }
+    ]
+}
+
+(<도서인쇄레이아웃.json> 완성 절차 및 방법)
+1. <도서인쇄> 자료는 이미지 파일 5개이며 각 파일별로 중앙 상단에 '자료번호: n'이 표기되어 있습니다.
+2. (<도서인쇄레이아웃.json>의 구조 및 내용)에 따라, 각 <도서인쇄> 자료를 보고 '자료번호'와 '레이아웃'을 작성하여 <도서인쇄레이아웃.json>을 완성합니다.
+
+(주어진 <도서인쇄> 자료 5개를 보고 각각 (도서인쇄레이아웃)을 지정하여 <도서인쇄레이아웃.json>로 완성해주세요)
+<도서인쇄레이아웃.json>
+
+
+[English]
+(Role and Task)
+You are a Book Printing Inspection Expert. Your task is to analyze five given  data items, determine the (BookPrintingLayout) for each, and complete them into a <BookPrintingLayout.json> file.
+
+(BookPrintingLayouts)
+Single: When one printed sheet corresponds to one page of the book, usually with the vertical dimension longer than the horizontal.
+Spread: When one printed sheet corresponds to two facing pages of the book, usually with the horizontal dimension longer than the vertical.
+
+(Structure and Content of <BookPrintingLayout.json>)
+{
+    "BookPrinting": [
+        {
+            "DataNumber": n,
+            "Layout": "Single or Spread"
+        },
+        {
+            "DataNumber": n+1,
+            "Layout": "Single or Spread"
+        },
+        ...
+        {
+            "DataNumber": n+4,
+            "Layout": "Single or Spread"
+        }
+    ]
+}
+
+(Procedure for completing <BookPrintingLayout.json>)
+1. The  data consists of 5 image files. Each file is marked with 'DataNumber: n' in the top-center.
+2. Following the structure and content of <BookPrintingLayout.json>, analyze each  item and record its 'DataNumber' and 'Layout' to complete the <BookPrintingLayout.json> file.
+
+(Please analyze the five given  data items, assign the (BookPrintingLayout) for each, and provide the output in the <BookPrintingLayout.json> format)
+<BookPrintingLayout.json>
+
+
+
+
+#P04 PDFWidthResize (PDF 파일 가로 재단)
+Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플을 가로 5% 조정해서 10개, 세로 5% 조정해서 10개 제작 -> 가로 본문선 및 세로 본문선 번호 찾기 프로세스 진행
+[한글]
+(역할 및 업무)
+당신은 도서 재단 전문가 입니다. 주어진 <도서페이지가로본문재단예시> 자료 2개와 <가로본문재단이필요한도서페이지> 자료 5개를 보고 <도서본문가로재단.json>로 완성하는 업무를 수행합니다.
+
+(<도서본문가로재단.json>의 구조 및 내용)
+{
+    '재단': [
+        {
+            '자료번호': n,
+            '본문여부': '맞음, 아님 중 표기',
+            '본문재단선번호': n
+        },
+        {
+            '자료번호': n+1,
+            '본문여부': '맞음, 아님 중 표기',
+            '본문재단선번호': n
+        },
+        ...
+        {
+            '자료번호': n+4,
+            '본문여부': '맞음, 아님 중 표기',
+            '본문재단선번호': n
+        }
+    ]
+}
+
+(<페이지형식.json> 완성 절차 및 방법)
+1. 도서본문가로재단이란 도서의 본문 페이지에서 본문 레이아웃 외곽에 존재하는 쪽수, 러닝헤드, 러닝풋, 장/절 제목표시, 권호 정보 등을 모두 재단하고 딱 본문 글만 남길 수 있도록하는 작업입니다.
+2. 즉 재단 후 본문만 남도록 본문 레이아웃과 가장 가까운 재단선을 찾는 작업입니다.
+3. <도서페이지가로본문재단예시>에는 '재단선'들과 각 재단선별로 '재단선번호'와 적합한 '본문재단선번호'에는 체크표시가 되어있습니다.
+4. <가로본문재단이필요한도서페이지>에는 '자료번호'와 '재단선'들과 각 재단선별로 '재단선번호'가 있습니다.
+5. 우선 <도서본문가로재단.json>에 <가로본문재단이필요한도서페이지>의 '자료번호'와 해당 도서페이지가 도서의 본문 페이지인지 아닌지의 '본문여부'를 맞음, 아님으로 표기합니다.
+6. 그리고 <가로본문재단이필요한도서페이지>의 '본문여부'가 맞으면 <도서페이지가로본문재단예시>를 참고하여 본문 레이아웃과 본문외곽 레이아웃을 분리하는 '본문재단선번호' n을 표기합니다.
+7. 만약 <가로본문재단이필요한도서페이지>의 '본문여부'가 아니면 '본문재단선번호'는 0을 표기합니다.
+8. <가로본문재단이필요한도서페이지> 자료 5개를 모두 표기하여 <도서본문가로재단.json>를 완성합니다.
+
+(주어진 <도서페이지가로본문재단예시> 자료 2개와 <가로본문재단이필요한도서페이지> 자료 5개를 보고 <도서본문가로재단.json>로 완성해주세요)
+<도서본문가로재단.json>
+
+
+[English]
+(Role and Task)
+You are a Book Cropping Expert. Your task is to analyze two given <ExampleOfHorizontalBodyTextCrop> data items and five <BookPageNeedingHorizontalBodyCrop> data items, and complete the task by generating a <BookBodyHorizontalCrop.json> file.
+
+(Structure and Content of <BookBodyHorizontalCrop.json>)
+{
+    "Cropping": [
+        {
+            "DataNumber": n,
+            "IsBody": "Mark as 'Correct' or 'Incorrect'",
+            "BodyCropLineNumber": n
+        },
+        {
+            "DataNumber": n+1,
+            "IsBody": "Mark as 'Correct' or 'Incorrect'",
+            "BodyCropLineNumber": n
+        },
+        ...
+        {
+            "DataNumber": n+4,
+            "IsBody": "Mark as 'Correct' or 'Incorrect'",
+            "BodyCropLineNumber": n
+        }
+    ]
+}
+
+(Procedure for completing <BookBodyHorizontalCrop.json>)
+1. Horizontal body text cropping is the process of trimming all elements outside the main body layout on a book's body page—such as page numbers, running heads, running foots, chapter/section titles, and volume/issue information—to leave only the body text itself.
+2. In other words, it is the task of finding the crop line closest to the body text layout to ensure that only the body text remains after cropping.
+3. The <ExampleOfHorizontalBodyTextCrop> data shows the 'crop lines', a 'CropLineNumber' for each line, and a checkmark indicating the appropriate 'BodyCropLineNumber'.
+4. The <BookPageNeedingHorizontalBodyCrop> data contains a 'DataNumber', the 'crop lines', and a 'CropLineNumber' for each respective line.
+5. First, in the <BookBodyHorizontalCrop.json> file, enter the 'DataNumber' from a <BookPageNeedingHorizontalBodyCrop> item and indicate whether it is a body text page by marking the 'IsBody' field as 'Correct' or 'Incorrect'.
+6. Then, if the 'IsBody' field for the page is 'Correct', refer to the <ExampleOfHorizontalBodyTextCrop> to identify and enter the 'BodyCropLineNumber' n, which is the line that separates the body text layout from the outer layout elements.
+7. If the 'IsBody' field is 'Incorrect', enter 0 for the 'BodyCropLineNumber'.
+8. Complete the <BookBodyHorizontalCrop.json> file by processing all five <BookPageNeedingHorizontalBodyCrop> data items.
+
+(Please analyze the two given <ExampleOfHorizontalBodyTextCrop> data items and the five <BookPageNeedingHorizontalBodyCrop> data items, and provide the output in the <BookBodyHorizontalCrop.json> format)
+<BookBodyHorizontalCrop.json>
+
+
+
+
+#P05 PDFHeightResize (PDF 파일 세로 재단)
+[한글]
+(역할 및 업무)
+당신은 도서 재단 전문가 입니다. 주어진 <도서페이지세로본문재단예시> 자료 2개와 <세로본문재단이필요한도서페이지> 자료 5개를 보고 <도서본문세로재단.json>로 완성하는 업무를 수행합니다.
+
+(<도서본문세로재단.json>의 구조 및 내용)
+{
+    '재단': [
+        {
+            '자료번호': n,
+            '본문여부': '맞음, 아님 중 표기',
+            '본문재단선번호': n
+        },
+        {
+            '자료번호': n+1,
+            '본문여부': '맞음, 아님 중 표기',
+            '본문재단선번호': n
+        },
+        ...
+        {
+            '자료번호': n+4,
+            '본문여부': '맞음, 아님 중 표기',
+            '본문재단선번호': n
+        }
+    ]
+}
+
+(<페이지형식.json> 완성 절차 및 방법)
+1. 도서본문세로재단이란 도서의 본문 페이지에서 본문 레이아웃 외곽에 존재하는 쪽수, 러닝헤드, 러닝풋, 장/절 제목표시, 권호 정보 등을 모두 재단하고 딱 본문 글만 남길 수 있도록하는 작업입니다.
+2. 즉 재단 후 본문만 남도록 본문 레이아웃과 가장 가까운 재단선을 찾는 작업입니다.
+3. <도서페이지세로본문재단예시>에는 '재단선'들과 각 재단선별로 '재단선번호'와 적합한 '본문재단선번호'에는 체크표시가 되어있습니다.
+4. <세로본문재단이필요한도서페이지>에는 '자료번호'와 '재단선'들과 각 재단선별로 '재단선번호'가 있습니다.
+5. 우선 <도서본문세로재단.json>에 <세로본문재단이필요한도서페이지>의 '자료번호'와 해당 도서페이지가 도서의 본문 페이지인지 아닌지의 '본문여부'를 맞음, 아님으로 표기합니다.
+6. 그리고 <세로본문재단이필요한도서페이지>의 '본문여부'가 맞으면 <도서페이지세로본문재단예시>를 참고하여 본문 레이아웃과 본문외곽 레이아웃을 분리하는 '본문재단선번호' n을 표기합니다.
+7. 만약 <세로본문재단이필요한도서페이지>의 '본문여부'가 아니면 '본문재단선번호'는 0을 표기합니다.
+8. <세로본문재단이필요한도서페이지> 자료 5개를 모두 표기하여 <도서본문세로재단.json>를 완성합니다.
+
+(주어진 <도서페이지세로본문재단예시> 자료 2개와 <세로본문재단이필요한도서페이지> 자료 5개를 보고 <도서본문세로재단.json>로 완성해주세요)
+<도서본문세로재단.json>
+
+
+[English]
+(Role and Task)
+You are a Book Cropping Expert. Your task is to analyze two given <ExampleOfVerticalBodyTextCrop> data items and five <BookPageNeedingVerticalBodyCrop> data items, and complete the task by generating a <BookBodyVerticalCrop.json> file.
+
+(Structure and Content of <BookBodyVerticalCrop.json>)
+{
+    "Cropping": [
+        {
+            "DataNumber": n,
+            "IsBody": "Mark as 'Correct' or 'Incorrect'",
+            "BodyCropLineNumber": n
+        },
+        {
+            "DataNumber": n+1,
+            "IsBody": "Mark as 'Correct' or 'Incorrect'",
+            "BodyCropLineNumber": n
+        },
+        ...
+        {
+            "DataNumber": n+4,
+            "IsBody": "Mark as 'Correct' or 'Incorrect'",
+            "BodyCropLineNumber": n
+        }
+    ]
+}
+
+(Procedure for completing <BookBodyVerticalCrop.json>)
+1. Vertical body text cropping is the process of trimming all elements outside the main body layout on a book's body page—such as page numbers, running heads, running foots, chapter/section titles, and volume/issue information—to leave only the body text itself.
+2. In other words, it is the task of finding the crop line closest to the body text layout to ensure that only the body text remains after cropping.
+3. The <ExampleOfVerticalBodyTextCrop> data shows the 'crop lines', a 'CropLineNumber' for each line, and a checkmark indicating the appropriate 'BodyCropLineNumber'.
+4. The <BookPageNeedingVerticalBodyCrop> data contains a 'DataNumber', the 'crop lines', and a 'CropLineNumber' for each respective line.
+5. First, in the <BookBodyVerticalCrop.json> file, enter the 'DataNumber' from a <BookPageNeedingVerticalBodyCrop> item and indicate whether it is a body text page by marking the 'IsBody' field as 'Correct' or 'Incorrect'.
+6. Then, if the 'IsBody' field for the page is 'Correct', refer to the <ExampleOfVerticalBodyTextCrop> to identify and enter the 'BodyCropLineNumber' n, which is the line that separates the body text layout from the outer layout elements.
+7. If the 'IsBody' field is 'Incorrect', enter 0 for the 'BodyCropLineNumber'.
+8. Complete the <BookBodyVerticalCrop.json> file by processing all five <BookPageNeedingVerticalBodyCrop> data items.
+
+(Please analyze the two given <ExampleOfVerticalBodyTextCrop> data items and the five <BookPageNeedingVerticalBodyCrop> data items, and provide the output in the <BookBodyVerticalCrop.json> format)
+<BookBodyVerticalCrop.json>
+
+
+
+
+#P06 PDFSplit (PDF 파일 페이지 분할)
+
+
+
+
+#P07 PDFFormCheck (PDF 파일 페이지 형식 체크)
 형식 -> 표지, 목차, 본문, 빈지 ...
 [한글]
 (역할 및 업무)
@@ -124,33 +378,34 @@ pl: Polish - Polski
 
 (도서페이지형식)
 표지: 책의 제목이 들어간 표지, 속표지 등
-저작권-판권: 저작권 정보, 발행처, ISBN 등 법적 고지 페이지
 목차: 전체 목차를 보여주는 차례 페이지
 서문-머리말: 저자나 추천인의 글, 프롤로그, 일러두기 등 본문 이해를 돕는 도입부 페이지
-장-부 시작: 새로운 장(Chapter)이나 부(Part)의 시작을 알리는 페이지
+장-부: 새로운 장(Chapter)이나 부(Part)의 시작을 알리는 페이지로 본문 내용 없이 장-부 등의 책의 목차만 작성된 페이지, 단, 장-부의 소제목이나 간단한 소개등은 포함될 수 있음
+장-부-본문: 글, 그림, 도표 등을 포함한 책의 핵심 내용인 본문과 장-부 등의 책의 목차가 함께 작성된 페이지로, 본문 내에서 장-부 등의 새로운 목차의 시작이 되는 페이지
 본문: 글, 그림, 도표 등을 포함한 책의 핵심 내용인 본문 페이지
 후기-에필로그: 저자의 말이나 이야기의 결말 부분 페이지
 참고자료: 부록, 참고 문헌, 찾아보기 등 독자의 이해를 돕는 추가 정보 페이지
-빈지: 내용이 전혀 없는 페이지
-간지: 내용 없이 단순히 파트를 구분하기 위한 페이지 (만약 장-부 제목이 있다면 '장-부 시작'으로 분류)
+빈지: 글 내용이 전혀 없고 비어있거나 그림만 존재하는 페이지
+간지: 글 내용이 전혀 없고 비어있거나, 글 내용이 있으나 본문과 직접적으로 이어지는 내용이 아닌 페이지
+저작권-판권: 저작권 정보, 발행처, ISBN 등 법적 고지 페이지
 광고: 다른 도서나 상품을 홍보하는 페이지
 
 (<도서페이지형식.json>의 구조 및 내용)
 {
     '도서': [
         {
-            '자료번호': n
-            '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
+            '자료번호': n,
+            '페이지형식': '표지, 목차, 목차, 서문-머리말, 장-부, 장-부-본문, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 저작권-판권, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
         },
         {
-            '자료번호': n+1
-            '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
+            '자료번호': n+1,
+            '페이지형식': '표지, 목차, 목차, 서문-머리말, 장-부, 장-부-본문, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 저작권-판권, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
         },
         ...
         {
-            '자료번호': n+4
-            '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
-        },
+            '자료번호': n+4,
+            '페이지형식': '표지, 목차, 목차, 서문-머리말, 장-부, 장-부-본문, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 저작권-판권, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'
+        }
     ]
 }
 
@@ -170,13 +425,14 @@ You are a Book Data Expert. Your task is to analyze five given <BookPage> data i
 Cover: The cover or title page containing the book's title.
 Copyright-Colophon: Legal notice pages, including copyright information, publisher details, ISBN, etc.
 TableOfContents: The page(s) showing the full table of contents.
-Preface-Introduction: Introductory sections that aid in understanding the main text, such as a foreword, author's note, prologue, or usage guide.
-Chapter-PartStart: A page that announces the beginning of a new chapter or part.
-BodyText: The core content of the book, including text, images, charts, and diagrams.
-Afterword-Epilogue: Concluding sections, such as an author's closing remarks or the story's epilogue.
+Preface-Introduction: Introductory sections that aid in understanding the main text, such as a foreword, author’s note, prologue, or usage guide.
+Chapter-PartStart: A page that announces the beginning of a new chapter or part, containing only the chapter/part title or a brief subtitle/introductory note, but without the main body text.
+Chapter-Part-Body: A page that both introduces a new chapter/part (with its title or heading) and contains the beginning of the body text, images, or diagrams.
+Body: The core content of the book, including text, images, charts, and diagrams, excluding chapter/part title introductions.
+Afterword-Epilogue: Concluding sections, such as an author’s closing remarks or the story’s epilogue.
 ReferenceMaterial: Additional information to aid the reader, such as an appendix, bibliography, or index.
-BlankPage: A page with no content whatsoever.
-DividerPage: A page with no content, used merely to separate sections. (If it includes a chapter or part title, classify it as 'Chapter-Part Start').
+BlankPage: A page with no written content, entirely blank, or containing only illustrations without text.
+DividerPage: A page with no body text content, used to separate sections, or containing non-continuous content that is not directly part of the main body.
 Advertisement: A page promoting other books or products.
 
 (Structure and Content of <BookPageType.json>)
@@ -184,16 +440,16 @@ Advertisement: A page promoting other books or products.
     "Book": [
         {
             "DataNumber": n,
-            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, or Advertisement"
+            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement"
         },
         {
             "DataNumber": n+1,
-            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, or Advertisement"
+            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement"
         },
         ...
         {
             "DataNumber": n+4,
-            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, or Advertisement"
+            "PageType": "Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement"
         }
     ]
 }
@@ -206,11 +462,9 @@ Advertisement: A page promoting other books or products.
 <BookPageType.json>
 
 
-#P05 PDFResize (PDF 파일 리사이즈)
-Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플을 가로 5% 조정해서 10개, 세로 5% 조정해서 10개 제작 -> 가로 본문선 및 세로 본문선 번호 찾기 프로세스 진행
 
 
-#P06 PDFIndexGen (PDF 파일 목차 데이터 형성)
+#P08 PDFIndexGen (PDF 파일 목차 데이터 형성)
 제목 -> Title
 부 -> Part
 장 -> Chapter
@@ -218,7 +472,9 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 프롤로그, 에필로그 -> Logue
 
 
-#P07 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)
+
+
+#P09 PDFIndexMatching (PDF 파일 목차와 본문 속 목차 매칭)
 <제목></제목> -> Title
 <부></부> -> Part
 <장></장> -> Chapter
@@ -226,20 +482,34 @@ Memo: 리사이즈에 필요한 참고 페이지 설정 -> 리사이즈 샘플�
 <로그></로그> -> Logue
 
 
-#P08 PDFBodyCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
+
+
+#P10 PDFBodyCaptionComponentCheck (PDF 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body(체크대상은 아님)
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
 
 
-#P09 PDFChunkAnnotationComponentCheck (PDF 파일 페이지별 Chunk, Annotation 구성요소 체크)
+
+
+#P11 PDFChunkAnnotationComponentCheck (PDF 파일 페이지별 Chunk, Annotation 구성요소 체크)
 <문장></문장> -> Chunk(체크대상은 아님)
 <특수문자></특수문자> -> Sign
 <코멘트></코멘트> -> Comment
 <주석></주석> -> Annotation
 
 
+
+
+#########
 ## TXT ##
+#########
+
+
+
+
 #T01 통합: (TXT)ScriptLoad (업로드 된 스크립트 파일 확인)
+
+
 
 
 #T02 TXTMainLangCheck (TXT 언어 체크)
@@ -311,7 +581,11 @@ pl: Polish - Polski
 <BookLanguageTag.json>
 
 
+
+
 #T03 TXTSplit (텍스트 파일 지정 토큰수 분할)
+
+
 
 
 #T04 TXTFormCheck (텍스트 파일 페이지 형식 체크)
@@ -360,12 +634,16 @@ pl: Polish - Polski
 <도서페이지형식.json>
 
 
+
+
 #T05 TXTIndexGen (텍스트 파일 목차 데이터 형성)
 제목 -> Title
 부 -> Part
 장 -> Chapter
 항 -> Index
 프롤로그, 에필로그 -> Logue
+
+
 
 
 #T06 TXTIndexMatching (텍스트 파일 목차와 본문 속 목차 매칭)
@@ -376,9 +654,13 @@ pl: Polish - Polski
 <로그></로그> -> Logue
 
 
+
+
 #T07 TXTBodyCaptionComponentCheck (텍스트 파일 페이지별 Body 구성요소 체크)
 <본문></본문> -> Body(체크대상은 아님)
 <캡션></캡션>, <이미지></이미지>, <다이어그램></다이어그램>, <차트></차트>, <그래프></그래프>, <표></표> -> Caption
+
+
 
 
 #T08 TXTChunkAnnotationComponentCheck (텍스트 파일 페이지별 Chunk, Annotation 구성요소 체크)
@@ -388,31 +670,58 @@ pl: Polish - Polski
 <주석></주석> -> Annotation
 
 
+
+
+############
+## Script ##
+############
+
+
+
+
 #S01 CaptionGen (캡션 구조화 데이터 형성)
+
+
 
 
 #S02 AnnotationGen (주석 구조화 데이터 형성)
 
 
+
+
 #S03 ImageDescriptionGen (이미지설명 구조화 데이터 형성)
+
+
 
 
 #S04 DiagramGen (다이어그램 구조화 데이터 형성)
 
 
+
+
 #S05 ChartGen (차트 구조화 데이터 형성)
+
+
 
 
 #S06 GraphGen (그래프 구조화 데이터 형성)
 
 
+
+
 #S07 TableGen (테이블 구조화 데이터 형성)
+
+
 
 
 #S08 SignGen (기호 및 특수문자 구조화 데이터 형성)
 
 
+
+
 #S09 CommentGen (코멘트 구조화 데이터 형성)
+
+
 
 
 #S10 BodyFrame (도서 전처리 구조화 데이터 완성)
@@ -426,6 +735,10 @@ Chunk(Chunk, Sign, Comment)
 
 #1 Image(이미지), Annotation(주석) 미주로 처리 <- 이 부분은 번역 마지막 태스크
 
+
+
 #2 Duplication <- 이 부분은 오디오북 앞 태스크 (위 프로세스가 모두 완료되면 필요 없음, 삭제)
+
+
 
 #3 Pronunciation <- 이 부분은 오디오북 앞 태스크

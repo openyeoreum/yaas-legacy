@@ -43,7 +43,7 @@
                     "ValueCheckList": [
                         {
                             "ValueCheck": "strDataAnswerRangeCheck",
-                            "ValueCheckItem": "표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고"
+                            "ValueCheckItem": "표지, 목차, 목차, 서문-머리말, 장-부, 장-부-본문, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 저작권-판권, 광고"
                         }
                     ],
                     "Value": ""
@@ -61,11 +61,11 @@
                 "Request": [
                     {
                         "Mark": "(도서페이지형식)\n",
-                        "Message": "표지: 책의 제목이 들어간 표지, 속표지 등\n저작권-판권: 저작권 정보, 발행처, ISBN 등 법적 고지 페이지\n목차: 전체 목차를 보여주는 차례 페이지\n서문-머리말: 저자나 추천인의 글, 프롤로그, 일러두기 등 본문 이해를 돕는 도입부 페이지\n장-부 시작: 새로운 장(Chapter)이나 부(Part)의 시작을 알리는 페이지\n본문: 글, 그림, 도표 등을 포함한 책의 핵심 내용인 본문 페이지\n후기-에필로그: 저자의 말이나 이야기의 결말 부분 페이지\n참고자료: 부록, 참고 문헌, 찾아보기 등 독자의 이해를 돕는 추가 정보 페이지\n빈지: 내용이 전혀 없는 페이지\n간지: 내용 없이 단순히 파트를 구분하기 위한 페이지 (만약 장-부 제목이 있다면 '장-부 시작'으로 분류)\n광고: 다른 도서나 상품을 홍보하는 페이지"
+                        "Message": "표지: 책의 제목이 들어간 표지, 속표지 등\n목차: 전체 목차를 보여주는 차례 페이지\n서문-머리말: 저자나 추천인의 글, 프롤로그, 일러두기 등 본문 이해를 돕는 도입부 페이지\n장-부: 새로운 장(Chapter)이나 부(Part)의 시작을 알리는 페이지로 본문 내용 없이 장-부 등의 책의 목차만 작성된 페이지, 단, 장-부의 소제목이나 간단한 소개등은 포함될 수 있음\n장-부-본문: 글, 그림, 도표 등을 포함한 책의 핵심 내용인 본문과 장-부 등의 책의 목차가 함께 작성된 페이지로, 본문 내에서 장-부 등의 새로운 목차의 시작이 되는 페이지\n본문: 글, 그림, 도표 등을 포함한 책의 핵심 내용인 본문 페이지\n후기-에필로그: 저자의 말이나 이야기의 결말 부분 페이지\n참고자료: 부록, 참고 문헌, 찾아보기 등 독자의 이해를 돕는 추가 정보 페이지\n빈지: 글 내용이 전혀 없고 비어있거나 그림만 존재하는 페이지\n간지: 글 내용이 전혀 없고 비어있거나, 글 내용이 있으나 본문과 직접적으로 이어지는 내용이 아닌 페이지\n저작권-판권: 저작권 정보, 발행처, ISBN 등 법적 고지 페이지\n광고: 다른 도서나 상품을 홍보하는 페이지"
                     },
                     {
                         "Mark": "\n\n(<도서페이지형식.json>의 구조 및 내용)\n",
-                        "Message": "{'도서': [{'자료번호': n, '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}, {'자료번호': n+1, '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}, ... {'자료번호': n+4, '페이지형식': '표지, 저작권-판권, 목차, 서문-머리말, 장-부 시작, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}]}"
+                        "Message": "{'도서': [{'자료번호': n, '페이지형식': '표지, 목차, 목차, 서문-머리말, 장-부, 장-부-본문, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 저작권-판권, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}, {'자료번호': n+1, '페이지형식': '표지, 목차, 목차, 서문-머리말, 장-부, 장-부-본문, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 저작권-판권, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}, ... {'자료번호': n+4, '페이지형식': '표지, 목차, 목차, 서문-머리말, 장-부, 장-부-본문, 본문, 후기-에필로그, 참고자료, 빈지, 간지, 저작권-판권, 광고 중 <도서페이지>에 적합한 페이지형식을 지정'}]}"
                     },
                     {
                         "Mark": "\n\n(<페이지형식.json> 완성 절차 및 방법)\n",
@@ -154,7 +154,7 @@
                     "ValueCheckList": [
                         {
                             "ValueCheck": "strDataAnswerRangeCheck",
-                            "ValueCheckItem": "Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, Advertisement"
+                            "ValueCheckItem": "Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement"
                         }
                     ],
                     "Value": ""
@@ -172,11 +172,11 @@
                 "Request": [
                     {
                         "Mark": "(BookPageTypes)\n",
-                        "Message": "Cover: The cover or title page containing the book's title.\nCopyright-Colophon: Legal notice pages, including copyright information, publisher details, ISBN, etc.\nTableOfContents: The page(s) showing the full table of contents.\nPreface-Introduction: Introductory sections that aid in understanding the main text, such as a foreword, author's note, prologue, or usage guide.\nChapter-PartStart: A page that announces the beginning of a new chapter or part.\nBodyText: The core content of the book, including text, images, charts, and diagrams.\nAfterword-Epilogue: Concluding sections, such as an author's closing remarks or the story's epilogue.\nReferenceMaterial: Additional information to aid the reader, such as an appendix, bibliography, or index.\nBlankPage: A page with no content whatsoever.\nDividerPage: A page with no content, used merely to separate sections. (If it includes a chapter or part title, classify it as 'Chapter-Part Start').\nAdvertisement: A page promoting other books or products."
+                        "Message": "Cover: The cover or title page containing the book's title.\nCopyright-Colophon: Legal notice pages, including copyright information, publisher details, ISBN, etc.\nTableOfContents: The page(s) showing the full table of contents.\nPreface-Introduction: Introductory sections that aid in understanding the main text, such as a foreword, author’s note, prologue, or usage guide.\nChapter-PartStart: A page that announces the beginning of a new chapter or part, containing only the chapter/part title or a brief subtitle/introductory note, but without the main body text.\nChapter-Part-Body: A page that both introduces a new chapter/part (with its title or heading) and contains the beginning of the body text, images, or diagrams.\nBody: The core content of the book, including text, images, charts, and diagrams, excluding chapter/part title introductions.\nAfterword-Epilogue: Concluding sections, such as an author’s closing remarks or the story’s epilogue.\nReferenceMaterial: Additional information to aid the reader, such as an appendix, bibliography, or index.\nBlankPage: A page with no written content, entirely blank, or containing only illustrations without text.\nDividerPage: A page with no body text content, used to separate sections, or containing non-continuous content that is not directly part of the main body.\nAdvertisement: A page promoting other books or products."
                     },
                     {
                         "Mark": "\n\n(Structure and Content of <BookPageType.json>)\n",
-                        "Message": "{'Book': [{'DataNumber': n, 'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, Blank Page, Divider Page, or Advertisement'}, {'DataNumber': n+1, 'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, BlankPage, DividerPage, or Advertisement'}, ... {'DataNumber': n+4, 'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, Table of Contents, Preface-Introduction, Chapter-Part Start, Body Text, Afterword-Epilogue, Reference Material, BlankPage, DividerPage, Advertisement'}]}"
+                        "Message": "{'Book': [{'DataNumber': n, 'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement'}, {'DataNumber': n+1, 'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement'}, ... {'DataNumber': n+4, 'PageType': 'Assign the appropriate page type for the <BookPage> from the list: Cover, Copyright-Colophon, TableOfContents, Preface-Introduction, Chapter-PartStart, Chapter-Part-Body, Body, Afterword-Epilogue, ReferenceMaterial, BlankPage, DividerPage, Advertisement'}]}"
                     },
                     {
                         "Mark": "\n\n(Procedure for completing <BookPageType.json>)\n",

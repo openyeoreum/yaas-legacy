@@ -68,8 +68,8 @@ def GetPromptFrame(Process, MainLang):
         # ScriptSegmentationPrompt
         "PDFLoad": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P01_PDFLoad.json",
         "PDFMainLangCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P02_PDFMainLangCheck.json",
-        "PDFSplit": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P03_PDFSplit.json",
-        "PDFFormCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P04_PDFFormCheck.json",
+        "PDFSplit": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P06_PDFSplit.json",
+        "PDFFormCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P07_PDFFormCheck.json",
         "TXTLoad": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-T01_TXTLoad.json",
         "TXTMainLangCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-T02_TXTMainLangCheck.json",
         "TXTSplit": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-T03_TXTSplit.json",

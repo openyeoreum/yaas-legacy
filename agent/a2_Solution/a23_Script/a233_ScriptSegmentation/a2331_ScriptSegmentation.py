@@ -307,7 +307,7 @@ class PDFMainLangCheckProcess:
 
 
 ##########################################
-##### P03 PDFSplit (PDF 페이지 별 분할) #####
+##### P06 PDFSplit (PDF 페이지 별 분할) #####
 ##########################################
 class PDFSplitProcess:
 
@@ -326,7 +326,7 @@ class PDFSplitProcess:
         self.UploadedScriptFilePath = UploadedScriptFilePath
         
         # Process 설정
-        self.ProcessNumber = 'P03'
+        self.ProcessNumber = 'P06'
         self.ProcessName = "PDFSplit"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
         
@@ -403,7 +403,7 @@ class PDFSplitProcess:
 
 
 ####################################################
-##### #P04 PDFFormCheck (PDF 파일 페이지 형식 체크) #####
+##### #P07 PDFFormCheck (PDF 파일 페이지 형식 체크) #####
 ####################################################
 class PDFFormCheck:
 
@@ -419,7 +419,7 @@ class PDFFormCheck:
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
-        self.ProcessNumber = "P04"
+        self.ProcessNumber = "P07"
         self.ProcessName = "PDFFormCheck"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
@@ -862,11 +862,11 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit, MainLang = PDFMainLangCheckProcessInstance.Run()
 
-        ## P03 PDFSplit (PDF 파일 페이지 분할)
+        ## P06 PDFSplit (PDF 파일 페이지 분할)
         PDFSplitterInstance = PDFSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, ScriptFileExtension, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFSplitterInstance.Run()
 
-        ## P04 PDFFormCheck (PDF 파일 페이지 형식 체크)
+        ## P07 PDFFormCheck (PDF 파일 페이지 형식 체크)
         PDFFormCheckInstance = PDFFormCheck(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFFormCheckInstance.Run()
         

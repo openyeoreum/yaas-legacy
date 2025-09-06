@@ -386,11 +386,11 @@ class PDFLayoutCheckProcess:
 
 
 #####################################################
-##### P04 PDFHorizontalResize (PDF 파일 가로 재단) #####
+##### P04 PDFResize (PDF 파일 가로 재단) #####
 #####################################################
-class PDFHorizontalResizeProcess:
+class PDFResizeProcess:
 
-    ## PDFHorizontalResize 초기화 ##
+    ## PDFResize 초기화 ##
     def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
@@ -405,7 +405,7 @@ class PDFHorizontalResizeProcess:
 
         # Process 설정
         self.ProcessNumber = "P04"
-        self.ProcessName = "PDFHorizontalResize"
+        self.ProcessName = "PDFResize"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
         # 경로설정
@@ -424,209 +424,234 @@ class PDFHorizontalResizeProcess:
         self.FontDirPath = "/usr/share/fonts/"
         self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
 
-    ## PDF 샘플 이미지 생성 및 라벨 + HTrim 보조선/동그라미 숫자(흰 배경) 생성 ##
+    ## PDF 샘플 이미지 생성 및 방향별(HTrim) 보조선/동그라미 숫자(흰 배경) 4종 생성 ##
     def _CreatePDFToHTrimJPEG(self, Page, InputId):
-        """PDF 페이지에 '자료번호: InputId' 라벨을 추가하고, 상·하단에 3% 간격 10개 선(빨강)과 동그라미 숫자(흰 배경)를 그린 JPEG 파일 생성"""
+        """한 PDF 페이지로부터 좌, 우, 상, 하 간격선 10개의 JPEG 생성"""
 
-        # 페이지 → 이미지
+        # ===== 0) 기본 이미지 변환 & 스케일 관련 =====
         Pixmap = Page.get_pixmap(dpi = 150)
-        PageImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
+        BaseImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
 
-        # 스케일 기준 및 스케일 팩터
         RefWidth = 1240
-        Scale = max(0.5, min(2.5, PageImg.width / RefWidth))
+        Scale = max(0.5, min(2.5, BaseImg.width / RefWidth))
 
-        # 폰트 로딩 (라벨/번호 공용)
-        FontSize = int(30 * Scale)
-        NumberFontSize = max(14, int(26 * Scale))  # 숫자 크기 키움
+        # 폰트 크기
+        LabelFontSize  = int(30 * Scale)
+        NumberFontSize = max(14, int(26 * Scale))  # 동그라미 숫자 조금 크게
+
+        # 폰트 로딩
         try:
-            Font = ImageFont.truetype(self.NotoSansCJKRegular, FontSize)
+            LabelFont  = ImageFont.truetype(self.NotoSansCJKRegular, LabelFontSize)
             NumberFont = ImageFont.truetype(self.NotoSansCJKRegular, NumberFontSize)
         except Exception:
-            Font = ImageFont.load_default()
+            LabelFont  = ImageFont.load_default()
             NumberFont = ImageFont.load_default()
 
-        # ===== 상·하단 보조선 및 번호 (먼저 그림) =====
-        PageDraw = ImageDraw.Draw(PageImg)
+        # 공통 스타일 파라미터
+        LineWidth          = max(1, int(2 * Scale))
+        IntervalY          = max(1, int(BaseImg.height * 0.03))  # 가로선 간격(상/하)
+        IntervalX          = max(1, int(BaseImg.width  * 0.03))  # 세로선 간격(좌/우)
+        NumberPad          = int(3 * Scale)   # 숫자 배경 패딩
+        NumberBaselineLift = int(2 * Scale)   # 미세 상향 보정 (중앙 정렬에서도 살짝 위로)
+        RoundedRadius      = max(2, int(6 * Scale))
 
-        # 간격: 전체 세로 길이의 3%
-        Interval = max(1, int(PageImg.height * 0.03))
-
-        # 스타일/여백 파라미터
-        LineWidth = max(1, int(2 * Scale))
-        EdgeInset = int(13 * Scale)            # 우측 번호 여백
-        NumberPad = int(3 * Scale)             # 숫자 배경 패딩
-        NumberShiftLeft = int(6 * Scale)       # 숫자+배경을 왼쪽으로 이동
-        NumberBaselineLift = int(5 * Scale)    # 숫자+배경을 위로 올림(폰트 베이스라인 보정)
-
-        # 동그라미 숫자(1~10)
+        # 동그라미 숫자
         CircledNums = ["", "①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"]
 
-        # 숫자+흰 배경 그리기: textbbox로 실제 렌더 박스 기준 배경 계산
-        def DrawNumberWithWhiteBG(Text, LineXRight, LineY, FontObj):
-            # 1) 폭/높이 추정용 bbox
-            EstBBox = FontObj.getbbox(Text)
-            TextW, TextH = EstBBox[2] - EstBBox[0], EstBBox[3] - EstBBox[1]
+        # 라벨 공통 박스 스타일
+        Padding  = int(14 * Scale)
+        BorderW  = max(2, int(4 * Scale))
 
-            # 2) 우측 정렬 + 세로 중앙에서 약간 위로 보정
-            Tx = LineXRight - TextW - NumberShiftLeft
-            Ty = int(LineY - TextH / 2 - NumberBaselineLift)
+        # 언어별 라벨 텍스트 매핑
+        if self.MainLang == "ko":
+            dir_label_map = {
+                "Left":  "자료방향: 좌",
+                "Right": "자료방향: 우",
+                "Up":    "자료방향: 상",
+                "Down":  "자료방향: 하",
+            }
+        else:
+            dir_label_map = {
+                "Left":  "Direction: Left",
+                "Right": "Direction: Right",
+                "Up":    "Direction: Up",
+                "Down":  "Direction: Down",
+            }
 
-            # 3) 실제 렌더 박스(baseline 포함)로 배경 사각형 산출
+        # 파일명 방향 표기(지시대로 영어 사용)
+        filename_suffix = {
+            "Left":  "Left",
+            "Right": "Right",
+            "Up":    "Up",
+            "Down":  "Down",
+        }
+
+        # ===== 공용: 텍스트+흰 배경 그리기(좌상단 기준) =====
+        def draw_text_with_white_bg(draw, xy, text, font, pad = NumberPad, rounded = True):
+            x, y = xy
             try:
-                RealBBox = PageDraw.textbbox((Tx, Ty), Text, font = FontObj)
-                BgLeft, BgTop, BgRight, BgBottom = RealBBox
+                bbox = draw.textbbox((x, y), text, font=font)
+                l, t, r, b = bbox
             except Exception:
-                # Pillow가 textbbox 미지원 시 getbbox 기반 근사
-                BgLeft, BgTop = Tx, Ty
-                BgRight, BgBottom = Tx + TextW, Ty + TextH
+                est = font.getbbox(text)
+                w, h = (est[2] - est[0], est[3] - est[1])
+                l, t, r, b = x, y, x + w, y + h
 
-            # 4) 배경(흰색)
+            if rounded and hasattr(draw, "rounded_rectangle"):
+                draw.rounded_rectangle([(l - pad, t - pad), (r + pad, b + pad)],
+                                    radius = RoundedRadius, fill = "white")
+            else:
+                draw.rectangle([(l - pad, t - pad), (r + pad, b + pad)], fill = "white")
+
+            draw.text((x, y), text, font=font, fill = "red")
+
+        # ===== 공용: 텍스트+흰 배경 "중앙 기준" 그리기 =====
+        def draw_text_with_white_bg_center(draw, center_xy, text, font, pad = NumberPad, rounded = True, baseline_lift = 0):
+            cx, cy = center_xy
+            # 텍스트 크기 측정
             try:
-                PageDraw.rounded_rectangle(
-                    [(BgLeft - NumberPad, BgTop - NumberPad),
-                    (BgRight + NumberPad, BgBottom + NumberPad)],
-                    radius = max(2, int(6 * Scale)),
-                    fill   = "white"
-                )
-            except AttributeError:
-                PageDraw.rectangle(
-                    [(BgLeft - NumberPad, BgTop - NumberPad),
-                    (BgRight + NumberPad, BgBottom + NumberPad)],
-                    fill = "white"
-                )
+                est = draw.textbbox((0, 0), text, font=font)
+                tw, th = est[2] - est[0], est[3] - est[1]
+            except Exception:
+                est = font.getbbox(text)
+                tw, th = est[2] - est[0], est[3] - est[1]
 
-            # 5) 숫자(빨강)
-            PageDraw.text((Tx, Ty), Text, font = FontObj, fill = "red")
+            # 중앙 배치 좌표 (살짝 위로 올림)
+            tx = int(cx - tw / 2)
+            ty = int(cy - th / 2 - baseline_lift)
 
-        # 우측 기준점(X): 오른쪽 여백만 고려
-        XRight = PageImg.width - EdgeInset
+            draw_text_with_white_bg(draw, (tx, ty), text, font, pad = pad, rounded = rounded)
 
-        # 상단 10개 선 (위에서부터 1~10)
-        for i in range(1, 11):
-            Y = i * Interval
-            PageDraw.line([(0, Y), (PageImg.width, Y)], fill = "red", width = LineWidth)
-            DrawNumberWithWhiteBG(CircledNums[i], XRight, Y, NumberFont)
+        # ===== 방향별로 선/숫자/라벨을 그리고 저장하는 루틴 =====
+        OutputPaths = []
+        def render_direction(direction: str):
+            """
+            direction ∈ {"Left","Right","Up","Down"}
+            """
+            Img = BaseImg.copy()
+            draw = ImageDraw.Draw(Img)
 
-        # 하단 10개 선 (아래에서부터 1~10)
-        for j in range(1, 11):
-            Y = PageImg.height - (j * Interval)
-            PageDraw.line([(0, Y), (PageImg.width, Y)], fill = "red", width = LineWidth)
-            DrawNumberWithWhiteBG(CircledNums[j], XRight, Y, NumberFont)
+            img_cx = Img.width // 2
+            img_cy = Img.height // 2
 
-        # 라벨(자료번호)은 마지막에 붙여 선 위로 오게 처리
-        LabelText = f"자료번호: {InputId}"
-        TextBBox = Font.getbbox(LabelText)
-        TextW = TextBBox[2] - TextBBox[0]
-        TextH = TextBBox[3] - TextBBox[1]
+            # 방향별 선 및 "중앙 숫자" 배치
+            if direction == "Up":
+                for i in range(1, 11):
+                    y = i * IntervalY  # 상단에서부터
+                    draw.line([(0, y), (Img.width, y)], fill="red", width = LineWidth)
+                    # 숫자를 "선 중앙" (가로선 → x 중앙, y = 선 위치)
+                    draw_text_with_white_bg_center(draw, (img_cx, y),
+                                                CircledNums[i], NumberFont,
+                                                pad = NumberPad, rounded = True,
+                                                baseline_lift = NumberBaselineLift)
 
-        Padding = int(14 * Scale)
-        BorderW = max(2, int(4 * Scale))
-        Margin = int(20 * Scale)
+            elif direction == "Down":
+                for i in range(1, 11):
+                    y = Img.height - (i * IntervalY)  # 하단에서부터
+                    draw.line([(0, y), (Img.width, y)], fill="red", width = LineWidth)
+                    draw_text_with_white_bg_center(draw, (img_cx, y),
+                                                CircledNums[i], NumberFont,
+                                                pad = NumberPad, rounded = True,
+                                                baseline_lift = NumberBaselineLift)
 
-        # 최소 폭 보장(예: 99999까지 가정)
-        MinWBBox = Font.getbbox("자료번호: 99999")
-        MinTextW = (MinWBBox[2] - MinWBBox[0])
+            elif direction == "Left":
+                for i in range(1, 11):
+                    x = i * IntervalX  # 좌측에서부터
+                    draw.line([(x, 0), (x, Img.height)], fill="red", width = LineWidth)
+                    # 숫자를 "선 중앙" (세로선 → x = 선 위치, y 중앙)
+                    draw_text_with_white_bg_center(draw, (x, img_cy),
+                                                CircledNums[i], NumberFont,
+                                                pad = NumberPad, rounded = True,
+                                                baseline_lift = NumberBaselineLift)
 
-        LabelW = max(TextW, MinTextW) + 2 * Padding
-        LabelH = TextH + 2 * Padding
+            elif direction == "Right":
+                for i in range(1, 11):
+                    x = Img.width - (i * IntervalX)  # 우측에서부터
+                    draw.line([(x, 0), (x, Img.height)], fill="red", width = LineWidth)
+                    draw_text_with_white_bg_center(draw, (x, img_cy),
+                                                CircledNums[i], NumberFont,
+                                                pad = NumberPad, rounded = True,
+                                                baseline_lift = NumberBaselineLift)
 
-        # 라벨 이미지 (흰색 불투명 배경, RGB)
-        LabelImg = Image.new("RGB", (LabelW, LabelH), "white")
-        Draw = ImageDraw.Draw(LabelImg)
+            # ===== 라벨(방향) 박스: "페이지 정중앙" 배치 =====
+            label_text = dir_label_map[direction]
 
-        # 라벨 테두리
-        Draw.rectangle([(0, 0), (LabelW - 1, LabelH - 1)], outline = "black", width = BorderW)
+            # 최소 폭 보장(한글/영문 길이 차 고려)
+            min_w_bbox = LabelFont.getbbox("자료방향: 상상상상상") if self.MainLang == "ko" else LabelFont.getbbox("Direction: Downward")
+            min_text_w = (min_w_bbox[2] - min_w_bbox[0])
 
-        # 라벨 텍스트 중앙 정렬(+ 수직 미세 보정)
-        TextX = (LabelW - TextW) // 2
-        VerticalOffset = int(-0.3 * FontSize)
-        TextY = (LabelH - TextH) // 2 + VerticalOffset
-        TextY = max(Padding // 2, min(TextY, LabelH - TextH - Padding // 2))
-        Draw.text((TextX, TextY), LabelText, font = Font, fill = "black")
+            text_bbox = LabelFont.getbbox(label_text)
+            text_w = text_bbox[2] - text_bbox[0]
+            text_h = text_bbox[3] - text_bbox[1]
 
-        # 라벨 합성 위치(상단 중앙)
-        PosX = (PageImg.width - LabelW) // 2
-        PosY = Margin
-        PosX = max(0, min(PosX, PageImg.width - LabelW))
-        PosY = max(0, min(PosY, PageImg.height - LabelH))
+            label_w = max(text_w, min_text_w) + 2 * Padding
+            label_h = text_h + 2 * Padding
 
-        if LabelImg.mode != "RGB":
-            LabelImg = LabelImg.convert("RGB")
-        PageImg.paste(LabelImg, (PosX, PosY))
+            label_img = Image.new("RGB", (label_w, label_h), "white")
+            ldraw = ImageDraw.Draw(label_img)
+            # 테두리
+            ldraw.rectangle([(0, 0), (label_w - 1, label_h - 1)], outline = "black", width = BorderW)
+            # 중앙정렬 + 수직 보정
+            tx = (label_w - text_w) // 2
+            ty = (label_h - text_h) // 2 + int(-0.3 * LabelFontSize)
+            ty = max(Padding // 2, min(ty, label_h - text_h - Padding // 2))
+            ldraw.text((tx, ty), label_text, font=LabelFont, fill="black")
 
-        # 저장
-        OutputFilename = f"{self.ProjectName}_HTrimScript({self.NextSolution})({InputId}).jpeg"
-        OutputPath = os.path.join(self.HTrimScriptJPEGDirPath, OutputFilename)
+            # 페이지 "정중앙" 위치로 변경
+            pos_x = (Img.width  - label_w) // 2
+            pos_y = (Img.height - label_h) // 2
+            pos_x = max(0, min(pos_x, Img.width - label_w))
+            pos_y = max(0, min(pos_y, Img.height - label_h))
+            if label_img.mode != "RGB":
+                label_img = label_img.convert("RGB")
+            Img.paste(label_img, (pos_x, pos_y))
 
-        PageImg.save(
-            OutputPath,
-            "JPEG",
-            quality = 92,
-            optimize = True,
-            progressive = True,
-            subsampling = 1
-        )
+            # ===== 저장 =====
+            suffix = filename_suffix[direction]
+            out_name = f"{self.ProjectName}_HTrimScript({self.NextSolution})({InputId})({suffix}).jpeg"
+            out_path = os.path.join(self.HTrimScriptJPEGDirPath, out_name)
+            Img.save(out_path, "JPEG", quality = 92, optimize = True, progressive = True, subsampling = 1)
+            return out_path
 
-        return OutputPath
+        # 4개 방향 모두 생성
+        OutputPaths = []
+        for dir_key in ["Left", "Right", "Up", "Down"]:
+            OutputPaths.append(render_direction(dir_key))
+
+        return OutputPaths
 
     ## InputList 생성 ##
     def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # SampleScriptJPEGDirPath에 ScriptJPEG 파일이 5개 존재하면 그대로 유지
-        if os.path.exists(self.HTrimScriptJPEGDirPath):
-            # SampleScriptJPEGDirPath에서 모든 JPEG 파일을 가져와 정렬
-            ScriptJPEGFiles = sorted([
-                FileName for FileName in os.listdir(self.HTrimScriptJPEGDirPath)
-                if FileName.lower().endswith('.jpeg')
-            ])
-
-            # SampleScriptJPEGDirPath에 JPEG 파일이 5개 이상 있는 경우는 InputList 생성 및 리턴
-            if len(ScriptJPEGFiles) >= 5:
-                InputList = [
-                    {
-                        "Id": 1,
-                        "Input": [],
-                        "InputFormat": "jpeg",
-                        "ComparisonInput": ""
-                    }
-                ]
-                for InputId, FileName in enumerate(ScriptJPEGFiles, 1):
-                    FilePath = os.path.join(self.HTrimScriptJPEGDirPath, FileName)
-                    InputList[0]["Input"].append(FilePath)
-                return InputList
-
+        """InputList 생성"""
         # PDF 파일 불러오기
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
         TotalPages = len(PdfDocument)
 
-        # 총 페이지가 5 미만이면 중복 포함해서 5개 선택
-        if TotalPages < 5:
-            SelectedPageIndices = random.choices(range(TotalPages), k = 5)
+        # 총 페이지가 10 미만이면 중복 포함해서 10개 선택, 아니면 10개 샘플
+        if TotalPages < 10:
+            SelectedPageIndices = random.choices(range(TotalPages), k = 10)
         else:
-            SelectedPageIndices = random.sample(range(TotalPages), 5)
+            SelectedPageIndices = random.sample(range(TotalPages), 10)
 
-        # InputList 생성
-        InputList = [
-            {
-                "Id": 1,
-                "Input": [],
-                "InputFormat": "jpeg",
-                "ComparisonInput": ""
-            }
-        ]
+        # InputList 생성 및 리턴
+        InputList = []
         for InputId, PageIndex in enumerate(SelectedPageIndices, 1):
             Page = PdfDocument.load_page(PageIndex)
-            # PDF 이미지 생성 및 라벨 생성
-            OutputFilePath = self._CreatePDFToHTrimJPEG(Page, InputId)
-
-            InputList[0]["Input"].append(OutputFilePath)
+            OutputPaths = self._CreatePDFToHTrimJPEG(Page, InputId)
+            InputList.append(
+                {
+                    "Id": InputId + 1,
+                    "Input": OutputPaths,
+                    "InputFormat": "jpeg",
+                    "ComparisonInput": ""
+                }
+            )
 
         PdfDocument.close()
 
         return InputList
 
-    ## PDFHorizontalResizeProcess 실행 ##
+    ## PDFResizeProcess 실행 ##
     def Run(self):
         """PDF 가로 재단 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
@@ -636,14 +661,9 @@ class PDFHorizontalResizeProcess:
 
         return SolutionEdit
 
-###################################################
-##### P05 PDFVerticalResize (PDF 파일 세로 재단) #####
-###################################################
-
-
 
 ##########################################
-##### P06 PDFSplit (PDF 페이지 별 분할) #####
+##### P05 PDFSplit (PDF 페이지 별 분할) #####
 ##########################################
 class PDFSplitProcess:
 
@@ -662,7 +682,7 @@ class PDFSplitProcess:
         self.UploadedScriptFilePath = UploadedScriptFilePath
         
         # Process 설정
-        self.ProcessNumber = 'P06'
+        self.ProcessNumber = 'P05'
         self.ProcessName = "PDFSplit"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
         
@@ -739,7 +759,7 @@ class PDFSplitProcess:
 
 
 ####################################################
-##### #P07 PDFFormCheck (PDF 파일 페이지 형식 체크) #####
+##### #P06 PDFFormCheck (PDF 파일 페이지 형식 체크) #####
 ####################################################
 class PDFFormCheckProcess:
 
@@ -757,7 +777,7 @@ class PDFFormCheckProcess:
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
-        self.ProcessNumber = "P07"
+        self.ProcessNumber = "P06"
         self.ProcessName = "PDFFormCheck"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
@@ -1203,17 +1223,15 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFLayoutCheckInstance.Run()
         
-        ## P04 PDFHorizontalResize (PDF 파일 가로 재단)
-        PDFHorizontalResizeInstance = PDFHorizontalResizeProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
-        SolutionEdit = PDFHorizontalResizeInstance.Run()
+        ## P04 PDFResize (PDF 파일 재단)
+        PDFResizeInstance = PDFResizeProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        SolutionEdit = PDFResizeInstance.Run()
         
-        ## P05 PDFVerticalResize (PDF 파일 세로 재단)
-        
-        ## P06 PDFSplit (PDF 파일 페이지 분할)
+        ## P05 PDFSplit (PDF 파일 페이지 분할)
         PDFSplitterInstance = PDFSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, ScriptFileExtension, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFSplitterInstance.Run()
 
-        ## P07 PDFFormCheck (PDF 파일 페이지 형식 체크)
+        ## P06 PDFFormCheck (PDF 파일 페이지 형식 체크)
         PDFFormCheckInstance = PDFFormCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFFormCheckInstance.Run()
         

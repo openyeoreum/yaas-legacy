@@ -2,7 +2,7 @@
     "ko": [
         {
             "ProjectName": "eval(self.ProjectName)",
-            "TaskName": "PDFHorizontalResize",
+            "TaskName": "PDFResize",
             "NextSolution": "eval(self.NextSolution)",
             "AutoTemplate": "eval(self.AutoTemplate)",
             "FileExtension": "pdf",
@@ -13,29 +13,20 @@
         [
             [
                 {
-                    "ScriptId": "eval(Response[0]['자료번호'])",
-                    "IsBody": "eval(Response[0]['본문여부'])",
+                    "CropLineDirection": "eval(Response[0]['재단선방향'])",
                     "BodyCropLineNumber": "eval(Response[0]['본문재단선번호'])"
                 },
                 {
-                    "ScriptId": "eval(Response[1]['자료번호'])",
-                    "IsBody": "eval(Response[1]['본문여부'])",
+                    "CropLineDirection": "eval(Response[1]['재단선방향'])",
                     "BodyCropLineNumber": "eval(Response[1]['본문재단선번호'])"
                 },
                 {
-                    "ScriptId": "eval(Response[2]['자료번호'])",
-                    "IsBody": "eval(Response[2]['본문여부'])",
+                    "CropLineDirection": "eval(Response[2]['재단선방향'])",
                     "BodyCropLineNumber": "eval(Response[2]['본문재단선번호'])"
                 },
                 {
-                    "ScriptId": "eval(Response[3]['자료번호'])",
-                    "IsBody": "eval(Response[3]['본문여부'])",
+                    "CropLineDirection": "eval(Response[3]['재단선방향'])",
                     "BodyCropLineNumber": "eval(Response[3]['본문재단선번호'])"
-                },
-                {
-                    "ScriptId": "eval(Response[4]['자료번호'])",
-                    "IsBody": "eval(Response[4]['본문여부'])",
-                    "BodyCropLineNumber": "eval(Response[4]['본문재단선번호'])"
                 }
             ]
         ]
@@ -43,7 +34,7 @@
     "global": [
         {
             "ProjectName": "eval(self.ProjectName)",
-            "TaskName": "PDFHorizontalResize",
+            "TaskName": "PDFResize",
             "NextSolution": "eval(self.NextSolution)",
             "AutoTemplate": "eval(self.AutoTemplate)",
             "FileExtension": "pdf",
@@ -54,29 +45,20 @@
         [
             [
                 {
-                    "ScriptId": "eval(Response[0]['DataNumber'])",
-                    "IsBody": "eval(Response[0]['IsBody'])",
+                    "CropLineDirection": "eval(Response[0]['CropLineDirection'])",
                     "BodyCropLineNumber": "eval(Response[0]['BodyCropLineNumber'])"
                 },
                 {
-                    "ScriptId": "eval(Response[1]['DataNumber'])",
-                    "IsBody": "eval(Response[1]['IsBody'])",
+                    "CropLineDirection": "eval(Response[1]['CropLineDirection'])",
                     "BodyCropLineNumber": "eval(Response[1]['BodyCropLineNumber'])"
                 },
                 {
-                    "ScriptId": "eval(Response[2]['DataNumber'])",
-                    "IsBody": "eval(Response[2]['IsBody'])",
+                    "CropLineDirection": "eval(Response[2]['CropLineDirection'])",
                     "BodyCropLineNumber": "eval(Response[2]['BodyCropLineNumber'])"
                 },
                 {
-                    "ScriptId": "eval(Response[3]['DataNumber'])",
-                    "IsBody": "eval(Response[3]['IsBody'])",
+                    "CropLineDirection": "eval(Response[3]['CropLineDirection'])",
                     "BodyCropLineNumber": "eval(Response[3]['BodyCropLineNumber'])"
-                },
-                {
-                    "ScriptId": "eval(Response[4]['DataNumber'])",
-                    "IsBody": "eval(Response[4]['IsBody'])",
-                    "BodyCropLineNumber": "eval(Response[4]['BodyCropLineNumber'])"
                 }
             ]
         ]

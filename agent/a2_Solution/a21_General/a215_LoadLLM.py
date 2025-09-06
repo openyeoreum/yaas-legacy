@@ -425,105 +425,118 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
 
     GoogleAIClient = genai.Client(api_key= os.getenv("GEMINI_API_KEY"), http_options={'api_version':'v1alpha'})
     if PromptFramePath == "":
-      promptFrame = GetPromptFrame(Process, mainLang)
+        promptFrame = GetPromptFrame(Process, mainLang)
     else:
-      with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
-        promptFrame = json.load(promptFrameJson)
+        with open(PromptFramePath, 'r', encoding = 'utf-8') as promptFrameJson:
+            promptFrame = json.load(promptFrameJson)
 
     Messages, TotalTokens, temperature = LLMmessages(Process, Input, 'claude', InputFormat = inputFormat, MainLang = mainLang, Root = root, promptFramePath = PromptFramePath, mode = Mode, input2 = Input2, inputMemory = InputMemory, outputMemory = OutputMemory, memoryNote = MemoryNote, outputEnder = OutputEnder)
 
     Model = promptFrame["GOOGLE"]["MasterModel"]
-    
+
+    # JPEG 파일 업로드 함수
+    def UploadJPEG(JPEGFilePath):
+        with open(JPEGFilePath, "rb") as JPEGFile:
+            JPEG = JPEGFile.read()
+        return types.Part.from_bytes(JPEG, mime_type = "image/jpeg")
+
+    # InputFormat이 jpeg인 경우, 이미지 파일들을 Part 리스트로 변환
+    if inputFormat == "jpeg":
+        ImageFiles = [UploadJPEG(path) for path in Input]
+
     for _ in range(MaxAttempts):
-      try:
-          Response = ''
-          if promptFrame["OutputFormat"] == 'json':
-            for responseChunk in GoogleAIClient.models.generate_content_stream(
-                model = Model,
-                contents = [
-                  types.Content(
-                    role = "user",
-                    parts = [types.Part.from_text(text = f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"),],
-                    ),
-                ],
-                config = types.GenerateContentConfig(response_mime_type = "application/json",)
-            ):
-              Response += responseChunk.text
-          else:
-            for responseChunk in GoogleAIClient.models.generate_content_stream(
-                model = Model,
-                contents = [
-                  types.Content(
-                    role = "user",
-                    parts = [types.Part.from_text(text = f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"),],
-                    ),
-                ],
-                config = types.GenerateContentConfig(response_mime_type = "text/plain",)
-            ):
-              Response += responseChunk.text
-          Usage = {'Input': responseChunk.usage_metadata.prompt_token_count,
-                    'Output': responseChunk.usage_metadata.candidates_token_count,
-                    'Total': responseChunk.usage_metadata.total_token_count}
-          # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
-          if promptFrame["OutputFormat"] == 'json':
-              pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'
-              match = re.search(pattern, Response, re.DOTALL)
-              if match:
-                  Response = match.group(1).strip()
-              Response = Response.replace('\n', '\\n')
-              StartIndexBracket = Response.find('[')
-              StartIndexBrace = Response.find('{')
-              if StartIndexBracket != -1 and StartIndexBrace != -1:
-                  StartIndex = min(StartIndexBracket, StartIndexBrace)
-              elif StartIndexBracket != -1:
-                  StartIndex = StartIndexBracket
-              elif StartIndexBrace != -1:
-                  StartIndex = StartIndexBrace
-              else:
-                  StartIndex = -1
-              if StartIndex != -1:
-                  if Response[StartIndex] == '[':
-                      EndIndex = Response.rfind(']')
-                  else:
-                      EndIndex = Response.rfind('}')
-                  if EndIndex != -1:
-                      JsonResponse = Response[StartIndex:EndIndex+1]
-                  else:
-                      JsonResponse = Response
-              else:
-                  JsonResponse = Response
-          else:
-              JsonResponse = Response
-          
-          if isinstance(email, str):
-              print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse 완료")
-          else:
-              print(f"LifeGraphName: {projectName} | Process: {Process} | GOOGLE_LLMresponse 완료")
-          
-          if messagesReview == "on":
-              LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, INPUTFORMAT = inputFormat, MAINLANG = mainLang, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryNote, OUTPUTENDER = OutputEnder)
+        try:
+            Response = ''
+            if promptFrame["OutputFormat"] == 'json':
+                for responseChunk in GoogleAIClient.models.generate_content_stream(
+                    model = Model,
+                    contents = [
+                    types.Content(
+                        role = "user",
+                        parts = [types.Part.from_text(text = f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"),],
+                        ),
+                    ],
+                    config = types.GenerateContentConfig(response_mime_type = "application/json",)
+                ):
+                    Response += responseChunk.text
+            else:
+                for responseChunk in GoogleAIClient.models.generate_content_stream(
+                    model = Model,
+                    contents = [
+                    types.Content(
+                        role = "user",
+                        parts = [types.Part.from_text(text = f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"),],
+                        ),
+                    ],
+                    config = types.GenerateContentConfig(response_mime_type = "text/plain",)
+                ):
+                    Response += responseChunk.text
+            Usage = {
+                'Input': responseChunk.usage_metadata.prompt_token_count,
+                'Output': responseChunk.usage_metadata.candidates_token_count,
+                'Total': responseChunk.usage_metadata.total_token_count
+            }
+            
+            # Response Mode 전처리1: ([...]와 {...}중 하나로 전처리)
+            if promptFrame["OutputFormat"] == 'json':
+                pattern = r'(?:\'\'\'|```|\"\"\")(.*?)(?:\'\'\'|```|\"\"\")'
+                match = re.search(pattern, Response, re.DOTALL)
+                if match:
+                    Response = match.group(1).strip()
+                Response = Response.replace('\n', '\\n')
+                StartIndexBracket = Response.find('[')
+                StartIndexBrace = Response.find('{')
+                if StartIndexBracket != -1 and StartIndexBrace != -1:
+                    StartIndex = min(StartIndexBracket, StartIndexBrace)
+                elif StartIndexBracket != -1:
+                    StartIndex = StartIndexBracket
+                elif StartIndexBrace != -1:
+                    StartIndex = StartIndexBrace
+                else:
+                    StartIndex = -1
+                if StartIndex != -1:
+                    if Response[StartIndex] == '[':
+                        EndIndex = Response.rfind(']')
+                    else:
+                        EndIndex = Response.rfind('}')
+                    if EndIndex != -1:
+                        JsonResponse = Response[StartIndex:EndIndex+1]
+                    else:
+                        JsonResponse = Response
+                else:
+                    JsonResponse = Response
+            else:
+                JsonResponse = Response
+            
+            if isinstance(email, str):
+                print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse 완료")
+            else:
+                print(f"LifeGraphName: {projectName} | Process: {Process} | GOOGLE_LLMresponse 완료")
+            
+            if messagesReview == "on":
+                LLMmessagesReview(Process, Input, Count, JsonResponse, Usage, Model, INPUTFORMAT = inputFormat, MAINLANG = mainLang, ROOT = root, MODE = Mode, INPUT2 = Input2, INPUTMEMORY = InputMemory, OUTPUTMEMORY = OutputMemory, MEMORYCOUNTER = MemoryNote, OUTPUTENDER = OutputEnder)
 
-          ## Response Mode 전처리2: JsonParsing의 재구조화
-          if ":" in JsonResponse and "{" in JsonResponse and "}" in JsonResponse:
-              try:
-                  TestResponse = json.loads(JsonResponse)
-              except json.JSONDecodeError:
-                  print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse 파싱오류 | JsonParsingProcess 시작")
-                  JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, MainLang = mainLang, LLM = "GOOGLE")
-                  try:
-                      TestResponse = json.loads(JsonResponse)
-                  except json.JSONDecodeError:
-                      JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, MainLang = mainLang, LLM = "OpenAI")
+            ## Response Mode 전처리2: JsonParsing의 재구조화
+            if ":" in JsonResponse and "{" in JsonResponse and "}" in JsonResponse:
+                try:
+                    TestResponse = json.loads(JsonResponse)
+                except json.JSONDecodeError:
+                    print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse 파싱오류 | JsonParsingProcess 시작")
+                    JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, MainLang = mainLang, LLM = "GOOGLE")
+                    try:
+                        TestResponse = json.loads(JsonResponse)
+                    except json.JSONDecodeError:
+                        JsonResponse = JsonParsingProcess(projectName, email, JsonResponse, JsonParsingFilter, MainLang = mainLang, LLM = "OpenAI")
 
-          return JsonResponse, Usage, Model
-      
-      except Exception as e:
-          if isinstance(email, str):
-            print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse에서 오류 발생\n\n{e}")
-          else:
-            print(f"LifeGraphName: {projectName} | Process: {Process} | GOOGLE_LLMresponse에서 오류 발생\n\n{e}")
-          time.sleep(random.uniform(5, 10))
-          continue
+            return JsonResponse, Usage, Model
+        
+        except Exception as e:
+            if isinstance(email, str):
+                print(f"Project: {projectName} | Process: {Process} | GOOGLE_LLMresponse에서 오류 발생\n\n{e}")
+            else:
+                print(f"LifeGraphName: {projectName} | Process: {Process} | GOOGLE_LLMresponse에서 오류 발생\n\n{e}")
+            time.sleep(random.uniform(5, 10))
+            continue
         
 #################################
 ##### DEEPSEEK LLM Response #####

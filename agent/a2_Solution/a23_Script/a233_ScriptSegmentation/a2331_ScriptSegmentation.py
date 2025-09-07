@@ -96,22 +96,22 @@ class ScriptLoadProcess:
             "UploadedScriptFilePath": self.UploadedScriptFilePath
         }
 
-        return [Inputs]
+        return [Inputs], [""]
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
-        # Inputs 생성 (반드시 리스트 형태)
-        Inputs = self._CreateProcessInfoToInputs()
+        # Inputs 생성
+        Inputs, ComparisonInputs = self._CreateProcessInfoToInputs()
 
-        # InputList 생성 및 리턴 (표본 고정 형태)
+        # InputList 생성 및 리턴
         InputList = []
         for i, Input in enumerate(Inputs):
             InputList.append(
                 {
                     "Id": i + 1,
                     "Input": Input,
-                    "ComparisonInput": ""
+                    "ComparisonInput": ComparisonInputs[i]
                 }
             )
             
@@ -263,7 +263,7 @@ class PDFMainLangCheckProcess:
                     os.path.join(self.SampleScriptJPEGDirPath, fn)
                     for fn in ScriptJpegs
                 ]
-                return Inputs
+                return Inputs, [""]
 
         # 없으면 PDF에서 5페이지 뽑아 라벨 JPEG 생성
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
@@ -284,22 +284,22 @@ class PDFMainLangCheckProcess:
 
         PdfDocument.close()
         
-        return [Inputs]
+        return [Inputs], [""]
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
         # Inputs 생성
-        Inputs = self._CreateLabeledSamplePathToInputs()
+        Inputs, ComparisonInputs = self._CreateLabeledSamplePathToInputs()
 
-        # InputList 생성 및 리턴 (표본 그대로)
+        # InputList 생성 및 리턴
         InputList = []
         for i, Input in enumerate(Inputs):
             InputList.append(
                 {
                     "Id": i + 1,
                     "Input": Input,
-                    "ComparisonInput": ""
+                    "ComparisonInput": ComparisonInputs[i]
                 }
             )
             
@@ -368,22 +368,22 @@ class PDFLayoutCheckProcess:
             FilePath = os.path.join(self.SampleScriptJPEGDirPath, FileName)
             Inputs.append(FilePath)
 
-        return [Inputs]
+        return [Inputs], [""]
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
         # Inputs 생성
-        Inputs = self._LoadPDFToLabeledSampleJPEGToInputs()
+        Inputs, ComparisonInputs = self._LoadPDFToLabeledSampleJPEGToInputs()
 
-        # InputList 생성 및 리턴 (표본 그대로)
+        # InputList 생성 및 리턴
         InputList = []
         for i, Input in enumerate(Inputs):
             InputList.append(
                 {
                     "Id": i + 1,
                     "Input": Input,
-                    "ComparisonInput": ""
+                    "ComparisonInput": ComparisonInputs[i]
                 }
             )
             
@@ -659,22 +659,22 @@ class PDFResizeProcess:
 
         PdfDocument.close()
         
-        return Inputs
+        return Inputs, [""]
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
         # Inputs 생성
-        Inputs = self._CreateTrimLineJPEGToInputs()
+        Inputs, ComparisonInputs = self._CreateTrimLineJPEGToInputs()
 
-        # InputList 생성 및 리턴 (표본 그대로)
+        # InputList 생성 및 리턴
         InputList = []
         for i, Input in enumerate(Inputs):
             InputList.append(
                 {
                     "Id": i + 1,
                     "Input": Input,
-                    "ComparisonInput": ""
+                    "ComparisonInput": ComparisonInputs[i]
                 }
             )
             
@@ -756,13 +756,13 @@ class PDFSplitProcess:
                 }
             )
             
-        return Inputs
+        return Inputs, [""]
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
         # Inputs 생성
-        Inputs = self._SplitPDFToInputs()
+        Inputs, ComparisonInputs = self._SplitPDFToInputs()
 
         # InputList 생성 및 리턴
         InputList = []
@@ -771,7 +771,7 @@ class PDFSplitProcess:
                 {
                     "Id": i + 1,
                     "Input": Input,
-                    "ComparisonInput": ""
+                    "ComparisonInput": ComparisonInputs[i]
                 }
             )
 
@@ -953,34 +953,6 @@ class PDFFormCheckProcess:
 
         return InputList
 
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # PDF 파일 불러오기 및 이미지 생성 및 라벨 생성
-        PdfDocument = fitz.open(self.UploadedScriptFilePath)
-        OutputPathList = self._CreatePDFToLabeledJPEGs(PdfDocument)
-        OutputPathListLength = len(OutputPathList)
-
-        InputList = []
-        for i, Start in enumerate(range(0, OutputPathListLength, 2), start = 1):
-            # 원형 인덱스(0-based)
-            Indexes = [(Start + k) % OutputPathListLength for k in range(5)]
-            # 경로 리스트
-            OutputPathSet = [OutputPathList[idx] for idx in Indexes]
-            # 사람이 보는 1-based 페이지 순번 리스트
-            OutputPathNums = [idx + 1 for idx in Indexes]
-            OutputPathNumsStr = ", ".join(str(idx) for idx in OutputPathNums)
-
-            InputList.append(
-                {
-                    "Id": i + 1,
-                    "Input": OutputPathSet,
-                    "ComparisonInput": OutputPathNumsStr
-                }
-            )
-
-        return InputList
-
     ## PDFFormCheckProcess 실행 ##
     def Run(self):
         """PDF 페이지 형식 체크 전체 프로세스 실행"""
@@ -1074,13 +1046,13 @@ class TXTMainLangCheckProcess:
         # "1구간문구 ... 2구간문구 ... 3구간문구" 형태로 합치기
         Inputs = f"{SampleTextList[0]} ... {SampleTextList[1]} ... {SampleTextList[2]}"
 
-        return [Inputs]
+        return [Inputs], [""]
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
         # Inputs 생성
-        Inputs = self._CreateTXTToSampleText()
+        Inputs, ComparisonInputs = self._CreateTXTToSampleText()
 
         # InputList 생성 및 리턴
         InputList = []
@@ -1089,7 +1061,7 @@ class TXTMainLangCheckProcess:
                 {
                     "Id": i + 1,
                     "Input": Input,
-                    "ComparisonInput": ""
+                    "ComparisonInput": ComparisonInputs[i]
                 }
             )
 
@@ -1252,13 +1224,13 @@ class TXTSplitProcess:
                 }
             )
 
-        return Inputs
+        return Inputs, [""]
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
         # Inputs 생성
-        Inputs = self._SplitTXTToInputs()
+        Inputs, ComparisonInputs = self._SplitTXTToInputs()
         
         # InputList 생성 및 리턴
         InputList = []
@@ -1267,7 +1239,7 @@ class TXTSplitProcess:
                 {
                     "Id": i + 1,
                     "Input": Input,
-                    "ComparisonInput": ""
+                    "ComparisonInput": ComparisonInputs[i]
                 }
             )
 

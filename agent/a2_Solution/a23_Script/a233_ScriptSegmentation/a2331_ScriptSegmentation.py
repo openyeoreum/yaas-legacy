@@ -85,25 +85,36 @@ class ScriptLoadProcess:
             # txt 또는 pdf 파일이 없으면 오류메세지 출력
             sys.exit(f"\n\n[ 원고 파일(txt, pdf)을 아래 경로에 복사해주세요. ]\n({self.UploadScriptFilePath})\n\n")
 
+    ## 프로세스 정보 Inputs 생성 ##
+    def _CreateProcessInfoToInputs(self):
+        """ProcessInfo를 생성해서 list 형태로 반환 """
+        Inputs = {
+            "ProjectName": self.ProjectName,
+            "NextSolution": self.NextSolution,
+            "AutoTemplate": self.AutoTemplate,
+            "FileExtension": self.ScriptFileExtension,
+            "UploadedScriptFilePath": self.UploadedScriptFilePath
+        }
+
+        return [Inputs]
+
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
-        # InputList 생성 및 리턴
-        InputList = [
-            {
-                "Id": 1,
-                "Input": {
-                    "ProjectName": self.ProjectName,
-                    "NextSolution": self.NextSolution,
-                    "AutoTemplate": self.AutoTemplate,
-                    "FileExtension": self.ScriptFileExtension,
-                    "UploadedScriptFilePath": self.UploadedScriptFilePath
-                },
-                "InputFormat": "text",
-                "ComparisonInput": ""
-            }
-        ]
+        # Inputs 생성 (반드시 리스트 형태)
+        Inputs = self._CreateProcessInfoToInputs()
 
+        # InputList 생성 및 리턴 (표본 고정 형태)
+        InputList = []
+        for i, Input in enumerate(Inputs):
+            InputList.append(
+                {
+                    "Id": i + 1,
+                    "Input": Input,
+                    "ComparisonInput": ""
+                }
+            )
+            
         return InputList
 
     ## ScriptLoadProcess 실행 메서드 ##
@@ -163,7 +174,7 @@ class PDFMainLangCheckProcess:
         self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
 
     ## PDF 샘플 이미지 생성 및 라벨 생성 ##
-    def _CreatePDFToLabeledSampleJPEG(self, Page, InputId):
+    def _CreatePDFToLabeledSampleJPEGs(self, Page, InputId):
         """PDF 페이지에 '자료번호: InputId' 라벨을 추가한 JPEG 파일을 생성"""
         # 페이지 → 이미지
         Pixmap = Page.get_pixmap(dpi = 150)
@@ -238,60 +249,60 @@ class PDFMainLangCheckProcess:
 
         return OutputPath
 
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # SampleScriptJPEGDirPath에 ScriptJPEG 파일이 5개 존재하면 그대로 유지
+    ## 라벨 샘플 경로의 Inputs 생성 ##
+    def _CreateLabeledSamplePathToInputs(self):
+        """샘플 입력을 생성해서 list 형태로 반환"""
+        # 폴더에 JPEG가 5개 이상 있으면 그대로 사용
         if os.path.exists(self.SampleScriptJPEGDirPath):
-            # SampleScriptJPEGDirPath에서 모든 JPEG 파일을 가져와 정렬
-            ScriptJPEGFiles = sorted([
-                FileName for FileName in os.listdir(self.SampleScriptJPEGDirPath)
-                if FileName.lower().endswith('.jpeg')
-            ])
-
-            # SampleScriptJPEGDirPath에 JPEG 파일이 5개 이상 있는 경우는 InputList 생성 및 리턴
-            if len(ScriptJPEGFiles) >= 5:
-                InputList = [
-                    {
-                        "Id": 1,
-                        "Input": [],
-                        "InputFormat": "jpeg",
-                        "ComparisonInput": ""
-                    }
+            ScriptJpegs = sorted(
+                f for f in os.listdir(self.SampleScriptJPEGDirPath)
+                if f.lower().endswith(".jpeg")
+            )
+            if len(ScriptJpegs) >= 5:
+                Inputs = [
+                    os.path.join(self.SampleScriptJPEGDirPath, fn)
+                    for fn in ScriptJpegs
                 ]
-                for InputId, FileName in enumerate(ScriptJPEGFiles, 1):
-                    FilePath = os.path.join(self.SampleScriptJPEGDirPath, FileName)
-                    InputList[0]["Input"].append(FilePath)
-                return InputList
+                return Inputs
 
-        # PDF 파일 불러오기
+        # 없으면 PDF에서 5페이지 뽑아 라벨 JPEG 생성
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
         TotalPages = len(PdfDocument)
 
-        # 총 페이지가 5 미만이면 중복 포함해서 5개 선택
         if TotalPages < 5:
-            SelectedPageIndices = random.choices(range(TotalPages), k = 5)
+            Selected = random.choices(range(TotalPages), k = 5)
         else:
-            SelectedPageIndices = random.sample(range(TotalPages), 5)
+            Selected = random.sample(range(TotalPages), 5)
 
-        # InputList 생성
-        InputList = [
-            {
-                "Id": 1,
-                "Input": [],
-                "InputFormat": "jpeg",
-                "ComparisonInput": ""
-            }
-        ]
-        for InputId, PageIndex in enumerate(SelectedPageIndices, 1):
-            Page = PdfDocument.load_page(PageIndex)
-            # PDF 이미지 생성 및 라벨 생성
-            OutputFilePath = self._CreatePDFToLabeledSampleJPEG(Page, InputId)
+        os.makedirs(self.SampleScriptJPEGDirPath, exist_ok=True)
 
-            InputList[0]["Input"].append(OutputFilePath)
+        Inputs = []
+        for InputId, PageIdx in enumerate(Selected, 1):
+            page = PdfDocument.load_page(PageIdx)
+            OutPath = self._CreatePDFToLabeledSampleJPEGs(page, InputId)
+            Inputs.append(OutPath)
 
         PdfDocument.close()
+        
+        return [Inputs]
 
+    ## InputList 생성 ##
+    def _CreateInputList(self):
+        """InputList를 생성하는 메서드"""
+        # Inputs 생성
+        Inputs = self._CreateLabeledSamplePathToInputs()
+
+        # InputList 생성 및 리턴 (표본 그대로)
+        InputList = []
+        for i, Input in enumerate(Inputs):
+            InputList.append(
+                {
+                    "Id": i + 1,
+                    "Input": Input,
+                    "ComparisonInput": ""
+                }
+            )
+            
         return InputList
 
     ## PDFMainLangCheckProcess 실행 ##
@@ -345,35 +356,37 @@ class PDFLayoutCheckProcess:
         # SplitedPDF 경로 및 디렉토리 생성
         self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_SampleScript({self.NextSolution})_jpeg")
 
-    ## PDF 라벨 샘플 이미지 불러오기 ##
-    def _LoadPDFToLabeledSampleJPEG(self):
+    ## PDF 라벨 샘플 이미지 Inputs 생성 ##
+    def _LoadPDFToLabeledSampleJPEGToInputs(self):
         """SampleScriptJPEGDirPath에 저장된 JPEG 파일 경로를 리스트로 반환"""
         # SampleScriptJPEGDirPath에 ScriptJPEG 파일 5개 파일명 추출
         ScriptJPEGFiles = sorted([FileName for FileName in os.listdir(self.SampleScriptJPEGDirPath) if FileName.lower().endswith('.jpeg')])
 
-        # SampleScriptJPEGDirPath에 JPEG 파일 5개 경로 OutputPathList 생성 및 리턴
-        OutputPathList = []
+        # SampleScriptJPEGDirPath에 JPEG 파일 5개 경로 Inputs 생성 및 리턴
+        Inputs = []
         for FileName in ScriptJPEGFiles:
             FilePath = os.path.join(self.SampleScriptJPEGDirPath, FileName)
-            OutputPathList.append(FilePath)
-            
-        return OutputPathList
+            Inputs.append(FilePath)
+
+        return [Inputs]
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
-        # PDF 라벨 샘플 이미지 불러오기
-        OutputPathList = self._LoadPDFToLabeledSampleJPEG()
+        # Inputs 생성
+        Inputs = self._LoadPDFToLabeledSampleJPEGToInputs()
 
-        InputList = [
-            {
-                "Id": 1,
-                "Input": OutputPathList,
-                "InputFormat": "jpeg",
-                "ComparisonInput": ""
-            }
-        ]
-
+        # InputList 생성 및 리턴 (표본 그대로)
+        InputList = []
+        for i, Input in enumerate(Inputs):
+            InputList.append(
+                {
+                    "Id": i + 1,
+                    "Input": Input,
+                    "ComparisonInput": ""
+                }
+            )
+            
         return InputList
     
     ## PDFLayoutCheckProcess 실행 ##
@@ -427,8 +440,8 @@ class PDFResizeProcess:
         self.FontDirPath = "/usr/share/fonts/"
         self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
 
-    ## PDF 샘플 이미지 생성 및 방향별(HTrim) 보조선/동그라미 숫자(흰 배경) 4종 생성 ##
-    def _CreatePDFToHTrimJPEG(self, Page, InputId):
+    ## PDF 방향별 보조선 샘플 이미지 생성 ##
+    def _CreatePDFToTrimLineJPEGs(self, Page, InputId):
         """한 PDF 페이지로부터 좌, 우, 위, 아래 간격선 10개의 JPEG 생성"""
 
         # ===== 0) 기본 이미지 변환 & 스케일 관련 =====
@@ -612,46 +625,59 @@ class PDFResizeProcess:
             # ===== 저장 =====
             suffix = filename_suffix[direction]
             out_name = f"{self.ProjectName}_HTrimScript({self.NextSolution})({InputId})({suffix}).jpeg"
-            out_path = os.path.join(self.HTrimScriptJPEGDirPath, out_name)
-            Img.save(out_path, "JPEG", quality = 92, optimize = True, progressive = True, subsampling = 1)
-            return out_path
+            OutPath = os.path.join(self.HTrimScriptJPEGDirPath, out_name)
+            Img.save(OutPath, "JPEG", quality = 92, optimize = True, progressive = True, subsampling = 1)
+            return OutPath
 
         # 4개 방향 모두 생성
         OutputPaths = []
-        for dir_key in ["Left", "Right", "Up", "Down"]:
-            OutputPaths.append(render_direction(dir_key))
+        for DirKey in ["Left", "Right", "Up", "Down"]:
+            OutputPaths.append(render_direction(DirKey))
 
         return OutputPaths
 
+    ## 방향별 보조선 샘플 이미지 Inputs 생성 ##
+    def _CreateTrimLineJPEGToInputs(self):
+        """PDF에서 최대 10개 페이지를 뽑아 각 페이지마다 방향별 보조선 샘플 이미지 4개 생성"""
+        # PDF 열기
+        PdfDocument = fitz.open(self.UploadedScriptFilePath)
+        total_pages = len(PdfDocument)
+
+        # 총 페이지가 10 미만이면 중복 포함 선택, 아니면 10개 샘플
+        K = 10
+        if total_pages < K:
+            selected_page_indices = random.choices(range(total_pages), k=K)
+        else:
+            selected_page_indices = random.sample(range(total_pages), K)
+
+        # 각 페이지별로 출력물 생성 → 하나의 Input
+        Inputs = []
+        for input_id, page_index in enumerate(selected_page_indices, 1):
+            page = PdfDocument.load_page(page_index)
+            output_paths = self._CreatePDFToTrimLineJPEGs(page, input_id)  # list[str] 기대
+            Inputs.append(output_paths)
+
+        PdfDocument.close()
+        
+        return Inputs
+
     ## InputList 생성 ##
     def _CreateInputList(self):
-        """InputList 생성"""
-        # PDF 파일 불러오기
-        PdfDocument = fitz.open(self.UploadedScriptFilePath)
-        TotalPages = len(PdfDocument)
+        """InputList를 생성하는 메서드"""
+        # Inputs 생성
+        Inputs = self._CreateTrimLineJPEGToInputs()
 
-        # 총 페이지가 10 미만이면 중복 포함해서 10개 선택, 아니면 10개 샘플
-        if TotalPages < 10:
-            SelectedPageIndices = random.choices(range(TotalPages), k = 10)
-        else:
-            SelectedPageIndices = random.sample(range(TotalPages), 10)
-
-        # InputList 생성 및 리턴
+        # InputList 생성 및 리턴 (표본 그대로)
         InputList = []
-        for InputId, PageIndex in enumerate(SelectedPageIndices, 1):
-            Page = PdfDocument.load_page(PageIndex)
-            OutputPaths = self._CreatePDFToHTrimJPEG(Page, InputId)
+        for i, Input in enumerate(Inputs):
             InputList.append(
                 {
-                    "Id": InputId + 1,
-                    "Input": OutputPaths,
-                    "InputFormat": "jpeg",
+                    "Id": i + 1,
+                    "Input": Input,
                     "ComparisonInput": ""
                 }
             )
-
-        PdfDocument.close()
-
+            
         return InputList
 
     ## PDFResizeProcess 실행 ##
@@ -703,15 +729,15 @@ class PDFSplitProcess:
         self.SplitScriptPDFDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_Script({self.NextSolution})_{self.ScriptFileExtension}")
         os.makedirs(self.SplitScriptPDFDirPath, exist_ok = True)
 
-    ## PDF 파일을 페이지별로 분할 및 저장 ##
-    def _SplitPDF(self):
+    ## PDF 파일을 페이지별로 분할 및 저장 및 Inputs 생성 ##
+    def _SplitPDFToInputs(self):
         """PDF 파일을 페이지별로 분할하고 저장"""
         # PDF 파일 읽고 총 페이지 수 계산
-        PageFilePaths = []
+        Inputs = []
         Reader = PdfReader(self.UploadedScriptFilePath)
         TotalPages = len(Reader.pages)
         
-        # 각 페이지를 개별 PDF 파일로 저장
+        # 각 페이지를 개별 PDF 파일로 저장 및 Inputs 생성
         for PageNum in range(TotalPages):
             Writer = PdfWriter()
             Writer.add_page(Reader.pages[PageNum])
@@ -723,27 +749,28 @@ class PDFSplitProcess:
             with open(OutputFilePath, "wb") as OutputFile:
                 Writer.write(OutputFile)
             # 페이지별 파일 경로를 리스트에 추가
-            PageFilePaths.append(OutputFilePath)
+            Inputs.append(
+                {
+                    "ScriptId": PageNum + 1,
+                    "PageFilePath": OutputFilePath
+                }
+            )
             
-        return PageFilePaths
+        return Inputs
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
-        # PDF 파일을 페이지별로 분할 및 저장
-        PageFilePaths = self._SplitPDF()
-        
+        # Inputs 생성
+        Inputs = self._SplitPDFToInputs()
+
         # InputList 생성 및 리턴
         InputList = []
-        for i, Path in enumerate(PageFilePaths):
+        for i, Input in enumerate(Inputs):
             InputList.append(
                 {
                     "Id": i + 1,
-                    "Input": {
-                        "ScriptId": i + 1,
-                        "PageFilePath": Path
-                    },
-                    "InputFormat": "text",
+                    "Input": Input,
                     "ComparisonInput": ""
                 }
             )
@@ -883,6 +910,49 @@ class PDFFormCheckProcess:
 
         return OutputPathList
 
+    ## 라벨된 JPEG 경로의 Inputs 생성 ##
+    def _CreateLabeledJPEGsToInputs(self):
+        """라벨된 JPEG 경로 목록을 기반으로, 5개를 선택하여 리스트를 반환"""
+        # PdfDocument 열어서 라벨 JPEG 생성 후 경로 리스트 확보
+        PdfDocument = fitz.open(self.UploadedScriptFilePath)
+        OutputPathList = self._CreatePDFToLabeledJPEGs(PdfDocument)  # list[str]
+        PdfDocument.close()
+
+        # 2칸씩 건너뛰며 시작점을 잡고, 매번 5개를 원형으로 선택
+        OutputPathLength = len(OutputPathList)
+        Inputs = []
+        ComparisonInputs = []
+        for start in range(0, OutputPathLength, 2):
+            Indexes = [(start + k) % OutputPathLength for k in range(5)]
+            inputPaths = [OutputPathList[i] for i in Indexes]
+            Inputs.append(inputPaths)
+            
+            OutputPathNums = [idx + 1 for idx in Indexes]
+            OutputPathNumsStr = ", ".join(str(idx) for idx in OutputPathNums)
+            ComparisonInputs.append(OutputPathNumsStr)
+            
+
+        return Inputs, ComparisonInputs
+
+    ## InputList 생성 ##
+    def _CreateInputList(self):
+        """InputList를 생성하는 메서드"""
+        # Inputs 생성
+        Inputs, ComparisonInputs = self._CreateLabeledJPEGsToInputs()
+
+        # InputList 생성 및 리턴
+        InputList = []
+        for i, Input in enumerate(Inputs):
+            InputList.append(
+                {
+                    "Id": i + 1,
+                    "Input": Input,
+                    "ComparisonInput": ComparisonInputs[i]
+                }
+            )
+
+        return InputList
+
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
@@ -905,7 +975,6 @@ class PDFFormCheckProcess:
                 {
                     "Id": i + 1,
                     "Input": OutputPathSet,
-                    "InputFormat": "jpeg",
                     "ComparisonInput": OutputPathNumsStr
                 }
             )
@@ -955,8 +1024,12 @@ class TXTMainLangCheckProcess:
         self.MessagesReview = MessagesReview
 
     ## TXT 샘플 생성 ##
-    def _CreateTXTToSampleText(self, FullText):
+    def _CreateTXTToSampleText(self):
         """텍스트 파일에서 3개의 샘플 텍스트를 추출하여 하나의 문자열로 반환하는 메서드"""
+        # 업로드된 스크립트 파일 읽기
+        with open(self.UploadedScriptFilePath, 'r', encoding = 'utf-8') as f:
+            FullText = f.read()
+
         FullTextLength = len(FullText)
         sampleTextLength = 1000
 
@@ -999,25 +1072,26 @@ class TXTMainLangCheckProcess:
             SampleTextList = [FullText, FullText, FullText]
 
         # "1구간문구 ... 2구간문구 ... 3구간문구" 형태로 합치기
-        SampleText = f"{SampleTextList[0]} ... {SampleTextList[1]} ... {SampleTextList[2]}"
+        Inputs = f"{SampleTextList[0]} ... {SampleTextList[1]} ... {SampleTextList[2]}"
 
-        return SampleText
+        return [Inputs]
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
-        # 업로드된 스크립트 파일 읽기
-        with open(self.UploadedScriptFilePath, 'r', encoding = 'utf-8') as f:
-            FullText = f.read()
+        # Inputs 생성
+        Inputs = self._CreateTXTToSampleText()
 
-        InputList = [
-            {
-                "Id": 1,
-                "Input": self._CreateTXTToSampleText(FullText),
-                "InputFormat": "text",
-                "ComparisonInput": ""
-            }
-        ]
+        # InputList 생성 및 리턴
+        InputList = []
+        for i, Input in enumerate(Inputs):
+            InputList.append(
+                {
+                    "Id": i + 1,
+                    "Input": Input,
+                    "ComparisonInput": ""
+                }
+            )
 
         return InputList
 
@@ -1134,8 +1208,8 @@ class TXTSplitProcess:
 
         return nlp
 
-    ## TXT 파일을 지정된 토큰 수에 가깝게 문장 묶음으로 분할 ##
-    def _SplitTXT(self):
+    ## TXT 파일을 지정된 토큰 수에 가깝게 문장 묶음으로 분할 및 Inputs 생성 ##
+    def _SplitTXTToInputs(self):
         """TXT 파일을 지정된 글자 수(공백 포함)에 가깝게 문장 묶음으로 분할 (공백/줄바꿈 유지)"""
         # Spacy 모델 로드
         nlp = self._LoadSpacyModel()
@@ -1149,10 +1223,10 @@ class TXTSplitProcess:
         # 문장의 원본 텍스트와 마지막 토큰 뒤의 공백/줄바꿈을 합쳐서 리스트 생성
         Sentences = [s.text + s[-1].whitespace_ for s in Doc.sents]
         
-        TXTChunks = []
+        Inputs = []
         CurrentTXTChunkList = []
-        
-        for Sent in Sentences:
+
+        for i, Sent in enumerate(Sentences):
             CurrentTXTChunkList.append(Sent)
             CurrentText = "".join(CurrentTXTChunkList)
             
@@ -1161,32 +1235,38 @@ class TXTSplitProcess:
             
             # 글자 수가 MaxTokens를 초과하면 분할합니다.
             if CharCount >= self.MaxTokens:
-                TXTChunks.append(CurrentText)
+                Inputs.append(
+                    {
+                        "ScriptId": i + 1,
+                        "SplitedText": CurrentText
+                    }
+                )
                 CurrentTXTChunkList = []
                 
         # 마지막 남은 문장 묶음 추가
         if CurrentTXTChunkList:
-            TXTChunks.append("".join(CurrentTXTChunkList))
-            
-        return TXTChunks
+            Inputs.append(
+                {
+                    "ScriptId": len(Inputs) + 1,
+                    "SplitedText": "".join(CurrentTXTChunkList)
+                }
+            )
+
+        return Inputs
 
     ## InputList 생성 ##
     def _CreateInputList(self):
         """InputList를 생성하는 메서드"""
-        # PDF 파일을 페이지별로 분할 및 저장
-        TXTChunks = self._SplitTXT()
+        # Inputs 생성
+        Inputs = self._SplitTXTToInputs()
         
         # InputList 생성 및 리턴
         InputList = []
-        for i, TXTChunk in enumerate(TXTChunks):
+        for i, Input in enumerate(Inputs):
             InputList.append(
                 {
                     "Id": i + 1,
-                    "Input": {
-                        "ScriptId": i + 1,
-                        "SplitedText": TXTChunk
-                    },
-                    "InputFormat": "text",
+                    "Input": Input,
                     "ComparisonInput": ""
                 }
             )

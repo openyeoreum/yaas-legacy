@@ -11,9 +11,9 @@ sys.path.append("/yaas")
 from PyPDF2 import PdfReader, PdfWriter
 from agent.a2_Solution.a21_General.a215_LoadLLM import OpenAI_LLMresponse, ANTHROPIC_LLMresponse, GOOGLE_LLMresponse, DEEPSEEK_LLMresponse
 
-#############################################
-##### LoadAgent (업로드 된 스크립트 파일 확인) #####
-#############################################
+#####################
+##### LoadAgent #####
+#####################
 class LoadAgent:
 
     ## 기본 경로 정의 ##
@@ -187,18 +187,18 @@ class LoadAgent:
         return EditCheck, EditCompletion
 
     ## ProcessResponse 생성 메서드 ##
-    def _ProcessResponse(self, Input, InputCount, InputFormat, ComparisonInput, memoryNote = ""):
+    def _ProcessResponse(self, Input, InputCount, ComparisonInput, memoryNote = ""):
         """ProcessResponse를 생성하는 메서드"""
         ErrorCount = 0
         while True:
             if self.Model == "OpenAI":
-                Response, Usage, Model = OpenAI_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = OpenAI_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "Anthropic":
-                Response, Usage, Model = ANTHROPIC_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = ANTHROPIC_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "Google":
-                Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "DeepSeek":
-                Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, inputFormat = InputFormat, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
 
             # 생성된 Respnse Filler 처리
             FilteredResponse = self._ProcessFilter(Response, ComparisonInput)
@@ -754,12 +754,11 @@ class LoadAgent:
                     ## Input 생성
                     inputCount = self.InputList[i]['Id']
                     Input = self.InputList[i]['Input']
-                    InputFormat = self.InputList[i]['InputFormat']
                     ComparisonInput = self.InputList[i]['ComparisonInput']
 
                     if Response == "Response":
                         ## ProcessResponse 생성
-                        ProcessResponse = self._ProcessResponse(Input, inputCount, InputFormat, ComparisonInput)
+                        ProcessResponse = self._ProcessResponse(Input, inputCount, ComparisonInput)
                     if Response == "Input":
                         ProcessResponse = Input
 

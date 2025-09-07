@@ -263,7 +263,7 @@ class PDFMainLangCheckProcess:
                     os.path.join(self.SampleScriptJPEGDirPath, fn)
                     for fn in ScriptJpegs
                 ]
-                return Inputs, [""]
+                return [Inputs], [""]
 
         # 없으면 PDF에서 5페이지 뽑아 라벨 JPEG 생성
         PdfDocument = fitz.open(self.UploadedScriptFilePath)
@@ -283,7 +283,7 @@ class PDFMainLangCheckProcess:
             Inputs.append(OutPath)
 
         PdfDocument.close()
-        
+
         return [Inputs], [""]
 
     ## InputList 생성 ##
@@ -652,14 +652,16 @@ class PDFResizeProcess:
 
         # 각 페이지별로 출력물 생성 → 하나의 Input
         Inputs = []
+        ComparisonInputs = []
         for input_id, page_index in enumerate(selected_page_indices, 1):
             page = PdfDocument.load_page(page_index)
-            output_paths = self._CreatePDFToTrimLineJPEGs(page, input_id)  # list[str] 기대
-            Inputs.append(output_paths)
+            OutputPaths = self._CreatePDFToTrimLineJPEGs(page, input_id)  # list[str] 기대
+            Inputs.append(OutputPaths)
+            ComparisonInputs.append("")
 
         PdfDocument.close()
-        
-        return Inputs, [""]
+
+        return Inputs, ComparisonInputs
 
     ## InputList 생성 ##
     def _CreateInputList(self):
@@ -733,11 +735,12 @@ class PDFSplitProcess:
     def _SplitPDFToInputs(self):
         """PDF 파일을 페이지별로 분할하고 저장"""
         # PDF 파일 읽고 총 페이지 수 계산
-        Inputs = []
         Reader = PdfReader(self.UploadedScriptFilePath)
         TotalPages = len(Reader.pages)
         
         # 각 페이지를 개별 PDF 파일로 저장 및 Inputs 생성
+        Inputs = []
+        ComparisonInputs = []
         for PageNum in range(TotalPages):
             Writer = PdfWriter()
             Writer.add_page(Reader.pages[PageNum])
@@ -755,8 +758,9 @@ class PDFSplitProcess:
                     "PageFilePath": OutputFilePath
                 }
             )
-            
-        return Inputs, [""]
+            ComparisonInputs.append("")
+
+        return Inputs, ComparisonInputs
 
     ## InputList 생성 ##
     def _CreateInputList(self):
@@ -930,7 +934,6 @@ class PDFFormCheckProcess:
             OutputPathNums = [idx + 1 for idx in Indexes]
             OutputPathNumsStr = ", ".join(str(idx) for idx in OutputPathNums)
             ComparisonInputs.append(OutputPathNumsStr)
-            
 
         return Inputs, ComparisonInputs
 
@@ -1195,9 +1198,9 @@ class TXTSplitProcess:
         # 문장의 원본 텍스트와 마지막 토큰 뒤의 공백/줄바꿈을 합쳐서 리스트 생성
         Sentences = [s.text + s[-1].whitespace_ for s in Doc.sents]
         
-        Inputs = []
         CurrentTXTChunkList = []
-
+        Inputs = []
+        ComparisonInputs = []
         for i, Sent in enumerate(Sentences):
             CurrentTXTChunkList.append(Sent)
             CurrentText = "".join(CurrentTXTChunkList)
@@ -1214,6 +1217,7 @@ class TXTSplitProcess:
                     }
                 )
                 CurrentTXTChunkList = []
+                ComparisonInputs.append("")
                 
         # 마지막 남은 문장 묶음 추가
         if CurrentTXTChunkList:
@@ -1223,8 +1227,9 @@ class TXTSplitProcess:
                     "SplitedText": "".join(CurrentTXTChunkList)
                 }
             )
+            ComparisonInputs.append("")
 
-        return Inputs, [""]
+        return Inputs, ComparisonInputs
 
     ## InputList 생성 ##
     def _CreateInputList(self):

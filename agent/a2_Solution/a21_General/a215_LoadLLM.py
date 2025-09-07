@@ -459,7 +459,8 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
                     ],
                     config = types.GenerateContentConfig(response_mime_type = "application/json",)
                 ):
-                    Response += responseChunk.text
+                    if responseChunk.text is not None:
+                        Response += responseChunk.text
             else:
                 for responseChunk in GoogleAIClient.models.generate_content_stream(
                     model = Model,
@@ -471,7 +472,8 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
                     ],
                     config = types.GenerateContentConfig(response_mime_type = "text/plain",)
                 ):
-                    Response += responseChunk.text
+                    if responseChunk.text is not None:
+                        Response += responseChunk.text
             Usage = {
                 'Input': responseChunk.usage_metadata.prompt_token_count,
                 'Output': responseChunk.usage_metadata.candidates_token_count,

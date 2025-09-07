@@ -130,7 +130,7 @@ class ScriptLoadProcess:
 class PDFMainLangCheckProcess:
 
     ## PDFMainLangCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, Model, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -138,6 +138,7 @@ class PDFMainLangCheckProcess:
         self.Solution = Solution
         self.SubSolution = SubSolution
         self.NextSolution = NextSolution
+        self.Model = Model
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
@@ -298,7 +299,7 @@ class PDFMainLangCheckProcess:
         """PDF 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
         InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, Model = self.Model, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
         SolutionEdit = LoadAgentInstance.Run()
 
         # MainLang 추출
@@ -313,7 +314,7 @@ class PDFMainLangCheckProcess:
 class PDFLayoutCheckProcess:
 
     ## PDFLayoutCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -323,6 +324,7 @@ class PDFLayoutCheckProcess:
         self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
         self.MainLang = MainLang
+        self.Model = Model
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
@@ -379,7 +381,7 @@ class PDFLayoutCheckProcess:
         """PDF 인쇄 파일 형식인 단면, 양면 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
         InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -391,7 +393,7 @@ class PDFLayoutCheckProcess:
 class PDFResizeProcess:
 
     ## PDFResize 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -401,6 +403,7 @@ class PDFResizeProcess:
         self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
         self.MainLang = MainLang
+        self.Model = Model
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
@@ -426,7 +429,7 @@ class PDFResizeProcess:
 
     ## PDF 샘플 이미지 생성 및 방향별(HTrim) 보조선/동그라미 숫자(흰 배경) 4종 생성 ##
     def _CreatePDFToHTrimJPEG(self, Page, InputId):
-        """한 PDF 페이지로부터 좌, 우, 상, 하 간격선 10개의 JPEG 생성"""
+        """한 PDF 페이지로부터 좌, 우, 위, 아래 간격선 10개의 JPEG 생성"""
 
         # ===== 0) 기본 이미지 변환 & 스케일 관련 =====
         Pixmap = Page.get_pixmap(dpi = 150)
@@ -467,8 +470,8 @@ class PDFResizeProcess:
             dir_label_map = {
                 "Left":  "자료방향: 좌",
                 "Right": "자료방향: 우",
-                "Up":    "자료방향: 상",
-                "Down":  "자료방향: 하",
+                "Up":    "자료방향: 위",
+                "Down":  "자료방향: 아래",
             }
         else:
             dir_label_map = {
@@ -656,7 +659,7 @@ class PDFResizeProcess:
         """PDF 가로 재단 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
         InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -764,7 +767,7 @@ class PDFSplitProcess:
 class PDFFormCheckProcess:
 
     ## PDFFormCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, Model, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -774,6 +777,7 @@ class PDFFormCheckProcess:
         self.NextSolution = NextSolution
         self.AutoTemplate = AutoTemplate
         self.MainLang = MainLang
+        self.Model = Model
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
@@ -913,7 +917,7 @@ class PDFFormCheckProcess:
         """PDF 페이지 형식 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
         InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, AutoTemplate = self.AutoTemplate)
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MainLang = self.MainLang, Model = self.Model, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution, AutoTemplate = self.AutoTemplate)
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
@@ -931,7 +935,7 @@ class PDFFormCheckProcess:
 class TXTMainLangCheckProcess:
 
     ## TXTMainLangCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, MessagesReview):
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, Model, UploadedScriptFilePath, MessagesReview):
         """클래스 초기화"""
         # 업데이트 정보
         self.Email = Email
@@ -939,6 +943,7 @@ class TXTMainLangCheckProcess:
         self.Solution = Solution
         self.SubSolution = SubSolution
         self.NextSolution = NextSolution
+        self.Model = Model
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
@@ -1021,7 +1026,7 @@ class TXTMainLangCheckProcess:
         """TXT 언어 체크 전체 프로세스 실행"""
         print(f"< {self.ProcessInfo} Update 시작 >")
         InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, Model = self.Model, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
         SolutionEdit = LoadAgentInstance.Run()
 
         # MainLang 추출
@@ -1216,15 +1221,15 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
     if ScriptFileExtension == 'pdf':
 
         ## P02 PDFMainLangCheck (PDF 언어 체크)
-        PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, "OpenAI", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit, MainLang = PDFMainLangCheckProcessInstance.Run()
         
         ## P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크)
-        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFLayoutCheckInstance.Run()
         
         ## P04 PDFResize (PDF 파일 재단)
-        PDFResizeInstance = PDFResizeProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFResizeInstance = PDFResizeProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFResizeInstance.Run()
         
         ## P05 PDFSplit (PDF 파일 페이지 분할)
@@ -1232,13 +1237,13 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         SolutionEdit = PDFSplitterInstance.Run()
 
         ## P06 PDFFormCheck (PDF 파일 페이지 형식 체크)
-        PDFFormCheckInstance = PDFFormCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        PDFFormCheckInstance = PDFFormCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFFormCheckInstance.Run()
         
     elif ScriptFileExtension == 'txt':
 
         # T02 TXTMainLangCheck (TXT 언어 체크)
-        TXTMainLangCheckInstance = TXTMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, UploadedScriptFilePath, MessagesReview)
+        TXTMainLangCheckInstance = TXTMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, "OpenAI", UploadedScriptFilePath, MessagesReview)
         SolutionEdit, MainLang = TXTMainLangCheckInstance.Run()
 
         # T03 TXTSplit (텍스트 파일 지정 토큰수 분할)

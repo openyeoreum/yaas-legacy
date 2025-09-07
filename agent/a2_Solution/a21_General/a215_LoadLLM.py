@@ -436,11 +436,12 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
 
     # JPEG 파일 업로드 함수
     def UploadJPEG(JPEGFilePath):
-        with open(JPEGFilePath, "rb") as JPEGFile:
-            JPEG = JPEGFile.read()
-        return types.Part.from_bytes(JPEG, mime_type = "image/jpeg")
+        with open(JPEGFilePath, "rb") as f:
+            jpegBytes = f.read()
+        return types.Part.from_bytes(data = jpegBytes, mime_type = "image/jpeg")
 
     # InputFormat이 jpeg인 경우, 이미지 파일들을 Part 리스트로 변환
+    ImageFiles = []
     if inputFormat == "jpeg":
         ImageFiles = [UploadJPEG(path) for path in Input]
 
@@ -453,7 +454,7 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
                     contents = [
                     types.Content(
                         role = "user",
-                        parts = [types.Part.from_text(text = f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"),],
+                        parts = [types.Part.from_text(text = f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\n"),] + ImageFiles,
                         ),
                     ],
                     config = types.GenerateContentConfig(response_mime_type = "application/json",)
@@ -465,7 +466,7 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, inputFormat = 
                     contents = [
                     types.Content(
                         role = "user",
-                        parts = [types.Part.from_text(text = f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\nAssistant: ```json"),],
+                        parts = [types.Part.from_text(text = f"{Messages[0]['content']}\n\n{Messages[1]['content']}\n\n{Messages[2]['content']}\n\n"),] + ImageFiles,
                         ),
                     ],
                     config = types.GenerateContentConfig(response_mime_type = "text/plain",)

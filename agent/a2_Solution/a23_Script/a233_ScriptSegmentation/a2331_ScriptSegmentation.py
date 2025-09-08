@@ -1281,15 +1281,15 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
         PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, "OpenAI", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit, MainLang = PDFMainLangCheckProcessInstance.Run()
         
-        ## P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크)
+        ## P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크) <- 여기서 페이지 분할 동시 진행
         PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFLayoutCheckInstance.Run()
         
-        ## P04 PDFResize (PDF 파일 재단)
+        ## P04 PDFResize (PDF 파일 재단) <- 여기서 분할된 페이지 순서대로 재단
         PDFResizeInstance = PDFResizeProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFResizeInstance.Run()
         
-        ## P05 PDFSplit (PDF 파일 페이지 분할)
+        ## P05 PDFSplit (PDF 파일 페이지 분할) <- 페이지 분할 삭제 또는 P04와 변경
         PDFSplitterInstance = PDFSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, ScriptFileExtension, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFSplitterInstance.Run()
 

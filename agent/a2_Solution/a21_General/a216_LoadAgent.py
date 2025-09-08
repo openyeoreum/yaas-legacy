@@ -629,9 +629,7 @@ class LoadAgent:
                                     return _SubSubFilteredResponse
 
         # 모든 조건을 만족하면 필터링된 응답 반환
-        return FilteredResponse[self.ResponseStructure["Key"]]
-
-    ## ko, global response 일치화 메서드 ##
+        return FilteredResponse[self.ResponseStructure["Key"]] 
 
     ## ProcessDataFrame 업데이트 메서드 ##
     def _UpdateProcessDataFrame(self, InputCount, Response):

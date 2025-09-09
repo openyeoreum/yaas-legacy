@@ -67,9 +67,9 @@ def GetPromptFrame(Process, MainLang):
         "ShortScriptGenFeedback": "/a542_ScriptPrompt/a5421_BookScriptGenPrompt/a5421-12_ShortScriptGenFeedback.json",
         # ScriptSegmentationPrompt
         "PDFLoad": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P01_PDFLoad.json",
-        "PDFMainLangCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P02_PDFMainLangCheck.json",
-        "PDFLayoutCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P03_PDFLayoutCheck.json",
-        "PDFResize": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P04_PDFResize.json",
+        "PDFLayoutCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P02_PDFLayoutCheck.json",
+        "PDFResize": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P03_PDFResize.json",
+        "PDFMainLangCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P04_PDFMainLangCheck.json",
         "PDFSplit": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P05_PDFSplit.json",
         "PDFFormCheck": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-P06_PDFFormCheck.json",
         "TXTLoad": "/a542_ScriptPrompt/a5422_ScriptSegmentationPrompt/a5422-T01_TXTLoad.json",

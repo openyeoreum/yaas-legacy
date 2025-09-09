@@ -135,192 +135,8 @@ class ScriptLoadProcess:
 #################################
 
 
-##############################################
-##### P02 PDFMainLangCheck (PDF 언어 체크) #####
-##############################################
-class PDFMainLangCheckProcess:
-
-    ## PDFMainLangCheck 초기화 ##
-    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, Model, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
-        """클래스 초기화"""
-        # 업데이트 정보
-        self.Email = Email
-        self.ProjectName = ProjectName
-        self.Solution = Solution
-        self.SubSolution = SubSolution
-        self.NextSolution = NextSolution
-        self.Model = Model
-        self.UploadedScriptFilePath = UploadedScriptFilePath
-
-        # Process 설정
-        self.ProcessNumber = "P02"
-        self.ProcessName = "PDFMainLangCheck"
-        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
-
-        # 경로설정
-        self.UploadScriptFilePath = UploadScriptFilePath
-        self._InitializePaths()
-
-        # 출력설정
-        self.MessagesReview = MessagesReview
-
-    ## 프로세스 관련 경로 초기화 ##
-    def _InitializePaths(self):
-        """프로세스와 관련된 모든 경로를 초기화"""
-        # SplitedPDF 경로 및 디렉토리 생성
-        self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_SampleScript({self.NextSolution})_jpeg")
-        os.makedirs(self.SampleScriptJPEGDirPath, exist_ok = True)
-        self.FontDirPath = "/usr/share/fonts/"
-        self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
-
-    ## PDF 샘플 이미지 생성 및 라벨 생성 ##
-    def _CreatePDFToLabeledSampleJPEGs(self, Page, InputId):
-        """PDF 페이지에 '자료번호: InputId' 라벨을 추가한 JPEG 파일을 생성"""
-        # 페이지 → 이미지
-        Pixmap = Page.get_pixmap(dpi = 150)
-        PageImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
-
-        # 스케일 기준 및 스케일 팩터
-        RefWidth = 1240
-        Scale = max(0.5, min(2.5, PageImg.width / RefWidth))
-
-        # 폰트 로딩
-        FontSize = int(30 * Scale)
-        try:
-            Font = ImageFont.truetype(self.NotoSansCJKRegular, FontSize)
-        except Exception:
-            Font = ImageFont.load_default()
-
-        # 라벨 텍스트 및 치수
-        LabelText = f"자료번호: {InputId}"
-        TextBBox = Font.getbbox(LabelText)
-        TextW = TextBBox[2] - TextBBox[0]
-        TextH = TextBBox[3] - TextBBox[1]
-
-        Padding = int(14 * Scale)
-        BorderW = max(2, int(4 * Scale))
-        Margin = int(20 * Scale)
-
-        MinWBBox = Font.getbbox("자료번호: 99999")
-        MinTextW = (MinWBBox[2] - MinWBBox[0])
-
-        LabelW = max(TextW, MinTextW) + 2 * Padding
-        LabelH = TextH + 2 * Padding
-
-        # 라벨 이미지 (흰색 불투명 배경, RGB)
-        LabelImg = Image.new("RGB", (LabelW, LabelH), "white")
-        Draw = ImageDraw.Draw(LabelImg)
-
-        # 테두리
-        Draw.rectangle([(0, 0), (LabelW - 1, LabelH - 1)], outline="black", width=BorderW)
-
-        # 텍스트 중앙 정렬 + 수직 오프셋(그림자 없음)
-        TextX = (LabelW - TextW) // 2
-        VerticalOffset = int(-0.3 * FontSize)  # 필요시 0 ~ -0.3*FontSize 내에서 조정
-        TextY = (LabelH - TextH) // 2 + VerticalOffset
-        TextY = max(Padding // 2, min(TextY, LabelH - TextH - Padding // 2))
-
-        Draw.text((TextX, TextY), LabelText, font=Font, fill="black")
-
-        # 합성 위치(상단 중앙)
-        PosX = (PageImg.width - LabelW) // 2
-        PosY = Margin
-        PosX = max(0, min(PosX, PageImg.width - LabelW))
-        PosY = max(0, min(PosY, PageImg.height - LabelH))
-
-        # 불투명 라벨은 paste로 합성 (alpha_composite 사용 금지)
-        if LabelImg.mode != "RGB":
-            LabelImg = LabelImg.convert("RGB")
-        # PageImg는 이미 RGB
-        PageImg.paste(LabelImg, (PosX, PosY))
-
-        # 디렉터리 저장
-        OutputFilename = f"{self.ProjectName}_Script({self.NextSolution})({InputId}).jpeg"
-        OutputPath = os.path.join(self.SampleScriptJPEGDirPath, OutputFilename)
-
-        PageImg.save(
-            OutputPath,
-            "JPEG",
-            quality = 92,
-            optimize = True,
-            progressive = True,
-            subsampling = 1
-        )
-
-        return OutputPath
-
-    ## 라벨 샘플 경로의 Inputs 생성 ##
-    def _CreateLabeledSamplePathToInputs(self):
-        """샘플 입력을 생성해서 list 형태로 반환"""
-        # 폴더에 JPEG가 5개 이상 있으면 그대로 사용
-        if os.path.exists(self.SampleScriptJPEGDirPath):
-            ScriptJpegs = sorted(
-                f for f in os.listdir(self.SampleScriptJPEGDirPath)
-                if f.lower().endswith(".jpeg")
-            )
-            if len(ScriptJpegs) >= 5:
-                Inputs = [
-                    os.path.join(self.SampleScriptJPEGDirPath, fn)
-                    for fn in ScriptJpegs
-                ]
-                return [Inputs], [""]
-
-        # 없으면 PDF에서 5페이지 뽑아 라벨 JPEG 생성
-        PdfDocument = fitz.open(self.UploadedScriptFilePath)
-        TotalPages = len(PdfDocument)
-
-        if TotalPages < 5:
-            Selected = random.choices(range(TotalPages), k = 5)
-        else:
-            Selected = random.sample(range(TotalPages), 5)
-
-        os.makedirs(self.SampleScriptJPEGDirPath, exist_ok=True)
-
-        Inputs = []
-        for InputId, PageIdx in enumerate(Selected, 1):
-            page = PdfDocument.load_page(PageIdx)
-            OutPath = self._CreatePDFToLabeledSampleJPEGs(page, InputId)
-            Inputs.append(OutPath)
-
-        PdfDocument.close()
-
-        return [Inputs], [""]
-
-    ## InputList 생성 ##
-    def _CreateInputList(self):
-        """InputList를 생성하는 메서드"""
-        # Inputs 생성
-        Inputs, ComparisonInputs = self._CreateLabeledSamplePathToInputs()
-
-        # InputList 생성 및 리턴
-        InputList = []
-        for i, Input in enumerate(Inputs):
-            InputList.append(
-                {
-                    "Id": i + 1,
-                    "Input": Input,
-                    "ComparisonInput": ComparisonInputs[i]
-                }
-            )
-            
-        return InputList
-
-    ## PDFMainLangCheckProcess 실행 ##
-    def Run(self):
-        """PDF 언어 체크 전체 프로세스 실행"""
-        print(f"< {self.ProcessInfo} Update 시작 >")
-        InputList = self._CreateInputList()
-        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, Model = self.Model, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
-        SolutionEdit = LoadAgentInstance.Run()
-
-        # MainLang 추출
-        MainLang = SolutionEdit[self.ProcessName][0]["MainLang"]
-
-        return SolutionEdit, MainLang
-
-
 ##############################################################
-##### P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크) #####
+##### P02 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크) #####
 ##############################################################
 class PDFLayoutCheckProcess:
 
@@ -339,7 +155,7 @@ class PDFLayoutCheckProcess:
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
-        self.ProcessNumber = "P03"
+        self.ProcessNumber = "P02"
         self.ProcessName = "PDFLayoutCheck"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
@@ -401,7 +217,7 @@ class PDFLayoutCheckProcess:
 
 
 #####################################################
-##### P04 PDFResize (PDF 파일 가로 재단) #####
+##### P03 PDFResize (PDF 파일 가로 재단) #####
 #####################################################
 class PDFResizeProcess:
 
@@ -420,7 +236,7 @@ class PDFResizeProcess:
         self.UploadedScriptFilePath = UploadedScriptFilePath
 
         # Process 설정
-        self.ProcessNumber = "P04"
+        self.ProcessNumber = "P03"
         self.ProcessName = "PDFResize"
         self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
 
@@ -691,6 +507,190 @@ class PDFResizeProcess:
         SolutionEdit = LoadAgentInstance.Run()
 
         return SolutionEdit
+
+
+##############################################
+##### P04 PDFMainLangCheck (PDF 언어 체크) #####
+##############################################
+class PDFMainLangCheckProcess:
+
+    ## PDFMainLangCheck 초기화 ##
+    def __init__(self, Email, ProjectName, Solution, SubSolution, NextSolution, Model, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview):
+        """클래스 초기화"""
+        # 업데이트 정보
+        self.Email = Email
+        self.ProjectName = ProjectName
+        self.Solution = Solution
+        self.SubSolution = SubSolution
+        self.NextSolution = NextSolution
+        self.Model = Model
+        self.UploadedScriptFilePath = UploadedScriptFilePath
+
+        # Process 설정
+        self.ProcessNumber = "P04"
+        self.ProcessName = "PDFMainLangCheck"
+        self.ProcessInfo = f"User: {self.Email} | Project: {self.ProjectName} | {self.ProcessNumber}_{self.ProcessName}({self.NextSolution})"
+
+        # 경로설정
+        self.UploadScriptFilePath = UploadScriptFilePath
+        self._InitializePaths()
+
+        # 출력설정
+        self.MessagesReview = MessagesReview
+
+    ## 프로세스 관련 경로 초기화 ##
+    def _InitializePaths(self):
+        """프로세스와 관련된 모든 경로를 초기화"""
+        # SplitedPDF 경로 및 디렉토리 생성
+        self.SampleScriptJPEGDirPath = os.path.join(self.UploadScriptFilePath, f"{self.ProjectName}_SampleScript({self.NextSolution})_jpeg")
+        os.makedirs(self.SampleScriptJPEGDirPath, exist_ok = True)
+        self.FontDirPath = "/usr/share/fonts/"
+        self.NotoSansCJKRegular = os.path.join(self.FontDirPath, "opentype/noto/NotoSansCJK-Regular.ttc")
+
+    ## PDF 샘플 이미지 생성 및 라벨 생성 ##
+    def _CreatePDFToLabeledSampleJPEGs(self, Page, InputId):
+        """PDF 페이지에 '자료번호: InputId' 라벨을 추가한 JPEG 파일을 생성"""
+        # 페이지 → 이미지
+        Pixmap = Page.get_pixmap(dpi = 150)
+        PageImg = Image.frombytes("RGB", (Pixmap.width, Pixmap.height), Pixmap.samples)
+
+        # 스케일 기준 및 스케일 팩터
+        RefWidth = 1240
+        Scale = max(0.5, min(2.5, PageImg.width / RefWidth))
+
+        # 폰트 로딩
+        FontSize = int(30 * Scale)
+        try:
+            Font = ImageFont.truetype(self.NotoSansCJKRegular, FontSize)
+        except Exception:
+            Font = ImageFont.load_default()
+
+        # 라벨 텍스트 및 치수
+        LabelText = f"자료번호: {InputId}"
+        TextBBox = Font.getbbox(LabelText)
+        TextW = TextBBox[2] - TextBBox[0]
+        TextH = TextBBox[3] - TextBBox[1]
+
+        Padding = int(14 * Scale)
+        BorderW = max(2, int(4 * Scale))
+        Margin = int(20 * Scale)
+
+        MinWBBox = Font.getbbox("자료번호: 99999")
+        MinTextW = (MinWBBox[2] - MinWBBox[0])
+
+        LabelW = max(TextW, MinTextW) + 2 * Padding
+        LabelH = TextH + 2 * Padding
+
+        # 라벨 이미지 (흰색 불투명 배경, RGB)
+        LabelImg = Image.new("RGB", (LabelW, LabelH), "white")
+        Draw = ImageDraw.Draw(LabelImg)
+
+        # 테두리
+        Draw.rectangle([(0, 0), (LabelW - 1, LabelH - 1)], outline="black", width=BorderW)
+
+        # 텍스트 중앙 정렬 + 수직 오프셋(그림자 없음)
+        TextX = (LabelW - TextW) // 2
+        VerticalOffset = int(-0.3 * FontSize)  # 필요시 0 ~ -0.3*FontSize 내에서 조정
+        TextY = (LabelH - TextH) // 2 + VerticalOffset
+        TextY = max(Padding // 2, min(TextY, LabelH - TextH - Padding // 2))
+
+        Draw.text((TextX, TextY), LabelText, font=Font, fill="black")
+
+        # 합성 위치(상단 중앙)
+        PosX = (PageImg.width - LabelW) // 2
+        PosY = Margin
+        PosX = max(0, min(PosX, PageImg.width - LabelW))
+        PosY = max(0, min(PosY, PageImg.height - LabelH))
+
+        # 불투명 라벨은 paste로 합성 (alpha_composite 사용 금지)
+        if LabelImg.mode != "RGB":
+            LabelImg = LabelImg.convert("RGB")
+        # PageImg는 이미 RGB
+        PageImg.paste(LabelImg, (PosX, PosY))
+
+        # 디렉터리 저장
+        OutputFilename = f"{self.ProjectName}_Script({self.NextSolution})({InputId}).jpeg"
+        OutputPath = os.path.join(self.SampleScriptJPEGDirPath, OutputFilename)
+
+        PageImg.save(
+            OutputPath,
+            "JPEG",
+            quality = 92,
+            optimize = True,
+            progressive = True,
+            subsampling = 1
+        )
+
+        return OutputPath
+
+    ## 라벨 샘플 경로의 Inputs 생성 ##
+    def _CreateLabeledSamplePathToInputs(self):
+        """샘플 입력을 생성해서 list 형태로 반환"""
+        # 폴더에 JPEG가 5개 이상 있으면 그대로 사용
+        if os.path.exists(self.SampleScriptJPEGDirPath):
+            ScriptJpegs = sorted(
+                f for f in os.listdir(self.SampleScriptJPEGDirPath)
+                if f.lower().endswith(".jpeg")
+            )
+            if len(ScriptJpegs) >= 5:
+                Inputs = [
+                    os.path.join(self.SampleScriptJPEGDirPath, fn)
+                    for fn in ScriptJpegs
+                ]
+                return [Inputs], [""]
+
+        # 없으면 PDF에서 5페이지 뽑아 라벨 JPEG 생성
+        PdfDocument = fitz.open(self.UploadedScriptFilePath)
+        TotalPages = len(PdfDocument)
+
+        if TotalPages < 5:
+            Selected = random.choices(range(TotalPages), k = 5)
+        else:
+            Selected = random.sample(range(TotalPages), 5)
+
+        os.makedirs(self.SampleScriptJPEGDirPath, exist_ok=True)
+
+        Inputs = []
+        for InputId, PageIdx in enumerate(Selected, 1):
+            page = PdfDocument.load_page(PageIdx)
+            OutPath = self._CreatePDFToLabeledSampleJPEGs(page, InputId)
+            Inputs.append(OutPath)
+
+        PdfDocument.close()
+
+        return [Inputs], [""]
+
+    ## InputList 생성 ##
+    def _CreateInputList(self):
+        """InputList를 생성하는 메서드"""
+        # Inputs 생성
+        Inputs, ComparisonInputs = self._CreateLabeledSamplePathToInputs()
+
+        # InputList 생성 및 리턴
+        InputList = []
+        for i, Input in enumerate(Inputs):
+            InputList.append(
+                {
+                    "Id": i + 1,
+                    "Input": Input,
+                    "ComparisonInput": ComparisonInputs[i]
+                }
+            )
+            
+        return InputList
+
+    ## PDFMainLangCheckProcess 실행 ##
+    def Run(self):
+        """PDF 언어 체크 전체 프로세스 실행"""
+        print(f"< {self.ProcessInfo} Update 시작 >")
+        InputList = self._CreateInputList()
+        LoadAgentInstance = LoadAgent(InputList, self.Email, self.ProjectName, self.Solution, self.ProcessNumber, self.ProcessName, Model = self.Model, MessagesReview = self.MessagesReview, SubSolution = self.SubSolution, NextSolution = self.NextSolution)
+        SolutionEdit = LoadAgentInstance.Run()
+
+        # MainLang 추출
+        MainLang = SolutionEdit[self.ProcessName][0]["MainLang"]
+
+        return SolutionEdit, MainLang
 
 
 ##########################################
@@ -1277,19 +1277,19 @@ def ScriptSegmentationProcessUpdate(projectName, email, NextSolution, AutoTempla
     ## 파일 확장자에 따라 후속 프로세스 실행
     if ScriptFileExtension == 'pdf':
 
-        ## P02 PDFMainLangCheck (PDF 언어 체크)
+        ## P02 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크) <- 여기서 페이지 분할 동시 진행
+        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        SolutionEdit = PDFLayoutCheckInstance.Run()
+
+        ## P03 PDFResize (PDF 파일 재단) <- 여기서 분할된 페이지 순서대로 재단
+        PDFResizeInstance = PDFResizeProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
+        SolutionEdit = PDFResizeInstance.Run()
+
+        ## P04 PDFMainLangCheck (PDF 언어 체크)
         PDFMainLangCheckProcessInstance = PDFMainLangCheckProcess(email, projectName, Solution, SubSolution, NextSolution, "OpenAI", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit, MainLang = PDFMainLangCheckProcessInstance.Run()
         
-        ## P03 PDFLayoutCheck (PDF 인쇄 파일 형식인 단면, 양면 체크) <- 여기서 페이지 분할 동시 진행
-        PDFLayoutCheckInstance = PDFLayoutCheckProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
-        SolutionEdit = PDFLayoutCheckInstance.Run()
-        
-        ## P04 PDFResize (PDF 파일 재단) <- 여기서 분할된 페이지 순서대로 재단
-        PDFResizeInstance = PDFResizeProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, "Google", UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
-        SolutionEdit = PDFResizeInstance.Run()
-        
-        ## P05 PDFSplit (PDF 파일 페이지 분할) <- 페이지 분할 삭제 또는 P04와 변경
+        ## P05 PDFSplit (PDF 파일 페이지 분할)
         PDFSplitterInstance = PDFSplitProcess(email, projectName, Solution, SubSolution, NextSolution, AutoTemplate, MainLang, ScriptFileExtension, UploadedScriptFilePath, UploadScriptFilePath, MessagesReview)
         SolutionEdit = PDFSplitterInstance.Run()
 

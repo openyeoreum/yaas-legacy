@@ -152,7 +152,7 @@ def LLMmessagesReview(Process, Input, Count, Response, Usage, Model, MAINLANG = 
     return print(TextMessages + TextReponse)
   
 ## 프롬프트 실행
-def OpenAI_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def OpenAI_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Master", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
     OpenAIClient = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
     if PromptFramePath == "":
         promptFrame = GetPromptFrame(Process, mainLang)
@@ -300,9 +300,9 @@ def JsonParsingProcess(projectName, email, RawResponse, FilterFunc, MainLang = "
     ErrorCount = 1
     while True:
         if LLM == "GOOGLE":
-            Response, Usage, Model = GOOGLE_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, mainLang = MainLang,  Mode = "Master", messagesReview = "off")
+            Response, Usage, Model = GOOGLE_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, mainLang = MainLang, messagesReview = "off")
         if LLM == "OpenAI":
-            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, mainLang = MainLang, Mode = "Master", messagesReview = "off")
+            Response, Usage, Model = OpenAI_LLMresponse(projectName, email, Process, RawResponse, ErrorCount, mainLang = MainLang, messagesReview = "off")
         FilteredResponse = FilterFunc(Response, RawResponse)
         
         if 'JSONDecode에서 오류 발생:' in FilteredResponse:
@@ -322,7 +322,7 @@ def JsonParsingProcess(projectName, email, RawResponse, FilterFunc, MainLang = "
         return FilteredResponse
 
 ## 프롬프트 실행
-def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Master", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
 
     AnthropicAIClient = anthropic.Anthropic(api_key = os.getenv("ANTHROPIC_API_KEY"))
     if PromptFramePath == "":
@@ -424,7 +424,7 @@ def ANTHROPIC_LLMresponse(projectName, email, Process, Input, Count, mainLang = 
 ###############################
 
 ## 프롬프트 실행
-def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Master", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
 
     GoogleAIClient = genai.Client(api_key= os.getenv("GEMINI_API_KEY"), http_options={'api_version':'v1alpha'})
     if PromptFramePath == "":
@@ -550,7 +550,7 @@ def GOOGLE_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko
 #################################
 
 ## 프롬프트 실행
-def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Example", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
+def DEEPSEEK_LLMresponse(projectName, email, Process, Input, Count, mainLang = "ko", root = "agent", PromptFramePath = "", Mode = "Master", Input2 = "", InputMemory = "", OutputMemory = "", MemoryNote = "", OutputEnder = "", MaxAttempts = 100, messagesReview = "off"):
     DeepSeekClient = OpenAI(api_key = os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
     if PromptFramePath == "":
       promptFrame = GetPromptFrame(Process, mainLang)

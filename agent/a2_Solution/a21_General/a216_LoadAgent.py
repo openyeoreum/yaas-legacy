@@ -22,7 +22,7 @@ class LoadAgent:
     PromptDataPath = "/yaas/agent/a5_Database/a54_PromptData"
 
     ## LoadAgent 초기화 ##
-    def __init__(self, InputList, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", Mode = "Master", MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", AutoTemplate = "on", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
+    def __init__(self, InputList, Email, ProjectName, Solution, ProcessNumber, ProcessName, MainLang = "ko", Model = "OpenAI", ResponseMethod = "Prompt", MessagesReview = "off", SubSolution = None, NextSolution = None, EditMode = "Auto", AutoTemplate = "on", OutputsPerInput = 1, InputCountKey = None, IgnoreCountCheck = False, FilterPass = False):
         """클래스 초기화"""
         # Process 설정
         self.Email = Email
@@ -38,7 +38,7 @@ class LoadAgent:
         else:
             self.MainLangTag = "global"
         self.Model = Model
-        self.Mode = Mode
+        self.ResponseMethod = ResponseMethod
         self.MessagesReview = MessagesReview
         self.EditMode = EditMode
         self.AutoTemplate = AutoTemplate
@@ -192,13 +192,13 @@ class LoadAgent:
         ErrorCount = 0
         while True:
             if self.Model == "OpenAI":
-                Response, Usage, Model = OpenAI_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = OpenAI_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "Anthropic":
-                Response, Usage, Model = ANTHROPIC_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = ANTHROPIC_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "Google":
-                Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = GOOGLE_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, MemoryNote = memoryNote, messagesReview = self.MessagesReview)
             elif self.Model == "DeepSeek":
-                Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, Mode = self.Mode, Input2 = "", MemoryNote = memoryNote, messagesReview = self.MessagesReview)
+                Response, Usage, Model = DEEPSEEK_LLMresponse(self.ProjectName, self.Email, self.ProcessName, Input, InputCount, mainLang = self.MainLang, MemoryNote = memoryNote, messagesReview = self.MessagesReview)
 
             # 생성된 Respnse Filler 처리
             FilteredResponse = self._ProcessFilter(Response, ComparisonInput)
@@ -746,7 +746,7 @@ class LoadAgent:
 
 
     ## Response 생성 및 프로세스 실행 메서드 ##
-    def Run(self, Response = "Response"):
+    def Run(self):
         """프로세스 실행 메서드"""
         if not self.EditCheck:
             if self.DataFrameCompletion == 'No':
@@ -756,10 +756,10 @@ class LoadAgent:
                     Input = self.InputList[i]['Input']
                     ComparisonInput = self.InputList[i]['ComparisonInput']
 
-                    if Response == "Response":
+                    if self.ResponseMethod == "Prompt":
                         ## ProcessResponse 생성
                         ProcessResponse = self._ProcessResponse(Input, inputCount, ComparisonInput)
-                    if Response == "Input":
+                    if self.ResponseMethod in ["Algorithm", "Manual"]:
                         ProcessResponse = Input
 
                     ## DataFrame 저장
